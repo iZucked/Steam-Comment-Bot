@@ -64,15 +64,15 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected static final String ADD_REMOVE_GROUP = "addremove";
 	protected static final String EDIT_GROUP = "edit";
 	private ScenarioTableViewer scenarioViewer;
-	private IScenarioEditingLocation jointModelEditorPart;
+	private final IScenarioEditingLocation jointModelEditorPart;
 
 	private FilterField filterField;
 	private ToolBarManager externalToolbarManager;
 
-	private IActionBars actionBars;
+	private final IActionBars actionBars;
 	private Action deleteAction;
 
-	public ScenarioTableViewerPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, IActionBars actionBars) {
+	public ScenarioTableViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part);
 		this.jointModelEditorPart = location;
 		this.actionBars = actionBars;
@@ -110,7 +110,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		// interpose and create filter field
 		if (getControl() == null) {
 			container = parent;
@@ -156,14 +156,14 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	}
 
 	@Override
-	public ScenarioTableViewer createViewer(Composite parent) {
+	public ScenarioTableViewer createViewer(final Composite parent) {
 		if (scenarioViewer == null) {
-			scenarioViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
+			scenarioViewer = constructViewer(parent);
 
 			scenarioViewer.addOpenListener(new IOpenListener() {
 
 				@Override
-				public void open(OpenEvent event) {
+				public void open(final OpenEvent event) {
 					if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
 						final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
 						if (structuredSelection.isEmpty() == false) {
@@ -191,7 +191,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			filterField.setViewer(scenarioViewer);
 
 			final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
-				protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
+				protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
 					return event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL || event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION
 							|| event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC;
 				}
@@ -206,6 +206,10 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			throw new RuntimeException("Did not expect two calls to createViewer()");
 		}
 
+	}
+
+	protected ScenarioTableViewer constructViewer(final Composite parent) {
+		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
 	}
 
 	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
@@ -322,13 +326,13 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 				viewer.getControl().addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetDisposed(DisposeEvent e) {
+					public void widgetDisposed(final DisposeEvent e) {
 						menuService.releaseContributions(toolbar);
 					}
 				});
 			}
 		}
-		
+
 		if (actionBars != null) {
 			actionBars.updateActionBars();
 		}
@@ -369,7 +373,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			}
 
 			@Override
-			protected boolean isApplicableToSelection(ISelection selection) {
+			protected boolean isApplicableToSelection(final ISelection selection) {
 				return selection.isEmpty() == false && selection instanceof IStructuredSelection;
 			}
 		};
@@ -379,7 +383,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected void requestActivation() {
 		super.requestActivation();
 		jointModelEditorPart.setCurrentViewer(scenarioViewer);
-		
+
 		if (actionBars != null) {
 			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
 		}
