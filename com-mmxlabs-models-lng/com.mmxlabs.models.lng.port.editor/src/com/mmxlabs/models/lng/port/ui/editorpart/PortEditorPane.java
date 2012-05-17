@@ -14,6 +14,7 @@ import java.util.List;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -46,6 +47,7 @@ import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -70,6 +72,15 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);
 		getToolBarManager().update(true);
+		
+		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("PG") {
+			@Override
+			public void run() {
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getJointModelEditorPart().getShell(), PortEditorPane.this.getJointModelEditorPart().getDefaultCommandHandler());
+				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), PortPackage.eINSTANCE.getPortModel_PortGroups());
+			}
+		});
+		
 		defaultSetTitle("Ports");
 	}
 
