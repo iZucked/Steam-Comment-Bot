@@ -29,6 +29,7 @@ import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.IValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -51,6 +52,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,6 +67,8 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
+import com.mmxlabs.models.ui.modelfactories.IModelFactory;
+import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -130,7 +135,7 @@ public class DetailCompositeDialog extends Dialog {
 
 	private DefaultExtraValidationContext validationContext;
 	
-	private boolean displaySidebarList = true;
+	private boolean displaySidebarList = false;
 	
 	private Composite sidebarSash;
 
@@ -260,8 +265,6 @@ public class DetailCompositeDialog extends Dialog {
 
 		getShell().setText("Editing " + EditorUtils.unmangle(selection.eClass().getName()) + " " + (1 + selectedObjectIndex) + " of " + inputs.size());
 		
-		final boolean displayCompositeWasNull = displayComposite == null;
-		
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
 			displayComposite = null;
@@ -280,12 +283,12 @@ public class DetailCompositeDialog extends Dialog {
 		}
 
 		displayComposite.setCommandHandler(commandHandler);
-		if (sidebarSash == null)
-			displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
+		
+		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		displayComposite.display(rootObject, duplicate, ranges.get(selection));
 		
-		dialogArea.layout(true);
+		getShell().layout(true, true); //argh
 		
 		// handle enablement
 		validate();
@@ -293,11 +296,6 @@ public class DetailCompositeDialog extends Dialog {
 		if (lockedForEditing) {
 			disableControls(displayComposite.getComposite());
 		}
-		
-		if (sidebarSash!=null && displayCompositeWasNull) {
-//			sidebarSash.setWeights(new int []{1, 9});
-		}
-		
 	}
 
 	/**
@@ -355,6 +353,10 @@ public class DetailCompositeDialog extends Dialog {
 			barManager.createControl(sidebarComposite).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 			
 			selectionViewer = new TableViewer(sidebarComposite, SWT.SINGLE|SWT.BORDER|SWT.V_SCROLL);
+			
+			createToolbarActions(barManager);
+			barManager.update(true);
+			
 			selectionViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 			
 			selectionViewer.setLabelProvider(new LabelProvider() {
@@ -369,7 +371,7 @@ public class DetailCompositeDialog extends Dialog {
 			});
 			
 			selectionViewer.setContentProvider(new ArrayContentProvider());
-			selectionViewer.setInput(inputs.toArray());
+			selectionViewer.setInput(inputs);
 			selectionViewer.setSelection(new StructuredSelection(inputs.get(0)));
 			selectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 				@Override
@@ -389,12 +391,109 @@ public class DetailCompositeDialog extends Dialog {
 			});
 			
 			dialogArea = new Composite(sidebarSash, SWT.NONE);
-			dialogArea.setLayout(new GridLayout(1, false));
+			{
+				final GridLayout layout = new GridLayout(1, false);
+				layout.marginHeight = layout.marginWidth = 0;
+				dialogArea.setLayout(layout);
+			}
 			dialogArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		} else {
 			dialogArea = c;
 		}
 		return c;
+	}
+	
+	private Action createAddAction(final IModelFactory factory) {
+		return new Action("Create new " + factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD)) {
+			@Override
+			public void run() {
+				final Collection<? extends ISetting> settings = 
+						factory.createInstance(rootObject, sidebarContainer, sidebarContainment);
+				if (settings.isEmpty()) return;
+				// now create an add command, which will include adding any other relevant objects
+				final CompoundCommand add = new CompoundCommand();
+				for (final ISetting setting : settings) {
+					add.append(AddCommand.create(commandHandler.getEditingDomain(),
+							setting.getContainer(), setting.getContainment(), setting.getInstance()));
+				}
+				add.execute();
+				inputs.add(settings.iterator().next().getInstance());
+				addedInputs.add(settings.iterator().next().getInstance());
+				selectionViewer.refresh();
+				selectionViewer.setSelection(new StructuredSelection(inputs.get(inputs.size()-1)));
+			}
+		};
+	}
+	
+	/**
+	 * When the sidebar is displayed, this method is invoked to add actions to the toolbar above it.
+	 * 
+	 * @param barManager
+	 */
+	private void createToolbarActions(final ToolBarManager barManager) {
+		// create add actions
+		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(sidebarContainment.getEReferenceType());
+		if (factories.isEmpty() == false) {
+			if (factories.size() == 1) {
+				barManager.add(createAddAction(factories.get(0)));
+			} else {
+				
+			}
+		}
+		
+		// create delete actions
+		final Action deleteAction = new Action() {
+			{
+				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+				selectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+					@Override
+					public void selectionChanged(SelectionChangedEvent event) {
+						setEnabled(event.getSelection().isEmpty() == false);
+					}
+				});
+			}
+
+			@Override
+			public void run() {
+				final ISelection selection = selectionViewer.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final Object element = ((IStructuredSelection) selection).getFirstElement();
+					if (element instanceof EObject) {
+						int elementIndex = inputs.indexOf(element);
+						if (selectedObjectIndex >= elementIndex) {
+							selectedObjectIndex--;
+						}
+						
+						deletedInputs.add((EObject) element);
+						
+						// remove from change map
+						for (final EObject o : ranges.get(element)) {
+							// o is the duplicate for a real thing,
+							// which is being deleted; forget about 
+							// both sides.
+							EObject original = duplicateToOriginal.get(o);
+							originalToDuplicate.remove(original);
+							duplicateToOriginal.remove(o);
+						}
+						
+						ranges.remove(element);
+						
+						inputs.remove(elementIndex);
+						if (inputs.size() > 0) {
+							selectionViewer.setSelection(new StructuredSelection(inputs.get(selectedObjectIndex)));
+						} else {
+							selectionViewer.setSelection(StructuredSelection.EMPTY);
+						}
+						selectionViewer.refresh();
+					}
+				}
+			}
+		};
+		
+		barManager.add(deleteAction);
+		
+		// create duplicate actions
+		
 	}
 
 	@Override
@@ -477,14 +576,15 @@ public class DetailCompositeDialog extends Dialog {
 			if (value == OK) {
 				final CompoundCommand cc = new CompoundCommand();
 				cc.append(IdentityCommand.INSTANCE);
-				for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
+				for (final Map.Entry<EObject, EObject> entry : originalToDuplicate
+						.entrySet()) {
 					final EObject original = entry.getKey();
 					final EObject duplicate = entry.getValue();
 					if (!original.equals(duplicate)) {
 						cc.append(makeEqualizer(original, duplicate));
 					}
 				}
-				
+
 				// new objects should already be added wherever they belong.
 				
 				// delete any objects which have been removed from the sidebar list
@@ -495,8 +595,15 @@ public class DetailCompositeDialog extends Dialog {
 			} else {
 				// any new objects will have been added from the inputs list, so we have to delete them
 				// we want to directly execute the command so that it doesn't go into the undo stack.
-				if (!addedInputs.isEmpty())
-					DeleteCommand.create(commandHandler.getEditingDomain(), addedInputs).execute();
+				if (!addedInputs.isEmpty()) {
+					Command delete = DeleteCommand.create(commandHandler.getEditingDomain(), addedInputs);
+					if (delete.canExecute()) {
+						System.err.println("Execute delete");
+						delete.execute();
+					} else {
+						System.err.println("Cannot execute delete");
+					}
+				}
 			}
 			return value;
 		} finally {

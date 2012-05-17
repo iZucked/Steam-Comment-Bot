@@ -280,18 +280,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 
 		{
-
-			// synchronize command execution on the root object; this is a temporary
-			// solution to allow other threads (evaluation thread for example) to ensure a consistent scenario
-			// state when they want to do something.
-			// This probably belongs in the scenario service in some future version.
-
 			commandStack.addCommandStackListener(new CommandStackListener() {
 				@Override
 				public void commandStackChanged(final EventObject event) {
-					if (commandStack.isSaveNeeded()) {
-						firePropertyChange(IEditorPart.PROP_DIRTY);
-					}
+					firePropertyChange(IEditorPart.PROP_DIRTY);
 				}
 			});
 
