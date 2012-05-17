@@ -60,7 +60,7 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 					public int compare(NamedObject arg0, NamedObject arg1) {
 						if (arg0 == null) {
 							if (arg1 == null) {
-								return 0
+								return 0;
 							} else {
 								return 1;
 							}
