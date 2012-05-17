@@ -140,6 +140,7 @@ public class ExportCSVWizardPage extends WizardPage {
 		// TODO: Create automatically?
 		if (!new File(editor.getStringValue()).exists()) {
 			updateStatus("Output diectory must exist");
+			return;
 		}
 
 		updateStatus(null);
