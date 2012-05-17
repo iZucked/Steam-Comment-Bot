@@ -162,28 +162,6 @@
     </contexts>
  </extension>
  <extension
-       point="org.eclipse.ui.menus">
-    <menuContribution
-          allPopups="false"
-          locationURI="toolbar:com.mmxlabs.models.lng.port.ui.editorpart.PortEditorPane">
-       <command
-             commandId="org.eclipse.ui.views.showView"
-             icon="icons/group.gif"
-             label="Show Port Groups"
-             style="push"
-             tooltip="Show Port Group Editor">
-          <parameter
-                name="org.eclipse.ui.views.showView.makeFast"
-                value="true">
-          </parameter>
-          <parameter
-                name="org.eclipse.ui.views.showView.viewId"
-                value="com.mmxlabs.models.lng.port.editor.views.PortGroupView">
-          </parameter>
-       </command>
-    </menuContribution>
- </extension>
- <extension
        point="com.mmxlabs.models.ui.editorfactories">
     <editorFactory
           factoryClass="com.mmxlabs.models.lng.port.ui.editors.PortGroupContentsEditorFactory"
