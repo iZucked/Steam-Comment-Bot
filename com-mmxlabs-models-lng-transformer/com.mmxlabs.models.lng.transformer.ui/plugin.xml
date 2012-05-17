@@ -76,7 +76,7 @@
             </enabledWhen>
          </handler>
          <handler
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.SaveOptimisationHandler"
+               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.derive.DeriveWizardHandler"
                commandId="com.mmxlabs.commands.optimisation.save">
            <enabledWhen>
                <iterate>
@@ -102,19 +102,6 @@
                               property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.hasActiveJob">
                         </test>
                      </not>
-                  </and>
-               </iterate>
-            </enabledWhen>
-         </handler>
-         <handler
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.DeriveOptimisationHandler"
-               commandId="com.mmxlabs.commands.optimisation.derive">
-           <enabledWhen>
-               <iterate>
-                  <and>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                     </instanceof>
                   </and>
                </iterate>
             </enabledWhen>
@@ -277,11 +264,6 @@
                id="com.mmxlabs.commands.optimisation.evaluate"
                name="Evaluate Schedule">
          </command>
-         <command
-               categoryId="com.mmxlabs.commands.category.optimisation"
-               id="com.mmxlabs.commands.optimisation.derive"
-               name="Derive Optimisation">
-         </command>
       </extension>
       
       <extension
@@ -332,14 +314,6 @@
                      mnemonic="S"
                      style="push"
                      tooltip="Save optimisations">
-               </command>
-               <command
-                     commandId="com.mmxlabs.commands.optimisation.derive"
-                     icon="icons/evaluate_schedule.gif"
-                     id="com.mmxlabs.scenario.service.toolbars.optimisation.derive"
-                     label="Derive schedule"
-                     style="push"
-                     tooltip="Derive scenario">
                </command>
          </menuContribution>
       </extension>
