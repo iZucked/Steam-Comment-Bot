@@ -134,8 +134,8 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 	private void dialogChanged() {
 
 		final Container c = scenarioServiceSelectionGroup.getSelectedContainer();
-		if (!(c instanceof Folder || c instanceof ScenarioInstance || c instanceof ScenarioService)) {
-			updateStatus("A Folder or Scenario must be selected");
+		if (!(c instanceof Folder || c instanceof ScenarioService)) {
+			updateStatus("A Folder must be selected");
 			return;
 		}
 
