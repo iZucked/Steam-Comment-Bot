@@ -49,6 +49,7 @@
          point="org.eclipse.ui.editors">
       <editor
             class="com.mmxlabs.models.ui.editorpart.JointModelEditorPart"
+            contributorClass="com.mmxlabs.models.ui.editorpart.JointModelEditorContributor"
             default="true"
             extensions="scn,sc2"
             id="com.mmxlabs.models.lng.demo.scneditor"
