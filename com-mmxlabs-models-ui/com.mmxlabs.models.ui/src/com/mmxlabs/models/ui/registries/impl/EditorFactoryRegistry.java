@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.ui.registries.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
@@ -181,13 +184,32 @@ public class EditorFactoryRegistry extends AbstractRegistry<Pair<EClass, EStruct
 		}
 	}
 
+	final Map<EClass, Map<EStructuralFeature, IInlineEditorFactory>> fasterCache = new HashMap<EClass, Map<EStructuralFeature, IInlineEditorFactory>>();
+	
 	/* (non-Javadoc)
 	 * @see com.mmxlabs.models.ui.registries.impl.IEditorFactoryRegistry#getEditorFactory(org.eclipse.emf.ecore.EClass, org.eclipse.emf.ecore.EStructuralFeature)
 	 */
 	@Override
-	public synchronized IInlineEditorFactory getEditorFactory(
+	public IInlineEditorFactory getEditorFactory(
 			final EClass owner, final EStructuralFeature feature) {
-		return get(new Pair<EClass, EStructuralFeature>(owner, feature));
+		Map<EStructuralFeature, IInlineEditorFactory> byClass = fasterCache.get(owner);
+		if (byClass == null) {
+			byClass = new HashMap<EStructuralFeature, IInlineEditorFactory>();
+			fasterCache.put(owner, byClass);
+		}
+		if (byClass.containsKey(feature)) return byClass.get(feature);
+		
+		EditorFactoryMatcher matcher = null;
+		for (final IInlineEditorFactoryExtension extension : extensions) {
+			matcher = new EditorFactoryMatcher(extension, owner, feature).getBetterMatch(matcher);
+		}
+		if (matcher == null) return null;
+		
+		IInlineEditorFactory factory = matcher.instantiate();
+		
+		byClass.put(feature, factory);
+		
+		return factory;
 	}
 
 	@Override

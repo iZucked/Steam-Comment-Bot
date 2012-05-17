@@ -34,8 +34,10 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 		final Composite contents = new Composite(parent, SWT.NONE);
 		contents.setLayout(new GridLayout(2, false));
 		
-		final Label description = new Label(contents, SWT.NONE);
+		final Label description = new Label(contents, SWT.WRAP);
 		description.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+		
+		
 		final Button button = new Button(contents, SWT.NONE);
 		button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 		button.setText("Edit");
