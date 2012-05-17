@@ -5,7 +5,9 @@
 package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -13,10 +15,13 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.ModelValidationService;
+import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
@@ -25,6 +30,10 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.ValidationHelper;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
@@ -38,17 +47,18 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescrip
  */
 public class StartOptimisationHandler extends AbstractOptimisationHandler {
 	final boolean optimising;
+
 	/**
 	 * The constructor.
 	 */
-	public StartOptimisationHandler(boolean optimising) {
+	public StartOptimisationHandler(final boolean optimising) {
 		this.optimising = optimising;
 	}
 
 	public StartOptimisationHandler() {
 		this(true);
 	}
-	
+
 	/**
 	 * the command has been executed, so extract extract the needed information from the application context.
 	 */
@@ -68,7 +78,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 				if (obj instanceof ScenarioInstance) {
 					return evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, optimising);
 				}
-				
+
 			}
 		}
 
@@ -76,66 +86,99 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 	}
 
 	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final boolean optimising) {
-//		final IStatus status = (IStatus) resource.getAdapter(IStatus.class);
-//		if (status.matches(IStatus.ERROR)) {
-//			Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName()));
-//			final MMXRootObject root = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
-//			final ScheduleModel scheduleModel = root.getSubModel(ScheduleModel.class);
-//			if (scheduleModel != null) {
-//				// no solution, so clear state.
-//				scheduleModel.setInitialSchedule(null);
-//				scheduleModel.setOptimisedSchedule(null);
-//				scheduleModel.setDirty(false);
-//			}
-//			try {
-//				final ResourceSet rs = root.eResource().getResourceSet();
-//				// temporarily mess with joint model resource set's uri converter
-//				// so that all of the URIs appear to be the same, for marker util.
-//				
-//				// this may need improving later.
-//				final URIConverter temp = rs.getURIConverter();
-//				rs.setURIConverter(new ExtensibleURIConverterImpl() {
-//					@Override
-//					public URI normalize(URI uri) {
-//						return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-//					}
-//				});
-//				MarkerUtil.updateMarkers(status);
-//				
-//				rs.setURIConverter(temp);
-//				Display.getDefault().asyncExec(
-//						new Runnable() {
-//							@Override
-//							public void run() {
-//								try {
-//									PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
-//											, null, IWorkbenchPage.VIEW_VISIBLE);
-//								} catch (final PartInitException e) {}
-//							}							
-//						});
-//			} catch (final Throwable e) {
-//				Platform.getLog(Activator.getDefault().getBundle()).log(
-//						new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An error occurred when creating validtion markers for an invalid scenario", e));
-//				
-//			}
-//
-//			return null;
-//		} else {
-		
+		// final IStatus status = (IStatus) resource.getAdapter(IStatus.class);
+		// if (status.matches(IStatus.ERROR)) {
+		// Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName()));
+		// final MMXRootObject root = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
+		// final ScheduleModel scheduleModel = root.getSubModel(ScheduleModel.class);
+		// if (scheduleModel != null) {
+		// // no solution, so clear state.
+		// scheduleModel.setInitialSchedule(null);
+		// scheduleModel.setOptimisedSchedule(null);
+		// scheduleModel.setDirty(false);
+		// }
+		// try {
+		// final ResourceSet rs = root.eResource().getResourceSet();
+		// // temporarily mess with joint model resource set's uri converter
+		// // so that all of the URIs appear to be the same, for marker util.
+		//
+		// // this may need improving later.
+		// final URIConverter temp = rs.getURIConverter();
+		// rs.setURIConverter(new ExtensibleURIConverterImpl() {
+		// @Override
+		// public URI normalize(URI uri) {
+		// return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
+		// }
+		// });
+		// MarkerUtil.updateMarkers(status);
+		//
+		// rs.setURIConverter(temp);
+		// Display.getDefault().asyncExec(
+		// new Runnable() {
+		// @Override
+		// public void run() {
+		// try {
+		// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
+		// , null, IWorkbenchPage.VIEW_VISIBLE);
+		// } catch (final PartInitException e) {}
+		// }
+		// });
+		// } catch (final Throwable e) {
+		// Platform.getLog(Activator.getDefault().getBundle()).log(
+		// new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An error occurred when creating validtion markers for an invalid scenario", e));
+		//
+		// }
+		//
+		// return null;
+		// } else {
+
 		final IScenarioService service = instance.getScenarioService();
 		if (service != null) {
 			try {
 				final EObject object = service.load(instance);
+
 				if (object instanceof MMXRootObject) {
 					final MMXRootObject root = (MMXRootObject) object;
+					{
+						final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+						validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+						final ValidationHelper helper = new ValidationHelper();
+						final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root);
+						final Collection<EObject> modelRoots = new LinkedList<EObject>();
+						for (final MMXSubModel subModel : root.getSubModels()) {
+							modelRoots.add(subModel.getSubModelInstance());
+						}
+
+						final IStatus status = helper.runValidation(validator, extraContext, modelRoots);
+
+						if (status.isOK() == false) {
+
+							// See if this command was executed in the UI thread - if so fire up the dialog box.
+							if (Display.getCurrent() != null) {
+
+								final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status);
+
+								dialog.setBlockOnOpen(true);
+
+								if (dialog.open() == Dialog.CANCEL) {
+									return null;
+								}
+							}
+						}
+
+						if (status.getSeverity() == IStatus.ERROR) {
+							return null;
+						}
+					}
 					final String uuid = instance.getUuid();
-					
+
 					IJobDescriptor job = jobManager.findJobForResource(uuid);
 					if (job == null) {
 						// create a new job
 						job = new LNGSchedulerJobDescriptor(instance.getName(), root, optimising);
 					}
-					
+
 					IJobControl control = jobManager.getControlForJob(job);
 					// If there is a job, but it is terminated, then we need to create a new one
 					if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
@@ -143,18 +186,18 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 						control = null;
 						job = new LNGSchedulerJobDescriptor(instance.getName(), root, optimising);
 					}
-					
+
 					if (control == null) {
 						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
 						control = jobManager.submitJob(job, uuid);
 					}
-					
-//					if (!jobManager.getSelectedJobs().contains(job)) {
-//						// Clean up when job is removed from manager
-//						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
-//						control = jobManager.submitJob(job, uuid);
-//					}
-					
+
+					// if (!jobManager.getSelectedJobs().contains(job)) {
+					// // Clean up when job is removed from manager
+					// jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
+					// control = jobManager.submitJob(job, uuid);
+					// }
+
 					if (control.getJobState() == EJobState.CREATED) {
 						try {
 							control.prepare();
@@ -170,34 +213,34 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 						control.start();
 					}
 				}
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		}
-			
-//			final ResourceSet rs = root.eResource().getResourceSet();
-			// temporarily mess with joint model resource set's uri converter
-			// so that all of the URIs appear to be the same, for marker util.
-//			
-//			// this may need improving later.
-//			final URIConverter temp = rs.getURIConverter();
-//			rs.setURIConverter(new ExtensibleURIConverterImpl() {
-//				@Override
-//				public URI normalize(URI uri) {
-//					return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-//				}
-//			});
-//			try {
-//				MarkerUtil.updateMarkers(status);
-//			} catch (CoreException e) {
-//			}
-//			
-//			rs.setURIConverter(temp);
-//		}
 
+		}
+
+		// final ResourceSet rs = root.eResource().getResourceSet();
+		// temporarily mess with joint model resource set's uri converter
+		// so that all of the URIs appear to be the same, for marker util.
+		//
+		// // this may need improving later.
+		// final URIConverter temp = rs.getURIConverter();
+		// rs.setURIConverter(new ExtensibleURIConverterImpl() {
+		// @Override
+		// public URI normalize(URI uri) {
+		// return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
+		// }
+		// });
+		// try {
+		// MarkerUtil.updateMarkers(status);
+		// } catch (CoreException e) {
+		// }
+		//
+		// rs.setURIConverter(temp);
+		// }
 
 		return null;
 	}
+
 }
