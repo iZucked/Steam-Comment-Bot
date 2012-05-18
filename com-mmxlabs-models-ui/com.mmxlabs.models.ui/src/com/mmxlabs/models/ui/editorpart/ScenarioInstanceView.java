@@ -5,8 +5,10 @@ import java.util.Stack;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -26,25 +28,47 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider {
-	private static final String SCENARIO_NAVIGATOR_ID="com.mmxlabs.scenario.service.ui.navigator";
+	private static final String SCENARIO_NAVIGATOR_ID = "com.mmxlabs.scenario.service.ui.navigator";
 	private ScenarioInstance scenarioInstance;
 	private ReferenceValueProviderCache valueProviderCache;
-	
+
+	private EContentAdapter lockedAdapter = new EContentAdapter() {
+
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+
+			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locked()) {
+				setLocked(notification.getNewBooleanValue());
+			}
+		}
+
+	};
+
 	protected void listenToScenarioSelection() {
 		getSite().getPage().addSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		selectionChanged(null, getSite().getPage().getSelection(SCENARIO_NAVIGATOR_ID));
 	}
-	
+
 	@Override
 	public void dispose() {
+
+		if (scenarioInstance != null) {
+			scenarioInstance.eAdapters().remove(lockedAdapter);
+		}
+
 		getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		super.dispose();
 	}
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		if (scenarioInstance != null) {
+			scenarioInstance.eAdapters().remove(lockedAdapter);
+		}
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structured = (IStructuredSelection) selection;
 			if (structured.size() == 1) {
@@ -56,7 +80,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		}
 		displayScenarioInstance(null);
 	}
-	
+
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
 		extraValidationContext.clear();
 		this.scenarioInstance = instance;
@@ -64,6 +88,8 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			getRootObject();
 			this.valueProviderCache = new ReferenceValueProviderCache(getRootObject());
 			extraValidationContext.push(new DefaultExtraValidationContext(getRootObject()));
+			scenarioInstance.eAdapters().add(lockedAdapter);
+			setLocked(instance.isLocked());
 		} else {
 			valueProviderCache = null;
 		}
@@ -76,11 +102,11 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public void setLocked(boolean locked) {
-		
+
 	}
 
 	private Stack<IExtraValidationContext> extraValidationContext = new Stack<IExtraValidationContext>();
-	
+
 	@Override
 	public IExtraValidationContext getExtraValidationContext() {
 		return extraValidationContext.peek();
@@ -112,24 +138,23 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	}
 
 	final ICommandHandler commandHandler = new ICommandHandler() {
-		
+
 		@Override
-		public void handleCommand(Command command, EObject target,
-				EStructuralFeature feature) {
+		public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
 			getEditingDomain().getCommandStack().execute(command);
 		}
-		
+
 		@Override
 		public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
 			return ScenarioInstanceView.this.getReferenceValueProviderCache();
 		}
-		
+
 		@Override
 		public EditingDomain getEditingDomain() {
 			return ScenarioInstanceView.this.getEditingDomain();
 		}
 	};
-	
+
 	@Override
 	public ICommandHandler getDefaultCommandHandler() {
 		return commandHandler;
@@ -162,7 +187,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public void setCurrentViewer(Viewer viewer) {
-		
+
 	}
 
 	@Override

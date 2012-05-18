@@ -279,6 +279,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			}
 			this.rootObject = root;
 
+			setLocked(instance.isLocked());
 		} else {
 			// Error!
 			throw new IllegalArgumentException("Editor input should be instance of IScenarioServiceEditorInput");
@@ -378,6 +379,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	protected void createPages() {
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.addPages(getContainer());
+			contribution.setLocked(isLocked());
 		}
 	}
 
