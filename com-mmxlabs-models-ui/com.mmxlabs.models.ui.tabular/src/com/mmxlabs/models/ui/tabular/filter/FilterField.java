@@ -27,7 +27,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 
-
 /**
  * Wraps up a text box, actions, events etc for a filter
  * 
@@ -75,17 +74,7 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 
 			@Override
 			public void run() {
-				text.setVisible(!text.getVisible());
-				layoutData.exclude = !layoutData.exclude;
-				text.getParent().layout(true);
-				if (text.isVisible() == false) {
-					if (viewer != null) {
-						viewer.setFilterString("");
-					}
-				} else {
-					text.setFocus();
-				}
-				setChecked(text.isVisible());
+				toggleVisibility();
 			}
 
 		}
@@ -154,5 +143,19 @@ public class FilterField implements ModifyListener, DisposeListener, KeyListener
 	@Override
 	public void proposalPopupClosed(final ContentProposalAdapter adapter) {
 		proposalLastClosed = System.currentTimeMillis();
+	}
+
+	public void toggleVisibility() {
+		text.setVisible(!text.getVisible());
+		layoutData.exclude = !layoutData.exclude;
+		text.getParent().layout(true);
+		if (text.isVisible() == false) {
+			if (viewer != null) {
+				viewer.setFilterString("");
+			}
+		} else {
+			text.setFocus();
+		}
+		contribution.getAction().setChecked(text.isVisible());
 	}
 }
