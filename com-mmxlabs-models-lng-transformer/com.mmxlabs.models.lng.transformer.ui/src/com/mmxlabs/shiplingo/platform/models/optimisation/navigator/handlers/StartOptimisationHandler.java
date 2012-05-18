@@ -211,6 +211,10 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 		final IStatus status = helper.runValidation(validator, extraContext, modelRoots);
 
+		if (status == null) {
+			return false;
+		}
+		
 		if (status.isOK() == false) {
 
 			// See if this command was executed in the UI thread - if so fire up the dialog box.
