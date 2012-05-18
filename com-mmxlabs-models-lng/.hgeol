@@ -1,4 +1,6 @@
 [patterns]
+**.ecore = native
+**.genmodel = native
 **.java = native
 **.txt = native
 **.ini = native
