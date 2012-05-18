@@ -15,6 +15,8 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.manager.IJobManager;
@@ -29,6 +31,7 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 
 public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScenarioServiceSelectionChangedListener {
+	private static final Logger log = LoggerFactory.getLogger(ScenarioViewerSynchronizer.class);
 	private Viewer viewer;
 	private IScenarioServiceSelectionProvider selectionProvider;
 	private HashSet<ScheduleModel> adaptees = new HashSet<ScheduleModel>();
@@ -38,8 +41,15 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		this.viewer = viewer;
 		this.collector = collector;
 		this.selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-		if (selectionProvider != null)
+		if (selectionProvider != null) {
 			selectionProvider.addSelectionChangedListener(this);
+			for (final ScenarioInstance instance : selectionProvider.getSelection()) {
+				adaptInstance(instance);
+			}
+		} else {
+		    log.warn("Viewer synchronizer for " + viewer.getClass() + " didn't find a selection provider"); 
+		}
+		
 		refreshViewer();
 	}
 
@@ -85,13 +95,17 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	@Override
 	public void selected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> selected) {
 		for (final ScenarioInstance instance : selected) {
-			final ScheduleModel scheduleModel = getScheduleModel(instance);
-			if (scheduleModel != null) {
-				scheduleModel.eAdapters().add(this);
-				adaptees.add(scheduleModel);
-			}
+			adaptInstance(instance);
 		}
 		refreshViewer();
+	}
+
+	private void adaptInstance(final ScenarioInstance instance) {
+		final ScheduleModel scheduleModel = getScheduleModel(instance);
+		if (scheduleModel != null) {
+			scheduleModel.eAdapters().add(this);
+			adaptees.add(scheduleModel);
+		}
 	}
 
 	@Override
@@ -127,8 +141,10 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	};
 
 	private void refreshViewer() {
-		needsRefresh = true;
-		Display.getDefault().asyncExec(refresh);
+		synchronized (this) {
+			needsRefresh = true;
+			Display.getDefault().asyncExec(refresh);
+		}
 	}
 	
 	private IScenarioViewerSynchronizerOutput collectObjects() {
