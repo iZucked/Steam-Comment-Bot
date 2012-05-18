@@ -24,15 +24,15 @@ import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.editorpart.JointModelEditorPart;
 
 /**
- * This editor contribution doesn't display anything in the editor. It does add an adapter which updates the
- * dirty state bit on the schedule model. This may in turn trigger re-evaluation, if live evaluation is on.
+ * This editor contribution doesn't display anything in the editor. It does add an adapter which updates the dirty state bit on the schedule model. This may in turn trigger re-evaluation, if live
+ * evaluation is on.
  * 
  * @author hinton
- *
+ * 
  */
 public class ScheduleModelEditorContribution extends BaseJointModelEditorContribution<ScheduleModel> {
 	private static final Logger log = LoggerFactory.getLogger(ScheduleModelEditorContribution.class);
-	private MMXContentAdapter dirtyStateAdapter = new MMXContentAdapter() {
+	private final MMXContentAdapter dirtyStateAdapter = new MMXContentAdapter() {
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
 			final int type = notification.getEventType();
@@ -41,10 +41,12 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 			case Notification.REMOVING_ADAPTER:
 				break;
 			default:
-				if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) return; // this feature is irrelevant
+				if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name())
+					return; // this feature is irrelevant
 				EObject target = (EObject) notification.getNotifier();
 				while (target != null) {
-					if (target == modelObject) return;
+					if (target == modelObject)
+						return;
 					target = target.eContainer();
 				}
 				log.debug("Setting dirty bit on schedule model");
@@ -52,8 +54,8 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 			}
 		}
 	};
-	private List<UUIDObject> adaptedObjects = new ArrayList<UUIDObject>();
-	
+	private final List<UUIDObject> adaptedObjects = new ArrayList<UUIDObject>();
+
 	@Override
 	public void init(final JointModelEditorPart editorPart, final MMXRootObject rootObject, final UUIDObject modelObject) {
 		super.init(editorPart, rootObject, modelObject);
@@ -71,15 +73,13 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 		super.dispose();
 	}
 
-
-
 	@Override
-	public void addPages(Composite parent) {
-		
+	public void addPages(final Composite parent) {
+
 	}
 
 	@Override
-	public void setLocked(boolean locked) {
-		
+	public void setLocked(final boolean locked) {
+
 	}
 }
