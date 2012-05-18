@@ -106,6 +106,15 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 							}
 						}
 
+						{
+							// Make sure current selection is in the list (check again in case filtered by contract)
+							final Port port = slot.getPort();
+							final Pair<String, EObject> pair = new Pair<String, EObject>(port.getName(), port);
+							if (!filteredList.contains(pair)) {
+								filteredList.add(pair);
+							}
+						}
+						
 						return filteredList;
 					}
 					return delegateValue;
