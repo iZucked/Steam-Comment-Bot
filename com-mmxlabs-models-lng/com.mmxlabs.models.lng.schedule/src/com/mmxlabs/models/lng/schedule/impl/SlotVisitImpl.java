@@ -3,6 +3,9 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -324,6 +327,38 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		return super.eInvoke(operationID, arguments);
 	}
 
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String type() {
+		
+		final SlotAllocation slotAllocation = getSlotAllocation();
+		final Slot slot = slotAllocation.getSlot();
+		if (slot instanceof LoadSlot) {
+			return "Load";
+		} else if (slot instanceof DischargeSlot) {
+			return "Discharge";
+		}
+		return "Unknown";
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String name() {
+		final SlotAllocation slotAllocation = getSlotAllocation();
+		final Slot slot = slotAllocation.getSlot();
+		if (slot != null) {
+			return slot.getName();
+		}
+		return "";
+	}
+	
 } // end of SlotVisitImpl
 
 // finish type fixing
