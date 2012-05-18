@@ -230,6 +230,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	 */
 	public void setLocked(final boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
+		refresh(true);
 	}
 
 	private boolean displayValidationErrors = true;
@@ -334,6 +335,17 @@ public class EObjectTableViewer extends GridTableViewer {
 
 			private final Color errorColour = new Color(Display.getDefault(), new RGB(255, 100, 100));
 			private final Color warningColour = new Color(Display.getDefault(), new RGB(255, 242, 0));
+			private final Color lockedColour = new Color(Display.getDefault(), new RGB(100, 100, 100));
+
+			@Override
+			public Color getForeground(final Object element) {
+
+				if (lockedForEditing) {
+					return lockedColour;
+				}
+
+				return super.getForeground(element);
+			}
 
 			@Override
 			public Color getBackground(final Object element) {
@@ -387,6 +399,7 @@ public class EObjectTableViewer extends GridTableViewer {
 			public void dispose() {
 				errorColour.dispose();
 				warningColour.dispose();
+				lockedColour.dispose();
 				super.dispose();
 			}
 		});
