@@ -8,11 +8,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
@@ -180,6 +182,14 @@ public abstract class AbstractScenarioService implements IScenarioService {
 			}
 		};
 
+		commandStack.addCommandStackListener(new CommandStackListener() {
+
+			@Override
+			public void commandStackChanged(EventObject event) {
+				instance.setDirty(commandStack.isSaveNeeded());
+			}
+		});
+
 		final ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
 
 		adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
@@ -214,6 +224,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		if (metadata != null) {
 			metadata.setLastModified(new Date());
 		}
+		scenarioInstance.setDirty(false);
 	}
 
 	@Override

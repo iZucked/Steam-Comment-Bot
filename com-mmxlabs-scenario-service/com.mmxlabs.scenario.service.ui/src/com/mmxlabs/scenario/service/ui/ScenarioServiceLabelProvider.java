@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scenario.service.ui;
 
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.SWT;
@@ -45,13 +44,8 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 			if (object instanceof ScenarioInstance) {
 				final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
-				if (scenarioInstance.getAdapters() != null) {
-					final BasicCommandStack stack = (BasicCommandStack) scenarioInstance.getAdapters().get(BasicCommandStack.class);
-					if (stack != null) {
-						if (stack.isSaveNeeded()) {
-							text = "* " + text;
-						}
-					}
+				if (scenarioInstance.isDirty()) {
+					text = "* " + text;
 				}
 			}
 

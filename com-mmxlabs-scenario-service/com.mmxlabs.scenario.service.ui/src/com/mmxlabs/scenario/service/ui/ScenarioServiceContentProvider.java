@@ -5,17 +5,12 @@
 package com.mmxlabs.scenario.service.ui;
 
 import java.util.ArrayList;
-import java.util.EventObject;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -37,39 +32,8 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 	private final Map<Object, Boolean> filteredElements = new WeakHashMap<Object, Boolean>();
 
-	private final Map<BasicCommandStack, ScenarioInstance> commandStackMap = new HashMap<BasicCommandStack, ScenarioInstance>();
-
-	/**
-	 * Listener to react to dirty status change.
-	 */
-	private final CommandStackListener commandStackListener = new CommandStackListener() {
-
-		@Override
-		public void commandStackChanged(final EventObject event) {
-			if (viewer instanceof StructuredViewer) {
-				final StructuredViewer structuredViewer = (StructuredViewer) viewer;
-				final Object x = event.getSource();
-				if (x instanceof BasicCommandStack) {
-					final BasicCommandStack basicCommandStack = (BasicCommandStack) x;
-					final ScenarioInstance instance = commandStackMap.get(basicCommandStack);
-					structuredViewer.update(instance, null);
-				}
-
-			}
-		}
-	};
-
 	public ScenarioServiceContentProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
-	}
-
-	@Override
-	public void dispose() {
-		for (final BasicCommandStack stack : commandStackMap.keySet()) {
-			stack.removeCommandStackListener(commandStackListener);
-		}
-
-		super.dispose();
 	}
 
 	@Override
@@ -86,17 +50,6 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 	@Override
 	public Object[] getChildren(final Object object) {
-
-		if (object instanceof ScenarioInstance) {
-			final ScenarioInstance scenarioInstance = (ScenarioInstance) object;
-			final Map<Class<?>, Object> adapters = scenarioInstance.getAdapters();
-			if (adapters != null) {
-				final BasicCommandStack stack = (BasicCommandStack) adapters.get(BasicCommandStack.class);
-				stack.addCommandStackListener(commandStackListener);
-				commandStackMap.put(stack, scenarioInstance);
-			}
-
-		}
 
 		final Object[] elements;
 		if (object instanceof ScenarioServiceRegistry) {

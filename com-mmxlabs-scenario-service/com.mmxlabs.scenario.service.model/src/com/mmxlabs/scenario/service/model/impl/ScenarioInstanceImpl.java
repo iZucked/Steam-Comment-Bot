@@ -34,13 +34,13 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getAdapters <em>Adapters</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getSubModelURIs <em>Sub Model UR Is</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isDirty <em>Dirty</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class ScenarioInstanceImpl extends ContainerImpl implements
-		ScenarioInstance {
+public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInstance {
 	/**
 	 * The default value of the '{@link #getUuid() <em>Uuid</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -132,6 +132,26 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 	protected EList<String> dependencyUUIDs;
 
 	/**
+	 * The default value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDirty()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DIRTY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDirty()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean dirty = DIRTY_EDEFAULT;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -168,9 +188,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 		String oldUuid = uuid;
 		uuid = newUuid;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					ScenarioServicePackage.SCENARIO_INSTANCE__UUID, oldUuid,
-					uuid));
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__UUID, oldUuid, uuid));
 	}
 
 	/**
@@ -187,15 +205,11 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetMetadata(Metadata newMetadata,
-			NotificationChain msgs) {
+	public NotificationChain basicSetMetadata(Metadata newMetadata, NotificationChain msgs) {
 		Metadata oldMetadata = metadata;
 		metadata = newMetadata;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this,
-					Notification.SET,
-					ScenarioServicePackage.SCENARIO_INSTANCE__METADATA,
-					oldMetadata, newMetadata);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__METADATA, oldMetadata, newMetadata);
 			if (msgs == null)
 				msgs = notification;
 			else
@@ -213,26 +227,14 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 		if (newMetadata != metadata) {
 			NotificationChain msgs = null;
 			if (metadata != null)
-				msgs = ((InternalEObject) metadata)
-						.eInverseRemove(
-								this,
-								EOPPOSITE_FEATURE_BASE
-										- ScenarioServicePackage.SCENARIO_INSTANCE__METADATA,
-								null, msgs);
+				msgs = ((InternalEObject) metadata).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioServicePackage.SCENARIO_INSTANCE__METADATA, null, msgs);
 			if (newMetadata != null)
-				msgs = ((InternalEObject) newMetadata)
-						.eInverseAdd(
-								this,
-								EOPPOSITE_FEATURE_BASE
-										- ScenarioServicePackage.SCENARIO_INSTANCE__METADATA,
-								null, msgs);
+				msgs = ((InternalEObject) newMetadata).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioServicePackage.SCENARIO_INSTANCE__METADATA, null, msgs);
 			msgs = basicSetMetadata(newMetadata, msgs);
 			if (msgs != null)
 				msgs.dispatch();
 		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					ScenarioServicePackage.SCENARIO_INSTANCE__METADATA,
-					newMetadata, newMetadata));
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__METADATA, newMetadata, newMetadata));
 	}
 
 	/**
@@ -253,9 +255,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 		boolean oldLocked = locked;
 		locked = newLocked;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED,
-					oldLocked, locked));
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED, oldLocked, locked));
 	}
 
 	/**
@@ -269,9 +269,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 			instance = eResolveProxy(oldInstance);
 			if (instance != oldInstance) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE,
-							oldInstance, instance));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE, oldInstance, instance));
 			}
 		}
 		return instance;
@@ -295,9 +293,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 		EObject oldInstance = instance;
 		instance = newInstance;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE,
-					oldInstance, instance));
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE, oldInstance, instance));
 	}
 
 	/**
@@ -318,9 +314,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 		Map<Class<?>, Object> oldAdapters = adapters;
 		adapters = newAdapters;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS,
-					oldAdapters, adapters));
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS, oldAdapters, adapters));
 	}
 
 	/**
@@ -330,8 +324,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 	 */
 	public EList<String> getSubModelURIs() {
 		if (subModelURIs == null) {
-			subModelURIs = new EDataTypeUniqueEList<String>(String.class, this,
-					ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS);
+			subModelURIs = new EDataTypeUniqueEList<String>(String.class, this, ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS);
 		}
 		return subModelURIs;
 	}
@@ -343,11 +336,30 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 	 */
 	public EList<String> getDependencyUUIDs() {
 		if (dependencyUUIDs == null) {
-			dependencyUUIDs = new EDataTypeUniqueEList<String>(String.class,
-					this,
-					ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS);
+			dependencyUUIDs = new EDataTypeUniqueEList<String>(String.class, this, ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS);
 		}
 		return dependencyUUIDs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isDirty() {
+		return dirty;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDirty(boolean newDirty) {
+		boolean oldDirty = dirty;
+		dirty = newDirty;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY, oldDirty, dirty));
 	}
 
 	/**
@@ -365,8 +377,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd,
-			int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 			return basicSetMetadata(null, msgs);
@@ -398,6 +409,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 			return getSubModelURIs();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
 			return getDependencyUUIDs();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
+			return isDirty();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -432,8 +445,10 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
 			getDependencyUUIDs().clear();
-			getDependencyUUIDs()
-					.addAll((Collection<? extends String>) newValue);
+			getDependencyUUIDs().addAll((Collection<? extends String>) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
+			setDirty((Boolean) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -468,6 +483,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
 			getDependencyUUIDs().clear();
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
+			setDirty(DIRTY_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -481,8 +499,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__UUID:
-			return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT
-					.equals(uuid);
+			return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 			return metadata != null;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKED:
@@ -495,6 +512,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 			return subModelURIs != null && !subModelURIs.isEmpty();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
 			return dependencyUUIDs != null && !dependencyUUIDs.isEmpty();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
+			return dirty != DIRTY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -520,6 +539,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements
 		result.append(subModelURIs);
 		result.append(", dependencyUUIDs: ");
 		result.append(dependencyUUIDs);
+		result.append(", dirty: ");
+		result.append(dirty);
 		result.append(')');
 		return result.toString();
 	}
