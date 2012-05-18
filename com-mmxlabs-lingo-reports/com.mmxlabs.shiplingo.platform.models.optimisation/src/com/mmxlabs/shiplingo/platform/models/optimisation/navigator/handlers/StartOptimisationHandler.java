@@ -12,8 +12,6 @@ import java.util.LinkedList;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
@@ -23,11 +21,14 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.impl.DisposeOnRemoveEclipseListener;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
+import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
@@ -46,6 +47,9 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescrip
  * @see org.eclipse.core.commands.AbstractHandler
  */
 public class StartOptimisationHandler extends AbstractOptimisationHandler {
+
+	private static final Logger log = LoggerFactory.getLogger(StartOptimisationHandler.class);
+
 	final boolean optimising;
 
 	/**
@@ -86,51 +90,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 	}
 
 	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final boolean optimising) {
-		// final IStatus status = (IStatus) resource.getAdapter(IStatus.class);
-		// if (status.matches(IStatus.ERROR)) {
-		// Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, "Validation errors were found in the resource " + resource.getName()));
-		// final MMXRootObject root = (MMXRootObject) resource.getAdapter(MMXRootObject.class);
-		// final ScheduleModel scheduleModel = root.getSubModel(ScheduleModel.class);
-		// if (scheduleModel != null) {
-		// // no solution, so clear state.
-		// scheduleModel.setInitialSchedule(null);
-		// scheduleModel.setOptimisedSchedule(null);
-		// scheduleModel.setDirty(false);
-		// }
-		// try {
-		// final ResourceSet rs = root.eResource().getResourceSet();
-		// // temporarily mess with joint model resource set's uri converter
-		// // so that all of the URIs appear to be the same, for marker util.
-		//
-		// // this may need improving later.
-		// final URIConverter temp = rs.getURIConverter();
-		// rs.setURIConverter(new ExtensibleURIConverterImpl() {
-		// @Override
-		// public URI normalize(URI uri) {
-		// return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-		// }
-		// });
-		// MarkerUtil.updateMarkers(status);
-		//
-		// rs.setURIConverter(temp);
-		// Display.getDefault().asyncExec(
-		// new Runnable() {
-		// @Override
-		// public void run() {
-		// try {
-		// PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProblemView" // TODO find where this lives
-		// , null, IWorkbenchPage.VIEW_VISIBLE);
-		// } catch (final PartInitException e) {}
-		// }
-		// });
-		// } catch (final Throwable e) {
-		// Platform.getLog(Activator.getDefault().getBundle()).log(
-		// new Status(IStatus.ERROR, Activator.PLUGIN_ID, "An error occurred when creating validtion markers for an invalid scenario", e));
-		//
-		// }
-		//
-		// return null;
-		// } else {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service != null) {
@@ -139,39 +98,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 				if (object instanceof MMXRootObject) {
 					final MMXRootObject root = (MMXRootObject) object;
-					{
-						final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
-						validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 
-						final ValidationHelper helper = new ValidationHelper();
-						final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root);
-						final Collection<EObject> modelRoots = new LinkedList<EObject>();
-						for (final MMXSubModel subModel : root.getSubModels()) {
-							modelRoots.add(subModel.getSubModelInstance());
-						}
-
-						final IStatus status = helper.runValidation(validator, extraContext, modelRoots);
-
-						if (status.isOK() == false) {
-
-							// See if this command was executed in the UI thread - if so fire up the dialog box.
-							if (Display.getCurrent() != null) {
-
-								final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status);
-
-								// Wait for use to press a button before continuing.
-								dialog.setBlockOnOpen(true);
-
-								if (dialog.open() == Dialog.CANCEL) {
-									return null;
-								}
-							}
-						}
-
-						if (status.getSeverity() == IStatus.ERROR) {
-							return null;
-						}
-					}
 					final String uuid = instance.getUuid();
 
 					IJobDescriptor job = jobManager.findJobForResource(uuid);
@@ -186,9 +113,16 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 						jobManager.removeJob(job);
 						control = null;
 						job = new LNGSchedulerJobDescriptor(instance.getName(), root, optimising);
+
 					}
 
 					if (control == null) {
+
+						// New optimisation, so check there are no validation errors.
+						if (!validateScenario(root)) {
+							return null;
+						}
+
 						jobManager.addEclipseJobManagerListener(new DisposeOnRemoveEclipseListener(job));
 						control = jobManager.submitJob(job, uuid);
 					}
@@ -201,47 +135,103 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 					if (control.getJobState() == EJobState.CREATED) {
 						try {
+
+							// Add listener to unlock scenario when it stops optimising
+							control.addListener(new IJobControlListener() {
+
+								@Override
+								public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
+
+									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
+										instance.setLocked(false);
+										return false;
+									}
+									return true;
+								}
+
+								@Override
+								public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
+									return true;
+								}
+							});
+							// Set initial state.
+							instance.setLocked(true);
 							control.prepare();
 							control.start();
 						} catch (final Exception ex) {
-							Platform.getLog(Activator.getDefault().getBundle()).log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK, "An error ocurred starting the optimisation", ex));
+							log.error(ex.getMessage(), ex);
 							control.cancel();
 						}
 						// Resume if paused
 					} else if (control.getJobState() == EJobState.PAUSED) {
 						control.resume();
+						instance.setLocked(true);
 					} else {
+						// Add listener to unlock scenario when it stops optimising
+						control.addListener(new IJobControlListener() {
+
+							@Override
+							public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
+
+								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
+									instance.setLocked(false);
+									return false;
+								}
+								return true;
+							}
+
+							@Override
+							public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
+								return true;
+							}
+						});
+						instance.setLocked(true);
 						control.start();
 					}
 				}
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.error(e.getMessage(), e);
 			}
 
 		}
 
-		// final ResourceSet rs = root.eResource().getResourceSet();
-		// temporarily mess with joint model resource set's uri converter
-		// so that all of the URIs appear to be the same, for marker util.
-		//
-		// // this may need improving later.
-		// final URIConverter temp = rs.getURIConverter();
-		// rs.setURIConverter(new ExtensibleURIConverterImpl() {
-		// @Override
-		// public URI normalize(URI uri) {
-		// return URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-		// }
-		// });
-		// try {
-		// MarkerUtil.updateMarkers(status);
-		// } catch (CoreException e) {
-		// }
-		//
-		// rs.setURIConverter(temp);
-		// }
-
 		return null;
+	}
+
+	public static boolean validateScenario(final MMXRootObject root) {
+		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		final ValidationHelper helper = new ValidationHelper();
+		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root);
+		final Collection<EObject> modelRoots = new LinkedList<EObject>();
+		for (final MMXSubModel subModel : root.getSubModels()) {
+			modelRoots.add(subModel.getSubModelInstance());
+		}
+
+		final IStatus status = helper.runValidation(validator, extraContext, modelRoots);
+
+		if (status.isOK() == false) {
+
+			// See if this command was executed in the UI thread - if so fire up the dialog box.
+			if (Display.getCurrent() != null) {
+
+				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status);
+
+				// Wait for use to press a button before continuing.
+				dialog.setBlockOnOpen(true);
+
+				if (dialog.open() == Dialog.CANCEL) {
+					return false;
+				}
+			}
+		}
+
+		if (status.getSeverity() == IStatus.ERROR) {
+			return false;
+		}
+
+		return true;
 	}
 
 }
