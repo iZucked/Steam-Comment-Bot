@@ -7,8 +7,6 @@ import org.eclipse.ui.IPerspectiveFactory;
 public class PhysicalPerspective implements IPerspectiveFactory {
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
-		final IFolderLayout navigator = layout.createFolder("navFolder", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
-		navigator.addView("com.mmxlabs.scenario.service.ui.navigator");
 		
 		final IFolderLayout viewsFolder = layout.createFolder("viewsFolder", IPageLayout.TOP, 1, IPageLayout.ID_EDITOR_AREA);
 		

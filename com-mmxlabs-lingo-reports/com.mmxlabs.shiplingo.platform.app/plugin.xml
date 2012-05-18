@@ -106,7 +106,7 @@
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension
-            targetID="com.mmxlabs.shiplingo.platform.app.perspective.editing">
+            targetID="*">
          <view
                id="com.mmxlabs.scenario.service.ui.navigator"
                minimized="true"

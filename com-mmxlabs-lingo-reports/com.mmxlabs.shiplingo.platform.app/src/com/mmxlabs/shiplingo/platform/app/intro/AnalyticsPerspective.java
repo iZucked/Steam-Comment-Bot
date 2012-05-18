@@ -23,9 +23,6 @@ public class AnalyticsPerspective implements IPerspectiveFactory {
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
 
-		final IFolderLayout navFolder = layout.createFolder("navFolder", IPageLayout.LEFT, 0.2f, IPageLayout.ID_EDITOR_AREA);
-		navFolder.addView("com.mmxlabs.scenario.service.ui.navigator");
-
 		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.3f, IPageLayout.ID_EDITOR_AREA);
 
 		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.BOTTOM, 0.5f, SchedulerView.ID);
@@ -48,7 +45,6 @@ public class AnalyticsPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(CooldownReportView.ID);
 		layout.addShowViewShortcut(PortRotationReportView.ID);
 
-		layout.addShowViewShortcut("com.mmxlabs.scenario.service.ui.navigator");
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
 		layout.addPerspectiveShortcut("com.mmxlabs.shiplingo.platform.app.perspective.optimisation");
