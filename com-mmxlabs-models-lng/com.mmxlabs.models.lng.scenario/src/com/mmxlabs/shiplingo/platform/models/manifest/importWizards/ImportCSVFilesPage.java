@@ -132,7 +132,12 @@ public class ImportCSVFilesPage extends WizardPage {
 				ffe.getTextControl(g).addModifyListener(new ModifyListener() {
 					@Override
 					public void modifyText(final ModifyEvent e) {
-						chunk.keys.put(entry.getKey(), ffe.getStringValue());
+						String stringValue = ffe.getStringValue();
+						if (stringValue.isEmpty()) {
+							chunk.keys.remove(entry.getKey());
+						} else {
+							chunk.keys.put(entry.getKey(), stringValue);
+						}
 					}
 				});
 				chunk.editors.put(entry.getKey(), ffe);
@@ -210,9 +215,9 @@ public class ImportCSVFilesPage extends WizardPage {
 
 						final List<EObject> models = new LinkedList<EObject>();
 						if (doImport(context, models) != null) {
-							
+
 							monitor.worked(1);
-							
+
 							ImportCSVFilesPage.this.importContext = context;
 							final Container container = mainPage.getScenarioContainer();
 							final IScenarioService scenarioService = container.getScenarioService();
@@ -220,7 +225,7 @@ public class ImportCSVFilesPage extends WizardPage {
 							try {
 								final ScenarioInstance instance = scenarioService.insert(container, Collections.<ScenarioInstance> emptySet(), models);
 								monitor.worked(1);
-								
+
 								instance.setName(mainPage.getFileName());
 
 								final Metadata metadata = instance.getMetadata();
@@ -229,7 +234,7 @@ public class ImportCSVFilesPage extends WizardPage {
 								metadata.setContentType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
 
 								ImportCSVFilesPage.this.setScenarioInstance(instance);
-								
+
 							} catch (final IOException e) {
 								log.error(e.getMessage(), e);
 								setErrorMessage(e.getMessage());
