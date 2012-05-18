@@ -71,6 +71,8 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 
 					if (target instanceof Slot) {
+						final Slot slot = (Slot) target;
+
 						final PortCapability capability = (target instanceof LoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
 						final ArrayList<Pair<String, EObject>> filterOne = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> p : delegateValue) {
@@ -78,8 +80,17 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 								filterOne.add(p);
 							}
 						}
+
+						{
+							// Make sure current selection is in the list
+							final Port port = slot.getPort();
+							final Pair<String, EObject> pair = new Pair<String, EObject>(port.getName(), port);
+							if (!filterOne.contains(pair)) {
+								filterOne.add(pair);
+							}
+						}
+
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
-						final Slot slot = (Slot) target;
 						final Contract contract = slot.getContract();
 						if (contract == null) {
 							return filterOne;
@@ -92,15 +103,6 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 						for (final Pair<String, EObject> value : filterOne) {
 							if (ports.contains(value.getSecond())) {
 								filteredList.add(value);
-							}
-						}
-
-						{
-							// Make sure current selection is in the list
-							final Port port = slot.getPort();
-							final Pair<String, EObject> pair = new Pair<String, EObject>(port.getName(), port);
-							if (!filteredList.contains(pair)) {
-								filteredList.add(pair);
 							}
 						}
 
