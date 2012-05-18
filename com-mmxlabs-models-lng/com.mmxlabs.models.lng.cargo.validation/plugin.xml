@@ -98,8 +98,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Cargo {0} does not have enough travel time - {1} hours are required for the journey, but only {2} hours
-            		are available.
+                  Cargo {0} does not have enough travel time - {1} hours are required for the journey, but only {2} hours are available.
                </message>
                <description>
                   The load and discharge dates for a cargo should allow enough time between them for
