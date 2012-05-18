@@ -145,7 +145,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		}
 
 		final Button auto = new Button(top, SWT.NONE);
-		auto.setText("Choose Directory...");
+		auto.setText("Choose &Directory...");
 
 		auto.addSelectionListener(new SelectionAdapter() {
 			@Override
