@@ -37,6 +37,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -153,16 +154,21 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	 */
 	@Override
 	public void setLocked(final boolean locked) {
-		this.locked = locked;
-		for (final IJointModelEditorContribution contribution : contributions) {
-			contribution.setLocked(locked);
-		}
-		
-		String title = getEditorInput().getName();
-		if (locked) {
-			title += " (locked)";
-		}
-		setPartName(title);
+		Display.getDefault().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				JointModelEditorPart.this.locked = locked;
+				for (final IJointModelEditorContribution contribution : contributions) {
+					contribution.setLocked(locked);
+				}
+
+				String title = getEditorInput().getName();
+				if (locked) {
+					title += " (locked)";
+				}
+				setPartName(title);
+			}
+		});
 	}
 
 	public boolean isSaving() {
