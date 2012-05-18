@@ -301,7 +301,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			commandStack.addCommandStackListener(new CommandStackListener() {
 				@Override
 				public void commandStackChanged(final EventObject event) {
-					firePropertyChange(IEditorPart.PROP_DIRTY);
+					getContainer().getDisplay().asyncExec(new Runnable() {
+						public void run() {
+							firePropertyChange(IEditorPart.PROP_DIRTY);
+						}
+					});
 				}
 			});
 
