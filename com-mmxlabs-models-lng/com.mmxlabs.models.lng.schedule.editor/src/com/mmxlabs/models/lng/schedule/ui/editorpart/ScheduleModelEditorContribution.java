@@ -53,6 +53,14 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 				ScheduleModelEditorContribution.this.modelObject.setDirty(true);
 			}
 		}
+
+		protected void missedNotifications(final List<Notification> missed) {
+			// Re-process missed notifications to update dirty state.
+			final List<Notification> copied = new ArrayList<Notification>(missed);
+			for (final Notification n : copied) {
+				reallyNotifyChanged(n);
+			}
+		}
 	};
 	private final List<UUIDObject> adaptedObjects = new ArrayList<UUIDObject>();
 
