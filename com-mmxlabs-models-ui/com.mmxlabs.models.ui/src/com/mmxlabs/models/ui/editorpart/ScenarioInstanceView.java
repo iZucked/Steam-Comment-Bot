@@ -13,6 +13,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
@@ -34,6 +35,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	private static final String SCENARIO_NAVIGATOR_ID = "com.mmxlabs.scenario.service.ui.navigator";
 	private ScenarioInstance scenarioInstance;
 	private ReferenceValueProviderCache valueProviderCache;
+	private boolean locked;
 
 	private EContentAdapter lockedAdapter = new EContentAdapter() {
 
@@ -42,7 +44,13 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			super.notifyChanged(notification);
 
 			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locked()) {
-				setLocked(notification.getNewBooleanValue());
+				Display.getDefault().asyncExec(new Runnable() {
+					
+					@Override
+					public void run() {
+						setLocked(notification.getNewBooleanValue());
+					}
+				});
 			}
 		}
 
@@ -73,7 +81,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			final IStructuredSelection structured = (IStructuredSelection) selection;
 			if (structured.size() == 1) {
 				if (structured.getFirstElement() instanceof ScenarioInstance) {
-					displayScenarioInstance((ScenarioInstance) structured.getFirstElement());
+					ScenarioInstance instance = (ScenarioInstance) structured.getFirstElement();
+					displayScenarioInstance(instance);
+					scenarioInstance.eAdapters().add(lockedAdapter);
+					setLocked(instance.isLocked());
 					return;
 				}
 			}
@@ -88,8 +99,6 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			getRootObject();
 			this.valueProviderCache = new ReferenceValueProviderCache(getRootObject());
 			extraValidationContext.push(new DefaultExtraValidationContext(getRootObject()));
-			scenarioInstance.eAdapters().add(lockedAdapter);
-			setLocked(instance.isLocked());
 		} else {
 			valueProviderCache = null;
 		}
@@ -97,12 +106,12 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public boolean isLocked() {
-		return false;
+		return locked;
 	}
 
 	@Override
 	public void setLocked(boolean locked) {
-
+		this.locked = locked;
 	}
 
 	private Stack<IExtraValidationContext> extraValidationContext = new Stack<IExtraValidationContext>();
