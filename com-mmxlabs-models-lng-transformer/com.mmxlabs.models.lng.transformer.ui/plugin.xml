@@ -155,21 +155,6 @@
             <adapter
                   type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
             </adapter>
-            <!--
-            <adapter
-                  type="org.eclipse.core.resources.IResource">
-            </adapter>
-            <adapter
-                  type="org.eclipse.core.resources.IContainer">
-            </adapter>
-            -->
-         </factory>
-         <factory
-               adaptableType="org.eclipse.core.resources.IResource"
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.adapterfactories.LNGJobDescriptorAdapterFactory">
-            <adapter
-                  type="com.mmxlabs.jobmanager.jobs.IJobDescriptor">
-            </adapter>
          </factory>
          <factory
                adaptableType="com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor"
