@@ -104,7 +104,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					IJobDescriptor job = jobManager.findJobForResource(uuid);
 					if (job == null) {
 						// create a new job
-						job = new LNGSchedulerJobDescriptor(instance.getName(), root, optimising);
+						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimising);
 					}
 
 					IJobControl control = jobManager.getControlForJob(job);
@@ -112,7 +112,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
 						jobManager.removeJob(job);
 						control = null;
-						job = new LNGSchedulerJobDescriptor(instance.getName(), root, optimising);
+						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimising);
 
 					}
 
