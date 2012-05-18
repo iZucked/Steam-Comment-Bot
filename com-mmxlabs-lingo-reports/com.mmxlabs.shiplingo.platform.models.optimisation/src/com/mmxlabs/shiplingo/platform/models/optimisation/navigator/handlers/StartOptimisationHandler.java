@@ -159,6 +159,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 								final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status);
 
+								// Wait for use to press a button before continuing.
 								dialog.setBlockOnOpen(true);
 
 								if (dialog.open() == Dialog.CANCEL) {
