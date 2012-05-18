@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -34,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
 
 import com.mmxlabs.common.Pair;
 
@@ -505,5 +507,39 @@ public class ListSelectionDialog extends Dialog {
 
 	public Object[] getResult() {
 		return result;
+	}
+
+	@Override
+	protected void createButtonsForButtonBar(final Composite parent) {
+		createButton(parent, IDialogConstants.SELECT_ALL_ID, "Select All", false);
+		createButton(parent, IDialogConstants.DESELECT_ALL_ID, "Select None", false);
+		super.createButtonsForButtonBar(parent);
+
+	}
+
+	protected void buttonPressed(final int buttonId) {
+		if (IDialogConstants.SELECT_ALL_ID == buttonId) {
+			selectAll();
+		} else if (IDialogConstants.DESELECT_ALL_ID == buttonId) {
+			deselectAll();
+		} else {
+			super.buttonPressed(buttonId);
+		}
+	}
+
+	private void deselectAll() {
+		final TreeItem[] items = viewer.getTree().getItems();
+		for (int i = 0; i < items.length; i++) {
+			final Object element = items[i].getData();
+			viewer.setSubtreeChecked(element, false);
+		}
+	}
+
+	private void selectAll() {
+		final TreeItem[] items = viewer.getTree().getItems();
+		for (int i = 0; i < items.length; i++) {
+			final Object element = items[i].getData();
+			viewer.setSubtreeChecked(element, true);
+		}
 	}
 }
