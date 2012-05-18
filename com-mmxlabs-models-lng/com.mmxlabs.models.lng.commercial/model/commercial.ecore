@@ -22,8 +22,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="preferredPort" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SalesContract" eSuperTypes="#//Contract"/>
-  <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" eSuperTypes="#//Contract"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SalesContract" abstract="true" eSuperTypes="#//Contract"/>
+  <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" abstract="true" eSuperTypes="#//Contract"/>
   <eClassifiers xsi:type="ecore:EClass" name="FixedPriceContract" eSuperTypes="#//SalesContract #//PurchaseContract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricePerMMBTU" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>

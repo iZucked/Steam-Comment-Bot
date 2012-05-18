@@ -11,7 +11,7 @@ package com.mmxlabs.models.lng.commercial;
  *
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface SalesContract extends Contract {

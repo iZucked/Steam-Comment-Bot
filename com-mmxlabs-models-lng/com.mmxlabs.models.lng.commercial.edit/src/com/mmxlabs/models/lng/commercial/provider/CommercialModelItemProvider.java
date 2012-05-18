@@ -218,22 +218,12 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createSalesContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
 				 CommercialFactory.eINSTANCE.createFixedPriceContract()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
 				 CommercialFactory.eINSTANCE.createIndexPriceContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createPurchaseContract()));
 
 		newChildDescriptors.add
 			(createChildParameter

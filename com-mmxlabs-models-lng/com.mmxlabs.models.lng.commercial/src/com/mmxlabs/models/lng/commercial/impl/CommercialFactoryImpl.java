@@ -61,8 +61,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.COMMERCIAL_MODEL: return createCommercialModel();
 			case CommercialPackage.LEGAL_ENTITY: return createLegalEntity();
 			case CommercialPackage.CONTRACT: return createContract();
-			case CommercialPackage.SALES_CONTRACT: return createSalesContract();
-			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			case CommercialPackage.FIXED_PRICE_CONTRACT: return createFixedPriceContract();
 			case CommercialPackage.INDEX_PRICE_CONTRACT: return createIndexPriceContract();
 			default:
@@ -98,26 +96,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public Contract createContract() {
 		ContractImpl contract = new ContractImpl();
 		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SalesContract createSalesContract() {
-		SalesContractImpl salesContract = new SalesContractImpl();
-		return salesContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PurchaseContract createPurchaseContract() {
-		PurchaseContractImpl purchaseContract = new PurchaseContractImpl();
-		return purchaseContract;
 	}
 
 	/**

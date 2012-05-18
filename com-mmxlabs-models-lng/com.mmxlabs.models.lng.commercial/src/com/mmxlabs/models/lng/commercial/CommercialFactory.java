@@ -51,24 +51,6 @@ public interface CommercialFactory extends EFactory {
 	Contract createContract();
 
 	/**
-	 * Returns a new object of class '<em>Sales Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Sales Contract</em>'.
-	 * @generated
-	 */
-	SalesContract createSalesContract();
-
-	/**
-	 * Returns a new object of class '<em>Purchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Purchase Contract</em>'.
-	 * @generated
-	 */
-	PurchaseContract createPurchaseContract();
-
-	/**
 	 * Returns a new object of class '<em>Fixed Price Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
