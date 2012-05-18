@@ -33,7 +33,7 @@ public interface IScheduleViewColourScheme {
 	Color getForeground(Object element);
 
 	/**
-	 * Returns the backgroun{@link Color} to use for this element.
+	 * Returns the background {@link Color} to use for this element.
 	 * 
 	 * @param element
 	 * @return
