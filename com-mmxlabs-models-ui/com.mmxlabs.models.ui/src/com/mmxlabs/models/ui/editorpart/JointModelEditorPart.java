@@ -157,6 +157,12 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.setLocked(locked);
 		}
+		
+		String title = getEditorInput().getName();
+		if (locked) {
+			title += " (locked)";
+		}
+		setPartName(title);
 	}
 
 	public boolean isSaving() {
