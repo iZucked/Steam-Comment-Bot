@@ -4,13 +4,11 @@
  */
 package com.mmxlabs.models.mmxcore.validation;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.mmxlabs.models.ui.validation.ValidationPlugin;
 
 /**
- * The activator class controls the plug-in life cycle
  */
 public class Activator extends ValidationPlugin {
 
