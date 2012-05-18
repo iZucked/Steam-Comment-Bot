@@ -7,7 +7,7 @@ package com.mmxlabs.shiplingo.platform.models.optimisation;
 import java.io.Serializable;
 
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
  * {@link IJobDescriptor} implementation for a {@link Scenario} optimisation job.
@@ -20,19 +20,19 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 
 	private final String name;
 
-	private MMXRootObject scenario;
+	private ScenarioInstance scenarioInstance;
 
 	private boolean optimise;
 
-	public LNGSchedulerJobDescriptor(final String name, final MMXRootObject scenario, final boolean optimise) {
+	public LNGSchedulerJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final boolean optimise) {
 		this.name = name;
-		this.scenario = scenario;
+		this.scenarioInstance = scenarioInstance;
 		this.optimise = optimise;
 	}
 
 	@Override
 	public void dispose() {
-		scenario = null;
+		scenarioInstance = null;
 	}
 
 	@Override
@@ -41,8 +41,8 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 	}
 
 	@Override
-	public MMXRootObject getJobContext() {
-		return scenario;
+	public ScenarioInstance getJobContext() {
+		return scenarioInstance;
 	}
 
 	@Override

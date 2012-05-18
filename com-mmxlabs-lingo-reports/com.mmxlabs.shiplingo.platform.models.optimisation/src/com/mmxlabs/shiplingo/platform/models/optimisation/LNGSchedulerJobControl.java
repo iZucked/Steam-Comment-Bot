@@ -6,6 +6,10 @@ package com.mmxlabs.shiplingo.platform.models.optimisation;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +18,7 @@ import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
@@ -24,6 +29,7 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private static final Logger log = LoggerFactory.getLogger(LNGSchedulerJobControl.class);
@@ -33,29 +39,35 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private final LNGSchedulerJobDescriptor jobDescriptor;
 
-	private MMXRootObject scenario;
+	private final ScenarioInstance scenarioInstance;
+
+	private final MMXRootObject scenario;
 
 	private Schedule intermediateSchedule = null;
 
-	private ModelEntityMap entities ;
+	private ModelEntityMap entities;
 
 	private LocalSearchOptimiser optimiser;
 
 	private long startTimeMillis;
 
+	private final EditingDomain editingDomain;
+
 	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super(jobDescriptor.isOptimising() ? "Optimising " : "Evaluating " + jobDescriptor.getJobName());
 		this.jobDescriptor = jobDescriptor;
-		this.scenario = jobDescriptor.getJobContext();
+		this.scenarioInstance = jobDescriptor.getJobContext();
+		this.scenario = (MMXRootObject) scenarioInstance.getInstance();
+		editingDomain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 	}
 
 	@Override
 	protected void reallyPrepare() {
 		startTimeMillis = System.currentTimeMillis();
 
-		LNGTransformer transformer = new LNGTransformer(scenario);
+		final LNGTransformer transformer = new LNGTransformer(scenario);
 
-		IOptimisationData data = transformer.getOptimisationData();
+		final IOptimisationData data = transformer.getOptimisationData();
 		entities = transformer.getEntities();
 
 		final OptimisationTransformer ot = transformer.getOptimisationTransformer();
@@ -80,22 +92,41 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+
+		final CompoundCommand command = new CompoundCommand("Set new initial schedule");
+
+		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
+		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
+
+		if (!command.canExecute()) {
+			throw new RuntimeException("Unable to execute save schedule command");
+		}
+		editingDomain.getCommandStack().execute(command);
+
 		scheduleModel.setInitialSchedule(schedule);
-		scheduleModel.setOptimisedSchedule(null); //clear optimised state.
+		scheduleModel.setOptimisedSchedule(null); // clear optimised state.
 		return schedule;
 	}
 
-	private Schedule saveOptimisedSolution(final IAnnotatedSolution solution) {
+	private Schedule saveOptimisedSolution(final IAnnotatedSolution solution, int currentProgress2) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		exporter.addPlatformExporterExtensions();
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
-		scheduleModel.setOptimisedSchedule(schedule);
-		
+
+		final CompoundCommand command = new CompoundCommand("Set new optimised schedule "  + currentProgress2 + "%");
+
+		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), schedule));
+
+		if (!command.canExecute()) {
+			throw new RuntimeException("Unable to execute save schedule command");
+		}
+		editingDomain.getCommandStack().execute(command);
+
 		return schedule;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -118,7 +149,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				// intermediateSchedule.eContainingFeature()))
 				// .remove(intermediateSchedule);
 			}
-			intermediateSchedule = saveOptimisedSolution(optimiser.getBestSolution(false));
+			intermediateSchedule = saveOptimisedSolution(optimiser.getBestSolution(false), currentProgress);
 		}
 
 		// System.err.println("current fitness " +
@@ -128,7 +159,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
-			intermediateSchedule = saveOptimisedSolution(optimiser.getBestSolution(true));
+			intermediateSchedule = saveOptimisedSolution(optimiser.getBestSolution(true), 100);
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			scheduleModel.setDirty(false);
