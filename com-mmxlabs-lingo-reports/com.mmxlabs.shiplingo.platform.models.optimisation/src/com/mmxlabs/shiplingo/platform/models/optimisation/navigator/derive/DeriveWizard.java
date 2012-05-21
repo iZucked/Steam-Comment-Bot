@@ -66,26 +66,26 @@ public class DeriveWizard extends Wizard implements IExportWizard {
 			final ScenarioInstance duplicate = output.getScenarioService().duplicate(input, output);
 			duplicate.setName(outputName);
 			
-			// fix output model
-			final EObject top = duplicate.getScenarioService().load(duplicate);
-			if (top instanceof MMXRootObject) {
-				final MMXRootObject root = (MMXRootObject) top;
-				final InputModel inputModel = root.getSubModel(InputModel.class);
-				final ScheduleModel scheduleModel = root.getSubModel(ScheduleModel.class);
-				final CargoModel cargoModel = root.getSubModel(CargoModel.class);
-				if (inputModel != null && scheduleModel != null && cargoModel != null) {
-					inputModel.getAssignments().clear();
-					
-					if (scheduleModel.getOptimisedSchedule() != null) {
-						derive(scheduleModel.getOptimisedSchedule(), inputModel, cargoModel);
-					} else if (scheduleModel.getInitialSchedule() != null) {
-						derive(scheduleModel.getInitialSchedule(), inputModel, cargoModel);
-					}
-					
-					duplicate.getScenarioService().save(duplicate);
-					return true;
-				}
-			}
+//			// fix output model
+//			final EObject top = duplicate.getScenarioService().load(duplicate);
+//			if (top instanceof MMXRootObject) {
+//				final MMXRootObject root = (MMXRootObject) top;
+//				final InputModel inputModel = root.getSubModel(InputModel.class);
+//				final ScheduleModel scheduleModel = root.getSubModel(ScheduleModel.class);
+//				final CargoModel cargoModel = root.getSubModel(CargoModel.class);
+//				if (inputModel != null && scheduleModel != null && cargoModel != null) {
+//					inputModel.getAssignments().clear();
+//					
+//					if (scheduleModel.getOptimisedSchedule() != null) {
+//						derive(scheduleModel.getOptimisedSchedule(), inputModel, cargoModel);
+//					} else if (scheduleModel.getInitialSchedule() != null) {
+//						derive(scheduleModel.getInitialSchedule(), inputModel, cargoModel);
+//					}
+//					
+//					duplicate.getScenarioService().save(duplicate);
+//					return true;
+//				}
+//			}
 		} catch (IOException e) {
 		
 		}
