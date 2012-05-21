@@ -786,7 +786,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			}
 		}
 		/**
-		 * This is the shortest time which the slowest vessel in the fleet can take to get from the latest
+		 * The shortest time which the slowest vessel in the fleet can take to get from the latest
 		 * discharge back to the load for that discharge.
 		 */
 		final int maxFastReturnTime;
@@ -805,7 +805,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 		final int latestTime = Math.max(endOfLatestWindow + (24 * 10), maxFastReturnTime + latestDischarge);
 		for (final Pair<ISequenceElement, PortSlot> elementAndSlot : endSlots) {
-			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + (30 * 24));
+			final ITimeWindow endWindow = createTimeWindow(latestTime, latestTime + (35 * 24));
 			elementAndSlot.getSecond().setTimeWindow(endWindow);
 			timeWindowProvider.setTimeWindows(elementAndSlot.getFirst(), Collections.singletonList(endWindow));
 		}
