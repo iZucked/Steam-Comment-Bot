@@ -82,10 +82,10 @@ public class DeriveWizard extends Wizard implements IExportWizard {
 						derive(scheduleModel.getInitialSchedule(), inputModel, cargoModel);
 					}
 					
+					duplicate.getScenarioService().save(duplicate);
 					return true;
 				}
 			}
-			duplicate.getScenarioService().save(duplicate);
 		} catch (IOException e) {
 		
 		}
