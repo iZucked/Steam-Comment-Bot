@@ -143,14 +143,12 @@
     <view
           category="com.mmxlabs.models.lng.views.physical"
           class="com.mmxlabs.models.lng.port.editor.views.PortView"
-          icon="icons/sample.gif"
           id="com.mmxlabs.models.lng.port.editor.views.PortView"
           name="Ports">
     </view>
     <view
           category="com.mmxlabs.models.lng.views.physical"
           class="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
-          icon="icons/sample.gif"
           id="com.mmxlabs.models.lng.port.editor.views.PortGroupView"
           name="Port Groups">
     </view>
