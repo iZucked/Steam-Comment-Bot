@@ -11,8 +11,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
@@ -28,6 +30,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
+
+	private static final int RELAXATION_STEP = 6;
 
 	private static final Logger log = LoggerFactory.getLogger(VoyagePlanOptimiser.class);
 
@@ -118,11 +122,21 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	private void evaluateVoyagePlan() {
-		final PortDetails endElement = (PortDetails) basicSequence.get(basicSequence.size() - 1);
+		final PortDetails endDetails = (PortDetails) basicSequence.get(basicSequence.size() - 1);
 
-		final boolean calculateEndTime = endElement.getPortSlot().getTimeWindow() == null;
-
-		evaluateVoyagePlan(calculateEndTime);
+		if (endDetails.getPortSlot() != null) {
+			if (endDetails.getPortSlot().getPortType() == PortType.End) {
+				final ITimeWindow window = endDetails.getPortSlot().getTimeWindow();
+				
+				final int lastArrivalTime = arrivalTimes.get(arrivalTimes.size()-1);
+				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getEnd() ? 0 : window.getEnd() - lastArrivalTime);
+				
+				evaluateVoyagePlan(extraExtent);
+				return;
+			}
+		}
+		
+		evaluateVoyagePlan(0);
 	}
 
 	/**
@@ -152,7 +166,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * 
 	 * @param optimiseLastLeg
 	 */
-	private void evaluateVoyagePlan(final boolean optimiseLastLeg) {
+	private void evaluateVoyagePlan(final int timeExtent) {
 
 		int currentProblemCount;
 		long cost;
@@ -161,8 +175,8 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		VoyageOptions optionsToRestore = null;
 		int availableTimeToRestore = 0;
 
-		if (optimiseLastLeg) {
-
+		if (timeExtent/RELAXATION_STEP > 0) {
+			
 			// There are some cases where we wish to evaluate the best time to
 			// end the sequence, rather than the specified value. Typically
 			// this will be because no end date has been set and the specified
@@ -182,6 +196,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			final int originalTime = options.getAvailableTime();
 			optionsToRestore = options;
 			availableTimeToRestore = originalTime;
+			
 			VoyagePlan bestLastLegPlan = null;
 			long bestLastLegCost = Long.MAX_VALUE;
 			int bestLastProblemCount = Short.MAX_VALUE;
@@ -201,8 +216,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			}
 
 			// TODO: Turn into a parameter -- probably want this to be longer than slightly over one day - could also scale it to 6/12 hours etc.
-			final int step = 6; // 6 hours
-			for (int i = 0; i < 30; i++) {
+			for (int i = 0; i < timeExtent/RELAXATION_STEP; i++) {
 
 				currentPlan = calculateVoyagePlan();
 
@@ -215,7 +229,7 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					// Hire cost will be properly calculated in a different step.
 
 					// This is not calculator.multiply, because hireRate is not scaled.
-					final long hireCost = hireRate * (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
+					final long hireCost = (long) hireRate * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
 					currentCost += hireCost;
 
 					// Check for capacity violations, prefer solutions with fewer violations
@@ -237,9 +251,8 @@ public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					// lastCost = currentCost;
 					// }
 				}
-				options.setAvailableTime(options.getAvailableTime() + step);
+				options.setAvailableTime(options.getAvailableTime() + RELAXATION_STEP);
 			}
-
 			options.setAvailableTime(bestAvailableTime);
 			currentProblemCount = bestLastProblemCount;
 			cost = bestLastLegCost;
