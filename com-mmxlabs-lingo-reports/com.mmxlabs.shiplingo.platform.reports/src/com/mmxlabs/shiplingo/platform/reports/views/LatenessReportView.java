@@ -4,16 +4,22 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduledEventCollector;
 
@@ -70,22 +76,44 @@ public class LatenessReportView extends EMFReportView {
 		});
 	}
 
-	private Date getWindowStartDate(final Object object) {
+	private Calendar getWindowStartDate(final Object object) {
 		if (object instanceof SlotVisit) {
-			return ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
+			Date date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
+			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
+			if (timeZone == null) timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
 		} else if (object instanceof VesselEventVisit) {
-			return ((VesselEventVisit) object).getVesselEvent().getStartAfter();
+			Date date = ((VesselEventVisit) object).getVesselEvent().getStartAfter();
+			String timeZone = ((VesselEventVisit)object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			if (timeZone == null) timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
 		}
 		return null;
 	}
 	
-	private Date getWindowEndDate(final Object object) {
+	private Calendar getWindowEndDate(final Object object) {
+		final Date date;
 		if (object instanceof SlotVisit) {
-			return ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
+			date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
+			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
+			if (timeZone == null) timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
 		} else if (object instanceof VesselEventVisit) {
-			return ((VesselEventVisit) object).getVesselEvent().getStartBy();
+			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
+			String timeZone = ((VesselEventVisit)object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			if (timeZone == null) timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
+		} else {
+			return null;
 		}
-		return null;
 	}
 	
 	@Override
