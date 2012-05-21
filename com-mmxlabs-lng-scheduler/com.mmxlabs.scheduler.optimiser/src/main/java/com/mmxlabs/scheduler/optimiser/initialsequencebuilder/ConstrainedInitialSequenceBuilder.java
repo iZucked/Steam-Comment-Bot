@@ -320,15 +320,13 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 				final int rc1 = chunk1.getResourceCount();
 				final int rc2 = chunk2.getResourceCount();
-
-				if (Math.abs(rc1 - rc2) > 3) {
-					if (rc1 < rc2) {
-						return -1;
-					} else {
-						return 1;
-					}
+				
+				if (rc1 < rc2) {
+					return -1;
+				} else if (rc1 > rc2) {
+					return 1;
 				}
-
+				
 				final ISequenceElement o1 = chunk1.get(0);
 				final ISequenceElement o2 = chunk2.get(0);
 
@@ -345,12 +343,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				final int duration2 = slot4.getTimeWindow().getStart() - slot2.getTimeWindow().getStart();
 
 				// if one is much longer than the other, do it first.
-				if (Math.abs(duration1 - duration2) > 24) {
-					if (duration1 > duration2) {
-						return -1;
-					} else {
-						return 1;
-					}
+				
+				if (duration1 > duration2) {
+					return -1;
+				} else if (duration1 < duration2) {
+					return 1;
 				}
 
 				// sort by start time
@@ -361,14 +358,16 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					return -1;
 				} else if (s1 > s2) {
 					return 1;
-				} else {
-					return 0;
 				}
+				
+				return chunk1.toString().compareTo(chunk2.toString());
 			}
 		};
 
 		Collections.sort(chunks, comparator);
 
+		log.debug(chunks + "");
+		
 		final ChunkChecker chunkChecker = new ChunkChecker(checker);
 		final Map<IResource, List<SequenceChunk>> sequences = new LinkedHashMap<IResource, List<SequenceChunk>>();
 
