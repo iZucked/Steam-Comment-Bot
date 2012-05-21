@@ -5,6 +5,7 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.Collections;
+import java.util.Date;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -38,8 +39,55 @@ public class LatenessReportView extends EMFReportView {
 
 		addColumn("End Date", datePartFormatter, sp.getEvent__GetLocalEnd());
 		addColumn("End Time", timePartFormatter,sp.getEvent__GetLocalEnd());
+		
+		addColumn("Window Start Date", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				return datePartFormatter.format(getWindowStartDate(object));
+			}
+		});
+		
+		addColumn("Window Start Time", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				return timePartFormatter.format(getWindowStartDate(object));
+			}
+		});
+		
+		
+		addColumn("Window End Date", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				return datePartFormatter.format(getWindowEndDate(object));
+			}
+		});
+		
+		addColumn("Window End Time", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				return timePartFormatter.format(getWindowEndDate(object));
+			}
+		});
 	}
 
+	private Date getWindowStartDate(final Object object) {
+		if (object instanceof SlotVisit) {
+			return ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
+		} else if (object instanceof VesselEventVisit) {
+			return ((VesselEventVisit) object).getVesselEvent().getStartAfter();
+		}
+		return null;
+	}
+	
+	private Date getWindowEndDate(final Object object) {
+		if (object instanceof SlotVisit) {
+			return ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
+		} else if (object instanceof VesselEventVisit) {
+			return ((VesselEventVisit) object).getVesselEvent().getStartBy();
+		}
+		return null;
+	}
+	
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		final IStructuredContentProvider superProvider = super.getContentProvider();
@@ -85,6 +133,7 @@ public class LatenessReportView extends EMFReportView {
 					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 						return true;
 					}
+					
 					setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
 				} else if (e instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) e;
