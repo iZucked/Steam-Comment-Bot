@@ -5,6 +5,7 @@
 package com.mmxlabs.scenario.service.ui;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -66,9 +67,9 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 				final IScenarioServiceSelectionProvider service = selectionProviderTracker.getService();
 				if (service != null) {
 					if (service.isSelected((ScenarioInstance) object)) {
-						return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/synced.png").createImage();
+						return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif").createImage();
 					} else {
-						return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/synced-grey.png").createImage();
+						return ImageDescriptor.createWithFlags(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif"), SWT.IMAGE_DISABLE).createImage();
 					}
 				}
 			}
