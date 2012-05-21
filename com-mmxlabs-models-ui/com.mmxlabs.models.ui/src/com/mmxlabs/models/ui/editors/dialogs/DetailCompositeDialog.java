@@ -380,7 +380,9 @@ public class DetailCompositeDialog extends Dialog {
 			
 			selectionViewer.setContentProvider(new ArrayContentProvider());
 			selectionViewer.setInput(inputs);
-			selectionViewer.setSelection(new StructuredSelection(inputs.get(0)));
+			if (inputs.isEmpty() == false) {
+				selectionViewer.setSelection(new StructuredSelection(inputs.get(0)));
+			}
 			selectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 				@Override
 				public void selectionChanged(final SelectionChangedEvent event) {
@@ -487,6 +489,8 @@ public class DetailCompositeDialog extends Dialog {
 							duplicateToOriginal.remove(o);
 							validationContext.ignore(o);
 							validationContext.ignore(original);
+							objectValidity.remove(o);
+							objectValidity.remove(original);
 						}
 						
 						ranges.remove(element);
