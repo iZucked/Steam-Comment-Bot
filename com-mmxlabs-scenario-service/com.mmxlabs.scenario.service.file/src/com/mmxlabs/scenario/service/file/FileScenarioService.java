@@ -178,7 +178,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		
 		int index = 0;
 		for (final EObject model : models) {
-			URI rel = URI.createURI("../" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
+			URI rel = URI.createURI("./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
 			rel = rel.resolve(storeURI);
 			log.debug("Storing submodel into " + rel);
 			try {
