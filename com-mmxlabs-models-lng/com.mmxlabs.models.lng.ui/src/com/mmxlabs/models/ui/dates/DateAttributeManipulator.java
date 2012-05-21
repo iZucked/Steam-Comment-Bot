@@ -22,7 +22,6 @@ import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
  * 
  */
 public class DateAttributeManipulator extends BasicAttributeManipulator {
-
 	private boolean showTimezone;
 
 	public DateAttributeManipulator(final EStructuralFeature field, final EditingDomain editingDomain) {
@@ -62,6 +61,16 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 			str += " (" + calendar.getTimeZone().getDisplayName(false, TimeZone.SHORT) + ")";
 		}
 		return str;
+	}
+	
+	@Override
+	public Comparable getComparable(final Object object) {
+		final Object o = getValue(object);
+		if (o instanceof Date) {
+			return (Date) o;
+		} else {
+			return null;
+		}
 	}
 
 	public boolean isShowTimezone() {
