@@ -222,6 +222,7 @@ public class OptimisationTransformer {
 		final InputModel inputModel = rootObject.getSubModel(InputModel.class);
 
 		if (!inputModel.getAssignments().isEmpty()) {
+			log.debug("Creating advice for sequence builder");
 			advice = new ModifiableSequences(data.getResources());
 			final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 			final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
@@ -272,9 +273,10 @@ public class OptimisationTransformer {
 					final AVessel modelVessel = SetUtils.getVessels(assignment.getVessels()).iterator().next();
 					vessel = mem.getOptimiserObject(modelVessel, IVessel.class);
 				}
-				if (vessel == null)
+				if (vessel == null) {
+					log.warn("Vessel from assignments not found");
 					continue assignments;
-
+				}
 				final IResource resource = vp.getResource(vessel);
 				if (assignment.getAssignedObjects().size() == 1) {
 					for (final ISequenceElement element : getElements(assignment.getAssignedObjects().get(0), psp, mem)) {
@@ -283,7 +285,7 @@ public class OptimisationTransformer {
 				} else {
 					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
 					for (final UUIDObject assignedObject : assignment.getAssignedObjects()) {
-						for (final ISequenceElement element : getElements(assignment.getAssignedObjects().get(0), psp, mem)) {
+						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
 							sequence.add(element);
 						}
 					}
