@@ -77,11 +77,16 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 	}
 
 	private void randomise(final int seq) {
-		for (int pos = 0; pos < sizes[seq]; pos++) {
+		final int lastIndex = sizes[seq] -1;
+		for (int pos = 0; pos < lastIndex; pos++) {
 			final int min = getMinArrivalTime(seq, pos);
 			final int max = getMaxArrivalTime(seq, pos);
 			arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
 		}
+
+		// Set the arrival time at the last bit to be as early as possible; VPO will relax it if necessary.
+		arrivalTimes[seq][lastIndex] = getMinArrivalTime(seq, lastIndex);
+		System.err.println("min AT = " + arrivalTimes[seq][lastIndex]);
 	}
 
 	public int getSamplingUpperBound() {
