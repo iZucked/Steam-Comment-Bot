@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.liveeval;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +37,15 @@ public class LiveEvaluator extends MMXAdapterImpl {
 			if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue()) {
 				queueEvaluate();
 			}
+		}
+	}
+
+	@Override
+	protected void missedNotifications(final List<Notification> missed) {
+		// Re-process missed notifications
+		final List<Notification> copied = new ArrayList<Notification>(missed);
+		for (final Notification n : copied) {
+			reallyNotifyChanged(n);
 		}
 	}
 
