@@ -163,6 +163,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		if (suggestion != null) {
 			for (final ISequence seq : suggestion.getSequences().values()) {
 				for (final ISequenceElement element : seq) {
+					if (unsequencedElements.contains(element) == false)
+						log.warn("Element " + element + " is already sequenced");
 					unsequencedElements.remove(element);
 				}
 			}
