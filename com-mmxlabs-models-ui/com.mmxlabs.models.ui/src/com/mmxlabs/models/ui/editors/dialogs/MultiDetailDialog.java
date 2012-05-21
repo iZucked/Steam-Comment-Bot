@@ -133,7 +133,7 @@ public class MultiDetailDialog extends Dialog {
 			}
 		};
 		displayComposite.setCommandHandler(immediate);
-		displayComposite.display(rootObject, proxies.get(0), proxies);
+		displayComposite.display(rootObject, proxies.get(proxies.size()-1), proxies);
 		disableControls();
 		resizeAndCenter();
 	}
