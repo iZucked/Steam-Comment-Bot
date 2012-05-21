@@ -136,6 +136,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 			final ConstrainedMoveGenerator.Followers<ISequenceElement> followers = owner.validFollowers.get(lastElementInSegment);
 
 			// Pick one of these followers and find where it is at the moment
+			if (followers.size() == 0) return null;
 			final ISequenceElement precursor = followers.get(owner.random.nextInt(followers.size()));
 			final Pair<Integer, Integer> posPrecursor = owner.reverseLookup.get(precursor);
 
