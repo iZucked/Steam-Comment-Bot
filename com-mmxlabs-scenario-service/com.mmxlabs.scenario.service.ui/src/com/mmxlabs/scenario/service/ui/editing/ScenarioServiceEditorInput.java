@@ -87,6 +87,9 @@ public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput {
 
 		if (obj instanceof ScenarioServiceEditorInput) {
 			final ScenarioServiceEditorInput other = (ScenarioServiceEditorInput) obj;
+
+			// TODO: Implement equals?
+			// use UUIDS?
 			return other.scenarioInstance.equals(scenarioInstance);
 		}
 		return false;
