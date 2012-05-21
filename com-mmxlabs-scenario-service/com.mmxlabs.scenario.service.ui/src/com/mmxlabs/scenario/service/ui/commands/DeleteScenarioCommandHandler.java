@@ -24,6 +24,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
+import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 public class DeleteScenarioCommandHandler extends AbstractHandler {
 	/**
@@ -65,6 +66,10 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 				if (container instanceof ScenarioInstance) {
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) container;
 					if (scenarioInstance.getInstance() != null) {
+						
+						// Deselect from view
+						Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
+						
 						final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
 						final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
 						// TODO: Prompt to save?
