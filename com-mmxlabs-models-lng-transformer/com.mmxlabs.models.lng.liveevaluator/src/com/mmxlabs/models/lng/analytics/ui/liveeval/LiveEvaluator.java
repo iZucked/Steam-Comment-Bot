@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.analytics.presentation.AnalyticsEditorPlugin;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -26,6 +28,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 	private static final Logger log = LoggerFactory.getLogger(LiveEvaluator.class);
 	private Thread evaluatorThread = null;
 	private final ScenarioInstance instance;
+	private Evaluator evaluator = new Evaluator();
 
 	public LiveEvaluator(final ScenarioInstance instance) {
 		this.instance = instance;
@@ -36,6 +39,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Dirty()) {
 			if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue()) {
 				queueEvaluate();
+			} else if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue() == false) {
+				dequeueEvaluate();
 			}
 		}
 	}
@@ -51,14 +56,26 @@ public class LiveEvaluator extends MMXAdapterImpl {
 
 	private void queueEvaluate() {
 		if (evaluatorThread == null || !evaluatorThread.isAlive()) {
-			evaluatorThread = new Thread(new Evaluator(), "Live Evaluator");
+			evaluatorThread = new Thread(evaluator , "Live Evaluator");
 			evaluatorThread.start();
 		} else {
 			evaluatorThread.interrupt();
 		}
 	}
+	
+	private void dequeueEvaluate() {
+		if (evaluatorThread != null && evaluatorThread.isAlive()) {
+			evaluator.kill();
+			evaluatorThread.interrupt();
+		}
+	}
 
 	private class Evaluator implements Runnable {
+		private boolean kill = false;
+		public void kill() {
+			kill = true;
+		}
+		
 		@Override
 		public void run() {
 			log.debug("Waiting 2s to evaluate " + instance.getName());
@@ -67,10 +84,17 @@ public class LiveEvaluator extends MMXAdapterImpl {
 				try {
 					spinLock = false;
 					Thread.sleep(2000);
-
+					
 					final IScenarioInstanceEvaluator evaluator = AnalyticsEditorPlugin.getPlugin().getResourceEvaluator();
 					if (evaluator != null) {
 						synchronized (instance) {
+							try {
+								final MMXRootObject root = (MMXRootObject) instance.getScenarioService().load(instance);
+								final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
+								if (subModel.isDirty()) return;
+							} catch (Throwable th) {
+								
+							}
 							log.debug("About to evaluate " + instance.getName());
 							evaluator.evaluate(instance);
 						}
@@ -78,7 +102,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 						log.debug("Could not find evaluator when evaluating " + instance.getName());
 					}
 				} catch (final InterruptedException e) {
-					spinLock = true;
+					if (kill) spinLock = false;
+					else spinLock = true;
 				}
 			}
 		}
