@@ -60,6 +60,9 @@ public abstract class MMXContentAdapter extends EContentAdapter implements IMMXA
 		enable(false);
 	}
 	
+	/**
+	 * @since 2.1
+	 */
 	public void enable(final boolean skip) {
 		if (missedNotifications.isEmpty() == false) {
 			if (!skip) missedNotifications(Collections.unmodifiableList(missedNotifications));
