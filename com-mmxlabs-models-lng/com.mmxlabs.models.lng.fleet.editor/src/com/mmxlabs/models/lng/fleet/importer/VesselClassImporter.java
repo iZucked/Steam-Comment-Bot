@@ -63,7 +63,8 @@ public class VesselClassImporter extends DefaultClassImporter {
 						final IFieldMap subMap = rowMap.getSubMap(parts[0]+"."+parts[1]+".");
 						
 						subMap.put("route", canalName);
-						subMap.put("vesselclass", row.get("name"));
+						if (row.containsKey("name")) 
+							subMap.put("vesselclass", row.get("name"));
 						final RouteCost cost = (RouteCost) routeCostImporter.importObject(PricingPackage.eINSTANCE.getRouteCost(), subMap, context).iterator().next();
 						
 						context.doLater(new IDeferment() {
