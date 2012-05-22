@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,9 +11,6 @@ import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.command.IdentityCommand;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
@@ -50,10 +46,11 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
+	private static final String LABEL_PREFIX = "Optimised: ";
+
 	private static final Logger log = LoggerFactory.getLogger(LNGSchedulerJobControl.class);
 
 	private static final int REPORT_PERCENTAGE = 1;
@@ -117,19 +114,18 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		if (currentProgress != 0) {
 			Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
 			if (mostRecentCommand != null) {
-				if (mostRecentCommand.getLabel().equals("Update schedule")) {
+				if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
 					editingDomain.getCommandStack().undo();
 				}
 			}
 		}
-		
-		
+
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		final InputModel inputModel = scenario.getSubModel(InputModel.class);
 		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
-		
 
-		final CompoundCommand command = new CompoundCommand("Update schedule");
+		String label = (currentProgress != 0) ? (LABEL_PREFIX + currentProgress + "%") : ("Evalute");
+		final CompoundCommand command = new CompoundCommand(label);
 
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
@@ -138,32 +134,32 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		if (!command.canExecute()) {
 			throw new RuntimeException("Unable to execute save schedule command");
 		}
-		
+
 		editingDomain.getCommandStack().execute(command);
-//
-//		scheduleModel.setInitialSchedule(schedule);
-//		scheduleModel.setOptimisedSchedule(null); // clear optimised state.
+		//
+		// scheduleModel.setInitialSchedule(schedule);
+		// scheduleModel.setOptimisedSchedule(null); // clear optimised state.
 		return schedule;
 	}
 
-//	private Schedule saveOptimisedSolution(final IAnnotatedSolution solution, int currentProgress2) {
-//		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-//		exporter.addPlatformExporterExtensions();
-//		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
-//
-//		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
-//
-//		final CompoundCommand command = new CompoundCommand("Set new optimised schedule " + currentProgress2 + "%");
-//
-//		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), schedule));
-//
-//		if (!command.canExecute()) {
-//			throw new RuntimeException("Unable to execute save schedule command");
-//		}
-//		editingDomain.getCommandStack().execute(command);
-//
-//		return schedule;
-//	}
+	// private Schedule saveOptimisedSolution(final IAnnotatedSolution solution, int currentProgress2) {
+	// final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+	// exporter.addPlatformExporterExtensions();
+	// final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
+	//
+	// final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+	//
+	// final CompoundCommand command = new CompoundCommand("Set new optimised schedule " + currentProgress2 + "%");
+	//
+	// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), schedule));
+	//
+	// if (!command.canExecute()) {
+	// throw new RuntimeException("Unable to execute save schedule command");
+	// }
+	// editingDomain.getCommandStack().execute(command);
+	//
+	// return schedule;
+	// }
 
 	/*
 	 * (non-Javadoc)
