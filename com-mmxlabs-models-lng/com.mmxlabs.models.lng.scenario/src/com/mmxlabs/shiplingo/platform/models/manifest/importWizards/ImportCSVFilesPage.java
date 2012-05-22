@@ -187,9 +187,14 @@ public class ImportCSVFilesPage extends WizardPage {
 					e.printStackTrace();
 				}
 			}
+			try {
 			final UUIDObject subModel = c.importer.importModel(readers, context);
 			models.add(subModel);
 			root.addSubModel(subModel);
+			} catch (Throwable th) {
+				th.printStackTrace();
+			}
+			
 		}
 
 		context.setRootObject(root);
