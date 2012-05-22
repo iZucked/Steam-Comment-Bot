@@ -74,12 +74,8 @@ public abstract class ValidationContentAdapter extends MMXContentAdapter {
 
 	@Override
 	protected void missedNotifications(final List<Notification> notifications) {
-		for (final Notification notification : notifications) {
-			if (!notification.isTouch()) {
-				performValidation();
-				return;
-			}
-		}
+		
+		performValidation();
 	}
 
 	/**
