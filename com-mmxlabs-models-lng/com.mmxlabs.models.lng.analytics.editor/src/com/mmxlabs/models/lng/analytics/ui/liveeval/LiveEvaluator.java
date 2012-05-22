@@ -91,7 +91,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 							try {
 								final MMXRootObject root = (MMXRootObject) instance.getScenarioService().load(instance);
 								final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
-								if (subModel.isDirty()) return;
+								if (!subModel.isDirty()) return;
 							} catch (Throwable th) {
 								
 							}
