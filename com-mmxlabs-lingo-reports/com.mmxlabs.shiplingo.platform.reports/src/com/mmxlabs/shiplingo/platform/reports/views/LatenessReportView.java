@@ -4,15 +4,22 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduledEventCollector;
 
@@ -38,8 +45,77 @@ public class LatenessReportView extends EMFReportView {
 
 		addColumn("End Date", datePartFormatter, sp.getEvent__GetLocalEnd());
 		addColumn("End Time", timePartFormatter,sp.getEvent__GetLocalEnd());
+		
+		addColumn("Window Start Date", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				return datePartFormatter.format(getWindowStartDate(object));
+			}
+		});
+		
+		addColumn("Window Start Time", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				return timePartFormatter.format(getWindowStartDate(object));
+			}
+		});
+		
+		
+		addColumn("Window End Date", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				return datePartFormatter.format(getWindowEndDate(object));
+			}
+		});
+		
+		addColumn("Window End Time", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				return timePartFormatter.format(getWindowEndDate(object));
+			}
+		});
 	}
 
+	private Calendar getWindowStartDate(final Object object) {
+		if (object instanceof SlotVisit) {
+			Date date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
+			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
+			if (timeZone == null) timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
+		} else if (object instanceof VesselEventVisit) {
+			Date date = ((VesselEventVisit) object).getVesselEvent().getStartAfter();
+			String timeZone = ((VesselEventVisit)object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			if (timeZone == null) timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
+		}
+		return null;
+	}
+	
+	private Calendar getWindowEndDate(final Object object) {
+		final Date date;
+		if (object instanceof SlotVisit) {
+			date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
+			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
+			if (timeZone == null) timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
+		} else if (object instanceof VesselEventVisit) {
+			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
+			String timeZone = ((VesselEventVisit)object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			if (timeZone == null) timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
+		} else {
+			return null;
+		}
+	}
+	
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		final IStructuredContentProvider superProvider = super.getContentProvider();
@@ -85,6 +161,7 @@ public class LatenessReportView extends EMFReportView {
 					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 						return true;
 					}
+					
 					setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
 				} else if (e instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) e;
