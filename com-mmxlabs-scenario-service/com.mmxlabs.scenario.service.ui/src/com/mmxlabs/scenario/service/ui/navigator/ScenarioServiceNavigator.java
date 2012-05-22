@@ -152,8 +152,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			@Override
 			public void run() {
 				final CommonViewer viewer1 = viewer;
-				if (viewer1 != null)
+				if (viewer1 != null && !viewer1.getControl().isDisposed()) {
 					viewer1.refresh();
+				}
 			}
 
 		});
