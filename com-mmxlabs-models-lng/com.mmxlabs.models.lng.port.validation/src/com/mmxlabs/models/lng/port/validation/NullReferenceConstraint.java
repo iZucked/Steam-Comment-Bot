@@ -29,11 +29,8 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  * 
  */
 public class NullReferenceConstraint extends AbstractModelConstraint {
-	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(
 	// TODO add any more refs to check here
-			PortPackage.eINSTANCE.getRouteLine_From(),
-			PortPackage.eINSTANCE.getRouteLine_To()
-			);
+	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(PortPackage.eINSTANCE.getRouteLine_From(), PortPackage.eINSTANCE.getRouteLine_To());
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 
@@ -63,7 +60,16 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 		if (errors.isEmpty()) {
 			return ctx.createSuccessStatus();
 		} else {
-			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus());
+			final StringBuilder sb = new StringBuilder();
+			boolean first = true;
+			for (final EReference ref : errors) {
+				if (!first) {
+					sb.append(", ");
+				}
+				sb.append(ref.getName());
+				first = false;
+			}
+			final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(sb.toString()));
 			for (final EReference ref : errors) {
 				dcsd.addEObjectAndFeature(target, ref);
 			}
