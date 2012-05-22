@@ -129,7 +129,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
 		command.append(derive(editingDomain, schedule, inputModel, cargoModel));
-
+		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+		
 		if (!command.canExecute()) {
 			throw new RuntimeException("Unable to execute save schedule command");
 		}
