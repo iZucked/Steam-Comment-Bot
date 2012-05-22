@@ -23,7 +23,7 @@ public class CostMatrixView extends ScenarioInstanceView {
 	public void createPartControl(final Composite parent) {
 		sash = new SashForm(parent, SWT.VERTICAL);
 		listenToScenarioSelection();
-		
+
 	}
 
 	@Override
@@ -36,22 +36,23 @@ public class CostMatrixView extends ScenarioInstanceView {
 		if (instance != getScenarioInstance()) {
 			if (viewerPane != null) {
 				viewerPane.dispose();
-				matrixViewer.dispose();
 				viewerPane = null;
+			}
+			if (matrixViewer != null) {
+				matrixViewer.dispose();
 				matrixViewer = null;
 			}
-			
+
 			final Composite parent = sash.getParent();
 			sash.dispose();
 			sash = new SashForm(parent, SWT.VERTICAL);
-			
+
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
 				viewerPane = new UnitCostMatrixViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
 				viewerPane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 				viewerPane.createControl(sash);
-				viewerPane.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getAnalyticsModel_RoundTripMatrices()),
-						getAdapterFactory());
+				viewerPane.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getAnalyticsModel_RoundTripMatrices()), getAdapterFactory());
 				viewerPane.getViewer().setInput(getRootObject().getSubModel(AnalyticsModel.class));
 				final CostMatrixViewer matrixViewer = new CostMatrixViewer(getSite().getPage(), this, this, viewerPane);
 				matrixViewer.createControl(sash);

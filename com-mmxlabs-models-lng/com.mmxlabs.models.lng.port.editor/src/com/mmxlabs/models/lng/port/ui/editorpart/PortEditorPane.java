@@ -222,7 +222,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					protected void populate(final Menu menu2) {
 						final Action editCanal = createMatrixEditor(canal.getName(), canal);
 						addActionToMenu(editCanal, menu2);
-						final Action renameCanal = new Action("Rename " + canal.getName() + "...") {
+						final Action renameCanal = new Action("Rename...") {
 							@Override
 							public void run() {
 								final HashSet<String> existingNames = new HashSet<String>();
@@ -253,7 +253,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 						};
 						addActionToMenu(renameCanal, menu2);
 						if (canal.isCanal()) {
-							final Action deleteCanal = new Action("Delete " + canal.getName() + "...") {
+							final Action deleteCanal = new Action("Delete...") {
 								@Override
 								public void run() {
 									if (MessageDialog.openQuestion(part.getSite().getShell(), "Delete canal " + canal.getName(), "Are you sure you want to delete the canal \"" + canal.getName()
@@ -312,7 +312,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		}
 
 		protected Action createMatrixEditor(final String name, final Route distanceModel) {
-			return new LockableAction("Edit " + name + " distances...") {
+			return new LockableAction("Edit distances...") {
 				@Override
 				public void run() {
 

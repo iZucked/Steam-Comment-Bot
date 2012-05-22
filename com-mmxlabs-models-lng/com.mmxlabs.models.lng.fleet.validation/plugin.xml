@@ -31,7 +31,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  This attribute must be set.
+                  The attribute(s) {0} must be set.
                </message>
                <description>
                   Some references should not be null.
@@ -269,6 +269,24 @@
                </description>
                <target
                      class="Vessel">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselEventVesselSetConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselEventVesselSetConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Event - Vessel Assignment"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Dry dock and Maintenance events need a vessel assignment.
+               </description>
+               <target
+                     class="VesselEvent">
                </target>
             </constraint>
          </constraints>
