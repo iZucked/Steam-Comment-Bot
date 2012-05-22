@@ -47,6 +47,7 @@ import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -369,7 +370,9 @@ public class ScenarioTableViewerPane extends ViewerPane {
 				if (sel instanceof IStructuredSelection) {
 					final EditingDomain ed = jointModelEditorPart.getEditingDomain();
 					final List<?> objects = ((IStructuredSelection) sel).toList();
+					getJointModelEditorPart().setDisableUpdates(true);
 					ed.getCommandStack().execute(DeleteCommand.create(ed, objects));
+					getJointModelEditorPart().setDisableUpdates(false);
 				}
 			}
 
