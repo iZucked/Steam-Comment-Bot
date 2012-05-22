@@ -62,7 +62,7 @@ public class ModelInstance implements IModelInstance {
 		if (model == null) return;
 		for (final Adapter a : model.eAdapters()) {
 			if (a instanceof IMMXAdapter) {
-				if (on) ((IMMXAdapter) a).enable();
+				if (on) ((IMMXAdapter) a).enable(true);
 				else ((IMMXAdapter) a).disable();
 			}
 		}
