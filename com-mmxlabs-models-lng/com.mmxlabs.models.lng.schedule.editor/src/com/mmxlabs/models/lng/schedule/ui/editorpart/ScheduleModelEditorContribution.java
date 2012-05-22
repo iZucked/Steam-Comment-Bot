@@ -41,12 +41,14 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 			case Notification.REMOVING_ADAPTER:
 				break;
 			default:
-				if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name())
+				if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 					return; // this feature is irrelevant
+				}
 				EObject target = (EObject) notification.getNotifier();
 				while (target != null) {
-					if (target == modelObject)
+					if (target == modelObject) {
 						return;
+					}
 					target = target.eContainer();
 				}
 				log.debug("Setting dirty bit on schedule model");
