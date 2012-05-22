@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -102,7 +103,7 @@ public class DetailCompositeDialog extends Dialog {
 	final IValidator<EObject> validator = ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 
 	final ValidationHelper validationHelper = new ValidationHelper();
-	
+
 	private ICommandHandler commandHandler;
 
 	/**
@@ -134,25 +135,23 @@ public class DetailCompositeDialog extends Dialog {
 	private Map<EObject, Collection<EObject>> ranges = new HashMap<EObject, Collection<EObject>>();
 
 	private DefaultExtraValidationContext validationContext;
-	
+
 	private boolean displaySidebarList = false;
-	
+
 	private Composite sidebarSash;
 
 	private TableViewer selectionViewer;
-	
+
 	/**
-	 * Contains elements which have been removed from {@link #inputs}, which will be deleted
-	 * if the dialog is OKed.
+	 * Contains elements which have been removed from {@link #inputs}, which will be deleted if the dialog is OKed.
 	 */
 	private List<EObject> deletedInputs = new ArrayList<EObject>();
-	
+
 	/**
-	 * Contains elements which have been added (these will actually be added into the model, so they
-	 * must be deleted on cancel)
+	 * Contains elements which have been added (these will actually be added into the model, so they must be deleted on cancel)
 	 */
 	private List<EObject> addedInputs = new ArrayList<EObject>();
-	
+
 	/**
 	 * Get the duplicate object (for editing) corresponding to the given input object.
 	 * 
@@ -181,7 +180,7 @@ public class DetailCompositeDialog extends Dialog {
 				}
 			}
 			if (!returnDuplicates) {
-				final Iterator	<EObject> rangeIterator2 = range.iterator();
+				final Iterator<EObject> rangeIterator2 = range.iterator();
 				final Iterator<EObject> duplicateIterator = duplicateRange.iterator();
 				while (rangeIterator2.hasNext() && duplicateIterator.hasNext()) {
 					final EObject original2 = rangeIterator2.next();
@@ -209,7 +208,8 @@ public class DetailCompositeDialog extends Dialog {
 				// so (a) no undo needed and (b) don't want to make the command stack dirty.
 				command.execute();
 				validate();
-				if (selectionViewer != null) selectionViewer.refresh(true);
+				if (selectionViewer != null)
+					selectionViewer.refresh(true);
 			}
 
 			@Override
@@ -237,6 +237,18 @@ public class DetailCompositeDialog extends Dialog {
 	private void validate() {
 		final IStatus status = validationHelper.runValidation(validator, validationContext, currentEditorTargets);
 
+//		if (status.isOK()) {
+//			errorText.setText("");
+//			errorText.setVisible(false);
+//			((GridData) errorText.getLayoutData()).heightHint = 0;
+//			getContents().pack();
+//		} else {
+//			errorText.setText(getMessages(status));
+//			errorText.setVisible(true);
+//			((GridData) errorText.getLayoutData()).heightHint = 50;
+//			getContents().pack();
+//		}
+
 		final boolean problem = status.matches(IStatus.ERROR);
 		for (final EObject object : currentEditorTargets)
 			objectValidity.put(object, !problem);
@@ -245,6 +257,25 @@ public class DetailCompositeDialog extends Dialog {
 			displayComposite.displayValidationStatus(status);
 
 		checkButtonEnablement();
+	}
+
+	/**
+	 * Extract message hierarchy and construct the tool tip message.
+	 * 
+	 * @param status
+	 * @return
+	 */
+	private String getMessages(final IStatus status) {
+		if (status.isMultiStatus()) {
+			final StringBuilder sb = new StringBuilder();
+			for (final IStatus s : status.getChildren()) {
+				sb.append(getMessages(s));
+				sb.append("\n");
+			}
+			return sb.toString();
+		} else {
+			return status.getMessage();
+		}
 	}
 
 	private void checkButtonEnablement() {
@@ -272,15 +303,15 @@ public class DetailCompositeDialog extends Dialog {
 		final EObject selection = inputs.get(selectedObjectIndex);
 
 		getShell().setText("Editing " + EditorUtils.unmangle(selection.eClass().getName()) + " " + (1 + selectedObjectIndex) + " of " + inputs.size());
-		
+
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
 			displayComposite = null;
 		}
-		
+
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass());
-		
+
 		final EObject duplicate = getDuplicate(selection, displayComposite);
 
 		currentEditorTargets.clear();
@@ -291,13 +322,13 @@ public class DetailCompositeDialog extends Dialog {
 		}
 
 		displayComposite.setCommandHandler(commandHandler);
-		
+
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		displayComposite.display(rootObject, duplicate, ranges.get(selection));
-		
-		getShell().layout(true, true); //argh
-		
+
+		getShell().layout(true, true); // argh
+
 		// handle enablement
 		validate();
 
@@ -337,10 +368,20 @@ public class DetailCompositeDialog extends Dialog {
 	protected boolean isResizable() {
 		return true;
 	}
-	
+
 	@Override
 	protected Control createDialogArea(final Composite parent) {
 		final Composite c = (Composite) super.createDialogArea(parent);
+
+//		errorText = new Text(c, SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
+//		{
+//			GridData gd = new GridData(SWT.CENTER, SWT.CENTER, true, false);
+//			gd.heightHint = 0;
+//			errorText.setLayoutData(gd);
+//		}
+//		errorText.setEditable(false);
+//		errorText.setVisible(false);
+		
 		if (displaySidebarList) {
 			sidebarSash = new Composite(c, SWT.NONE);
 			{
@@ -352,21 +393,21 @@ public class DetailCompositeDialog extends Dialog {
 			final Composite sidebarComposite = new Composite(sidebarSash, SWT.NONE);
 			sidebarComposite.setLayout(new GridLayout(1, true));
 			sidebarComposite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true));
-			
+
 			final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.RIGHT);
-			
+
 			// need to populate add action - it could do a duplicate and then a clear?
 			// delete action can just kill the primary, and remove from inputs
-			
+
 			barManager.createControl(sidebarComposite).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-			
-			selectionViewer = new TableViewer(sidebarComposite, SWT.SINGLE|SWT.BORDER|SWT.V_SCROLL);
-			
+
+			selectionViewer = new TableViewer(sidebarComposite, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL);
+
 			createToolbarActions(barManager);
 			barManager.update(true);
-			
+
 			selectionViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-			
+
 			selectionViewer.setLabelProvider(new LabelProvider() {
 				@Override
 				public String getText(Object element) {
@@ -377,7 +418,7 @@ public class DetailCompositeDialog extends Dialog {
 					}
 				}
 			});
-			
+
 			selectionViewer.setContentProvider(new ArrayContentProvider());
 			selectionViewer.setInput(inputs);
 			if (inputs.isEmpty() == false) {
@@ -399,7 +440,7 @@ public class DetailCompositeDialog extends Dialog {
 					}
 				}
 			});
-			
+
 			dialogArea = new Composite(sidebarSash, SWT.NONE);
 			{
 				final GridLayout layout = new GridLayout(1, false);
@@ -412,32 +453,31 @@ public class DetailCompositeDialog extends Dialog {
 		}
 		return c;
 	}
-	
+
 	private Action createAddAction(final IModelFactory factory) {
 		return new Action("Create new " + factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD)) {
 			@Override
 			public void run() {
-				final Collection<? extends ISetting> settings = 
-						factory.createInstance(rootObject, sidebarContainer, sidebarContainment);
-				if (settings.isEmpty()) return;
+				final Collection<? extends ISetting> settings = factory.createInstance(rootObject, sidebarContainer, sidebarContainment);
+				if (settings.isEmpty())
+					return;
 				// now create an add command, which will include adding any other relevant objects
 				final CompoundCommand add = new CompoundCommand();
 				for (final ISetting setting : settings) {
-					add.append(AddCommand.create(commandHandler.getEditingDomain(),
-							setting.getContainer(), setting.getContainment(), setting.getInstance()));
+					add.append(AddCommand.create(commandHandler.getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
 				}
 				add.execute();
 				inputs.add(settings.iterator().next().getInstance());
 				addedInputs.add(settings.iterator().next().getInstance());
-				if (inputs.get(inputs.size()-1) instanceof NamedObject) {
-					((NamedObject) inputs.get(inputs.size()-1)).setName("New " + factory.getLabel());
+				if (inputs.get(inputs.size() - 1) instanceof NamedObject) {
+					((NamedObject) inputs.get(inputs.size() - 1)).setName("New " + factory.getLabel());
 				}
 				selectionViewer.refresh();
-				selectionViewer.setSelection(new StructuredSelection(inputs.get(inputs.size()-1)));
+				selectionViewer.setSelection(new StructuredSelection(inputs.get(inputs.size() - 1)));
 			}
 		};
 	}
-	
+
 	/**
 	 * When the sidebar is displayed, this method is invoked to add actions to the toolbar above it.
 	 * 
@@ -453,7 +493,7 @@ public class DetailCompositeDialog extends Dialog {
 				// multi-adder //TODO
 			}
 		}
-		
+
 		// create delete actions
 		final Action deleteAction = new Action() {
 			{
@@ -476,13 +516,13 @@ public class DetailCompositeDialog extends Dialog {
 						if (selectedObjectIndex >= elementIndex) {
 							selectedObjectIndex--;
 						}
-						
+
 						deletedInputs.add((EObject) element);
-						
+
 						// remove from change map
 						for (final EObject o : ranges.get(element)) {
 							// o is the duplicate for a real thing,
-							// which is being deleted; forget about 
+							// which is being deleted; forget about
 							// both sides.
 							EObject original = duplicateToOriginal.get(o);
 							originalToDuplicate.remove(original);
@@ -492,7 +532,7 @@ public class DetailCompositeDialog extends Dialog {
 							objectValidity.remove(o);
 							objectValidity.remove(original);
 						}
-						
+
 						ranges.remove(element);
 						inputs.remove(elementIndex);
 						if (inputs.size() > 0) {
@@ -506,11 +546,11 @@ public class DetailCompositeDialog extends Dialog {
 				}
 			}
 		};
-		
+
 		barManager.add(deleteAction);
-		
+
 		// create duplicate actions
-		
+
 	}
 
 	@Override
@@ -565,6 +605,8 @@ public class DetailCompositeDialog extends Dialog {
 
 	private EObject sidebarContainer;
 
+	private Text errorText;
+
 	/**
 	 * This version of the open method also displays the sidebar and allows for creation and deletion of objects in the sidebar.
 	 * 
@@ -583,18 +625,17 @@ public class DetailCompositeDialog extends Dialog {
 		this.duplicateToOriginal.clear();
 		this.displaySidebarList = true;
 		inputs.addAll((List) container.eGet(containment));
-		
+
 		this.sidebarContainer = container;
 		this.sidebarContainment = containment;
-		
+
 		part.pushExtraValidationContext(validationContext);
 		try {
 			final int value = open();
 			if (value == OK) {
 				final CompoundCommand cc = new CompoundCommand();
 				cc.append(IdentityCommand.INSTANCE);
-				for (final Map.Entry<EObject, EObject> entry : originalToDuplicate
-						.entrySet()) {
+				for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
 					final EObject original = entry.getKey();
 					final EObject duplicate = entry.getValue();
 					if (!original.equals(duplicate)) {
@@ -603,11 +644,11 @@ public class DetailCompositeDialog extends Dialog {
 				}
 
 				// new objects should already be added wherever they belong.
-				
+
 				// delete any objects which have been removed from the sidebar list
 				if (!deletedInputs.isEmpty())
 					cc.append(DeleteCommand.create(commandHandler.getEditingDomain(), deletedInputs));
-				
+
 				commandHandler.getEditingDomain().getCommandStack().execute(cc);
 			} else {
 				// any new objects will have been added from the inputs list, so we have to delete them
@@ -627,7 +668,7 @@ public class DetailCompositeDialog extends Dialog {
 			part.popExtraValidationContext();
 		}
 	}
-	
+
 	public int open(final IScenarioEditingLocation part, final MMXRootObject rootObject, final List<EObject> objects, final boolean locked) {
 		validationContext = new DefaultExtraValidationContext(part.getExtraValidationContext());
 		part.pushExtraValidationContext(validationContext);
@@ -656,7 +697,7 @@ public class DetailCompositeDialog extends Dialog {
 								"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
 						log.error("Unable to apply change", new RuntimeException("Unable to apply change"));
 					}
-					
+
 				} else {
 					final CompoundCommand cc = new CompoundCommand();
 					for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
@@ -711,20 +752,16 @@ public class DetailCompositeDialog extends Dialog {
 			// object, rather than generate a SetCommand.
 			if (original.eClass().getEAllContainments().contains(feature)) {
 				if (feature.isMany()) {
-					if (!((Collection<?>)original.eGet(feature)).isEmpty())
-					compound.append(
-							RemoveCommand.create(editingDomain, original, feature, (Collection<?>) original.eGet(feature))
-							);
-					if (!((Collection<?>)duplicate.eGet(feature)).isEmpty())
-					compound.append(
-							AddCommand.create(editingDomain, original, feature, (Collection<?>) duplicate.eGet(feature))
-							);
-//					final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
-//					if (mas.canExecute() == false) {
-//						log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
-//								"Attempt to set feature which could not be set."));
-//					}
-//					compound.append(mas);
+					if (!((Collection<?>) original.eGet(feature)).isEmpty())
+						compound.append(RemoveCommand.create(editingDomain, original, feature, (Collection<?>) original.eGet(feature)));
+					if (!((Collection<?>) duplicate.eGet(feature)).isEmpty())
+						compound.append(AddCommand.create(editingDomain, original, feature, (Collection<?>) duplicate.eGet(feature)));
+					// final Command mas = CommandUtil.createMultipleAttributeSetter(editingDomain, original, feature, (Collection) duplicate.eGet(feature));
+					// if (mas.canExecute() == false) {
+					// log.error("Unable to set the feature " + feature.getName() + " on an instance of " + original.eClass().getName(), new RuntimeException(
+					// "Attempt to set feature which could not be set."));
+					// }
+					// compound.append(mas);
 				} else {
 					final Command c = makeEqualizer((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature));
 					// if (!c.getAffectedObjects().isEmpty()) {
