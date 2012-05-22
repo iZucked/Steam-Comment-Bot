@@ -120,7 +120,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 	@Override
 	public EObject load(final ScenarioInstance instance) throws IOException {
 		if (instance.getInstance() != null) {
-			log.debug("Instance " + instance.getUuid() + " already loaded");
+//			log.debug("Instance " + instance.getUuid() + " already loaded");
 			return instance.getInstance();
 		}
 		log.debug("Instance " + instance.getUuid() + " needs loading");

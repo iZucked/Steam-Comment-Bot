@@ -27,7 +27,7 @@ public class ModelInstance implements IModelInstance {
 
 	@Override
 	public EObject getModel() throws IOException {
-
+		
 		if (!resource.isLoaded()) {
 			resource.load(Collections.emptyMap());
 		}
@@ -49,21 +49,21 @@ public class ModelInstance implements IModelInstance {
 			switchAdapters(model, true);
 		}
 	}
-
+	
+	public void saveWithMany() throws IOException {
+		resource.save(Collections.emptyMap());
+	}
+	
 	/**
 	 * TODO this could be in the MMXCoreResourceHandler
-	 * 
 	 * @param model
 	 */
 	private void switchAdapters(EObject model, boolean on) {
-		if (model == null)
-			return;
+		if (model == null) return;
 		for (final Adapter a : model.eAdapters()) {
 			if (a instanceof IMMXAdapter) {
-				if (on)
-					((IMMXAdapter) a).enable();
-				else
-					((IMMXAdapter) a).disable();
+				if (on) ((IMMXAdapter) a).enable(true);
+				else ((IMMXAdapter) a).disable();
 			}
 		}
 		for (final EObject child : model.eContents()) {

@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.model.service.IModelService;
+import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
@@ -150,6 +152,7 @@ public class ModelService implements IModelService {
 	@Override
 	public void saveTogether(final Collection<IModelInstance> instances) throws IOException {
 		// 1. backup all old model files
+		
 		synchronized (this) {
 			final URIConverter converter = resourceSet.getURIConverter();
 			final HashMap<IModelInstance, byte[]> backups = new HashMap<IModelInstance, byte[]>();
@@ -172,10 +175,13 @@ public class ModelService implements IModelService {
 			}
 			// now try saving each instance
 			final List<IModelInstance> touchedInstances = new ArrayList<IModelInstance>();
+				for (final IModelInstance instance : instances) {
+					switchAdapters(instance.getModel(), false);
+				}
 			try {
 				for (final IModelInstance instance : instances) {
 					touchedInstances.add(instance);
-					instance.save();
+					instance.saveWithMany();
 				}
 			} catch (IOException error) {
 				// if an instance didn't save, copy all the backups back
@@ -187,7 +193,24 @@ public class ModelService implements IModelService {
 					output.close();
 				}
 				throw error;
+			} finally {
+				for (final IModelInstance instance : instances) {
+					switchAdapters(instance.getModel(), true);
+				}
 			}
+		}
+	}
+	
+	private void switchAdapters(EObject model, boolean on) {
+		if (model == null) return;
+		for (final Adapter a : model.eAdapters().toArray(new Adapter[0])) {
+			if (a instanceof IMMXAdapter) {
+				if (on) ((IMMXAdapter) a).enable(true);
+				else ((IMMXAdapter) a).disable();
+			}
+		}
+		for (final EObject child : model.eContents()) {
+			switchAdapters(child, on);
 		}
 	}
 }
