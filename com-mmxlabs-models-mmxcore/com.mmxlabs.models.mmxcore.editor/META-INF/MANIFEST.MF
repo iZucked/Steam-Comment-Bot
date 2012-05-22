@@ -11,7 +11,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.models.mmxcore.presentation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
- com.mmxlabs.models.mmxcore.edit;visibility:=reexport,
+ com.mmxlabs.models.mmxcore.edit;bundle-version="[2.0.0,3.0.0)";visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.emf.edit.ui;visibility:=reexport,
  org.eclipse.ui.ide;visibility:=reexport
