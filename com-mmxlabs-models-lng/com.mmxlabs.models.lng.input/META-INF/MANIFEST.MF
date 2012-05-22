@@ -13,5 +13,5 @@ Export-Package: com.mmxlabs.models.lng.input,
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
  com.mmxlabs.models.lng.types;visibility:=reexport,
- com.mmxlabs.models.mmxcore;visibility:=reexport
+ com.mmxlabs.models.mmxcore;bundle-version="[2.0.0,3.0.0)";visibility:=reexport
 Bundle-ActivationPolicy: lazy
