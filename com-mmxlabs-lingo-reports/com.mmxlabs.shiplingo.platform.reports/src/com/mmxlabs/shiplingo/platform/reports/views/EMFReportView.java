@@ -281,7 +281,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	private Action copyTableAction;
 	private final String helpContextId;
 	private ScenarioViewerSynchronizer jobManagerListener;
-	
+
 	private IScenarioViewerSynchronizerOutput synchronizerOutput = null;
 
 	protected IStructuredContentProvider getContentProvider() {
@@ -293,12 +293,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 					synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
 				}
 			}
-			
+
 			@Override
 			public void dispose() {
 				synchronizerOutput = null;
 			}
-			
+
 			@Override
 			public Object[] getElements(Object inputElement) {
 				if (inputElement instanceof IScenarioViewerSynchronizerOutput) {
@@ -350,8 +350,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
 
-				final boolean inputEmpty = (input == null) || ((input instanceof Collection) && ((Collection<?>) input).isEmpty());
-				final boolean oldInputEmpty = (oldInput == null) || ((oldInput instanceof Collection) && ((Collection<?>) oldInput).isEmpty());
+				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
+				final boolean oldInputEmpty = (oldInput == null)
+						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
 
 				if (inputEmpty != oldInputEmpty) {
 					// Disabled because running this takes up 50% of the runtime when displaying a new schedule (!)
