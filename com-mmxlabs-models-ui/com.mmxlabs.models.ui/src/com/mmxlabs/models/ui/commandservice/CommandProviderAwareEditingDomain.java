@@ -6,6 +6,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.osgi.util.tracker.ServiceTracker;
@@ -28,20 +29,22 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	private boolean commandProvidersDisabled = false;
 
 	public CommandProviderAwareEditingDomain(final AdapterFactory adapterFactory, final CommandStack commandStack, final MMXRootObject rootObject,
-			final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker) {
-		super(adapterFactory, commandStack);
+			final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker, final ResourceSet resourceSet) {
+		super(adapterFactory, commandStack, resourceSet);
 		this.rootObject = rootObject;
 		this.commandProviderTracker = commandProviderTracker;
 	}
 
 	public void setAdaptersEnabled(final boolean enabled) {
 		for (final MMXSubModel subModel : rootObject.getSubModels()) {
-			if (enabled) enableAdapters(subModel.getSubModelInstance());
-			else disableAdapters(subModel.getSubModelInstance());
+			if (enabled)
+				enableAdapters(subModel.getSubModelInstance());
+			else
+				disableAdapters(subModel.getSubModelInstance());
 		}
-		
+
 	}
-	
+
 	private void disableAdapters(final EObject top) {
 		for (final Adapter a : top.eAdapters()) {
 			if (a instanceof IMMXAdapter) {
@@ -51,7 +54,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		for (final EObject o : top.eContents())
 			disableAdapters(o);
 	}
-	
+
 	private void enableAdapters(final EObject top) {
 		for (final Adapter a : top.eAdapters()) {
 			if (a instanceof IMMXAdapter) {
@@ -61,7 +64,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		for (final EObject o : top.eContents())
 			enableAdapters(o);
 	}
-	
+
 	@Override
 	public Command createCommand(final Class<? extends Command> commandClass, final CommandParameter commandParameter) {
 		final Command normal = super.createCommand(commandClass, commandParameter);
@@ -69,10 +72,11 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		if (!isCommandProvidersDisabled()) {
 			final CompoundCommand wrapper = new CompoundCommand();
 			wrapper.append(normal);
-			IModelCommandProvider[] providers = commandProviderTracker.getServices(new IModelCommandProvider[0]);
-			for (final IModelCommandProvider provider : providers) provider.startCommandProvision();
-			
-			for (final IModelCommandProvider provider : providers){
+			final IModelCommandProvider[] providers = commandProviderTracker.getServices(new IModelCommandProvider[0]);
+			for (final IModelCommandProvider provider : providers)
+				provider.startCommandProvision();
+
+			for (final IModelCommandProvider provider : providers) {
 				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject, commandClass, commandParameter, normal);
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
@@ -83,9 +87,10 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 					}
 				}
 			}
-			
-			for (final IModelCommandProvider provider : providers) provider.endCommandProvision();
-			
+
+			for (final IModelCommandProvider provider : providers)
+				provider.endCommandProvision();
+
 			return wrapper.unwrap();
 		} else {
 			return normal;
