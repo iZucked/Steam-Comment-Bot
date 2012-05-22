@@ -14,7 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
@@ -176,14 +175,8 @@ public abstract class AbstractScenarioService implements IScenarioService {
 	}
 
 	public EditingDomain initEditingDomain(final EObject rootObject, final ScenarioInstance instance) {
-		final BasicCommandStack commandStack = new BasicCommandStack() {
-			@Override
-			public void execute(final Command command) {
-				synchronized (instance) {
-					super.execute(command);
-				}
-			}
-		};
+
+		final MMXAdaptersAwareCommandStack commandStack = new MMXAdaptersAwareCommandStack(instance);
 
 		commandStack.addCommandStackListener(new CommandStackListener() {
 
@@ -214,7 +207,11 @@ public abstract class AbstractScenarioService implements IScenarioService {
 			}
 		}
 
-		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, mmxRootObject, commandProviderTracker, resourceSet);
+		final CommandProviderAwareEditingDomain editingDomain = new CommandProviderAwareEditingDomain(adapterFactory, commandStack, mmxRootObject, commandProviderTracker, resourceSet);
+
+		commandStack.setEditingDomain(editingDomain);
+
+		return editingDomain;
 
 	}
 
