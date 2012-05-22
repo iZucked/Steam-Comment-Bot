@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -347,21 +348,26 @@ public class DefaultClassImporter implements IClassImporter {
 				}
 			}
 		} else {
-			if (MMXCorePackage.eINSTANCE.getNamedObject().isSuperTypeOf(
-					reference.getEReferenceType())) {
-				if (reference.isMany()) {
-					final EList<? extends NamedObject> values = (EList<? extends NamedObject>) object.eGet(reference);
-					final StringBuffer sb = new StringBuffer();
-					boolean comma = false;
-					for (final NamedObject no : values) {
+			if (reference.isMany()) {
+				final List<? extends Object> values = (List<? extends Object>) object
+						.eGet(reference);
+				final StringBuffer sb = new StringBuffer();
+				boolean comma = false;
+				for (final Object o : values) {
+					if (o instanceof NamedObject) {
+						final NamedObject no = (NamedObject) o;
 						if (comma)
 							sb.append(",");
 						comma = true;
 						sb.append(no.getName());
 					}
-					result.put(reference.getName(), sb.toString());
-				} else {
-					final NamedObject no = (NamedObject) object.eGet(reference);
+				}
+
+				result.put(reference.getName(), sb.toString());
+			} else {
+				final Object o = object.eGet(reference);
+				if (o instanceof NamedObject) {
+					final NamedObject no = (NamedObject) o;
 					if (no != null)
 						result.put(reference.getName(), no.getName());
 				}
@@ -370,7 +376,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
-		return true;
+		return feature.getEContainingClass().getEPackage() != MMXCorePackage.eINSTANCE;
 	}
 
 	protected boolean shouldFlattenReference(final EReference reference) {
