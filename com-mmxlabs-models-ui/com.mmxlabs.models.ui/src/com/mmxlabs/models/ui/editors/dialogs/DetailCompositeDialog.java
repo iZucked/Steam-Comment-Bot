@@ -52,6 +52,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.slf4j.Logger;
@@ -254,6 +255,18 @@ public class DetailCompositeDialog extends Dialog {
 		final IStatus status = validationHelper.runValidation(validator,
 				validationContext, currentEditorTargets);
 
+//		if (status.isOK()) {
+//			errorText.setText("");
+//			errorText.setVisible(false);
+//			((GridData) errorText.getLayoutData()).heightHint = 0;
+//			getContents().pack();
+//		} else {
+//			errorText.setText(getMessages(status));
+//			errorText.setVisible(true);
+//			((GridData) errorText.getLayoutData()).heightHint = 50;
+//			getContents().pack();
+//		}
+
 		final boolean problem = status.matches(IStatus.ERROR);
 		for (final EObject object : currentEditorTargets)
 			objectValidity.put(object, !problem);
@@ -262,6 +275,25 @@ public class DetailCompositeDialog extends Dialog {
 			displayComposite.displayValidationStatus(status);
 
 		checkButtonEnablement();
+	}
+
+	/**
+	 * Extract message hierarchy and construct the tool tip message.
+	 * 
+	 * @param status
+	 * @return
+	 */
+	private String getMessages(final IStatus status) {
+		if (status.isMultiStatus()) {
+			final StringBuilder sb = new StringBuilder();
+			for (final IStatus s : status.getChildren()) {
+				sb.append(getMessages(s));
+				sb.append("\n");
+			}
+			return sb.toString();
+		} else {
+			return status.getMessage();
+		}
 	}
 
 	private void checkButtonEnablement() {
@@ -368,6 +400,16 @@ public class DetailCompositeDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(final Composite parent) {
 		final Composite c = (Composite) super.createDialogArea(parent);
+
+//		errorText = new Text(c, SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
+//		{
+//			GridData gd = new GridData(SWT.CENTER, SWT.CENTER, true, false);
+//			gd.heightHint = 0;
+//			errorText.setLayoutData(gd);
+//		}
+//		errorText.setEditable(false);
+//		errorText.setVisible(false);
+		
 		if (displaySidebarList) {
 			sidebarSash = new Composite(c, SWT.NONE);
 			{
@@ -627,6 +669,8 @@ public class DetailCompositeDialog extends Dialog {
 
 	private EObject sidebarContainer;
 
+	private Text errorText;
+
 	/**
 	 * This version of the open method also displays the sidebar and allows for
 	 * creation and deletion of objects in the sidebar.
@@ -659,8 +703,7 @@ public class DetailCompositeDialog extends Dialog {
 			if (value == OK) {
 				final CompoundCommand cc = new CompoundCommand();
 				cc.append(IdentityCommand.INSTANCE);
-				for (final Map.Entry<EObject, EObject> entry : originalToDuplicate
-						.entrySet()) {
+				for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
 					final EObject original = entry.getKey();
 					final EObject duplicate = entry.getValue();
 					if (!original.equals(duplicate)) {

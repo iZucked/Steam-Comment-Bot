@@ -377,7 +377,7 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 
 			/**
-			 * Extract message hierachy and construct the tool tip message.
+			 * Extract message hierarchy and construct the tool tip message.
 			 * 
 			 * @param status
 			 * @return
