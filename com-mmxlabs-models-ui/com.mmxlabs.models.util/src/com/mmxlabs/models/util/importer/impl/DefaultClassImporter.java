@@ -376,7 +376,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected boolean shouldExportFeature(final EStructuralFeature feature) {
-		return true;
+		return feature.getEContainingClass().getEPackage() != MMXCorePackage.eINSTANCE;
 	}
 
 	protected boolean shouldFlattenReference(final EReference reference) {
