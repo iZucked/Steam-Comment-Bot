@@ -19,6 +19,9 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter {
 	private List<Notification> missedNotifications = new LinkedList<Notification>();
 	
+	/**
+	 * @since 2.0
+	 */
 	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
 	
 	public MMXAdapterImpl() {
@@ -35,6 +38,10 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 	
 	public abstract void reallyNotifyChanged(final Notification notification);
 	
+	
+	/**
+	 * @since 2.0
+	 */
 	protected void missedNotifications(final List<Notification> missed) {
 		
 	}
