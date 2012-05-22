@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -12,9 +11,6 @@ import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.command.IdentityCommand;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.slf4j.Logger;
@@ -50,7 +46,6 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
-import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
