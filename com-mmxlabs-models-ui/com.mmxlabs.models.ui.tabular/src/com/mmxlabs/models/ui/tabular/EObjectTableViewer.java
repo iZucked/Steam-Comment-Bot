@@ -230,7 +230,9 @@ public class EObjectTableViewer extends GridTableViewer {
 	 */
 	public void setLocked(final boolean lockedForEditing) {
 		this.lockedForEditing = lockedForEditing;
-		refresh(true);
+		if (!getControl().isDisposed()) {
+			refresh(true);
+		}
 	}
 
 	private boolean displayValidationErrors = true;
