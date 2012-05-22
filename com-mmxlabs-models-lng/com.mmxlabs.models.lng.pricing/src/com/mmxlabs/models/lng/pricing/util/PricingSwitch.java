@@ -90,7 +90,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				PricingModel pricingModel = (PricingModel)theEObject;
 				T result = casePricingModel(pricingModel);
 				if (result == null) result = caseUUIDObject(pricingModel);
-				if (result == null) result = caseNamedObject(pricingModel);
 				if (result == null) result = caseMMXObject(pricingModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

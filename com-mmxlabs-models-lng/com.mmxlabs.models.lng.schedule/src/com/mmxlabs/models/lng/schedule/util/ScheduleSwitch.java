@@ -77,7 +77,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				ScheduleModel scheduleModel = (ScheduleModel)theEObject;
 				T result = caseScheduleModel(scheduleModel);
 				if (result == null) result = caseUUIDObject(scheduleModel);
-				if (result == null) result = caseNamedObject(scheduleModel);
 				if (result == null) result = caseMMXObject(scheduleModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

@@ -36,7 +36,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getLoadSlots <em>Load Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getDischargeSlots <em>Discharge Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoes <em>Cargoes</em>}</li>
@@ -46,26 +45,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getLoadSlots() <em>Load Slots</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -113,27 +92,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	@Override
 	protected EClass eStaticClass() {
 		return CargoPackage.Literals.CARGO_MODEL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.CARGO_MODEL__NAME, oldName, name));
 	}
 
 	/**
@@ -198,8 +156,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CargoPackage.CARGO_MODEL__NAME:
-				return getName();
 			case CargoPackage.CARGO_MODEL__LOAD_SLOTS:
 				return getLoadSlots();
 			case CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS:
@@ -219,9 +175,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CargoPackage.CARGO_MODEL__NAME:
-				setName((String)newValue);
-				return;
 			case CargoPackage.CARGO_MODEL__LOAD_SLOTS:
 				getLoadSlots().clear();
 				getLoadSlots().addAll((Collection<? extends LoadSlot>)newValue);
@@ -246,9 +199,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CARGO_MODEL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case CargoPackage.CARGO_MODEL__LOAD_SLOTS:
 				getLoadSlots().clear();
 				return;
@@ -270,8 +220,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CargoPackage.CARGO_MODEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case CargoPackage.CARGO_MODEL__LOAD_SLOTS:
 				return loadSlots != null && !loadSlots.isEmpty();
 			case CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS:
@@ -280,54 +228,6 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return cargoes != null && !cargoes.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (derivedFeatureID) {
-				case CargoPackage.CARGO_MODEL__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.NAMED_OBJECT__NAME: return CargoPackage.CARGO_MODEL__NAME;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of CargoModelImpl

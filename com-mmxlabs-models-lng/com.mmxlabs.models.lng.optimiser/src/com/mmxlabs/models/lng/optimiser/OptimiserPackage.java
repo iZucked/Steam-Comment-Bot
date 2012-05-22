@@ -100,22 +100,13 @@ public interface OptimiserPackage extends EPackage {
 	int OPTIMISER_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int OPTIMISER_MODEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Settings</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_MODEL__SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int OPTIMISER_MODEL__SETTINGS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Active Setting</b></em>' reference.
@@ -124,7 +115,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_MODEL__ACTIVE_SETTING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int OPTIMISER_MODEL__ACTIVE_SETTING = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -133,7 +124,7 @@ public interface OptimiserPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int OPTIMISER_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int OPTIMISER_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.optimiser.impl.OptimiserSettingsImpl <em>Settings</em>}' class.

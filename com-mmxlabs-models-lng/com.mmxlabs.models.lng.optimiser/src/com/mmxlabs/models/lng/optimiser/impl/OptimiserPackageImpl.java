@@ -483,7 +483,6 @@ public class OptimiserPackageImpl extends EPackageImpl implements OptimiserPacka
 
 		// Add supertypes to classes
 		optimiserModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		optimiserModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		optimiserSettingsEClass.getESuperTypes().add(theTypesPackage.getAOptimisationSettings());
 		objectiveEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		constraintEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());

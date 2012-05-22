@@ -116,7 +116,6 @@ public class FleetSwitch<T> extends Switch<T> {
 				FleetModel fleetModel = (FleetModel)theEObject;
 				T result = caseFleetModel(fleetModel);
 				if (result == null) result = caseUUIDObject(fleetModel);
-				if (result == null) result = caseNamedObject(fleetModel);
 				if (result == null) result = caseMMXObject(fleetModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

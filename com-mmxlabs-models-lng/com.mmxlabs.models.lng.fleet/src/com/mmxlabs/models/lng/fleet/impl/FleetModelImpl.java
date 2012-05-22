@@ -37,7 +37,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVessels <em>Vessels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselClasses <em>Vessel Classes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.FleetModelImpl#getVesselEvents <em>Vessel Events</em>}</li>
@@ -48,26 +47,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -125,27 +104,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	@Override
 	protected EClass eStaticClass() {
 		return FleetPackage.Literals.FLEET_MODEL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, FleetPackage.FLEET_MODEL__NAME, oldName, name));
 	}
 
 	/**
@@ -224,8 +182,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case FleetPackage.FLEET_MODEL__NAME:
-				return getName();
 			case FleetPackage.FLEET_MODEL__VESSELS:
 				return getVessels();
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
@@ -247,9 +203,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case FleetPackage.FLEET_MODEL__NAME:
-				setName((String)newValue);
-				return;
 			case FleetPackage.FLEET_MODEL__VESSELS:
 				getVessels().clear();
 				getVessels().addAll((Collection<? extends Vessel>)newValue);
@@ -278,9 +231,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case FleetPackage.FLEET_MODEL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case FleetPackage.FLEET_MODEL__VESSELS:
 				getVessels().clear();
 				return;
@@ -305,8 +255,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case FleetPackage.FLEET_MODEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case FleetPackage.FLEET_MODEL__VESSELS:
 				return vessels != null && !vessels.isEmpty();
 			case FleetPackage.FLEET_MODEL__VESSEL_CLASSES:
@@ -317,54 +265,6 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 				return baseFuels != null && !baseFuels.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (derivedFeatureID) {
-				case FleetPackage.FLEET_MODEL__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.NAMED_OBJECT__NAME: return FleetPackage.FLEET_MODEL__NAME;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of FleetModelImpl

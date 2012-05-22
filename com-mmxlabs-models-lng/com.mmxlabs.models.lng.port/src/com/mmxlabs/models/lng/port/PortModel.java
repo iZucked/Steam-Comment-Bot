@@ -27,7 +27,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface PortModel extends UUIDObject, NamedObject {
+public interface PortModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Ports</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.port.Port}.

@@ -27,7 +27,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface CommercialModel extends UUIDObject, NamedObject {
+public interface CommercialModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Entities</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.LegalEntity}.

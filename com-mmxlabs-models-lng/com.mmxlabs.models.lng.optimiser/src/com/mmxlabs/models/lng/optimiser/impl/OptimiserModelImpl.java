@@ -32,7 +32,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.optimiser.impl.OptimiserModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.optimiser.impl.OptimiserModelImpl#getSettings <em>Settings</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.optimiser.impl.OptimiserModelImpl#getActiveSetting <em>Active Setting</em>}</li>
  * </ul>
@@ -41,26 +40,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * @generated
  */
 public class OptimiserModelImpl extends UUIDObjectImpl implements OptimiserModel {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getSettings() <em>Settings</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -98,27 +77,6 @@ public class OptimiserModelImpl extends UUIDObjectImpl implements OptimiserModel
 	@Override
 	protected EClass eStaticClass() {
 		return OptimiserPackage.Literals.OPTIMISER_MODEL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, OptimiserPackage.OPTIMISER_MODEL__NAME, oldName, name));
 	}
 
 	/**
@@ -193,8 +151,6 @@ public class OptimiserModelImpl extends UUIDObjectImpl implements OptimiserModel
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case OptimiserPackage.OPTIMISER_MODEL__NAME:
-				return getName();
 			case OptimiserPackage.OPTIMISER_MODEL__SETTINGS:
 				return getSettings();
 			case OptimiserPackage.OPTIMISER_MODEL__ACTIVE_SETTING:
@@ -213,9 +169,6 @@ public class OptimiserModelImpl extends UUIDObjectImpl implements OptimiserModel
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case OptimiserPackage.OPTIMISER_MODEL__NAME:
-				setName((String)newValue);
-				return;
 			case OptimiserPackage.OPTIMISER_MODEL__SETTINGS:
 				getSettings().clear();
 				getSettings().addAll((Collection<? extends OptimiserSettings>)newValue);
@@ -235,9 +188,6 @@ public class OptimiserModelImpl extends UUIDObjectImpl implements OptimiserModel
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.OPTIMISER_MODEL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case OptimiserPackage.OPTIMISER_MODEL__SETTINGS:
 				getSettings().clear();
 				return;
@@ -256,62 +206,12 @@ public class OptimiserModelImpl extends UUIDObjectImpl implements OptimiserModel
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case OptimiserPackage.OPTIMISER_MODEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case OptimiserPackage.OPTIMISER_MODEL__SETTINGS:
 				return settings != null && !settings.isEmpty();
 			case OptimiserPackage.OPTIMISER_MODEL__ACTIVE_SETTING:
 				return activeSetting != null;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (derivedFeatureID) {
-				case OptimiserPackage.OPTIMISER_MODEL__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.NAMED_OBJECT__NAME: return OptimiserPackage.OPTIMISER_MODEL__NAME;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of OptimiserModelImpl

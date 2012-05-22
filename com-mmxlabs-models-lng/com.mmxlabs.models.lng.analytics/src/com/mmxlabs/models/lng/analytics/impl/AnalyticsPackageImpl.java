@@ -716,7 +716,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		// Add supertypes to classes
 		analyticsModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		analyticsModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		unitCostMatrixEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		unitCostMatrixEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		unitCostLineEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());

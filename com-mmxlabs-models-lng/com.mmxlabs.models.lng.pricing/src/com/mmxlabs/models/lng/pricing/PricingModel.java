@@ -29,7 +29,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model
  * @generated
  */
-public interface PricingModel extends UUIDObject, NamedObject {
+public interface PricingModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Commodity Indices</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.pricing.Index}&lt;java.lang.Double>.

@@ -118,7 +118,6 @@ public class PortSwitch<T> extends Switch<T> {
 				PortModel portModel = (PortModel)theEObject;
 				T result = casePortModel(portModel);
 				if (result == null) result = caseUUIDObject(portModel);
-				if (result == null) result = caseNamedObject(portModel);
 				if (result == null) result = caseMMXObject(portModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

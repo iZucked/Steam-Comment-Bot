@@ -78,7 +78,6 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				AnalyticsModel analyticsModel = (AnalyticsModel)theEObject;
 				T result = caseAnalyticsModel(analyticsModel);
 				if (result == null) result = caseUUIDObject(analyticsModel);
-				if (result == null) result = caseNamedObject(analyticsModel);
 				if (result == null) result = caseMMXObject(analyticsModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

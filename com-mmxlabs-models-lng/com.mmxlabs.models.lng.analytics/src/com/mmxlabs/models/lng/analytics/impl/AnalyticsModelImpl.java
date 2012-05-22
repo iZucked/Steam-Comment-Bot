@@ -38,7 +38,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getRoundTripMatrices <em>Round Trip Matrices</em>}</li>
  * </ul>
  * </p>
@@ -46,26 +45,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getRoundTripMatrices() <em>Round Trip Matrices</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -93,27 +72,6 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	@Override
 	protected EClass eStaticClass() {
 		return AnalyticsPackage.Literals.ANALYTICS_MODEL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYTICS_MODEL__NAME, oldName, name));
 	}
 
 	/**
@@ -150,8 +108,6 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AnalyticsPackage.ANALYTICS_MODEL__NAME:
-				return getName();
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
 				return getRoundTripMatrices();
 		}
@@ -167,9 +123,6 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AnalyticsPackage.ANALYTICS_MODEL__NAME:
-				setName((String)newValue);
-				return;
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
 				getRoundTripMatrices().clear();
 				getRoundTripMatrices().addAll((Collection<? extends UnitCostMatrix>)newValue);
@@ -186,9 +139,6 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.ANALYTICS_MODEL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
 				getRoundTripMatrices().clear();
 				return;
@@ -204,60 +154,10 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.ANALYTICS_MODEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
 				return roundTripMatrices != null && !roundTripMatrices.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (derivedFeatureID) {
-				case AnalyticsPackage.ANALYTICS_MODEL__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.NAMED_OBJECT__NAME: return AnalyticsPackage.ANALYTICS_MODEL__NAME;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of AnalyticsModelImpl

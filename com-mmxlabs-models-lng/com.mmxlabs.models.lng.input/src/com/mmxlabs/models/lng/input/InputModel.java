@@ -24,7 +24,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface InputModel extends UUIDObject, NamedObject {
+public interface InputModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Assignments</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.input.Assignment}.
