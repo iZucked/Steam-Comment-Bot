@@ -61,6 +61,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -607,8 +608,7 @@ public class DetailCompositeDialog extends Dialog {
 				// delete any objects which have been removed from the sidebar list
 				if (!deletedInputs.isEmpty())
 					cc.append(DeleteCommand.create(commandHandler.getEditingDomain(), deletedInputs));
-				
-				commandHandler.getEditingDomain().getCommandStack().execute(cc);
+				executeFinalCommand(cc);
 			} else {
 				// any new objects will have been added from the inputs list, so we have to delete them
 				// we want to directly execute the command so that it doesn't go into the undo stack.
@@ -650,7 +650,7 @@ public class DetailCompositeDialog extends Dialog {
 					}
 					final boolean isExecutable = adder.canExecute();
 					if (isExecutable) {
-						commandHandler.getEditingDomain().getCommandStack().execute(adder);
+						executeFinalCommand(adder);
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
 								"An error occurred applying the change - the command to apply it was not executable. Refer to the error log for more details");
@@ -670,7 +670,7 @@ public class DetailCompositeDialog extends Dialog {
 					final boolean isExecutable = cc.canExecute();
 					if (isExecutable) {
 
-						commandHandler.getEditingDomain().getCommandStack().execute(cc);
+						executeFinalCommand(cc);
 
 					} else {
 						MessageDialog.openError(getShell(), "Error applying change",
@@ -682,6 +682,17 @@ public class DetailCompositeDialog extends Dialog {
 			return value;
 		} finally {
 			part.popExtraValidationContext();
+		}
+	}
+
+	private void executeFinalCommand(final CompoundCommand cc) {
+		EditingDomain domain = commandHandler.getEditingDomain();
+		if (domain instanceof CommandProviderAwareEditingDomain) {
+			((CommandProviderAwareEditingDomain) domain).setCommandProvidersDisabled(true);
+		}
+		commandHandler.getEditingDomain().getCommandStack().execute(cc);
+		if (domain instanceof CommandProviderAwareEditingDomain) {
+			((CommandProviderAwareEditingDomain) domain).setCommandProvidersDisabled(false);
 		}
 	}
 
