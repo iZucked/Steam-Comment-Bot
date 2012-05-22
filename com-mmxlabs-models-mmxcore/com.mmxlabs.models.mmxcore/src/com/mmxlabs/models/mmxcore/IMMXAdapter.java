@@ -22,4 +22,6 @@ public interface IMMXAdapter extends Adapter {
 	 * Called after a save has finished
 	 */
 	public void enable();
+	
+	public void enable(boolean loseNotifications);
 }

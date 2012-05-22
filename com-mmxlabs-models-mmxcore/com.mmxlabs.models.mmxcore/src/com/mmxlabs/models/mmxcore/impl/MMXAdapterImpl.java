@@ -48,8 +48,12 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 
 	@Override
 	public void enable() {
+		enable(false);
+	}
+	
+	public void enable(final boolean skip) {
 		if (missedNotifications.isEmpty() == false) {
-			missedNotifications(Collections.unmodifiableList(missedNotifications));
+			if (!skip) missedNotifications(Collections.unmodifiableList(missedNotifications));
 			missedNotifications.clear();
 		}
 		enabled = true;
