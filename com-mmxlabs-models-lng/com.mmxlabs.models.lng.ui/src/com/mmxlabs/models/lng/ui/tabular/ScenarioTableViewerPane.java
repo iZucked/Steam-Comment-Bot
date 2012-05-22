@@ -31,7 +31,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -47,7 +46,6 @@ import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -371,8 +369,11 @@ public class ScenarioTableViewerPane extends ViewerPane {
 					final EditingDomain ed = jointModelEditorPart.getEditingDomain();
 					final List<?> objects = ((IStructuredSelection) sel).toList();
 					getJointModelEditorPart().setDisableUpdates(true);
-					ed.getCommandStack().execute(DeleteCommand.create(ed, objects));
-					getJointModelEditorPart().setDisableUpdates(false);
+					try {
+						ed.getCommandStack().execute(DeleteCommand.create(ed, objects));
+					} finally {
+						getJointModelEditorPart().setDisableUpdates(false);
+					}
 				}
 			}
 
