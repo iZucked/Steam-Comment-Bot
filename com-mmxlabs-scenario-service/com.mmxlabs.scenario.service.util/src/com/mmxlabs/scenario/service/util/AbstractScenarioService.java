@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
@@ -18,6 +19,8 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -75,7 +78,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		return modelService;
 	}
 
-	public void setModelService(IModelService modelService) {
+	public void setModelService(final IModelService modelService) {
 		this.modelService = modelService;
 	}
 
@@ -88,8 +91,8 @@ public abstract class AbstractScenarioService implements IScenarioService {
 
 	@Override
 	public ScenarioInstance getScenarioInstance(final String uuid) {
-		SELECT query = new SELECT(1, new FROM(getServiceModel()), new WHERE(new EObjectAttributeValueCondition(uuidAttribute, new StringValue(uuid))));
-		IQueryResult result = query.execute();
+		final SELECT query = new SELECT(1, new FROM(getServiceModel()), new WHERE(new EObjectAttributeValueCondition(uuidAttribute, new StringValue(uuid))));
+		final IQueryResult result = query.execute();
 		if (result.isEmpty())
 			return null;
 		else
@@ -185,7 +188,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		commandStack.addCommandStackListener(new CommandStackListener() {
 
 			@Override
-			public void commandStackChanged(EventObject event) {
+			public void commandStackChanged(final EventObject event) {
 				instance.setDirty(commandStack.isSaveNeeded());
 			}
 		});
@@ -198,11 +201,21 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker = Activator.getDefault().getCommandProviderTracker();
 
 		// Create the editing domain with a special command stack.
-		//
-		// return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
+		final MMXRootObject mmxRootObject = (MMXRootObject) rootObject;
 
-		// create editing domain
-		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, (MMXRootObject) rootObject, commandProviderTracker);
+		// Assuming there is at least one submodel that it is part of the global resourceset (note this is assuming the current implementation of the ModelService)
+		ResourceSet resourceSet = null;
+		final Iterator<MMXSubModel> iterator = mmxRootObject.getSubModels().iterator();
+		while (iterator.hasNext() && resourceSet == null) {
+			final MMXSubModel sub = iterator.next();
+			final Resource eResource = sub.getOriginalResource();
+			if (eResource != null) {
+				resourceSet = eResource.getResourceSet();
+			}
+		}
+
+		return new CommandProviderAwareEditingDomain(adapterFactory, commandStack, mmxRootObject, commandProviderTracker, resourceSet);
+
 	}
 
 	@Override
@@ -236,20 +249,20 @@ public abstract class AbstractScenarioService implements IScenarioService {
 			try {
 				final IModelInstance instance = modelService.getModel(URI.createURI(subModelURI));
 				originalSubModels.add(instance.getModel());
-			} catch (IOException e1) {
+			} catch (final IOException e1) {
 				log.error("IO Exception loading model from " + subModelURI, e1);
 			}
 		}
 
 		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
 
-		Collection<ScenarioInstance> dependencies = new ArrayList<ScenarioInstance>();
+		final Collection<ScenarioInstance> dependencies = new ArrayList<ScenarioInstance>();
 
 		for (final String uuids : original.getDependencyUUIDs()) {
 			dependencies.add(getScenarioInstance(uuids));
 		}
 
-		ScenarioInstance dup = insert(destination, dependencies, duppedSubModels);
+		final ScenarioInstance dup = insert(destination, dependencies, duppedSubModels);
 		// Copy across various bits of information.
 		dup.getMetadata().setContentType(original.getMetadata().getContentType());
 		dup.getMetadata().setCreated(original.getMetadata().getCreated());
