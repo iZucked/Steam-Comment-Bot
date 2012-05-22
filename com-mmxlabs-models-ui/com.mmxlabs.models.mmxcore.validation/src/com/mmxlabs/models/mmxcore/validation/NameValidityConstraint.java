@@ -42,7 +42,6 @@ public class NameValidityConstraint extends AbstractModelConstraint {
 	 * @return validation status; success if attribute is a valid id/name
 	 */
 	private IStatus validate(final EObject target, final EAttribute attribute, final IValidationContext ctx) {
-		if (target.eContainingFeature().isMany() == false) return ctx.createSuccessStatus();
 		final String name = (String) target.eGet(attribute);
 		
 		if (name == null || name.trim().isEmpty()) {
