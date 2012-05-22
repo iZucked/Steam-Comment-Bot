@@ -7,7 +7,7 @@ Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.emf.validation;bundle-version="1.4.0",
- com.mmxlabs.models.mmxcore;bundle-version="1.0.0",
+ com.mmxlabs.models.mmxcore;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.ui.validation;bundle-version="1.0.0",
  org.junit;bundle-version="4.8.2",
  org.mockito;bundle-version="1.8.4"
