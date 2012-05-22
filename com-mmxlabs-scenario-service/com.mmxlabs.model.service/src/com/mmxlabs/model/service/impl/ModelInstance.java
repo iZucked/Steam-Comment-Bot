@@ -45,9 +45,13 @@ public class ModelInstance implements IModelInstance {
 		try {
 			switchAdapters(model, false);
 			resource.save(Collections.emptyMap());
-		}finally {
+		} finally {
 			switchAdapters(model, true);
 		}
+	}
+	
+	public void saveWithMany() throws IOException {
+		resource.save(Collections.emptyMap());
 	}
 	
 	/**

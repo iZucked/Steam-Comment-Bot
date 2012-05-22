@@ -31,7 +31,9 @@ public interface IModelInstance {
 	 * @throws IOException
 	 */
 	void save() throws IOException;
-
+	
+	void saveWithMany() throws IOException;
+	
 	/**
 	 * Request the current model should be deleted.
 	 * 
