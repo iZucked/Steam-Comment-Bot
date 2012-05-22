@@ -27,7 +27,7 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.models.lng.types;bundle-version="1.0.0",
  com.mmxlabs.models.util;bundle-version="1.0.0",
  com.mmxlabs.models.ui.tabular;bundle-version="1.0.0",
- com.mmxlabs.models.mmxcore,
+ com.mmxlabs.models.mmxcore;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.scenario.service.ui;bundle-version="1.0.0",
  com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
  org.slf4j.api;bundle-version="1.6.4"

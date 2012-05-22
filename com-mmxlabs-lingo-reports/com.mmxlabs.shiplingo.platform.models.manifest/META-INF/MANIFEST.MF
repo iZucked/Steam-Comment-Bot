@@ -17,7 +17,7 @@ Export-Package: com.mmxlabs.shiplingo.platform.models.manifest,
  com.mmxlabs.shiplingo.platform.models.manifest.wizards
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,
- com.mmxlabs.models.mmxcore;bundle-version="1.0.0",
+ com.mmxlabs.models.mmxcore;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.port;bundle-version="1.0.0",
  com.mmxlabs.models.lng.fleet;bundle-version="1.0.0",
  com.mmxlabs.models.lng.cargo;bundle-version="1.0.0",
