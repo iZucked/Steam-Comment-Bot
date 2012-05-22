@@ -35,30 +35,30 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 	private final MMXContentAdapter dirtyStateAdapter = new MMXContentAdapter() {
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
-			final int type = notification.getEventType();
-			switch (type) {
-			case Notification.RESOLVE:
-			case Notification.REMOVING_ADAPTER:
-				break;
-			default:
+			handle(notification);
+		}
+		private boolean handle(final Notification notification) {
+			if (notification.isTouch() == false) {
 				if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name())
-					return; // this feature is irrelevant
+					return false; // this feature is irrelevant
 				EObject target = (EObject) notification.getNotifier();
 				while (target != null) {
 					if (target == modelObject)
-						return;
+						return false;
 					target = target.eContainer();
 				}
-				log.debug("Setting dirty bit on schedule model");
+				log.debug("Setting dirty bit on schedule model because " + notification);
 				ScheduleModelEditorContribution.this.modelObject.setDirty(true);
+				return true;
 			}
+			return false;
 		}
 
 		protected void missedNotifications(final List<Notification> missed) {
 			// Re-process missed notifications to update dirty state.
 			final List<Notification> copied = new ArrayList<Notification>(missed);
 			for (final Notification n : copied) {
-				reallyNotifyChanged(n);
+				if (handle(n)) break;
 			}
 		}
 	};

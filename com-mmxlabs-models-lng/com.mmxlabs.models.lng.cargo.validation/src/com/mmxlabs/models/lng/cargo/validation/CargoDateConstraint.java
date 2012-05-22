@@ -66,6 +66,17 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 		return ctx.createSuccessStatus();
 	}
 
+	private String formatHours(final int hours) {
+		if (hours < 24) {
+			if (hours == 1) return hours + " hour";
+			else return hours + " hours";
+		} else {
+			int remainderHours = hours % 24;
+			int days = hours / 24;
+			return days + " day" + (days > 1 ? "s" : "") + (remainderHours > 0 ? (", " + remainderHours + " hour" + (remainderHours > 1 ? "s" : "")) : "");
+		}
+	}
+	
 	/**
 	 * Validate that the available time is enough to get from A to B, if it's not negative
 	 * 
@@ -114,12 +125,12 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					// distance line is missing
 					// TODO customise message for this case.
 					// seems like a waste to run the same code twice
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), "infinity", availableTime));
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), "infinity", formatHours(availableTime)));
 					dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port());
 					return dsd;
 				} else {
 					if (time > availableTime) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), time, availableTime));
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), formatHours(time), formatHours(availableTime)));
 						dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
 						return dsd;
 					}
