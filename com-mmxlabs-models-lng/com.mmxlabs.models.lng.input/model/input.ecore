@@ -3,7 +3,7 @@
     xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="input"
     nsURI="http://www.mmxlabs.com/models/lng/input/1/" nsPrefix="lng.input">
-  <eClassifiers xsi:type="ecore:EClass" name="InputModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="InputModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="assignments" upperBound="-1"
         eType="#//Assignment" containment="true"/>
   </eClassifiers>

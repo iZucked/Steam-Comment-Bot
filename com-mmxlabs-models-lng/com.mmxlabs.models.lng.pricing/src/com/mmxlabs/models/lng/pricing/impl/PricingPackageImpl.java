@@ -793,7 +793,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 		// Add supertypes to classes
 		pricingModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		pricingModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		EGenericType g1 = createEGenericType(this.getIndex());
 		EGenericType g2 = createEGenericType(dataIndexEClass_Value);
 		g1.getETypeArguments().add(g2);

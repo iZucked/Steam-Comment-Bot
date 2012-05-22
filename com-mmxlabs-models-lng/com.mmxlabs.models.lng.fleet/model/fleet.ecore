@@ -100,7 +100,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startBy" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FleetModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="FleetModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
         eType="#//Vessel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClasses" upperBound="-1"

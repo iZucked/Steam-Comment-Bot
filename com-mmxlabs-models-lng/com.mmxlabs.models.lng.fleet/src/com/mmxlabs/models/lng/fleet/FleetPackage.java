@@ -480,22 +480,13 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int FLEET_MODEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int FLEET_MODEL__VESSELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Classes</b></em>' containment reference list.
@@ -504,7 +495,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__VESSEL_CLASSES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int FLEET_MODEL__VESSEL_CLASSES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Events</b></em>' containment reference list.
@@ -513,7 +504,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int FLEET_MODEL__VESSEL_EVENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuels</b></em>' containment reference list.
@@ -522,7 +513,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL__BASE_FUELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int FLEET_MODEL__BASE_FUELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -531,7 +522,7 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.

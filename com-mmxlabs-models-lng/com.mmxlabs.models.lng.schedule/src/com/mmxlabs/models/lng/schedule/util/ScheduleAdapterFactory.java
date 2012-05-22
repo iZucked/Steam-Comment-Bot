@@ -147,12 +147,12 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createUUIDObjectAdapter();
 			}
 			@Override
-			public Adapter caseNamedObject(NamedObject object) {
-				return createNamedObjectAdapter();
-			}
-			@Override
 			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
 				return createITimezoneProviderAdapter();
+			}
+			@Override
+			public Adapter caseNamedObject(NamedObject object) {
+				return createNamedObjectAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {

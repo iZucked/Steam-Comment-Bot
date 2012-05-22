@@ -1216,7 +1216,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Add supertypes to classes
 		scheduleModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		scheduleModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		scheduleEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		sequenceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		eventEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());

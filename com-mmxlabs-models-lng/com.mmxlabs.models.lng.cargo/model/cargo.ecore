@@ -56,7 +56,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargo" eType="#//Cargo"
         eOpposite="#//Cargo/dischargeSlot"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CargoModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="CargoModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadSlots" upperBound="-1"
         eType="#//LoadSlot" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeSlots" upperBound="-1"

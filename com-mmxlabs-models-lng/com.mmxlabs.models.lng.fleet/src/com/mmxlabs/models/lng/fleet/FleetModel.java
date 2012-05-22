@@ -27,7 +27,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface FleetModel extends UUIDObject, NamedObject {
+public interface FleetModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Vessels</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.Vessel}.

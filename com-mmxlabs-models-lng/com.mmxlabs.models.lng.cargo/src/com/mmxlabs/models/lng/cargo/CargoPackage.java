@@ -635,22 +635,13 @@ public interface CargoPackage extends EPackage {
 	int CARGO_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_MODEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Load Slots</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL__LOAD_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int CARGO_MODEL__LOAD_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Slots</b></em>' containment reference list.
@@ -659,7 +650,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL__DISCHARGE_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int CARGO_MODEL__DISCHARGE_SLOTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Cargoes</b></em>' containment reference list.
@@ -668,7 +659,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL__CARGOES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int CARGO_MODEL__CARGOES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -677,7 +668,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.SpotSlotImpl <em>Spot Slot</em>}' class.

@@ -394,7 +394,6 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		// Add supertypes to classes
 		commercialModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		commercialModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		legalEntityEClass.getESuperTypes().add(theTypesPackage.getALegalEntity());
 		contractEClass.getESuperTypes().add(theTypesPackage.getAContract());
 		salesContractEClass.getESuperTypes().add(this.getContract());

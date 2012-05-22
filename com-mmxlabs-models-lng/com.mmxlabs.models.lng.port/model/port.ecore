@@ -46,7 +46,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="distance" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="PortModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="PortModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
         eType="#//Port" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="portGroups" upperBound="-1"

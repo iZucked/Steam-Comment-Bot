@@ -99,22 +99,13 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int COMMERCIAL_MODEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Entities</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL__ENTITIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int COMMERCIAL_MODEL__ENTITIES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Sales Contracts</b></em>' containment reference list.
@@ -123,7 +114,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL__SALES_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int COMMERCIAL_MODEL__SALES_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Shipping Entity</b></em>' reference.
@@ -132,7 +123,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL__SHIPPING_ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int COMMERCIAL_MODEL__SHIPPING_ENTITY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Purchase Contracts</b></em>' containment reference list.
@@ -141,7 +132,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -150,7 +141,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.

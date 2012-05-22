@@ -539,7 +539,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		loadSlotEClass.getESuperTypes().add(this.getSlot());
 		dischargeSlotEClass.getESuperTypes().add(this.getSlot());
 		cargoModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		cargoModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		spotSlotEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		spotLoadSlotEClass.getESuperTypes().add(this.getLoadSlot());
 		spotLoadSlotEClass.getESuperTypes().add(this.getSpotSlot());

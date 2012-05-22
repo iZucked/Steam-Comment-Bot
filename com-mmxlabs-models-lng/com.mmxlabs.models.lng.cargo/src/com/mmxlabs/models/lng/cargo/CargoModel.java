@@ -26,7 +26,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface CargoModel extends UUIDObject, NamedObject {
+public interface CargoModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Load Slots</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.LoadSlot}.

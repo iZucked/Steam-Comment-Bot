@@ -34,7 +34,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.input.impl.InputModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.impl.InputModelImpl#getAssignments <em>Assignments</em>}</li>
  * </ul>
  * </p>
@@ -42,26 +41,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * @generated
  */
 public class InputModelImpl extends UUIDObjectImpl implements InputModel {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getAssignments() <em>Assignments</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -89,27 +68,6 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 	@Override
 	protected EClass eStaticClass() {
 		return InputPackage.Literals.INPUT_MODEL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, InputPackage.INPUT_MODEL__NAME, oldName, name));
 	}
 
 	/**
@@ -146,8 +104,6 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case InputPackage.INPUT_MODEL__NAME:
-				return getName();
 			case InputPackage.INPUT_MODEL__ASSIGNMENTS:
 				return getAssignments();
 		}
@@ -163,9 +119,6 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case InputPackage.INPUT_MODEL__NAME:
-				setName((String)newValue);
-				return;
 			case InputPackage.INPUT_MODEL__ASSIGNMENTS:
 				getAssignments().clear();
 				getAssignments().addAll((Collection<? extends Assignment>)newValue);
@@ -182,9 +135,6 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case InputPackage.INPUT_MODEL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case InputPackage.INPUT_MODEL__ASSIGNMENTS:
 				getAssignments().clear();
 				return;
@@ -200,60 +150,10 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case InputPackage.INPUT_MODEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case InputPackage.INPUT_MODEL__ASSIGNMENTS:
 				return assignments != null && !assignments.isEmpty();
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (derivedFeatureID) {
-				case InputPackage.INPUT_MODEL__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.NAMED_OBJECT__NAME: return InputPackage.INPUT_MODEL__NAME;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of InputModelImpl

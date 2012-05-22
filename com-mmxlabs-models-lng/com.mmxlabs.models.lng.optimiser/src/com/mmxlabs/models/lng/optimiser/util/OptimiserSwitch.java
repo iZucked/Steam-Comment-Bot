@@ -85,7 +85,6 @@ public class OptimiserSwitch<T> extends Switch<T> {
 				OptimiserModel optimiserModel = (OptimiserModel)theEObject;
 				T result = caseOptimiserModel(optimiserModel);
 				if (result == null) result = caseUUIDObject(optimiserModel);
-				if (result == null) result = caseNamedObject(optimiserModel);
 				if (result == null) result = caseMMXObject(optimiserModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

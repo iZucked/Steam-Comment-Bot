@@ -79,7 +79,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 				CommercialModel commercialModel = (CommercialModel)theEObject;
 				T result = caseCommercialModel(commercialModel);
 				if (result == null) result = caseUUIDObject(commercialModel);
-				if (result == null) result = caseNamedObject(commercialModel);
 				if (result == null) result = caseMMXObject(commercialModel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

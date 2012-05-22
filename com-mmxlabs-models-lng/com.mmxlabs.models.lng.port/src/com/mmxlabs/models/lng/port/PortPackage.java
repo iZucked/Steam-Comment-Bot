@@ -446,22 +446,13 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_MODEL__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Ports</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL__PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int PORT_MODEL__PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Port Groups</b></em>' containment reference list.
@@ -470,7 +461,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL__PORT_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int PORT_MODEL__PORT_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Routes</b></em>' containment reference list.
@@ -479,7 +470,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL__ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int PORT_MODEL__ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -488,7 +479,7 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.

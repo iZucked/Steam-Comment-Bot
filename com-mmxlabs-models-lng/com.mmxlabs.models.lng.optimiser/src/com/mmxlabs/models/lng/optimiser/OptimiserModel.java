@@ -29,7 +29,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model
  * @generated
  */
-public interface OptimiserModel extends UUIDObject, NamedObject {
+public interface OptimiserModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Settings</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.optimiser.OptimiserSettings}.

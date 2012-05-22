@@ -12,6 +12,8 @@ import org.osgi.framework.ServiceRegistration;
 
 import com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider;
+import com.mmxlabs.models.lng.cargo.ui.commands.SlotDeletingCommandProvider;
+import com.mmxlabs.models.lng.cargo.ui.commands.SlotNameUpdatingCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
@@ -85,6 +87,8 @@ public final class CargoEditorPlugin extends EMFPlugin {
 	public static class Implementation extends EclipseUIPlugin {
 		private ServiceRegistration<IModelCommandProvider> dateCorrectorRegistration;
 		private ServiceRegistration<IModelCommandProvider> portCorrectorRegistration;
+		private ServiceRegistration<IModelCommandProvider> slotNameCorrectorRegistration;
+		private ServiceRegistration<IModelCommandProvider> slotDeletingRegistration;
 
 		/**
 		 * Creates an instance.
@@ -106,6 +110,8 @@ public final class CargoEditorPlugin extends EMFPlugin {
 			super.start(context);
 			dateCorrectorRegistration = context.registerService(IModelCommandProvider.class, new DateUpdatingCommandProvider(), null);
 			portCorrectorRegistration = context.registerService(IModelCommandProvider.class, new PortUpdatingCommandProvider(), null);
+			slotNameCorrectorRegistration = context.registerService(IModelCommandProvider.class, new SlotNameUpdatingCommandProvider(), null);
+			slotDeletingRegistration = context.registerService(IModelCommandProvider.class, new SlotDeletingCommandProvider(), null);
 		}
 
 		/* (non-Javadoc)
@@ -115,6 +121,9 @@ public final class CargoEditorPlugin extends EMFPlugin {
 		public void stop(BundleContext context) throws Exception {
 			dateCorrectorRegistration.unregister();
 			portCorrectorRegistration.unregister();
+			slotNameCorrectorRegistration.unregister();
+			slotDeletingRegistration.unregister();
+			
 			super.stop(context);
 		}
 	}

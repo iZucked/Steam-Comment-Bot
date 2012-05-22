@@ -438,7 +438,6 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		portGroupEClass.getESuperTypes().add(theTypesPackage.getAPortSet());
 		routeLineEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		portModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);

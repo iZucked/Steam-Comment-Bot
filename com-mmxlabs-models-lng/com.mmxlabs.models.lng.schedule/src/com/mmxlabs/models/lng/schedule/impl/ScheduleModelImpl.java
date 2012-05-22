@@ -27,7 +27,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getInitialSchedule <em>Initial Schedule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getOptimisedSchedule <em>Optimised Schedule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#isDirty <em>Dirty</em>}</li>
@@ -37,26 +36,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final String NAME_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
-	protected String name = NAME_EDEFAULT;
-
 	/**
 	 * The cached value of the '{@link #getInitialSchedule() <em>Initial Schedule</em>}' containment reference.
 	 * <!-- begin-user-doc -->
@@ -114,27 +93,6 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	protected EClass eStaticClass() {
 		return SchedulePackage.Literals.SCHEDULE_MODEL;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE_MODEL__NAME, oldName, name));
 	}
 
 	/**
@@ -268,8 +226,6 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__NAME:
-				return getName();
 			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
 				return getInitialSchedule();
 			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
@@ -288,9 +244,6 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__NAME:
-				setName((String)newValue);
-				return;
 			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
 				setInitialSchedule((Schedule)newValue);
 				return;
@@ -312,9 +265,6 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__NAME:
-				setName(NAME_EDEFAULT);
-				return;
 			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
 				setInitialSchedule((Schedule)null);
 				return;
@@ -336,8 +286,6 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
 				return initialSchedule != null;
 			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
@@ -354,45 +302,11 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * @generated
 	 */
 	@Override
-	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (derivedFeatureID) {
-				case SchedulePackage.SCHEDULE_MODEL__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				default: return -1;
-			}
-		}
-		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == NamedObject.class) {
-			switch (baseFeatureID) {
-				case MMXCorePackage.NAMED_OBJECT__NAME: return SchedulePackage.SCHEDULE_MODEL__NAME;
-				default: return -1;
-			}
-		}
-		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", dirty: ");
+		result.append(" (dirty: ");
 		result.append(dirty);
 		result.append(')');
 		return result.toString();

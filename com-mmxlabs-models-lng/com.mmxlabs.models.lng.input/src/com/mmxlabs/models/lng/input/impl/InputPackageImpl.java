@@ -229,7 +229,6 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 
 		// Add supertypes to classes
 		inputModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		inputModelEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		assignmentEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters

@@ -28,7 +28,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface AnalyticsModel extends UUIDObject, NamedObject {
+public interface AnalyticsModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Round Trip Matrices</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.UnitCostMatrix}.

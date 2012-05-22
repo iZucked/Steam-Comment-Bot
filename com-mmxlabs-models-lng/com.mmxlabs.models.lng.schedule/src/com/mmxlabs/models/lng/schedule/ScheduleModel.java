@@ -24,7 +24,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model
  * @generated
  */
-public interface ScheduleModel extends UUIDObject, NamedObject {
+public interface ScheduleModel extends UUIDObject {
 	/**
 	 * Returns the value of the '<em><b>Initial Schedule</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
