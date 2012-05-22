@@ -157,13 +157,13 @@ public class TotalsHierarchyView extends ViewPart {
 
 	private TreeData createTreeData(final IScenarioViewerSynchronizerOutput object) {
 		final TreeData dummy = new TreeData("");
-		
+
 		final Collection<Schedule> schedules = (Collection) object.getCollectedElements();
-		
+
 		if (schedules.size() == 1) {
 			final Schedule schedule = schedules.iterator().next();
 			dummy.addChild(createCostsTreeData(schedule));
-//			dummy.addChild(createProfitTreeData(schedule));
+			// dummy.addChild(createProfitTreeData(schedule));
 		} else {
 			for (final Schedule schedule : schedules) {
 				final String scheduleName = object.getScenarioInstance(schedule).getName();
@@ -172,61 +172,61 @@ public class TotalsHierarchyView extends ViewPart {
 				// (profits already include costs)
 				final TreeData group = new TreeData(scheduleName, true);
 				group.addChild(createCostsTreeData(schedule));
-//				group.addChild(createProfitTreeData(schedule));
+				// group.addChild(createProfitTreeData(schedule));
 				dummy.addChild(group);
 			}
 		}
 		return dummy;
 	}
 
-//	private TreeData createProfitTreeData(final Schedule schedule) {
-//		final TreeData top = new TreeData("Total Profit");
-//		final Map<Entity, TreeData> byEntity = new HashMap<Entity, TreeData>();
-//		if (schedule != null) {
-//			for (final BookedRevenue revenue : schedule.getRevenue()) {
-//				final Entity e = revenue.getEntity();
-//				if ((e == null) || !(e instanceof GroupEntity)) {
-//					continue;
-//				}
-//
-//				TreeData td = byEntity.get(e);
-//				if (td == null) {
-//					td = new TreeData(e.getName());
-//					top.addChild(td);
-//					byEntity.put(e, td);
-//				}
-//
-//				final TreeData rd = new TreeData(revenue.getName(), revenue.getValue());
-//				td.addChild(rd);
-//				for (final Detail d : revenue.getDetails().getChildren()) {
-//					rd.addChild(createDetailTreeData(d));
-//				}
-//
-//				// for (final LineItem item : revenue.getLineItems()) {
-//				// final TreeData li = new TreeData(item.getName(),
-//				// item.getValue());
-//				// rd.addChild(li);
-//				// }
-//
-//				// rd.addChild(new TreeData("Tax", -revenue.getTaxCost()));
-//				// assert (rd.getCost() == revenue.getTaxedValue());
-//				// TODO this does not take account of ownership proportion
-//			}
-//		}
-//		return top;
-//	}
+	// private TreeData createProfitTreeData(final Schedule schedule) {
+	// final TreeData top = new TreeData("Total Profit");
+	// final Map<Entity, TreeData> byEntity = new HashMap<Entity, TreeData>();
+	// if (schedule != null) {
+	// for (final BookedRevenue revenue : schedule.getRevenue()) {
+	// final Entity e = revenue.getEntity();
+	// if ((e == null) || !(e instanceof GroupEntity)) {
+	// continue;
+	// }
+	//
+	// TreeData td = byEntity.get(e);
+	// if (td == null) {
+	// td = new TreeData(e.getName());
+	// top.addChild(td);
+	// byEntity.put(e, td);
+	// }
+	//
+	// final TreeData rd = new TreeData(revenue.getName(), revenue.getValue());
+	// td.addChild(rd);
+	// for (final Detail d : revenue.getDetails().getChildren()) {
+	// rd.addChild(createDetailTreeData(d));
+	// }
+	//
+	// // for (final LineItem item : revenue.getLineItems()) {
+	// // final TreeData li = new TreeData(item.getName(),
+	// // item.getValue());
+	// // rd.addChild(li);
+	// // }
+	//
+	// // rd.addChild(new TreeData("Tax", -revenue.getTaxCost()));
+	// // assert (rd.getCost() == revenue.getTaxedValue());
+	// // TODO this does not take account of ownership proportion
+	// }
+	// }
+	// return top;
+	// }
 
-//	/**
-//	 * @param details
-//	 * @return
-//	 */
-//	private TreeData createDetailTreeData(final Detail details) {
-//		final TreeData top = new TreeData(details.getName(), details.getValue());
-//		for (final Detail d : details.getChildren()) {
-//			top.addChild(createDetailTreeData(d));
-//		}
-//		return top;
-//	}
+	// /**
+	// * @param details
+	// * @return
+	// */
+	// private TreeData createDetailTreeData(final Detail details) {
+	// final TreeData top = new TreeData(details.getName(), details.getValue());
+	// for (final Detail d : details.getChildren()) {
+	// top.addChild(createDetailTreeData(d));
+	// }
+	// return top;
+	// }
 
 	/**
 	 * Extract cost information from the schedule and put it in the treedata
@@ -278,11 +278,10 @@ public class TotalsHierarchyView extends ViewPart {
 		}
 
 		for (final Sequence seq : schedule.getSequences()) {
-//			final AllocatedVessel av = seq.getVessel();
+			// final AllocatedVessel av = seq.getVessel();
 			final Map<Fuel, TreeData> vesselFuelUsage = new HashMap<Fuel, TreeData>();
 
-			final Map<Fuel, TreeData> fuelUsages = 
-					seq.isSpotVessel() ? spotFuelUsages : fleetFuelUsages;
+			final Map<Fuel, TreeData> fuelUsages = seq.isSpotVessel() ? spotFuelUsages : fleetFuelUsages;
 
 			for (final Fuel t : Fuel.values()) {
 				final TreeData thisFuelAndVessel = new TreeData(seq.getName());
@@ -323,7 +322,7 @@ public class TotalsHierarchyView extends ViewPart {
 
 		// Now do canal costs
 		for (final Sequence seq : schedule.getSequences()) {
-//			final AllocatedVessel av = seq.getVessel();
+			// final AllocatedVessel av = seq.getVessel();
 			final TreeData thisVessel = new TreeData(seq.getName());
 			(!seq.isSpotVessel() ? fleetCanalCosts : spotCanalCosts).addChild(thisVessel);
 
@@ -331,10 +330,8 @@ public class TotalsHierarchyView extends ViewPart {
 				if (event instanceof Journey) {
 					final Journey j = (Journey) event;
 					if (j.getToll() > 0) {
-						final TreeData thisLeg = new TreeData(
-								(j.isLaden() ? "Laden" : "Ballast")
-								+ " voyage from " + j.getPort().getName() + " to " + j.getDestination().getName() + " via " + j.getRoute(),
-								j.getToll());
+						final TreeData thisLeg = new TreeData((j.isLaden() ? "Laden" : "Ballast") + " voyage from " + j.getPort().getName() + " to " + j.getDestination().getName() + " via "
+								+ j.getRoute(), j.getToll());
 						thisVessel.addChild(thisLeg);
 					}
 				}
@@ -363,8 +360,9 @@ public class TotalsHierarchyView extends ViewPart {
 			protected void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
 
-				final boolean inputEmpty = (input == null) || ((input instanceof Collection) && ((Collection<?>) input).isEmpty());
-				final boolean oldInputEmpty = (oldInput == null) || ((oldInput instanceof Collection) && ((Collection<?>) oldInput).isEmpty());
+				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
+				final boolean oldInputEmpty = (oldInput == null)
+						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
 
 				if (inputEmpty != oldInputEmpty) {
 					if (packColumnsAction != null) {
@@ -423,7 +421,7 @@ public class TotalsHierarchyView extends ViewPart {
 			@Override
 			public Object[] getElements(final Object object) {
 				if (object instanceof IScenarioViewerSynchronizerOutput) {
-					final TreeData top = createTreeData((IScenarioViewerSynchronizerOutput)object);
+					final TreeData top = createTreeData((IScenarioViewerSynchronizerOutput) object);
 					return getChildren(top);
 				} else if (object instanceof TreeData) {
 					final TreeData data = (TreeData) object;
