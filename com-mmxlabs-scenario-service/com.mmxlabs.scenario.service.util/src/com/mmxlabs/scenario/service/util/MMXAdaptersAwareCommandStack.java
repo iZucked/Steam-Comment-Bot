@@ -29,7 +29,12 @@ public final class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	@Override
 	public void execute(final Command command) {
 		synchronized (instance) {
-			super.execute(command);
+			editingDomain.setAdaptersEnabled(false);
+			try {
+				super.execute(command);
+			} finally {
+				editingDomain.setAdaptersEnabled(true);
+			}
 		}
 	}
 
