@@ -548,6 +548,20 @@ public class EObjectTableViewer extends GridTableViewer {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
+				if (oldInput == null) {
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							if (!viewer.getControl().isDisposed()) {
+								if (viewer instanceof GridTableViewer) {
+									for (final GridColumn tc : ((GridTableViewer) viewer).getGrid().getColumns()) {
+										tc.pack();
+									}
+								}
+							}
+						}
+					});
+				}
+
 				// Remove adapter from old input
 				if (oldInput instanceof EObject) {
 					final EObject eObject = (EObject) oldInput;
