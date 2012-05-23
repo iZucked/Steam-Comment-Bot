@@ -21,6 +21,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 import com.mmxlabs.scenario.service.ui.navigator.PieChartRenderer;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
+import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
 public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider implements ITableLabelProvider {
 	private final ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> selectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(
@@ -40,7 +41,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	@Override
 	public String getColumnText(final Object object, final int columnIndex) {
 		switch (columnIndex) {
-		case 0:
+		case ScenarioServiceNavigator.COLUMN_NAME_IDX:
 			String text = super.getColumnText(object, columnIndex);
 
 			if (object instanceof ScenarioInstance) {
@@ -61,7 +62,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	@Override
 	public Image getColumnImage(final Object object, final int columnIndex) {
 		switch (columnIndex) {
-		case 1:
+		case ScenarioServiceNavigator.COLUMN_SHOW_IDX:
 			// virtual checkbox
 			if (object instanceof ScenarioInstance) {
 				final IScenarioServiceSelectionProvider service = selectionProviderTracker.getService();
@@ -74,7 +75,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 				}
 			}
 			return null;
-		case 2:
+		case ScenarioServiceNavigator.COLUMN_PROGRESS_IDX:
 			if (object instanceof ScenarioInstance) {
 				final ScenarioInstance instance = (ScenarioInstance) object;
 				if (jobManager == null) {
@@ -98,7 +99,7 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 				}
 			}
 			break;
-		case 0:
+		case ScenarioServiceNavigator.COLUMN_NAME_IDX:
 			return super.getColumnImage(object, columnIndex);
 		}
 		return null;

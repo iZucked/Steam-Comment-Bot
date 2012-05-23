@@ -51,6 +51,10 @@ import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 public class ScenarioServiceNavigator extends CommonNavigator {
 
+	public static final int COLUMN_NAME_IDX = 0;
+	public static final int COLUMN_SHOW_IDX = 1;
+	public static final int COLUMN_PROGRESS_IDX = 2;
+
 	private static final Logger log = LoggerFactory.getLogger(ScenarioServiceNavigator.class);
 
 	protected AdapterFactoryEditingDomain editingDomain;
@@ -168,12 +172,17 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		viewer.getTree().setHeaderVisible(true);
 
+		// Keep order in sync with COLUMN_XXX_IDX constants declared in this class
+		
 		final TreeColumn labelColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		labelColumn.setText("Name");
 		labelColumn.setWidth(275);
 
 		final TreeColumn checkColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
-		checkColumn.setText("Show");
+		// checkColumn.setText("Show");
+		checkColumn.setImage(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif").createImage());
+		checkColumn.setToolTipText("Display");
+		checkColumn.setMoveable(true);
 
 		final TreeColumn progressColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		progressColumn.setText("Opt");
@@ -202,7 +211,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 				if (selected != null) {
 					if (e.button == 1) {
 
-						final Rectangle imageBounds = selected.getImageBounds(1);
+						final Rectangle imageBounds = selected.getImageBounds(COLUMN_SHOW_IDX);
 						if ((e.x > imageBounds.x) && (e.x < (imageBounds.x + selected.getImage().getBounds().width))) {
 							if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + selected.getImage().getBounds().height))) {
 
