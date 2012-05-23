@@ -13,6 +13,10 @@ import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
 public interface IJointModelEditorExtension {
 	@MapName("id") String getID();
 	@MapName("subModelClass") String getSubModelClassName();
-	@MapName("implementation") IJointModelEditorContribution instantiate();
+	/**
+	 * Create a new instance. Note method needs to start with "create" to avoid Peaberry caching the result
+	 * @return
+	 */
+	@MapName("implementation") IJointModelEditorContribution createInstance();
 	@MapName("priority") String getPriority();
 }

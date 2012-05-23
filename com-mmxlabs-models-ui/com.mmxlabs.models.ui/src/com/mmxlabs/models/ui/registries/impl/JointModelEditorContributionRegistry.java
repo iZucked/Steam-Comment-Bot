@@ -52,10 +52,11 @@ public class JointModelEditorContributionRegistry implements IJointModelEditorCo
 				return o1.getFirst().getPriority().compareTo(o2.getFirst().getPriority());
 			}
 		});
+		int ii = 0;
 		
 		final ArrayList<IJointModelEditorContribution> result = new ArrayList<IJointModelEditorContribution>(matches.size());
 		for (final Pair<IJointModelEditorExtension, UUIDObject> extension : matches) {
-			final IJointModelEditorContribution contribution = extension.getFirst().instantiate();
+			final IJointModelEditorContribution contribution = extension.getFirst().createInstance();
 			result.add(contribution);
 			contribution.init(part, root, extension.getSecond());
 		}
