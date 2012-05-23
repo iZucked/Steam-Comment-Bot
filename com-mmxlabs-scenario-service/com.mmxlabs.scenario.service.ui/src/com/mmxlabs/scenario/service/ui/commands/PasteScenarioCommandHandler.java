@@ -9,10 +9,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
@@ -24,50 +26,54 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class PasteScenarioCommandHandler extends AbstractHandler {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.core.commands.IHandler#execute(org.eclipse.core.commands.ExecutionEvent)
 	 */
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
 		final ISelection selection = activePage.getSelection();
-		
+
 		final Container container = getContainer(selection);
-		
+
 		if (container == null) {
 			return null;
 		}
-		
+
 		final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
 		try {
 			if (!pasteFromURI(clipboard, container)) {
 				pasteFromFiles(clipboard, container);
 			}
 		} catch (final IOException e) {
-			throw new ExecutionException(e.getMessage(), e);	
+			throw new ExecutionException(e.getMessage(), e);
 		} finally {
 			clipboard.dispose();
 		}
-		
+
 		return null;
 	}
 
 	/**
 	 * @param clipboard
 	 * @param container
-	 * @throws IOException 
+	 * @throws IOException
 	 */
-	private boolean pasteFromFiles(Clipboard clipboard, Container container) throws IOException {
+	private boolean pasteFromFiles(final Clipboard clipboard, final Container container) throws IOException {
 		final Object fileData = clipboard.getContents(FileTransfer.getInstance());
 		final IScenarioService service = container.getScenarioService();
 		if (fileData instanceof String[]) {
@@ -86,7 +92,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	 * @param selection
 	 * @return
 	 */
-	private Container getContainer(ISelection selection) {
+	private Container getContainer(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection strucSelection = (IStructuredSelection) selection;
 			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
@@ -102,11 +108,12 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 	/**
 	 * @param clipboard
 	 * @param container
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	private boolean pasteFromURI(final Clipboard clipboard, final Container container) throws IOException {
 		final String url = (String) clipboard.getContents(URLTransfer.getInstance());
-		if (url == null) return false;
+		if (url == null)
+			return false;
 		try {
 			final URI uri = new URI(url);
 
@@ -126,9 +133,32 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 					}
 				}
 			}
-		} catch (URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 		}
 		return false;
 	}
 
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		boolean enabled = false;
+		if (evaluationContext instanceof IEvaluationContext) {
+			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
+			final Object defaultVariable = context.getDefaultVariable();
+
+			if (defaultVariable instanceof List<?>) {
+				final List<?> variables = (List<?>) defaultVariable;
+
+				for (final Object var : variables) {
+					if (var instanceof Folder || var instanceof ScenarioService) {
+						enabled = true;
+					} else {
+						super.setBaseEnabled(false);
+						return;
+					}
+				}
+			}
+		}
+
+		super.setBaseEnabled(enabled);
+	}
 }

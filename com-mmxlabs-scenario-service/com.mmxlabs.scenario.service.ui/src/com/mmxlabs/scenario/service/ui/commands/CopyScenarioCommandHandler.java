@@ -10,10 +10,12 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -52,21 +54,21 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 					URI scenarioURI;
 					try {
 						final String componentID = Activator.getDefault().getServiceComponentID(service);
-						scenarioURI = new URI("scenario", componentID, "/"+instance.getUuid(), null);
+						scenarioURI = new URI("scenario", componentID, "/" + instance.getUuid(), null);
 
 						final String scenarioURL = scenarioURI.toString();
-						
+
 						String[] tempFilePath;
 						try {
-							tempFilePath = new String[]{ScenarioStorageUtil.storeToTemporaryFile(instance)};
-							clipboard.setContents(new Object[]{scenarioURL, tempFilePath}, new Transfer[]{transfer, FileTransfer.getInstance()});
+							tempFilePath = new String[] { ScenarioStorageUtil.storeToTemporaryFile(instance) };
+							clipboard.setContents(new Object[] { scenarioURL, tempFilePath }, new Transfer[] { transfer, FileTransfer.getInstance() });
 						} catch (IOException e) {
 						}
 					} catch (URISyntaxException e) {
 						e.printStackTrace();
 					}
 				}
-				
+
 			} else {
 				final ArrayList<String> tempFiles = new ArrayList<String>();
 				for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
@@ -82,12 +84,36 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 				final String[] tempFilesArray = tempFiles.toArray(new String[tempFiles.size()]);
 				if (tempFilesArray.length > 0) {
 					System.err.println(Arrays.toString(tempFilesArray));
-					clipboard.setContents(new Object[]{tempFilesArray}, new Transfer[]{FileTransfer.getInstance()});
+					clipboard.setContents(new Object[] { tempFilesArray }, new Transfer[] { FileTransfer.getInstance() });
 				}
 			}
 			clipboard.dispose();
 		}
-		
+
 		return null;
+	}
+
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		boolean enabled = false;
+		if (evaluationContext instanceof IEvaluationContext) {
+			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
+			final Object defaultVariable = context.getDefaultVariable();
+
+			if (defaultVariable instanceof List<?>) {
+				final List<?> variables = (List<?>) defaultVariable;
+
+				for (final Object var : variables) {
+					if (var instanceof ScenarioInstance) {
+						enabled = true;
+					} else {
+						super.setBaseEnabled(false);
+						return;
+					}
+				}
+			}
+		}
+
+		super.setBaseEnabled(enabled);
 	}
 }
