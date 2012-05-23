@@ -110,7 +110,7 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 					c.remove(element);
 				}
 				
-				doSetValue(c);
+				doSetValue(c, false);
 			}
 		});
 		

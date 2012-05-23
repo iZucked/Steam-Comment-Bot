@@ -57,6 +57,60 @@
                      class="RouteLine">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortTimeZoneConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.PortTimeZoneConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Port TimeZone "
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  A valid timezone must be specified
+               </message>
+               <description>
+                  Checks ports have a valid time zone specified
+               </description>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortCapabilityConstraints"
+                  id="com.mmxlabs.models.lng.port.validation.PortCapabilityConstraints"
+                  lang="Java"
+                  mode="Batch"
+                  name="Port Capabilities"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Checks attributes are set for enabled capabilities
+               </description>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.port.validation.PortWindowSizeConstraint"
+                  id="com.mmxlabs.models.lng.port.validation.PortWindowSizeConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Port Window Size"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  A port must have a default window size
+               </message>
+               <description>
+                  Checks ports have a default window size
+               </description>
+               <target
+                     class="Port">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

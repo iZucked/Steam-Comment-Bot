@@ -56,7 +56,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 
 	private void queueEvaluate() {
 		if (evaluatorThread == null || !evaluatorThread.isAlive()) {
-			evaluatorThread = new Thread(evaluator , "Live Evaluator");
+			evaluatorThread = new Thread(evaluator , "Live Evaluator [" + instance.getName() + "]");
 			evaluatorThread.start();
 		} else {
 			evaluatorThread.interrupt();
