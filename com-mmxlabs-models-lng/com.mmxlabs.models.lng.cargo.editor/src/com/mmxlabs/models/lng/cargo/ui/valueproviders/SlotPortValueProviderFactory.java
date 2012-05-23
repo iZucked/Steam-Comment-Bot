@@ -53,6 +53,10 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 			return new IReferenceValueProvider() {
 				@Override
 				public boolean updateOnChangeToFeature(final Object changedFeature) {
+					if (changedFeature == CargoPackage.eINSTANCE.getSlot_Contract()) {
+						return true;
+					}
+
 					return delegateFactory.updateOnChangeToFeature(changedFeature);
 				}
 
@@ -85,8 +89,7 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 							// Make sure current selection is in the list
 							final Port port = slot.getPort();
 							if (port != null) {
-								final Pair<String, EObject> pair = new Pair<String, EObject>(
-										port.getName(), port);
+								final Pair<String, EObject> pair = new Pair<String, EObject>(port.getName(), port);
 								if (!filterOne.contains(pair)) {
 									filterOne.add(pair);
 								}
@@ -103,18 +106,21 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 						for (final APortSet set : contract.getAllowedPorts()) {
 							ports.addAll(set.collect(marks));
 						}
-						for (final Pair<String, EObject> value : filterOne) {
-							if (ports.contains(value.getSecond())) {
-								filteredList.add(value);
+						if (ports != null && !ports.isEmpty()) {
+							for (final Pair<String, EObject> value : filterOne) {
+								if (ports.contains(value.getSecond())) {
+									filteredList.add(value);
+								}
 							}
+						} else {
+							return filterOne;
 						}
 
 						{
 							// Make sure current selection is in the list (check again in case filtered by contract)
 							final Port port = slot.getPort();
 							if (port != null) {
-								final Pair<String, EObject> pair = new Pair<String, EObject>(
-										port.getName(), port);
+								final Pair<String, EObject> pair = new Pair<String, EObject>(port.getName(), port);
 								if (!filteredList.contains(pair)) {
 									filteredList.add(pair);
 								}
