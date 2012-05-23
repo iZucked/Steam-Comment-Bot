@@ -37,6 +37,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -600,6 +601,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		if (part == this) {
 			return;
 		}
+		// Ignore property page activation - otherwise we loose the selecion
+		if (part instanceof PropertySheet) {
+			return;
+		}
+		
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection sel = (IStructuredSelection) selection;
 			final List<Object> objects = new ArrayList<Object>(sel.toList().size());
