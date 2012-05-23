@@ -173,6 +173,16 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public int getEventsBottomSpacer() {
 				return 5;
 			}
+
+			@Override
+			public boolean showDeleteMenuOption() {
+				return false;
+			}
+
+			@Override
+			public boolean showMenuItemsOnRightClick() {
+				return false;
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings) {
@@ -605,7 +615,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		if (part instanceof PropertySheet) {
 			return;
 		}
-		
+
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection sel = (IStructuredSelection) selection;
 			final List<Object> objects = new ArrayList<Object>(sel.toList().size());
