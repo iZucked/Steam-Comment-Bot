@@ -16,23 +16,25 @@ public class JobStatePropertyTester extends PropertyTester {
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 		boolean b = reallyTest(receiver, property, expectedValue);
-//		if (receiver instanceof ScenarioInstance) System.err.println(((ScenarioInstance) receiver).getName() + "." + property + "=" + b);
+		// if (receiver instanceof ScenarioInstance) System.err.println(((ScenarioInstance) receiver).getName() + "." + property + "=" + b);
 		return b;
 	}
 
-	private boolean reallyTest(final Object receiver, final String property,
-			final Object expectedValue) {
-		
+	private boolean reallyTest(final Object receiver, final String property, final Object expectedValue) {
+
 		final EJobState state = getJobState(receiver);
-		
+
 		if ("jobState".equals(property)) {
 			if (expectedValue != null && state != null) {
 				return expectedValue.toString().equalsIgnoreCase(state.name());
 			}
 		} else if ("canPause".equals(property)) {
-			if (state == EJobState.RUNNING) return true;
+			if (state == EJobState.RUNNING)
+				return true;
 		} else if ("canPlay".equals(property)) {
-			if (state == null) return true;
+			if (state == null) {
+				return true;
+			}
 			switch (state) {
 			case CANCELLED:
 			case COMPLETED:
@@ -40,18 +42,23 @@ public class JobStatePropertyTester extends PropertyTester {
 			case INITIALISED:
 			case CREATED:
 				return true;
-			default: return false;
+			default:
+				return false;
 			}
 		} else if ("canTerminate".equals(property)) {
-			if (state == null) return false;
+			if (state == null) {
+				return false;
+			}
 			switch (state) {
 			case RUNNING:
 			case PAUSED:
 				return true;
-			default: return false;
+			default:
+				return false;
 			}
 		} else if ("hasActiveJob".equals(property)) {
-			if (state == null) return false;
+			if (state == null)
+				return false;
 			switch (state) {
 			case RUNNING:
 			case PAUSED:
@@ -61,10 +68,11 @@ public class JobStatePropertyTester extends PropertyTester {
 			case CANCELLING:
 			case RESUMING:
 				return true;
-			default: return false;
+			default:
+				return false;
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -76,7 +84,7 @@ public class JobStatePropertyTester extends PropertyTester {
 				final IJobDescriptor descriptor = jobManager.findJobForResource(instance.getUuid());
 				if (descriptor != null) {
 					final IJobControl control = jobManager.getControlForJob(descriptor);
-					if (control!= null) {
+					if (control != null) {
 						return control.getJobState();
 					}
 				}

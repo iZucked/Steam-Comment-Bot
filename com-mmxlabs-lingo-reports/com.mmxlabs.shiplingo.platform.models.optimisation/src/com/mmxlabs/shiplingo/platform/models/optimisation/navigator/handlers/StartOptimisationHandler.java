@@ -8,9 +8,11 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.model.EvaluationMode;
@@ -39,6 +41,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor;
+import com.mmxlabs.shiplingo.platform.models.optimisation.propertytesters.JobStatePropertyTester;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -214,7 +217,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		if (status == null) {
 			return false;
 		}
-		
+
 		if (status.isOK() == false) {
 
 			// See if this command was executed in the UI thread - if so fire up the dialog box.
@@ -238,4 +241,34 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		return true;
 	}
 
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		final JobStatePropertyTester tester = new JobStatePropertyTester();
+		boolean enabled = false;
+		if (evaluationContext instanceof IEvaluationContext) {
+			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
+			final Object defaultVariable = context.getDefaultVariable();
+
+			if (defaultVariable instanceof List<?>) {
+				final List<?> variables = (List<?>) defaultVariable;
+
+				for (final Object var : variables) {
+					if (var instanceof ScenarioInstance) {
+						final ScenarioInstance scenarioInstance = (ScenarioInstance) var;
+						if (tester.test(scenarioInstance, "canPlay", null, null)) {
+							enabled = true;
+						} else {
+							super.setBaseEnabled(false);
+							return;
+						}
+					} else {
+						super.setBaseEnabled(false);
+						return;
+					}
+				}
+			}
+		}
+
+		super.setBaseEnabled(enabled);
+	}
 }
