@@ -209,7 +209,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 			
 			monitor.worked(5);
-			monitor.subTask("Creating a cargo for each entry");
+			monitor.subTask("Creating " + loadPorts.size() * dischargePorts.size() + " cargoes");
+			final int totalCargoCount = loadPorts.size() * dischargePorts.size();
 			final List<ICargo> cargoes = new ArrayList<ICargo>(loadPorts.size() * dischargePorts.size());
 			final ILoadPriceCalculator2 loadCalculator = new FixedPriceContract(0);
 			final IShippingPriceCalculator dischargeCalculator = new FixedPriceContract(Calculator.scaleToInt(spec.getCargoPrice()));
@@ -217,6 +218,11 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			int i = 0;
 			for (final Port loadPort : loadPorts) {
 				for (final Port dischargePort : dischargePorts) {
+					
+					if (i % 100 == 0) {
+						monitor.subTask("Created " + i + " of " + totalCargoCount);
+					}
+					
 					// compute time windows
 					final List<Integer> minTimesLD = minTravelTimeAtSpeed.get(new Pair<Port, Port>(loadPort, dischargePort));
 					final List<Integer> minTimesDL = minTravelTimeAtSpeed.get(new Pair<Port, Port>(dischargePort, loadPort));
