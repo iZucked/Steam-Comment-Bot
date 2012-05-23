@@ -135,7 +135,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	@Override
 	public void modifyText(final ModifyEvent e) {
 		if (text.isValid()) {
-			doSetValue(descale(text.getValue()));
+			doSetValue(descale(text.getValue()), false);
 		}
 	}
 	

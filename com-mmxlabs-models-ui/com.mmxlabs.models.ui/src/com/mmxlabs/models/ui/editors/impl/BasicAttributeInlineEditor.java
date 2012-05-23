@@ -214,7 +214,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * 
 	 * @param value
 	 */
-	protected synchronized void doSetValue(final Object value) {
+	protected synchronized void doSetValue(final Object value, boolean forceCommandExecution) {
 		// System.err.println("setvalue on " + feature.getName() + " to " +
 		// value + " (" + currentlySettingValue + ")");
 		if (currentlySettingValue) {
@@ -222,7 +222,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 		currentlySettingValue = true;
 		final Object currentValue = getValue();
-		if (!(/* (currentValue == null && value == null) || */((currentValue != null && value != null) && currentValue.equals(value)))) {
+		if (forceCommandExecution || !(/* (currentValue == null && value == null) || */((currentValue != null && value != null) && currentValue.equals(value)))) {
 			final Command command = createSetCommand(value);
 			commandHandler.handleCommand(command, input, feature);
 			// editingDomain.getCommandStack().execute(command);

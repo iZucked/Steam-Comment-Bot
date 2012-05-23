@@ -55,9 +55,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	public void display(MMXRootObject context, EObject input, final Collection<EObject> range) {
-		valueProvider = commandHandler
-				.getReferenceValueProviderProvider()
-				.getReferenceValueProvider(input.eClass(), (EReference) feature);
+		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
 		super.display(context, input, range);
 	}
 
@@ -79,7 +77,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 			public void widgetSelected(SelectionEvent e) {
 				final List<EObject> o = openDialogBox(parent);
 				if (o != null) {
-					doSetValue(o);
+					doSetValue(o, false);
 					updateDisplay(o);
 				}
 			}
@@ -92,42 +90,38 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected Command createSetCommand(Object value) {
-		final CompoundCommand setter = CommandUtil
-				.createMultipleAttributeSetter(
-						commandHandler.getEditingDomain(), input, feature,
-						(Collection<?>) value);
+		final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
 		return setter;
 	}
 
 	@Override
 	protected void updateDisplay(Object value) {
 		List<? extends EObject> selectedValues = (List<? extends EObject>) value;
-		final StringBuilder sb = new StringBuilder();
-		for (final EObject obj : selectedValues) {
-			if (sb.length() > 0)
-				sb.append(", ");
-			sb.append(valueProvider.getName(input, (EReference) feature, obj));
+		if (selectedValues != null) {
+			final StringBuilder sb = new StringBuilder();
+			for (final EObject obj : selectedValues) {
+				if (sb.length() > 0)
+					sb.append(", ");
+				sb.append(valueProvider.getName(input, (EReference) feature, obj));
+			}
+			theLabel.setText(sb.toString());
 		}
-		theLabel.setText(sb.toString());
 	}
 
 	@SuppressWarnings("unchecked")
 	protected List<EObject> openDialogBox(Control cellEditorWindow) {
-		List<Pair<String, EObject>> options = valueProvider.getAllowedValues(
-				input, feature);
+		List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, feature);
 
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
 
-		ListSelectionDialog dlg = new ListSelectionDialog(
-				cellEditorWindow.getShell(), options.toArray(),
-				new ArrayContentProvider(), new LabelProvider() {
+		ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), options.toArray(), new ArrayContentProvider(), new LabelProvider() {
 
-					@Override
-					public String getText(Object element) {
-						return ((Pair<String, ?>) element).getFirst();
-					}
-				});
+			@Override
+			public String getText(Object element) {
+				return ((Pair<String, ?>) element).getFirst();
+			}
+		});
 		dlg.setTitle("Value Selection");
 
 		final ArrayList<Pair<String, EObject>> selectedOptions = new ArrayList<Pair<String, EObject>>();
@@ -168,8 +162,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		dlg.groupBy(new ColumnLabelProvider() {
 			@Override
 			public String getText(Object element) {
-				return ((Pair<?, EObject>) element).getSecond().eClass()
-						.getName();
+				return ((Pair<?, EObject>) element).getSecond().eClass().getName();
 			}
 		});
 

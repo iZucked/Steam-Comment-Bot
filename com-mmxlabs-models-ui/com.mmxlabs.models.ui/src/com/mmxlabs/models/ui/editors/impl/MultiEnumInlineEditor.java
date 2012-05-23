@@ -67,7 +67,7 @@ public class MultiEnumInlineEditor extends BasicAttributeInlineEditor {
 			public void widgetSelected(SelectionEvent e) {
 				final List<Object> o = openDialogBox(parent);
 				if (o != null) {
-					doSetValue(o);
+					doSetValue(o, false);
 					updateDisplay(o);
 				}
 			}

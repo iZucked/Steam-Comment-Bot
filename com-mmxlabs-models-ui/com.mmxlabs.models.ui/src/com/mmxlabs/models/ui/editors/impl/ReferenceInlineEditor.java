@@ -72,7 +72,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				doSetValue(valueList.get(nameList.indexOf(combo.getText())));
+				doSetValue(valueList.get(nameList.indexOf(combo.getText())), false);
 			}
 
 			@Override

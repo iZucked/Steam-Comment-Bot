@@ -52,7 +52,7 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 
 			@Override
 			public void modifyText(ModifyEvent e) {
-				TextInlineEditor.this.doSetValue(text.getText());
+				TextInlineEditor.this.doSetValue(text.getText(), false);
 			}
 		});
 

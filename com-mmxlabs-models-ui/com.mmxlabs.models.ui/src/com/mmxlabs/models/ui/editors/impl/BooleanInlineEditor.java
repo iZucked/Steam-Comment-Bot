@@ -39,7 +39,7 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 					}
 					@Override
 					public void widgetSelected(SelectionEvent e) {
-						doSetValue((Boolean) button.getSelection());
+						doSetValue((Boolean) button.getSelection(), false);
 					}
 					
 					@Override

@@ -60,7 +60,7 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 					public void widgetSelected(final SelectionEvent e) {
 						final Object o = displayDialog(getValue());
 						if (o != null) {
-							doSetValue(o);
+							doSetValue(o, false);
 							updateDisplay(getValue());
 						}
 					}

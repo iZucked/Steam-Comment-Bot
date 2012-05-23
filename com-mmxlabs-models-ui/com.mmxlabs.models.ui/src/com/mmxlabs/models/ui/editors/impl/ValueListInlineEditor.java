@@ -56,7 +56,7 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 		final SelectionListener sl = new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				doSetValue(values.get(combo.getSelectionIndex()));
+				doSetValue(values.get(combo.getSelectionIndex()), false);
 			}
 		};
 

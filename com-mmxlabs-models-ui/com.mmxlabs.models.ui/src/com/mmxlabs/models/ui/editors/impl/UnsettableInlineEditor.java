@@ -79,7 +79,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					if (setButton.getSelection()) {
-						doSetValue(lastSetValue);
+						doSetValue(lastSetValue, true);
 						setControlEnabled(inner, true);
 						currentlySettingValue = true;
 						updateValueDisplay(lastSetValue);
@@ -94,6 +94,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 							currentlySettingValue = false;
 						}
 					}
+					
 				}
 			});
 			setButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false,
@@ -108,7 +109,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	protected void unsetValue() {
-		super.doSetValue(SetCommand.UNSET_VALUE);
+		super.doSetValue(SetCommand.UNSET_VALUE, true);
 	}
 
 	@Override
@@ -125,7 +126,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	@Override
-	protected synchronized void doSetValue(final Object value) {
+	protected synchronized void doSetValue(final Object value, boolean forceCommandExecution) {
 		if (currentlySettingValue) return;
 		if (value != null) 
 			lastSetValue = value; // hold for later checking and unchecking.
@@ -134,7 +135,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			setButton.setSelection(true);
 		}
 		if (setButton == null || setButton.getSelection()) {
-			super.doSetValue(value);
+			super.doSetValue(value, forceCommandExecution);
 		}
 	}
 
