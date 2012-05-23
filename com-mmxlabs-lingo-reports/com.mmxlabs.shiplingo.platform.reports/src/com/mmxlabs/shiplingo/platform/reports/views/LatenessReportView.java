@@ -14,12 +14,10 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduledEventCollector;
 
@@ -40,74 +38,123 @@ public class LatenessReportView extends EMFReportView {
 
 		addColumn("ID", objectFormatter, sp.getEvent__Name());
 
-		final ColumnHandler dateColumn = addColumn("Start Date", datePartFormatter, sp.getEvent__GetLocalStart());
+		addColumn("Start Date", datePartFormatter, sp.getEvent__GetLocalStart());
 		addColumn("Start Time", timePartFormatter, sp.getEvent__GetLocalStart());
 
 		addColumn("End Date", datePartFormatter, sp.getEvent__GetLocalEnd());
-		addColumn("End Time", timePartFormatter,sp.getEvent__GetLocalEnd());
-		
+		addColumn("End Time", timePartFormatter, sp.getEvent__GetLocalEnd());
+
 		addColumn("Window Start Date", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				return datePartFormatter.format(getWindowStartDate(object));
 			}
 		});
-		
+
 		addColumn("Window Start Time", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				return timePartFormatter.format(getWindowStartDate(object));
 			}
 		});
-		
-		
+
 		addColumn("Window End Date", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				return datePartFormatter.format(getWindowEndDate(object));
 			}
 		});
-		
+
 		addColumn("Window End Time", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 				return timePartFormatter.format(getWindowEndDate(object));
 			}
 		});
+
+		addColumn("Late By", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+
+				if (object instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) object;
+					final Calendar localStart = slotVisit.getLocalStart();
+					final Calendar windowEndDate = getWindowEndDate(object);
+
+					long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
+
+					// Strip milliseconds
+					diff /= 1000;
+					// Strip seconds;
+					diff /= 60;
+					// Strip
+					diff /= 60;
+					return String.format("%02d:%02d", diff / 24, diff % 24);
+				}
+
+				return "";
+			}
+
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+
+				if (object instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) object;
+					final Calendar localStart = slotVisit.getLocalStart();
+					final Calendar windowEndDate = getWindowEndDate(object);
+
+					long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
+
+					// Strip milliseconds
+					diff /= 1000;
+					// Strip seconds;
+					diff /= 60;
+					// Strip
+					diff /= 60;
+					return Long.valueOf(diff);
+				}
+
+				return super.getComparable(object);
+			}
+		});
 	}
 
 	private Calendar getWindowStartDate(final Object object) {
 		if (object instanceof SlotVisit) {
-			Date date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
+			final Date date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime();
 			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
-			if (timeZone == null) timeZone = "UTC";
+			if (timeZone == null)
+				timeZone = "UTC";
 			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 			c.setTime(date);
 			return c;
 		} else if (object instanceof VesselEventVisit) {
-			Date date = ((VesselEventVisit) object).getVesselEvent().getStartAfter();
-			String timeZone = ((VesselEventVisit)object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
-			if (timeZone == null) timeZone = "UTC";
+			final Date date = ((VesselEventVisit) object).getVesselEvent().getStartAfter();
+			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			if (timeZone == null)
+				timeZone = "UTC";
 			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 			c.setTime(date);
 			return c;
 		}
 		return null;
 	}
-	
+
 	private Calendar getWindowEndDate(final Object object) {
 		final Date date;
 		if (object instanceof SlotVisit) {
 			date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
 			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
-			if (timeZone == null) timeZone = "UTC";
+			if (timeZone == null)
+				timeZone = "UTC";
 			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 			c.setTime(date);
 			return c;
 		} else if (object instanceof VesselEventVisit) {
 			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
-			String timeZone = ((VesselEventVisit)object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
-			if (timeZone == null) timeZone = "UTC";
+			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			if (timeZone == null)
+				timeZone = "UTC";
 			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
 			c.setTime(date);
 			return c;
@@ -115,7 +162,7 @@ public class LatenessReportView extends EMFReportView {
 			return null;
 		}
 	}
-	
+
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		final IStructuredContentProvider superProvider = super.getContentProvider();
@@ -133,7 +180,7 @@ public class LatenessReportView extends EMFReportView {
 
 			@Override
 			public Object[] getElements(final Object object) {
-				
+
 				clearInputEquivalents();
 				final Object[] result = superProvider.getElements(object);
 				for (final Object e : result) {
@@ -148,20 +195,19 @@ public class LatenessReportView extends EMFReportView {
 			}
 		};
 	}
-	
-	
+
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduledEventCollector() {
 			@Override
-			protected boolean filter(Event e) {
+			protected boolean filter(final Event e) {
 				if (e instanceof SlotVisit) {
 					final SlotVisit visit = (SlotVisit) e;
 
 					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 						return true;
 					}
-					
+
 					setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
 				} else if (e instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) e;
@@ -176,7 +222,7 @@ public class LatenessReportView extends EMFReportView {
 			protected boolean filter() {
 				return true;
 			}
-			
+
 		};
 	}
 
