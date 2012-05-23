@@ -1,8 +1,11 @@
 package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.derive;
 
+import java.util.List;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -10,6 +13,8 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.handlers.HandlerUtil;
+
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class DeriveWizardHandler extends AbstractHandler {
 
@@ -43,5 +48,29 @@ public class DeriveWizardHandler extends AbstractHandler {
 		dialog.open();
 
 		return null;
+	}
+
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		boolean enabled = false;
+		if (evaluationContext instanceof IEvaluationContext) {
+			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
+			final Object defaultVariable = context.getDefaultVariable();
+
+			if (defaultVariable instanceof List<?>) {
+				final List<?> variables = (List<?>) defaultVariable;
+
+				for (final Object var : variables) {
+					if (var instanceof ScenarioInstance) {
+						enabled = true;
+					} else {
+						super.setBaseEnabled(false);
+						return;
+					}
+				}
+			}
+		}
+
+		super.setBaseEnabled(enabled);
 	}
 }
