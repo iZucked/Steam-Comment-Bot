@@ -117,7 +117,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 			@Override
 			public int getMinimumSectionHeight() {
-				return 10;
+				return 5;
 			}
 
 			@Override
@@ -154,6 +154,24 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public boolean drawSectionsWithGradients() {
 				return false;
 			}
+
+			@Override
+			public boolean allowArrowKeysToScrollChart() {
+				return true;
+			}
+
+			@Override
+			public boolean showBarsIn3D() {
+				return false;
+			}
+
+			public int getEventsTopSpacer() {
+				return 5;
+			}
+
+			public int getEventsBottomSpacer() {
+				return 5;
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings) {
@@ -174,7 +192,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		};
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
-		
+
 		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider();
 		viewer.setContentProvider(contentProvider);
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer);
@@ -183,9 +201,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		labelProvider.addColourScheme(new RouteChoiceColourScheme());
 		labelProvider.addColourScheme(new HighSpeedColourScheme());
 		labelProvider.addColourScheme(new CooldownColourScheme());
-		labelProvider.addColourScheme(new AlternatingCargoColourScheme(
-				ColorCache.getColor(220, 20, 50),
-				ColorCache.getColor(20,155,124)));
+		labelProvider.addColourScheme(new AlternatingCargoColourScheme(ColorCache.getColor(220, 20, 50), ColorCache.getColor(20, 155, 124)));
 		viewer.setLabelProvider(labelProvider);
 		// TODO: Hook up action to alter sort behaviour
 		// Then refresh
@@ -194,21 +210,6 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		viewer.setComparator(viewerComparator);
 
 		viewer.setInput(getViewSite());
-//
-//		viewer.addDoubleClickListener(new IDoubleClickListener() {
-//			@Override
-//			public void doubleClick(final DoubleClickEvent event) {
-//				final Object selection = event.getSelection();
-//				// find what we have double-clicked
-//				if (selection instanceof SlotVisit) {
-//					final SlotVisit slotVisit = (SlotVisit) selection;
-//					final Slot slot = slotVisit.getSlotAllocation().getSlot();
-//					// TODO factor out to somewhere useful:
-//					final EObject c = slot.eContainer();
-//
-//				}
-//			}
-//		});
 
 		// Create the help context id for the viewer's control. This is in the
 		// format of pluginid.contextId
