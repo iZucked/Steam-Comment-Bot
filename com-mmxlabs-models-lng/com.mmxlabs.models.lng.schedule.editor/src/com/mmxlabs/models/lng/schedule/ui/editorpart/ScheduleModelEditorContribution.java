@@ -14,7 +14,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
@@ -39,12 +41,18 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 		}
 		private boolean handle(final Notification notification) {
 			if (notification.isTouch() == false) {
-				if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name())
+				if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 					return false; // this feature is irrelevant
+				}
+				else if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule()) {
+					// If a new schedule is set, ignore this change
+					return false;
+				}
 				EObject target = (EObject) notification.getNotifier();
 				while (target != null) {
-					if (target == modelObject)
+					if (target == modelObject) {
 						return false;
+					}
 					target = target.eContainer();
 				}
 				log.debug("Setting dirty bit on schedule model because " + notification);
