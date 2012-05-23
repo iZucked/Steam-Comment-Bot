@@ -31,6 +31,8 @@
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StartOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.play">
             <enabledWhen>
+                  <with
+                        variable="selection">
                <iterate>
                   <and>
                      <instanceof
@@ -41,7 +43,20 @@
                      </test>
                   </and>
                </iterate>
+                  </with>
             </enabledWhen>
+            <activeWhen>
+              <with
+                        variable="selection">
+               <iterate>
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
+                    </with>
+            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StopOptimisationHandler"
