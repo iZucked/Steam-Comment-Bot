@@ -48,7 +48,7 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 					}
 					if (!unpricedPorts.isEmpty()) {
 						final SortedSet<String> names = new TreeSet<String>();
-						for (final APort p : unpricedPorts) names.add(p.getName());
+						for (final APort p : unpricedPorts) names.add(""+p.getName());
 						return ctx.createFailureStatus(names.toString());
 					}
 				}
