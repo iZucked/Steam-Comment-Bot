@@ -47,7 +47,7 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 			@Override
 			public void modifyText(final ModifyEvent e) {
 				if (formattedText.isValid()) {
-					doSetValue((Date)formattedText.getValue());
+					doSetValue((Date)formattedText.getValue(), false);
 				}
 			}
 		});
