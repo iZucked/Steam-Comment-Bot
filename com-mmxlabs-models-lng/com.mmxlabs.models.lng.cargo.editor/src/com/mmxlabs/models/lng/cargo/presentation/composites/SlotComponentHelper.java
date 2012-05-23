@@ -11,13 +11,12 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
-import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 
 /**
  * A component helper for Slot instances
@@ -119,15 +118,26 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CONTRACT));
+		 detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__CONTRACT));
 	}
 	/**
 	 * Create the editor for the duration feature on Slot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_durationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__DURATION));
+
+			final NumberInlineEditor editor = new NumberInlineEditor(CargoPackage.eINSTANCE.getSlot_Duration()) {
+				protected boolean updateOnChangeToFeature(final Object changedFeature) {
+					if (changedFeature == CargoPackage.eINSTANCE.getSlot_Port()) {
+						return true;
+					}
+					return super.updateOnChangeToFeature(changedFeature);
+				}
+			};
+
+		detailComposite.addInlineEditor(editor);
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__DURATION));
 	}
 	/**
 	 * Create the editor for the minQuantity feature on Slot
