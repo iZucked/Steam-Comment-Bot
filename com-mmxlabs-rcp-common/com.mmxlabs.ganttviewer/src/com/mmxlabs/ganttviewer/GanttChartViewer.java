@@ -257,6 +257,8 @@ public class GanttChartViewer extends StructuredViewer {
 
 					if (treeContentProvider.hasChildren(r)) {
 						final GanttGroup group = new GanttGroup(ganttChart);
+						group.setVerticalEventAlignment(SWT.CENTER);
+
 						final Object[] children = treeContentProvider.getChildren(r);
 						for (final Object c : children) {
 
@@ -277,6 +279,7 @@ public class GanttChartViewer extends StructuredViewer {
 							} else {
 								event = new GanttEvent(ganttChart, c, cName, startDate, endDate, 0);
 							}
+							event.setVerticalEventAlignment(SWT.CENTER);
 
 							if (image != null) {
 								event.setImage(true);
