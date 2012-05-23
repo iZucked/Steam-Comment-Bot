@@ -627,7 +627,15 @@ public class EObjectTableViewer extends GridTableViewer {
 					final Object v1 = path.get((EObject) e1);
 					final Object v2 = path.get((EObject) e2);
 
-					comparison = renderer.getComparable(v1).compareTo(renderer.getComparable(v2));
+					final Comparable left = renderer.getComparable(v1);
+					final Comparable right = renderer.getComparable(v2);
+					if (left == null) {
+						return -1;
+					} else if (right == null) {
+						return 1;
+					} else {
+						comparison = left.compareTo(right);
+					}
 				}
 				return sortDescending ? -comparison : comparison;
 			}
