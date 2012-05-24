@@ -18,6 +18,8 @@ import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -283,6 +285,12 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		final ISequence sequence = sequences.getSequence(sequenceIndex);
 		final IResource resource = sequences.getResources().get(sequenceIndex);
 
+		final IVesselProvider vesselProvider = super.getVesselProvider();
+		final IVessel vessel = vesselProvider.getVessel(resource);
+		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+			return;
+		}
+
 		final int size = sequence.size();
 
 		resizeAll(sequenceIndex, size);
@@ -294,16 +302,15 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		final boolean[] isVirtual = this.isVirtual[sequenceIndex];
 
 		final IPortTypeProvider portTypeProvider = super.getPortTypeProvider();
-		final IVesselProvider vesselProvider = super.getVesselProvider();
 
 		final ITimeWindowDataComponentProvider timeWindowProvider = super.getTimeWindowProvider();
 		final IPortProvider portProvider = super.getPortProvider();
 		final IMultiMatrixProvider<IPort, Integer> distanceProvider = super.getDistanceProvider();
 		final IElementDurationProvider durationProvider = super.getDurationsProvider();
 
-		final int maxSpeed = vesselProvider.getVessel(resource).getVesselClass().getMaxSpeed();
+		final int maxSpeed = vessel.getVesselClass().getMaxSpeed();
 
-		final int minSpeed = vesselProvider.getVessel(resource).getVesselClass().getMinSpeed();
+		final int minSpeed = vessel.getVesselClass().getMinSpeed();
 
 		int index = 0;
 		ISequenceElement lastElement = null;
@@ -325,7 +332,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 				int maxTravelTime = 0;
 				for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(lastPort, port)) {
 					final int distance = entry.getValue();
-					final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vesselProvider.getVessel(resource).getVesselClass());
+					final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vessel.getVesselClass());
 					final int minByRoute = Calculator.getTimeFromSpeedDistance(maxSpeed, distance) + extraTime;
 					final int maxByRoute = Calculator.getTimeFromSpeedDistance(minSpeed, distance) + extraTime;
 					minTravelTime = Math.min(minTravelTime, minByRoute);

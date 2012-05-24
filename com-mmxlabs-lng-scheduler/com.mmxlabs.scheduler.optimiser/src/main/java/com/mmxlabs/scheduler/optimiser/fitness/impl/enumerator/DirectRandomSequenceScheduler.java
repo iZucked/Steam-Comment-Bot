@@ -77,6 +77,10 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 	}
 
 	private void randomise(final int seq) {
+		if (arrivalTimes[seq] == null) {
+			return;
+		}
+		
 		final int lastIndex = sizes[seq] -1;
 		for (int pos = 0; pos < lastIndex; pos++) {
 			final int min = getMinArrivalTime(seq, pos);
