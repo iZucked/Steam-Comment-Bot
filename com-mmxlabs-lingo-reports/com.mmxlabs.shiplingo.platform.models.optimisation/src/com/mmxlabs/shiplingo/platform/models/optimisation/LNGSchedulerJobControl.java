@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -41,6 +42,7 @@ import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -268,14 +270,20 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				a.setAssignToSpot(false);
 				a.getVessels().add(sequence.getVessel());
 			}
+			
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
-					a.getAssignedObjects().add(((SlotVisit) event).getSlotAllocation().getSlot());
+					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
+					
+					if (slot instanceof LoadSlot) {
+						a.getAssignedObjects().add(((LoadSlot) slot).getCargo());
+					}
 				} else if (event instanceof VesselEventVisit) {
 					a.getAssignedObjects().add(((VesselEventVisit) event).getVesselEvent());
 				}
 			}
-			if (!a.getAssignedObjects().isEmpty()) {
+			
+			if (!a.getAssignedObjects().isEmpty() || sequence.isSpotVessel() == false) {
 				newAssignments.add(a);
 			}
 		}
