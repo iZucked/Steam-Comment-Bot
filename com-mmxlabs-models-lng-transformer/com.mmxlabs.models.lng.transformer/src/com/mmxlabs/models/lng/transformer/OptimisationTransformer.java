@@ -155,48 +155,6 @@ public class OptimisationTransformer {
 		return result;
 	}
 
-	/**
-	 * Creates a fitness function registry used by this {@link OptimisationTransformer} instance.
-	 * 
-	 * @param data
-	 * @return
-	 */
-	public IFitnessFunctionRegistry createFitnessFunctionRegistry() {
-		fitnessFunctionRegistry = new FitnessFunctionRegistry();
-
-		final CargoSchedulerFitnessCoreFactory factory = new CargoSchedulerFitnessCoreFactory();
-
-		fitnessFunctionRegistry.registerFitnessCoreFactory(factory);
-		return fitnessFunctionRegistry;
-	}
-
-	/**
-	 * Creates a constraint checker registry used by this {@link OptimisationTransformer} instance.
-	 * 
-	 * @param data
-	 * @return
-	 */
-	public IConstraintCheckerRegistry createConstraintCheckerRegistry() {
-		constraintCheckerRegistry = new ConstraintCheckerRegistry();
-		{
-			final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
-			constraintCheckerRegistry.registerConstraintCheckerFactory(constraintFactory);
-		}
-		{
-			final ResourceAllocationConstraintCheckerFactory constraintFactory = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
-			constraintCheckerRegistry.registerConstraintCheckerFactory(constraintFactory);
-		}
-
-		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_vesselProvider));
-
-		constraintCheckerRegistry.registerConstraintCheckerFactory(new TravelTimeConstraintCheckerFactory());
-
-		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortExclusionConstraintCheckerFactory(SchedulerConstants.DCP_portExclusionProvider, SchedulerConstants.DCP_vesselProvider,
-				SchedulerConstants.DCP_portProvider));
-
-		return constraintCheckerRegistry;
-	}
-
 	public IEvaluationProcessRegistry createEvaluationProcessRegistry() {
 		evaluationProcessRegistry = new EvaluationProcessRegistry();
 
