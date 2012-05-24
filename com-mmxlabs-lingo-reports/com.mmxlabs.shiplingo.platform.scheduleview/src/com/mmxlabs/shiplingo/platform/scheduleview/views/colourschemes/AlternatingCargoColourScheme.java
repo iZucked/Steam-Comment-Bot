@@ -1,5 +1,6 @@
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
+import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -11,13 +12,17 @@ public class AlternatingCargoColourScheme implements IScheduleViewColourScheme {
 	private final Color secondaryColor;
 
 	private Color selectedColor;
-	
+
+	public AlternatingCargoColourScheme() {
+		this(ColorCache.getColor(220, 20, 50), ColorCache.getColor(20, 155, 124));
+	}
+
 	public AlternatingCargoColourScheme(final Color baseColor, final Color second) {
 		this.baseColor = baseColor;
 		this.secondaryColor = second;
 		selectedColor = baseColor;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "Alternating Cargoes";
@@ -30,7 +35,7 @@ public class AlternatingCargoColourScheme implements IScheduleViewColourScheme {
 
 	@Override
 	public Color getBackground(Object element) {
-		if (element instanceof SlotVisit && ((SlotVisit)element).getSlotAllocation().getSlot() instanceof LoadSlot) {
+		if (element instanceof SlotVisit && ((SlotVisit) element).getSlotAllocation().getSlot() instanceof LoadSlot) {
 			// flip colour
 			if (selectedColor == baseColor) {
 				selectedColor = secondaryColor;

@@ -9,6 +9,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -22,7 +24,6 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
-import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
@@ -49,13 +50,8 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
-import com.mmxlabs.shiplingo.platform.scheduleview.Activator;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.AlternatingCargoColourScheme;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.FuelChoiceColourScheme;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.HighSpeedColourScheme;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.RouteChoiceColourScheme;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme;
+import com.mmxlabs.shiplingo.platform.scheduleview.internal.Activator;
+import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
 
 public class SchedulerView extends ViewPart implements ISelectionListener {
 
@@ -82,6 +78,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	private ScenarioViewerSynchronizer jobManagerListener;
 
+	@Inject
+	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemes;
+
 	/**
 	 * The constructor.
 	 */
@@ -94,6 +93,8 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	@Override
 	public void createPartControl(final Composite parent) {
 
+		Activator.getDefault().getInjector().injectMembers(this);
+		
 		// Gantt Chart settings object
 		final ISettings settings = new AbstractSettings() {
 			@Override
@@ -207,12 +208,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider();
 		viewer.setContentProvider(contentProvider);
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer);
-		labelProvider.addColourScheme(new VesselStateColourScheme());
-		labelProvider.addColourScheme(new FuelChoiceColourScheme());
-		labelProvider.addColourScheme(new RouteChoiceColourScheme());
-		labelProvider.addColourScheme(new HighSpeedColourScheme());
-		labelProvider.addColourScheme(new CooldownColourScheme());
-		labelProvider.addColourScheme(new AlternatingCargoColourScheme(ColorCache.getColor(220, 20, 50), ColorCache.getColor(20, 155, 124)));
+
+		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemes) {
+			labelProvider.addColourScheme(ext.getID(), ext.createInstance());
+		}
+
 		viewer.setLabelProvider(labelProvider);
 		// TODO: Hook up action to alter sort behaviour
 		// Then refresh

@@ -2,15 +2,20 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.scheduleview;
+package com.mmxlabs.shiplingo.platform.scheduleview.internal;
+
+import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.ops4j.peaberry.Peaberry;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 
 /**
@@ -25,6 +30,8 @@ public class Activator extends AbstractUIPlugin {
 	private static Activator plugin;
 
 	private ServiceTracker<IEclipseJobManager, IEclipseJobManager> jobManagerServiceTracker;
+
+	private Injector injector;
 
 	/**
 	 * The constructor
@@ -44,6 +51,8 @@ public class Activator extends AbstractUIPlugin {
 
 		jobManagerServiceTracker = new ServiceTracker<IEclipseJobManager, IEclipseJobManager>(context, IEclipseJobManager.class.getName(), null);
 		jobManagerServiceTracker.open();
+
+		injector = Guice.createInjector(Peaberry.osgiModule(context, eclipseRegistry()), new ActivatorModule());
 	}
 
 	/*
@@ -108,5 +117,9 @@ public class Activator extends AbstractUIPlugin {
 
 		final Status status = new Status(IStatus.ERROR, PLUGIN_ID, message, t);
 		getDefault().getLog().log(status);
+	}
+
+	public Injector getInjector() {
+		return injector;
 	}
 }

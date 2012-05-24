@@ -7,6 +7,7 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="schedulerViewColourScheme" name="Scheduler View Colour Scheme" schema="schema/schedulerViewColourScheme.exsd"/>
 
    <extension
          point="org.eclipse.ui.views">
@@ -34,6 +35,39 @@
             file="toc.xml"
             primary="false">
       </toc>
+   </extension>
+   <extension
+         point="com.mmxlabs.shiplingo.platform.scheduleview.schedulerViewColourScheme">
+      <ColourScheme
+            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.AlternatingCargoColourScheme"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.AlternatingCargoColourScheme"
+            name="Alternating Cargoes">
+      </ColourScheme>
+      <ColourScheme
+            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.AlternatingCargoColourScheme"
+            name="Cooldown">
+      </ColourScheme>
+      <ColourScheme
+            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.FuelChoiceColourScheme"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.FuelChoiceColourScheme"
+            name="Fuel Choice">
+      </ColourScheme>
+      <ColourScheme
+            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.HighSpeedColourScheme"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.HighSpeedColourScheme"
+            name="High Speed">
+      </ColourScheme>
+      <ColourScheme
+            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.RouteChoiceColourScheme"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.RouteChoiceColourScheme"
+            name="Route Choice">
+      </ColourScheme>
+      <ColourScheme
+            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme"
+            name="Vessel State">
+      </ColourScheme>
    </extension>
 
 </plugin>

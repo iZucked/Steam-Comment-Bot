@@ -7,7 +7,9 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
@@ -31,6 +33,8 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
  * 
  */
 public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGanttChartToolTipProvider, IColorProvider {
+
+	private final Map<String, IScheduleViewColourScheme> colourSchemesById = new HashMap<String, IScheduleViewColourScheme>();
 
 	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<IScheduleViewColourScheme>();
 
@@ -73,6 +77,12 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	public void setScheme(final IScheduleViewColourScheme scheme) {
 		this.currentScheme = scheme;
+	}
+
+	public void setScheme(final String id) {
+		if (colourSchemesById.containsKey(id)) {
+			this.currentScheme = colourSchemesById.get(id);
+		}
 	}
 
 	protected final IScheduleViewColourScheme getCurrentScheme() {
@@ -193,7 +203,11 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return null;
 	}
 
-	public void addColourScheme(final IScheduleViewColourScheme colourScheme) {
+	public void addColourScheme(final String id, final IScheduleViewColourScheme colourScheme) {
+		if (id != null && !id.isEmpty()) {
+			colourSchemesById.put(id, colourScheme);
+		}
+
 		colourSchemes.add(colourScheme);
 		if ((currentScheme == null) && (colourSchemes.size() == 1)) {
 			currentScheme = colourScheme;
