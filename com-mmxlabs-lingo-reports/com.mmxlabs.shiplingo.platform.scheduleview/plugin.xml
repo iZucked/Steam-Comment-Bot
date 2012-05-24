@@ -45,7 +45,7 @@
       </ColourScheme>
       <ColourScheme
             class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme"
-            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.AlternatingCargoColourScheme"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme"
             name="Cooldown">
       </ColourScheme>
       <ColourScheme
