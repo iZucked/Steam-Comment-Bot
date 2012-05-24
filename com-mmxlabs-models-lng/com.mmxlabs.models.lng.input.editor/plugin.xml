@@ -67,4 +67,13 @@
           subModelImporterClass="com.mmxlabs.models.lng.input.importers.InputModelImporter">
     </submodelImporter>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.input.editor.inputEditorContribution"
+          implementation="com.mmxlabs.models.lng.input.editorpart.InputJointModelEditorContribution"
+          priority="0"
+          subModelClass="com.mmxlabs.models.lng.input.InputModel">
+    </jointModelEditor>
+ </extension>
 </plugin>
