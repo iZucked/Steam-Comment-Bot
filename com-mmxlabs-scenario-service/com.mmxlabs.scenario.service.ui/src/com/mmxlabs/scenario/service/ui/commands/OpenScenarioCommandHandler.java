@@ -79,8 +79,6 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		final IEditorPart editorPart = activePage.findEditor(editorInput);
 		if (editorPart != null) {
-			// FIXME: This doesn't quite work through navigator double click. Editor is activated, selection provider is linked to editor. However another double click in navigator does not transfer
-			// focus back - it still seems to think it has focus so does not request it. This results in the execute() obtaining the wrong selection.
 			activePage.activate(editorPart);
 		} else {
 			final IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
