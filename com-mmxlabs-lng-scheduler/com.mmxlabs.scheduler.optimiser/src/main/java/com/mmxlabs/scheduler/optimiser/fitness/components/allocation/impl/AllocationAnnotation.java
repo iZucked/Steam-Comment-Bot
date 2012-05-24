@@ -4,8 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 
 /**
@@ -13,8 +13,8 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
  * 
  */
 public class AllocationAnnotation implements IAllocationAnnotation {
-	private ILoadSlot loadSlot;
-	private IDischargeSlot dischargeSlot;
+	private ILoadOption loadSlot;
+	private IDischargeOption dischargeSlot;
 
 	private long fuelVolume;
 	private long dischargeVolume;
@@ -35,20 +35,20 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public ILoadSlot getLoadSlot() {
+	public ILoadOption getLoadOption() {
 		return loadSlot;
 	}
 
-	public void setLoadSlot(final ILoadSlot loadSlot) {
+	public void setLoadSlot(final ILoadOption loadSlot) {
 		this.loadSlot = loadSlot;
 	}
 
 	@Override
-	public IDischargeSlot getDischargeSlot() {
+	public IDischargeOption getDischargeOption() {
 		return dischargeSlot;
 	}
 
-	public void setDischargeSlot(final IDischargeSlot dischargeSlot) {
+	public void setDischargeSlot(final IDischargeOption dischargeSlot) {
 		this.dischargeSlot = dischargeSlot;
 	}
 

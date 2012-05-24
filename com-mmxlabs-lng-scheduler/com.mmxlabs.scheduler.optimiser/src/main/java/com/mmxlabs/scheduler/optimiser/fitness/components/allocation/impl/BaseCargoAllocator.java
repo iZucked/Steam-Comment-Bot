@@ -12,7 +12,9 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -63,11 +65,11 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	/**
 	 * The load slot for each cargo
 	 */
-	final ArrayList<ILoadSlot> loadSlots = new ArrayList<ILoadSlot>();
+	final ArrayList<ILoadOption> loadSlots = new ArrayList<ILoadOption>();
 	/**
 	 * The discharge slot for each cargo.
 	 */
-	final ArrayList<IDischargeSlot> dischargeSlots = new ArrayList<IDischargeSlot>();
+	final ArrayList<IDischargeOption> dischargeSlots = new ArrayList<IDischargeOption>();
 
 	final ArrayList<Integer> loadPrices = new ArrayList<Integer>();
 	final ArrayList<Integer> dischargePrices = new ArrayList<Integer>();
@@ -148,10 +150,10 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 				}
 				if (object instanceof PortDetails) {
 					final PortDetails pd = (PortDetails) object;
-					if (pd.getPortSlot() instanceof ILoadSlot) {
+					if (pd.getPortSlot() instanceof ILoadOption) {
 						loadDetails = pd;
 						loadTime = planIterator.getCurrentTime();
-					} else if (pd.getPortSlot() instanceof IDischargeSlot) {
+					} else if (pd.getPortSlot() instanceof IDischargeOption) {
 						dischargeDetails = pd;
 						dischargeTime = planIterator.getCurrentTime();
 					}
@@ -282,8 +284,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 			@Override
 			public Iterator<IAllocationAnnotation> iterator() {
 				return new Iterator<IAllocationAnnotation>() {
-					final Iterator<ILoadSlot> loadIterator = loadSlots.iterator();
-					final Iterator<IDischargeSlot> dischargeIterator = dischargeSlots.iterator();
+					final Iterator<ILoadOption> loadIterator = loadSlots.iterator();
+					final Iterator<IDischargeOption> dischargeIterator = dischargeSlots.iterator();
 					final Iterator<Integer> priceIterator = unitPrices.iterator();
 					int allocationIndex;
 
@@ -296,8 +298,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 					public IAllocationAnnotation next() {
 						final AllocationAnnotation annotation = new AllocationAnnotation();
 
-						final ILoadSlot loadSlot = loadIterator.next();
-						final IDischargeSlot dischargeSlot = dischargeIterator.next();
+						final ILoadOption loadSlot = loadIterator.next();
+						final IDischargeOption dischargeSlot = dischargeIterator.next();
 
 						annotation.setLoadSlot(loadSlot);
 						annotation.setDischargeSlot(dischargeSlot);

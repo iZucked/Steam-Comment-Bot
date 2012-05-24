@@ -135,7 +135,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 			for (final VoyagePlan plan : sequence.getVoyagePlans()) {
 				final PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
 				final PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
-				if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadSlot()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeSlot()))) {
+				if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeOption()))) {
 					final long cargoGroupValue = evaluate(plan, currentAllocation, vessel, annotatedSolution);
 					accumulator += cargoGroupValue;
 					if (allocationIterator.hasNext()) {
@@ -171,11 +171,11 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 	 */
 	private long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final IAnnotatedSolution annotatedSolution) {
 		// get each entity
-		final IEntity downstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getDischargeSlot());
-		final IEntity upstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getLoadSlot());
+		final IEntity downstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getDischargeOption());
+		final IEntity upstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getLoadOption());
 
 		final int dischargePricePerM3 = currentAllocation.getDischargeM3Price();
-		final int cvValue = currentAllocation.getLoadSlot().getCargoCVValue();
+		final int cvValue = currentAllocation.getLoadOption().getCargoCVValue();
 		final long dischargeVolume = currentAllocation.getDischargeVolume();
 		final long loadVolume = currentAllocation.getLoadVolume();
 		final int loadPricePerM3 = currentAllocation.getLoadM3Price();
@@ -247,7 +247,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 			// add entry for each entity
 
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getDischargeTime(), entries);
-			final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadSlot());
+			final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
 			annotatedSolution.getElementAnnotations().setAnnotation(element, TradingConstants.AI_profitAndLoss, annotation);
 		}
 

@@ -13,8 +13,8 @@ import java.util.Map;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ITotalVolumeLimit;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -107,8 +107,8 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 
 			// Now we find the lower bound for allocation above the fuel
 			// requirement
-			final ILoadSlot loadSlot = loadSlots.get(variable);
-			final IDischargeSlot dischargeSlot = dischargeSlots.get(variable);
+			final ILoadOption loadSlot = loadSlots.get(variable);
+			final IDischargeOption dischargeSlot = dischargeSlots.get(variable);
 
 			// It is, the greater of the minimum load LESS FUEL, and minimum
 			// discharge

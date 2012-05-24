@@ -4,19 +4,19 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 
 /**
- * An annotation which is appended to both load and discharge slots indicating decisions made by the cargo allocator.
+ * An annotation which is appended to both {@link ILoadOption} and {@link IDischargeOption} indicating decisions made by the {@link ICargoAllocator}
  * 
  * @author hinton
  * 
  */
 public interface IAllocationAnnotation {
-	public ILoadSlot getLoadSlot();
+	public ILoadOption getLoadOption();
 
-	public IDischargeSlot getDischargeSlot();
+	public IDischargeOption getDischargeOption();
 
 	public long getLoadVolume();
 
