@@ -108,6 +108,7 @@
       <perspectiveExtension
             targetID="*">
          <view
+               closeable="false"
                id="com.mmxlabs.scenario.service.ui.navigator"
                minimized="true"
                relationship="left"
