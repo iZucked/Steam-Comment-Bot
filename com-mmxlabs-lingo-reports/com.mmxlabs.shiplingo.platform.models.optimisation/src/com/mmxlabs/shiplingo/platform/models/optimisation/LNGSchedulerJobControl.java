@@ -256,6 +256,11 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		for (final Sequence sequence : schedule.getSequences()) {
 			final Assignment a = InputFactory.eINSTANCE.createAssignment();
+			
+			if (sequence.getVessel() == null) {
+				continue;
+			}
+			
 			if (sequence.isSpotVessel()) {
 				a.setAssignToSpot(true);
 				a.getVessels().add(sequence.getVesselClass());
