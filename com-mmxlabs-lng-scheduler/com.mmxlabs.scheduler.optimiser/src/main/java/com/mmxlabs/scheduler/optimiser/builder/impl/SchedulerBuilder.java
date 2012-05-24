@@ -755,12 +755,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		for (final ISequenceElement element : unshippedElements) {
 			// create a new resource for each of these guys, and bind them to their resources
 			final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, 0, VesselInstanceType.VIRTUAL, createStartEndRequirement(), createStartEndRequirement(), 0, 0, 0);
-			// Bind every discharge slot to its vessel
-			if (portTypeProvider.getPortType(element) == PortType.Discharge) {
-				constrainSlotToVessels(portSlotsProvider.getPortSlot(element), Collections.singleton(virtualVessel));
-			} else {
-				constrainSlotToVesselClasses(portSlotsProvider.getPortSlot(element), virtualClassSet);
-			}
+			// Bind every slot to its vessel
+			constrainSlotToVessels(portSlotsProvider.getPortSlot(element), Collections.singleton(virtualVessel));
 		}
 
 		// create return elements before fixing time windows,
