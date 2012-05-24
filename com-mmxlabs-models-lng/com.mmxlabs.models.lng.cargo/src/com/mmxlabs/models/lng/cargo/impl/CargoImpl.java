@@ -302,6 +302,13 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * @generated NOT
 	 */
 	public CargoType getCargoType() {
+
+		if (getLoadSlot() == null || getLoadSlot().isDESPurchase()) {
+			return CargoType.DES;
+		}
+		if (getDischargeSlot() == null || getDischargeSlot().isFOBSale()) {
+			return CargoType.FOB;
+		}
 		return CargoType.FLEET;
 	}
 
