@@ -161,14 +161,15 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 							instance.setLocked(true);
 							control.prepare();
 							control.start();
-						} catch (final Exception ex) {
+						} catch (final Throwable ex) {
 							log.error(ex.getMessage(), ex);
 							control.cancel();
+							instance.setLocked(false);
 						}
 						// Resume if paused
 					} else if (control.getJobState() == EJobState.PAUSED) {
-						control.resume();
 						instance.setLocked(true);
+						control.resume();
 					} else {
 						// Add listener to unlock scenario when it stops optimising
 						control.addListener(new IJobControlListener() {
@@ -243,12 +244,12 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
+		System.out.println("Start Opt");
 		final JobStatePropertyTester tester = new JobStatePropertyTester();
 		boolean enabled = false;
 		if (evaluationContext instanceof IEvaluationContext) {
 			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
 			final Object defaultVariable = context.getDefaultVariable();
-
 			if (defaultVariable instanceof List<?>) {
 				final List<?> variables = (List<?>) defaultVariable;
 
@@ -268,7 +269,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 				}
 			}
 		}
-
 		super.setBaseEnabled(enabled);
 	}
 }
