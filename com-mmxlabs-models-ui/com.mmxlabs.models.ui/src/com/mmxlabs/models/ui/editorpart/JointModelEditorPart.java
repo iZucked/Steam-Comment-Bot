@@ -21,6 +21,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -28,17 +29,25 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.domain.IEditingDomainProvider;
-import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
+import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -77,6 +86,11 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider, IScenarioEditingLocation, IMMXRootObjectProvider,
 		IScenarioInstanceProvider {
 
+	/**
+	 * Flag to enable the default EMF tree view editor
+	 */
+	private static final boolean DEBUG = false;
+
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 
 	private final Stack<IExtraValidationContext> validationContextStack = new Stack<IExtraValidationContext>();
@@ -90,7 +104,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	 * The editing domain for controls to use. This is pretty standard, but hooks command creation to allow extra things there
 	 */
 	private CommandProviderAwareEditingDomain editingDomain;
-	private ComposedAdapterFactory adapterFactory;
+	private AdapterFactory adapterFactory;
 	private BasicCommandStack commandStack;
 
 	/**
@@ -133,6 +147,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private ScenarioInstance scenarioInstance;
 
 	private EContentAdapter lockedAdapter;
+
+	private TreeViewer selectionViewer;
 
 	public JointModelEditorPart() {
 	}
@@ -227,6 +243,20 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 						return null;
 					}
 				});
+				if (DEBUG && propertySheetPage == null)
+					propertySheetPage = new ExtendedPropertySheetPage(editingDomain) {
+						@Override
+						public void setSelectionToViewer(final List<?> selection) {
+							selectionViewer.setSelection(new StructuredSelection(selection));
+							JointModelEditorPart.this.setFocus();
+						}
+
+						@Override
+						public void setActionBars(final IActionBars actionBars) {
+							super.setActionBars(actionBars);
+						}
+					};
+				propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
 			}
 			return propertySheetPage;
 		}
@@ -268,6 +298,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 			commandStack = (BasicCommandStack) instance.getAdapters().get(BasicCommandStack.class);
 			editingDomain = (CommandProviderAwareEditingDomain) instance.getAdapters().get(EditingDomain.class);
+
+			adapterFactory = editingDomain.getAdapterFactory();
 
 			lockedAdapter = new EContentAdapter() {
 
@@ -398,6 +430,37 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.addPages(getContainer());
 			contribution.setLocked(isLocked());
+		}
+		if (DEBUG) {
+			final ViewerPane viewerPane = new ViewerPane(getSite().getPage(), JointModelEditorPart.this) {
+				@Override
+				public Viewer createViewer(final Composite composite) {
+					final Tree tree = new Tree(composite, SWT.MULTI);
+					final TreeViewer newTreeViewer = new TreeViewer(tree);
+					return newTreeViewer;
+				}
+
+				@Override
+				public void requestActivation() {
+
+					super.requestActivation();
+					setCurrentViewer(viewer);
+				}
+			};
+			viewerPane.createControl(getContainer());
+
+			selectionViewer = (TreeViewer) viewerPane.getViewer();
+			selectionViewer.setContentProvider(new AdapterFactoryContentProvider(adapterFactory));
+
+			selectionViewer.setLabelProvider(new AdapterFactoryLabelProvider(adapterFactory));
+			selectionViewer.setInput(editingDomain.getResourceSet());
+			selectionViewer.setSelection(new StructuredSelection(editingDomain.getResourceSet().getResources().get(0)), true);
+			viewerPane.setTitle(editingDomain.getResourceSet());
+
+			new AdapterFactoryTreeEditor(selectionViewer.getTree(), adapterFactory);
+
+			final int pageIndex = addPage(viewerPane.getControl());
+			setPageText(pageIndex, "DEBUG");
 		}
 	}
 
