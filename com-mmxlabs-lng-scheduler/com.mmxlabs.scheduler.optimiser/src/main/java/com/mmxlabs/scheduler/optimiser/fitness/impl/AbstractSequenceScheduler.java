@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -137,7 +138,23 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			// Virtual vessels are those operated by a third party, for FOB and DES situations.
 			// Should we compute a schedule for them anyway? The arrival times don't mean much,
 			// but contracts need this kind of information to make up numbers with.
-			return null;
+			final List<Object> currentSequence = new ArrayList<Object>(5);
+			final VoyagePlan currentPlan = new VoyagePlan();
+
+			for (final ISequenceElement element : sequence) {
+
+				final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+
+				final PortDetails portDetails = new PortDetails();
+				portDetails.setVisitDuration(0);
+				portDetails.setPortSlot(thisPortSlot);
+				currentSequence.add(portDetails);
+
+			}
+
+			currentPlan.setSequence(currentSequence.toArray());
+			return new ScheduledSequence(resource, 0, Collections.singletonList(currentPlan));
+
 		}
 
 		// Get start time
