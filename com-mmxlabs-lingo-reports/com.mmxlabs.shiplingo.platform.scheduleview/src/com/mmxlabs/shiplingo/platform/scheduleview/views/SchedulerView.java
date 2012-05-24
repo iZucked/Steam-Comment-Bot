@@ -57,6 +57,8 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	private static final String SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME = "SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME";
 
+	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
+
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -95,8 +97,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	@Override
 	public void createPartControl(final Composite parent) {
 
+		// Inject the extension points
 		Activator.getDefault().getInjector().injectMembers(this);
-		
+
 		// Gantt Chart settings object
 		final ISettings settings = new AbstractSettings() {
 			@Override
@@ -279,7 +282,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// .getSelectionService()
 		// .getSelection("com.mmxlabs.rcp.navigator");
 		// selectionListener.selectionChanged(null, selection);
-		
+
 		String defaultColourScheme = Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME);
 		if (defaultColourScheme != null) {
 			labelProvider.setScheme(defaultColourScheme);
@@ -334,7 +337,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
-		manager.add(toggleColourSchemeAction);
+		if (toggleColourSchemeAction != null) {
+			manager.add(toggleColourSchemeAction);
+		}
 		manager.add(sortModeAction);
 		manager.add(packAction);
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -345,7 +350,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
 
-		toggleColourSchemeAction = new ToggleColourSchemeAction((EMFScheduleLabelProvider) (viewer.getLabelProvider()));
+		if (!Activator.getDefault().getPreferenceStore().getBoolean(SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION)) {
+
+			toggleColourSchemeAction = new ToggleColourSchemeAction((EMFScheduleLabelProvider) (viewer.getLabelProvider()));
+		}
 
 		sortModeAction = new SortModeAction(viewerComparator);
 
