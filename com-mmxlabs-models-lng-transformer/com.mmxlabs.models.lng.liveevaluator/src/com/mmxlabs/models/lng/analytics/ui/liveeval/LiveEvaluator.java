@@ -39,8 +39,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Dirty()) {
 			if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue()) {
 				queueEvaluate();
-			} else if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue() == false) {
-				dequeueEvaluate();
+//			} else if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue() == false) {
+//				dequeueEvaluate();
 			}
 		}
 	}
@@ -88,6 +88,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 					final IScenarioInstanceEvaluator evaluator = AnalyticsEditorPlugin.getPlugin().getResourceEvaluator();
 					if (evaluator != null) {
 						synchronized (instance) {
+							log.debug("Checking dirty flag is still set");
 							try {
 								final MMXRootObject root = (MMXRootObject) instance.getScenarioService().load(instance);
 								final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
@@ -102,7 +103,9 @@ public class LiveEvaluator extends MMXAdapterImpl {
 						log.debug("Could not find evaluator when evaluating " + instance.getName());
 					}
 				} catch (final InterruptedException e) {
-					if (kill) spinLock = false;
+					if (kill) {
+						spinLock = false;
+					}
 					else spinLock = true;
 				}
 			}
