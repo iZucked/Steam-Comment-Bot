@@ -42,6 +42,6 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 				Peaberry.service(new TravelTimeConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(VirtualVesselConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new VirtualVesselConstraintCheckerFactory(SchedulerConstants.DCP_vesselProvider)).export());
+				Peaberry.service(new VirtualVesselConstraintCheckerFactory(SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider)).export());
 	}
 }

@@ -6,13 +6,22 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -25,13 +34,19 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 public class VirtualVesselConstraintChecker implements IConstraintChecker {
 	private final String name;
 	private final String vesselProviderKey;
+	private final String portSlotProviderKey;
 
+	@Inject
+	private IPortSlotProvider portSlotProvider;
+
+	@Inject
 	private IVesselProvider vesselProvider;
 
-	public VirtualVesselConstraintChecker(final String name, final String vesselProviderKey) {
+	public VirtualVesselConstraintChecker(final String name, final String vesselProviderKey, final String portSlotProviderKey) {
 		super();
 		this.name = name;
 		this.vesselProviderKey = vesselProviderKey;
+		this.portSlotProviderKey = portSlotProviderKey;
 	}
 
 	@Override
@@ -69,13 +84,36 @@ public class VirtualVesselConstraintChecker implements IConstraintChecker {
 			return true;
 		}
 
-		// TODO check that at least one of the slots on the sequence is unshipped.
+		// Check that at one of the slots on the sequence is unshipped.
+		boolean foundOne = false;
+		for (final ISequenceElement element : sequence) {
 
-		return false;
+			final IPortSlot portSlot = portSlotProvider.getPortSlot(element);
+			if ((portSlot instanceof ILoadOption) && !(portSlot instanceof ILoadSlot)) {
+				// This check could be disabled if we allow multiple virtual slots on a route
+				if (foundOne) {
+					return true;
+				}
+				foundOne = true;
+
+			}
+
+			if ((portSlot instanceof IDischargeOption) && !(portSlot instanceof IDischargeSlot)) {
+				// This check could be disabled if we allow multiple virtual slots on a route
+				if (foundOne) {
+					return true;
+				}
+				foundOne = true;
+
+			}
+		}
+
+		return !foundOne;
 	}
 
 	@Override
 	public void setOptimisationData(final IOptimisationData optimisationData) {
 		vesselProvider = optimisationData.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
+		portSlotProvider = optimisationData.getDataComponentProvider(portSlotProviderKey, IPortSlotProvider.class);
 	}
 }

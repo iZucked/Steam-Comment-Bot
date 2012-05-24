@@ -20,14 +20,18 @@ public final class VirtualVesselConstraintCheckerFactory implements IConstraintC
 	public static final String NAME = "VirtualVesselConstraintChecker";
 
 	private final String vesselProviderKey;
+	private final String portSlotProviderKey;
 
 	/**
 	 * Constructor taking the keys to use in {@link IOptimisationData} to find the {@link IVesselProvider}.
 	 * 
+	 * @param portSlotProviderKey
+	 * 
 	 * @param key
 	 */
-	public VirtualVesselConstraintCheckerFactory(final String vesselKey) {
+	public VirtualVesselConstraintCheckerFactory(final String vesselKey, final String portSlotProviderKey) {
 		this.vesselProviderKey = vesselKey;
+		this.portSlotProviderKey = portSlotProviderKey;
 	}
 
 	@Override
@@ -37,6 +41,6 @@ public final class VirtualVesselConstraintCheckerFactory implements IConstraintC
 
 	@Override
 	public IConstraintChecker instantiate() {
-		return new VirtualVesselConstraintChecker(NAME, vesselProviderKey);
+		return new VirtualVesselConstraintChecker(NAME, vesselProviderKey, portSlotProviderKey);
 	}
 }
