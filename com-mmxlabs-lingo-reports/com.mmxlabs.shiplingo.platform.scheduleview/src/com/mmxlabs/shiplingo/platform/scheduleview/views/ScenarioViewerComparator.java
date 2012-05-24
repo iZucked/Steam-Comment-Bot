@@ -81,7 +81,7 @@ public class ScenarioViewerComparator extends ViewerComparator {
 			final String str1 = s1.getVessel() == null ? null : s1.getVessel().getName();
 			final String str2 = s2.getVessel() == null ? null : s2.getVessel().getName();
 
-			final int c = str1 == null ? -1 : str1.compareTo(str2);
+			final int c = str1 == null ? -1 : (str2 == null ? 1 : str1.compareTo(str2));
 			if (c != 0) {
 				return c;
 			}
