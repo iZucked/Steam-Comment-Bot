@@ -444,13 +444,22 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__CARGO = SLOT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>DES Purchase</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__DES_PURCHASE = SLOT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Load Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
+	int LOAD_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
@@ -589,13 +598,22 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__CARGO = SLOT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__FOB_SALE = SLOT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Discharge Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 1;
+	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.
@@ -871,6 +889,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__CARGO = LOAD_SLOT__CARGO;
 
 	/**
+	 * The feature id for the '<em><b>DES Purchase</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__DES_PURCHASE = LOAD_SLOT__DES_PURCHASE;
+
+	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1023,6 +1050,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__CARGO = DISCHARGE_SLOT__CARGO;
+
+	/**
+	 * The feature id for the '<em><b>FOB Sale</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__FOB_SALE = DISCHARGE_SLOT__FOB_SALE;
 
 	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
@@ -1261,6 +1297,17 @@ public interface CargoPackage extends EPackage {
 	EReference getLoadSlot_Cargo();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase <em>DES Purchase</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>DES Purchase</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase()
+	 * @see #getLoadSlot()
+	 * @generated
+	 */
+	EAttribute getLoadSlot_DESPurchase();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.DischargeSlot <em>Discharge Slot</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1280,6 +1327,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getDischargeSlot_Cargo();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isFOBSale <em>FOB Sale</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>FOB Sale</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#isFOBSale()
+	 * @see #getDischargeSlot()
+	 * @generated
+	 */
+	EAttribute getDischargeSlot_FOBSale();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CargoModel <em>Model</em>}'.
@@ -1556,6 +1614,14 @@ public interface CargoPackage extends EPackage {
 		EReference LOAD_SLOT__CARGO = eINSTANCE.getLoadSlot_Cargo();
 
 		/**
+		 * The meta object literal for the '<em><b>DES Purchase</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOAD_SLOT__DES_PURCHASE = eINSTANCE.getLoadSlot_DESPurchase();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl <em>Discharge Slot</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1572,6 +1638,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference DISCHARGE_SLOT__CARGO = eINSTANCE.getDischargeSlot_Cargo();
+
+		/**
+		 * The meta object literal for the '<em><b>FOB Sale</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCHARGE_SLOT__FOB_SALE = eINSTANCE.getDischargeSlot_FOBSale();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.

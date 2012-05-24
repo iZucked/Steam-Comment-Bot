@@ -62,6 +62,7 @@ public class LoadSlotItemProvider
 			addCargoCVPropertyDescriptor(object);
 			addArriveColdPropertyDescriptor(object);
 			addCargoPropertyDescriptor(object);
+			addDESPurchasePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -133,6 +134,28 @@ public class LoadSlotItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the DES Purchase feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDESPurchasePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LoadSlot_DESPurchase_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LoadSlot_DESPurchase_feature", "_UI_LoadSlot_type"),
+				 CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns LoadSlot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -171,6 +194,7 @@ public class LoadSlotItemProvider
 		switch (notification.getFeatureID(LoadSlot.class)) {
 			case CargoPackage.LOAD_SLOT__CARGO_CV:
 			case CargoPackage.LOAD_SLOT__ARRIVE_COLD:
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

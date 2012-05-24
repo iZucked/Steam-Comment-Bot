@@ -64,6 +64,7 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoEditor(detailComposite, topClass);
+		add_FOBSaleEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -75,5 +76,14 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 		// This is an opposite reference - not for direct UI consumption
 		
 //		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__CARGO));
+	}
+
+	/**
+	 * Create the editor for the FOBSale feature on DischargeSlot
+	 *
+	 * @generated
+	 */
+	protected void add_FOBSaleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE));
 	}
 }

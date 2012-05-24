@@ -66,6 +66,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 		add_cargoCVEditor(detailComposite, topClass);
 		add_arriveColdEditor(detailComposite, topClass);
 		add_cargoEditor(detailComposite, topClass);
+		add_DESPurchaseEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the cargoCV feature on LoadSlot
@@ -93,5 +94,14 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 		// This is an opposite reference - not for direct UI consumption
 		
 		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__CARGO));
+	}
+
+	/**
+	 * Create the editor for the DESPurchase feature on LoadSlot
+	 *
+	 * @generated
+	 */
+	protected void add_DESPurchaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE));
 	}
 }

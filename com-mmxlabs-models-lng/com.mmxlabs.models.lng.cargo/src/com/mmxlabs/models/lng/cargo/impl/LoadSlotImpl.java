@@ -26,6 +26,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isArriveCold <em>Arrive Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#getCargo <em>Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.LoadSlotImpl#isDESPurchase <em>DES Purchase</em>}</li>
  * </ul>
  * </p>
  *
@@ -99,6 +100,26 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	 * @ordered
 	 */
 	protected Cargo cargo;
+
+	/**
+	 * The default value of the '{@link #isDESPurchase() <em>DES Purchase</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDESPurchase()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean DES_PURCHASE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isDESPurchase() <em>DES Purchase</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isDESPurchase()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean desPurchase = DES_PURCHASE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -274,6 +295,27 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isDESPurchase() {
+		return desPurchase;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDESPurchase(boolean newDESPurchase) {
+		boolean oldDESPurchase = desPurchase;
+		desPurchase = newDESPurchase;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.LOAD_SLOT__DES_PURCHASE, oldDESPurchase, desPurchase));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public double getSlotOrPortCV() {
@@ -329,6 +371,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 			case CargoPackage.LOAD_SLOT__CARGO:
 				if (resolve) return getCargo();
 				return basicGetCargo();
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
+				return isDESPurchase();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -349,6 +393,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				return;
 			case CargoPackage.LOAD_SLOT__CARGO:
 				setCargo((Cargo)newValue);
+				return;
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
+				setDESPurchase((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -371,6 +418,9 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 			case CargoPackage.LOAD_SLOT__CARGO:
 				setCargo((Cargo)null);
 				return;
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
+				setDESPurchase(DES_PURCHASE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -389,6 +439,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 				return isSetArriveCold();
 			case CargoPackage.LOAD_SLOT__CARGO:
 				return cargo != null;
+			case CargoPackage.LOAD_SLOT__DES_PURCHASE:
+				return desPurchase != DES_PURCHASE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -407,6 +459,8 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 		if (cargoCVESet) result.append(cargoCV); else result.append("<unset>");
 		result.append(", arriveCold: ");
 		if (arriveColdESet) result.append(arriveCold); else result.append("<unset>");
+		result.append(", DESPurchase: ");
+		result.append(desPurchase);
 		result.append(')');
 		return result.toString();
 	}
