@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.VirtualCargo;
@@ -168,10 +169,16 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 					}
 				}
 			}
+			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+				addVirtualCargo(loadDetails, dischargeDetails);
+			}
+
 		}
 
 		for (final VirtualCargo virtual : sequences.getVirtualCargoes()) {
 			// add virtual cargo, somehow; contracts need to know how to price this, because we need the load price.
+			addVirtualCargo(virtual);
+
 		}
 
 		solve();
@@ -225,8 +232,84 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		// the load CV price is the notional maximum price
 		// if we load less, it might actually be worth less
 
-		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume, vessel,
-				plan);
+		final int loadCVPrice = loadSlot.getLoadPriceCalculator()
+				.calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume, vessel, plan);
+
+		final int dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
+		final int loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
+
+		loadPrices.add(loadM3Price);
+		dischargePrices.add(dischargeM3Price);
+
+		this.unitPrices.add(dischargeM3Price - loadM3Price);
+
+		cargoCount++;
+	}
+
+	public void addVirtualCargo(final PortDetails loadDetails, PortDetails dischargeDetails) {
+
+		final ILoadOption loadSlot = (ILoadOption) loadDetails.getPortSlot();
+		final IDischargeOption dischargeSlot = (IDischargeOption) dischargeDetails.getPortSlot();
+
+		addVirtualCargo(loadSlot, dischargeSlot);
+	}
+
+	public void addVirtualCargo(final VirtualCargo cargo) {
+
+		final ILoadOption loadSlot = cargo.getLoadOption();
+		final IDischargeOption dischargeSlot = cargo.getDischargeOption();
+		addVirtualCargo(loadSlot, dischargeSlot);
+	}
+
+	public void addVirtualCargo(final ILoadOption loadSlot, final IDischargeOption dischargeSlot) {
+		boolean isFOB = false;
+		boolean isDES = false;
+
+		if (loadSlot instanceof ILoadSlot) {
+			isFOB = true;
+		}
+		if (dischargeSlot instanceof IDischargeSlot) {
+			isDES = true;
+		}
+
+		assert isDES != isFOB;
+
+		final int time;
+
+		if (isFOB) {
+			// Pick start of window.
+			time = ((ILoadSlot) loadSlot).getTimeWindow().getStart();
+		} else {
+			time = ((IDischargeSlot) dischargeSlot).getTimeWindow().getStart();
+		}
+
+		slotTimes.put(loadSlot, time);
+		slotTimes.put(dischargeSlot, time);
+
+		loadSlots.add(loadSlot);
+		dischargeSlots.add(dischargeSlot);
+
+		// store the current cargo index (variable index in the LP) so that we
+		// can reverse-lookup from slots to LP variables
+		final Integer ci = cargoCount;
+		variableTable.put(loadSlot, ci);
+		variableTable.put(dischargeSlot, ci);
+
+		// We have to load this much LNG no matter what
+		 forcedLoadVolume.add(0l);
+		 this.vesselCapacity.add(Long.MAX_VALUE);
+
+		final int cargoCVValue = loadSlot.getCargoCVValue();
+
+		// compute purchase price from contract
+		// this is not ideal.
+		final int dischargeCVPrice = dischargeSlot.getDischargePriceCalculator().calculateUnitPrice(dischargeSlot, time);
+
+		// TODO this value is incorrect for netback and profit sharing cases
+		// the load CV price is the notional maximum price
+		// if we load less, it might actually be worth less
+
+		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, time, dischargeCVPrice);
 
 		final int dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
 		final int loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
