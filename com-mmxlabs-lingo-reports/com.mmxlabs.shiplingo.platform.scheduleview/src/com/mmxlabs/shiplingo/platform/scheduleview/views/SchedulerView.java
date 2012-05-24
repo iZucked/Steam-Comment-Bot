@@ -55,6 +55,8 @@ import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ISchedule
 
 public class SchedulerView extends ViewPart implements ISelectionListener {
 
+	private static final String SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME = "SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME";
+
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -277,6 +279,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// .getSelectionService()
 		// .getSelection("com.mmxlabs.rcp.navigator");
 		// selectionListener.selectionChanged(null, selection);
+		
+		String defaultColourScheme = Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME);
+		if (defaultColourScheme != null) {
+			labelProvider.setScheme(defaultColourScheme);
+		}
 	}
 
 	@Override
