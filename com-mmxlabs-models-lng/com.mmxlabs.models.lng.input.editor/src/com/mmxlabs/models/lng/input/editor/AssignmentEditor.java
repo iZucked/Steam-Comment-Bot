@@ -80,7 +80,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 	private ITimingProvider<T> timingProvider;
 	
 	public AssignmentEditor(Composite parent, int style) {
-		super(parent, style);
+		super(parent, style | SWT.DOUBLE_BUFFERED);
 		
 		addPaintListener(new PaintListener() {
 			@Override
