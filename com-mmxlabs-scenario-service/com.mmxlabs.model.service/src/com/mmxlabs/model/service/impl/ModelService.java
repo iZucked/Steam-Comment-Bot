@@ -81,7 +81,7 @@ public class ModelService implements IModelService {
 
 	@Override
 	public void delete(IModelInstance instance) throws IOException {
-		// TODO handle this.
+		instance.delete();
 	}
 
 	@Override
