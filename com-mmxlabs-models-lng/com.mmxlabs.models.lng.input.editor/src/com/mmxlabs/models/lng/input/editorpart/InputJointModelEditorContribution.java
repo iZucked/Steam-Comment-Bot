@@ -53,13 +53,13 @@ public class InputJointModelEditorContribution extends
 
 	protected void updateEditorInput() {
 		editor.setResources((List) modelObject.getAssignments());
-		List<UUIDObject> tasks = new ArrayList<UUIDObject>();
 		
 		CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 		
-		tasks.addAll(cargoModel.getCargoes());
-		tasks.addAll(fleetModel.getVesselEvents());
+		final List<UUIDObject> tasks = new ArrayList<UUIDObject>();
+		if (cargoModel != null) tasks.addAll(cargoModel.getCargoes());
+		if (fleetModel != null) tasks.addAll(fleetModel.getVesselEvents());
 		
 		editor.setTasks(tasks);
 		editor.update();
