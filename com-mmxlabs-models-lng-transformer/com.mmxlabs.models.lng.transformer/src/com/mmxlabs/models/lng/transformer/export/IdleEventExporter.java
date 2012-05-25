@@ -13,6 +13,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
  * Exports idleevent annotations.
@@ -59,7 +61,14 @@ public class IdleEventExporter extends BaseAnnotationExporter {
 
 		idle.setPort(ePort);
 		idle.setStart(entities.getDateFromHours(event.getStartTime()));
-		idle.setEnd(entities.getDateFromHours(event.getEndTime()));
+		final long cooldownVolume = event.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3);
+		if (cooldownVolume > 0) {
+			// there was a cooldown - subtract cooldown duration from the end time
+			idle.setEnd(entities.getDateFromHours(event.getEndTime() - event.getCooldownDuration()));
+		} else {
+			idle.setEnd(entities.getDateFromHours(event.getEndTime()));
+		}
+		
 		idle.setLaden(VesselState.Laden.equals(event.getVesselState()));
 
 		idle.getFuels().addAll(super.createFuelQuantities(event));
