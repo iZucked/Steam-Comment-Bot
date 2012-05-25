@@ -26,6 +26,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -74,6 +75,8 @@ public class EObjectTableViewer extends GridTableViewer {
 	private static final String COLUMN_MANIPULATOR = "COLUMN_MANIPULATOR";
 	protected static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
 	protected static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
+
+	protected IColorProvider delegateColourProvider;
 
 	final HashSet<EObject> objectsToUpdate = new HashSet<EObject>();
 	boolean waitingForUpdate = false;
@@ -346,6 +349,13 @@ public class EObjectTableViewer extends GridTableViewer {
 					return lockedColour;
 				}
 
+				if (delegateColourProvider != null) {
+					final Color colour = delegateColourProvider.getForeground(element);
+					if (colour != null) {
+						return colour;
+					}
+				}
+
 				return super.getForeground(element);
 			}
 
@@ -359,6 +369,14 @@ public class EObjectTableViewer extends GridTableViewer {
 						return warningColour;
 					}
 				}
+
+				if (delegateColourProvider != null) {
+					final Color colour = delegateColourProvider.getBackground(element);
+					if (colour != null) {
+						return colour;
+					}
+				}
+
 				return super.getBackground(element);
 			}
 
@@ -864,5 +882,13 @@ public class EObjectTableViewer extends GridTableViewer {
 		if (validationAdapter != null) {
 			validationAdapter.setExtraContext(extraValidationContext);
 		}
+	}
+
+	public IColorProvider getColourProvider() {
+		return delegateColourProvider;
+	}
+
+	public void setColourProvider(final IColorProvider delegateColourProvider) {
+		this.delegateColourProvider = delegateColourProvider;
 	}
 }
