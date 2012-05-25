@@ -277,7 +277,8 @@ public class AssignmentEditor<R, T> extends Canvas {
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				redraw();
+				if (!isDisposed())
+					redraw();
 			}			
 		});
 	}
@@ -380,7 +381,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		return null;
 	}
 
-	protected void paintControl(final PaintEvent e) {
+	protected synchronized void paintControl(final PaintEvent e) {
 		prepare();
 		
 		if (coloursSet == false) {
@@ -654,13 +655,13 @@ public class AssignmentEditor<R, T> extends Canvas {
 		Collections.sort(unallocatedTasks, startDateComparator);
 	}
 	
-	public void setResources(final List<R> resources) {
+	public synchronized void setResources(final List<R> resources) {
 		this.resources.clear();
 		this.resources.addAll(resources);
 		update();
 	}
 	
-	public void setTasks(final List<T> tasks) {
+	public synchronized void setTasks(final List<T> tasks) {
 		this.tasks.clear();
 		this.tasks.addAll(tasks);
 		update();
