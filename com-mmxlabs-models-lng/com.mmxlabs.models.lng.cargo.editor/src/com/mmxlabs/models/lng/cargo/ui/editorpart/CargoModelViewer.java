@@ -36,6 +36,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.BasicOperationRenderer;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
@@ -63,6 +64,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		final EditingDomain editingDomain = part.getEditingDomain();
 
 		addTypicalColumn("ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain));
+
+		addTypicalColumn("Type ", new BasicOperationRenderer(pkg.getCargo__GetCargoType(), editingDomain));
 
 		addTypicalColumn("Load Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_LoadSlot());
 
