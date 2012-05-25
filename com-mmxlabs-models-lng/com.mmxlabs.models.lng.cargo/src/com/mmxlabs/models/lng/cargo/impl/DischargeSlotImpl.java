@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#getCargo <em>Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.DischargeSlotImpl#isFOBSale <em>FOB Sale</em>}</li>
  * </ul>
  * </p>
  *
@@ -37,6 +38,25 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	 * @ordered
 	 */
 	protected Cargo cargo;
+
+	/**
+	 * The default value of the '{@link #isFOBSale() <em>FOB Sale</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFOBSale()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean FOB_SALE_EDEFAULT = false;
+	/**
+	 * The cached value of the '{@link #isFOBSale() <em>FOB Sale</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isFOBSale()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fobSale = FOB_SALE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -122,6 +142,27 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isFOBSale() {
+		return fobSale;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFOBSale(boolean newFOBSale) {
+		boolean oldFOBSale = fobSale;
+		fobSale = newFOBSale;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.DISCHARGE_SLOT__FOB_SALE, oldFOBSale, fobSale));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -158,6 +199,8 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 			case CargoPackage.DISCHARGE_SLOT__CARGO:
 				if (resolve) return getCargo();
 				return basicGetCargo();
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE:
+				return isFOBSale();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -172,6 +215,9 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 		switch (featureID) {
 			case CargoPackage.DISCHARGE_SLOT__CARGO:
 				setCargo((Cargo)newValue);
+				return;
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE:
+				setFOBSale((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -188,6 +234,9 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 			case CargoPackage.DISCHARGE_SLOT__CARGO:
 				setCargo((Cargo)null);
 				return;
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE:
+				setFOBSale(FOB_SALE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -202,8 +251,26 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 		switch (featureID) {
 			case CargoPackage.DISCHARGE_SLOT__CARGO:
 				return cargo != null;
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE:
+				return fobSale != FOB_SALE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (FOBSale: ");
+		result.append(fobSale);
+		result.append(')');
+		return result.toString();
 	}
 
 	@Override

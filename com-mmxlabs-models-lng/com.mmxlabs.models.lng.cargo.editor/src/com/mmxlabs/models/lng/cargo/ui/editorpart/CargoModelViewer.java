@@ -15,8 +15,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -25,6 +28,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.actions.RewireAction;
@@ -36,11 +40,16 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.BasicOperationRenderer;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 public class CargoModelViewer extends ScenarioTableViewerPane {
 	private final IScenarioEditingLocation part;
+
+	// TODO: Make these colours a preference so they can be consistently used across various UI parts
+	private Color desCargo = new Color(Display.getDefault(), 150, 210, 230);
+	private Color fobCargo = new Color(Display.getDefault(), 190, 220, 180);
 
 	public CargoModelViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -63,6 +72,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		final EditingDomain editingDomain = part.getEditingDomain();
 
 		addTypicalColumn("ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain));
+
+		addTypicalColumn("Type ", new BasicOperationRenderer(pkg.getCargo__GetCargoType(), editingDomain));
 
 		addTypicalColumn("Load Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_LoadSlot());
 
@@ -108,7 +119,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
+		ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
 
 			@Override
 			protected EObject getElementForNotificationTarget(final EObject source) {
@@ -122,6 +133,41 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 			}
 
 		};
+		scenarioTableViewer.setColourProvider(new IColorProvider() {
+
+			@Override
+			public Color getForeground(Object element) {
+				return null;
+			}
+
+			@Override
+			public Color getBackground(Object element) {
+
+				if (element instanceof Cargo) {
+					CargoType cargoType = ((Cargo) element).getCargoType();
+					switch (cargoType) {
+					case DES:
+						return desCargo;
+					case FLEET:
+						break;
+					case FOB:
+						return fobCargo;
+					}
+				}
+				return null;
+			}
+
+		});
+		return scenarioTableViewer;
+
 	}
 
+	@Override
+	public void dispose() {
+
+		fobCargo.dispose();
+		desCargo.dispose();
+
+		super.dispose();
+	}
 }
