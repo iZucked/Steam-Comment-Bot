@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.Assignment;
@@ -142,7 +143,18 @@ public class InputJointModelEditorContribution extends
 
 			@Override
 			public String getTooltip(UUIDObject task) {
-				return getLabel(task);
+				String secondLine = "";
+				if (task instanceof Cargo) {
+					secondLine = "\n" + ((Cargo) task).getLoadSlot().getPort().getName() + " to "
+							+ ((Cargo)task).getDischargeSlot().getPort().getName();
+				} else if (task instanceof VesselEvent) {
+					secondLine = "\n" + ((VesselEvent) task).getPort().getName();
+					if (task instanceof CharterOutEvent) {
+						if (((CharterOutEvent)task).isSetRelocateTo())
+							secondLine += " to " + ((CharterOutEvent) task).getRelocateTo().getName();
+					}
+				}
+				return getLabel(task) + secondLine;
 			}
 
 			@Override
