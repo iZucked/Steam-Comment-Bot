@@ -22,6 +22,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CapacityComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
@@ -33,6 +34,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 import com.mmxlabs.trading.optimiser.TradingConstants;
@@ -190,6 +192,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		}
 
 		final IPortSlotProvider portSlotProvider = solution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		final IVesselProvider vesselProvider = solution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 
 		// re-evaluate everything
 		final ScheduledSequences schedule = scheduler.schedule(sequences, forExport);
@@ -212,7 +215,8 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
 
 		annotator.setPortSlotProvider(portSlotProvider);
-
+		annotator.setVesselProvider(vesselProvider);
+		
 		for (final ScheduledSequence scheduledSequence : schedule) {
 			final IResource resource = scheduledSequence.getResource();
 			final ISequence sequence = sequences.getSequence(resource);

@@ -267,4 +267,12 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	public IPortSlotProvider getPortSlotProvider() {
 		return portSlotProvider;
 	}
+
+	public IVesselProvider getVesselProvider() {
+		return vesselProvider;
+	}
+
+	public void setVesselProvider(IVesselProvider vesselProvider) {
+		this.vesselProvider = vesselProvider;
+	}
 }
