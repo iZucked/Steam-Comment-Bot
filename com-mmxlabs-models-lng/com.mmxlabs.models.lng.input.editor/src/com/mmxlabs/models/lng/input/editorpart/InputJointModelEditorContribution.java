@@ -123,6 +123,7 @@ public class InputJointModelEditorContribution extends
 				if (element instanceof NamedObject) {
 					return ((NamedObject) element).getName();
 				} else if (element instanceof Assignment) {
+					if (((Assignment) element).getVessels().isEmpty()) return "";
 					return getText(((Assignment) element).getVessels().get(0));
 				} else {
 					return super.getText(element);
