@@ -244,7 +244,6 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
-		System.out.println("Start Opt");
 		final JobStatePropertyTester tester = new JobStatePropertyTester();
 		boolean enabled = false;
 		if (evaluationContext instanceof IEvaluationContext) {
