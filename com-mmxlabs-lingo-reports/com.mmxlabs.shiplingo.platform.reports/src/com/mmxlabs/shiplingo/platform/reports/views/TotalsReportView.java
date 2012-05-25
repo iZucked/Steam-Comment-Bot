@@ -17,6 +17,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -28,8 +29,11 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
@@ -63,7 +67,25 @@ public class TotalsReportView extends ViewPart {
 
 	private ScenarioViewerSynchronizer jobManagerListener;
 
-	static class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider {
+	static class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider {
+
+		private Font boldFont;
+
+		public ViewLabelProvider() {
+			Font systemFont = Display.getDefault().getSystemFont();
+			// Clone the font data
+			FontData fd = new FontData(systemFont.getFontData()[0].toString());
+			// Set the bold bit.
+			fd.setStyle(fd.getStyle() | SWT.BOLD);
+			boldFont = new Font(Display.getDefault(), fd);
+		}
+
+		@Override
+		public void dispose() {
+			boldFont.dispose();
+			super.dispose();
+		}
+
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 
@@ -75,7 +97,7 @@ public class TotalsReportView extends ViewPart {
 				case 1:
 					return d.component;
 				case 2:
-					return d.isCost ? "Cost" : "Profit";
+					return d.type;
 				case 3:
 					return String.format("%,d", d.fitness);
 				}
@@ -91,6 +113,18 @@ public class TotalsReportView extends ViewPart {
 		@Override
 		public void update(final ViewerCell cell) {
 
+		}
+
+		@Override
+		public Font getFont(Object element) {
+			if (element instanceof RowData) {
+				final RowData d = (RowData) element;
+				if ("Total Cost".equals(d.component)) {
+					return boldFont;
+				}
+			}
+
+			return null;
 		}
 	}
 
@@ -210,13 +244,7 @@ public class TotalsReportView extends ViewPart {
 						sort = r1.component.compareTo(r2.component);
 						break;
 					case 2:
-						if (r1.isCost == r2.isCost) {
-							sort = 0;
-						} else if (r1.isCost) {
-							sort = -1;
-						} else {
-							sort = 1;
-						}
+						sort = r1.type.compareTo(r2.type);
 						break;
 					case 3:
 						sort = ((Long) r1.fitness).compareTo(r2.fitness);

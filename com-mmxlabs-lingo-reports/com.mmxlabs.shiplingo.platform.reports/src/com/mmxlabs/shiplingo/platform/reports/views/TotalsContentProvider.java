@@ -32,18 +32,22 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
  */
 public class TotalsContentProvider implements IStructuredContentProvider {
 
+	private static final String TOTAL_COST = "Total Cost";
+
+	private static final String TYPE_COST = "Cost";
+
 	public static class RowData {
-		public RowData(final String scheduleName, final String component, final boolean isCost, final long fitness) {
+		public RowData(final String scheduleName, final String component, final String type, final long fitness) {
 			super();
 			this.scheduleName = scheduleName;
 			this.component = component;
-			this.isCost = isCost;
+			this.type = type;
 			this.fitness = fitness;
 		}
 
 		public final String scheduleName;
 		public final String component;
-		public final boolean isCost;
+		public final String type;
 		public final long fitness;
 
 	}
@@ -75,7 +79,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 					// add up fuel components from mixture
 					for (final FuelQuantity fq : mix.getFuels()) {
 						Long sumSoFar = totalFuelCosts.get(fq.getFuel());
-						if (sumSoFar == null) sumSoFar = 0l;
+						if (sumSoFar == null)
+							sumSoFar = 0l;
 						totalFuelCosts.put(fq.getFuel(), sumSoFar + fq.getCost());
 						totalCost += fq.getCost();
 					}
@@ -95,39 +100,39 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 				object = ((EObject) object).eContainer();
 			}
 		}
-		
+
 		for (final Entry<Fuel, Long> entry : totalFuelCosts.entrySet()) {
-			output.add(new RowData(scheduleName, entry.getKey().toString(), true, entry.getValue()));
+			output.add(new RowData(scheduleName, entry.getKey().toString(), TYPE_COST, entry.getValue()));
 		}
 
-		output.add(new RowData(scheduleName, "Canal Fees", true, canals));
-		output.add(new RowData(scheduleName, "Charter Fees", true, hire));
-		output.add(new RowData(scheduleName, "Distance", true, distance));
+		output.add(new RowData(scheduleName, "Canal Fees", TYPE_COST, canals));
+		output.add(new RowData(scheduleName, "Charter Fees", TYPE_COST, hire));
+		output.add(new RowData(scheduleName, "Distance", TYPE_COST, distance));
 
-		output.add(new RowData(scheduleName, "Total Cost", true, totalCost));
+		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost));
 
 		// compute revenues
 
-//		final Map<Entity, Long> totalRevenue = new HashMap<Entity, Long>();
-//
-//		for (final BookedRevenue revenue : schedule.getRevenue()) {
-//			if (revenue.getEntity() == null) {
-//				continue;
-//			}
-//			if ((revenue.getEntity() instanceof GroupEntity) == false) {
-//				continue;
-//			}
-//			final Long l = totalRevenue.get(revenue.getEntity());
-//			totalRevenue.put(revenue.getEntity(), (l == null ? 0 : l.longValue()) + revenue.getValue());
-//		}
-//
-//		long totalTotalRevenue = 0;
-//		for (final Map.Entry<Entity, Long> sum : totalRevenue.entrySet()) {
-//			output.add(new RowData(scheduleName, sum.getKey().getName(), false, sum.getValue()));
-//			totalTotalRevenue += sum.getValue();
-//		}
-//
-//		output.add(new RowData(scheduleName, "Total Profit", false, totalTotalRevenue));
+		// final Map<Entity, Long> totalRevenue = new HashMap<Entity, Long>();
+		//
+		// for (final BookedRevenue revenue : schedule.getRevenue()) {
+		// if (revenue.getEntity() == null) {
+		// continue;
+		// }
+		// if ((revenue.getEntity() instanceof GroupEntity) == false) {
+		// continue;
+		// }
+		// final Long l = totalRevenue.get(revenue.getEntity());
+		// totalRevenue.put(revenue.getEntity(), (l == null ? 0 : l.longValue()) + revenue.getValue());
+		// }
+		//
+		// long totalTotalRevenue = 0;
+		// for (final Map.Entry<Entity, Long> sum : totalRevenue.entrySet()) {
+		// output.add(new RowData(scheduleName, sum.getKey().getName(), false, sum.getValue()));
+		// totalTotalRevenue += sum.getValue();
+		// }
+		//
+		// output.add(new RowData(scheduleName, "Total Profit", false, totalTotalRevenue));
 	}
 
 	@Override
@@ -143,7 +148,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 			}
 			rowData = rowDataList.toArray(rowData);
 		}
-		
+
 	}
 
 	@Override
