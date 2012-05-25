@@ -17,8 +17,12 @@ import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuDetectEvent;
+import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -129,15 +133,65 @@ public class AssignmentEditor<R, T> extends Canvas {
 				AssignmentEditor.this.mouseMove(e);
 			}
 		});
+		
+		addMenuDetectListener(new MenuDetectListener() {
+			@Override
+			public void menuDetected(MenuDetectEvent e) {
+				Point local = AssignmentEditor.this.toControl(new Point(e.x,e.y));
+				final T task = findTaskAtCoordinates(local.x, local.y);
+				
+				if (task == null) {
+					e.doit = false;
+					return;
+				}
+				
+				Action open = new Action("Open " + labelProvider.getText(task) + "...") {
+					@Override
+					public void run() {
+						notifyEditEvent(task);
+					}
+				};
+				
+				Action delete = new Action("Delete " + labelProvider.getText(task) + "...") {
+					@Override
+					public void run() {
+						notifyDeleteEvent(task);
+					}
+				};
+				
+				MenuManager manager = new MenuManager();
+				manager.add(open);
+				manager.add(delete);
+				
+				setMenu(manager.createContextMenu(AssignmentEditor.this));
+				e.doit = true;
+			}
+		});
+		
+		MenuManager manager = new MenuManager();
+		
+		setMenu(manager.createContextMenu(AssignmentEditor.this));
 	}
 	
-	protected void mouseDoubleClick(final MouseEvent e) {
-		final T task = findTaskAtCoordinates(e.x, e.y);
+	private void notifyEditEvent(final T task) {
 		if (task != null) {
 			for (final IAssignmentListener<R, T> l : assignmentListeners.toArray(new IAssignmentListener[0])) {
 				l.taskOpened(task);
 			}
 		}
+	}
+	
+	private void notifyDeleteEvent(final T task) {
+		if (task != null) {
+			for (final IAssignmentListener<R, T> l : assignmentListeners.toArray(new IAssignmentListener[0])) {
+				l.taskDeleted(task);
+			}
+		}
+	}
+	
+	protected void mouseDoubleClick(final MouseEvent e) {
+		final T task = findTaskAtCoordinates(e.x, e.y);
+		notifyEditEvent(task);
 	}
 
 	final DateFormat tooltipDateFormat = DateFormat.getDateInstance(DateFormat.SHORT);
@@ -163,16 +217,26 @@ public class AssignmentEditor<R, T> extends Canvas {
 		}
 		
 	}
-
-	protected void mouseDown(MouseEvent e) {
+	
+	protected void mouseDown(final MouseEvent e) {
 		final T task = findTaskAtCoordinates(e.x, e.y);
 		if (task != null) {
-			findInsertionPoint(e.x, e.y, task); // so if we let go it doesn't get deallocated instantly
-			selectedTask = task;
-			final Rectangle location = locationsByTask.get(task);
-			selectedTaskInternalY = e.y - location.y;
-			selectedTaskDragY = e.y;
-			redraw();
+			switch (e.button) {
+			case 1:
+				findInsertionPoint(e.x, e.y, task); // so if we let go it
+													// doesn't get deallocated
+													// instantly, we get it as
+													// its own drag destination
+				selectedTask = task;
+				final Rectangle location = locationsByTask.get(task);
+				selectedTaskInternalY = e.y - location.y;
+				selectedTaskDragY = e.y;
+				redraw();
+				break;
+			default:
+				break;
+			}
+
 		}
 	}
 

@@ -7,8 +7,14 @@ import java.util.List;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -22,6 +28,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.AssignmentEditor;
 import com.mmxlabs.models.lng.input.editor.IAssignmentListener;
 import com.mmxlabs.models.lng.input.editor.IAssignmentProvider;
@@ -147,8 +154,11 @@ public class InputJointModelEditorContribution extends
 			public void taskReassigned(UUIDObject task, UUIDObject beforeTask,
 					UUIDObject afterTask, Assignment oldResource,
 					Assignment newResource) {
+				final CompoundCommand cc = new CompoundCommand();
+				final EditingDomain ed = editorPart.getEditingDomain();
+				
 				if (oldResource != null) {
-					oldResource.getAssignedObjects().remove(task);
+					cc.append(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
 				}
 				
 				int position;
@@ -172,16 +182,21 @@ public class InputJointModelEditorContribution extends
 				}
 				
 				if (newResource.getAssignedObjects().isEmpty() || position == newResource.getAssignedObjects().size()) {
-					newResource.getAssignedObjects().add(task);
+					cc.append(AddCommand.create(ed, newResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
 				} else {
-					newResource.getAssignedObjects().add(position, task);
+					cc.append(AddCommand.create(ed, newResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task, position));
 				}
+				
+				ed.getCommandStack().execute(cc);
+				
 				editor.update();
 			}
 
 			@Override
 			public void taskUnassigned(UUIDObject task, Assignment oldResource) {
-				oldResource.getAssignedObjects().remove(task);
+				final EditingDomain ed = editorPart.getEditingDomain();
+				ed.getCommandStack().execute(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
+				
 				editor.update();
 			}
 
@@ -194,8 +209,9 @@ public class InputJointModelEditorContribution extends
 			}
 
 			@Override
-			public void taskDeleted(UUIDObject task) {
-				// allow?
+			public void taskDeleted(final UUIDObject task) {
+				final Command delete = DeleteCommand.create(editorPart.getEditingDomain(), task);
+				editorPart.getEditingDomain().getCommandStack().execute(delete);
 			}
 		});
 		
