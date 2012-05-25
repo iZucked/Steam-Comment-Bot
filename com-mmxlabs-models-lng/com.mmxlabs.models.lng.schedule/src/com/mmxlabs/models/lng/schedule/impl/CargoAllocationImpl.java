@@ -617,7 +617,11 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @generated NOT
 	 */
 	public String getType() {
-		return "Fleet";
+		if (isSetInputCargo()) {
+			return getInputCargo().getCargoType().toString();
+		} 
+		return "Unknown";
+		
 	}
 
 	/**

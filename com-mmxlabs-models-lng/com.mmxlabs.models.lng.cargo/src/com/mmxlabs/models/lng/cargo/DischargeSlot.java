@@ -13,6 +13,7 @@ package com.mmxlabs.models.lng.cargo;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getCargo <em>Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isFOBSale <em>FOB Sale</em>}</li>
  * </ul>
  * </p>
  *
@@ -49,6 +50,32 @@ public interface DischargeSlot extends Slot {
 	 * @generated
 	 */
 	void setCargo(Cargo value);
+
+	/**
+	 * Returns the value of the '<em><b>FOB Sale</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>FOB Sale</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>FOB Sale</em>' attribute.
+	 * @see #setFOBSale(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getDischargeSlot_FOBSale()
+	 * @model
+	 * @generated
+	 */
+	boolean isFOBSale();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#isFOBSale <em>FOB Sale</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>FOB Sale</em>' attribute.
+	 * @see #isFOBSale()
+	 * @generated
+	 */
+	void setFOBSale(boolean value);
 } // end of  DischargeSlot
 
 // finish type fixing

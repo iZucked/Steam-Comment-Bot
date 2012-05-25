@@ -21,6 +21,8 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.cargo.DischargeSlot} object.
@@ -58,6 +60,7 @@ public class DischargeSlotItemProvider
 			super.getPropertyDescriptors(object);
 
 			addCargoPropertyDescriptor(object);
+			addFOBSalePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -80,6 +83,28 @@ public class DischargeSlotItemProvider
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the FOB Sale feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFOBSalePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DischargeSlot_FOBSale_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DischargeSlot_FOBSale_feature", "_UI_DischargeSlot_type"),
+				 CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -119,6 +144,12 @@ public class DischargeSlotItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(DischargeSlot.class)) {
+			case CargoPackage.DISCHARGE_SLOT__FOB_SALE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
