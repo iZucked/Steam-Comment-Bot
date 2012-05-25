@@ -6,17 +6,17 @@ import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
-import com.mmxlabs.models.lng.fleet.ui.editorpart.VesselViewerPane;
+import com.mmxlabs.models.lng.fleet.ui.editorpart.VesselViewerPane_View;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 
-public class VesselView extends ScenarioTableViewerView<VesselViewerPane> {
+public class VesselView extends ScenarioTableViewerView<VesselViewerPane_View> {
 	@Override
-	protected VesselViewerPane createViewerPane() {
-		return new VesselViewerPane(getSite().getPage(), this, this, getViewSite().getActionBars());
+	protected VesselViewerPane_View createViewerPane() {
+		return new VesselViewerPane_View(getSite().getPage(), this, this, getViewSite().getActionBars());
 	}
 
 	@Override
-	protected void initViewerPane(VesselViewerPane pane) {
+	protected void initViewerPane(VesselViewerPane_View pane) {
 		pane.init(Arrays
 				.asList(new EReference[] { FleetPackage.eINSTANCE
 						.getFleetModel_Vessels() }), null);

@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 
 public class FleetModelEditorContribution extends BaseJointModelEditorContribution<FleetModel> {	
-	private VesselViewerPane vesselViewerPane;
+	private VesselViewerPane_Editor vesselViewerPane;
 //	private VesselClassViewerPane vesselClassViewerPane;
 	private VesselEventViewerPane eventViewerPane;
 
@@ -23,7 +23,7 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 	public void addPages(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
 		
-		vesselViewerPane = new VesselViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		vesselViewerPane.createControl(sash);
 		vesselViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_Vessels()),
 				editorPart.getAdapterFactory());

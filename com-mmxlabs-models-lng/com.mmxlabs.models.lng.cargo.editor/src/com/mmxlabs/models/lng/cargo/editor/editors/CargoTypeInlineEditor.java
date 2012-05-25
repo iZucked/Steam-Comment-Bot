@@ -67,7 +67,7 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 
 	private Button fobButton;
 
-	private Button fleetButton;
+	private Button shippedButton;
 
 	/**
 	 * {@link ControlDecoration} used to show validation messages.
@@ -184,7 +184,7 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 			desButton.setSelection(true);
 			break;
 		case FLEET:
-			fleetButton.setSelection(true);
+			shippedButton.setSelection(true);
 			break;
 		case FOB:
 			fobButton.setSelection(true);
@@ -304,7 +304,7 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 	protected Command createSetCommand() {
 
 		final CompoundCommand cmd = new CompoundCommand("Change cargo type");
-		if (fleetButton.getSelection()) {
+		if (shippedButton.getSelection()) {
 			cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), false)));
 			cmd.append(commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), false)));
 		} else if (desButton.getSelection()) {
@@ -383,8 +383,8 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 		final Group g = new Group(parent, style);
 		g.setLayout(new org.eclipse.swt.layout.GridLayout(3, true));
 
-		fleetButton = new Button(g, SWT.RADIO);
-		fleetButton.setText("Fleet");
+		shippedButton = new Button(g, SWT.RADIO);
+		shippedButton.setText("Shipped");
 
 		fobButton = new Button(g, SWT.RADIO);
 		fobButton.setText("FOB Sale");
@@ -399,7 +399,7 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 			}
 		};
 
-		fleetButton.addSelectionListener(selectionListener);
+		shippedButton.addSelectionListener(selectionListener);
 		fobButton.addSelectionListener(selectionListener);
 		desButton.addSelectionListener(selectionListener);
 
