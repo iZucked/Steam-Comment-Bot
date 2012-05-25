@@ -61,6 +61,9 @@ public class AssignmentEditor<R, T> extends Canvas {
 	Color resourceLabelTextColor;
 	Color dividerColor;
 	
+	Color lockedTaskGradientTop;
+	Color lockedTaskGradientBottom;
+	
 	/**
 	 * Maps from screen coordinates to tasks
 	 */
@@ -91,13 +94,13 @@ public class AssignmentEditor<R, T> extends Canvas {
 	private final Comparator<T> startDateComparator = new Comparator<T>() {
 		@Override
 		public int compare(T o1, T o2) {
-			return timingProvider.getStartDate(o1).compareTo(timingProvider.getStartDate(o2));
+			return informationProvider.getStartDate(o1).compareTo(informationProvider.getStartDate(o2));
 		}
 	};
 	
 	private Date minDate;
-	private ILabelProvider labelProvider;
-	private ITimingProvider<T> timingProvider;
+
+	private IAssignmentInformationProvider<R,T> informationProvider;
 	
 	public AssignmentEditor(Composite parent, int style) {
 		super(parent, style | SWT.DOUBLE_BUFFERED);
@@ -145,22 +148,39 @@ public class AssignmentEditor<R, T> extends Canvas {
 					return;
 				}
 				
-				Action open = new Action("Open " + labelProvider.getText(task) + "...") {
+				Action open = new Action("Open " + informationProvider.getLabel(task) + "...") {
 					@Override
 					public void run() {
 						notifyEditEvent(task);
 					}
 				};
 				
-				Action delete = new Action("Delete " + labelProvider.getText(task) + "...") {
+				Action delete = new Action("Delete " + informationProvider.getLabel(task) + "...") {
 					@Override
 					public void run() {
 						notifyDeleteEvent(task);
 					}
 				};
+				Action lock;
+				if (informationProvider.isLocked(task)) {
+					lock = new Action("Unlock " + informationProvider.getLabel(task) + "...") {
+						@Override
+						public void run() {
+							notifyUnlockEvent(task);
+						}
+					};
+				} else {
+					lock = new Action("Lock " + informationProvider.getLabel(task) + "...") {
+						@Override
+						public void run() {
+							notifyLockEvent(task);
+						}
+					};
+				}
 				
 				MenuManager manager = new MenuManager();
 				manager.add(open);
+				manager.add(lock);
 				manager.add(delete);
 				
 				setMenu(manager.createContextMenu(AssignmentEditor.this));
@@ -189,6 +209,21 @@ public class AssignmentEditor<R, T> extends Canvas {
 		}
 	}
 	
+	private void notifyLockEvent(final T task) {
+		if (task != null) {
+			for (final IAssignmentListener<R, T> l : assignmentListeners.toArray(new IAssignmentListener[0])) {
+				l.taskLocked(task, resourceByTask.get(task));
+			}
+		}
+	}
+	private void notifyUnlockEvent(final T task) {
+		if (task != null) {
+			for (final IAssignmentListener<R, T> l : assignmentListeners.toArray(new IAssignmentListener[0])) {
+				l.taskUnlocked(task, resourceByTask.get(task));
+			}
+		}
+	}
+	
 	protected void mouseDoubleClick(final MouseEvent e) {
 		final T task = findTaskAtCoordinates(e.x, e.y);
 		notifyEditEvent(task);
@@ -207,10 +242,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		} else {
 			final T task = findTaskAtCoordinates(e.x, e.y);
 			if (task != null) {
-				final Date start = timingProvider.getStartDate(task);
-				final Date end = timingProvider.getEndDate(task);
-				
-				setToolTipText(labelProvider.getText(task) + "\n" + tooltipDateFormat.format(start) + " - " + tooltipDateFormat.format(end));
+				setToolTipText(informationProvider.getTooltip(task));
 			} else {
 				setToolTipText("");
 			}
@@ -353,16 +385,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		
 		if (coloursSet == false) {
 			coloursSet = true;
-			backgroundColor = Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
-			taskLabelTextColor = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-			resourceLabelTextColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-			dividerColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-			
-			selectedTaskGradientBottom = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
-			selectedTaskGradientTop = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
-			
-			taskGradientBottom = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
-			taskGradientTop = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
+			setDefaultColors();
 		}
 		
 		int oldMinWidth = minWidth;
@@ -378,7 +401,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		final GC gc = e.gc;
 
 		for (final R resource : resources) {
-			final String name = labelProvider.getText(resource);
+			final String name = informationProvider.getResourceLabel(resource);
 			leftOffset = Math.max(leftOffset, gc.textExtent(name).x);
 		}
 
@@ -399,7 +422,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		
 		for (final R resource : resources) {
 			gc.setForeground(resourceLabelTextColor);
-			gc.drawString(labelProvider.getText(resource), VERTICAL_SPACE_BETWEEN_TASKS, topOfCurrentRow + VERTICAL_SPACE_BETWEEN_TASKS, true);
+			gc.drawString(informationProvider.getResourceLabel(resource), VERTICAL_SPACE_BETWEEN_TASKS, topOfCurrentRow + VERTICAL_SPACE_BETWEEN_TASKS, true);
 			
 			resourceByY.put(topOfCurrentRow, resource);
 			// draw a horizontal line
@@ -414,7 +437,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 			gc.setAlpha(100);
 			
 			drawTask(selectedTask, gc, leftOffset, selectedTaskDragY - selectedTaskInternalY, 
-					timingProvider.getStartDate(selectedTask), timingProvider.getEndDate(selectedTask));
+					informationProvider.getStartDate(selectedTask), informationProvider.getEndDate(selectedTask));
 		}
 		
 		minWidth += VERTICAL_SPACE_BETWEEN_TASKS ;
@@ -425,6 +448,22 @@ public class AssignmentEditor<R, T> extends Canvas {
 				l.requiredSizeUpdated(minWidth, minHeight);
 			}
 		}
+	}
+
+	private void setDefaultColors() {
+		backgroundColor = Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
+		taskLabelTextColor = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+		resourceLabelTextColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+		dividerColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+		
+		selectedTaskGradientBottom = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
+		selectedTaskGradientTop = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
+		
+		taskGradientBottom = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
+		taskGradientTop = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
+		
+		lockedTaskGradientBottom = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED);
+		lockedTaskGradientTop = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 	}
 
 	private int paintTimeGrid(int leftOffset, final GC gc) {
@@ -508,7 +547,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 	}
 
 	protected void drawTask(final T task, final GC gc,final int xoff, final int y, final Date start, final Date end) {
-		String taskName = labelProvider.getText(task);
+		String taskName = informationProvider.getLabel(task);
 		
 		final int days = getX(minDate, start);
 //		final int days = (int) ((start.getTime() - minDate.getTime()) / SCALE_FACTOR);
@@ -519,6 +558,9 @@ public class AssignmentEditor<R, T> extends Canvas {
 		if (task == selectedTask) {
 			gc.setBackground(selectedTaskGradientBottom);
 			gc.setForeground(selectedTaskGradientTop);
+		} else if (informationProvider.isLocked(task)) {
+			gc.setBackground(lockedTaskGradientBottom);
+			gc.setForeground(lockedTaskGradientTop);
 		} else {
 			gc.setBackground(taskGradientBottom);
 			gc.setForeground(taskGradientTop);
@@ -561,8 +603,8 @@ public class AssignmentEditor<R, T> extends Canvas {
 		int maxRowDepth = 0;
 		
 		for (final T o : objects) {
-			final Date start = timingProvider.getStartDate(o);
-			final Date end = timingProvider.getEndDate(o);
+			final Date start = informationProvider.getStartDate(o);
+			final Date end = informationProvider.getEndDate(o);
 			final int depth = rangeTracker.addRange(start, end, o);
 			
 			final int taskTop = topOffset + VERTICAL_SPACE_BETWEEN_TASKS +
@@ -592,8 +634,8 @@ public class AssignmentEditor<R, T> extends Canvas {
 		maxDate = null;
 		
 		for (final T task : tasks) {
-			final Date tStart = timingProvider.getStartDate(task);
-			final Date tEnd = timingProvider.getEndDate(task);
+			final Date tStart = informationProvider.getStartDate(task);
+			final Date tEnd = informationProvider.getEndDate(task);
 			if (minDate == null || minDate.after(tStart)) minDate = tStart;
 			if (maxDate == null || maxDate.before(tEnd)) maxDate = tEnd;
 		}
@@ -624,13 +666,8 @@ public class AssignmentEditor<R, T> extends Canvas {
 		update();
 	}
 	
-	public void setLabelProvider(final ILabelProvider labelProvider) {
-		this.labelProvider = labelProvider;
-		update();
-	}
-	
-	public void setTimingProvider(final ITimingProvider<T> timingProvider) {
-		this.timingProvider = timingProvider;
+	public void setInformationProvider(final IAssignmentInformationProvider<R,T> timingProvider) {
+		this.informationProvider = timingProvider;
 		update();
 	}
 	

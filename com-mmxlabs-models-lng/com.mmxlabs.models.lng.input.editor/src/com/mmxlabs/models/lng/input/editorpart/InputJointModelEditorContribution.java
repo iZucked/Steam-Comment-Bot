@@ -33,7 +33,7 @@ import com.mmxlabs.models.lng.input.editor.AssignmentEditor;
 import com.mmxlabs.models.lng.input.editor.IAssignmentListener;
 import com.mmxlabs.models.lng.input.editor.IAssignmentProvider;
 import com.mmxlabs.models.lng.input.editor.ISizeListener;
-import com.mmxlabs.models.lng.input.editor.ITimingProvider;
+import com.mmxlabs.models.lng.input.editor.IAssignmentInformationProvider;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
@@ -93,7 +93,7 @@ public class InputJointModelEditorContribution extends
 			}
 		});
 		
-		final ITimingProvider<UUIDObject> timing = new ITimingProvider<UUIDObject>() {
+		final IAssignmentInformationProvider<Assignment, UUIDObject> timing = new IAssignmentInformationProvider<Assignment, UUIDObject>() {
 			@Override
 			public Date getStartDate(UUIDObject task) {
 				if (task instanceof Cargo) {
@@ -124,23 +124,34 @@ public class InputJointModelEditorContribution extends
 					return null;
 				}
 			}
-		};
-		
-		editor.setTimingProvider(timing);
-		
-		editor.setLabelProvider(new LabelProvider() {
+
 			@Override
-			public String getText(Object element) {
+			public String getLabel(final UUIDObject element) {
 				if (element instanceof NamedObject) {
 					return ((NamedObject) element).getName();
-				} else if (element instanceof Assignment) {
-					if (((Assignment) element).getVessels().isEmpty()) return "";
-					return getText(((Assignment) element).getVessels().get(0));
 				} else {
-					return super.getText(element);
+					return "";
 				}
 			}
-		});
+
+			@Override
+			public String getResourceLabel(Assignment resource) {
+				if (resource.getVessels().isEmpty()) return "";
+				return resource.getVessels().iterator().next().getName();
+			}
+
+			@Override
+			public String getTooltip(UUIDObject task) {
+				return getLabel(task);
+			}
+
+			@Override
+			public boolean isLocked(UUIDObject task) {
+				return modelObject.getLockedAssignedObjects().contains(task);
+			}
+		};
+		
+		editor.setInformationProvider(timing);
 		
 		editor.setAssignmentProvider(new IAssignmentProvider<Assignment, UUIDObject>() {
 			@Override
@@ -195,7 +206,11 @@ public class InputJointModelEditorContribution extends
 			@Override
 			public void taskUnassigned(UUIDObject task, Assignment oldResource) {
 				final EditingDomain ed = editorPart.getEditingDomain();
-				ed.getCommandStack().execute(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
+				
+				final CompoundCommand cc = new CompoundCommand();
+				cc.append(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
+				cc.append(RemoveCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), task));
+				ed.getCommandStack().execute(cc);
 				
 				editor.update();
 			}
@@ -212,6 +227,22 @@ public class InputJointModelEditorContribution extends
 			public void taskDeleted(final UUIDObject task) {
 				final Command delete = DeleteCommand.create(editorPart.getEditingDomain(), task);
 				editorPart.getEditingDomain().getCommandStack().execute(delete);
+			}
+
+			@Override
+			public void taskLocked(final UUIDObject task, final Assignment resource) {
+				final EditingDomain ed = editorPart.getEditingDomain();
+				editorPart.getEditingDomain().getCommandStack().execute(
+						AddCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), 
+								task));
+			}
+
+			@Override
+			public void taskUnlocked(final UUIDObject task, final Assignment resource) {
+				final EditingDomain ed = editorPart.getEditingDomain();
+				editorPart.getEditingDomain().getCommandStack().execute(
+						RemoveCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), 
+								task));
 			}
 		});
 		
