@@ -99,9 +99,9 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the DESPurchase feature on LoadSlot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_DESPurchaseEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.LOAD_SLOT__DES_PURCHASE));
 	}
 }

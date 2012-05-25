@@ -81,9 +81,9 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the FOBSale feature on DischargeSlot
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_FOBSaleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__FOB_SALE));
 	}
 }
