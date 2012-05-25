@@ -10,10 +10,12 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.swt.SWT;
 
-import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.editor.editors.CargoTypeInlineEditor;
 import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
@@ -64,11 +66,23 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+
+		add_cargoTypeEditor(detailComposite, topClass);
 		add_loadSlotEditor(detailComposite, topClass);
 		add_dischargeSlotEditor(detailComposite, topClass);
 		add_allowRewiringEditor(detailComposite, topClass);
 		add_allowedVesselsEditor(detailComposite, topClass);
 	}
+	
+	/**
+	 * Create the editor for the cargoType operation on Cargo
+	 *
+	 * @generated NO
+	 */
+	protected void add_cargoTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(new CargoTypeInlineEditor(SWT.NONE));
+	}
+	
 	/**
 	 * Create the editor for the loadSlot feature on Cargo
 	 *
