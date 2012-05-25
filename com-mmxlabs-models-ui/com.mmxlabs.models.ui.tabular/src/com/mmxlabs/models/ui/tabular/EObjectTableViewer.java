@@ -501,12 +501,19 @@ public class EObjectTableViewer extends GridTableViewer {
 		validationAdapter = new ValidationContentAdapter(extraValidationContext) {
 			@Override
 			public void validationStatus(final IStatus status) {
+				final HashSet<Object> updates = new HashSet<Object>();
+				for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
+					if (!entry.getValue().isOK()) updates.add(entry.getKey());
+				}
+				
 				validationErrors.clear();
-
+				
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
 						processStatus(status);
+						// also update things which had an error before, in case they don't any more.
+						update(updates.toArray(), null);
 					}
 				});
 
@@ -523,7 +530,6 @@ public class EObjectTableViewer extends GridTableViewer {
 				if (status instanceof IDetailConstraintStatus) {
 					final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
 					if (!status.isOK()) {
-
 						setStatus(detailConstraintStatus.getTarget(), status);
 						update(detailConstraintStatus.getTarget(), null);
 

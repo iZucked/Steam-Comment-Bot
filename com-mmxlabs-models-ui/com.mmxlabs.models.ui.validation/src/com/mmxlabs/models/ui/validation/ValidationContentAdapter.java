@@ -1,9 +1,13 @@
 package com.mmxlabs.models.ui.validation;
 
 import java.util.Collections;
+import java.util.EventObject;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
@@ -42,10 +46,13 @@ public abstract class ValidationContentAdapter extends MMXContentAdapter {
 		createValidator();
 
 		// Run the validation
-		final IStatus status = helper.runValidation(validator, extraContext, Collections.singleton(currentTarget));
+		if (extraContext != null) {
+			final IStatus status = helper.runValidation(validator,
+					extraContext, Collections.singleton(currentTarget));
 
-		// Notify implementors
-		validationStatus(status);
+			// Notify implementors
+			validationStatus(status);
+		}
 
 	}
 
@@ -57,7 +64,7 @@ public abstract class ValidationContentAdapter extends MMXContentAdapter {
 		}
 	}
 
-	public void reallyNotifyChanged(final Notification notification) {
+	private boolean processNotification(final Notification notification) {
 		// Ignore adapter notifications
 		if (!notification.isTouch()) {
 			createValidator();
@@ -68,14 +75,28 @@ public abstract class ValidationContentAdapter extends MMXContentAdapter {
 
 			// Notify implementors
 			validationStatus(status);
-			return;
+			return true;
 		}
+		return false;
+	}
+
+	public void reallyNotifyChanged(final Notification notification) {
+		processNotification(notification);
 	}
 
 	@Override
 	protected void missedNotifications(final List<Notification> notifications) {
-		
-		performValidation();
+		final HashSet<Object> processedObjects = new HashSet<Object>();
+		for (final Notification notification : notifications) {
+			if (currentTarget != null) {
+				if (processNotification(notification))
+					return;
+			} else {
+				if (!processedObjects.contains(notification.getNotifier())
+						&& processNotification(notification))
+					processedObjects.add(notification.getNotifier());
+			}
+		}
 	}
 
 	/**

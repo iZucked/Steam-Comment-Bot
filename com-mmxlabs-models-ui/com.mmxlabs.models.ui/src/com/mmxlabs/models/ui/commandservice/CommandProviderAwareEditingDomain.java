@@ -42,7 +42,6 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 			else
 				disableAdapters(subModel.getSubModelInstance());
 		}
-
 	}
 
 	private void disableAdapters(final EObject top) {
