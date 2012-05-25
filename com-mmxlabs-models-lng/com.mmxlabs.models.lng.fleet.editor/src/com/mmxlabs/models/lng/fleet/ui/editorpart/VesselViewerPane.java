@@ -22,7 +22,11 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -38,11 +42,13 @@ import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.importer.FuelCurveImporter;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -63,6 +69,9 @@ import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class VesselViewerPane extends ScenarioTableViewerPane {
+
+	// TODO: Make these colours a preference so they can be consistently used across various UI parts
+	private final Color tcVessel = new Color(Display.getDefault(), 150, 210, 230);
 
 	private final IScenarioEditingLocation jointModelEditor;
 
@@ -96,24 +105,24 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 				FleetPackage.eINSTANCE.getVessel_Availability());
 
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
-	
+
 		getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
-		getToolBarManager().appendToGroup(EDIT_GROUP, 
-				new Action("VC") {
-					@Override
-					public void run() {
-						final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane.this.getJointModelEditorPart().getShell(), VesselViewerPane.this.getJointModelEditorPart().getDefaultCommandHandler());
-						dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
-					}
-				});
+		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VC") {
+			@Override
+			public void run() {
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane.this.getJointModelEditorPart().getShell(), VesselViewerPane.this.getJointModelEditorPart()
+						.getDefaultCommandHandler());
+				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
+			}
+		});
 		getToolBarManager().update(true);
 	}
-	
+
 	@Override
 	protected Action createImportAction() {
 		final Action def = super.createImportAction();
 		def.setText("Import Vessels");
-		
+
 		return new AbstractMenuAction("Import CSV") {
 			{
 				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif"));
@@ -122,33 +131,34 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 			@Override
 			protected void populate(final Menu menu) {
 				addActionToMenu(def, menu);
-				
+
 				final Action importVesselClasses = new ImportAction(getJointModelEditorPart()) {
 					{
 						setText("Import Vessel Classes");
 					}
+
 					@Override
-					protected void doImportStages(DefaultImportContext context) {
+					protected void doImportStages(final DefaultImportContext context) {
 						final EObject container = (EObject) viewer.getInput();
 						final EReference containment = FleetPackage.eINSTANCE.getFleetModel_VesselClasses();
-						
+
 						final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(containment.getEReferenceType());
 						// open file picker
 
 						final FileDialog fileDialog = new FileDialog(part.getShell());
-						fileDialog.setFilterExtensions(new String[] {"*.csv"});
+						fileDialog.setFilterExtensions(new String[] { "*.csv" });
 						final String path = fileDialog.open();
-						
-						if (path == null) return;
-						
+
+						if (path == null)
+							return;
+
 						CSVReader reader;
 						try {
 							reader = new CSVReader(path);
 							final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 							context.run();
-							part.getEditingDomain().getCommandStack().execute(mergeLists(container, containment, 
-									new ArrayList<EObject>(importedObjects)));
-						} catch (IOException e) {
+							part.getEditingDomain().getCommandStack().execute(mergeLists(container, containment, new ArrayList<EObject>(importedObjects)));
+						} catch (final IOException e) {
 							e.printStackTrace();
 						}
 					}
@@ -258,7 +268,8 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 
 		@Override
 		public void run() {
-			final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane.this.getJointModelEditorPart().getShell(), VesselViewerPane.this.getJointModelEditorPart().getDefaultCommandHandler());
+			final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane.this.getJointModelEditorPart().getShell(), VesselViewerPane.this.getJointModelEditorPart()
+					.getDefaultCommandHandler());
 			dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
 		}
 
@@ -325,5 +336,41 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 				addActionToMenu(newBase, menu);
 			}
 		}
+	}
+
+	@Override
+	protected ScenarioTableViewer constructViewer(final Composite parent) {
+		final ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart());
+		scenarioTableViewer.setColourProvider(new IColorProvider() {
+
+			@Override
+			public Color getForeground(final Object element) {
+				return null;
+			}
+
+			@Override
+			public Color getBackground(final Object element) {
+
+				if (element instanceof Vessel) {
+
+					final Vessel vessel = (Vessel) element;
+					if (vessel.isSetTimeCharterRate()) {
+						return tcVessel;
+					}
+				}
+				return null;
+			}
+
+		});
+		return scenarioTableViewer;
+
+	}
+
+	@Override
+	public void dispose() {
+
+		tcVessel.dispose();
+
+		super.dispose();
 	}
 }
