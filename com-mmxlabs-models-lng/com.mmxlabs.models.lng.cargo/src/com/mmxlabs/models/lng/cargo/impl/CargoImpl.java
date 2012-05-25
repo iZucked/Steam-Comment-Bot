@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.impl.ACargoImpl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
@@ -438,6 +439,20 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				return allowedVessels != null && !allowedVessels.isEmpty();
 		}
 		return super.eIsSet(featureID);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CargoPackage.CARGO___GET_CARGO_TYPE:
+				return getCargoType();
+		}
+		return super.eInvoke(operationID, arguments);
 	}
 
 	/**
