@@ -250,6 +250,7 @@ public class OptimisationTransformer {
 			}
 
 			assignments: for (final Assignment assignment : inputModel.getAssignments()) {
+				if (assignment.getVessels().isEmpty()) continue assignments;
 				IVessel vessel = null;
 				;
 				if (assignment.isAssignToSpot()) {
