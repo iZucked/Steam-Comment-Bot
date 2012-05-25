@@ -93,6 +93,11 @@
             id="com.mmxlabs.scenario.service.ui.newfolder"
             name="New Folder">
       </command>
+      <command
+            description="Fork the current scenario"
+            id="com.mmxlabs.scenario.service.ui.fork"
+            name="Fork Scenario">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -285,6 +290,20 @@
             </iterate>
          </enabledWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.ForkScenarioCommandHandler"
+            commandId="com.mmxlabs.scenario.service.ui.fork">
+         <activeWhen>
+            <with
+                  variable="selection">
+               <iterate>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </iterate>
+            </with>
+         </activeWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -311,6 +330,11 @@
                style="push"
                tooltip="Create a new folder">
          </command>
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.fork"
+               label="Fork"
+               style="push">
+         </command>
       </menuContribution>
       <menuContribution
             allPopups="false"
@@ -325,6 +349,11 @@
          <command
                commandId="org.eclipse.ui.edit.rename"
                label="Rename"
+               style="push">
+         </command>
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.fork"
+               label="Fork"
                style="push">
          </command>
          <command
@@ -380,6 +409,17 @@
             </instanceof>
          </selectionEnablement>
       </linkHelper>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="com.mmxlabs.scenario.service.ui.fork"
+            icon="icons/fork.gif">
+      </image>
+      <image
+            commandId="com.mmxlabs.scenario.service.ui.lock"
+            icon="icons/commands/lock.gif">
+      </image>
    </extension>
 
 </plugin>
