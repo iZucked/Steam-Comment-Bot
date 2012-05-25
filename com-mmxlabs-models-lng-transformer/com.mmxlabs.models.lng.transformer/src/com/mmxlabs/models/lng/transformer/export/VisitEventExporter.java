@@ -19,7 +19,9 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
@@ -61,45 +63,47 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		lastPortVisited = ePort;
 
-		if (slot instanceof IDischargeSlot || slot instanceof ILoadSlot) {
-			
+		if (slot instanceof IDischargeOption || slot instanceof ILoadOption) {
+
 			final SlotVisit sv = factory.createSlotVisit();
 			final SlotAllocation slotAllocation = factory.createSlotAllocation();
 			sv.setSlotAllocation(slotAllocation);
-			
+
 			output.getSlotAllocations().add(slotAllocation);
-			//TODO this will have to look at market-generated slots.
+			// TODO this will have to look at market-generated slots.
 			slotAllocation.setSlot(entities.getModelObject(slot, Slot.class));
 			portVisit = sv;
 
 			// Output allocation info.
 			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
-
 			CargoAllocation eAllocation = allocations.get(slot);
 
 			if (eAllocation == null) {
 				eAllocation = scheduleFactory.createCargoAllocation();
-				allocations.put(allocation.getLoadSlot(), eAllocation);
-				allocations.put(allocation.getDischargeSlot(), eAllocation);
-//				eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
-//				eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
-//				eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); // yes? no?
+				allocations.put(allocation.getLoadOption(), eAllocation);
+				allocations.put(allocation.getDischargeOption(), eAllocation);
+				// eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
+				// eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
+				// eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); // yes? no?
 				eAllocation.setDischargeVolume((int) (allocation.getDischargeVolume() / Calculator.ScaleFactor));
 				eAllocation.setLoadVolume((int) (allocation.getLoadVolume() / Calculator.ScaleFactor));
-//				eAllocation.setSequence();
+				// eAllocation.setSequence();
 
 				output.getCargoAllocations().add(eAllocation);
 			}
+			if (slot instanceof ILoadOption)
+				eAllocation.setLoadAllocation(slotAllocation);
+			else
+				eAllocation.setDischargeAllocation(slotAllocation);
 
-			if (slot instanceof ILoadSlot) eAllocation.setLoadAllocation(slotAllocation);
-			else eAllocation.setDischargeAllocation(slotAllocation);
-			
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setCargoAllocation(eAllocation);
+
 		} else if (slot instanceof IVesselEventPortSlot) {
 			// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
 			final VesselEvent event = entities.getModelObject(slot, VesselEvent.class);
-			if (event == null) return null;
+			if (event == null)
+				return null;
 			final VesselEventVisit vev;
 			if (event instanceof CharterOutEvent) {
 				final CharterOutEvent charterOut = (CharterOutEvent) event;
@@ -107,10 +111,10 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				// will have duration zero anyway)
 				if (ePort != charterOut.getEndPort())
 					return null;
-//				final CharterOutVisit cov = factory.createCharterOutVisit();
-//				vev = cov;
-//				cov.setCharterOut(charterOut);
-				vev = factory.createVesselEventVisit();	
+				// final CharterOutVisit cov = factory.createCharterOutVisit();
+				// vev = cov;
+				// cov.setCharterOut(charterOut);
+				vev = factory.createVesselEventVisit();
 			} else {
 				vev = factory.createVesselEventVisit();
 			}
