@@ -212,6 +212,9 @@ public class OptimisationTransformer {
 				IVessel vessel = null;
 				;
 				if (assignment.isAssignToSpot()) {
+					if (inputModel.getLockedAssignedObjects().containsAll(assignment.getAssignedObjects())) {
+						continue assignments; // these will get assigned by their constraints.
+					}
 					AVesselClass modelVesselClass;
 					for (final AVesselSet set : assignment.getVessels()) {
 						if (set instanceof AVesselClass) {
