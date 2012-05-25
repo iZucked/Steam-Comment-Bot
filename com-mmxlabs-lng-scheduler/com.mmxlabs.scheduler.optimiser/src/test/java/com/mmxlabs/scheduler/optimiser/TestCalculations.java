@@ -166,6 +166,7 @@ public class TestCalculations {
 
 		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
 		annotator.setPortSlotProvider(portSlotProvider);
+		annotator.setVesselProvider(vesselProvider);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -995,6 +996,7 @@ public class TestCalculations {
 
 		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
 		annotator.setPortSlotProvider(portSlotProvider);
+		annotator.setVesselProvider(vesselProvider);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
