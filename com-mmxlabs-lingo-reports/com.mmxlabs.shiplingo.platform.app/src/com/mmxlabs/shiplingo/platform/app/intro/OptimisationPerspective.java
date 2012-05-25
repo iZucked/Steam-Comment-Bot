@@ -24,7 +24,7 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 	public void createInitialLayout(final IPageLayout layout) {
 
 		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.5f, IPageLayout.ID_EDITOR_AREA);
-		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.LEFT, 0.5f, IPageLayout.ID_EDITOR_AREA);
+		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.RIGHT, 0.5f, IPageLayout.ID_EDITOR_AREA);
 
 		reportsFolder.addView(TotalsReportView.ID);
 		reportsFolder.addView(TotalsHierarchyView.ID);
