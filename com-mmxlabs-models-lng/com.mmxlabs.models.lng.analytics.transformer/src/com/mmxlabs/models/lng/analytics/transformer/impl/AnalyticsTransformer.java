@@ -60,7 +60,6 @@ import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -100,43 +99,17 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 	@Override
 	public List<UnitCostLine> createCostLines(final MMXRootObject root, final UnitCostMatrix spec, final IProgressMonitor monitor) {
 		try {
-			monitor.beginTask("Evaluating " + spec.getName(), 100);
+			
 			final PortModel portModel = root.getSubModel(PortModel.class);
 			final PricingModel pricing = root.getSubModel(PricingModel.class);
-			final Injector injector = Guice.createInjector(new DataComponentProviderModule());
-			final ISchedulerBuilder builder = new SchedulerBuilder();
-			injector.injectMembers(builder);
 
-			monitor.subTask("Setting up ports and matrices");
 			/*
 			 * Create ports and distances
 			 */
-			final Association<Port, IPort> ports = new Association<Port, IPort>();
-			final IShippingPriceCalculator nullCalculator = new FixedPriceContract(0);
 
 			final Map<Pair<Port, Port>, List<Integer>> minTravelTimeAtSpeed = new HashMap<Pair<Port, Port>, List<Integer>>();
 
-			for (final Port port : portModel.getPorts()) {
-				ports.add(port, builder.createPort(port.getName(), !port.isAllowCooldown(), nullCalculator));
-			}
 			
-			/*
-			 * Create vessel class
-			 */
-			final Vessel modelVessel = spec.getVessel();
-
-			final VesselClass eVc = modelVessel.getVesselClass();
-			final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()),
-					Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), Calculator.scaleToInt(eVc.getMinHeel()),
-
-					Calculator.scaleToInt(spec.getBaseFuelPrice()),
-
-					Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()), Calculator.scaleToInt(eVc.getPilotLightRate()) / 24, Calculator.scaleToInt(spec.getNotionalDayRate() / 24.0),
-					eVc.getWarmingTime(), eVc.getCoolingTime(), Calculator.scale(eVc.getCoolingVolume()));
-
-			buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
-			buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
-
 			final double speed;
 			if (spec.isSetSpeed()) {
 				speed = spec.getSpeed();
@@ -161,22 +134,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					}
 				}
 				for (final RouteLine line : route.getLines()) {
-					builder.setPortToPortDistance(ports.lookup(line.getFrom()), ports.lookup(line.getTo()), route.getName(), line.getDistance());
-					if (parametersForRoute != null) {
-						builder.setVesselClassRouteTransitTime(route.getName(), vesselClass, parametersForRoute.getExtraTransitTime());
-						builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Laden, 
-								Calculator.scale(parametersForRoute.getLadenConsumptionRate()) / 24,
-								Calculator.scale(parametersForRoute.getLadenNBORate()) / 24);
-						builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Ballast, 
-								Calculator.scale(parametersForRoute.getBallastConsumptionRate()) / 24,
-								Calculator.scale(parametersForRoute.getBallastNBORate()) / 24);
-					}
-					if (costForRoute != null) {
-						builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Laden, (int) Calculator.scale(costForRoute.getLadenCost()));
-						builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Ballast, (int) Calculator.scale(costForRoute.getBallastCost()));
-					}
-					int travelTime = (int) Math.ceil(line.getDistance() / speed) + (parametersForRoute == null ? 0 : parametersForRoute.getExtraTransitTime());
-					final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
+					int travelTime = (int) Math
+							.ceil(line.getDistance() / speed)
+							+ (parametersForRoute == null ? 0
+									: parametersForRoute.getExtraTransitTime());
+					final Pair<Port, Port> key = new Pair<Port, Port>(
+							line.getFrom(), line.getTo());
 					List<Integer> existingValue = minTravelTimeAtSpeed.get(key);
 					if (existingValue == null) {
 						existingValue = new ArrayList<Integer>();
@@ -185,12 +148,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					existingValue.add(travelTime);
 				}
 			}
-			monitor.worked(5);
+			
 			/*
 			 * Create a cargo for each pair
 			 */
 			
-			monitor.subTask("Creating vessel");
+			
 			final Set<APort> includedPorts = SetUtils.getPorts(spec.getPorts());
 			if (includedPorts.isEmpty()) {
 				includedPorts.addAll(portModel.getPorts());
@@ -208,20 +171,86 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			}
 
 			
-			monitor.worked(5);
-			monitor.subTask("Creating a cargo for each entry");
-			final List<ICargo> cargoes = new ArrayList<ICargo>(loadPorts.size() * dischargePorts.size());
+			
+			
+			final HashMap<Pair<Port, Port>, UnitCostLine> bestCostSoFar = new HashMap<Pair<Port, Port>, UnitCostLine>();
+			
 			final ILoadPriceCalculator2 loadCalculator = new FixedPriceContract(0);
 			final IShippingPriceCalculator dischargeCalculator = new FixedPriceContract(Calculator.scaleToInt(spec.getCargoPrice()));
-			final List<IVessel> vessels = new ArrayList<IVessel>(loadPorts.size() * dischargePorts.size());
 			int i = 0;
+			
+			monitor.beginTask("Creating unit cost matrix", loadPorts.size());
+			
 			for (final Port loadPort : loadPorts) {
+				monitor.subTask("Evaluating costs for journeys from " + loadPort.getName());
+				final Injector injector = Guice.createInjector(new DataComponentProviderModule());
+				final ISchedulerBuilder builder = new SchedulerBuilder();
+				injector.injectMembers(builder);
+				
+				final Association<Port, IPort> ports = new Association<Port, IPort>();
+				final IShippingPriceCalculator nullCalculator = new FixedPriceContract(0);
+				for (final Port port : portModel.getPorts()) {
+					ports.add(port, builder.createPort(port.getName(), !port.isAllowCooldown(), nullCalculator));
+				}
+				
+				/*
+				 * Create vessel class
+				 */
+				final Vessel modelVessel = spec.getVessel();
+
+				final VesselClass eVc = modelVessel.getVesselClass();
+				final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()),
+						Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), Calculator.scaleToInt(eVc.getMinHeel()),
+
+						Calculator.scaleToInt(spec.getBaseFuelPrice()),
+
+						Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()), Calculator.scaleToInt(eVc.getPilotLightRate()) / 24, Calculator.scaleToInt(spec.getNotionalDayRate() / 24.0),
+						eVc.getWarmingTime(), eVc.getCoolingTime(), Calculator.scale(eVc.getCoolingVolume()));
+
+				buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
+				buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
+				
+				for (final Route route : spec.getAllowedRoutes().isEmpty() ? portModel.getRoutes() : spec.getAllowedRoutes()) {
+					VesselClassRouteParameters parametersForRoute = null;
+					RouteCost costForRoute = null;
+					for (final VesselClassRouteParameters parameters : spec.getVessel().getVesselClass().getRouteParameters()) {
+						if (parameters.getRoute() == route) {
+							parametersForRoute = parameters;
+							break;
+						}
+					}
+					for (final RouteCost routeCost : pricing.getRouteCosts()) {
+						if (routeCost.getRoute() == route && routeCost.getVesselClass() == spec.getVessel().getVesselClass()) {
+							costForRoute = routeCost;
+							break;
+						}
+					}
+					for (final RouteLine line : route.getLines()) {
+						builder.setPortToPortDistance(ports.lookup(line.getFrom()), ports.lookup(line.getTo()), route.getName(), line.getDistance());
+						if (parametersForRoute != null) {
+							builder.setVesselClassRouteTransitTime(route.getName(), vesselClass, parametersForRoute.getExtraTransitTime());
+							builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Laden, 
+									Calculator.scale(parametersForRoute.getLadenConsumptionRate()) / 24,
+									Calculator.scale(parametersForRoute.getLadenNBORate()) / 24);
+							builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Ballast, 
+									Calculator.scale(parametersForRoute.getBallastConsumptionRate()) / 24,
+									Calculator.scale(parametersForRoute.getBallastNBORate()) / 24);
+						}
+						if (costForRoute != null) {
+							builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Laden, (int) Calculator.scale(costForRoute.getLadenCost()));
+							builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Ballast, (int) Calculator.scale(costForRoute.getBallastCost()));
+						}
+					}
+				}
+				
+				final List<ICargo> cargoes = new ArrayList<ICargo>(dischargePorts.size());
+				final List<IVessel> vessels = new ArrayList<IVessel>(dischargePorts.size());
+				
 				for (final Port dischargePort : dischargePorts) {
 					// compute time windows
 					final List<Integer> minTimesLD = minTravelTimeAtSpeed.get(new Pair<Port, Port>(loadPort, dischargePort));
 					final List<Integer> minTimesDL = minTravelTimeAtSpeed.get(new Pair<Port, Port>(dischargePort, loadPort));
 					if (minTimesLD == null || minTimesDL == null) {
-						System.err.println("No connection from " + loadPort.getName() + "-" + dischargePort.getName());
 						continue;
 					} else {
 					}
@@ -262,141 +291,137 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 									builder.createStartEndRequirement(returnWindow), 0, 0, 0));
 						}
 					}
+				}
+				
+				/*
+				 * Create a sequences assigning each cargo to the right vessel
+				 */
+				final IOptimisationData data = builder.getOptimisationData();
+				final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+				final IModifiableSequences sequences = new ModifiableSequences(data.getResources());
+				final Iterator<IVessel> vesselIterator = vessels.iterator();
+				final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
+				final IPortSlotProvider slotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+
+				final int[][] arrivalTimes = new int[cargoes.size()][3];
+				int index = 0;
+				for (final ICargo cargo : cargoes) {
+					final IResource resource = vesselProvider.getResource(vesselIterator.next());
+					final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
+					// set up sequence and arrival times
+					sequence.add(startEndProvider.getStartElement(resource));
+					sequence.add(slotProvider.getElement(cargo.getLoadOption()));
+					sequence.add(slotProvider.getElement(cargo.getDischargeOption()));
+					sequence.add(startEndProvider.getEndElement(resource));
+					final int[] times = arrivalTimes[index++];
+					times[0] = 0;
+					times[1] = cargo.getDischargeOption().getTimeWindow().getStart();
+					times[2] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart();
 					
+					if (spec.isSetSpeed()) {
+						times[1] -= spec.getDischargeIdleTime();
+						times[2] -= spec.getReturnIdleTime();
+					}
 				}
-			}
+				/*
+				 * Create a fitness core and evaluate+annotate the sequences
+				 */
+				final ISequencesManipulator manipulator = SequencesManipulatorUtil.createDefaultSequenceManipulators(data);
+				manipulator.manipulate(sequences); // this will set the return elements to the right places, and remove the start elements.
+				final LNGVoyageCalculator calculator = new LNGVoyageCalculator();
+				calculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
+				final VoyagePlanOptimiser optimiser = new VoyagePlanOptimiser(calculator);
 
-			monitor.worked(10);
-			/*
-			 * Create a sequences assigning each cargo to the right vessel
-			 */
-			final IOptimisationData data = builder.getOptimisationData();
-			final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-			final IModifiableSequences sequences = new ModifiableSequences(data.getResources());
-			final Iterator<IVessel> vesselIterator = vessels.iterator();
-			final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
-			final IPortSlotProvider slotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+				final AbstractSequenceScheduler scheduler = new AbstractSequenceScheduler() {
+					@Override
+					public ScheduledSequences schedule(ISequences sequences, boolean forExport) {
+						return null;
+					}
 
-			final int[][] arrivalTimes = new int[cargoes.size()][3];
-			monitor.subTask("Preparing to evaluate");
-			int index = 0;
-			for (final ICargo cargo : cargoes) {
-				final IResource resource = vesselProvider.getResource(vesselIterator.next());
-				final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
-				// set up sequence and arrival times
-				sequence.add(startEndProvider.getStartElement(resource));
-				sequence.add(slotProvider.getElement(cargo.getLoadOption()));
-				sequence.add(slotProvider.getElement(cargo.getDischargeOption()));
-				sequence.add(startEndProvider.getEndElement(resource));
-				final int[] times = arrivalTimes[index++];
-				times[0] = 0;
-				times[1] = cargo.getDischargeOption().getTimeWindow().getStart();
-				times[2] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart();
+					@Override
+					public ScheduledSequences schedule(ISequences sequences, Collection<IResource> affectedResources, boolean forExport) {
+						return null;
+					}
+
+					@Override
+					public void acceptLastSchedule() {
+
+					}
+				};
+
+				SchedulerUtils.setDataComponentProviders(data, scheduler);
+				scheduler.setVoyagePlanOptimiser(optimiser);
+				scheduler.init();
 				
-				if (spec.isSetSpeed()) {
-					times[1] -= spec.getDischargeIdleTime();
-					times[2] -= spec.getReturnIdleTime();
+				
+				// run the scheduler on the sequences
+				final ScheduledSequences result = scheduler.schedule(sequences, arrivalTimes);
+				
+
+				final UnconstrainedCargoAllocator aca = new UnconstrainedCargoAllocator();
+				aca.setVesselProvider(vesselProvider);
+
+				final Collection<IAllocationAnnotation> allocations = aca.allocate(result);
+				final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
+				
+				/*
+				 * Unpack the annotated solution and create output lines
+				 */
+				for (final ScheduledSequence sequence : result) {
+					final IAllocationAnnotation allocation = allocationIterator.next();
+					final VoyagePlan plan = sequence.getVoyagePlans().get(0);
+					// create line for plan
+
+					final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
+					
+					line.setFrom(ports.reverseLookup(((PortDetails) plan.getSequence()[0]).getPortSlot().getPort()));
+					line.setTo(ports.reverseLookup(((PortDetails) plan.getSequence()[2]).getPortSlot().getPort()));
+
+					final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
+					
+					// unpack costs from plan
+					line.getCostComponents().add(createPortCostComponent(ports, pricing, spec, (PortDetails) plan.getSequence()[0]));
+					line.getCostComponents().add(createVoyageCostComponent(spec, (VoyageDetails) plan.getSequence()[1]));
+					line.getCostComponents().add(createPortCostComponent(ports, pricing, spec, (PortDetails) plan.getSequence()[2]));
+					line.getCostComponents().add(createVoyageCostComponent(spec, (VoyageDetails) plan.getSequence()[3]));
+					int totalDuration = 0;
+					int totalFuelCost = 0;
+					int totalRouteCost = 0;
+					int totalPortCost = 0;
+					for (final CostComponent cc : line.getCostComponents()) {
+						totalDuration += cc.getDuration();
+						totalFuelCost += cc.getFuelCost();
+						if (cc instanceof Voyage)
+							totalRouteCost += ((Voyage) cc).getRouteCost();
+						if (cc instanceof Visit)
+							totalPortCost += ((Visit) cc).getPortCost();
+					}
+					line.setDuration(totalDuration);
+					line.setFuelCost(totalFuelCost);
+					line.setCanalCost(totalRouteCost);
+					line.setHireCost((spec.getNotionalDayRate() * totalDuration)/12);
+					line.setPortCost(totalPortCost);
+
+					line.setVolumeLoaded((int) ((allocation.getDischargeVolume() + allocation.getFuelVolume()) / Calculator.ScaleFactor));
+					line.setVolumeDischarged((int) (allocation.getDischargeVolume() / Calculator.ScaleFactor));
+
+					double cv = spec.isSetCvValue() ? spec.getCvValue() : line.getFrom().getCvValue();
+
+					line.setMmbtuDelivered((int) (line.getVolumeDischarged() * cv));
+					line.setUnitCost(line.getTotalCost() / (double) line.getMmbtuDelivered());
+					UnitCostLine d = bestCostSoFar.get(key);
+					if (d == null || d.getUnitCost() > line.getUnitCost()) {
+						bestCostSoFar.put(key, line);
+					}
 				}
+				monitor.worked(1);
 			}
-			/*
-			 * Create a fitness core and evaluate+annotate the sequences
-			 */
-			final ISequencesManipulator manipulator = SequencesManipulatorUtil.createDefaultSequenceManipulators(data);
-			manipulator.manipulate(sequences); // this will set the return elements to the right places, and remove the start elements.
-			monitor.worked(1);
-			final LNGVoyageCalculator calculator = new LNGVoyageCalculator();
-			calculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
-			final VoyagePlanOptimiser optimiser = new VoyagePlanOptimiser(calculator);
 
-			final AbstractSequenceScheduler scheduler = new AbstractSequenceScheduler() {
-				@Override
-				public ScheduledSequences schedule(ISequences sequences, boolean forExport) {
-					return null;
-				}
 
-				@Override
-				public ScheduledSequences schedule(ISequences sequences, Collection<IResource> affectedResources, boolean forExport) {
-					return null;
-				}
-
-				@Override
-				public void acceptLastSchedule() {
-
-				}
-			};
-
-			SchedulerUtils.setDataComponentProviders(data, scheduler);
-			scheduler.setVoyagePlanOptimiser(optimiser);
-			scheduler.init();
 			
-			monitor.worked(5);
-			monitor.subTask("Computing round-trip costs");
-			
-			// run the scheduler on the sequences
-			final ScheduledSequences result = scheduler.schedule(sequences, arrivalTimes);
-			final List<UnitCostLine> lines = new ArrayList<UnitCostLine>(result.size());
-			monitor.worked(1);
-			final UnconstrainedCargoAllocator aca = new UnconstrainedCargoAllocator();
-			aca.setVesselProvider(vesselProvider);
-			monitor.worked(20);
-			monitor.subTask("Allocating volumes");
-			final Collection<IAllocationAnnotation> allocations = aca.allocate(result);
-			final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
-			monitor.worked(5);
-			monitor.subTask("Exporting matrix for display");
-			final HashMap<Pair<Port, Port>, UnitCostLine> bestCostSoFar = new HashMap<Pair<Port, Port>, UnitCostLine>();
-			/*
-			 * Unpack the annotated solution and create output lines
-			 */
-			for (final ScheduledSequence sequence : result) {
-				final IAllocationAnnotation allocation = allocationIterator.next();
-				final VoyagePlan plan = sequence.getVoyagePlans().get(0);
-				// create line for plan
-
-				final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
-				
-				line.setFrom(ports.reverseLookup(((PortDetails) plan.getSequence()[0]).getPortSlot().getPort()));
-				line.setTo(ports.reverseLookup(((PortDetails) plan.getSequence()[2]).getPortSlot().getPort()));
-
-				final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
-				
-				// unpack costs from plan
-				line.getCostComponents().add(createPortCostComponent(ports, pricing, spec, (PortDetails) plan.getSequence()[0]));
-				line.getCostComponents().add(createVoyageCostComponent(spec, (VoyageDetails) plan.getSequence()[1]));
-				line.getCostComponents().add(createPortCostComponent(ports, pricing, spec, (PortDetails) plan.getSequence()[2]));
-				line.getCostComponents().add(createVoyageCostComponent(spec, (VoyageDetails) plan.getSequence()[3]));
-				int totalDuration = 0;
-				int totalFuelCost = 0;
-				int totalRouteCost = 0;
-				int totalPortCost = 0;
-				for (final CostComponent cc : line.getCostComponents()) {
-					totalDuration += cc.getDuration();
-					totalFuelCost += cc.getFuelCost();
-					if (cc instanceof Voyage)
-						totalRouteCost += ((Voyage) cc).getRouteCost();
-					if (cc instanceof Visit)
-						totalPortCost += ((Visit) cc).getPortCost();
-				}
-				line.setDuration(totalDuration);
-				line.setFuelCost(totalFuelCost);
-				line.setCanalCost(totalRouteCost);
-				line.setHireCost((spec.getNotionalDayRate() * totalDuration)/12);
-				line.setPortCost(totalPortCost);
-
-				line.setVolumeLoaded((int) ((allocation.getDischargeVolume() + allocation.getFuelVolume()) / Calculator.ScaleFactor));
-				line.setVolumeDischarged((int) (allocation.getDischargeVolume() / Calculator.ScaleFactor));
-
-				double cv = spec.isSetCvValue() ? spec.getCvValue() : line.getFrom().getCvValue();
-
-				line.setMmbtuDelivered((int) (line.getVolumeDischarged() * cv));
-				line.setUnitCost(line.getTotalCost() / (double) line.getMmbtuDelivered());
-				UnitCostLine d = bestCostSoFar.get(key);
-				if (d == null || d.getUnitCost() > line.getUnitCost()) {
-					bestCostSoFar.put(key, line);
-				}
-			}
+			final List<UnitCostLine> lines = new ArrayList<UnitCostLine>();
 			lines.addAll(bestCostSoFar.values());
-			monitor.worked(10);
+
 			return lines;
 		} finally {
 			monitor.done();
