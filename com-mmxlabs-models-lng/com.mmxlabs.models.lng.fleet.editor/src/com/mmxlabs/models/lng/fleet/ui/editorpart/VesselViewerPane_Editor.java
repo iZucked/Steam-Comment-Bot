@@ -5,11 +5,8 @@
 package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +18,6 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -29,7 +25,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -38,24 +33,18 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.common.Pair;
-import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.importer.FuelCurveImporter;
-import com.mmxlabs.models.lng.ui.actions.AddModelAction;
-import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.ICommandHandler;
-import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.MultipleReferenceManipulator;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
@@ -68,14 +57,14 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
-public class VesselViewerPane extends ScenarioTableViewerPane {
+public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 
 	// TODO: Make these colours a preference so they can be consistently used across various UI parts
 	private final Color tcVessel = new Color(Display.getDefault(), 150, 210, 230);
 
 	private final IScenarioEditingLocation jointModelEditor;
 
-	public VesselViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+	public VesselViewerPane_Editor(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		this.jointModelEditor = location;
 	}
@@ -105,17 +94,6 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 				FleetPackage.eINSTANCE.getVessel_Availability());
 
 		setTitle("Vessels", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
-
-		getToolBarManager().appendToGroup(EDIT_GROUP, new BaseFuelEditorAction());
-		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VC") {
-			@Override
-			public void run() {
-				final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane.this.getJointModelEditorPart().getShell(), VesselViewerPane.this.getJointModelEditorPart()
-						.getDefaultCommandHandler());
-				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
-			}
-		});
-		getToolBarManager().update(true);
 	}
 
 	@Override
@@ -257,88 +235,6 @@ public class VesselViewerPane extends ScenarioTableViewerPane {
 		};
 	}
 
-	class BaseFuelEditorAction extends AbstractMenuAction {
-		public BaseFuelEditorAction() {
-			super("Base Fuels");
-			try {
-				setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.fleet.editor/icons/oildrop.png")));
-			} catch (final MalformedURLException e) {
-			}
-		}
-
-		@Override
-		public void run() {
-			final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane.this.getJointModelEditorPart().getShell(), VesselViewerPane.this.getJointModelEditorPart()
-					.getDefaultCommandHandler());
-			dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
-		}
-
-		@Override
-		protected void populate(final Menu menu) {
-			final FleetModel fleetModel = jointModelEditor.getRootObject().getSubModel(FleetModel.class);
-			boolean b = false;
-			for (final BaseFuel baseFuel : fleetModel.getBaseFuels()) {
-				b = true;
-				final Action editBase = new AbstractMenuAction(baseFuel.getName()) {
-					@Override
-					protected void populate(final Menu submenu) {
-						final LockableAction edit = new LockableAction("Edit...") {
-							public void run() {
-								final DetailCompositeDialog dcd = new DetailCompositeDialog(jointModelEditor.getShell(), jointModelEditor.getDefaultCommandHandler());
-								dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) baseFuel));
-							}
-						};
-						addActionToMenu(edit, submenu);
-
-						final Action delete = new LockableAction("Delete...") {
-							public void run() {
-								final ICommandHandler handler = jointModelEditor.getDefaultCommandHandler();
-								handler.handleCommand(DeleteCommand.create(handler.getEditingDomain(), Collections.singleton(baseFuel)), fleetModel, FleetPackage.eINSTANCE.getFleetModel_BaseFuels());
-							}
-						};
-						addActionToMenu(delete, submenu);
-					}
-				};
-				addActionToMenu(editBase, menu);
-			}
-
-			if (b) {
-				new MenuItem(menu, SWT.SEPARATOR);
-			}
-			final Action newBase = AddModelAction.create(FleetPackage.eINSTANCE.getBaseFuel(), new IAddContext() {
-				@Override
-				public MMXRootObject getRootObject() {
-					return jointModelEditor.getRootObject();
-				}
-
-				@Override
-				public EReference getContainment() {
-					return FleetPackage.eINSTANCE.getFleetModel_BaseFuels();
-				}
-
-				@Override
-				public EObject getContainer() {
-					return fleetModel;
-				}
-
-				@Override
-				public ICommandHandler getCommandHandler() {
-					return jointModelEditor.getDefaultCommandHandler();
-				}
-
-				@Override
-				public IScenarioEditingLocation getEditorPart() {
-					return jointModelEditor;
-				}
-			});
-			if (newBase != null) {
-				newBase.setText("Add new base fuel...");
-				addActionToMenu(newBase, menu);
-			}
-		}
-	}
-
-	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		final ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart());
 		scenarioTableViewer.setColourProvider(new IColorProvider() {
