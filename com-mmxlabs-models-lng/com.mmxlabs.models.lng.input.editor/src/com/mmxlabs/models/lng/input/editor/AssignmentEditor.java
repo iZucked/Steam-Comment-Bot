@@ -20,6 +20,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -40,6 +41,15 @@ public class AssignmentEditor<R, T> extends Canvas {
 	private final List<T> tasks = new ArrayList<T>();
 	private final List<T> unallocatedTasks = new ArrayList<T>();
 	private final List<R> resources = new ArrayList<R>();
+	
+	private boolean coloursSet = false;
+	
+	Color selectedTaskGradientTop;
+	Color selectedTaskGradientBottom;
+	Color taskGradientTop;
+	Color taskGradientBottom;
+	Color backgroundColor;
+	Color taskLabelTextColor;
 	
 	/**
 	 * Maps from screen coordinates to tasks
@@ -111,12 +121,21 @@ public class AssignmentEditor<R, T> extends Canvas {
 	
 	protected void mouseMove(final MouseEvent e) {
 		if (selectedTask != null) {
+			setToolTipText("");
 			if (findInsertionPoint(e.x, e.y, selectedTask)
 					|| selectedTaskDragY != e.y) {
 				selectedTaskDragY = e.y;
 				redraw();
 			}
+		} else {
+			final T task = findTaskAtCoordinates(e.x, e.y);
+			if (task != null) {
+				setToolTipText(labelProvider.getText(task));
+			} else {
+				setToolTipText("");
+			}
 		}
+		
 	}
 
 	protected void mouseDown(MouseEvent e) {
@@ -181,6 +200,8 @@ public class AssignmentEditor<R, T> extends Canvas {
 	T insertAfter;
 	T insertBefore;
 	R insertResource;
+	private Color resourceLabelTextColor;
+	private Color dividerColor;
 	
 	/**
 	 * Finds the tasks before and after the given task if it were dropped at the given y coordinate
@@ -240,6 +261,21 @@ public class AssignmentEditor<R, T> extends Canvas {
 
 	protected void paintControl(final PaintEvent e) {
 		prepare();
+		
+		if (coloursSet == false) {
+			coloursSet = true;
+			backgroundColor = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+			taskLabelTextColor = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
+			resourceLabelTextColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+			dividerColor = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
+			
+			selectedTaskGradientBottom = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
+			selectedTaskGradientTop = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
+			
+			taskGradientBottom = Display.getCurrent().getSystemColor(SWT.COLOR_DARK_BLUE);
+			taskGradientTop = Display.getCurrent().getSystemColor(SWT.COLOR_BLUE);
+		}
+		
 		int oldMinWidth = minWidth;
 		int oldMinHeight = minHeight;
 		minWidth = 0;
@@ -262,19 +298,19 @@ public class AssignmentEditor<R, T> extends Canvas {
 		int topOfCurrentRow = 0;
 		
 		gc.setAlpha(255);
-		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		gc.setForeground(backgroundColor);
+		gc.setBackground(backgroundColor);
 		gc.fillRectangle(e.x, e.y, e.width, e.height);
 		
 		topOfCurrentRow += paintRow(e, topOfCurrentRow, leftOffset, unallocatedTasks, true);
 		// now paint all allocated tasks
 		for (final R resource : resources) {
-			gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+			gc.setForeground(resourceLabelTextColor);
 			gc.drawString(labelProvider.getText(resource), VERTICAL_SPACE_BETWEEN_TASKS, topOfCurrentRow + VERTICAL_SPACE_BETWEEN_TASKS, true);
 			
 			resourceByY.put(topOfCurrentRow, resource);
 			// draw a horizontal line
-			gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GRAY));
+			gc.setForeground(dividerColor);
 			gc.drawLine(leftOffset, topOfCurrentRow, getSize().x - VERTICAL_SPACE_BETWEEN_TASKS, topOfCurrentRow);
 			
 			final List<T> assignment = assignmentProvider.getAssignedObjects(resource);
@@ -299,29 +335,35 @@ public class AssignmentEditor<R, T> extends Canvas {
 	}
 	
 	protected void drawTask(final T task, final GC gc,final int xoff, final int y, final Date start, final Date end) {
-		final String taskName = labelProvider.getText(task);
+		String taskName = labelProvider.getText(task);
 		
 		final int days = (int) ((start.getTime() - minDate.getTime()) / SCALE_FACTOR);
 		
 		final int w = (int) Math.max(MIN_WIDTH, ((end.getTime() - start.getTime()) / SCALE_FACTOR));
 		
 		if (task == selectedTask) {
-			gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN));
-			gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_GREEN));
+			gc.setBackground(selectedTaskGradientBottom);
+			gc.setForeground(selectedTaskGradientTop);
 		} else {
-			gc.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
-			gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
+			gc.setBackground(taskGradientBottom);
+			gc.setForeground(taskGradientTop);
 		}
 		
 		gc.fillGradientRectangle(xoff+days, y, w, TASK_HEIGHT, true);
 		
-		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+		gc.setForeground(resourceLabelTextColor);
 		
 		gc.drawRectangle(xoff+days, y, w, TASK_HEIGHT);
 		
-		gc.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-		final Point textExtent = gc.textExtent(taskName, SWT.DRAW_TRANSPARENT);
+		gc.setForeground(taskLabelTextColor);
+		Point textExtent = gc.textExtent(taskName, SWT.DRAW_TRANSPARENT);
+		while (textExtent.x > w) {
+			taskName = taskName.substring(0, taskName.length()-2);
+			textExtent = gc.textExtent(taskName, SWT.DRAW_TRANSPARENT);
+		}
 		// draw label in the middle
+		
+		
 		
 		// position of top left corner is position of middle of task - 1/2 textextent
 		final int labelx = xoff + days + w/2 - textExtent.x/2;
