@@ -24,9 +24,11 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
+import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
@@ -107,6 +109,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				return false;
 			}
 
+			@Override
+			public Color getDefaultEventColor() {
+				return ColorCache.getColor(221, 220, 221);
+			}
+			
 			@Override
 			public boolean showPlannedDates() {
 				return false;
