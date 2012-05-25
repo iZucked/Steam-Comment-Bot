@@ -11,14 +11,11 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
 
 public class ModelInstance implements IModelInstance {
-	private static final Logger log = LoggerFactory.getLogger(ModelInstance.class);
 	private final Resource resource;
 
 	public ModelInstance(final Resource resource) {
@@ -27,13 +24,12 @@ public class ModelInstance implements IModelInstance {
 
 	@Override
 	public EObject getModel() throws IOException {
-		
+
 		if (!resource.isLoaded()) {
 			resource.load(Collections.emptyMap());
 		}
 		if (resource.getContents().isEmpty()) {
-			log.error("Failed to get contents for " + resource.getURI() + ", as it is empty");
-			return null;
+			throw new IOException("Failed to get contents for " + resource.getURI() + ", as it is empty");
 		} else {
 			return resource.getContents().get(0);
 		}
@@ -49,21 +45,25 @@ public class ModelInstance implements IModelInstance {
 			switchAdapters(model, true);
 		}
 	}
-	
+
 	public void saveWithMany() throws IOException {
 		resource.save(Collections.emptyMap());
 	}
-	
+
 	/**
 	 * TODO this could be in the MMXCoreResourceHandler
+	 * 
 	 * @param model
 	 */
 	private void switchAdapters(EObject model, boolean on) {
-		if (model == null) return;
+		if (model == null)
+			return;
 		for (final Adapter a : model.eAdapters()) {
 			if (a instanceof IMMXAdapter) {
-				if (on) ((IMMXAdapter) a).enable(true);
-				else ((IMMXAdapter) a).disable();
+				if (on)
+					((IMMXAdapter) a).enable(true);
+				else
+					((IMMXAdapter) a).disable();
 			}
 		}
 		for (final EObject child : model.eContents()) {
