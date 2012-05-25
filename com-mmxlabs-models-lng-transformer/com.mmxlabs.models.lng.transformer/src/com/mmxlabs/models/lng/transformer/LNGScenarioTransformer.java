@@ -56,6 +56,8 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
 import com.mmxlabs.models.lng.port.Port;
@@ -78,6 +80,7 @@ import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -138,6 +141,8 @@ public class LNGScenarioTransformer {
 	 * A set of all transformer extensions being used (should contain {@link #contractTransformers})
 	 */
 	final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<ITransformerExtension>();
+
+	private Map<VesselClass, List<IVessel>> spotVesselsByClass = new HashMap<VesselClass, List<IVessel>>();
 
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
@@ -342,12 +347,61 @@ public class LNGScenarioTransformer {
 		// buildDiscountCurves(builder);
 
 		// freezeStartSequences(builder, entities);
+		
+		// freeze any frozen assignments
+		freezeInputModel(builder, entities);
+		
 
 		for (final ITransformerExtension extension : allTransformerExtensions) {
 			extension.finishTransforming();
 		}
 
 		return builder.getOptimisationData();
+	}
+
+	private void freezeInputModel(ISchedulerBuilder builder, ModelEntityMap entities) {
+		final InputModel input = rootObject.getSubModel(InputModel.class);
+		if (input != null) {
+			for (final UUIDObject o : input.getLockedAssignedObjects()) {
+				Assignment assignment = null;
+				for (final Assignment a : input.getAssignments()) {
+					if (a.getAssignedObjects().contains(o)) {
+						assignment = a;
+						break;
+					}
+				}
+				
+				if (assignment == null || assignment.getVessels().isEmpty()) continue;// o is not actually assigned to anything
+				final IVessel vessel;
+				if (assignment.isAssignToSpot()) {
+					final List<IVessel> spots = spotVesselsByClass.get(assignment.getVessels().iterator().next());
+					if (spots != null && spots.isEmpty() == false) {
+						vessel = spots.get(0);
+						spots.remove(0);
+					} else {
+						vessel = null;
+					}
+				} else {
+					vessel = entities.getOptimiserObject(assignment.getVessels().get(0), IVessel.class);
+				}
+				
+				if (vessel == null) continue;
+				
+				if (o instanceof Cargo) {
+					final ICargo cargo = entities.getOptimiserObject(o, ICargo.class);
+					if (cargo != null) {
+						// bind slots to vessel
+						builder.constrainSlotToVessels(cargo.getLoadOption(), Collections.singleton(vessel));
+						builder.constrainSlotToVessels(cargo.getDischargeOption(), Collections.singleton(vessel));
+					}
+				} else if (o instanceof VesselEvent) {
+					final IVesselEventPortSlot slot = entities.getOptimiserObject(o, IVesselEventPortSlot.class);
+					if (slot != null) {
+						builder.constrainSlotToVessels(slot, Collections.singleton(vessel));
+					}
+				}
+			}
+		}
 	}
 
 	// /**
@@ -591,6 +645,8 @@ public class LNGScenarioTransformer {
 
 			final ICargo cargo = builder.createCargo(eCargo.getName(), load, discharge, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
 
+			entities.addModelObject(eCargo, cargo);
+			
 			final Set<AVessel> allowedVessels = SetUtils.getVessels(eCargo.getAllowedVessels());
 			if (!allowedVessels.isEmpty()) {
 				final Set<IVessel> vesselsForCargo = new HashSet<IVessel>();
@@ -754,7 +810,7 @@ public class LNGScenarioTransformer {
 
 			if (charterCount > 0) {
 				for (int i = 0; i < charterCount; i++) {
-					builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount);
+					spotVesselsByClass.put(eVc, builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount));
 				}
 			}
 
