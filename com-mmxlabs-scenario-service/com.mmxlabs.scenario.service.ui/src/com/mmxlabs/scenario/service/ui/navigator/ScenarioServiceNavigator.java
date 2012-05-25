@@ -180,7 +180,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		final TreeColumn checkColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		// checkColumn.setText("Show");
-		checkColumn.setImage(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif").createImage());
+		checkColumn.setImage(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage());
 		checkColumn.setToolTipText("Display");
 		checkColumn.setMoveable(true);
 

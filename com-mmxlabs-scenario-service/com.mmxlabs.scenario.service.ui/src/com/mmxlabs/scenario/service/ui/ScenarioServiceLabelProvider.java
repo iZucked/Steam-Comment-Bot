@@ -68,9 +68,9 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 				final IScenarioServiceSelectionProvider service = selectionProviderTracker.getService();
 				if (service != null) {
 					if (service.isSelected((ScenarioInstance) object)) {
-						return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif").createImage();
+						return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
 					} else {
-						return ImageDescriptor.createWithFlags(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif"), SWT.IMAGE_DISABLE).createImage();
+						return ImageDescriptor.createWithFlags(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif"), SWT.IMAGE_DISABLE).createImage();
 					}
 				}
 			}
