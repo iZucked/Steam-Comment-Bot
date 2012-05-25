@@ -1,13 +1,16 @@
 package com.mmxlabs.models.lng.input.editorpart;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.widgets.Composite;
@@ -28,6 +31,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 
 public class InputJointModelEditorContribution extends
 		BaseJointModelEditorContribution<InputModel> {
@@ -180,8 +184,19 @@ public class InputJointModelEditorContribution extends
 				oldResource.getAssignedObjects().remove(task);
 				editor.update();
 			}
-			
 
+			@Override
+			public void taskOpened(final UUIDObject task) {
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(editorPart.getShell(),editorPart.getDefaultCommandHandler());
+				if(dcd.open(editorPart, editorPart.getRootObject(), Collections.singletonList((EObject)task), false) == Window.OK) {
+					updateEditorInput();
+				}
+			}
+
+			@Override
+			public void taskDeleted(UUIDObject task) {
+				// allow?
+			}
 		});
 		
 		
