@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.impl.DischargeEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
@@ -29,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.Capacity
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.CapacityEntry;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
@@ -44,7 +46,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
 public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 	private IPortSlotProvider portSlotProvider;
-
+	private IVesselProvider vesselProvider;
+	
 	private final FuelComponent[] idleFuelComponents = FuelComponent.getIdleFuelComponents();
 	private final FuelComponent[] travelFuelComponents = FuelComponent.getTravelFuelComponents();
 
@@ -62,6 +65,7 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	@Override
 	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans, final int startTime, final IAnnotatedSolution solution) {
 		final VoyagePlanIterator vpi = new VoyagePlanIterator();
+		final IVessel vessel = vesselProvider.getVessel(resource);
 		vpi.setVoyagePlans(plans, startTime);
 
 		vpi.reset();
@@ -233,7 +237,10 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					}
 				}
 				idle.setVesselState(details.getOptions().getVesselState());
-
+				
+				if (idle.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0)
+					idle.setCooldownDuration(Math.min(idleTime, vessel.getVesselClass().getCooldownTime()));
+				
 				solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_idleInfo, idle);
 
 			} else {

@@ -27,6 +27,8 @@ public final class IdleEventImpl extends AbstractScheduledEventImpl implements I
 
 	private final EnumMap<FuelComponent, Long> fuelCost = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 
+	private int cooldownDuration;
+
 	@Override
 	public IPort getPort() {
 		return port;
@@ -81,5 +83,14 @@ public final class IdleEventImpl extends AbstractScheduledEventImpl implements I
 
 	public void setFuelCost(final FuelComponent fuel, final long cost) {
 		fuelCost.put(fuel, cost);
+	}
+
+	public void setCooldownDuration(final int cooldownDuration) {
+		this.cooldownDuration = cooldownDuration;
+	}
+	
+	@Override
+	public int getCooldownDuration() {
+		return cooldownDuration;
 	}
 }
