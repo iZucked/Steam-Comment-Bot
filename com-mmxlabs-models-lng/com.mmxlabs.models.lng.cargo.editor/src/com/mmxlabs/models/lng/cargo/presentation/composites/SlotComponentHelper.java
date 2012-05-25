@@ -160,7 +160,8 @@ public class SlotComponentHelper extends BaseComponentHelper {
 					enabled = !((DischargeSlot) input).isFOBSale();
 				}
 				super.updateDisplay(value);
-				setControlEnablement(enabled);
+
+//				setControlEnablement(enabled);
 			}
 		};
 		detailComposite.addInlineEditor(editor);
