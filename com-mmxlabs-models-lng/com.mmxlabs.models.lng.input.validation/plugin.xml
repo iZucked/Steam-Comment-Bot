@@ -21,6 +21,44 @@
          </package>
          <constraints
                categories=" com.mmxlabs.models.lng.input.validation.base">
+            <constraint
+                  class="com.mmxlabs.models.lng.input.validation.VesselAssignmentConstraint"
+                  id="com.mmxlabs.models.lng.input.validation.VesselAssignmentConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Vessel Assignment Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  description body text
+               </description>
+               <target
+                     class="Assignment">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.input.validation.CargoTypeAssignmentConstraint"
+                  id="com.mmxlabs.models.lng.input.validation.CargoTypeAssignmentConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Cargo Type Assignment Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  description body text
+               </description>
+               <target
+                     class="Assignment">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
