@@ -173,7 +173,8 @@ public class VoyagePlanAnnotatorTest {
 
 		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
 		annotator.setPortSlotProvider(portSlotEditor);
-
+		annotator.setVesselProvider(null);
+		
 		final VoyagePlan plan1 = new VoyagePlan();
 		plan1.setSequence(new Object[] { loadDetails1, voyageDetails1, dischargeDetails1, voyageDetails2, loadDetails2 });
 
