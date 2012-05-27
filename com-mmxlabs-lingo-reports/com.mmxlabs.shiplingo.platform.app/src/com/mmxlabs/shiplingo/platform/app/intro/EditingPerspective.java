@@ -27,10 +27,8 @@ public class EditingPerspective implements IPerspectiveFactory {
 		final IFolderLayout dataFolder = layout.createFolder("dataFolder", IPageLayout.RIGHT, 0.75f, IPageLayout.ID_EDITOR_AREA);
 		dataFolder.addView("com.mmxlabs.models.lng.port.editor.views.PortView");
 		dataFolder.addView("com.mmxlabs.models.lng.fleet.editor.views.VesselView");
-		dataFolder.addView("com.mmxlabs.models.lng.fleet.editor.views.VesselClassView");
 		
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.port.editor.views.PortView");
 		layout.addShowViewShortcut("com.mmxlabs.models.lng.fleet.editor.views.VesselView");
-		layout.addShowViewShortcut("com.mmxlabs.models.lng.fleet.editor.views.VesselClassView");
 	}
 }
