@@ -47,7 +47,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 
 					try {
 						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
-						final DateFormat df = DateFormat.getDateTimeInstance();
+						final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 						final Set<String> existingNames = new HashSet<String>();
 						for (final Container c : instance.getElements()) {
@@ -58,7 +58,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 							}
 						}
 
-						final String namePrefix = "Fork-" +df.format(new Date());
+						final String namePrefix = "Fork " +df.format(new Date()) + " - " + instance.getName();
 						String newName = namePrefix;
 						int counter = 1;
 						while (existingNames.contains(newName)) {
