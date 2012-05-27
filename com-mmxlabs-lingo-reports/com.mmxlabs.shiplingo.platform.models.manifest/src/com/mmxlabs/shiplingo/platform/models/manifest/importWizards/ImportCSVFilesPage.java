@@ -113,6 +113,28 @@ public class ImportCSVFilesPage extends WizardPage {
 		final Composite top = new Composite(c1, SWT.NONE);
 
 		top.setLayout(new GridLayout(1, false));
+
+		final Button auto = new Button(top, SWT.NONE);
+		auto.setText("Choose &Directory...");
+
+		auto.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				// display file open dialog and then fill out files if the exist.
+				final DirectoryDialog dd = new DirectoryDialog(getShell());
+				final String d = dd.open();
+
+				if (d != null) {
+					final File dir = new File(d);
+					if (dir.exists() && dir.isDirectory()) {
+						for (final Chunk c : chunks) {
+							c.setFromDirectory(dir);
+						}
+					}
+				}
+			}
+		});
+
 		for (final EClass subModelClass : ManifestJointModel.getSubmodelClasses()) {
 			final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(subModelClass);
 			if (importer == null)
@@ -143,27 +165,6 @@ public class ImportCSVFilesPage extends WizardPage {
 				chunk.editors.put(entry.getKey(), ffe);
 			}
 		}
-
-		final Button auto = new Button(top, SWT.NONE);
-		auto.setText("Choose &Directory...");
-
-		auto.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				// display file open dialog and then fill out files if the exist.
-				final DirectoryDialog dd = new DirectoryDialog(getShell());
-				final String d = dd.open();
-
-				if (d != null) {
-					final File dir = new File(d);
-					if (dir.exists() && dir.isDirectory()) {
-						for (final Chunk c : chunks) {
-							c.setFromDirectory(dir);
-						}
-					}
-				}
-			}
-		});
 
 		c1.setContent(top);
 		// c1.setExpandVertical(true);
