@@ -7,6 +7,7 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +19,7 @@ import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -41,6 +43,9 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	private IScheduleViewColourScheme currentScheme = null;
 
 	private final GanttChartViewer viewer;
+
+	final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
+	final DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT);
 
 	public EMFScheduleLabelProvider(final GanttChartViewer viewer) {
 		this.viewer = viewer;
@@ -93,54 +98,79 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return colourSchemes;
 	}
 
+	
+	private String dateToString (Date date){
+		return 	df.format(date) + " " + tf.format(date);
+	}
+
 	@Override
 	public String getToolTipText(final Object element) {
 		if (element instanceof Sequence) {
 			return getText(element);
 		} else if (element instanceof Event) {
 
-			final DateFormat df = DateFormat.getDateInstance();
-
 			final StringBuilder sb = new StringBuilder();
-			final Event event = (Event) element;
+			final Event event = (Event) element;			
+			final String start = dateToString(event.getStart()) ;
+			final String end = dateToString(event.getEnd()) ;
+			
+//			final String start = df.format(event.getStart()) + " " + tf.format(event.getStart());
+//			final String end = df.format(event.getEnd());
 
-			sb.append("Start Date: " + df.format(event.getStart()) + "\n");
-			sb.append("End Date: " + df.format(event.getEnd()) + "\n");
+//			if (element instanceof Journey) {
+//				final Journey journey = (Journey) element;
+//				if (journey.getPort() != null) {
+//					sb.append("From: " + journey.getPort().getName() + "\n");
+//				}
+//				if (journey.getDestination() != null) {
+//					sb.append("To: " + journey.getDestination().getName() + "\n");
+//				}
+//			}
+//
+//			sb.append("\n");
+
+//			if (element instanceof Journey) {
+//				final Journey journey = (Journey) element;
+//				if (journey.getPort() != null) {
+//					sb.append("Depart: " + start + ", " + journey.getPort().getName() + "\n");
+//				}
+//				if (journey.getDestination() != null) {
+//					sb.append("Arrive: " + end + ", " + journey.getDestination().getName() + "\n");
+//				}
+//			}
+//
+			
+			sb.append("Start: " + start + "\n");
+			sb.append("End:  " + end + "\n");
 			final int days = event.getDuration() / 24;
 			final int hours = event.getDuration() % 24;
 			sb.append("Duration: " + days + " days, " + hours + " hours\n");
-
 			if (element instanceof Journey) {
 				final Journey journey = (Journey) element;
-				if (journey.getPort() != null) {
-					sb.append("From: " + journey.getPort().getName() + "\n");
-				}
-				if (journey.getDestination() != null) {
-					sb.append("To: " + journey.getDestination().getName() + "\n");
-				}
 				// sb.append("Vessel State: " + journey.getVesselState().getName() + "\n");
 				if (!journey.getRoute().equalsIgnoreCase("default")) {
 					sb.append("Route: " + journey.getRoute() + "\n");
 				}
 				sb.append(String.format("Speed: %.1f\n", journey.getSpeed()));
-			} else {
+			} 
+			else {
 				if (event.getPort() != null) {
-					sb.append("Port: " + event.getPort().getName() + "\n");
+//					sb.append("Port: " + event.getPort().getName() + "\n");
 				}
 				if (element instanceof SlotVisit) {
-					final SlotVisit svisit = (SlotVisit) element;
-					sb.append("Window Start Time: " + svisit.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime() + "\n");
-					sb.append("Window End Time: " + svisit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime() + "\n");
+					final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+					sb.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
+					sb.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
 				} else if (element instanceof Idle) {
-					final Idle idle = (Idle) element;
-					sb.append("Laden: " + (idle.isLaden() ? "Yes" : "No") + "\n");
+//					final Idle idle = (Idle) element;
+//					sb.append("Laden: " + (idle.isLaden() ? "Yes" : "No") + "\n");
 				}
 			}
 
 			if (element instanceof FuelUsage) {
 				final FuelUsage fuel = (FuelUsage) element;
 				for (final FuelQuantity fq : fuel.getFuels()) {
-					sb.append(String.format("%s, %,d %s, $%,d\n", fq.getFuel().toString(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(), fq.getCost()));
+					sb.append(String.format("%s: %,d %s | $%,d\n", fq.getFuel().toString(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(), fq.getCost()));
 				}
 			}
 
@@ -151,17 +181,23 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	@Override
 	public String getToolTipTitle(final Object element) {
+		String port = null;
+		if (element instanceof Event) {
+			port = ((Event) element).getPort().getName();
+		}
 		if (element instanceof Journey) {
 			final Journey journey = (Journey) element;
-			return (journey.isLaden() ? "Laden" : "Ballast") + " Journey";
+			return port + " -- " + journey.getDestination().getName() + (journey.isLaden() ? " (Laden)" : " (Ballast)");
 		} else if (element instanceof Idle) {
 			final Idle idle = (Idle) element;
-			return (idle.isLaden() ? "Laden" : "Ballast") + " Idle";
+			return "At " + port + (idle.isLaden() ? " (Laden" : " (Ballast") + " idle)";
 		} else if (element instanceof Sequence) {
 			return getText(element);
 		} else if (element instanceof Event) {
-			// final String displayTypeName = ((PortVisit) element).getDisplayTypeName();
-			return "Port Visit: ";// + displayTypeName;
+			return "At " +  port;// + displayTypeName;
+		} else if (element instanceof SlotVisit) {
+			SlotVisit sv = (SlotVisit) element;
+			return "At " +  port;// + displayTypeName;
 		}
 		return null;
 	}
