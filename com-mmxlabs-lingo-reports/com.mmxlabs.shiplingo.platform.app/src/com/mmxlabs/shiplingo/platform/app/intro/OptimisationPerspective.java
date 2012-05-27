@@ -30,6 +30,7 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 		reportsFolder.addView(TotalsHierarchyView.ID);
 		reportsFolder.addView(BasicCargoReportView.ID);
 		reportsFolder.addView(CargoReportView.ID);
+		reportsFolder.addView(PortRotationReportView.ID);
 		reportsFolder.addView(LatenessReportView.ID);
 		reportsFolder.addView(CooldownReportView.ID);
 		reportsFolder.addView(FitnessReportView.ID);
@@ -39,10 +40,10 @@ public class OptimisationPerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(TotalsHierarchyView.ID);
 		layout.addShowViewShortcut(CargoReportView.ID);
 		layout.addShowViewShortcut(BasicCargoReportView.ID);
-		layout.addShowViewShortcut(FitnessReportView.ID);
+		layout.addShowViewShortcut(PortRotationReportView.ID);
 		layout.addShowViewShortcut(LatenessReportView.ID);
 		layout.addShowViewShortcut(CooldownReportView.ID);
-		layout.addShowViewShortcut(PortRotationReportView.ID);
+		layout.addShowViewShortcut(FitnessReportView.ID);
 
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView");
 
