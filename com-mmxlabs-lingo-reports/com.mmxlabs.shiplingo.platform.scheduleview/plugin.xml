@@ -68,6 +68,11 @@
             id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme"
             name="Vessel State">
       </ColourScheme>
+      <ColourScheme
+            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.LadenHighlightColourScheme"
+            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.LadenHighlightColourScheme"
+            name="Laden Highlight">
+      </ColourScheme>
    </extension>
 
 </plugin>
