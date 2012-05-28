@@ -76,4 +76,14 @@
           subModelClass="com.mmxlabs.models.lng.input.InputModel">
     </jointModelEditor>
  </extension>
+ <extension
+       id="com.mmxlabs.models.lng.input.cargohelpers"
+       point="com.mmxlabs.models.ui.componenthelpers">
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.input.ui.cargoeditor.AssignmentInlineEditorComponentHelper"
+          id="com.mmxlabs.models.lng.input.editor.cargoAssignmentHelper"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.cargo.Cargo">
+    </componentHelper>
+ </extension>
 </plugin>
