@@ -291,7 +291,13 @@ public class IdleImpl extends EventImpl implements Idle {
 		return result.toString();
 	}
 
-	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String type() {
+		return "Idle";
+	}	
 } // end of IdleImpl
 
 // finish type fixing

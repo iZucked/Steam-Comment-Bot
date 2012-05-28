@@ -573,7 +573,14 @@ public class JourneyImpl extends EventImpl implements Journey {
 		result.append(')');
 		return result.toString();
 	}
-
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String type() {
+		return "Journey";
+	}
 } // end of JourneyImpl
 
 // finish type fixing

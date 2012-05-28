@@ -346,6 +346,14 @@ public class CooldownImpl extends EventImpl implements Cooldown {
 		return result.toString();
 	}
 
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String type() {
+		return "Cooldown";
+	}
+	
 } // end of CooldownImpl
 
 // finish type fixing

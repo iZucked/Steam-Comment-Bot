@@ -8,6 +8,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
+import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -165,6 +168,26 @@ public class VesselEventVisitImpl extends EventImpl implements VesselEventVisit 
 		return super.name();
 	}
 
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String type() {
+		final VesselEvent event = getVesselEvent();
+		if (event != null) {
+			if (event instanceof CharterOutEvent) {
+				return "Charter Out";
+			}
+			if (event instanceof DryDockEvent) {
+				return "Dry Dock";
+			}
+			if (event instanceof MaintenanceEvent) {
+				return "Maintenance";
+			}
+		}
+		return "Unknown Event";
+	}
+	
 } // end of VesselEventVisitImpl
 
 // finish type fixing
