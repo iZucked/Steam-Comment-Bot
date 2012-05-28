@@ -81,7 +81,7 @@ public class DistanceMatrixCreator {
 	}
 
 	private void run() throws IOException {
-		final BufferedImage image = ImageIO.read(new File(getImageFilePath()));
+		final BufferedImage image = ImageIO.read(getClass().getResource(getImageFilePath()));
 
 		final boolean[][] landMatrix = new boolean[image.getWidth()][image.getHeight()];
 		for (int i = 0; i < landMatrix.length; i++) {
@@ -228,7 +228,7 @@ public class DistanceMatrixCreator {
 		return imageFilePath;
 	}
 
-	@Option(defaultValue = "earth.png", help = "Image to load. Expects a mercator projection of the Earth with lat/lon 0,0 in the centre. "
+	@Option(defaultValue = "/med-earth.png", help = "Image to load. Expects a mercator projection of the Earth with lat/lon 0,0 in the centre. "
 			+ "Blue pixels (RGB 0 0 255) are considered sea, and all other pixels are considered land. "
 			+ "The projection should be equal-aspect around the equator (so that one pixel across is one pixel up), in order for the maximum latitude to be correctly computed. "
 			+ "All terrain above/below the maximum latitude is considered impassable (land).")
