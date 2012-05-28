@@ -343,6 +343,7 @@ public class TotalsHierarchyView extends ViewPart {
 		top.addChild(charterCosts);
 
 		for (final Sequence seq : schedule.getSequences()) {
+			if (seq.isFleetVessel()) continue;
 			long acc = 0;
 			for (final Event e : seq.getEvents()) {
 				acc += e.getHireCost();
