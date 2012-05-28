@@ -58,7 +58,7 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 	@Override
 	public void setLocked(boolean locked) {
 //		vesselClassViewerPane.setLocked(locked);
-		vesselViewerPane.setLocked(locked);
-		eventViewerPane.setLocked(locked);
+		if (vesselViewerPane != null) vesselViewerPane.setLocked(locked);
+		if (eventViewerPane != null) eventViewerPane.setLocked(locked);
 	}
 }
