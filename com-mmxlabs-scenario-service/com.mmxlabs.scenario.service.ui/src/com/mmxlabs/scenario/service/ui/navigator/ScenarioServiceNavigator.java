@@ -13,6 +13,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -224,7 +225,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 						}
 					}
 				} else {
-					tree.deselectAll();
+					viewer.setSelection(StructuredSelection.EMPTY);
 				}
 			}
 
