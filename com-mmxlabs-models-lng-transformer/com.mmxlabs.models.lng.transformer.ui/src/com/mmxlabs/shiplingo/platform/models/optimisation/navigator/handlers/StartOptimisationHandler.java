@@ -17,6 +17,7 @@ import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
@@ -162,6 +163,11 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 							log.error(ex.getMessage(), ex);
 							control.cancel();
 							instance.setLocked(false);
+
+							final Display display = Display.getDefault();
+							if (display != null) {
+								MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", ex.getMessage());
+							}
 						}
 						// Resume if paused
 					} else if (control.getJobState() == EJobState.PAUSED) {
