@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
@@ -19,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
@@ -26,6 +28,7 @@ import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
@@ -36,6 +39,9 @@ public class VoyagePlanAnnotatorTest {
 
 	@Test
 	public void testAnnotateFromVoyagePlans() {
+
+		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
+		final IVessel vessel = context.mock(IVessel.class);
 
 		final ISequenceElement element1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement element2 = context.mock(ISequenceElement.class, "2");
@@ -173,8 +179,8 @@ public class VoyagePlanAnnotatorTest {
 
 		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
 		annotator.setPortSlotProvider(portSlotEditor);
-		annotator.setVesselProvider(null);
-		
+		annotator.setVesselProvider(vesselProvider);
+
 		final VoyagePlan plan1 = new VoyagePlan();
 		plan1.setSequence(new Object[] { loadDetails1, voyageDetails1, dischargeDetails1, voyageDetails2, loadDetails2 });
 
@@ -186,6 +192,13 @@ public class VoyagePlanAnnotatorTest {
 		plans.add(plan2);
 
 		final IResource resource = context.mock(IResource.class);
+
+		context.checking(new Expectations() {
+			{
+				one(vesselProvider).getVessel(resource);
+				will(returnValue(vessel));
+			}
+		});
 
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
 		annotator.annotateFromVoyagePlan(resource, plans, 0, annotatedSolution);
