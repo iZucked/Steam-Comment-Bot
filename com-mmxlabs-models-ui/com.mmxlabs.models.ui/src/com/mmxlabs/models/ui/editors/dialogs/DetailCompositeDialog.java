@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +17,11 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EStructuralFeature.Setting;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -59,6 +62,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Equality;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
@@ -169,12 +173,44 @@ public class DetailCompositeDialog extends Dialog {
 			final IDisplayComposite displayComposite) {
 		final EObject original = input;
 		if (!originalToDuplicate.containsKey(original)) {
-			final Collection<EObject> range = displayCompositeFactory
-					.getExternalEditingRange(rootObject, original);
+			final List<EObject> range = new ArrayList<EObject>(displayCompositeFactory
+					.getExternalEditingRange(rootObject, original));
 			range.add(original);
 			// range is the full set of objects which the display composite
 			// might touch; we need to duplicate all of these
-			final Collection<EObject> duplicateRange = EcoreUtil.copyAll(range);
+			
+			// however, there is a possibility that two things will have overlapping range
+			// so we don't want to duplicate again if that happens.
+			
+			final ArrayList<EObject> reducedRange = new ArrayList<EObject>(range);
+			
+			final Iterator<EObject> iterator = reducedRange.iterator();
+			final ArrayList<Pair<Integer, EObject>> alreadyDuplicated = new ArrayList<Pair<Integer, EObject>>();
+			int index = 0;
+			
+			while (iterator.hasNext()) {
+				final EObject o = iterator.next();
+				if (originalToDuplicate.containsKey(o)) {
+					iterator.remove();
+					alreadyDuplicated.add(new Pair<Integer, EObject>(index, o));
+				}
+				index++;
+			}
+			
+			final List<EObject> duplicateRange = new ArrayList<EObject>(EcoreUtil.copyAll(reducedRange));
+			
+			// fix crossreferences to existing duplicates
+			TreeIterator<EObject> allDuplicates = EcoreUtil.getAllContents(duplicateRange);
+			while (allDuplicates.hasNext()) {
+				pointReferencesToExistingDuplicates(allDuplicates.next());
+			}
+			
+			// re-insert the duplicates back into the range
+			for (final Pair<Integer, EObject> duplicated : alreadyDuplicated) {
+				final EObject duplicate = originalToDuplicate.get(duplicated.getSecond());
+				duplicateRange.add(duplicated.getFirst(), duplicate);	
+			}
+			
 			ranges.put(original, duplicateRange);
 			final Iterator<EObject> rangeIterator = range.iterator();
 			final Iterator<EObject> duplicateRangeIterator = duplicateRange
@@ -202,6 +238,31 @@ public class DetailCompositeDialog extends Dialog {
 			}
 		}
 		return originalToDuplicate.get(original);
+	}
+
+	/**
+	 * For every EObject in duplicate range or its containment tree, finds any references
+	 * to any already-duplicated objects and patches them up.
+	 * 
+	 * @param duplicateRange
+	 */
+	private void pointReferencesToExistingDuplicates(final EObject object) {
+		for (final EReference ref : object.eClass().getEAllReferences()) {
+			if (ref.isContainment()) continue;
+			if (ref.isMany()) {
+				final List values = (List) object.eGet(ref);
+				for (int i = 0; i<values.size(); i++) {
+					if (originalToDuplicate.containsKey(values.get(i))) {
+						values.set(i, originalToDuplicate.get(values.get(i)));
+					}
+				}
+			} else {
+				final EObject value = (EObject) object.eGet(ref);
+				if (originalToDuplicate.containsKey(value)) {
+					object.eSet(ref, originalToDuplicate.get(value));
+				}
+			}
+		}
 	}
 
 	/**
@@ -783,6 +844,8 @@ public class DetailCompositeDialog extends Dialog {
 					}
 
 				} else {
+					correctCrossReferences();
+					
 					final CompoundCommand cc = new CompoundCommand();
 					for (final Map.Entry<EObject, EObject> entry : originalToDuplicate
 							.entrySet()) {
@@ -815,6 +878,40 @@ public class DetailCompositeDialog extends Dialog {
 		}
 	}
 
+	/**
+	 * If we are modifying duplicates and then applying the change back to the originals,
+	 * any internal cross-references will need adjusting back to the originals or the refs won't be valid.
+	 * 
+	 * This method takes all non-containment references between duplicates and fixes them
+	 */
+	private void correctCrossReferences() {
+		final Map<EObject, Collection<Setting>> xrefs = EcoreUtil.CrossReferencer.find(duplicateToOriginal.keySet());
+		
+		for (final Map.Entry<EObject, Collection<Setting>> xref : xrefs.entrySet()) {
+			final EObject target = xref.getKey();
+			final EObject original = duplicateToOriginal.get(target);
+			if (original == null) continue;
+			final Collection<Setting> refs = xref.getValue();
+			for (final Setting setting : refs) {
+				final EStructuralFeature feature = setting.getEStructuralFeature();
+				if (feature instanceof EReference) {
+					final EReference reference = (EReference) feature;
+					if (reference.isContainment() == false) {
+						if (reference.isMany()) {
+							final List l = (List) setting.getEObject().eGet(reference);
+							int x;
+							while ((x = l.indexOf(target)) != -1) {
+								l.set(x, original);
+							}
+						} else {
+							setting.getEObject().eSet(reference, original);
+						}
+					}
+				}
+			}
+		}
+	}
+
 	private void executeFinalCommand(final CompoundCommand cc) {
 		commandHandler.getEditingDomain().getCommandStack().execute(cc);
 	}
@@ -831,6 +928,8 @@ public class DetailCompositeDialog extends Dialog {
 	 * attributes.
 	 * 
 	 * This will do for now.
+	 * 
+	 * TODO fix so that references to duplicates are pointed back
 	 * 
 	 * @param eObject
 	 *            the object to be adjusted
@@ -851,39 +950,18 @@ public class DetailCompositeDialog extends Dialog {
 		try {
 			final CompoundCommand compound = new CompoundCommand();
 			compound.append(new IdentityCommand());
-			for (final EStructuralFeature feature : original.eClass()
-					.getEAllStructuralFeatures()) {
+			for (final EStructuralFeature feature : original.eClass().getEAllStructuralFeatures()) {
 				// For containment references, we need to compare the contained
 				// object, rather than generate a SetCommand.
 				if (original.eClass().getEAllContainments().contains(feature)) {
 					if (feature.isMany()) {
 						if (!((Collection<?>) original.eGet(feature)).isEmpty())
-							compound.append(RemoveCommand.create(editingDomain,
-									original, feature,
-									(Collection<?>) original.eGet(feature)));
-						if (!((Collection<?>) duplicate.eGet(feature))
-								.isEmpty())
-							compound.append(AddCommand.create(editingDomain,
-									original, feature,
-									(Collection<?>) duplicate.eGet(feature)));
-						// final Command mas =
-						// CommandUtil.createMultipleAttributeSetter(editingDomain,
-						// original, feature, (Collection)
-						// duplicate.eGet(feature));
-						// if (mas.canExecute() == false) {
-						// log.error("Unable to set the feature " +
-						// feature.getName() + " on an instance of " +
-						// original.eClass().getName(), new RuntimeException(
-						// "Attempt to set feature which could not be set."));
-						// }
-						// compound.append(mas);
+							compound.append(RemoveCommand.create(editingDomain, original, feature, (Collection<?>) original.eGet(feature)));
+						if (!((Collection<?>) duplicate.eGet(feature)).isEmpty())
+							compound.append(AddCommand.create(editingDomain, original, feature, (Collection<?>) duplicate.eGet(feature)));
 					} else {
-						final Command c = makeEqualizer(
-								(EObject) original.eGet(feature),
-								(EObject) duplicate.eGet(feature));
-						// if (!c.getAffectedObjects().isEmpty()) {
+						final Command c = makeEqualizer((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature));
 						compound.append(c);
-						// }
 					}
 
 					continue;
