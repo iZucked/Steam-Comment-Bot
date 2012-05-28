@@ -21,6 +21,8 @@ import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
@@ -35,6 +37,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 	private static final String TOTAL_COST = "Total Cost";
 
 	private static final String TYPE_COST = "Cost";
+	public static final String TYPE_TIME = "Days, Hours";
 
 	public static class RowData {
 		public RowData(final String scheduleName, final String component, final String type, final long fitness) {
@@ -69,6 +72,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		long totalCost = 0l;
 		long canals = 0;
 		long hire = 0;
+		
+		long lateness = 0;
 
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event evt : seq.getEvents()) {
@@ -91,6 +96,22 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 					canals += journey.getToll();
 					totalCost += journey.getToll();
 				}
+				if (evt instanceof SlotVisit) {
+					final SlotVisit visit = (SlotVisit) evt;
+
+					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
+						
+						long late = visit.getStart().getTime() -  visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().getTime();
+						lateness += (late / 1000 / 60/ 60);
+					}
+
+				} else if (evt instanceof VesselEventVisit) {
+					final VesselEventVisit vev = (VesselEventVisit) evt;
+					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
+						long late = evt.getStart().getTime() -  vev.getVesselEvent().getStartBy().getTime();
+						lateness += (late / 1000 / 60/ 60);
+					}
+				}
 			}
 		}
 
@@ -108,6 +129,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		output.add(new RowData(scheduleName, "Canal Fees", TYPE_COST, canals));
 		output.add(new RowData(scheduleName, "Charter Fees", TYPE_COST, hire));
 		output.add(new RowData(scheduleName, "Distance", TYPE_COST, distance));
+		
+		output.add(new RowData(scheduleName, "Lateness", TYPE_TIME, lateness));
 
 		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost));
 

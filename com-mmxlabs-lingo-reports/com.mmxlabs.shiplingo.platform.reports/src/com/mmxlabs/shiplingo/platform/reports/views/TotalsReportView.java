@@ -99,7 +99,14 @@ public class TotalsReportView extends ViewPart {
 				case 2:
 					return d.type;
 				case 3:
-					return String.format("%,d", d.fitness);
+					if (TotalsContentProvider.TYPE_TIME.equals(d.type)) {
+						final long days = d.fitness / 24;
+						final long hours = d.fitness % 24;
+						return "" + days + ", " + hours;
+					} else {
+
+						return String.format("%,d", d.fitness);
+					}
 				}
 			}
 			return "";
