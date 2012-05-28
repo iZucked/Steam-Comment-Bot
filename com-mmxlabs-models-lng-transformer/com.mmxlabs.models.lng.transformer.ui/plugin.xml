@@ -33,12 +33,14 @@
             <enabledWhen>
                   <with
                         variable="selection">
-               <iterate>
+               <iterate
+                     ifEmpty="false">
                   <and>
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                      </instanceof>
                      <test
+                           forcePluginActivation="true"
                            property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPlay">
                      </test>
                   </and>
@@ -48,7 +50,8 @@
             <activeWhen>
               <with
                         variable="selection">
-               <iterate>
+               <iterate
+                        ifEmpty="false">
                   <and>
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -62,7 +65,8 @@
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StopOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.terminate">
             <enabledWhen>
-               <iterate>
+               <iterate
+                     ifEmpty="false">
                   <and>
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -73,12 +77,26 @@
                   </and>
                </iterate>
             </enabledWhen>
+            <activeWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <and>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </and>
+                  </iterate>
+               </with>
+            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.PauseOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.pause">
             <enabledWhen>
-               <iterate>
+               <iterate
+                     ifEmpty="false">
                   <and>
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -89,12 +107,26 @@
                   </and>
                </iterate>
             </enabledWhen>
+            <activeWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <and>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </and>
+                  </iterate>
+               </with>
+            </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.derive.DeriveWizardHandler"
                commandId="com.mmxlabs.commands.optimisation.save">
            <enabledWhen>
-               <iterate>
+               <iterate
+                     ifEmpty="false">
                   <and>
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -102,12 +134,26 @@
                   </and>
                </iterate>
             </enabledWhen>
+           <activeWhen>
+              <with
+                    variable="selection">
+                 <iterate
+                       ifEmpty="false">
+                    <and>
+                       <instanceof
+                             value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                       </instanceof>
+                    </and>
+                 </iterate>
+              </with>
+           </activeWhen>
          </handler>
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.EvaluateOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.evaluate">
             <enabledWhen>
-               <iterate>
+               <iterate
+                     ifEmpty="false">
                   <and>
                      <instanceof
                            value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -120,6 +166,19 @@
                   </and>
                </iterate>
             </enabledWhen>
+            <activeWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <and>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </and>
+                  </iterate>
+               </with>
+            </activeWhen>
          </handler>
       </extension>
 
