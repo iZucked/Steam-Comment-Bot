@@ -8,7 +8,8 @@ Bundle-Activator: com.mmxlabs.models.lng.input.presentation.InputEditorPlugin$Im
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.models.lng.input.presentation
+Export-Package: com.mmxlabs.models.lng.input.editor.utils,
+ com.mmxlabs.models.lng.input.presentation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
  com.mmxlabs.models.lng.input.edit;visibility:=reexport,

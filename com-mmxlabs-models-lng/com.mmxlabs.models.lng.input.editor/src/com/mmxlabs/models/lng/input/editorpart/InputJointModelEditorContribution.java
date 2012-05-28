@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.input.editor.IAssignmentListener;
 import com.mmxlabs.models.lng.input.editor.IAssignmentProvider;
 import com.mmxlabs.models.lng.input.editor.ISizeListener;
 import com.mmxlabs.models.lng.input.editor.IAssignmentInformationProvider;
+import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
@@ -97,33 +98,12 @@ public class InputJointModelEditorContribution extends
 		final IAssignmentInformationProvider<Assignment, UUIDObject> timing = new IAssignmentInformationProvider<Assignment, UUIDObject>() {
 			@Override
 			public Date getStartDate(UUIDObject task) {
-				if (task instanceof Cargo) {
-					return ((Cargo) task).getLoadSlot()
-							.getWindowStartWithSlotOrPortTime();
-				} else if (task instanceof VesselEvent) {
-					return
-							((VesselEvent) task).getStartBy();
-				} else if (task instanceof Slot) {
-					return ((Slot) task).getWindowStartWithSlotOrPortTime();
-				} else {
-					return null;
-				}
+				return AssignmentEditorHelper.getStartDate(task);
 			}
 			
 			@Override
 			public Date getEndDate(UUIDObject task) {
-				if (task instanceof Cargo) {
-					return ((Cargo) task).getDischargeSlot().getWindowEndWithSlotOrPortTime();
-				} else if (task instanceof VesselEvent) {
-					return 
-							new Date(
-							((VesselEvent) task).getStartBy().getTime()
-							+ Timer.ONE_DAY * ((VesselEvent)task).getDurationInDays());
-				} else if (task instanceof Slot) {
-					return ((Slot) task).getWindowEndWithSlotOrPortTime();
-				} else {
-					return null;
-				}
+				return AssignmentEditorHelper.getEndDate(task);
 			}
 
 			@Override
@@ -177,40 +157,9 @@ public class InputJointModelEditorContribution extends
 			public void taskReassigned(UUIDObject task, UUIDObject beforeTask,
 					UUIDObject afterTask, Assignment oldResource,
 					Assignment newResource) {
-				final CompoundCommand cc = new CompoundCommand();
-				final EditingDomain ed = editorPart.getEditingDomain();
+				final Command c = AssignmentEditorHelper.taskReassigned(editorPart.getEditingDomain(), modelObject, task, beforeTask, afterTask, oldResource, newResource);
 				
-				if (oldResource != null) {
-					cc.append(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
-				}
-				
-				int position;
-				if (beforeTask != null) {
-					position = newResource.getAssignedObjects().indexOf(beforeTask);
-				} else if (afterTask != null) {
-					position = newResource.getAssignedObjects().indexOf(afterTask) + 1;
-				} else {
-					position = 0;
-					final Date start = timing.getStartDate(task);
-					final Date end = timing.getEndDate(task);
-					for (final UUIDObject o : newResource.getAssignedObjects()) {
-						if (end.before(timing.getStartDate(o))) {
-							break;
-						} else if (start.after(timing.getEndDate(o))) {
-							position++;
-							break;
-						}
-						position++;
-					}
-				}
-				
-				if (newResource.getAssignedObjects().isEmpty() || position == newResource.getAssignedObjects().size()) {
-					cc.append(AddCommand.create(ed, newResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
-				} else {
-					cc.append(AddCommand.create(ed, newResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task, position));
-				}
-				
-				ed.getCommandStack().execute(cc);
+				editorPart.getEditingDomain().getCommandStack().execute(c);
 				
 				editor.update();
 			}
@@ -219,9 +168,8 @@ public class InputJointModelEditorContribution extends
 			public void taskUnassigned(UUIDObject task, Assignment oldResource) {
 				final EditingDomain ed = editorPart.getEditingDomain();
 				
-				final CompoundCommand cc = new CompoundCommand();
-				cc.append(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
-				cc.append(RemoveCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), task));
+				final Command cc = AssignmentEditorHelper.taskUnassigned(ed, modelObject, task, oldResource);
+				
 				ed.getCommandStack().execute(cc);
 				
 				editor.update();
