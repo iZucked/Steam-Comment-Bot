@@ -45,7 +45,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	}
 
 	private void disableAdapters(final EObject top) {
-		for (final Adapter a : top.eAdapters()) {
+		for (final Adapter a : top.eAdapters().toArray(new Adapter[top.eAdapters().size()])) {
 			if (a instanceof IMMXAdapter) {
 				((IMMXAdapter) a).disable();
 			}

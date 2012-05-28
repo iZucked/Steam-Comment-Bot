@@ -372,8 +372,10 @@ public class MultiDetailDialog extends Dialog {
 						}
 					});
 
-					if (proxy.getFeature().isMany() && ((proxy.getFeature() instanceof EAttribute) || (((EReference) proxy.getFeature()).isContainment() == false))) {
-						manager.add(new MultiFeatureAction(pair, featuresToSet));
+					if (proxy.getFeature() != null) {
+						if (proxy.getFeature().isMany() && ((proxy.getFeature() instanceof EAttribute) || (((EReference) proxy.getFeature()).isContainment() == false))) {
+							manager.add(new MultiFeatureAction(pair, featuresToSet));
+						}
 					}
 
 					final ToolBar tb = manager.createControl(composite);
