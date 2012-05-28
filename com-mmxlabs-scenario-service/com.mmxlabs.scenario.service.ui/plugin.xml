@@ -98,6 +98,10 @@
             id="com.mmxlabs.scenario.service.ui.fork"
             name="Fork Scenario">
       </command>
+      <command
+            id="com.mmxlabs.scenario.service.ui.revert"
+            name="Revert">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -304,6 +308,20 @@
             </with>
          </activeWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.RevertScenarioCommandHandler"
+            commandId="com.mmxlabs.scenario.service.ui.revert">
+              <activeWhen>
+            <with
+                  variable="selection">
+               <iterate>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </iterate>
+            </with>
+         </activeWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -391,6 +409,11 @@
          <separator
                name="Imports">
          </separator>
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.revert"
+               label="Revert"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension
