@@ -6,13 +6,11 @@ package com.mmxlabs.scenario.service.ui.commands;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -101,32 +99,5 @@ public class NewFolderCommandHandler extends AbstractHandler {
 
 			o.getElements().add(f);
 		}
-	}
-
-	@Override
-	public void setEnabled(final Object evaluationContext) {
-		boolean enabled = false;
-		if (evaluationContext instanceof IEvaluationContext) {
-			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
-			final Object defaultVariable = context.getDefaultVariable();
-
-			if (defaultVariable instanceof List<?>) {
-				final List<?> variables = (List<?>) defaultVariable;
-				if (variables.isEmpty()) {
-					enabled = true;
-				} else if (variables.size() == 1) {
-					if (variables.get(0) instanceof Folder) {
-						enabled = true;
-					}
-				} else {
-					setBaseEnabled(false);
-					return;
-				}
-			} else if (defaultVariable == null) {
-				enabled = true;
-			}
-		}
-
-		super.setBaseEnabled(enabled);
 	}
 }

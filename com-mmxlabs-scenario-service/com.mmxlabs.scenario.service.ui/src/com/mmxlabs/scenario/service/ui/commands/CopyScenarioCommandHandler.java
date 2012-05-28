@@ -10,12 +10,10 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -91,29 +89,5 @@ public class CopyScenarioCommandHandler extends AbstractHandler {
 		}
 
 		return null;
-	}
-
-	@Override
-	public void setEnabled(final Object evaluationContext) {
-		boolean enabled = false;
-		if (evaluationContext instanceof IEvaluationContext) {
-			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
-			final Object defaultVariable = context.getDefaultVariable();
-
-			if (defaultVariable instanceof List<?>) {
-				final List<?> variables = (List<?>) defaultVariable;
-
-				for (final Object var : variables) {
-					if (var instanceof ScenarioInstance) {
-						enabled = true;
-					} else {
-						super.setBaseEnabled(false);
-						return;
-					}
-				}
-			}
-		}
-
-		super.setBaseEnabled(enabled);
 	}
 }

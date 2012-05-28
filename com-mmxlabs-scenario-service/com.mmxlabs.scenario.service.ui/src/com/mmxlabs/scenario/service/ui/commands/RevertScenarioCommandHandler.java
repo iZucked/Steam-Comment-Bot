@@ -5,13 +5,11 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -56,37 +54,5 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 		}
 
 		return null;
-	}
-
-	@Override
-	public void setEnabled(final Object evaluationContext) {
-		boolean enabled = false;
-		if (evaluationContext instanceof IEvaluationContext) {
-			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
-			final Object defaultVariable = context.getDefaultVariable();
-
-			if (defaultVariable instanceof List<?>) {
-				final List<?> variables = (List<?>) defaultVariable;
-
-				for (final Object var : variables) {
-					if (var instanceof ScenarioInstance) {
-						final ScenarioInstance model = (ScenarioInstance) var;
-						final Map<Class<?>, Object> adapters = model.getAdapters();
-						if (adapters != null) {
-							final BasicCommandStack stack = (BasicCommandStack) adapters.get(BasicCommandStack.class);
-							enabled = stack.isSaveNeeded() && stack.canUndo();
-						} else {
-							super.setBaseEnabled(false);
-							return;
-						}
-					} else {
-						super.setBaseEnabled(false);
-						return;
-					}
-				}
-			}
-		}
-
-		super.setBaseEnabled(enabled);
 	}
 }

@@ -109,7 +109,8 @@
             class="com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler"
             commandId="com.mmxlabs.scenario.service.ui.open">
          <enabledWhen>
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <and>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -122,7 +123,8 @@
             class="com.mmxlabs.scenario.service.ui.commands.LockScenarioCommandHandler"
             commandId="com.mmxlabs.scenario.service.ui.lock">
          <enabledWhen>
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <and>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -135,7 +137,8 @@
             class="com.mmxlabs.scenario.service.ui.commands.DeleteScenarioCommandHandler"
             commandId="org.eclipse.ui.edit.delete">
          <activeWhen>
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <and>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.Container">
@@ -149,7 +152,8 @@
             </iterate>
          </activeWhen>
          <enabledWhen>
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <and>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.Container">
@@ -169,7 +173,8 @@
          <activeWhen>
                <with
                      variable="selection">
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <and>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -181,7 +186,8 @@
          <enabledWhen>
                 <with
                      variable="selection">
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <and>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -197,7 +203,8 @@
          <activeWhen>
                 <with
                      variable="selection">
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <and>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.Container">
@@ -209,7 +216,8 @@
          <enabledWhen>
                 <with
                      variable="selection">
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <and>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.Container">
@@ -231,7 +239,8 @@
                   <count
                         value="1">
                   </count>
-                  <iterate>
+                  <iterate
+                        ifEmpty="false">
                      <or>
                         <instanceof
                               value="com.mmxlabs.scenario.service.model.Folder">
@@ -253,7 +262,8 @@
                   <count
                         value="1">
                   </count>
-                  <iterate>
+                  <iterate
+                        ifEmpty="false">
                      <or>
                         <instanceof
                               value="com.mmxlabs.scenario.service.model.Folder">
@@ -270,7 +280,8 @@
             class="com.mmxlabs.scenario.service.ui.commands.RenameElementHandler"
             commandId="org.eclipse.ui.edit.rename">
          <activeWhen>
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <or>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -282,7 +293,8 @@
             </iterate>
          </activeWhen>
          <enabledWhen>
-            <iterate>
+            <iterate
+                  ifEmpty="false">
                <or>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
@@ -300,7 +312,8 @@
          <activeWhen>
             <with
                   variable="selection">
-               <iterate>
+               <iterate
+                     ifEmpty="false">
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                   </instanceof>
@@ -314,7 +327,8 @@
               <activeWhen>
             <with
                   variable="selection">
-               <iterate>
+               <iterate
+                     ifEmpty="false">
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.ScenarioInstance">
                   </instanceof>

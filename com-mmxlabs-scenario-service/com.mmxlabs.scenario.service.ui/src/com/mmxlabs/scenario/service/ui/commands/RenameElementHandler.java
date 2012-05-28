@@ -1,12 +1,10 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -69,29 +67,5 @@ public class RenameElementHandler extends AbstractHandler {
 			return dialog.getValue();
 		}
 		return null;
-	}
-
-	@Override
-	public void setEnabled(final Object evaluationContext) {
-		boolean enabled = false;
-		if (evaluationContext instanceof IEvaluationContext) {
-			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
-			final Object defaultVariable = context.getDefaultVariable();
-
-			if (defaultVariable instanceof List<?>) {
-				final List<?> variables = (List<?>) defaultVariable;
-
-				for (final Object var : variables) {
-					if (var instanceof ScenarioInstance || var instanceof Folder) {
-						enabled = true;
-					} else {
-						super.setBaseEnabled(false);
-						return;
-					}
-				}
-			}
-		}
-
-		super.setBaseEnabled(enabled);
 	}
 }

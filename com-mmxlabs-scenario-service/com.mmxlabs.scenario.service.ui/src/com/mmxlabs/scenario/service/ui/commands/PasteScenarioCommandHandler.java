@@ -9,12 +9,10 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.core.expressions.IEvaluationContext;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
@@ -26,9 +24,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
-import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 /**
@@ -136,29 +132,5 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		} catch (final URISyntaxException e) {
 		}
 		return false;
-	}
-
-	@Override
-	public void setEnabled(final Object evaluationContext) {
-		boolean enabled = false;
-		if (evaluationContext instanceof IEvaluationContext) {
-			final IEvaluationContext context = (IEvaluationContext) evaluationContext;
-			final Object defaultVariable = context.getDefaultVariable();
-
-			if (defaultVariable instanceof List<?>) {
-				final List<?> variables = (List<?>) defaultVariable;
-
-				for (final Object var : variables) {
-					if (var instanceof Folder || var instanceof ScenarioService) {
-						enabled = true;
-					} else {
-						super.setBaseEnabled(false);
-						return;
-					}
-				}
-			}
-		}
-
-		super.setBaseEnabled(enabled);
 	}
 }
