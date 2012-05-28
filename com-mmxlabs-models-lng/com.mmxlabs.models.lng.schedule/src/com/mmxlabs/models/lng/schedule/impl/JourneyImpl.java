@@ -3,10 +3,14 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 import com.mmxlabs.models.lng.port.Port;
 
@@ -19,6 +23,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -581,6 +586,34 @@ public class JourneyImpl extends EventImpl implements Journey {
 	public String type() {
 		return "Journey";
 	}
+	
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String name() {
+		
+		// Work backwards through the events list to find a slot or cargo to get the name
+		final EObject container = this.eContainer();
+		if (container instanceof Sequence) {
+			final Sequence sequence = (Sequence) container;
+			final EList<Event> events = sequence.getEvents();
+			int idx = events.indexOf(this);
+			if (idx >= 0) {
+				while (--idx >= 0) {
+					final EObject namedObject = events.get(idx);
+					if (namedObject instanceof SlotVisit) {
+						return ((SlotVisit) namedObject).name();
+					} else if (namedObject instanceof VesselEventVisit) {
+						return ((VesselEventVisit) namedObject).name();
+					}
+				}
+			}
+		}
+
+		return super.name();
+	}
+	
 } // end of JourneyImpl
 
 // finish type fixing

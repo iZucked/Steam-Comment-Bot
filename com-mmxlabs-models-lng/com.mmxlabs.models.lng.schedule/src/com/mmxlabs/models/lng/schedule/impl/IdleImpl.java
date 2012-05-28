@@ -3,22 +3,27 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import java.lang.reflect.InvocationTargetException;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 /**
  * <!-- begin-user-doc -->
@@ -297,7 +302,34 @@ public class IdleImpl extends EventImpl implements Idle {
 	@Override
 	public String type() {
 		return "Idle";
-	}	
+	}
+
+	/**
+	 * @generated NOT
+	 */
+	@Override
+	public String name() {
+		
+		// Work backwards through the events list to find a slot or cargo to get the name
+		final EObject container = this.eContainer();
+		if (container instanceof Sequence) {
+			final Sequence sequence = (Sequence) container;
+			final EList<Event> events = sequence.getEvents();
+			int idx = events.indexOf(this);
+			if (idx >= 0) {
+				while (--idx >= 0) {
+					final EObject namedObject = events.get(idx);
+					if (namedObject instanceof SlotVisit) {
+						return ((SlotVisit) namedObject).name();
+					} else if (namedObject instanceof VesselEventVisit) {
+						return ((VesselEventVisit) namedObject).name();
+					}
+				}
+			}
+		}
+
+		return super.name();
+	}
 } // end of IdleImpl
 
 // finish type fixing
