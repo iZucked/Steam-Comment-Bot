@@ -101,7 +101,10 @@ public class ScenarioViewerComparator extends ViewerComparator {
 				}
 
 				// Sort by name
-				final int c = s1.getVessel().getName().compareTo(s2.getVessel().getName());
+				final String name1 = s1Spot ? s1.getVesselClass().getName() + "-" + s1.getSpotIndex() : s1.getVessel().getName();
+				final String name2 = s2Spot ? s2.getVesselClass().getName() + "-" + s2.getSpotIndex() : s2.getVessel().getName();
+
+				final int c = name1.compareTo(name2);
 				if (c != 0) {
 					return c;
 				}

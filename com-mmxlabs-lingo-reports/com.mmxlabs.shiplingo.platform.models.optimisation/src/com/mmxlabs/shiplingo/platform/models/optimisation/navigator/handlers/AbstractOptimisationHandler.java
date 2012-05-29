@@ -90,5 +90,4 @@ public abstract class AbstractOptimisationHandler extends AbstractHandler {
 		}
 		super.dispose();
 	}
-
 }

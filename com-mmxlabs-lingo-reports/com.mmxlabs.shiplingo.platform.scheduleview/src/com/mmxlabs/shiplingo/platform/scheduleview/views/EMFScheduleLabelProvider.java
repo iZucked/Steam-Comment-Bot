@@ -20,6 +20,7 @@ import org.eclipse.swt.graphics.Image;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -183,7 +184,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	public String getToolTipTitle(final Object element) {
 		String port = null;
 		if (element instanceof Event) {
-			port = ((Event) element).getPort().getName();
+			final Port portObj = ((Event) element).getPort();
+			if (portObj != null) {
+				port = portObj.getName();
+			}
 		}
 		if (element instanceof Journey) {
 			final Journey journey = (Journey) element;
