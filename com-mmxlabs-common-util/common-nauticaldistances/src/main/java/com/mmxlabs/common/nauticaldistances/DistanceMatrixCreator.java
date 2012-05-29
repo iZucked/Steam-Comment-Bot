@@ -123,7 +123,7 @@ public class DistanceMatrixCreator {
 			String line;
 			while ((line = portReader.readLine()) != null) {
 				final String[] parts = line.split(",");
-				ports.add(new Pair<String, Pair<Double, Double>>(parts[0], new Pair<Double, Double>(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]))));
+				ports.add(new Pair<String, Pair<Double, Double>>(parts[0], new Pair<Double, Double>(Double.parseDouble(parts[1].trim()), Double.parseDouble(parts[2].trim()))));
 			}
 		} finally {
 			if (portReader != null) {
