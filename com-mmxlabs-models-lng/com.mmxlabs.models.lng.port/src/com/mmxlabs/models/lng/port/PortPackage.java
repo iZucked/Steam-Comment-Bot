@@ -473,13 +473,86 @@ public interface PortPackage extends EPackage {
 	int PORT_MODEL__ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Special Port Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_MODEL__SPECIAL_PORT_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int PORT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getCapabilityGroup()
+	 * @generated
+	 */
+	int CAPABILITY_GROUP = 5;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP__EXTENSIONS = TypesPackage.APORT_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP__PROXIES = TypesPackage.APORT_SET__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP__UUID = TypesPackage.APORT_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP__NAME = TypesPackage.APORT_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Capability</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP__CAPABILITY = TypesPackage.APORT_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Capability Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 1;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
@@ -741,6 +814,38 @@ public interface PortPackage extends EPackage {
 	EReference getPortModel_Routes();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.port.PortModel#getSpecialPortGroups <em>Special Port Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Special Port Groups</em>'.
+	 * @see com.mmxlabs.models.lng.port.PortModel#getSpecialPortGroups()
+	 * @see #getPortModel()
+	 * @generated
+	 */
+	EReference getPortModel_SpecialPortGroups();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.CapabilityGroup <em>Capability Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Capability Group</em>'.
+	 * @see com.mmxlabs.models.lng.port.CapabilityGroup
+	 * @generated
+	 */
+	EClass getCapabilityGroup();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.CapabilityGroup#getCapability <em>Capability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Capability</em>'.
+	 * @see com.mmxlabs.models.lng.port.CapabilityGroup#getCapability()
+	 * @see #getCapabilityGroup()
+	 * @generated
+	 */
+	EAttribute getCapabilityGroup_Capability();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -963,6 +1068,32 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PORT_MODEL__ROUTES = eINSTANCE.getPortModel_Routes();
+
+		/**
+		 * The meta object literal for the '<em><b>Special Port Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT_MODEL__SPECIAL_PORT_GROUPS = eINSTANCE.getPortModel_SpecialPortGroups();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl <em>Capability Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.impl.CapabilityGroupImpl
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getCapabilityGroup()
+		 * @generated
+		 */
+		EClass CAPABILITY_GROUP = eINSTANCE.getCapabilityGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Capability</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CAPABILITY_GROUP__CAPABILITY = eINSTANCE.getCapabilityGroup_Capability();
 
 	}
 

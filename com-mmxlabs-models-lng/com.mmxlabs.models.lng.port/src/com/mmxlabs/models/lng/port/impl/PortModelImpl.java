@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 
+import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortCollection;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
@@ -40,6 +42,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getPortGroups <em>Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getRoutes <em>Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.impl.PortModelImpl#getSpecialPortGroups <em>Special Port Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -75,6 +78,16 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * @ordered
 	 */
 	protected EList<Route> routes;
+
+	/**
+	 * The cached value of the '{@link #getSpecialPortGroups() <em>Special Port Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSpecialPortGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CapabilityGroup> specialPortGroups;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -136,6 +149,18 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<CapabilityGroup> getSpecialPortGroups() {
+		if (specialPortGroups == null) {
+			specialPortGroups = new EObjectContainmentEList<CapabilityGroup>(CapabilityGroup.class, this, PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS);
+		}
+		return specialPortGroups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -145,6 +170,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return ((InternalEList<?>)getPortGroups()).basicRemove(otherEnd, msgs);
 			case PortPackage.PORT_MODEL__ROUTES:
 				return ((InternalEList<?>)getRoutes()).basicRemove(otherEnd, msgs);
+			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
+				return ((InternalEList<?>)getSpecialPortGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -163,6 +190,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return getPortGroups();
 			case PortPackage.PORT_MODEL__ROUTES:
 				return getRoutes();
+			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
+				return getSpecialPortGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -188,6 +217,10 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				getRoutes().clear();
 				getRoutes().addAll((Collection<? extends Route>)newValue);
 				return;
+			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
+				getSpecialPortGroups().clear();
+				getSpecialPortGroups().addAll((Collection<? extends CapabilityGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -209,6 +242,9 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 			case PortPackage.PORT_MODEL__ROUTES:
 				getRoutes().clear();
 				return;
+			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
+				getSpecialPortGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -227,6 +263,8 @@ public class PortModelImpl extends UUIDObjectImpl implements PortModel {
 				return portGroups != null && !portGroups.isEmpty();
 			case PortPackage.PORT_MODEL__ROUTES:
 				return routes != null && !routes.isEmpty();
+			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
+				return specialPortGroups != null && !specialPortGroups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

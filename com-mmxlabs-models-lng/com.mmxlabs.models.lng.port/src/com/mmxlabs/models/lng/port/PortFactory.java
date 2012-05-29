@@ -69,6 +69,15 @@ public interface PortFactory extends EFactory {
 	PortModel createPortModel();
 
 	/**
+	 * Returns a new object of class '<em>Capability Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Capability Group</em>'.
+	 * @generated
+	 */
+	CapabilityGroup createCapabilityGroup();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

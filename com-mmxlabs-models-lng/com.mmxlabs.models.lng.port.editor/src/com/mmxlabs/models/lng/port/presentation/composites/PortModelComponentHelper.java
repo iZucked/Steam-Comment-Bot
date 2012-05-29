@@ -67,6 +67,7 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 		add_portsEditor(detailComposite, topClass);
 		add_portGroupsEditor(detailComposite, topClass);
 		add_routesEditor(detailComposite, topClass);
+		add_specialPortGroupsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on PortModel
@@ -92,5 +93,14 @@ public class PortModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_routesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__ROUTES));
+	}
+
+	/**
+	 * Create the editor for the specialPortGroups feature on PortModel
+	 *
+	 * @generated
+	 */
+	protected void add_specialPortGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT_MODEL__SPECIAL_PORT_GROUPS));
 	}
 }

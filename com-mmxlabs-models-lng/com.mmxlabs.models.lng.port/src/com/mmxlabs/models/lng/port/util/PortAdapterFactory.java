@@ -98,6 +98,10 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 				return createPortModelAdapter();
 			}
 			@Override
+			public Adapter caseCapabilityGroup(CapabilityGroup object) {
+				return createCapabilityGroupAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -208,6 +212,20 @@ public class PortAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortModelAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.port.CapabilityGroup <em>Capability Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.port.CapabilityGroup
+	 * @generated
+	 */
+	public Adapter createCapabilityGroupAdapter() {
 		return null;
 	}
 

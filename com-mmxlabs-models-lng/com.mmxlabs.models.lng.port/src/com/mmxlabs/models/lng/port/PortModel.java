@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getPortGroups <em>Port Groups</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getRoutes <em>Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.port.PortModel#getSpecialPortGroups <em>Special Port Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -75,5 +76,21 @@ public interface PortModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<Route> getRoutes();
+
+	/**
+	 * Returns the value of the '<em><b>Special Port Groups</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.port.CapabilityGroup}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Special Port Groups</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Special Port Groups</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.port.PortPackage#getPortModel_SpecialPortGroups()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CapabilityGroup> getSpecialPortGroups();
 
 } // PortModel

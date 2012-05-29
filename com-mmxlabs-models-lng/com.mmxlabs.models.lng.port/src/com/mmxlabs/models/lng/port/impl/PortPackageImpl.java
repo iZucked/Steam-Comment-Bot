@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.impl;
 
+import com.mmxlabs.models.lng.port.CapabilityGroup;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
@@ -12,6 +13,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortCollection;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortGroup;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -62,6 +64,13 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * @generated
 	 */
 	private EClass portModelEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass capabilityGroupEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -348,6 +357,33 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getPortModel_SpecialPortGroups() {
+		return (EReference)portModelEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCapabilityGroup() {
+		return capabilityGroupEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCapabilityGroup_Capability() {
+		return (EAttribute)capabilityGroupEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public PortFactory getPortFactory() {
 		return (PortFactory)getEFactoryInstance();
 	}
@@ -399,6 +435,10 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		createEReference(portModelEClass, PORT_MODEL__PORTS);
 		createEReference(portModelEClass, PORT_MODEL__PORT_GROUPS);
 		createEReference(portModelEClass, PORT_MODEL__ROUTES);
+		createEReference(portModelEClass, PORT_MODEL__SPECIAL_PORT_GROUPS);
+
+		capabilityGroupEClass = createEClass(CAPABILITY_GROUP);
+		createEAttribute(capabilityGroupEClass, CAPABILITY_GROUP__CAPABILITY);
 	}
 
 	/**
@@ -438,6 +478,7 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		portGroupEClass.getESuperTypes().add(theTypesPackage.getAPortSet());
 		routeLineEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		portModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		capabilityGroupEClass.getESuperTypes().add(theTypesPackage.getAPortSet());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(portEClass, Port.class, "Port", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -471,6 +512,10 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 		initEReference(getPortModel_Ports(), this.getPort(), null, "ports", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortModel_PortGroups(), this.getPortGroup(), null, "portGroups", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortModel_Routes(), this.getRoute(), null, "routes", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPortModel_SpecialPortGroups(), this.getCapabilityGroup(), null, "specialPortGroups", null, 0, -1, PortModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(capabilityGroupEClass, CapabilityGroup.class, "CapabilityGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getCapabilityGroup_Capability(), theTypesPackage.getPortCapability(), "capability", null, 1, 1, CapabilityGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
