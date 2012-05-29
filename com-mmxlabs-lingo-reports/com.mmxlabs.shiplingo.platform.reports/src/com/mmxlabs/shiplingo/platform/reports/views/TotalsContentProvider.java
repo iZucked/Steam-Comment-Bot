@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -69,7 +70,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		long totalCost = 0l;
 		long canals = 0;
 		long hire = 0;
-
+		long portCost = 0;
+		
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event evt : seq.getEvents()) {
 				hire += evt.getHireCost();
@@ -91,6 +93,11 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 					canals += journey.getToll();
 					totalCost += journey.getToll();
 				}
+				if (evt instanceof PortVisit) {
+					final int cost = ((PortVisit) evt).getPortCost();
+					portCost += cost;
+					totalCost += cost;
+				}
 			}
 		}
 
@@ -108,6 +115,8 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		output.add(new RowData(scheduleName, "Canal Fees", TYPE_COST, canals));
 		output.add(new RowData(scheduleName, "Charter Fees", TYPE_COST, hire));
 		output.add(new RowData(scheduleName, "Distance", TYPE_COST, distance));
+		
+		output.add(new RowData(scheduleName, "Port Costs", TYPE_COST, portCost));
 
 		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost));
 
