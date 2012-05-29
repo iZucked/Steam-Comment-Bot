@@ -27,14 +27,41 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	private final ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> selectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(
 			Activator.getDefault().getBundle().getBundleContext(), IScenarioServiceSelectionProvider.class, null);
 
+	private IEclipseJobManager jobManager = null;
+	private Image showEnabledImage;
+	private Image showDisabledImage;
+
+	private Image noJobImage;
+
+	private Image jobComplete;
+
+	private Color majorColor;
+
+	private Color defaultMinorColour;
+
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 		selectionProviderTracker.open();
+		showEnabledImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
+		showDisabledImage = ImageDescriptor.createWithFlags(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif"), SWT.IMAGE_DISABLE).createImage();
+		noJobImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/no_job.gif").createImage();
+		jobComplete = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/complete_job.gif").createImage();
+		majorColor = new Color(Display.getDefault(), 240, 80, 85);
+		defaultMinorColour = new Color(Display.getDefault(), 100, 230, 120);
 	}
 
 	@Override
 	public void dispose() {
 		selectionProviderTracker.close();
+
+		showEnabledImage.dispose();
+		showDisabledImage.dispose();
+		noJobImage.dispose();
+		jobComplete.dispose();
+
+		defaultMinorColour.dispose();
+		majorColor.dispose();
+		
 		super.dispose();
 	}
 
@@ -57,8 +84,6 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 		}
 	}
 
-	private IEclipseJobManager jobManager = null;
-
 	@Override
 	public Image getColumnImage(final Object object, final int columnIndex) {
 		switch (columnIndex) {
@@ -68,9 +93,9 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 				final IScenarioServiceSelectionProvider service = selectionProviderTracker.getService();
 				if (service != null) {
 					if (service.isSelected((ScenarioInstance) object)) {
-						return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
+						return showEnabledImage;
 					} else {
-						return ImageDescriptor.createWithFlags(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif"), SWT.IMAGE_DISABLE).createImage();
+						return showDisabledImage;
 					}
 				}
 			}
@@ -86,15 +111,13 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 					final IJobControl control = jobManager.getControlForJob(job);
 					if (control != null) {
 						if (control.getJobState() == EJobState.COMPLETED) {
-							return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/complete_job.gif").createImage();
+							return jobComplete;
 						}
 						final Color minorColor = (control.getJobState() == EJobState.PAUSED || control.getJobState() == EJobState.PAUSING) ? Display.getDefault().getSystemColor(SWT.COLOR_YELLOW)
-								: new Color(Display.getDefault(), 100, 230, 120);
-						final Color majorColor = new Color(Display.getDefault(), 240, 80, 85);
-
+								: defaultMinorColour;
 						return PieChartRenderer.renderPie(minorColor, majorColor, control.getProgress() / 100.0);
 					} else {
-						return Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/no_job.gif").createImage();
+						return noJobImage;
 					}
 				}
 			}
