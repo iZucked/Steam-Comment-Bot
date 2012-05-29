@@ -116,11 +116,12 @@ public abstract class ImportAction extends LockableAction {
 			deletedObjects.add(oldObject);
 		}
 
-		merge.append(setter);
+		
 		if (deletedObjects.isEmpty() == false)
 			merge.append(DeleteCommand.create(domain, deletedObjects));
 		if (importedObjects.isEmpty() == false)
 			merge.append(AddCommand.create(domain, container, containment, importedObjects));
+		merge.append(setter);
 		
 		return merge;
 	}
@@ -140,7 +141,11 @@ public abstract class ImportAction extends LockableAction {
 		if (oldObject == null) return result;
 		
 		// update old references
-		Collection<Setting> refsToOldObject = EcoreUtil.UsageCrossReferencer.find(oldObject, rootObject);
+		final List<EObject> subModels = new ArrayList<EObject>();
+		for (final MMXSubModel sub : rootObject.getSubModels()) {
+			subModels.add(sub.getSubModelInstance());
+		}
+		Collection<Setting> refsToOldObject = EcoreUtil.UsageCrossReferencer.find(oldObject, subModels);
 		for (final Setting setting : refsToOldObject) {
 			if (setting.getEStructuralFeature().isMany()) {
 				result.append(ReplaceCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), oldObject, Collections.singleton(newObject)));
