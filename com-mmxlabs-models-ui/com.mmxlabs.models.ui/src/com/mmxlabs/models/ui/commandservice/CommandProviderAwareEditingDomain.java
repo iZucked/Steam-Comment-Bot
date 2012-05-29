@@ -1,5 +1,7 @@
 package com.mmxlabs.models.ui.commandservice;
 
+import java.util.WeakHashMap;
+
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -76,7 +78,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				provider.startCommandProvision();
 
 			for (final IModelCommandProvider provider : providers) {
-				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject, commandClass, commandParameter, normal);
+				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject,overrides, commandClass, commandParameter, normal);
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
 					if (addition.canExecute() == false) {
@@ -94,6 +96,16 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		} else {
 			return normal;
 		}
+	}
+	
+	private final WeakHashMap<EObject, EObject> overrides = new WeakHashMap<EObject, EObject>();
+	
+	public void setOverride(final EObject real, final EObject override) {
+		overrides.put(real, override);
+	}
+	
+	public void clearOverride(final EObject real) {
+		overrides.remove(real);
 	}
 
 	public boolean isCommandProvidersDisabled() {

@@ -6,11 +6,13 @@ package com.mmxlabs.models.ui.commandservice;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.UnexecutableCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -37,6 +39,7 @@ public abstract class BaseModelCommandProvider implements IModelCommandProvider 
 	public Command provideAdditionalCommand(
 			EditingDomain editingDomain, 
 			MMXRootObject rootObject, 
+			Map<EObject, EObject> overrides,
 			Class<? extends Command> commandClass, 
 			CommandParameter parameter, 
 			Command input) {

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -230,10 +229,22 @@ public class DetailCompositeDialog extends Dialog {
 				final Iterator<EObject> rangeIterator2 = range.iterator();
 				final Iterator<EObject> duplicateIterator = duplicateRange
 						.iterator();
+				
+				final CommandProviderAwareEditingDomain domain;
+				{
+					final EditingDomain ed = commandHandler.getEditingDomain();
+					if (ed instanceof CommandProviderAwareEditingDomain) domain = (CommandProviderAwareEditingDomain) ed;
+					else domain = null;
+				}
+				
 				while (rangeIterator2.hasNext() && duplicateIterator.hasNext()) {
 					final EObject original2 = rangeIterator2.next();
 					final EObject duplicate = duplicateIterator.next();
 					validationContext.replace(original2, duplicate);
+					
+					if (domain != null) {
+						domain.setOverride(original2, duplicate);
+					}
 				}
 			}
 		}
@@ -798,6 +809,20 @@ public class DetailCompositeDialog extends Dialog {
 			}
 			return value;
 		} finally {
+			
+			final CommandProviderAwareEditingDomain domain;
+			{
+				final EditingDomain ed = commandHandler.getEditingDomain();
+				if (ed instanceof CommandProviderAwareEditingDomain) domain = (CommandProviderAwareEditingDomain) ed;
+				else domain = null;
+			}
+			
+			if (domain != null) {
+				for (final EObject original : originalToDuplicate.keySet()) {
+					domain.clearOverride(original);
+				}
+			}
+			
 			part.popExtraValidationContext();
 		}
 	}
@@ -874,6 +899,19 @@ public class DetailCompositeDialog extends Dialog {
 			}
 			return value;
 		} finally {
+			final CommandProviderAwareEditingDomain domain;
+			{
+				final EditingDomain ed = commandHandler.getEditingDomain();
+				if (ed instanceof CommandProviderAwareEditingDomain) domain = (CommandProviderAwareEditingDomain) ed;
+				else domain = null;
+			}
+			
+			if (domain != null) {
+				for (final EObject original : originalToDuplicate.keySet()) {
+					domain.clearOverride(original);
+				}
+			}
+			
 			part.popExtraValidationContext();
 		}
 	}

@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.models.ui.commandservice;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -25,6 +28,7 @@ public interface IModelCommandProvider {
 	public Command provideAdditionalCommand(
 			final EditingDomain editingDomain, 
 			final MMXRootObject rootObject,
+			final Map<EObject, EObject> overrides,
 			final Class<? extends Command> commandClass, 
 			final CommandParameter parameter, 
 			final Command input);
