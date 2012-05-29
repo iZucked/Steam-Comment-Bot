@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.validation.internal.service.GetBatchConstraintsOperation;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -131,6 +132,8 @@ public class ImportCSVFilesPage extends WizardPage {
 							c.setFromDirectory(dir);
 						}
 					}
+					// Trigger 'Next' button focus 
+					setPageComplete(true);
 				}
 			}
 		});
