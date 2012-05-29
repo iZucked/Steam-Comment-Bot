@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.fleet.validation;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.mmxlabs.models.ui.validation.ValidationPlugin;

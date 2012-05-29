@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getRoundTripMatrices <em>Round Trip Matrices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getSelectedMatrix <em>Selected Matrix</em>}</li>
  * </ul>
  * </p>
  *
@@ -54,6 +55,16 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @ordered
 	 */
 	protected EList<UnitCostMatrix> roundTripMatrices;
+
+	/**
+	 * The cached value of the '{@link #getSelectedMatrix() <em>Selected Matrix</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSelectedMatrix()
+	 * @generated
+	 * @ordered
+	 */
+	protected UnitCostMatrix selectedMatrix;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -91,6 +102,44 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public UnitCostMatrix getSelectedMatrix() {
+		if (selectedMatrix != null && selectedMatrix.eIsProxy()) {
+			InternalEObject oldSelectedMatrix = (InternalEObject)selectedMatrix;
+			selectedMatrix = (UnitCostMatrix)eResolveProxy(oldSelectedMatrix);
+			if (selectedMatrix != oldSelectedMatrix) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX, oldSelectedMatrix, selectedMatrix));
+			}
+		}
+		return selectedMatrix;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public UnitCostMatrix basicGetSelectedMatrix() {
+		return selectedMatrix;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSelectedMatrix(UnitCostMatrix newSelectedMatrix) {
+		UnitCostMatrix oldSelectedMatrix = selectedMatrix;
+		selectedMatrix = newSelectedMatrix;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX, oldSelectedMatrix, selectedMatrix));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -110,6 +159,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 		switch (featureID) {
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
 				return getRoundTripMatrices();
+			case AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX:
+				if (resolve) return getSelectedMatrix();
+				return basicGetSelectedMatrix();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -127,6 +179,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				getRoundTripMatrices().clear();
 				getRoundTripMatrices().addAll((Collection<? extends UnitCostMatrix>)newValue);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX:
+				setSelectedMatrix((UnitCostMatrix)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -142,6 +197,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
 				getRoundTripMatrices().clear();
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX:
+				setSelectedMatrix((UnitCostMatrix)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -156,6 +214,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 		switch (featureID) {
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
 				return roundTripMatrices != null && !roundTripMatrices.isEmpty();
+			case AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX:
+				return selectedMatrix != null;
 		}
 		return super.eIsSet(featureID);
 	}

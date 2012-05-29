@@ -106,13 +106,22 @@ public interface InputPackage extends EPackage {
 	int INPUT_MODEL__ASSIGNMENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Locked Assigned Objects</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int INPUT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.input.impl.AssignmentImpl <em>Assignment</em>}' class.
@@ -201,6 +210,17 @@ public interface InputPackage extends EPackage {
 	EReference getInputModel_Assignments();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.input.InputModel#getLockedAssignedObjects <em>Locked Assigned Objects</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Locked Assigned Objects</em>'.
+	 * @see com.mmxlabs.models.lng.input.InputModel#getLockedAssignedObjects()
+	 * @see #getInputModel()
+	 * @generated
+	 */
+	EReference getInputModel_LockedAssignedObjects();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.input.Assignment <em>Assignment</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -282,6 +302,14 @@ public interface InputPackage extends EPackage {
 		 * @generated
 		 */
 		EReference INPUT_MODEL__ASSIGNMENTS = eINSTANCE.getInputModel_Assignments();
+
+		/**
+		 * The meta object literal for the '<em><b>Locked Assigned Objects</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS = eINSTANCE.getInputModel_LockedAssignedObjects();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.input.impl.AssignmentImpl <em>Assignment</em>}' class.

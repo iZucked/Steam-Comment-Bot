@@ -8,7 +8,8 @@ Bundle-Activator: com.mmxlabs.models.lng.input.presentation.InputEditorPlugin$Im
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.models.lng.input.presentation
+Export-Package: com.mmxlabs.models.lng.input.editor.utils,
+ com.mmxlabs.models.lng.input.presentation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
  com.mmxlabs.models.lng.input.edit;visibility:=reexport,
@@ -20,5 +21,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.ui,
  com.mmxlabs.models.util;bundle-version="1.0.0",
  com.mmxlabs.models.lng.fleet;bundle-version="1.0.0",
- com.mmxlabs.models.lng.cargo;bundle-version="1.0.0"
+ com.mmxlabs.models.lng.cargo;bundle-version="1.0.0",
+ com.mmxlabs.models.lng.port;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/component.xml

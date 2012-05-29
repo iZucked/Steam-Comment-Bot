@@ -69,6 +69,7 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_roundTripMatricesEditor(detailComposite, topClass);
+		add_selectedMatrixEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the roundTripMatrices feature on AnalyticsModel
@@ -77,5 +78,14 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_roundTripMatricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES));
+	}
+
+	/**
+	 * Create the editor for the selectedMatrix feature on AnalyticsModel
+	 *
+	 * @generated
+	 */
+	protected void add_selectedMatrixEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__SELECTED_MATRIX));
 	}
 }

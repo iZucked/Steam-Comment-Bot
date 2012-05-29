@@ -87,6 +87,7 @@ public class PortModelItemProvider
 			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORTS);
 			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORT_GROUPS);
 			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__ROUTES);
+			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__SPECIAL_PORT_GROUPS);
 		}
 		return childrenFeatures;
 	}
@@ -144,6 +145,7 @@ public class PortModelItemProvider
 			case PortPackage.PORT_MODEL__PORTS:
 			case PortPackage.PORT_MODEL__PORT_GROUPS:
 			case PortPackage.PORT_MODEL__ROUTES:
+			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -175,6 +177,11 @@ public class PortModelItemProvider
 			(createChildParameter
 				(PortPackage.Literals.PORT_MODEL__ROUTES,
 				 PortFactory.eINSTANCE.createRoute()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PortPackage.Literals.PORT_MODEL__SPECIAL_PORT_GROUPS,
+				 PortFactory.eINSTANCE.createCapabilityGroup()));
 	}
 
 	/**

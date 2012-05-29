@@ -130,6 +130,7 @@ public class ScheduleItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__UNSCHEDULED_CARGOES);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SLOT_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESSES);
 		}

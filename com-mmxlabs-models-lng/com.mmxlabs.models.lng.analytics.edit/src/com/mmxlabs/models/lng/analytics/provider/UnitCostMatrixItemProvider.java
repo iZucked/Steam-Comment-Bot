@@ -86,6 +86,7 @@ public class UnitCostMatrixItemProvider
 			addDischargeIdleTimePropertyDescriptor(object);
 			addReturnIdleTimePropertyDescriptor(object);
 			addAllowedRoutesPropertyDescriptor(object);
+			addRevenueSharePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -443,6 +444,28 @@ public class UnitCostMatrixItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Revenue Share feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRevenueSharePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostMatrix_revenueShare_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_revenueShare_feature", "_UI_UnitCostMatrix_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__REVENUE_SHARE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -522,6 +545,7 @@ public class UnitCostMatrixItemProvider
 			case AnalyticsPackage.UNIT_COST_MATRIX__CV_VALUE:
 			case AnalyticsPackage.UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME:
 			case AnalyticsPackage.UNIT_COST_MATRIX__RETURN_IDLE_TIME:
+			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:

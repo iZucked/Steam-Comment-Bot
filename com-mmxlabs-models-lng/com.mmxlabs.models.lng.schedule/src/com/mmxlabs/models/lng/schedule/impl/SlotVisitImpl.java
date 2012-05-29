@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -33,6 +34,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getFuels <em>Fuels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getPortCost <em>Port Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotVisitImpl#getSlotAllocation <em>Slot Allocation</em>}</li>
  * </ul>
  * </p>
@@ -49,6 +51,24 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 	 * @ordered
 	 */
 	protected EList<FuelQuantity> fuels;
+	/**
+	 * The default value of the '{@link #getPortCost() <em>Port Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PORT_COST_EDEFAULT = 0;
+	/**
+	 * The cached value of the '{@link #getPortCost() <em>Port Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPortCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int portCost = PORT_COST_EDEFAULT;
 	/**
 	 * The cached value of the '{@link #getSlotAllocation() <em>Slot Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -87,6 +107,27 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			fuels = new EObjectContainmentEList<FuelQuantity>(FuelQuantity.class, this, SchedulePackage.SLOT_VISIT__FUELS);
 		}
 		return fuels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getPortCost() {
+		return portCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPortCost(int newPortCost) {
+		int oldPortCost = portCost;
+		portCost = newPortCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_VISIT__PORT_COST, oldPortCost, portCost));
 	}
 
 	/**
@@ -204,6 +245,8 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		switch (featureID) {
 			case SchedulePackage.SLOT_VISIT__FUELS:
 				return getFuels();
+			case SchedulePackage.SLOT_VISIT__PORT_COST:
+				return getPortCost();
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				if (resolve) return getSlotAllocation();
 				return basicGetSlotAllocation();
@@ -224,6 +267,9 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				getFuels().clear();
 				getFuels().addAll((Collection<? extends FuelQuantity>)newValue);
 				return;
+			case SchedulePackage.SLOT_VISIT__PORT_COST:
+				setPortCost((Integer)newValue);
+				return;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)newValue);
 				return;
@@ -242,6 +288,9 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 			case SchedulePackage.SLOT_VISIT__FUELS:
 				getFuels().clear();
 				return;
+			case SchedulePackage.SLOT_VISIT__PORT_COST:
+				setPortCost(PORT_COST_EDEFAULT);
+				return;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				setSlotAllocation((SlotAllocation)null);
 				return;
@@ -259,6 +308,8 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		switch (featureID) {
 			case SchedulePackage.SLOT_VISIT__FUELS:
 				return fuels != null && !fuels.isEmpty();
+			case SchedulePackage.SLOT_VISIT__PORT_COST:
+				return portCost != PORT_COST_EDEFAULT;
 			case SchedulePackage.SLOT_VISIT__SLOT_ALLOCATION:
 				return slotAllocation != null;
 		}
@@ -278,6 +329,12 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				default: return -1;
 			}
 		}
+		if (baseClass == PortVisit.class) {
+			switch (derivedFeatureID) {
+				case SchedulePackage.SLOT_VISIT__PORT_COST: return SchedulePackage.PORT_VISIT__PORT_COST;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -294,6 +351,12 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 				default: return -1;
 			}
 		}
+		if (baseClass == PortVisit.class) {
+			switch (baseFeatureID) {
+				case SchedulePackage.PORT_VISIT__PORT_COST: return SchedulePackage.SLOT_VISIT__PORT_COST;
+				default: return -1;
+			}
+		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
@@ -307,6 +370,11 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		if (baseClass == FuelUsage.class) {
 			switch (baseOperationID) {
 				case SchedulePackage.FUEL_USAGE___GET_FUEL_COST: return SchedulePackage.SLOT_VISIT___GET_FUEL_COST;
+				default: return -1;
+			}
+		}
+		if (baseClass == PortVisit.class) {
+			switch (baseOperationID) {
 				default: return -1;
 			}
 		}
@@ -327,6 +395,22 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		return super.eInvoke(operationID, arguments);
 	}
 
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (portCost: ");
+		result.append(portCost);
+		result.append(')');
+		return result.toString();
+	}
 
 	/**
 	 * <!-- begin-user-doc -->

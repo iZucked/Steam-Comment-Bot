@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.commands;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.Command;
@@ -29,7 +30,7 @@ import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 public class DateUpdatingCommandProvider implements IModelCommandProvider {
 
 	@Override
-	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
+	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject,Map<EObject, EObject> overrides, Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
 		if (commandClass == SetCommand.class) {
 			if (parameter.getEOwner() instanceof Slot) {
 				final Slot slot = (Slot) parameter.getEOwner();

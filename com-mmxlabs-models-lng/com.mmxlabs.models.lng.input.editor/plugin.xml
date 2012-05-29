@@ -67,4 +67,23 @@
           subModelImporterClass="com.mmxlabs.models.lng.input.importers.InputModelImporter">
     </submodelImporter>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.input.editor.inputEditorContribution"
+          implementation="com.mmxlabs.models.lng.input.editorpart.InputJointModelEditorContribution"
+          priority="0"
+          subModelClass="com.mmxlabs.models.lng.input.InputModel">
+    </jointModelEditor>
+ </extension>
+ <extension
+       id="com.mmxlabs.models.lng.input.cargohelpers"
+       point="com.mmxlabs.models.ui.componenthelpers">
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.input.ui.cargoeditor.AssignmentInlineEditorComponentHelper"
+          id="com.mmxlabs.models.lng.input.editor.cargoAssignmentHelper"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.cargo.Cargo">
+    </componentHelper>
+ </extension>
 </plugin>

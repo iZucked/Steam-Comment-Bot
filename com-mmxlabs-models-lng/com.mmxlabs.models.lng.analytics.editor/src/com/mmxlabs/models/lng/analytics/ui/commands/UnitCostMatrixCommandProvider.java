@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.commands;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -24,7 +27,7 @@ import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 public class UnitCostMatrixCommandProvider implements IModelCommandProvider {
 
 	@Override
-	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
+	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides,Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
 		if (commandClass.equals(SetCommand.class)) {
 			if (parameter.getEOwner() instanceof UnitCostMatrix) {
 				return RemoveCommand.create(editingDomain, parameter.getEOwner(), AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), ((UnitCostMatrix) (parameter.getEOwner())).getCostLines());

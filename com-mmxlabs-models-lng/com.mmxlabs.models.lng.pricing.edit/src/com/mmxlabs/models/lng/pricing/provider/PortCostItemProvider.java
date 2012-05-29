@@ -64,7 +64,6 @@ public class PortCostItemProvider
 
 			addPortsPropertyDescriptor(object);
 			addReferenceCapacityPropertyDescriptor(object);
-			addAppliesToPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -109,28 +108,6 @@ public class PortCostItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Applies To feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addAppliesToPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_PortCost_appliesTo_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_PortCost_appliesTo_feature", "_UI_PortCost_type"),
-				 PricingPackage.Literals.PORT_COST__APPLIES_TO,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}

@@ -57,6 +57,11 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 		if (reference == CargoPackage.eINSTANCE.getSlot_Contract()) {
 			return new IReferenceValueProvider() {
 				@Override
+				public void dispose() {
+					delegateFactory.dispose();
+				}
+
+				@Override
 				public boolean updateOnChangeToFeature(Object changedFeature) {
 					return delegateFactory
 							.updateOnChangeToFeature(changedFeature);

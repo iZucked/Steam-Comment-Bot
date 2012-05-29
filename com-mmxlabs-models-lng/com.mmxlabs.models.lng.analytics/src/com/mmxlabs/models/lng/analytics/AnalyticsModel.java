@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getRoundTripMatrices <em>Round Trip Matrices</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getSelectedMatrix <em>Selected Matrix</em>}</li>
  * </ul>
  * </p>
  *
@@ -44,6 +45,32 @@ public interface AnalyticsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<UnitCostMatrix> getRoundTripMatrices();
+
+	/**
+	 * Returns the value of the '<em><b>Selected Matrix</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Selected Matrix</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Selected Matrix</em>' reference.
+	 * @see #setSelectedMatrix(UnitCostMatrix)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_SelectedMatrix()
+	 * @model required="true"
+	 * @generated
+	 */
+	UnitCostMatrix getSelectedMatrix();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getSelectedMatrix <em>Selected Matrix</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Selected Matrix</em>' reference.
+	 * @see #getSelectedMatrix()
+	 * @generated
+	 */
+	void setSelectedMatrix(UnitCostMatrix value);
 
 } // end of  AnalyticsModel
 

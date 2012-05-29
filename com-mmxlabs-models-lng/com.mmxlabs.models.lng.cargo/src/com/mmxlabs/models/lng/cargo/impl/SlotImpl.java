@@ -8,10 +8,13 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.port.Port;
 
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.impl.ASlotImpl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -20,6 +23,7 @@ import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -805,6 +809,48 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == ITimezoneProvider.class) {
+			switch (baseOperationID) {
+				case TypesPackage.ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE: return CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+		switch (operationID) {
+			case CargoPackage.SLOT___GET_SLOT_OR_PORT_DURATION:
+				return getSlotOrPortDuration();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MIN_QUANTITY:
+				return getSlotOrContractMinQuantity();
+			case CargoPackage.SLOT___GET_SLOT_OR_CONTRACT_MAX_QUANTITY:
+				return getSlotOrContractMaxQuantity();
+			case CargoPackage.SLOT___GET_WINDOW_END_WITH_SLOT_OR_PORT_TIME:
+				return getWindowEndWithSlotOrPortTime();
+			case CargoPackage.SLOT___GET_WINDOW_START_WITH_SLOT_OR_PORT_TIME:
+				return getWindowStartWithSlotOrPortTime();
+			case CargoPackage.SLOT___GET_SLOT_OR_PORT_WINDOW_SIZE:
+				return getSlotOrPortWindowSize();
+			case CargoPackage.SLOT___GET_TIME_ZONE__EATTRIBUTE:
+				return getTimeZone((EAttribute)arguments.get(0));
+		}
+		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -840,6 +886,12 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		} else if (CargoPackage.eINSTANCE.getSlot_WindowSize() == feature) {
 			if (getPort() == null) return (Integer) 6;
 			else return getPort().getDefaultWindowSize();
+		} else if (CargoPackage.eINSTANCE.getSlot_MinQuantity() == feature) {
+			if (getContract() == null) return 0;
+			else return getContract().getMinQuantity();
+		} else if (CargoPackage.eINSTANCE.getSlot_MaxQuantity() == feature) {
+			if (getContract() == null) return 500000;
+			else return getContract().getMaxQuantity();
 		}
 		
 		return super.getUnsetValue(feature);

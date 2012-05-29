@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.input.InputModel#getAssignments <em>Assignments</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.input.InputModel#getLockedAssignedObjects <em>Locked Assigned Objects</em>}</li>
  * </ul>
  * </p>
  *
@@ -40,6 +41,22 @@ public interface InputModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<Assignment> getAssignments();
+
+	/**
+	 * Returns the value of the '<em><b>Locked Assigned Objects</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.mmxcore.UUIDObject}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Locked Assigned Objects</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Locked Assigned Objects</em>' reference list.
+	 * @see com.mmxlabs.models.lng.input.InputPackage#getInputModel_LockedAssignedObjects()
+	 * @model
+	 * @generated
+	 */
+	EList<UUIDObject> getLockedAssignedObjects();
 
 } // end of  InputModel
 

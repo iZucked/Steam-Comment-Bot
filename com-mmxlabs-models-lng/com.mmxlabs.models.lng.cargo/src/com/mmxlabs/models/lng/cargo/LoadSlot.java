@@ -15,6 +15,7 @@ package com.mmxlabs.models.lng.cargo;
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargoCV <em>Cargo CV</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isArriveCold <em>Arrive Cold</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#getCargo <em>Cargo</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase <em>DES Purchase</em>}</li>
  * </ul>
  * </p>
  *
@@ -156,6 +157,32 @@ public interface LoadSlot extends Slot {
 	 * @generated
 	 */
 	void setCargo(Cargo value);
+
+	/**
+	 * Returns the value of the '<em><b>DES Purchase</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>DES Purchase</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>DES Purchase</em>' attribute.
+	 * @see #setDESPurchase(boolean)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getLoadSlot_DESPurchase()
+	 * @model
+	 * @generated
+	 */
+	boolean isDESPurchase();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.LoadSlot#isDESPurchase <em>DES Purchase</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>DES Purchase</em>' attribute.
+	 * @see #isDESPurchase()
+	 * @generated
+	 */
+	void setDESPurchase(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->

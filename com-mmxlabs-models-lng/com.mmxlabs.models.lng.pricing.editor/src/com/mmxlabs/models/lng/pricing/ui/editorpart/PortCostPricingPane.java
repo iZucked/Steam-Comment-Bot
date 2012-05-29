@@ -56,11 +56,6 @@ public class PortCostPricingPane extends ScenarioTableViewerPane {
 				getEditingDomain(),
 				MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 		
-		addTypicalColumn("Vessels", new MultipleReferenceManipulator(
-				PricingPackage.eINSTANCE.getPortCost_AppliesTo(),
-				getReferenceValueProviderCache(),
-				getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		
 		addTypicalColumn("Reference Capacity", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getPortCost_ReferenceCapacity(), getEditingDomain()));
 
 		addTypicalColumn("Loading Fee", new PortCostManipulator(PortCapability.LOAD));

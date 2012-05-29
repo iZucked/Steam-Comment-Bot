@@ -811,22 +811,13 @@ public interface PricingPackage extends EPackage {
 	int PORT_COST__REFERENCE_CAPACITY = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Applies To</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PORT_COST__APPLIES_TO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The number of structural features of the '<em>Port Cost</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int PORT_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl <em>Port Cost Entry</em>}' class.
@@ -1394,17 +1385,6 @@ public interface PricingPackage extends EPackage {
 	EAttribute getPortCost_ReferenceCapacity();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.PortCost#getAppliesTo <em>Applies To</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Applies To</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.PortCost#getAppliesTo()
-	 * @see #getPortCost()
-	 * @generated
-	 */
-	EReference getPortCost_AppliesTo();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.PortCostEntry <em>Port Cost Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1865,14 +1845,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT_COST__REFERENCE_CAPACITY = eINSTANCE.getPortCost_ReferenceCapacity();
-
-		/**
-		 * The meta object literal for the '<em><b>Applies To</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference PORT_COST__APPLIES_TO = eINSTANCE.getPortCost_AppliesTo();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostEntryImpl <em>Port Cost Entry</em>}' class.

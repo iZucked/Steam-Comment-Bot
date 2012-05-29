@@ -12,10 +12,11 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference input.ecore#//InputModel/assignments"/>
     </genClasses>
     <genClasses ecoreClass="input.ecore#//Assignment">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference input.ecore#//Assignment/vessels"/>
+      <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference input.ecore#//Assignment/vessels"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute input.ecore#//Assignment/assignToSpot"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference input.ecore#//Assignment/nextAssignment"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference input.ecore#//Assignment/assignedObject"/>
+      <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference input.ecore#//Assignment/assignedObjects"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

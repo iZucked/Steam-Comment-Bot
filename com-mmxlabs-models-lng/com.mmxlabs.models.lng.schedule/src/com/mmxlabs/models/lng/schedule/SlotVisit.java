@@ -20,7 +20,7 @@ package com.mmxlabs.models.lng.schedule;
  * @model
  * @generated
  */
-public interface SlotVisit extends Event, FuelUsage {
+public interface SlotVisit extends Event, FuelUsage, PortVisit {
 	/**
 	 * Returns the value of the '<em><b>Slot Allocation</b></em>' reference.
 	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotVisit <em>Slot Visit</em>}'.

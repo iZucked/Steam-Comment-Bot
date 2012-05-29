@@ -36,7 +36,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getEntries <em>Entries</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getReferenceCapacity <em>Reference Capacity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl#getAppliesTo <em>Applies To</em>}</li>
  * </ul>
  * </p>
  *
@@ -91,16 +90,6 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * @ordered
 	 */
 	protected boolean referenceCapacityESet;
-
-	/**
-	 * The cached value of the '{@link #getAppliesTo() <em>Applies To</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAppliesTo()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AVesselSet> appliesTo;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -196,23 +185,15 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<AVesselSet> getAppliesTo() {
-		if (appliesTo == null) {
-			appliesTo = new EObjectResolvingEList<AVesselSet>(AVesselSet.class, this, PricingPackage.PORT_COST__APPLIES_TO);
-		}
-		return appliesTo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getPortCost(AVessel vessel, AVesselClass vesselClass, PortCapability activity) {
+	public int getPortCost(AVesselClass vesselClass, PortCapability activity) {
 		for (final PortCostEntry entry : getEntries()) {
 			if (entry.getActivity() == activity) {
-				return (int)
-					(entry.getCost() * ((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity());
+				if (isSetReferenceCapacity()) {
+					return (int)
+						(entry.getCost() * ((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity());
+				} else {
+					return entry.getCost();
+				}
 			}
 		}
 		return 0;
@@ -246,8 +227,6 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 				return getEntries();
 			case PricingPackage.PORT_COST__REFERENCE_CAPACITY:
 				return getReferenceCapacity();
-			case PricingPackage.PORT_COST__APPLIES_TO:
-				return getAppliesTo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -272,10 +251,6 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 			case PricingPackage.PORT_COST__REFERENCE_CAPACITY:
 				setReferenceCapacity((Integer)newValue);
 				return;
-			case PricingPackage.PORT_COST__APPLIES_TO:
-				getAppliesTo().clear();
-				getAppliesTo().addAll((Collection<? extends AVesselSet>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -297,9 +272,6 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 			case PricingPackage.PORT_COST__REFERENCE_CAPACITY:
 				unsetReferenceCapacity();
 				return;
-			case PricingPackage.PORT_COST__APPLIES_TO:
-				getAppliesTo().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -318,8 +290,6 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 				return entries != null && !entries.isEmpty();
 			case PricingPackage.PORT_COST__REFERENCE_CAPACITY:
 				return isSetReferenceCapacity();
-			case PricingPackage.PORT_COST__APPLIES_TO:
-				return appliesTo != null && !appliesTo.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

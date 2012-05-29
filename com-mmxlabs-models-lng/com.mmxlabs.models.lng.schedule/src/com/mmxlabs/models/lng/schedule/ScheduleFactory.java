@@ -168,6 +168,33 @@ public interface ScheduleFactory extends EFactory {
 	Fitness createFitness();
 
 	/**
+	 * Returns a new object of class '<em>Port Visit</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Port Visit</em>'.
+	 * @generated
+	 */
+	PortVisit createPortVisit();
+
+	/**
+	 * Returns a new object of class '<em>Additional Data</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Additional Data</em>'.
+	 * @generated
+	 */
+	AdditionalData createAdditionalData();
+
+	/**
+	 * Returns a new object of class '<em>Additional Data Holder</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Additional Data Holder</em>'.
+	 * @generated
+	 */
+	AdditionalDataHolder createAdditionalDataHolder();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

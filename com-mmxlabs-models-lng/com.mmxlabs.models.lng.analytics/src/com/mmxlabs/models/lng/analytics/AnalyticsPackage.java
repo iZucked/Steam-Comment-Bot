@@ -108,13 +108,22 @@ public interface AnalyticsPackage extends EPackage {
 	int ANALYTICS_MODEL__ROUND_TRIP_MATRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Selected Matrix</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYTICS_MODEL__SELECTED_MATRIX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl <em>Unit Cost Matrix</em>}' class.
@@ -307,13 +316,22 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_MATRIX__ALLOWED_ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
+	 * The feature id for the '<em><b>Revenue Share</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_MATRIX__REVENUE_SHARE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+
+	/**
 	 * The number of structural features of the '<em>Unit Cost Matrix</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
+	int UNIT_COST_MATRIX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl <em>Unit Cost Line</em>}' class.
@@ -740,6 +758,17 @@ public interface AnalyticsPackage extends EPackage {
 	EReference getAnalyticsModel_RoundTripMatrices();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getSelectedMatrix <em>Selected Matrix</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Selected Matrix</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getSelectedMatrix()
+	 * @see #getAnalyticsModel()
+	 * @generated
+	 */
+	EReference getAnalyticsModel_SelectedMatrix();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix <em>Unit Cost Matrix</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -924,6 +953,17 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getUnitCostMatrix_AllowedRoutes();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRevenueShare <em>Revenue Share</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Revenue Share</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRevenueShare()
+	 * @see #getUnitCostMatrix()
+	 * @generated
+	 */
+	EAttribute getUnitCostMatrix_RevenueShare();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.UnitCostLine <em>Unit Cost Line</em>}'.
@@ -1302,6 +1342,14 @@ public interface AnalyticsPackage extends EPackage {
 		EReference ANALYTICS_MODEL__ROUND_TRIP_MATRICES = eINSTANCE.getAnalyticsModel_RoundTripMatrices();
 
 		/**
+		 * The meta object literal for the '<em><b>Selected Matrix</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYTICS_MODEL__SELECTED_MATRIX = eINSTANCE.getAnalyticsModel_SelectedMatrix();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl <em>Unit Cost Matrix</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1438,6 +1486,14 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference UNIT_COST_MATRIX__ALLOWED_ROUTES = eINSTANCE.getUnitCostMatrix_AllowedRoutes();
+
+		/**
+		 * The meta object literal for the '<em><b>Revenue Share</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_COST_MATRIX__REVENUE_SHARE = eINSTANCE.getUnitCostMatrix_RevenueShare();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl <em>Unit Cost Line</em>}' class.

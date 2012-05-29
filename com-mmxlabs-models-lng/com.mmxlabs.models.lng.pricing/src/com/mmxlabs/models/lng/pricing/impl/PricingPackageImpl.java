@@ -594,15 +594,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getPortCost_AppliesTo() {
-		return (EReference)portCostEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getPortCostEntry() {
 		return portCostEntryEClass;
 	}
@@ -742,7 +733,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(portCostEClass, PORT_COST__PORTS);
 		createEReference(portCostEClass, PORT_COST__ENTRIES);
 		createEAttribute(portCostEClass, PORT_COST__REFERENCE_CAPACITY);
-		createEReference(portCostEClass, PORT_COST__APPLIES_TO);
 
 		portCostEntryEClass = createEClass(PORT_COST_ENTRY);
 		createEAttribute(portCostEntryEClass, PORT_COST_ENTRY__ACTIVITY);
@@ -890,10 +880,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPortCost_Ports(), theTypesPackage.getAPortSet(), null, "ports", null, 0, -1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPortCost_Entries(), this.getPortCostEntry(), null, "entries", null, 0, -1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getPortCost_ReferenceCapacity(), ecorePackage.getEInt(), "referenceCapacity", null, 1, 1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getPortCost_AppliesTo(), theTypesPackage.getAVesselSet(), null, "appliesTo", null, 0, -1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = addEOperation(portCostEClass, ecorePackage.getEInt(), "getPortCost", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, theTypesPackage.getAVessel(), "vessel", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theTypesPackage.getAVesselClass(), "vesselClass", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, theTypesPackage.getPortCapability(), "activity", 1, 1, IS_UNIQUE, IS_ORDERED);
 
