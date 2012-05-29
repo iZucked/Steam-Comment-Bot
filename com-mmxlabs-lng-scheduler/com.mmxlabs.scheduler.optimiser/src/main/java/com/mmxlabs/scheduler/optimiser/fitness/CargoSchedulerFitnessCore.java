@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComp
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterOutFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.components.PortCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
@@ -91,6 +92,8 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		allocationComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, TradingConstants.DCP_entityProvider,
 				SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider, this));
 
+		schedulerComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this, SchedulerConstants.DCP_portCostProvider, SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
+		
 		allComponents.addAll(schedulerComponents);
 		allComponents.addAll(allocationComponents);
 	}

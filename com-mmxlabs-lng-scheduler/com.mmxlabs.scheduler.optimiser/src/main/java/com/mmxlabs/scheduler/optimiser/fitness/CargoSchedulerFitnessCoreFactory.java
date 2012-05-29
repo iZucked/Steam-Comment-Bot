@@ -40,6 +40,8 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 	public static final String COST_COOLDOWN_COMPONENT_NAME = "cargo-scheduler-cost-cooldown";
 
 	public static final String PROFIT_COMPONENT_NAME = "cargo-scheduler-group-profit";
+	
+	public static final String PORT_COST_COMPONENT_NAME = "cargo-scheduler-port-cost";
 
 	/* default scheduler factory creates default GA scheduler */
 	// TODO: Make static class
@@ -56,7 +58,7 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 	@Override
 	public Collection<String> getFitnessComponentNames() {
 		return CollectionsUtil.makeArrayList(LATENESS_COMPONENT_NAME, CAPACITY_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME, CHARTER_COST_COMPONENT_NAME, ROUTE_PRICE_COMPONENT_NAME,
-				COST_COOLDOWN_COMPONENT_NAME, CHARTER_REVENUE_COMPONENT_NAME, PROFIT_COMPONENT_NAME);
+				COST_COOLDOWN_COMPONENT_NAME, CHARTER_REVENUE_COMPONENT_NAME, PROFIT_COMPONENT_NAME, PORT_COST_COMPONENT_NAME);
 	}
 
 	@Override
