@@ -21,6 +21,7 @@ import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
@@ -212,12 +213,12 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
 	}
 
-	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
-		this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
+	public <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
+		return this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
 	}
 
-	public void addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
-		scenarioViewer.addColumn(columnName, renderer, manipulator, pathObjects);
+	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
+		return scenarioViewer.addColumn(columnName, renderer, manipulator, pathObjects);
 	}
 
 	public EditingDomain getEditingDomain() {
