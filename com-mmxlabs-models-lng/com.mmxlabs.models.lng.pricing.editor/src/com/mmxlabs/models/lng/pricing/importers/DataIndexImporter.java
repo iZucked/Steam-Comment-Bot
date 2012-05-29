@@ -105,7 +105,15 @@ public class DataIndexImporter implements IClassImporter {
 					if (row.get(s).isEmpty())
 						continue;
 					try {
-						final Number n = parseAsInt ? Integer.parseInt(row.get(s)) : Double.parseDouble(row.get(s));
+						final Number n;
+						// This used to be a ? : statement, but for some reason the int (or even Integer) was always stored as a Double 
+						if (parseAsInt) {
+							int value = Integer.parseInt(row.get(s));
+							n = value;
+						} else {
+							double value  = Double.parseDouble(row.get(s));
+							n = value;
+						}
 
 						final IndexPoint<Number> point = PricingFactory.eINSTANCE.createIndexPoint();
 						point.setDate(date);
