@@ -55,11 +55,11 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="end" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="port" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SlotVisit" eSuperTypes="#//Event #//FuelUsage">
+  <eClassifiers xsi:type="ecore:EClass" name="SlotVisit" eSuperTypes="#//Event #//FuelUsage #//PortVisit">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation" eOpposite="#//SlotAllocation/slotVisit"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event #//PortVisit">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselEvent"/>
   </eClassifiers>
@@ -162,5 +162,9 @@
     <eLiterals name="BaseFuel"/>
     <eLiterals name="FBO" value="1" literal="FBO"/>
     <eLiterals name="NBO" value="1" literal="NBO"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="PortVisit" eSuperTypes="#//Event">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCost" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
 </ecore:EPackage>

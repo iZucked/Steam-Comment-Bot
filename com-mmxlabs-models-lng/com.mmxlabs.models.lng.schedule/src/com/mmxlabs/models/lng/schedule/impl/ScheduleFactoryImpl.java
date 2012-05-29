@@ -76,6 +76,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.SLOT_ALLOCATION: return createSlotAllocation();
 			case SchedulePackage.FUEL_AMOUNT: return createFuelAmount();
 			case SchedulePackage.FITNESS: return createFitness();
+			case SchedulePackage.PORT_VISIT: return createPortVisit();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -277,6 +278,16 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public Fitness createFitness() {
 		FitnessImpl fitness = new FitnessImpl();
 		return fitness;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortVisit createPortVisit() {
+		PortVisitImpl portVisit = new PortVisitImpl();
+		return portVisit;
 	}
 
 	/**

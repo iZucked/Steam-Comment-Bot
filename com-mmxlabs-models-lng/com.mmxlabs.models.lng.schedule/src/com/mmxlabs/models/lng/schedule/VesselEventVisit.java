@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.fleet.VesselEvent;
  * @model
  * @generated
  */
-public interface VesselEventVisit extends Event {
+public interface VesselEventVisit extends Event, PortVisit {
 	/**
 	 * Returns the value of the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->

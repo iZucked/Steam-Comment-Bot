@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
@@ -158,6 +159,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass fitnessEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass portVisitEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1023,6 +1031,24 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getPortVisit() {
+		return portVisitEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPortVisit_PortCost() {
+		return (EAttribute)portVisitEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -1175,6 +1201,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		fitnessEClass = createEClass(FITNESS);
 		createEAttribute(fitnessEClass, FITNESS__FITNESS_VALUE);
 
+		portVisitEClass = createEClass(PORT_VISIT);
+		createEAttribute(portVisitEClass, PORT_VISIT__PORT_COST);
+
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
 		fuelEEnum = createEEnum(FUEL);
@@ -1222,7 +1251,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		eventEClass.getESuperTypes().add(theTypesPackage.getITimezoneProvider());
 		slotVisitEClass.getESuperTypes().add(this.getEvent());
 		slotVisitEClass.getESuperTypes().add(this.getFuelUsage());
+		slotVisitEClass.getESuperTypes().add(this.getPortVisit());
 		vesselEventVisitEClass.getESuperTypes().add(this.getEvent());
+		vesselEventVisitEClass.getESuperTypes().add(this.getPortVisit());
 		journeyEClass.getESuperTypes().add(this.getEvent());
 		journeyEClass.getESuperTypes().add(this.getFuelUsage());
 		idleEClass.getESuperTypes().add(this.getEvent());
@@ -1233,6 +1264,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		cargoAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		slotAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		fitnessEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		portVisitEClass.getESuperTypes().add(this.getEvent());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1354,6 +1386,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(fitnessEClass, Fitness.class, "Fitness", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFitness_FitnessValue(), ecorePackage.getELong(), "fitnessValue", null, 1, 1, Fitness.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPortVisit_PortCost(), ecorePackage.getEInt(), "portCost", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");

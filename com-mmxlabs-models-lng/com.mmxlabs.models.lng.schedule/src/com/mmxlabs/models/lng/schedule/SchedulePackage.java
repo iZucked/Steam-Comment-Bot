@@ -869,13 +869,22 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_VISIT__FUELS = EVENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Slot Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 1;
+	int SLOT_VISIT__SLOT_ALLOCATION = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Slot Visit</em>' class.
@@ -884,7 +893,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
+	int SLOT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -1095,13 +1104,22 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__PORT = EVENT__PORT;
 
 	/**
+	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Vessel Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 0;
+	int VESSEL_EVENT_VISIT__VESSEL_EVENT = EVENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Vessel Event Visit</em>' class.
@@ -1110,7 +1128,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
+	int VESSEL_EVENT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -2860,6 +2878,223 @@ public interface SchedulePackage extends EPackage {
 	int FITNESS_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl <em>Port Visit</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.PortVisitImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisit()
+	 * @generated
+	 */
+	int PORT_VISIT = 16;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__PROXIES = EVENT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__PORT_COST = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Port Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___MAKE_PROXIES = EVENT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
+
+	/**
+	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___NAME = EVENT___NAME;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
+
+	/**
+	 * The number of operations of the '<em>Port Visit</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2867,7 +3102,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 16;
+	int FUEL_UNIT = 17;
 
 
 	/**
@@ -2878,7 +3113,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 17;
+	int FUEL = 18;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -2888,7 +3123,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 18;
+	int CALENDAR = 19;
 
 
 	/**
@@ -3804,6 +4039,27 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getFitness_FitnessValue();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.PortVisit <em>Port Visit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Port Visit</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisit
+	 * @generated
+	 */
+	EClass getPortVisit();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.PortVisit#getPortCost <em>Port Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Port Cost</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.PortVisit#getPortCost()
+	 * @see #getPortVisit()
+	 * @generated
+	 */
+	EAttribute getPortVisit_PortCost();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4575,6 +4831,24 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute FITNESS__FITNESS_VALUE = eINSTANCE.getFitness_FitnessValue();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.PortVisitImpl <em>Port Visit</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.PortVisitImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisit()
+		 * @generated
+		 */
+		EClass PORT_VISIT = eINSTANCE.getPortVisit();
+
+		/**
+		 * The meta object literal for the '<em><b>Port Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PORT_VISIT__PORT_COST = eINSTANCE.getPortVisit_PortCost();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
