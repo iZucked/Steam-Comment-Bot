@@ -396,6 +396,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.dispose();
 		}
+		
+		referenceValueProviderCache.dispose();
 
 		super.dispose();
 	}

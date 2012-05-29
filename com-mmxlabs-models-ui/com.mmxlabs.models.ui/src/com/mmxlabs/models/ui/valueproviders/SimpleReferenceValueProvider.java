@@ -64,4 +64,9 @@ public class SimpleReferenceValueProvider extends BaseReferenceValueProvider {
 	protected EList<? extends EObject> getObjects() {
 		return (EList<? extends EObject>) container.eGet(containingReference);
 	}
+
+	@Override
+	public void dispose() {
+		container.eAdapters().remove(this);
+	}
 }

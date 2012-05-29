@@ -11,5 +11,7 @@ public interface IReferenceValueProviderProvider {
 
 	public abstract IReferenceValueProvider getReferenceValueProvider(
 			final EClass owner, final EReference reference);
+	
+	public void dispose();
 
 }

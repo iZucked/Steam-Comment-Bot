@@ -80,4 +80,6 @@ public interface IReferenceValueProvider {
 	 * @return whether to update
 	 */
 	public boolean updateOnChangeToFeature(Object changedFeature);
+
+	public void dispose();
 }

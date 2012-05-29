@@ -13,13 +13,10 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -71,6 +68,8 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			scenarioInstance.eAdapters().remove(lockedAdapter);
 		}
 
+		valueProviderCache.dispose();
+		
 		getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		super.dispose();
 	}
