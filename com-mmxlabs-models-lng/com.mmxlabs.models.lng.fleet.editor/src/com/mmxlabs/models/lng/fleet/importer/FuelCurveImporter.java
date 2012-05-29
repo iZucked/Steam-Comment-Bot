@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -116,17 +117,23 @@ public class FuelCurveImporter {
 	public Collection<Map<String, String>> exportCurves(final EList<VesselClass> vesselClasses) {
 		final List<Map<String, String>> rows = new ArrayList<Map<String, String>>(vesselClasses.size() * 2);
 		
+		// Use a LinkedHashMap to preserve put order, use a TreeMap to sort columns by speed
+		
 		for (final VesselClass vc : vesselClasses) {
 			final Map<String, String> ladenRow = new LinkedHashMap<String, String>();
+			final Map<String, String> ladenRowValues = new TreeMap<String, String>();
 			ladenRow.put("class", vc.getName());
 			ladenRow.put("state", "laden");
-			exportConsumptions(vc.getLadenAttributes().getFuelConsumption(), ladenRow);
+			exportConsumptions(vc.getLadenAttributes().getFuelConsumption(), ladenRowValues);
+			ladenRow.putAll(ladenRowValues);
 			rows.add(ladenRow);
 			
 			final Map<String, String> ballastRow = new LinkedHashMap<String, String>();
+			final Map<String, String> ballastRowValues = new TreeMap<String, String>();
 			ballastRow.put("class", vc.getName());
 			ballastRow.put("state", "ballast");
-			exportConsumptions(vc.getBallastAttributes().getFuelConsumption(), ballastRow);
+			exportConsumptions(vc.getBallastAttributes().getFuelConsumption(), ballastRowValues);
+			ballastRow.putAll(ballastRowValues);
 			rows.add(ballastRow);
 		}
 		
