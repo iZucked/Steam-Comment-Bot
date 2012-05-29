@@ -4,9 +4,12 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.commands;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -26,7 +29,7 @@ import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 
 	@Override
-	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
+	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides,Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
 		if (commandClass == SetCommand.class) {
 			if (parameter.getEOwner() instanceof Cargo) {
 				final Cargo cargo = (Cargo) parameter.getEOwner();

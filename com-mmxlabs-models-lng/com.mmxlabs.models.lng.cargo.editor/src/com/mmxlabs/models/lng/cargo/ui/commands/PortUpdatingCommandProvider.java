@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.commands;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.CommandParameter;
@@ -24,7 +26,7 @@ import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
  */
 public class PortUpdatingCommandProvider implements IModelCommandProvider {
 	@Override
-	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
+	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides,Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
 		if (commandClass == SetCommand.class) {
 			if (parameter.getEOwner() instanceof Slot) {
 				final Slot slot = (Slot) parameter.getEOwner();
