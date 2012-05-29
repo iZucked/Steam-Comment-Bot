@@ -117,7 +117,7 @@ public class DistanceMatrixCreator {
 		BufferedReader portReader = null;
 		final List<Pair<String, Pair<Double, Double>>> ports = new ArrayList<Pair<String, Pair<Double, Double>>>();
 		try {
-			portReader = new BufferedReader(new FileReader(getCoordinatesFilePath()));
+			portReader = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(getCoordinatesFilePath())));
 
 			String line;
 			while ((line = portReader.readLine()) != null) {
@@ -249,7 +249,7 @@ public class DistanceMatrixCreator {
 		return coordinatesFilePath;
 	}
 
-	@Option(defaultValue = "ports.csv", help = "List of port coordinates, in a CSV file. Column 0 is port name, column 1 is degrees latitude (-90 to 90) and column 2 degrees longitude (-180 to 180).")
+	@Option(defaultValue = "/ports.csv", help = "List of port coordinates, in a CSV file. Column 0 is port name, column 1 is degrees latitude (-90 to 90) and column 2 degrees longitude (-180 to 180).")
 	public void setCoordinatesFilePath(final String coordinatesFilePath) {
 		this.coordinatesFilePath = coordinatesFilePath;
 	}
