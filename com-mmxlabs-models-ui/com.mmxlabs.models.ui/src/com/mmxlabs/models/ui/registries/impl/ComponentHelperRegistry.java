@@ -21,63 +21,69 @@ import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.util.importer.registry.impl.AbstractRegistry;
 
 /**
- * Handles the extension point com.mmxlabs.models.ui.componenthelpers. When
- * constructing a UI element for an EClass, the default editor will ask this
- * registry to get an {@link IComponentHelper} matching the EClass. Extensions
- * are matched according to the following rules:
+ * Handles the extension point com.mmxlabs.models.ui.componenthelpers. When constructing a UI element for an EClass, the default editor will ask this registry to get an {@link IComponentHelper}
+ * matching the EClass. Extensions are matched according to the following rules:
  * 
  * <ol>
- * <li>An extension matches an EClass if (a) the modelClass attribute matches
- * the EClass' interface canonical name exactly, or (b) matches a supertype's
- * interface canonical name exactly and inheritable=true</li>
- * <li>If more than one extension matches, the one with the most specific
- * modelClass wins</li>
+ * <li>An extension matches an EClass if (a) the modelClass attribute matches the EClass' interface canonical name exactly, or (b) matches a supertype's interface canonical name exactly and
+ * inheritable=true</li>
+ * <li>If more than one extension matches, the one with the most specific modelClass wins</li>
  * </ol>
  * 
  * @author hinton
  * 
  */
 public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComponentHelper>> implements IComponentHelperRegistry {
-	@Inject Iterable<IComponentHelperExtension> extensions;
+	@Inject
+	Iterable<IComponentHelperExtension> extensions;
 	private Comparator<IComponentHelper> comparator = new Comparator<IComponentHelper>() {
 		@Override
 		public int compare(IComponentHelper arg0, IComponentHelper arg1) {
+
+			if (arg0 == null) {
+				return -1;
+			}
+			if (arg1 == null) {
+				return 1;
+			}
+
 			return ((Integer) arg0.getDisplayPriority()).compareTo(arg1.getDisplayPriority());
 		}
 	};
-	
+
 	/**
-	 * If an EClass has no component helper registered that will match it, but its supertypes do have registered component helpers,
-	 * we will still want to invoke those on the supertypes. This method returns a component helper to do that job.
+	 * If an EClass has no component helper registered that will match it, but its supertypes do have registered component helpers, we will still want to invoke those on the supertypes. This method
+	 * returns a component helper to do that job.
 	 * 
 	 * @param eClass
 	 * @return
 	 */
 	private IComponentHelper reflector(final EClass eClass) {
 		final ArrayList<IComponentHelper> superHelpers = new ArrayList<IComponentHelper>();
-		
+
 		for (final EClass eSuper : eClass.getESuperTypes()) {
 			final List<IComponentHelper> h = getComponentHelpers(eSuper);
 			superHelpers.addAll(h);
 		}
-		
+
 		// This check should ensure that pointless reflectors are not created.
-		if (superHelpers.isEmpty()) return null;
-		
+		if (superHelpers.isEmpty())
+			return null;
+
 		return new BaseComponentHelper() {
 			@Override
-			public void addEditorsToComposite(IInlineEditorContainer detailComposite,
-					EClass displayedClass) {
-				for (final IComponentHelper h : superHelpers) h.addEditorsToComposite(detailComposite, displayedClass);
+			public void addEditorsToComposite(IInlineEditorContainer detailComposite, EClass displayedClass) {
+				for (final IComponentHelper h : superHelpers)
+					h.addEditorsToComposite(detailComposite, displayedClass);
 			}
-			
+
 			@Override
 			public void addEditorsToComposite(IInlineEditorContainer detailComposite) {
 				addEditorsToComposite(detailComposite, eClass);
 			}
 		};
 	}
-	
+
 	public ComponentHelperRegistry() {
 
 	}
@@ -106,28 +112,31 @@ public class ComponentHelperRegistry extends AbstractRegistry<EClass, List<IComp
 					}
 				}
 			}
-			
+
 		}
-		
+
 		if (bestExtension == null) {
-			if (key.getESuperTypes().isEmpty()) return helpers;
+			if (key.getESuperTypes().isEmpty())
+				return helpers;
 			final IComponentHelper reflector = reflector(key);
-			if (reflector != null) helpers.add(reflector);
+			if (reflector != null)
+				helpers.add(reflector);
 			return helpers;
 		}
-		
+
 		if (factoryExistsForID(bestExtension.getID())) {
 			helpers.addAll(getFactoryForID(bestExtension.getID()));
 		} else {
 			helpers.addAll(cacheFactoryForID(bestExtension.getID(), Collections.singletonList(bestExtension.instantiate())));
 		}
-		
+
 		if (helpers.size() > 1) {
-			Collections.sort(helpers, comparator );
+			Collections.sort(helpers, comparator);
 		}
-		
-		while (helpers.remove(null));
-		
+
+		while (helpers.remove(null))
+			;
+
 		return helpers;
 	}
 }

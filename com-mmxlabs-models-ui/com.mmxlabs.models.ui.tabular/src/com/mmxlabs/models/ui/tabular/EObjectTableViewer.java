@@ -23,7 +23,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IColorProvider;
@@ -40,8 +39,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -218,7 +215,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private IFilter filter = null;
 
-	private boolean lockedForEditing = false;
+	boolean lockedForEditing = false;
 
 	/**
 	 * @return True if editing is currently disabled on this table.
@@ -242,7 +239,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private ValidationContentAdapter validationAdapter;
 
-	private final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
+	final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
 	public boolean isDisplayValidationErrors() {
 		return displayValidationErrors;
@@ -336,93 +333,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 		columnSortOrder.add(tColumn);
 
-		column.setLabelProvider(new ColumnLabelProvider() {
-
-			private final Color errorColour = new Color(Display.getDefault(), new RGB(255, 100, 100));
-			private final Color warningColour = new Color(Display.getDefault(), new RGB(255, 242, 0));
-			private final Color lockedColour = new Color(Display.getDefault(), new RGB(100, 100, 100));
-
-			@Override
-			public Color getForeground(final Object element) {
-
-				if (lockedForEditing) {
-					return lockedColour;
-				}
-
-				if (delegateColourProvider != null) {
-					final Color colour = delegateColourProvider.getForeground(element);
-					if (colour != null) {
-						return colour;
-					}
-				}
-
-				return super.getForeground(element);
-			}
-
-			@Override
-			public Color getBackground(final Object element) {
-				if (validationErrors.containsKey(element)) {
-					final IStatus s = validationErrors.get(element);
-					if (s.getSeverity() == IStatus.ERROR) {
-						return errorColour;
-					} else if (s.getSeverity() == IStatus.WARNING) {
-						return warningColour;
-					}
-				}
-
-				if (delegateColourProvider != null) {
-					final Color colour = delegateColourProvider.getBackground(element);
-					if (colour != null) {
-						return colour;
-					}
-				}
-
-				return super.getBackground(element);
-			}
-
-			@Override
-			public String getText(final Object element) {
-				return renderer.render(path.get((EObject) element));
-			}
-
-			@Override
-			public String getToolTipText(final Object element) {
-				if (validationErrors.containsKey(element)) {
-					final IStatus s = validationErrors.get(element);
-					if (!s.isOK()) {
-						return getMessages(s);
-					}
-				}
-				return super.getToolTipText(element);
-			}
-
-			/**
-			 * Extract message hierarchy and construct the tool tip message.
-			 * 
-			 * @param status
-			 * @return
-			 */
-			private String getMessages(final IStatus status) {
-				if (status.isMultiStatus()) {
-					final StringBuilder sb = new StringBuilder();
-					for (final IStatus s : status.getChildren()) {
-						sb.append(getMessages(s));
-						sb.append("\n");
-					}
-					return sb.toString();
-				} else {
-					return status.getMessage();
-				}
-			}
-
-			@Override
-			public void dispose() {
-				errorColour.dispose();
-				warningColour.dispose();
-				lockedColour.dispose();
-				super.dispose();
-			}
-		});
+		column.setLabelProvider(new EObjectTableViewerColumnProvider(this, renderer, path));
 
 		column.setEditingSupport(new EditingSupport(viewer) {
 			@Override
@@ -890,5 +801,9 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	public void setColourProvider(final IColorProvider delegateColourProvider) {
 		this.delegateColourProvider = delegateColourProvider;
+	}
+
+	public Map<Object, IStatus> getValidationErrors() {
+		return validationErrors;
 	}
 }
