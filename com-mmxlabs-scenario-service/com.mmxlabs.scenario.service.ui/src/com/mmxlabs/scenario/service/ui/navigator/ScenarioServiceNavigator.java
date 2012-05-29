@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -132,6 +133,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			tryRefresh();
 		}
 	};
+	private Image showColumnImage;
 
 	public ScenarioServiceNavigator() {
 		super();
@@ -141,6 +143,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
+		showColumnImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
 	}
 
 	@Override
@@ -148,6 +151,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker.close();
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
 		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
+		
+		showColumnImage.dispose();
+		
 		super.dispose();
 	}
 
@@ -180,8 +186,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		labelColumn.setWidth(275);
 
 		final TreeColumn checkColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
-		// checkColumn.setText("Show");
-		checkColumn.setImage(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage());
+		checkColumn.setImage(showColumnImage);
 		checkColumn.setToolTipText("Display");
 		checkColumn.setMoveable(true);
 
