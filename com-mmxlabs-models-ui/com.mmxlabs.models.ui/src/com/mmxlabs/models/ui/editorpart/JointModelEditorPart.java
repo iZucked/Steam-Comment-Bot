@@ -150,6 +150,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	private TreeViewer selectionViewer;
 
+	private Image editorTitleImage;
+
 	public JointModelEditorPart() {
 	}
 
@@ -274,7 +276,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 			final ImageDescriptor imageDescriptor = ssInput.getImageDescriptor();
 			if (imageDescriptor != null) {
-				setTitleImage(imageDescriptor.createImage());
+				if (editorTitleImage != null) {
+					editorTitleImage.dispose();
+				}
+				editorTitleImage = imageDescriptor.createImage();
+				setTitleImage(editorTitleImage);
 			}
 
 			final ScenarioInstance instance = ssInput.getScenarioInstance();
@@ -399,6 +405,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		
 		referenceValueProviderCache.dispose();
 
+		if (editorTitleImage != null) {
+			editorTitleImage.dispose();
+		}
+		
 		super.dispose();
 	}
 
