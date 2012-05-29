@@ -23,7 +23,6 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.pricing.PortCost#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PortCost#getEntries <em>Entries</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.PortCost#getReferenceCapacity <em>Reference Capacity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.PortCost#getAppliesTo <em>Applies To</em>}</li>
  * </ul>
  * </p>
  *
@@ -118,29 +117,13 @@ public interface PortCost extends MMXObject {
 	boolean isSetReferenceCapacity();
 
 	/**
-	 * Returns the value of the '<em><b>Applies To</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Applies To</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Applies To</em>' reference list.
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPortCost_AppliesTo()
-	 * @model
-	 * @generated
-	 */
-	EList<AVesselSet> getAppliesTo();
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model required="true" vesselRequired="true" vesselClassRequired="true" activityRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (final PortCostEntry entry : getEntries()) {\n\tif (entry.getActivity() == activity) {\n\t\treturn (int)\n\t\t\t(entry.getCost() * ((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity());\n\t}\n}\nreturn 0;'"
+	 * @model required="true" vesselClassRequired="true" activityRequired="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='for (final PortCostEntry entry : getEntries()) {\n\tif (entry.getActivity() == activity) {\n\t\tif (isSetReferenceCapacity()) {\n\t\t\treturn (int)\n\t\t\t\t(entry.getCost() * ((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity());\n\t\t} else {\n\t\t\treturn entry.getCost();\n\t\t}\n\t}\n}\nreturn 0;'"
 	 * @generated
 	 */
-	int getPortCost(AVessel vessel, AVesselClass vesselClass, PortCapability activity);
+	int getPortCost(AVesselClass vesselClass, PortCapability activity);
 
 } // end of  PortCost
 

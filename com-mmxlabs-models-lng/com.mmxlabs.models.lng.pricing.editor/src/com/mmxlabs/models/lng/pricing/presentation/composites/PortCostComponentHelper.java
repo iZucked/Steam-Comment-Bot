@@ -82,7 +82,6 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 		add_portsEditor(detailComposite, topClass);
 		add_entriesEditor(detailComposite, topClass);
 		add_referenceCapacityEditor(detailComposite, topClass);
-		add_appliesToEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on PortCost
@@ -159,14 +158,5 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_referenceCapacityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__REFERENCE_CAPACITY));
-	}
-
-	/**
-	 * Create the editor for the appliesTo feature on PortCost
-	 *
-	 * @generated
-	 */
-	protected void add_appliesToEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__APPLIES_TO));
 	}
 }

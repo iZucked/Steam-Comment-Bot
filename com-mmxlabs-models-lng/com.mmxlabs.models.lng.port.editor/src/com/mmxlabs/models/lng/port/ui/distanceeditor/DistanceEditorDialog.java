@@ -220,7 +220,7 @@ public class DistanceEditorDialog extends Dialog {
 						public boolean select(final Viewer viewer, final Object parentElement, final Object element) {
 							return ((Pair<Port, ?>) element).getFirst().getName().toLowerCase().contains(text);
 						}
-					} });
+					}});
 				}
 			}
 		});
