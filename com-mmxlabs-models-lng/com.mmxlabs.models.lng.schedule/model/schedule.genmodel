@@ -14,15 +14,23 @@
       <genEnumLiterals ecoreEnumLiteral="schedule.ecore#//FuelUnit/MT"/>
       <genEnumLiterals ecoreEnumLiteral="schedule.ecore#//FuelUnit/MMBTU"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="schedule.ecore#//Fuel">
+      <genEnumLiterals ecoreEnumLiteral="schedule.ecore#//Fuel/BaseFuel"/>
+      <genEnumLiterals ecoreEnumLiteral="schedule.ecore#//Fuel/FBO"/>
+      <genEnumLiterals ecoreEnumLiteral="schedule.ecore#//Fuel/NBO"/>
+    </genEnums>
+    <genDataTypes ecoreDataType="schedule.ecore#//Calendar"/>
     <genClasses ecoreClass="schedule.ecore#//ScheduleModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//ScheduleModel/initialSchedule"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//ScheduleModel/optimisedSchedule"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//ScheduleModel/dirty"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Schedule">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Schedule/complete"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/sequences"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/unscheduledCargoes"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/cargoAllocations"/>
+      <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference schedule.ecore#//Schedule/cargoAllocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/slotAllocations"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Schedule/fitnesses"/>
     </genClasses>
@@ -31,13 +39,23 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Sequence/vessel"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Sequence/vesselClass"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//Sequence/fitnesses"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Sequence/dailyHireRate"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Sequence/spotIndex"/>
       <genOperations ecoreOperation="schedule.ecore#//Sequence/getName"/>
+      <genOperations ecoreOperation="schedule.ecore#//Sequence/isSpotVessel"/>
+      <genOperations ecoreOperation="schedule.ecore#//Sequence/isFleetVessel"/>
+      <genOperations ecoreOperation="schedule.ecore#//Sequence/isTimeCharterVessel"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Event">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Event/start"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Event/end"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//Event/port"/>
       <genOperations ecoreOperation="schedule.ecore#//Event/getDuration"/>
+      <genOperations ecoreOperation="schedule.ecore#//Event/getLocalStart"/>
+      <genOperations ecoreOperation="schedule.ecore#//Event/getLocalEnd"/>
+      <genOperations ecoreOperation="schedule.ecore#//Event/type"/>
+      <genOperations ecoreOperation="schedule.ecore#//Event/name"/>
+      <genOperations ecoreOperation="schedule.ecore#//Event/getHireCost"/>
     </genClasses>
     <genClasses image="false" ecoreClass="schedule.ecore#//SlotVisit">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//SlotVisit/slotAllocation"/>
@@ -62,16 +80,20 @@
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//FuelUsage">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//FuelUsage/fuels"/>
+      <genOperations ecoreOperation="schedule.ecore#//FuelUsage/getFuelCost"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//FuelQuantity">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//FuelQuantity/fuelName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//FuelQuantity/fuel"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//FuelQuantity/cost"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//FuelQuantity/amounts"/>
     </genClasses>
-    <genClasses ecoreClass="schedule.ecore#//Cooldown"/>
+    <genClasses ecoreClass="schedule.ecore#//Cooldown">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Cooldown/volume"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Cooldown/cost"/>
+    </genClasses>
     <genClasses ecoreClass="schedule.ecore#//CargoAllocation">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/loadVisit"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/dischargeVisit"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/loadAllocation"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/dischargeAllocation"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/loadVolume"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//CargoAllocation/dischargeVolume"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/inputCargo"/>
@@ -80,12 +102,20 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/ladenIdle"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/ballastIdle"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/sequence"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//CargoAllocation/additionalData"/>
+      <genOperations ecoreOperation="schedule.ecore#//CargoAllocation/getName"/>
+      <genOperations ecoreOperation="schedule.ecore#//CargoAllocation/getType"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//SlotAllocation">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//SlotAllocation/slot"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//SlotAllocation/spotMarket"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//SlotAllocation/cargoAllocation"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference schedule.ecore#//SlotAllocation/slotVisit"/>
+      <genOperations ecoreOperation="schedule.ecore#//SlotAllocation/getPort"/>
+      <genOperations ecoreOperation="schedule.ecore#//SlotAllocation/getLocalStart"/>
+      <genOperations ecoreOperation="schedule.ecore#//SlotAllocation/getLocalEnd"/>
+      <genOperations ecoreOperation="schedule.ecore#//SlotAllocation/getContract"/>
+      <genOperations ecoreOperation="schedule.ecore#//SlotAllocation/getName"/>
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//FuelAmount">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//FuelAmount/unit"/>
@@ -93,6 +123,14 @@
     </genClasses>
     <genClasses ecoreClass="schedule.ecore#//Fitness">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//Fitness/fitnessValue"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//PortVisit">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//PortVisit/portCost"/>
+    </genClasses>
+    <genClasses ecoreClass="schedule.ecore#//AdditionalData">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference schedule.ecore#//AdditionalData/children"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//AdditionalData/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute schedule.ecore#//AdditionalData/integerValue"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

@@ -1,15 +1,17 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
 
-import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.AdditionalData;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,13 +34,13 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.Schedule} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.AdditionalData} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScheduleItemProvider
-	extends MMXObjectItemProvider
+public class AdditionalDataItemProvider
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -51,7 +53,7 @@ public class ScheduleItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ScheduleItemProvider(AdapterFactory adapterFactory) {
+	public AdditionalDataItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -66,52 +68,52 @@ public class ScheduleItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addCompletePropertyDescriptor(object);
-			addCargoAllocationsPropertyDescriptor(object);
+			addKeyPropertyDescriptor(object);
+			addIntegerValuePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Complete feature.
+	 * This adds a property descriptor for the Key feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCompletePropertyDescriptor(Object object) {
+	protected void addKeyPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Schedule_complete_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Schedule_complete_feature", "_UI_Schedule_type"),
-				 SchedulePackage.Literals.SCHEDULE__COMPLETE,
+				 getString("_UI_AdditionalData_key_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdditionalData_key_feature", "_UI_AdditionalData_type"),
+				 SchedulePackage.Literals.ADDITIONAL_DATA__KEY,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Cargo Allocations feature.
+	 * This adds a property descriptor for the Integer Value feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addCargoAllocationsPropertyDescriptor(Object object) {
+	protected void addIntegerValuePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_Schedule_cargoAllocations_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Schedule_cargoAllocations_feature", "_UI_Schedule_type"),
-				 SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS,
+				 getString("_UI_AdditionalData_integerValue_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdditionalData_integerValue_feature", "_UI_AdditionalData_type"),
+				 SchedulePackage.Literals.ADDITIONAL_DATA__INTEGER_VALUE,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -128,11 +130,7 @@ public class ScheduleItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__UNSCHEDULED_CARGOES);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SLOT_ALLOCATIONS);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESSES);
+			childrenFeatures.add(SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
 		}
 		return childrenFeatures;
 	}
@@ -151,14 +149,14 @@ public class ScheduleItemProvider
 	}
 
 	/**
-	 * This returns Schedule.gif.
+	 * This returns AdditionalData.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/Schedule"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AdditionalData"));
 	}
 
 	/**
@@ -169,8 +167,10 @@ public class ScheduleItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Schedule schedule = (Schedule)object;
-		return getString("_UI_Schedule_type") + " " + schedule.isComplete();
+		String label = ((AdditionalData)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_AdditionalData_type") :
+			getString("_UI_AdditionalData_type") + " " + label;
 	}
 
 	/**
@@ -184,14 +184,12 @@ public class ScheduleItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(Schedule.class)) {
-			case SchedulePackage.SCHEDULE__COMPLETE:
+		switch (notification.getFeatureID(AdditionalData.class)) {
+			case SchedulePackage.ADDITIONAL_DATA__KEY:
+			case SchedulePackage.ADDITIONAL_DATA__INTEGER_VALUE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case SchedulePackage.SCHEDULE__SEQUENCES:
-			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOES:
-			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
-			case SchedulePackage.SCHEDULE__FITNESSES:
+			case SchedulePackage.ADDITIONAL_DATA__ADDITIONAL_DATA:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -211,23 +209,8 @@ public class ScheduleItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__SEQUENCES,
-				 ScheduleFactory.eINSTANCE.createSequence()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__UNSCHEDULED_CARGOES,
-				 ScheduleFactory.eINSTANCE.createUnscheduledCargo()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__SLOT_ALLOCATIONS,
-				 ScheduleFactory.eINSTANCE.createSlotAllocation()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__FITNESSES,
-				 ScheduleFactory.eINSTANCE.createFitness()));
+				(SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA,
+				 ScheduleFactory.eINSTANCE.createAdditionalData()));
 	}
 
 	/**

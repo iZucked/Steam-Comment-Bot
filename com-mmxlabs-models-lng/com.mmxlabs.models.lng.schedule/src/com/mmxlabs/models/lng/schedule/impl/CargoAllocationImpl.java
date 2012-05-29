@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.schedule.AdditionalData;
+import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -14,13 +16,17 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -29,6 +35,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getAdditionalData <em>Additional Data</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLoadAllocation <em>Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getDischargeAllocation <em>Discharge Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLoadVolume <em>Load Volume</em>}</li>
@@ -45,6 +52,16 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * @generated
  */
 public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocation {
+	/**
+	 * The cached value of the '{@link #getAdditionalData() <em>Additional Data</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdditionalData()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AdditionalData> additionalData;
+
 	/**
 	 * The cached value of the '{@link #getLoadAllocation() <em>Load Allocation</em>}' reference.
 	 * <!-- begin-user-doc -->
@@ -601,6 +618,18 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<AdditionalData> getAdditionalData() {
+		if (additionalData == null) {
+			additionalData = new EObjectContainmentEList<AdditionalData>(AdditionalData.class, this, SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA);
+		}
+		return additionalData;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public String getName() {
@@ -629,9 +658,38 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public AdditionalData getAdditionalDataWithKey(String key) {
+		for (final AdditionalData ad : getAdditionalData()) {
+		  if (ad.getKey().equals(key)) return ad;
+		}
+		
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
+				return ((InternalEList<?>)getAdditionalData()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
+				return getAdditionalData();
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
 				if (resolve) return getLoadAllocation();
 				return basicGetLoadAllocation();
@@ -669,9 +727,14 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
+				getAdditionalData().clear();
+				getAdditionalData().addAll((Collection<? extends AdditionalData>)newValue);
+				return;
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
 				setLoadAllocation((SlotAllocation)newValue);
 				return;
@@ -714,6 +777,9 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
+				getAdditionalData().clear();
+				return;
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
 				setLoadAllocation((SlotAllocation)null);
 				return;
@@ -756,6 +822,8 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
+				return additionalData != null && !additionalData.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
 				return loadAllocation != null;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_ALLOCATION:
@@ -786,12 +854,62 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == AdditionalDataHolder.class) {
+			switch (derivedFeatureID) {
+				case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA: return SchedulePackage.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == AdditionalDataHolder.class) {
+			switch (baseFeatureID) {
+				case SchedulePackage.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA: return SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
+		if (baseClass == AdditionalDataHolder.class) {
+			switch (baseOperationID) {
+				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING: return SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING;
+				default: return -1;
+			}
+		}
+		return super.eDerivedOperationID(baseOperationID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 			case SchedulePackage.CARGO_ALLOCATION___GET_NAME:
 				return getName();
 			case SchedulePackage.CARGO_ALLOCATION___GET_TYPE:
 				return getType();
+			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
+				return getAdditionalDataWithKey((String)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

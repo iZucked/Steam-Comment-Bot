@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.schedule.AdditionalData;
+import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -166,6 +168,20 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass portVisitEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass additionalDataEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass additionalDataHolderEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1049,6 +1065,60 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getAdditionalData() {
+		return additionalDataEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAdditionalData_Key() {
+		return (EAttribute)additionalDataEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAdditionalData_IntegerValue() {
+		return (EAttribute)additionalDataEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAdditionalDataHolder() {
+		return additionalDataHolderEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAdditionalDataHolder_AdditionalData() {
+		return (EReference)additionalDataHolderEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getAdditionalDataHolder__GetAdditionalDataWithKey__String() {
+		return additionalDataHolderEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -1204,6 +1274,14 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		portVisitEClass = createEClass(PORT_VISIT);
 		createEAttribute(portVisitEClass, PORT_VISIT__PORT_COST);
 
+		additionalDataEClass = createEClass(ADDITIONAL_DATA);
+		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__KEY);
+		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__INTEGER_VALUE);
+
+		additionalDataHolderEClass = createEClass(ADDITIONAL_DATA_HOLDER);
+		createEReference(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
+		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING);
+
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
 		fuelEEnum = createEEnum(FUEL);
@@ -1262,9 +1340,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		cooldownEClass.getESuperTypes().add(this.getEvent());
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		cargoAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		cargoAllocationEClass.getESuperTypes().add(this.getAdditionalDataHolder());
 		slotAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		fitnessEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		portVisitEClass.getESuperTypes().add(this.getEvent());
+		additionalDataEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		additionalDataEClass.getESuperTypes().add(this.getAdditionalDataHolder());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1389,6 +1470,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPortVisit_PortCost(), ecorePackage.getEInt(), "portCost", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(additionalDataEClass, AdditionalData.class, "AdditionalData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getAdditionalData_Key(), ecorePackage.getEString(), "key", null, 1, 1, AdditionalData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAdditionalData_IntegerValue(), ecorePackage.getEInt(), "integerValue", null, 1, 1, AdditionalData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(additionalDataHolderEClass, AdditionalDataHolder.class, "AdditionalDataHolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getAdditionalDataHolder_AdditionalData(), this.getAdditionalData(), null, "additionalData", null, 0, -1, AdditionalDataHolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		EOperation op = initEOperation(getAdditionalDataHolder__GetAdditionalDataWithKey__String(), this.getAdditionalData(), "getAdditionalDataWithKey", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");
