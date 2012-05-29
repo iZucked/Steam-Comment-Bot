@@ -29,7 +29,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	public AbstractPerRouteSchedulerFitnessComponent(final String name, final IFitnessCore core) {
 		super(name, core);
 	}
-
+	
 	@Override
 	public void startSequence(final IResource resource, final boolean sequenceHasChanged) {
 		if (sequenceHasChanged) {
@@ -87,6 +87,21 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	 */
 	protected abstract boolean reallyEvaluateObject(Object object, int time);
 
+	
+	
+	@Override
+	public boolean annotateNextObject(Object object, int time,
+			IAnnotatedSolution solution) {
+		if (currentResource != null) {
+			return reallyAnnotateObject(object, time, solution);
+		}
+		return true;
+	}
+
+	protected boolean reallyAnnotateObject(Object object, int time, IAnnotatedSolution solution) {
+		return nextObject(object, time);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 

@@ -1,10 +1,14 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.impl.PortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
@@ -17,17 +21,22 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessComponent {
 
 	private String portCostProviderKey;
+	private String vesselProviderKey;
+	private String portSlotProviderKey;
+	
 	private IPortCostProvider portCostProvider;
 	private IVesselProvider vesselProvider;
-	private String vesselProviderKey;
+	private IPortSlotProvider portSlotProvider;
+	
 
 	private IVessel currentVessel;
 	private long sequenceAccumulator = 0;
 	
-	public PortCostFitnessComponent(String name, IFitnessCore core, String portCostProviderKey, String vesselProviderKey) {
+	public PortCostFitnessComponent(String name, IFitnessCore core, String portCostProviderKey, String vesselProviderKey, String portSlotProviderKey) {
 		super(name, core);
 		this.portCostProviderKey = portCostProviderKey;
 		this.vesselProviderKey = vesselProviderKey;
+		this.portSlotProviderKey = portSlotProviderKey;
 	}
 	
 	@Override
@@ -35,6 +44,7 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 		super.init(data);
 		setPortCostProvider(data.getDataComponentProvider(portCostProviderKey, IPortCostProvider.class));
 		setVesselProvider(data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class));
+		setPortSlotProvider(data.getDataComponentProvider(portSlotProviderKey, IPortSlotProvider.class));
 	}
 
 	@Override
@@ -50,6 +60,23 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 			final PortDetails details = (PortDetails) object;
 			sequenceAccumulator += portCostProvider.getPortCost(details.getPortSlot().getPort(), currentVessel, 
 					details.getPortSlot().getPortType());
+		}
+		
+		return true;
+	}
+
+	@Override
+	protected boolean reallyAnnotateObject(Object object, int time,
+			IAnnotatedSolution solution) {
+		if (object instanceof PortDetails) {
+			final PortDetails details = (PortDetails) object;
+			final long cost = portCostProvider.getPortCost(details.getPortSlot().getPort(), currentVessel, 
+					details.getPortSlot().getPortType());
+			
+			solution.getElementAnnotations().getAnnotations(portSlotProvider.getElement(details.getPortSlot())).put(
+					SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
+			
+			sequenceAccumulator += cost;
 		}
 		
 		return true;
@@ -75,5 +102,13 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 
 	public void setVesselProvider(IVesselProvider vesselProvider) {
 		this.vesselProvider = vesselProvider;
+	}
+
+	public IPortSlotProvider getPortSlotProvider() {
+		return portSlotProvider;
+	}
+
+	public void setPortSlotProvider(IPortSlotProvider portSlotProvider) {
+		this.portSlotProvider = portSlotProvider;
 	}
 }
