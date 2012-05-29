@@ -70,8 +70,31 @@ public class AnalyticsModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addSelectedMatrixPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Selected Matrix feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSelectedMatrixPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AnalyticsModel_selectedMatrix_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AnalyticsModel_selectedMatrix_feature", "_UI_AnalyticsModel_type"),
+				 AnalyticsPackage.Literals.ANALYTICS_MODEL__SELECTED_MATRIX,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**

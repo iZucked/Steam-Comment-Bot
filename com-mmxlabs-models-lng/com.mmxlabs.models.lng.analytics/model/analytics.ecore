@@ -6,6 +6,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="AnalyticsModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="roundTripMatrices" upperBound="-1"
         eType="#//UnitCostMatrix" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="selectedMatrix" lowerBound="1"
+        eType="#//UnitCostMatrix"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UnitCostMatrix" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
@@ -80,6 +82,14 @@
         eType="#//UnitCostLine" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="allowedRoutes" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ARoute"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="revenueShare" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="scale" value="100"/>
+        <details key="formatString" value="###.#"/>
+        <details key="unit" value="%"/>
+      </eAnnotations>
+    </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UnitCostLine" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
     <eOperations name="getTotalCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">

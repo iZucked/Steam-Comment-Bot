@@ -886,6 +886,12 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		} else if (CargoPackage.eINSTANCE.getSlot_WindowSize() == feature) {
 			if (getPort() == null) return (Integer) 6;
 			else return getPort().getDefaultWindowSize();
+		} else if (CargoPackage.eINSTANCE.getSlot_MinQuantity() == feature) {
+			if (getContract() == null) return 0;
+			else return getContract().getMinQuantity();
+		} else if (CargoPackage.eINSTANCE.getSlot_MaxQuantity() == feature) {
+			if (getContract() == null) return 500000;
+			else return getContract().getMaxQuantity();
 		}
 		
 		return super.getUnsetValue(feature);

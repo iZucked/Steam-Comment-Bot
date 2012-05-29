@@ -19,6 +19,8 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getEntity <em>Entity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getAllowedPorts <em>Allowed Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPreferredPort <em>Preferred Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMinQuantity <em>Min Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMaxQuantity <em>Max Quantity</em>}</li>
  * </ul>
  * </p>
  *
@@ -94,6 +96,58 @@ public interface Contract extends AContract {
 	 * @generated
 	 */
 	void setPreferredPort(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Min Quantity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min Quantity</em>' attribute.
+	 * @see #setMinQuantity(int)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_MinQuantity()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getMinQuantity();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getMinQuantity <em>Min Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min Quantity</em>' attribute.
+	 * @see #getMinQuantity()
+	 * @generated
+	 */
+	void setMinQuantity(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Max Quantity</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Max Quantity</em>' attribute.
+	 * @see #setMaxQuantity(int)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_MaxQuantity()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getMaxQuantity();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getMaxQuantity <em>Max Quantity</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Max Quantity</em>' attribute.
+	 * @see #getMaxQuantity()
+	 * @generated
+	 */
+	void setMaxQuantity(int value);
 
 } // end of  Contract
 

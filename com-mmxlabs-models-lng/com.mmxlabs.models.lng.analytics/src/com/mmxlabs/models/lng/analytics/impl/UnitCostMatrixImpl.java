@@ -60,6 +60,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getReturnIdleTime <em>Return Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCostLines <em>Cost Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getAllowedRoutes <em>Allowed Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getRevenueShare <em>Revenue Share</em>}</li>
  * </ul>
  * </p>
  *
@@ -383,6 +384,26 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * @ordered
 	 */
 	protected EList<Route> allowedRoutes;
+
+	/**
+	 * The default value of the '{@link #getRevenueShare() <em>Revenue Share</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRevenueShare()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double REVENUE_SHARE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getRevenueShare() <em>Revenue Share</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRevenueShare()
+	 * @generated
+	 * @ordered
+	 */
+	protected double revenueShare = REVENUE_SHARE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -805,6 +826,27 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getRevenueShare() {
+		return revenueShare;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRevenueShare(double newRevenueShare) {
+		double oldRevenueShare = revenueShare;
+		revenueShare = newRevenueShare;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE, oldRevenueShare, revenueShare));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -857,6 +899,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return getCostLines();
 			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
 				return getAllowedRoutes();
+			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
+				return getRevenueShare();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -924,6 +968,9 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				getAllowedRoutes().clear();
 				getAllowedRoutes().addAll((Collection<? extends Route>)newValue);
 				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
+				setRevenueShare((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -987,6 +1034,9 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
 				getAllowedRoutes().clear();
 				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
+				setRevenueShare(REVENUE_SHARE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1033,6 +1083,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return costLines != null && !costLines.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
 				return allowedRoutes != null && !allowedRoutes.isEmpty();
+			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
+				return revenueShare != REVENUE_SHARE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1105,6 +1157,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		result.append(dischargeIdleTime);
 		result.append(", returnIdleTime: ");
 		result.append(returnIdleTime);
+		result.append(", revenueShare: ");
+		result.append(revenueShare);
 		result.append(')');
 		return result.toString();
 	}

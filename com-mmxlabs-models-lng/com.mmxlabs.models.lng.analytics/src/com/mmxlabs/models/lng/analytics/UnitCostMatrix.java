@@ -40,6 +40,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getReturnIdleTime <em>Return Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCostLines <em>Cost Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRoutes <em>Allowed Routes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRevenueShare <em>Revenue Share</em>}</li>
  * </ul>
  * </p>
  *
@@ -498,6 +499,33 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	EList<Route> getAllowedRoutes();
+
+	/**
+	 * Returns the value of the '<em><b>Revenue Share</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Revenue Share</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Revenue Share</em>' attribute.
+	 * @see #setRevenueShare(double)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_RevenueShare()
+	 * @model required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
+	 * @generated
+	 */
+	double getRevenueShare();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRevenueShare <em>Revenue Share</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Revenue Share</em>' attribute.
+	 * @see #getRevenueShare()
+	 * @generated
+	 */
+	void setRevenueShare(double value);
 
 } // end of  UnitCostMatrix
 

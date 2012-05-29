@@ -67,6 +67,8 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_entityEditor(detailComposite, topClass);
 		add_allowedPortsEditor(detailComposite, topClass);
 		add_preferredPortEditor(detailComposite, topClass);
+		add_minQuantityEditor(detailComposite, topClass);
+		add_maxQuantityEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the entity feature on Contract
@@ -93,5 +95,23 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_preferredPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PREFERRED_PORT));
+	}
+
+	/**
+	 * Create the editor for the minQuantity feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_minQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__MIN_QUANTITY));
+	}
+
+	/**
+	 * Create the editor for the maxQuantity feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_maxQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__MAX_QUANTITY));
 	}
 }

@@ -7,6 +7,7 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.commercial;
+import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.types.AIndex;
 
 /**
@@ -42,7 +43,7 @@ public interface IndexPriceContract extends SalesContract, PurchaseContract {
 	 * @model required="true"
 	 * @generated
 	 */
-	AIndex getIndex();
+	Index getIndex();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getIndex <em>Index</em>}' reference.
@@ -52,7 +53,7 @@ public interface IndexPriceContract extends SalesContract, PurchaseContract {
 	 * @see #getIndex()
 	 * @generated
 	 */
-	void setIndex(AIndex value);
+	void setIndex(Index value);
 
 	/**
 	 * Returns the value of the '<em><b>Constant</b></em>' attribute.

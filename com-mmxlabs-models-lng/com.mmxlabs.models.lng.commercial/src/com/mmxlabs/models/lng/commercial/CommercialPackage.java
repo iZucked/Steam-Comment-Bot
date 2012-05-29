@@ -272,13 +272,31 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__PREFERRED_PORT = TypesPackage.ACONTRACT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__MIN_QUANTITY = TypesPackage.ACONTRACT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__MAX_QUANTITY = TypesPackage.ACONTRACT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = TypesPackage.ACONTRACT_FEATURE_COUNT + 3;
+	int CONTRACT_FEATURE_COUNT = TypesPackage.ACONTRACT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -352,6 +370,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__PREFERRED_PORT = CONTRACT__PREFERRED_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__MIN_QUANTITY = CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__MAX_QUANTITY = CONTRACT__MAX_QUANTITY;
 
 	/**
 	 * The number of structural features of the '<em>Sales Contract</em>' class.
@@ -436,6 +472,24 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__PREFERRED_PORT = CONTRACT__PREFERRED_PORT;
 
 	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__MIN_QUANTITY = CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__MAX_QUANTITY = CONTRACT__MAX_QUANTITY;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -516,6 +570,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int FIXED_PRICE_CONTRACT__PREFERRED_PORT = SALES_CONTRACT__PREFERRED_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__MIN_QUANTITY = SALES_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__MAX_QUANTITY = SALES_CONTRACT__MAX_QUANTITY;
 
 	/**
 	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
@@ -607,6 +679,24 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int INDEX_PRICE_CONTRACT__PREFERRED_PORT = SALES_CONTRACT__PREFERRED_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__MIN_QUANTITY = SALES_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__MAX_QUANTITY = SALES_CONTRACT__MAX_QUANTITY;
 
 	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
@@ -750,6 +840,28 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getContract_PreferredPort();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getMinQuantity <em>Min Quantity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Quantity</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getMinQuantity()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_MinQuantity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#getMaxQuantity <em>Max Quantity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Quantity</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getMaxQuantity()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_MaxQuantity();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
@@ -942,6 +1054,22 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONTRACT__PREFERRED_PORT = eINSTANCE.getContract_PreferredPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Quantity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__MIN_QUANTITY = eINSTANCE.getContract_MinQuantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Quantity</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__MAX_QUANTITY = eINSTANCE.getContract_MaxQuantity();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.

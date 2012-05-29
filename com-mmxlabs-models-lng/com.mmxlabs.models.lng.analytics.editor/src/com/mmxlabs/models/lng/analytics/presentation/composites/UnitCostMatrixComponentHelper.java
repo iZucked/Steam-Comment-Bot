@@ -85,6 +85,7 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 		add_returnIdleTimeEditor(detailComposite, topClass);
 		add_costLinesEditor(detailComposite, topClass);
 		add_allowedRoutesEditor(detailComposite, topClass);
+		add_revenueShareEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on UnitCostMatrix
@@ -214,5 +215,14 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_allowedRoutesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__ALLOWED_ROUTES));
+	}
+
+	/**
+	 * Create the editor for the revenueShare feature on UnitCostMatrix
+	 *
+	 * @generated
+	 */
+	protected void add_revenueShareEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__REVENUE_SHARE));
 	}
 }

@@ -170,6 +170,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getAnalyticsModel_SelectedMatrix() {
+		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getUnitCostMatrix() {
 		return unitCostMatrixEClass;
 	}
@@ -316,6 +325,15 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EReference getUnitCostMatrix_AllowedRoutes() {
 		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(15);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUnitCostMatrix_RevenueShare() {
+		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(16);
 	}
 
 	/**
@@ -627,6 +645,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		// Create classes and their features
 		analyticsModelEClass = createEClass(ANALYTICS_MODEL);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__ROUND_TRIP_MATRICES);
+		createEReference(analyticsModelEClass, ANALYTICS_MODEL__SELECTED_MATRIX);
 
 		unitCostMatrixEClass = createEClass(UNIT_COST_MATRIX);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__PORTS);
@@ -645,6 +664,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__RETURN_IDLE_TIME);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__COST_LINES);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__ALLOWED_ROUTES);
+		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__REVENUE_SHARE);
 
 		unitCostLineEClass = createEClass(UNIT_COST_LINE);
 		createEAttribute(unitCostLineEClass, UNIT_COST_LINE__UNIT_COST);
@@ -725,6 +745,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAnalyticsModel_RoundTripMatrices(), this.getUnitCostMatrix(), null, "roundTripMatrices", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalyticsModel_SelectedMatrix(), this.getUnitCostMatrix(), null, "selectedMatrix", null, 1, 1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitCostMatrixEClass, UnitCostMatrix.class, "UnitCostMatrix", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getUnitCostMatrix_Ports(), theTypesPackage.getAPortSet(), null, "ports", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -743,6 +764,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getUnitCostMatrix_ReturnIdleTime(), ecorePackage.getEInt(), "returnIdleTime", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getUnitCostMatrix_CostLines(), this.getUnitCostLine(), null, "costLines", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getUnitCostMatrix_AllowedRoutes(), theTypesPackage.getARoute(), null, "allowedRoutes", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUnitCostMatrix_RevenueShare(), ecorePackage.getEDouble(), "revenueShare", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitCostLineEClass, UnitCostLine.class, "UnitCostLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnitCostLine_UnitCost(), ecorePackage.getEDouble(), "unitCost", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -859,6 +881,14 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   source, 
 		   new String[] {
 			 "unit", "hrs"
+		   });		
+		addAnnotation
+		  (getUnitCostMatrix_RevenueShare(), 
+		   source, 
+		   new String[] {
+			 "scale", "100",
+			 "formatString", "###.#",
+			 "unit", "%"
 		   });		
 	}
 

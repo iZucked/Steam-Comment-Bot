@@ -4,23 +4,33 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.editorpart;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.SetCommand;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 
+import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.ui.actions.EvaluateUnitCostMatrixAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.tabular.ICellManipulator;
+import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
@@ -50,6 +60,8 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("LNG Price", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CargoPrice(), getEditingDomain()));
 
+		addTypicalColumn("Selected", new SelectedMatrixManipulator());
+		
 		final EvaluateUnitCostMatrixAction evaluateAction = new EvaluateUnitCostMatrixAction(getJointModelEditorPart());
 		getToolBarManager().appendToGroup(EDIT_GROUP, evaluateAction);
 		getToolBarManager().update(true);
@@ -72,5 +84,59 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 				}
 			}
 		});
+	}
+	
+	
+	class SelectedMatrixManipulator implements ICellRenderer, ICellManipulator {
+		@Override
+		public void setValue(final Object object, final Object value) {
+			if (object instanceof UnitCostMatrix) {
+				final UnitCostMatrix settings = (UnitCostMatrix) object;
+				if (settings.eContainer() instanceof AnalyticsModel) {
+					final AnalyticsModel cm = (AnalyticsModel) settings.eContainer();
+					getEditingDomain().getCommandStack().execute(SetCommand.create(getEditingDomain(), cm, AnalyticsPackage.eINSTANCE.getAnalyticsModel_SelectedMatrix(), settings));
+				}
+			}
+		}
+
+		@Override
+		public CellEditor getCellEditor(final Composite parent, final Object object) {
+			return new ComboBoxCellEditor(parent, new String[] { "Y", "N" });
+		}
+
+		@Override
+		public Object getValue(final Object object) {
+			if (object instanceof UnitCostMatrix) {
+				final UnitCostMatrix settings = (UnitCostMatrix) object;
+				if (((AnalyticsModel) settings.eContainer()).getSelectedMatrix() == settings)
+					return 0;
+			}
+			return 1;
+		}
+
+		@Override
+		public boolean canEdit(final Object object) {
+			return true;
+		}
+
+		@Override
+		public String render(final Object object) {
+			return ((Integer) getValue(object)) == 0 ? "Y" : "N";
+		}
+
+		@Override
+		public Comparable getComparable(final Object object) {
+			return render(object);
+		}
+
+		@Override
+		public Object getFilterValue(final Object object) {
+			return render(object);
+		}
+
+		@Override
+		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
+			return Collections.emptySet();
+		}
 	}
 }

@@ -58,6 +58,7 @@ public class EvaluateUnitCostMatrixAction extends ScenarioModifyingAction {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
 				final List<UnitCostLine> newLines = transformer.createCostLines(part.getRootObject(), matrix, monitor);
+				if (newLines == null) return Status.CANCEL_STATUS;
 				final EditingDomain d = part.getEditingDomain();
 				final CompoundCommand replace = new CompoundCommand();
 				final Command rc = RemoveCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), matrix.getCostLines());
