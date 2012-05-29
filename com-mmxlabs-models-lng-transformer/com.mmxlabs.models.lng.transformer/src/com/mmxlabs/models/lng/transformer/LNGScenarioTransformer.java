@@ -71,6 +71,8 @@ import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PortCost;
+import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
@@ -103,6 +105,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility methods to convert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
@@ -144,6 +147,8 @@ public class LNGScenarioTransformer {
 
 	private Map<VesselClass, List<IVessel>> spotVesselsByClass = new HashMap<VesselClass, List<IVessel>>();
 
+	private final ArrayList<IVessel> allVessels = new ArrayList<IVessel>();
+	
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
@@ -335,9 +340,42 @@ public class LNGScenarioTransformer {
 			allPorts.add(port);
 			entities.addModelObject(ePort, port);
 		}
+		
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, entities);
 
+		// process port costs
+		final PricingModel pricing = rootObject.getSubModel(PricingModel.class);
+		if (pricing != null) {
+			for (final PortCost cost : pricing.getPortCosts()) {
+				for (final APort port : SetUtils.getPorts(cost.getPorts())) {
+					for (final PortCostEntry entry : cost.getEntries()) {
+						PortType type = null;
+						switch (entry.getActivity()) {
+						case LOAD:
+							type = PortType.Load;break;
+						case DISCHARGE:
+							type = PortType.Discharge;break;
+						case DRYDOCK:
+							type=PortType.DryDock;break;
+						case MAINTENANCE:
+							type=PortType.Maintenance;break;
+						}
+						
+						if (type != null) {
+							for (final IVessel v : allVessels) {
+								//TODO should the builder handle the application of costs to vessel classes?
+								final long activityCost = Calculator.scale(cost.getPortCost(vesselAssociations.getFirst().reverseLookup(v.getVesselClass()), entry.getActivity()));
+								builder.setPortCost(portAssociation.lookup((Port)port), v, type, activityCost);
+							}
+						}
+					}
+				}
+
+			}
+		}
+				
+		
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst());
 
 		buildCargoes(builder, portAssociation, indexAssociation, vesselAssociations.getSecond(), contractTransformers, entities, getOptimisationSettings().isRewire());
@@ -814,7 +852,9 @@ public class LNGScenarioTransformer {
 			}
 
 			if (charterCount > 0) {
-				spotVesselsByClass.put(eVc, builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount));
+				List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount);
+				spotVesselsByClass.put(eVc, spots);
+				allVessels.addAll(spots);
 			}
 
 			entities.addModelObject(eVc, vc);
@@ -840,6 +880,7 @@ public class LNGScenarioTransformer {
 			vesselAssociation.add(eV, vessel);
 
 			entities.addModelObject(eV, vessel);
+			allVessels.add(vessel);
 		}
 		//
 		// /*
