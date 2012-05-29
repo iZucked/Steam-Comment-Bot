@@ -11,6 +11,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+
 /**
  * A reference value provider which is like simple reference value provider, but merges
  * the values of several containment references.
@@ -30,8 +32,9 @@ public class MergedReferenceValueProvider extends SimpleReferenceValueProvider {
 	}
 	@Override
 	protected boolean isRelevantTarget(Object target, Object feature) {
-		return super.isRelevantTarget(target, feature)
-				|| (target == container && extraReferences.contains(feature));
+		if (super.isRelevantTarget(target, feature)) return true;
+		if (target == container && extraReferences.contains(feature)) return true;
+		return feature == MMXCorePackage.eINSTANCE.getNamedObject_Name();
 	}
 	
 	@Override
