@@ -466,7 +466,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
 				// this is the cost for the given port
 				
-				v.setPortCost(cost.getPortCost(spec.getVessel(), spec.getVessel().getVesselClass(), portDetails.getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE));
+				v.setPortCost(cost.getPortCost(spec.getVessel().getVesselClass(), portDetails.getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE));
 				
 				break;
 			}
