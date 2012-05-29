@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -60,7 +61,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		if (ePort == null)
 			return null;
 
-		Event portVisit = null;
+		PortVisit portVisit = null;
 
 		lastPortVisited = ePort;
 
@@ -122,7 +123,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			vev.setVesselEvent(event);
 			portVisit = vev;
 		} else {
-			portVisit = factory.createEvent();
+			portVisit = factory.createPortVisit();
 		}
 
 		portVisit.setPort(ePort);
