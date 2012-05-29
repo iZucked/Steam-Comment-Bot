@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -144,13 +145,18 @@ public class DataIndexImporter implements IClassImporter {
 		for (final EObject o : objects) {
 			if (o instanceof DataIndex) {
 				final DataIndex<Number> i = (DataIndex) o;
+				// Use a LinkedHashMap to preserve put order, use a TreeMap to sort columns by date
+
 				final Map<String, String> row = new LinkedHashMap<String, String>();
+				final Map<String, String> rowValues = new TreeMap<String, String>();
+
 				row.put(NAME, i.getName());
 				for (final IndexPoint<Number> pt : i.getPoints()) {
 					final Number n = pt.getValue();
 					final Date dt = pt.getDate();
-					row.put(shortDate.format(dt), n.toString());
+					rowValues.put(shortDate.format(dt), n.toString());
 				}
+				row.putAll(rowValues);
 				result.add(row);
 			} else if (o instanceof DerivedIndex) {
 				final DerivedIndex<Number> derived = (DerivedIndex<Number>) o;
