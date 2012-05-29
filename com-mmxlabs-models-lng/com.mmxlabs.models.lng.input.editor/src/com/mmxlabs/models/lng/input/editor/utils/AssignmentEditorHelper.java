@@ -1,6 +1,9 @@
 package com.mmxlabs.models.lng.input.editor.utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import javax.management.timer.Timer;
 
@@ -56,19 +59,25 @@ public class AssignmentEditorHelper {
 		final CompoundCommand cc = new CompoundCommand();
 		
 		// this should definitely kill anything pre-existing
-		cc.append(totallyUnassign(ed, modelObject, task));
+		Command totallyUnassign = totallyUnassign(ed, modelObject, task);
+		cc.append(totallyUnassign);
+		
+		// copy the current state and remove all ocurrences of task, in order that when we get
+		// the position it's valid after the unassign command has executed.
+		final List<UUIDObject> assigned = new ArrayList<UUIDObject>(newResource.getAssignedObjects());
+		assigned.removeAll(Collections.singleton(task));
 		
 		int position;
 		if (beforeTask != null) {
-			position = newResource.getAssignedObjects().indexOf(beforeTask);
+			position = assigned.indexOf(beforeTask);
 		} else if (afterTask != null) {
-			position = newResource.getAssignedObjects().indexOf(afterTask) + 1;
+			position = assigned.indexOf(afterTask) + 1;
 		} else {
 			position = 0;
 			final Date start = getStartDate(task);
 			final Date end = getEndDate(task);
 			if (start != null && end != null) {
-				for (final UUIDObject o : newResource.getAssignedObjects()) {
+				for (final UUIDObject o : assigned) {
 					if (end.before(getStartDate(o))) {
 						break;
 					} else if (start.after(getEndDate(o))) {
