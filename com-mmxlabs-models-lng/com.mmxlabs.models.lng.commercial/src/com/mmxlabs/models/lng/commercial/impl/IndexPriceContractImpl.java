@@ -14,7 +14,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.IndexPriceContract;
-import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.types.AIndex;
 
 /**
@@ -41,7 +40,7 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 	 * @generated
 	 * @ordered
 	 */
-	protected Index index;
+	protected AIndex index;
 
 	/**
 	 * The default value of the '{@link #getConstant() <em>Constant</em>}' attribute.
@@ -107,10 +106,10 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index getIndex() {
+	public AIndex getIndex() {
 		if (index != null && index.eIsProxy()) {
 			InternalEObject oldIndex = (InternalEObject)index;
-			index = (Index)eResolveProxy(oldIndex);
+			index = (AIndex)eResolveProxy(oldIndex);
 			if (index != oldIndex) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.INDEX_PRICE_CONTRACT__INDEX, oldIndex, index));
@@ -124,7 +123,7 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index basicGetIndex() {
+	public AIndex basicGetIndex() {
 		return index;
 	}
 
@@ -133,8 +132,8 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIndex(Index newIndex) {
-		Index oldIndex = index;
+	public void setIndex(AIndex newIndex) {
+		AIndex oldIndex = index;
 		index = newIndex;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.INDEX_PRICE_CONTRACT__INDEX, oldIndex, index));
@@ -210,7 +209,7 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case CommercialPackage.INDEX_PRICE_CONTRACT__INDEX:
-				setIndex((Index)newValue);
+				setIndex((AIndex)newValue);
 				return;
 			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
 				setConstant((Double)newValue);
@@ -231,7 +230,7 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case CommercialPackage.INDEX_PRICE_CONTRACT__INDEX:
-				setIndex((Index)null);
+				setIndex((AIndex)null);
 				return;
 			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
 				setConstant(CONSTANT_EDEFAULT);
