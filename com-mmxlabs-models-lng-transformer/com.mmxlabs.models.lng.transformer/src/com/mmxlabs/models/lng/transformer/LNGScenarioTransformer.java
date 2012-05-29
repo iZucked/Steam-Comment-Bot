@@ -774,7 +774,12 @@ public class LNGScenarioTransformer {
 			for (final CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
 				if (charterCost.getVesselClasses().contains(eVc)) {
 					if (charterCost.getCharterInPrice() != null) {
-						charterInPrice = charterCost.getCharterInPrice().getValueAfter(latestTime);
+						final Integer value = charterCost.getCharterInPrice().getValueAfter(latestTime);
+						if (value != null) {
+							charterInPrice = value;
+						} else {
+							charterInPrice = 0;
+						}
 					} else {
 						charterInPrice = 0;
 					}
@@ -809,9 +814,7 @@ public class LNGScenarioTransformer {
 			}
 
 			if (charterCount > 0) {
-				for (int i = 0; i < charterCount; i++) {
-					spotVesselsByClass.put(eVc, builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount));
-				}
+				spotVesselsByClass.put(eVc, builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount));
 			}
 
 			entities.addModelObject(eVc, vc);
