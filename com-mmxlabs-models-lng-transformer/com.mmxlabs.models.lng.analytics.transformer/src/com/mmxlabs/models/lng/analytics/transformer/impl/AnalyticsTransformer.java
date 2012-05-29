@@ -414,6 +414,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 						bestCostSoFar.put(key, line);
 					}
 				}
+				if (monitor.isCanceled()) return null;
 				monitor.worked(1);
 			}
 
