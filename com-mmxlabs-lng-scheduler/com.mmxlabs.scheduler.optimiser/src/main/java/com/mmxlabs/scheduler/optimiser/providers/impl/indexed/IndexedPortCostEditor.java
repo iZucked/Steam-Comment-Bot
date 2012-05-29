@@ -17,7 +17,7 @@ public class IndexedPortCostEditor implements IPortCostProviderEditor {
 		
 		public void setPortCost(final IVessel vessel, final PortType type, final long cost) {
 			LongFastEnumMap<PortType> x = contents.maybeGet(vessel);
-			if (x != null) {
+			if (x == null) {
 				x = new LongFastEnumMap<PortType>(PortType.values().length);
 				contents.set(vessel, x);
 			}
