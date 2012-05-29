@@ -80,6 +80,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
@@ -219,6 +220,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	private IDiscountCurveProviderEditor discountCurveProvider;
 
+	@Inject
+	private IPortCostProviderEditor portCostProvider;
+	
 	/**
 	 * Keeps track of calculators
 	 */
@@ -847,6 +851,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		data.addDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, elementDurationsProvider);
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, portTypeProvider);
+		
+		data.addDataComponentProvider(SchedulerConstants.DCP_portCostProvider, portCostProvider);
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, resourceAllocationProvider);
 
@@ -1282,5 +1288,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void addBuilderExtension(final IBuilderExtension extension) {
 		extensions.add(extension);
+	}
+
+	@Override
+	public void setPortCost(IPort port, IVessel vessel, PortType portType,long cost) {
+		portCostProvider.setPortCost(port, vessel, portType, cost);
 	}
 }
