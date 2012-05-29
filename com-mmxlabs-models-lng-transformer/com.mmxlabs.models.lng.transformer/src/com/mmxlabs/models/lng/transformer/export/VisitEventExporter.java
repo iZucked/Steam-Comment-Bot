@@ -27,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.IPortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -140,6 +141,12 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		} else {
 			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
 		}
+		
+		final IPortCostAnnotation cost = (IPortCostAnnotation) annotations.get(SchedulerConstants.AI_portCostInfo);
+		if (cost != null) {
+			portVisit.setPortCost((int) (cost.getPortCost() / Calculator.ScaleFactor));
+		}
+		
 		return portVisit;
 	}
 
