@@ -189,6 +189,29 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.port.CapabilityGroup} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CapabilityGroupItemProvider capabilityGroupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.port.CapabilityGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCapabilityGroupAdapter() {
+		if (capabilityGroupItemProvider == null) {
+			capabilityGroupItemProvider = new CapabilityGroupItemProvider(this);
+		}
+
+		return capabilityGroupItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -292,6 +315,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (portGroupItemProvider != null) portGroupItemProvider.dispose();
 		if (routeLineItemProvider != null) routeLineItemProvider.dispose();
 		if (portModelItemProvider != null) portModelItemProvider.dispose();
+		if (capabilityGroupItemProvider != null) capabilityGroupItemProvider.dispose();
 	}
 
 }

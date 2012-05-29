@@ -1,18 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.port.provider;
 
 
-import com.mmxlabs.models.lng.port.PortFactory;
-import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.PortPackage;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
+import com.mmxlabs.models.lng.types.provider.APortSetItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,9 +18,6 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
-
-import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -34,13 +29,13 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.port.PortModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.port.CapabilityGroup} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class PortModelItemProvider
-	extends UUIDObjectItemProvider
+public class CapabilityGroupItemProvider
+	extends APortSetItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -53,7 +48,7 @@ public class PortModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortModelItemProvider(AdapterFactory adapterFactory) {
+	public CapabilityGroupItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -68,52 +63,42 @@ public class PortModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addCapabilityPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * This adds a property descriptor for the Capability feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORTS);
-			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__PORT_GROUPS);
-			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__ROUTES);
-			childrenFeatures.add(PortPackage.Literals.PORT_MODEL__SPECIAL_PORT_GROUPS);
-		}
-		return childrenFeatures;
+	protected void addCapabilityPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CapabilityGroup_capability_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CapabilityGroup_capability_feature", "_UI_CapabilityGroup_type"),
+				 PortPackage.Literals.CAPABILITY_GROUP__CAPABILITY,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
-	 * This returns PortModel.gif.
+	 * This returns CapabilityGroup.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/PortModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CapabilityGroup"));
 	}
 
 	/**
@@ -124,10 +109,10 @@ public class PortModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((PortModel)object).getUuid();
+		String label = ((CapabilityGroup)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_PortModel_type") :
-			getString("_UI_PortModel_type") + " " + label;
+			getString("_UI_CapabilityGroup_type") :
+			getString("_UI_CapabilityGroup_type") + " " + label;
 	}
 
 	/**
@@ -141,12 +126,9 @@ public class PortModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(PortModel.class)) {
-			case PortPackage.PORT_MODEL__PORTS:
-			case PortPackage.PORT_MODEL__PORT_GROUPS:
-			case PortPackage.PORT_MODEL__ROUTES:
-			case PortPackage.PORT_MODEL__SPECIAL_PORT_GROUPS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+		switch (notification.getFeatureID(CapabilityGroup.class)) {
+			case PortPackage.CAPABILITY_GROUP__CAPABILITY:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -162,26 +144,6 @@ public class PortModelItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PortPackage.Literals.PORT_MODEL__PORTS,
-				 PortFactory.eINSTANCE.createPort()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PortPackage.Literals.PORT_MODEL__PORT_GROUPS,
-				 PortFactory.eINSTANCE.createPortGroup()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PortPackage.Literals.PORT_MODEL__ROUTES,
-				 PortFactory.eINSTANCE.createRoute()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PortPackage.Literals.PORT_MODEL__SPECIAL_PORT_GROUPS,
-				 PortFactory.eINSTANCE.createCapabilityGroup()));
 	}
 
 	/**
