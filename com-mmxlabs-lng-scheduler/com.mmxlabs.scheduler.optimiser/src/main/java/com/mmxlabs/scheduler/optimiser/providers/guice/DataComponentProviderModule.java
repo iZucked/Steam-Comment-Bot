@@ -45,6 +45,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
@@ -71,6 +73,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEd
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortCostEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortTypeEditor;
@@ -198,6 +201,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor(SchedulerConstants.DCP_optionalElementsProvider);
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
+		
+		final IPortCostProviderEditor portCosts = new IndexedPortCostEditor(SchedulerConstants.DCP_portCostProvider);
+		bind(IPortCostProvider.class).toInstance(portCosts);
+		bind(IPortCostProviderEditor.class).toInstance(portCosts);
 	}
 
 	/**
