@@ -22,7 +22,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CapacityComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
@@ -96,6 +95,21 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		
 		allComponents.addAll(schedulerComponents);
 		allComponents.addAll(allocationComponents);
+	}
+
+	public CargoSchedulerFitnessCore(
+			Iterable<ICargoFitnessComponentProvider> externalComponentProviders) {
+		this();
+		for (final ICargoFitnessComponentProvider provider : externalComponentProviders) {
+			ICargoFitnessComponent component = provider.createComponent(this);
+			allComponents.add(component);
+			if (component instanceof ICargoSchedulerFitnessComponent) {
+				schedulerComponents.add((ICargoSchedulerFitnessComponent) component);
+			}
+			if (component instanceof ICargoAllocationFitnessComponent) {
+				allocationComponents.add((ICargoAllocationFitnessComponent) component);
+			}
+		}
 	}
 
 	@Override

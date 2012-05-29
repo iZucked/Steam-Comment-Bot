@@ -5,7 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.Collection;
+import java.util.List;
 
+import com.google.inject.Inject;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -43,6 +45,9 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 	
 	public static final String PORT_COST_COMPONENT_NAME = "cargo-scheduler-port-cost";
 
+	@Inject(optional=true)
+	private Iterable<ICargoFitnessComponentProvider> externalComponentProviders;
+	
 	/* default scheduler factory creates default GA scheduler */
 	// TODO: Make static class
 	private ISchedulerFactory schedulerFactory = new ISchedulerFactory() {
@@ -57,8 +62,17 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 
 	@Override
 	public Collection<String> getFitnessComponentNames() {
-		return CollectionsUtil.makeArrayList(LATENESS_COMPONENT_NAME, CAPACITY_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME, CHARTER_COST_COMPONENT_NAME, ROUTE_PRICE_COMPONENT_NAME,
+		
+		final List<String> result = CollectionsUtil.makeArrayList(LATENESS_COMPONENT_NAME, CAPACITY_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME, CHARTER_COST_COMPONENT_NAME, ROUTE_PRICE_COMPONENT_NAME,
 				COST_COOLDOWN_COMPONENT_NAME, CHARTER_REVENUE_COMPONENT_NAME, PROFIT_COMPONENT_NAME, PORT_COST_COMPONENT_NAME);
+	
+		if (externalComponentProviders != null) {
+			for (final ICargoFitnessComponentProvider provider : externalComponentProviders) {
+				result.add(provider.getFitnessComponentName());
+			}
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -68,7 +82,7 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 
 	@Override
 	public CargoSchedulerFitnessCore instantiate() {
-		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore();
+		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(externalComponentProviders);
 		core.setSchedulerFactory(schedulerFactory);
 		return core;
 	}

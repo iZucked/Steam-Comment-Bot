@@ -18,8 +18,7 @@ public class FitnessCoreServiceModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-
 		bind(TypeLiterals.export(IFitnessCoreFactory.class)).annotatedWith(Names.named(CargoSchedulerFitnessCoreFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new CargoSchedulerFitnessCoreFactory()).export());
+				Peaberry.service(CargoSchedulerFitnessCoreFactory.class).export());
 	}
 }
