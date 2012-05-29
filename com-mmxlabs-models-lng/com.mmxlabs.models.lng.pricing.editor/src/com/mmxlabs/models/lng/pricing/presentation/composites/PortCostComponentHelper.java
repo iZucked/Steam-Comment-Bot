@@ -133,7 +133,7 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 						for (final PortCostEntry entry : pc.getEntries()) {
 							if (entry.getActivity() == capability) {
 								numberEditor.display(scenario, entry, range);
-								break;
+								return;
 							}
 						}
 						final PortCostEntry entry = PricingFactory.eINSTANCE.createPortCostEntry();
