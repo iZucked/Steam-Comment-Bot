@@ -67,8 +67,8 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		if (scenarioInstance != null) {
 			scenarioInstance.eAdapters().remove(lockedAdapter);
 		}
-
-		valueProviderCache.dispose();
+		if (valueProviderCache != null)
+			valueProviderCache.dispose();
 		
 		getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		super.dispose();
@@ -97,8 +97,12 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
 		extraValidationContext.clear();
 		this.scenarioInstance = instance;
+		if (this.valueProviderCache != null) {
+			valueProviderCache.dispose();
+		}
 		if (instance != null) {
 			getRootObject();
+			
 			this.valueProviderCache = new ReferenceValueProviderCache(getRootObject());
 			extraValidationContext.push(new DefaultExtraValidationContext(getRootObject()));
 		} else {
