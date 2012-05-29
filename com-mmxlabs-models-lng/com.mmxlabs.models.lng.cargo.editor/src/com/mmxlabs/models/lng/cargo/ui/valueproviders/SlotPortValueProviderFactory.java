@@ -131,6 +131,11 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 					}
 					return delegateValue;
 				}
+
+				@Override
+				public void dispose() {
+					delegateFactory.dispose();
+				}
 			};
 		} else {
 			return delegateFactory;

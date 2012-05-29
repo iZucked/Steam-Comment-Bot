@@ -6,6 +6,7 @@ import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -54,9 +55,8 @@ public class AssignmentEditorHelper {
 			Assignment newResource) {
 		final CompoundCommand cc = new CompoundCommand();
 		
-		if (oldResource != null) {
-			cc.append(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
-		}
+		// this should definitely kill anything pre-existing
+		cc.append(totallyUnassign(ed, modelObject, task));
 		
 		int position;
 		if (beforeTask != null) {
@@ -67,14 +67,16 @@ public class AssignmentEditorHelper {
 			position = 0;
 			final Date start = getStartDate(task);
 			final Date end = getEndDate(task);
-			for (final UUIDObject o : newResource.getAssignedObjects()) {
-				if (end.before(getStartDate(o))) {
-					break;
-				} else if (start.after(getEndDate(o))) {
+			if (start != null && end != null) {
+				for (final UUIDObject o : newResource.getAssignedObjects()) {
+					if (end.before(getStartDate(o))) {
+						break;
+					} else if (start.after(getEndDate(o))) {
+						position++;
+						break;
+					}
 					position++;
-					break;
 				}
-				position++;
 			}
 		}
 		
@@ -92,6 +94,19 @@ public class AssignmentEditorHelper {
 		cc.append(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
 		cc.append(RemoveCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), task));
 		return cc;
+	}
+	
+	public static Command totallyUnassign(final EditingDomain ed, final InputModel modelObject, final UUIDObject task) {
+		final CompoundCommand kill = new CompoundCommand();
+		kill.append(IdentityCommand.INSTANCE);
+		for (final Assignment a : modelObject.getAssignments()) {
+			for (final UUIDObject b : a.getAssignedObjects()) {
+				if (b == task) {
+					kill.append(RemoveCommand.create(ed, a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
+				}
+			}
+		}
+		return kill;
 	}
 	
 	public static Assignment getAssignmentForTask(final InputModel inputModel, final UUIDObject object) {
