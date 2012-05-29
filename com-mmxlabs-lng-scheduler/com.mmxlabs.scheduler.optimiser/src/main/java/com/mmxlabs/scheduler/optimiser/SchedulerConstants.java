@@ -21,6 +21,7 @@ public final class SchedulerConstants {
 	public static final String DCP_orderedElementsProvider = "provider-ordered-elements";
 	public static final String DCP_elementDurationsProvider = "provider-element-durations";
 	public static final String DCP_portTypeProvider = "provider-port-type";
+	public static final String DCP_portCostProvider = "provider-port-cost";
 	public static final String DCP_resourceAllocationProvider = "provider-resource-allocation";
 	public static final String DCP_startEndRequirementProvider = "provider-start-end-requirement";
 	public static final String DCP_portExclusionProvider = "provider-port-exclusions";
