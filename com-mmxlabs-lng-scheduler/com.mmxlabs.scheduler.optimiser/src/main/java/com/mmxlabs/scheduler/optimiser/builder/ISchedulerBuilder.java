@@ -30,6 +30,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
 /**
@@ -498,4 +499,13 @@ public interface ISchedulerBuilder {
 	 * @param iCurve
 	 */
 	void setFitnessComponentDiscountCurve(String name, ICurve iCurve);
+	
+	/**
+	 * Set the cost of visiting the given port + vessel in the given way.
+	 * @param port
+	 * @param vessel
+	 * @param portType
+	 * @param cost
+	 */
+	void setPortCost(IPort port, IVessel vessel, PortType portType, long cost);
 }
