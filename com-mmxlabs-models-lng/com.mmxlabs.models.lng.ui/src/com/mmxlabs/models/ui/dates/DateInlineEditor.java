@@ -23,7 +23,7 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	}
 	
 	public DateInlineEditor(final EStructuralFeature feature) {
-		this(feature, new DateTimeFormatter("dd/MM/yyyy hh:00"));
+		this(feature, new DateTimeFormatter("dd/MM/yyyy HH:00"));
 	}
 	
 	@Override
