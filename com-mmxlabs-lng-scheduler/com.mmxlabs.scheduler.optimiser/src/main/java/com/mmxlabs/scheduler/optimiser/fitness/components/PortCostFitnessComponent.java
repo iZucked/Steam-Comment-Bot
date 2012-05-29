@@ -66,15 +66,13 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 	}
 
 	@Override
-	protected boolean reallyAnnotateObject(Object object, int time,
-			IAnnotatedSolution solution) {
+	protected boolean reallyAnnotateObject(Object object, int time,IAnnotatedSolution solution) {
 		if (object instanceof PortDetails) {
 			final PortDetails details = (PortDetails) object;
 			final long cost = portCostProvider.getPortCost(details.getPortSlot().getPort(), currentVessel, 
 					details.getPortSlot().getPortType());
 			
-			solution.getElementAnnotations().getAnnotations(portSlotProvider.getElement(details.getPortSlot())).put(
-					SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
+			solution.getElementAnnotations().setAnnotation(portSlotProvider.getElement(details.getPortSlot()), SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
 			
 			sequenceAccumulator += cost;
 		}
