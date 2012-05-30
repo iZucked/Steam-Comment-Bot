@@ -38,6 +38,7 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
@@ -338,11 +339,28 @@ public class TotalsHierarchyView extends ViewPart {
 			}
 		}
 
+		final TreeData portCosts = new TreeData("Port Costs");
+		for (final Sequence seq : schedule.getSequences()) {
+			for (final Event event : seq.getEvents()) {
+				if (event instanceof PortVisit) {
+					int cost = ((PortVisit) event).getPortCost();
+					if (cost > 0) {
+						final TreeData record = new TreeData(event.name(), cost);
+						portCosts.addChild(record);
+					}
+				}
+			}
+		}
+		if (portCosts.getChildCount() > 0) {
+			top.addChild(portCosts);
+		}
+		
 		// Finally do charter cost
 		final TreeData charterCosts = new TreeData("Charter In");
 		top.addChild(charterCosts);
 
 		for (final Sequence seq : schedule.getSequences()) {
+			if (seq.isFleetVessel()) continue;
 			long acc = 0;
 			for (final Event e : seq.getEvents()) {
 				acc += e.getHireCost();
