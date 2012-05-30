@@ -180,6 +180,15 @@ public interface TypesPackage extends EPackage {
 	int APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APORT_SET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
 	 * The operation id for the '<em>Collect</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -314,6 +323,15 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int APORT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = APORT_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APORT___ECONTAINER_OP = APORT_SET___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Collect</em>' operation.
@@ -452,6 +470,15 @@ public interface TypesPackage extends EPackage {
 	int AROUTE___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AROUTE___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
 	 * The number of operations of the '<em>ARoute</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -577,6 +604,15 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AVESSEL_SET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Collect</em>' operation.
@@ -715,6 +751,15 @@ public interface TypesPackage extends EPackage {
 	int AVESSEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AVESSEL___ECONTAINER_OP = AVESSEL_SET___ECONTAINER_OP;
+
+	/**
 	 * The operation id for the '<em>Collect</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -849,6 +894,15 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AVESSEL_CLASS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = AVESSEL_SET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AVESSEL_CLASS___ECONTAINER_OP = AVESSEL_SET___ECONTAINER_OP;
 
 	/**
 	 * The operation id for the '<em>Collect</em>' operation.
@@ -987,6 +1041,15 @@ public interface TypesPackage extends EPackage {
 	int AVESSEL_EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AVESSEL_EVENT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
 	 * The number of operations of the '<em>AVessel Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1112,6 +1175,15 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ACONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACONTRACT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>AContract</em>' class.
@@ -1241,6 +1313,15 @@ public interface TypesPackage extends EPackage {
 	int ALEGAL_ENTITY___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALEGAL_ENTITY___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
 	 * The number of operations of the '<em>ALegal Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1366,6 +1447,15 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AINDEX___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AINDEX___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>AIndex</em>' class.
@@ -1495,6 +1585,15 @@ public interface TypesPackage extends EPackage {
 	int ACARGO___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ACARGO___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
 	 * The number of operations of the '<em>ACargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1621,6 +1720,15 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int ASLOT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASLOT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>ASlot</em>' class.
@@ -1787,6 +1895,15 @@ public interface TypesPackage extends EPackage {
 	int ABASE_FUEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ABASE_FUEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
 	 * The number of operations of the '<em>ABase Fuel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1914,6 +2031,15 @@ public interface TypesPackage extends EPackage {
 	int ASPOT_MARKET___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASPOT_MARKET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
 	 * The number of operations of the '<em>ASpot Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2039,6 +2165,15 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int AOPTIMISATION_SETTINGS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AOPTIMISATION_SETTINGS___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>AOptimisation Settings</em>' class.
