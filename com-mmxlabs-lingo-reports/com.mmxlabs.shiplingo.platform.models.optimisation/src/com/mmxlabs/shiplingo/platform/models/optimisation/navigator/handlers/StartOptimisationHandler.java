@@ -166,7 +166,13 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 
 							final Display display = Display.getDefault();
 							if (display != null) {
-								MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", ex.getMessage());
+								display.asyncExec(new Runnable() {
+									
+									@Override
+									public void run() {
+										MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", ex.getMessage());
+									}
+								});
 							}
 						}
 						// Resume if paused
