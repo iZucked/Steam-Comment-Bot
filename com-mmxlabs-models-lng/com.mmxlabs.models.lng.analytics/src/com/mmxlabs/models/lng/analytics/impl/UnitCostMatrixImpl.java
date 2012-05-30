@@ -800,11 +800,15 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NO
 	 */
 	public EList<UnitCostLine> getCostLines() {
 		if (costLines == null) {
-			costLines = new EObjectContainmentEList<UnitCostLine>(UnitCostLine.class, this, AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES);
+			costLines = new EObjectContainmentEList<UnitCostLine>(UnitCostLine.class, this, AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES) {
+				public boolean isUnique() {
+					return false;
+				}
+			};
 		}
 		return costLines;
 	}
