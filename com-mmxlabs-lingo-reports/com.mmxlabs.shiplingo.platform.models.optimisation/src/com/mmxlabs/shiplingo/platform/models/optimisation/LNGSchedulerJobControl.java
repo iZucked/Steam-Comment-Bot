@@ -132,13 +132,18 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
 		command.append(derive(editingDomain, schedule, inputModel, cargoModel));
-		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+//		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 		
 		if (!command.canExecute()) {
 			throw new RuntimeException("Unable to execute save schedule command");
 		}
 
 		editingDomain.getCommandStack().execute(command);
+		
+//		Hmm, should this be done here or as part of a command - it is a persisted item.
+//		However the dirty adapter sets dirty to true outside of a command...
+//		
+		scheduleModel.setDirty(false);
 		//
 		// scheduleModel.setInitialSchedule(schedule);
 		// scheduleModel.setOptimisedSchedule(null); // clear optimised state.
@@ -171,10 +176,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	 */
 	@Override
 	protected boolean step() {
-		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+//		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		if (jobDescriptor.isOptimising() == false) {
-			scheduleModel.setDirty(false);
-			log.debug("Cleared dirty bit on " + scheduleModel);
+//			scheduleModel.setDirty(false);
+//			log.debug("Cleared dirty bit on " + scheduleModel);
 			return false; // if we are not optimising, finish.
 		}
 		optimiser.step(REPORT_PERCENTAGE);
@@ -199,8 +204,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			intermediateSchedule = saveInitialSolution(optimiser.getBestSolution(true), 100);
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
-			scheduleModel.setDirty(false);
-			log.debug("Cleared dirty bit on " + scheduleModel);
+//			scheduleModel.setDirty(false);
+//			log.debug("Cleared dirty bit on " + scheduleModel);
 			super.setProgress(100);
 			return false;
 		} else {
