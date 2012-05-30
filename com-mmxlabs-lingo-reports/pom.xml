@@ -171,5 +171,11 @@
 			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/</url>
 			<layout>p2</layout>
 		</repository>
+
+		<repository>
+			<id>mmxlabs-jre</id>
+			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/jre</url>
+			<layout>p2</layout>
+		</repository>
 	</repositories>
 </project>
