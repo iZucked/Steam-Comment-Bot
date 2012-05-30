@@ -8,6 +8,7 @@
 
    <launcherArgs>
       <vmArgs>-ea -server -Xmx768m</vmArgs>
+      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts</vmArgsMac>
    </launcherArgs>
 
    <windowImages i16="/com.mmxlabs.shiplingo.platform.app/icons/alt_window_16.gif"/>
