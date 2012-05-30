@@ -56,7 +56,9 @@ public class ReferenceValueProviderCache implements IReferenceValueProviderProvi
 	
 	public void dispose() {
 		for (final IReferenceValueProvider valueProvider : cache.values()) {
-			valueProvider.dispose();
+			if (valueProvider != null) {
+				valueProvider.dispose();
+			}
 		}
 	}
 }
