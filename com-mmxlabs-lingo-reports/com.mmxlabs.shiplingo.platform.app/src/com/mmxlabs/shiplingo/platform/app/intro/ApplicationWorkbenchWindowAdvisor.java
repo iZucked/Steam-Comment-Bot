@@ -29,12 +29,5 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowCoolBar(false);
 		configurer.setShowStatusLine(true);
 		configurer.setShowPerspectiveBar(true);
-		
-		configurer.setTitle("ShipLiNGO");
-	}
-	
-	@Override
-	public void openIntro() {
-		// Disable intro page opening
 	}
 }
