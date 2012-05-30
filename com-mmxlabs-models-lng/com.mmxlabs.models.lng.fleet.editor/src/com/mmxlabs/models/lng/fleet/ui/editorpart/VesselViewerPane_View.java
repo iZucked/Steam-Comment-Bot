@@ -96,7 +96,11 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 			}
 		});
 		
-		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VG") {
+		getToolBarManager().appendToGroup(EDIT_GROUP, new Action() {
+			{
+				setImageDescriptor(
+						AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
+			}
 			@Override
 			public void run() {
 				final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(), VesselViewerPane_View.this.getJointModelEditorPart()
