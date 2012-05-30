@@ -153,22 +153,13 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__TIME_CHARTER_RATE = TypesPackage.AVESSEL_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Vessel Groups</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__VESSEL_GROUPS = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
-
-	/**
 	 * The number of structural features of the '<em>Vessel</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 6;
+	int VESSEL_FEATURE_COUNT = TypesPackage.AVESSEL_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.
@@ -1441,17 +1432,6 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVessel_TimeCharterRate();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselGroups <em>Vessel Groups</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Vessel Groups</em>'.
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getVesselGroups()
-	 * @see #getVessel()
-	 * @generated
-	 */
-	EReference getVessel_VesselGroups();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselClass <em>Vessel Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2224,14 +2204,6 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL__TIME_CHARTER_RATE = eINSTANCE.getVessel_TimeCharterRate();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessel Groups</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference VESSEL__VESSEL_GROUPS = eINSTANCE.getVessel_VesselGroups();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselClassImpl <em>Vessel Class</em>}' class.

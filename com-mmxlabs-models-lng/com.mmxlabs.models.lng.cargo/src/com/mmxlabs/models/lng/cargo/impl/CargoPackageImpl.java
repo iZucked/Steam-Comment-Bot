@@ -221,15 +221,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getCargo_Groups() {
-		return (EReference)cargoEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EOperation getCargo__GetCargoType() {
 		return cargoEClass.getEOperations().get(0);
 	}
@@ -600,7 +591,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		createEReference(cargoEClass, CARGO__DISCHARGE_SLOT);
 		createEAttribute(cargoEClass, CARGO__ALLOW_REWIRING);
 		createEReference(cargoEClass, CARGO__ALLOWED_VESSELS);
-		createEReference(cargoEClass, CARGO__GROUPS);
 		createEOperation(cargoEClass, CARGO___GET_CARGO_TYPE);
 
 		slotEClass = createEClass(SLOT);
@@ -702,7 +692,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEReference(getCargo_DischargeSlot(), this.getDischargeSlot(), this.getDischargeSlot_Cargo(), "dischargeSlot", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCargo_AllowRewiring(), ecorePackage.getEBoolean(), "allowRewiring", null, 1, 1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getCargo_AllowedVessels(), theTypesPackage.getAVesselSet(), null, "allowedVessels", null, 0, -1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getCargo_Groups(), this.getCargoGroup(), this.getCargoGroup_Cargoes(), "groups", null, 0, -1, Cargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getCargo__GetCargoType(), this.getCargoType(), "getCargoType", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -755,7 +744,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 		initEClass(spotDischargeSlotEClass, SpotDischargeSlot.class, "SpotDischargeSlot", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(cargoGroupEClass, CargoGroup.class, "CargoGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getCargoGroup_Cargoes(), this.getCargo(), this.getCargo_Groups(), "cargoes", null, 0, -1, CargoGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getCargoGroup_Cargoes(), this.getCargo(), null, "cargoes", null, 0, -1, CargoGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(cargoTypeEEnum, CargoType.class, "CargoType");

@@ -69,7 +69,6 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		add_startHeelEditor(detailComposite, topClass);
 		add_availabilityEditor(detailComposite, topClass);
 		add_timeCharterRateEditor(detailComposite, topClass);
-		add_vesselGroupsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vesselClass feature on Vessel
@@ -110,14 +109,5 @@ public class VesselComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_timeCharterRateEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__TIME_CHARTER_RATE));
-	}
-
-	/**
-	 * Create the editor for the vesselGroups feature on Vessel
-	 *
-	 * @generated
-	 */
-	protected void add_vesselGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.VESSEL__VESSEL_GROUPS));
 	}
 }

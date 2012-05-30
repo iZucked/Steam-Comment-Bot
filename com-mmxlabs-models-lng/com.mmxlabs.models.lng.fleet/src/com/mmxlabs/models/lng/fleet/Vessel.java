@@ -21,7 +21,6 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getTimeCharterRate <em>Time Charter Rate</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselGroups <em>Vessel Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -176,24 +175,6 @@ public interface Vessel extends AVessel {
 	 * @generated
 	 */
 	boolean isSetTimeCharterRate();
-
-	/**
-	 * Returns the value of the '<em><b>Vessel Groups</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.VesselGroup}.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.fleet.VesselGroup#getVessels <em>Vessels</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Vessel Groups</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Vessel Groups</em>' reference list.
-	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVessel_VesselGroups()
-	 * @see com.mmxlabs.models.lng.fleet.VesselGroup#getVessels
-	 * @model opposite="vessels"
-	 * @generated
-	 */
-	EList<VesselGroup> getVesselGroups();
 
 	/**
 	 * <!-- begin-user-doc -->

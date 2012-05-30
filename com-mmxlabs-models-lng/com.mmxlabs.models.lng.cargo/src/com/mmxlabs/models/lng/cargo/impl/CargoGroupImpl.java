@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
@@ -75,38 +76,9 @@ public class CargoGroupImpl extends NamedObjectImpl implements CargoGroup {
 	 */
 	public EList<Cargo> getCargoes() {
 		if (cargoes == null) {
-			cargoes = new EObjectWithInverseResolvingEList.ManyInverse<Cargo>(Cargo.class, this, CargoPackage.CARGO_GROUP__CARGOES, CargoPackage.CARGO__GROUPS);
+			cargoes = new EObjectResolvingEList<Cargo>(Cargo.class, this, CargoPackage.CARGO_GROUP__CARGOES);
 		}
 		return cargoes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case CargoPackage.CARGO_GROUP__CARGOES:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getCargoes()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case CargoPackage.CARGO_GROUP__CARGOES:
-				return ((InternalEList<?>)getCargoes()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

@@ -78,7 +78,7 @@ public class VesselGroupImpl extends AVesselSetImpl implements VesselGroup {
 	 */
 	public EList<Vessel> getVessels() {
 		if (vessels == null) {
-			vessels = new EObjectWithInverseResolvingEList.ManyInverse<Vessel>(Vessel.class, this, FleetPackage.VESSEL_GROUP__VESSELS, FleetPackage.VESSEL__VESSEL_GROUPS);
+			vessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, FleetPackage.VESSEL_GROUP__VESSELS);
 		}
 		return vessels;
 	}
@@ -96,35 +96,6 @@ public class VesselGroupImpl extends AVesselSetImpl implements VesselGroup {
 			result.addAll(v.collect(marked));
 		}
 		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case FleetPackage.VESSEL_GROUP__VESSELS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getVessels()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case FleetPackage.VESSEL_GROUP__VESSELS:
-				return ((InternalEList<?>)getVessels()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

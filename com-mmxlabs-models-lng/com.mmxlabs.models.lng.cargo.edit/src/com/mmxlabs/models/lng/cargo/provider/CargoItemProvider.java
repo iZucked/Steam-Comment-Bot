@@ -68,7 +68,6 @@ public class CargoItemProvider
 			addDischargeSlotPropertyDescriptor(object);
 			addAllowRewiringPropertyDescriptor(object);
 			addAllowedVesselsPropertyDescriptor(object);
-			addGroupsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -153,28 +152,6 @@ public class CargoItemProvider
 				 getString("_UI_Cargo_allowedVessels_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Cargo_allowedVessels_feature", "_UI_Cargo_type"),
 				 CargoPackage.Literals.CARGO__ALLOWED_VESSELS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Groups feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addGroupsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Cargo_groups_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Cargo_groups_feature", "_UI_Cargo_type"),
-				 CargoPackage.Literals.CARGO__GROUPS,
 				 true,
 				 false,
 				 true,

@@ -32,7 +32,6 @@ public interface VesselGroup extends AVesselSet {
 	/**
 	 * Returns the value of the '<em><b>Vessels</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.Vessel}.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.fleet.Vessel#getVesselGroups <em>Vessel Groups</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Vessels</em>' reference list isn't clear,
@@ -41,8 +40,7 @@ public interface VesselGroup extends AVesselSet {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vessels</em>' reference list.
 	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getVesselGroup_Vessels()
-	 * @see com.mmxlabs.models.lng.fleet.Vessel#getVesselGroups
-	 * @model opposite="vesselGroups"
+	 * @model
 	 * @generated
 	 */
 	EList<Vessel> getVessels();

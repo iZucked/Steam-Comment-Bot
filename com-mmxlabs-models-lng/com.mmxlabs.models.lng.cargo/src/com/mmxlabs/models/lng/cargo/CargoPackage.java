@@ -146,22 +146,13 @@ public interface CargoPackage extends EPackage {
 	int CARGO__ALLOWED_VESSELS = TypesPackage.ACARGO_FEATURE_COUNT + 3;
 
 	/**
-	 * The feature id for the '<em><b>Groups</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO__GROUPS = TypesPackage.ACARGO_FEATURE_COUNT + 4;
-
-	/**
 	 * The number of structural features of the '<em>Cargo</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 5;
+	int CARGO_FEATURE_COUNT = TypesPackage.ACARGO_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -2290,17 +2281,6 @@ public interface CargoPackage extends EPackage {
 	EReference getCargo_AllowedVessels();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.cargo.Cargo#getGroups <em>Groups</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Groups</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Cargo#getGroups()
-	 * @see #getCargo()
-	 * @generated
-	 */
-	EReference getCargo_Groups();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Cargo#getCargoType() <em>Get Cargo Type</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2764,14 +2744,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CARGO__ALLOWED_VESSELS = eINSTANCE.getCargo_AllowedVessels();
-
-		/**
-		 * The meta object literal for the '<em><b>Groups</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference CARGO__GROUPS = eINSTANCE.getCargo_Groups();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Cargo Type</b></em>' operation.

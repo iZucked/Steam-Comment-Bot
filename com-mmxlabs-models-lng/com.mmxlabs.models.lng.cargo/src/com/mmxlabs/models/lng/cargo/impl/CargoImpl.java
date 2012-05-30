@@ -38,7 +38,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getAllowedVessels <em>Allowed Vessels</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoImpl#getGroups <em>Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -103,16 +102,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	 * @ordered
 	 */
 	protected EList<AVesselSet> allowedVessels;
-
-	/**
-	 * The cached value of the '{@link #getGroups() <em>Groups</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getGroups()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<CargoGroup> groups;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -314,18 +303,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<CargoGroup> getGroups() {
-		if (groups == null) {
-			groups = new EObjectWithInverseResolvingEList.ManyInverse<CargoGroup>(CargoGroup.class, this, CargoPackage.CARGO__GROUPS, CargoPackage.CARGO_GROUP__CARGOES);
-		}
-		return groups;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public CargoType getCargoType() {
@@ -356,8 +333,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				if (dischargeSlot != null)
 					msgs = ((InternalEObject)dischargeSlot).eInverseRemove(this, CargoPackage.DISCHARGE_SLOT__CARGO, DischargeSlot.class, msgs);
 				return basicSetDischargeSlot((DischargeSlot)otherEnd, msgs);
-			case CargoPackage.CARGO__GROUPS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getGroups()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -374,8 +349,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				return basicSetLoadSlot(null, msgs);
 			case CargoPackage.CARGO__DISCHARGE_SLOT:
 				return basicSetDischargeSlot(null, msgs);
-			case CargoPackage.CARGO__GROUPS:
-				return ((InternalEList<?>)getGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -398,8 +371,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				return isAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				return getAllowedVessels();
-			case CargoPackage.CARGO__GROUPS:
-				return getGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -426,10 +397,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				getAllowedVessels().clear();
 				getAllowedVessels().addAll((Collection<? extends AVesselSet>)newValue);
 				return;
-			case CargoPackage.CARGO__GROUPS:
-				getGroups().clear();
-				getGroups().addAll((Collection<? extends CargoGroup>)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -454,9 +421,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				getAllowedVessels().clear();
 				return;
-			case CargoPackage.CARGO__GROUPS:
-				getGroups().clear();
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -477,8 +441,6 @@ public class CargoImpl extends ACargoImpl implements Cargo {
 				return isSetAllowRewiring();
 			case CargoPackage.CARGO__ALLOWED_VESSELS:
 				return allowedVessels != null && !allowedVessels.isEmpty();
-			case CargoPackage.CARGO__GROUPS:
-				return groups != null && !groups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

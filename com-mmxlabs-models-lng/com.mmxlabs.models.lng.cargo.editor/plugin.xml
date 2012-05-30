@@ -93,6 +93,12 @@
 			helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.SpotDischargeSlotComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot" />
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.cargo.presentation.composites.CargoGroupComponentHelper"
+        id="com.mmxlabs.models.lng.cargo.helpers.CargoGroup"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.cargo.CargoGroup">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -117,6 +123,16 @@
           id="com.mmxlabs.models.lng.cargo.editor.slotContractProvider"
           ownerEClass="com.mmxlabs.models.lng.types.ASlot"
           referenceEClass="com.mmxlabs.models.lng.types.AContract">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.cargoValueProvider"
+          referenceEClass="com.mmxlabs.models.lng.types.ACargo">
+    </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.CargoValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.editor.cargoGroupValueProvider"
+          referenceEClass="com.mmxlabs.models.lng.cargo.CargoGroup">
     </valueProvider>
  </extension>
  <extension
@@ -165,6 +181,12 @@
           factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.CargoFactory"
           label="Cargo"
           targetEClass="com.mmxlabs.models.lng.cargo.Cargo">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.cargoGroupFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Cargo Group"
+          targetEClass="com.mmxlabs.models.lng.cargo.CargoGroup">
     </factory>
  </extension>
  <extension

@@ -20,8 +20,6 @@
         eType="#//VesselAvailability" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeCharterRate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroups" upperBound="-1"
-        eType="#//VesselGroup" eOpposite="#//VesselGroup/vessels"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="VesselClass" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselClass">
     <eOperations name="collect" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel">
@@ -218,6 +216,6 @@
       <eParameters name="marked" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
-        eType="#//Vessel" eOpposite="#//Vessel/vesselGroups"/>
+        eType="#//Vessel"/>
   </eClassifiers>
 </ecore:EPackage>

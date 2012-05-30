@@ -70,7 +70,6 @@ public class CargoComponentHelper extends BaseComponentHelper {
 		add_dischargeSlotEditor(detailComposite, topClass);
 		add_allowRewiringEditor(detailComposite, topClass);
 		add_allowedVesselsEditor(detailComposite, topClass);
-		add_groupsEditor(detailComposite, topClass);
 	}
 	
 	/**
@@ -115,14 +114,5 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_allowedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOWED_VESSELS));
-	}
-
-	/**
-	 * Create the editor for the groups feature on Cargo
-	 *
-	 * @generated
-	 */
-	protected void add_groupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__GROUPS));
 	}
 }

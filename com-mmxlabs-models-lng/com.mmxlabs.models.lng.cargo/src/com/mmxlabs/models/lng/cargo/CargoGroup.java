@@ -31,7 +31,6 @@ public interface CargoGroup extends NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Cargoes</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.Cargo}.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.Cargo#getGroups <em>Groups</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Cargoes</em>' reference list isn't clear,
@@ -40,8 +39,7 @@ public interface CargoGroup extends NamedObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cargoes</em>' reference list.
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargoGroup_Cargoes()
-	 * @see com.mmxlabs.models.lng.cargo.Cargo#getGroups
-	 * @model opposite="groups"
+	 * @model
 	 * @generated
 	 */
 	EList<Cargo> getCargoes();
