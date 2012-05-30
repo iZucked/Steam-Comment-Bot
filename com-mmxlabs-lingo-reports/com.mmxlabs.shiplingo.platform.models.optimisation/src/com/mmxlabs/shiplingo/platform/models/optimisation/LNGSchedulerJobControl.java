@@ -126,7 +126,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		final InputModel inputModel = scenario.getSubModel(InputModel.class);
 		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
 
-		String label = (currentProgress != 0) ? (LABEL_PREFIX + currentProgress + "%") : ("Evalute");
+		String label = (currentProgress != 0) ? (LABEL_PREFIX + currentProgress + "%") : ("Evaluate");
 		final CompoundCommand command = new CompoundCommand(label);
 
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
