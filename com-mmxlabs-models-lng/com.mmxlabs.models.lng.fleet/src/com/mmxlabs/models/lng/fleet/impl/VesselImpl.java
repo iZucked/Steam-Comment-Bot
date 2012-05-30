@@ -10,6 +10,8 @@ import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.AVessel;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.impl.AVesselImpl;
 
 import java.util.Collection;
@@ -312,6 +314,19 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 */
 	public boolean isSetTimeCharterRate() {
 		return timeCharterRateESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<AVessel> collect(EList<AVesselSet> marked) {
+		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
+		final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();
+		marked.add(this);
+		result.add(this);
+		return result;
 	}
 
 	/**

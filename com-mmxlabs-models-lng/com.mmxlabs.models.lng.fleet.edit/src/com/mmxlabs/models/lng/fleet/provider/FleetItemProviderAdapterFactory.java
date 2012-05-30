@@ -350,6 +350,29 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.fleet.VesselGroup} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected VesselGroupItemProvider vesselGroupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.fleet.VesselGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createVesselGroupAdapter() {
+		if (vesselGroupItemProvider == null) {
+			vesselGroupItemProvider = new VesselGroupItemProvider(this);
+		}
+
+		return vesselGroupItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -460,6 +483,7 @@ public class FleetItemProviderAdapterFactory extends FleetAdapterFactory impleme
 		if (fuelConsumptionItemProvider != null) fuelConsumptionItemProvider.dispose();
 		if (maintenanceEventItemProvider != null) maintenanceEventItemProvider.dispose();
 		if (vesselClassRouteParametersItemProvider != null) vesselClassRouteParametersItemProvider.dispose();
+		if (vesselGroupItemProvider != null) vesselGroupItemProvider.dispose();
 	}
 
 }

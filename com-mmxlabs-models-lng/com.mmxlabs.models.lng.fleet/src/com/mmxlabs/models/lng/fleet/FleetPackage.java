@@ -516,13 +516,22 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__BASE_FUELS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -1293,6 +1302,71 @@ public interface FleetPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl <em>Vessel Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselGroup()
+	 * @generated
+	 */
+	int VESSEL_GROUP = 13;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__PROXIES = TypesPackage.AVESSEL_SET__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__UUID = TypesPackage.AVESSEL_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__NAME = TypesPackage.AVESSEL_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__VESSELS = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.Vessel <em>Vessel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1639,6 +1713,17 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFleetModel_BaseFuels();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroups <em>Vessel Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Vessel Groups</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroups()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_VesselGroups();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.BaseFuel <em>Base Fuel</em>}'.
@@ -2028,6 +2113,27 @@ public interface FleetPackage extends EPackage {
 	EAttribute getVesselClassRouteParameters_BallastNBORate();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselGroup <em>Vessel Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Group</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselGroup
+	 * @generated
+	 */
+	EClass getVesselGroup();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.fleet.VesselGroup#getVessels <em>Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselGroup#getVessels()
+	 * @see #getVesselGroup()
+	 * @generated
+	 */
+	EReference getVesselGroup_Vessels();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2312,6 +2418,14 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_MODEL__BASE_FUELS = eINSTANCE.getFleetModel_BaseFuels();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__VESSEL_GROUPS = eINSTANCE.getFleetModel_VesselGroups();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -2618,6 +2732,24 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute VESSEL_CLASS_ROUTE_PARAMETERS__BALLAST_NBO_RATE = eINSTANCE.getVesselClassRouteParameters_BallastNBORate();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl <em>Vessel Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.VesselGroupImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselGroup()
+		 * @generated
+		 */
+		EClass VESSEL_GROUP = eINSTANCE.getVesselGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference VESSEL_GROUP__VESSELS = eINSTANCE.getVesselGroup_Vessels();
 
 	}
 

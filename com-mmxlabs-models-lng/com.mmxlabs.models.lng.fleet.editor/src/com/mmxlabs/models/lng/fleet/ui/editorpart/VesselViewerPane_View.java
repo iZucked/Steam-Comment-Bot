@@ -95,6 +95,15 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
 			}
 		});
+		
+		getToolBarManager().appendToGroup(EDIT_GROUP, new Action("VG") {
+			@Override
+			public void run() {
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(), VesselViewerPane_View.this.getJointModelEditorPart()
+						.getDefaultCommandHandler());
+				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), FleetPackage.eINSTANCE.getFleetModel_VesselGroups());
+			}
+		});
 		getToolBarManager().update(true);
 	}
 

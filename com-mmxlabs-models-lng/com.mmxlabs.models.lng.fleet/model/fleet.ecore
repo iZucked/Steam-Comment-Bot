@@ -4,6 +4,12 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fleet"
     nsURI="http://www.mmxlabs.com/models/lng/fleet/1/" nsPrefix="lng.fleet">
   <eClassifiers xsi:type="ecore:EClass" name="Vessel" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel">
+    <eOperations name="collect" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();&#xA;final org.eclipse.emf.common.util.UniqueEList&lt;com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList&lt;com.mmxlabs.models.lng.types.AVessel>();&#xA;marked.add(this);&#xA;result.add(this);&#xA;return result;"/>
+      </eAnnotations>
+      <eParameters name="marked" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselClass" lowerBound="1"
         eType="#//VesselClass"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inaccessiblePorts" upperBound="-1"
@@ -109,6 +115,8 @@
         eType="#//VesselEvent" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseFuels" upperBound="-1"
         eType="#//BaseFuel" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroups" upperBound="-1"
+        eType="#//VesselGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseFuel" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ABaseFuel">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="equivalenceFactor" lowerBound="1"
@@ -199,5 +207,15 @@
         lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="ballastNBORate" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselGroup" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+    <eOperations name="collect" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();&#xA;final org.eclipse.emf.common.util.UniqueEList&lt;com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList&lt;com.mmxlabs.models.lng.types.AVessel>();&#xA;marked.add(this);&#xA;for (final Vessel v : getVessels()) {&#xA;&#x9;result.addAll(v.collect(marked));&#xA;}&#xA;return result;"/>
+      </eAnnotations>
+      <eParameters name="marked" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
+        eType="#//Vessel"/>
   </eClassifiers>
 </ecore:EPackage>

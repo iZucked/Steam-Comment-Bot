@@ -117,6 +117,12 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.fleet.MaintenanceEvent">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.fleet.presentation.composites.VesselGroupComponentHelper"
+        id="com.mmxlabs.models.lng.fleet.helpers.VesselGroup"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.fleet.VesselGroup">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -198,6 +204,12 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Base Fuel"
           targetEClass="com.mmxlabs.models.lng.fleet.BaseFuel">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.fleet.editor.vesselGroupFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Vessel Group"
+          targetEClass="com.mmxlabs.models.lng.fleet.VesselGroup">
     </factory>
  </extension>
  <extension

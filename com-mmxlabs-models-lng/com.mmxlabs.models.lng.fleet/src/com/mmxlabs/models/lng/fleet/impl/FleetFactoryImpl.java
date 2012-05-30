@@ -70,6 +70,7 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 			case FleetPackage.FUEL_CONSUMPTION: return createFuelConsumption();
 			case FleetPackage.MAINTENANCE_EVENT: return createMaintenanceEvent();
 			case FleetPackage.VESSEL_CLASS_ROUTE_PARAMETERS: return createVesselClassRouteParameters();
+			case FleetPackage.VESSEL_GROUP: return createVesselGroup();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -193,6 +194,16 @@ public class FleetFactoryImpl extends EFactoryImpl implements FleetFactory {
 	public VesselClassRouteParameters createVesselClassRouteParameters() {
 		VesselClassRouteParametersImpl vesselClassRouteParameters = new VesselClassRouteParametersImpl();
 		return vesselClassRouteParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public VesselGroup createVesselGroup() {
+		VesselGroupImpl vesselGroup = new VesselGroupImpl();
+		return vesselGroup;
 	}
 
 	/**

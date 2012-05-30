@@ -68,6 +68,7 @@ public class FleetModelComponentHelper extends BaseComponentHelper {
 		add_vesselClassesEditor(detailComposite, topClass);
 		add_vesselEventsEditor(detailComposite, topClass);
 		add_baseFuelsEditor(detailComposite, topClass);
+		add_vesselGroupsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vessels feature on FleetModel
@@ -100,5 +101,14 @@ public class FleetModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_baseFuelsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__BASE_FUELS));
+	}
+
+	/**
+	 * Create the editor for the vesselGroups feature on FleetModel
+	 *
+	 * @generated
+	 */
+	protected void add_vesselGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.FLEET_MODEL__VESSEL_GROUPS));
 	}
 }
