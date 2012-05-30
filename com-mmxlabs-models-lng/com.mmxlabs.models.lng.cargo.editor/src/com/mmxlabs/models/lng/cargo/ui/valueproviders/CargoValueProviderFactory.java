@@ -19,7 +19,7 @@ public class CargoValueProviderFactory implements
 			EReference reference, MMXRootObject rootObject) {
 		final CargoModel cm = rootObject.getSubModel(CargoModel.class);
 		if (cm == null) return null;
-		if (reference.getEReferenceType().isSuperTypeOf(TypesPackage.eINSTANCE.getACargo())) {
+		if (TypesPackage.eINSTANCE.getACargo().isSuperTypeOf(reference.getEReferenceType())) {
 			return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_Cargoes());
 		} else if (reference.getEReferenceType().isSuperTypeOf(CargoPackage.eINSTANCE.getCargoGroup())) {
 			return new SimpleReferenceValueProvider(cm, CargoPackage.eINSTANCE.getCargoModel_CargoGroups());
