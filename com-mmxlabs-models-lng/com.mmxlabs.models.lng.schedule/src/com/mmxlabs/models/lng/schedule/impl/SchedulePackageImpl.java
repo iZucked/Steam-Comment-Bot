@@ -32,11 +32,13 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
+import java.lang.Iterable;
 import java.util.Calendar;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
@@ -203,6 +205,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EDataType calendarEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType iterableEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -1119,6 +1128,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getAdditionalDataHolder__GetAdditionalDataWithPath__EList() {
+		return additionalDataHolderEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -1139,6 +1157,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EDataType getCalendar() {
 		return calendarEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EDataType getIterable() {
+		return iterableEDataType;
 	}
 
 	/**
@@ -1281,6 +1308,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		additionalDataHolderEClass = createEClass(ADDITIONAL_DATA_HOLDER);
 		createEReference(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
 		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING);
+		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST);
 
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
@@ -1288,6 +1316,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Create data types
 		calendarEDataType = createEDataType(CALENDAR);
+		iterableEDataType = createEDataType(ITERABLE);
 	}
 
 	/**
@@ -1318,6 +1347,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		TypesPackage theTypesPackage = (TypesPackage)EPackage.Registry.INSTANCE.getEPackage(TypesPackage.eNS_URI);
 
 		// Create type parameters
+		addETypeParameter(iterableEDataType, "T");
 
 		// Set bounds for type parameters
 
@@ -1481,6 +1511,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		EOperation op = initEOperation(getAdditionalDataHolder__GetAdditionalDataWithKey__String(), this.getAdditionalData(), "getAdditionalDataWithKey", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE, IS_ORDERED);
 
+		op = initEOperation(getAdditionalDataHolder__GetAdditionalDataWithPath__EList(), this.getAdditionalData(), "getAdditionalDataWithPath", 1, 1, IS_UNIQUE, IS_ORDERED);
+		EGenericType g1 = createEGenericType(this.getIterable());
+		EGenericType g2 = createEGenericType(ecorePackage.getEString());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "keys", 1, 1, IS_UNIQUE, IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");
 		addEEnumLiteral(fuelUnitEEnum, FuelUnit.M3);
@@ -1494,6 +1530,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(iterableEDataType, Iterable.class, "Iterable", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

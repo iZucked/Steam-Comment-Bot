@@ -87,6 +87,7 @@ public class CargoModelItemProvider
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__LOAD_SLOTS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__DISCHARGE_SLOTS);
 			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CARGOES);
+			childrenFeatures.add(CargoPackage.Literals.CARGO_MODEL__CARGO_GROUPS);
 		}
 		return childrenFeatures;
 	}
@@ -144,6 +145,7 @@ public class CargoModelItemProvider
 			case CargoPackage.CARGO_MODEL__LOAD_SLOTS:
 			case CargoPackage.CARGO_MODEL__DISCHARGE_SLOTS:
 			case CargoPackage.CARGO_MODEL__CARGOES:
+			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -185,6 +187,11 @@ public class CargoModelItemProvider
 			(createChildParameter
 				(CargoPackage.Literals.CARGO_MODEL__CARGOES,
 				 CargoFactory.eINSTANCE.createCargo()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CargoPackage.Literals.CARGO_MODEL__CARGO_GROUPS,
+				 CargoFactory.eINSTANCE.createCargoGroup()));
 	}
 
 	/**

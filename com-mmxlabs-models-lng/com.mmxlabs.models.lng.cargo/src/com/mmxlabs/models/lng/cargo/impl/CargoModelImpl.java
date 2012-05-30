@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.impl;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -39,6 +40,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getLoadSlots <em>Load Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getDischargeSlots <em>Discharge Slots</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoes <em>Cargoes</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl#getCargoGroups <em>Cargo Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -74,6 +76,16 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * @ordered
 	 */
 	protected EList<Cargo> cargoes;
+
+	/**
+	 * The cached value of the '{@link #getCargoGroups() <em>Cargo Groups</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCargoGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<CargoGroup> cargoGroups;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -135,6 +147,18 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<CargoGroup> getCargoGroups() {
+		if (cargoGroups == null) {
+			cargoGroups = new EObjectContainmentEList<CargoGroup>(CargoGroup.class, this, CargoPackage.CARGO_MODEL__CARGO_GROUPS);
+		}
+		return cargoGroups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -144,6 +168,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return ((InternalEList<?>)getDischargeSlots()).basicRemove(otherEnd, msgs);
 			case CargoPackage.CARGO_MODEL__CARGOES:
 				return ((InternalEList<?>)getCargoes()).basicRemove(otherEnd, msgs);
+			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
+				return ((InternalEList<?>)getCargoGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -162,6 +188,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return getDischargeSlots();
 			case CargoPackage.CARGO_MODEL__CARGOES:
 				return getCargoes();
+			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
+				return getCargoGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -187,6 +215,10 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				getCargoes().clear();
 				getCargoes().addAll((Collection<? extends Cargo>)newValue);
 				return;
+			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
+				getCargoGroups().clear();
+				getCargoGroups().addAll((Collection<? extends CargoGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -208,6 +240,9 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 			case CargoPackage.CARGO_MODEL__CARGOES:
 				getCargoes().clear();
 				return;
+			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
+				getCargoGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -226,6 +261,8 @@ public class CargoModelImpl extends UUIDObjectImpl implements CargoModel {
 				return dischargeSlots != null && !dischargeSlots.isEmpty();
 			case CargoPackage.CARGO_MODEL__CARGOES:
 				return cargoes != null && !cargoes.isEmpty();
+			case CargoPackage.CARGO_MODEL__CARGO_GROUPS:
+				return cargoGroups != null && !cargoGroups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

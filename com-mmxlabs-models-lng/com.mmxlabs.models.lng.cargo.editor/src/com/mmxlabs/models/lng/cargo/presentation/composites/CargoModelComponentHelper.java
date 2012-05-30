@@ -67,6 +67,7 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 		add_loadSlotsEditor(detailComposite, topClass);
 		add_dischargeSlotsEditor(detailComposite, topClass);
 		add_cargoesEditor(detailComposite, topClass);
+		add_cargoGroupsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the loadSlots feature on CargoModel
@@ -91,5 +92,14 @@ public class CargoModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cargoesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__CARGOES));
+	}
+
+	/**
+	 * Create the editor for the cargoGroups feature on CargoModel
+	 *
+	 * @generated
+	 */
+	protected void add_cargoGroupsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO_MODEL__CARGO_GROUPS));
 	}
 }

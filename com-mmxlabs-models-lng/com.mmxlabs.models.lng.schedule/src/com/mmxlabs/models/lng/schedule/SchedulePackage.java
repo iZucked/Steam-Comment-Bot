@@ -2488,13 +2488,22 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Additional Data With Path</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ELIST = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
+
+	/**
 	 * The operation id for the '<em>Get Name</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
+	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Get Type</em>' operation.
@@ -2503,7 +2512,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
+	int CARGO_ALLOCATION___GET_TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The number of operations of the '<em>Cargo Allocation</em>' class.
@@ -2512,7 +2521,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
+	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
@@ -3267,13 +3276,22 @@ public interface SchedulePackage extends EPackage {
 	int ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_KEY__STRING = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The operation id for the '<em>Get Additional Data With Path</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ELIST = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
+
+	/**
 	 * The number of operations of the '<em>Additional Data</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADDITIONAL_DATA_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
+	int ADDITIONAL_DATA_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataHolderImpl <em>Additional Data Holder</em>}' class.
@@ -3313,13 +3331,22 @@ public interface SchedulePackage extends EPackage {
 	int ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING = 0;
 
 	/**
+	 * The operation id for the '<em>Get Additional Data With Path</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST = 1;
+
+	/**
 	 * The number of operations of the '<em>Additional Data Holder</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADDITIONAL_DATA_HOLDER_OPERATION_COUNT = 1;
+	int ADDITIONAL_DATA_HOLDER_OPERATION_COUNT = 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
@@ -3351,6 +3378,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	int CALENDAR = 21;
+
+
+	/**
+	 * The meta object id for the '<em>Iterable</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.Iterable
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
+	 * @generated
+	 */
+	int ITERABLE = 22;
 
 
 	/**
@@ -4350,6 +4388,16 @@ public interface SchedulePackage extends EPackage {
 	EOperation getAdditionalDataHolder__GetAdditionalDataWithKey__String();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder#getAdditionalDataWithPath(java.lang.Iterable) <em>Get Additional Data With Path</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Additional Data With Path</em>' operation.
+	 * @see com.mmxlabs.models.lng.schedule.AdditionalDataHolder#getAdditionalDataWithPath(java.lang.Iterable)
+	 * @generated
+	 */
+	EOperation getAdditionalDataHolder__GetAdditionalDataWithPath__EList();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4379,6 +4427,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getCalendar();
+
+	/**
+	 * Returns the meta object for data type '{@link java.lang.Iterable <em>Iterable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Iterable</em>'.
+	 * @see java.lang.Iterable
+	 * @model instanceClass="java.lang.Iterable" typeParameters="T"
+	 * @generated
+	 */
+	EDataType getIterable();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -5193,6 +5252,14 @@ public interface SchedulePackage extends EPackage {
 		EOperation ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING = eINSTANCE.getAdditionalDataHolder__GetAdditionalDataWithKey__String();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Additional Data With Path</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST = eINSTANCE.getAdditionalDataHolder__GetAdditionalDataWithPath__EList();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5221,6 +5288,16 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EDataType CALENDAR = eINSTANCE.getCalendar();
+
+		/**
+		 * The meta object literal for the '<em>Iterable</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.Iterable
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
+		 * @generated
+		 */
+		EDataType ITERABLE = eINSTANCE.getIterable();
 
 	}
 

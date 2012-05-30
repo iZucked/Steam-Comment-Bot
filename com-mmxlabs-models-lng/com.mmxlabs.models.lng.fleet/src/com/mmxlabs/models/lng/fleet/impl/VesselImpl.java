@@ -9,6 +9,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 
+import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -27,6 +28,8 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -40,6 +43,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getVesselGroups <em>Vessel Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -114,6 +118,16 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @ordered
 	 */
 	protected boolean timeCharterRateESet;
+
+	/**
+	 * The cached value of the '{@link #getVesselGroups() <em>Vessel Groups</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselGroups()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VesselGroup> vesselGroups;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -321,12 +335,39 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<VesselGroup> getVesselGroups() {
+		if (vesselGroups == null) {
+			vesselGroups = new EObjectWithInverseResolvingEList.ManyInverse<VesselGroup>(VesselGroup.class, this, FleetPackage.VESSEL__VESSEL_GROUPS, FleetPackage.VESSEL_GROUP__VESSELS);
+		}
+		return vesselGroups;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EList<AVessel> collect(EList<AVesselSet> marked) {
 		if (marked.contains(this)) return org.eclipse.emf.common.util.ECollections.emptyEList();
 		final org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel> result = new org.eclipse.emf.common.util.UniqueEList<com.mmxlabs.models.lng.types.AVessel>();
 		marked.add(this);
 		result.add(this);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FleetPackage.VESSEL__VESSEL_GROUPS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getVesselGroups()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -341,6 +382,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return basicSetStartHeel(null, msgs);
 			case FleetPackage.VESSEL__AVAILABILITY:
 				return basicSetAvailability(null, msgs);
+			case FleetPackage.VESSEL__VESSEL_GROUPS:
+				return ((InternalEList<?>)getVesselGroups()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -364,6 +407,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return getAvailability();
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				return getTimeCharterRate();
+			case FleetPackage.VESSEL__VESSEL_GROUPS:
+				return getVesselGroups();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -393,6 +438,10 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				setTimeCharterRate((Integer)newValue);
 				return;
+			case FleetPackage.VESSEL__VESSEL_GROUPS:
+				getVesselGroups().clear();
+				getVesselGroups().addAll((Collection<? extends VesselGroup>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -420,6 +469,9 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				unsetTimeCharterRate();
 				return;
+			case FleetPackage.VESSEL__VESSEL_GROUPS:
+				getVesselGroups().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -442,6 +494,8 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return availability != null;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				return isSetTimeCharterRate();
+			case FleetPackage.VESSEL__VESSEL_GROUPS:
+				return vesselGroups != null && !vesselGroups.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

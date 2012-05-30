@@ -164,6 +164,14 @@ public class CargoSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CargoPackage.CARGO_GROUP: {
+				CargoGroup cargoGroup = (CargoGroup)theEObject;
+				T result = caseCargoGroup(cargoGroup);
+				if (result == null) result = caseNamedObject(cargoGroup);
+				if (result == null) result = caseMMXObject(cargoGroup);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -285,6 +293,21 @@ public class CargoSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSpotDischargeSlot(SpotDischargeSlot object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCargoGroup(CargoGroup object) {
 		return null;
 	}
 

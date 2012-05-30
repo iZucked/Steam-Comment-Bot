@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
+import java.lang.Iterable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
@@ -671,6 +672,21 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public AdditionalData getAdditionalDataWithPath(Iterable<String> keys) {
+		AdditionalDataHolder adh = this;
+		for (final String key : keys) {
+			if (adh == null) return null;
+			adh = adh.getAdditionalDataWithKey(key);
+		}
+		if (adh instanceof AdditionalData) return (AdditionalData) adh;
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -890,6 +906,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		if (baseClass == AdditionalDataHolder.class) {
 			switch (baseOperationID) {
 				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING: return SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING;
+				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST: return SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ELIST;
 				default: return -1;
 			}
 		}
@@ -902,6 +919,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @generated
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 			case SchedulePackage.CARGO_ALLOCATION___GET_NAME:
@@ -910,6 +928,8 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return getType();
 			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
 				return getAdditionalDataWithKey((String)arguments.get(0));
+			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ELIST:
+				return getAdditionalDataWithPath((Iterable<String>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

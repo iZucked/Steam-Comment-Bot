@@ -66,6 +66,7 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 			case CargoPackage.SPOT_SLOT: return createSpotSlot();
 			case CargoPackage.SPOT_LOAD_SLOT: return createSpotLoadSlot();
 			case CargoPackage.SPOT_DISCHARGE_SLOT: return createSpotDischargeSlot();
+			case CargoPackage.CARGO_GROUP: return createCargoGroup();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -169,6 +170,16 @@ public class CargoFactoryImpl extends EFactoryImpl implements CargoFactory {
 	public SpotDischargeSlot createSpotDischargeSlot() {
 		SpotDischargeSlotImpl spotDischargeSlot = new SpotDischargeSlotImpl();
 		return spotDischargeSlot;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CargoGroup createCargoGroup() {
+		CargoGroupImpl cargoGroup = new CargoGroupImpl();
+		return cargoGroup;
 	}
 
 	/**

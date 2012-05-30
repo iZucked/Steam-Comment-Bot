@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
 import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
+import java.lang.Iterable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -220,6 +221,21 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public AdditionalData getAdditionalDataWithPath(Iterable<String> keys) {
+		AdditionalDataHolder adh = this;
+		for (final String key : keys) {
+			if (adh == null) return null;
+			adh = adh.getAdditionalDataWithKey(key);
+		}
+		if (adh instanceof AdditionalData) return (AdditionalData) adh;
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -351,6 +367,7 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 		if (baseClass == AdditionalDataHolder.class) {
 			switch (baseOperationID) {
 				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING: return SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_KEY__STRING;
+				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST: return SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ELIST;
 				default: return -1;
 			}
 		}
@@ -363,10 +380,13 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 	 * @generated
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 			case SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
 				return getAdditionalDataWithKey((String)arguments.get(0));
+			case SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ELIST:
+				return getAdditionalDataWithPath((Iterable<String>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

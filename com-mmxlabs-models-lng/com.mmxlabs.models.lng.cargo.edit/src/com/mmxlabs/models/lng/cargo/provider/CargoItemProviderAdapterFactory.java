@@ -235,6 +235,29 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.cargo.CargoGroup} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CargoGroupItemProvider cargoGroupItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.cargo.CargoGroup}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCargoGroupAdapter() {
+		if (cargoGroupItemProvider == null) {
+			cargoGroupItemProvider = new CargoGroupItemProvider(this);
+		}
+
+		return cargoGroupItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -340,6 +363,7 @@ public class CargoItemProviderAdapterFactory extends CargoAdapterFactory impleme
 		if (spotSlotItemProvider != null) spotSlotItemProvider.dispose();
 		if (spotLoadSlotItemProvider != null) spotLoadSlotItemProvider.dispose();
 		if (spotDischargeSlotItemProvider != null) spotDischargeSlotItemProvider.dispose();
+		if (cargoGroupItemProvider != null) cargoGroupItemProvider.dispose();
 	}
 
 }

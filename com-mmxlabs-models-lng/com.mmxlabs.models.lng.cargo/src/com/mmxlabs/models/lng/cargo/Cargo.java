@@ -19,6 +19,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getDischargeSlot <em>Discharge Slot</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#isAllowRewiring <em>Allow Rewiring</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getAllowedVessels <em>Allowed Vessels</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Cargo#getGroups <em>Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -151,6 +152,24 @@ public interface Cargo extends ACargo {
 	 * @generated
 	 */
 	EList<AVesselSet> getAllowedVessels();
+
+	/**
+	 * Returns the value of the '<em><b>Groups</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.cargo.CargoGroup}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.cargo.CargoGroup#getCargoes <em>Cargoes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Groups</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Groups</em>' reference list.
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getCargo_Groups()
+	 * @see com.mmxlabs.models.lng.cargo.CargoGroup#getCargoes
+	 * @model opposite="cargoes"
+	 * @generated
+	 */
+	EList<CargoGroup> getGroups();
 
 	/**
 	 * <!-- begin-user-doc -->

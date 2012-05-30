@@ -11,12 +11,14 @@ import com.mmxlabs.models.lng.schedule.AdditionalData;
 import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
+import java.lang.Iterable;
 import java.lang.reflect.InvocationTargetException;
 
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
@@ -91,6 +93,21 @@ public class AdditionalDataHolderImpl extends EObjectImpl implements AdditionalD
 		  if (ad.getKey().equals(key)) return ad;
 		}
 		
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AdditionalData getAdditionalDataWithPath(Iterable<String> keys) {
+		AdditionalDataHolder adh = this;
+		for (final String key : keys) {
+			if (adh == null) return null;
+			adh = adh.getAdditionalDataWithKey(key);
+		}
+		if (adh instanceof AdditionalData) return (AdditionalData) adh;
 		return null;
 	}
 
@@ -174,10 +191,13 @@ public class AdditionalDataHolderImpl extends EObjectImpl implements AdditionalD
 	 * @generated
 	 */
 	@Override
+	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 			case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
 				return getAdditionalDataWithKey((String)arguments.get(0));
+			case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST:
+				return getAdditionalDataWithPath((Iterable<String>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

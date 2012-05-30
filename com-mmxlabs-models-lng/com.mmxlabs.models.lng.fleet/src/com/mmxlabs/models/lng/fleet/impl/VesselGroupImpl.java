@@ -18,10 +18,14 @@ import com.mmxlabs.models.lng.types.impl.AVesselSetImpl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 
 /**
@@ -74,7 +78,7 @@ public class VesselGroupImpl extends AVesselSetImpl implements VesselGroup {
 	 */
 	public EList<Vessel> getVessels() {
 		if (vessels == null) {
-			vessels = new EObjectResolvingEList<Vessel>(Vessel.class, this, FleetPackage.VESSEL_GROUP__VESSELS);
+			vessels = new EObjectWithInverseResolvingEList.ManyInverse<Vessel>(Vessel.class, this, FleetPackage.VESSEL_GROUP__VESSELS, FleetPackage.VESSEL__VESSEL_GROUPS);
 		}
 		return vessels;
 	}
@@ -92,6 +96,35 @@ public class VesselGroupImpl extends AVesselSetImpl implements VesselGroup {
 			result.addAll(v.collect(marked));
 		}
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FleetPackage.VESSEL_GROUP__VESSELS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getVessels()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case FleetPackage.VESSEL_GROUP__VESSELS:
+				return ((InternalEList<?>)getVessels()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

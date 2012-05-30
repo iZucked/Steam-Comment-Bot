@@ -7,6 +7,7 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.schedule;
+import java.lang.Iterable;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -52,6 +53,15 @@ public interface AdditionalDataHolder extends EObject {
 	 * @generated
 	 */
 	AdditionalData getAdditionalDataWithKey(String key);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" keysDataType="com.mmxlabs.models.lng.schedule.Iterable<org.eclipse.emf.ecore.EString>" keysRequired="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='AdditionalDataHolder adh = this;\nfor (final String key : keys) {\n\tif (adh == null) return null;\n\tadh = adh.getAdditionalDataWithKey(key);\n}\nif (adh instanceof AdditionalData) return (AdditionalData) adh;\nreturn null;'"
+	 * @generated
+	 */
+	AdditionalData getAdditionalDataWithPath(Iterable<String> keys);
 
 } // end of  AdditionalDataHolder
 

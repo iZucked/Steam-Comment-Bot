@@ -110,6 +110,10 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 				return createSpotDischargeSlotAdapter();
 			}
 			@Override
+			public Adapter caseCargoGroup(CargoGroup object) {
+				return createCargoGroupAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -262,6 +266,20 @@ public class CargoAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSpotDischargeSlotAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.cargo.CargoGroup <em>Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.cargo.CargoGroup
+	 * @generated
+	 */
+	public Adapter createCargoGroupAdapter() {
 		return null;
 	}
 
