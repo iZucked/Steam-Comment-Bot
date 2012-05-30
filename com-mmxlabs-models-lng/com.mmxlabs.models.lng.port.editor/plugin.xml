@@ -128,8 +128,7 @@
           ID="com.mmxlabs.models.lng.port.editor.portGroupFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Port Group"
-          outputEClass="com.mmxlabs.models.lng.port.PortGroup"
-          targetEClass="com.mmxlabs.models.lng.port.PortCollection">
+          targetEClass="com.mmxlabs.models.lng.port.PortGroup">
     </factory>
  </extension>
  <extension
