@@ -597,6 +597,8 @@ public class DetailCompositeDialog extends Dialog {
 				selectionViewer.refresh();
 				selectionViewer.setSelection(new StructuredSelection(inputs
 						.get(inputs.size() - 1)));
+				selectedObjectIndex = inputs.size() - 1;
+				updateEditor();
 			}
 		};
 	}
@@ -954,6 +956,8 @@ public class DetailCompositeDialog extends Dialog {
 		commandHandler.getEditingDomain().getCommandStack().execute(cc);
 	}
 
+	
+	
 	/**
 	 * Make a command to set the fields on the first argument to be equal to the
 	 * fields on the second argument. Presumes both arguments have the same
@@ -986,31 +990,55 @@ public class DetailCompositeDialog extends Dialog {
 					.setCommandProvidersDisabled(true);
 		}
 		try {
-			final CompoundCommand compound = new CompoundCommand();
-			compound.append(new IdentityCommand());
-			for (final EStructuralFeature feature : original.eClass().getEAllStructuralFeatures()) {
-				// For containment references, we need to compare the contained
-				// object, rather than generate a SetCommand.
-				if (original.eClass().getEAllContainments().contains(feature)) {
-					if (feature.isMany()) {
-						if (!((Collection<?>) original.eGet(feature)).isEmpty())
-							compound.append(RemoveCommand.create(editingDomain, original, feature, (Collection<?>) original.eGet(feature)));
-						if (!((Collection<?>) duplicate.eGet(feature)).isEmpty())
-							compound.append(AddCommand.create(editingDomain, original, feature, (Collection<?>) duplicate.eGet(feature)));
-					} else {
-						final Command c = makeEqualizer((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature));
-						compound.append(c);
-					}
+			return makeEqualizer2(original, duplicate, editingDomain);
+		} finally {
+			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) editingDomain)
+						.setCommandProvidersDisabled(false);
+			}
+		}
+	}
 
-					continue;
+	private Command makeEqualizer2(final EObject original,
+			final EObject duplicate, final EditingDomain editingDomain) {
+		if (original == null && duplicate == null) {
+			return IdentityCommand.INSTANCE;
+		}
+		final CompoundCommand compound = new CompoundCommand();
+		compound.append(new IdentityCommand());
+		for (final EStructuralFeature feature : original.eClass().getEAllStructuralFeatures()) {
+			// For containment references, we need to compare the contained
+			// object, rather than generate a SetCommand.
+			if (original.eClass().getEAllContainments().contains(feature)) {
+				if (feature.isMany()) {
+					if (!((Collection<?>) original.eGet(feature)).isEmpty())
+						compound.append(RemoveCommand.create(editingDomain, original, feature, (Collection<?>) original.eGet(feature)));
+					if (!((Collection<?>) duplicate.eGet(feature)).isEmpty())
+						compound.append(AddCommand.create(editingDomain, original, feature, (Collection<?>) duplicate.eGet(feature)));
+				} else {
+					final Command c = makeEqualizer2((EObject) original.eGet(feature), (EObject) duplicate.eGet(feature), editingDomain);
+					compound.append(c);
 				}
-				// Skip items which have not changed.
-				if (Equality.isEqual(original.eGet(feature),
-						duplicate.eGet(feature))
-						&& (!feature.isUnsettable() || (original
-								.eIsSet(feature) == duplicate.eIsSet(feature)))) {
-					continue;
-				}
+
+				continue;
+			}
+			// Skip items which have not changed.
+			if (Equality.isEqual(original.eGet(feature),
+					duplicate.eGet(feature))
+					&& (!feature.isUnsettable() || (original
+							.eIsSet(feature) == duplicate.eIsSet(feature)))) {
+				continue;
+			}
+//			if (feature instanceof EReference && ((EReference) feature).getEOpposite()!=null) {
+				// handle opposite references
+				// these require a bit more thought than normal ones, because setting the ref on the
+				// duplicate object will have introduced a ref from the referent back to the duplicate
+				
+				// once we copy the duplicate's ref onto the original, that should set up the opposite back-reference
+				// but what about the dangling opposite refs?
+				
+				// why do these pose a problem anyway?
+//			} else {
 				if (feature.isMany()) {
 					final Command mas = CommandUtil
 							.createMultipleAttributeSetter(editingDomain,
@@ -1040,13 +1068,8 @@ public class DetailCompositeDialog extends Dialog {
 					}
 				}
 			}
+//		}
 
-			return compound;
-		} finally {
-			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-				((CommandProviderAwareEditingDomain) editingDomain)
-						.setCommandProvidersDisabled(false);
-			}
-		}
+		return compound;
 	}
 }
