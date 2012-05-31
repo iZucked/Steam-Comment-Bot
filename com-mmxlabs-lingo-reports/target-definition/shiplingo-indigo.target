@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.6"?>
 
-<target name="MMXLabs Target" sequenceNumber="34">
+<target name="MMXLabs Target" sequenceNumber="35">
 <locations>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.edapt.recorder.feature.feature.group" version="0.3.0.201111051053"/>
@@ -116,6 +116,11 @@
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
+</location>
+<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="jre.1.6.0_32.win32.win32.x86.feature.group" version="1.0.0"/>
+<unit id="jre.1.6.0_32.win32.win32.x86_64.feature.group" version="1.0.0"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/jre"/>
 </location>
 </locations>
 </target>
