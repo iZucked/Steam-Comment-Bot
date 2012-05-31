@@ -94,6 +94,7 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 				final UnitCostMatrix settings = (UnitCostMatrix) object;
 				if (settings.eContainer() instanceof AnalyticsModel) {
 					final AnalyticsModel cm = (AnalyticsModel) settings.eContainer();
+					if (cm != null)
 					getEditingDomain().getCommandStack().execute(SetCommand.create(getEditingDomain(), cm, AnalyticsPackage.eINSTANCE.getAnalyticsModel_SelectedMatrix(), settings));
 				}
 			}
