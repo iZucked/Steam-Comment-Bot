@@ -166,6 +166,8 @@ public class AnnotatedSolutionExporter {
 				eSequence.unsetVesselClass();
 				break;
 			case VIRTUAL:
+				// oops should do something here
+				// Skip and process differently
 				break;
 			case SPOT_CHARTER:
 				if (annotatedSolution.getSequences().getSequence(resource).size() < 2)
