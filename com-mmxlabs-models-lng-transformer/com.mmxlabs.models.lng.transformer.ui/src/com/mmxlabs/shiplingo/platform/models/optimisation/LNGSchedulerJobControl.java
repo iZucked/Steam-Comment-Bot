@@ -150,8 +150,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			throw new RuntimeException("Unable to execute save schedule command");
 		}
 
-		// scheduleModel.setInitialSchedule(schedule);
-		// scheduleModel.setOptimisedSchedule(null); // clear optimised state.
 		editingDomain.getCommandStack().execute(command);
 
 		// Hmm, should this be done here or as part of a command - it is a persisted item.
@@ -161,25 +159,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		scheduleModel.setDirty(false);
 		return schedule;
 	}
-
-	// private Schedule saveOptimisedSolution(final IAnnotatedSolution solution, int currentProgress2) {
-	// final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-	// exporter.addPlatformExporterExtensions();
-	// final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
-	//
-	// final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
-	//
-	// final CompoundCommand command = new CompoundCommand("Set new optimised schedule " + currentProgress2 + "%");
-	//
-	// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), schedule));
-	//
-	// if (!command.canExecute()) {
-	// throw new RuntimeException("Unable to execute save schedule command");
-	// }
-	// editingDomain.getCommandStack().execute(command);
-	//
-	// return schedule;
-	// }
 
 	/*
 	 * (non-Javadoc)
