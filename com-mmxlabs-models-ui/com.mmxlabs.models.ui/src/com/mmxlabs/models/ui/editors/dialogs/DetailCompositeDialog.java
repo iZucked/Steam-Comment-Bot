@@ -63,6 +63,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
@@ -808,6 +809,10 @@ public class DetailCompositeDialog extends Dialog {
 						System.err.println("Cannot execute delete");
 					}
 				}
+				
+				for (final EObject duplicate : duplicateToOriginal.keySet()) {
+					clearReferences(duplicate);
+				}
 			}
 			return value;
 		} finally {
@@ -882,6 +887,9 @@ public class DetailCompositeDialog extends Dialog {
 							cc.append(makeEqualizer(original, duplicate));
 						}
 					}
+				
+					//TODO check this experimental option works properly
+//					cc.append(replaceOriginals(commandHandler.getEditingDomain(), rootObject));
 
 					final boolean isExecutable = cc.canExecute();
 					if (isExecutable) {
@@ -897,6 +905,10 @@ public class DetailCompositeDialog extends Dialog {
 						log.error("Unable to apply change",
 								new RuntimeException("Unable to apply change"));
 					}
+				}
+			} else {
+				for (final EObject duplicate : duplicateToOriginal.keySet()) {
+					clearReferences(duplicate);
 				}
 			}
 			return value;
@@ -990,6 +1002,7 @@ public class DetailCompositeDialog extends Dialog {
 					.setCommandProvidersDisabled(true);
 		}
 		try {
+//			return replaceOriginals(editingDomain, rootObject)
 			return makeEqualizer2(original, duplicate, editingDomain);
 		} finally {
 			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
@@ -998,7 +1011,110 @@ public class DetailCompositeDialog extends Dialog {
 			}
 		}
 	}
-
+	
+	/**
+	 * Clear all the ereferences on this object and all its contents
+	 * 
+	 * used to prevent opposite references from getting set to point to duplicates
+	 * after the dialog is cancelled.
+	 * 
+	 * @param duplicate
+	 */
+	private void clearReferences(final EObject duplicate) {
+		for (final EObject o : duplicate.eContents()) {
+			clearReferences(o);
+		}
+		for (final EReference reference : duplicate.eClass().getEAllReferences()) {
+			if (reference.isMany()) {
+				final List l = (List) duplicate.eGet(reference);
+				l.clear();
+			} else {
+				duplicate.eSet(reference, null);
+			}
+		}
+	}
+	
+	private Command replaceOriginals(final EditingDomain editingDomain, final MMXRootObject rootObject) {
+		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+			((CommandProviderAwareEditingDomain) editingDomain)
+					.setCommandProvidersDisabled(true);
+		}
+		
+		try {
+			
+			final CompoundCommand compound = new CompoundCommand();
+			compound.append(IdentityCommand.INSTANCE);
+			
+			// clear references to original and replace with references to the new,
+			// except in unique multiple references that already contain the new
+			
+			final List<EObject> parts = new ArrayList<EObject>(rootObject.getSubModels().size());
+			for (final MMXSubModel sub : rootObject.getSubModels()) {
+				parts.add(sub.getSubModelInstance());
+			}
+			
+			final Map<EObject, Collection<Setting>> referencesToOriginals = EcoreUtil.UsageCrossReferencer.findAll(originalToDuplicate.keySet(), parts);
+			
+			for (final Map.Entry<EObject, Collection<Setting>> entry : referencesToOriginals.entrySet()) {
+				final EObject original = entry.getKey();
+				final EObject duplicate = originalToDuplicate.get(original);
+				
+				for (final Setting setting : entry.getValue()) {
+					final EObject owner = setting.getEObject();
+					if (originalToDuplicate.keySet().contains(owner)) continue;
+					final EStructuralFeature feature = setting.getEStructuralFeature();
+					if (feature instanceof EReference) {
+						final EReference reference = (EReference) feature;
+						if (reference.isMany()) {
+							final List<EObject> l = (List<EObject>) owner.eGet(reference);
+							if (reference.isUnique()) {
+								if (l.contains(duplicate)) { // we can't add twice
+									compound.append(RemoveCommand.create(editingDomain, 
+											owner, feature, original));
+								} else {
+									compound.append(SetCommand.create(editingDomain, owner, feature, duplicate,
+											l.indexOf(original)));
+								}
+							} else {
+								int index = 0;
+								for (final EObject e : l) {
+									if (e == original) {
+										compound.append(SetCommand.create(editingDomain, owner, feature, duplicate, index));
+									}
+									index++;
+								}
+							}
+						} else {
+							compound.append(SetCommand.create(editingDomain, owner, reference, duplicate));
+						}
+					}
+				}
+			}
+			
+			// set containers (usages above are only non-containment)
+			for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
+				final EObject original = entry.getKey();
+				final EObject duplicate = entry.getValue();
+				final EObject container = original.eContainer();
+				final EReference containment = (EReference) original.eContainingFeature();
+				if (container == null || containment == null) continue;
+				if (containment.isMany()) {
+					compound.append(SetCommand.create(editingDomain, container, containment, duplicate,
+							((List) container.eGet(containment)).indexOf(original)));
+				} else {
+					compound.append(SetCommand.create(editingDomain, container, containment, duplicate));
+				}
+			}
+			
+			return compound;
+		} finally {
+			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) editingDomain)
+						.setCommandProvidersDisabled(false);
+			}
+		}
+	}
+	
 	private Command makeEqualizer2(final EObject original,
 			final EObject duplicate, final EditingDomain editingDomain) {
 		if (original == null && duplicate == null) {
