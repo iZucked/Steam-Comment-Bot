@@ -108,6 +108,7 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 		public Object getValue(final Object object) {
 			if (object instanceof UnitCostMatrix) {
 				final UnitCostMatrix settings = (UnitCostMatrix) object;
+				if (settings.eContainer() == null) return 1;
 				if (((AnalyticsModel) settings.eContainer()).getSelectedMatrix() == settings)
 					return 0;
 			}
