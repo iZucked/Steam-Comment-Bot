@@ -39,7 +39,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class AssignmentEditor<R, T> extends Canvas {
 	private static final int EMPTY_ROW_HEIGHT = 64;
-	private static final int TASK_HEIGHT = 24;
+	private static final int TASK_HEIGHT = 18;
 	private static final int VERTICAL_SPACE_BETWEEN_TASKS = 8;
 	/**
 	 * Sets the time for one pixel of horizontal scale
