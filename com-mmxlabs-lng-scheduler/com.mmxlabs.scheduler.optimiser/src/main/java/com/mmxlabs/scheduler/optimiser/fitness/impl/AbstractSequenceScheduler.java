@@ -36,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -141,10 +142,16 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			final List<Object> currentSequence = new ArrayList<Object>(5);
 			final VoyagePlan currentPlan = new VoyagePlan();
 
+			boolean startSet = false;
+			int startTime = 0;
 			for (final ISequenceElement element : sequence) {
 
 				final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 
+				if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
+					startTime = thisPortSlot.getTimeWindow().getStart();
+					startSet = true;
+				}
 				final PortDetails portDetails = new PortDetails();
 				portDetails.setVisitDuration(0);
 				portDetails.setPortSlot(thisPortSlot);
@@ -153,7 +160,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			}
 
 			currentPlan.setSequence(currentSequence.toArray());
-			return new ScheduledSequence(resource, 0, Collections.singletonList(currentPlan));
+			return new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan));
 
 		}
 
