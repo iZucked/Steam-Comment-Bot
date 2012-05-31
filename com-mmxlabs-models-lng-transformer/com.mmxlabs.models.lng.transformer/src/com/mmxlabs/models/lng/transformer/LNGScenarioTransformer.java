@@ -39,6 +39,7 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -89,8 +90,8 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
@@ -239,7 +240,7 @@ public class LNGScenarioTransformer {
 
 		// set earliest and latest times into entities
 		entities.setEarliestDate(earliestTime);
-		
+
 		/**
 		 * First, create all the market curves (should these come through the builder?)
 		 */
@@ -340,7 +341,6 @@ public class LNGScenarioTransformer {
 			allPorts.add(port);
 			entities.addModelObject(ePort, port);
 		}
-		
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, entities);
 
@@ -611,17 +611,13 @@ public class LNGScenarioTransformer {
 
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
+		// TODO: Refactor into Load and Discharge slot creation before cargo paring
+		
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
-			// ignore all non-fleet cargoes, as far as optimisation goes.
-			if (eCargo.getCargoType().equals(CargoType.FLEET) == false) {
-				continue;
-			}
-
 			if (eCargo.getLoadSlot().getWindowStartWithSlotOrPortTime().after(latestDate)) {
 				continue;
 			}
-
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
 
 			final ITimeWindow loadWindow = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTime()),
@@ -643,11 +639,17 @@ public class LNGScenarioTransformer {
 				loadPriceCalculator = entities.getOptimiserObject(purchaseContract, ILoadPriceCalculator2.class);
 			}
 
-			final ILoadSlot load = builder.createLoadSlot(loadSlot.getName(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
-					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(),
-					loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), false);
+			final ILoadOption load;
+			if (loadSlot.isDESPurchase()) {
+				load = builder.createVirtualLoadSlot(loadSlot.getName(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
+						Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), false);
+			} else {
+				load = builder.createLoadSlot(loadSlot.getName(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
+						Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(),
+						loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), false);
+			}
 
-			final Slot dischargeSlot = eCargo.getDischargeSlot();
+			final DischargeSlot dischargeSlot = eCargo.getDischargeSlot();
 			final ITimeWindow dischargeWindow = builder.createTimeWindow(convertTime(earliestTime, dischargeSlot.getWindowStartWithSlotOrPortTime()),
 					convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTime()));
 
@@ -669,10 +671,15 @@ public class LNGScenarioTransformer {
 				dischargePriceCalculator = entities.getOptimiserObject(dischargeSlot.getContract(), IShippingPriceCalculator.class);
 			}
 
-			final IDischargeSlot discharge = builder.createDischargeSlot(dischargeSlot.getName(), ports.lookup(dischargeSlot.getPort()), dischargeWindow,
-					Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator,
-					dischargeSlot.getSlotOrPortDuration(), false);
-
+			final IDischargeOption discharge;
+			if (dischargeSlot.isFOBSale()) {
+				discharge = builder.createVirtualDischargeSlot(dischargeSlot.getName(), ports.lookup(dischargeSlot.getPort()), dischargeWindow,
+						Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator, false);
+			} else {
+				discharge = builder.createDischargeSlot(dischargeSlot.getName(), ports.lookup(dischargeSlot.getPort()), dischargeWindow,
+						Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator,
+						dischargeSlot.getSlotOrPortDuration(), false);
+			}
 			entities.addModelObject(loadSlot, load);
 			entities.addModelObject(dischargeSlot, discharge);
 
@@ -684,15 +691,21 @@ public class LNGScenarioTransformer {
 			final ICargo cargo = builder.createCargo(eCargo.getName(), load, discharge, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
 
 			entities.addModelObject(eCargo, cargo);
+			if (eCargo.getCargoType() == CargoType.FLEET) {
 			
-			final Set<AVessel> allowedVessels = SetUtils.getVessels(eCargo.getAllowedVessels());
-			if (!allowedVessels.isEmpty()) {
-				final Set<IVessel> vesselsForCargo = new HashSet<IVessel>();
-				for (final AVessel v : allowedVessels) {
-					vesselsForCargo.add(vesselAssociation.lookup((Vessel) v));
+				final Set<AVessel> allowedVessels = SetUtils.getVessels(eCargo.getAllowedVessels());
+				if (!allowedVessels.isEmpty()) {
+					final Set<IVessel> vesselsForCargo = new HashSet<IVessel>();
+					for (final AVessel v : allowedVessels) {
+						vesselsForCargo.add(vesselAssociation.lookup((Vessel) v));
+					}
+					builder.setCargoVesselRestriction(cargo, vesselsForCargo);
 				}
-				builder.setCargoVesselRestriction(cargo, vesselsForCargo);
+			} else {
+				// Move generators should not permit this, but specify here just in case
+				builder.setCargoVesselRestriction(cargo, Collections.<IVessel>emptySet());
 			}
+
 		}
 	}
 
