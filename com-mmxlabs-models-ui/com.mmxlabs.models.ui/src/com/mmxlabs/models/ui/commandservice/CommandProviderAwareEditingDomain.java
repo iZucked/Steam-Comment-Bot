@@ -30,6 +30,8 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 
 	private boolean commandProvidersDisabled = false;
 
+	private boolean enabled = true;
+
 	public CommandProviderAwareEditingDomain(final AdapterFactory adapterFactory, final CommandStack commandStack, final MMXRootObject rootObject,
 			final ServiceTracker<IModelCommandProvider, IModelCommandProvider> commandProviderTracker, final ResourceSet resourceSet) {
 		super(adapterFactory, commandStack, resourceSet);
@@ -38,6 +40,9 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	}
 
 	public void setAdaptersEnabled(final boolean enabled) {
+
+		this.enabled = enabled;
+
 		for (final MMXSubModel subModel : rootObject.getSubModels()) {
 			if (enabled)
 				enableAdapters(subModel.getSubModelInstance());
@@ -46,7 +51,18 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		}
 	}
 
+	public void setAdaptersEnabled(final boolean enabled, final boolean skip) {
+		this.enabled = enabled;
+		for (final MMXSubModel subModel : rootObject.getSubModels()) {
+			if (enabled)
+				enableAdapters(subModel.getSubModelInstance(), skip);
+			else
+				disableAdapters(subModel.getSubModelInstance());
+		}
+	}
+
 	private void disableAdapters(final EObject top) {
+
 		for (final Adapter a : top.eAdapters().toArray(new Adapter[top.eAdapters().size()])) {
 			if (a instanceof IMMXAdapter) {
 				((IMMXAdapter) a).disable();
@@ -57,6 +73,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	}
 
 	private void enableAdapters(final EObject top) {
+
 		for (final Adapter a : top.eAdapters()) {
 			if (a instanceof IMMXAdapter) {
 				((IMMXAdapter) a).enable();
@@ -64,6 +81,16 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		}
 		for (final EObject o : top.eContents())
 			enableAdapters(o);
+	}
+
+	private void enableAdapters(final EObject top, final boolean skip) {
+		for (final Adapter a : top.eAdapters()) {
+			if (a instanceof IMMXAdapter) {
+				((IMMXAdapter) a).enable(skip);
+			}
+		}
+		for (final EObject o : top.eContents())
+			enableAdapters(o, skip);
 	}
 
 	@Override
@@ -78,7 +105,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				provider.startCommandProvision();
 
 			for (final IModelCommandProvider provider : providers) {
-				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject,overrides, commandClass, commandParameter, normal);
+				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject, overrides, commandClass, commandParameter, normal);
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
 					if (addition.canExecute() == false) {
@@ -97,13 +124,13 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 			return normal;
 		}
 	}
-	
+
 	private final WeakHashMap<EObject, EObject> overrides = new WeakHashMap<EObject, EObject>();
-	
+
 	public void setOverride(final EObject real, final EObject override) {
 		overrides.put(real, override);
 	}
-	
+
 	public void clearOverride(final EObject real) {
 		overrides.remove(real);
 	}
@@ -114,6 +141,10 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 
 	public void setCommandProvidersDisabled(final boolean commandProvidersDisabled) {
 		this.commandProvidersDisabled = commandProvidersDisabled;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
 	}
 
 }
