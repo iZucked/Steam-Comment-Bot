@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -71,7 +72,13 @@ public class InputJointModelEditorContribution extends
 		FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 		
 		final List<UUIDObject> tasks = new ArrayList<UUIDObject>();
-		if (cargoModel != null) tasks.addAll(cargoModel.getCargoes());
+		if (cargoModel != null) {
+			for (final Cargo c : cargoModel.getCargoes()) {
+				if (c.getCargoType() == CargoType.FLEET) {
+					tasks.add(c);
+				}
+			}
+		}
 		if (fleetModel != null) tasks.addAll(fleetModel.getVesselEvents());
 		
 		editor.setTasks(tasks);
