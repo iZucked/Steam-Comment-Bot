@@ -28,7 +28,7 @@ public enum CargoType implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	FLEET(0, "FLEET", "FLEET"),
+	FLEET(0, "FLEET", "Shipped"),
 
 	/**
 	 * The '<em><b>FOB</b></em>' literal object.
@@ -59,7 +59,7 @@ public enum CargoType implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #FLEET
-	 * @model
+	 * @model literal="Shipped"
 	 * @generated
 	 * @ordered
 	 */
