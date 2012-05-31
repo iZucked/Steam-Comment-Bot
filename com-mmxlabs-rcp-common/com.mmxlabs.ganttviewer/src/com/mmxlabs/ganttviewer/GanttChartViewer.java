@@ -212,8 +212,9 @@ public class GanttChartViewer extends StructuredViewer {
 		if (selectedEvents.isEmpty() == false) {
 			final GanttEvent sel = selectedEvents.get(0);
 			// TODO figure out bug here; showEvent() blanks the view
-			// if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds()))
-			// ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
+//			if (!ganttChart.getGanttComposite().isEventVisible(sel, ganttChart.getGanttComposite().getBounds())) {
+				ganttChart.getGanttComposite().showEvent(sel, SWT.CENTER);
+//			}
 			// ganttChart.getGanttComposite().redraw();
 		}
 	}
