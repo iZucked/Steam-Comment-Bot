@@ -29,11 +29,16 @@ public final class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	@Override
 	public void execute(final Command command) {
 		synchronized (instance) {
-			editingDomain.setAdaptersEnabled(false);
+			final boolean isEnabled = editingDomain.isEnabled();
+			if (isEnabled) {
+				editingDomain.setAdaptersEnabled(false);
+			}
 			try {
 				super.execute(command);
 			} finally {
-				editingDomain.setAdaptersEnabled(true);
+				if (isEnabled) {
+					editingDomain.setAdaptersEnabled(true);
+				}
 			}
 		}
 	}
@@ -42,12 +47,16 @@ public final class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	public void undo() {
 
 		if (editingDomain != null) {
-
-			editingDomain.setAdaptersEnabled(false);
+			final boolean isEnabled = editingDomain.isEnabled();
+			if (isEnabled) {
+				editingDomain.setAdaptersEnabled(false);
+			}
 			try {
 				super.undo();
 			} finally {
-				editingDomain.setAdaptersEnabled(true);
+				if (isEnabled) {
+					editingDomain.setAdaptersEnabled(true);
+				}
 			}
 		} else {
 			super.undo();
@@ -58,12 +67,16 @@ public final class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	public void redo() {
 
 		if (editingDomain != null) {
-
-			editingDomain.setAdaptersEnabled(false);
+			final boolean isEnabled = editingDomain.isEnabled();
+			if (isEnabled) {
+				editingDomain.setAdaptersEnabled(false);
+			}
 			try {
 				super.redo();
 			} finally {
-				editingDomain.setAdaptersEnabled(true);
+				if (isEnabled) {
+					editingDomain.setAdaptersEnabled(true);
+				}
 			}
 		} else {
 			super.redo();
