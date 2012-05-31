@@ -21,9 +21,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
@@ -54,12 +52,14 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		final IPortSlot slot = portSlotProvider.getPortSlot(element);
 
-		if (slot == null)
+		if (slot == null) {
 			return null;
+		}
 
 		final Port ePort = entities.getModelObject(slot.getPort(), Port.class);
-		if (ePort == null)
+		if (ePort == null) {
 			return null;
+		}
 
 		PortVisit portVisit = null;
 
@@ -93,10 +93,11 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 				output.getCargoAllocations().add(eAllocation);
 			}
-			if (slot instanceof ILoadOption)
+			if (slot instanceof ILoadOption) {
 				eAllocation.setLoadAllocation(slotAllocation);
-			else
+			} else {
 				eAllocation.setDischargeAllocation(slotAllocation);
+			}
 
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setCargoAllocation(eAllocation);
@@ -111,8 +112,9 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				final CharterOutEvent charterOut = (CharterOutEvent) event;
 				// filter out the charter out slots at the start port (these
 				// will have duration zero anyway)
-				if (ePort != charterOut.getEndPort())
+				if (ePort != charterOut.getEndPort()) {
 					return null;
+				}
 				// final CharterOutVisit cov = factory.createCharterOutVisit();
 				// vev = cov;
 				// cov.setCharterOut(charterOut);
@@ -142,12 +144,12 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		} else {
 			portVisit.setEnd(entities.getDateFromHours(visitEvent.getEndTime()));
 		}
-		
+
 		final IPortCostAnnotation cost = (IPortCostAnnotation) annotations.get(SchedulerConstants.AI_portCostInfo);
 		if (cost != null) {
 			portVisit.setPortCost((int) (cost.getPortCost() / Calculator.ScaleFactor));
 		}
-		
+
 		return portVisit;
 	}
 
