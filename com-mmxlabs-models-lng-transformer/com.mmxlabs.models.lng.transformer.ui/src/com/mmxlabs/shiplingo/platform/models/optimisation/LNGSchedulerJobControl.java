@@ -42,7 +42,7 @@ import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -108,20 +108,32 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	}
 
 	private Schedule saveInitialSolution(final IAnnotatedSolution solution, int currentProgress) {
+
+		EditingDomain domain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+		try {
+
+			if (domain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) domain).setAdaptersEnabled(false);
+			}
+
+			// Rollback last "save" and re-apply to avoid long history of undos
+			if (currentProgress != 0) {
+				Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
+				if (mostRecentCommand != null) {
+					if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
+						editingDomain.getCommandStack().undo();
+					}
+				}
+			}
+
+		} finally {
+			if (domain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) domain).setAdaptersEnabled(true, true);
+			}
+		}
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		exporter.addPlatformExporterExtensions();
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
-
-		// Rollback last "save" and re-apply to avoid long history of undos
-		if (currentProgress != 0) {
-			Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
-			if (mostRecentCommand != null) {
-				if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
-					editingDomain.getCommandStack().undo();
-				}
-			}
-		}
-
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		final InputModel inputModel = scenario.getSubModel(InputModel.class);
 		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
@@ -132,21 +144,21 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
 		command.append(derive(editingDomain, schedule, inputModel, cargoModel));
-//		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
-		
+		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+
 		if (!command.canExecute()) {
 			throw new RuntimeException("Unable to execute save schedule command");
 		}
 
-		editingDomain.getCommandStack().execute(command);
-		
-//		Hmm, should this be done here or as part of a command - it is a persisted item.
-//		However the dirty adapter sets dirty to true outside of a command...
-//		
-		scheduleModel.setDirty(false);
-		//
 		// scheduleModel.setInitialSchedule(schedule);
 		// scheduleModel.setOptimisedSchedule(null); // clear optimised state.
+		editingDomain.getCommandStack().execute(command);
+
+		// Hmm, should this be done here or as part of a command - it is a persisted item.
+		// However the dirty adapter sets dirty to true outside of a command...
+		//
+		//
+		scheduleModel.setDirty(false);
 		return schedule;
 	}
 
@@ -176,10 +188,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	 */
 	@Override
 	protected boolean step() {
-//		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
+		// final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		if (jobDescriptor.isOptimising() == false) {
-//			scheduleModel.setDirty(false);
-//			log.debug("Cleared dirty bit on " + scheduleModel);
+			// scheduleModel.setDirty(false);
+			// log.debug("Cleared dirty bit on " + scheduleModel);
 			return false; // if we are not optimising, finish.
 		}
 		optimiser.step(REPORT_PERCENTAGE);
@@ -204,8 +216,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			intermediateSchedule = saveInitialSolution(optimiser.getBestSolution(true), 100);
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
-//			scheduleModel.setDirty(false);
-//			log.debug("Cleared dirty bit on " + scheduleModel);
+			// scheduleModel.setDirty(false);
+			// log.debug("Cleared dirty bit on " + scheduleModel);
 			super.setProgress(100);
 			return false;
 		} else {
@@ -263,11 +275,11 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		for (final Sequence sequence : schedule.getSequences()) {
 			final Assignment a = InputFactory.eINSTANCE.createAssignment();
-			
+
 			if (sequence.getVessel() == null) {
 				continue;
 			}
-			
+
 			if (sequence.isSpotVessel()) {
 				a.setAssignToSpot(true);
 				a.getVessels().add(sequence.getVesselClass());
@@ -275,11 +287,11 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				a.setAssignToSpot(false);
 				a.getVessels().add(sequence.getVessel());
 			}
-			
+
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
-					
+
 					if (slot instanceof LoadSlot) {
 						a.getAssignedObjects().add(((LoadSlot) slot).getCargo());
 					}
@@ -287,7 +299,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					a.getAssignedObjects().add(((VesselEventVisit) event).getVesselEvent());
 				}
 			}
-			
+
 			if (!a.getAssignedObjects().isEmpty() || sequence.isSpotVessel() == false) {
 				newAssignments.add(a);
 			}
