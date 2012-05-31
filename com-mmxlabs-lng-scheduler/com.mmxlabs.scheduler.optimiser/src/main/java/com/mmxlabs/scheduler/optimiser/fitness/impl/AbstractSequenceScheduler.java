@@ -148,6 +148,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 				final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 
+				// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window 
 				if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
 					startTime = thisPortSlot.getTimeWindow().getStart();
 					startSet = true;
