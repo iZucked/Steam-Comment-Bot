@@ -7,7 +7,11 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 
@@ -394,9 +398,31 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @generated NOT
 	 */
 	public String getName() {
-		if (isSetVessel()) return getVessel().getName();
-		else if (isSetVesselClass()) return getVesselClass().getName();
-		else return "<no vessel>";
+		if (isSetVessel()) {
+			return getVessel().getName();
+		} else if (isSetVesselClass()) {
+			return getVesselClass().getName();
+		} else {
+			for (final Event e : getEvents()) {
+				if (e instanceof SlotVisit) {
+					Slot slot = ((SlotVisit) e).getSlotAllocation().getSlot();
+					if (slot != null) {
+						if (slot instanceof LoadSlot) {
+							if (((LoadSlot) slot).isDESPurchase()) {
+								return "DES Purchase";
+							}
+						}
+						if (slot instanceof DischargeSlot) {
+							if (((DischargeSlot) slot).isFOBSale()) {
+								return "FOB Sale";
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return "<no vessel>";
 	}
 
 	/**

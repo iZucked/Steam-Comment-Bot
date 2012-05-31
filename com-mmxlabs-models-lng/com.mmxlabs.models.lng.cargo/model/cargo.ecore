@@ -75,7 +75,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="SpotLoadSlot" eSuperTypes="#//LoadSlot #//SpotSlot"/>
   <eClassifiers xsi:type="ecore:EClass" name="SpotDischargeSlot" eSuperTypes="#//DischargeSlot #//SpotSlot"/>
   <eClassifiers xsi:type="ecore:EEnum" name="CargoType">
-    <eLiterals name="FLEET" literal="FLEET"/>
+    <eLiterals name="FLEET" literal="Shipped"/>
     <eLiterals name="FOB" value="1"/>
     <eLiterals name="DES" value="2"/>
   </eClassifiers>

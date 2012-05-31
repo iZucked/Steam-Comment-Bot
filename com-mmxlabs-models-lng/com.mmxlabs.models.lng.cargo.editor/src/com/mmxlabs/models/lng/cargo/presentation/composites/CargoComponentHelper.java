@@ -66,6 +66,8 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+
+		add_cargoTypeEditor(detailComposite, topClass);
 		add_loadSlotEditor(detailComposite, topClass);
 		add_dischargeSlotEditor(detailComposite, topClass);
 		add_allowRewiringEditor(detailComposite, topClass);
