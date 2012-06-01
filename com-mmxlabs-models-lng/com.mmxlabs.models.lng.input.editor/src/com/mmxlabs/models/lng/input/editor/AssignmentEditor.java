@@ -749,10 +749,8 @@ public class AssignmentEditor<R, T> extends Canvas {
 		final GC gc = e.gc;
 		int index = 0;
 		for (final T o : objects) {
-			if (taskFilter != null && !taskFilter.select(o)) {
-				index++;
-				continue;
-			}
+			if (taskFilter != null && !taskFilter.select(o)) continue;
+			
 			final Date start = informationProvider.getStartDate(o);
 			final Date end = informationProvider.getEndDate(o);
 			final int depth = depths[index++];
