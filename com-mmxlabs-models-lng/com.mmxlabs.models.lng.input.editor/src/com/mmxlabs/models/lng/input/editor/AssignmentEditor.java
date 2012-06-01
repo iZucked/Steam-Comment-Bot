@@ -505,7 +505,10 @@ public class AssignmentEditor<R, T> extends Canvas {
 		
 		int i = 0;
 		for (final R resource : resources) {
-			if (resourceFilter != null && !resourceFilter.select(resource)) continue;
+			if (resourceFilter != null && !resourceFilter.select(resource)) {
+				i++;
+				continue;
+			}
 			
 			Date startDate = resourceStartDates.get(i);
 			if (startDate == null || startDate.before(minDate)) startDate = minDate;
@@ -746,7 +749,10 @@ public class AssignmentEditor<R, T> extends Canvas {
 		final GC gc = e.gc;
 		int index = 0;
 		for (final T o : objects) {
-			if (taskFilter != null && !taskFilter.select(o)) continue;
+			if (taskFilter != null && !taskFilter.select(o)) {
+				index++;
+				continue;
+			}
 			final Date start = informationProvider.getStartDate(o);
 			final Date end = informationProvider.getEndDate(o);
 			final int depth = depths[index++];
