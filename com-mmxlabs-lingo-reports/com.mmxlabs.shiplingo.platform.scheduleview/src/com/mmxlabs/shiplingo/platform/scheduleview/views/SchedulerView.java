@@ -50,6 +50,7 @@ import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.shiplingo.platform.scheduleview.internal.Activator;
@@ -113,7 +114,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public Color getDefaultEventColor() {
 				return ColorCache.getColor(221, 220, 221);
 			}
-			
+
 			@Override
 			public boolean showPlannedDates() {
 				return false;
@@ -203,8 +204,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			protected synchronized void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
 
-				final boolean inputEmpty = (input == null) || ((input instanceof Collection) && ((Collection<?>) input).isEmpty());
-				final boolean oldInputEmpty = (oldInput == null) || ((oldInput instanceof Collection) && ((Collection<?>) oldInput).isEmpty());
+				final boolean inputEmpty = (input == null) || ((input instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) input).getCollectedElements().isEmpty());
+				final boolean oldInputEmpty = (oldInput == null)
+						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
 
 				if (inputEmpty != oldInputEmpty) {
 
