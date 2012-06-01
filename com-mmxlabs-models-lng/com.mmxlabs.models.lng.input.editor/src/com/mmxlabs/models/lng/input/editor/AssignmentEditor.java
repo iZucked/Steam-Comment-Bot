@@ -616,16 +616,20 @@ public class AssignmentEditor<R, T> extends Canvas {
 			}
 
 			calendar.setTime(minDate);
+			calendar.set(Calendar.MINUTE,0);
+			calendar.set(Calendar.HOUR,0);
+			calendar.set(Calendar.SECOND,0);
+			calendar.set(Calendar.MILLISECOND,0);
 			calendar.set(Calendar.DAY_OF_MONTH, 1);
+			
 			while (calendar.getTime().before(maxDate)) {
 				final Date date = calendar.getTime();
+				final String monthName = symbols.getShortMonths()[calendar.get(Calendar.MONTH)];
 				calendar.add(Calendar.MONTH, 1);
 				if (date.after(minDate)) {
 					// draw month labels
 					gc.setAlpha(255);
 					gc.setForeground(colors.resourceLabelTextColor);
-
-					final String monthName = symbols.getShortMonths()[calendar.get(Calendar.MONTH)];
 
 					final Point textExtent = gc.textExtent(monthName, SWT.DRAW_TRANSPARENT);
 					textHeight = Math.max(textHeight, textExtent.y);
