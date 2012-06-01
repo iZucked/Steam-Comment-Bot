@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  */
 public interface ScenarioLock extends EObject {
 	public static final String EDITORS = "editors";
-	public static final String EVALUTOR = "evaluator";
+	public static final String EVALUATOR = "evaluator";
 	public static final String OPTIMISER = "optimiser";
 	public static final String NAVIGATOR = "navigator";
 	
