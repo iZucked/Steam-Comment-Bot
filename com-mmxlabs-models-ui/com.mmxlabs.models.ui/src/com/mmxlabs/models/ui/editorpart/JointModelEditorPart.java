@@ -51,6 +51,8 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
@@ -151,6 +153,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private TreeViewer selectionViewer;
 
 	private Image editorTitleImage;
+
+	private ISelectionListener externalSelectionChangedListener;
 
 	public JointModelEditorPart() {
 	}
@@ -360,6 +364,22 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 		validationContextStack.clear();
 		validationContextStack.push(new DefaultExtraValidationContext(getRootObject()));
+
+		externalSelectionChangedListener = new ISelectionListener() {
+
+			@Override
+			public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+
+				if (part == JointModelEditorPart.this) {
+					return;
+				}
+				if (currentViewer != null) {
+					currentViewer.setSelection(selection, true);
+				}
+			}
+		};
+		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(externalSelectionChangedListener);
+
 	}
 
 	/*
@@ -395,6 +415,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	public void dispose() {
 
+		getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(externalSelectionChangedListener);
+
 		if (scenarioInstance != null) {
 			scenarioInstance.eAdapters().remove(lockedAdapter);
 		}
@@ -402,13 +424,13 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.dispose();
 		}
-		
+
 		referenceValueProviderCache.dispose();
 
 		if (editorTitleImage != null) {
 			editorTitleImage.dispose();
 		}
-		
+
 		super.dispose();
 	}
 
