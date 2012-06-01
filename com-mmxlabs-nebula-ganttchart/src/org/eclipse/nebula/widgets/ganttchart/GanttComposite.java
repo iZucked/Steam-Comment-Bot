@@ -601,7 +601,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         // TODO: Do fancy thing where client area moves with the resize.. (low priority)
 
-        if (_bottomMostY < getClientArea().height) {
+        if (_bottomMostY + vSelection < getClientArea().height) {
             // if we reached the end, make sure we're back at the top
             if (_vScrollBar.isVisible()) {
                 _vScrollBar.setVisible(false);
