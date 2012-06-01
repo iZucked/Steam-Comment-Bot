@@ -12,6 +12,8 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -27,8 +29,12 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
@@ -64,6 +70,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	private final Image showColumnImage;
 	private final Image optImage;
 
+	private boolean selectionModeTrackEditor = true;
+
 	protected AdapterFactoryEditingDomain editingDomain;
 
 	protected ComposedAdapterFactory adapterFactory = ScenarioServiceComposedAdapterFactory.getAdapterFactory();
@@ -71,6 +79,49 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	private final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker;
 
 	private CommonViewer viewer = null;
+
+	/**
+	 * Part listener to track editor activation
+	 */
+	private IPartListener partListener = new IPartListener() {
+
+		@Override
+		public void partOpened(final IWorkbenchPart part) {
+
+		}
+
+		@Override
+		public void partDeactivated(final IWorkbenchPart part) {
+
+		}
+
+		@Override
+		public void partClosed(final IWorkbenchPart part) {
+
+		}
+
+		@Override
+		public void partBroughtToTop(final IWorkbenchPart part) {
+
+		}
+
+		@Override
+		public void partActivated(final IWorkbenchPart part) {
+
+			if (selectionModeTrackEditor) {
+				// If the selection tracks editor, then get the scenario instance and make it the only selection.
+				if (part instanceof IEditorPart) {
+					final IEditorPart editorPart = (IEditorPart) part;
+					final IEditorInput editorInput = editorPart.getEditorInput();
+					final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+					if (scenarioInstance != null) {
+						Activator.getDefault().getScenarioServiceSelectionProvider().deselectAll();
+						Activator.getDefault().getScenarioServiceSelectionProvider().select(scenarioInstance);
+					}
+				}
+			}
+		}
+	};
 
 	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
 		@Override
@@ -160,6 +211,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		showColumnImage.dispose();
 		optImage.dispose();
 
+		getSite().getPage().removePartListener(partListener);
+
 		super.dispose();
 	}
 
@@ -222,15 +275,16 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 				}
 				if (selected != null) {
 					if (e.button == 1) {
+						if (!selectionModeTrackEditor) {
+							final Rectangle imageBounds = selected.getImageBounds(COLUMN_SHOW_IDX);
+							if ((e.x > imageBounds.x) && (e.x < (imageBounds.x + selected.getImage().getBounds().width))) {
+								if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + selected.getImage().getBounds().height))) {
 
-						final Rectangle imageBounds = selected.getImageBounds(COLUMN_SHOW_IDX);
-						if ((e.x > imageBounds.x) && (e.x < (imageBounds.x + selected.getImage().getBounds().width))) {
-							if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + selected.getImage().getBounds().height))) {
-
-								final Object data = selected.getData();
-								if (data instanceof ScenarioInstance) {
-									final ScenarioInstance instance = (ScenarioInstance) data;
-									Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+									final Object data = selected.getData();
+									if (data instanceof ScenarioInstance) {
+										final ScenarioInstance instance = (ScenarioInstance) data;
+										Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+									}
 								}
 							}
 						}
@@ -262,14 +316,15 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 			@Override
 			public void keyReleased(final KeyEvent e) {
-				// TODO Auto-generated method stub
 				if (e.character == SWT.SPACE) {
-					final TreeItem[] selection = tree.getSelection();
-					for (final TreeItem item : selection) {
-						final Object data = item.getData();
-						if (data instanceof ScenarioInstance) {
-							final ScenarioInstance instance = (ScenarioInstance) data;
-							Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+					if (!selectionModeTrackEditor) {
+						final TreeItem[] selection = tree.getSelection();
+						for (final TreeItem item : selection) {
+							final Object data = item.getData();
+							if (data instanceof ScenarioInstance) {
+								final ScenarioInstance instance = (ScenarioInstance) data;
+								Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+							}
 						}
 					}
 				}
@@ -281,6 +336,23 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			}
 		});
 
+		final Action a = new Action("Toggle Track Editor", IAction.AS_CHECK_BOX) {
+
+			public void run() {
+
+				selectionModeTrackEditor = !selectionModeTrackEditor;
+
+				if (selectionModeTrackEditor) {
+					partListener.partActivated(getSite().getPage().getActiveEditor());
+				}
+			}
+		};
+		a.setImageDescriptor(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/synced.gif"));
+		a.setChecked(selectionModeTrackEditor);
+
+		getViewSite().getActionBars().getToolBarManager().add(a);
+		getViewSite().getActionBars().getToolBarManager().update(true);
+
 		return viewer;
 	}
 
@@ -290,6 +362,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		// Enable linking by default
 		setLinkingEnabled(true);
+
+		aSite.getPage().addPartListener(partListener);
 	}
 
 	@Override
