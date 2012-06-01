@@ -34,11 +34,14 @@ import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridItem;
+import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -253,6 +256,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		super(parent, style);
 
 		ColumnViewerToolTipSupport.enableFor(this);
+
 	}
 
 	public void setFilterString(final String filterString) {
@@ -273,6 +277,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 		// create a column
 		final GridTableViewer viewer = this;
+
 		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
 		final GridColumn tColumn = column.getColumn();
 
@@ -384,6 +389,8 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 		});
 
+		column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
+
 		return column;
 	}
 
@@ -432,11 +439,12 @@ public class EObjectTableViewer extends GridTableViewer {
 			public void validationStatus(final IStatus status) {
 				final HashSet<Object> updates = new HashSet<Object>();
 				for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
-					if (!entry.getValue().isOK()) updates.add(entry.getKey());
+					if (!entry.getValue().isOK())
+						updates.add(entry.getKey());
 				}
-				
+
 				validationErrors.clear();
-				
+
 				Display.getDefault().asyncExec(new Runnable() {
 					@Override
 					public void run() {
