@@ -54,6 +54,7 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
+import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 
 public class InputJointModelEditorContribution extends
@@ -286,6 +287,16 @@ public class InputJointModelEditorContribution extends
 			@Override
 			public List<UUIDObject> getAssignedObjects(Assignment resource) {
 				return resource.getAssignedObjects();
+			}
+
+			@Override
+			public boolean canStartEdit() {
+				return editorPart.getEditorLock().claim();
+			}
+
+			@Override
+			public void finishEdit() {
+				editorPart.getEditorLock().release();
 			}
 		});
 		

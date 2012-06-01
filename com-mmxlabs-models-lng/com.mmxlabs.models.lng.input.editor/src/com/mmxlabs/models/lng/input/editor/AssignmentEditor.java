@@ -323,24 +323,25 @@ public class AssignmentEditor<R, T> extends Canvas {
 	}
 
 	protected void mouseDown(final MouseEvent e) {
-		final T task = findTaskAtCoordinates(e.x, e.y);
-		if (task != null) {
-			switch (e.button) {
-			case 1:
-				findInsertionPoint(e.x, e.y, task); // so if we let go it
-													// doesn't get deallocated
-													// instantly, we get it as
-													// its own drag destination
-				setSelectedTask(task);
-				final Rectangle location = locationsByTask.get(task);
-				selectedTaskInternalY = e.y - location.y;
-				selectedTaskDragY = e.y;
-				redraw();
-				break;
-			default:
-				break;
-			}
-
+			final T task = findTaskAtCoordinates(e.x, e.y);
+			if (task != null) {
+				switch (e.button) {
+				case 1:
+					if (assignmentProvider.canStartEdit()) {
+						findInsertionPoint(e.x, e.y, task); // so if we let go it
+															// doesn't get deallocated
+															// instantly, we get it as
+															// its own drag destination
+						setSelectedTask(task);
+						final Rectangle location = locationsByTask.get(task);
+						selectedTaskInternalY = e.y - location.y;
+						selectedTaskDragY = e.y;
+						redraw();
+					}
+					break;
+				default:
+					break;
+				}
 		}
 	}
 
@@ -873,5 +874,6 @@ public class AssignmentEditor<R, T> extends Canvas {
 	private void setSelectedTask(T selectedTask) {
 		this.selectedTask = selectedTask;
 		canFollowSelection = feasibles.get(selectedTask);
+		if (selectedTask == null) assignmentProvider.finishEdit();
 	}
 }
