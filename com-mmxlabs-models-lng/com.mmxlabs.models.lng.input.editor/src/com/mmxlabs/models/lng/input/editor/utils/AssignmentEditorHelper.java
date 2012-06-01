@@ -75,32 +75,24 @@ public class AssignmentEditorHelper {
 			position = assigned.indexOf(afterTask) + 1;
 		} else {
 			position = 0;
-			final DateFormat df = DateFormat.getDateInstance();
 			
 			final Date start = getStartDate(task);
 			final Date end = getEndDate(task);
 
-			System.err.println("Insert " + df.format(start) + "-" + df.format(end));
-			
 			if (start != null && end != null) {
 				for (final UUIDObject o : assigned) {
 					final Date startO = getStartDate(o);
 					final Date endO = getEndDate(o);
-					System.err.println("Look at " + df.format(startO) + "-" + df.format(endO));
 					if (end.before(startO)) {
-						System.err.println("Insert before this");
 						break;
 					} else if (start.after(endO)) {
 						position++;
-						System.err.println("Insert after this");
 						break;
 					} else {
 						position++;
 					}
 				}
 			}
-			
-			System.err.println("Insert before " + position);
 		}
 		
 		if (newResource.getAssignedObjects().isEmpty() || position == newResource.getAssignedObjects().size()) {
