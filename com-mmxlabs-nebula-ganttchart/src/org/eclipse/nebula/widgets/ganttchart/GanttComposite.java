@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Tracker;
 
+
 /**
  * The GanttComposite is the workhorse of the GANTT chart. It contains a few public methods available for use, but most
  * of the functionality is private. <br>
@@ -281,10 +282,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
     private int                           _lockedHeaderY;
 
-    private int                           _vScrollPos;
+//    private int                           _vScrollPos;
 
     private final Point                   _origin                  = new Point(0, 0);
-    private int                           _lastVScrollPos;
+//    private int                           _lastVScrollPos;
 
     private ScrollBar                     _vScrollBar;
 
@@ -558,22 +559,23 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         // this has got to be a SWT bug, a non-visible scrollbar can report scroll events!
         if (!_vScrollBar.isVisible()) {
-            _vScrollPos = 0;
+//            _vScrollPos = 0;
             return;
         }
 
         final int vSelection = _vScrollBar.getSelection();
 
-        _vScrollPos = vSelection;
-        final int diff = _vScrollPos - _lastVScrollPos;
-        _lastVScrollPos = _vScrollPos;
-
-        // move all events the fast way. There is truly no reason to recalculate bounds for any event, all we need to do is move them
-        // according to the scroll bar, which is way way faster than recalculating.
-        moveYBounds(diff);
+//        _vScrollPos = vSelection;
+//        final int diff = _vScrollPos - _lastVScrollPos;
+//        _lastVScrollPos = _vScrollPos;
+//
+//        // move all events the fast way. There is truly no reason to recalculate bounds for any event, all we need to do is move them
+//        // according to the scroll bar, which is way way faster than recalculating.
+//        moveYBounds(diff);
         //showVscrollInfo();
 
         _recalcSecBounds = true;
+        _recalcScopes = true;
         redraw();
     }
 
@@ -584,7 +586,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     private void handleResize(final boolean redraw) {
         final Rectangle rect = getBounds();
         final Rectangle client = getClientArea();
-        _vScrollBar.setMaximum(rect.height);
+        
+        _vScrollBar.setMaximum(rect.height + _vScrollBar.getSelection());
         _vScrollBar.setPageIncrement(15);
         _vScrollBar.setThumb(Math.min(rect.height, client.height));
         final int vPage = rect.height - client.height;
@@ -598,14 +601,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         // TODO: Do fancy thing where client area moves with the resize.. (low priority)
 
-        if (_bottomMostY < getClientArea().height) {
+        if (_bottomMostY + vSelection < getClientArea().height) {
             // if we reached the end, make sure we're back at the top
             if (_vScrollBar.isVisible()) {
                 _vScrollBar.setVisible(false);
-                if (_vScrollPos != 0) {
-                    moveYBounds(-_vScrollPos);
-                    _vScrollPos = 0;
-                }
             }
         } else {
             _vScrollBar.setVisible(true);
@@ -1031,13 +1030,16 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             _bottomMostY = 0;
         }
 
-        Rectangle bounds = super.getClientArea();
+        Rectangle originalBounds = super.getClientArea();
         if (boundsOverride != null) {
-            bounds = boundsOverride;
+        	originalBounds = boundsOverride;
         }
 
+        int vScroll = (_vScrollBar.isVisible() && boundsOverride == null) ? _vScrollBar.getSelection() : 0;
+		Rectangle bounds = new Rectangle(originalBounds.x, originalBounds.y - vScroll , originalBounds.width, originalBounds.height);
+        
         // the actual visible bounds counting any vertical scroll offset (includes header height)
-        _visibleBounds = new Rectangle(bounds.x, bounds.y + _vScrollPos, bounds.width, bounds.height);
+        _visibleBounds = new Rectangle(bounds.x, bounds.y + getHeaderHeight(), bounds.width, bounds.height);
 
         // if we use sections, our bounds for everything will be the size of the client area minus the section bar on the left
         if (drawSections) {
@@ -1049,7 +1051,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         }
 
         _mainBounds = new Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
-        _lockedHeaderY = _mainBounds.y;
+        _lockedHeaderY = originalBounds.y;
 //        _mainBounds.y -= _vScrollPos;
 
         boolean calcHeaderOnly = ((_settings.drawHeader() && _settings.lockHeaderOnVerticalScroll()) || !_settings.drawHeader()); 
@@ -1094,9 +1096,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                     gsBounds.width = boundsOverride.width;
                 }
 
-                if (_recalcScopes) {
+//                if (_recalcScopes) {
                     calculateAllScopes(gsBounds, section);
-                }
+//                }s
 
                 drawFills(gc, gsBounds, section);
 
@@ -1545,7 +1547,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     	}
     	else {
     		int takeOff = getHeaderHeight();    	
-    		vScrollToY(ge.getY() - _vScrollPos + yOffset - takeOff, false);
+    		vScrollToY(ge.getY() + yOffset - takeOff, false);
     	}
 
     	// NOTE: Old code
@@ -1583,25 +1585,31 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         if (ge.getActualStartDate() == null) { return; }
 
         vScrollToY(ge.getY(), false);
-        internalSetDate(ge.getActualStartDate(), side, true, false);
-        _recalcScopes = true;
-        _recalcSecBounds = true;
-        redraw();
+        internalSetDate(ge.getActualStartDate(), side, true, true);
+//        _recalcScopes = true;
+//        _recalcSecBounds = true;
+//        redraw();
     }
 
     // moves the chart to the given y position, takes various spacers into account
-    private void vScrollToY(final int yPos, final boolean redraw) {
+    private synchronized void vScrollToY(final int yPos, final boolean redraw) {
         int y = yPos;
 
-        if (_settings.lockHeaderOnVerticalScroll()) {
-            y -= getHeaderHeight();
-        } else {
-            y -= (_mainBounds.y - getHeaderHeight());
-        }
+        y -= getHeaderHeight();
+
+        y-= _settings.getEventsTopSpacer();
+
+//        if (_settings.lockHeaderOnVerticalScroll()) {
+//            y -= getHeaderHeight();
+//        } else {
+//            y -= (_mainBounds.y - getHeaderHeight());
+//        }
 
         // we need to take the "previous" scroll location into account
-//        y += _vScrollPos;
 
+        int vScroll = _vScrollBar.isVisible() ? _vScrollBar.getSelection() : 0;
+        y += vScroll;
+        
         final int max = _vScrollBar.getMaximum() - _vScrollBar.getThumb();
 
         if (y < 0) {
@@ -1611,14 +1619,12 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             y = max;
         }
 
-        _vScrollPos = y;
-        _lastVScrollPos = _vScrollPos;
         _vScrollBar.setSelection(y);
 
-        flagForceFullUpdate();
-
+        _recalcSecBounds = true;
+        _recalcScopes = true;
         if (redraw) {
-            redraw();
+        	redraw();
         }
     }
 
@@ -1720,17 +1726,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 			toggle = (idx & 1) == 1;
         }
         
-        int offset = 0;
-        if (gs == null) {
-            offset = _vScrollPos;
-            if (offset > getHeaderHeight()) {
-                offset = getHeaderHeight();
-            }
-        } else {
-           offset = _vScrollPos;
-        }
-
-        final int startY = bounds.y - offset;// getHeaderHeight() == 0 ? bounds.y : bounds.y + getHeaderHeight() + 1;
+        final int startY = bounds.y;// - offset;// getHeaderHeight() == 0 ? bounds.y : bounds.y + getHeaderHeight() + 1;
         final int heightY = gs == null ? bounds.height : gs.getBounds().height;
 
         //System.err.println(startY + " " + heightY + " " + gs.getName() + " " + gs.getBounds());
@@ -1884,7 +1880,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         int lineLoc = getHeaderHeight() == 0 ? bounds.y : (bounds.y + getHeaderHeight());
         int yStart = lineLoc;
-        yStart -= _vScrollPos;
 
         int x = 0;
 
@@ -1905,8 +1900,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         final GanttSection bottomSection = (GanttSection) _ganttSections.get(_ganttSections.size() - 1);
 
+
         if (drawCornerOnly) {
-            lineLoc += _vScrollPos;
+      		// Keep corner line in same place on scroll
+            lineLoc += _vScrollBar.getSelection();
         }
 
         // top corner
@@ -2029,7 +2026,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             gc.drawLine(x, bounds.y, x + xMax, bounds.y);
         }
 
-        gc.drawLine(x, lineLoc - _vScrollPos, x + xMax, lineLoc - _vScrollPos);
+        gc.drawLine(x, lineLoc , x + xMax, lineLoc );
 
     }
 
@@ -2049,7 +2046,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             }
 
             int yExtra = ge.isAutomaticRowHeight() ? 0 : ge.getFixedRowHeight();
-            yExtra -= _vScrollPos;
 
             if (ge.getGanttGroup() != null) {
                 if (usedGroups.contains(ge.getGanttGroup())) {
@@ -2083,8 +2079,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     private void drawVerticalLines(final GC gc, final Rectangle bounds, final boolean applyVscroll) {
         // int xMax = bounds.width + bounds.x;
         // space it out 1 or more or else it will draw over the bottom horizontal line of the header
-        final int yStart = bounds.y - (applyVscroll ? _vScrollPos : 0);
-        final int height = bounds.height + yStart - 1 + (applyVscroll ? _vScrollPos : 0);
+        final int yStart = bounds.y;
+        final int height = bounds.height + yStart - 1;
 
         if (_currentView == ISettings.VIEW_WEEK || _currentView == ISettings.VIEW_MONTH || _currentView == ISettings.VIEW_DAY || _currentView == ISettings.VIEW_D_DAY) {
             // normal day lines
@@ -2818,25 +2814,14 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                 gc.setBackground(range.getBackgroundColorBottom());
             }
 
-            int offset = 0;
-            if (gs == null) {
-                offset = _vScrollPos;
-                if (offset > getHeaderHeight()) {
-                    offset = getHeaderHeight();
-                }
-            } else {
-                offset = _vScrollPos;
-            }
-
-            final int yStart = bounds.y - offset;
-            int yHeight = bounds.height + offset;
+            final int yStart = bounds.y;
+            int yHeight = bounds.height;
 
             int extra = 0;
             if (!_ganttSections.isEmpty() && _settings.getSectionSide() == SWT.LEFT) {
                 extra += _settings.getSectionBarWidth();
             }
 
-            yHeight -= offset;
 
             final List toDraw = range.getBlocks(_mainCalendar, _endCalendar);
             for (int x = 0; x < toDraw.size(); x++) {
@@ -2874,22 +2859,10 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             extra += _settings.getSectionBarWidth();
         }
 
-        int offset = 0;
-        if (gs == null) {
-            offset = _vScrollPos;
-            if (offset > getHeaderHeight()) {
-                offset = getHeaderHeight();
-            }
-        } else {
-            offset = _vScrollPos;
-        }
 
         // first of all, fill a full background of the header
         if (header) {
             int yLoc = pHeight;
-            if (!_settings.lockHeaderOnVerticalScroll()) {
-                yLoc += offset;
-            }
 
             gc.setBackground(_phaseHeaderBGColorBottom);
             gc.setForeground(_phaseHeaderBGColorTop);
@@ -2919,10 +2892,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
             xEnd += extra;
 
-            int yStart = bounds.y - offset;
-            int yHeight = bounds.height + offset;
-
-            yHeight -= offset;
+            int yStart = bounds.y ;
+            int yHeight = bounds.height ;
 
             // alpha
             if (phase.getAlpha() == 255) {
@@ -2934,9 +2905,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
             if (header) {
                 yStart = getHeaderHeight() - pHeight;
-                if (!_settings.lockHeaderOnVerticalScroll()) {
-                    yStart -= offset;
-                }
                 // do fills first
                 gc.setBackground(phase.getHeaderBackgroundColor());
                 gc.setForeground(phase.getHeaderForegroundColor());
@@ -3360,12 +3328,13 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             }
 
             // position event will be drawn at vertically
-            int yDrawPos = yStart - _vScrollPos;
+            int yDrawPos = yStart ;
 
             // if it's a grouped event, get the location from our map to where it's drawn
             if (groupedEvent && groupLocations.containsKey(ge.getGanttGroup())) {
                 yDrawPos = ((Integer) groupLocations.get(ge.getGanttGroup())).intValue();
             }
+            
 
             int fixedRowHeight = _fixedRowHeight;
             int verticalAlignment = ge.getVerticalEventAlignment();
@@ -3383,7 +3352,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
             final boolean fixedHeight = (fixedRowHeight > 0);
 
-            ge.setHorizontalLineTopY(yStart + _vScrollPos);
+            ge.setHorizontalLineTopY(yStart );
 
             if (fixedHeight) {
                 yStart += fixedRowHeight;
@@ -3420,9 +3389,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             }
 
             if (fixedHeight) {
-                ge.setHorizontalLineBottomY(yDrawPos - _eventHeight + _vScrollPos);
+                ge.setHorizontalLineBottomY(yDrawPos - _eventHeight );
             } else {
-                ge.setHorizontalLineBottomY(yDrawPos + _eventHeight + _vScrollPos);
+                ge.setHorizontalLineBottomY(yDrawPos + _eventHeight );
             }
 
             // set event bounds
@@ -4193,13 +4162,12 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             yStart = bounds.y;
         }
 
-        yStart -= _vScrollPos;
 
         if (_useAlpha) {
             gc.setAlpha(_colorManager.getTodayLineAlpha());
         }
 
-        gc.drawLine(xStart, yStart, xStart, bounds.height + yStart + _vScrollPos);
+        gc.drawLine(xStart, yStart, xStart, bounds.height + yStart );
         if (_useAlpha) {
             gc.setAlpha(0);
             gc.setAdvanced(false);
@@ -4844,8 +4812,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         // mGmap.clear();
         eventNumbersChanged();
         _forceSBUpdate = true;
-        _vScrollPos = 0;
-        _lastVScrollPos = 0;
         _vScrollBar.setSelection(0);
         redraw();
     }
@@ -4858,8 +4824,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         _ganttGroups.clear();
         eventNumbersChanged();
         _forceSBUpdate = true;
-        _vScrollPos = 0;
-        _lastVScrollPos = 0;
         _vScrollBar.setSelection(0);
         redraw();
     }
@@ -4872,8 +4836,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         _ganttSections.clear();
         eventNumbersChanged();
         _forceSBUpdate = true;
-        _vScrollPos = 0;
-        _lastVScrollPos = 0;
         _vScrollBar.setSelection(0);
         redraw();
     }
@@ -4892,8 +4854,6 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         // mGmap.clear();
         eventNumbersChanged();
         _forceSBUpdate = true;
-        _vScrollPos = 0;
-        _lastVScrollPos = 0;
         _vScrollBar.setSelection(0);
         flagForceFullUpdate();
         redraw();
@@ -5078,19 +5038,19 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     	updateEventVisibilities(mVisibleBounds);
     }*/
 
-    private void moveYBounds(final int move) {
-        final Object[] objs = _allEventsCombined.toArray();
-
-        for (int i = 0; i < objs.length; i++) {
-            final GanttEvent ge = (GanttEvent) objs[i];
-            ge.updateY(ge.getY() - move);
-        }
-
-        _visibleBounds.y += move;
-
-        updateEventVisibilities(_visibleBounds);
-    }
-
+//    private void moveYBounds(final int move) {
+//        final Object[] objs = _allEventsCombined.toArray();
+//
+//        for (int i = 0; i < objs.length; i++) {
+//            final GanttEvent ge = (GanttEvent) objs[i];
+//            ge.updateY(ge.getY() - move);
+//        }
+//
+//        _visibleBounds.y += move;
+//
+//        updateEventVisibilities(_visibleBounds);
+//    }
+//
     /**
      * Redraws the calendar should some event not do it automatically.
      */
@@ -5129,21 +5089,20 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         // if event is missing dates, don't let it show, fix to #281983
         if (event.getActualStartDate() == null || event.getActualEndDate() == null) { return Constants.EVENT_NOT_VISIBLE; }
 
-        // our second check is the check whether it's out of bounds vertically, if so we can return right away (and scope calculation
-        // takes the special OOB_HEIGHT into account when counting the vertical offset
-
-        // as we offset the entire view area when scrolling vertically by moving the events up or down vertically
-        // we need to check the offset as if they were still in their original position, which we do by taking their y location
-        // and adding on the vertical scroll position. Once we have those fake bounds, we simply check it against the visual area
-        // and if they're not inside, they're out!
-        Rectangle fakeBounds = new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight());
-        fakeBounds.y += _vScrollPos;
-
-        // first draw everything is zero, ignore that one
-        if (event.getY() != 0) {
-            if (fakeBounds.y > _visibleBounds.y + _visibleBounds.height) { return Constants.EVENT_OOB_BOTTOM; }
-            if ((fakeBounds.y + fakeBounds.height) < _visibleBounds.y) { return Constants.EVENT_OOB_TOP; }
-        }
+//        // our second check is the check whether it's out of bounds vertically, if so we can return right away (and scope calculation
+//        // takes the special OOB_HEIGHT into account when counting the vertical offset
+//
+//        // as we offset the entire view area when scrolling vertically by moving the events up or down vertically
+//        // we need to check the offset as if they were still in their original position, which we do by taking their y location
+//        // and adding on the vertical scroll position. Once we have those fake bounds, we simply check it against the visual area
+//        // and if they're not inside, they're out!
+//        Rectangle fakeBounds = new Rectangle(event.getX(), event.getY(), event.getWidth(), event.getHeight());
+//
+//        // first draw everything is zero, ignore that one
+//        if (event.getY() != 0) {
+//            if (fakeBounds.y > _visibleBounds.y + _visibleBounds.height) { return Constants.EVENT_OOB_BOTTOM; }
+//            if ((fakeBounds.y + fakeBounds.height) < _visibleBounds.y) { return Constants.EVENT_OOB_TOP; }
+//        }
 
         Calendar sCal = null;
         Calendar eCal = null;
@@ -5483,7 +5442,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
         // header clicks, if it's visible
         if (_settings.drawHeader() && _settings.allowHeaderSelection() && me.button == 1) {
-            final Rectangle headerBounds = new Rectangle(_mainBounds.x, _settings.getHeaderMonthHeight() + _vScrollPos, _mainBounds.width, _settings.getHeaderDayHeight());
+            final Rectangle headerBounds = new Rectangle(_mainBounds.x, _settings.getHeaderMonthHeight(), _mainBounds.width, _settings.getHeaderDayHeight());
 
             if (isInside(me.x, me.y, headerBounds)) {
                 // we account for section bar width
@@ -5945,7 +5904,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             final GanttSection gs = (GanttSection) _ganttSections.get(i);
 
             // must account for scroll position as the event itself has no clue there's a scrollbar and obviously doesn't account for it
-            if (gs.getBounds().contains(event.getX(), event.getY() + _vScrollPos)) { return gs; }
+            if (gs.getBounds().contains(event.getX(), event.getY())) { return gs; }
         }
 
         // if we get here, we had a null hit, which means we might be between two sections, make it easy, check if we're oob first
@@ -7779,9 +7738,9 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         // we need to pretend that we are at scroll position 0 along with that our bounds are as big as all visible events,
         // thus we save old values before so we can reset them at the end
         _savingChartImage = true;
-        int oldVscroll = _vScrollPos;
-        _vScrollPos = 0;
-        moveYBounds(-oldVscroll);
+//        int oldVscroll = _vScrollPos;
+//        _vScrollPos = 0;
+//        moveYBounds(-oldVscroll);
         Rectangle oldBounds = _mainBounds;
         Calendar currentCalendar = DateHelper.getNewCalendar(_mainCalendar);
         try {
@@ -7859,8 +7818,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             SWT.error(SWT.ERROR_UNSPECIFIED, err);
         } finally {
             // reset everything, including forcing a redraw and reset
-            _vScrollPos = oldVscroll;
-            moveYBounds(_vScrollPos);
+//            _vScrollPos = oldVscroll;
+//            moveYBounds(_vScrollPos);
             _savingChartImage = false;
             _mainBounds = oldBounds;
             _mainCalendar = currentCalendar;

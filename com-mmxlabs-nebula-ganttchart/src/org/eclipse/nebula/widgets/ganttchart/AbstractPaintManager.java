@@ -40,6 +40,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
 
         if (isSelected && settings.drawSelectionMarkerAroundSelectedEvent()) {
             gc.setLineStyle(SWT.LINE_DOT);
+            gc.setLineWidth(3);
 
             // this is _extremely_ slow to draw, so we need to check bounds here, which is probably a good idea anyway
             final boolean oobLeft = (xLoc < bounds.x);
@@ -67,6 +68,7 @@ public abstract class AbstractPaintManager implements IPaintManager {
             }
 
             gc.setLineStyle(SWT.LINE_SOLID);
+            gc.setLineWidth(1);
         } else {
             gc.drawRectangle(xLoc, y, eventWidth, settings.getEventHeight());
         }
