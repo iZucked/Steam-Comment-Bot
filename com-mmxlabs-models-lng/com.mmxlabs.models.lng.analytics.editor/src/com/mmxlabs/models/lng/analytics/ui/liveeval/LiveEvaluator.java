@@ -88,7 +88,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 					
 					final IScenarioInstanceEvaluator evaluator = AnalyticsEditorPlugin.getPlugin().getResourceEvaluator();
 					if (evaluator != null) {
-						if (instance.getLock(ScenarioLock.EVALUATOR).awaitClaim()) {
+						if (instance.getLock(ScenarioLock.EVALUATOR).claim()) {
 							try {
 								log.debug("Checking dirty flag is still set");
 								final MMXRootObject root = (MMXRootObject) instance.getScenarioService().load(instance);
@@ -101,6 +101,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 							} finally {
 								instance.getLock(ScenarioLock.EVALUATOR).release();
 							}
+						} else {
+							Thread.currentThread().interrupt(); //interrupt ourself to delay again, because we missed a claim.
 						}
 					} else {
 						log.debug("Could not find evaluator when evaluating " + instance.getName());
