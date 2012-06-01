@@ -113,6 +113,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 						this.inputModel = i;
 						top:
 						for (final Assignment a : i.getAssignments()) {
+							if (a.getVessels().isEmpty()) continue;
 							for (final UUIDObject o : a.getAssignedObjects()) {
 								if (o == object) {
 									combo.setText(nameList.get(valueList.indexOf(a.getVessels().iterator().next())));
