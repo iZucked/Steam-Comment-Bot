@@ -18,7 +18,7 @@ import com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView;
 import com.mmxlabs.shiplingo.platform.reports.views.TotalsReportView;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerView;
 
-public class OptimisationPerspective implements IPerspectiveFactory {
+public class AnalysisPerspective implements IPerspectiveFactory {
 
 	@Override
 	public void createInitialLayout(final IPageLayout layout) {
