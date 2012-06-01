@@ -99,9 +99,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return colourSchemes;
 	}
 
-	
-	private String dateToString (Date date){
-		return 	df.format(date) + " " + tf.format(date);
+	private String dateToString(final Date date) {
+		return df.format(date) + " " + tf.format(date);
 	}
 
 	@Override
@@ -111,36 +110,44 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof Event) {
 
 			final StringBuilder sb = new StringBuilder();
-			final Event event = (Event) element;			
-			final String start = dateToString(event.getStart()) ;
-			final String end = dateToString(event.getEnd()) ;
-			
-//			final String start = df.format(event.getStart()) + " " + tf.format(event.getStart());
-//			final String end = df.format(event.getEnd());
+			if (element instanceof Event) {
 
-//			if (element instanceof Journey) {
-//				final Journey journey = (Journey) element;
-//				if (journey.getPort() != null) {
-//					sb.append("From: " + journey.getPort().getName() + "\n");
-//				}
-//				if (journey.getDestination() != null) {
-//					sb.append("To: " + journey.getDestination().getName() + "\n");
-//				}
-//			}
-//
-//			sb.append("\n");
+				final String name = ((Event) element).name();
+				if (!name.isEmpty()) {
+					sb.append("ID: " + name + "\n");
+				}
+			}
 
-//			if (element instanceof Journey) {
-//				final Journey journey = (Journey) element;
-//				if (journey.getPort() != null) {
-//					sb.append("Depart: " + start + ", " + journey.getPort().getName() + "\n");
-//				}
-//				if (journey.getDestination() != null) {
-//					sb.append("Arrive: " + end + ", " + journey.getDestination().getName() + "\n");
-//				}
-//			}
-//
-			
+			final Event event = (Event) element;
+			final String start = dateToString(event.getStart());
+			final String end = dateToString(event.getEnd());
+
+			// final String start = df.format(event.getStart()) + " " + tf.format(event.getStart());
+			// final String end = df.format(event.getEnd());
+
+			// if (element instanceof Journey) {
+			// final Journey journey = (Journey) element;
+			// if (journey.getPort() != null) {
+			// sb.append("From: " + journey.getPort().getName() + "\n");
+			// }
+			// if (journey.getDestination() != null) {
+			// sb.append("To: " + journey.getDestination().getName() + "\n");
+			// }
+			// }
+			//
+			// sb.append("\n");
+
+			// if (element instanceof Journey) {
+			// final Journey journey = (Journey) element;
+			// if (journey.getPort() != null) {
+			// sb.append("Depart: " + start + ", " + journey.getPort().getName() + "\n");
+			// }
+			// if (journey.getDestination() != null) {
+			// sb.append("Arrive: " + end + ", " + journey.getDestination().getName() + "\n");
+			// }
+			// }
+			//
+
 			sb.append("Start: " + start + "\n");
 			sb.append("End:  " + end + "\n");
 			final int days = event.getDuration() / 24;
@@ -153,18 +160,17 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					sb.append("Route: " + journey.getRoute() + "\n");
 				}
 				sb.append(String.format("Speed: %.1f\n", journey.getSpeed()));
-			} 
-			else {
+			} else {
 				if (event.getPort() != null) {
-//					sb.append("Port: " + event.getPort().getName() + "\n");
+					// sb.append("Port: " + event.getPort().getName() + "\n");
 				}
 				if (element instanceof SlotVisit) {
 					final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
 					sb.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
 					sb.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
 				} else if (element instanceof Idle) {
-//					final Idle idle = (Idle) element;
-//					sb.append("Laden: " + (idle.isLaden() ? "Yes" : "No") + "\n");
+					// final Idle idle = (Idle) element;
+					// sb.append("Laden: " + (idle.isLaden() ? "Yes" : "No") + "\n");
 				}
 			}
 
@@ -182,6 +188,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	@Override
 	public String getToolTipTitle(final Object element) {
+
 		String port = null;
 		if (element instanceof Event) {
 			final Port portObj = ((Event) element).getPort();
@@ -198,10 +205,10 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof Sequence) {
 			return getText(element);
 		} else if (element instanceof Event) {
-			return "At " +  port;// + displayTypeName;
+			return "At " + port;// + displayTypeName;
 		} else if (element instanceof SlotVisit) {
-			SlotVisit sv = (SlotVisit) element;
-			return "At " +  port;// + displayTypeName;
+			final SlotVisit sv = (SlotVisit) element;
+			return "At " + port;// + displayTypeName;
 		}
 		return null;
 	}
