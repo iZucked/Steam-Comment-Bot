@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -347,8 +348,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-				final CellEditor result = manipulator.getCellEditor(viewer.getGrid(), path.get((EObject) element));
-				return result;
+				return manipulator.getCellEditor(viewer.getGrid(), path.get((EObject) element));
 			}
 
 			@Override

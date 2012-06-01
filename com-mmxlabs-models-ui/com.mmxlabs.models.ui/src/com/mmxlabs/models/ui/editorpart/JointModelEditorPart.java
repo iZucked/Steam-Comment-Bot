@@ -21,6 +21,7 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -73,6 +74,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -146,11 +148,13 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	private ScenarioInstance scenarioInstance;
 
-	private EContentAdapter lockedAdapter;
+	private AdapterImpl lockedAdapter;
 
 	private TreeViewer selectionViewer;
 
 	private Image editorTitleImage;
+	
+	private ScenarioLock editorLock;
 
 	public JointModelEditorPart() {
 	}
@@ -291,6 +295,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			}
 
 			scenarioInstance = instance;
+			
+			editorLock = instance.getLock(ScenarioLock.EDITORS);
+			
 			EObject ro;
 			try {
 				ro = scenarioService.load(instance);
@@ -307,20 +314,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 			adapterFactory = editingDomain.getAdapterFactory();
 
-			lockedAdapter = new EContentAdapter() {
-
+			lockedAdapter = new AdapterImpl() {
 				@Override
-				public void notifyChanged(final Notification notification) {
-					super.notifyChanged(notification);
-
-					if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locked()) {
-						setLocked(notification.getNewBooleanValue());
+				public void notifyChanged(Notification msg) {
+					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioLock_Available()) {
+						setLocked(!msg.getNewBooleanValue());
 					}
 				}
-
 			};
-			instance.eAdapters().add(lockedAdapter);
+//			instance.eAdapters().add(lockedAdapter);
 
+			editorLock.eAdapters().add(lockedAdapter);
+			
 			if (ro instanceof MMXRootObject) {
 				root = (MMXRootObject) ro;
 			} else {
@@ -329,7 +334,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			}
 			this.rootObject = root;
 
-			setLocked(instance.isLocked());
+			setLocked(!editorLock.isAvailable());
 		} else {
 			// Error!
 			throw new IllegalArgumentException("Editor input should be instance of IScenarioServiceEditorInput");
@@ -395,8 +400,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	public void dispose() {
 
-		if (scenarioInstance != null) {
-			scenarioInstance.eAdapters().remove(lockedAdapter);
+		if (editorLock != null) {
+			editorLock.eAdapters().remove(lockedAdapter);
 		}
 
 		for (final IJointModelEditorContribution contribution : contributions) {
@@ -646,5 +651,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	public Shell getShell() {
 		return getSite().getShell();
+	}
+
+	@Override
+	public ScenarioLock getEditorLock() {
+		return editorLock;
 	}
 }

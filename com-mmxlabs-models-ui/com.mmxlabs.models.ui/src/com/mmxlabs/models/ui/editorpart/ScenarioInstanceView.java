@@ -4,11 +4,12 @@ import java.io.IOException;
 import java.util.Stack;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -29,26 +30,26 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider {
 	private static final String SCENARIO_NAVIGATOR_ID = "com.mmxlabs.scenario.service.ui.navigator";
 	private ScenarioInstance scenarioInstance;
 	private ReferenceValueProviderCache valueProviderCache;
+	
+	private ScenarioLock editorLock;
+	
 	private boolean locked;
 
-	private EContentAdapter lockedAdapter = new EContentAdapter() {
-
+	private Adapter lockedAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
-			super.notifyChanged(notification);
-
-			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locked()) {
+			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioLock_Available()) {
 				Display.getDefault().asyncExec(new Runnable() {
-					
 					@Override
 					public void run() {
-						setLocked(notification.getNewBooleanValue());
+						setLocked(!notification.getNewBooleanValue());
 					}
 				});
 			}
@@ -64,8 +65,8 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	@Override
 	public void dispose() {
 
-		if (scenarioInstance != null) {
-			scenarioInstance.eAdapters().remove(lockedAdapter);
+		if (editorLock != null) {
+			editorLock.eAdapters().remove(lockedAdapter);
 		}
 		if (valueProviderCache != null)
 			valueProviderCache.dispose();
@@ -76,17 +77,18 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if (scenarioInstance != null) {
-			scenarioInstance.eAdapters().remove(lockedAdapter);
+		if (editorLock != null) {
+			editorLock.eAdapters().remove(lockedAdapter);
 		}
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structured = (IStructuredSelection) selection;
 			if (structured.size() == 1) {
 				if (structured.getFirstElement() instanceof ScenarioInstance) {
 					ScenarioInstance instance = (ScenarioInstance) structured.getFirstElement();
+					editorLock = instance.getLock(ScenarioLock.EDITORS);
+					editorLock.eAdapters().add(lockedAdapter);
+					setLocked(!editorLock.isAvailable());
 					displayScenarioInstance(instance);
-					scenarioInstance.eAdapters().add(lockedAdapter);
-					setLocked(instance.isLocked());
 					return;
 				}
 			}
@@ -213,5 +215,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	@Override
 	public Shell getShell() {
 		return getSite().getShell();
+	}
+
+	@Override
+	public ScenarioLock getEditorLock() {
+		return editorLock;
 	}
 }
