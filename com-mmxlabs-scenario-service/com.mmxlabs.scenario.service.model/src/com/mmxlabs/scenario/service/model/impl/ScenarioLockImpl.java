@@ -242,22 +242,22 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * @generated NOT
 	 */
 	public boolean claim() {
-		System.err.println(getKey() + " claim");
+//		System.err.println(getKey() + " claim");
 		final ScenarioInstance instance = getInstance();
 		synchronized (instance) {
-			System.err.println(getKey() + " synch");
+//			System.err.println(getKey() + " synch");
 			if (isClaimed()) {
-				System.err.println(getKey() + " already claimed");	
+//				System.err.println(getKey() + " already claimed");	
 				return true;
 			}
 			claiming = true;
 			if (instance.isLocked()) {
-				System.err.println(getKey() + " can't claim (held by someone else)");
+//				System.err.println(getKey() + " can't claim (held by someone else)");
 				claiming = false;
 				return false;
 			}
 			
-			System.err.println(getKey() + " acquired");
+//			System.err.println(getKey() + " acquired");
 			
 			instance.setLocked(true);
 			claiming = false;
@@ -272,24 +272,24 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * @generated NOT
 	 */
 	public boolean awaitClaim() {
-		System.err.println(getKey() + " await claim");
+//		System.err.println(getKey() + " await claim");
 		final ScenarioInstance instance = getInstance();
 		synchronized (instance) {
-			System.err.println(getKey() + " await synch");
+//			System.err.println(getKey() + " await synch");
 			if (isClaimed()) {
-				System.err.println(getKey() + " already claimed");
+//				System.err.println(getKey() + " already claimed");
 				return true;
 			}
 			claiming = true;
 			while (instance.isLocked()) {
 				try {
-					System.err.println(getKey() + " waiting for unlock");
+//					System.err.println(getKey() + " waiting for unlock");
 					instance.wait();
 				} catch (InterruptedException e) {
 					
 				}
 			}
-			System.err.println(getKey() + " acquired");
+//			System.err.println(getKey() + " acquired");
 			instance.setLocked(true);
 			claiming = false;
 			setClaimed(true);
@@ -303,17 +303,17 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * @generated NOT
 	 */
 	public void release() {
-		System.err.println(getKey() + " release");
+//		System.err.println(getKey() + " release");
 		final ScenarioInstance instance = getInstance();
 		synchronized (instance) {
-			System.err.println(getKey() + " release synch");
+//			System.err.println(getKey() + " release synch");
 			if (isClaimed()) {
 				setClaimed(false);
 				getInstance().setLocked(false);
-				System.err.println(getKey() + " waking up others");
+//				System.err.println(getKey() + " waking up others");
 				getInstance().notifyAll();
 			} else {
-				System.err.println(getKey() + " not actually claimed");
+//				System.err.println(getKey() + " not actually claimed");
 			}
 		}
 	}
