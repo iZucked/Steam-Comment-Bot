@@ -1901,6 +1901,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         final GanttSection bottomSection = (GanttSection) _ganttSections.get(_ganttSections.size() - 1);
 
 
+        if (drawCornerOnly) {
+      		// Keep corner line in same place on scroll
+            lineLoc += _vScrollBar.getSelection();
+        }
+
         // top corner
         gc.setForeground(_colorManager.getNonActiveSessionBarColorLeft());
         gc.setBackground(_colorManager.getNonActiveSessionBarColorRight());
