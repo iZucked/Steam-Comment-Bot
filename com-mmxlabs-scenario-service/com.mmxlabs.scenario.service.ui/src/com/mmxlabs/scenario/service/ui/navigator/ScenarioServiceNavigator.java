@@ -15,6 +15,8 @@ import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Image;
@@ -133,7 +135,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			tryRefresh();
 		}
 	};
-	private Image showColumnImage;
+	private final Image showColumnImage;
 
 	public ScenarioServiceNavigator() {
 		super();
@@ -151,9 +153,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		tracker.close();
 		Activator.getDefault().getScenarioServiceSelectionProvider().removeSelectionChangedListener(selectionChangedListener);
 		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
-		
+
 		showColumnImage.dispose();
-		
+
 		super.dispose();
 	}
 
@@ -180,7 +182,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		viewer.getTree().setHeaderVisible(true);
 
 		// Keep order in sync with COLUMN_XXX_IDX constants declared in this class
-		
+
 		final TreeColumn labelColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
 		labelColumn.setText("Name");
 		labelColumn.setWidth(275);
@@ -249,6 +251,29 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 					}
 				}
 				return null;
+			}
+		});
+
+		tree.addKeyListener(new KeyListener() {
+
+			@Override
+			public void keyReleased(final KeyEvent e) {
+				// TODO Auto-generated method stub
+				if (e.character == SWT.SPACE) {
+					final TreeItem[] selection = tree.getSelection();
+					for (final TreeItem item : selection) {
+						final Object data = item.getData();
+						if (data instanceof ScenarioInstance) {
+							final ScenarioInstance instance = (ScenarioInstance) data;
+							Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
+						}
+					}
+				}
+			}
+
+			@Override
+			public void keyPressed(final KeyEvent e) {
+
 			}
 		});
 
