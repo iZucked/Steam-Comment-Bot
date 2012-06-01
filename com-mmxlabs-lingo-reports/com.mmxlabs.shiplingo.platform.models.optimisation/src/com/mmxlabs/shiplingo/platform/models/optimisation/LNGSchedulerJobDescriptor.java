@@ -23,11 +23,14 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 	private ScenarioInstance scenarioInstance;
 
 	private boolean optimise;
+	
+	private final String lockKey;
 
-	public LNGSchedulerJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final boolean optimise) {
+	public LNGSchedulerJobDescriptor(final String name, final ScenarioInstance scenarioInstance, final boolean optimise, final String lockKey) {
 		this.name = name;
 		this.scenarioInstance = scenarioInstance;
 		this.optimise = optimise;
+		this.lockKey = lockKey;
 	}
 
 	@Override
@@ -55,14 +58,11 @@ public final class LNGSchedulerJobDescriptor implements IJobDescriptor, Serializ
 		return null;
 	}
 
-	/**
-	 * @return
-	 */
-	public boolean isOptimising() {
-		return optimise;
+	public String getLockKey() {
+		return lockKey;
 	}
 
-	public void setOptimising(final boolean optimise) {
-		this.optimise = optimise;
+	public boolean isOptimising() {
+		return optimise;
 	}
 }

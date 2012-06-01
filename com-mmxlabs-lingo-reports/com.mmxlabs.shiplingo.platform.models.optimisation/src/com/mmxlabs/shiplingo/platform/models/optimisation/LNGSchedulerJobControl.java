@@ -84,6 +84,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	@Override
 	protected void reallyPrepare() {
+		scenarioInstance.getLock(jobDescriptor.getLockKey()).awaitClaim();
 		startTimeMillis = System.currentTimeMillis();
 
 		final LNGTransformer transformer = new LNGTransformer(scenario);
@@ -198,6 +199,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			// scheduleModel.setDirty(false);
 			// log.debug("Cleared dirty bit on " + scheduleModel);
 			super.setProgress(100);
+			scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
 			return false;
 		} else {
 			return true;
@@ -215,6 +217,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			optimiser.dispose();
 			optimiser = null;
 		}
+		scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
 	}
 
 	@Override
