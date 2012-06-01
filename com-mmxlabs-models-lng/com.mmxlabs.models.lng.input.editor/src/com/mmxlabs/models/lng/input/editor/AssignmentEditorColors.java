@@ -18,6 +18,10 @@ public class AssignmentEditorColors {
 	public final Color lockedTaskGradientBottom;
 	public final Color rowColorOne;
 	public final Color rowColorTwo;
+	public final Color limitColor;
+	public final Color inFeasibleTaskGradientTop;
+	public final Color inFeasibleTaskGradientBottom;
+	public final Color limitColor2;
 	
 	public AssignmentEditorColors(final Display display) {
 		rowColorTwo = new Color(display, 230,239,249);
@@ -33,9 +37,14 @@ public class AssignmentEditorColors {
 
 		taskGradientBottom = display.getSystemColor(SWT.COLOR_DARK_BLUE);
 		taskGradientTop = display.getSystemColor(SWT.COLOR_BLUE);
+		
+		inFeasibleTaskGradientBottom = display.getSystemColor(SWT.COLOR_DARK_GRAY);
+		inFeasibleTaskGradientTop = display.getSystemColor(SWT.COLOR_GRAY);
 
 		lockedTaskGradientBottom = display.getSystemColor(SWT.COLOR_DARK_RED);
 		lockedTaskGradientTop = display.getSystemColor(SWT.COLOR_RED);
+		limitColor = display.getSystemColor(SWT.COLOR_DARK_RED);
+		limitColor2 = display.getSystemColor(SWT.COLOR_RED);
 	}
 	
 	public void dispose() {
@@ -53,5 +62,10 @@ public class AssignmentEditorColors {
 		
 		rowColorOne.dispose();
 		rowColorTwo.dispose();
+		
+		limitColor.dispose();
+		limitColor2.dispose();
+		inFeasibleTaskGradientBottom.dispose();
+		inFeasibleTaskGradientTop.dispose();
 	}
 }

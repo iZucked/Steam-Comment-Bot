@@ -3,7 +3,10 @@ package com.mmxlabs.models.lng.input.editorpart;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+
+import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
@@ -24,11 +27,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -39,6 +45,11 @@ import com.mmxlabs.models.lng.input.editor.IAssignmentListener;
 import com.mmxlabs.models.lng.input.editor.IAssignmentProvider;
 import com.mmxlabs.models.lng.input.editor.ISizeListener;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
@@ -48,6 +59,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 public class InputJointModelEditorContribution extends
 		BaseJointModelEditorContribution<InputModel> {
 	
+	private final HashMap<Pair<Port, Port>, Integer> minTravelTimes = new HashMap<Pair<Port, Port>, Integer>();
 	private AssignmentEditor<Assignment, UUIDObject> editor;
 	private MMXContentAdapter adapter = new MMXContentAdapter() {
 		private boolean process(final Notification n) {
@@ -68,6 +80,7 @@ public class InputJointModelEditorContribution extends
 	};
 
 	protected void updateEditorInput() {
+		updateMinTravelTimes();
 		editor.setResources((List) modelObject.getAssignments());
 		
 		CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
@@ -87,13 +100,34 @@ public class InputJointModelEditorContribution extends
 		editor.update();
 	}
 	
+	protected void updateMinTravelTimes() {
+		final PortModel pm = rootObject.getSubModel(PortModel.class);
+		final FleetModel fm = rootObject.getSubModel(FleetModel.class);
+		minTravelTimes.clear();
+		if (pm != null && fm != null) {
+			double maxSpeed = 0;
+			for (final VesselClass vc : fm.getVesselClasses()) {
+				maxSpeed = Math.max(maxSpeed, vc.getMaxSpeed());
+			}
+			for (final Route route : pm.getRoutes()) {
+				for (final RouteLine line : route.getLines()) {
+					final Pair<Port, Port> p = new Pair<Port, Port>(line.getFrom(), line.getTo());
+					Integer i = minTravelTimes.get(p);
+					int t = (int) (line.getDistance() / maxSpeed);
+					if (i == null || t < i) {
+						minTravelTimes.put(p, t);
+					}
+				}
+			}
+		}
+	}
+	
 	@Override
 	public void addPages(Composite parent) {
 		final Composite outer = new Composite(parent, SWT.NONE);
 		final GridLayout outerLayout = new GridLayout(4, false);
 		outerLayout.marginHeight = outerLayout.marginWidth = 4;
 		outer.setLayout(outerLayout);
-		
 		
 		final Text resourceFilterText;
 		final Text taskFilterText;
@@ -156,6 +190,28 @@ public class InputJointModelEditorContribution extends
 				return resource.getVessels().iterator().next().getName();
 			}
 
+			private Port getEndPort(final UUIDObject task) {
+				if (task instanceof Cargo) {
+					return ((Cargo)task).getDischargeSlot().getPort();
+				} else if (task instanceof CharterOutEvent) {
+					return ((CharterOutEvent) task).getEndPort();
+				} else if (task instanceof VesselEvent) {
+					return ((VesselEvent) task).getPort();
+				} else {
+					return null;
+				}
+			}
+			
+			private Port getStartPort(final UUIDObject task) {
+				if (task instanceof Cargo) {
+					return ((Cargo)task).getLoadSlot().getPort();
+				} else if (task instanceof VesselEvent) {
+					return ((VesselEvent) task).getPort();
+				} else {
+					return null;
+				}
+			}
+			
 			@Override
 			public String getTooltip(UUIDObject task) {
 				String secondLine = "";
@@ -175,6 +231,52 @@ public class InputJointModelEditorContribution extends
 			@Override
 			public boolean isLocked(UUIDObject task) {
 				return modelObject.getLockedAssignedObjects().contains(task);
+			}
+
+			@Override
+			public Date getResourceStartDate(final Assignment resource) {
+				if (resource.getVessels().isEmpty() == false) {
+					final AVesselSet v = resource.getVessels().get(0);
+					if (v instanceof Vessel) {
+						final Vessel v2 = (Vessel) v;
+						if (v2.getAvailability().isSetStartAfter()) {
+							return v2.getAvailability().getStartAfter();
+						}
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public Date getResourceEndDate(final Assignment resource) {
+				if (resource.getVessels().isEmpty() == false) {
+					final AVesselSet v = resource.getVessels().get(0);
+					if (v instanceof Vessel) {
+						final Vessel v2 = (Vessel) v;
+						if (v2.getAvailability().isSetStartAfter()) {
+							return v2.getAvailability().getEndBy();
+						}
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public boolean isSensibleSequence(final UUIDObject task1, final UUIDObject task2) {
+				final Date end1 = getEndDate(task1);
+				final Date start2 = getStartDate(task2);
+
+				if (end1.before(start2)) {
+					final long time = (start2.getTime() - end1.getTime()) / Timer.ONE_HOUR;
+					final Port p1 = getEndPort(task1);
+					final Port p2 = getStartPort(task2);
+					// guess travel time
+					final Integer travelTime = minTravelTimes.get(new Pair<Port, Port>(p1, p2));
+					if (travelTime != null) {
+						return time >= travelTime;
+					}
+				}
+				return false;
 			}
 		};
 		

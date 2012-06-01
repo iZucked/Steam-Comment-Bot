@@ -9,4 +9,9 @@ public interface IAssignmentInformationProvider<R,T> {
 	public String getResourceLabel(R resource);
 	public String getTooltip(T task);
 	public boolean isLocked(T task);
+	
+	public Date getResourceStartDate(R resource);
+	public Date getResourceEndDate(R resource);
+	
+	public boolean isSensibleSequence(T task1, T task2);
 }
