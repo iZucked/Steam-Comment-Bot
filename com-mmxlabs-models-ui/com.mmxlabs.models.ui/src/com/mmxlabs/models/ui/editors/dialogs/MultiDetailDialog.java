@@ -322,6 +322,10 @@ public class MultiDetailDialog extends Dialog {
 			if (proxy.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 				return null;
 			}
+			
+			if (proxy.getFeature() == null) {
+				return null;//hack that filters out assignment editor
+			}
 
 			return new IInlineEditor() {
 				private Pair<EObject, EStructuralFeature> key;
