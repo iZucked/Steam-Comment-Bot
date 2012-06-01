@@ -105,7 +105,7 @@ public class InputJointModelEditorContribution extends
 			final Text tr = new Text(outer, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 			tr.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 			final Label lt = new Label(outer,SWT.NONE);
-			lt.setText("Task:");
+			lt.setText("ID:");
 			lt.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 			final Text tt = new Text(outer, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 			tt.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -247,8 +247,7 @@ public class InputJointModelEditorContribution extends
 			public boolean select(Object toTest) {
 				final String name = timing.getResourceLabel((Assignment) toTest);
 				final String pattern = resourceFilterText.getText().trim();
-				if (pattern.isEmpty()) return true;
-				return name.toLowerCase().contains(pattern.toLowerCase());
+				return match(name, pattern);
 			}
 		};
 		
@@ -257,8 +256,7 @@ public class InputJointModelEditorContribution extends
 			public boolean select(Object toTest) {
 				final String name = timing.getLabel((UUIDObject) toTest);
 				final String pattern = taskFilterText.getText().trim();
-				if (pattern.isEmpty()) return true;
-				return name.toLowerCase().contains(pattern.toLowerCase());
+				return match(name, pattern);
 			}
 		};
 		
@@ -280,6 +278,22 @@ public class InputJointModelEditorContribution extends
 		editorPart.setPageText(editorPart.addPage(outer), "Assignments");
 	}
 
+	private boolean match(String test, String pattern) {
+		// simple boolean matching
+		test = test.toLowerCase();
+		pattern = pattern.trim();
+		if (pattern.isEmpty()) return true;
+		final String[] parts = pattern.split(",");
+		for (final String part : parts) {
+			final String trimmedPart = part.trim().toLowerCase();
+			if (trimmedPart.isEmpty()) continue;
+			if (test.contains(trimmedPart)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	@Override
 	public void dispose() {
 		modelObject.eAdapters().remove(adapter);
