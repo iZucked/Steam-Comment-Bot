@@ -6,6 +6,7 @@ package com.mmxlabs.scenario.service.model;
 
 import java.util.Map;
 
+import java.util.concurrent.locks.Lock;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getSubModelURIs <em>Sub Model UR Is</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLocks <em>Locks</em>}</li>
  * </ul>
  * </p>
  *
@@ -224,6 +226,24 @@ public interface ScenarioInstance extends Container {
 	void setDirty(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Locks</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.scenario.service.model.ScenarioLock}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.scenario.service.model.ScenarioLock#getInstance <em>Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Locks</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Locks</em>' containment reference list.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_Locks()
+	 * @see com.mmxlabs.scenario.service.model.ScenarioLock#getInstance
+	 * @model opposite="instance" containment="true" transient="true"
+	 * @generated
+	 */
+	EList<ScenarioLock> getLocks();
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
@@ -231,5 +251,14 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	int getContainedInstanceCount();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" keyRequired="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final List<ScenarioLock> locks = getLocks();\n\t\tsynchronized (locks) {\n\t\t\tfor (final ScenarioLock lock : locks) {\n\t\t\t\tif (lock.getKey().equals(key)) {\n\t\t\t\t\treturn lock;\n\t\t\t\t}\n\t\t\t}\n\n\t\t\tfinal ScenarioLock newLock = ScenarioServiceFactory.eINSTANCE.createScenarioLock();\n\t\t\tnewLock.setKey(key);\n\t\t\tlocks.add(newLock);\n\t\t\tnewLock.init();\n\t\t\treturn newLock;\n\t\t}'"
+	 * @generated
+	 */
+	ScenarioLock getLock(String key);
 
 } // ScenarioInstance

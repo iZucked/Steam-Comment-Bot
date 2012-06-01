@@ -28,7 +28,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class ScenarioServiceImpl extends ContainerImpl implements ScenarioService {
+public class ScenarioServiceImpl extends ContainerImpl implements
+		ScenarioService {
 	/**
 	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -106,7 +107,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		String oldDescription = description;
 		description = newDescription;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION, oldDescription, description));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION,
+					oldDescription, description));
 	}
 
 	/**
@@ -127,7 +130,9 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 		IScenarioService oldServiceRef = serviceRef;
 		serviceRef = newServiceRef;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF, oldServiceRef, serviceRef));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF,
+					oldServiceRef, serviceRef));
 	}
 
 	/**
@@ -191,9 +196,11 @@ public class ScenarioServiceImpl extends ContainerImpl implements ScenarioServic
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
-			return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+			return DESCRIPTION_EDEFAULT == null ? description != null
+					: !DESCRIPTION_EDEFAULT.equals(description);
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
-			return SERVICE_REF_EDEFAULT == null ? serviceRef != null : !SERVICE_REF_EDEFAULT.equals(serviceRef);
+			return SERVICE_REF_EDEFAULT == null ? serviceRef != null
+					: !SERVICE_REF_EDEFAULT.equals(serviceRef);
 		}
 		return super.eIsSet(featureID);
 	}

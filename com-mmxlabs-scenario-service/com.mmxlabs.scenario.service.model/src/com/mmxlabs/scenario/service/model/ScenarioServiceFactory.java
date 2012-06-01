@@ -21,7 +21,8 @@ public interface ScenarioServiceFactory extends EFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	ScenarioServiceFactory eINSTANCE = com.mmxlabs.scenario.service.model.impl.ScenarioServiceFactoryImpl.init();
+	ScenarioServiceFactory eINSTANCE = com.mmxlabs.scenario.service.model.impl.ScenarioServiceFactoryImpl
+			.init();
 
 	/**
 	 * Returns a new object of class '<em>Scenario Model</em>'.
@@ -67,6 +68,15 @@ public interface ScenarioServiceFactory extends EFactory {
 	 * @generated
 	 */
 	Metadata createMetadata();
+
+	/**
+	 * Returns a new object of class '<em>Scenario Lock</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Scenario Lock</em>'.
+	 * @generated
+	 */
+	ScenarioLock createScenarioLock();
 
 	/**
 	 * Returns the package supported by this factory.
