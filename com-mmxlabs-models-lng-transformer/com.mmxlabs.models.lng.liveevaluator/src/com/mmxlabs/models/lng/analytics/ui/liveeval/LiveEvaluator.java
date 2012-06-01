@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * Updates schedule when their dirty bit is set.
@@ -87,17 +88,19 @@ public class LiveEvaluator extends MMXAdapterImpl {
 					
 					final IScenarioInstanceEvaluator evaluator = AnalyticsEditorPlugin.getPlugin().getResourceEvaluator();
 					if (evaluator != null) {
-						synchronized (instance) {
-							log.debug("Checking dirty flag is still set");
+						if (instance.getLock(ScenarioLock.EVALUATOR).awaitClaim()) {
 							try {
+								log.debug("Checking dirty flag is still set");
 								final MMXRootObject root = (MMXRootObject) instance.getScenarioService().load(instance);
 								final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
 								if (!subModel.isDirty()) return;
-							} catch (Throwable th) {
+								log.debug("About to evaluate " + instance.getName());
+								evaluator.evaluate(instance);								
+							} catch (final Throwable th) {
 								
+							} finally {
+								instance.getLock(ScenarioLock.EVALUATOR).release();
 							}
-							log.debug("About to evaluate " + instance.getName());
-							evaluator.evaluate(instance);
 						}
 					} else {
 						log.debug("Could not find evaluator when evaluating " + instance.getName());
