@@ -55,7 +55,7 @@ public class DeleteScenarioCommandHandler extends AbstractHandler {
 
 			if (totalChildCount > 0) {
 				final MessageDialog dialog = new MessageDialog(HandlerUtil.getActiveShell(event), "Delete selection and contents?", null,
-						"Do you really want to delete the selection and all and its contents (" + totalChildCount + " scenarios)", MessageDialog.CONFIRM, new String[] { "Don't Delete", "Delete" }, 0);
+						"Do you really want to delete the selection and all and its contents (" + totalChildCount + " scenarios)", MessageDialog.CONFIRM, new String[] { "Don't Delete", "Delete" }, 1);
 				if (dialog.open() != 1) {
 					return null;
 				}
