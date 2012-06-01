@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+// * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.ui.actions;
@@ -115,7 +115,6 @@ public abstract class ImportAction extends LockableAction {
 
 			deletedObjects.add(oldObject);
 		}
-
 		
 		if (deletedObjects.isEmpty() == false)
 			merge.append(DeleteCommand.create(domain, deletedObjects));
@@ -137,7 +136,7 @@ public abstract class ImportAction extends LockableAction {
 	private Command replace(EditingDomain domain, EObject oldObject, EObject newObject, MMXRootObject rootObject) {
 		final CompoundCommand result = new CompoundCommand();
 		result.append(IdentityCommand.INSTANCE);
-		
+		result.setDescription("Replacing " + oldObject + " with " + newObject);
 		if (oldObject == null) return result;
 		
 		// update old references

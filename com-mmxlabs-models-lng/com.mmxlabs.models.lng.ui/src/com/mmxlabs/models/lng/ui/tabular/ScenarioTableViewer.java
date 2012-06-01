@@ -11,12 +11,5 @@ public class ScenarioTableViewer extends EObjectTableViewer  {
 	public ScenarioTableViewer(final Composite parent, final int style, final IScenarioEditingLocation part) {
 		super(parent, style);
 		this.editorPart = part;
-	}
-
-//
-//	@Override
-//	public void refresh() {
-//		if (editorPart.isSaving()) return;
-//		super.refresh();
-//	}
+	}	
 }
