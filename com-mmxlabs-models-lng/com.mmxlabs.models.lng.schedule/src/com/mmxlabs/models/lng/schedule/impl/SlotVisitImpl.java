@@ -3,6 +3,18 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Collection;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -12,19 +24,6 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.notify.NotificationChain;
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
-import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -438,6 +437,15 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		final SlotAllocation slotAllocation = getSlotAllocation();
 		final Slot slot = slotAllocation.getSlot();
 		if (slot != null) {
+			
+			// Show cargo ID rather than slot ID.
+			// TODO: Perhaps this should be a UI configurable option
+			if (slot instanceof LoadSlot) {
+				return ((LoadSlot) slot).getCargo().getName();
+			} else if (slot instanceof DischargeSlot) {
+				return ((DischargeSlot) slot).getCargo().getName();
+			}
+			
 			return slot.getName();
 		}
 		return "";
