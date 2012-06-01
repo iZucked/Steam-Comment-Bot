@@ -273,8 +273,8 @@ public class AdvancedTooltipDialog {
 			Display.getDefault().asyncExec(new Runnable() {
 
 				public void run() {
+					if (_shell.isDisposed()) return;
 					_shell.redraw();
-					
 				}
 				
 			});
