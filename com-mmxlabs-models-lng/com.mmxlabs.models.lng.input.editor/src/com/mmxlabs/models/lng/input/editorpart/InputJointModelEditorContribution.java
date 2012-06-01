@@ -175,7 +175,7 @@ public class InputJointModelEditorContribution extends
 			public void taskUnassigned(UUIDObject task, Assignment oldResource) {
 				final EditingDomain ed = editorPart.getEditingDomain();
 				
-				final Command cc = AssignmentEditorHelper.taskUnassigned(ed, modelObject, task, oldResource);
+				final Command cc = AssignmentEditorHelper.totallyUnassign(ed, modelObject, task);
 				
 				ed.getCommandStack().execute(cc);
 				
