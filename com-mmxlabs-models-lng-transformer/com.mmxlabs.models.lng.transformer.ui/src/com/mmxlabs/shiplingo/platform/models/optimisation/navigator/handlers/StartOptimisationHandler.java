@@ -38,6 +38,7 @@ import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor;
 
@@ -81,7 +82,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 			while (itr.hasNext()) {
 				final Object obj = itr.next();
 				if (obj instanceof ScenarioInstance) {
-					return evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, optimising);
+					return evaluateScenarioInstance(jobManager, (ScenarioInstance) obj, optimising, ScenarioLock.OPTIMISER);
 				}
 
 			}
@@ -90,7 +91,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 		return null;
 	}
 
-	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final boolean optimising) {
+	public static Object evaluateScenarioInstance(final IEclipseJobManager jobManager, final ScenarioInstance instance, final boolean optimising, final String k) {
 
 		final IScenarioService service = instance.getScenarioService();
 		if (service != null) {
@@ -105,7 +106,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					IJobDescriptor job = jobManager.findJobForResource(uuid);
 					if (job == null) {
 						// create a new job
-						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimising);
+						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimising, k);
 					}
 
 					IJobControl control = jobManager.getControlForJob(job);
@@ -113,7 +114,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 					if ((control != null) && ((control.getJobState() == EJobState.CANCELLED) || (control.getJobState() == EJobState.COMPLETED))) {
 						jobManager.removeJob(job);
 						control = null;
-						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimising);
+						job = new LNGSchedulerJobDescriptor(instance.getName(), instance, optimising, k);
 
 					}
 
@@ -144,7 +145,8 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 								public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
 
 									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-										instance.setLocked(false);
+//										instance.setLocked(false);
+										instance.getLock(k).release();
 										return false;
 									}
 									return true;
@@ -156,13 +158,15 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 								}
 							});
 							// Set initial state.
-							instance.setLocked(true);
+//							instance.setLocked(true);
+							instance.getLock(k).awaitClaim();
 							control.prepare();
 							control.start();
 						} catch (final Throwable ex) {
 							log.error(ex.getMessage(), ex);
 							control.cancel();
-							instance.setLocked(false);
+//							instance.setLocked(false);
+							instance.getLock(k).release();
 
 							final Display display = Display.getDefault();
 							if (display != null) {
@@ -177,7 +181,8 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 						}
 						// Resume if paused
 					} else if (control.getJobState() == EJobState.PAUSED) {
-						instance.setLocked(true);
+//						instance.setLocked(true);
+						instance.getLock(k).awaitClaim();
 						control.resume();
 					} else {
 						// Add listener to unlock scenario when it stops optimising
@@ -187,7 +192,8 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 							public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
 
 								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-									instance.setLocked(false);
+//									instance.setLocked(false);
+									instance.getLock(k).release();
 									return false;
 								}
 								return true;
@@ -198,7 +204,8 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 								return true;
 							}
 						});
-						instance.setLocked(true);
+//						instance.setLocked(true);
+						instance.getLock(k).awaitClaim();
 						control.start();
 					}
 				}
