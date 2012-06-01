@@ -256,7 +256,6 @@ public class EObjectTableViewer extends GridTableViewer {
 		super(parent, style);
 
 		ColumnViewerToolTipSupport.enableFor(this);
-
 	}
 
 	public void setFilterString(final String filterString) {
@@ -416,6 +415,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		final Grid table = viewer.getGrid();
 
 		table.setRowHeaderVisible(true);
+		table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
 
 		final Listener measureListener = new Listener() {
 			@Override
