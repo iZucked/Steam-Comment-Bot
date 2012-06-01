@@ -341,8 +341,11 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 				}
 			}
 		};
-
-		getInstance().eAdapters().add(lockWatcher);
+		final ScenarioInstance instance = getInstance();
+		synchronized (instance) {
+			setAvailable(!instance.isLocked());
+			getInstance().eAdapters().add(lockWatcher);
+		}
 	}
 
 	/**
