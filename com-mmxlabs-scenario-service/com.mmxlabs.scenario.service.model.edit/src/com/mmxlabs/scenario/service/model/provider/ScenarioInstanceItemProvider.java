@@ -61,6 +61,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider
 			addAdaptersPropertyDescriptor(object);
 			addSubModelURIsPropertyDescriptor(object);
 			addDependencyUUIDsPropertyDescriptor(object);
+			addDirtyPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -168,6 +169,26 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Dirty feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDirtyPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory)
+						.getRootAdapterFactory(),
+				getResourceLocator(),
+				getString("_UI_ScenarioInstance_dirty_feature"),
+				getString("_UI_PropertyDescriptor_description",
+						"_UI_ScenarioInstance_dirty_feature",
+						"_UI_ScenarioInstance_type"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__DIRTY, true,
+				false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null,
+				null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -184,6 +205,8 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider
 					.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__METADATA);
 			childrenFeatures
 					.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__INSTANCE);
+			childrenFeatures
+					.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__LOCKS);
 		}
 		return childrenFeatures;
 	}
@@ -253,11 +276,13 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider
 		case ScenarioServicePackage.SCENARIO_INSTANCE__ADAPTERS:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__SUB_MODEL_UR_IS:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
 			fireNotifyChanged(new ViewerNotification(notification,
 					notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
 			fireNotifyChanged(new ViewerNotification(notification,
 					notification.getNotifier(), true, false));
 			return;
@@ -280,6 +305,10 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider
 		newChildDescriptors.add(createChildParameter(
 				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__METADATA,
 				ScenarioServiceFactory.eINSTANCE.createMetadata()));
+
+		newChildDescriptors.add(createChildParameter(
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__LOCKS,
+				ScenarioServiceFactory.eINSTANCE.createScenarioLock()));
 	}
 
 }

@@ -192,6 +192,29 @@ public class ScenarioServiceItemProviderAdapterFactory extends
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ScenarioLock} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ScenarioLockItemProvider scenarioLockItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioLock}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createScenarioLockAdapter() {
+		if (scenarioLockItemProvider == null) {
+			scenarioLockItemProvider = new ScenarioLockItemProvider(this);
+		}
+
+		return scenarioLockItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -303,6 +326,8 @@ public class ScenarioServiceItemProviderAdapterFactory extends
 			scenarioInstanceItemProvider.dispose();
 		if (metadataItemProvider != null)
 			metadataItemProvider.dispose();
+		if (scenarioLockItemProvider != null)
+			scenarioLockItemProvider.dispose();
 	}
 
 }
