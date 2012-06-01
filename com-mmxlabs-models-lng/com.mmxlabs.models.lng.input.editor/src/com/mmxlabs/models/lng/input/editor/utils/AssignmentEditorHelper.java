@@ -83,8 +83,9 @@ public class AssignmentEditorHelper {
 					} else if (start.after(getEndDate(o))) {
 						position++;
 						break;
+					} else {
+						position++;
 					}
-					position++;
 				}
 			}
 		}
