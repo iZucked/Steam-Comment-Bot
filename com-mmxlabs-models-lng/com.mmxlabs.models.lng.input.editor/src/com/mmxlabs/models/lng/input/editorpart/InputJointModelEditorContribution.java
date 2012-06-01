@@ -5,26 +5,28 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import javax.management.timer.Timer;
-
 import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.IFilter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
@@ -32,10 +34,10 @@ import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.AssignmentEditor;
+import com.mmxlabs.models.lng.input.editor.IAssignmentInformationProvider;
 import com.mmxlabs.models.lng.input.editor.IAssignmentListener;
 import com.mmxlabs.models.lng.input.editor.IAssignmentProvider;
 import com.mmxlabs.models.lng.input.editor.ISizeListener;
-import com.mmxlabs.models.lng.input.editor.IAssignmentInformationProvider;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -87,7 +89,33 @@ public class InputJointModelEditorContribution extends
 	
 	@Override
 	public void addPages(Composite parent) {
-		final ScrolledComposite scroller = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		final Composite outer = new Composite(parent, SWT.NONE);
+		final GridLayout outerLayout = new GridLayout(4, false);
+		outerLayout.marginHeight = outerLayout.marginWidth = 4;
+		outer.setLayout(outerLayout);
+		
+		
+		final Text resourceFilterText;
+		final Text taskFilterText;
+		
+		{
+			final Label lr = new Label(outer,SWT.NONE);
+			lr.setText("Vessel:");
+			lr.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+			final Text tr = new Text(outer, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
+			tr.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+			final Label lt = new Label(outer,SWT.NONE);
+			lt.setText("Task:");
+			lt.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+			final Text tt = new Text(outer, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
+			tt.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+			resourceFilterText = tr;
+			taskFilterText = tt;
+		}
+		
+		final ScrolledComposite scroller = new ScrolledComposite(outer, SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		
+		scroller.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
 		
 		editor = new AssignmentEditor<Assignment, UUIDObject>(scroller, SWT.NONE);
 
@@ -214,9 +242,42 @@ public class InputJointModelEditorContribution extends
 		});
 		
 		
+		final IFilter resourceFilter = new IFilter() {
+			@Override
+			public boolean select(Object toTest) {
+				final String name = timing.getResourceLabel((Assignment) toTest);
+				final String pattern = resourceFilterText.getText().trim();
+				if (pattern.isEmpty()) return true;
+				return name.toLowerCase().contains(pattern.toLowerCase());
+			}
+		};
+		
+		final IFilter taskFilter = new IFilter() {
+			@Override
+			public boolean select(Object toTest) {
+				final String name = timing.getLabel((UUIDObject) toTest);
+				final String pattern = taskFilterText.getText().trim();
+				if (pattern.isEmpty()) return true;
+				return name.toLowerCase().contains(pattern.toLowerCase());
+			}
+		};
+		
+		final ModifyListener modifyListener = new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				editor.redraw();
+			}
+		};
+		
+		taskFilterText.addModifyListener(modifyListener);
+		resourceFilterText.addModifyListener(modifyListener);
+		
+		editor.setResourceFilter(resourceFilter);
+		editor.setTaskFilter(taskFilter);
+		
 		updateEditorInput();
 		modelObject.eAdapters().add(adapter);
-		editorPart.setPageText(editorPart.addPage(scroller), "Assignments");
+		editorPart.setPageText(editorPart.addPage(outer), "Assignments");
 	}
 
 	@Override

@@ -22,6 +22,7 @@ import javax.management.timer.Timer;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.IFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
@@ -30,7 +31,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -116,6 +116,9 @@ public class AssignmentEditor<R, T> extends Canvas {
 	private int selectedTaskInternalY = 0;
 
 	private int minWidth, minHeight;
+	
+	private IFilter taskFilter;
+	private IFilter resourceFilter;
 
 	private final Comparator<T> startDateComparator = new Comparator<T>() {
 		@Override
@@ -500,6 +503,8 @@ public class AssignmentEditor<R, T> extends Canvas {
 		
 		int i = 0;
 		for (final R resource : resources) {
+			if (resourceFilter != null && !resourceFilter.select(resource)) continue;
+			
 			final List<T> assignment = assignmentProvider.getAssignedObjects(resource);
 			final int rowHeight = getRowHeight(assignment,false, depths);
 			gc.setForeground(colors.resourceLabelTextColor);
@@ -548,6 +553,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		final DateRangeTracker rangeTracker = new DateRangeTracker(collapse);
 		int i = 0;
 		for (final T o : objects) {
+			if (taskFilter != null && !taskFilter.select(o)) continue;
 			final Date start = informationProvider.getStartDate(o);
 			final Date end = informationProvider.getEndDate(o);
 			final int depth = rangeTracker.addRange(start, end, o);
@@ -695,6 +701,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		final GC gc = e.gc;
 		int index = 0;
 		for (final T o : objects) {
+			if (taskFilter != null && !taskFilter.select(o)) continue;
 			final Date start = informationProvider.getStartDate(o);
 			final Date end = informationProvider.getEndDate(o);
 			final int depth = depths[index++];
@@ -772,5 +779,21 @@ public class AssignmentEditor<R, T> extends Canvas {
 
 	public void addSizeListener(final ISizeListener sizeListener) {
 		this.sizeListeners.add(sizeListener);
+	}
+
+	public IFilter getTaskFilter() {
+		return taskFilter;
+	}
+
+	public void setTaskFilter(IFilter taskFilter) {
+		this.taskFilter = taskFilter;
+	}
+
+	public IFilter getResourceFilter() {
+		return resourceFilter;
+	}
+
+	public void setResourceFilter(IFilter resourceFilter) {
+		this.resourceFilter = resourceFilter;
 	}
 }
