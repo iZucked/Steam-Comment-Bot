@@ -586,7 +586,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     private void handleResize(final boolean redraw) {
         final Rectangle rect = getBounds();
         final Rectangle client = getClientArea();
-        _vScrollBar.setMaximum(rect.height);
+        
+        _vScrollBar.setMaximum(rect.height + _vScrollBar.getSelection());
         _vScrollBar.setPageIncrement(15);
         _vScrollBar.setThumb(Math.min(rect.height, client.height));
         final int vPage = rect.height - client.height;
