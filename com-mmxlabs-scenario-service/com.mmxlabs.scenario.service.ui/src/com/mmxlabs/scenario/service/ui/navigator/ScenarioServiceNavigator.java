@@ -61,6 +61,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 	private static final Logger log = LoggerFactory.getLogger(ScenarioServiceNavigator.class);
 
+	private final Image showColumnImage;
+	private final Image optImage;
+
 	protected AdapterFactoryEditingDomain editingDomain;
 
 	protected ComposedAdapterFactory adapterFactory = ScenarioServiceComposedAdapterFactory.getAdapterFactory();
@@ -135,7 +138,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			tryRefresh();
 		}
 	};
-	private final Image showColumnImage;
 
 	public ScenarioServiceNavigator() {
 		super();
@@ -146,6 +148,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
 		showColumnImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
+		optImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/opt.gif").createImage();
 	}
 
 	@Override
@@ -155,6 +158,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		Activator.getDefault().getEclipseJobManager().removeEclipseJobManagerListener(jobManagerListener);
 
 		showColumnImage.dispose();
+		optImage.dispose();
 
 		super.dispose();
 	}
@@ -193,7 +197,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		checkColumn.setMoveable(true);
 
 		final TreeColumn progressColumn = new TreeColumn(viewer.getTree(), SWT.NONE);
-		progressColumn.setText("Opt");
+		progressColumn.setImage(optImage);
 
 		checkColumn.pack();
 		progressColumn.pack();
