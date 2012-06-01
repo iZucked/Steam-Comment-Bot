@@ -25,6 +25,10 @@
             viewerId="com.mmxlabs.scenario.service.ui.navigator">
          <options>
             <property
+                  name="org.eclipse.ui.navigator.hideLinkWithEditorAction"
+                  value="true">
+            </property>
+            <property
                   name="org.eclipse.ui.navigator.hideAvailableCustomizationsDialog"
                   value="true">
             </property>
