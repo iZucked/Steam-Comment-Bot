@@ -38,7 +38,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 	private static final String TOTAL_COST = "Total Cost";
 
 	private static final String TYPE_COST = "Cost";
-	public static final String TYPE_TIME = "Days, Hours";
+	public static final String TYPE_TIME = "Days, hours";
 
 	public static class RowData {
 		public RowData(final String scheduleName, final String component, final String type, final long fitness) {
