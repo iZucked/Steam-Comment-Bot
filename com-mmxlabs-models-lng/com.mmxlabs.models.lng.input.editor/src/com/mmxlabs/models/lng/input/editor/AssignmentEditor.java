@@ -180,7 +180,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 				}
 
 				
-				final Action open = new Action("Open...") {
+				final Action open = new Action("Edit...") {
 					@Override
 					public void run() {
 						notifyEditEvent(task);
