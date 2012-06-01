@@ -21,6 +21,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -32,6 +34,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -45,6 +48,8 @@ import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -68,8 +73,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	private final IScenarioEditingLocation part;
 
 	// TODO: Make these colours a preference so they can be consistently used across various UI parts
-	private Color desCargo = new Color(Display.getDefault(), 150, 210, 230);
-	private Color fobCargo = new Color(Display.getDefault(), 190, 220, 180);
+	private final Color desCargo = new Color(Display.getDefault(), 150, 210, 230);
+	private final Color fobCargo = new Color(Display.getDefault(), 190, 220, 180);
 
 	public CargoModelViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -108,25 +113,65 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		addTypicalColumn("Discharge Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_DischargeSlot());
 
 		final InputModel input = part.getRootObject().getSubModel(InputModel.class);
-		
+
 		if (input != null) {
 			addTypicalColumn("Assignment", new AssignmentManipulator(part));
 		}
-		
+
 		getToolBarManager().appendToGroup(EDIT_GROUP, new Action() {
 			{
-				setImageDescriptor(
-						AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
+				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
 			}
+
 			@Override
 			public void run() {
-				final DetailCompositeDialog dcd = new DetailCompositeDialog(CargoModelViewer.this.getJointModelEditorPart().getShell(), CargoModelViewer.this.getJointModelEditorPart().getDefaultCommandHandler());
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(CargoModelViewer.this.getJointModelEditorPart().getShell(), CargoModelViewer.this.getJointModelEditorPart()
+						.getDefaultCommandHandler());
 				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), CargoPackage.eINSTANCE.getCargoModel_CargoGroups());
 			}
 		});
 		getToolBarManager().update(true);
-		
+
 		setTitle("Cargoes", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+
+		// IElementComparer to handle selection objects from e.g. schedule
+		((GridTableViewer) viewer).setComparer(new IElementComparer() {
+
+			@Override
+			public int hashCode(final Object element) {
+				return element.hashCode();
+			}
+
+			@Override
+			public boolean equals(final Object a, final Object b) {
+
+				final Cargo c1 = getCargo(a);
+				final Cargo c2 = getCargo(b);
+
+				return Equality.isEqual(c1, c2);
+			}
+
+			private Cargo getCargo(final Object o) {
+
+				if (o instanceof Cargo) {
+					return (Cargo) o;
+				}
+				if (o instanceof LoadSlot) {
+					return ((LoadSlot) o).getCargo();
+				}
+				if (o instanceof DischargeSlot) {
+					return ((DischargeSlot) o).getCargo();
+				}
+				if (o instanceof SlotVisit) {
+					final SlotAllocation slotAllocation = ((SlotVisit) o).getSlotAllocation();
+					if (slotAllocation != null) {
+						return getCargo(slotAllocation.getSlot());
+					}
+				}
+				return null;
+			}
+
+		});
 	}
 
 	@Override
@@ -158,7 +203,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
+		final ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
 
 			@Override
 			protected EObject getElementForNotificationTarget(final EObject source) {
@@ -175,15 +220,15 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		scenarioTableViewer.setColourProvider(new IColorProvider() {
 
 			@Override
-			public Color getForeground(Object element) {
+			public Color getForeground(final Object element) {
 				return null;
 			}
 
 			@Override
-			public Color getBackground(Object element) {
+			public Color getBackground(final Object element) {
 
 				if (element instanceof Cargo) {
-					CargoType cargoType = ((Cargo) element).getCargoType();
+					final CargoType cargoType = ((Cargo) element).getCargoType();
 					switch (cargoType) {
 					case DES:
 						return desCargo;
@@ -209,31 +254,33 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 		super.dispose();
 	}
-	
+
 	class AssignmentManipulator implements ICellRenderer, ICellManipulator {
-		private IScenarioEditingLocation location;
-		private IReferenceValueProvider valueProvider;
+		private final IScenarioEditingLocation location;
+		private final IReferenceValueProvider valueProvider;
 		private List<Pair<String, EObject>> allowedValues;
-		private List<EObject> vessels = new ArrayList<EObject>();
+		private final List<EObject> vessels = new ArrayList<EObject>();
 
 		public AssignmentManipulator(final IScenarioEditingLocation location) {
 			this.location = location;
 			this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(InputPackage.eINSTANCE.getAssignment(), InputPackage.eINSTANCE.getAssignment_Vessels());
 			getValues();
 		}
-		
+
 		private void getValues() {
 			allowedValues = valueProvider.getAllowedValues(null, InputPackage.eINSTANCE.getAssignment_Vessels());
 			vessels.clear();
-			for (final Pair<String, EObject> p : allowedValues) vessels.add(p.getSecond());
+			for (final Pair<String, EObject> p : allowedValues)
+				vessels.add(p.getSecond());
 		}
-		
+
 		@Override
-		public void setValue(Object object, Object value) {
+		public void setValue(final Object object, final Object value) {
 			// grar.
 			final InputModel input = location.getRootObject().getSubModel(InputModel.class);
 			if (input != null) {
-				if (value == null || value.equals(-1)) return;
+				if (value == null || value.equals(-1))
+					return;
 				final AVesselSet set = (AVesselSet) vessels.get((Integer) value);
 				Assignment newAssignment;
 				if (set instanceof AVessel) {
@@ -243,15 +290,14 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 						newAssignment = InputFactory.eINSTANCE.createAssignment();
 						newAssignment.getVessels().add(set);
 						newAssignment.getAssignedObjects().add((UUIDObject) object);
-						location.getEditingDomain().getCommandStack().execute(
-								AddCommand.create(location.getEditingDomain(),
-										input, InputPackage.eINSTANCE.getInputModel_Assignments(), newAssignment));
+						location.getEditingDomain().getCommandStack().execute(AddCommand.create(location.getEditingDomain(), input, InputPackage.eINSTANCE.getInputModel_Assignments(), newAssignment));
 						return;
 					} else {
-						location.getEditingDomain().getCommandStack().execute(
-								AssignmentEditorHelper.taskReassigned(getEditingDomain(), input, (UUIDObject) object, null, null, AssignmentEditorHelper.getAssignmentForTask(input, (UUIDObject) object),
-										newAssignment
-										));
+						location.getEditingDomain()
+								.getCommandStack()
+								.execute(
+										AssignmentEditorHelper.taskReassigned(getEditingDomain(), input, (UUIDObject) object, null, null,
+												AssignmentEditorHelper.getAssignmentForTask(input, (UUIDObject) object), newAssignment));
 					}
 				} else if (set instanceof AVesselClass) {
 					// add to spot
@@ -259,20 +305,18 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 					newAssignment.getVessels().add(set);
 					newAssignment.setAssignToSpot(true);
 					newAssignment.getAssignedObjects().add((UUIDObject) object);
-					location.getEditingDomain().getCommandStack().execute(
-							AddCommand.create(location.getEditingDomain(),
-									input, InputPackage.eINSTANCE.getInputModel_Assignments(), newAssignment));
+					location.getEditingDomain().getCommandStack().execute(AddCommand.create(location.getEditingDomain(), input, InputPackage.eINSTANCE.getInputModel_Assignments(), newAssignment));
 					return;
 				}
-				
+
 			}
 		}
 
 		@Override
-		public CellEditor getCellEditor(Composite parent, Object object) {
+		public CellEditor getCellEditor(final Composite parent, final Object object) {
 			getValues();
-			final String[] items = new String[allowedValues.size()-1];
-			for (int i = 0; i<items.length; i++) {
+			final String[] items = new String[allowedValues.size() - 1];
+			for (int i = 0; i < items.length; i++) {
 				items[i] = allowedValues.get(i).getFirst();
 			}
 			return new ComboBoxCellEditor(parent, items);
@@ -282,7 +326,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		public Integer getValue(final Object object) {
 			if (object instanceof Cargo) {
 				final Cargo cargo = (Cargo) object;
-				
+
 				final InputModel input = location.getRootObject().getSubModel(InputModel.class);
 				if (input != null) {
 					for (final Assignment assignment : input.getAssignments()) {
@@ -292,7 +336,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 					}
 				}
 			}
-			
+
 			return null;
 		}
 
@@ -303,8 +347,9 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 		@Override
 		public String render(final Object object) {
-			Integer value = getValue(object);
-			if (value == null || value == -1) return "";
+			final Integer value = getValue(object);
+			if (value == null || value == -1)
+				return "";
 			return allowedValues.get(value).getFirst();
 		}
 
