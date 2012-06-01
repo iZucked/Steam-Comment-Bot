@@ -34,45 +34,10 @@ public class LatenessReportView extends EMFReportView {
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 
-		addColumn("Type", objectFormatter, sp.getEvent__Type());
-
 		addColumn("ID", objectFormatter, sp.getEvent__Name());
 
-		addColumn("Start Date", datePartFormatter, sp.getEvent__GetLocalStart());
-		addColumn("Start Time", timePartFormatter, sp.getEvent__GetLocalStart());
-
-		addColumn("End Date", datePartFormatter, sp.getEvent__GetLocalEnd());
-		addColumn("End Time", timePartFormatter, sp.getEvent__GetLocalEnd());
-
-		addColumn("Window Start Date", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				return datePartFormatter.format(getWindowStartDate(object));
-			}
-		});
-
-		addColumn("Window Start Time", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				return timePartFormatter.format(getWindowStartDate(object));
-			}
-		});
-
-		addColumn("Window End Date", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				return datePartFormatter.format(getWindowEndDate(object));
-			}
-		});
-
-		addColumn("Window End Time", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				return timePartFormatter.format(getWindowEndDate(object));
-			}
-		});
-
-		addColumn("Late By", new BaseFormatter() {
+		addColumn("Type", objectFormatter, sp.getEvent__Type());
+		addColumn("Lateness", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
 
@@ -89,7 +54,11 @@ public class LatenessReportView extends EMFReportView {
 					diff /= 60;
 					// Strip
 					diff /= 60;
-					return String.format("%02d:%02d", diff / 24, diff % 24);
+					if (diff / 24 == 0) {
+						return String.format("%2dh", diff % 24);
+					} else {
+						return String.format("%2dd, %2dh", diff / 24, diff % 24);
+					}
 				}
 
 				return "";
@@ -117,6 +86,15 @@ public class LatenessReportView extends EMFReportView {
 				return super.getComparable(object);
 			}
 		});
+
+		addColumn("Start by", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				return calendarFormatterNoTZ.format(getWindowEndDate(object));
+			}
+		});
+		addColumn("Scheduled time", calendarFormatterNoTZ, sp.getEvent__GetLocalStart());
+
 	}
 
 	private Calendar getWindowStartDate(final Object object) {
