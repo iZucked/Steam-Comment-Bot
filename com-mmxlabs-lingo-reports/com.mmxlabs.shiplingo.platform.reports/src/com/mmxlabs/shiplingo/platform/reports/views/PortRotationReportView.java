@@ -59,11 +59,9 @@ public class PortRotationReportView extends EMFReportView {
 
 		addColumn("ID", objectFormatter, sp.getEvent__Name());
 
-		dateColumn = addColumn("Start Date", datePartFormatter, sp.getEvent__GetLocalStart());
-		addColumn("Start Time", timePartFormatter, sp.getEvent__GetLocalStart());
+		dateColumn = addColumn("Start Date", calendarFormatter, sp.getEvent__GetLocalStart());
 
-		addColumn("End Date", datePartFormatter, sp.getEvent__GetLocalEnd());
-		addColumn("End Time", timePartFormatter, sp.getEvent__GetLocalEnd());
+		addColumn("End Date", calendarFormatter, sp.getEvent__GetLocalEnd());
 
 		durationColumn = addColumn("Duration (DD:HH)", new BaseFormatter() {
 			@Override
