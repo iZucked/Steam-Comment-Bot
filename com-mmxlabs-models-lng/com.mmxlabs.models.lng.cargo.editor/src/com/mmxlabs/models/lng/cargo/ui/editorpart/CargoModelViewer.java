@@ -206,7 +206,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		final ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
 
 			@Override
-			protected EObject getElementForNotificationTarget(final EObject source) {
+			public EObject getElementForNotificationTarget(final EObject source) {
 				if (source instanceof LoadSlot) {
 					return ((LoadSlot) source).getCargo();
 				} else if (source instanceof DischargeSlot) {
