@@ -64,7 +64,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		allocationComponents = new ArrayList<ICargoAllocationFitnessComponent>();
 		schedulerComponents = new ArrayList<ICargoSchedulerFitnessComponent>(5);
 		schedulerComponents.add(new LatenessComponent(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, this));
-		
+
 		schedulerComponents.add(new CapacityComponent(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, this));
 
 		schedulerComponents.add(new CostComponent(CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME, CollectionsUtil.makeArrayList(FuelComponent.NBO, FuelComponent.FBO, FuelComponent.IdleNBO),
@@ -91,23 +91,25 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		allocationComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, TradingConstants.DCP_entityProvider,
 				SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider, this));
 
-		schedulerComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this, SchedulerConstants.DCP_portCostProvider, SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
-		
+		schedulerComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this, SchedulerConstants.DCP_portCostProvider,
+				SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
+
 		allComponents.addAll(schedulerComponents);
 		allComponents.addAll(allocationComponents);
 	}
 
-	public CargoSchedulerFitnessCore(
-			Iterable<ICargoFitnessComponentProvider> externalComponentProviders) {
+	public CargoSchedulerFitnessCore(final Iterable<ICargoFitnessComponentProvider> externalComponentProviders) {
 		this();
-		for (final ICargoFitnessComponentProvider provider : externalComponentProviders) {
-			ICargoFitnessComponent component = provider.createComponent(this);
-			allComponents.add(component);
-			if (component instanceof ICargoSchedulerFitnessComponent) {
-				schedulerComponents.add((ICargoSchedulerFitnessComponent) component);
-			}
-			if (component instanceof ICargoAllocationFitnessComponent) {
-				allocationComponents.add((ICargoAllocationFitnessComponent) component);
+		if (externalComponentProviders != null) {
+			for (final ICargoFitnessComponentProvider provider : externalComponentProviders) {
+				final ICargoFitnessComponent component = provider.createComponent(this);
+				allComponents.add(component);
+				if (component instanceof ICargoSchedulerFitnessComponent) {
+					schedulerComponents.add((ICargoSchedulerFitnessComponent) component);
+				}
+				if (component instanceof ICargoAllocationFitnessComponent) {
+					allocationComponents.add((ICargoAllocationFitnessComponent) component);
+				}
 			}
 		}
 	}
@@ -233,7 +235,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 		annotator.setPortSlotProvider(portSlotProvider);
 		annotator.setVesselProvider(vesselProvider);
-		
+
 		for (final ScheduledSequence scheduledSequence : schedule) {
 			final IResource resource = scheduledSequence.getResource();
 			final ISequence sequence = sequences.getSequence(resource);
