@@ -14,8 +14,11 @@ import java.util.Set;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -65,7 +68,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 							newName = namePrefix + " (" + counter++ + ")";
 						}
 
-						fork.setName(newName);
+						fork.setName(getNewName(instance.getName(), newName));
 					} catch (final IOException e) {
 						throw new ExecutionException("Unable to fork scenario", e);
 					}
@@ -73,6 +76,17 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 			}
 		}
 
+		return null;
+	}
+	
+	private String getNewName(final String oldName, final String suggestedName) {
+		// TODO: Hook in an element specific validator
+		final IInputValidator validator = null;
+		final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Fork " + oldName, "Choose new name for fork", suggestedName, validator);
+
+		if (dialog.open() == InputDialog.OK) {
+			return dialog.getValue();
+		}
 		return null;
 	}
 }
