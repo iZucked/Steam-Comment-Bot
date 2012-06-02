@@ -151,7 +151,7 @@ public class EObjectTableViewer extends GridTableViewer {
 		}
 	};
 
-	protected EObject getElementForNotificationTarget(EObject source) {
+	public EObject getElementForNotificationTarget(EObject source) {
 		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
 
 		}
@@ -468,11 +468,11 @@ public class EObjectTableViewer extends GridTableViewer {
 					final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
 					if (!status.isOK()) {
 						setStatus(detailConstraintStatus.getTarget(), status);
-						update(detailConstraintStatus.getTarget(), null);
+						update(getElementForNotificationTarget(detailConstraintStatus.getTarget()), null);
 
 						for (final EObject e : detailConstraintStatus.getObjects()) {
 							setStatus(e, status);
-							update(e, null);
+							update(getElementForNotificationTarget(e), null);
 						}
 					}
 				}
