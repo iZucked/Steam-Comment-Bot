@@ -375,6 +375,19 @@
                      tooltip="Save optimisations">
                </command>
          </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=additions">
+               <command
+                     commandId="com.mmxlabs.commands.optimisation.play"
+                     disabledIcon="icons/dlcl16/resume_co.gif"
+                     icon="icons/elcl16/resume_co.gif"
+                     id="com.mmxlabs.scenario.service.toolbars.optimisation.play"
+                     label="Optimise"
+                     style="push"
+                     tooltip="Start or resume optimisation">
+               </command>
+         </menuContribution>
       </extension>
       <extension
             point="org.eclipse.core.expressions.propertyTesters">
