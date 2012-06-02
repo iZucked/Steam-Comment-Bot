@@ -62,6 +62,40 @@
             </activeWhen>
          </handler>
          <handler
+               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.ForkAndStartOptimisationHandler"
+               commandId="com.mmxlabs.commands.optimisation.forkandplay">
+            <enabledWhen>
+                  <with
+                        variable="selection">
+               <iterate
+                     ifEmpty="false">
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <test
+                           forcePluginActivation="true"
+                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPlay">
+                     </test>
+                  </and>
+               </iterate>
+                  </with>
+            </enabledWhen>
+            <activeWhen>
+              <with
+                        variable="selection">
+               <iterate
+                        ifEmpty="false">
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
+                    </with>
+            </activeWhen>
+         </handler>
+         <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StopOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.terminate">
             <enabledWhen>
@@ -323,6 +357,11 @@
                id="com.mmxlabs.commands.optimisation.evaluate"
                name="Evaluate Schedule">
          </command>
+         <command
+               categoryId="com.mmxlabs.commands.category.optimisation"
+               id="com.mmxlabs.commands.optimisation.forkandplay"
+               name="Fork and Optimise">
+         </command>
       </extension>
       
       <extension
@@ -386,6 +425,15 @@
                      label="Optimise"
                      style="push"
                      tooltip="Start or resume optimisation">
+               </command>
+               <command
+                     commandId="com.mmxlabs.commands.optimisation.forkandplay"
+                     disabledIcon="icons/dlcl16/resume_co.gif"
+                     icon="icons/elcl16/resume_co.gif"
+                     id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
+                     label="Fork and Optimise"
+                     style="push"
+                     tooltip="Fork and Optimise">
                </command>
          </menuContribution>
       </extension>
