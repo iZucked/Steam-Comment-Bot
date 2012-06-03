@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.importer.FuelCurveImporter;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
@@ -236,7 +237,16 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 	}
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
-		final ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart());
+		final ScenarioTableViewer scenarioTableViewer = new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
+			@Override
+			public EObject getElementForNotificationTarget(final EObject source) {
+				if (source instanceof VesselAvailability) {
+					return source.eContainer();
+				}
+
+				return super.getElementForNotificationTarget(source);
+			}
+		};
 		scenarioTableViewer.setColourProvider(new IColorProvider() {
 
 			@Override
