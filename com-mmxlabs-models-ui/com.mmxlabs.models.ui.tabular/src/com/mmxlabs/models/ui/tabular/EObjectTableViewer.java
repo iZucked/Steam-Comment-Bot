@@ -25,7 +25,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.ICellEditorListener;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -35,14 +34,11 @@ import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.nebula.widgets.grid.GridColumn;
-import org.eclipse.nebula.widgets.grid.GridItem;
-import org.eclipse.nebula.widgets.grid.internal.DefaultCellRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -155,6 +151,11 @@ public class EObjectTableViewer extends GridTableViewer {
 		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
 
 		}
+		
+		if (source == null) {
+			final int ii = 0;
+		}
+		
 		return source;
 	}
 
@@ -467,14 +468,19 @@ public class EObjectTableViewer extends GridTableViewer {
 				if (status instanceof IDetailConstraintStatus) {
 					final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
 					if (!status.isOK()) {
-						setStatus(detailConstraintStatus.getTarget(), status);
-						update(getElementForNotificationTarget(detailConstraintStatus.getTarget()), null);
+						updateObject(getElementForNotificationTarget(detailConstraintStatus.getTarget()), status);
 
 						for (final EObject e : detailConstraintStatus.getObjects()) {
-							setStatus(e, status);
-							update(getElementForNotificationTarget(e), null);
+							updateObject(getElementForNotificationTarget(e), status);
 						}
 					}
+				}
+			}
+			
+			void updateObject(final EObject object, final IStatus status) {
+				if (object != null) {
+					setStatus(object, status);
+					update(object, null);
 				}
 			}
 
