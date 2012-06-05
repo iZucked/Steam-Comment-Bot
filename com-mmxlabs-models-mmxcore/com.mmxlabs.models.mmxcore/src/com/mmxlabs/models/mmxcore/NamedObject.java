@@ -63,6 +63,7 @@ public interface NamedObject extends MMXObject {
 	 * @return the value of the '<em>Other Names</em>' attribute list.
 	 * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getNamedObject_OtherNames()
 	 * @model
+	 * @since 2.2
 	 * @generated
 	 */
 	EList<String> getOtherNames();

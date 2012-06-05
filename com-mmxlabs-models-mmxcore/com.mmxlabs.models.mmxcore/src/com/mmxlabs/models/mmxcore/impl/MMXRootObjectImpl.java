@@ -384,7 +384,7 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 				restoreSubModels();
 				return null;
 			case MMXCorePackage.MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS:
-				return getSubModel((Class<T>)arguments.get(0));
+				return getSubModel((Class<?>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}
