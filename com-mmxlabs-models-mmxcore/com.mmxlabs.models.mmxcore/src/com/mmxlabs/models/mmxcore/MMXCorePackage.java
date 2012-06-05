@@ -215,13 +215,22 @@ public interface MMXCorePackage extends EPackage {
 	int NAMED_OBJECT__NAME = MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NAMED_OBJECT__OTHER_NAMES = MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Named Object</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NAMED_OBJECT_FEATURE_COUNT = MMX_OBJECT_FEATURE_COUNT + 1;
+	int NAMED_OBJECT_FEATURE_COUNT = MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -561,13 +570,22 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_ROOT_OBJECT__NAME = UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MMX_ROOT_OBJECT__OTHER_NAMES = UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Sub Models</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_ROOT_OBJECT__SUB_MODELS = UUID_OBJECT_FEATURE_COUNT + 1;
+	int MMX_ROOT_OBJECT__SUB_MODELS = UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Version</b></em>' attribute.
@@ -576,7 +594,7 @@ public interface MMXCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_ROOT_OBJECT__VERSION = UUID_OBJECT_FEATURE_COUNT + 2;
+	int MMX_ROOT_OBJECT__VERSION = UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>MMX Root Object</em>' class.
@@ -585,7 +603,7 @@ public interface MMXCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int MMX_ROOT_OBJECT_FEATURE_COUNT = UUID_OBJECT_FEATURE_COUNT + 3;
+	int MMX_ROOT_OBJECT_FEATURE_COUNT = UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -976,6 +994,17 @@ public interface MMXCorePackage extends EPackage {
 	EAttribute getNamedObject_Name();
 
 	/**
+	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.mmxcore.NamedObject#getOtherNames <em>Other Names</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Other Names</em>'.
+	 * @see com.mmxlabs.models.mmxcore.NamedObject#getOtherNames()
+	 * @see #getNamedObject()
+	 * @generated
+	 */
+	EAttribute getNamedObject_OtherNames();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.UUIDObject <em>UUID Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1306,6 +1335,14 @@ public interface MMXCorePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NAMED_OBJECT__NAME = eINSTANCE.getNamedObject_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Other Names</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NAMED_OBJECT__OTHER_NAMES = eINSTANCE.getNamedObject_OtherNames();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl <em>UUID Object</em>}' class.

@@ -11,6 +11,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -31,6 +32,7 @@ import java.lang.reflect.InvocationTargetException;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getSubModels <em>Sub Models</em>}</li>
  *   <li>{@link com.mmxlabs.models.mmxcore.impl.MMXRootObjectImpl#getVersion <em>Version</em>}</li>
  * </ul>
@@ -58,6 +60,16 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
 
 	/**
 	 * The cached value of the '{@link #getSubModels() <em>Sub Models</em>}' containment reference list.
@@ -127,6 +139,18 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_ROOT_OBJECT__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, MMXCorePackage.MMX_ROOT_OBJECT__OTHER_NAMES);
+		}
+		return otherNames;
 	}
 
 	/**
@@ -228,6 +252,8 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		switch (featureID) {
 			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
 				return getName();
+			case MMXCorePackage.MMX_ROOT_OBJECT__OTHER_NAMES:
+				return getOtherNames();
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				return getSubModels();
 			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
@@ -247,6 +273,10 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		switch (featureID) {
 			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
 				setName((String)newValue);
+				return;
+			case MMXCorePackage.MMX_ROOT_OBJECT__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				getSubModels().clear();
@@ -270,6 +300,9 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case MMXCorePackage.MMX_ROOT_OBJECT__OTHER_NAMES:
+				getOtherNames().clear();
+				return;
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				getSubModels().clear();
 				return;
@@ -290,6 +323,8 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		switch (featureID) {
 			case MMXCorePackage.MMX_ROOT_OBJECT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case MMXCorePackage.MMX_ROOT_OBJECT__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 			case MMXCorePackage.MMX_ROOT_OBJECT__SUB_MODELS:
 				return subModels != null && !subModels.isEmpty();
 			case MMXCorePackage.MMX_ROOT_OBJECT__VERSION:
@@ -308,6 +343,7 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case MMXCorePackage.MMX_ROOT_OBJECT__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				case MMXCorePackage.MMX_ROOT_OBJECT__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -324,6 +360,7 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return MMXCorePackage.MMX_ROOT_OBJECT__NAME;
+				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return MMXCorePackage.MMX_ROOT_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -346,7 +383,7 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 				restoreSubModels();
 				return null;
 			case MMXCorePackage.MMX_ROOT_OBJECT___GET_SUB_MODEL__CLASS:
-				return getSubModel((Class<?>)arguments.get(0));
+				return getSubModel((Class<T>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -363,6 +400,8 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", otherNames: ");
+		result.append(otherNames);
 		result.append(", version: ");
 		result.append(version);
 		result.append(')');
