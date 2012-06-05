@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.models.mmxcore;
 
 import org.eclipse.emf.common.notify.Adapter;
@@ -18,4 +22,9 @@ public interface IMMXAdapter extends Adapter {
 	 * Called after a save has finished
 	 */
 	public void enable();
+	
+	/**
+	 * @since 2.1
+	 */
+	public void enable(boolean loseNotifications);
 }

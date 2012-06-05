@@ -1,4 +1,12 @@
+com.mmxlabs.models.mmxcore.p2/.project
+
 syntax: regexp
 ^.*/bin$
 syntax: regexp
 ^.*/target$
+
+syntax: regexp
+^\.project$
+
+
+.*~$

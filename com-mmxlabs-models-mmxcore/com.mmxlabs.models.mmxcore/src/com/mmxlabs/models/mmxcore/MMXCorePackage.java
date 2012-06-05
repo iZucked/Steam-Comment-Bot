@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.mmxcore;
@@ -742,7 +742,7 @@ public interface MMXCorePackage extends EPackage {
 	int MMX_SUB_MODEL__PROXIES = MMX_OBJECT__PROXIES;
 
 	/**
-	 * The feature id for the '<em><b>Sub Model Instance</b></em>' containment reference.
+	 * The feature id for the '<em><b>Sub Model Instance</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -1174,10 +1174,10 @@ public interface MMXCorePackage extends EPackage {
 	EClass getMMXSubModel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.mmxcore.MMXSubModel#getSubModelInstance <em>Sub Model Instance</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.mmxcore.MMXSubModel#getSubModelInstance <em>Sub Model Instance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Sub Model Instance</em>'.
+	 * @return the meta object for the reference '<em>Sub Model Instance</em>'.
 	 * @see com.mmxlabs.models.mmxcore.MMXSubModel#getSubModelInstance()
 	 * @see #getMMXSubModel()
 	 * @generated
@@ -1481,7 +1481,7 @@ public interface MMXCorePackage extends EPackage {
 		EClass MMX_SUB_MODEL = eINSTANCE.getMMXSubModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Sub Model Instance</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Sub Model Instance</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated

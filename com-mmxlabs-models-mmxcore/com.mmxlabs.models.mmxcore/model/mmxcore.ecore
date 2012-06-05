@@ -57,7 +57,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referentID" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="resolvedReferent" lowerBound="1"
-        eType="#//UUIDObject"/>
+        eType="#//UUIDObject" transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="reference" lowerBound="1"
         eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EReference"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="referentOwner" lowerBound="1"
@@ -87,7 +87,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MMXSubModel" eSuperTypes="#//MMXObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="subModelInstance" lowerBound="1"
-        eType="#//UUIDObject" containment="true"/>
+        eType="#//UUIDObject"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="originalResource" lowerBound="1"
         eType="#//MMXResource"/>
   </eClassifiers>

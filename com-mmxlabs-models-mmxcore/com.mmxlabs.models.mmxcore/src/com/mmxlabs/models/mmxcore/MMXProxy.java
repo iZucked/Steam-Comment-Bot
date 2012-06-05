@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.mmxcore;
@@ -66,7 +66,7 @@ public interface MMXProxy extends EObject {
 	 * @return the value of the '<em>Resolved Referent</em>' reference.
 	 * @see #setResolvedReferent(UUIDObject)
 	 * @see com.mmxlabs.models.mmxcore.MMXCorePackage#getMMXProxy_ResolvedReferent()
-	 * @model required="true"
+	 * @model required="true" transient="true"
 	 * @generated
 	 */
 	UUIDObject getResolvedReferent();

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.mmxcore.impl;
@@ -158,7 +158,8 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 		proxy.setReference(ref);
 		proxy.setResolvedReferent(u);
 		proxy.setReferentID(u.getUuid());
-		proxy.setReferentOwner(referent.eResource().getURI().toString());
+		if (referent.eResource() != null)
+			proxy.setReferentOwner(referent.eResource().getURI().toString());
 		proxy.setIndex(index);
 		
 		getProxies().add(proxy);
@@ -176,6 +177,7 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 			final MMXProxy p = iterator.next();
 			p.setResolvedReferent(objectsByUUID.get(p.getReferentID()));
 		}
+		
 		for (final EObject o : eContents()) {
 			if (o instanceof MMXObject) ((MMXObject) o).resolveProxies(objectsByUUID);
 		}
@@ -217,10 +219,28 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 		for (final EObject o : eContents()) {
 			if (o instanceof MMXObject) {
 				((MMXObject) o).collectUUIDObjects(objectsByUUID);
+			} else {
+				collectUUIDObjectsFor(objectsByUUID, o);
 			}
 		}
 	}
-
+	
+	/**
+	 * A helper method for collecting UUID objects even in children which are not themselves MMXObjects
+	 * @param objectsByUUID
+	 * @param object
+	 * @since 2.1
+	 */
+	public void collectUUIDObjectsFor(final Map<String, UUIDObject> objectsByUUID, final EObject object) {
+		for (final EObject o : object.eContents()) {
+			if (o instanceof MMXObject) {
+				((MMXObject) o).collectUUIDObjects(objectsByUUID);
+			} else {
+				collectUUIDObjectsFor(objectsByUUID, o);
+			}
+		}
+	}
+	
 	/**
 	 * This is equivalent to
 	 * <code>

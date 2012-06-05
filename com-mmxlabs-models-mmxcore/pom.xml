@@ -5,14 +5,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.mmxcore</groupId>
 	<artifactId>com.mmxlabs.models.mmxcore.parent</artifactId>
-	<version>1-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>11</version>
+		<version>13</version>
 	</parent>
 
 	<scm>
@@ -124,26 +124,14 @@
 		</repository>
 
 		<repository>
-			<id>nebula-main-snapshots</id>
-			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
+			<id>edapt-updates</id>
+			<url>http://download.eclipse.org/edapt/update-site/</url>
 			<layout>p2</layout>
 		</repository>
 
 		<repository>
-			<id>nebula-incubation-snapshots</id>
-			<url>http://download.eclipse.org/technology/nebula/incubation/snapshot</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>mmxlabs-p2-external</id>
-			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>mmxlabs-p2-snapshots</id>
-			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/</url>
+			<id>mmxlabs-p2-releases</id>
+			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/</url>
 			<layout>p2</layout>
 		</repository>
 

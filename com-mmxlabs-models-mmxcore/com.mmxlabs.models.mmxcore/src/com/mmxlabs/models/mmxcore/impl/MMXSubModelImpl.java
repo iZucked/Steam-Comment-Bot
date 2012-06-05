@@ -1,15 +1,16 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.mmxcore.impl;
+
+import java.util.Map;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -33,7 +34,7 @@ import org.eclipse.emf.ecore.resource.Resource;
  */
 public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	/**
-	 * The cached value of the '{@link #getSubModelInstance() <em>Sub Model Instance</em>}' containment reference.
+	 * The cached value of the '{@link #getSubModelInstance() <em>Sub Model Instance</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getSubModelInstance()
@@ -87,6 +88,24 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	 * @generated
 	 */
 	public UUIDObject getSubModelInstance() {
+		if (subModelInstance != null && subModelInstance.eIsProxy()) {
+			InternalEObject oldSubModelInstance = (InternalEObject)subModelInstance;
+			subModelInstance = (UUIDObject)eResolveProxy(oldSubModelInstance);
+			if (subModelInstance != oldSubModelInstance) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, oldSubModelInstance, subModelInstance));
+			}
+		}
+		return subModelInstance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @since 2.1
+	 */
+	public UUIDObject basicGetSubModelInstance() {
 		return subModelInstance;
 	}
 
@@ -95,33 +114,11 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetSubModelInstance(UUIDObject newSubModelInstance, NotificationChain msgs) {
+	public void setSubModelInstance(UUIDObject newSubModelInstance) {
 		UUIDObject oldSubModelInstance = subModelInstance;
 		subModelInstance = newSubModelInstance;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, oldSubModelInstance, newSubModelInstance);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setSubModelInstance(UUIDObject newSubModelInstance) {
-		if (newSubModelInstance != subModelInstance) {
-			NotificationChain msgs = null;
-			if (subModelInstance != null)
-				msgs = ((InternalEObject)subModelInstance).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, null, msgs);
-			if (newSubModelInstance != null)
-				msgs = ((InternalEObject)newSubModelInstance).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, null, msgs);
-			msgs = basicSetSubModelInstance(newSubModelInstance, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, newSubModelInstance, newSubModelInstance));
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE, oldSubModelInstance, subModelInstance));
 	}
 
 	/**
@@ -151,24 +148,11 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE:
-				return basicSetSubModelInstance(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case MMXCorePackage.MMX_SUB_MODEL__SUB_MODEL_INSTANCE:
-				return getSubModelInstance();
+				if (resolve) return getSubModelInstance();
+				return basicGetSubModelInstance();
 			case MMXCorePackage.MMX_SUB_MODEL__ORIGINAL_RESOURCE:
 				return getOriginalResource();
 		}
@@ -243,4 +227,21 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 		return result.toString();
 	}
 
+	@Override
+	public void resolveProxies(Map<String, UUIDObject> objectsByUUID) {
+		super.resolveProxies(objectsByUUID);
+		getSubModelInstance().resolveProxies(objectsByUUID);
+	}
+
+	@Override
+	public void restoreProxies() {
+		super.restoreProxies();
+		getSubModelInstance().restoreProxies();
+	}
+
+	@Override
+	public void collectUUIDObjects(Map<String, UUIDObject> objectsByUUID) {
+		super.collectUUIDObjects(objectsByUUID);
+		getSubModelInstance().collectUUIDObjects(objectsByUUID);
+	}
 } //MMXSubModelImpl

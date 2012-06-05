@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.mmxcore.impl;
@@ -593,7 +593,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 		initEClass(mmxProxyEClass, MMXProxy.class, "MMXProxy", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getMMXProxy_ReferentID(), ecorePackage.getEString(), "referentID", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getMMXProxy_ResolvedReferent(), this.getUUIDObject(), null, "resolvedReferent", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMMXProxy_ResolvedReferent(), this.getUUIDObject(), null, "resolvedReferent", null, 1, 1, MMXProxy.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getMMXProxy_Reference(), ecorePackage.getEReference(), null, "reference", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMMXProxy_ReferentOwner(), ecorePackage.getEString(), "referentOwner", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMMXProxy_Index(), ecorePackage.getEInt(), "index", null, 1, 1, MMXProxy.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -618,7 +618,7 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 		initEOperation(op, g1);
 
 		initEClass(mmxSubModelEClass, MMXSubModel.class, "MMXSubModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getMMXSubModel_SubModelInstance(), this.getUUIDObject(), null, "subModelInstance", null, 1, 1, MMXSubModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getMMXSubModel_SubModelInstance(), this.getUUIDObject(), null, "subModelInstance", null, 1, 1, MMXSubModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getMMXSubModel_OriginalResource(), this.getMMXResource(), "originalResource", null, 1, 1, MMXSubModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types

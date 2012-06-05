@@ -1,10 +1,11 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.mmxcore.impl;
 
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -209,9 +210,9 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * @generated NO
 	 */
 	public void restoreSubModels() {
-		for (final MMXSubModel sub : getSubModels()) {
-			sub.getOriginalResource().getContents().add(sub.getSubModelInstance());
-		}
+//		for (final MMXSubModel sub : getSubModels()) {
+//			sub.getOriginalResource().getContents().add(sub.getSubModelInstance());
+//		}
 		getSubModels().clear();
 	}
 
