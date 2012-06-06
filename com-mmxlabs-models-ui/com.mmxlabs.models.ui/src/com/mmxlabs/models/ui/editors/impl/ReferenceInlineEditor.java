@@ -122,4 +122,13 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	protected boolean updateOnChangeToFeature(Object changedFeature) {
 		return valueProvider.updateOnChangeToFeature(changedFeature);
 	}
+	
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+
+		combo.setEnabled(enabled);
+		
+		super.setEnabled(enabled);
+	}
 }

@@ -80,4 +80,12 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 	protected Object getInitialUnsetValue() {
 		return values.get(0);
 	}
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+
+		combo.setEnabled(enabled);
+		
+		super.setEnabled(enabled);
+	}
 }

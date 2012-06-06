@@ -36,4 +36,5 @@ public interface IInlineEditor {
 	void processValidation(IStatus status);	
 	public EStructuralFeature getFeature();
 	void setLabel(Label label);
+	void setEnabled(boolean enabled);
 }

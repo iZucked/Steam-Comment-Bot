@@ -22,22 +22,22 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 	public DialogInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
+
 	private Button button;
 	private Label description;
-	
+
 	protected Shell getShell() {
 		return button.getShell();
 	}
-	
+
 	@Override
 	public Control createControl(final Composite parent) {
 		final Composite contents = new Composite(parent, SWT.NONE);
 		contents.setLayout(new GridLayout(2, false));
-		
+
 		final Label description = new Label(contents, SWT.WRAP);
 		description.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
-		
-		
+
 		final Button button = new Button(contents, SWT.NONE);
 		button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
 		button.setText("Edit");
@@ -79,6 +79,16 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 			description.setText(render(value));
 	}
 
+	@Override
+	public void setEnabled(final boolean enabled) {
+
+		button.setEnabled(enabled);
+		description.setEnabled(enabled);
+
+		super.setEnabled(enabled);
+	}
+
 	protected abstract Object displayDialog(final Object currentValue);
+
 	protected abstract String render(final Object value);
 }

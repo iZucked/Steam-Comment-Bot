@@ -72,4 +72,13 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	protected Object getInitialUnsetValue() {
 		return "";
 	}
+	
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+
+		text.setEnabled(enabled);
+		
+		super.setEnabled(enabled);
+	}
 }

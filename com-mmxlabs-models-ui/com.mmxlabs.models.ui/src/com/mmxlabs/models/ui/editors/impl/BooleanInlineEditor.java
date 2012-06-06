@@ -16,7 +16,8 @@ import org.eclipse.swt.widgets.Control;
 
 public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	private Button button;
-	public BooleanInlineEditor(EStructuralFeature feature) {
+
+	public BooleanInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
 
@@ -41,13 +42,10 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 					public void widgetSelected(SelectionEvent e) {
 						doSetValue((Boolean) button.getSelection(), false);
 					}
-					
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {}
 				});
 		
 		this.button = button;
-		
+
 		return super.wrapControl(button);
 	}
 
@@ -61,4 +59,11 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 		}
 	}
 
+	@Override
+	public void setEnabled(final boolean enabled) {
+
+		button.setEnabled(enabled);
+
+		super.setEnabled(enabled);
+	}
 }

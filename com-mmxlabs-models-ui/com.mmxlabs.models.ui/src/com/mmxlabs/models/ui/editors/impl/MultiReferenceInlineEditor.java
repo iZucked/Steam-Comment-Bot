@@ -42,6 +42,7 @@ import com.mmxlabs.rcp.common.dialogs.ListSelectionDialog;
 public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	private IReferenceValueProvider valueProvider;
 	private Label theLabel;
+	private Button button;
 
 	/**
 	 * @param path
@@ -69,7 +70,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 		final Label label = new Label(buttonAndLabel, SWT.NONE);
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		final Button button = new Button(buttonAndLabel, SWT.NONE);
+		button = new Button(buttonAndLabel, SWT.NONE);
 		button.setText("Edit");
 
 		button.addSelectionListener(new SelectionAdapter() {
@@ -177,5 +178,15 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		}
 
 		return null;
+	}
+	
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+
+		theLabel.setEnabled(enabled);
+		button.setEnabled(enabled);
+		
+		super.setEnabled(enabled);
 	}
 }

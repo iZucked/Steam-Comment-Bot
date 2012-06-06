@@ -103,6 +103,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	};
 
 	protected Label label;
+	
+	protected boolean enabled = true;
 
 	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
 		this.feature = feature;
@@ -214,7 +216,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * 
 	 * @param value
 	 */
-	protected synchronized void doSetValue(final Object value, boolean forceCommandExecution) {
+	protected synchronized void doSetValue(final Object value, final boolean forceCommandExecution) {
 		// System.err.println("setvalue on " + feature.getName() + " to " +
 		// value + " (" + currentlySettingValue + ")");
 		if (currentlySettingValue) {
@@ -382,5 +384,17 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	@Override
 	public void setLabel(final Label label) {
 		this.label = label;
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+		if (label != null) {
+			label.setEnabled(enabled);
+		}
+		this.enabled = enabled;
 	}
 }

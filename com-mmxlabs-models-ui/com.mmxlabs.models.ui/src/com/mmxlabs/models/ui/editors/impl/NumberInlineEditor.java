@@ -164,4 +164,13 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		}
 		return displayValue;
 	}
+	
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+
+		text.getControl().setEnabled(enabled);
+		
+		super.setEnabled(enabled);
+	}
 }

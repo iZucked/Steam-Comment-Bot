@@ -42,7 +42,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	 * @return A suitable value
 	 */
 	protected abstract Object getInitialUnsetValue();
-	
+
 	private void setControlEnabled(final Control c, final boolean enabled) {
 		if (c == null) return;
 		c.setEnabled(enabled);
@@ -52,7 +52,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			}
 		}
 	}
-	
+
 	@Override
 	public Control createControl(final Composite parent) {
 
@@ -94,7 +94,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 							currentlySettingValue = false;
 						}
 					}
-					
+
 				}
 			});
 			setButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false,
@@ -143,7 +143,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (input == null) return false;
 		return input.eIsSet(getFeature());
 	}
-	
+
 	@Override
 	protected void updateDisplay(final Object value) {
 		updateControl();
@@ -154,5 +154,14 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			setButton.setSelection(valueIsSet());
 		}
 		setControlEnabled(inner, setButton == null || setButton.getSelection());
+	}
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+		if (setButton != null) {
+			setButton.setEnabled(enabled);
+		}
+
+		super.setEnabled(enabled);
 	}
 }

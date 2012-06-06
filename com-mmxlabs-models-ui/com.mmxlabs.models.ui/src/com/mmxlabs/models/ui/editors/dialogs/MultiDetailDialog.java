@@ -411,6 +411,11 @@ public class MultiDetailDialog extends Dialog {
 				public void setLabel(Label label) {
 					proxy.setLabel(label);
 				}
+
+				@Override
+				public void setEnabled(boolean enabled) {
+					proxy.setEnabled(enabled);
+				}
 			};
 		}
 	}
