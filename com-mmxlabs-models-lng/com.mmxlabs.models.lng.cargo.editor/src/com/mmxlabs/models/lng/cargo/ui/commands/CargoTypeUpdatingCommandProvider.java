@@ -17,6 +17,8 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
@@ -32,6 +34,10 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Class<? extends Command> commandClass,
 			final CommandParameter parameter, final Command input) {
 		if (commandClass == SetCommand.class) {
+			InputModel inputModel = rootObject.getSubModel(InputModel.class);
+			if (overrides.containsKey(inputModel)) {
+				inputModel = (InputModel) overrides.get(inputModel);
+			}
 			if (parameter.getEOwner() instanceof LoadSlot) {
 				final LoadSlot slot = (LoadSlot) parameter.getEOwner();
 				if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
@@ -43,6 +49,7 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 							if (dischargeSlot != null) {
 
 								final CompoundCommand cmd = new CompoundCommand("Convert to DES Purchase");
+								cmd.append(AssignmentEditorHelper.totallyUnassign(editingDomain, inputModel, cargo));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
@@ -68,6 +75,7 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 							if (loadSlot != null) {
 
 								final CompoundCommand cmd = new CompoundCommand("Convert to FOB Sale");
+								cmd.append(AssignmentEditorHelper.totallyUnassign(editingDomain, inputModel, cargo));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
