@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -105,6 +106,17 @@ public class PerVesselReportView extends ViewPart {
 					});
 		}
 		
+		final TableViewerColumn utilisation = new TableViewerColumn(tableViewer, SWT.NONE);
+		utilisation.getColumn().setText("Utilisation");
+		utilisation.getColumn().pack();
+		utilisation.setLabelProvider(
+				new ColumnLabelProvider() {
+					@Override
+					public String getText(Object element) {
+						return String.format("%.2f%%", ((VesselCosts)element).utilisation * 100);
+					}
+				});
+		
 		makeActions();
 		fillLocalToolBar(getViewSite().getActionBars().getToolBarManager());
 		
@@ -158,9 +170,12 @@ public class PerVesselReportView extends ViewPart {
 		public int canalCost;
 		public int hireCost;
 		public int portCost;
+		public double utilisation;
 		public Map<Fuel, Integer> fuelCosts = new HashMap<Fuel, Integer>();
 		public VesselCosts(final Sequence sequence) {
 			name = sequence.getName();
+			int activeDuration = 0;
+			int idleDuration = 0;
 			for (final Event event : sequence.getEvents()) {
 				hireCost += event.getHireCost();
 				if (event instanceof FuelUsage) {
@@ -174,7 +189,15 @@ public class PerVesselReportView extends ViewPart {
 				if (event instanceof PortVisit) {
 					portCost += ((PortVisit) event).getPortCost();
 				}
+				
+				if (event instanceof Idle) {
+					idleDuration += event.getDuration();
+				} else {
+					activeDuration += event.getDuration();
+				}
 			}
+			
+			utilisation = activeDuration / (double) (idleDuration + activeDuration);
 		}
 	}
 	
