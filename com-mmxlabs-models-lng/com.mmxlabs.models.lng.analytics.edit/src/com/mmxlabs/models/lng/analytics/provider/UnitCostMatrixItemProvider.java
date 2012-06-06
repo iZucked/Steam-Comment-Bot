@@ -71,6 +71,7 @@ public class UnitCostMatrixItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addOtherNamesPropertyDescriptor(object);
 			addPortsPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
 			addNotionalDayRatePropertyDescriptor(object);
@@ -105,6 +106,28 @@ public class UnitCostMatrixItemProvider
 				 getString("_UI_NamedObject_name_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Other Names feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOtherNamesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedObject_otherNames_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
+				 MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES,
 				 true,
 				 false,
 				 false,
@@ -533,6 +556,7 @@ public class UnitCostMatrixItemProvider
 
 		switch (notification.getFeatureID(UnitCostMatrix.class)) {
 			case AnalyticsPackage.UNIT_COST_MATRIX__NAME:
+			case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES:
 			case AnalyticsPackage.UNIT_COST_MATRIX__NOTIONAL_DAY_RATE:
 			case AnalyticsPackage.UNIT_COST_MATRIX__SPEED:
 			case AnalyticsPackage.UNIT_COST_MATRIX__ROUND_TRIP:

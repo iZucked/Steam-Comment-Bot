@@ -9,6 +9,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -20,6 +21,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.importers.DataIndexImporter;
+import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
@@ -27,8 +30,11 @@ import com.mmxlabs.models.ui.tabular.DialogFeatureManipulator;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
+import com.mmxlabs.models.util.importer.IClassImporter;
 
 public class IndexEditorPane extends ScenarioTableViewerPane {
+	private boolean useIntegers;
+
 	public IndexEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
@@ -54,6 +60,24 @@ public class IndexEditorPane extends ScenarioTableViewerPane {
 		defaultSetTitle("Indices");
 	}
 	
+	public void setUseIntegers(final boolean b) {
+		this.useIntegers = b;
+	}
+	
+	@Override
+	protected Action createImportAction() {
+		return new SimpleImportAction(getJointModelEditorPart(), getScenarioViewer()) {
+			@Override
+			protected IClassImporter getImporter(EReference containment) {
+				final IClassImporter result = super.getImporter(containment);
+				if (result instanceof DataIndexImporter) {
+					((DataIndexImporter) result).setParseAsInt(useIntegers);
+				}
+				return result;
+			};
+		};
+	}
+
 	private class IndexValueManipulator implements ICellRenderer, ICellManipulator {
 		private BasicAttributeManipulator expressionManipulator = 
 				new BasicAttributeManipulator(
@@ -130,6 +154,4 @@ public class IndexEditorPane extends ScenarioTableViewerPane {
 	public void defaultSetTitle(String string) {
 		super.defaultSetTitle(string);
 	}
-	
-	
 }

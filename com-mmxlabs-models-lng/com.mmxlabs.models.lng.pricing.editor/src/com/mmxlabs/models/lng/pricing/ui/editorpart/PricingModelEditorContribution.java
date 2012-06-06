@@ -75,6 +75,7 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		pane2.getViewer().setInput(modelObject);
 		pane.defaultSetTitle("Commodity Indices");
 		pane2.defaultSetTitle("Chartering Indices");
+		pane2.setUseIntegers(true);
 		
 		int page = editorPart.addPage(sash);
 		editorPart.setPageText(page, "Indices");

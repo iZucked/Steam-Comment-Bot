@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.fleet.ui.inlineeditors;
 
+import java.util.List;
+
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -21,9 +23,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 
@@ -68,7 +74,6 @@ public class CanalCostsDialog extends Dialog {
 			@Override
 			public void update(final ViewerCell cell) {
 				cell.setText(((VesselClassRouteParameters) cell.getElement()).getRoute().getName());
-
 			}
 		});
 
@@ -87,12 +92,29 @@ public class CanalCostsDialog extends Dialog {
 		return content;
 	}
 
-	public int open(final AdapterFactory adapterFactory, final EditingDomain editingDomain, final EObject container, final EReference containment) {
+	public int open(final AdapterFactory adapterFactory, final EditingDomain editingDomain, final MMXRootObject rootObject, final EObject container, final EReference containment) {
 		this.container = EcoreUtil.copy(container);
 		this.containment = containment;
-
-		final EList<VesselClassRouteParameters> costs = (EList<VesselClassRouteParameters>) this.container.eGet(containment);
-
+		
+		final List<VesselClassRouteParameters> l = (List<VesselClassRouteParameters>) this.container.eGet(containment);
+		
+		final PortModel pm = rootObject.getSubModel(PortModel.class);
+		if (pm != null) {
+			route_loop:
+			for (final Route r : pm.getRoutes()) {
+				if (r.isCanal() == false) continue route_loop;
+				for (final VesselClassRouteParameters vcrp : l) {
+					if (vcrp.getRoute() == r) {
+						continue route_loop;
+					}
+				}
+				
+				final VesselClassRouteParameters vcrp = FleetFactory.eINSTANCE.createVesselClassRouteParameters();
+				vcrp.setRoute(r);
+				l.add(vcrp);
+			}
+		}
+		
 		this.editingDomain = editingDomain;
 		this.adapterFactory = adapterFactory;
 

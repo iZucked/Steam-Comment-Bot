@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
@@ -44,6 +45,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getNotionalDayRate <em>Notional Day Rate</em>}</li>
@@ -86,6 +88,16 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
 
 	/**
 	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' reference list.
@@ -443,6 +455,18 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		name = newName;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_MATRIX__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES);
+		}
+		return otherNames;
 	}
 
 	/**
@@ -870,6 +894,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		switch (featureID) {
 			case AnalyticsPackage.UNIT_COST_MATRIX__NAME:
 				return getName();
+			case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES:
+				return getOtherNames();
 			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
 				return getPorts();
 			case AnalyticsPackage.UNIT_COST_MATRIX__VESSEL:
@@ -920,6 +946,10 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		switch (featureID) {
 			case AnalyticsPackage.UNIT_COST_MATRIX__NAME:
 				setName((String)newValue);
+				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
 				getPorts().clear();
@@ -990,6 +1020,9 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES:
+				getOtherNames().clear();
+				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
 				getPorts().clear();
 				return;
@@ -1055,6 +1088,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		switch (featureID) {
 			case AnalyticsPackage.UNIT_COST_MATRIX__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
 				return ports != null && !ports.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__VESSEL:
@@ -1103,6 +1138,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case AnalyticsPackage.UNIT_COST_MATRIX__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -1119,6 +1155,7 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return AnalyticsPackage.UNIT_COST_MATRIX__NAME;
+				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -1137,6 +1174,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", otherNames: ");
+		result.append(otherNames);
 		result.append(", notionalDayRate: ");
 		result.append(notionalDayRate);
 		result.append(", speed: ");

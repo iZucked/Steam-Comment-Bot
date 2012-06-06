@@ -190,7 +190,7 @@ public class PortCostImpl extends MMXObjectImpl implements PortCost {
 			if (entry.getActivity() == activity) {
 				if (isSetReferenceCapacity()) {
 					return (int)
-						(entry.getCost() * ((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity());
+						(entry.getCost() * (((VesselClass)vesselClass).getCapacity() / (double) getReferenceCapacity()));
 				} else {
 					return entry.getCost();
 				}
