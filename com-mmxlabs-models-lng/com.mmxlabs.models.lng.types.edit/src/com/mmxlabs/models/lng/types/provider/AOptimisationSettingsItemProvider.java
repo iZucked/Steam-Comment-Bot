@@ -68,6 +68,7 @@ public class AOptimisationSettingsItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addOtherNamesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -86,6 +87,28 @@ public class AOptimisationSettingsItemProvider
 				 getString("_UI_NamedObject_name_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"),
 				 MMXCorePackage.Literals.NAMED_OBJECT__NAME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Other Names feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addOtherNamesPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NamedObject_otherNames_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
+				 MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES,
 				 true,
 				 false,
 				 false,
@@ -121,6 +144,7 @@ public class AOptimisationSettingsItemProvider
 
 		switch (notification.getFeatureID(AOptimisationSettings.class)) {
 			case TypesPackage.AOPTIMISATION_SETTINGS__NAME:
+			case TypesPackage.AOPTIMISATION_SETTINGS__OTHER_NAMES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

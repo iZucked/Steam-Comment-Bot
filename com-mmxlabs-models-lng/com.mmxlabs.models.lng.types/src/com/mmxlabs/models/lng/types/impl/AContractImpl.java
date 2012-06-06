@@ -14,11 +14,14 @@ import com.mmxlabs.models.mmxcore.NamedObject;
 
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
+import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 /**
  * <!-- begin-user-doc -->
@@ -28,6 +31,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.types.impl.AContractImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.types.impl.AContractImpl#getOtherNames <em>Other Names</em>}</li>
  * </ul>
  * </p>
  *
@@ -53,6 +57,16 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOtherNames()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> otherNames;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -99,11 +113,25 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<String> getOtherNames() {
+		if (otherNames == null) {
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.ACONTRACT__OTHER_NAMES);
+		}
+		return otherNames;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case TypesPackage.ACONTRACT__NAME:
 				return getName();
+			case TypesPackage.ACONTRACT__OTHER_NAMES:
+				return getOtherNames();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -113,11 +141,16 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case TypesPackage.ACONTRACT__NAME:
 				setName((String)newValue);
+				return;
+			case TypesPackage.ACONTRACT__OTHER_NAMES:
+				getOtherNames().clear();
+				getOtherNames().addAll((Collection<? extends String>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -134,6 +167,9 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 			case TypesPackage.ACONTRACT__NAME:
 				setName(NAME_EDEFAULT);
 				return;
+			case TypesPackage.ACONTRACT__OTHER_NAMES:
+				getOtherNames().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -148,6 +184,8 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 		switch (featureID) {
 			case TypesPackage.ACONTRACT__NAME:
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case TypesPackage.ACONTRACT__OTHER_NAMES:
+				return otherNames != null && !otherNames.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -162,6 +200,7 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
 				case TypesPackage.ACONTRACT__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
+				case TypesPackage.ACONTRACT__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -178,6 +217,7 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
 				case MMXCorePackage.NAMED_OBJECT__NAME: return TypesPackage.ACONTRACT__NAME;
+				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return TypesPackage.ACONTRACT__OTHER_NAMES;
 				default: return -1;
 			}
 		}
@@ -196,6 +236,8 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");
 		result.append(name);
+		result.append(", otherNames: ");
+		result.append(otherNames);
 		result.append(')');
 		return result.toString();
 	}
