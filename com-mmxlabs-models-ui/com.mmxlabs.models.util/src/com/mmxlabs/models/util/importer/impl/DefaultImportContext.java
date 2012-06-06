@@ -37,6 +37,8 @@ public class DefaultImportContext implements IImportContext {
 		final List<NamedObject> matches = namedObjects.get(name);
 		if (matches == null) {
 			log.warn("No objects with name " + name + " have been imported");
+			final String lowerName = name.toLowerCase();
+			if (!lowerName.equals(name)) return getNamedObject(lowerName, preferredType);
 			return null;
 		}
 		int match = Integer.MAX_VALUE;
@@ -73,12 +75,17 @@ public class DefaultImportContext implements IImportContext {
 	}
 	
 	private void registerObjectWithName(final NamedObject object, final String name) {
+		if (name == null) return;
 		List<NamedObject> others = namedObjects.get(name);
 		if (others == null) {
 			others = new LinkedList<NamedObject>();
 			namedObjects.put(name, others);
 		}
 		others.add(object);
+		
+		if (name.equals(name.toLowerCase()) == false) {
+			registerObjectWithName(object, name.toLowerCase());
+		}
 	}
 
 	@Override
