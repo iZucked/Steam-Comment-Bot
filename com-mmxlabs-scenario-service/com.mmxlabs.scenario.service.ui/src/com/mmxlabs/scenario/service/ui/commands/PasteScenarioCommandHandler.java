@@ -6,18 +6,16 @@ package com.mmxlabs.scenario.service.ui.commands;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.edit.ui.dnd.LocalTransfer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.FileTransfer;
-import org.eclipse.swt.dnd.URLTransfer;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -25,7 +23,6 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 /**
  * @author hinton
@@ -52,7 +49,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 
 		final Clipboard clipboard = new Clipboard(HandlerUtil.getActiveWorkbenchWindow(event).getShell().getDisplay());
 		try {
-			if (!pasteFromURI(clipboard, container)) {
+			if (!pasteLocal(clipboard, container)) {
 				pasteFromFiles(clipboard, container);
 			}
 		} catch (final IOException e) {
@@ -62,6 +59,21 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		}
 
 		return null;
+	}
+	
+	private boolean pasteLocal(final Clipboard clipboard, final Container container) throws IOException {
+		final Object localData = clipboard.getContents(LocalTransfer.getInstance());
+		final IScenarioService service = container.getScenarioService();
+		if (localData instanceof Iterable) {
+			for (final Object o : (Iterable)localData) {
+				if (o instanceof ScenarioInstance) {
+					System.err.println("Local paste " + ((ScenarioInstance) o).getName());
+					service.duplicate((ScenarioInstance)o, container).setName("Copy of " + ((ScenarioInstance)o).getName());
+				}
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -99,38 +111,5 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * @param clipboard
-	 * @param container
-	 * @throws IOException
-	 */
-	private boolean pasteFromURI(final Clipboard clipboard, final Container container) throws IOException {
-		final String url = (String) clipboard.getContents(URLTransfer.getInstance());
-		if (url == null)
-			return false;
-		try {
-			final URI uri = new URI(url);
-
-			if (uri.getScheme().equals("scenario")) {
-				final String serviceName = uri.getHost();
-				final String scenarioUUID = uri.getPath().substring(1);
-
-				final IScenarioService service = Activator.getDefault().getServiceForComponentID(serviceName);
-				if (service != null) {
-					final ScenarioInstance instance = service.getScenarioInstance(scenarioUUID);
-					if (instance != null) {
-						// duplicate insert into selected container
-
-						final IScenarioService targetService = container.getScenarioService();
-						targetService.duplicate(instance, container).setName("Copy of " + instance.getName());
-						return true;
-					}
-				}
-			}
-		} catch (final URISyntaxException e) {
-		}
-		return false;
 	}
 }
