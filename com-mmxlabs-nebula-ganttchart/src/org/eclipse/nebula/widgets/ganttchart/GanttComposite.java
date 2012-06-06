@@ -1083,7 +1083,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
 
             // if we fill the bottom then fill it!
             if (_settings.drawFillsToBottomWhenUsingGanttSections()) {
-                final Rectangle extraBounds = new Rectangle(0, _mainBounds.y + getHeaderHeight(), _mainBounds.x + _mainBounds.width, _mainBounds.y + _mainBounds.height);
+            	// Fix for broken vScroll max - sometimes it is too big, so here force it in to the calc to avoid rendering artifacts when the max is bigger than the expected size
+                final Rectangle extraBounds = new Rectangle(0, _mainBounds.y + getHeaderHeight(), _mainBounds.x + _mainBounds.width, _mainBounds.y + Math.max(_vScrollBar.getMaximum(), _mainBounds.height));
                 drawFills(gc, extraBounds);
                 drawVerticalLines(gc, extraBounds, false);
             }
