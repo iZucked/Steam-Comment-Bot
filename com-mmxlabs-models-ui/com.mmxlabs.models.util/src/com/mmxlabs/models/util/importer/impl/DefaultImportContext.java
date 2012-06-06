@@ -65,7 +65,14 @@ public class DefaultImportContext implements IImportContext {
 
 	@Override
 	public void registerNamedObject(NamedObject object) {
-		final String name = object.getName();
+		registerObjectWithName(object, object.getName());
+
+		for (final String otherName : object.getOtherNames()) {
+			registerObjectWithName(object, otherName);
+		}
+	}
+	
+	private void registerObjectWithName(final NamedObject object, final String name) {
 		List<NamedObject> others = namedObjects.get(name);
 		if (others == null) {
 			others = new LinkedList<NamedObject>();
