@@ -48,7 +48,7 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 					final EList<PortCapability> capabilities = port.getCapabilities();
 
 					if (slot instanceof LoadSlot) {
-						if (!capabilities.contains(PortCapability.LOAD)) {
+						if (!((LoadSlot) slot).isDESPurchase() && !capabilities.contains(PortCapability.LOAD)) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.LOAD.getName()));
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 							dsd.addEObjectAndFeature(((LoadSlot) slot).getCargo(), CargoPackage.eINSTANCE.getCargo_LoadSlot());
@@ -57,7 +57,7 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 					}
 
 					if (slot instanceof DischargeSlot) {
-						if (!capabilities.contains(PortCapability.DISCHARGE)) {
+						if (!((DischargeSlot) slot).isFOBSale() && !capabilities.contains(PortCapability.DISCHARGE)) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.DISCHARGE.getName()));
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
 							dsd.addEObjectAndFeature(((DischargeSlot) slot).getCargo(), CargoPackage.eINSTANCE.getCargo_DischargeSlot());
