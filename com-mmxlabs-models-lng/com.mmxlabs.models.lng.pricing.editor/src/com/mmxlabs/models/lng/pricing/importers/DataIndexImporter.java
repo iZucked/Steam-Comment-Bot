@@ -157,7 +157,11 @@ public class DataIndexImporter implements IClassImporter {
 				for (final IndexPoint<Number> pt : i.getPoints()) {
 					final Number n = pt.getValue();
 					final Date dt = pt.getDate();
-					row.put(shortDate.format(dt), n.toString());
+					if (n instanceof Integer) {
+						row.put(shortDate.format(dt), String.format("%d", n));
+					} else {
+						row.put(shortDate.format(dt), n.toString());
+					}
 				}
 				result.add(row);
 			} else if (o instanceof DerivedIndex) {
