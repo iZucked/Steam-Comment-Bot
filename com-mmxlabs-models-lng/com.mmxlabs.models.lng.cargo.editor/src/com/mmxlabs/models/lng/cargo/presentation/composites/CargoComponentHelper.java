@@ -61,12 +61,13 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 
+		// This line is not auto-generated
 		add_cargoTypeEditor(detailComposite, topClass);
 		add_loadSlotEditor(detailComposite, topClass);
 		add_dischargeSlotEditor(detailComposite, topClass);
