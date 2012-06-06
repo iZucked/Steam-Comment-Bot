@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.rcp.common.dialogs;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,7 +25,10 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
@@ -33,7 +37,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
@@ -412,13 +418,54 @@ public class ListSelectionDialog extends Dialog {
 		final Composite box = (Composite) super.createDialogArea(parent);
 
 		final Composite inner = new Composite(box, SWT.NONE);
-		inner.setLayout(new GridLayout(1, false));
+		inner.setLayout(new GridLayout(2, false));
 		// Create view within inner.
+		
+		final Label lr = new Label(inner,SWT.NONE);
+		lr.setText("Filter:");
+		lr.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
+		final Text tr = new Text(inner, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
+		
+		final List<String> filters = new ArrayList<String>();
+		
+		tr.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		tr.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				filters.clear();
+				final String match = tr.getText().trim();
+				if (!match.isEmpty()) {
+					final String[] parts = match.split(",");
+					for (final String p : parts) {
+						final String p2 = p.toLowerCase().trim();
+						if (p2.isEmpty())continue;
+						filters.add(p2);
+					}
+				}
+
+				viewer.refresh();
+			}
+		});
+		
 		viewer = new CheckboxTreeViewer(inner, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
 		viewer.setContentProvider(contentProvider);
 		viewer.setLabelProvider(labelProvider);
-		viewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		viewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 
+		viewer.addFilter(new ViewerFilter() {
+			@Override
+			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				if (filters.isEmpty()) return true;
+				final String t = labelProvider.getText(element).toLowerCase();
+				
+				for (final String f : filters) {
+					if (t.contains(f)) return true;
+				}
+				
+				return false;
+			}
+		});
+		
 		if (columns.size() > 0) {
 			for (final Pair<String, CellLabelProvider> column : columns) {
 				final TreeViewerColumn tvc = new TreeViewerColumn(viewer, SWT.NONE);
