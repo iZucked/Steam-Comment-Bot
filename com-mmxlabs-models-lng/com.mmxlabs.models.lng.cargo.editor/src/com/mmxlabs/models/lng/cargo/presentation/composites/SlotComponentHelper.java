@@ -9,17 +9,18 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 
 /**
@@ -29,6 +30,32 @@ import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
  */
 public class SlotComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
+
+	/**
+	 * @generated NOT
+	 */
+	private class SlotInlineEditorWrapper extends IInlineEditorEnablementWrapper {
+
+		public SlotInlineEditorWrapper(final IInlineEditor wrapped) {
+			super(wrapped);
+		}
+
+		@Override
+		public void reallyNotifyChanged(final Notification notification) {
+			if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+
+				if (input instanceof LoadSlot) {
+					setEnabled(!((LoadSlot) input).isDESPurchase());
+				}
+
+			}
+			if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
+				if (input instanceof DischargeSlot) {
+					setEnabled(!((DischargeSlot) input).isFOBSale());
+				}
+			}
+		}
+	};
 
 	/**
 	 * Construct a new instance, using the platform adapter manager
@@ -63,7 +90,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);	
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);
 	}
 
 	/**
@@ -91,7 +118,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_windowStartEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START));
+		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START)));
 	}
 
 	/**
@@ -100,7 +127,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_windowStartTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START_TIME));
+		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START_TIME)));
 	}
 
 	/**
@@ -109,7 +136,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE));
+		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE)));
 	}
 
 	/**
@@ -118,7 +145,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT));
+		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT)));
 	}
 
 	/**
@@ -142,30 +169,12 @@ public class SlotComponentHelper extends BaseComponentHelper {
 				if (changedFeature == CargoPackage.eINSTANCE.getSlot_Port()) {
 					return true;
 				}
-				if (changedFeature == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
-					return true;
-				}
-				if (changedFeature == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
-					return true;
-				}
+
 				return super.updateOnChangeToFeature(changedFeature);
 			}
 
-			@Override
-			protected void updateDisplay(final Object value) {
-
-				boolean enabled = true;
-				if (input instanceof LoadSlot) {
-					enabled = !((LoadSlot) input).isDESPurchase();
-				} else if (input instanceof DischargeSlot) {
-					enabled = !((DischargeSlot) input).isFOBSale();
-				}
-				super.updateDisplay(value);
-
-//				setControlEnablement(enabled);
-			}
 		};
-		detailComposite.addInlineEditor(editor);
+		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(editor));
 	}
 
 	/**

@@ -147,6 +147,11 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 				public Control createControl(Composite parent) {
 					return numberEditor.createControl(parent);
 				}
+
+				@Override
+				public void setEnabled(boolean enabled) {
+					numberEditor.setEnabled(enabled);
+				}
 			});
 		}
 	}

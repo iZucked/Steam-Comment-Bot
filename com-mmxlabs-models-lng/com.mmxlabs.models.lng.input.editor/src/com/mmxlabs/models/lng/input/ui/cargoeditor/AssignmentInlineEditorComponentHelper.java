@@ -238,6 +238,12 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 				
 				return sub;
 			}
+
+			@Override
+			public void setEnabled(boolean enabled) {
+				// TODO Auto-generated method stub
+				
+			}
 		};
 		detailComposite.addInlineEditor(assignmentEditor);
 	}

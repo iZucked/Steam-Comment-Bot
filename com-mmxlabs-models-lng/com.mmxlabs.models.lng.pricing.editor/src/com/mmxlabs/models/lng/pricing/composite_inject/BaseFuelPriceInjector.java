@@ -78,6 +78,11 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			public Control createControl(final Composite parent) {
 				return numberEditor.createControl(parent);
 			}
+
+			@Override
+			public void setEnabled(boolean enabled) {
+				numberEditor.setEnabled(enabled);
+			}
 		});
 	}
 

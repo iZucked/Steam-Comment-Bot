@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
+import com.mmxlabs.models.lng.cargo.ui.commands.CargoTypeUpdatingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.SlotDeletingCommandProvider;
@@ -89,6 +90,7 @@ public final class CargoEditorPlugin extends EMFPlugin {
 		private ServiceRegistration<IModelCommandProvider> portCorrectorRegistration;
 		private ServiceRegistration<IModelCommandProvider> slotNameCorrectorRegistration;
 		private ServiceRegistration<IModelCommandProvider> slotDeletingRegistration;
+		private ServiceRegistration<IModelCommandProvider> cargoTypeUpdaterRegistration;
 
 		/**
 		 * Creates an instance.
@@ -112,6 +114,7 @@ public final class CargoEditorPlugin extends EMFPlugin {
 			portCorrectorRegistration = context.registerService(IModelCommandProvider.class, new PortUpdatingCommandProvider(), null);
 			slotNameCorrectorRegistration = context.registerService(IModelCommandProvider.class, new SlotNameUpdatingCommandProvider(), null);
 			slotDeletingRegistration = context.registerService(IModelCommandProvider.class, new SlotDeletingCommandProvider(), null);
+			cargoTypeUpdaterRegistration = context.registerService(IModelCommandProvider.class, new CargoTypeUpdatingCommandProvider(), null);
 		}
 
 		/* (non-Javadoc)
@@ -123,6 +126,7 @@ public final class CargoEditorPlugin extends EMFPlugin {
 			portCorrectorRegistration.unregister();
 			slotNameCorrectorRegistration.unregister();
 			slotDeletingRegistration.unregister();
+			cargoTypeUpdaterRegistration.unregister();
 			
 			super.stop(context);
 		}

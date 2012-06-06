@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -55,6 +56,10 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 				public boolean updateOnChangeToFeature(final Object changedFeature) {
 					if (changedFeature == CargoPackage.eINSTANCE.getSlot_Contract()) {
 						return true;
+					} else if (changedFeature == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+						return true;
+					} else if (changedFeature == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
+						return true;
 					}
 
 					return delegateFactory.updateOnChangeToFeature(changedFeature);
@@ -77,7 +82,19 @@ public class SlotPortValueProviderFactory implements IReferenceValueProviderFact
 					if (target instanceof Slot) {
 						final Slot slot = (Slot) target;
 
-						final PortCapability capability = (target instanceof LoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
+						PortCapability capability = null;
+						
+						// If FOB or DES, then only one port is permitted - this should be set by the CargoTypeUpdatingCommandProvider
+						if (target instanceof LoadSlot) {
+							if (!((LoadSlot) target).isDESPurchase()) {
+								capability = PortCapability.LOAD;
+							}
+						}
+						if (target instanceof DischargeSlot) {
+							if (!((DischargeSlot) target).isFOBSale()) {
+								capability = PortCapability.DISCHARGE;
+							}
+						}
 						final ArrayList<Pair<String, EObject>> filterOne = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> p : delegateValue) {
 							if (((Port) p.getSecond()).getCapabilities().contains(capability)) {
