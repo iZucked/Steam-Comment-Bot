@@ -31,13 +31,13 @@ public class SimpleImportAction extends ImportAction {
 		super(part);
 		this.viewer = viewer;
 	}
-
+	
 	@Override
 	protected void doImportStages(final DefaultImportContext context) {
 		final EObject container = viewer.getCurrentContainer();
 		final EReference containment = viewer.getCurrentContainment();
 		
-		final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(containment.getEReferenceType());
+		final IClassImporter importer = getImporter(containment);
 		// open file picker
 
 		final FileDialog fileDialog = new FileDialog(part.getShell());
@@ -55,6 +55,12 @@ public class SimpleImportAction extends ImportAction {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+
+
+	protected IClassImporter getImporter(final EReference containment) {
+		return Activator.getDefault().getImporterRegistry().getClassImporter(containment.getEReferenceType());
 	}
 
 	protected Command mergeImports(final EObject container, final EReference containment, final Collection<EObject> imports) {
