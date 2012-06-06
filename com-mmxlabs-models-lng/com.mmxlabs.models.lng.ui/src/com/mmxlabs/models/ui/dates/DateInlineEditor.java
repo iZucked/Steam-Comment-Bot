@@ -53,4 +53,13 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 		});
 		return formattedText.getControl();
 	}
+	
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+
+		formattedText.getControl().setEnabled(enabled);
+		
+		super.setEnabled(enabled);
+	}
 }
