@@ -8,11 +8,11 @@
 <feature
       id="com.mmxlabs.models.mmxcore.runtime.feature"
       label="Models: MMXCore Runtime Feature"
-      version="1.0.1.qualifier"
+      version="1.0.2.qualifier"
       provider-name="Minimax Labs">
 
    <description>
-      MMX Core model and UI components.
+      MMX Core Model, Edit and Editor plugins
    </description>
 
    <copyright>
