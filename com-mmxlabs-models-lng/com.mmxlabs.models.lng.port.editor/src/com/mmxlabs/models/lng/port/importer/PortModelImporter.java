@@ -75,6 +75,7 @@ public class PortModelImporter implements ISubmodelImporter {
 					g.setName("All " + capability.getName() + " Ports");
 					g.setCapability(capability);
 					portModel.getSpecialPortGroups().add(g);
+					context.registerNamedObject(g);
 				}
 			}
 		}
