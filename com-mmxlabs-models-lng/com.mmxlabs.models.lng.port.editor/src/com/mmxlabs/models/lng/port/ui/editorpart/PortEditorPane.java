@@ -197,6 +197,55 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				importNew.setText("Import new canal...");
 
 				addActionToMenu(importNew, menu);
+				
+				boolean hasMainRoute = false;
+				for (final Route r : pm.getRoutes()) {
+					if (r.isCanal() == false) {
+						hasMainRoute = true;
+						break;
+					}
+				}
+				if (!hasMainRoute) {
+					final ImportAction importNew2 = new ImportAction(getJointModelEditorPart()) {
+
+						@Override
+						protected void doImportStages(DefaultImportContext context) {
+							final FileDialog fileDialog = new FileDialog(part.getShell());
+							fileDialog.setFilterExtensions(new String[] { "*.csv" });
+							final String path = fileDialog.open();
+
+							if (path == null)
+								return;
+
+							
+								final String newName = "Direct";
+								final RouteImporter routeImporter = new RouteImporter();
+
+								CSVReader reader;
+								try {
+									reader = new CSVReader(path);
+
+									final Route importRoute = routeImporter.importRoute(reader, context);
+
+									context.run();
+
+									importRoute.setName(newName);
+									importRoute.setCanal(false);
+
+									getJointModelEditorPart().setDisableUpdates(true);
+									getJointModelEditorPart().getEditingDomain().getCommandStack()
+											.execute(AddCommand.create(getJointModelEditorPart().getEditingDomain(), pm, PortPackage.eINSTANCE.getPortModel_Routes(), importRoute));
+									getJointModelEditorPart().setDisableUpdates(false);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
+							}
+						
+					};
+
+					importNew2.setText("Import direct distances...");
+					addActionToMenu(importNew2, menu);
+				}
 			}
 		};
 
