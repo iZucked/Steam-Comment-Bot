@@ -6,12 +6,15 @@ package com.mmxlabs.scenario.service.manifest;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
@@ -52,22 +55,42 @@ public class ScenarioStorageUtil {
 		
 		addURIs(partURIs, instance, scenarioService);
 
+		final URIConverter conv = resourceSet.getURIConverter();
+		
 		int index = 0;
+		byte [] buffer = new byte[10*4096];
+//		long l = System.currentTimeMillis();
+//		
+//		int index = 0;
+//		for (final String partURI : partURIs) {
+//			final URI u = URI.createURI(partURI);
+//			final Resource r = resourceSet.createResource(u);
+//			r.load(null);
+//			if (!r.getContents().isEmpty()) {
+//				final EObject top = r.getContents().get(0);
+//				final URI relativeURI = URI.createURI("/" + top.eClass().getName() + index++ + ".xmi");
+//				manifest.getModelURIs().add(relativeURI.toString());
+//				final URI resolved = relativeURI.resolve(manifestURI);
+//				final Resource r2 = resourceSet.createResource(resolved);
+//				r2.getContents().add(top);
+//				r2.save(null);
+//			}
+//		}
+		
 		for (final String partURI : partURIs) {
 			final URI u = URI.createURI(partURI);
-			final Resource r = resourceSet.createResource(u);
-			r.load(null);
-			if (!r.getContents().isEmpty()) {
-				final EObject top = r.getContents().get(0);
-				final URI relativeURI = URI.createURI("/" + top.eClass().getName() + index++ + ".xmi");
-				manifest.getModelURIs().add(relativeURI.toString());
-				final URI resolved = relativeURI.resolve(manifestURI);
-				final Resource r2 = resourceSet.createResource(resolved);
-				r2.getContents().add(top);
-				r2.save(null);
+			final InputStream input = conv.createInputStream(u);
+			final URI relativeURI = URI.createURI("/" + index++ +"-" + u.segment(u.segmentCount()-1));
+			manifest.getModelURIs().add(relativeURI.toString());
+			final URI resolved = relativeURI.resolve(manifestURI);
+			final OutputStream output = conv.createOutputStream(resolved);
+			int b;
+			
+			while ((b = input.read(buffer)) != -1) {
+				output.write(buffer, 0, b);
 			}
 		}
-		
+//		System.err.println("time: " + (System.currentTimeMillis() - l));
 		manifestResource.save(null);
 	}
 
