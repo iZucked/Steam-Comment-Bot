@@ -96,12 +96,13 @@ public class CanalCostsDialog extends Dialog {
 		this.container = EcoreUtil.copy(container);
 		this.containment = containment;
 		
-		final List<VesselClassRouteParameters> l = (List<VesselClassRouteParameters>) container.eGet(containment);
+		final List<VesselClassRouteParameters> l = (List<VesselClassRouteParameters>) this.container.eGet(containment);
 		
 		final PortModel pm = rootObject.getSubModel(PortModel.class);
 		if (pm != null) {
 			route_loop:
 			for (final Route r : pm.getRoutes()) {
+				if (r.isCanal() == false) continue route_loop;
 				for (final VesselClassRouteParameters vcrp : l) {
 					if (vcrp.getRoute() == r) {
 						continue route_loop;
