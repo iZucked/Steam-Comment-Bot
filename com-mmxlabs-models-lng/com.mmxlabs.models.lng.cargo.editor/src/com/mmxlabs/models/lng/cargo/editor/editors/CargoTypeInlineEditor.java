@@ -416,4 +416,10 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 
 	}
 
+	@Override
+	public void setEnabled(boolean enabled) {
+		shippedButton.setEnabled(enabled);
+		fobButton.setEnabled(enabled);
+		desButton.setEnabled(enabled);
+	}
 }

@@ -140,4 +140,13 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 		viewer.setInput(pm);
 		viewer.refresh();
 	}
+	
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+
+		viewer.getControl().setEnabled(enabled);
+		
+		super.setEnabled(enabled);
+	}
 }
