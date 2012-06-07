@@ -89,6 +89,9 @@ public class ScenarioStorageUtil {
 			while ((b = input.read(buffer)) != -1) {
 				output.write(buffer, 0, b);
 			}
+			
+			output.flush();
+			output.close();
 		}
 //		System.err.println("time: " + (System.currentTimeMillis() - l));
 		manifestResource.save(null);
