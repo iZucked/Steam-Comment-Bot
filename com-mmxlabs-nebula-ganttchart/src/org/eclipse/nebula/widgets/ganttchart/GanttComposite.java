@@ -320,6 +320,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     private boolean                       _drawToMinute;
 
     private int 						  _daysToAppendForEndOfDay;
+
+	private int _lastSectionColumnWidth;
     
     static {
         final String osProperty = System.getProperty("os.name");
@@ -1044,7 +1046,7 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
         // if we use sections, our bounds for everything will be the size of the client area minus the section bar on the left
         if (drawSections) {
             if (_settings.getSectionSide() == SWT.LEFT) {
-                bounds = new Rectangle(_settings.getSectionBarWidth(), bounds.y, bounds.width - _settings.getSectionBarWidth(), bounds.height);
+                bounds = new Rectangle(_lastSectionColumnWidth, bounds.y, bounds.width - _settings.getSectionBarWidth(), bounds.height);
             } else {
                 bounds = new Rectangle(0, bounds.y, bounds.width - _settings.getSectionBarWidth(), bounds.height);
             }
@@ -1879,6 +1881,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             }
         }
 
+        this._lastSectionColumnWidth = xMax;
+        
         int lineLoc = getHeaderHeight() == 0 ? bounds.y : (bounds.y + getHeaderHeight());
         int yStart = lineLoc;
 
@@ -7763,11 +7767,15 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
             int extraX = 0;
             int extraW = 0;
             if (drawSections) {
+            	
+            	// Take into account last calculated witdh. We could do it again here in case things have changed, but we need a GC
+            	int xMax = Math.max(_lastSectionColumnWidth, _settings.getSectionBarWidth());
+            	
                 if (_settings.getSectionSide() == SWT.LEFT) {
-                    extraX = -_settings.getSectionBarWidth();
-                    extraW = _settings.getSectionBarWidth();
+                    extraX = -xMax;
+                    extraW = xMax;
                 } else {
-                    extraW = _settings.getSectionBarWidth();
+                    extraW = xMax;
                 }
 
             }
@@ -8413,4 +8421,8 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
     ISettings getSettings() {
     	return _settings;
     }
+
+	public int getLastSectionColumnWidth() {
+		return _lastSectionColumnWidth;
+	}
 }
