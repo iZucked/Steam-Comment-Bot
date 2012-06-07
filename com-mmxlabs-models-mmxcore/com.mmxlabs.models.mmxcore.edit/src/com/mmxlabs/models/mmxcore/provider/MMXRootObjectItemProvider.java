@@ -96,6 +96,7 @@ public class MMXRootObjectItemProvider
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 2.0
 	 */
 	protected void addOtherNamesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add

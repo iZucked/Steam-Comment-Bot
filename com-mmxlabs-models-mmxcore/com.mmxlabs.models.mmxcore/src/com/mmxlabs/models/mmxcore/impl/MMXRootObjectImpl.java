@@ -69,6 +69,7 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * @see #getOtherNames()
 	 * @generated
 	 * @ordered
+	 * @since 2.2
 	 */
 	protected EList<String> otherNames;
 
@@ -146,6 +147,7 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 2.2
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {

@@ -58,6 +58,7 @@ public class NamedObjectImpl extends MMXObjectImpl implements NamedObject {
 	 * @see #getOtherNames()
 	 * @generated
 	 * @ordered
+	 * @since 2.2
 	 */
 	protected EList<String> otherNames;
 
@@ -105,6 +106,7 @@ public class NamedObjectImpl extends MMXObjectImpl implements NamedObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 2.2
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {

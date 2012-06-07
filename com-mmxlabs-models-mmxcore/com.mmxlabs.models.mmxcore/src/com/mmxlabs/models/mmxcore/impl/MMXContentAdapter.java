@@ -19,7 +19,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 public abstract class MMXContentAdapter extends EContentAdapter implements IMMXAdapter {
 	private List<Notification> missedNotifications = new LinkedList<Notification>();
 	/**
-	 * @since 2.1
+	 * @since 2.2
 	 */
 	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
 	
@@ -42,7 +42,7 @@ public abstract class MMXContentAdapter extends EContentAdapter implements IMMXA
 	public abstract void reallyNotifyChanged(final Notification notification);
 
 	/**
-	 * @since 2.1
+	 * @since 2.2
 	 */
 	protected void missedNotifications(final List<Notification> missed) {
 		
@@ -61,7 +61,7 @@ public abstract class MMXContentAdapter extends EContentAdapter implements IMMXA
 	}
 	
 	/**
-	 * @since 2.1
+	 * @since 2.2
 	 */
 	public void enable(final boolean skip) {
 		if (missedNotifications.isEmpty() == false) {

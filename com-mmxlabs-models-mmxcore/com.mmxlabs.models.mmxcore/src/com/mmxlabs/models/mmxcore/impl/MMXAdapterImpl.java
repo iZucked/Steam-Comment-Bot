@@ -20,7 +20,7 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 	private List<Notification> missedNotifications = new LinkedList<Notification>();
 	
 	/**
-	 * @since 2.1
+	 * @since 2.2
 	 */
 	protected final HashSet<EStructuralFeature> ignoredFeatures = new HashSet<EStructuralFeature>();
 	
@@ -40,7 +40,7 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 	
 	
 	/**
-	 * @since 2.1
+	 * @since 2.2
 	 */
 	protected void missedNotifications(final List<Notification> missed) {
 		
@@ -59,7 +59,7 @@ public abstract class MMXAdapterImpl extends AdapterImpl implements IMMXAdapter 
 	}
 	
 	/**
-	 * @since 2.1
+	 * @since 2.2
 	 */
 	public void enable(final boolean skip) {
 		if (missedNotifications.isEmpty() == false) {

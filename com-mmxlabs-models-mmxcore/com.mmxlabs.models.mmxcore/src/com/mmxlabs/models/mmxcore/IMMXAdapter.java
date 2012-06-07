@@ -24,7 +24,7 @@ public interface IMMXAdapter extends Adapter {
 	public void enable();
 	
 	/**
-	 * @since 2.1
+	 * @since 2.2
 	 */
 	public void enable(boolean loseNotifications);
 }

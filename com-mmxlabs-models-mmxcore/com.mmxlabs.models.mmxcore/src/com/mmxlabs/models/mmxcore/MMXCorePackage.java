@@ -220,6 +220,7 @@ public interface MMXCorePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
+	 * @since 2.2
 	 */
 	int NAMED_OBJECT__OTHER_NAMES = MMX_OBJECT_FEATURE_COUNT + 1;
 
@@ -575,6 +576,7 @@ public interface MMXCorePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
+	 * @since 2.2
 	 */
 	int MMX_ROOT_OBJECT__OTHER_NAMES = UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -1001,6 +1003,7 @@ public interface MMXCorePackage extends EPackage {
 	 * @see com.mmxlabs.models.mmxcore.NamedObject#getOtherNames()
 	 * @see #getNamedObject()
 	 * @generated
+	 * @since 2.2
 	 */
 	EAttribute getNamedObject_OtherNames();
 
@@ -1341,6 +1344,7 @@ public interface MMXCorePackage extends EPackage {
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
+		 * @since 2.2
 		 */
 		EAttribute NAMED_OBJECT__OTHER_NAMES = eINSTANCE.getNamedObject_OtherNames();
 
