@@ -12,6 +12,7 @@ import com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CargoReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView;
+import com.mmxlabs.shiplingo.platform.reports.views.KPIReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.LatenessReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.PortRotationReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.TotalsHierarchyView;
@@ -26,15 +27,17 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		layout.addView(SchedulerView.ID, IPageLayout.BOTTOM, 0.5f, IPageLayout.ID_EDITOR_AREA);
 		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.RIGHT, 0.5f, IPageLayout.ID_EDITOR_AREA);
 
-		reportsFolder.addView(TotalsReportView.ID);
-		reportsFolder.addView(TotalsHierarchyView.ID);
-		reportsFolder.addView(BasicCargoReportView.ID);
+		reportsFolder.addView(KPIReportView.ID);
 		reportsFolder.addView(CargoReportView.ID);
-		reportsFolder.addView(PortRotationReportView.ID);
-		reportsFolder.addView(LatenessReportView.ID);
-		reportsFolder.addView(CooldownReportView.ID);
-		reportsFolder.addView(FitnessReportView.ID);
+		reportsFolder.addPlaceholder(TotalsReportView.ID);
+		reportsFolder.addPlaceholder(TotalsHierarchyView.ID);
+		reportsFolder.addPlaceholder(BasicCargoReportView.ID);
+		reportsFolder.addPlaceholder(PortRotationReportView.ID);
+		reportsFolder.addPlaceholder(LatenessReportView.ID);
+		reportsFolder.addPlaceholder(CooldownReportView.ID);
+		reportsFolder.addPlaceholder(FitnessReportView.ID);
 
+		layout.addShowViewShortcut(KPIReportView.ID);
 		layout.addShowViewShortcut(SchedulerView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);
 		layout.addShowViewShortcut(TotalsHierarchyView.ID);
