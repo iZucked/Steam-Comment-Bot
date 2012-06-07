@@ -40,12 +40,25 @@ public class PerVesselReportView extends ViewPart {
 	private PackTableColumnsAction packColumnsAction;
 	private CopyTableToClipboardAction copyTableAction;
 
+	private IScenarioViewerSynchronizerOutput lastInput;
+	
 	@Override
 	public void createPartControl(final Composite parent) {
 		tableViewer = new TableViewer(parent);
 		
 		tableViewer.getTable().setHeaderVisible(true);
 		tableViewer.getTable().setLinesVisible(true);
+		
+		final TableViewerColumn scenario = new TableViewerColumn(tableViewer, SWT.NONE);
+		scenario.getColumn().setText("Scenario");
+		scenario.getColumn().pack();
+		scenario.setLabelProvider(
+				new ColumnLabelProvider() {
+					@Override
+					public String getText(Object element) {
+						return lastInput.getScenarioInstance(element).getName();
+					}
+				});
 		
 		final TableViewerColumn name = new TableViewerColumn(tableViewer, SWT.NONE);
 		name.getColumn().setText("Vessel");
@@ -133,7 +146,9 @@ public class PerVesselReportView extends ViewPart {
 			
 			@Override
 			public Object[] getElements(Object inputElement) {
+				lastInput = null;
 				if (inputElement instanceof IScenarioViewerSynchronizerOutput) {
+					lastInput = (IScenarioViewerSynchronizerOutput) inputElement;
 					return ((IScenarioViewerSynchronizerOutput) inputElement).getCollectedElements().toArray();
 				}
 				return new Object[0];
