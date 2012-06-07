@@ -6,11 +6,13 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.jface.viewers.IColorProvider;
@@ -19,7 +21,9 @@ import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -28,6 +32,7 @@ import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
@@ -122,32 +127,6 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			final String start = dateToString(event.getStart());
 			final String end = dateToString(event.getEnd());
 
-			// final String start = df.format(event.getStart()) + " " + tf.format(event.getStart());
-			// final String end = df.format(event.getEnd());
-
-			// if (element instanceof Journey) {
-			// final Journey journey = (Journey) element;
-			// if (journey.getPort() != null) {
-			// sb.append("From: " + journey.getPort().getName() + "\n");
-			// }
-			// if (journey.getDestination() != null) {
-			// sb.append("To: " + journey.getDestination().getName() + "\n");
-			// }
-			// }
-			//
-			// sb.append("\n");
-
-			// if (element instanceof Journey) {
-			// final Journey journey = (Journey) element;
-			// if (journey.getPort() != null) {
-			// sb.append("Depart: " + start + ", " + journey.getPort().getName() + "\n");
-			// }
-			// if (journey.getDestination() != null) {
-			// sb.append("Arrive: " + end + ", " + journey.getDestination().getName() + "\n");
-			// }
-			// }
-			//
-
 			sb.append("Start: " + start + "\n");
 			sb.append("End:  " + end + "\n");
 			final int days = event.getDuration() / 24;
@@ -160,21 +139,34 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					sb.append("Route: " + journey.getRoute() + "\n");
 				}
 				sb.append(String.format("Speed: %.1f\n", journey.getSpeed()));
-			} else {
-				if (event.getPort() != null) {
-					// sb.append("Port: " + event.getPort().getName() + "\n");
-				}
-				if (element instanceof SlotVisit) {
-					final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
-					sb.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
-					sb.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
-				} else if (element instanceof Idle) {
-					// final Idle idle = (Idle) element;
-					// sb.append("Laden: " + (idle.isLaden() ? "Yes" : "No") + "\n");
-				}
-			}
+			} else if (element instanceof SlotVisit) {
+				final SlotVisit slotVisit = (SlotVisit) element;
+				final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
+				sb.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
+				sb.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
 
-			if (element instanceof FuelUsage) {
+				if (slotVisit.getStart().after(slot.getWindowEndWithSlotOrPortTime())) {
+					// lateness
+
+					final Calendar localStart = slotVisit.getLocalStart();
+					final Calendar windowEndDate = getWindowEndDate(element);
+					sb.append("Lateness: " + getLatenessString(localStart, windowEndDate) + "\n");
+
+				}
+			} else if (element instanceof VesselEventVisit) {
+				final VesselEventVisit vev = (VesselEventVisit) element;
+				if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
+					// lateneess;
+					final Calendar localStart = vev.getLocalStart();
+					final Calendar windowEndDate = getWindowEndDate(element);
+
+					sb.append("Lateness: " + getLatenessString(localStart, windowEndDate) + "\n");
+				}
+
+			} else if (element instanceof Idle) {
+				// final Idle idle = (Idle) element;
+				// sb.append("Laden: " + (idle.isLaden() ? "Yes" : "No") + "\n");
+			} else if (element instanceof FuelUsage) {
 				final FuelUsage fuel = (FuelUsage) element;
 				for (final FuelQuantity fq : fuel.getFuels()) {
 					sb.append(String.format("%s: %,d %s | $%,d\n", fq.getFuel().toString(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(), fq.getCost()));
@@ -258,6 +250,45 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		colourSchemes.add(colourScheme);
 		if ((currentScheme == null) && (colourSchemes.size() == 1)) {
 			currentScheme = colourScheme;
+		}
+	}
+
+	private Calendar getWindowEndDate(final Object object) {
+		final Date date;
+		if (object instanceof SlotVisit) {
+			date = ((SlotVisit) object).getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime();
+			String timeZone = ((SlotVisit) object).getSlotAllocation().getSlot().getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart());
+			if (timeZone == null)
+				timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
+		} else if (object instanceof VesselEventVisit) {
+			date = ((VesselEventVisit) object).getVesselEvent().getStartBy();
+			String timeZone = ((VesselEventVisit) object).getVesselEvent().getTimeZone(FleetPackage.eINSTANCE.getVesselEvent_StartBy());
+			if (timeZone == null)
+				timeZone = "UTC";
+			final Calendar c = Calendar.getInstance(TimeZone.getTimeZone(timeZone));
+			c.setTime(date);
+			return c;
+		} else {
+			return null;
+		}
+	}
+
+	public String getLatenessString(final Calendar localStart, final Calendar windowEndDate) {
+		long diff = localStart.getTimeInMillis() - windowEndDate.getTimeInMillis();
+
+		// Strip milliseconds
+		diff /= 1000;
+		// Strip seconds;
+		diff /= 60;
+		// Strip
+		diff /= 60;
+		if (diff / 24 == 0) {
+			return String.format("%2dh", diff % 24);
+		} else {
+			return String.format("%2dd, %2dh", diff / 24, diff % 24);
 		}
 	}
 
