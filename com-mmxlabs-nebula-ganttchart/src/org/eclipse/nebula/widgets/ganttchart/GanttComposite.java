@@ -8005,11 +8005,11 @@ public final class GanttComposite extends Canvas implements MouseListener, Mouse
                 break;
             case ISettings.ZOOM_YEAR_MAX:
                 _currentView = ISettings.VIEW_YEAR;
-                _yearDayWidth = originalYearMonthDayWidth + 3;
+                _yearDayWidth = originalYearMonthDayWidth + 2;
                 break;
             case ISettings.ZOOM_YEAR_MEDIUM:
                 _currentView = ISettings.VIEW_YEAR;
-                _yearDayWidth = originalYearMonthDayWidth + 2;
+                _yearDayWidth = originalYearMonthDayWidth + 1;
                 break;
             case ISettings.ZOOM_YEAR_NORMAL:
                 _currentView = ISettings.VIEW_YEAR;
