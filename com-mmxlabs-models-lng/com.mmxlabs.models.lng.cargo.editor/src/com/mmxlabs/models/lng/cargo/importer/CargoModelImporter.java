@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -26,12 +27,19 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 public class CargoModelImporter implements ISubmodelImporter {
 	private static final String CARGO_KEY = "CARGO";
+	private static final String CARGO_GROUP_KEY = "CARGO-GROUP";
 	private IClassImporter cargoImporter = Activator.getDefault()
 			.getImporterRegistry()
 			.getClassImporter(CargoPackage.eINSTANCE.getCargo());
+	
+	private IClassImporter cargoGroupImporter = Activator.getDefault()
+			.getImporterRegistry()
+			.getClassImporter(CargoPackage.eINSTANCE.getCargoGroup());
+	
 	private HashMap<String, String> inputs = new HashMap<String, String>();
 	{
 		inputs.put(CARGO_KEY, "Cargoes");
+		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
 	}
 	@Override
 	public Map<String, String> getRequiredInputs() {
@@ -57,6 +65,12 @@ public class CargoModelImporter implements ISubmodelImporter {
 			}
 		}
 		
+		if (inputs.containsKey(CARGO_GROUP_KEY)) {
+			final CSVReader reader = inputs.get(CARGO_GROUP_KEY);
+			final Collection<EObject> values = cargoGroupImporter.importObjects(CargoPackage.eINSTANCE.getCargoGroup(), reader, context);
+			cargoModel.getCargoGroups().addAll((Collection<? extends CargoGroup>) values);
+		}
+		
 		return cargoModel;
 	}
 
@@ -64,5 +78,6 @@ public class CargoModelImporter implements ISubmodelImporter {
 	public void exportModel(MMXRootObject root,
 			UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
 		output.put(CARGO_KEY, cargoImporter.exportObjects(((CargoModel) model).getCargoes(), root));
+		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(((CargoModel)model).getCargoGroups(), root));
 	}
 }

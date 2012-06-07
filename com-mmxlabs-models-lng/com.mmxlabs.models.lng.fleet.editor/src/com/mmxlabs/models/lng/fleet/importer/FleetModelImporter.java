@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.fleet.VesselGroup;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -33,17 +34,21 @@ public class FleetModelImporter implements ISubmodelImporter {
 	public static final String FUELS_KEY = "BASEFUELS";
 	public static final String EVENTS_KEY = "EVENTS";
 	private static final String CURVES_KEY = "CONSUMPTION_CURVES";
+	private static final String GROUPS_KEY = "VESSEL-GROUPS";
 	
 	private IClassImporter vesselImporter = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getVessel());
 	private IClassImporter vesselClassImporter = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getVesselClass());
 	private IClassImporter vesselEventImporter = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getVesselEvent());
 	private IClassImporter baseFuelImporter = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getBaseFuel());
+	private IClassImporter groupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getVesselGroup());
+	
 	private FuelCurveImporter fuelCurveImporter = new FuelCurveImporter();
 	
 	private static final Map<String, String> inputs = new HashMap<String, String>();
 	static {
 		inputs.put(VESSELS_KEY, "Vessels");
 		inputs.put(VESSEL_CLASSES_KEY, "Vessel Classes");
+		inputs.put(GROUPS_KEY, "Vessel Groups");
 		inputs.put(FUELS_KEY, "Base Fuels");
 		inputs.put(EVENTS_KEY, "Events");
 		inputs.put(CURVES_KEY, "Consumption Curves");
@@ -68,6 +73,9 @@ public class FleetModelImporter implements ISubmodelImporter {
 		
 		if  (inputs.containsKey(FUELS_KEY))
 			fleetModel.getBaseFuels().addAll((Collection<? extends BaseFuel>) baseFuelImporter.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), inputs.get(FUELS_KEY), context));
+	
+		if  (inputs.containsKey(GROUPS_KEY))
+			fleetModel.getVesselGroups().addAll((Collection<? extends VesselGroup>) groupImporter.importObjects(FleetPackage.eINSTANCE.getVesselGroup(), inputs.get(GROUPS_KEY), context));
 		
 		if (inputs.containsKey(CURVES_KEY)) fuelCurveImporter.importFuelConsumptions(inputs.get(CURVES_KEY), context);
 		
@@ -112,5 +120,6 @@ public class FleetModelImporter implements ISubmodelImporter {
 		output.put(EVENTS_KEY, vesselEventImporter.exportObjects(fleetModel.getVesselEvents(), root));
 		output.put(FUELS_KEY, baseFuelImporter.exportObjects(fleetModel.getBaseFuels(), root));
 		output.put(CURVES_KEY, fuelCurveImporter.exportCurves(fleetModel.getVesselClasses()));
+		output.put(GROUPS_KEY, groupImporter.exportObjects(fleetModel.getVesselGroups(), root));
 	}
 }
