@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -23,8 +24,10 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
@@ -63,6 +66,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.BasicOperationRenderer;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
@@ -76,9 +80,15 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	private final Color desCargo = new Color(Display.getDefault(), 150, 210, 230);
 	private final Color fobCargo = new Color(Display.getDefault(), 190, 220, 180);
 
+	private final Image wiredImage;
+	private final Image lockedImage;
+
 	public CargoModelViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 		this.part = location;
+
+		wiredImage = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "/icons/wired.gif").createImage();
+		lockedImage = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "/icons/assigned.gif").createImage();
 	}
 
 	@Override
@@ -95,6 +105,32 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		final CargoPackage pkg = CargoPackage.eINSTANCE;
 		final IReferenceValueProviderProvider provider = part.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = part.getEditingDomain();
+
+		final GridViewerColumn state = getScenarioViewer().addSimpleColumn("", false);
+		state.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
+
+			@Override
+			public String getText(final Object element) {
+				return null;
+			}
+
+			@Override
+			public Image getImage(final Object element) {
+
+				if (element instanceof Cargo) {
+					final Cargo cargo = (Cargo) element;
+					final InputModel inputModel = part.getRootObject().getSubModel(InputModel.class);
+					if (inputModel.getLockedAssignedObjects().contains(cargo)) {
+						return lockedImage;
+					} else if (!cargo.isAllowRewiring()) {
+						return wiredImage;
+
+					}
+				}
+
+				return super.getImage(element);
+			}
+		});
 
 		addTypicalColumn("ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain));
 
@@ -251,6 +287,9 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 		fobCargo.dispose();
 		desCargo.dispose();
+
+		wiredImage.dispose();
+		lockedImage.dispose();
 
 		super.dispose();
 	}
