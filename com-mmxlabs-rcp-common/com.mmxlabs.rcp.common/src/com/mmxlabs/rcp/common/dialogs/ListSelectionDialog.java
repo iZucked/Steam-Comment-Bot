@@ -7,6 +7,8 @@ package com.mmxlabs.rcp.common.dialogs;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +76,9 @@ public class ListSelectionDialog extends Dialog {
 		private final Map<Object, E> originalToViewer = new HashMap<Object, E>();
 		private final Map<E, Object> viewerToOriginal = new HashMap<E, Object>();
 
+		private G lastTop;
+		private Object lastInput;
+		
 		private class E {
 			public final Object value;
 			public final G parent;
@@ -147,9 +152,11 @@ public class ListSelectionDialog extends Dialog {
 		public void dispose() {
 			delegate.dispose();
 		}
-
+		
 		@Override
 		public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+			lastTop = null;
+			lastInput = null;
 			originalToViewer.clear();
 			viewerToOriginal.clear();
 			delegate.inputChanged(viewer, oldInput, newInput);
@@ -157,8 +164,14 @@ public class ListSelectionDialog extends Dialog {
 
 		@Override
 		public Object[] getElements(final Object inputElement) {
-			final G top = new G(inputElement, "Top", Arrays.asList(delegate.getElements(inputElement)), groupers);
-			return top.children;
+			if (inputElement == lastInput) {
+				return lastTop.children;
+			} else {
+				final G top = new G(inputElement, "Top", Arrays.asList(delegate.getElements(inputElement)), groupers);
+				lastInput = inputElement;
+				lastTop = top;
+				return top.children;
+			}
 		}
 
 		@Override
@@ -393,19 +406,19 @@ public class ListSelectionDialog extends Dialog {
 
 			return result.toArray();
 		}
+
+		public Object getViewerElement(Object o) {
+			return originalToViewer.get(o);
+		}
 	}
 
 	public ListSelectionDialog(final Shell parentShell, final Object input, final IStructuredContentProvider contentProvider, final ILabelProvider labelProvider) {
 		super(parentShell);
 		this.input = input;
-		// if (contentProvider instanceof ITreeContentProvider) {
-		// this.contentProvider = contentProvider;
-		// this.labelProvider = labelProvider;
-		// } else {
+
 		final GroupedElementProvider gep = new GroupedElementProvider(contentProvider);
 		this.contentProvider = gep;
 		this.labelProvider = gep.wrapLabelProvider(labelProvider);
-		// }
 	}
 
 	@Override
@@ -427,7 +440,9 @@ public class ListSelectionDialog extends Dialog {
 		final Text tr = new Text(inner, SWT.BORDER | SWT.SEARCH | SWT.ICON_SEARCH | SWT.ICON_CANCEL);
 		
 		final List<String> filters = new ArrayList<String>();
-		
+
+		final HashSet<Object> allSelectedElements = new HashSet<Object>();
+		final HashSet<Object> filteredElements = new HashSet<Object>();
 		tr.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		tr.addModifyListener(new ModifyListener() {
 			@Override
@@ -442,8 +457,11 @@ public class ListSelectionDialog extends Dialog {
 						filters.add(p2);
 					}
 				}
-
+				
+				allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
+				allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements())));
 				viewer.refresh();
+				viewer.setCheckedElements(contentProvider.getViewerElements(allSelectedElements.toArray()));
 			}
 		});
 		
@@ -455,13 +473,14 @@ public class ListSelectionDialog extends Dialog {
 		viewer.addFilter(new ViewerFilter() {
 			@Override
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
+				filteredElements.remove(element);
 				if (filters.isEmpty()) return true;
 				final String t = labelProvider.getText(element).toLowerCase();
 				
 				for (final String f : filters) {
 					if (t.contains(f)) return true;
 				}
-				
+				filteredElements.add(element);
 				return false;
 			}
 		});
