@@ -23,9 +23,11 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -151,11 +153,11 @@ public class EObjectTableViewer extends GridTableViewer {
 		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
 
 		}
-		
+
 		if (source == null) {
 			final int ii = 0;
 		}
-		
+
 		return source;
 	}
 
@@ -394,6 +396,94 @@ public class EObjectTableViewer extends GridTableViewer {
 		return column;
 	}
 
+	/**
+	 * Create a "simple" column linked to the {@link EObjectTableViewer}. A {@link CellLabelProvider} must be set on the column by the caller. If the column is sortable, then a {@link EMFPath} and
+	 * {@link ICellRenderer} will need to be set as in the {@link #addColumn(String, ICellRenderer, ICellManipulator, EMFPath)} method.
+	 * 
+	 * @param columnName
+	 * @return
+	 */
+	public GridViewerColumn addSimpleColumn(final String columnName, final boolean sortable) {
+
+		// create a column
+		final GridTableViewer viewer = this;
+
+		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
+		final GridColumn tColumn = column.getColumn();
+
+		tColumn.setMoveable(true);
+		tColumn.setText(columnName);
+		tColumn.pack();
+		// tColumn.setResizable(true);
+
+		{
+			final List<String> mnems = new LinkedList<String>();
+			tColumn.setData(COLUMN_MNEMONICS, mnems);
+			mnems.add(columnName.toLowerCase().replace(" ", ""));
+			String initials = "";
+			boolean ws = true;
+			for (int i = 0; i < columnName.length(); i++) {
+				final char c = columnName.charAt(i);
+				if (Character.isWhitespace(c)) {
+					ws = true;
+				} else {
+					if (ws) {
+						initials += c;
+					}
+					ws = false;
+				}
+			}
+			mnems.add(initials.toLowerCase());
+		}
+
+		// GridViewerEditor.create(viewer, new ColumnViewerEditorActivationStrategy(viewer) {
+		// long timer = 0;
+		//
+		// /*
+		// * (non-Javadoc)
+		// *
+		// * @see org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy#isEditorActivationEvent(org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent)
+		// */
+		// @Override
+		// protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
+		// final long fireTime = System.currentTimeMillis();
+		// final boolean activate = (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
+		// || ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED) && (event.keyCode == SWT.F2) && ((fireTime - timer) > 500)); // this is a hack; for some reason without
+		// // this we get loads of keydown events.
+		// timer = fireTime;
+		// return activate;
+		// }
+		//
+		// }, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR | ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK);
+
+		if (sortable) {
+			columnSortOrder.add(tColumn);
+
+			column.getColumn().addSelectionListener(new SelectionListener() {
+				@Override
+				public void widgetDefaultSelected(final SelectionEvent e) {
+				}
+
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					if (columnSortOrder.get(0) == tColumn) {
+						sortDescending = !sortDescending;
+					} else {
+						sortDescending = false;
+						columnSortOrder.get(0).setSort(SWT.NONE);
+						columnSortOrder.remove(tColumn);
+						columnSortOrder.add(0, tColumn);
+					}
+					tColumn.setSort(sortDescending ? SWT.UP : SWT.DOWN);
+					viewer.refresh(false);
+				}
+			});
+		}
+		column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
+
+		return column;
+	}
+
 	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
 		this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
 	}
@@ -476,7 +566,7 @@ public class EObjectTableViewer extends GridTableViewer {
 					}
 				}
 			}
-			
+
 			void updateObject(final EObject object, final IStatus status) {
 				if (object != null) {
 					setStatus(object, status);
