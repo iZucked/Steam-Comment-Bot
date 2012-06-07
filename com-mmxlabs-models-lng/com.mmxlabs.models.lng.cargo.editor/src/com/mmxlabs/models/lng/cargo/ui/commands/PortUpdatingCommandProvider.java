@@ -22,11 +22,12 @@ import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class PortUpdatingCommandProvider implements IModelCommandProvider {
 	@Override
-	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides,Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
+	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Class<? extends Command> commandClass,
+			final CommandParameter parameter, final Command input) {
 		if (commandClass == SetCommand.class) {
 			if (parameter.getEOwner() instanceof Slot) {
 				final Slot slot = (Slot) parameter.getEOwner();
@@ -35,14 +36,12 @@ public class PortUpdatingCommandProvider implements IModelCommandProvider {
 					final EObject newValue = parameter.getEValue();
 					if (newValue instanceof Contract) {
 						final Contract contract = (Contract) newValue;
-						if (contract.getAllowedPorts().isEmpty()) return null;
+						if (contract.getAllowedPorts().isEmpty())
+							return null;
 						final Port currentPort = slot.getPort();
 						if (!SetUtils.getPorts(contract.getAllowedPorts()).contains(currentPort)) {
 							// figure out a new port - preferred port?
-							return SetCommand.create(editingDomain,
-									slot, 
-									CargoPackage.eINSTANCE.getSlot_Port(),
-									contract.getPreferredPort());
+							return SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), contract.getPreferredPort());
 						}
 					}
 				}
@@ -53,11 +52,11 @@ public class PortUpdatingCommandProvider implements IModelCommandProvider {
 
 	@Override
 	public void startCommandProvision() {
-		
+
 	}
 
 	@Override
 	public void endCommandProvision() {
-		
+
 	}
 }

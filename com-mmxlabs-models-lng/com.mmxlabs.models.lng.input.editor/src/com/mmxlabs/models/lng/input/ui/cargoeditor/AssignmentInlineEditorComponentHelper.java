@@ -10,12 +10,15 @@ import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -28,6 +31,9 @@ import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.Assignment;
@@ -37,6 +43,7 @@ import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -47,216 +54,285 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
  * A component helper which adds an assignment editor to the cargo view.
  * 
  * @author hinton
- *
+ * 
  */
 public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
+	public final class AssignmentInlineEditor extends MMXAdapterImpl implements IInlineEditor {
+		private Label label;
+		private ICommandHandler handler;
+		private Combo combo;
+		private final ArrayList<String> nameList = new ArrayList<String>();
+		private final ArrayList<EObject> valueList = new ArrayList<EObject>();
+		private InputModel inputModel;
+		private EObject inputObject;
+		private Button lock;
+		private final DisposeListener disposeListener;
+		private IReferenceValueProvider valueProvider;
+		private Collection<EObject> range;
+
+		public AssignmentInlineEditor() {
+			disposeListener = new DisposeListener() {
+				@Override
+				public void widgetDisposed(final DisposeEvent e) {
+					if (AssignmentInlineEditor.this.inputObject != null) {
+						AssignmentInlineEditor.this.inputObject.eAdapters().remove(AssignmentInlineEditor.this);
+					}
+					if (AssignmentInlineEditor.this.range != null) {
+						for (final EObject obj : AssignmentInlineEditor.this.range) {
+							obj.eAdapters().remove(AssignmentInlineEditor.this);
+						}
+					}
+					e.widget.removeDisposeListener(this);
+				}
+
+			};
+		}
+
+		@Override
+		public void setLabel(final Label label) {
+			this.label = label;
+		}
+
+		@Override
+		public void setCommandHandler(final ICommandHandler handler) {
+			this.handler = handler;
+		}
+
+		@Override
+		public void processValidation(final IStatus status) {
+
+		}
+
+		@Override
+		public EStructuralFeature getFeature() {
+			return null;
+		}
+
+		@Override
+		public void display(final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+			label.setText("Assigned to:");
+
+			if (inputObject != null) {
+				inputObject.eAdapters().remove(AssignmentInlineEditor.this);
+			}
+			if (this.range != null) {
+				for (final EObject obj : this.range) {
+					obj.eAdapters().remove(AssignmentInlineEditor.this);
+				}
+			}
+
+			this.inputObject = object;
+			this.range = range;
+
+			if (inputObject != null) {
+				inputObject.eAdapters().add(AssignmentInlineEditor.this);
+			}
+			if (this.range != null) {
+				for (final EObject obj : this.range) {
+					obj.eAdapters().add(AssignmentInlineEditor.this);
+				}
+			}
+
+			valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(InputPackage.eINSTANCE.getAssignment(), InputPackage.eINSTANCE.getAssignment_Vessels());
+
+			updateDisplay(object);
+
+			combo.addDisposeListener(disposeListener);
+		}
+
+		public void updateDisplay(final EObject object) {
+
+			final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(null, InputPackage.eINSTANCE.getAssignment_Vessels());
+			combo.removeAll();
+			nameList.clear();
+			valueList.clear();
+
+			for (final Pair<String, EObject> v : values) {
+				valueList.add(v.getSecond());
+				nameList.add(v.getFirst());
+				combo.add(v.getFirst());
+			}
+
+			for (final EObject r : range) {
+				if (r instanceof InputModel) {
+					final InputModel i = (InputModel) r;
+					this.inputModel = i;
+					top: for (final Assignment a : i.getAssignments()) {
+						if (a.getVessels().isEmpty())
+							continue;
+						for (final UUIDObject o : a.getAssignedObjects()) {
+							if (o == object) {
+								combo.setText(nameList.get(valueList.indexOf(a.getVessels().iterator().next())));
+								break top;
+							}
+						}
+					}
+
+					lock.setSelection(i.getLockedAssignedObjects().contains(inputObject));
+				}
+			}
+		}
+
+		@Override
+		public Control createControl(final Composite parent) {
+
+			final Composite sub = new Composite(parent, SWT.NONE);
+			final GridLayout layout = new GridLayout(2, false);
+			layout.marginHeight = layout.marginWidth = 0;
+			sub.setLayout(layout);
+
+			final Combo combo = new Combo(sub, SWT.READ_ONLY);
+			this.combo = combo;
+
+			combo.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+			final Button lock = new Button(sub, SWT.CHECK);
+			this.lock = lock;
+			lock.setText("Locked");
+			lock.setLayoutData(new GridData(GridData.FILL_VERTICAL));
+
+			lock.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					if (lock.getSelection()) {
+						handler.handleCommand(AddCommand.create(handler.getEditingDomain(), inputModel, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), inputObject), inputModel,
+								InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects());
+					} else {
+						handler.handleCommand(RemoveCommand.create(handler.getEditingDomain(), inputModel, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), inputObject), inputModel,
+								InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects());
+					}
+				}
+			});
+
+			combo.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					// apply change
+					final int index = combo.getSelectionIndex();
+					if (index >= 0) {
+						final EObject vessel = valueList.get(index);
+						if (inputModel != null) {
+							final CompoundCommand cc = new CompoundCommand();
+							boolean hadExistingAssignment = false;
+							for (final Assignment a : inputModel.getAssignments()) {
+								if (a.getAssignedObjects().contains(inputObject)) {
+									if (a.getVessels().contains(vessel) == false) {
+										cc.append(RemoveCommand.create(handler.getEditingDomain(), a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), inputObject));
+									} else {
+										return;
+									}
+								} else if (!(vessel instanceof VesselClass) && a.getVessels().contains(vessel)) {
+									// insert at a suitable index
+									hadExistingAssignment = true;
+									final Date thisStartDate = ((Cargo) inputObject).getLoadSlot().getWindowStartWithSlotOrPortTime();
+									final Date thisEndDate = ((Cargo) inputObject).getLoadSlot().getWindowEndWithSlotOrPortTime();
+									int position = 0;
+									boolean inserted = false;
+									for (final UUIDObject o : a.getAssignedObjects()) {
+										final Date otherEndDate;
+										final Date otherStartDate;
+										if (o instanceof Cargo) {
+											otherStartDate = ((Cargo) o).getDischargeSlot().getWindowStartWithSlotOrPortTime();
+											otherEndDate = ((Cargo) o).getDischargeSlot().getWindowEndWithSlotOrPortTime();
+										} else if (o instanceof VesselEvent) {
+											otherStartDate = ((VesselEvent) o).getStartAfter();
+											otherEndDate = new Date(((VesselEvent) o).getStartBy().getTime() + ((VesselEvent) o).getDurationInDays() * Timer.ONE_DAY);
+										} else {
+											otherEndDate = null;
+											otherStartDate = null;
+										}
+										if (thisStartDate.after(otherEndDate)) {
+											// insert this after other
+											cc.append(AddCommand.create(handler.getEditingDomain(), a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), inputObject, position + 1));
+											inserted = true;
+											break;
+										} else if (thisEndDate.before(otherStartDate)) {
+											// insert this before other.
+											cc.append(AddCommand.create(handler.getEditingDomain(), a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), inputObject, position));
+											inserted = true;
+											break;
+										}
+										position++;
+									}
+
+									// no hits. add at end.
+									if (!inserted) {
+										cc.append(AddCommand.create(handler.getEditingDomain(), a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), inputObject));
+									}
+								}
+							}
+
+							if (!hadExistingAssignment) {
+								// need to create an entirely new assignment
+								final Assignment a = InputFactory.eINSTANCE.createAssignment();
+								a.getVessels().add((AVesselSet) vessel);
+								if (vessel instanceof VesselClass) {
+									// spot
+									a.setAssignToSpot(true);
+								}
+								a.getAssignedObjects().add((UUIDObject) inputObject);
+								cc.append(AddCommand.create(handler.getEditingDomain(), inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), a));
+							}
+
+							handler.handleCommand(cc, inputModel, null);
+						}
+					}
+				}
+			});
+
+			return sub;
+		}
+
+		@Override
+		public void setEnabled(final boolean enabled) {
+			combo.setEnabled(enabled);
+			lock.setEnabled(enabled);
+		}
+
+		@Override
+		public void reallyNotifyChanged(final Notification notification) {
+			Object input = notification.getNotifier();
+			boolean enabled = true;
+			if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+
+				if (input instanceof LoadSlot) {
+					if (((LoadSlot) input).isDESPurchase()) {
+						enabled = false;
+					}
+				}
+
+			}
+			if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
+				if (input instanceof DischargeSlot) {
+					if (((DischargeSlot) input).isFOBSale()) {
+						enabled = false;
+					}
+				}
+			}
+			setEnabled(enabled);
+
+			if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+				updateDisplay(inputObject);
+			}
+			if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot()) {
+				updateDisplay(inputObject);
+			}
+		}
+	}
+
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		final IInlineEditor assignmentEditor = new IInlineEditor() {
-			private Label label;
-			private ICommandHandler handler;
-			private Combo combo;
-			
-			private final ArrayList<String> nameList = new ArrayList<String>();
-			private final ArrayList<EObject> valueList = new ArrayList<EObject>();
-			private InputModel inputModel;
-			private EObject inputObject;
-			private Button lock;
-
-			@Override
-			public void setLabel(final Label label) {
-				this.label = label;
-			}
-			
-			@Override
-			public void setCommandHandler(final ICommandHandler handler) {
-				this.handler = handler;
-			}
-			
-			@Override
-			public void processValidation(final IStatus status) {
-				
-			}
-			
-			@Override
-			public EStructuralFeature getFeature() {
-				return null;
-			}
-			
-			@Override
-			public void display(final MMXRootObject scenario, final EObject object,
-					final Collection<EObject> range) {
-				label.setText("Assigned to:");
-				
-				this.inputObject = object;
-				
-				final IReferenceValueProvider valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(
-						InputPackage.eINSTANCE.getAssignment(),
-						InputPackage.eINSTANCE.getAssignment_Vessels());
-				
-				List<Pair<String, EObject>> values = valueProvider.getAllowedValues(null, 
-						InputPackage.eINSTANCE.getAssignment_Vessels());
-				
-				combo.removeAll();
-				nameList.clear();
-				valueList.clear();
-
-				for (final Pair<String, EObject> v : values) {
-					valueList.add(v.getSecond());
-					nameList.add(v.getFirst());
-					combo.add(v.getFirst());
-				}
-				
-				for (final EObject r : range) {
-					if (r instanceof InputModel) {
-						final InputModel i = (InputModel) r;
-						this.inputModel = i;
-						top:
-						for (final Assignment a : i.getAssignments()) {
-							if (a.getVessels().isEmpty()) continue;
-							for (final UUIDObject o : a.getAssignedObjects()) {
-								if (o == object) {
-									combo.setText(nameList.get(valueList.indexOf(a.getVessels().iterator().next())));
-									break top;
-								}
-							}
-						}
-						
-						lock.setSelection(i.getLockedAssignedObjects().contains(inputObject));
-					}
-				}
-			}
-			
-			@Override
-			public Control createControl(Composite parent) {
-				
-				final Composite sub = new Composite(parent, SWT.NONE);
-				final GridLayout layout = new GridLayout(2, false);
-				layout.marginHeight = layout.marginWidth = 0;
-				sub.setLayout(layout);
-				
-				final Combo combo = new Combo(sub, SWT.READ_ONLY);
-				this.combo = combo;
-				
-				combo.setLayoutData(new GridData(GridData.FILL_BOTH));
-				
-				final Button lock = new Button(sub, SWT.CHECK);
-				this.lock = lock;
-				lock.setText("Locked");
-				lock.setLayoutData(new GridData(GridData.FILL_VERTICAL));
-				
-				lock.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						if (lock.getSelection()) {
-							handler.handleCommand(AddCommand.create(
-									handler.getEditingDomain(), inputModel, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(),
-									inputObject), inputModel, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects());
-						} else {
-							handler.handleCommand(RemoveCommand.create(
-									handler.getEditingDomain(), inputModel, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(),
-									inputObject), inputModel, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects());
-						}
-					}
-				});
-				
-				combo.addSelectionListener(new SelectionAdapter() {
-					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						// apply change
-						final int index = combo.getSelectionIndex();
-						if (index >= 0) {
-							final EObject vessel = valueList.get(index);
-							if (inputModel != null) {
-								final CompoundCommand cc = new CompoundCommand();
-								boolean hadExistingAssignment = false;
-								for (final Assignment a : inputModel.getAssignments()) {
-									if (a.getAssignedObjects().contains(inputObject)) {
-										if (a.getVessels().contains(vessel) == false) {
-											cc.append(RemoveCommand.create(handler.getEditingDomain(), a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), inputObject));
-										} else {
-											return;
-										}
-									} else if (!(vessel instanceof VesselClass) && a.getVessels().contains(vessel)) {
-										// insert at a suitable index
-										hadExistingAssignment = true;
-										final Date thisStartDate = ((Cargo) inputObject).getLoadSlot().getWindowStartWithSlotOrPortTime();
-										final Date thisEndDate = ((Cargo) inputObject).getLoadSlot().getWindowEndWithSlotOrPortTime();
-										int position = 0;
-										boolean inserted = false;
-										for (final UUIDObject o : a.getAssignedObjects()) {
-											final Date otherEndDate;
-											final Date otherStartDate;
-											if (o instanceof Cargo) {
-												otherStartDate = ((Cargo) o).getDischargeSlot().getWindowStartWithSlotOrPortTime();
-												otherEndDate = ((Cargo) o).getDischargeSlot().getWindowEndWithSlotOrPortTime();
-											} else if (o instanceof VesselEvent) {
-												otherStartDate = ((VesselEvent) o).getStartAfter();
-												otherEndDate = new Date(((VesselEvent) o).getStartBy().getTime() + ((VesselEvent)o).getDurationInDays() * Timer.ONE_DAY);
-											} else {
-												otherEndDate = null;
-												otherStartDate = null;
-											}
-											if (thisStartDate.after(otherEndDate)) {
-												// insert this after other
-												cc.append(AddCommand.create(handler.getEditingDomain(), a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), inputObject, position+1));
-												inserted = true;
-												break;
-											} else if (thisEndDate.before(otherStartDate)) {
-												// insert this before other.
-												cc.append(AddCommand.create(handler.getEditingDomain(), a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), inputObject, position));
-												inserted = true;
-												break;
-											}
-											position++;
-										}
-										
-										// no hits. add at end.
-										if (!inserted) {
-											cc.append(AddCommand.create(handler.getEditingDomain(), a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), inputObject));
-										}
-									}
-								}
-								
-								if (!hadExistingAssignment) {
-									// need to create an entirely new assignment
-									final Assignment a = InputFactory.eINSTANCE.createAssignment();
-									a.getVessels().add((AVesselSet) vessel);
-									if (vessel instanceof VesselClass) {
-										// spot
-										a.setAssignToSpot(true);
-									}
-									a.getAssignedObjects().add((UUIDObject) inputObject);
-									cc.append(AddCommand.create(handler.getEditingDomain(), inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), a));
-								}
-								
-								handler.handleCommand(cc, inputModel, null);
-							}
-						}
-					}
-				});
-				
-				return sub;
-			}
-
-			@Override
-			public void setEnabled(boolean enabled) {
-				// TODO Auto-generated method stub
-				
-			}
-		};
+		final IInlineEditor assignmentEditor = new AssignmentInlineEditor();
 		detailComposite.addInlineEditor(assignmentEditor);
 	}
 
 	@Override
-	public void addEditorsToComposite(final IInlineEditorContainer detailComposite,
-			final EClass displayedClass) {
+	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass displayedClass) {
 		addEditorsToComposite(detailComposite);
 	}
 
 	@Override
-	public List<EObject> getExternalEditingRange(MMXRootObject root,
-			EObject value) {
+	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
 		final InputModel input = root.getSubModel(InputModel.class);
 		if (input != null) {
 			return Collections.singletonList((EObject) input);

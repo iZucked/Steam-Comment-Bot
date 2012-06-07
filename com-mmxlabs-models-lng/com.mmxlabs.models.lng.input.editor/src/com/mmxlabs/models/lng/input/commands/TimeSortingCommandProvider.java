@@ -22,9 +22,26 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 public class TimeSortingCommandProvider implements IModelCommandProvider {
+
+	private boolean ignored = false;
+
+	private int depth = 0;
+
 	@Override
-	public Command provideAdditionalCommand(EditingDomain editingDomain,MMXRootObject rootObject, Map<EObject, EObject> overrides,Class<? extends Command> commandClass,CommandParameter parameter, Command input) {
+	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Class<? extends Command> commandClass,
+			final CommandParameter parameter, final Command input) {
+
+		// TODO: ignored should really be a map of slot/cargo to change
 		if (commandClass == SetCommand.class) {
+			if (parameter.getEAttribute() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+				ignored = true;
+			}
+			if (parameter.getEAttribute() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
+				ignored = true;
+			}
+		}
+
+		if (!ignored && commandClass == SetCommand.class) {
 			if (parameter.getEAttribute() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
 				final EObject o = parameter.getEOwner();
 				if (o instanceof LoadSlot) {
@@ -34,8 +51,7 @@ public class TimeSortingCommandProvider implements IModelCommandProvider {
 					final Cargo c = ((DischargeSlot) o).getCargo();
 					return fixTask(c, editingDomain, rootObject, overrides);
 				}
-			} else if (parameter.getEAttribute() == FleetPackage.eINSTANCE.getVesselEvent_StartAfter() 
-					|| parameter.getEAttribute() == FleetPackage.eINSTANCE.getVesselEvent_StartBy()
+			} else if (parameter.getEAttribute() == FleetPackage.eINSTANCE.getVesselEvent_StartAfter() || parameter.getEAttribute() == FleetPackage.eINSTANCE.getVesselEvent_StartBy()
 					|| parameter.getEAttribute() == FleetPackage.eINSTANCE.getVesselEvent_DurationInDays()) {
 				final EObject o = parameter.getEOwner();
 				if (o instanceof VesselEvent) {
@@ -46,29 +62,30 @@ public class TimeSortingCommandProvider implements IModelCommandProvider {
 		return null;
 	}
 
-
-
-	private Command fixTask(UUIDObject o, EditingDomain editingDomain,
-			MMXRootObject rootObject, Map<EObject, EObject> overrides) {
+	private Command fixTask(final UUIDObject o, final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides) {
 		InputModel input = rootObject.getSubModel(InputModel.class);
 		if (input != null) {
-			if (overrides.containsKey(input)) input = (InputModel) overrides.get(input);
+			if (overrides.containsKey(input))
+				input = (InputModel) overrides.get(input);
 			final Assignment a = AssignmentEditorHelper.getAssignmentForTask(input, o);
-			if (a != null) return AssignmentEditorHelper.taskReassigned(editingDomain, input, o, null, null, null, a);
+			if (a != null)
+				return AssignmentEditorHelper.taskReassigned(editingDomain, input, o, null, null, null, a);
 		}
 		return null;
 	}
 
 	@Override
 	public void startCommandProvision() {
-		// TODO Auto-generated method stub
-		
+		if (depth == 0) {
+			// Reset flag
+			ignored = false;
+		}
+		depth++;
 	}
 
 	@Override
 	public void endCommandProvision() {
-		// TODO Auto-generated method stub
-		
+		depth--;
 	}
-	
+
 }

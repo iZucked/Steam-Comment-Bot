@@ -24,12 +24,13 @@ import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
  * Adds a set command to the setter for cargo names
  * 
  * @author hinton
- *
+ * 
  */
 public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 
 	@Override
-	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides,Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
+	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Class<? extends Command> commandClass,
+			final CommandParameter parameter, final Command input) {
 		if (commandClass == SetCommand.class) {
 			if (parameter.getEOwner() instanceof Cargo) {
 				final Cargo cargo = (Cargo) parameter.getEOwner();
@@ -41,11 +42,11 @@ public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 					if (load != null) {
 						fixer.append(SetCommand.create(editingDomain, load, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "load-" + parameter.getValue()));
 					}
-					
+
 					if (discharge != null) {
 						fixer.append(SetCommand.create(editingDomain, discharge, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "discharge-" + parameter.getValue()));
 					}
-					
+
 					return fixer;
 				}
 			}
@@ -55,11 +56,11 @@ public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 
 	@Override
 	public void startCommandProvision() {
-		
+
 	}
 
 	@Override
 	public void endCommandProvision() {
-		
+
 	}
 }

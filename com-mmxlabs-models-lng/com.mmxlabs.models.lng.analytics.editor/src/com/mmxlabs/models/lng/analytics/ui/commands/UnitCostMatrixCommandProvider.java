@@ -22,12 +22,13 @@ import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
  * A command provider which resets cost matrix lines when the cost matrix has changed
  * 
  * @author hinton
- *
+ * 
  */
 public class UnitCostMatrixCommandProvider implements IModelCommandProvider {
 
 	@Override
-	public Command provideAdditionalCommand(EditingDomain editingDomain, MMXRootObject rootObject, Map<EObject, EObject> overrides,Class<? extends Command> commandClass, CommandParameter parameter, Command input) {
+	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Class<? extends Command> commandClass,
+			final CommandParameter parameter, final Command input) {
 		if (commandClass.equals(SetCommand.class)) {
 			if (parameter.getEOwner() instanceof UnitCostMatrix) {
 				return RemoveCommand.create(editingDomain, parameter.getEOwner(), AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), ((UnitCostMatrix) (parameter.getEOwner())).getCostLines());
@@ -38,11 +39,11 @@ public class UnitCostMatrixCommandProvider implements IModelCommandProvider {
 
 	@Override
 	public void startCommandProvision() {
-		
+
 	}
 
 	@Override
 	public void endCommandProvision() {
-		
+
 	}
 }
