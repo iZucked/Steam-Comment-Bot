@@ -15,6 +15,7 @@ import org.eclipse.nebula.widgets.ganttchart.GanttComposite;
 import org.eclipse.nebula.widgets.ganttchart.GanttEvent;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Rectangle;
 
 public class PackAction extends Action {
 	private final GanttChart ganttChart;
@@ -50,18 +51,18 @@ public class PackAction extends Action {
 			// adjust the zoom
 			final int daysNeeded = (int) ((latestDate.getTimeInMillis() - earliestDate.getTimeInMillis()) / (Timer.ONE_DAY)) + 28;
 
-			if (daysNeeded < 150) {
-				composite.setZoomLevel(ISettings.ZOOM_MONTH_NORMAL);
-			} else if (daysNeeded < 365) {
-				composite.setZoomLevel(ISettings.ZOOM_YEAR_MAX);
-			} else if (daysNeeded < 584) {
-				composite.setZoomLevel(ISettings.ZOOM_YEAR_NORMAL);
-			} else {
-				composite.setZoomLevel(ISettings.ZOOM_YEAR_SMALL);
+			final Rectangle visibleBounds = composite.getVisibleBounds();
+			final int viewWidth = visibleBounds.width - composite.getLastSectionColumnWidth();
+			final int ratio = (int) (Math.floor((float) viewWidth / (float) daysNeeded));
+
+			int zoom = ISettings.MAX_ZOOM_LEVEL - (ratio - 1);
+			if (zoom < ISettings.MIN_ZOOM_LEVEL) {
+				zoom = ISettings.MIN_ZOOM_LEVEL;
 			}
+			composite.setZoomLevel(zoom);
 
 			final Calendar leftDate = (Calendar) earliestDate.clone();
-			leftDate.setTimeInMillis(leftDate.getTimeInMillis() - (Timer.ONE_DAY * 14));
+			leftDate.setTimeInMillis(leftDate.getTimeInMillis());
 
 			// Set the left hand side
 			composite.setDate(leftDate, SWT.LEFT);
