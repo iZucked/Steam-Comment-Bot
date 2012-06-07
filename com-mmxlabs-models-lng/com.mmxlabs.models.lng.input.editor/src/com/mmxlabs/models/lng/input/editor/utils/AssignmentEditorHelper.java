@@ -1,6 +1,5 @@
 package com.mmxlabs.models.lng.input.editor.utils;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -82,12 +81,12 @@ public class AssignmentEditorHelper {
 			if (start != null && end != null) {
 				for (final UUIDObject o : assigned) {
 					final Date startO = getStartDate(o);
-					final Date endO = getEndDate(o);
+//					final Date endO = getEndDate(o);
 					if (end.before(startO)) {
 						break;
-					} else if (start.after(endO)) {
-						position++;
-						break;
+//					} else if (start.after(endO)) {
+//						position++;
+//						break;
 					} else {
 						position++;
 					}

@@ -40,6 +40,7 @@ public class InputModelImporter implements ISubmodelImporter {
 			final Collection<EObject> importObjects = importer.importObjects(InputPackage.eINSTANCE.getAssignment(), inputs.get(ASSIGNMENTS), context);
 			input.getAssignments().addAll((Collection<? extends Assignment>) importObjects);
 		}
+		
 		return input;
 	}
 
