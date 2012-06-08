@@ -84,14 +84,16 @@ public class ScenarioStorageUtil {
 			manifest.getModelURIs().add(relativeURI.toString());
 			final URI resolved = relativeURI.resolve(manifestURI);
 			final OutputStream output = conv.createOutputStream(resolved);
-			int b;
+			try {
+				int b;
+				while ((b = input.read(buffer)) != -1) {
+					output.write(buffer, 0, b);
+				}
 			
-			while ((b = input.read(buffer)) != -1) {
-				output.write(buffer, 0, b);
+				output.flush();
+			} finally {
+				output.close();
 			}
-			
-			output.flush();
-			output.close();
 		}
 //		System.err.println("time: " + (System.currentTimeMillis() - l));
 		manifestResource.save(null);
