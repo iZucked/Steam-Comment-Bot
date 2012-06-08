@@ -131,7 +131,6 @@ public class FileScenarioService extends AbstractScenarioService {
 				delete(container.getElements().get(0));
 			}
 		}
-
 		
 		final EObject parent = container.eContainer();
 		if (parent != null) {
@@ -152,7 +151,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		
 			for (final String modelInstanceURI : instance.getSubModelURIs()) {
 				try {
-					final IModelInstance modelInstance = modelService.getModel(URI.createURI(modelInstanceURI));
+					final IModelInstance modelInstance = modelService.getModel(resolveURI(modelInstanceURI));
 					modelInstance.delete();
 				} catch (final IOException e) {
 					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + modelInstanceURI, e);
@@ -178,15 +177,16 @@ public class FileScenarioService extends AbstractScenarioService {
 		
 		int index = 0;
 		for (final EObject model : models) {
-			URI rel = URI.createURI("./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
-			rel = rel.resolve(storeURI);
-			log.debug("Storing submodel into " + rel);
+//			URI rel = URI.createURI("./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
+			final String uriString = "./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi";
+			final URI resolved = resolveURI(uriString);
+			log.debug("Storing submodel into " + resolved);
 			try {
-				final IModelInstance instance = modelService.store(model, rel);
+				final IModelInstance instance = modelService.store(model, resolved);
 			} catch (IOException e) {
 				return null;
 			}
-			newInstance.getSubModelURIs().add(rel.toString());
+			newInstance.getSubModelURIs().add(uriString);
 		}
 		
 		container.getElements().add(newInstance);
@@ -257,5 +257,15 @@ public class FileScenarioService extends AbstractScenarioService {
 		result.eAdapters().add(saveAdapter);
 		
 		return result;
+	}
+
+	@Override
+	public URI resolveURI(final String uriString) {
+		final URI uri = URI.createURI(uriString);
+		if (uri.isRelative()) {
+			return uri.resolve(storeURI);
+		} else {
+			return uri;
+		}
 	}
 }

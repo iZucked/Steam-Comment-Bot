@@ -333,10 +333,15 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 			return;
 		}
 		for (final String uris : scenarioInstance.getSubModelURIs()) {
-			final IModelInstance modelInstance = modelService.getModel(URI.createURI(uris));
+			final IModelInstance modelInstance = modelService.getModel(resolveURI(uris));
 			if (modelInstance != null) {
 				modelInstance.save();
 			}
 		}
+	}
+
+	@Override
+	public URI resolveURI(String uriString) {
+		return URI.createURI(uriString);
 	}
 }

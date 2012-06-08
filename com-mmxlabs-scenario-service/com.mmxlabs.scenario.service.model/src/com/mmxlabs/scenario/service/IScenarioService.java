@@ -7,6 +7,7 @@ package com.mmxlabs.scenario.service;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.scenario.service.model.Container;
@@ -91,4 +92,6 @@ public interface IScenarioService {
 	 * @throws IOException
 	 */
 	void save(ScenarioInstance instance) throws IOException;
+	
+	public URI resolveURI(final String uriString);
 }

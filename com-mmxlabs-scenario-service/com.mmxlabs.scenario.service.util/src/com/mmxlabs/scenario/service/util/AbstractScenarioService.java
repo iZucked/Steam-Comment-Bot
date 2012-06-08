@@ -116,6 +116,8 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		}
 		return serviceModel;
 	}
+	
+	public abstract URI resolveURI(final String URI);
 
 	@Override
 	public EObject load(final ScenarioInstance instance) throws IOException {
@@ -150,7 +152,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		for (final String subModelURI : instance.getSubModelURIs()) {
 			// acquire sub models
 			log.debug("Loading submodel from " + subModelURI);
-			final IModelInstance modelInstance = modelService.getModel(URI.createURI(subModelURI));
+			final IModelInstance modelInstance = modelService.getModel(resolveURI(subModelURI));
 			if (modelInstance.getModel() instanceof UUIDObject) {
 				implementation.addSubModel((UUIDObject) modelInstance.getModel());
 			} else if (modelInstance.getModel() != null) {
@@ -223,7 +225,7 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		}
 		final List<IModelInstance> models = new ArrayList<IModelInstance>();
 		for (final String uris : scenarioInstance.getSubModelURIs()) {
-			final IModelInstance modelInstance = modelService.getModel(URI.createURI(uris));
+			final IModelInstance modelInstance = modelService.getModel(resolveURI(uris));
 			if (modelInstance != null) {
 				models.add(modelInstance);
 			}
@@ -240,11 +242,15 @@ public abstract class AbstractScenarioService implements IScenarioService {
 	@Override
 	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException {
 		log.debug("Duplicating " + original.getUuid() + " into " + destination);
+		final IScenarioService originalService = original.getScenarioService();
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 		for (final String subModelURI : original.getSubModelURIs()) {
 			log.debug("Loading submodel " + subModelURI);
 			try {
-				final IModelInstance instance = modelService.getModel(URI.createURI(subModelURI));
+				final URI realURI = originalService == null ? 
+						URI.createURI(subModelURI) : originalService.resolveURI(subModelURI);
+						
+				final IModelInstance instance = modelService.getModel(realURI);
 				originalSubModels.add(instance.getModel());
 			} catch (final IOException e1) {
 				log.error("IO Exception loading model from " + subModelURI, e1);

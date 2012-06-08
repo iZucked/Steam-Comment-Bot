@@ -78,7 +78,7 @@ public class ScenarioStorageUtil {
 //		}
 		
 		for (final String partURI : partURIs) {
-			final URI u = URI.createURI(partURI);
+			final URI u = scenarioService.resolveURI(partURI);
 			final InputStream input = conv.createInputStream(u);
 			final URI relativeURI = URI.createURI("/" + index++ +"-" + u.segment(u.segmentCount()-1));
 			manifest.getModelURIs().add(relativeURI.toString());
