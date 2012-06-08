@@ -58,7 +58,6 @@ public class FilterUtils {
 		public void pushOr() {
 			conjunction = new Group(true);
 			disjunctions.addFilter(conjunction);
-
 		}
 	}
 
@@ -95,6 +94,10 @@ public class FilterUtils {
 				matchOp = tok.ttype;
 				break;
 			case COMMA:
+				if (lastWord != null) {
+					builder.pushAnd(new Match(Match.Operation.LIKE, lastWord));
+					lastWord = null;
+				}
 				builder.pushOr();
 				break;
 			case LP:
@@ -130,6 +133,7 @@ public class FilterUtils {
 		tok.wordChars('/', '/');
 		tok.wordChars('-', '-');
 		tok.wordChars('+', '+');
+		tok.ordinaryChar(',');
 
 		try {
 			final IFilter filter = parseTokenizer(tok);
