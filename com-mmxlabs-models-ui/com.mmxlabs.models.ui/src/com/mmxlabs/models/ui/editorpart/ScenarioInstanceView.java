@@ -13,9 +13,13 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
@@ -56,9 +60,46 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		}
 
 	};
+	private IPartListener partListener;
 
 	protected void listenToScenarioSelection() {
-		getSite().getPage().addSelectionListener(SCENARIO_NAVIGATOR_ID, this);
+		partListener = new IPartListener() {
+			IWorkbenchPart lastPart = null;
+			@Override
+			public void partOpened(IWorkbenchPart part) {
+				
+			}
+			
+			@Override
+			public void partDeactivated(IWorkbenchPart part) {
+				
+			}
+			
+			@Override
+			public void partClosed(IWorkbenchPart part) {
+				if (part == lastPart) {
+					selectionChanged(part, StructuredSelection.EMPTY);
+				}
+			}
+			
+			@Override
+			public void partBroughtToTop(IWorkbenchPart part) {
+				
+			}
+			
+			@Override
+			public void partActivated(IWorkbenchPart part) {
+				if (part instanceof IEditorPart) {
+					final IEditorPart editorPart = (IEditorPart) part;
+					final IEditorInput editorInput = editorPart.getEditorInput();
+					final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
+					lastPart = part;
+					selectionChanged(part, new StructuredSelection(scenarioInstance));
+				}
+			}
+		};
+		getSite().getPage().addPartListener(partListener);
+//		getSite().getPage().addSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		selectionChanged(null, getSite().getPage().getSelection(SCENARIO_NAVIGATOR_ID));
 	}
 
@@ -71,7 +112,8 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		if (valueProviderCache != null)
 			valueProviderCache.dispose();
 		
-		getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
+//		getSite().getPage().removeSelectionListener(SCENARIO_NAVIGATOR_ID, this);
+		getSite().getPage().removePartListener(partListener);
 		super.dispose();
 	}
 

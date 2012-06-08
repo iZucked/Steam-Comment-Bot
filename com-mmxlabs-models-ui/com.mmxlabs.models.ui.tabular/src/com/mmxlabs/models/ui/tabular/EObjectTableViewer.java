@@ -695,6 +695,7 @@ public class EObjectTableViewer extends GridTableViewer {
 				for (final GridColumn column : getGrid().getColumns()) {
 					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
 					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
+					if (path == null) continue;
 					final Object fieldValue = path.get((EObject) element);
 					final Object filterValue = renderer.getFilterValue(fieldValue);
 					final Object renderValue = renderer.render(fieldValue);
