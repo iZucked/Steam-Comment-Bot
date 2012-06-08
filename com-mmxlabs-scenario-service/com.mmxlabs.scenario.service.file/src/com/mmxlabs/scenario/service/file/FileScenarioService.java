@@ -4,12 +4,14 @@
  */
 package com.mmxlabs.scenario.service.file;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,6 +24,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -37,6 +40,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.scenario.service.model.Container;
+import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -302,8 +306,47 @@ public class FileScenarioService extends AbstractScenarioService {
 		return result;
 	}
 
+	/**
+	 * Simple method to recover any lost scenarios (those which are in the instances/ dir, but not in the scenario service)
+	 * @param result
+	 */
 	private void recoverLostScenarios(final ScenarioService result) {
-		
+		// gather up all UUIDs
+		final HashSet<String> allUUIDs = new HashSet<String>();
+		final TreeIterator<EObject> iterator = result.eAllContents();
+		while (iterator.hasNext()) {
+			final EObject o = iterator.next();
+			if (o instanceof ScenarioInstance) {
+				allUUIDs.add(((ScenarioInstance) o).getUuid());
+			}
+		}
+		final Folder lostAndFound = ScenarioServiceFactory.eINSTANCE.createFolder();
+		lostAndFound.setName("Lost & Found");
+		// now look for all instances in the spare dir which don't have UUIDs
+		final File f = new File(resolveURI("instances/").toFileString());
+		if (f.exists() && f.isDirectory()) {
+			for (final File instanceFile : f.listFiles()) {
+				if (instanceFile.getName().endsWith(".xmi")) {
+					final String instanceUUID = instanceFile.getName().substring(0, instanceFile.getName().length() - 4);
+					if (!allUUIDs.contains(instanceUUID)) {
+						// recover the instance in f, if possible
+						try {
+							final Resource resource = resourceSet.createResource(URI.createFileURI(instanceFile.getAbsolutePath()));
+							final EObject o = resource.getContents().get(0);
+							if (o instanceof ScenarioInstance) {
+								lostAndFound.getElements().add((Container) o);
+							}
+							resourceSet.getResources().remove(resource);
+						} catch (final Throwable th) {
+							
+						}
+					}
+				}
+			}
+		}
+		if (lostAndFound.getElements().size() > 0) {
+			result.getElements().add(lostAndFound);
+		}
 	}
 
 	private void makeRelativeURIs(final Container container) {
