@@ -211,8 +211,9 @@ public class PerVesselReportView extends ViewPart {
 					activeDuration += event.getDuration();
 				}
 			}
-			
-			utilisation = activeDuration / (double) (idleDuration + activeDuration);
+			final int totalDuration = idleDuration + activeDuration;
+			utilisation = totalDuration == 0 ? 0 :
+				((activeDuration) /  (double) totalDuration);
 		}
 	}
 	
