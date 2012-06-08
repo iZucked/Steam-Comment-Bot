@@ -10,7 +10,6 @@ import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,6 +29,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
@@ -88,12 +88,30 @@ public class FileScenarioService extends AbstractScenarioService {
 				log.error("Exception project folder for store: ", e);
 			}
 		}
+		if (resource != null) {
+			final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(modelURIString.split("/")[1]);
+			try {
+				project.open(null);
+			} catch (CoreException e) {
+				log.error("Exception opening project for store: ", e);
+			}
+		}
 		if (resource != null && resource.getParent().exists() == false) {
 			// create folder for resource somehow
 			try {
 				createFolder(resource.getParent());
 			} catch (CoreException e) {
 				log.error("Exception creating folder for store: ", e);
+			}
+		}
+		if (resource != null) {
+			final IFolder manifestsFolder = resource.getParent().getFolder(Path.fromPortableString("instances/"));
+			if (manifestsFolder.exists() == false) {
+				try {
+					createFolder(manifestsFolder);
+				} catch (CoreException e) {
+					log.error("Exception creating folder for instances: ", e);
+				}
 			}
 		}
 	}
@@ -157,7 +175,28 @@ public class FileScenarioService extends AbstractScenarioService {
 					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + modelInstanceURI, e);
 				}
 			}
+			
+			try {
+				final Resource resource = resourceSet.createResource(resolveURI("instances/"+instance.getUuid() + ".xmi"));
+				resource.delete(null);
+				resourceSet.getResources().remove(resource);
+			} catch (final Throwable th) {
+			}
 		}
+	}
+	
+	@Override
+	public void save(final ScenarioInstance scenarioInstance) throws IOException {
+		//store manifest
+		try {
+			final Resource resource = resourceSet.createResource(resolveURI("instances/"+scenarioInstance.getUuid() + ".xmi"));
+			final ScenarioInstance copy = EcoreUtil.copy(scenarioInstance);
+			resource.getContents().add(copy);
+			resource.save(null);
+			resourceSet.getResources().remove(resource);
+		} catch (final Throwable th) {}
+		
+		super.save(scenarioInstance);
 	}
 
 	@Override
@@ -256,10 +295,15 @@ public class FileScenarioService extends AbstractScenarioService {
 	
 		// modify any old scenarios to fix wrong pointing
 		makeRelativeURIs(result);
+		recoverLostScenarios(result);
 		
 		result.eAdapters().add(saveAdapter);
 		
 		return result;
+	}
+
+	private void recoverLostScenarios(final ScenarioService result) {
+		
 	}
 
 	private void makeRelativeURIs(final Container container) {
