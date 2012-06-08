@@ -329,9 +329,11 @@ public class FileScenarioService extends AbstractScenarioService {
 				if (instanceFile.getName().endsWith(".xmi")) {
 					final String instanceUUID = instanceFile.getName().substring(0, instanceFile.getName().length() - 4);
 					if (!allUUIDs.contains(instanceUUID)) {
+						log.warn("Recovering instance " + instanceUUID);
 						// recover the instance in f, if possible
 						try {
 							final Resource resource = resourceSet.createResource(URI.createFileURI(instanceFile.getAbsolutePath()));
+							resource.load(null);
 							final EObject o = resource.getContents().get(0);
 							if (o instanceof ScenarioInstance) {
 								lostAndFound.getElements().add((Container) o);
