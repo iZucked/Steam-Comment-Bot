@@ -254,9 +254,32 @@ public class FileScenarioService extends AbstractScenarioService {
 		
 		result.setDescription("File scenario service with store " + storeURI);
 	
+		// modify any old scenarios to fix wrong pointing
+		makeRelativeURIs(result);
+		
 		result.eAdapters().add(saveAdapter);
 		
 		return result;
+	}
+
+	private void makeRelativeURIs(final Container container) {
+		if (container instanceof ScenarioInstance) {
+			final ScenarioInstance instance = (ScenarioInstance) container;
+			
+			for (int index = 0; index<instance.getSubModelURIs().size(); index++) {
+				final String uriString = instance.getSubModelURIs().get(index);
+				final URI uri = URI.createURI(uriString);
+				if (uri.isRelative() == false) {
+					final URI derezzed = uri.deresolve(storeURI);
+					if (derezzed.isRelative()) {
+						instance.getSubModelURIs().set(index, derezzed.toString());
+					}
+				}
+			}
+		}
+		for (final Container c : container.getElements()) {
+			makeRelativeURIs(c);
+		}
 	}
 
 	@Override
