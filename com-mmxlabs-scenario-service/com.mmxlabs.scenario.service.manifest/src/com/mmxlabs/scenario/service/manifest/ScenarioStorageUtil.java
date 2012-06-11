@@ -29,10 +29,43 @@ import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
  *
  */
 public class ScenarioStorageUtil {
-	public static String storeToTemporaryFile(final ScenarioInstance instance) throws IOException {
-		//TODO this inserts some gibberish into the name for uniqueness; could put it in a folder instead.
-		final File tempFile = File.createTempFile(instance.getName(), ".sc2");
+	static final ScenarioStorageUtil INSTANCE = new ScenarioStorageUtil();
+	File storageDirectory;
+	File lastTemporaryFile;
+	
+	protected ScenarioStorageUtil() {
+		try {
+			storageDirectory = File.createTempFile("ScenarioStorage", "dir");
+			// there is a race here
+			if (storageDirectory.delete()) {
+				storageDirectory.mkdir();
+			}
+			//TODO should we delete this on finalize? if the user has copied something she would expect 
+			// it to remain copied so perhaps we should delete all but the most recent copied thing?
+			// Is that a job for the copy handler anyway?
+		} catch (IOException e) {
+			storageDirectory = null;
+		}
+	}
+	
+	protected File getTemporaryFile(final ScenarioInstance instance) {
+		final String name = instance.getName();
+		final String uuid = instance.getUuid();
+		
+		final File uuidDir = new File(storageDirectory, escape(uuid) + ".d");
+		if (uuidDir.exists() == false) {
+			uuidDir.mkdirs();
+		}
+		return new File(uuidDir, escape(name) + ".sc2");
+	}
+	
+	private String escape(String name) {
+		return name.replaceAll("[\\W&&[^ ]]+", "-");
+	}
 
+	public static String storeToTemporaryFile(final ScenarioInstance instance) throws IOException {
+		final File tempFile = INSTANCE.getTemporaryFile(instance);
+		
 		tempFile.deleteOnExit();
 		storeToFile(instance, tempFile);
 		
