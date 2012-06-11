@@ -36,7 +36,8 @@ public class ScenarioStorageUtil {
 	protected ScenarioStorageUtil() {
 		try {
 			storageDirectory = File.createTempFile("ScenarioStorage", "dir");
-			// there is a race here
+			// there is a race here; the only way to really avoid it is to use
+			// something like java.nio in java 7, which has a createTempDir method.
 			if (storageDirectory.delete()) {
 				storageDirectory.mkdir();
 			}
