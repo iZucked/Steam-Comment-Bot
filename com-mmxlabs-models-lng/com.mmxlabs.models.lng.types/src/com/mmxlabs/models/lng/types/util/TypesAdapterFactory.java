@@ -62,7 +62,7 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 			return true;
 		}
 		if (object instanceof EObject) {
-			return ((EObject)object).eClass().getEPackage() == modelPackage;
+			return ((EObject) object).eClass().getEPackage() == modelPackage;
 		}
 		return false;
 	}
@@ -73,89 +73,107 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected TypesSwitch<Adapter> modelSwitch =
-		new TypesSwitch<Adapter>() {
-			@Override
-			public Adapter caseAPort(APort object) {
-				return createAPortAdapter();
-			}
-			@Override
-			public Adapter caseAPortSet(APortSet object) {
-				return createAPortSetAdapter();
-			}
-			@Override
-			public Adapter caseARoute(ARoute object) {
-				return createARouteAdapter();
-			}
-			@Override
-			public Adapter caseAVessel(AVessel object) {
-				return createAVesselAdapter();
-			}
-			@Override
-			public Adapter caseAVesselClass(AVesselClass object) {
-				return createAVesselClassAdapter();
-			}
-			@Override
-			public Adapter caseAVesselEvent(AVesselEvent object) {
-				return createAVesselEventAdapter();
-			}
-			@Override
-			public Adapter caseAContract(AContract object) {
-				return createAContractAdapter();
-			}
-			@Override
-			public Adapter caseALegalEntity(ALegalEntity object) {
-				return createALegalEntityAdapter();
-			}
-			@Override
-			public Adapter caseAIndex(AIndex object) {
-				return createAIndexAdapter();
-			}
-			@Override
-			public Adapter caseACargo(ACargo object) {
-				return createACargoAdapter();
-			}
-			@Override
-			public Adapter caseASlot(ASlot object) {
-				return createASlotAdapter();
-			}
-			@Override
-			public Adapter caseAVesselSet(AVesselSet object) {
-				return createAVesselSetAdapter();
-			}
-			@Override
-			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
-				return createITimezoneProviderAdapter();
-			}
-			@Override
-			public Adapter caseABaseFuel(ABaseFuel object) {
-				return createABaseFuelAdapter();
-			}
-			@Override
-			public Adapter caseASpotMarket(ASpotMarket object) {
-				return createASpotMarketAdapter();
-			}
-			@Override
-			public Adapter caseAOptimisationSettings(AOptimisationSettings object) {
-				return createAOptimisationSettingsAdapter();
-			}
-			@Override
-			public Adapter caseMMXObject(MMXObject object) {
-				return createMMXObjectAdapter();
-			}
-			@Override
-			public Adapter caseUUIDObject(UUIDObject object) {
-				return createUUIDObjectAdapter();
-			}
-			@Override
-			public Adapter caseNamedObject(NamedObject object) {
-				return createNamedObjectAdapter();
-			}
-			@Override
-			public Adapter defaultCase(EObject object) {
-				return createEObjectAdapter();
-			}
-		};
+	protected TypesSwitch<Adapter> modelSwitch = new TypesSwitch<Adapter>() {
+		@Override
+		public Adapter caseAPort(APort object) {
+			return createAPortAdapter();
+		}
+
+		@Override
+		public Adapter caseAPortSet(APortSet object) {
+			return createAPortSetAdapter();
+		}
+
+		@Override
+		public Adapter caseARoute(ARoute object) {
+			return createARouteAdapter();
+		}
+
+		@Override
+		public Adapter caseAVessel(AVessel object) {
+			return createAVesselAdapter();
+		}
+
+		@Override
+		public Adapter caseAVesselClass(AVesselClass object) {
+			return createAVesselClassAdapter();
+		}
+
+		@Override
+		public Adapter caseAVesselEvent(AVesselEvent object) {
+			return createAVesselEventAdapter();
+		}
+
+		@Override
+		public Adapter caseAContract(AContract object) {
+			return createAContractAdapter();
+		}
+
+		@Override
+		public Adapter caseALegalEntity(ALegalEntity object) {
+			return createALegalEntityAdapter();
+		}
+
+		@Override
+		public Adapter caseAIndex(AIndex object) {
+			return createAIndexAdapter();
+		}
+
+		@Override
+		public Adapter caseACargo(ACargo object) {
+			return createACargoAdapter();
+		}
+
+		@Override
+		public Adapter caseASlot(ASlot object) {
+			return createASlotAdapter();
+		}
+
+		@Override
+		public Adapter caseAVesselSet(AVesselSet object) {
+			return createAVesselSetAdapter();
+		}
+
+		@Override
+		public Adapter caseITimezoneProvider(ITimezoneProvider object) {
+			return createITimezoneProviderAdapter();
+		}
+
+		@Override
+		public Adapter caseABaseFuel(ABaseFuel object) {
+			return createABaseFuelAdapter();
+		}
+
+		@Override
+		public Adapter caseASpotMarket(ASpotMarket object) {
+			return createASpotMarketAdapter();
+		}
+
+		@Override
+		public Adapter caseAOptimisationSettings(AOptimisationSettings object) {
+			return createAOptimisationSettingsAdapter();
+		}
+
+		@Override
+		public Adapter caseMMXObject(MMXObject object) {
+			return createMMXObjectAdapter();
+		}
+
+		@Override
+		public Adapter caseUUIDObject(UUIDObject object) {
+			return createUUIDObjectAdapter();
+		}
+
+		@Override
+		public Adapter caseNamedObject(NamedObject object) {
+			return createNamedObjectAdapter();
+		}
+
+		@Override
+		public Adapter defaultCase(EObject object) {
+			return createEObjectAdapter();
+		}
+	};
 
 	/**
 	 * Creates an adapter for the <code>target</code>.
@@ -167,9 +185,8 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 */
 	@Override
 	public Adapter createAdapter(Notifier target) {
-		return modelSwitch.doSwitch((EObject)target);
+		return modelSwitch.doSwitch((EObject) target);
 	}
-
 
 	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.

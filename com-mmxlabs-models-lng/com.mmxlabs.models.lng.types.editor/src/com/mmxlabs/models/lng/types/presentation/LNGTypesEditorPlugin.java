@@ -28,7 +28,7 @@ public final class LNGTypesEditorPlugin extends EMFPlugin {
 	 * @generated
 	 */
 	public static final LNGTypesEditorPlugin INSTANCE = new LNGTypesEditorPlugin();
-	
+
 	/**
 	 * Keep track of the singleton.
 	 * <!-- begin-user-doc -->
@@ -44,10 +44,7 @@ public final class LNGTypesEditorPlugin extends EMFPlugin {
 	 * @generated
 	 */
 	public LNGTypesEditorPlugin() {
-		super
-			(new ResourceLocator [] {
-				MmxcoreEditPlugin.INSTANCE,
-			});
+		super(new ResourceLocator[] { MmxcoreEditPlugin.INSTANCE, });
 	}
 
 	/**
@@ -61,7 +58,7 @@ public final class LNGTypesEditorPlugin extends EMFPlugin {
 	public ResourceLocator getPluginResourceLocator() {
 		return plugin;
 	}
-	
+
 	/**
 	 * Returns the singleton instance of the Eclipse plugin.
 	 * <!-- begin-user-doc -->
@@ -72,7 +69,7 @@ public final class LNGTypesEditorPlugin extends EMFPlugin {
 	public static Implementation getPlugin() {
 		return plugin;
 	}
-	
+
 	/**
 	 * The actual implementation of the Eclipse <b>Plugin</b>.
 	 * <!-- begin-user-doc -->
@@ -88,7 +85,7 @@ public final class LNGTypesEditorPlugin extends EMFPlugin {
 		 */
 		public Implementation() {
 			super();
-	
+
 			// Remember the static instance.
 			//
 			plugin = this;

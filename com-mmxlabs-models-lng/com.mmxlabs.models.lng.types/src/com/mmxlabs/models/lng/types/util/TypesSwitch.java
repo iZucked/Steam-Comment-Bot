@@ -74,151 +74,216 @@ public class TypesSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
-			case TypesPackage.APORT: {
-				APort aPort = (APort)theEObject;
-				T result = caseAPort(aPort);
-				if (result == null) result = caseAPortSet(aPort);
-				if (result == null) result = caseUUIDObject(aPort);
-				if (result == null) result = caseNamedObject(aPort);
-				if (result == null) result = caseMMXObject(aPort);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.APORT_SET: {
-				APortSet aPortSet = (APortSet)theEObject;
-				T result = caseAPortSet(aPortSet);
-				if (result == null) result = caseUUIDObject(aPortSet);
-				if (result == null) result = caseNamedObject(aPortSet);
-				if (result == null) result = caseMMXObject(aPortSet);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.AROUTE: {
-				ARoute aRoute = (ARoute)theEObject;
-				T result = caseARoute(aRoute);
-				if (result == null) result = caseUUIDObject(aRoute);
-				if (result == null) result = caseNamedObject(aRoute);
-				if (result == null) result = caseMMXObject(aRoute);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.AVESSEL: {
-				AVessel aVessel = (AVessel)theEObject;
-				T result = caseAVessel(aVessel);
-				if (result == null) result = caseAVesselSet(aVessel);
-				if (result == null) result = caseUUIDObject(aVessel);
-				if (result == null) result = caseNamedObject(aVessel);
-				if (result == null) result = caseMMXObject(aVessel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.AVESSEL_CLASS: {
-				AVesselClass aVesselClass = (AVesselClass)theEObject;
-				T result = caseAVesselClass(aVesselClass);
-				if (result == null) result = caseAVesselSet(aVesselClass);
-				if (result == null) result = caseUUIDObject(aVesselClass);
-				if (result == null) result = caseNamedObject(aVesselClass);
-				if (result == null) result = caseMMXObject(aVesselClass);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.AVESSEL_EVENT: {
-				AVesselEvent aVesselEvent = (AVesselEvent)theEObject;
-				T result = caseAVesselEvent(aVesselEvent);
-				if (result == null) result = caseUUIDObject(aVesselEvent);
-				if (result == null) result = caseNamedObject(aVesselEvent);
-				if (result == null) result = caseMMXObject(aVesselEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.ACONTRACT: {
-				AContract aContract = (AContract)theEObject;
-				T result = caseAContract(aContract);
-				if (result == null) result = caseUUIDObject(aContract);
-				if (result == null) result = caseNamedObject(aContract);
-				if (result == null) result = caseMMXObject(aContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.ALEGAL_ENTITY: {
-				ALegalEntity aLegalEntity = (ALegalEntity)theEObject;
-				T result = caseALegalEntity(aLegalEntity);
-				if (result == null) result = caseUUIDObject(aLegalEntity);
-				if (result == null) result = caseNamedObject(aLegalEntity);
-				if (result == null) result = caseMMXObject(aLegalEntity);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.AINDEX: {
-				AIndex aIndex = (AIndex)theEObject;
-				T result = caseAIndex(aIndex);
-				if (result == null) result = caseUUIDObject(aIndex);
-				if (result == null) result = caseNamedObject(aIndex);
-				if (result == null) result = caseMMXObject(aIndex);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.ACARGO: {
-				ACargo aCargo = (ACargo)theEObject;
-				T result = caseACargo(aCargo);
-				if (result == null) result = caseUUIDObject(aCargo);
-				if (result == null) result = caseNamedObject(aCargo);
-				if (result == null) result = caseMMXObject(aCargo);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.ASLOT: {
-				ASlot aSlot = (ASlot)theEObject;
-				T result = caseASlot(aSlot);
-				if (result == null) result = caseUUIDObject(aSlot);
-				if (result == null) result = caseNamedObject(aSlot);
-				if (result == null) result = caseMMXObject(aSlot);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.AVESSEL_SET: {
-				AVesselSet aVesselSet = (AVesselSet)theEObject;
-				T result = caseAVesselSet(aVesselSet);
-				if (result == null) result = caseUUIDObject(aVesselSet);
-				if (result == null) result = caseNamedObject(aVesselSet);
-				if (result == null) result = caseMMXObject(aVesselSet);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.ITIMEZONE_PROVIDER: {
-				ITimezoneProvider iTimezoneProvider = (ITimezoneProvider)theEObject;
-				T result = caseITimezoneProvider(iTimezoneProvider);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.ABASE_FUEL: {
-				ABaseFuel aBaseFuel = (ABaseFuel)theEObject;
-				T result = caseABaseFuel(aBaseFuel);
-				if (result == null) result = caseUUIDObject(aBaseFuel);
-				if (result == null) result = caseNamedObject(aBaseFuel);
-				if (result == null) result = caseMMXObject(aBaseFuel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.ASPOT_MARKET: {
-				ASpotMarket aSpotMarket = (ASpotMarket)theEObject;
-				T result = caseASpotMarket(aSpotMarket);
-				if (result == null) result = caseUUIDObject(aSpotMarket);
-				if (result == null) result = caseNamedObject(aSpotMarket);
-				if (result == null) result = caseMMXObject(aSpotMarket);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case TypesPackage.AOPTIMISATION_SETTINGS: {
-				AOptimisationSettings aOptimisationSettings = (AOptimisationSettings)theEObject;
-				T result = caseAOptimisationSettings(aOptimisationSettings);
-				if (result == null) result = caseUUIDObject(aOptimisationSettings);
-				if (result == null) result = caseNamedObject(aOptimisationSettings);
-				if (result == null) result = caseMMXObject(aOptimisationSettings);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			default: return defaultCase(theEObject);
+		case TypesPackage.APORT: {
+			APort aPort = (APort) theEObject;
+			T result = caseAPort(aPort);
+			if (result == null)
+				result = caseAPortSet(aPort);
+			if (result == null)
+				result = caseUUIDObject(aPort);
+			if (result == null)
+				result = caseNamedObject(aPort);
+			if (result == null)
+				result = caseMMXObject(aPort);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.APORT_SET: {
+			APortSet aPortSet = (APortSet) theEObject;
+			T result = caseAPortSet(aPortSet);
+			if (result == null)
+				result = caseUUIDObject(aPortSet);
+			if (result == null)
+				result = caseNamedObject(aPortSet);
+			if (result == null)
+				result = caseMMXObject(aPortSet);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.AROUTE: {
+			ARoute aRoute = (ARoute) theEObject;
+			T result = caseARoute(aRoute);
+			if (result == null)
+				result = caseUUIDObject(aRoute);
+			if (result == null)
+				result = caseNamedObject(aRoute);
+			if (result == null)
+				result = caseMMXObject(aRoute);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.AVESSEL: {
+			AVessel aVessel = (AVessel) theEObject;
+			T result = caseAVessel(aVessel);
+			if (result == null)
+				result = caseAVesselSet(aVessel);
+			if (result == null)
+				result = caseUUIDObject(aVessel);
+			if (result == null)
+				result = caseNamedObject(aVessel);
+			if (result == null)
+				result = caseMMXObject(aVessel);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.AVESSEL_CLASS: {
+			AVesselClass aVesselClass = (AVesselClass) theEObject;
+			T result = caseAVesselClass(aVesselClass);
+			if (result == null)
+				result = caseAVesselSet(aVesselClass);
+			if (result == null)
+				result = caseUUIDObject(aVesselClass);
+			if (result == null)
+				result = caseNamedObject(aVesselClass);
+			if (result == null)
+				result = caseMMXObject(aVesselClass);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.AVESSEL_EVENT: {
+			AVesselEvent aVesselEvent = (AVesselEvent) theEObject;
+			T result = caseAVesselEvent(aVesselEvent);
+			if (result == null)
+				result = caseUUIDObject(aVesselEvent);
+			if (result == null)
+				result = caseNamedObject(aVesselEvent);
+			if (result == null)
+				result = caseMMXObject(aVesselEvent);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.ACONTRACT: {
+			AContract aContract = (AContract) theEObject;
+			T result = caseAContract(aContract);
+			if (result == null)
+				result = caseUUIDObject(aContract);
+			if (result == null)
+				result = caseNamedObject(aContract);
+			if (result == null)
+				result = caseMMXObject(aContract);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.ALEGAL_ENTITY: {
+			ALegalEntity aLegalEntity = (ALegalEntity) theEObject;
+			T result = caseALegalEntity(aLegalEntity);
+			if (result == null)
+				result = caseUUIDObject(aLegalEntity);
+			if (result == null)
+				result = caseNamedObject(aLegalEntity);
+			if (result == null)
+				result = caseMMXObject(aLegalEntity);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.AINDEX: {
+			AIndex aIndex = (AIndex) theEObject;
+			T result = caseAIndex(aIndex);
+			if (result == null)
+				result = caseUUIDObject(aIndex);
+			if (result == null)
+				result = caseNamedObject(aIndex);
+			if (result == null)
+				result = caseMMXObject(aIndex);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.ACARGO: {
+			ACargo aCargo = (ACargo) theEObject;
+			T result = caseACargo(aCargo);
+			if (result == null)
+				result = caseUUIDObject(aCargo);
+			if (result == null)
+				result = caseNamedObject(aCargo);
+			if (result == null)
+				result = caseMMXObject(aCargo);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.ASLOT: {
+			ASlot aSlot = (ASlot) theEObject;
+			T result = caseASlot(aSlot);
+			if (result == null)
+				result = caseUUIDObject(aSlot);
+			if (result == null)
+				result = caseNamedObject(aSlot);
+			if (result == null)
+				result = caseMMXObject(aSlot);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.AVESSEL_SET: {
+			AVesselSet aVesselSet = (AVesselSet) theEObject;
+			T result = caseAVesselSet(aVesselSet);
+			if (result == null)
+				result = caseUUIDObject(aVesselSet);
+			if (result == null)
+				result = caseNamedObject(aVesselSet);
+			if (result == null)
+				result = caseMMXObject(aVesselSet);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.ITIMEZONE_PROVIDER: {
+			ITimezoneProvider iTimezoneProvider = (ITimezoneProvider) theEObject;
+			T result = caseITimezoneProvider(iTimezoneProvider);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.ABASE_FUEL: {
+			ABaseFuel aBaseFuel = (ABaseFuel) theEObject;
+			T result = caseABaseFuel(aBaseFuel);
+			if (result == null)
+				result = caseUUIDObject(aBaseFuel);
+			if (result == null)
+				result = caseNamedObject(aBaseFuel);
+			if (result == null)
+				result = caseMMXObject(aBaseFuel);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.ASPOT_MARKET: {
+			ASpotMarket aSpotMarket = (ASpotMarket) theEObject;
+			T result = caseASpotMarket(aSpotMarket);
+			if (result == null)
+				result = caseUUIDObject(aSpotMarket);
+			if (result == null)
+				result = caseNamedObject(aSpotMarket);
+			if (result == null)
+				result = caseMMXObject(aSpotMarket);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.AOPTIMISATION_SETTINGS: {
+			AOptimisationSettings aOptimisationSettings = (AOptimisationSettings) theEObject;
+			T result = caseAOptimisationSettings(aOptimisationSettings);
+			if (result == null)
+				result = caseUUIDObject(aOptimisationSettings);
+			if (result == null)
+				result = caseNamedObject(aOptimisationSettings);
+			if (result == null)
+				result = caseMMXObject(aOptimisationSettings);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		default:
+			return defaultCase(theEObject);
 		}
 	}
 

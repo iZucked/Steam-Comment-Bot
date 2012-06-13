@@ -106,7 +106,8 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.AINDEX__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					TypesPackage.AINDEX__NAME, oldName, name));
 	}
 
 	/**
@@ -117,7 +118,8 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.AINDEX__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
+					TypesPackage.AINDEX__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -130,10 +132,10 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case TypesPackage.AINDEX__NAME:
-				return getName();
-			case TypesPackage.AINDEX__OTHER_NAMES:
-				return getOtherNames();
+		case TypesPackage.AINDEX__NAME:
+			return getName();
+		case TypesPackage.AINDEX__OTHER_NAMES:
+			return getOtherNames();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -147,13 +149,13 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case TypesPackage.AINDEX__NAME:
-				setName((String)newValue);
-				return;
-			case TypesPackage.AINDEX__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
-				return;
+		case TypesPackage.AINDEX__NAME:
+			setName((String) newValue);
+			return;
+		case TypesPackage.AINDEX__OTHER_NAMES:
+			getOtherNames().clear();
+			getOtherNames().addAll((Collection<? extends String>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -166,12 +168,12 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case TypesPackage.AINDEX__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case TypesPackage.AINDEX__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
+		case TypesPackage.AINDEX__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case TypesPackage.AINDEX__OTHER_NAMES:
+			getOtherNames().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -184,10 +186,11 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case TypesPackage.AINDEX__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case TypesPackage.AINDEX__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
+		case TypesPackage.AINDEX__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
+					.equals(name);
+		case TypesPackage.AINDEX__OTHER_NAMES:
+			return otherNames != null && !otherNames.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -201,9 +204,12 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
-				case TypesPackage.AINDEX__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case TypesPackage.AINDEX__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
-				default: return -1;
+			case TypesPackage.AINDEX__NAME:
+				return MMXCorePackage.NAMED_OBJECT__NAME;
+			case TypesPackage.AINDEX__OTHER_NAMES:
+				return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+			default:
+				return -1;
 			}
 		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
@@ -218,9 +224,12 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
-				case MMXCorePackage.NAMED_OBJECT__NAME: return TypesPackage.AINDEX__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return TypesPackage.AINDEX__OTHER_NAMES;
-				default: return -1;
+			case MMXCorePackage.NAMED_OBJECT__NAME:
+				return TypesPackage.AINDEX__NAME;
+			case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES:
+				return TypesPackage.AINDEX__OTHER_NAMES;
+			default:
+				return -1;
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
@@ -233,7 +242,8 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");

@@ -59,7 +59,8 @@ public interface TypesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl.init();
+	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl
+			.init();
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
@@ -2617,7 +2618,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation APORT___COLLECT__ELIST = eINSTANCE.getAPort__Collect__EList();
+		EOperation APORT___COLLECT__ELIST = eINSTANCE
+				.getAPort__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
@@ -2635,7 +2637,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation APORT_SET___COLLECT__ELIST = eINSTANCE.getAPortSet__Collect__EList();
+		EOperation APORT_SET___COLLECT__ELIST = eINSTANCE
+				.getAPortSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ARouteImpl <em>ARoute</em>}' class.
@@ -2663,7 +2666,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE.getAVessel__Collect__EList();
+		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE
+				.getAVessel__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AVesselClassImpl <em>AVessel Class</em>}' class.
@@ -2751,7 +2755,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation AVESSEL_SET___COLLECT__ELIST = eINSTANCE.getAVesselSet__Collect__EList();
+		EOperation AVESSEL_SET___COLLECT__ELIST = eINSTANCE
+				.getAVesselSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}' class.
@@ -2769,7 +2774,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE.getITimezoneProvider__GetTimeZone__EAttribute();
+		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE
+				.getITimezoneProvider__GetTimeZone__EAttribute();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ABaseFuelImpl <em>ABase Fuel</em>}' class.

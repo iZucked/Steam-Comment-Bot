@@ -32,12 +32,12 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 */
 	public static TypesFactory init() {
 		try {
-			TypesFactory theTypesFactory = (TypesFactory)EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/types/1/"); 
+			TypesFactory theTypesFactory = (TypesFactory) EPackage.Registry.INSTANCE
+					.getEFactory("http://www.mmxlabs.com/models/lng/types/1/");
 			if (theTypesFactory != null) {
 				return theTypesFactory;
 			}
-		}
-		catch (Exception exception) {
+		} catch (Exception exception) {
 			EcorePlugin.INSTANCE.log(exception);
 		}
 		return new TypesFactoryImpl();
@@ -61,10 +61,13 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-			case TypesPackage.AVESSEL_SET: return createAVesselSet();
-			case TypesPackage.ABASE_FUEL: return createABaseFuel();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		case TypesPackage.AVESSEL_SET:
+			return createAVesselSet();
+		case TypesPackage.ABASE_FUEL:
+			return createABaseFuel();
+		default:
+			throw new IllegalArgumentException("The class '" + eClass.getName()
+					+ "' is not a valid classifier");
 		}
 	}
 
@@ -76,10 +79,11 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	@Override
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
-			case TypesPackage.PORT_CAPABILITY:
-				return createPortCapabilityFromString(eDataType, initialValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		case TypesPackage.PORT_CAPABILITY:
+			return createPortCapabilityFromString(eDataType, initialValue);
+		default:
+			throw new IllegalArgumentException("The datatype '"
+					+ eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -91,10 +95,11 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	@Override
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
-			case TypesPackage.PORT_CAPABILITY:
-				return convertPortCapabilityToString(eDataType, instanceValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		case TypesPackage.PORT_CAPABILITY:
+			return convertPortCapabilityToString(eDataType, instanceValue);
+		default:
+			throw new IllegalArgumentException("The datatype '"
+					+ eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -123,9 +128,13 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortCapability createPortCapabilityFromString(EDataType eDataType, String initialValue) {
+	public PortCapability createPortCapabilityFromString(EDataType eDataType,
+			String initialValue) {
 		PortCapability result = PortCapability.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		if (result == null)
+			throw new IllegalArgumentException("The value '" + initialValue
+					+ "' is not a valid enumerator of '" + eDataType.getName()
+					+ "'");
 		return result;
 	}
 
@@ -134,7 +143,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertPortCapabilityToString(EDataType eDataType, Object instanceValue) {
+	public String convertPortCapabilityToString(EDataType eDataType,
+			Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
@@ -144,7 +154,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * @generated
 	 */
 	public TypesPackage getTypesPackage() {
-		return (TypesPackage)getEPackage();
+		return (TypesPackage) getEPackage();
 	}
 
 	/**

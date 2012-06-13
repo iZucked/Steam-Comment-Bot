@@ -108,7 +108,8 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.AVESSEL_SET__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					TypesPackage.AVESSEL_SET__NAME, oldName, name));
 	}
 
 	/**
@@ -119,7 +120,8 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.AVESSEL_SET__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
+					TypesPackage.AVESSEL_SET__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -143,10 +145,10 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case TypesPackage.AVESSEL_SET__NAME:
-				return getName();
-			case TypesPackage.AVESSEL_SET__OTHER_NAMES:
-				return getOtherNames();
+		case TypesPackage.AVESSEL_SET__NAME:
+			return getName();
+		case TypesPackage.AVESSEL_SET__OTHER_NAMES:
+			return getOtherNames();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -160,13 +162,13 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case TypesPackage.AVESSEL_SET__NAME:
-				setName((String)newValue);
-				return;
-			case TypesPackage.AVESSEL_SET__OTHER_NAMES:
-				getOtherNames().clear();
-				getOtherNames().addAll((Collection<? extends String>)newValue);
-				return;
+		case TypesPackage.AVESSEL_SET__NAME:
+			setName((String) newValue);
+			return;
+		case TypesPackage.AVESSEL_SET__OTHER_NAMES:
+			getOtherNames().clear();
+			getOtherNames().addAll((Collection<? extends String>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -179,12 +181,12 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case TypesPackage.AVESSEL_SET__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case TypesPackage.AVESSEL_SET__OTHER_NAMES:
-				getOtherNames().clear();
-				return;
+		case TypesPackage.AVESSEL_SET__NAME:
+			setName(NAME_EDEFAULT);
+			return;
+		case TypesPackage.AVESSEL_SET__OTHER_NAMES:
+			getOtherNames().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -197,10 +199,11 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case TypesPackage.AVESSEL_SET__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case TypesPackage.AVESSEL_SET__OTHER_NAMES:
-				return otherNames != null && !otherNames.isEmpty();
+		case TypesPackage.AVESSEL_SET__NAME:
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
+					.equals(name);
+		case TypesPackage.AVESSEL_SET__OTHER_NAMES:
+			return otherNames != null && !otherNames.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -214,9 +217,12 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == NamedObject.class) {
 			switch (derivedFeatureID) {
-				case TypesPackage.AVESSEL_SET__NAME: return MMXCorePackage.NAMED_OBJECT__NAME;
-				case TypesPackage.AVESSEL_SET__OTHER_NAMES: return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
-				default: return -1;
+			case TypesPackage.AVESSEL_SET__NAME:
+				return MMXCorePackage.NAMED_OBJECT__NAME;
+			case TypesPackage.AVESSEL_SET__OTHER_NAMES:
+				return MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+			default:
+				return -1;
 			}
 		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
@@ -231,9 +237,12 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == NamedObject.class) {
 			switch (baseFeatureID) {
-				case MMXCorePackage.NAMED_OBJECT__NAME: return TypesPackage.AVESSEL_SET__NAME;
-				case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES: return TypesPackage.AVESSEL_SET__OTHER_NAMES;
-				default: return -1;
+			case MMXCorePackage.NAMED_OBJECT__NAME:
+				return TypesPackage.AVESSEL_SET__NAME;
+			case MMXCorePackage.NAMED_OBJECT__OTHER_NAMES:
+				return TypesPackage.AVESSEL_SET__OTHER_NAMES;
+			default:
+				return -1;
 			}
 		}
 		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
@@ -246,10 +255,11 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments)
+			throws InvocationTargetException {
 		switch (operationID) {
-			case TypesPackage.AVESSEL_SET___COLLECT__ELIST:
-				return collect((EList<AVesselSet>)arguments.get(0));
+		case TypesPackage.AVESSEL_SET___COLLECT__ELIST:
+			return collect((EList<AVesselSet>) arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}
@@ -261,7 +271,8 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) return super.toString();
+		if (eIsProxy())
+			return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (name: ");

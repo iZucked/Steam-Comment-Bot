@@ -53,9 +53,10 @@ public abstract class APortImpl extends APortSetImpl implements APort {
 			return org.eclipse.emf.common.util.ECollections.emptyEList();
 		} else {
 			marked.add(this);
-			return (EList<APort>) org.eclipse.emf.common.util.ECollections.singletonEList((APort)this);
+			return (EList<APort>) org.eclipse.emf.common.util.ECollections
+					.singletonEList((APort) this);
 		}
-		
+
 	}
 
 	/**
@@ -65,10 +66,11 @@ public abstract class APortImpl extends APortSetImpl implements APort {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments)
+			throws InvocationTargetException {
 		switch (operationID) {
-			case TypesPackage.APORT___COLLECT__ELIST:
-				return collect((EList<APortSet>)arguments.get(0));
+		case TypesPackage.APORT___COLLECT__ELIST:
+			return collect((EList<APortSet>) arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

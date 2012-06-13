@@ -6,7 +6,6 @@
  */
 package com.mmxlabs.models.lng.types.provider;
 
-
 import com.mmxlabs.models.lng.types.APort;
 
 import java.util.Collection;
@@ -28,14 +27,9 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class APortItemProvider
-	extends APortSetItemProvider
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+public class APortItemProvider extends APortSetItemProvider implements
+		IEditingDomainItemProvider, IStructuredItemContentProvider,
+		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -69,7 +63,8 @@ public class APortItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/APort"));
+		return overlayImage(object,
+				getResourceLocator().getImage("full/obj16/APort"));
 	}
 
 	/**
@@ -80,10 +75,9 @@ public class APortItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((APort)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_APort_type") :
-			getString("_UI_APort_type") + " " + label;
+		String label = ((APort) object).getName();
+		return label == null || label.length() == 0 ? getString("_UI_APort_type")
+				: getString("_UI_APort_type") + " " + label;
 	}
 
 	/**
@@ -107,7 +101,8 @@ public class APortItemProvider
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(
+			Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

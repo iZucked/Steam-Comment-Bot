@@ -128,13 +128,8 @@ public enum PortCapability implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final PortCapability[] VALUES_ARRAY =
-		new PortCapability[] {
-			LOAD,
-			DISCHARGE,
-			DRYDOCK,
-			MAINTENANCE,
-		};
+	private static final PortCapability[] VALUES_ARRAY = new PortCapability[] {
+			LOAD, DISCHARGE, DRYDOCK, MAINTENANCE, };
 
 	/**
 	 * A public read-only list of all the '<em><b>Port Capability</b></em>' enumerators.
@@ -142,7 +137,8 @@ public enum PortCapability implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<PortCapability> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+	public static final List<PortCapability> VALUES = Collections
+			.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
 	 * Returns the '<em><b>Port Capability</b></em>' literal with the specified literal value.
@@ -184,10 +180,14 @@ public enum PortCapability implements Enumerator {
 	 */
 	public static PortCapability get(int value) {
 		switch (value) {
-			case LOAD_VALUE: return LOAD;
-			case DISCHARGE_VALUE: return DISCHARGE;
-			case DRYDOCK_VALUE: return DRYDOCK;
-			case MAINTENANCE_VALUE: return MAINTENANCE;
+		case LOAD_VALUE:
+			return LOAD;
+		case DISCHARGE_VALUE:
+			return DISCHARGE;
+		case DRYDOCK_VALUE:
+			return DRYDOCK;
+		case MAINTENANCE_VALUE:
+			return MAINTENANCE;
 		}
 		return null;
 	}
@@ -231,7 +231,7 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 */
 	public int getValue() {
-	  return value;
+		return value;
 	}
 
 	/**
@@ -240,7 +240,7 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 */
 	public String getName() {
-	  return name;
+		return name;
 	}
 
 	/**
@@ -249,7 +249,7 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 */
 	public String getLiteral() {
-	  return literal;
+		return literal;
 	}
 
 	/**
@@ -262,5 +262,5 @@ public enum PortCapability implements Enumerator {
 	public String toString() {
 		return literal;
 	}
-	
+
 } //PortCapability

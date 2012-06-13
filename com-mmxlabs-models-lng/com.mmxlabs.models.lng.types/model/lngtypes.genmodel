@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.types/src"
-    modelPluginID="com.mmxlabs.models.lng.types" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
-    dynamicTemplates="true" modelName="LNGTypes" importerID="org.eclipse.emf.importer.ecore"
-    complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="Copyright (C) Minimax Labs Ltd., 2010 - 2012&#xD;&#xA;All rights reserved."
+    modelDirectory="/com.mmxlabs.models.lng.types/src" modelPluginID="com.mmxlabs.models.lng.types"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+    dynamicTemplates="true" modelName="LNGTypes" featureMapWrapperInternalInterface=""
+    featureMapWrapperClass="" codeFormatting="true" booleanFlagsField="" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" language="" usedGenPackages="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore"
     operationReflection="true">
   <foreignModel>lngtypes.ecore</foreignModel>
   <genPackages prefix="Types" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
@@ -49,5 +51,6 @@
     </genClasses>
     <genClasses ecoreClass="lngtypes.ecore#//ABaseFuel"/>
     <genClasses image="false" ecoreClass="lngtypes.ecore#//ASpotMarket"/>
+    <genClasses image="false" ecoreClass="lngtypes.ecore#//AOptimisationSettings"/>
   </genPackages>
 </genmodel:GenModel>

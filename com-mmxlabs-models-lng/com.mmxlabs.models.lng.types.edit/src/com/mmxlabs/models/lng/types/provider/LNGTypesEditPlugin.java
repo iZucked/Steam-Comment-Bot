@@ -42,10 +42,7 @@ public final class LNGTypesEditPlugin extends EMFPlugin {
 	 * @generated
 	 */
 	public LNGTypesEditPlugin() {
-		super
-		  (new ResourceLocator [] {
-		     MmxcoreEditPlugin.INSTANCE,
-		   });
+		super(new ResourceLocator[] { MmxcoreEditPlugin.INSTANCE, });
 	}
 
 	/**
