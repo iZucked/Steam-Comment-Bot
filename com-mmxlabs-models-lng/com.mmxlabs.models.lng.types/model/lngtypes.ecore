@@ -92,10 +92,10 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ASpotMarket" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
   <eClassifiers xsi:type="ecore:EEnum" name="PortCapability">
-    <eLiterals name="LOAD" literal="Load"/>
-    <eLiterals name="DISCHARGE" value="1" literal="Discharge"/>
-    <eLiterals name="DRYDOCK" value="2" literal="Dry Dock"/>
-    <eLiterals name="MAINTENANCE" value="3" literal="Maintenance"/>
+    <eLiterals name="LOAD" literal="LOAD"/>
+    <eLiterals name="DISCHARGE" value="1" literal="DISCHARGE"/>
+    <eLiterals name="DRYDOCK" value="2" literal="DRYDOCK"/>
+    <eLiterals name="MAINTENANCE" value="3" literal="MAINTENANCE"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AOptimisationSettings" abstract="true"
       eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
