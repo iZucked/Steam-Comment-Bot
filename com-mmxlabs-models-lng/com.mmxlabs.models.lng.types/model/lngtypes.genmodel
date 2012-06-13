@@ -32,6 +32,7 @@
         <genParameters ecoreParameter="lngtypes.ecore#//AVessel/collect/marked"/>
       </genOperations>
     </genClasses>
+    <genClasses image="false" ecoreClass="lngtypes.ecore#//AFleetVessel"/>
     <genClasses ecoreClass="lngtypes.ecore#//AVesselClass"/>
     <genClasses ecoreClass="lngtypes.ecore#//AVesselEvent"/>
     <genClasses ecoreClass="lngtypes.ecore#//AContract"/>

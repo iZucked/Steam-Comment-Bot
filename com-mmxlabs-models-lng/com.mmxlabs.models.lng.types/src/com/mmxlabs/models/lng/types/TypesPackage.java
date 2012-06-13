@@ -529,7 +529,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselSet()
 	 * @generated
 	 */
-	int AVESSEL_SET = 11;
+	int AVESSEL_SET = 12;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -834,6 +834,139 @@ public interface TypesPackage extends EPackage {
 	int AVESSEL_OPERATION_COUNT = AVESSEL_SET_OPERATION_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AFleetVesselImpl <em>AFleet Vessel</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.impl.AFleetVesselImpl
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAFleetVessel()
+	 * @generated
+	 */
+	int AFLEET_VESSEL = 4;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AFLEET_VESSEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 * @since 2.0
+	 */
+	int AFLEET_VESSEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AFLEET_VESSEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The number of structural features of the '<em>AFleet Vessel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 * @since 2.0
+	 */
+	int AFLEET_VESSEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 * @since 2.0
+	 */
+	int AFLEET_VESSEL___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AFLEET_VESSEL___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 * @since 2.0
+	 */
+	int AFLEET_VESSEL___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AFLEET_VESSEL___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AFLEET_VESSEL___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AFLEET_VESSEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int AFLEET_VESSEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 * @since 2.0
+	 */
+	int AFLEET_VESSEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>AFleet Vessel</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 * @since 2.0
+	 */
+	int AFLEET_VESSEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AVesselClassImpl <em>AVessel Class</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -841,7 +974,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselClass()
 	 * @generated
 	 */
-	int AVESSEL_CLASS = 4;
+	int AVESSEL_CLASS = 5;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -997,7 +1130,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAVesselEvent()
 	 * @generated
 	 */
-	int AVESSEL_EVENT = 5;
+	int AVESSEL_EVENT = 6;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1144,7 +1277,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAContract()
 	 * @generated
 	 */
-	int ACONTRACT = 6;
+	int ACONTRACT = 7;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1291,7 +1424,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALegalEntity()
 	 * @generated
 	 */
-	int ALEGAL_ENTITY = 7;
+	int ALEGAL_ENTITY = 8;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1438,7 +1571,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAIndex()
 	 * @generated
 	 */
-	int AINDEX = 8;
+	int AINDEX = 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1585,7 +1718,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getACargo()
 	 * @generated
 	 */
-	int ACARGO = 9;
+	int ACARGO = 10;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1732,7 +1865,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASlot()
 	 * @generated
 	 */
-	int ASLOT = 10;
+	int ASLOT = 11;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -1880,7 +2013,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getITimezoneProvider()
 	 * @generated
 	 */
-	int ITIMEZONE_PROVIDER = 12;
+	int ITIMEZONE_PROVIDER = 13;
 
 	/**
 	 * The number of structural features of the '<em>ITimezone Provider</em>' class.
@@ -1917,7 +2050,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getABaseFuel()
 	 * @generated
 	 */
-	int ABASE_FUEL = 13;
+	int ABASE_FUEL = 14;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -2064,7 +2197,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASpotMarket()
 	 * @generated
 	 */
-	int ASPOT_MARKET = 14;
+	int ASPOT_MARKET = 15;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -2211,7 +2344,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAOptimisationSettings()
 	 * @generated
 	 */
-	int AOPTIMISATION_SETTINGS = 15;
+	int AOPTIMISATION_SETTINGS = 16;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -2358,7 +2491,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getPortCapability()
 	 * @generated
 	 */
-	int PORT_CAPABILITY = 16;
+	int PORT_CAPABILITY = 17;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.
@@ -2429,6 +2562,17 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EOperation getAVessel__Collect__EList();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AFleetVessel <em>AFleet Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>AFleet Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.types.AFleetVessel
+	 * @generated
+	 * @since 2.0
+	 */
+	EClass getAFleetVessel();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AVesselClass <em>AVessel Class</em>}'.
@@ -2668,6 +2812,17 @@ public interface TypesPackage extends EPackage {
 		 */
 		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE
 				.getAVessel__Collect__EList();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AFleetVesselImpl <em>AFleet Vessel</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.impl.AFleetVesselImpl
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAFleetVessel()
+		 * @generated
+		 * @since 2.0
+		 */
+		EClass AFLEET_VESSEL = eINSTANCE.getAFleetVessel();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AVesselClassImpl <em>AVessel Class</em>}' class.

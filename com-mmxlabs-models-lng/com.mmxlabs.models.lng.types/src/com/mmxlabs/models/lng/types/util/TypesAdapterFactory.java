@@ -95,6 +95,11 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseAFleetVessel(AFleetVessel object) {
+			return createAFleetVesselAdapter();
+		}
+
+		@Override
 		public Adapter caseAVesselClass(AVesselClass object) {
 			return createAVesselClassAdapter();
 		}
@@ -241,6 +246,21 @@ public class TypesAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAVesselAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.AFleetVessel <em>AFleet Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.AFleetVessel
+	 * @generated
+	 * @since 2.0
+	 */
+	public Adapter createAFleetVesselAdapter() {
 		return null;
 	}
 

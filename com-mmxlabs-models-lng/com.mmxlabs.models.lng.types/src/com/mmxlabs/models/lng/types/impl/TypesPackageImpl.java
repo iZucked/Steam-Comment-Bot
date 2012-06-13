@@ -15,6 +15,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.lng.types.ACargo;
 import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.AFleetVessel;
 import com.mmxlabs.models.lng.types.AIndex;
 import com.mmxlabs.models.lng.types.ALegalEntity;
 import com.mmxlabs.models.lng.types.AOptimisationSettings;
@@ -67,6 +68,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EClass aVesselEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass aFleetVesselEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -293,6 +301,16 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 2.0
+	 */
+	public EClass getAFleetVessel() {
+		return aFleetVesselEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
 	 */
 	public EClass getAVesselClass() {
 		return aVesselClassEClass;
@@ -464,6 +482,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aVesselEClass = createEClass(AVESSEL);
 		createEOperation(aVesselEClass, AVESSEL___COLLECT__ELIST);
 
+		aFleetVesselEClass = createEClass(AFLEET_VESSEL);
+
 		aVesselClassEClass = createEClass(AVESSEL_CLASS);
 
 		aVesselEventEClass = createEClass(AVESSEL_EVENT);
@@ -534,6 +554,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		aRouteEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		aRouteEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		aVesselEClass.getESuperTypes().add(this.getAVesselSet());
+		aFleetVesselEClass.getESuperTypes().add(
+				theMMXCorePackage.getUUIDObject());
 		aVesselClassEClass.getESuperTypes().add(this.getAVesselSet());
 		aVesselEventEClass.getESuperTypes().add(
 				theMMXCorePackage.getUUIDObject());
@@ -595,6 +617,9 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				"collect", 0, -1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, this.getAVesselSet(), "marked", 0, -1, IS_UNIQUE,
 				IS_ORDERED);
+
+		initEClass(aFleetVesselEClass, AFleetVessel.class, "AFleetVessel",
+				IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(aVesselClassEClass, AVesselClass.class, "AVesselClass",
 				IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -674,6 +699,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				"com.mmxlabs.models.lng.port.Route" });
 		addAnnotation(aVesselEClass, source, new String[] { "generatedType",
 				"com.mmxlabs.models.lng.fleet.Vessel" });
+		addAnnotation(aFleetVesselEClass, source, new String[] {
+				"generatedType", "com.mmxlabs.models.lng.fleet.Vessel" });
 		addAnnotation(aVesselClassEClass, source, new String[] {
 				"generatedType", "com.mmxlabs.models.lng.fleet.VesselClass" });
 		addAnnotation(aVesselEventEClass, source, new String[] {

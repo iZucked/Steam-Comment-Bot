@@ -130,6 +130,17 @@ public class TypesSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case TypesPackage.AFLEET_VESSEL: {
+			AFleetVessel aFleetVessel = (AFleetVessel) theEObject;
+			T result = caseAFleetVessel(aFleetVessel);
+			if (result == null)
+				result = caseUUIDObject(aFleetVessel);
+			if (result == null)
+				result = caseMMXObject(aFleetVessel);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		case TypesPackage.AVESSEL_CLASS: {
 			AVesselClass aVesselClass = (AVesselClass) theEObject;
 			T result = caseAVesselClass(aVesselClass);
@@ -344,6 +355,22 @@ public class TypesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAVessel(AVessel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>AFleet Vessel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>AFleet Vessel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 * @since 2.0
+	 */
+	public T caseAFleetVessel(AFleetVessel object) {
 		return null;
 	}
 
