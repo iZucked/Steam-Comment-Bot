@@ -870,6 +870,7 @@ public interface TypesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
+	 * @since 2.0
 	 */
 	int AFLEET_VESSEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
