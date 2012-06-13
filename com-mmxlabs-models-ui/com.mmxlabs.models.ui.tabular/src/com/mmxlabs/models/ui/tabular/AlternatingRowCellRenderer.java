@@ -25,6 +25,7 @@ import org.eclipse.swt.graphics.TextLayout;
  * @author chris.gross@us.ibm.com
  * @since 2.0.0
  */
+@SuppressWarnings("restriction")
 public class AlternatingRowCellRenderer extends GridCellRenderer {
 
 	int leftMargin = 4;
