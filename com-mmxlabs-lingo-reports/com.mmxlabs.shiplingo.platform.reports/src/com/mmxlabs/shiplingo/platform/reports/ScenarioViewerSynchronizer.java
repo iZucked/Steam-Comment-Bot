@@ -14,6 +14,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,8 +133,13 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		public void run() {
 			synchronized (this) {
 				while (needsRefresh) {
-					final IScenarioViewerSynchronizerOutput data = collectObjects();
-					viewer.setInput(data);
+					if (viewer != null) {
+						final Control control = viewer.getControl();
+						if (control != null && !control.isDisposed()) {
+							final IScenarioViewerSynchronizerOutput data = collectObjects();
+							viewer.setInput(data);
+						}
+					}
 					needsRefresh = false;
 				}
 			}
