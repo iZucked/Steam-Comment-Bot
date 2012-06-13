@@ -29,8 +29,10 @@ public class LiveEvaluator extends MMXAdapterImpl {
 	private static final Logger log = LoggerFactory.getLogger(LiveEvaluator.class);
 	private Thread evaluatorThread = null;
 	private final ScenarioInstance instance;
-	private Evaluator evaluator = new Evaluator();
+	private final Evaluator evaluator = new Evaluator();
 
+	private boolean enabled = true;
+	
 	public LiveEvaluator(final ScenarioInstance instance) {
 		this.instance = instance;
 	}
@@ -56,6 +58,10 @@ public class LiveEvaluator extends MMXAdapterImpl {
 	}
 
 	private void queueEvaluate() {
+		if (!enabled) {
+			return;
+		}
+		
 		if (evaluatorThread == null || !evaluatorThread.isAlive()) {
 			evaluatorThread = new Thread(evaluator , "Live Evaluator [" + instance.getName() + "]");
 			evaluatorThread.start();
@@ -81,7 +87,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		public void run() {
 			log.debug("Waiting 2s to evaluate " + instance.getName());
 			boolean spinLock = true;
-			while (spinLock) {
+			while (spinLock && enabled) {
 				try {
 					spinLock = false;
 					Thread.sleep(2000);
@@ -112,6 +118,24 @@ public class LiveEvaluator extends MMXAdapterImpl {
 						spinLock = false;
 					}
 					else spinLock = true;
+				}
+			}
+		}
+	}
+
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(final boolean enabled) {
+		this.enabled = enabled;
+		if (enabled) {
+			// We we re-enable check the dirty status and queue an evaluation if it is dirty 
+			final MMXRootObject root = (MMXRootObject) instance.getInstance();
+			if (root != null) {
+				final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
+				if (subModel.isDirty()) {
+					queueEvaluate();
 				}
 			}
 		}
