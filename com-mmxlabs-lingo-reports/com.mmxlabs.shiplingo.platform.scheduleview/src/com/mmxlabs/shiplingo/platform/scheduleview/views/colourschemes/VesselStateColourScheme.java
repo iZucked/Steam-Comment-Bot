@@ -53,4 +53,13 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 		return null;
 	}
 
+	@Override
+	public int getAlpha(final Object element) {
+		return 255;
+	}
+
+	@Override
+	public Color getBorderColour(final Object element) {
+		return null;
+	}
 }

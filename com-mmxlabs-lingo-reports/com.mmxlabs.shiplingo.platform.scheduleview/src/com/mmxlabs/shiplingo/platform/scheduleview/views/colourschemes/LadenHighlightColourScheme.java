@@ -31,17 +31,15 @@ public class LadenHighlightColourScheme implements IScheduleViewColourScheme {
 			final Journey journey = (Journey) element;
 			if (journey.isLaden()) {
 				return ColorCache.getColor(0, 180, 80);
-			} 
-			else {
+			} else {
 				return ColorCache.getColor(200, 200, 200);
-//				return ColorCache.getColor(223, 115, 255);
+				// return ColorCache.getColor(223, 115, 255);
 			}
 		} else if (element instanceof Idle) {
 			final Idle idle = (Idle) element;
-			if(idle.isLaden()){
+			if (idle.isLaden()) {
 				return ColorCache.getColor(40, 255, 80);
-			}
-			else {
+			} else {
 				return null;
 			}
 		} else if (element instanceof VesselEventVisit) {
@@ -64,4 +62,13 @@ public class LadenHighlightColourScheme implements IScheduleViewColourScheme {
 		return null;
 	}
 
+	@Override
+	public int getAlpha(final Object element) {
+		return 255;
+	}
+
+	@Override
+	public Color getBorderColour(final Object element) {
+		return null;
+	}
 }

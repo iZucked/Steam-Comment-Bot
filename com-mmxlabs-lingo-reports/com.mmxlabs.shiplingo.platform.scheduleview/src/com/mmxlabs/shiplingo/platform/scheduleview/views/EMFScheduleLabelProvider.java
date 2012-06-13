@@ -20,6 +20,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
+import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -40,7 +41,7 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
  * @author hinton
  * 
  */
-public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGanttChartToolTipProvider, IColorProvider {
+public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGanttChartToolTipProvider, IGanttChartColourProvider {
 
 	private final Map<String, IScheduleViewColourScheme> colourSchemesById = new HashMap<String, IScheduleViewColourScheme>();
 
@@ -292,4 +293,19 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 	}
 
+	@Override
+	public int getAlpha(final Object element) {
+		if (currentScheme != null) {
+			return currentScheme.getAlpha(element);
+		}
+		return 255;
+	}
+
+	@Override
+	public Color getBorderColour(final Object element) {
+		if (currentScheme != null) {
+			return currentScheme.getBorderColour(element);
+		}
+		return null;
+	}
 }

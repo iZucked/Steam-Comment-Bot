@@ -86,4 +86,15 @@ public class ShippingRiskColourScheme implements IScheduleViewColourScheme {
 
 		return (travelTime / totalTime > threshold);
 	}
+	
+
+	@Override
+	public int getAlpha(final Object element) {
+		return 255;
+	}
+
+	@Override
+	public Color getBorderColour(final Object element) {
+		return null;
+	}
 }

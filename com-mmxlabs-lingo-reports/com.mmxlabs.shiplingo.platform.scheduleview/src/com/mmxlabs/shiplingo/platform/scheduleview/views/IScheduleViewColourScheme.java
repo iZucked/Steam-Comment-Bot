@@ -6,7 +6,6 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import org.eclipse.swt.graphics.Color;
 
-
 /**
  * Interface defining a colour scheme used to render the {@link SchedulerView} elements.
  * 
@@ -39,4 +38,20 @@ public interface IScheduleViewColourScheme {
 	 * @return
 	 */
 	Color getBackground(Object element);
+
+	/**
+	 * Returns the alpha value to apply.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	int getAlpha(Object element);
+
+	/**
+	 * Returns the {@link Color} used to draw borders
+	 * 
+	 * @param element
+	 * @return
+	 */
+	Color getBorderColour(Object element);
 }

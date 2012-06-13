@@ -45,4 +45,14 @@ public class AlternatingCargoColourScheme implements IScheduleViewColourScheme {
 		}
 		return selectedColor;
 	}
+
+	@Override
+	public int getAlpha(final Object element) {
+		return 255;
+	}
+
+	@Override
+	public Color getBorderColour(final Object element) {
+		return null;
+	}
 }
