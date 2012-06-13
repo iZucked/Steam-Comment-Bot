@@ -30,7 +30,7 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	LOAD(0, "LOAD", "Load"),
+	LOAD(0, "LOAD", "LOAD"),
 
 	/**
 	 * The '<em><b>DISCHARGE</b></em>' literal object.
@@ -40,7 +40,7 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	DISCHARGE(1, "DISCHARGE", "Discharge"),
+	DISCHARGE(1, "DISCHARGE", "DISCHARGE"),
 
 	/**
 	 * The '<em><b>DRYDOCK</b></em>' literal object.
@@ -50,7 +50,7 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	DRYDOCK(2, "DRYDOCK", "Dry Dock"),
+	DRYDOCK(2, "DRYDOCK", "DRYDOCK"),
 
 	/**
 	 * The '<em><b>MAINTENANCE</b></em>' literal object.
@@ -60,7 +60,7 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	MAINTENANCE(3, "MAINTENANCE", "Maintenance");
+	MAINTENANCE(3, "MAINTENANCE", "MAINTENANCE");
 
 	/**
 	 * The '<em><b>LOAD</b></em>' literal value.
@@ -71,7 +71,7 @@ public enum PortCapability implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #LOAD
-	 * @model literal="Load"
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
@@ -86,7 +86,7 @@ public enum PortCapability implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #DISCHARGE
-	 * @model literal="Discharge"
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
@@ -101,7 +101,7 @@ public enum PortCapability implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #DRYDOCK
-	 * @model literal="Dry Dock"
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
@@ -116,7 +116,7 @@ public enum PortCapability implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #MAINTENANCE
-	 * @model literal="Maintenance"
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
