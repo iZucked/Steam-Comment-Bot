@@ -1,9 +1,10 @@
 package com.mmxlabs.ganttviewer;
 
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.swt.graphics.Color;
 
 /**
- * Extended version of {@link IColorProvider} returning alpha values
+ * Extended version of {@link IColorProvider} returning additional colour scheme values
  * 
  * @author Simon Goodall
  * 
@@ -16,4 +17,12 @@ public interface IGanttChartColourProvider extends IColorProvider {
 	 * @return
 	 */
 	int getAlpha(Object element);
+
+	/**
+	 * Returns the {@link Color} used to draw borders
+	 * 
+	 * @param element
+	 * @return
+	 */
+	Color getBorderColour(Object element);
 }

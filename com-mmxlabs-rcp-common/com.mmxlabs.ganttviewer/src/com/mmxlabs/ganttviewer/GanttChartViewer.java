@@ -294,6 +294,12 @@ public class GanttChartViewer extends StructuredViewer {
 							if (statusColour != null) {
 								event.setStatusColor(statusColour);
 							}
+							
+							final Color statusBorderColour = getLabelProviderBorderColor(labelProvider, c);
+							if (statusBorderColour != null) {
+								event.setStatusBorderColor(statusBorderColour);
+							}
+							
 							event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
 
 							// Get tooltip from label provider
@@ -337,6 +343,12 @@ public class GanttChartViewer extends StructuredViewer {
 		return null;
 	}
 
+	private Color getLabelProviderBorderColor(final ILabelProvider labelProvider, final Object c) {
+		if (labelProvider instanceof IGanttChartColourProvider) {
+			return ((IGanttChartColourProvider) labelProvider).getBorderColour(c);
+		}
+		return null;
+	}
 
 	private int getLabelProviderAlpha(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IGanttChartColourProvider) {
