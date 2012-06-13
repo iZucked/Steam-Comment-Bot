@@ -40,7 +40,7 @@ public enum PortCapability implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	DISCHARGE(1, "DISCHARGE", "Discharge"),
+	DISCHARGE(1, "DISCHARGE", "DISCHARGE"),
 
 	/**
 	 * The '<em><b>DRYDOCK</b></em>' literal object.
@@ -101,7 +101,7 @@ public enum PortCapability implements Enumerator {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @see #DRYDOCK
-	 * @model literal="Dry Dock"
+	 * @model
 	 * @generated
 	 * @ordered
 	 */
