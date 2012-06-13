@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import org.eclipse.jface.viewers.BaseLabelProvider;
-import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
