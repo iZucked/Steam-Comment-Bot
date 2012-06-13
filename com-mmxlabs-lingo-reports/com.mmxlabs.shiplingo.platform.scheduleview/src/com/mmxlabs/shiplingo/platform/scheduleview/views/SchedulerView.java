@@ -25,7 +25,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
+import org.eclipse.nebula.widgets.ganttchart.DefaultColorManager;
 import org.eclipse.nebula.widgets.ganttchart.GanttFlags;
+import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -199,7 +201,15 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			}
 		};
 
-		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings) {
+		final IColorManager colourManager = new DefaultColorManager() {
+			
+			@Override
+			public boolean useAlphaDrawing() {
+				return true;
+			};
+		};
+
+		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings, colourManager) {
 			@Override
 			protected synchronized void inputChanged(final Object input, final Object oldInput) {
 				super.inputChanged(input, oldInput);
@@ -292,7 +302,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// .getSelection("com.mmxlabs.rcp.navigator");
 		// selectionListener.selectionChanged(null, selection);
 
-		String defaultColourScheme = Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME);
+		final String defaultColourScheme = Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME);
 		if (defaultColourScheme != null) {
 			labelProvider.setScheme(defaultColourScheme);
 		}
