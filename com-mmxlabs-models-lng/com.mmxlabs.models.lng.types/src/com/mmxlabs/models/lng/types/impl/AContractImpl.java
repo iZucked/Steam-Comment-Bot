@@ -65,6 +65,7 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 	 * @see #getOtherNames()
 	 * @generated
 	 * @ordered
+	 * @since 2.0
 	 */
 	protected EList<String> otherNames;
 
@@ -112,6 +113,7 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 2.0
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {

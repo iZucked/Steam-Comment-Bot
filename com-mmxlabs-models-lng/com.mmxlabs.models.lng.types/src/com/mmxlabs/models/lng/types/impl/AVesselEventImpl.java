@@ -61,6 +61,7 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVessel
 	 * @see #getOtherNames()
 	 * @generated
 	 * @ordered
+	 * @since 2.0
 	 */
 	protected EList<String> otherNames;
 
@@ -108,6 +109,7 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVessel
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 2.0
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {

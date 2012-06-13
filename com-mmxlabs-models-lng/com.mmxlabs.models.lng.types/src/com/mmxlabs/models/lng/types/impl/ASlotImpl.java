@@ -61,6 +61,7 @@ public abstract class ASlotImpl extends UUIDObjectImpl implements ASlot {
 	 * @see #getOtherNames()
 	 * @generated
 	 * @ordered
+	 * @since 2.0
 	 */
 	protected EList<String> otherNames;
 
@@ -108,6 +109,7 @@ public abstract class ASlotImpl extends UUIDObjectImpl implements ASlot {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 2.0
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
