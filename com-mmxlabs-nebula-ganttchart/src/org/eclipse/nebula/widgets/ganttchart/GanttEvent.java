@@ -85,6 +85,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
     private int             _x, _y, _width, _height;
     private int             _earliestStartX, _latestEndX, _actualWidth;
     private Color           _statusColor;
+    private Color           _statusBorderColor;
     private int 			_statusAlpha = 255;
     private Color           _gradientStatusColor;
     private boolean         _showBoldText;
@@ -903,6 +904,24 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
      */
     public void setStatusColor(final Color statusColor) {
         _statusColor = statusColor;
+    }
+    
+    /**
+     * Returns the status border color of this event. 
+     * 
+     * @return Status Border color
+     */
+    public Color getStatusBorderColor() {
+        return _statusBorderColor;
+    }
+
+    /**
+     * Sets the status border color of this event. 
+     * 
+     * @param statusColor Status color
+     */
+    public void setStatusBorderColor(final Color statusBorderColor) {
+        _statusBorderColor = statusBorderColor;
     }
 
     /**
@@ -2046,6 +2065,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
         clone._scopeParent = _scopeParent;
         clone._showBoldText = _showBoldText;
         clone._statusColor = _statusColor;
+        clone._statusBorderColor = _statusBorderColor;
         clone._textDisplayFormat = _textDisplayFormat;
         clone._textFont = _textFont;
         clone._verticalEventAlignment = _verticalEventAlignment;
@@ -2067,5 +2087,4 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
 	public int getStatusAlpha() {
 		return _statusAlpha;
 	}
-
 }

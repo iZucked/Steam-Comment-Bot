@@ -37,7 +37,10 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		int xLoc = xStart;
 
 		// draw the border
-		gc.setForeground(colorManager.getEventBorderColor());
+		Color cEventBorder = event.getStatusBorderColor();
+		if (cEventBorder == null) {
+			gc.setForeground(colorManager.getEventBorderColor());
+		}
 
 		if (isSelected && settings.drawSelectionMarkerAroundSelectedEvent()) {
 			gc.setLineStyle(SWT.LINE_DOT);
