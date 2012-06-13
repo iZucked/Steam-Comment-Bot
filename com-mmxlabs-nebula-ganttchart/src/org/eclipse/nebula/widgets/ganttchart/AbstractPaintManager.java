@@ -40,6 +40,8 @@ public abstract class AbstractPaintManager implements IPaintManager {
 		Color cEventBorder = event.getStatusBorderColor();
 		if (cEventBorder == null) {
 			gc.setForeground(colorManager.getEventBorderColor());
+		} else {
+			gc.setForeground(cEventBorder);
 		}
 
 		if (isSelected && settings.drawSelectionMarkerAroundSelectedEvent()) {
