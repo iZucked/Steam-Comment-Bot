@@ -899,6 +899,7 @@ public interface TypesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
+	 * @since 2.0
 	 */
 	int AFLEET_VESSEL___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
 
