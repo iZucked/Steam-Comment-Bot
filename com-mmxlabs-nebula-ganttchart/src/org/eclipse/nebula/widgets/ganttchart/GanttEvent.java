@@ -85,6 +85,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
     private int             _x, _y, _width, _height;
     private int             _earliestStartX, _latestEndX, _actualWidth;
     private Color           _statusColor;
+    private int 			_statusAlpha = 255;
     private Color           _gradientStatusColor;
     private boolean         _showBoldText;
     private String          _textDisplayFormat;
@@ -2055,7 +2056,16 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
         clone._earliestStartX = _earliestStartX;
         clone._actualWidth = _actualWidth;
         clone._savedVerticalDragY = _savedVerticalDragY;
+        clone._statusAlpha  = _statusAlpha;
         return clone;
     }
+
+	public void setStatusAlpha(int statusAlpha) {
+		_statusAlpha = statusAlpha;
+	}
+    
+	public int getStatusAlpha() {
+		return _statusAlpha;
+	}
 
 }
