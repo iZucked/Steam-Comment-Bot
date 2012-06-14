@@ -475,6 +475,7 @@ public class ListSelectionDialog extends Dialog {
 			public boolean select(Viewer viewer, Object parentElement, Object element) {
 				filteredElements.remove(element);
 				if (filters.isEmpty()) return true;
+				if (contentProvider.hasChildren(element)) return true;
 				final String t = labelProvider.getText(element).toLowerCase();
 				
 				for (final String f : filters) {
