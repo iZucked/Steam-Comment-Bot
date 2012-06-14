@@ -5,11 +5,14 @@
 package com.mmxlabs.jobmanager.eclipse.jobs.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
@@ -96,8 +99,21 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	private int progress = 0;
 
 	public AbstractEclipseJobControl(final String jobName) {
+		this(jobName, Collections.<QualifiedName, Object> emptyMap());
+	}
+
+	/**
+	 * Constructor taking a map of properties to pass into the internal {@link Job}
+	 * 
+	 * @param jobName
+	 * @param jobProperties
+	 */
+	public AbstractEclipseJobControl(final String jobName, final Map<QualifiedName, Object> jobProperties) {
 		super();
 		runner = new Runner(jobName);
+		for (final Map.Entry<QualifiedName, Object> entry : jobProperties.entrySet()) {
+			runner.setProperty(entry.getKey(), entry.getValue());
+		}
 		currentState = EJobState.CREATED;
 	}
 
