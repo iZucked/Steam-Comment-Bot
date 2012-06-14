@@ -48,6 +48,19 @@
     select="Member/getComment" 
     match="@\s*(ordered)\s*(?:\n\r?|\r\n?)"/>
 
+
+  <!-- Keep @since tags -->
+  <merge:dictionaryPattern
+    name="sinceMembers" 
+    select="Member/getComment" 
+    match="@\s*(since)"/>
+    
+  <merge:pull
+  	targetMarkup="^since$"   
+	sourceGet="Method/getComment"
+	sourceTransfer="(\s*@since.*?\s*)(?:\n\r?|\r\n?)s\s*)\n)"
+   	targetPut="Method/setComment"/>
+   	
   <!-- Only push Annotations for the Members marked by gen-->
   <merge:push targetParentMarkup="^gen$" select="Annotation"/>
 
