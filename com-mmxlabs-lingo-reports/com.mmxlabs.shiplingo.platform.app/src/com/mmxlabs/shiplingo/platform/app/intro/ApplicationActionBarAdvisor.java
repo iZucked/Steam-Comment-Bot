@@ -333,15 +333,15 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	protected void fillCoolBar(final ICoolBarManager coolBar) {
 
 		final IActionBarConfigurer2 actionBarConfigurer = (IActionBarConfigurer2) getActionBarConfigurer();
-		{ // Set up the context Menu
-			coolbarPopupMenuManager = new MenuManager();
-			coolbarPopupMenuManager.add(new ActionContributionItem(lockToolBarAction));
-			// coolbarPopupMenuManager.add(new
-			// ActionContributionItem(editActionSetAction));
-			coolBar.setContextMenuManager(coolbarPopupMenuManager);
-			final IMenuService menuService = (IMenuService) window.getService(IMenuService.class);
-			menuService.populateContributionManager(coolbarPopupMenuManager, "popup:windowCoolbarContextMenu"); //$NON-NLS-1$
-		}
+//		{ // Set up the context Menu
+//			coolbarPopupMenuManager = new MenuManager();
+//			coolbarPopupMenuManager.add(new ActionContributionItem(lockToolBarAction));
+//			// coolbarPopupMenuManager.add(new
+//			// ActionContributionItem(editActionSetAction));
+//			coolBar.setContextMenuManager(coolbarPopupMenuManager);
+//			final IMenuService menuService = (IMenuService) window.getService(IMenuService.class);
+//			menuService.populateContributionManager(coolbarPopupMenuManager, "popup:windowCoolbarContextMenu"); //$NON-NLS-1$
+//		}
 		coolBar.add(new GroupMarker(IIDEActionConstants.GROUP_FILE));
 		{ // File Group
 			final IToolBarManager fileToolBar = actionBarConfigurer.createToolBarManager();
@@ -352,8 +352,8 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			fileToolBar.add(saveAction);
 			fileToolBar.add(saveAllAction);
 			fileToolBar.add(new GroupMarker(IWorkbenchActionConstants.SAVE_EXT));
-			fileToolBar.add(getPrintItem());
-			fileToolBar.add(new GroupMarker(IWorkbenchActionConstants.PRINT_EXT));
+//			fileToolBar.add(getPrintItem());
+//			fileToolBar.add(new GroupMarker(IWorkbenchActionConstants.PRINT_EXT));
 			//
 			// fileToolBar
 			// .add(new Separator(IWorkbenchActionConstants.BUILD_GROUP));
