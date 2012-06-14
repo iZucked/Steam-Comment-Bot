@@ -83,7 +83,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private static final ImageDescriptor imgEval = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
 	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
-		super((jobDescriptor.isOptimising() ? "Optimising " : "Evaluating ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(
+		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(
 				IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, true, IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
