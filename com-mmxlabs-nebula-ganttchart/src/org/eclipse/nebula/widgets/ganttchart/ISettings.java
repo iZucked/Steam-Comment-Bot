@@ -1082,4 +1082,6 @@ public interface ISettings {
      * @return true to render with gradients. Default is true.
      */
     public boolean drawSectionsWithGradients();
+
+	public int getSelectionLineWidth();
 }

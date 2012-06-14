@@ -510,4 +510,9 @@ public abstract class AbstractSettings implements ISettings {
     public boolean drawSectionsWithGradients() {
     	return true;
     }
+    
+    @Override
+    public int getSelectionLineWidth() {
+    	return 1;
+    }
 }
