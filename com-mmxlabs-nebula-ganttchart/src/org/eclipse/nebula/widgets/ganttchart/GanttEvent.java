@@ -87,6 +87,7 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
     private Color           _statusColor;
     private Color           _statusBorderColor;
     private int 			_statusAlpha = 255;
+    private int 			_statusBorderWidth = 1;
     private Color           _gradientStatusColor;
     private boolean         _showBoldText;
     private String          _textDisplayFormat;
@@ -2086,5 +2087,13 @@ public class GanttEvent extends AbstractGanttEvent implements IGanttChartItem, C
     
 	public int getStatusAlpha() {
 		return _statusAlpha;
+	}
+
+	public int getStatusBorderWidth() {
+		return _statusBorderWidth;
+	}
+	
+	public void setStatusBorderWidth(final int  statusBorderWidth) {
+		_statusBorderWidth = statusBorderWidth;
 	}
 }
