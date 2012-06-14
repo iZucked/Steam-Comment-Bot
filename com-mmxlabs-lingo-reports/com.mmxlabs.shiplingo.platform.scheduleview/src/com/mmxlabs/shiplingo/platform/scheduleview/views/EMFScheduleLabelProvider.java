@@ -313,4 +313,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 		return null;
 	}
+
+	@Override
+	public int getBorderWidth(final Object element) {
+
+		if (currentScheme != null) {
+			return currentScheme.getBorderWidth(element);
+		}
+
+		return 1;
+	}
 }

@@ -124,4 +124,48 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 		}
 		return null;
 	}
+	
+	@Override 
+	public int getBorderWidth(final Object element) {
+		
+		if (element instanceof Event) {
+			final Event event = (Event) element;
+
+			// Stage 1: Find the cargo
+			final Sequence sequence = (Sequence) event.eContainer();
+			int index = sequence.getEvents().indexOf(event);
+			Cargo cargo = null;
+			while (cargo == null && index >= 0 ) {
+				Object obj = sequence.getEvents().get(index);
+				if (obj instanceof SlotVisit) {
+					final SlotVisit slotVisit = ((SlotVisit) obj);
+					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+					final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+					cargo = cargoAllocation.getInputCargo();
+				}
+				--index;
+			}
+
+			// Stage 2: Find the input assignment
+			if (cargo != null) {
+
+				final Object input = viewer.getInput();
+				if (input instanceof IScenarioViewerSynchronizerOutput) {
+					final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
+
+					final Collection<Object> collectedElements = output.getCollectedElements();
+					if (collectedElements.size() > 0) {
+						final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
+						final MMXRootObject rootObject = (MMXRootObject) instance.getInstance();
+						final InputModel inputModel = rootObject.getSubModel(InputModel.class);
+						if (inputModel.getLockedAssignedObjects().contains(cargo)) {
+							return 2;
+						}
+					}
+				}
+			}
+		}
+		
+		return 1;
+	}
 }

@@ -199,6 +199,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public boolean showMenuItemsOnRightClick() {
 				return false;
 			}
+			
+			@Override
+			public int getSelectionLineWidth() {
+				return 3;
+			}
 		};
 
 		final IColorManager colourManager = new DefaultColorManager() {

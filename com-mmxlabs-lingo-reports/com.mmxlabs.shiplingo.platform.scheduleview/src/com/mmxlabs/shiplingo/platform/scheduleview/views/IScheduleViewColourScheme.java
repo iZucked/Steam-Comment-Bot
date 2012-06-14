@@ -60,4 +60,6 @@ public interface IScheduleViewColourScheme {
 	 * @return
 	 */
 	Color getBorderColour(Object element);
+
+	int getBorderWidth(Object element);
 }

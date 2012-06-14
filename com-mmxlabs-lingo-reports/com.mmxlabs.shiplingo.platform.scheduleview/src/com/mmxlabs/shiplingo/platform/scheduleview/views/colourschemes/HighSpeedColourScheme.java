@@ -80,4 +80,10 @@ public class HighSpeedColourScheme implements IScheduleViewColourScheme {
 	public Color getBorderColour(final Object element) {
 		return null;
 	}
+	
+
+	@Override 
+	public int getBorderWidth(final Object element) {
+		return 1;
+	}
 }
