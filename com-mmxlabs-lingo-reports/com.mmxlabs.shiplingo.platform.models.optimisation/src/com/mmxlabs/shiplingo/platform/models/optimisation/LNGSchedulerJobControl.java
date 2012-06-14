@@ -75,7 +75,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private final EditingDomain editingDomain;
 
 	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
-		super(jobDescriptor.isOptimising() ? "Optimising " : "Evaluating " + jobDescriptor.getJobName());
+		super((jobDescriptor.isOptimising() ? "Optimising " : "Evaluating ") + jobDescriptor.getJobName());
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		this.scenario = (MMXRootObject) scenarioInstance.getInstance();
