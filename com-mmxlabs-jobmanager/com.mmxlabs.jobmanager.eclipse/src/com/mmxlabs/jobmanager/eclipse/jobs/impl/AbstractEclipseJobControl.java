@@ -39,6 +39,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 		@Override
 		public IStatus run(final IProgressMonitor monitor) {
 			try {
+				monitor.beginTask("", 100);
 				while (true) {
 					if (monitor.isCanceled()) {
 						kill();
