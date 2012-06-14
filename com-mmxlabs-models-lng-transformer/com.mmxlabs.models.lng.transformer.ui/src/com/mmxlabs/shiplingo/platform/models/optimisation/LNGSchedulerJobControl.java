@@ -9,13 +9,18 @@ import java.util.List;
 
 import javax.management.timer.Timer;
 
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.ui.progress.IProgressConstants;
+import org.eclipse.ui.progress.IProgressConstants2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
@@ -74,8 +79,12 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private final EditingDomain editingDomain;
 
+	private static final ImageDescriptor imgOpti = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
+	private static final ImageDescriptor imgEval = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
+
 	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
-		super((jobDescriptor.isOptimising() ? "Optimising " : "Evaluating ") + jobDescriptor.getJobName());
+		super((jobDescriptor.isOptimising() ? "Optimising " : "Evaluating ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(
+				IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, true, IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		this.scenario = (MMXRootObject) scenarioInstance.getInstance();
