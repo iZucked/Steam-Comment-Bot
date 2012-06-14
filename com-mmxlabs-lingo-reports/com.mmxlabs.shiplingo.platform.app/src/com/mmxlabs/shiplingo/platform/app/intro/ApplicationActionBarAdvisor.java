@@ -213,7 +213,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 	 * 
 	 * @since 3.3
 	 */
-	private MenuManager coolbarPopupMenuManager;
+//	private MenuManager coolbarPopupMenuManager;
 
 	/**
 	 * Constructs a new action builder which contributes actions to the given window.
@@ -756,9 +756,9 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 			return;
 		}
 		isDisposed = true;
-		final IMenuService menuService = (IMenuService) window.getService(IMenuService.class);
-		menuService.releaseContributions(coolbarPopupMenuManager);
-		coolbarPopupMenuManager.dispose();
+//		final IMenuService menuService = (IMenuService) window.getService(IMenuService.class);
+//		menuService.releaseContributions(coolbarPopupMenuManager);
+//		coolbarPopupMenuManager.dispose();
 
 		getActionBarConfigurer().getStatusLineManager().remove(statusLineItem);
 		// if (pageListener != null) {
