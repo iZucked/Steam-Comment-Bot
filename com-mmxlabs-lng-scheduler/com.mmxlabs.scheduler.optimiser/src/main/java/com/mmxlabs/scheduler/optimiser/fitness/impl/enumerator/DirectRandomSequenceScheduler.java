@@ -90,6 +90,8 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 
 		// Set the arrival time at the last bit to be as early as possible; VPO will relax it if necessary.
 		arrivalTimes[seq][lastIndex] = getMinArrivalTime(seq, lastIndex);
+		
+		arrivalTimes[seq][0] = getMaxArrivalTimeForNextArrival(seq, 0);
 	}
 
 	public int getSamplingUpperBound() {

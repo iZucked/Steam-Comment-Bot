@@ -561,6 +561,17 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		}
 	}
 
+	protected final int getMaxArrivalTimeForNextArrival(final int seq, final int pos) {
+		final int ideal = arrivalTimes[seq][pos+1] - minTimeToNextElement[seq][pos];
+		if (ideal < windowStartTime[seq][pos]) {
+			return windowStartTime[seq][pos];
+		} else if (ideal > windowEndTime[seq][pos]) {
+			return windowEndTime[seq][pos];
+		} else {
+			return ideal;
+		}
+	}
+	
 	public ScheduleEvaluator getScheduleEvaluator() {
 		return evaluator;
 	}

@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
  * @author hinton
@@ -12,10 +13,14 @@ import com.mmxlabs.common.curves.ICurve;
  */
 public class MarketPriceContract extends SimpleContract {
 	private final ICurve market;
+	private int multiplier;
+	private int offset;
 
-	public MarketPriceContract(final ICurve market) {
+	public MarketPriceContract(final ICurve market, final int offset, final int multiplier) {
 		super();
 		this.market = market;
+		this.offset = offset;
+		this.multiplier = multiplier;
 	}
 
 	/*
@@ -25,6 +30,7 @@ public class MarketPriceContract extends SimpleContract {
 	 */
 	@Override
 	public int calculateSimpleLoadUnitPrice(final int loadTime) {
-		return (int) market.getValueAtPoint(loadTime);
+		return offset + (int) Calculator.multiply((int) market.getValueAtPoint(loadTime),
+				multiplier);
 	}
 }
