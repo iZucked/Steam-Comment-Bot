@@ -94,6 +94,11 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 				double maxSpeedKnots = 0.0;
 				final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
 
+				if (fleetModel.getVesselClasses().isEmpty()) {
+					// Cannot perform our validation, so return
+					return ctx.createSuccessStatus();
+				}
+				
 				for (final VesselClass vc : fleetModel.getVesselClasses()) {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
