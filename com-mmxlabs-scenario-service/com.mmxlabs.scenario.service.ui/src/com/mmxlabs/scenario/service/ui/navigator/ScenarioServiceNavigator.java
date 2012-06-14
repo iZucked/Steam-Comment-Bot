@@ -235,6 +235,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		final CommonViewer viewer = super.createCommonViewer(aParent);
 
 		this.viewer = viewer;
+		viewer.setLabelProvider(new ScenarioServiceNavigatorDecoratingLabelProvider(viewer.getNavigatorContentService().createCommonLabelProvider()));
 
 		viewer.getTree().setHeaderVisible(true);
 
