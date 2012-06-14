@@ -376,7 +376,6 @@ public class MMXRootObjectImpl extends UUIDObjectImpl implements MMXRootObject {
 	 * @generated
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 			case MMXCorePackage.MMX_ROOT_OBJECT___ADD_SUB_MODEL__UUIDOBJECT:
