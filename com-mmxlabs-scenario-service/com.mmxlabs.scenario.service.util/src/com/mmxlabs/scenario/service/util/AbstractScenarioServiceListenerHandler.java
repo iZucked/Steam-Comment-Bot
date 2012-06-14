@@ -25,14 +25,14 @@ public abstract class AbstractScenarioServiceListenerHandler implements IScenari
 	private final Set<IScenarioServiceListener> scenarioServiceListeners = new HashSet<IScenarioServiceListener>();
 
 	@Override
-	public void addScenarioServiceListner(final IScenarioServiceListener listener) {
+	public void addScenarioServiceListener(final IScenarioServiceListener listener) {
 		if (listener != null) {
 			scenarioServiceListeners.add(listener);
 		}
 	}
 
 	@Override
-	public void removeScenarioServiceListner(final IScenarioServiceListener listener) {
+	public void removeScenarioServiceListener(final IScenarioServiceListener listener) {
 		scenarioServiceListeners.remove(listener);
 	}
 

@@ -100,12 +100,12 @@ public interface IScenarioService {
 	 * 
 	 * @param listener
 	 */
-	void addScenarioServiceListner(IScenarioServiceListener listener);
+	void addScenarioServiceListener(IScenarioServiceListener listener);
 
 	/**
 	 * Remove a previously added {@link IScenarioServiceListener} to this scenario service.
 	 * 
 	 * @param listener
 	 */
-	void removeScenarioServiceListner(IScenarioServiceListener listener);
+	void removeScenarioServiceListener(IScenarioServiceListener listener);
 }
