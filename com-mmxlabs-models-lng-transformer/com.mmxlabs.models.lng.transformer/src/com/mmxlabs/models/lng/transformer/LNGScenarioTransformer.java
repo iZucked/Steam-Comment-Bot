@@ -327,7 +327,7 @@ public class LNGScenarioTransformer {
 
 		final Map<APort, IShippingPriceCalculator> cooldownCalculators = new HashMap<APort, IShippingPriceCalculator>();
 		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
-			final IShippingPriceCalculator cooldownCalculator = new MarketPriceContract(indexAssociation.lookup(price.getIndex()));
+			final IShippingPriceCalculator cooldownCalculator = new MarketPriceContract(indexAssociation.lookup(price.getIndex()), 0, Calculator.scaleToInt(1));
 
 			for (final APort port : SetUtils.getPorts(price.getPorts())) {
 				cooldownCalculators.put(port, cooldownCalculator);

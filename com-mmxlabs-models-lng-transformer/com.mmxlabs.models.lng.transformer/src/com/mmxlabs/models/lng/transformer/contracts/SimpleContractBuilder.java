@@ -36,8 +36,8 @@ public class SimpleContractBuilder implements IBuilderExtension {
 		return new FixedPriceContract(pricePerMMBTU);
 	}
 
-	MarketPriceContract createMarketPriceContract(final ICurve index) {
-		return new MarketPriceContract(index);
+	MarketPriceContract createMarketPriceContract(final ICurve index, final int offset, final int multiplier) {
+		return new MarketPriceContract(index, offset, multiplier);
 	}
 
 	ILoadPriceCalculator2 createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int alpha, final int beta, final int gamma) {

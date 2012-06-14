@@ -63,7 +63,8 @@ public class SimpleContractTransformer implements IContractTransformer {
 			return contractBuilder.createFixedPriceContract(
 					Calculator.scaleToInt(((FixedPriceContract) c).getPricePerMMBTU()));
 		} else if (c instanceof IndexPriceContract) {
-			return contractBuilder.createMarketPriceContract(map.getOptimiserObject(((IndexPriceContract) c).getIndex(), ICurve.class));
+			return contractBuilder.createMarketPriceContract(map.getOptimiserObject(((IndexPriceContract) c).getIndex(), ICurve.class),
+					Calculator.scaleToInt(((IndexPriceContract) c).getConstant()), Calculator.scaleToInt(((IndexPriceContract) c).getMultiplier()));
 		}
 		return null;
 	}
