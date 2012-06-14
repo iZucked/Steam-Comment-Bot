@@ -25,4 +25,11 @@ public interface IGanttChartColourProvider extends IColorProvider {
 	 * @return
 	 */
 	Color getBorderColour(Object element);
+
+	/**
+	 * Returns the border width of this element
+	 * @param element
+	 * @return
+	 */
+	int getBorderWidth(Object element);
 }

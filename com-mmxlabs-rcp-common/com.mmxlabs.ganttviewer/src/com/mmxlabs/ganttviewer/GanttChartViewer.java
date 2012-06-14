@@ -300,6 +300,7 @@ public class GanttChartViewer extends StructuredViewer {
 								event.setStatusBorderColor(statusBorderColour);
 							}
 							
+							event.setStatusBorderWidth(getLabelProviderBorderWidth(labelProvider, c));
 							event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
 
 							// Get tooltip from label provider
@@ -350,6 +351,14 @@ public class GanttChartViewer extends StructuredViewer {
 		return null;
 	}
 
+	private int getLabelProviderBorderWidth(final ILabelProvider labelProvider, final Object c) {
+		if (labelProvider instanceof IGanttChartColourProvider) {
+			return ((IGanttChartColourProvider) labelProvider).getBorderWidth(c);
+		}
+		return 1;
+	}
+
+	
 	private int getLabelProviderAlpha(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IGanttChartColourProvider) {
 			return ((IGanttChartColourProvider) labelProvider).getAlpha(c);
