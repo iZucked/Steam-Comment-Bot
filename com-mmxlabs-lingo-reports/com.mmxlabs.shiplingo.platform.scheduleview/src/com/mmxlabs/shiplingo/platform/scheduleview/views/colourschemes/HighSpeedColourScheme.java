@@ -7,12 +7,15 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
+import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourScheme;
 
 public class HighSpeedColourScheme implements IScheduleViewColourScheme {
+
+	private GanttChartViewer viewer;
 
 	private final double speed;
 
@@ -27,6 +30,16 @@ public class HighSpeedColourScheme implements IScheduleViewColourScheme {
 	@Override
 	public String getName() {
 		return "High Speed";
+	}
+
+	@Override
+	public GanttChartViewer getViewer() {
+		return viewer;
+	}
+
+	@Override
+	public void setViewer(final GanttChartViewer viewer) {
+		this.viewer = viewer;
 	}
 
 	@Override
@@ -57,7 +70,6 @@ public class HighSpeedColourScheme implements IScheduleViewColourScheme {
 		}
 		return null;
 	}
-
 
 	@Override
 	public int getAlpha(final Object element) {

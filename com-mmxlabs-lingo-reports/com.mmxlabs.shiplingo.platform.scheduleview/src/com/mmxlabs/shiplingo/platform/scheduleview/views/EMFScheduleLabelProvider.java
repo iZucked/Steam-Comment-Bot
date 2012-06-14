@@ -87,7 +87,13 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	}
 
 	public void setScheme(final IScheduleViewColourScheme scheme) {
+		if (currentScheme != null) {
+			currentScheme.setViewer(null);
+		}
 		this.currentScheme = scheme;
+		if (currentScheme != null) {
+			currentScheme.setViewer(viewer);
+		}
 	}
 
 	public void setScheme(final String id) {

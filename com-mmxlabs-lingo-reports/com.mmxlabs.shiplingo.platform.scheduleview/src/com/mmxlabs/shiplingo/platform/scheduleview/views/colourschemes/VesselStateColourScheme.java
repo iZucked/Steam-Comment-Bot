@@ -9,8 +9,8 @@ import java.util.Collection;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
+import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -26,9 +26,21 @@ import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourSche
 
 public class VesselStateColourScheme implements IScheduleViewColourScheme {
 
+	private GanttChartViewer viewer;
+
 	@Override
 	public String getName() {
 		return "Vessel State";
+	}
+
+	@Override
+	public GanttChartViewer getViewer() {
+		return viewer;
+	}
+
+	@Override
+	public void setViewer(final GanttChartViewer viewer) {
+		this.viewer = viewer;
 	}
 
 	@Override
@@ -80,9 +92,10 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 			final Sequence sequence = (Sequence) event.eContainer();
 			int index = sequence.getEvents().indexOf(event);
 			Cargo cargo = null;
-			while (cargo == null && index != -1) {
-				if (event instanceof SlotVisit) {
-					final SlotVisit slotVisit = ((SlotVisit) event);
+			while (cargo == null && index >= 0 ) {
+				Object obj = sequence.getEvents().get(index);
+				if (obj instanceof SlotVisit) {
+					final SlotVisit slotVisit = ((SlotVisit) obj);
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 					final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 					cargo = cargoAllocation.getInputCargo();
@@ -93,20 +106,17 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 			// Stage 2: Find the input assignment
 			if (cargo != null) {
 
-				// TODO: Get the input model - no access to viewer here?
-				final Object input = null;// viewer.getInput();
+				final Object input = viewer.getInput();
 				if (input instanceof IScenarioViewerSynchronizerOutput) {
 					final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
 
 					final Collection<Object> collectedElements = output.getCollectedElements();
-					if (collectedElements.size() > 1) {
+					if (collectedElements.size() > 0) {
 						final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
 						final MMXRootObject rootObject = (MMXRootObject) instance.getInstance();
 						final InputModel inputModel = rootObject.getSubModel(InputModel.class);
-						for (final Assignment assignment : inputModel.getAssignments()) {
-							if (assignment.getAssignedObjects().contains(cargo)) {
-								return ColorCache.getWhite();
-							}
+						if (inputModel.getLockedAssignedObjects().contains(cargo)) {
+							return ColorCache.getColor(255, 0, 128);
 						}
 					}
 				}

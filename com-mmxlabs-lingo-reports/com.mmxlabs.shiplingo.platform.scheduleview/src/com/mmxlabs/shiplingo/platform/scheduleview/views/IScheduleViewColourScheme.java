@@ -6,6 +6,8 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import org.eclipse.swt.graphics.Color;
 
+import com.mmxlabs.ganttviewer.GanttChartViewer;
+
 /**
  * Interface defining a colour scheme used to render the {@link SchedulerView} elements.
  * 
@@ -22,6 +24,10 @@ public interface IScheduleViewColourScheme {
 	 * @return
 	 */
 	String getName();
+
+	GanttChartViewer getViewer();
+
+	void setViewer(GanttChartViewer viewer);
 
 	/**
 	 * Returns the foreground {@link Color} to use for this element.

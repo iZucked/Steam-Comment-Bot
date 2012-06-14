@@ -7,6 +7,7 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
+import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -18,9 +19,21 @@ public class ShippingRiskColourScheme implements IScheduleViewColourScheme {
 	private static final float threshold = 0.95f;
 	private static final float speed = 19.0f;
 
+	private GanttChartViewer viewer;
+
 	@Override
 	public String getName() {
 		return "Shipping Risk";
+	}
+
+	@Override
+	public GanttChartViewer getViewer() {
+		return viewer;
+	}
+
+	@Override
+	public void setViewer(final GanttChartViewer viewer) {
+		this.viewer = viewer;
 	}
 
 	@Override
@@ -86,7 +99,6 @@ public class ShippingRiskColourScheme implements IScheduleViewColourScheme {
 
 		return (travelTime / totalTime > threshold);
 	}
-	
 
 	@Override
 	public int getAlpha(final Object element) {

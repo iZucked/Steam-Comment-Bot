@@ -7,6 +7,7 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
+import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -15,9 +16,21 @@ import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourSche
 
 public class FuelChoiceColourScheme implements IScheduleViewColourScheme {
 
+	private GanttChartViewer viewer;
+
 	@Override
 	public String getName() {
 		return "Fuel Choice";
+	}
+
+	@Override
+	public GanttChartViewer getViewer() {
+		return viewer;
+	}
+
+	@Override
+	public void setViewer(final GanttChartViewer viewer) {
+		this.viewer = viewer;
 	}
 
 	@Override
