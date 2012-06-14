@@ -57,7 +57,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  * @author hinton
  * 
  */
-public abstract class AbstractScenarioService implements IScenarioService {
+public abstract class AbstractScenarioService extends AbstractScenarioServiceListenerHandler {
 	private static final Logger log = LoggerFactory.getLogger(AbstractScenarioService.class);
 	private final String name;
 	private ScenarioService serviceModel;
@@ -116,15 +116,19 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		}
 		return serviceModel;
 	}
-	
+
 	public abstract URI resolveURI(final String URI);
 
 	@Override
 	public EObject load(final ScenarioInstance instance) throws IOException {
 		if (instance.getInstance() != null) {
-//			log.debug("Instance " + instance.getUuid() + " already loaded");
+			// log.debug("Instance " + instance.getUuid() + " already loaded");
 			return instance.getInstance();
 		}
+		
+		fireEvent(ScenarioServiceEvent.PRE_LOAD, instance);
+
+		
 		log.debug("Instance " + instance.getUuid() + " needs loading");
 		final List<EObject> parts = new ArrayList<EObject>();
 		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
@@ -173,6 +177,8 @@ public abstract class AbstractScenarioService implements IScenarioService {
 
 		modelService.resolve(parts);
 
+		fireEvent(ScenarioServiceEvent.POST_LOAD, instance);
+		
 		return implementation;
 	}
 
@@ -223,6 +229,9 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		if (instance == null) {
 			return;
 		}
+		
+		fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
+		
 		final List<IModelInstance> models = new ArrayList<IModelInstance>();
 		for (final String uris : scenarioInstance.getSubModelURIs()) {
 			final IModelInstance modelInstance = modelService.getModel(resolveURI(uris));
@@ -237,6 +246,8 @@ public abstract class AbstractScenarioService implements IScenarioService {
 			metadata.setLastModified(new Date());
 		}
 		scenarioInstance.setDirty(false);
+		
+		fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
 	}
 
 	@Override
@@ -247,9 +258,8 @@ public abstract class AbstractScenarioService implements IScenarioService {
 		for (final String subModelURI : original.getSubModelURIs()) {
 			log.debug("Loading submodel " + subModelURI);
 			try {
-				final URI realURI = originalService == null ? 
-						URI.createURI(subModelURI) : originalService.resolveURI(subModelURI);
-						
+				final URI realURI = originalService == null ? URI.createURI(subModelURI) : originalService.resolveURI(subModelURI);
+
 				final IModelInstance instance = modelService.getModel(realURI);
 				originalSubModels.add(instance.getModel());
 			} catch (final IOException e1) {
