@@ -98,6 +98,7 @@ public class ScenarioServiceNewScenarioPage extends WizardPage {
 		initialize();
 		dialogChanged();
 		setControl(container);
+		fileText.setFocus();
 	}
 
 	/**
