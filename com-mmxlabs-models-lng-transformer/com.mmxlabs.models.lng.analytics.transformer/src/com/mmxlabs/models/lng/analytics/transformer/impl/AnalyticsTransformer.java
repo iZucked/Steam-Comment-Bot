@@ -399,7 +399,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					line.setDuration(totalDuration);
 					line.setFuelCost(totalFuelCost);
 					line.setCanalCost(totalRouteCost);
-					line.setHireCost((spec.getNotionalDayRate() * totalDuration)/12);
+					line.setHireCost((spec.getNotionalDayRate() * totalDuration)/24);
 					line.setPortCost(totalPortCost);
 
 					line.setVolumeLoaded((int) ((allocation.getDischargeVolume() + allocation.getFuelVolume()) / Calculator.ScaleFactor));
