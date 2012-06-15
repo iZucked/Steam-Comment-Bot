@@ -32,9 +32,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class FolderItemProvider extends ContainerItemProvider implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class FolderItemProvider extends ContainerItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -69,12 +67,10 @@ public class FolderItemProvider extends ContainerItemProvider implements
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(
-			Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures
-					.add(ScenarioServicePackage.Literals.FOLDER__METADATA);
+			childrenFeatures.add(ScenarioServicePackage.Literals.FOLDER__METADATA);
 		}
 		return childrenFeatures;
 	}
@@ -100,8 +96,7 @@ public class FolderItemProvider extends ContainerItemProvider implements
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-				getResourceLocator().getImage("full/obj16/Folder"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Folder"));
 	}
 
 	/**
@@ -129,8 +124,7 @@ public class FolderItemProvider extends ContainerItemProvider implements
 
 		switch (notification.getFeatureID(Folder.class)) {
 		case ScenarioServicePackage.FOLDER__METADATA:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), true, false));
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -144,13 +138,10 @@ public class FolderItemProvider extends ContainerItemProvider implements
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(
-				ScenarioServicePackage.Literals.FOLDER__METADATA,
-				ScenarioServiceFactory.eINSTANCE.createMetadata()));
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.FOLDER__METADATA, ScenarioServiceFactory.eINSTANCE.createMetadata()));
 	}
 
 }

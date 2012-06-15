@@ -31,8 +31,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioServicePackageImpl extends EPackageImpl implements
-		ScenarioServicePackage {
+public class ScenarioServicePackageImpl extends EPackageImpl implements ScenarioServicePackage {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -87,21 +86,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EDataType classEDataType = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EDataType iScenarioServiceEDataType = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EDataType objectEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -143,12 +128,10 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 */
 	public static ScenarioServicePackage init() {
 		if (isInited)
-			return (ScenarioServicePackage) EPackage.Registry.INSTANCE
-					.getEPackage(ScenarioServicePackage.eNS_URI);
+			return (ScenarioServicePackage) EPackage.Registry.INSTANCE.getEPackage(ScenarioServicePackage.eNS_URI);
 
 		// Obtain or create and register package
-		ScenarioServicePackageImpl theScenarioServicePackage = (ScenarioServicePackageImpl) (EPackage.Registry.INSTANCE
-				.get(eNS_URI) instanceof ScenarioServicePackageImpl ? EPackage.Registry.INSTANCE
+		ScenarioServicePackageImpl theScenarioServicePackage = (ScenarioServicePackageImpl) (EPackage.Registry.INSTANCE.get(eNS_URI) instanceof ScenarioServicePackageImpl ? EPackage.Registry.INSTANCE
 				.get(eNS_URI) : new ScenarioServicePackageImpl());
 
 		isInited = true;
@@ -163,8 +146,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 		theScenarioServicePackage.freeze();
 
 		// Update the registry and return the package
-		EPackage.Registry.INSTANCE.put(ScenarioServicePackage.eNS_URI,
-				theScenarioServicePackage);
+		EPackage.Registry.INSTANCE.put(ScenarioServicePackage.eNS_URI, theScenarioServicePackage);
 		return theScenarioServicePackage;
 	}
 
@@ -264,8 +246,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EAttribute getScenarioService_Description() {
-		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(
-				0);
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -274,8 +255,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EAttribute getScenarioService_ServiceRef() {
-		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(
-				1);
+		return (EAttribute) scenarioServiceEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -293,8 +273,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_Uuid() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures()
-				.get(0);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -303,8 +282,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EReference getScenarioInstance_Metadata() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures()
-				.get(1);
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -313,8 +291,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_Locked() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures()
-				.get(2);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -323,8 +300,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EReference getScenarioInstance_Instance() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures()
-				.get(3);
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -333,8 +309,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_Adapters() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures()
-				.get(4);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -343,8 +318,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_SubModelURIs() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures()
-				.get(5);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -353,8 +327,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_DependencyUUIDs() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures()
-				.get(6);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -363,8 +336,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EAttribute getScenarioInstance_Dirty() {
-		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures()
-				.get(7);
+		return (EAttribute) scenarioInstanceEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -373,8 +345,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * @generated
 	 */
 	public EReference getScenarioInstance_Locks() {
-		return (EReference) scenarioInstanceEClass.getEStructuralFeatures()
-				.get(8);
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -490,26 +461,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EDataType getClass_() {
-		return classEDataType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EDataType getIScenarioService() {
 		return iScenarioServiceEDataType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EDataType getObject() {
-		return objectEDataType;
 	}
 
 	/**
@@ -563,10 +516,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__LOCKED);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__INSTANCE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__ADAPTERS);
-		createEAttribute(scenarioInstanceEClass,
-				SCENARIO_INSTANCE__SUB_MODEL_UR_IS);
-		createEAttribute(scenarioInstanceEClass,
-				SCENARIO_INSTANCE__DEPENDENCY_UUI_DS);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__SUB_MODEL_UR_IS);
+		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__DEPENDENCY_UUI_DS);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__DIRTY);
 		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__LOCKS);
 
@@ -585,9 +536,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 		createEReference(scenarioLockEClass, SCENARIO_LOCK__INSTANCE);
 
 		// Create data types
-		classEDataType = createEDataType(CLASS);
 		iScenarioServiceEDataType = createEDataType(ISCENARIO_SERVICE);
-		objectEDataType = createEDataType(OBJECT);
 	}
 
 	/**
@@ -615,7 +564,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 		setNsURI(eNS_URI);
 
 		// Create type parameters
-		addETypeParameter(classEDataType, "T");
 
 		// Set bounds for type parameters
 
@@ -625,195 +573,100 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 		scenarioInstanceEClass.getESuperTypes().add(this.getContainer());
 
 		// Initialize classes and features; add operations and parameters
-		initEClass(scenarioModelEClass, ScenarioModel.class, "ScenarioModel",
-				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getScenarioModel_ScenarioServices(),
-				this.getScenarioService(), null, "scenarioServices", null, 0,
-				-1, ScenarioModel.class, IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+		initEClass(scenarioModelEClass, ScenarioModel.class, "ScenarioModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getScenarioModel_ScenarioServices(), this.getScenarioService(), null, "scenarioServices", null, 0, -1, ScenarioModel.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(containerEClass, com.mmxlabs.scenario.service.model.Container.class, "Container", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getContainer_Parent(), this.getContainer(), this.getContainer_Elements(), "parent", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContainer_Elements(), this.getContainer(), this.getContainer_Parent(), "elements", null, 0, -1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContainer_Archived(), ecorePackage.getEBoolean(), "archived", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContainer_Name(), ecorePackage.getEString(), "name", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(containerEClass, this.getIScenarioService(), "getScenarioService", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		addEOperation(containerEClass, ecorePackage.getEInt(), "getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(folderEClass, Folder.class, "Folder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFolder_Metadata(), this.getMetadata(), null, "metadata", null, 0, 1, Folder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(containerEClass,
-				com.mmxlabs.scenario.service.model.Container.class,
-				"Container", IS_ABSTRACT, !IS_INTERFACE,
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getContainer_Parent(), this.getContainer(),
-				this.getContainer_Elements(), "parent", null, 0, 1,
-				com.mmxlabs.scenario.service.model.Container.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
-				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEReference(getContainer_Elements(), this.getContainer(),
-				this.getContainer_Parent(), "elements", null, 0, -1,
-				com.mmxlabs.scenario.service.model.Container.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
-				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEAttribute(getContainer_Archived(), ecorePackage.getEBoolean(),
-				"archived", null, 0, 1,
-				com.mmxlabs.scenario.service.model.Container.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+		initEClass(scenarioServiceEClass, ScenarioService.class, "ScenarioService", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getScenarioService_Description(), ecorePackage.getEString(), "description", null, 0, 1, ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
 				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getContainer_Name(), ecorePackage.getEString(), "name",
-				null, 0, 1, com.mmxlabs.scenario.service.model.Container.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
-				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioService_ServiceRef(), this.getIScenarioService(), "serviceRef", null, 0, 1, ScenarioService.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(containerEClass, this.getIScenarioService(),
-				"getScenarioService", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		addEOperation(containerEClass, ecorePackage.getEInt(),
-				"getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEClass(folderEClass, Folder.class, "Folder", !IS_ABSTRACT,
-				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getFolder_Metadata(), this.getMetadata(), null,
-				"metadata", null, 0, 1, Folder.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(scenarioServiceEClass, ScenarioService.class,
-				"ScenarioService", !IS_ABSTRACT, !IS_INTERFACE,
-				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getScenarioService_Description(),
-				ecorePackage.getEString(), "description", null, 0, 1,
-				ScenarioService.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEAttribute(getScenarioService_ServiceRef(),
-				this.getIScenarioService(), "serviceRef", null, 0, 1,
-				ScenarioService.class, IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-
-		initEClass(scenarioInstanceEClass, ScenarioInstance.class,
-				"ScenarioInstance", !IS_ABSTRACT, !IS_INTERFACE,
-				IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getScenarioInstance_Uuid(), ecorePackage.getEString(),
-				"uuid", null, 1, 1, ScenarioInstance.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE,
+		initEClass(scenarioInstanceEClass, ScenarioInstance.class, "ScenarioInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getScenarioInstance_Uuid(), ecorePackage.getEString(), "uuid", null, 1, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEReference(getScenarioInstance_Metadata(), this.getMetadata(),
-				null, "metadata", null, 0, 1, ScenarioInstance.class,
-				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
-				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEAttribute(getScenarioInstance_Locked(),
-				ecorePackage.getEBoolean(), "locked", null, 0, 1,
-				ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEReference(getScenarioInstance_Instance(),
-				ecorePackage.getEObject(), null, "instance", null, 0, 1,
-				ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioInstance_Metadata(), this.getMetadata(), null, "metadata", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
+				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_Locked(), ecorePackage.getEBoolean(), "locked", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioInstance_Instance(), ecorePackage.getEObject(), null, "instance", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		EGenericType g1 = createEGenericType(ecorePackage.getEMap());
-		EGenericType g2 = createEGenericType(this.getClass_());
+		EGenericType g2 = createEGenericType(ecorePackage.getEJavaClass());
 		g1.getETypeArguments().add(g2);
 		EGenericType g3 = createEGenericType();
 		g2.getETypeArguments().add(g3);
-		g2 = createEGenericType(this.getObject());
+		g2 = createEGenericType(ecorePackage.getEJavaObject());
 		g1.getETypeArguments().add(g2);
-		initEAttribute(getScenarioInstance_Adapters(), g1, "adapters", null, 0,
-				1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+		initEAttribute(getScenarioInstance_Adapters(), g1, "adapters", null, 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
 				IS_ORDERED);
-		initEAttribute(getScenarioInstance_SubModelURIs(),
-				ecorePackage.getEString(), "subModelURIs", null, 0, -1,
-				ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEAttribute(getScenarioInstance_DependencyUUIDs(),
-				ecorePackage.getEString(), "dependencyUUIDs", null, 0, -1,
-				ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEAttribute(getScenarioInstance_Dirty(), ecorePackage.getEBoolean(),
-				"dirty", "false", 0, 1, ScenarioInstance.class, IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
-		initEReference(getScenarioInstance_Locks(), this.getScenarioLock(),
-				this.getScenarioLock_Instance(), "locks", null, 0, -1,
-				ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_SubModelURIs(), ecorePackage.getEString(), "subModelURIs", null, 0, -1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_DependencyUUIDs(), ecorePackage.getEString(), "dependencyUUIDs", null, 0, -1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioInstance_Dirty(), ecorePackage.getEBoolean(), "dirty", "false", 0, 1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioInstance_Locks(), this.getScenarioLock(), this.getScenarioLock_Instance(), "locks", null, 0, -1, ScenarioInstance.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(scenarioInstanceEClass, ecorePackage.getEInt(),
-				"getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(scenarioInstanceEClass, ecorePackage.getEInt(), "getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		EOperation op = addEOperation(scenarioInstanceEClass,
-				this.getScenarioLock(), "getLock", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE,
-				IS_ORDERED);
+		EOperation op = addEOperation(scenarioInstanceEClass, this.getScenarioLock(), "getLock", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		initEClass(metadataEClass, Metadata.class, "Metadata", !IS_ABSTRACT,
-				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getMetadata_Creator(), ecorePackage.getEString(),
-				"creator", null, 1, 1, Metadata.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+		initEClass(metadataEClass, Metadata.class, "Metadata", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getMetadata_Creator(), ecorePackage.getEString(), "creator", null, 1, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMetadata_Created(), ecorePackage.getEDate(),
-				"created", null, 1, 1, Metadata.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+		initEAttribute(getMetadata_Created(), ecorePackage.getEDate(), "created", null, 1, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMetadata_LastModified(), ecorePackage.getEDate(),
-				"lastModified", null, 0, 1, Metadata.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+		initEAttribute(getMetadata_LastModified(), ecorePackage.getEDate(), "lastModified", null, 0, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMetadata_Comment(), ecorePackage.getEString(),
-				"comment", null, 0, 1, Metadata.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+		initEAttribute(getMetadata_Comment(), ecorePackage.getEString(), "comment", null, 0, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMetadata_LastModifiedBy(), ecorePackage.getEString(),
-				"lastModifiedBy", null, 0, 1, Metadata.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getMetadata_ContentType(), ecorePackage.getEString(),
-				"contentType", null, 0, 1, Metadata.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+		initEAttribute(getMetadata_LastModifiedBy(), ecorePackage.getEString(), "lastModifiedBy", null, 0, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getMetadata_ContentType(), ecorePackage.getEString(), "contentType", null, 0, 1, Metadata.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
 
-		initEClass(scenarioLockEClass, ScenarioLock.class, "ScenarioLock",
-				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getScenarioLock_Available(), ecorePackage.getEBoolean(),
-				"available", null, 1, 1, ScenarioLock.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+		initEClass(scenarioLockEClass, ScenarioLock.class, "ScenarioLock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getScenarioLock_Available(), ecorePackage.getEBoolean(), "available", null, 1, 1, ScenarioLock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioLock_Claimed(), ecorePackage.getEBoolean(), "claimed", null, 1, 1, ScenarioLock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getScenarioLock_Claimed(), ecorePackage.getEBoolean(),
-				"claimed", null, 1, 1, ScenarioLock.class, !IS_TRANSIENT,
-				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+		initEAttribute(getScenarioLock_Key(), ecorePackage.getEString(), "key", null, 1, 1, ScenarioLock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
-		initEAttribute(getScenarioLock_Key(), ecorePackage.getEString(), "key",
-				null, 1, 1, ScenarioLock.class, !IS_TRANSIENT, !IS_VOLATILE,
-				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
-				IS_ORDERED);
-		initEReference(getScenarioLock_Instance(), this.getScenarioInstance(),
-				this.getScenarioInstance_Locks(), "instance", null, 1, 1,
-				ScenarioLock.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
-				!IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
-				!IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioLock_Instance(), this.getScenarioInstance(), this.getScenarioInstance_Locks(), "instance", null, 1, 1, ScenarioLock.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(scenarioLockEClass, ecorePackage.getEBoolean(), "claim",
-				1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(scenarioLockEClass, ecorePackage.getEBoolean(), "claim", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(scenarioLockEClass, ecorePackage.getEBoolean(),
-				"awaitClaim", 1, 1, IS_UNIQUE, IS_ORDERED);
+		addEOperation(scenarioLockEClass, ecorePackage.getEBoolean(), "awaitClaim", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(scenarioLockEClass, null, "release", 1, 1, IS_UNIQUE,
-				IS_ORDERED);
+		addEOperation(scenarioLockEClass, null, "release", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		addEOperation(scenarioLockEClass, null, "init", 1, 1, IS_UNIQUE,
-				IS_ORDERED);
+		addEOperation(scenarioLockEClass, null, "init", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		// Initialize data types
-		initEDataType(classEDataType, Class.class, "Class", IS_SERIALIZABLE,
-				!IS_GENERATED_INSTANCE_CLASS);
-		initEDataType(iScenarioServiceEDataType, IScenarioService.class,
-				"IScenarioService", !IS_SERIALIZABLE,
-				!IS_GENERATED_INSTANCE_CLASS);
-		initEDataType(objectEDataType, Object.class, "Object", IS_SERIALIZABLE,
-				!IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(iScenarioServiceEDataType, IScenarioService.class, "IScenarioService", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -29,9 +29,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioServiceItemProvider extends ContainerItemProvider
-		implements IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ScenarioServiceItemProvider extends ContainerItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -66,17 +65,9 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider
 	 * @generated
 	 */
 	protected void addDescriptionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_ScenarioService_description_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_ScenarioService_description_feature",
-						"_UI_ScenarioService_type"),
-				ScenarioServicePackage.Literals.SCENARIO_SERVICE__DESCRIPTION,
-				true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_description_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_description_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.Literals.SCENARIO_SERVICE__DESCRIPTION, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -86,17 +77,9 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider
 	 * @generated
 	 */
 	protected void addServiceRefPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_ScenarioService_serviceRef_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_ScenarioService_serviceRef_feature",
-						"_UI_ScenarioService_type"),
-				ScenarioServicePackage.Literals.SCENARIO_SERVICE__SERVICE_REF,
-				true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioService_serviceRef_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioService_serviceRef_feature", "_UI_ScenarioService_type"),
+				ScenarioServicePackage.Literals.SCENARIO_SERVICE__SERVICE_REF, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -107,8 +90,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-				getResourceLocator().getImage("full/obj16/ScenarioService"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioService"));
 	}
 
 	/**
@@ -137,8 +119,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider
 		switch (notification.getFeatureID(ScenarioService.class)) {
 		case ScenarioServicePackage.SCENARIO_SERVICE__DESCRIPTION:
 		case ScenarioServicePackage.SCENARIO_SERVICE__SERVICE_REF:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), false, true));
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -152,8 +133,7 @@ public class ScenarioServiceItemProvider extends ContainerItemProvider
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
