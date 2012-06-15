@@ -158,11 +158,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		};
 
 		@Override
-		public void jobSelected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
-
-		}
-
-		@Override
 		public void jobRemoved(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
 			control.removeListener(jobControlListener);
 			tryRefresh();
@@ -175,11 +170,6 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
-
-		}
-
-		@Override
-		public void jobDeselected(final IEclipseJobManager eclipseJobManager, final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
 
 		}
 
