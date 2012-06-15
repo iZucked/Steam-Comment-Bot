@@ -37,26 +37,6 @@ public interface IEclipseJobManagerListener {
 	void jobRemoved(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl control, Object resource);
 
 	/**
-	 * Notify that a {@link IJobDescriptor} has been selected.
-	 * 
-	 * @param eclipseJobManager
-	 * @param job
-	 * @param control
-	 * @param resource
-	 */
-	void jobSelected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource);
-
-	/**
-	 * Notify that a {@link IJobDescriptor} has been deselected.
-	 * 
-	 * @param eclipseJobManager
-	 * @param job
-	 * @param jobControl
-	 * @param resource
-	 */
-	void jobDeselected(IEclipseJobManager eclipseJobManager, IJobDescriptor job, IJobControl jobControl, Object resource);
-
-	/**
 	 * Notify that a new {@link IJobManager} instance has been registered with the {@link IEclipseJobManager}
 	 * 
 	 * @param eclipseJobManager

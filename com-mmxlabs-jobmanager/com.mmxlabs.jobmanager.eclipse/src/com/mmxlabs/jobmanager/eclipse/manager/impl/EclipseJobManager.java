@@ -168,33 +168,6 @@ public final class EclipseJobManager implements IEclipseJobManager {
 		}
 	}
 
-	/**
-	 * @param job
-	 */
-	private void fireJobSelected(final IJobDescriptor job, final IJobControl control, final Object resource) {
-
-		// Take a copy of the set before iterating over it as it is possible
-		// that the listeners may be changed as a results of the event
-		final Set<IEclipseJobManagerListener> local_jobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
-
-		for (final IEclipseJobManagerListener l : local_jobManagerListeners) {
-			l.jobSelected(this, job, control, resource);
-		}
-	}
-
-	/**
-	 * @param job
-	 */
-	private void fireJobDeselected(final IJobDescriptor job, final IJobControl jobControl, final Object resource) {
-
-		// Take a copy of the set before iterating over it as it is possible
-		// that the listeners may be changed as a results of the event
-		final Set<IEclipseJobManagerListener> local_jobManagerListeners = new HashSet<IEclipseJobManagerListener>(jobManagerListeners);
-
-		for (final IEclipseJobManagerListener l : local_jobManagerListeners) {
-			l.jobDeselected(this, job, jobControl, resource);
-		}
-	}
 	@Override
 	public IJobDescriptor findJobForResource(final Object resource) {
 		for (final Map.Entry<IJobDescriptor, Object> entry : jobResourceMap.entrySet()) {

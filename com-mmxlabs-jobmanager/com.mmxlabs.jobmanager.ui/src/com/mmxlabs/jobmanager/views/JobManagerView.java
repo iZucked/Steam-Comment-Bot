@@ -107,18 +107,6 @@ public class JobManagerView extends ViewPart {
 		}
 
 		@Override
-		public void jobSelected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
-			JobManagerView.this.refresh();
-		}
-
-		@Override
-		public void jobDeselected(final IEclipseJobManager jobManager, final IJobDescriptor job, final IJobControl control, final Object resource) {
-
-			JobManagerView.this.refresh();
-		}
-
-		@Override
 		public void jobManagerAdded(final IEclipseJobManager eclipseJobManager, final IJobManager jobManager) {
 			JobManagerView.this.refresh();
 
