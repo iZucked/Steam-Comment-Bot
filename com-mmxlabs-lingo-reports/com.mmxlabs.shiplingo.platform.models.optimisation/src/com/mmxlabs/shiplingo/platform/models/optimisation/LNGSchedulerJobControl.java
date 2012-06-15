@@ -16,7 +16,6 @@ import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.progress.IProgressConstants;
-import org.eclipse.ui.progress.IProgressConstants2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -83,8 +82,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private static final ImageDescriptor imgEval = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
 	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
-		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(
-				IProgressConstants2.SHOW_IN_TASKBAR_ICON_PROPERTY, true, IProgressConstants.ICON_PROPERTY, (jobDescriptor.isOptimising() ? imgOpti : imgEval)));
+		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY,
+				(jobDescriptor.isOptimising() ? imgOpti : imgEval)));
 		this.jobDescriptor = jobDescriptor;
 		this.scenarioInstance = jobDescriptor.getJobContext();
 		this.scenario = (MMXRootObject) scenarioInstance.getInstance();
