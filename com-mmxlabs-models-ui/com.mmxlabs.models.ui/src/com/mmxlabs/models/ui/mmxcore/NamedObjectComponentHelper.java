@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.mmxcore;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -16,6 +17,7 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.impl.TextInlineEditor;
 
 public class NamedObjectComponentHelper extends BaseComponentHelper {
+	public static final String OTHER_NAMES_ANNOTATION = "http://www.mmxlabs.com/models/mmxcore/annotations/namedobject";
 	@Override
 	public void addEditorsToComposite(IInlineEditorContainer detailComposite) {
 		addEditorsToComposite(detailComposite, MMXCorePackage.eINSTANCE.getNamedObject());
@@ -24,42 +26,50 @@ public class NamedObjectComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(IInlineEditorContainer detailComposite,
 			EClass displayedClass) {
+		
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(displayedClass, MMXCorePackage.eINSTANCE.getNamedObject_Name()));
-		detailComposite.addInlineEditor(new TextInlineEditor(MMXCorePackage.eINSTANCE.getNamedObject_OtherNames()) {
-			@Override
-			protected synchronized void doSetValue(Object value,
-					boolean forceCommandExecution) {
-				if (value == null) return;
-				final String valueString = "" + value;
-				final String[] values = valueString.split(",");
-				final List<String> valueList = new ArrayList<String>(values.length);
-				for (final String s : values) {
-					final String s2 = s.trim();
-					if (s2.isEmpty()) continue;
-					valueList.add(s2);
-				}
-				super.doSetValue(valueList, forceCommandExecution);
-			}
-
-			@Override
-			protected void updateValueDisplay(Object value) {
-				final StringBuilder sb = new StringBuilder();
-				
-				if (value instanceof List) {
-					boolean c = false;
-					for (final Object o : (List) value) {
-						if (c) {
-							sb.append(", ");
-						} else {
-							c = true;
+		
+		final EAnnotation annotation = displayedClass.getEAnnotation(OTHER_NAMES_ANNOTATION);
+		if (annotation != null) {
+			final String value = annotation.getDetails().get("showOtherNames");
+			if (value != null && Boolean.valueOf(value)) {
+				detailComposite.addInlineEditor(new TextInlineEditor(MMXCorePackage.eINSTANCE.getNamedObject_OtherNames()) {
+					@Override
+					protected synchronized void doSetValue(Object value,
+							boolean forceCommandExecution) {
+						if (value == null) return;
+						final String valueString = "" + value;
+						final String[] values = valueString.split(",");
+						final List<String> valueList = new ArrayList<String>(values.length);
+						for (final String s : values) {
+							final String s2 = s.trim();
+							if (s2.isEmpty()) continue;
+							valueList.add(s2);
 						}
-						sb.append(o);
+						super.doSetValue(valueList, forceCommandExecution);
 					}
-					super.updateValueDisplay(sb.toString());
-				} else {
-					super.updateValueDisplay(value);
-				}
+					
+					@Override
+					protected void updateValueDisplay(Object value) {
+						final StringBuilder sb = new StringBuilder();
+						
+						if (value instanceof List) {
+							boolean c = false;
+							for (final Object o : (List) value) {
+								if (c) {
+									sb.append(", ");
+								} else {
+									c = true;
+								}
+								sb.append(o);
+							}
+							super.updateValueDisplay(sb.toString());
+						} else {
+							super.updateValueDisplay(value);
+						}
+					}
+				});
 			}
-		});
+		}
 	}
 }
