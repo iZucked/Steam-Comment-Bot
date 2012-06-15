@@ -14,7 +14,7 @@ import com.mmxlabs.jobmanager.manager.IJobManager;
 public interface IEclipseJobManager {
 
 	/**
-	 * Returns the list of {@link IManagedJob} added to the {@link IEclipseJobManager} instance. Will return an ermpty {@link List} if there are no {@link IManagedJob}s.
+	 * Returns the list of {@link IManagedJob} added to the {@link IEclipseJobManager} instance. Will return an empty {@link List} if there are no {@link IManagedJob}s.
 	 * 
 	 * @return
 	 */
