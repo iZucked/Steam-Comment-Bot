@@ -325,6 +325,8 @@ public class FileScenarioService extends AbstractScenarioService {
 		// now look for all instances in the spare dir which don't have UUIDs
 		final File f = new File(resolveURI("instances/").toFileString());
 		if (f.exists() && f.isDirectory()) {
+			final HashMap<String, ScenarioInstance> recoveredInstances = new HashMap<String, ScenarioInstance>();
+			final HashSet<String> recoveredSubInstances = new HashSet<String>();
 			for (final File instanceFile : f.listFiles()) {
 				if (instanceFile.getName().endsWith(".xmi")) {
 					final String instanceUUID = instanceFile.getName().substring(0, instanceFile.getName().length() - 4);
@@ -336,7 +338,22 @@ public class FileScenarioService extends AbstractScenarioService {
 							resource.load(null);
 							final EObject o = resource.getContents().get(0);
 							if (o instanceof ScenarioInstance) {
-								lostAndFound.getElements().add((Container) o);
+								final ScenarioInstance theInstance = (ScenarioInstance) o;
+								final TreeIterator<EObject> contentIterator = o.eAllContents();
+								while (contentIterator.hasNext()) {
+									final EObject sub = contentIterator.next();
+									if (sub instanceof ScenarioInstance) {
+										final ScenarioInstance subInstance = (ScenarioInstance) sub;
+										if (recoveredInstances.containsKey(subInstance.getUuid())) {
+											recoveredInstances.remove(subInstance.getUuid());
+										}
+										recoveredSubInstances.add(subInstance.getUuid());
+									}
+								}
+								if (!recoveredSubInstances.contains(theInstance.getUuid())) {
+									recoveredInstances.put(theInstance.getUuid(), theInstance);
+								}
+								
 							}
 							resourceSet.getResources().remove(resource);
 						} catch (final Throwable th) {
@@ -345,6 +362,7 @@ public class FileScenarioService extends AbstractScenarioService {
 					}
 				}
 			}
+			lostAndFound.getElements().addAll(recoveredInstances.values());
 		}
 		if (lostAndFound.getElements().size() > 0) {
 			result.getElements().add(lostAndFound);
