@@ -264,4 +264,17 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 	 * This method will be called if the job gets killed; clean up any resources.
 	 */
 	protected abstract void kill();
+
+	public void setJobProperty(final QualifiedName name, final Object value) {
+		if (this.runner != null) {
+			runner.setProperty(name, value);
+		}
+	}
+
+	public Object getJobProperty(final QualifiedName name) {
+		if (this.runner != null) {
+			return runner.getProperty(name);
+		}
+		return null;
+	}
 }
