@@ -35,7 +35,16 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 
 	@Override
 	public CellEditor createCellEditor(final Composite c, final Object object) {
-		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c);
+		final FormattedTextCellEditor editor = new FormattedTextCellEditor(c) {
+			@Override
+			protected Object doGetValue() {
+				final Object superValue = super.doGetValue();
+				if (superValue == null) {
+					return new Date();
+				}
+				return superValue;
+			}
+		};
 		final DateFormatter formatter = new DateFormatter();
 		formatter.setTimeZone(LocalDateUtil.getTimeZone(object, (EAttribute) field));
 		editor.setFormatter(formatter);
@@ -80,5 +89,4 @@ public class DateAttributeManipulator extends BasicAttributeManipulator {
 	public void setShowTimezone(final boolean showTimezone) {
 		this.showTimezone = showTimezone;
 	}
-
 }
