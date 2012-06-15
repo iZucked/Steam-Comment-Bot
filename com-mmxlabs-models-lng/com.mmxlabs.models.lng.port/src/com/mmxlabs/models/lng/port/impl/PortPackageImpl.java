@@ -519,6 +519,26 @@ public class PortPackageImpl extends EPackageImpl implements PortPackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/models/mmxcore/annotations/namedobject
+		createNamedobjectAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/mmxcore/annotations/namedobject</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNamedobjectAnnotations() {
+		String source = "http://www.mmxlabs.com/models/mmxcore/annotations/namedobject";		
+		addAnnotation
+		  (portEClass, 
+		   source, 
+		   new String[] {
+			 "showOtherNames", "true"
+		   });	
 	}
 
 } //PortPackageImpl

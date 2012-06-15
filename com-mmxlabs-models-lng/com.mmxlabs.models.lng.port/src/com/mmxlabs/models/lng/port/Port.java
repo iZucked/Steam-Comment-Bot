@@ -29,7 +29,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  *
  * @see com.mmxlabs.models.lng.port.PortPackage#getPort()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject showOtherNames='true'"
  * @generated
  */
 public interface Port extends APort {
