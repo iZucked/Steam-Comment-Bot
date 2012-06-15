@@ -2,7 +2,7 @@ package com.mmxlabs.models.ui.validation.gui;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -26,19 +26,23 @@ public class ValidationStatusDialog extends Dialog {
 
 	private final IStatus status;
 
+	private final boolean showCancelButton;
+
 	public IStatus getStatus() {
 		return status;
 	}
 
-	public ValidationStatusDialog(final IShellProvider parentShell, final IStatus status) {
+	public ValidationStatusDialog(final IShellProvider parentShell, final IStatus status, final boolean showCancelButton) {
 		super(parentShell);
 		this.status = status;
+		this.showCancelButton = showCancelButton;
 		setShellStyle(SWT.SHELL_TRIM);
 	}
 
-	public ValidationStatusDialog(final Shell parentShell, final IStatus status) {
+	public ValidationStatusDialog(final Shell parentShell, final IStatus status, final boolean showCancelButton) {
 		super(parentShell);
 		this.status = status;
+		this.showCancelButton = showCancelButton;
 		setShellStyle(SWT.SHELL_TRIM);
 	}
 
@@ -89,4 +93,11 @@ public class ValidationStatusDialog extends Dialog {
 		return composite;
 	}
 
+	protected void createButtonsForButtonBar(Composite parent) {
+		// create OK and Cancel buttons by default
+		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true);
+		if (showCancelButton) {
+			createButton(parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false);
+		}
+	}
 }
