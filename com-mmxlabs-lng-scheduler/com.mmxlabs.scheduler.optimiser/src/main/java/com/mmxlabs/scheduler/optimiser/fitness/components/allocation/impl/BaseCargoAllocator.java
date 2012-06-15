@@ -226,7 +226,11 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		// compute purchase price from contract
 		// this is not ideal.
 		final int dischargeCVPrice = dischargeSlot.getDischargePriceCalculator().calculateUnitPrice(dischargeSlot, dischargeTime);
-		final long maximumDischargeVolume = Math.min(vesselCapacity - requiredLoadVolume, loadSlot.getMaxLoadVolume() - requiredLoadVolume);
+		long maxLoadVolume = loadSlot.getMaxLoadVolume();
+		if (maxLoadVolume == 0) {
+			maxLoadVolume = vesselCapacity;
+		}
+		final long maximumDischargeVolume = Math.min(vesselCapacity - requiredLoadVolume, maxLoadVolume - requiredLoadVolume);
 
 		// TODO this value is incorrect for netback and profit sharing cases
 		// the load CV price is the notional maximum price
