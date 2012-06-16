@@ -232,7 +232,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 			// See if this command was executed in the UI thread - if so fire up the dialog box.
 			if (Display.getCurrent() != null) {
 
-				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status);
+				final ValidationStatusDialog dialog = new ValidationStatusDialog(Display.getCurrent().getActiveShell(), status, status.getSeverity() != IStatus.ERROR);
 
 				// Wait for use to press a button before continuing.
 				dialog.setBlockOnOpen(true);
