@@ -36,21 +36,65 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * <p>
  * The following features are implemented:
  * <ul>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowSize <em>Window Size</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
 public abstract class SlotImpl extends ASlotImpl implements Slot {
+	/**
+	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected Contract contract;
+
+	/**
+	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getFixedPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double FIXED_PRICE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getFixedPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double fixedPrice = FIXED_PRICE_EDEFAULT;
+
+	/**
+	 * This is true if the Fixed Price attribute has been set.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean fixedPriceESet;
+
+	/**
+	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @see #getPort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port port;
+
 	/**
 	 * The default value of the '{@link #getWindowStart() <em>Window Start</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -120,24 +164,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean windowSizeESet;
-
-	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected Contract contract;
-
-	/**
-	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port port;
 
 	/**
 	 * The default value of the '{@link #getDuration() <em>Duration</em>}' attribute.
@@ -216,32 +242,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean maxQuantityESet;
-
-	/**
-	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getFixedPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double FIXED_PRICE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getFixedPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected double fixedPrice = FIXED_PRICE_EDEFAULT;
-
-	/**
-	 * This is true if the Fixed Price attribute has been set.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean fixedPriceESet;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -679,26 +679,26 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case CargoPackage.SLOT__CONTRACT:
+				if (resolve) return getContract();
+				return basicGetContract();
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return getFixedPrice();
+			case CargoPackage.SLOT__PORT:
+				if (resolve) return getPort();
+				return basicGetPort();
 			case CargoPackage.SLOT__WINDOW_START:
 				return getWindowStart();
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 				return getWindowStartTime();
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				return getWindowSize();
-			case CargoPackage.SLOT__CONTRACT:
-				if (resolve) return getContract();
-				return basicGetContract();
-			case CargoPackage.SLOT__PORT:
-				if (resolve) return getPort();
-				return basicGetPort();
 			case CargoPackage.SLOT__DURATION:
 				return getDuration();
 			case CargoPackage.SLOT__MIN_QUANTITY:
 				return getMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				return getMaxQuantity();
-			case CargoPackage.SLOT__FIXED_PRICE:
-				return getFixedPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -710,6 +710,15 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)newValue);
+				return;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				setFixedPrice((Double)newValue);
+				return;
+			case CargoPackage.SLOT__PORT:
+				setPort((Port)newValue);
+				return;
 			case CargoPackage.SLOT__WINDOW_START:
 				setWindowStart((Date)newValue);
 				return;
@@ -719,12 +728,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				setWindowSize((Integer)newValue);
 				return;
-			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)newValue);
-				return;
-			case CargoPackage.SLOT__PORT:
-				setPort((Port)newValue);
-				return;
 			case CargoPackage.SLOT__DURATION:
 				setDuration((Integer)newValue);
 				return;
@@ -733,9 +736,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
-				return;
-			case CargoPackage.SLOT__FIXED_PRICE:
-				setFixedPrice((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -748,6 +748,15 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case CargoPackage.SLOT__CONTRACT:
+				setContract((Contract)null);
+				return;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				unsetFixedPrice();
+				return;
+			case CargoPackage.SLOT__PORT:
+				setPort((Port)null);
+				return;
 			case CargoPackage.SLOT__WINDOW_START:
 				setWindowStart(WINDOW_START_EDEFAULT);
 				return;
@@ -757,12 +766,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				unsetWindowSize();
 				return;
-			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)null);
-				return;
-			case CargoPackage.SLOT__PORT:
-				setPort((Port)null);
-				return;
 			case CargoPackage.SLOT__DURATION:
 				unsetDuration();
 				return;
@@ -771,9 +774,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				unsetMaxQuantity();
-				return;
-			case CargoPackage.SLOT__FIXED_PRICE:
-				unsetFixedPrice();
 				return;
 		}
 		super.eUnset(featureID);
@@ -786,24 +786,24 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case CargoPackage.SLOT__CONTRACT:
+				return contract != null;
+			case CargoPackage.SLOT__FIXED_PRICE:
+				return isSetFixedPrice();
+			case CargoPackage.SLOT__PORT:
+				return port != null;
 			case CargoPackage.SLOT__WINDOW_START:
 				return WINDOW_START_EDEFAULT == null ? windowStart != null : !WINDOW_START_EDEFAULT.equals(windowStart);
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 				return isSetWindowStartTime();
 			case CargoPackage.SLOT__WINDOW_SIZE:
 				return isSetWindowSize();
-			case CargoPackage.SLOT__CONTRACT:
-				return contract != null;
-			case CargoPackage.SLOT__PORT:
-				return port != null;
 			case CargoPackage.SLOT__DURATION:
 				return isSetDuration();
 			case CargoPackage.SLOT__MIN_QUANTITY:
 				return isSetMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				return isSetMaxQuantity();
-			case CargoPackage.SLOT__FIXED_PRICE:
-				return isSetFixedPrice();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -859,7 +859,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (windowStart: ");
+		result.append(" (fixedPrice: ");
+		if (fixedPriceESet) result.append(fixedPrice); else result.append("<unset>");
+		result.append(", windowStart: ");
 		result.append(windowStart);
 		result.append(", windowStartTime: ");
 		if (windowStartTimeESet) result.append(windowStartTime); else result.append("<unset>");
@@ -871,8 +873,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		if (minQuantityESet) result.append(minQuantity); else result.append("<unset>");
 		result.append(", maxQuantity: ");
 		if (maxQuantityESet) result.append(maxQuantity); else result.append("<unset>");
-		result.append(", fixedPrice: ");
-		if (fixedPriceESet) result.append(fixedPrice); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}

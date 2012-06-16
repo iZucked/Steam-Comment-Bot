@@ -40,8 +40,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getInaccessiblePorts <em>Inaccessible Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getAvailability <em>Availability</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getStartHeel <em>Start Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.impl.VesselImpl#getTimeCharterRate <em>Time Charter Rate</em>}</li>
  * </ul>
  * </p>
@@ -70,16 +70,6 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	protected EList<APortSet> inaccessiblePorts;
 
 	/**
-	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getStartHeel()
-	 * @generated
-	 * @ordered
-	 */
-	protected HeelOptions startHeel;
-
-	/**
 	 * The cached value of the '{@link #getAvailability() <em>Availability</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -88,6 +78,16 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	 * @ordered
 	 */
 	protected VesselAvailability availability;
+
+	/**
+	 * The cached value of the '{@link #getStartHeel() <em>Start Heel</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getStartHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected HeelOptions startHeel;
 
 	/**
 	 * The default value of the '{@link #getTimeCharterRate() <em>Time Charter Rate</em>}' attribute.
@@ -340,10 +340,10 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case FleetPackage.VESSEL__START_HEEL:
-				return basicSetStartHeel(null, msgs);
 			case FleetPackage.VESSEL__AVAILABILITY:
 				return basicSetAvailability(null, msgs);
+			case FleetPackage.VESSEL__START_HEEL:
+				return basicSetStartHeel(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -361,10 +361,10 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return basicGetVesselClass();
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return getInaccessiblePorts();
-			case FleetPackage.VESSEL__START_HEEL:
-				return getStartHeel();
 			case FleetPackage.VESSEL__AVAILABILITY:
 				return getAvailability();
+			case FleetPackage.VESSEL__START_HEEL:
+				return getStartHeel();
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				return getTimeCharterRate();
 		}
@@ -387,11 +387,11 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				getInaccessiblePorts().clear();
 				getInaccessiblePorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
-			case FleetPackage.VESSEL__START_HEEL:
-				setStartHeel((HeelOptions)newValue);
-				return;
 			case FleetPackage.VESSEL__AVAILABILITY:
 				setAvailability((VesselAvailability)newValue);
+				return;
+			case FleetPackage.VESSEL__START_HEEL:
+				setStartHeel((HeelOptions)newValue);
 				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				setTimeCharterRate((Integer)newValue);
@@ -414,11 +414,11 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				getInaccessiblePorts().clear();
 				return;
-			case FleetPackage.VESSEL__START_HEEL:
-				setStartHeel((HeelOptions)null);
-				return;
 			case FleetPackage.VESSEL__AVAILABILITY:
 				setAvailability((VesselAvailability)null);
+				return;
+			case FleetPackage.VESSEL__START_HEEL:
+				setStartHeel((HeelOptions)null);
 				return;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				unsetTimeCharterRate();
@@ -439,10 +439,10 @@ public class VesselImpl extends AVesselImpl implements Vessel {
 				return vesselClass != null;
 			case FleetPackage.VESSEL__INACCESSIBLE_PORTS:
 				return inaccessiblePorts != null && !inaccessiblePorts.isEmpty();
-			case FleetPackage.VESSEL__START_HEEL:
-				return startHeel != null;
 			case FleetPackage.VESSEL__AVAILABILITY:
 				return availability != null;
+			case FleetPackage.VESSEL__START_HEEL:
+				return startHeel != null;
 			case FleetPackage.VESSEL__TIME_CHARTER_RATE:
 				return isSetTimeCharterRate();
 		}

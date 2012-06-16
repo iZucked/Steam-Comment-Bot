@@ -63,15 +63,15 @@ public class SlotItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addContractPropertyDescriptor(object);
+			addFixedPricePropertyDescriptor(object);
+			addPortPropertyDescriptor(object);
 			addWindowStartPropertyDescriptor(object);
 			addWindowStartTimePropertyDescriptor(object);
 			addWindowSizePropertyDescriptor(object);
-			addContractPropertyDescriptor(object);
-			addPortPropertyDescriptor(object);
 			addDurationPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
-			addFixedPricePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -311,13 +311,13 @@ public class SlotItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Slot.class)) {
+			case CargoPackage.SLOT__FIXED_PRICE:
 			case CargoPackage.SLOT__WINDOW_START:
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 			case CargoPackage.SLOT__WINDOW_SIZE:
 			case CargoPackage.SLOT__DURATION:
 			case CargoPackage.SLOT__MIN_QUANTITY:
 			case CargoPackage.SLOT__MAX_QUANTITY:
-			case CargoPackage.SLOT__FIXED_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

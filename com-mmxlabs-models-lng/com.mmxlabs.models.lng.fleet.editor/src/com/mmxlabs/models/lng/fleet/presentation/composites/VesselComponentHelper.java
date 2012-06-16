@@ -66,8 +66,8 @@ public class VesselComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
 		add_inaccessiblePortsEditor(detailComposite, topClass);
-		add_startHeelEditor(detailComposite, topClass);
 		add_availabilityEditor(detailComposite, topClass);
+		add_startHeelEditor(detailComposite, topClass);
 		add_timeCharterRateEditor(detailComposite, topClass);
 	}
 	/**
