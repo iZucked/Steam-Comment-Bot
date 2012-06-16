@@ -4,6 +4,9 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="port"
     nsURI="http://www.mmxlabs.com/models/lng/port/1/" nsPrefix="lng.port">
   <eClassifiers xsi:type="ecore:EClass" name="Port" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort">
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/annotations/namedobject">
+      <details key="showOtherNames" value="true"/>
+    </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="capabilities" upperBound="-1"
         eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//PortCapability"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="timeZone" lowerBound="1"
