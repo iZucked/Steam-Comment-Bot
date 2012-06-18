@@ -10,6 +10,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -49,7 +50,10 @@ public class TimeSortingCommandProvider implements IModelCommandProvider {
 					return fixTask(c, editingDomain, rootObject, overrides);
 				} else if (o instanceof DischargeSlot) {
 					final Cargo c = ((DischargeSlot) o).getCargo();
-					return fixTask(c, editingDomain, rootObject, overrides);
+					
+					if (c.getCargoType() == CargoType.FLEET) {
+						return fixTask(c, editingDomain, rootObject, overrides);
+					}
 				}
 			} else if (parameter.getEAttribute() == FleetPackage.eINSTANCE.getVesselEvent_StartAfter() || parameter.getEAttribute() == FleetPackage.eINSTANCE.getVesselEvent_StartBy()
 					|| parameter.getEAttribute() == FleetPackage.eINSTANCE.getVesselEvent_DurationInDays()) {
@@ -65,11 +69,27 @@ public class TimeSortingCommandProvider implements IModelCommandProvider {
 	private Command fixTask(final UUIDObject o, final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides) {
 		InputModel input = rootObject.getSubModel(InputModel.class);
 		if (input != null) {
-			if (overrides.containsKey(input))
+			if (overrides.containsKey(input)) {
 				input = (InputModel) overrides.get(input);
+			}
 			final Assignment a = AssignmentEditorHelper.getAssignmentForTask(input, o);
-			if (a != null)
+			if (a != null) {
 				return AssignmentEditorHelper.taskReassigned(editingDomain, input, o, null, null, null, a);
+			}
+		}
+		return null;
+	}
+	
+	private Command unassignTask(final UUIDObject o, final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides) {
+		InputModel input = rootObject.getSubModel(InputModel.class);
+		if (input != null) {
+			if (overrides.containsKey(input)) {
+				input = (InputModel) overrides.get(input);
+			}
+			final Assignment a = AssignmentEditorHelper.getAssignmentForTask(input, o);
+			if (a != null) {
+				return AssignmentEditorHelper.taskReassigned(editingDomain, input, o, null, null, null, a);
+			}
 		}
 		return null;
 	}
