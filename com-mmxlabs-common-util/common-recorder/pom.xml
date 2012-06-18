@@ -9,6 +9,7 @@
 	</parent>
 	<artifactId>common-recorder</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
+	<packaging>bundle</packaging>
 
 	<build>
 		<plugins>
