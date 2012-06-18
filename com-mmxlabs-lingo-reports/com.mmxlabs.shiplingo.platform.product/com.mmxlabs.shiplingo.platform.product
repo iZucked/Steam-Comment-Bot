@@ -48,12 +48,14 @@
       <feature id="com.mmxlabs.models.lng.ui.runtime.feature"/>
       <feature id="com.mmxlabs.rcp.common.feature"/>
       <feature id="com.mmxlabs.scenario.service.feature"/>
+      <feature id="com.mmxlabs.trading.optimiser.feature"/>
    </features>
 
    <configurations>
       <plugin id="com.mmxlabs.optimiser.optimiser-common" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-core" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.trading.integration" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
