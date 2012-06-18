@@ -291,76 +291,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NAME = TypesPackage.ASLOT__NAME;
 
 	/**
-	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__WINDOW_START = TypesPackage.ASLOT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Window Start Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__WINDOW_START_TIME = TypesPackage.ASLOT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__WINDOW_SIZE = TypesPackage.ASLOT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__CONTRACT = TypesPackage.ASLOT_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__PORT = TypesPackage.ASLOT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Duration</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__DURATION = TypesPackage.ASLOT_FEATURE_COUNT + 5;
-
-	/**
-	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__MIN_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 6;
-
-	/**
-	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__MAX_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 7;
+	int SLOT__CONTRACT = TypesPackage.ASLOT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
@@ -369,7 +306,70 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__FIXED_PRICE = TypesPackage.ASLOT_FEATURE_COUNT + 8;
+	int SLOT__FIXED_PRICE = TypesPackage.ASLOT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__PORT = TypesPackage.ASLOT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__WINDOW_START = TypesPackage.ASLOT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Window Start Time</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__WINDOW_START_TIME = TypesPackage.ASLOT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__WINDOW_SIZE = TypesPackage.ASLOT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__DURATION = TypesPackage.ASLOT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__MIN_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__MAX_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 8;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -571,6 +571,33 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__NAME = SLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__CONTRACT = SLOT__CONTRACT;
+
+	/**
+	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__FIXED_PRICE = SLOT__FIXED_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__PORT = SLOT__PORT;
+
+	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -598,24 +625,6 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__WINDOW_SIZE = SLOT__WINDOW_SIZE;
 
 	/**
-	 * The feature id for the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__CONTRACT = SLOT__CONTRACT;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__PORT = SLOT__PORT;
-
-	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -641,15 +650,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__MAX_QUANTITY = SLOT__MAX_QUANTITY;
-
-	/**
-	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__FIXED_PRICE = SLOT__FIXED_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -896,6 +896,33 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__NAME = SLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__CONTRACT = SLOT__CONTRACT;
+
+	/**
+	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__FIXED_PRICE = SLOT__FIXED_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__PORT = SLOT__PORT;
+
+	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -923,24 +950,6 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__WINDOW_SIZE = SLOT__WINDOW_SIZE;
 
 	/**
-	 * The feature id for the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__CONTRACT = SLOT__CONTRACT;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__PORT = SLOT__PORT;
-
-	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -966,15 +975,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__MAX_QUANTITY = SLOT__MAX_QUANTITY;
-
-	/**
-	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__FIXED_PRICE = SLOT__FIXED_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -1484,6 +1484,33 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__NAME = LOAD_SLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__CONTRACT = LOAD_SLOT__CONTRACT;
+
+	/**
+	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__FIXED_PRICE = LOAD_SLOT__FIXED_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__PORT = LOAD_SLOT__PORT;
+
+	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1511,24 +1538,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__WINDOW_SIZE = LOAD_SLOT__WINDOW_SIZE;
 
 	/**
-	 * The feature id for the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__CONTRACT = LOAD_SLOT__CONTRACT;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__PORT = LOAD_SLOT__PORT;
-
-	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1554,15 +1563,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__MAX_QUANTITY = LOAD_SLOT__MAX_QUANTITY;
-
-	/**
-	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__FIXED_PRICE = LOAD_SLOT__FIXED_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -1818,6 +1818,33 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__NAME = DISCHARGE_SLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__CONTRACT = DISCHARGE_SLOT__CONTRACT;
+
+	/**
+	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__FIXED_PRICE = DISCHARGE_SLOT__FIXED_PRICE;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__PORT = DISCHARGE_SLOT__PORT;
+
+	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1845,24 +1872,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__WINDOW_SIZE = DISCHARGE_SLOT__WINDOW_SIZE;
 
 	/**
-	 * The feature id for the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__CONTRACT = DISCHARGE_SLOT__CONTRACT;
-
-	/**
-	 * The feature id for the '<em><b>Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__PORT = DISCHARGE_SLOT__PORT;
-
-	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1888,15 +1897,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__MAX_QUANTITY = DISCHARGE_SLOT__MAX_QUANTITY;
-
-	/**
-	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__FIXED_PRICE = DISCHARGE_SLOT__FIXED_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.

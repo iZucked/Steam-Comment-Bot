@@ -13,12 +13,14 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
@@ -90,7 +92,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);	
 	}
 
 	/**
@@ -101,15 +103,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_contractEditor(detailComposite, topClass);
+		add_fixedPriceEditor(detailComposite, topClass);
+		add_portEditor(detailComposite, topClass);
 		add_windowStartEditor(detailComposite, topClass);
 		add_windowStartTimeEditor(detailComposite, topClass);
 		add_windowSizeEditor(detailComposite, topClass);
-		add_contractEditor(detailComposite, topClass);
-		add_portEditor(detailComposite, topClass);
 		add_durationEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
-		add_fixedPriceEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -118,7 +120,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_windowStartEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START)));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START));
 	}
 
 	/**
@@ -127,7 +129,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_windowStartTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START_TIME)));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START_TIME));
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE)));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE));
 	}
 
 	/**
@@ -145,7 +147,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT)));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT));
 	}
 
 	/**

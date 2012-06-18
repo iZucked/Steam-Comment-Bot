@@ -235,7 +235,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVessel_StartHeel() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(2);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 	 * @generated
 	 */
 	public EReference getVessel_Availability() {
-		return (EReference)vesselEClass.getEStructuralFeatures().get(3);
+		return (EReference)vesselEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -872,8 +872,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		vesselEClass = createEClass(VESSEL);
 		createEReference(vesselEClass, VESSEL__VESSEL_CLASS);
 		createEReference(vesselEClass, VESSEL__INACCESSIBLE_PORTS);
-		createEReference(vesselEClass, VESSEL__START_HEEL);
 		createEReference(vesselEClass, VESSEL__AVAILABILITY);
+		createEReference(vesselEClass, VESSEL__START_HEEL);
 		createEAttribute(vesselEClass, VESSEL__TIME_CHARTER_RATE);
 
 		vesselClassEClass = createEClass(VESSEL_CLASS);
@@ -1006,8 +1006,8 @@ public class FleetPackageImpl extends EPackageImpl implements FleetPackage {
 		initEClass(vesselEClass, Vessel.class, "Vessel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getVessel_VesselClass(), this.getVesselClass(), null, "vesselClass", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_InaccessiblePorts(), theTypesPackage.getAPortSet(), null, "inaccessiblePorts", null, 0, -1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getVessel_StartHeel(), this.getHeelOptions(), null, "startHeel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getVessel_Availability(), this.getVesselAvailability(), null, "availability", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getVessel_StartHeel(), this.getHeelOptions(), null, "startHeel", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getVessel_TimeCharterRate(), ecorePackage.getEInt(), "timeCharterRate", null, 1, 1, Vessel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		EOperation op = addEOperation(vesselEClass, theTypesPackage.getAVessel(), "collect", 0, -1, IS_UNIQUE, IS_ORDERED);

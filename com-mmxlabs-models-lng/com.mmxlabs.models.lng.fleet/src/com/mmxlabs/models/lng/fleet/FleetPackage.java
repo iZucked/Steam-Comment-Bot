@@ -126,22 +126,22 @@ public interface FleetPackage extends EPackage {
 	int VESSEL__INACCESSIBLE_PORTS = TypesPackage.AVESSEL_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VESSEL__START_HEEL = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VESSEL__AVAILABILITY = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
+	int VESSEL__AVAILABILITY = TypesPackage.AVESSEL_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Start Heel</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__START_HEEL = TypesPackage.AVESSEL_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Time Charter Rate</b></em>' attribute.
