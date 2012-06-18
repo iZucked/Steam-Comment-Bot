@@ -28,7 +28,7 @@
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.common.recorder.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
+						<Export-Package>com.mmxlabs.common.recorder.*;version="$_{Bundle-UnqualifiedVersion}"</Export-Package>
 					</instructions>
 				</configuration>
 

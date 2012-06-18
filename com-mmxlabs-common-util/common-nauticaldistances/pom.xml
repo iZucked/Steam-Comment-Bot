@@ -28,7 +28,7 @@
 					<instructions>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.common.nautilcaldistances.*;version="${Bundle-UnqualifiedVersion}"</Export-Package>
+						<Export-Package>com.mmxlabs.common.nauticaldistances.*;version="${_Bundle-UnqualifiedVersion}"</Export-Package>
 					</instructions>
 				</configuration>
 
