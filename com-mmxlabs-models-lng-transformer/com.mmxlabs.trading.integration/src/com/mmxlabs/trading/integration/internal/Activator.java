@@ -1,4 +1,4 @@
-package com.mmxlabs.trading.integration;
+package com.mmxlabs.trading.integration.internal;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
