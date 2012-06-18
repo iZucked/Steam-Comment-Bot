@@ -138,6 +138,17 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 			updateDisplay(object);
 
 			combo.addDisposeListener(disposeListener);
+
+			if (object instanceof Cargo) {
+
+				final Cargo cargo = (Cargo) object;
+				if (cargo.getLoadSlot() != null && cargo.getLoadSlot().isDESPurchase()) {
+					setEnabled(false);
+				}
+				if (cargo.getDischargeSlot() != null && cargo.getDischargeSlot().isFOBSale()) {
+					setEnabled(false);
+				}
+			}
 		}
 
 		public void updateDisplay(final EObject object) {
@@ -291,24 +302,27 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
-			Object input = notification.getNotifier();
+			final Object input = notification.getNotifier();
 			boolean enabled = true;
-			if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
 
-				if (input instanceof LoadSlot) {
-					if (((LoadSlot) input).isDESPurchase()) {
-						enabled = false;
-					}
-				}
+			Cargo cargo = null;
+			if (input instanceof LoadSlot) {
+				cargo = ((LoadSlot) input).getCargo();
+			}
+			else if (input instanceof DischargeSlot) {
+				cargo = ((DischargeSlot) input).getCargo();
+			}
 
-			}
-			if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
-				if (input instanceof DischargeSlot) {
-					if (((DischargeSlot) input).isFOBSale()) {
-						enabled = false;
-					}
+			if (cargo != null) {
+
+				if (cargo.getLoadSlot() != null && cargo.getLoadSlot().isDESPurchase()) {
+					enabled = false;
+				}
+				if (cargo.getDischargeSlot() != null && cargo.getDischargeSlot().isFOBSale()) {
+					enabled = false;
 				}
 			}
+
 			setEnabled(enabled);
 
 			if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
