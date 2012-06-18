@@ -26,8 +26,8 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
  * @author hinton
  * 
  */
-public class CharterPricingPane extends ScenarioTableViewerPane {
-	public CharterPricingPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+public class CharterMarketPane extends ScenarioTableViewerPane {
+	public CharterMarketPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
 
@@ -44,6 +44,6 @@ public class CharterPricingPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Lending Index", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getCharterCostModel_CharterOutPrice(), getReferenceValueProviderCache(), getEditingDomain()));
 
-		defaultSetTitle("Charter Pricing");
+		defaultSetTitle("Charter Market");
 	}
 }

@@ -32,10 +32,10 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.util.importer.IClassImporter;
 
-public class IndexEditorPane extends ScenarioTableViewerPane {
+public class IndexPane extends ScenarioTableViewerPane {
 	private boolean useIntegers;
 
-	public IndexEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+	public IndexPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
 

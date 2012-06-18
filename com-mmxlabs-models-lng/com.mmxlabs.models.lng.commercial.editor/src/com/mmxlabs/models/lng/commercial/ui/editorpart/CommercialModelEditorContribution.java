@@ -29,16 +29,16 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		salesContractEditorPane = new ContractEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 
 		entityEditorPane.createControl(sash);
-		salesContractEditorPane.createControl(sash);
 		purchaseContractEditorPane.createControl(sash);
+		salesContractEditorPane.createControl(sash);
 		
 		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory());
-		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory());
 		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory());
+		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory());
 		
 		entityEditorPane.getViewer().setInput(modelObject);
-		salesContractEditorPane.getViewer().setInput(modelObject);
 		purchaseContractEditorPane.getViewer().setInput(modelObject);
+		salesContractEditorPane.getViewer().setInput(modelObject);
 		
 		purchaseContractEditorPane.defaultSetTitle("Purchase Contracts");
 		salesContractEditorPane.defaultSetTitle("Sales Contracts");

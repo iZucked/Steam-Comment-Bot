@@ -23,12 +23,12 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
  * @author hinton
  *
  */
-public class CooldownPricingEditorPane extends ScenarioTableViewerPane {
+public class CooldownCostsPane extends ScenarioTableViewerPane {
 	/**
 	 * @param page
 	 * @param part
 	 */
-	public CooldownPricingEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+	public CooldownCostsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
 
@@ -40,6 +40,6 @@ public class CooldownPricingEditorPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory);
 		addTypicalColumn("Ports", new MultipleReferenceManipulator(PricingPackage.eINSTANCE.getCooldownPrice_Ports(), getReferenceValueProviderCache(), getEditingDomain(), MMXCorePackage.eINSTANCE.getNamedObject_Name()));
 		addTypicalColumn("Index", new SingleReferenceManipulator(PricingPackage.eINSTANCE.getCooldownPrice_Index(), getReferenceValueProviderCache(), getEditingDomain()));
-		defaultSetTitle("Cooldown Prices");
+		defaultSetTitle("Cooldown Costs");
 	}
 }

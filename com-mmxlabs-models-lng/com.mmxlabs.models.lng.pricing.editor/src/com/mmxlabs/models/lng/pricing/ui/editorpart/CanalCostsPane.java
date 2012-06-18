@@ -25,8 +25,8 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
  * @author hinton
  * 
  */
-public class VesselRoutePricingPane extends ScenarioTableViewerPane {
-	public VesselRoutePricingPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+public class CanalCostsPane extends ScenarioTableViewerPane {
+	public CanalCostsPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
 
@@ -39,7 +39,7 @@ public class VesselRoutePricingPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Laden Toll", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getRouteCost_LadenCost(), getEditingDomain()));
 		addTypicalColumn("Ballast Toll", new NumericAttributeManipulator(PricingPackage.eINSTANCE.getRouteCost_BallastCost(), getEditingDomain()));
 
-		defaultSetTitle("Route Pricing");
+		defaultSetTitle("Canal Costs");
 	}
 
 	@Override

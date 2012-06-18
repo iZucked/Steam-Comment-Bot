@@ -17,45 +17,39 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 
 public class PricingModelEditorContribution extends BaseJointModelEditorContribution<PricingModel> {
-	private CharterPricingPane charter;
-	private VesselRoutePricingPane route;
-	private CooldownPricingEditorPane cool;
-	private PortCostPricingPane port;
+	private CharterMarketPane charter;
+	private CanalCostsPane route;
+	private CooldownCostsPane cool;
+	private PortCostPane port;
 
 	@Override
 	public void addPages(final Composite parent) {
 		addIndexPage(parent);
 		addMarketPage(parent);
-		addPricingPage(parent);
+		addCostsPage(parent);
 	}
 
-	private void addPricingPage(final Composite parent) {
-		final SashForm sash = new SashForm(parent, SWT.VERTICAL);
-		final SashForm sash2 = new SashForm(sash, SWT.HORIZONTAL);
-		final SashForm sash3 = new SashForm(sash, SWT.HORIZONTAL);
+	private void addCostsPage(final Composite parent) {
+		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
+		final SashForm sash2 = new SashForm(sash, SWT.VERTICAL);
+		final SashForm sash3 = new SashForm(sash, SWT.VERTICAL);
 		
-		charter = new CharterPricingPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		charter.createControl(sash2);
-		charter.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_CharterCosts() }),
-				editorPart.getAdapterFactory());
-		charter.getViewer().setInput(modelObject);
-
-		route = new VesselRoutePricingPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		route = new CanalCostsPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		route.createControl(sash2);
 		route.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_RouteCosts() }), editorPart.getAdapterFactory());
 		route.getViewer().setInput(modelObject);
 
-		cool = new CooldownPricingEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		cool.createControl(sash3);
-		cool.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_CooldownPrices()}), editorPart.getAdapterFactory());
-		cool.getViewer().setInput(modelObject);
-		
-		port = new PortCostPricingPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		port = new PortCostPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		port.createControl(sash3);
 		port.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_PortCosts()}), editorPart.getAdapterFactory());
 		port.getViewer().setInput(modelObject);
 		
-		editorPart.setPageText(editorPart.addPage(sash), "Pricing");
+		cool = new CooldownCostsPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		cool.createControl(sash3);
+		cool.init(Arrays.asList(new EReference[] {PricingPackage.eINSTANCE.getPricingModel_CooldownPrices()}), editorPart.getAdapterFactory());
+		cool.getViewer().setInput(modelObject);
+		
+		editorPart.setPageText(editorPart.addPage(sash), "Costs");
 	}
 
 	private void addMarketPage(final Composite parent) {
@@ -64,21 +58,30 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 
 	private void addIndexPage(final Composite parent) {
 		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
-		final IndexEditorPane pane = new IndexEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		pane.createControl(sash);
+		final SashForm sash2 = new SashForm(sash, SWT.VERTICAL);
+		final SashForm sash3 = new SashForm(sash, SWT.VERTICAL);
+
+		final IndexPane pane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		pane.createControl(sash2);
 		pane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()), editorPart.getAdapterFactory());
 		pane.getViewer().setInput(modelObject);
+		pane.defaultSetTitle("Commodity Indices");
 
-		final IndexEditorPane pane2 = new IndexEditorPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		pane2.createControl(sash);
+		final IndexPane pane2 = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		pane2.createControl(sash2);
 		pane2.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CharterIndices()), editorPart.getAdapterFactory());
 		pane2.getViewer().setInput(modelObject);
-		pane.defaultSetTitle("Commodity Indices");
 		pane2.defaultSetTitle("Chartering Indices");
 		pane2.setUseIntegers(true);
-		
+
+		charter = new CharterMarketPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		charter.createControl(sash3);
+		charter.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FleetCost(), PricingPackage.eINSTANCE.getFleetCostModel_CharterCosts() }),
+				editorPart.getAdapterFactory());
+		charter.getViewer().setInput(modelObject);
+
 		int page = editorPart.addPage(sash);
-		editorPart.setPageText(page, "Indices");
+		editorPart.setPageText(page, "Markets");
 	}
 
 	@Override

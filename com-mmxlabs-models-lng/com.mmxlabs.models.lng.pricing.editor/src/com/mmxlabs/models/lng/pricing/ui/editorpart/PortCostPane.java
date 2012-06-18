@@ -41,8 +41,8 @@ import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
  * @author hinton
  *
  */
-public class PortCostPricingPane extends ScenarioTableViewerPane {
-	public PortCostPricingPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, final IActionBars actionBars) {
+public class PortCostPane extends ScenarioTableViewerPane {
+	public PortCostPane(IWorkbenchPage page, IWorkbenchPart part, IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
 
