@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Trading Optimiser
+Bundle-SymbolicName: com.mmxlabs.trading.optimiser
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Minimax Labs
+Require-Bundle: com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="1.0.0",
+ com.mmxlabs.common.common-util;bundle-version="1.0.0",
+ com.mmxlabs.optimiser.optimiser-core;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.mmxlabs.trading.optimiser,
+ com.mmxlabs.trading.optimiser.annotations,
+ com.mmxlabs.trading.optimiser.annotations.impl,
+ com.mmxlabs.trading.optimiser.builder,
+ com.mmxlabs.trading.optimiser.components,
+ com.mmxlabs.trading.optimiser.impl,
+ com.mmxlabs.trading.optimiser.providers,
+ com.mmxlabs.trading.optimiser.providers.impl
