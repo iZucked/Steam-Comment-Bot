@@ -9,6 +9,8 @@
 	</parent>
 	<artifactId>common-nauticaldistances</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
+	<packaging>bundle</packaging>
+
 	<build>
 		<plugins>
 
@@ -110,5 +112,4 @@
 			<version>1.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-	<packaging>bundle</packaging>
 </project>
