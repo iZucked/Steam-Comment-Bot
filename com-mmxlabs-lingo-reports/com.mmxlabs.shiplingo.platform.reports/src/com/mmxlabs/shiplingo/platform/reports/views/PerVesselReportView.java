@@ -195,7 +195,8 @@ public class PerVesselReportView extends ViewPart {
 				hireCost += event.getHireCost();
 				if (event instanceof FuelUsage) {
 					for (final FuelQuantity quantity : ((FuelUsage) event).getFuels()) {
-						fuelCosts.put(quantity.getFuel(), quantity.getCost());
+						Integer i = fuelCosts.get(quantity.getFuel());
+						fuelCosts.put(quantity.getFuel(), (i == null ? 0 : i.intValue()) + quantity.getCost());
 					}
 				}
 				if (event instanceof Journey) {

@@ -18,9 +18,14 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -188,28 +193,28 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 
 				list.add(descriptor);
 			}
-//			if (event instanceof FuelMixture) {
-//				final ColumnLabelProvider fqlp = new ColumnLabelProvider() {
-//					@Override
-//					public String getText(final Object element) {
-//						if (element instanceof FuelQuantity) {
-//							final FuelQuantity fq = (FuelQuantity) element;
-//							return String.format("%,d %s ($%,d)", fq.getQuantity(), fq.getFuelUnit().getName(), fq.getTotalPrice());
-//						}
-//						return super.getText(element);
-//					}
-//				};
-//				for (final FuelQuantity fc : ((FuelMixture) event).getFuelUsage()) {
-//					if (fc.getQuantity() == 0) {
-//						continue;
-//					}
-//					final PropertyDescriptor descriptor = new PropertyDescriptor(fc.getFuelType(), fc.getFuelType().getName());
-//					descriptor.setLabelProvider(fqlp);
-//					descriptor.setCategory("Fuel Usage");
-//
-//					list.add(descriptor);
-//				}
-//			}
+			if (event instanceof FuelUsage) {
+				final ColumnLabelProvider fqlp = new ColumnLabelProvider() {
+					@Override
+					public String getText(final Object element) {
+						if (element instanceof FuelQuantity) {
+							final FuelQuantity fq = (FuelQuantity) element;
+							return String.format("%,d %s ($%,d)", fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit(), fq.getCost());
+						}
+						return super.getText(element);
+					}
+				};
+				for (final FuelQuantity fc : ((FuelUsage) event).getFuels()) {
+					if (fc.getCost() == 0) {
+						continue;
+					}
+					final PropertyDescriptor descriptor = new PropertyDescriptor(fc.getFuel(), fc.getFuel().getName());
+					descriptor.setLabelProvider(fqlp);
+					descriptor.setCategory("Fuel Usage");
+
+					list.add(descriptor);
+				}
+			}
 
 			descriptors = list.toArray(new IPropertyDescriptor[0]);
 
@@ -220,13 +225,13 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 		public Object getPropertyValue(final Object id) {
 			if (id instanceof EMFPath) {
 				return (((EMFPath) id).get(event));
-//			} else if (id instanceof FuelType) {
-//				for (final FuelQuantity fq : ((FuelMixture) event).getFuelUsage()) {
-//					if (fq.getFuelType().equals(id)) {
-//						return fq;
-//					}
-//				}
-//				return null;
+			} else if (id instanceof Fuel) {
+				for (final FuelQuantity fq : ((FuelUsage) event).getFuels()) {
+					if (fq.getFuel().equals(id)) {
+						return fq;
+					}
+				}
+				return null;
 			} else {// properties for fuelmix
 				return null;
 			}

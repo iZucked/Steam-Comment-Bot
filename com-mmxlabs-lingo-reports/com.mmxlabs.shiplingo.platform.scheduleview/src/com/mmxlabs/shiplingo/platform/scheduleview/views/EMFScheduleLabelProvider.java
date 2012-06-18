@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -120,66 +122,74 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return getText(element);
 		} else if (element instanceof Event) {
 
-			final StringBuilder sb = new StringBuilder();
+			// build base string - start, end and time for duration.
+			final StringBuilder tt = new StringBuilder();
+			final StringBuilder eventText = new StringBuilder();
 			if (element instanceof Event) {
 
 				final String name = ((Event) element).name();
 				if (!name.isEmpty()) {
-					sb.append("ID: " + name + "\n");
+					tt.append("ID: " + name + "\n");
 				}
 			}
-
 			final Event event = (Event) element;
 			final String start = dateToString(event.getStart());
 			final String end = dateToString(event.getEnd());
-
-			sb.append("Start: " + start + "\n");
-			sb.append("End:  " + end + "\n");
+			tt.append("Start: " + start + "\n");
+			tt.append("End: " + end + "\n");
 			final int days = event.getDuration() / 24;
 			final int hours = event.getDuration() % 24;
-			sb.append("Duration: " + days + " days, " + hours + " hours\n");
+			final String durationTime = days + " day" + (days>1||days==0? "s": "") + ", " + hours + " hour" + (hours>1||hours==0? "s": "");
+
+			// build event specific text
 			if (element instanceof Journey) {
+				eventText.append("Travel time: " + durationTime + " \n");
 				final Journey journey = (Journey) element;
-				// sb.append("Vessel State: " + journey.getVesselState().getName() + "\n");
-				if (!journey.getRoute().equalsIgnoreCase("default")) {
-					sb.append("Route: " + journey.getRoute() + "\n");
+				eventText.append(" \n");
+				//				if (!journey.getRoute().equalsIgnoreCase("default")) {
+				eventText.append(String.format("%.1f knots", journey.getSpeed()));
+				for (FuelQuantity fq : journey.getFuels()) {
+					eventText.append(String.format(" | %s", fq.getFuel().toString()));					
 				}
-				sb.append(String.format("Speed: %.1f\n", journey.getSpeed()));
+				if (journey.getRoute().contains("canal")) {
+					eventText.append(" | " + journey.getRoute() + "\n");
+				}
+
 			} else if (element instanceof SlotVisit) {
+				eventText.append("Time in port: " + durationTime + " \n");
+				eventText.append(" \n");
 				final SlotVisit slotVisit = (SlotVisit) element;
 				final Slot slot = ((SlotVisit) element).getSlotAllocation().getSlot();
-				sb.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
-				sb.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
+//				eventText.append("Window Start: " + dateToString(slot.getWindowStartWithSlotOrPortTime()) + "\n");
+				eventText.append("Window End: " + dateToString(slot.getWindowEndWithSlotOrPortTime()) + "\n");
 
 				if (slotVisit.getStart().after(slot.getWindowEndWithSlotOrPortTime())) {
 					// lateness
-
 					final Calendar localStart = slotVisit.getLocalStart();
 					final Calendar windowEndDate = getWindowEndDate(element);
-					sb.append("Lateness: " + getLatenessString(localStart, windowEndDate) + "\n");
-
+					eventText.append("LATE by" + getLatenessString(localStart, windowEndDate) + "\n");
 				}
 			} else if (element instanceof VesselEventVisit) {
+				eventText.append("Duration: " + durationTime);
 				final VesselEventVisit vev = (VesselEventVisit) element;
 				if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-					// lateneess;
+					// lateness;
 					final Calendar localStart = vev.getLocalStart();
 					final Calendar windowEndDate = getWindowEndDate(element);
-
-					sb.append("Lateness: " + getLatenessString(localStart, windowEndDate) + "\n");
+					eventText.append(" \n");
+					eventText.append("LATE by  " + getLatenessString(localStart, windowEndDate) + "\n");
 				}
-
 			} else if (element instanceof Idle) {
-				// final Idle idle = (Idle) element;
-				// sb.append("Laden: " + (idle.isLaden() ? "Yes" : "No") + "\n");
+				eventText.append("Idle time: " + durationTime);
 			} else if (element instanceof FuelUsage) {
 				final FuelUsage fuel = (FuelUsage) element;
 				for (final FuelQuantity fq : fuel.getFuels()) {
-					sb.append(String.format("%s: %,d %s | $%,d\n", fq.getFuel().toString(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(), fq.getCost()));
+					eventText.append(String.format("%s: %,d %s | $%,d\n", fq.getFuel().toString(), fq.getAmounts().get(0).getQuantity(), fq.getAmounts().get(0).getUnit().toString(), fq.getCost()));
 				}
 			}
-
-			return sb.toString();
+			
+			tt.append(eventText);
+			return tt.toString();
 		}
 		return null;
 	}
@@ -203,10 +213,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		} else if (element instanceof Sequence) {
 			return getText(element);
 		} else if (element instanceof Event) {
-			return "At " + port;// + displayTypeName;
-		} else if (element instanceof SlotVisit) {
-			final SlotVisit sv = (SlotVisit) element;
-			return "At " + port;// + displayTypeName;
+			return "At " + port + (element instanceof Cooldown ? " (Cooldown)": ""); // + displayTypeName;
 		}
 		return null;
 	}
