@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.*;
+
 import java.util.Collection;
 
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
@@ -14,6 +16,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
@@ -25,7 +28,7 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourScheme;
 
 public class VesselStateColourScheme implements IScheduleViewColourScheme {
-
+	
 	private GanttChartViewer viewer;
 
 	@Override
@@ -52,13 +55,23 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 	public Color getBackground(final Object element) {
 		if (element instanceof Journey) {
 			final Journey journey = (Journey) element;
-			if (journey.isLaden()) {
-				return ColorCache.getColor(0, 255, 0);
+			if (isRiskyVoyage(journey, findIdleForJourney(journey))) {
+				return ColorCache.getColor(Warning_Yellow);
+			} else
+				if (journey.isLaden()) {
+				return ColorCache.getColor(Green);
 			} else {
-				return ColorCache.getColor(0, 0, 255);
+				return ColorCache.getColor(Gas_Blue);
+			}
+		} else if (element instanceof Idle) {
+			final Idle idle = (Idle) element;
+			if (idle.isLaden()) {
+				return ColorCache.getColor(Light_Green);
+			} else {
+				return ColorCache.getColor(Light_Gas_Blue);
 			}
 		} else if (element instanceof VesselEventVisit) {
-			return ColorCache.getColor(223, 115, 255);
+			return ColorCache.getColor(VesselEvent_Purple);
 		}
 
 		// else if (mode == Mode.Lateness) {
@@ -66,12 +79,15 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 			final SlotVisit visit = (SlotVisit) element;
 			if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 				return ColorCache.getColor(255, 0, 0);
-			}
-			return ColorCache.getColor(0, 0, 0);
+			} 
+//			else if(isLocked(visit)) {
+//				return ColorCache.getColor(Locked_White);
+//			}
+			return ColorCache.getColor(Slot_White);
 		} else if (element instanceof VesselEventVisit) {
 			final VesselEventVisit vev = (VesselEventVisit) element;
 			if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-				return ColorCache.getColor(255, 0, 0);
+				return ColorCache.getColor(Alert_Crimson);
 			}
 		}
 		return null;
@@ -79,6 +95,11 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 
 	@Override
 	public int getAlpha(final Object element) {
+		
+		if(element instanceof Event) {
+			Event ev = (Event) (element);
+			if(isLocked(ev, viewer)) return 150;
+		}
 		return 255;
 	}
 
@@ -87,42 +108,7 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 
 		if (element instanceof Event) {
 			final Event event = (Event) element;
-
-			// Stage 1: Find the cargo
-			final Sequence sequence = (Sequence) event.eContainer();
-			int index = sequence.getEvents().indexOf(event);
-			Cargo cargo = null;
-			while (cargo == null && index >= 0) {
-				Object obj = sequence.getEvents().get(index);
-				if (obj instanceof SlotVisit) {
-					final SlotVisit slotVisit = ((SlotVisit) obj);
-					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
-					final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
-					cargo = cargoAllocation.getInputCargo();
-				} else if (obj instanceof VesselEventVisit) {
-					break;
-				}
-				--index;
-			}
-
-			// Stage 2: Find the input assignment
-			if (cargo != null) {
-
-				final Object input = viewer.getInput();
-				if (input instanceof IScenarioViewerSynchronizerOutput) {
-					final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
-
-					final Collection<Object> collectedElements = output.getCollectedElements();
-					if (collectedElements.size() > 0) {
-						final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
-						final MMXRootObject rootObject = (MMXRootObject) instance.getInstance();
-						final InputModel inputModel = rootObject.getSubModel(InputModel.class);
-						if (inputModel.getLockedAssignedObjects().contains(cargo)) {
-							return ColorCache.getColor(255, 0, 128);
-						}
-					}
-				}
-			}
+			if(isLocked(event, viewer)) return ColorCache.getColor(Locked_White);
 		}
 		return null;
 	}
@@ -163,7 +149,7 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 						final MMXRootObject rootObject = (MMXRootObject) instance.getInstance();
 						final InputModel inputModel = rootObject.getSubModel(InputModel.class);
 						if (inputModel.getLockedAssignedObjects().contains(cargo)) {
-							return 2;
+							return 1;
 						}
 					}
 				}

@@ -10,7 +10,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
@@ -100,7 +99,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	public void setScheme(final String id) {
 		if (colourSchemesById.containsKey(id)) {
-			this.currentScheme = colourSchemesById.get(id);
+			setScheme(colourSchemesById.get(id));
 		}
 	}
 
