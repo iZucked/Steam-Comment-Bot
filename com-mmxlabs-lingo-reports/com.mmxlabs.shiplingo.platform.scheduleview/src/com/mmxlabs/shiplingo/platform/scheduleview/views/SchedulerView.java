@@ -212,6 +212,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			public boolean useAlphaDrawing() {
 				return true;
 			};
+			
+			@Override
+			public Color getTextColor() {
+				return ColorCache.getWhite();
+			}
 		};
 
 		viewer = new GanttChartViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | GanttFlags.H_SCROLL_FIXED_RANGE, settings, colourManager) {

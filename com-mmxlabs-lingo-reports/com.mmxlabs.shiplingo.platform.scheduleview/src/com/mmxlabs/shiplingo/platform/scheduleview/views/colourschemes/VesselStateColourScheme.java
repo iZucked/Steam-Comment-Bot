@@ -48,7 +48,7 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 
 	@Override
 	public Color getForeground(final Object element) {
-		return null;
+		return ColorCache.getColor(Alert_Crimson);
 	}
 
 	@Override
@@ -77,8 +77,8 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 		// else if (mode == Mode.Lateness) {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
-			if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-				return ColorCache.getColor(255, 0, 0);
+			if (isLate(visit)) {
+				return ColorCache.getColor(Alert_Crimson);
 			} 
 //			else if(isLocked(visit)) {
 //				return ColorCache.getColor(Locked_White);
@@ -86,7 +86,7 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 			return ColorCache.getColor(Slot_White);
 		} else if (element instanceof VesselEventVisit) {
 			final VesselEventVisit vev = (VesselEventVisit) element;
-			if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
+			if (isLate(vev)) {
 				return ColorCache.getColor(Alert_Crimson);
 			}
 		}
@@ -98,7 +98,7 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 		
 		if(element instanceof Event) {
 			Event ev = (Event) (element);
-			if(isLocked(ev, viewer)) return 150;
+			if(isLocked(ev, viewer) && !isLate(ev)) return Faded_Alpha;
 		}
 		return 255;
 	}

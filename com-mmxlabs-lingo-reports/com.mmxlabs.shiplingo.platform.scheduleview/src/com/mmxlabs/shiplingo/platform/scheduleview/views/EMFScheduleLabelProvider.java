@@ -166,7 +166,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					// lateness
 					final Calendar localStart = slotVisit.getLocalStart();
 					final Calendar windowEndDate = getWindowEndDate(element);
-					eventText.append("LATE by" + getLatenessString(localStart, windowEndDate) + "\n");
+					eventText.append("LATE by " + getLatenessString(localStart, windowEndDate) + "\n");
 				}
 			} else if (element instanceof VesselEventVisit) {
 				eventText.append("Duration: " + durationTime);

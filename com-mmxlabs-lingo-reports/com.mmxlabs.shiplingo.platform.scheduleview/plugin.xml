@@ -44,24 +44,9 @@
             name="Shipping Risk">
       </ColourScheme>
       <ColourScheme
-            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.AlternatingCargoColourScheme"
-            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.AlternatingCargoColourScheme"
-            name="Alternating Cargoes">
-      </ColourScheme>
-      <ColourScheme
             class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme"
             id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.CooldownColourScheme"
             name="Cooldown">
-      </ColourScheme>
-      <ColourScheme
-            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.FuelChoiceColourScheme"
-            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.FuelChoiceColourScheme"
-            name="Fuel Choice">
-      </ColourScheme>
-      <ColourScheme
-            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.HighSpeedColourScheme"
-            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.HighSpeedColourScheme"
-            name="High Speed">
       </ColourScheme>
       <ColourScheme
             class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.RouteChoiceColourScheme"
@@ -72,11 +57,6 @@
             class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme"
             id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.VesselStateColourScheme"
             name="Vessel State">
-      </ColourScheme>
-      <ColourScheme
-            class="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.LadenHighlightColourScheme"
-            id="com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.LadenHighlightColourScheme"
-            name="Laden Highlight">
       </ColourScheme>
    </extension>
 

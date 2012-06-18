@@ -1,7 +1,9 @@
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
 import java.util.Collection;
+import java.util.Date;
 
+import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.RGB;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -14,6 +16,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
@@ -33,11 +36,28 @@ public class ColourSchemeUtil {
 	static final RGB Warning_Yellow = new RGB(255,255,25);
 	static final RGB Alert_Crimson = new RGB(255,0,0);
 	
+	static final int Faded_Alpha = 150;
+	
 	private static final float IdleRisk_threshold = 0.95f;
 	private static final float IdleRisk_speed = 19.0f;
 
 	
-	public  static boolean isLocked(final Event event, GanttChartViewer viewer) {
+	public static boolean isLate(Event ev) {
+		Date start = ev.getStart();
+		if((ev instanceof VesselEventVisit) && start.after(((VesselEventVisit) ev).getVesselEvent().getStartBy())){
+			return true;
+		}
+		
+		if(ev instanceof SlotVisit){
+			final SlotVisit visit = (SlotVisit) ev;
+			if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isLocked(final Event event, GanttChartViewer viewer) {
 		// Stage 1: Find the cargo
 		final Sequence sequence = (Sequence) event.eContainer();
 		int index = sequence.getEvents().indexOf(event);

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.*;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
@@ -63,7 +64,7 @@ public class LadenHighlightColourScheme implements IScheduleViewColourScheme {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
 			if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-				return ColorCache.getColor(255, 0, 0);
+				return ColorCache.getColor(Alert_Crimson);
 			}
 			return ColorCache.getColor(0, 0, 0);
 		} else if (element instanceof VesselEventVisit) {
