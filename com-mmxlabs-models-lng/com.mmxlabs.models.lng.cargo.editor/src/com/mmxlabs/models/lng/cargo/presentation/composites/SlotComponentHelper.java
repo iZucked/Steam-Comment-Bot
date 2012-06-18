@@ -117,37 +117,37 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the windowStart feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_windowStartEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START));
+		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START)));
 	}
 
 	/**
 	 * Create the editor for the windowStartTime feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_windowStartTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START_TIME));
+		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START_TIME)));
 	}
 
 	/**
 	 * Create the editor for the windowSize feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE));
+		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE)));
 	}
 
 	/**
 	 * Create the editor for the port feature on Slot
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT));
+		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT)));
 	}
 
 	/**
