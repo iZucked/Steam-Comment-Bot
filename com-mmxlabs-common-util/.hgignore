@@ -17,3 +17,6 @@ syntax: regexp
 \.project$
 syntax: regexp
 ^common-nauticaldistances/META-INF$
+
+syntax: regexp
+\.csv$
