@@ -37,8 +37,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
-import com.mmxlabs.trading.optimiser.TradingConstants;
-import com.mmxlabs.trading.optimiser.components.ProfitAndLossAllocationComponent;
 
 /**
  * {@link IFitnessCore} which schedules {@link ISequences} objects using an {@link ISequenceScheduler}. Various {@link IFitnessComponent}s implementing {@link ICargoSchedulerFitnessComponent}
@@ -87,9 +85,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		// SchedulerConstants.DCP_totalVolumeLimitProvider, SchedulerConstants.DCP_portSlotsProvider, this));
 
 		schedulerComponents.add(new CharterOutFitnessComponent(CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, SchedulerConstants.DCP_vesselProvider, this));
-
-		allocationComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, TradingConstants.DCP_entityProvider,
-				SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider, this));
 
 		schedulerComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this, SchedulerConstants.DCP_portCostProvider,
 				SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
