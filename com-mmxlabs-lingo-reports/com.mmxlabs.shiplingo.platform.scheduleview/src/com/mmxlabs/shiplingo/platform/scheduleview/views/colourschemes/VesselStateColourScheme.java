@@ -113,9 +113,9 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 		return null;
 	}
 
-	@Override 
+	@Override
 	public int getBorderWidth(final Object element) {
-		
+
 		if (element instanceof Event) {
 			final Event event = (Event) element;
 
@@ -123,13 +123,15 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 			final Sequence sequence = (Sequence) event.eContainer();
 			int index = sequence.getEvents().indexOf(event);
 			Cargo cargo = null;
-			while (cargo == null && index >= 0 ) {
+			while (cargo == null && index >= 0) {
 				Object obj = sequence.getEvents().get(index);
 				if (obj instanceof SlotVisit) {
 					final SlotVisit slotVisit = ((SlotVisit) obj);
 					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 					final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 					cargo = cargoAllocation.getInputCargo();
+				} else if (obj instanceof VesselEventVisit) {
+					break;
 				}
 				--index;
 			}
@@ -153,7 +155,7 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 				}
 			}
 		}
-		
+
 		return 1;
 	}
 }

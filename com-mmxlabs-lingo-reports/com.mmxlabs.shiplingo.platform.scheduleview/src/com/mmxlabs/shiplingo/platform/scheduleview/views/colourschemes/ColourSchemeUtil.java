@@ -69,6 +69,8 @@ public class ColourSchemeUtil {
 				final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
 				final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
 				cargo = cargoAllocation.getInputCargo();
+			} else if (obj instanceof VesselEventVisit) {
+				break;
 			}
 			--index;
 		}
