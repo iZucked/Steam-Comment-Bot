@@ -14,14 +14,18 @@
 
 			<!-- Enable access to all projects in the current multimodule build! -->
 			<useAllReactorProjects>true</useAllReactorProjects>
-     
-			<!-- Now, select which projects to include in this module-set. -->
-			<!--
-			<includes>
-				<include>com.mmxlabs.common:common-util</include>
-			</includes>
-			-->
 			<binaries>
+				<outputDirectory>plugins</outputDirectory>
+				<includeDependencies>false</includeDependencies>
+				<unpack>false</unpack>
+			</binaries>
+		</moduleSet>
+		<moduleSet>
+
+			<!-- Enable access to all projects in the current multimodule build! -->
+			<useAllReactorProjects>true</useAllReactorProjects>
+			<binaries>
+				<attachmentClassifier>sources</attachmentClassifier>
 				<outputDirectory>plugins</outputDirectory>
 				<includeDependencies>false</includeDependencies>
 				<unpack>false</unpack>
