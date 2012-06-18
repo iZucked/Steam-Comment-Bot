@@ -153,7 +153,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (setButton != null && !setButton.isDisposed()) {
 			setButton.setSelection(valueIsSet());
 		}
-		setControlEnabled(inner, setButton == null || setButton.getSelection());
+		setControlEnabled(inner, isEnabled() && (setButton == null || setButton.getSelection()));
 	}
 
 	@Override
