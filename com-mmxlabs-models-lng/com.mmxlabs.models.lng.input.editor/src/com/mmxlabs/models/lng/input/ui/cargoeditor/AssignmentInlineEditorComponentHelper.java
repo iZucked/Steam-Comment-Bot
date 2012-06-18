@@ -110,7 +110,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 		@Override
 		public void display(final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
-			label.setText("Assigned to:");
+			label.setText("Assigned to");
 
 			if (inputObject != null) {
 				inputObject.eAdapters().remove(AssignmentInlineEditor.this);
