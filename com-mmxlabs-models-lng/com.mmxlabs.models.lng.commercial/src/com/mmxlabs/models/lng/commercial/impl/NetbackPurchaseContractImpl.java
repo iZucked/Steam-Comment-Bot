@@ -9,13 +9,17 @@
 package com.mmxlabs.models.lng.commercial.impl;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.NetbackPurchaseContract;
 import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
+import java.util.Collection;
 import com.mmxlabs.models.lng.types.AIndex;
 
 /**
@@ -26,9 +30,7 @@ import com.mmxlabs.models.lng.types.AIndex;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl#getNotionalBallastParameters <em>Notional Ballast Parameters</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl#getIndex <em>Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl#getConstant <em>Constant</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl#getMultiplier <em>Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl#getMargin <em>Margin</em>}</li>
  * </ul>
  * </p>
  *
@@ -36,64 +38,34 @@ import com.mmxlabs.models.lng.types.AIndex;
  */
 public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements NetbackPurchaseContract {
 	/**
-	 * The cached value of the '{@link #getNotionalBallastParameters() <em>Notional Ballast Parameters</em>}' containment reference.
+	 * The cached value of the '{@link #getNotionalBallastParameters() <em>Notional Ballast Parameters</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getNotionalBallastParameters()
 	 * @generated
 	 * @ordered
 	 */
-	protected NotionalBallastParameters notionalBallastParameters;
+	protected EList<NotionalBallastParameters> notionalBallastParameters;
 
 	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
+	 * The default value of the '{@link #getMargin() <em>Margin</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getIndex()
+	 * @see #getMargin()
 	 * @generated
 	 * @ordered
 	 */
-	protected AIndex index;
+	protected static final double MARGIN_EDEFAULT = 0.0;
 
 	/**
-	 * The default value of the '{@link #getConstant() <em>Constant</em>}' attribute.
+	 * The cached value of the '{@link #getMargin() <em>Margin</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getConstant()
+	 * @see #getMargin()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double CONSTANT_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getConstant() <em>Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getConstant()
-	 * @generated
-	 * @ordered
-	 */
-	protected double constant = CONSTANT_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getMultiplier() <em>Multiplier</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMultiplier()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double MULTIPLIER_EDEFAULT = 1.0;
-
-	/**
-	 * The cached value of the '{@link #getMultiplier() <em>Multiplier</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getMultiplier()
-	 * @generated
-	 * @ordered
-	 */
-	protected double multiplier = MULTIPLIER_EDEFAULT;
+	protected double margin = MARGIN_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -119,7 +91,10 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotionalBallastParameters getNotionalBallastParameters() {
+	public EList<NotionalBallastParameters> getNotionalBallastParameters() {
+		if (notionalBallastParameters == null) {
+			notionalBallastParameters = new EObjectContainmentEList<NotionalBallastParameters>(NotionalBallastParameters.class, this, CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS);
+		}
 		return notionalBallastParameters;
 	}
 
@@ -128,14 +103,8 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetNotionalBallastParameters(NotionalBallastParameters newNotionalBallastParameters, NotificationChain msgs) {
-		NotionalBallastParameters oldNotionalBallastParameters = notionalBallastParameters;
-		notionalBallastParameters = newNotionalBallastParameters;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS, oldNotionalBallastParameters, newNotionalBallastParameters);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
+	public double getMargin() {
+		return margin;
 	}
 
 	/**
@@ -143,98 +112,11 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setNotionalBallastParameters(NotionalBallastParameters newNotionalBallastParameters) {
-		if (newNotionalBallastParameters != notionalBallastParameters) {
-			NotificationChain msgs = null;
-			if (notionalBallastParameters != null)
-				msgs = ((InternalEObject)notionalBallastParameters).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS, null, msgs);
-			if (newNotionalBallastParameters != null)
-				msgs = ((InternalEObject)newNotionalBallastParameters).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS, null, msgs);
-			msgs = basicSetNotionalBallastParameters(newNotionalBallastParameters, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS, newNotionalBallastParameters, newNotionalBallastParameters));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AIndex getIndex() {
-		if (index != null && index.eIsProxy()) {
-			InternalEObject oldIndex = (InternalEObject)index;
-			index = (AIndex)eResolveProxy(oldIndex);
-			if (index != oldIndex) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.NETBACK_PURCHASE_CONTRACT__INDEX, oldIndex, index));
-			}
-		}
-		return index;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AIndex basicGetIndex() {
-		return index;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setIndex(AIndex newIndex) {
-		AIndex oldIndex = index;
-		index = newIndex;
+	public void setMargin(double newMargin) {
+		double oldMargin = margin;
+		margin = newMargin;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NETBACK_PURCHASE_CONTRACT__INDEX, oldIndex, index));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public double getConstant() {
-		return constant;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setConstant(double newConstant) {
-		double oldConstant = constant;
-		constant = newConstant;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NETBACK_PURCHASE_CONTRACT__CONSTANT, oldConstant, constant));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public double getMultiplier() {
-		return multiplier;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setMultiplier(double newMultiplier) {
-		double oldMultiplier = multiplier;
-		multiplier = newMultiplier;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NETBACK_PURCHASE_CONTRACT__MULTIPLIER, oldMultiplier, multiplier));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN, oldMargin, margin));
 	}
 
 	/**
@@ -246,7 +128,7 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS:
-				return basicSetNotionalBallastParameters(null, msgs);
+				return ((InternalEList<?>)getNotionalBallastParameters()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -261,13 +143,8 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 		switch (featureID) {
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS:
 				return getNotionalBallastParameters();
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__INDEX:
-				if (resolve) return getIndex();
-				return basicGetIndex();
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__CONSTANT:
-				return getConstant();
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MULTIPLIER:
-				return getMultiplier();
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
+				return getMargin();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -277,20 +154,16 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS:
-				setNotionalBallastParameters((NotionalBallastParameters)newValue);
+				getNotionalBallastParameters().clear();
+				getNotionalBallastParameters().addAll((Collection<? extends NotionalBallastParameters>)newValue);
 				return;
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__INDEX:
-				setIndex((AIndex)newValue);
-				return;
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__CONSTANT:
-				setConstant((Double)newValue);
-				return;
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MULTIPLIER:
-				setMultiplier((Double)newValue);
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
+				setMargin((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -305,16 +178,10 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS:
-				setNotionalBallastParameters((NotionalBallastParameters)null);
+				getNotionalBallastParameters().clear();
 				return;
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__INDEX:
-				setIndex((AIndex)null);
-				return;
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__CONSTANT:
-				setConstant(CONSTANT_EDEFAULT);
-				return;
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MULTIPLIER:
-				setMultiplier(MULTIPLIER_EDEFAULT);
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
+				setMargin(MARGIN_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -329,13 +196,9 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS:
-				return notionalBallastParameters != null;
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__INDEX:
-				return index != null;
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__CONSTANT:
-				return constant != CONSTANT_EDEFAULT;
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MULTIPLIER:
-				return multiplier != MULTIPLIER_EDEFAULT;
+				return notionalBallastParameters != null && !notionalBallastParameters.isEmpty();
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
+				return margin != MARGIN_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -350,10 +213,8 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (constant: ");
-		result.append(constant);
-		result.append(", multiplier: ");
-		result.append(multiplier);
+		result.append(" (margin: ");
+		result.append(margin);
 		result.append(')');
 		return result.toString();
 	}

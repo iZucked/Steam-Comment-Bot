@@ -28,11 +28,15 @@ import com.mmxlabs.models.lng.types.APortSet;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarket <em>Base Market</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getIndex <em>Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getConstant <em>Constant</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getMultiplier <em>Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarketPorts <em>Base Market Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarketIndex <em>Base Market Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarketConstant <em>Base Market Constant</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarketMultiplier <em>Base Market Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getRefMarketIndex <em>Ref Market Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getRefMarketConstant <em>Ref Market Constant</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getRefMarketMultiplier <em>Ref Market Multiplier</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getShare <em>Share</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getMargin <em>Margin</em>}</li>
  * </ul>
  * </p>
  *
@@ -40,64 +44,114 @@ import com.mmxlabs.models.lng.types.APortSet;
  */
 public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implements ProfitSharePurchaseContract {
 	/**
-	 * The cached value of the '{@link #getBaseMarket() <em>Base Market</em>}' reference list.
+	 * The cached value of the '{@link #getBaseMarketPorts() <em>Base Market Ports</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getBaseMarket()
+	 * @see #getBaseMarketPorts()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<APortSet> baseMarket;
+	protected EList<APortSet> baseMarketPorts;
 
 	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
+	 * The cached value of the '{@link #getBaseMarketIndex() <em>Base Market Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getIndex()
+	 * @see #getBaseMarketIndex()
 	 * @generated
 	 * @ordered
 	 */
-	protected AIndex index;
+	protected AIndex baseMarketIndex;
 
 	/**
-	 * The default value of the '{@link #getConstant() <em>Constant</em>}' attribute.
+	 * The default value of the '{@link #getBaseMarketConstant() <em>Base Market Constant</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getConstant()
+	 * @see #getBaseMarketConstant()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double CONSTANT_EDEFAULT = 0.0;
+	protected static final double BASE_MARKET_CONSTANT_EDEFAULT = 0.0;
 
 	/**
-	 * The cached value of the '{@link #getConstant() <em>Constant</em>}' attribute.
+	 * The cached value of the '{@link #getBaseMarketConstant() <em>Base Market Constant</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getConstant()
+	 * @see #getBaseMarketConstant()
 	 * @generated
 	 * @ordered
 	 */
-	protected double constant = CONSTANT_EDEFAULT;
+	protected double baseMarketConstant = BASE_MARKET_CONSTANT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getMultiplier() <em>Multiplier</em>}' attribute.
+	 * The default value of the '{@link #getBaseMarketMultiplier() <em>Base Market Multiplier</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMultiplier()
+	 * @see #getBaseMarketMultiplier()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final double MULTIPLIER_EDEFAULT = 1.0;
+	protected static final double BASE_MARKET_MULTIPLIER_EDEFAULT = 1.0;
 
 	/**
-	 * The cached value of the '{@link #getMultiplier() <em>Multiplier</em>}' attribute.
+	 * The cached value of the '{@link #getBaseMarketMultiplier() <em>Base Market Multiplier</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getMultiplier()
+	 * @see #getBaseMarketMultiplier()
 	 * @generated
 	 * @ordered
 	 */
-	protected double multiplier = MULTIPLIER_EDEFAULT;
+	protected double baseMarketMultiplier = BASE_MARKET_MULTIPLIER_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRefMarketIndex() <em>Ref Market Index</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRefMarketIndex()
+	 * @generated
+	 * @ordered
+	 */
+	protected AIndex refMarketIndex;
+
+	/**
+	 * The default value of the '{@link #getRefMarketConstant() <em>Ref Market Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRefMarketConstant()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double REF_MARKET_CONSTANT_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getRefMarketConstant() <em>Ref Market Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRefMarketConstant()
+	 * @generated
+	 * @ordered
+	 */
+	protected double refMarketConstant = REF_MARKET_CONSTANT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getRefMarketMultiplier() <em>Ref Market Multiplier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRefMarketMultiplier()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double REF_MARKET_MULTIPLIER_EDEFAULT = 1.0;
+
+	/**
+	 * The cached value of the '{@link #getRefMarketMultiplier() <em>Ref Market Multiplier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRefMarketMultiplier()
+	 * @generated
+	 * @ordered
+	 */
+	protected double refMarketMultiplier = REF_MARKET_MULTIPLIER_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getShare() <em>Share</em>}' attribute.
@@ -118,6 +172,26 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * @ordered
 	 */
 	protected double share = SHARE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMargin() <em>Margin</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMargin()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double MARGIN_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getMargin() <em>Margin</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getMargin()
+	 * @generated
+	 * @ordered
+	 */
+	protected double margin = MARGIN_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -143,11 +217,11 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getBaseMarket() {
-		if (baseMarket == null) {
-			baseMarket = new EObjectResolvingEList<APortSet>(APortSet.class, this, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET);
+	public EList<APortSet> getBaseMarketPorts() {
+		if (baseMarketPorts == null) {
+			baseMarketPorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_PORTS);
 		}
-		return baseMarket;
+		return baseMarketPorts;
 	}
 
 	/**
@@ -155,16 +229,16 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AIndex getIndex() {
-		if (index != null && index.eIsProxy()) {
-			InternalEObject oldIndex = (InternalEObject)index;
-			index = (AIndex)eResolveProxy(oldIndex);
-			if (index != oldIndex) {
+	public AIndex getBaseMarketIndex() {
+		if (baseMarketIndex != null && baseMarketIndex.eIsProxy()) {
+			InternalEObject oldBaseMarketIndex = (InternalEObject)baseMarketIndex;
+			baseMarketIndex = (AIndex)eResolveProxy(oldBaseMarketIndex);
+			if (baseMarketIndex != oldBaseMarketIndex) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__INDEX, oldIndex, index));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX, oldBaseMarketIndex, baseMarketIndex));
 			}
 		}
-		return index;
+		return baseMarketIndex;
 	}
 
 	/**
@@ -172,8 +246,8 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AIndex basicGetIndex() {
-		return index;
+	public AIndex basicGetBaseMarketIndex() {
+		return baseMarketIndex;
 	}
 
 	/**
@@ -181,11 +255,11 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIndex(AIndex newIndex) {
-		AIndex oldIndex = index;
-		index = newIndex;
+	public void setBaseMarketIndex(AIndex newBaseMarketIndex) {
+		AIndex oldBaseMarketIndex = baseMarketIndex;
+		baseMarketIndex = newBaseMarketIndex;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__INDEX, oldIndex, index));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX, oldBaseMarketIndex, baseMarketIndex));
 	}
 
 	/**
@@ -193,8 +267,8 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public double getConstant() {
-		return constant;
+	public double getBaseMarketConstant() {
+		return baseMarketConstant;
 	}
 
 	/**
@@ -202,11 +276,11 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setConstant(double newConstant) {
-		double oldConstant = constant;
-		constant = newConstant;
+	public void setBaseMarketConstant(double newBaseMarketConstant) {
+		double oldBaseMarketConstant = baseMarketConstant;
+		baseMarketConstant = newBaseMarketConstant;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT, oldConstant, constant));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT, oldBaseMarketConstant, baseMarketConstant));
 	}
 
 	/**
@@ -214,8 +288,8 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public double getMultiplier() {
-		return multiplier;
+	public double getBaseMarketMultiplier() {
+		return baseMarketMultiplier;
 	}
 
 	/**
@@ -223,11 +297,91 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setMultiplier(double newMultiplier) {
-		double oldMultiplier = multiplier;
-		multiplier = newMultiplier;
+	public void setBaseMarketMultiplier(double newBaseMarketMultiplier) {
+		double oldBaseMarketMultiplier = baseMarketMultiplier;
+		baseMarketMultiplier = newBaseMarketMultiplier;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER, oldMultiplier, multiplier));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER, oldBaseMarketMultiplier, baseMarketMultiplier));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AIndex getRefMarketIndex() {
+		if (refMarketIndex != null && refMarketIndex.eIsProxy()) {
+			InternalEObject oldRefMarketIndex = (InternalEObject)refMarketIndex;
+			refMarketIndex = (AIndex)eResolveProxy(oldRefMarketIndex);
+			if (refMarketIndex != oldRefMarketIndex) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX, oldRefMarketIndex, refMarketIndex));
+			}
+		}
+		return refMarketIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AIndex basicGetRefMarketIndex() {
+		return refMarketIndex;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRefMarketIndex(AIndex newRefMarketIndex) {
+		AIndex oldRefMarketIndex = refMarketIndex;
+		refMarketIndex = newRefMarketIndex;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX, oldRefMarketIndex, refMarketIndex));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getRefMarketConstant() {
+		return refMarketConstant;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRefMarketConstant(double newRefMarketConstant) {
+		double oldRefMarketConstant = refMarketConstant;
+		refMarketConstant = newRefMarketConstant;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT, oldRefMarketConstant, refMarketConstant));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getRefMarketMultiplier() {
+		return refMarketMultiplier;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRefMarketMultiplier(double newRefMarketMultiplier) {
+		double oldRefMarketMultiplier = refMarketMultiplier;
+		refMarketMultiplier = newRefMarketMultiplier;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER, oldRefMarketMultiplier, refMarketMultiplier));
 	}
 
 	/**
@@ -256,20 +410,50 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getMargin() {
+		return margin;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMargin(double newMargin) {
+		double oldMargin = margin;
+		margin = newMargin;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN, oldMargin, margin));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET:
-				return getBaseMarket();
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__INDEX:
-				if (resolve) return getIndex();
-				return basicGetIndex();
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT:
-				return getConstant();
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER:
-				return getMultiplier();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_PORTS:
+				return getBaseMarketPorts();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX:
+				if (resolve) return getBaseMarketIndex();
+				return basicGetBaseMarketIndex();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
+				return getBaseMarketConstant();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
+				return getBaseMarketMultiplier();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX:
+				if (resolve) return getRefMarketIndex();
+				return basicGetRefMarketIndex();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+				return getRefMarketConstant();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
+				return getRefMarketMultiplier();
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 				return getShare();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
+				return getMargin();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -283,21 +467,33 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET:
-				getBaseMarket().clear();
-				getBaseMarket().addAll((Collection<? extends APortSet>)newValue);
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_PORTS:
+				getBaseMarketPorts().clear();
+				getBaseMarketPorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__INDEX:
-				setIndex((AIndex)newValue);
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX:
+				setBaseMarketIndex((AIndex)newValue);
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT:
-				setConstant((Double)newValue);
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
+				setBaseMarketConstant((Double)newValue);
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER:
-				setMultiplier((Double)newValue);
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
+				setBaseMarketMultiplier((Double)newValue);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX:
+				setRefMarketIndex((AIndex)newValue);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+				setRefMarketConstant((Double)newValue);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
+				setRefMarketMultiplier((Double)newValue);
 				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 				setShare((Double)newValue);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
+				setMargin((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -311,20 +507,32 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET:
-				getBaseMarket().clear();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_PORTS:
+				getBaseMarketPorts().clear();
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__INDEX:
-				setIndex((AIndex)null);
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX:
+				setBaseMarketIndex((AIndex)null);
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT:
-				setConstant(CONSTANT_EDEFAULT);
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
+				setBaseMarketConstant(BASE_MARKET_CONSTANT_EDEFAULT);
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER:
-				setMultiplier(MULTIPLIER_EDEFAULT);
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
+				setBaseMarketMultiplier(BASE_MARKET_MULTIPLIER_EDEFAULT);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX:
+				setRefMarketIndex((AIndex)null);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+				setRefMarketConstant(REF_MARKET_CONSTANT_EDEFAULT);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
+				setRefMarketMultiplier(REF_MARKET_MULTIPLIER_EDEFAULT);
 				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 				setShare(SHARE_EDEFAULT);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
+				setMargin(MARGIN_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -338,16 +546,24 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET:
-				return baseMarket != null && !baseMarket.isEmpty();
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__INDEX:
-				return index != null;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT:
-				return constant != CONSTANT_EDEFAULT;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER:
-				return multiplier != MULTIPLIER_EDEFAULT;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_PORTS:
+				return baseMarketPorts != null && !baseMarketPorts.isEmpty();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX:
+				return baseMarketIndex != null;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
+				return baseMarketConstant != BASE_MARKET_CONSTANT_EDEFAULT;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
+				return baseMarketMultiplier != BASE_MARKET_MULTIPLIER_EDEFAULT;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX:
+				return refMarketIndex != null;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+				return refMarketConstant != REF_MARKET_CONSTANT_EDEFAULT;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
+				return refMarketMultiplier != REF_MARKET_MULTIPLIER_EDEFAULT;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 				return share != SHARE_EDEFAULT;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
+				return margin != MARGIN_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -362,12 +578,18 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (constant: ");
-		result.append(constant);
-		result.append(", multiplier: ");
-		result.append(multiplier);
+		result.append(" (baseMarketConstant: ");
+		result.append(baseMarketConstant);
+		result.append(", baseMarketMultiplier: ");
+		result.append(baseMarketMultiplier);
+		result.append(", refMarketConstant: ");
+		result.append(refMarketConstant);
+		result.append(", refMarketMultiplier: ");
+		result.append(refMarketMultiplier);
 		result.append(", share: ");
 		result.append(share);
+		result.append(", margin: ");
+		result.append(margin);
 		result.append(')');
 		return result.toString();
 	}

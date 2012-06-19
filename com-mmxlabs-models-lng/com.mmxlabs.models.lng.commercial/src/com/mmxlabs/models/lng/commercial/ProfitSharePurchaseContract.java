@@ -20,11 +20,15 @@ import com.mmxlabs.models.lng.types.APortSet;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarket <em>Base Market</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getIndex <em>Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getConstant <em>Constant</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMultiplier <em>Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketPorts <em>Base Market Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketIndex <em>Base Market Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketConstant <em>Base Market Constant</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketMultiplier <em>Base Market Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketIndex <em>Ref Market Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketConstant <em>Ref Market Constant</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketMultiplier <em>Ref Market Multiplier</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getShare <em>Share</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMargin <em>Margin</em>}</li>
  * </ul>
  * </p>
  *
@@ -34,100 +38,180 @@ import com.mmxlabs.models.lng.types.APortSet;
  */
 public interface ProfitSharePurchaseContract extends PurchaseContract {
 	/**
-	 * Returns the value of the '<em><b>Base Market</b></em>' reference list.
+	 * Returns the value of the '<em><b>Base Market Ports</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Base Market</em>' reference list isn't clear,
+	 * If the meaning of the '<em>Base Market Ports</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Base Market</em>' reference list.
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_BaseMarket()
+	 * @return the value of the '<em>Base Market Ports</em>' reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_BaseMarketPorts()
 	 * @model
 	 * @generated
 	 */
-	EList<APortSet> getBaseMarket();
+	EList<APortSet> getBaseMarketPorts();
 
 	/**
-	 * Returns the value of the '<em><b>Index</b></em>' reference.
+	 * Returns the value of the '<em><b>Base Market Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Index</em>' reference isn't clear,
+	 * If the meaning of the '<em>Base Market Index</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Index</em>' reference.
-	 * @see #setIndex(Index)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_Index()
+	 * @return the value of the '<em>Base Market Index</em>' reference.
+	 * @see #setBaseMarketIndex(Index)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_BaseMarketIndex()
 	 * @model required="true"
 	 * @generated
 	 */
-	AIndex getIndex();
+	AIndex getBaseMarketIndex();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getIndex <em>Index</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketIndex <em>Base Market Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Index</em>' reference.
-	 * @see #getIndex()
+	 * @param value the new value of the '<em>Base Market Index</em>' reference.
+	 * @see #getBaseMarketIndex()
 	 * @generated
 	 */
-	void setIndex(AIndex value);
+	void setBaseMarketIndex(AIndex value);
 
 	/**
-	 * Returns the value of the '<em><b>Constant</b></em>' attribute.
+	 * Returns the value of the '<em><b>Base Market Constant</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Constant</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Base Market Constant</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Constant</em>' attribute.
-	 * @see #setConstant(double)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_Constant()
+	 * @return the value of the '<em>Base Market Constant</em>' attribute.
+	 * @see #setBaseMarketConstant(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_BaseMarketConstant()
 	 * @model default="0" required="true"
 	 * @generated
 	 */
-	double getConstant();
+	double getBaseMarketConstant();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getConstant <em>Constant</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketConstant <em>Base Market Constant</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Constant</em>' attribute.
-	 * @see #getConstant()
+	 * @param value the new value of the '<em>Base Market Constant</em>' attribute.
+	 * @see #getBaseMarketConstant()
 	 * @generated
 	 */
-	void setConstant(double value);
+	void setBaseMarketConstant(double value);
 
 	/**
-	 * Returns the value of the '<em><b>Multiplier</b></em>' attribute.
+	 * Returns the value of the '<em><b>Base Market Multiplier</b></em>' attribute.
 	 * The default value is <code>"1"</code>.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Multiplier</em>' attribute isn't clear,
+	 * If the meaning of the '<em>Base Market Multiplier</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Multiplier</em>' attribute.
-	 * @see #setMultiplier(double)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_Multiplier()
+	 * @return the value of the '<em>Base Market Multiplier</em>' attribute.
+	 * @see #setBaseMarketMultiplier(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_BaseMarketMultiplier()
 	 * @model default="1" required="true"
 	 * @generated
 	 */
-	double getMultiplier();
+	double getBaseMarketMultiplier();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMultiplier <em>Multiplier</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketMultiplier <em>Base Market Multiplier</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Multiplier</em>' attribute.
-	 * @see #getMultiplier()
+	 * @param value the new value of the '<em>Base Market Multiplier</em>' attribute.
+	 * @see #getBaseMarketMultiplier()
 	 * @generated
 	 */
-	void setMultiplier(double value);
+	void setBaseMarketMultiplier(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Ref Market Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ref Market Index</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ref Market Index</em>' reference.
+	 * @see #setRefMarketIndex(Index)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_RefMarketIndex()
+	 * @model required="true"
+	 * @generated
+	 */
+	AIndex getRefMarketIndex();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketIndex <em>Ref Market Index</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ref Market Index</em>' reference.
+	 * @see #getRefMarketIndex()
+	 * @generated
+	 */
+	void setRefMarketIndex(AIndex value);
+
+	/**
+	 * Returns the value of the '<em><b>Ref Market Constant</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ref Market Constant</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ref Market Constant</em>' attribute.
+	 * @see #setRefMarketConstant(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_RefMarketConstant()
+	 * @model default="0" required="true"
+	 * @generated
+	 */
+	double getRefMarketConstant();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketConstant <em>Ref Market Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ref Market Constant</em>' attribute.
+	 * @see #getRefMarketConstant()
+	 * @generated
+	 */
+	void setRefMarketConstant(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Ref Market Multiplier</b></em>' attribute.
+	 * The default value is <code>"1"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ref Market Multiplier</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ref Market Multiplier</em>' attribute.
+	 * @see #setRefMarketMultiplier(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_RefMarketMultiplier()
+	 * @model default="1" required="true"
+	 * @generated
+	 */
+	double getRefMarketMultiplier();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketMultiplier <em>Ref Market Multiplier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ref Market Multiplier</em>' attribute.
+	 * @see #getRefMarketMultiplier()
+	 * @generated
+	 */
+	void setRefMarketMultiplier(double value);
 
 	/**
 	 * Returns the value of the '<em><b>Share</b></em>' attribute.
@@ -154,6 +238,33 @@ public interface ProfitSharePurchaseContract extends PurchaseContract {
 	 * @generated
 	 */
 	void setShare(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Margin</b></em>' attribute.
+	 * The default value is <code>"0"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Margin</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Margin</em>' attribute.
+	 * @see #setMargin(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_Margin()
+	 * @model default="0" required="true"
+	 * @generated
+	 */
+	double getMargin();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMargin <em>Margin</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Margin</em>' attribute.
+	 * @see #getMargin()
+	 * @generated
+	 */
+	void setMargin(double value);
 
 } // end of  ProfitSharePurchaseContract
 

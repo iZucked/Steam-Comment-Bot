@@ -65,44 +65,79 @@ public class ProfitSharePurchaseContractComponentHelper extends BaseComponentHel
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_baseMarketEditor(detailComposite, topClass);
-		add_indexEditor(detailComposite, topClass);
-		add_constantEditor(detailComposite, topClass);
-		add_multiplierEditor(detailComposite, topClass);
+		add_baseMarketPortsEditor(detailComposite, topClass);
+		add_baseMarketIndexEditor(detailComposite, topClass);
+		add_baseMarketConstantEditor(detailComposite, topClass);
+		add_baseMarketMultiplierEditor(detailComposite, topClass);
+		add_refMarketIndexEditor(detailComposite, topClass);
+		add_refMarketConstantEditor(detailComposite, topClass);
+		add_refMarketMultiplierEditor(detailComposite, topClass);
 		add_shareEditor(detailComposite, topClass);
+		add_marginEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the baseMarket feature on ProfitSharePurchaseContract
+	 * Create the editor for the baseMarketPorts feature on ProfitSharePurchaseContract
 	 *
 	 * @generated
 	 */
-	protected void add_baseMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET));
+	protected void add_baseMarketPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_PORTS));
 	}
+
 	/**
-	 * Create the editor for the index feature on ProfitSharePurchaseContract
+	 * Create the editor for the baseMarketIndex feature on ProfitSharePurchaseContract
 	 *
 	 * @generated
 	 */
-	protected void add_indexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__INDEX));
+	protected void add_baseMarketIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX));
 	}
+
 	/**
-	 * Create the editor for the constant feature on ProfitSharePurchaseContract
+	 * Create the editor for the baseMarketConstant feature on ProfitSharePurchaseContract
 	 *
 	 * @generated
 	 */
-	protected void add_constantEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT));
+	protected void add_baseMarketConstantEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT));
 	}
+
 	/**
-	 * Create the editor for the multiplier feature on ProfitSharePurchaseContract
+	 * Create the editor for the baseMarketMultiplier feature on ProfitSharePurchaseContract
 	 *
 	 * @generated
 	 */
-	protected void add_multiplierEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER));
+	protected void add_baseMarketMultiplierEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER));
 	}
+
+	/**
+	 * Create the editor for the refMarketIndex feature on ProfitSharePurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_refMarketIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX));
+	}
+
+	/**
+	 * Create the editor for the refMarketConstant feature on ProfitSharePurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_refMarketConstantEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT));
+	}
+
+	/**
+	 * Create the editor for the refMarketMultiplier feature on ProfitSharePurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_refMarketMultiplierEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER));
+	}
+
 	/**
 	 * Create the editor for the share feature on ProfitSharePurchaseContract
 	 *
@@ -110,5 +145,14 @@ public class ProfitSharePurchaseContractComponentHelper extends BaseComponentHel
 	 */
 	protected void add_shareEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE));
+	}
+
+	/**
+	 * Create the editor for the margin feature on ProfitSharePurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_marginEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN));
 	}
 }

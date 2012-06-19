@@ -66,9 +66,7 @@ public class NetbackPurchaseContractComponentHelper extends BaseComponentHelper 
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_notionalBallastParametersEditor(detailComposite, topClass);
-		add_indexEditor(detailComposite, topClass);
-		add_constantEditor(detailComposite, topClass);
-		add_multiplierEditor(detailComposite, topClass);
+		add_marginEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the notionalBallastParameters feature on NetbackPurchaseContract
@@ -79,27 +77,11 @@ public class NetbackPurchaseContractComponentHelper extends BaseComponentHelper 
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS));
 	}
 	/**
-	 * Create the editor for the index feature on NetbackPurchaseContract
+	 * Create the editor for the margin feature on NetbackPurchaseContract
 	 *
 	 * @generated
 	 */
-	protected void add_indexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__INDEX));
-	}
-	/**
-	 * Create the editor for the constant feature on NetbackPurchaseContract
-	 *
-	 * @generated
-	 */
-	protected void add_constantEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__CONSTANT));
-	}
-	/**
-	 * Create the editor for the multiplier feature on NetbackPurchaseContract
-	 *
-	 * @generated
-	 */
-	protected void add_multiplierEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__MULTIPLIER));
+	protected void add_marginEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__MARGIN));
 	}
 }

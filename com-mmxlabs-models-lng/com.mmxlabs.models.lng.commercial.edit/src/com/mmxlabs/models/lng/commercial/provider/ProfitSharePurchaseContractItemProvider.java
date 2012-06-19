@@ -61,29 +61,33 @@ public class ProfitSharePurchaseContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addBaseMarketPropertyDescriptor(object);
-			addIndexPropertyDescriptor(object);
-			addConstantPropertyDescriptor(object);
-			addMultiplierPropertyDescriptor(object);
+			addBaseMarketPortsPropertyDescriptor(object);
+			addBaseMarketIndexPropertyDescriptor(object);
+			addBaseMarketConstantPropertyDescriptor(object);
+			addBaseMarketMultiplierPropertyDescriptor(object);
+			addRefMarketIndexPropertyDescriptor(object);
+			addRefMarketConstantPropertyDescriptor(object);
+			addRefMarketMultiplierPropertyDescriptor(object);
 			addSharePropertyDescriptor(object);
+			addMarginPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Base Market feature.
+	 * This adds a property descriptor for the Base Market Ports feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addBaseMarketPropertyDescriptor(Object object) {
+	protected void addBaseMarketPortsPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ProfitSharePurchaseContract_baseMarket_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_baseMarket_feature", "_UI_ProfitSharePurchaseContract_type"),
-				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET,
+				 getString("_UI_ProfitSharePurchaseContract_baseMarketPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_baseMarketPorts_feature", "_UI_ProfitSharePurchaseContract_type"),
+				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_PORTS,
 				 true,
 				 false,
 				 true,
@@ -93,19 +97,19 @@ public class ProfitSharePurchaseContractItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Index feature.
+	 * This adds a property descriptor for the Base Market Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIndexPropertyDescriptor(Object object) {
+	protected void addBaseMarketIndexPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ProfitSharePurchaseContract_index_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_index_feature", "_UI_ProfitSharePurchaseContract_type"),
-				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__INDEX,
+				 getString("_UI_ProfitSharePurchaseContract_baseMarketIndex_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_baseMarketIndex_feature", "_UI_ProfitSharePurchaseContract_type"),
+				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX,
 				 true,
 				 false,
 				 true,
@@ -115,19 +119,19 @@ public class ProfitSharePurchaseContractItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Constant feature.
+	 * This adds a property descriptor for the Base Market Constant feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addConstantPropertyDescriptor(Object object) {
+	protected void addBaseMarketConstantPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ProfitSharePurchaseContract_constant_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_constant_feature", "_UI_ProfitSharePurchaseContract_type"),
-				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT,
+				 getString("_UI_ProfitSharePurchaseContract_baseMarketConstant_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_baseMarketConstant_feature", "_UI_ProfitSharePurchaseContract_type"),
+				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT,
 				 true,
 				 false,
 				 false,
@@ -137,19 +141,85 @@ public class ProfitSharePurchaseContractItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Multiplier feature.
+	 * This adds a property descriptor for the Base Market Multiplier feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMultiplierPropertyDescriptor(Object object) {
+	protected void addBaseMarketMultiplierPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_ProfitSharePurchaseContract_multiplier_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_multiplier_feature", "_UI_ProfitSharePurchaseContract_type"),
-				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER,
+				 getString("_UI_ProfitSharePurchaseContract_baseMarketMultiplier_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_baseMarketMultiplier_feature", "_UI_ProfitSharePurchaseContract_type"),
+				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ref Market Index feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRefMarketIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharePurchaseContract_refMarketIndex_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_refMarketIndex_feature", "_UI_ProfitSharePurchaseContract_type"),
+				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ref Market Constant feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRefMarketConstantPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharePurchaseContract_refMarketConstant_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_refMarketConstant_feature", "_UI_ProfitSharePurchaseContract_type"),
+				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ref Market Multiplier feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRefMarketMultiplierPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharePurchaseContract_refMarketMultiplier_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_refMarketMultiplier_feature", "_UI_ProfitSharePurchaseContract_type"),
+				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER,
 				 true,
 				 false,
 				 false,
@@ -172,6 +242,28 @@ public class ProfitSharePurchaseContractItemProvider
 				 getString("_UI_ProfitSharePurchaseContract_share_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_share_feature", "_UI_ProfitSharePurchaseContract_type"),
 				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Margin feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMarginPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharePurchaseContract_margin_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_margin_feature", "_UI_ProfitSharePurchaseContract_type"),
+				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN,
 				 true,
 				 false,
 				 false,
@@ -217,9 +309,12 @@ public class ProfitSharePurchaseContractItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ProfitSharePurchaseContract.class)) {
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT:
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER:
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

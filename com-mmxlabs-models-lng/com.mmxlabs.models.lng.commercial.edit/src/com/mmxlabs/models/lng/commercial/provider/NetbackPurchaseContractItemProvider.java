@@ -64,71 +64,25 @@ public class NetbackPurchaseContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIndexPropertyDescriptor(object);
-			addConstantPropertyDescriptor(object);
-			addMultiplierPropertyDescriptor(object);
+			addMarginPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Index feature.
+	 * This adds a property descriptor for the Margin feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIndexPropertyDescriptor(Object object) {
+	protected void addMarginPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_NetbackPurchaseContract_index_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_index_feature", "_UI_NetbackPurchaseContract_type"),
-				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__INDEX,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Constant feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addConstantPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NetbackPurchaseContract_constant_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_constant_feature", "_UI_NetbackPurchaseContract_type"),
-				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__CONSTANT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Multiplier feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addMultiplierPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NetbackPurchaseContract_multiplier_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_multiplier_feature", "_UI_NetbackPurchaseContract_type"),
-				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__MULTIPLIER,
+				 getString("_UI_NetbackPurchaseContract_margin_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_margin_feature", "_UI_NetbackPurchaseContract_type"),
+				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__MARGIN,
 				 true,
 				 false,
 				 false,
@@ -204,8 +158,7 @@ public class NetbackPurchaseContractItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(NetbackPurchaseContract.class)) {
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__CONSTANT:
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MULTIPLIER:
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS:
