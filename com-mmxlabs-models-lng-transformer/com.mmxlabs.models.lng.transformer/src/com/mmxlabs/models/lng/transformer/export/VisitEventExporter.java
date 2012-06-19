@@ -95,8 +95,12 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			}
 			if (slot instanceof ILoadOption) {
 				eAllocation.setLoadAllocation(slotAllocation);
+				final int pricePerMMBTu = (int) Calculator.divide(allocation.getLoadM3Price(), allocation.getLoadOption().getCargoCVValue());
+				eAllocation.getLoadAllocation().setPrice((double) pricePerMMBTu / (double) Calculator.ScaleFactor);
 			} else {
 				eAllocation.setDischargeAllocation(slotAllocation);
+				final int pricePerMMBTu = (int) Calculator.divide(allocation.getDischargeM3Price(), allocation.getLoadOption().getCargoCVValue());
+				eAllocation.getDischargeAllocation().setPrice((double) pricePerMMBTu / (double) Calculator.ScaleFactor);
 			}
 
 			sv.setSlotAllocation(slotAllocation);
