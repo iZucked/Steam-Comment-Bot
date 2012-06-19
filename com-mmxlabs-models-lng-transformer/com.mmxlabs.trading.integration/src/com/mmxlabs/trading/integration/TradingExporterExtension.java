@@ -5,6 +5,7 @@
 package com.mmxlabs.trading.integration;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.ocl.ecore.opposites.AllInstancesContentAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,24 +57,32 @@ public class TradingExporterExtension implements IExporterExtension {
 	@Override
 	public void finishExporting() {
 //		final EList<BookedRevenue> revenues = outputSchedule.getRevenue();
-//		final IPortSlotProvider slotProvider = annotatedSolution.getContext().getOptimisationData()
-//				.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-//		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
-//			final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, TradingConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
-//			if (profitAndLoss != null) {
-//				// emit p&l entry - depends on the type of slot associated with the element.
-//				final IPortSlot slot = slotProvider.getPortSlot(element);
-//
-//				if (slot instanceof ILoadSlot) {
-//					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
-//					CargoAllocation cargoAllocation = null;
-//					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-//						if (allocation.getLoadSlot() == modelSlot || allocation.getDischargeSlot() == slot) {
-//							cargoAllocation = allocation;
-//							break;
-//						}
-//					}
-//					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
+		final IPortSlotProvider slotProvider = annotatedSolution.getContext().getOptimisationData()
+				.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
+			final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, TradingConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
+			if (profitAndLoss != null) {
+				// emit p&l entry - depends on the type of slot associated with the element.
+				final IPortSlot slot = slotProvider.getPortSlot(element);
+
+				if (slot instanceof ILoadSlot) {
+					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+					CargoAllocation cargoAllocation = null;
+					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
+						if (allocation.getLoadAllocation().getSlot() == modelSlot || allocation.getDischargeAllocation().getSlot() == slot) {
+							cargoAllocation = allocation;
+							break;
+						}
+					}
+					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
+						AdditionalData entityData = ScheduleFactory.eINSTANCE.createAdditionalData();
+						entityData.setKey(entry.getEntity().getName());
+						AdditionalData pnlData = ScheduleFactory.eINSTANCE.createAdditionalData();
+						pnlData.setIntegerValue((int)entry.getFinalGroupValue() / Calculator.ScaleFactor);
+						pnlData.setKey("pnl");
+						cargoAllocation.getAdditionalData().add(entityData);
+						entityData.getAdditionalData().add(pnlData);
+						
 //						final CargoRevenue revenue = ScheduleFactory.eINSTANCE.createCargoRevenue();
 //						revenue.setCargo(cargoAllocation);
 //						revenue.setEntity(entities.getModelObject(entry.getEntity(), Entity.class));
@@ -88,8 +97,8 @@ public class TradingExporterExtension implements IExporterExtension {
 //						} else if (cargoAllocation.getDischargeRevenue() == null) {
 //							cargoAllocation.setDischargeRevenue(revenue);
 //						}
-//					}
-//				} else if (slot instanceof IVesselEventPortSlot) {
+					}
+				} else if (slot instanceof IVesselEventPortSlot) {
 //					final VesselEvent modelEvent = entities.getModelObject(slot, VesselEvent.class);
 //					VesselEventVisit visit = null;
 //
@@ -113,7 +122,7 @@ public class TradingExporterExtension implements IExporterExtension {
 //						revenues.add(revenue);
 //						visit.setRevenue(revenue);
 //					}
-//				} else {
+				} else {
 //					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
 //						AdditionalData additionalData = ScheduleFactory.eINSTANCE.createAdditionalData();
 //
@@ -124,9 +133,9 @@ public class TradingExporterExtension implements IExporterExtension {
 //						revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
 //						revenues.add(revenue);
 //					}
-//				}
-//			}
-//		}
+				}
+			}
+		}
 
 		// clear refs, just in case.
 		inputScenario = null;
