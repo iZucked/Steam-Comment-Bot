@@ -107,7 +107,7 @@ public class NotionalBallastParametersItemProvider
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
 				 getString("_UI_NotionalBallastParameters_speed_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalBallastParameters_speed_feature", "_UI_NotionalBallastParameters_type"),
+				 getString("_UI_NotionalBallastParameters_speed_description"),
 				 CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__SPEED,
 				 true,
 				 false,
