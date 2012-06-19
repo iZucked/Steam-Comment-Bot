@@ -149,7 +149,7 @@ public class LNGScenarioTransformer {
 	private Map<VesselClass, List<IVessel>> spotVesselsByClass = new HashMap<VesselClass, List<IVessel>>();
 
 	private final ArrayList<IVessel> allVessels = new ArrayList<IVessel>();
-	
+
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
@@ -353,20 +353,24 @@ public class LNGScenarioTransformer {
 						PortType type = null;
 						switch (entry.getActivity()) {
 						case LOAD:
-							type = PortType.Load;break;
+							type = PortType.Load;
+							break;
 						case DISCHARGE:
-							type = PortType.Discharge;break;
+							type = PortType.Discharge;
+							break;
 						case DRYDOCK:
-							type=PortType.DryDock;break;
+							type = PortType.DryDock;
+							break;
 						case MAINTENANCE:
-							type=PortType.Maintenance;break;
+							type = PortType.Maintenance;
+							break;
 						}
-						
+
 						if (type != null) {
 							for (final IVessel v : allVessels) {
-								//TODO should the builder handle the application of costs to vessel classes?
+								// TODO should the builder handle the application of costs to vessel classes?
 								final long activityCost = Calculator.scale(cost.getPortCost(vesselAssociations.getFirst().reverseLookup(v.getVesselClass()), entry.getActivity()));
-								builder.setPortCost(portAssociation.lookup((Port)port), v, type, activityCost);
+								builder.setPortCost(portAssociation.lookup((Port) port), v, type, activityCost);
 							}
 						}
 					}
@@ -374,8 +378,7 @@ public class LNGScenarioTransformer {
 
 			}
 		}
-				
-		
+
 		buildDistances(builder, portAssociation, allPorts, portIndices, vesselAssociations.getFirst());
 
 		buildCargoes(builder, portAssociation, indexAssociation, vesselAssociations.getSecond(), contractTransformers, entities, getOptimisationSettings().isRewire());
@@ -385,10 +388,9 @@ public class LNGScenarioTransformer {
 		// buildDiscountCurves(builder);
 
 		// freezeStartSequences(builder, entities);
-		
+
 		// freeze any frozen assignments
 		freezeInputModel(builder, entities);
-		
 
 		for (final ITransformerExtension extension : allTransformerExtensions) {
 			extension.finishTransforming();
@@ -408,8 +410,9 @@ public class LNGScenarioTransformer {
 						break;
 					}
 				}
-				
-				if (assignment == null || assignment.getVessels().isEmpty()) continue;// o is not actually assigned to anything
+
+				if (assignment == null || assignment.getVessels().isEmpty())
+					continue;// o is not actually assigned to anything
 				final IVessel vessel;
 				if (assignment.isAssignToSpot()) {
 					final List<IVessel> spots = spotVesselsByClass.get(assignment.getVessels().iterator().next());
@@ -422,9 +425,10 @@ public class LNGScenarioTransformer {
 				} else {
 					vessel = entities.getOptimiserObject(assignment.getVessels().get(0), IVessel.class);
 				}
-				
-				if (vessel == null) continue;
-				
+
+				if (vessel == null)
+					continue;
+
 				if (o instanceof Cargo) {
 					final ICargo cargo = entities.getOptimiserObject(o, ICargo.class);
 					if (cargo != null) {
@@ -612,7 +616,7 @@ public class LNGScenarioTransformer {
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
 		// TODO: Refactor into Load and Discharge slot creation before cargo paring
-		
+
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
 			if (eCargo.getLoadSlot().getWindowStartWithSlotOrPortTime().after(latestDate)) {
@@ -692,7 +696,7 @@ public class LNGScenarioTransformer {
 
 			entities.addModelObject(eCargo, cargo);
 			if (eCargo.getCargoType() == CargoType.FLEET) {
-			
+
 				final Set<AVessel> allowedVessels = SetUtils.getVessels(eCargo.getAllowedVessels());
 				if (!allowedVessels.isEmpty()) {
 					final Set<IVessel> vesselsForCargo = new HashSet<IVessel>();
@@ -703,7 +707,7 @@ public class LNGScenarioTransformer {
 				}
 			} else {
 				// Move generators should not permit this, but specify here just in case
-				builder.setCargoVesselRestriction(cargo, Collections.<IVessel>emptySet());
+				builder.setCargoVesselRestriction(cargo, Collections.<IVessel> emptySet());
 			}
 
 		}
