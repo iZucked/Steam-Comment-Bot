@@ -158,6 +158,8 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		
 		final HashMap<Object, Pair<ScenarioInstance, MMXRootObject>> sourceByElement = new HashMap<Object, Pair<ScenarioInstance, MMXRootObject>>();
 		final ArrayList<Object> selectedObjects = new ArrayList<Object>();
+		final List<MMXRootObject> rootObjects = new ArrayList<MMXRootObject>();
+		
 		for (final ScenarioInstance job : selectionProvider.getSelection()) {
 			final IScenarioService scenarioService = job.getScenarioService();
 
@@ -167,15 +169,19 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			} catch (IOException e) {}
 
 			if (instance instanceof MMXRootObject) {
-				final Collection<? extends Object> viewerContent = collector.collectElements((MMXRootObject) instance);
+				final MMXRootObject rootObject = (MMXRootObject) instance;
+				rootObjects.add(rootObject);
+				final Collection<? extends Object> viewerContent = collector.collectElements(rootObject);
 				for (final Object o : viewerContent) {
-					sourceByElement.put(o, new Pair<ScenarioInstance, MMXRootObject>(job, (MMXRootObject) instance));
+					sourceByElement.put(o, new Pair<ScenarioInstance, MMXRootObject>(job, rootObject));
 				}
 				selectedObjects.addAll(viewerContent);
 			}
 		}
 		
 		return new IScenarioViewerSynchronizerOutput() {
+
+			
 			@Override
 			public ScenarioInstance getScenarioInstance(Object object) {
 				return sourceByElement.get(object).getFirst();
@@ -189,6 +195,11 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			@Override
 			public Collection<Object> getCollectedElements() {
 				return selectedObjects;
+			}
+			
+			@Override
+			public Collection<MMXRootObject> getRootObjects() {
+				return rootObjects;
 			}
 		};
 	}

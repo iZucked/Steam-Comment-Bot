@@ -9,4 +9,5 @@ public interface IScenarioViewerSynchronizerOutput {
 		public Collection<Object> getCollectedElements();
 		public ScenarioInstance getScenarioInstance(Object object);
 		public MMXRootObject getRootObject(Object object);
+		public Collection<MMXRootObject> getRootObjects();
 	}
