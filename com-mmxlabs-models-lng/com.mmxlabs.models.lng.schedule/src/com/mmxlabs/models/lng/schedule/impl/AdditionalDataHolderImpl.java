@@ -196,7 +196,7 @@ public class AdditionalDataHolderImpl extends EObjectImpl implements AdditionalD
 		switch (operationID) {
 			case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
 				return getAdditionalDataWithKey((String)arguments.get(0));
-			case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST:
+			case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE:
 				return getAdditionalDataWithPath((Iterable<String>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);

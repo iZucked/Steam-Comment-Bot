@@ -147,6 +147,7 @@
         eType="#//CargoAllocation"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotVisit" lowerBound="1"
         eType="#//SlotVisit" unsettable="true" eOpposite="#//SlotVisit/slotAllocation"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="price" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FuelAmount">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" lowerBound="1" eType="#//FuelUnit"/>

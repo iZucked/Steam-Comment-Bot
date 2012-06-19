@@ -22,6 +22,7 @@ import java.util.Calendar;
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSpotMarket <em>Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getSlotVisit <em>Slot Visit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPrice <em>Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -216,6 +217,32 @@ public interface SlotAllocation extends MMXObject {
 	 * @generated
 	 */
 	boolean isSetSlotVisit();
+
+	/**
+	 * Returns the value of the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price</em>' attribute.
+	 * @see #setPrice(double)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSlotAllocation_Price()
+	 * @model
+	 * @generated
+	 */
+	double getPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPrice <em>Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price</em>' attribute.
+	 * @see #getPrice()
+	 * @generated
+	 */
+	void setPrice(double value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -46,6 +46,7 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 	public CargoAllocationComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER));
 	}
 	
 	/**

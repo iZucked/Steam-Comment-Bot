@@ -34,6 +34,7 @@ import java.util.Calendar;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSpotMarket <em>Spot Market</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getCargoAllocation <em>Cargo Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getSlotVisit <em>Slot Visit</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl#getPrice <em>Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -106,6 +107,26 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	 * @ordered
 	 */
 	protected boolean slotVisitESet;
+
+	/**
+	 * The default value of the '{@link #getPrice() <em>Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double PRICE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getPrice() <em>Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double price = PRICE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -405,6 +426,27 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getPrice() {
+		return price;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPrice(double newPrice) {
+		double oldPrice = price;
+		price = newPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SLOT_ALLOCATION__PRICE, oldPrice, price));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public APort getPort() {
@@ -523,6 +565,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				if (resolve) return getSlotVisit();
 				return basicGetSlotVisit();
+			case SchedulePackage.SLOT_ALLOCATION__PRICE:
+				return getPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -546,6 +590,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return;
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				setSlotVisit((SlotVisit)newValue);
+				return;
+			case SchedulePackage.SLOT_ALLOCATION__PRICE:
+				setPrice((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -571,6 +618,9 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				unsetSlotVisit();
 				return;
+			case SchedulePackage.SLOT_ALLOCATION__PRICE:
+				setPrice(PRICE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -591,6 +641,8 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return cargoAllocation != null;
 			case SchedulePackage.SLOT_ALLOCATION__SLOT_VISIT:
 				return isSetSlotVisit();
+			case SchedulePackage.SLOT_ALLOCATION__PRICE:
+				return price != PRICE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -615,6 +667,22 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 				return getName();
 		}
 		return super.eInvoke(operationID, arguments);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (price: ");
+		result.append(price);
+		result.append(')');
+		return result.toString();
 	}
 
 } // end of SlotAllocationImpl

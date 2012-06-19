@@ -2494,7 +2494,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ELIST = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
+	int CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Get Name</em>' operation.
@@ -2588,13 +2588,22 @@ public interface SchedulePackage extends EPackage {
 	int SLOT_ALLOCATION__SLOT_VISIT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_ALLOCATION__PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Slot Allocation</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int SLOT_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -2804,6 +2813,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int FITNESS__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FITNESS__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Fitness Value</b></em>' attribute.
@@ -3159,6 +3177,15 @@ public interface SchedulePackage extends EPackage {
 	int ADDITIONAL_DATA__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADDITIONAL_DATA__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Additional Data</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3282,7 +3309,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ELIST = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
+	int ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The number of operations of the '<em>Additional Data</em>' class.
@@ -3337,7 +3364,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST = 1;
+	int ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = 1;
 
 	/**
 	 * The number of operations of the '<em>Additional Data Holder</em>' class.
@@ -4201,6 +4228,17 @@ public interface SchedulePackage extends EPackage {
 	EReference getSlotAllocation_SlotVisit();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPrice <em>Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SlotAllocation#getPrice()
+	 * @see #getSlotAllocation()
+	 * @generated
+	 */
+	EAttribute getSlotAllocation_Price();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.SlotAllocation#getPort() <em>Get Port</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4395,7 +4433,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.AdditionalDataHolder#getAdditionalDataWithPath(java.lang.Iterable)
 	 * @generated
 	 */
-	EOperation getAdditionalDataHolder__GetAdditionalDataWithPath__EList();
+	EOperation getAdditionalDataHolder__GetAdditionalDataWithPath__Iterable();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}'.
@@ -5098,6 +5136,14 @@ public interface SchedulePackage extends EPackage {
 		EReference SLOT_ALLOCATION__SLOT_VISIT = eINSTANCE.getSlotAllocation_SlotVisit();
 
 		/**
+		 * The meta object literal for the '<em><b>Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT_ALLOCATION__PRICE = eINSTANCE.getSlotAllocation_Price();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Port</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -5257,7 +5303,7 @@ public interface SchedulePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST = eINSTANCE.getAdditionalDataHolder__GetAdditionalDataWithPath__EList();
+		EOperation ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = eINSTANCE.getAdditionalDataHolder__GetAdditionalDataWithPath__Iterable();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.FuelUnit <em>Fuel Unit</em>}' enum.

@@ -906,7 +906,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		if (baseClass == AdditionalDataHolder.class) {
 			switch (baseOperationID) {
 				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING: return SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING;
-				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST: return SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ELIST;
+				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE: return SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE;
 				default: return -1;
 			}
 		}
@@ -928,7 +928,7 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return getType();
 			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
 				return getAdditionalDataWithKey((String)arguments.get(0));
-			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ELIST:
+			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE:
 				return getAdditionalDataWithPath((Iterable<String>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);

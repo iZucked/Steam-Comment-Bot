@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.schedule.presentation.composites;
 
@@ -11,8 +13,8 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
+import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -20,11 +22,11 @@ import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * A component helper for VesselEventVisit instances
+ * A component helper for AdditionalDataHolder instances
  *
  * @generated
  */
-public class VesselEventVisitComponentHelper extends BaseComponentHelper {
+public class AdditionalDataHolderComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -32,7 +34,7 @@ public class VesselEventVisitComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public VesselEventVisitComponentHelper() {
+	public AdditionalDataHolderComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -41,20 +43,18 @@ public class VesselEventVisitComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public VesselEventVisitComponentHelper(IAdapterManager adapterManager) {
+	public AdditionalDataHolderComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PORT_VISIT));
 	}
 	
 	/**
-	 * add editors to a composite, using VesselEventVisit as the supertype
+	 * add editors to a composite, using AdditionalDataHolder as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, SchedulePackage.Literals.VESSEL_EVENT_VISIT);	
+		addEditorsToComposite(detailComposite, SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER);	
 	}
 	
 	/**
@@ -65,14 +65,14 @@ public class VesselEventVisitComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_vesselEventEditor(detailComposite, topClass);
+		add_additionalDataEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the vesselEvent feature on VesselEventVisit
+	 * Create the editor for the additionalData feature on AdditionalDataHolder
 	 *
 	 * @generated
 	 */
-	protected void add_vesselEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.VESSEL_EVENT_VISIT__VESSEL_EVENT));
+	protected void add_additionalDataEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA));
 	}
 }

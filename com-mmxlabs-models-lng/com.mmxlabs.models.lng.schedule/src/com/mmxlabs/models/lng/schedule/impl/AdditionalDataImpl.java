@@ -367,7 +367,7 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 		if (baseClass == AdditionalDataHolder.class) {
 			switch (baseOperationID) {
 				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING: return SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_KEY__STRING;
-				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST: return SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ELIST;
+				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE: return SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE;
 				default: return -1;
 			}
 		}
@@ -385,7 +385,7 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 		switch (operationID) {
 			case SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
 				return getAdditionalDataWithKey((String)arguments.get(0));
-			case SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ELIST:
+			case SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE:
 				return getAdditionalDataWithPath((Iterable<String>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);

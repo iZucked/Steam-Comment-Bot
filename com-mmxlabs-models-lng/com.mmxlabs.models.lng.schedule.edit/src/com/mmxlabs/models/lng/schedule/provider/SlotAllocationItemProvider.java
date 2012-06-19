@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.schedule.provider;
 
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 import java.util.Collection;
@@ -24,6 +25,8 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.SlotAllocation} object.
@@ -64,6 +67,7 @@ public class SlotAllocationItemProvider
 			addSpotMarketPropertyDescriptor(object);
 			addCargoAllocationPropertyDescriptor(object);
 			addSlotVisitPropertyDescriptor(object);
+			addPricePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -157,6 +161,28 @@ public class SlotAllocationItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SlotAllocation_price_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SlotAllocation_price_feature", "_UI_SlotAllocation_type"),
+				 SchedulePackage.Literals.SLOT_ALLOCATION__PRICE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns SlotAllocation.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -175,7 +201,8 @@ public class SlotAllocationItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_SlotAllocation_type");
+		SlotAllocation slotAllocation = (SlotAllocation)object;
+		return getString("_UI_SlotAllocation_type") + " " + slotAllocation.getPrice();
 	}
 
 	/**
@@ -188,6 +215,12 @@ public class SlotAllocationItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(SlotAllocation.class)) {
+			case SchedulePackage.SLOT_ALLOCATION__PRICE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

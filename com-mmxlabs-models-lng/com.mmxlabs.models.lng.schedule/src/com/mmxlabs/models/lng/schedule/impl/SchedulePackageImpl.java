@@ -966,6 +966,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getSlotAllocation_Price() {
+		return (EAttribute)slotAllocationEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getSlotAllocation__GetPort() {
 		return slotAllocationEClass.getEOperations().get(0);
 	}
@@ -1128,7 +1137,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getAdditionalDataHolder__GetAdditionalDataWithPath__EList() {
+	public EOperation getAdditionalDataHolder__GetAdditionalDataWithPath__Iterable() {
 		return additionalDataHolderEClass.getEOperations().get(1);
 	}
 
@@ -1285,6 +1294,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SPOT_MARKET);
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__CARGO_ALLOCATION);
 		createEReference(slotAllocationEClass, SLOT_ALLOCATION__SLOT_VISIT);
+		createEAttribute(slotAllocationEClass, SLOT_ALLOCATION__PRICE);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_PORT);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_START);
 		createEOperation(slotAllocationEClass, SLOT_ALLOCATION___GET_LOCAL_END);
@@ -1308,7 +1318,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		additionalDataHolderEClass = createEClass(ADDITIONAL_DATA_HOLDER);
 		createEReference(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
 		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING);
-		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ELIST);
+		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE);
 
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
@@ -1480,6 +1490,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSlotAllocation_SpotMarket(), theTypesPackage.getASpotMarket(), null, "spotMarket", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlotAllocation_CargoAllocation(), this.getCargoAllocation(), null, "cargoAllocation", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlotAllocation_SlotVisit(), this.getSlotVisit(), this.getSlotVisit_SlotAllocation(), "slotVisit", null, 1, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSlotAllocation_Price(), ecorePackage.getEDouble(), "price", null, 0, 1, SlotAllocation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSlotAllocation__GetPort(), theTypesPackage.getAPort(), "getPort", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1511,7 +1522,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		EOperation op = initEOperation(getAdditionalDataHolder__GetAdditionalDataWithKey__String(), this.getAdditionalData(), "getAdditionalDataWithKey", 1, 1, IS_UNIQUE, IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE, IS_ORDERED);
 
-		op = initEOperation(getAdditionalDataHolder__GetAdditionalDataWithPath__EList(), this.getAdditionalData(), "getAdditionalDataWithPath", 1, 1, IS_UNIQUE, IS_ORDERED);
+		op = initEOperation(getAdditionalDataHolder__GetAdditionalDataWithPath__Iterable(), this.getAdditionalData(), "getAdditionalDataWithPath", 1, 1, IS_UNIQUE, IS_ORDERED);
 		EGenericType g1 = createEGenericType(this.getIterable());
 		EGenericType g2 = createEGenericType(ecorePackage.getEString());
 		g1.getETypeArguments().add(g2);
