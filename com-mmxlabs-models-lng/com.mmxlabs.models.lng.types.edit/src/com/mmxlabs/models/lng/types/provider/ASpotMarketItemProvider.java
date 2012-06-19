@@ -53,9 +53,9 @@ public class ASpotMarketItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
@@ -73,7 +73,6 @@ public class ASpotMarketItemProvider extends UUIDObjectItemProvider implements
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
@@ -93,9 +92,9 @@ public class ASpotMarketItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This adds a property descriptor for the Other Names feature.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected void addOtherNamesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
@@ -115,7 +114,6 @@ public class ASpotMarketItemProvider extends UUIDObjectItemProvider implements
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public String getText(Object object) {
@@ -130,7 +128,6 @@ public class ASpotMarketItemProvider extends UUIDObjectItemProvider implements
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public void notifyChanged(Notification notification) {

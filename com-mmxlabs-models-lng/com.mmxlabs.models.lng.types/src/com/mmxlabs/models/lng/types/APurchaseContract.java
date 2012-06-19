@@ -17,13 +17,6 @@ package com.mmxlabs.models.lng.types;
  * @generated
  */
 public interface APurchaseContract extends AContract {
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	String copyright = "Copyright (C) Minimax Labs Ltd., 2010 - 2012\r\nAll rights reserved.";
 } // end of  APurchaseContract
 
 // finish type fixing

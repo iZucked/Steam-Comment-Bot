@@ -26,9 +26,9 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.types.AFleetVessel} object.
  * <!-- begin-user-doc -->
+ * @since 2.0
  * <!-- end-user-doc -->
  * @generated
- * @since 2.0
  */
 public class AFleetVesselItemProvider extends UUIDObjectItemProvider implements
 		IEditingDomainItemProvider, IStructuredItemContentProvider,

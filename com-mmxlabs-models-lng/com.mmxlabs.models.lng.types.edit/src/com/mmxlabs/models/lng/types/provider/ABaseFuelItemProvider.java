@@ -43,9 +43,9 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	public ABaseFuelItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
@@ -54,9 +54,9 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
@@ -72,9 +72,9 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
@@ -94,9 +94,9 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This adds a property descriptor for the Other Names feature.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected void addOtherNamesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
@@ -114,9 +114,9 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This returns ABaseFuel.gif.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public Object getImage(Object object) {
@@ -127,9 +127,9 @@ public class ABaseFuelItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public String getText(Object object) {

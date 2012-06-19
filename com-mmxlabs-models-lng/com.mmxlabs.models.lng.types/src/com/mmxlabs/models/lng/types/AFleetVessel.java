@@ -9,6 +9,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>AFleet Vessel</b></em>'.
+ * @since 2.0
  * <!-- end-user-doc -->
  *
  *
@@ -16,7 +17,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @model abstract="true"
  *        annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.models.lng.fleet.Vessel'"
  * @generated
- * @since 2.0
  */
 public interface AFleetVessel extends UUIDObject {
 

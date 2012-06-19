@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EClass;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>APurchase Contract</b></em>'.
+ * @since 2.0
  * <!-- end-user-doc -->
  * <p>
  * </p>
@@ -20,13 +21,6 @@ import org.eclipse.emf.ecore.EClass;
  */
 public abstract class APurchaseContractImpl extends AContractImpl implements
 		APurchaseContract {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public static final String copyright = "Copyright (C) Minimax Labs Ltd., 2010 - 2012\r\nAll rights reserved.";
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

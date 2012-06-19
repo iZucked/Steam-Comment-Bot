@@ -111,10 +111,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int APORT_SET__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -193,10 +193,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int APORT_SET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -267,10 +267,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int APORT__OTHER_NAMES = APORT_SET__OTHER_NAMES;
 
@@ -349,10 +349,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int APORT___ECONTAINER_OP = APORT_SET___ECONTAINER_OP;
 
@@ -423,10 +423,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AROUTE__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -505,10 +505,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AROUTE___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -570,10 +570,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AVESSEL_SET__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -652,10 +652,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AVESSEL_SET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -726,10 +726,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AVESSEL__OTHER_NAMES = AVESSEL_SET__OTHER_NAMES;
 
@@ -808,10 +808,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AVESSEL___ECONTAINER_OP = AVESSEL_SET___ECONTAINER_OP;
 
@@ -836,141 +836,141 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.AFleetVesselImpl <em>AFleet Vessel</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.types.impl.AFleetVesselImpl
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAFleetVessel()
 	 * @generated
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL = 4;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
 
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
 	 * The number of structural features of the '<em>AFleet Vessel</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
 
 	/**
 	 * The operation id for the '<em>Resolve Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
 
 	/**
 	 * The operation id for the '<em>Restore Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
 
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
 
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
 
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
 
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
 	/**
 	 * The number of operations of the '<em>AFleet Vessel</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AFLEET_VESSEL_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
@@ -1023,10 +1023,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AVESSEL_CLASS__OTHER_NAMES = AVESSEL_SET__OTHER_NAMES;
 
@@ -1105,10 +1105,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AVESSEL_CLASS___ECONTAINER_OP = AVESSEL_SET___ECONTAINER_OP;
 
@@ -1179,10 +1179,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AVESSEL_EVENT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -1261,10 +1261,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AVESSEL_EVENT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -1326,10 +1326,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ACONTRACT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -1408,10 +1408,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ACONTRACT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -1473,10 +1473,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ALEGAL_ENTITY__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -1555,10 +1555,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ALEGAL_ENTITY___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -1620,10 +1620,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AINDEX__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -1702,10 +1702,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AINDEX___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -1767,10 +1767,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ACARGO__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -1849,10 +1849,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ACARGO___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -1914,10 +1914,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ASLOT__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -1996,10 +1996,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ASLOT___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -2098,10 +2098,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ABASE_FUEL__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -2180,10 +2180,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ABASE_FUEL___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -2245,10 +2245,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ASPOT_MARKET__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -2327,10 +2327,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int ASPOT_MARKET___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -2392,10 +2392,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AOPTIMISATION_SETTINGS__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
@@ -2474,10 +2474,10 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	int AOPTIMISATION_SETTINGS___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
 
@@ -2493,6 +2493,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.APurchaseContractImpl <em>APurchase Contract</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.types.impl.APurchaseContractImpl
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAPurchaseContract()
@@ -2503,6 +2504,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2512,6 +2514,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2521,6 +2524,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2530,6 +2534,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2539,6 +2544,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2548,6 +2554,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>APurchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2557,6 +2564,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2566,6 +2574,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Resolve Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2575,6 +2584,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Restore Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2584,6 +2594,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2593,6 +2604,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2602,6 +2614,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2611,6 +2624,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2620,6 +2634,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2629,6 +2644,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>APurchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2638,6 +2654,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ASalesContractImpl <em>ASales Contract</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.types.impl.ASalesContractImpl
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASalesContract()
@@ -2648,6 +2665,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2657,6 +2675,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2666,6 +2685,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2675,6 +2695,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2684,6 +2705,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2693,6 +2715,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>ASales Contract</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2702,6 +2725,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2711,6 +2735,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Resolve Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2720,6 +2745,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Restore Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2729,6 +2755,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2738,6 +2765,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2747,6 +2775,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2756,6 +2785,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2765,6 +2795,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2774,6 +2805,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>ASales Contract</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2788,7 +2820,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getPortCapability()
 	 * @generated
 	 */
-	int PORT_CAPABILITY = 17;
+	int PORT_CAPABILITY = 19;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.
@@ -2863,11 +2895,11 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.AFleetVessel <em>AFleet Vessel</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>AFleet Vessel</em>'.
 	 * @see com.mmxlabs.models.lng.types.AFleetVessel
 	 * @generated
-	 * @since 2.0
 	 */
 	EClass getAFleetVessel();
 
@@ -3014,6 +3046,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APurchaseContract <em>APurchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>APurchase Contract</em>'.
 	 * @see com.mmxlabs.models.lng.types.APurchaseContract
@@ -3024,6 +3057,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ASalesContract <em>ASales Contract</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>ASales Contract</em>'.
 	 * @see com.mmxlabs.models.lng.types.ASalesContract
@@ -3137,7 +3171,6 @@ public interface TypesPackage extends EPackage {
 		 * @see com.mmxlabs.models.lng.types.impl.AFleetVesselImpl
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAFleetVessel()
 		 * @generated
-		 * @since 2.0
 		 */
 		EClass AFLEET_VESSEL = eINSTANCE.getAFleetVessel();
 
@@ -3292,6 +3325,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ASalesContractImpl <em>ASales Contract</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.types.impl.ASalesContractImpl
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASalesContract()

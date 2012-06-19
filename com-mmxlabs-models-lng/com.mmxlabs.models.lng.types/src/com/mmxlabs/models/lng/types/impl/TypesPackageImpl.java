@@ -315,9 +315,9 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	public EClass getAFleetVessel() {
 		return aFleetVesselEClass;
@@ -545,6 +545,10 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		aOptimisationSettingsEClass = createEClass(AOPTIMISATION_SETTINGS);
 
+		aPurchaseContractEClass = createEClass(APURCHASE_CONTRACT);
+
+		aSalesContractEClass = createEClass(ASALES_CONTRACT);
+
 		// Create enums
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
 	}
@@ -623,6 +627,8 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				theMMXCorePackage.getUUIDObject());
 		aOptimisationSettingsEClass.getESuperTypes().add(
 				theMMXCorePackage.getNamedObject());
+		aPurchaseContractEClass.getESuperTypes().add(this.getAContract());
+		aSalesContractEClass.getESuperTypes().add(this.getAContract());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(aPortEClass, APort.class, "APort", IS_ABSTRACT,
@@ -704,6 +710,14 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				"AOptimisationSettings", IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(aPurchaseContractEClass, APurchaseContract.class,
+				"APurchaseContract", IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(aSalesContractEClass, ASalesContract.class,
+				"ASalesContract", IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+
 		// Initialize enums and add enum literals
 		initEEnum(portCapabilityEEnum, PortCapability.class, "PortCapability");
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.LOAD);
@@ -752,6 +766,12 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				"com.mmxlabs.models.lng.cargo.Slot" });
 		addAnnotation(aBaseFuelEClass, source, new String[] { "generatedType",
 				"com.mmxlabs.models.lng.fleet.BaseFuel" });
+		addAnnotation(aPurchaseContractEClass, source, new String[] {
+				"generatedType",
+				"com.mmxlabs.models.lng.commercial.PurchaseContract" });
+		addAnnotation(aSalesContractEClass, source, new String[] {
+				"generatedType",
+				"com.mmxlabs.models.lng.commercial.SalesContract" });
 	}
 
 } //TypesPackageImpl

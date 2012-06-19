@@ -61,11 +61,11 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	/**
 	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getOtherNames()
 	 * @generated
 	 * @ordered
-	 * @since 2.0
 	 */
 	protected EList<String> otherNames;
 
@@ -112,9 +112,9 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {

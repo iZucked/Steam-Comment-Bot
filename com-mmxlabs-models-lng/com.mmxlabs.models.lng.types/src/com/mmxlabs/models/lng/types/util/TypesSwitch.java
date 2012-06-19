@@ -293,6 +293,36 @@ public class TypesSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case TypesPackage.APURCHASE_CONTRACT: {
+			APurchaseContract aPurchaseContract = (APurchaseContract) theEObject;
+			T result = caseAPurchaseContract(aPurchaseContract);
+			if (result == null)
+				result = caseAContract(aPurchaseContract);
+			if (result == null)
+				result = caseUUIDObject(aPurchaseContract);
+			if (result == null)
+				result = caseNamedObject(aPurchaseContract);
+			if (result == null)
+				result = caseMMXObject(aPurchaseContract);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.ASALES_CONTRACT: {
+			ASalesContract aSalesContract = (ASalesContract) theEObject;
+			T result = caseASalesContract(aSalesContract);
+			if (result == null)
+				result = caseAContract(aSalesContract);
+			if (result == null)
+				result = caseUUIDObject(aSalesContract);
+			if (result == null)
+				result = caseNamedObject(aSalesContract);
+			if (result == null)
+				result = caseMMXObject(aSalesContract);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -363,12 +393,12 @@ public class TypesSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>AFleet Vessel</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
-	 * @since 2.0
 	 */
 	public T caseAFleetVessel(AFleetVessel object) {
 		return null;

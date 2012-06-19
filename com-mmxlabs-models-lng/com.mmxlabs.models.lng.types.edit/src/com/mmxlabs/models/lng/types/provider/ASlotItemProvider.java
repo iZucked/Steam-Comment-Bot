@@ -53,9 +53,9 @@ public class ASlotItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This returns the property descriptors for the adapted class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
@@ -71,9 +71,9 @@ public class ASlotItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This adds a property descriptor for the Name feature.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
@@ -93,9 +93,9 @@ public class ASlotItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This adds a property descriptor for the Other Names feature.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected void addOtherNamesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
@@ -113,9 +113,9 @@ public class ASlotItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public String getText(Object object) {
@@ -128,9 +128,9 @@ public class ASlotItemProvider extends UUIDObjectItemProvider implements
 	 * This handles model notifications by calling {@link #updateChildren} to update any cached
 	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public void notifyChanged(Notification notification) {

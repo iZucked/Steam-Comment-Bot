@@ -55,7 +55,6 @@ public class AVesselSetItemProvider extends UUIDObjectItemProvider implements
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
@@ -73,7 +72,6 @@ public class AVesselSetItemProvider extends UUIDObjectItemProvider implements
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
 		itemPropertyDescriptors
@@ -93,9 +91,9 @@ public class AVesselSetItemProvider extends UUIDObjectItemProvider implements
 	/**
 	 * This adds a property descriptor for the Other Names feature.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected void addOtherNamesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(
@@ -115,7 +113,6 @@ public class AVesselSetItemProvider extends UUIDObjectItemProvider implements
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public Object getImage(Object object) {
@@ -128,7 +125,6 @@ public class AVesselSetItemProvider extends UUIDObjectItemProvider implements
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	@Override
 	public String getText(Object object) {

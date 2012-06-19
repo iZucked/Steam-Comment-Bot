@@ -13,12 +13,12 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>AFleet Vessel</b></em>'.
+ * @since 2.0
  * <!-- end-user-doc -->
  * <p>
  * </p>
  *
  * @generated
- * @since 2.0
  */
 public abstract class AFleetVesselImpl extends UUIDObjectImpl implements
 		AFleetVessel {
