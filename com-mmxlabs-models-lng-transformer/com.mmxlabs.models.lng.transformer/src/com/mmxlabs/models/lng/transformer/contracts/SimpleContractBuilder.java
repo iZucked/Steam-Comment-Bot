@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
@@ -40,19 +41,19 @@ public class SimpleContractBuilder implements IBuilderExtension {
 		return new MarketPriceContract(index, offset, multiplier);
 	}
 
-	ILoadPriceCalculator2 createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int alpha, final int beta, final int gamma) {
-		return new ProfitSharingContract(actualMarket, referenceMarket, alpha, beta, gamma);
+	ProfitSharingContract createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int margin, final int share, Set<IPort> baseMarketPorts) {
+		return new ProfitSharingContract(actualMarket, referenceMarket, margin, share, baseMarketPorts);
 	}
 
-	ILoadPriceCalculator2 createNetbackContract(final int buyersMargin) {
-		final NetbackContract result = new NetbackContract();
-
-		result.setMarginScaled(buyersMargin);
-
-		netbacks.add(result);
-
-		return result;
-	}
+	// ILoadPriceCalculator2 createNetbackContract(final int buyersMargin) {
+	// final NetbackContract result = new NetbackContract();
+	//
+	// result.setMarginScaled(buyersMargin);
+	//
+	// netbacks.add(result);
+	//
+	// return result;
+	// }
 
 	@Override
 	public Collection<Pair<String, IDataComponentProvider>> createDataComponentProviders(IOptimisationData optimisationData) {
