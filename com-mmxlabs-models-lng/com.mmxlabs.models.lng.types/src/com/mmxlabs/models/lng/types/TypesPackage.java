@@ -1930,7 +1930,6 @@ public interface TypesPackage extends EPackage {
 	 */
 	int ASLOT_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
-
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
@@ -2492,6 +2491,296 @@ public interface TypesPackage extends EPackage {
 	int AOPTIMISATION_SETTINGS_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.APurchaseContractImpl <em>APurchase Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.impl.APurchaseContractImpl
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAPurchaseContract()
+	 * @generated
+	 */
+	int APURCHASE_CONTRACT = 17;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT__EXTENSIONS = ACONTRACT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT__PROXIES = ACONTRACT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT__UUID = ACONTRACT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT__NAME = ACONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT__OTHER_NAMES = ACONTRACT__OTHER_NAMES;
+
+	/**
+	 * The number of structural features of the '<em>APurchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT_FEATURE_COUNT = ACONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT___MAKE_PROXIES = ACONTRACT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT___RESOLVE_PROXIES__MAP = ACONTRACT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT___RESTORE_PROXIES = ACONTRACT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT___COLLECT_UUID_OBJECTS__MAP = ACONTRACT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT___COLLECT_UUID_OBJECTS = ACONTRACT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = ACONTRACT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = ACONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT___ECONTAINER_OP = ACONTRACT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>APurchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int APURCHASE_CONTRACT_OPERATION_COUNT = ACONTRACT_OPERATION_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ASalesContractImpl <em>ASales Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.impl.ASalesContractImpl
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASalesContract()
+	 * @generated
+	 */
+	int ASALES_CONTRACT = 18;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT__EXTENSIONS = ACONTRACT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT__PROXIES = ACONTRACT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT__UUID = ACONTRACT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT__NAME = ACONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT__OTHER_NAMES = ACONTRACT__OTHER_NAMES;
+
+	/**
+	 * The number of structural features of the '<em>ASales Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT_FEATURE_COUNT = ACONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT___MAKE_PROXIES = ACONTRACT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT___RESOLVE_PROXIES__MAP = ACONTRACT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT___RESTORE_PROXIES = ACONTRACT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT___COLLECT_UUID_OBJECTS__MAP = ACONTRACT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT___COLLECT_UUID_OBJECTS = ACONTRACT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = ACONTRACT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = ACONTRACT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT___ECONTAINER_OP = ACONTRACT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>ASales Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ASALES_CONTRACT_OPERATION_COUNT = ACONTRACT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2721,6 +3010,26 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getAOptimisationSettings();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APurchaseContract <em>APurchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>APurchase Contract</em>'.
+	 * @see com.mmxlabs.models.lng.types.APurchaseContract
+	 * @generated
+	 */
+	EClass getAPurchaseContract();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ASalesContract <em>ASales Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ASales Contract</em>'.
+	 * @see com.mmxlabs.models.lng.types.ASalesContract
+	 * @generated
+	 */
+	EClass getASalesContract();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}'.
@@ -2969,6 +3278,26 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EClass AOPTIMISATION_SETTINGS = eINSTANCE.getAOptimisationSettings();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.APurchaseContractImpl <em>APurchase Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.impl.APurchaseContractImpl
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAPurchaseContract()
+		 * @generated
+		 */
+		EClass APURCHASE_CONTRACT = eINSTANCE.getAPurchaseContract();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ASalesContractImpl <em>ASales Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.impl.ASalesContractImpl
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getASalesContract()
+		 * @generated
+		 */
+		EClass ASALES_CONTRACT = eINSTANCE.getASalesContract();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.

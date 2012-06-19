@@ -21,7 +21,9 @@ import com.mmxlabs.models.lng.types.ALegalEntity;
 import com.mmxlabs.models.lng.types.AOptimisationSettings;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.APurchaseContract;
 import com.mmxlabs.models.lng.types.ARoute;
+import com.mmxlabs.models.lng.types.ASalesContract;
 import com.mmxlabs.models.lng.types.ASlot;
 import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.lng.types.AVessel;
@@ -159,6 +161,20 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EClass aOptimisationSettingsEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass aPurchaseContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass aSalesContractEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -431,6 +447,24 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 */
 	public EClass getAOptimisationSettings() {
 		return aOptimisationSettingsEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getAPurchaseContract() {
+		return aPurchaseContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getASalesContract() {
+		return aSalesContractEClass;
 	}
 
 	/**

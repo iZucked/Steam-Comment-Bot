@@ -53,5 +53,7 @@
     <genClasses ecoreClass="lngtypes.ecore#//ABaseFuel"/>
     <genClasses image="false" ecoreClass="lngtypes.ecore#//ASpotMarket"/>
     <genClasses image="false" ecoreClass="lngtypes.ecore#//AOptimisationSettings"/>
+    <genClasses image="false" ecoreClass="lngtypes.ecore#//APurchaseContract"/>
+    <genClasses image="false" ecoreClass="lngtypes.ecore#//ASalesContract"/>
   </genPackages>
 </genmodel:GenModel>
