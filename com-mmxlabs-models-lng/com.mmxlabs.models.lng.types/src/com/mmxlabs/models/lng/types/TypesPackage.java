@@ -3167,6 +3167,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AFleetVesselImpl <em>AFleet Vessel</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.types.impl.AFleetVesselImpl
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAFleetVessel()
@@ -3315,6 +3316,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.APurchaseContractImpl <em>APurchase Contract</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.types.impl.APurchaseContractImpl
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getAPurchaseContract()
