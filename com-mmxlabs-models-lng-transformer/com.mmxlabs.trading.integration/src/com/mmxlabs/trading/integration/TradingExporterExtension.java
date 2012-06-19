@@ -47,7 +47,7 @@ public class TradingExporterExtension implements IExporterExtension {
 	private Schedule outputSchedule;
 
 	@Override
-	public void startExporting(MMXRootObject inputScenario, Schedule outputSchedule, ModelEntityMap entities, IAnnotatedSolution annotatedSolution) {
+	public void startExporting(final MMXRootObject inputScenario, final Schedule outputSchedule, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
 		this.inputScenario = inputScenario;
 		this.entities = entities;
 		this.annotatedSolution = annotatedSolution;
@@ -75,10 +75,12 @@ public class TradingExporterExtension implements IExporterExtension {
 						}
 					}
 					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
-						AdditionalData entityData = ScheduleFactory.eINSTANCE.createAdditionalData();
+						final AdditionalData entityData = ScheduleFactory.eINSTANCE.createAdditionalData();
+						entityData.setName(entry.getEntity().getName());
 						entityData.setKey(entry.getEntity().getName());
-						AdditionalData pnlData = ScheduleFactory.eINSTANCE.createAdditionalData();
+						final AdditionalData pnlData = ScheduleFactory.eINSTANCE.createAdditionalData();
 						pnlData.setIntegerValue((int)entry.getFinalGroupValue() / Calculator.ScaleFactor);
+						pnlData.setName("P&L");
 						pnlData.setKey("pnl");
 						cargoAllocation.getAdditionalData().add(entityData);
 						entityData.getAdditionalData().add(pnlData);
