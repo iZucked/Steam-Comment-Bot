@@ -189,6 +189,75 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NetbackPurchaseContractItemProvider netbackPurchaseContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNetbackPurchaseContractAdapter() {
+		if (netbackPurchaseContractItemProvider == null) {
+			netbackPurchaseContractItemProvider = new NetbackPurchaseContractItemProvider(this);
+		}
+
+		return netbackPurchaseContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProfitSharePurchaseContractItemProvider profitSharePurchaseContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProfitSharePurchaseContractAdapter() {
+		if (profitSharePurchaseContractItemProvider == null) {
+			profitSharePurchaseContractItemProvider = new ProfitSharePurchaseContractItemProvider(this);
+		}
+
+		return profitSharePurchaseContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NotionalBallastParametersItemProvider notionalBallastParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNotionalBallastParametersAdapter() {
+		if (notionalBallastParametersItemProvider == null) {
+			notionalBallastParametersItemProvider = new NotionalBallastParametersItemProvider(this);
+		}
+
+		return notionalBallastParametersItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -292,6 +361,9 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (contractItemProvider != null) contractItemProvider.dispose();
 		if (fixedPriceContractItemProvider != null) fixedPriceContractItemProvider.dispose();
 		if (indexPriceContractItemProvider != null) indexPriceContractItemProvider.dispose();
+		if (netbackPurchaseContractItemProvider != null) netbackPurchaseContractItemProvider.dispose();
+		if (profitSharePurchaseContractItemProvider != null) profitSharePurchaseContractItemProvider.dispose();
+		if (notionalBallastParametersItemProvider != null) notionalBallastParametersItemProvider.dispose();
 	}
 
 }

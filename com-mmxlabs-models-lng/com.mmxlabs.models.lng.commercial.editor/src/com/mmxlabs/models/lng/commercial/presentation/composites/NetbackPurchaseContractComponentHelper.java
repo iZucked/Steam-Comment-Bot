@@ -21,11 +21,11 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
- * A component helper for IndexPriceContract instances
+ * A component helper for NetbackPurchaseContract instances
  *
  * @generated
  */
-public class IndexPriceContractComponentHelper extends BaseComponentHelper {
+public class NetbackPurchaseContractComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -33,34 +33,28 @@ public class IndexPriceContractComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public IndexPriceContractComponentHelper() {
+	public NetbackPurchaseContractComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated NO - there is an issue with having Contract as the supertype two ways at the moment
+	 * @generated
 	 */
-	public IndexPriceContractComponentHelper(IAdapterManager adapterManager) {
-		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-		
-				superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.SALES_CONTRACT));
-		} 
-//		{
-//			final IComponentHelper helper = registry.getComponentHelper(CommercialPackage.Literals.PURCHASE_CONTRACT);
-//			if (helper != null) superClassesHelpers.add(helper);
-//		}
+	public NetbackPurchaseContractComponentHelper(IAdapterManager adapterManager) {
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.PURCHASE_CONTRACT));
 	}
 	
 	/**
-	 * add editors to a composite, using IndexPriceContract as the supertype
+	 * add editors to a composite, using NetbackPurchaseContract as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.INDEX_PRICE_CONTRACT);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT);	
 	}
 	
 	/**
@@ -71,32 +65,41 @@ public class IndexPriceContractComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_notionalBallastParametersEditor(detailComposite, topClass);
 		add_indexEditor(detailComposite, topClass);
 		add_constantEditor(detailComposite, topClass);
 		add_multiplierEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the index feature on IndexPriceContract
+	 * Create the editor for the notionalBallastParameters feature on NetbackPurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_notionalBallastParametersEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS));
+	}
+	/**
+	 * Create the editor for the index feature on NetbackPurchaseContract
 	 *
 	 * @generated
 	 */
 	protected void add_indexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.INDEX_PRICE_CONTRACT__INDEX));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__INDEX));
 	}
 	/**
-	 * Create the editor for the constant feature on IndexPriceContract
+	 * Create the editor for the constant feature on NetbackPurchaseContract
 	 *
 	 * @generated
 	 */
 	protected void add_constantEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.INDEX_PRICE_CONTRACT__CONSTANT));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__CONSTANT));
 	}
 	/**
-	 * Create the editor for the multiplier feature on IndexPriceContract
+	 * Create the editor for the multiplier feature on NetbackPurchaseContract
 	 *
 	 * @generated
 	 */
 	protected void add_multiplierEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.INDEX_PRICE_CONTRACT__MULTIPLIER));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__MULTIPLIER));
 	}
 }

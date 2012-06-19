@@ -69,6 +69,33 @@ public interface CommercialFactory extends EFactory {
 	IndexPriceContract createIndexPriceContract();
 
 	/**
+	 * Returns a new object of class '<em>Netback Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Netback Purchase Contract</em>'.
+	 * @generated
+	 */
+	NetbackPurchaseContract createNetbackPurchaseContract();
+
+	/**
+	 * Returns a new object of class '<em>Profit Share Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Profit Share Purchase Contract</em>'.
+	 * @generated
+	 */
+	ProfitSharePurchaseContract createProfitSharePurchaseContract();
+
+	/**
+	 * Returns a new object of class '<em>Notional Ballast Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Notional Ballast Parameters</em>'.
+	 * @generated
+	 */
+	NotionalBallastParameters createNotionalBallastParameters();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -9,6 +9,8 @@ import com.mmxlabs.models.lng.commercial.*;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.ALegalEntity;
 
+import com.mmxlabs.models.lng.types.APurchaseContract;
+import com.mmxlabs.models.lng.types.ASalesContract;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -107,6 +109,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 				SalesContract salesContract = (SalesContract)theEObject;
 				T result = caseSalesContract(salesContract);
 				if (result == null) result = caseContract(salesContract);
+				if (result == null) result = caseASalesContract(salesContract);
 				if (result == null) result = caseAContract(salesContract);
 				if (result == null) result = caseUUIDObject(salesContract);
 				if (result == null) result = caseNamedObject(salesContract);
@@ -118,6 +121,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 				PurchaseContract purchaseContract = (PurchaseContract)theEObject;
 				T result = casePurchaseContract(purchaseContract);
 				if (result == null) result = caseContract(purchaseContract);
+				if (result == null) result = caseAPurchaseContract(purchaseContract);
 				if (result == null) result = caseAContract(purchaseContract);
 				if (result == null) result = caseUUIDObject(purchaseContract);
 				if (result == null) result = caseNamedObject(purchaseContract);
@@ -131,6 +135,8 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = caseSalesContract(fixedPriceContract);
 				if (result == null) result = casePurchaseContract(fixedPriceContract);
 				if (result == null) result = caseContract(fixedPriceContract);
+				if (result == null) result = caseASalesContract(fixedPriceContract);
+				if (result == null) result = caseAPurchaseContract(fixedPriceContract);
 				if (result == null) result = caseAContract(fixedPriceContract);
 				if (result == null) result = caseUUIDObject(fixedPriceContract);
 				if (result == null) result = caseNamedObject(fixedPriceContract);
@@ -144,10 +150,44 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = caseSalesContract(indexPriceContract);
 				if (result == null) result = casePurchaseContract(indexPriceContract);
 				if (result == null) result = caseContract(indexPriceContract);
+				if (result == null) result = caseASalesContract(indexPriceContract);
+				if (result == null) result = caseAPurchaseContract(indexPriceContract);
 				if (result == null) result = caseAContract(indexPriceContract);
 				if (result == null) result = caseUUIDObject(indexPriceContract);
 				if (result == null) result = caseNamedObject(indexPriceContract);
 				if (result == null) result = caseMMXObject(indexPriceContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT: {
+				NetbackPurchaseContract netbackPurchaseContract = (NetbackPurchaseContract)theEObject;
+				T result = caseNetbackPurchaseContract(netbackPurchaseContract);
+				if (result == null) result = casePurchaseContract(netbackPurchaseContract);
+				if (result == null) result = caseContract(netbackPurchaseContract);
+				if (result == null) result = caseAPurchaseContract(netbackPurchaseContract);
+				if (result == null) result = caseAContract(netbackPurchaseContract);
+				if (result == null) result = caseUUIDObject(netbackPurchaseContract);
+				if (result == null) result = caseNamedObject(netbackPurchaseContract);
+				if (result == null) result = caseMMXObject(netbackPurchaseContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT: {
+				ProfitSharePurchaseContract profitSharePurchaseContract = (ProfitSharePurchaseContract)theEObject;
+				T result = caseProfitSharePurchaseContract(profitSharePurchaseContract);
+				if (result == null) result = casePurchaseContract(profitSharePurchaseContract);
+				if (result == null) result = caseContract(profitSharePurchaseContract);
+				if (result == null) result = caseAPurchaseContract(profitSharePurchaseContract);
+				if (result == null) result = caseAContract(profitSharePurchaseContract);
+				if (result == null) result = caseUUIDObject(profitSharePurchaseContract);
+				if (result == null) result = caseNamedObject(profitSharePurchaseContract);
+				if (result == null) result = caseMMXObject(profitSharePurchaseContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS: {
+				NotionalBallastParameters notionalBallastParameters = (NotionalBallastParameters)theEObject;
+				T result = caseNotionalBallastParameters(notionalBallastParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -261,6 +301,51 @@ public class CommercialSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Netback Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Netback Purchase Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNetbackPurchaseContract(NetbackPurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Profit Share Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Profit Share Purchase Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseProfitSharePurchaseContract(ProfitSharePurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Notional Ballast Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Notional Ballast Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNotionalBallastParameters(NotionalBallastParameters object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>MMX Object</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -332,6 +417,36 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAContract(AContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ASales Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ASales Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseASalesContract(ASalesContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>APurchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>APurchase Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAPurchaseContract(APurchaseContract object) {
 		return null;
 	}
 

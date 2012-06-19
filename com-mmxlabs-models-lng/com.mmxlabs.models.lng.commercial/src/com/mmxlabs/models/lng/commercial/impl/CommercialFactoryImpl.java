@@ -63,6 +63,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.CONTRACT: return createContract();
 			case CommercialPackage.FIXED_PRICE_CONTRACT: return createFixedPriceContract();
 			case CommercialPackage.INDEX_PRICE_CONTRACT: return createIndexPriceContract();
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT: return createProfitSharePurchaseContract();
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS: return createNotionalBallastParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -116,6 +119,36 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public IndexPriceContract createIndexPriceContract() {
 		IndexPriceContractImpl indexPriceContract = new IndexPriceContractImpl();
 		return indexPriceContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NetbackPurchaseContract createNetbackPurchaseContract() {
+		NetbackPurchaseContractImpl netbackPurchaseContract = new NetbackPurchaseContractImpl();
+		return netbackPurchaseContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitSharePurchaseContract createProfitSharePurchaseContract() {
+		ProfitSharePurchaseContractImpl profitSharePurchaseContract = new ProfitSharePurchaseContractImpl();
+		return profitSharePurchaseContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotionalBallastParameters createNotionalBallastParameters() {
+		NotionalBallastParametersImpl notionalBallastParameters = new NotionalBallastParametersImpl();
+		return notionalBallastParameters;
 	}
 
 	/**

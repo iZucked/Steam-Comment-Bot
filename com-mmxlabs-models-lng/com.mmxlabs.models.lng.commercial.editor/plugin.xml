@@ -87,6 +87,24 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.commercial.FixedPriceContract">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.NetbackPurchaseContractComponentHelper"
+        id="com.mmxlabs.models.lng.commercial.editor.netbackPurchaseContractHelper"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ProfitSharePurchaseContractComponentHelper"
+        id="com.mmxlabs.models.lng.commercial.editor.profitSharePurchaseContractHelper"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.NotionalBallastParametersComponentHelper"
+        id="com.mmxlabs.models.lng.commercial.editor.notionalBallastparametersHelper"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -154,6 +172,20 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Entity"
           targetEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.NetbackPurchaseContractFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Netback Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.ProfitSharePurchaseContractFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Profit Share Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
  </extension>
 </plugin>

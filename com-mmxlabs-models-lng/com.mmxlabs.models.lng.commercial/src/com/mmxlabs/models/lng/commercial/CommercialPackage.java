@@ -190,6 +190,15 @@ public interface CommercialPackage extends EPackage {
 	int LEGAL_ENTITY__NAME = TypesPackage.ALEGAL_ENTITY__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEGAL_ENTITY__OTHER_NAMES = TypesPackage.ALEGAL_ENTITY__OTHER_NAMES;
+
+	/**
 	 * The number of structural features of the '<em>Legal Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -243,6 +252,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONTRACT__NAME = TypesPackage.ACONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__OTHER_NAMES = TypesPackage.ACONTRACT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -345,6 +363,15 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__NAME = CONTRACT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__OTHER_NAMES = CONTRACT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -445,6 +472,15 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__NAME = CONTRACT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__OTHER_NAMES = CONTRACT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -543,6 +579,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int FIXED_PRICE_CONTRACT__NAME = SALES_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__OTHER_NAMES = SALES_CONTRACT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
@@ -654,6 +699,15 @@ public interface CommercialPackage extends EPackage {
 	int INDEX_PRICE_CONTRACT__NAME = SALES_CONTRACT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__OTHER_NAMES = SALES_CONTRACT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Entity</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -733,6 +787,369 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int INDEX_PRICE_CONTRACT_FEATURE_COUNT = SALES_CONTRACT_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl <em>Netback Purchase Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNetbackPurchaseContract()
+	 * @generated
+	 */
+	int NETBACK_PURCHASE_CONTRACT = 7;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__EXTENSIONS = PURCHASE_CONTRACT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__PROXIES = PURCHASE_CONTRACT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__UUID = PURCHASE_CONTRACT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__OTHER_NAMES = PURCHASE_CONTRACT__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__ALLOWED_PORTS = PURCHASE_CONTRACT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__PREFERRED_PORT = PURCHASE_CONTRACT__PREFERRED_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Notional Ballast Parameters</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__CONSTANT = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Multiplier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__MULTIPLIER = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Netback Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 4;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl <em>Profit Share Purchase Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getProfitSharePurchaseContract()
+	 * @generated
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT = 8;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__EXTENSIONS = PURCHASE_CONTRACT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__PROXIES = PURCHASE_CONTRACT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__UUID = PURCHASE_CONTRACT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__OTHER_NAMES = PURCHASE_CONTRACT__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__ALLOWED_PORTS = PURCHASE_CONTRACT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__PREFERRED_PORT = PURCHASE_CONTRACT__PREFERRED_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Base Market</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Multiplier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Share</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__SHARE = PURCHASE_CONTRACT_FEATURE_COUNT + 4;
+
+	/**
+	 * The number of structural features of the '<em>Profit Share Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 5;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl <em>Notional Ballast Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalBallastParameters()
+	 * @generated
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS = 9;
+
+	/**
+	 * The feature id for the '<em><b>Routes</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__ROUTES = 0;
+
+	/**
+	 * The feature id for the '<em><b>Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__SPEED = 1;
+
+	/**
+	 * The feature id for the '<em><b>Nbo Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__NBO_RATE = 2;
+
+	/**
+	 * The feature id for the '<em><b>Base Consumption</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION = 3;
+
+	/**
+	 * The feature id for the '<em><b>Return Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT = 4;
+
+	/**
+	 * The number of structural features of the '<em>Notional Ballast Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS_FEATURE_COUNT = 5;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -948,6 +1365,190 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getIndexPriceContract_Multiplier();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract <em>Netback Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Netback Purchase Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract
+	 * @generated
+	 */
+	EClass getNetbackPurchaseContract();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getNotionalBallastParameters <em>Notional Ballast Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Notional Ballast Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getNotionalBallastParameters()
+	 * @see #getNetbackPurchaseContract()
+	 * @generated
+	 */
+	EReference getNetbackPurchaseContract_NotionalBallastParameters();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getIndex <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getIndex()
+	 * @see #getNetbackPurchaseContract()
+	 * @generated
+	 */
+	EReference getNetbackPurchaseContract_Index();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getConstant <em>Constant</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Constant</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getConstant()
+	 * @see #getNetbackPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getNetbackPurchaseContract_Constant();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getMultiplier <em>Multiplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Multiplier</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getMultiplier()
+	 * @see #getNetbackPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getNetbackPurchaseContract_Multiplier();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract <em>Profit Share Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Profit Share Purchase Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract
+	 * @generated
+	 */
+	EClass getProfitSharePurchaseContract();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarket <em>Base Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Base Market</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarket()
+	 * @see #getProfitSharePurchaseContract()
+	 * @generated
+	 */
+	EReference getProfitSharePurchaseContract_BaseMarket();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getIndex <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getIndex()
+	 * @see #getProfitSharePurchaseContract()
+	 * @generated
+	 */
+	EReference getProfitSharePurchaseContract_Index();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getConstant <em>Constant</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Constant</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getConstant()
+	 * @see #getProfitSharePurchaseContract()
+	 * @generated
+	 */
+	EAttribute getProfitSharePurchaseContract_Constant();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMultiplier <em>Multiplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Multiplier</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMultiplier()
+	 * @see #getProfitSharePurchaseContract()
+	 * @generated
+	 */
+	EAttribute getProfitSharePurchaseContract_Multiplier();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getShare <em>Share</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Share</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getShare()
+	 * @see #getProfitSharePurchaseContract()
+	 * @generated
+	 */
+	EAttribute getProfitSharePurchaseContract_Share();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters <em>Notional Ballast Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Notional Ballast Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters
+	 * @generated
+	 */
+	EClass getNotionalBallastParameters();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getRoutes <em>Routes</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Routes</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getRoutes()
+	 * @see #getNotionalBallastParameters()
+	 * @generated
+	 */
+	EReference getNotionalBallastParameters_Routes();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getSpeed <em>Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Speed</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getSpeed()
+	 * @see #getNotionalBallastParameters()
+	 * @generated
+	 */
+	EAttribute getNotionalBallastParameters_Speed();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getNboRate <em>Nbo Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Nbo Rate</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getNboRate()
+	 * @see #getNotionalBallastParameters()
+	 * @generated
+	 */
+	EAttribute getNotionalBallastParameters_NboRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getBaseConsumption <em>Base Consumption</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Consumption</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getBaseConsumption()
+	 * @see #getNotionalBallastParameters()
+	 * @generated
+	 */
+	EAttribute getNotionalBallastParameters_BaseConsumption();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getReturnPort <em>Return Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Return Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getReturnPort()
+	 * @see #getNotionalBallastParameters()
+	 * @generated
+	 */
+	EReference getNotionalBallastParameters_ReturnPort();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1142,6 +1743,148 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute INDEX_PRICE_CONTRACT__MULTIPLIER = eINSTANCE.getIndexPriceContract_Multiplier();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl <em>Netback Purchase Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNetbackPurchaseContract()
+		 * @generated
+		 */
+		EClass NETBACK_PURCHASE_CONTRACT = eINSTANCE.getNetbackPurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Notional Ballast Parameters</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS = eINSTANCE.getNetbackPurchaseContract_NotionalBallastParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NETBACK_PURCHASE_CONTRACT__INDEX = eINSTANCE.getNetbackPurchaseContract_Index();
+
+		/**
+		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NETBACK_PURCHASE_CONTRACT__CONSTANT = eINSTANCE.getNetbackPurchaseContract_Constant();
+
+		/**
+		 * The meta object literal for the '<em><b>Multiplier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NETBACK_PURCHASE_CONTRACT__MULTIPLIER = eINSTANCE.getNetbackPurchaseContract_Multiplier();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl <em>Profit Share Purchase Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getProfitSharePurchaseContract()
+		 * @generated
+		 */
+		EClass PROFIT_SHARE_PURCHASE_CONTRACT = eINSTANCE.getProfitSharePurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Market</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET = eINSTANCE.getProfitSharePurchaseContract_BaseMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_SHARE_PURCHASE_CONTRACT__INDEX = eINSTANCE.getProfitSharePurchaseContract_Index();
+
+		/**
+		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PURCHASE_CONTRACT__CONSTANT = eINSTANCE.getProfitSharePurchaseContract_Constant();
+
+		/**
+		 * The meta object literal for the '<em><b>Multiplier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PURCHASE_CONTRACT__MULTIPLIER = eINSTANCE.getProfitSharePurchaseContract_Multiplier();
+
+		/**
+		 * The meta object literal for the '<em><b>Share</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PURCHASE_CONTRACT__SHARE = eINSTANCE.getProfitSharePurchaseContract_Share();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl <em>Notional Ballast Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNotionalBallastParameters()
+		 * @generated
+		 */
+		EClass NOTIONAL_BALLAST_PARAMETERS = eINSTANCE.getNotionalBallastParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Routes</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NOTIONAL_BALLAST_PARAMETERS__ROUTES = eINSTANCE.getNotionalBallastParameters_Routes();
+
+		/**
+		 * The meta object literal for the '<em><b>Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_BALLAST_PARAMETERS__SPEED = eINSTANCE.getNotionalBallastParameters_Speed();
+
+		/**
+		 * The meta object literal for the '<em><b>Nbo Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_BALLAST_PARAMETERS__NBO_RATE = eINSTANCE.getNotionalBallastParameters_NboRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Consumption</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION = eINSTANCE.getNotionalBallastParameters_BaseConsumption();
+
+		/**
+		 * The meta object literal for the '<em><b>Return Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT = eINSTANCE.getNotionalBallastParameters_ReturnPort();
 
 	}
 

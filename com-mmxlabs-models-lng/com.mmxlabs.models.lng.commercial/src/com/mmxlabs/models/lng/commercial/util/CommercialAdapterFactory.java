@@ -4,21 +4,29 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
-import com.mmxlabs.models.lng.commercial.*;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
+import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.FixedPriceContract;
+import com.mmxlabs.models.lng.commercial.IndexPriceContract;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.NetbackPurchaseContract;
+import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
+import com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.ALegalEntity;
-
+import com.mmxlabs.models.lng.types.APurchaseContract;
+import com.mmxlabs.models.lng.types.ASalesContract;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notifier;
-
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -105,6 +113,18 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createIndexPriceContractAdapter();
 			}
 			@Override
+			public Adapter caseNetbackPurchaseContract(NetbackPurchaseContract object) {
+				return createNetbackPurchaseContractAdapter();
+			}
+			@Override
+			public Adapter caseProfitSharePurchaseContract(ProfitSharePurchaseContract object) {
+				return createProfitSharePurchaseContractAdapter();
+			}
+			@Override
+			public Adapter caseNotionalBallastParameters(NotionalBallastParameters object) {
+				return createNotionalBallastParametersAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -123,6 +143,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseAContract(AContract object) {
 				return createAContractAdapter();
+			}
+			@Override
+			public Adapter caseASalesContract(ASalesContract object) {
+				return createASalesContractAdapter();
+			}
+			@Override
+			public Adapter caseAPurchaseContract(APurchaseContract object) {
+				return createAPurchaseContractAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -243,6 +271,48 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract <em>Netback Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract
+	 * @generated
+	 */
+	public Adapter createNetbackPurchaseContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract <em>Profit Share Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract
+	 * @generated
+	 */
+	public Adapter createProfitSharePurchaseContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters <em>Notional Ballast Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters
+	 * @generated
+	 */
+	public Adapter createNotionalBallastParametersAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -309,6 +379,34 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ASalesContract <em>ASales Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.ASalesContract
+	 * @generated
+	 */
+	public Adapter createASalesContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.APurchaseContract <em>APurchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.APurchaseContract
+	 * @generated
+	 */
+	public Adapter createAPurchaseContractAdapter() {
 		return null;
 	}
 

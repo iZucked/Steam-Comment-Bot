@@ -1,25 +1,21 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2011
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.commercial.provider;
 
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
+import com.mmxlabs.models.lng.commercial.NetbackPurchaseContract;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 
@@ -34,13 +30,13 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.CommercialModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class CommercialModelItemProvider
-	extends UUIDObjectItemProvider
+public class NetbackPurchaseContractItemProvider
+	extends PurchaseContractItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -53,7 +49,7 @@ public class CommercialModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommercialModelItemProvider(AdapterFactory adapterFactory) {
+	public NetbackPurchaseContractItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -68,29 +64,75 @@ public class CommercialModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addShippingEntityPropertyDescriptor(object);
+			addIndexPropertyDescriptor(object);
+			addConstantPropertyDescriptor(object);
+			addMultiplierPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Shipping Entity feature.
+	 * This adds a property descriptor for the Index feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addShippingEntityPropertyDescriptor(Object object) {
+	protected void addIndexPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_CommercialModel_shippingEntity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_CommercialModel_shippingEntity_feature", "_UI_CommercialModel_type"),
-				 CommercialPackage.Literals.COMMERCIAL_MODEL__SHIPPING_ENTITY,
+				 getString("_UI_NetbackPurchaseContract_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_index_feature", "_UI_NetbackPurchaseContract_type"),
+				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__INDEX,
 				 true,
 				 false,
 				 true,
 				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Constant feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addConstantPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NetbackPurchaseContract_constant_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_constant_feature", "_UI_NetbackPurchaseContract_type"),
+				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__CONSTANT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Multiplier feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMultiplierPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NetbackPurchaseContract_multiplier_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_multiplier_feature", "_UI_NetbackPurchaseContract_type"),
+				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__MULTIPLIER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -107,9 +149,7 @@ public class CommercialModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS);
-			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
+			childrenFeatures.add(CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS);
 		}
 		return childrenFeatures;
 	}
@@ -128,14 +168,14 @@ public class CommercialModelItemProvider
 	}
 
 	/**
-	 * This returns CommercialModel.gif.
+	 * This returns NetbackPurchaseContract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/CommercialModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/NetbackPurchaseContract"));
 	}
 
 	/**
@@ -146,10 +186,10 @@ public class CommercialModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((CommercialModel)object).getUuid();
+		String label = ((NetbackPurchaseContract)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_CommercialModel_type") :
-			getString("_UI_CommercialModel_type") + " " + label;
+			getString("_UI_NetbackPurchaseContract_type") :
+			getString("_UI_NetbackPurchaseContract_type") + " " + label;
 	}
 
 	/**
@@ -163,10 +203,12 @@ public class CommercialModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(CommercialModel.class)) {
-			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
-			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
-			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
+		switch (notification.getFeatureID(NetbackPurchaseContract.class)) {
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__CONSTANT:
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MULTIPLIER:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -186,72 +228,8 @@ public class CommercialModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES,
-				 CommercialFactory.eINSTANCE.createLegalEntity()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createFixedPriceContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createIndexPriceContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createFixedPriceContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createIndexPriceContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createNetbackPurchaseContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createProfitSharePurchaseContract()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS ||
-			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return CommercialEditPlugin.INSTANCE;
+				(CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS,
+				 CommercialFactory.eINSTANCE.createNotionalBallastParameters()));
 	}
 
 }
