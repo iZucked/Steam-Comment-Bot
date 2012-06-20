@@ -188,6 +188,8 @@ public class CommercialSwitch<T> extends Switch<T> {
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS: {
 				NotionalBallastParameters notionalBallastParameters = (NotionalBallastParameters)theEObject;
 				T result = caseNotionalBallastParameters(notionalBallastParameters);
+				if (result == null) result = caseNamedObject(notionalBallastParameters);
+				if (result == null) result = caseMMXObject(notionalBallastParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

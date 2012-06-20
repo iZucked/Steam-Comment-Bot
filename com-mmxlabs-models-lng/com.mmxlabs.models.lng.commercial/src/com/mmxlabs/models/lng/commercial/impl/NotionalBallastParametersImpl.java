@@ -10,9 +10,12 @@ package com.mmxlabs.models.lng.commercial.impl;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
 
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 
+import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -39,12 +42,13 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getNboRate <em>Nbo Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getBaseConsumption <em>Base Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getReturnPort <em>Return Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getVessels <em>Vessels</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class NotionalBallastParametersImpl extends EObjectImpl implements NotionalBallastParameters {
+public class NotionalBallastParametersImpl extends NamedObjectImpl implements NotionalBallastParameters {
 	/**
 	 * The cached value of the '{@link #getRoutes() <em>Routes</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -160,6 +164,16 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 	 * @ordered
 	 */
 	protected boolean returnPortESet;
+
+	/**
+	 * The cached value of the '{@link #getVessels() <em>Vessels</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVessels()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<AVesselSet> vessels;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -398,6 +412,18 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<AVesselSet> getVessels() {
+		if (vessels == null) {
+			vessels = new EObjectResolvingEList<AVesselSet>(AVesselSet.class, this, CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSELS);
+		}
+		return vessels;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -412,6 +438,8 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT:
 				if (resolve) return getReturnPort();
 				return basicGetReturnPort();
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSELS:
+				return getVessels();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -441,6 +469,10 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT:
 				setReturnPort((Port)newValue);
 				return;
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSELS:
+				getVessels().clear();
+				getVessels().addAll((Collection<? extends AVesselSet>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -468,6 +500,9 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT:
 				unsetReturnPort();
 				return;
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSELS:
+				getVessels().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -490,6 +525,8 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 				return isSetBaseConsumption();
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT:
 				return isSetReturnPort();
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSELS:
+				return vessels != null && !vessels.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

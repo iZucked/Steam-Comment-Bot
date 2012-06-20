@@ -1116,13 +1116,49 @@ public interface CommercialPackage extends EPackage {
 	int NOTIONAL_BALLAST_PARAMETERS = 9;
 
 	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__PROXIES = MMXCorePackage.NAMED_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Routes</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_BALLAST_PARAMETERS__ROUTES = 0;
+	int NOTIONAL_BALLAST_PARAMETERS__ROUTES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -1131,7 +1167,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_BALLAST_PARAMETERS__SPEED = 1;
+	int NOTIONAL_BALLAST_PARAMETERS__SPEED = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Nbo Rate</b></em>' attribute.
@@ -1140,7 +1176,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_BALLAST_PARAMETERS__NBO_RATE = 2;
+	int NOTIONAL_BALLAST_PARAMETERS__NBO_RATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Base Consumption</b></em>' attribute.
@@ -1149,7 +1185,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION = 3;
+	int NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Return Port</b></em>' reference.
@@ -1158,7 +1194,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT = 4;
+	int NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__VESSELS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Notional Ballast Parameters</em>' class.
@@ -1167,7 +1212,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_BALLAST_PARAMETERS_FEATURE_COUNT = 5;
+	int NOTIONAL_BALLAST_PARAMETERS_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -1589,6 +1634,17 @@ public interface CommercialPackage extends EPackage {
 	EReference getNotionalBallastParameters_ReturnPort();
 
 	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getVessels <em>Vessels</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Vessels</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getVessels()
+	 * @see #getNotionalBallastParameters()
+	 * @generated
+	 */
+	EReference getNotionalBallastParameters_Vessels();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1941,6 +1997,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT = eINSTANCE.getNotionalBallastParameters_ReturnPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NOTIONAL_BALLAST_PARAMETERS__VESSELS = eINSTANCE.getNotionalBallastParameters_Vessels();
 
 	}
 

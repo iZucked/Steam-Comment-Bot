@@ -10,6 +10,8 @@ package com.mmxlabs.models.lng.commercial.provider;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
 
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -36,7 +38,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class NotionalBallastParametersItemProvider
-	extends ItemProviderAdapter
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -69,6 +71,7 @@ public class NotionalBallastParametersItemProvider
 			addNboRatePropertyDescriptor(object);
 			addBaseConsumptionPropertyDescriptor(object);
 			addReturnPortPropertyDescriptor(object);
+			addVesselsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -184,6 +187,28 @@ public class NotionalBallastParametersItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Vessels feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVesselsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalBallastParameters_vessels_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalBallastParameters_vessels_feature", "_UI_NotionalBallastParameters_type"),
+				 CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__VESSELS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns NotionalBallastParameters.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -202,8 +227,10 @@ public class NotionalBallastParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		NotionalBallastParameters notionalBallastParameters = (NotionalBallastParameters)object;
-		return getString("_UI_NotionalBallastParameters_type") + " " + notionalBallastParameters.getSpeed();
+		String label = ((NotionalBallastParameters)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_NotionalBallastParameters_type") :
+			getString("_UI_NotionalBallastParameters_type") + " " + label;
 	}
 
 	/**

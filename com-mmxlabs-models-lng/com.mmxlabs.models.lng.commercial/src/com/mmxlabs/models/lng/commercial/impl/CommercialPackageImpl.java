@@ -522,6 +522,15 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getNotionalBallastParameters_Vessels() {
+		return (EReference)notionalBallastParametersEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public CommercialFactory getCommercialFactory() {
 		return (CommercialFactory)getEFactoryInstance();
 	}
@@ -593,6 +602,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__NBO_RATE);
 		createEAttribute(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION);
 		createEReference(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT);
+		createEReference(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__VESSELS);
 	}
 
 	/**
@@ -640,6 +650,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		indexPriceContractEClass.getESuperTypes().add(this.getPurchaseContract());
 		netbackPurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
 		profitSharePurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
+		notionalBallastParametersEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -690,6 +701,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getNotionalBallastParameters_NboRate(), ecorePackage.getEInt(), "nboRate", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalBallastParameters_BaseConsumption(), ecorePackage.getEInt(), "baseConsumption", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getNotionalBallastParameters_ReturnPort(), theTypesPackage.getAPort(), null, "returnPort", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNotionalBallastParameters_Vessels(), theTypesPackage.getAVesselSet(), null, "vessels", null, 0, -1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

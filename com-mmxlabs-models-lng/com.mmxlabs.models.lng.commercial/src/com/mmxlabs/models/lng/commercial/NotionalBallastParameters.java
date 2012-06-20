@@ -7,9 +7,12 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.commercial;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.Route;
 
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.MMXObject;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -27,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getNboRate <em>Nbo Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getBaseConsumption <em>Base Consumption</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getReturnPort <em>Return Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getVessels <em>Vessels</em>}</li>
  * </ul>
  * </p>
  *
@@ -34,7 +38,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface NotionalBallastParameters extends EObject {
+public interface NotionalBallastParameters extends NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Routes</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.Route}.
@@ -262,6 +266,22 @@ public interface NotionalBallastParameters extends EObject {
 	 * @generated
 	 */
 	boolean isSetReturnPort();
+
+	/**
+	 * Returns the value of the '<em><b>Vessels</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.AVesselSet}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessels</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessels</em>' reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNotionalBallastParameters_Vessels()
+	 * @model
+	 * @generated
+	 */
+	EList<AVesselSet> getVessels();
 
 } // end of  NotionalBallastParameters
 
