@@ -70,7 +70,8 @@ public class AdditionalDataComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_keyEditor(detailComposite, topClass);
-		add_integerValueEditor(detailComposite, topClass);
+		add_valueEditor(detailComposite, topClass);
+		add_renderEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the key feature on AdditionalData
@@ -81,11 +82,19 @@ public class AdditionalDataComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.ADDITIONAL_DATA__KEY));
 	}
 	/**
-	 * Create the editor for the integerValue feature on AdditionalData
+	 * Create the editor for the value feature on AdditionalData
 	 *
 	 * @generated
 	 */
-	protected void add_integerValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.ADDITIONAL_DATA__INTEGER_VALUE));
+	protected void add_valueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.ADDITIONAL_DATA__VALUE));
+	}
+	/**
+	 * Create the editor for the render feature on AdditionalData
+	 *
+	 * @generated
+	 */
+	protected void add_renderEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.ADDITIONAL_DATA__RENDER));
 	}
 }
