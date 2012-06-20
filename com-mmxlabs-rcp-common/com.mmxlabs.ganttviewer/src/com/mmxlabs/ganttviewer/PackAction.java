@@ -32,6 +32,10 @@ public class PackAction extends Action {
 		// there may be a better way to do all this
 		final GanttComposite composite = ganttChart.getGanttComposite();
 
+		if (composite == null || composite.getVisibleBounds() == null) {
+			return;
+		}
+		
 		Calendar earliestDate = null;
 		Calendar latestDate = null;
 
