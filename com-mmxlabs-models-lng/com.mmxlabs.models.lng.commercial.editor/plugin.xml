@@ -188,4 +188,14 @@
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.NotionalBallastParametersFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Notional Ballast Parameters"
+          outputEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
+    </factory>
+ </extension>
 </plugin>
