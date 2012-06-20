@@ -73,14 +73,11 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetMetadata(Metadata newMetadata,
-			NotificationChain msgs) {
+	public NotificationChain basicSetMetadata(Metadata newMetadata, NotificationChain msgs) {
 		Metadata oldMetadata = metadata;
 		metadata = newMetadata;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this,
-					Notification.SET, ScenarioServicePackage.FOLDER__METADATA,
-					oldMetadata, newMetadata);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.FOLDER__METADATA, oldMetadata, newMetadata);
 			if (msgs == null)
 				msgs = notification;
 			else
@@ -98,22 +95,14 @@ public class FolderImpl extends ContainerImpl implements Folder {
 		if (newMetadata != metadata) {
 			NotificationChain msgs = null;
 			if (metadata != null)
-				msgs = ((InternalEObject) metadata).eInverseRemove(this,
-						EOPPOSITE_FEATURE_BASE
-								- ScenarioServicePackage.FOLDER__METADATA,
-						null, msgs);
+				msgs = ((InternalEObject) metadata).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - ScenarioServicePackage.FOLDER__METADATA, null, msgs);
 			if (newMetadata != null)
-				msgs = ((InternalEObject) newMetadata).eInverseAdd(this,
-						EOPPOSITE_FEATURE_BASE
-								- ScenarioServicePackage.FOLDER__METADATA,
-						null, msgs);
+				msgs = ((InternalEObject) newMetadata).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - ScenarioServicePackage.FOLDER__METADATA, null, msgs);
 			msgs = basicSetMetadata(newMetadata, msgs);
 			if (msgs != null)
 				msgs.dispatch();
 		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					ScenarioServicePackage.FOLDER__METADATA, newMetadata,
-					newMetadata));
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.FOLDER__METADATA, newMetadata, newMetadata));
 	}
 
 	/**
@@ -122,8 +111,7 @@ public class FolderImpl extends ContainerImpl implements Folder {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd,
-			int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case ScenarioServicePackage.FOLDER__METADATA:
 			return basicSetMetadata(null, msgs);

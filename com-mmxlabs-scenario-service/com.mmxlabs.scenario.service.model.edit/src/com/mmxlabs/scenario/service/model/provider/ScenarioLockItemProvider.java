@@ -32,9 +32,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioLockItemProvider extends ItemProviderAdapter implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ScenarioLockItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -70,17 +69,9 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addAvailablePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_ScenarioLock_available_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_ScenarioLock_available_feature",
-						"_UI_ScenarioLock_type"),
-				ScenarioServicePackage.Literals.SCENARIO_LOCK__AVAILABLE, true,
-				false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null,
-				null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioLock_available_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioLock_available_feature", "_UI_ScenarioLock_type"),
+				ScenarioServicePackage.Literals.SCENARIO_LOCK__AVAILABLE, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -90,17 +81,9 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addClaimedPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_ScenarioLock_claimed_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_ScenarioLock_claimed_feature",
-						"_UI_ScenarioLock_type"),
-				ScenarioServicePackage.Literals.SCENARIO_LOCK__CLAIMED, true,
-				false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null,
-				null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioLock_claimed_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioLock_claimed_feature", "_UI_ScenarioLock_type"),
+				ScenarioServicePackage.Literals.SCENARIO_LOCK__CLAIMED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -110,18 +93,9 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addKeyPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(
-						((ComposeableAdapterFactory) adapterFactory)
-								.getRootAdapterFactory(),
-						getResourceLocator(),
-						getString("_UI_ScenarioLock_key_feature"),
-						getString("_UI_PropertyDescriptor_description",
-								"_UI_ScenarioLock_key_feature",
-								"_UI_ScenarioLock_type"),
-						ScenarioServicePackage.Literals.SCENARIO_LOCK__KEY,
-						true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_ScenarioLock_key_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_ScenarioLock_key_feature", "_UI_ScenarioLock_type"), ScenarioServicePackage.Literals.SCENARIO_LOCK__KEY, true, false, false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -132,8 +106,7 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-				getResourceLocator().getImage("full/obj16/ScenarioLock"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioLock"));
 	}
 
 	/**
@@ -145,8 +118,7 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements
 	@Override
 	public String getText(Object object) {
 		ScenarioLock scenarioLock = (ScenarioLock) object;
-		return getString("_UI_ScenarioLock_type") + " "
-				+ scenarioLock.isAvailable();
+		return getString("_UI_ScenarioLock_type") + " " + scenarioLock.isAvailable();
 	}
 
 	/**
@@ -164,8 +136,7 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements
 		case ScenarioServicePackage.SCENARIO_LOCK__AVAILABLE:
 		case ScenarioServicePackage.SCENARIO_LOCK__CLAIMED:
 		case ScenarioServicePackage.SCENARIO_LOCK__KEY:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), false, true));
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -179,8 +150,7 @@ public class ScenarioLockItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

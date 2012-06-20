@@ -462,5 +462,22 @@
             icon="icons/commands/lock.gif">
       </image>
    </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="false"
+            class="com.mmxlabs.scenario.service.ui.navigator.ValidatingDecorator"
+            id="com.mmxlabs.scenario.service.ui.navigator.ValidatingDecorator"
+            label="Validation Decorator"
+            lightweight="true"
+            location="BOTTOM_RIGHT"
+            state="true">
+         <enablement>
+               <objectClass
+                     name="com.mmxlabs.scenario.service.model.ScenarioInstance">
+               </objectClass>
+         </enablement>
+      </decorator>
+   </extension>
 
 </plugin>

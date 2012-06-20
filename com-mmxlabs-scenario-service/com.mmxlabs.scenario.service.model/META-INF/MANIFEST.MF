@@ -8,6 +8,7 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.scenario.service,
+ com.mmxlabs.scenario.service.impl,
  com.mmxlabs.scenario.service.model,
  com.mmxlabs.scenario.service.model.impl,
  com.mmxlabs.scenario.service.model.util

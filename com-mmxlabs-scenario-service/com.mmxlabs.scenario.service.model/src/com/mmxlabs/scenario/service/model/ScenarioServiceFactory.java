@@ -21,8 +21,7 @@ public interface ScenarioServiceFactory extends EFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	ScenarioServiceFactory eINSTANCE = com.mmxlabs.scenario.service.model.impl.ScenarioServiceFactoryImpl
-			.init();
+	ScenarioServiceFactory eINSTANCE = com.mmxlabs.scenario.service.model.impl.ScenarioServiceFactoryImpl.init();
 
 	/**
 	 * Returns a new object of class '<em>Scenario Model</em>'.

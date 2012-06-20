@@ -10,6 +10,8 @@
 **.classpath = native
 **.project = native
 **build.properites = native
+**.ecore = native
+**.genmodel = native
 
 [repository]
 native = CRLF

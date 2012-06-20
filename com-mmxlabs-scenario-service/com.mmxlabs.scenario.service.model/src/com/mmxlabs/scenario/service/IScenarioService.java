@@ -55,7 +55,7 @@ public interface IScenarioService {
 	 * @param models
 	 *            the new models which this scenario will own; these ought not be in any resources at this point. New resources and storage will be sorted out for them by this scenario service.
 	 * @return a new scenario instance, which will contain a new root object as its instance attribute
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) throws IOException;
 
@@ -66,7 +66,7 @@ public interface IScenarioService {
 	 * @param original
 	 * @param destination
 	 * @return the new, duplicated instance.
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException;
 
@@ -92,6 +92,20 @@ public interface IScenarioService {
 	 * @throws IOException
 	 */
 	void save(ScenarioInstance instance) throws IOException;
-	
+
 	public URI resolveURI(final String uriString);
+
+	/**
+	 * Register a {@link IScenarioServiceListener} with this scenario service. Adding a service multiple times has no effect.
+	 * 
+	 * @param listener
+	 */
+	void addScenarioServiceListener(IScenarioServiceListener listener);
+
+	/**
+	 * Remove a previously added {@link IScenarioServiceListener} to this scenario service.
+	 * 
+	 * @param listener
+	 */
+	void removeScenarioServiceListener(IScenarioServiceListener listener);
 }

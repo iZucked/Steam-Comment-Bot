@@ -171,6 +171,8 @@ public class FileScenarioService extends AbstractScenarioService {
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance instance = (ScenarioInstance) container;
 		
+			fireEvent(ScenarioServiceEvent.PRE_DELETE, instance);
+			
 			for (final String modelInstanceURI : instance.getSubModelURIs()) {
 				try {
 					final IModelInstance modelInstance = modelService.getModel(resolveURI(modelInstanceURI));
@@ -186,6 +188,8 @@ public class FileScenarioService extends AbstractScenarioService {
 				resourceSet.getResources().remove(resource);
 			} catch (final Throwable th) {
 			}
+			
+			fireEvent(ScenarioServiceEvent.POST_DELETE, instance);
 		}
 	}
 	

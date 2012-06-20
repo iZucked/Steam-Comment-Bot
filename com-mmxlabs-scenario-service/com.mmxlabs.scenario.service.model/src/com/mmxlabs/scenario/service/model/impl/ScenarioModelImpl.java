@@ -68,9 +68,7 @@ public class ScenarioModelImpl extends EObjectImpl implements ScenarioModel {
 	 */
 	public EList<ScenarioService> getScenarioServices() {
 		if (scenarioServices == null) {
-			scenarioServices = new EObjectResolvingEList<ScenarioService>(
-					ScenarioService.class, this,
-					ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES);
+			scenarioServices = new EObjectResolvingEList<ScenarioService>(ScenarioService.class, this, ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES);
 		}
 		return scenarioServices;
 	}
@@ -100,8 +98,7 @@ public class ScenarioModelImpl extends EObjectImpl implements ScenarioModel {
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_MODEL__SCENARIO_SERVICES:
 			getScenarioServices().clear();
-			getScenarioServices().addAll(
-					(Collection<? extends ScenarioService>) newValue);
+			getScenarioServices().addAll((Collection<? extends ScenarioService>) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
