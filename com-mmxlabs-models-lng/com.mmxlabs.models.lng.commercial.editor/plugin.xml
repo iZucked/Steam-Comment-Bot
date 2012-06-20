@@ -188,6 +188,15 @@
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
  </extension>
+  <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.NetbackPurchaseContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.NetbackPurchaseContractCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
+ </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
     <factory
