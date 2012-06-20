@@ -68,10 +68,10 @@ public class NotionalBallastParametersItemProvider
 
 			addRoutesPropertyDescriptor(object);
 			addSpeedPropertyDescriptor(object);
+			addHireCostPropertyDescriptor(object);
 			addNboRatePropertyDescriptor(object);
 			addBaseConsumptionPropertyDescriptor(object);
-			addReturnPortPropertyDescriptor(object);
-			addVesselsPropertyDescriptor(object);
+			addVesselClassesPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -121,6 +121,28 @@ public class NotionalBallastParametersItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Hire Cost feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHireCostPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NotionalBallastParameters_hireCost_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalBallastParameters_hireCost_feature", "_UI_NotionalBallastParameters_type"),
+				 CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Nbo Rate feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -165,41 +187,19 @@ public class NotionalBallastParametersItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Return Port feature.
+	 * This adds a property descriptor for the Vessel Classes feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addReturnPortPropertyDescriptor(Object object) {
+	protected void addVesselClassesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_NotionalBallastParameters_returnPort_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalBallastParameters_returnPort_feature", "_UI_NotionalBallastParameters_type"),
-				 CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Vessels feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addVesselsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_NotionalBallastParameters_vessels_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalBallastParameters_vessels_feature", "_UI_NotionalBallastParameters_type"),
-				 CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__VESSELS,
+				 getString("_UI_NotionalBallastParameters_vesselClasses_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NotionalBallastParameters_vesselClasses_feature", "_UI_NotionalBallastParameters_type"),
+				 CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES,
 				 true,
 				 false,
 				 true,
@@ -246,6 +246,7 @@ public class NotionalBallastParametersItemProvider
 
 		switch (notification.getFeatureID(NotionalBallastParameters.class)) {
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__SPEED:
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST:
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__NBO_RATE:
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

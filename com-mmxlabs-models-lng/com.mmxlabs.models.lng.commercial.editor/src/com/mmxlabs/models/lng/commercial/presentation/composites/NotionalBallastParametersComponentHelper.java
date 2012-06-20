@@ -68,10 +68,10 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_routesEditor(detailComposite, topClass);
 		add_speedEditor(detailComposite, topClass);
+		add_hireCostEditor(detailComposite, topClass);
 		add_nboRateEditor(detailComposite, topClass);
 		add_baseConsumptionEditor(detailComposite, topClass);
-		add_returnPortEditor(detailComposite, topClass);
-		add_vesselsEditor(detailComposite, topClass);
+		add_vesselClassesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the routes feature on NotionalBallastParameters
@@ -90,6 +90,15 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__SPEED));
 	}
 	/**
+	 * Create the editor for the hireCost feature on NotionalBallastParameters
+	 *
+	 * @generated
+	 */
+	protected void add_hireCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST));
+	}
+
+	/**
 	 * Create the editor for the nboRate feature on NotionalBallastParameters
 	 *
 	 * @generated
@@ -106,20 +115,11 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION));
 	}
 	/**
-	 * Create the editor for the returnPort feature on NotionalBallastParameters
+	 * Create the editor for the vesselClasses feature on NotionalBallastParameters
 	 *
 	 * @generated
 	 */
-	protected void add_returnPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT));
-	}
-
-	/**
-	 * Create the editor for the vessels feature on NotionalBallastParameters
-	 *
-	 * @generated
-	 */
-	protected void add_vesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__VESSELS));
+	protected void add_vesselClassesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES));
 	}
 }

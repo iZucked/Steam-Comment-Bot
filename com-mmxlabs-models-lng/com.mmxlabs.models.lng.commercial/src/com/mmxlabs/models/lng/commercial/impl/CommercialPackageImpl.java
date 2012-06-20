@@ -495,7 +495,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNotionalBallastParameters_NboRate() {
+	public EAttribute getNotionalBallastParameters_HireCost() {
 		return (EAttribute)notionalBallastParametersEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -504,7 +504,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getNotionalBallastParameters_BaseConsumption() {
+	public EAttribute getNotionalBallastParameters_NboRate() {
 		return (EAttribute)notionalBallastParametersEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -513,8 +513,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getNotionalBallastParameters_ReturnPort() {
-		return (EReference)notionalBallastParametersEClass.getEStructuralFeatures().get(4);
+	public EAttribute getNotionalBallastParameters_BaseConsumption() {
+		return (EAttribute)notionalBallastParametersEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -522,7 +522,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getNotionalBallastParameters_Vessels() {
+	public EReference getNotionalBallastParameters_VesselClasses() {
 		return (EReference)notionalBallastParametersEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -599,10 +599,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		notionalBallastParametersEClass = createEClass(NOTIONAL_BALLAST_PARAMETERS);
 		createEReference(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__ROUTES);
 		createEAttribute(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__SPEED);
+		createEAttribute(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__HIRE_COST);
 		createEAttribute(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__NBO_RATE);
 		createEAttribute(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION);
-		createEReference(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT);
-		createEReference(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__VESSELS);
+		createEReference(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES);
 	}
 
 	/**
@@ -698,10 +698,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEClass(notionalBallastParametersEClass, NotionalBallastParameters.class, "NotionalBallastParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getNotionalBallastParameters_Routes(), theTypesPackage.getARoute(), null, "routes", null, 0, -1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalBallastParameters_Speed(), ecorePackage.getEDouble(), "speed", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNotionalBallastParameters_HireCost(), ecorePackage.getEInt(), "hireCost", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalBallastParameters_NboRate(), ecorePackage.getEInt(), "nboRate", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalBallastParameters_BaseConsumption(), ecorePackage.getEInt(), "baseConsumption", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getNotionalBallastParameters_ReturnPort(), theTypesPackage.getAPort(), null, "returnPort", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getNotionalBallastParameters_Vessels(), theTypesPackage.getAVesselSet(), null, "vessels", null, 0, -1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getNotionalBallastParameters_VesselClasses(), theTypesPackage.getAVesselClass(), null, "vesselClasses", null, 1, -1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

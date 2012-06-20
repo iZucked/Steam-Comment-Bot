@@ -1170,13 +1170,22 @@ public interface CommercialPackage extends EPackage {
 	int NOTIONAL_BALLAST_PARAMETERS__SPEED = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NOTIONAL_BALLAST_PARAMETERS__HIRE_COST = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Nbo Rate</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_BALLAST_PARAMETERS__NBO_RATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int NOTIONAL_BALLAST_PARAMETERS__NBO_RATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Base Consumption</b></em>' attribute.
@@ -1185,25 +1194,16 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Return Port</b></em>' reference.
+	 * The feature id for the '<em><b>Vessel Classes</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int NOTIONAL_BALLAST_PARAMETERS__VESSELS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
+	int NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Notional Ballast Parameters</em>' class.
@@ -1601,6 +1601,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getNotionalBallastParameters_Speed();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getHireCost <em>Hire Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getHireCost()
+	 * @see #getNotionalBallastParameters()
+	 * @generated
+	 */
+	EAttribute getNotionalBallastParameters_HireCost();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getNboRate <em>Nbo Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1623,26 +1634,15 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getNotionalBallastParameters_BaseConsumption();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getReturnPort <em>Return Port</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getVesselClasses <em>Vessel Classes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Return Port</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getReturnPort()
+	 * @return the meta object for the reference list '<em>Vessel Classes</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getVesselClasses()
 	 * @see #getNotionalBallastParameters()
 	 * @generated
 	 */
-	EReference getNotionalBallastParameters_ReturnPort();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getVessels <em>Vessels</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Vessels</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getVessels()
-	 * @see #getNotionalBallastParameters()
-	 * @generated
-	 */
-	EReference getNotionalBallastParameters_Vessels();
+	EReference getNotionalBallastParameters_VesselClasses();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -1975,6 +1975,14 @@ public interface CommercialPackage extends EPackage {
 		EAttribute NOTIONAL_BALLAST_PARAMETERS__SPEED = eINSTANCE.getNotionalBallastParameters_Speed();
 
 		/**
+		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NOTIONAL_BALLAST_PARAMETERS__HIRE_COST = eINSTANCE.getNotionalBallastParameters_HireCost();
+
+		/**
 		 * The meta object literal for the '<em><b>Nbo Rate</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1991,20 +1999,12 @@ public interface CommercialPackage extends EPackage {
 		EAttribute NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION = eINSTANCE.getNotionalBallastParameters_BaseConsumption();
 
 		/**
-		 * The meta object literal for the '<em><b>Return Port</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Vessel Classes</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT = eINSTANCE.getNotionalBallastParameters_ReturnPort();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference NOTIONAL_BALLAST_PARAMETERS__VESSELS = eINSTANCE.getNotionalBallastParameters_Vessels();
+		EReference NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES = eINSTANCE.getNotionalBallastParameters_VesselClasses();
 
 	}
 
