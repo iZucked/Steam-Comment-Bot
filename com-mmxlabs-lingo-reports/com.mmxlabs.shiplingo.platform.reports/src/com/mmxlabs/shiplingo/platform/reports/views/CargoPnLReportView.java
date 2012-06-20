@@ -162,7 +162,7 @@ public class CargoPnLReportView extends EMFReportView {
 			public Integer getIntValue(final Object object) {
 				if (object instanceof CargoAllocation) {
 					// display P&L
-					int value = 0;
+					Integer value = 0;
 
 					final CargoAllocation allocation = (CargoAllocation) object;
 					// TODO: make key well known
