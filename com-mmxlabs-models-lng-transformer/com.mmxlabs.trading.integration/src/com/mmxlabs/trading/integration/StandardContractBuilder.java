@@ -30,20 +30,19 @@ import com.mmxlabs.trading.optimiser.contracts.impl.BallastParameters;
 import com.mmxlabs.trading.optimiser.contracts.impl.NetbackContract;
 import com.mmxlabs.trading.optimiser.contracts.impl.ProfitSharingContract;
 
-// TODO: Rename 
-public class SimpleContractBuilder implements IBuilderExtension {
+public class StandardContractBuilder implements IBuilderExtension {
 	private final Map<NetbackContract, Map<AVesselClass, NotionalBallastParameters>> netbacks = new HashMap<NetbackContract, Map<AVesselClass, NotionalBallastParameters>>();
-	ModelEntityMap map;
+	private final ModelEntityMap map;
 
-	public SimpleContractBuilder(final ModelEntityMap map) {
+	public StandardContractBuilder(final ModelEntityMap map) {
 		this.map = map;
 	}
 
-	ProfitSharingContract createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int margin, final int share, final Set<IPort> baseMarketPorts) {
+	public ProfitSharingContract createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int margin, final int share, final Set<IPort> baseMarketPorts) {
 		return new ProfitSharingContract(actualMarket, referenceMarket, margin, share, baseMarketPorts);
 	}
 
-	NetbackContract createNetbackContract(final int buyersMargin, final Map<AVesselClass, NotionalBallastParameters> ballastParameters) {
+	public NetbackContract createNetbackContract(final int buyersMargin, final Map<AVesselClass, NotionalBallastParameters> ballastParameters) {
 		final NetbackContract result = new NetbackContract(buyersMargin);
 
 		netbacks.put(result, ballastParameters);

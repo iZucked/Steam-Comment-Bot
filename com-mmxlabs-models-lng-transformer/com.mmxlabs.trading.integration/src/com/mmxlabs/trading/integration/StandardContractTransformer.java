@@ -43,9 +43,9 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
  * @author hinton
  * 
  */
-public class SimpleContractTransformer implements IContractTransformer {
+public class StandardContractTransformer implements IContractTransformer {
 	private ISchedulerBuilder builder;
-	private SimpleContractBuilder contractBuilder;
+	private StandardContractBuilder contractBuilder;
 	private ModelEntityMap map;
 	private MMXRootObject rootObject;
 	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getProfitSharePurchaseContract(), CommercialPackage.eINSTANCE.getNetbackPurchaseContract());
@@ -55,7 +55,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 		this.rootObject = rootObject;
 		this.map = map;
 		this.builder = builder;
-		this.contractBuilder = new SimpleContractBuilder(map);
+		this.contractBuilder = new StandardContractBuilder(map);
 		builder.addBuilderExtension(contractBuilder);
 	}
 
