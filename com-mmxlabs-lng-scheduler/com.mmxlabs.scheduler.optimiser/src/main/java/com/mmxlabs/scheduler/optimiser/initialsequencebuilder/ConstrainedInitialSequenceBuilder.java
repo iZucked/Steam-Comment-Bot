@@ -474,20 +474,22 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					IResource suggestedResource = null;
 					for (final ISequenceElement element : here) {
 						final IResource suggestionForElement = resourceSuggestion.get(element);
-						if ((suggestionForElement != null) && (suggestedResource != null) && (suggestionForElement != suggestedResource)) {
-							suggestedResource = null;
+						log.debug("Suggestion for " + element + " = " + suggestionForElement);
+						if (suggestionForElement != null) {
+							suggestedResource = suggestionForElement;
 							break;
 						}
-						suggestedResource = suggestionForElement;
 					}
 
 					if (suggestedResource != null) {
 						// try inserting on suggested resource first
-
+						log.info("Trying to insert on " + suggestedResource);
 						final List<SequenceChunk> sequence = sequences.get(suggestedResource);
 
 						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource)) {
 							break top;
+						} else {
+							log.info("Could not insert at suggested location");
 						}
 					}
 
