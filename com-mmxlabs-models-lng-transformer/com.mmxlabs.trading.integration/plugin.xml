@@ -7,6 +7,15 @@
       <Transformer
             transformer="com.mmxlabs.trading.integration.TradingTransformerExtension">
       </Transformer>
+      <Transformer
+            transformer="com.mmxlabs.trading.integration.SimpleContractTransformer">
+         <modelclass
+               class=" com.mmxlabs.models.lng.commercial.NetbackPurchaseContract">
+         </modelclass>
+         <modelclass
+               class="com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract">
+         </modelclass>
+      </Transformer>
    </extension>
    <extension
          id="com.mmxlabs.trading.integration.exporter"
