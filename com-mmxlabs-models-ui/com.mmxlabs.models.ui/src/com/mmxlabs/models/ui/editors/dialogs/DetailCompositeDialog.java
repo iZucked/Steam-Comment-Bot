@@ -88,6 +88,8 @@ public class DetailCompositeDialog extends Dialog {
 	private static final Logger log = LoggerFactory
 			.getLogger(DetailCompositeDialog.class);
 
+	private IScenarioEditingLocation scenarioEditingLocation;
+	
 	private IDisplayComposite displayComposite;
 	/**
 	 * The top composite in which we store our detail views
@@ -407,7 +409,7 @@ public class DetailCompositeDialog extends Dialog {
 				.getDisplayCompositeFactoryRegistry()
 				.getDisplayCompositeFactory(selection.eClass());
 		displayComposite = displayCompositeFactory.createToplevelComposite(
-				dialogArea, selection.eClass());
+				dialogArea, selection.eClass(), scenarioEditingLocation );
 
 		final EObject duplicate = getDuplicate(selection, displayComposite);
 
@@ -759,8 +761,10 @@ public class DetailCompositeDialog extends Dialog {
 	public int open(final IScenarioEditingLocation part,
 			final MMXRootObject rootObject, final EObject container,
 			final EReference containment) {
+		this.scenarioEditingLocation = part;
+
 		validationContext = new DefaultExtraValidationContext(
-				part.getExtraValidationContext());
+				scenarioEditingLocation.getExtraValidationContext());
 		this.rootObject = rootObject;
 		lockedForEditing = false;
 		this.inputs.clear();
@@ -772,7 +776,7 @@ public class DetailCompositeDialog extends Dialog {
 		this.sidebarContainer = container;
 		this.sidebarContainment = containment;
 
-		part.pushExtraValidationContext(validationContext);
+		scenarioEditingLocation.pushExtraValidationContext(validationContext);
 		try {
 			final int value = open();
 			if (value == OK) {
@@ -830,16 +834,17 @@ public class DetailCompositeDialog extends Dialog {
 				}
 			}
 			
-			part.popExtraValidationContext();
+			scenarioEditingLocation.popExtraValidationContext();
 		}
 	}
 
 	public int open(final IScenarioEditingLocation part,
 			final MMXRootObject rootObject, final List<EObject> objects,
 			final boolean locked) {
+		this.scenarioEditingLocation = part;
 		validationContext = new DefaultExtraValidationContext(
-				part.getExtraValidationContext());
-		part.pushExtraValidationContext(validationContext);
+				scenarioEditingLocation.getExtraValidationContext());
+		scenarioEditingLocation.pushExtraValidationContext(validationContext);
 		this.rootObject = rootObject;
 		lockedForEditing = locked;
 		this.inputs.clear();
@@ -926,7 +931,7 @@ public class DetailCompositeDialog extends Dialog {
 				}
 			}
 			
-			part.popExtraValidationContext();
+			scenarioEditingLocation.popExtraValidationContext();
 		}
 	}
 

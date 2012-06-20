@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
@@ -39,9 +40,11 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	protected ICommandHandler commandHandler;
 	protected IDisplayCompositeLayoutProvider layoutProvider = new DefaultDisplayCompositeLayoutProvider();
 	protected IInlineEditorWrapper editorWrapper = IInlineEditorWrapper.IDENTITY;
+	protected IScenarioEditingLocation location;
 
-	public DefaultTopLevelComposite(final Composite parent, final int style) {
+	public DefaultTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
 		super(parent, style);
+		this.location = location;
 	}
 
 	@Override
@@ -51,7 +54,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		g.setText(EditorUtils.unmangle(eClass.getName()));
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
-		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass);
+		topLevel = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(eClass).createSublevelComposite(g, eClass, location);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
@@ -78,7 +81,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 					g2.setLayout(new FillLayout());
 					g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, value));
 
-					final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass());
+					final IDisplayComposite sub = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(value.eClass()).createSublevelComposite(g2, value.eClass(), location);
 
 					sub.setCommandHandler(commandHandler);
 					sub.setEditorWrapper(editorWrapper);
@@ -89,7 +92,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 		}
 	}
 
-	protected boolean shouldDisplay(EReference ref) {
+	protected boolean shouldDisplay(final EReference ref) {
 		return ref.isContainment() && !ref.isMany();
 	}
 
@@ -99,12 +102,12 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	@Override
-	public void setCommandHandler(ICommandHandler commandHandler) {
+	public void setCommandHandler(final ICommandHandler commandHandler) {
 		this.commandHandler = commandHandler;
 	}
 
 	@Override
-	public void displayValidationStatus(IStatus status) {
+	public void displayValidationStatus(final IStatus status) {
 		topLevel.displayValidationStatus(status);
 		for (final IDisplayComposite child : childComposites) {
 			child.displayValidationStatus(status);
@@ -112,7 +115,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	@Override
-	public void setEditorWrapper(IInlineEditorWrapper wrapper) {
+	public void setEditorWrapper(final IInlineEditorWrapper wrapper) {
 		this.editorWrapper = wrapper;
 		if (topLevel != null)
 			topLevel.setEditorWrapper(editorWrapper);

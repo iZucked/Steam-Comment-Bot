@@ -46,6 +46,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
@@ -56,33 +57,37 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
+
 enum SetMode {
-	IGNORE,
-	REPLACE,
-	UNION,
-	INTERSECTION
+	IGNORE, REPLACE, UNION, INTERSECTION
 }
+
 /**
  * A dialog which lets you apply the same edit to multiple target objects simultaneously.
  * 
- * TODO sort out fake multi-value editors like the enum editor. 
+ * TODO sort out fake multi-value editors like the enum editor.
  * 
  * @author hinton
- *
+ * 
  */
-public class MultiDetailDialog extends Dialog {	
+public class MultiDetailDialog extends Dialog {
 	private IDisplayComposite displayComposite;
+	/**
+	 * The top composite in which we store our detail views
+	 */
+	private Composite dialogArea = null;
+	
 	private final MMXRootObject rootObject;
 	private final IInlineEditorWrapper wrapper = new EditorWrapper();
 	private final ICommandHandler commandHandler;
-	
+
 	private DefaultExtraValidationContext validationContext;
-	
+
 	/**
 	 * Track all the controls that have been created, so we can disable them after setInput(), which will re-enable them otherwise.
 	 */
 	private final List<Control> controlsToDisable = new LinkedList<Control>();
-	
+
 	/**
 	 * This list of EObjects contains the proxy structure being edited in place of the real input
 	 */
@@ -96,6 +101,7 @@ public class MultiDetailDialog extends Dialog {
 	private List<EObject> editedObjects;
 	private Map<EObject, List<EObject>> proxyCounterparts = new HashMap<EObject, List<EObject>>();
 	private IDisplayCompositeFactory displayCompositeFactory;
+	private IScenarioEditingLocation scenarioEditingLocation;
 
 	public MultiDetailDialog(final Shell parentShell, final MMXRootObject root, final ICommandHandler commandHandler) {
 		super(parentShell);
@@ -114,6 +120,16 @@ public class MultiDetailDialog extends Dialog {
 	public void create() {
 		super.create();
 		createProxies();
+
+
+		if (displayComposite != null) {
+			displayComposite.getComposite().dispose();
+			displayComposite = null;
+		}
+		
+		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
+		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, editingClass, scenarioEditingLocation);
+		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		displayComposite.setEditorWrapper(wrapper);
 		final ICommandHandler immediate = new ICommandHandler() {
@@ -121,19 +137,19 @@ public class MultiDetailDialog extends Dialog {
 			public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
 				command.execute();
 			}
-			
+
 			@Override
 			public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
 				return commandHandler.getReferenceValueProviderProvider();
 			}
-			
+
 			@Override
 			public EditingDomain getEditingDomain() {
 				return commandHandler.getEditingDomain();
 			}
 		};
 		displayComposite.setCommandHandler(immediate);
-		displayComposite.display(rootObject, proxies.get(proxies.size()-1), proxies);
+		displayComposite.display(rootObject, proxies.get(proxies.size() - 1), proxies);
 		disableControls();
 		resizeAndCenter();
 	}
@@ -141,41 +157,39 @@ public class MultiDetailDialog extends Dialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		final Composite c = (Composite) super.createDialogArea(parent);
-		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
-		displayComposite = displayCompositeFactory.
-				createToplevelComposite(c, editingClass);
-		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
+		dialogArea = c;
+
 		return c;
 	}
 
 	private void createProxies() {
 		final List<List<EObject>> ranges = new ArrayList<List<EObject>>(editedObjects.size());
-		
+
 		for (final EObject object : editedObjects) {
 			final List<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, object);
 			range.add(object);
 			ranges.add(range);
 		}
-		
+
 		final List<EObject> range0 = ranges.get(0);
 		proxies.addAll(EcoreUtil.copyAll(range0));
-		
+
 		// clear attributes on proxies
-		
+
 		// now set equal attributes.
-		for (int i = 0; i<proxies.size(); i++) {
+		for (int i = 0; i < proxies.size(); i++) {
 			final EObject proxy = proxies.get(i);
 			final ArrayList<EObject> originals = new ArrayList<EObject>(editedObjects.size());
 			for (final List<EObject> range : ranges) {
 				originals.add(range.get(i));
 			}
-//			final Pair<EObject, EReference> c = ValidationSupport.getInstance().getContainer(range0.get(i));
-//			ValidationSupport.getInstance().setContainers(Collections.singleton(proxies.get(i)), c.getFirst(), c.getSecond());
+			// final Pair<EObject, EReference> c = ValidationSupport.getInstance().getContainer(range0.get(i));
+			// ValidationSupport.getInstance().setContainers(Collections.singleton(proxies.get(i)), c.getFirst(), c.getSecond());
 			setSameValues(proxy, originals);
 			setCounterparts(proxy, originals);
 		}
 	}
-	
+
 	private void setCounterparts(final EObject proxy, final List<EObject> originals) {
 		proxyCounterparts.put(proxy, originals);
 		for (final EReference reference : proxy.eClass().getEAllContainments()) {
@@ -188,25 +202,20 @@ public class MultiDetailDialog extends Dialog {
 			}
 		}
 	}
-	
+
 	private void applyProxies() {
 		final CompoundCommand command = new CompoundCommand();
 		command.append(IdentityCommand.INSTANCE); // add the identity command so that even if we set no features the command is executable
-		
+
 		for (final Map.Entry<Pair<EObject, EStructuralFeature>, SetMode> featureToSet : featuresToSet.entrySet()) {
 			final EObject proxy = featureToSet.getKey().getFirst();
 			final EStructuralFeature feature = featureToSet.getKey().getSecond();
 			final SetMode mode = feature.isMany() ? featureToSet.getValue() : SetMode.REPLACE;
 			switch (mode) {
 			case REPLACE:
-				final Object newValue = 
-				(!feature.isUnsettable() ||
-						proxy.eIsSet(feature)) ?
-								proxy.eGet(feature) : SetCommand.UNSET_VALUE;
+				final Object newValue = (!feature.isUnsettable() || proxy.eIsSet(feature)) ? proxy.eGet(feature) : SetCommand.UNSET_VALUE;
 				for (final EObject original : proxyCounterparts.get(proxy)) {
-					command.append(
-							SetCommand.create(commandHandler.getEditingDomain(),
-									original, feature, newValue));
+					command.append(SetCommand.create(commandHandler.getEditingDomain(), original, feature, newValue));
 				}
 				break;
 			case UNION:
@@ -214,7 +223,7 @@ public class MultiDetailDialog extends Dialog {
 				final List<Object> newValues = (List) proxy.eGet(feature);
 				for (final EObject original : proxyCounterparts.get(proxy)) {
 					final List<Object> oldValues = (List) original.eGet(feature);
-					
+
 					final LinkedHashSet<Object> lhs = new LinkedHashSet<Object>();
 					lhs.addAll(oldValues);
 					if (mode == SetMode.UNION) {
@@ -228,22 +237,24 @@ public class MultiDetailDialog extends Dialog {
 				break;
 			}
 		}
-		
+
 		commandHandler.getEditingDomain().getCommandStack().execute(command);
 	}
-	
-	public int open(final List<EObject> objects) {
+
+	public int open(final IScenarioEditingLocation part, final List<EObject> objects) {
+		this.scenarioEditingLocation = part;
+
 		this.editedObjects = objects;
 		editingClass = EMFUtils.findCommonSuperclass(objects);
-		
+
 		final int result;
 		if ((result = open()) == OK) {
 			applyProxies();
 		}
-		
+
 		// undo change from createProxies above
-//		ValidationSupport.getInstance().clearContainers(proxies);
-		
+		// ValidationSupport.getInstance().clearContainers(proxies);
+
 		return result;
 	}
 
@@ -313,18 +324,19 @@ public class MultiDetailDialog extends Dialog {
 			shell.setLocation(shellBounds.x + ((shellBounds.width - dialogSize.x) / 2), shellBounds.y + ((shellBounds.height - dialogSize.y) / 2));
 		}
 	}
-	
+
 	private class EditorWrapper implements IInlineEditorWrapper {
 		@Override
 		public IInlineEditor wrap(final IInlineEditor proxy) {
-			if (proxy == null) return null;
-			
+			if (proxy == null)
+				return null;
+
 			if (proxy.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 				return null;
 			}
-			
+
 			if (proxy.getFeature() == null) {
-				return null;//hack that filters out assignment editor
+				return null;// hack that filters out assignment editor
 			}
 
 			return new IInlineEditor() {
@@ -361,8 +373,7 @@ public class MultiDetailDialog extends Dialog {
 					controlsToDisable.add(sub);
 
 					final ToolBarManager manager = new ToolBarManager(SWT.NONE);
-					final Pair<EObject, EStructuralFeature> pair = 
-							new Pair<EObject, EStructuralFeature>(null, getFeature());
+					final Pair<EObject, EStructuralFeature> pair = new Pair<EObject, EStructuralFeature>(null, getFeature());
 					this.key = pair;
 					manager.add(new Action("Set", IAction.AS_CHECK_BOX) {
 						@Override
@@ -400,7 +411,7 @@ public class MultiDetailDialog extends Dialog {
 				public void setCommandHandler(ICommandHandler handler) {
 					proxy.setCommandHandler(handler);
 				}
-				
+
 				@Override
 				public void display(MMXRootObject scenario, EObject object, final Collection<EObject> range) {
 					key.setFirst(object);
@@ -458,6 +469,5 @@ class MultiFeatureAction extends AbstractMenuAction {
 			}
 		}
 	}
-	
-	
+
 }
