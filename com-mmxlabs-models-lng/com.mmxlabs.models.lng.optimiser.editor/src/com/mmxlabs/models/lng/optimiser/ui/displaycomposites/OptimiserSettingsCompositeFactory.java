@@ -10,30 +10,26 @@ import org.eclipse.swt.widgets.Composite;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 
-public class OptimiserSettingsCompositeFactory implements
-		IDisplayCompositeFactory {
+public class OptimiserSettingsCompositeFactory implements IDisplayCompositeFactory {
 
-	final IDisplayCompositeFactory delegate = Activator.getDefault().getDisplayCompositeFactoryRegistry()
-			.getDisplayCompositeFactory(TypesPackage.eINSTANCE.getAOptimisationSettings());
-	
+	final IDisplayCompositeFactory delegate = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(TypesPackage.eINSTANCE.getAOptimisationSettings());
+
 	@Override
-	public IDisplayComposite createToplevelComposite(Composite composite,
-			EClass eClass) {
-		return new OptimiserSettingsToplevelComposite(composite, SWT.NONE);
+	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
+		return new OptimiserSettingsToplevelComposite(composite, SWT.NONE, location);
 	}
 
 	@Override
-	public IDisplayComposite createSublevelComposite(Composite composite,
-			EClass eClass) {
-		return delegate.createSublevelComposite(composite, eClass);
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
+		return delegate.createSublevelComposite(composite, eClass, location);
 	}
 
 	@Override
-	public List<EObject> getExternalEditingRange(MMXRootObject root,
-			EObject value) {
+	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
 		return delegate.getExternalEditingRange(root, value);
 	}
 }

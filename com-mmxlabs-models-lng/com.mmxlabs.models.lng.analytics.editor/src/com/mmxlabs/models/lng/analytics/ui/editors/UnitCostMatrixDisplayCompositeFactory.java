@@ -13,20 +13,21 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class UnitCostMatrixDisplayCompositeFactory extends DefaultDisplayCompositeFactory {
 	@Override
-	public IDisplayComposite createSublevelComposite(Composite composite, EClass eClass) {
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
 		return new DefaultDetailComposite(composite, SWT.NONE) {
 			@Override
-			public void display(MMXRootObject root, EObject object, final Collection<EObject> range) {
+			public void display(final MMXRootObject root, final EObject object, final Collection<EObject> range) {
 				if (object instanceof UnitCostMatrix) {
 					((UnitCostMatrix) object).getCostLines().clear();
 				}

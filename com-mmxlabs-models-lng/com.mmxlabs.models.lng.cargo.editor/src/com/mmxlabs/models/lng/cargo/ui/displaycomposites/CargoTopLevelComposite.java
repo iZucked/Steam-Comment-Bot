@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
@@ -45,8 +46,8 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	 */
 	protected IDisplayComposite bottomLevel = null;
 
-	public CargoTopLevelComposite(final Composite parent, final int style) {
-		super(parent, style);
+	public CargoTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
+		super(parent, style, location);
 	}
 
 	@Override

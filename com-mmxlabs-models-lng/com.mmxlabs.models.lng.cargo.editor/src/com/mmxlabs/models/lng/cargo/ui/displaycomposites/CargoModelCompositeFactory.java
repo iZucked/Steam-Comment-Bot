@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.IComponentHelper;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;
 
@@ -30,18 +31,18 @@ public class CargoModelCompositeFactory extends DefaultDisplayCompositeFactory {
 	}
 
 	@Override
-	public IDisplayComposite createToplevelComposite(Composite composite, EClass eClass) {
-		return new CargoTopLevelComposite(composite, SWT.NONE);
+	public IDisplayComposite createToplevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
+		return new CargoTopLevelComposite(composite, SWT.NONE, location);
 	}
 
 	@Override
-	public IDisplayComposite createSublevelComposite(Composite composite, EClass eClass) {
+	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
 		// This is not expected to be called. The CargoTopLevelComposite will create it's own instances directly.
 		throw new UnsupportedOperationException("Unexpected method invocations");
 	}
 
 	@Override
-	public List<EObject> getExternalEditingRange(MMXRootObject root, EObject value) {
+	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
 		final List<EObject> external = super.getExternalEditingRange(root, value);
 
 		if (value instanceof Cargo) {
