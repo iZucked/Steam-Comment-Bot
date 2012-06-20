@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -44,6 +45,7 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 	 */
 	public NotionalBallastParametersComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**
@@ -69,6 +71,7 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 		add_nboRateEditor(detailComposite, topClass);
 		add_baseConsumptionEditor(detailComposite, topClass);
 		add_returnPortEditor(detailComposite, topClass);
+		add_vesselsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the routes feature on NotionalBallastParameters
@@ -109,5 +112,14 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 	 */
 	protected void add_returnPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT));
+	}
+
+	/**
+	 * Create the editor for the vessels feature on NotionalBallastParameters
+	 *
+	 * @generated
+	 */
+	protected void add_vesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__VESSELS));
 	}
 }
