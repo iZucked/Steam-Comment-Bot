@@ -184,7 +184,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 									if (scenarioViewer.isLocked() == false) {
 										final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
 												.getDefaultCommandHandler());
-										mdd.open(structuredSelection.toList());
+										mdd.open(jointModelEditorPart, structuredSelection.toList());
 									}
 								} finally {
 									jointModelEditorPart.getEditorLock().release();
