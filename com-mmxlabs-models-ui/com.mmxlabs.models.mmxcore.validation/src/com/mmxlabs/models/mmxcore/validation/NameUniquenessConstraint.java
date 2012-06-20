@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -45,7 +46,14 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 			return ctx.createSuccessStatus();
 		final EStructuralFeature feature = containerAndFeature.getSecond();
 		if (feature != null && feature.isMany() && feature instanceof EReference && ((EReference) feature).getEReferenceType().getEAllAttributes().contains(nameAttribute)) {
-
+			
+			EAnnotation eAnnotation = target.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/validation/NamedObject");
+			if (eAnnotation != null) {
+				if (Boolean.valueOf(eAnnotation.getDetails().get("nonUnique"))) {
+					return ctx.createSuccessStatus();
+				}
+			}
+			
 			Map<Pair<EObject, EReference>, Set<String>> badNames = (Map<Pair<EObject, EReference>, Set<String>>) ctx.getCurrentConstraintData();
 			if (badNames == null) {
 				badNames = new HashMap<Pair<EObject, EReference>, Set<String>>();
