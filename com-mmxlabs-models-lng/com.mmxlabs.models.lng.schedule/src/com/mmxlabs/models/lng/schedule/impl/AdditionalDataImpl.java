@@ -281,6 +281,21 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Integer getIntegerValue() {
+		final Object value = getValue();
+		
+		if (value instanceof Number) {
+			return ((Number)value).intValue();
+		}
+		
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public AdditionalData getAdditionalDataWithKey(String key) {
 		for (final AdditionalData ad : getAdditionalData()) {
 		  if (ad.getKey().equals(key)) return ad;
@@ -470,6 +485,8 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 				return getIntValue();
 			case SchedulePackage.ADDITIONAL_DATA___FORMAT:
 				return format();
+			case SchedulePackage.ADDITIONAL_DATA___GET_INTEGER_VALUE:
+				return getIntegerValue();
 			case SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
 				return getAdditionalDataWithKey((String)arguments.get(0));
 			case SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE:

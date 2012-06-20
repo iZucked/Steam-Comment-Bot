@@ -169,6 +169,9 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdditionalData" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject #//AdditionalDataHolder">
+    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
+      <details key="nonUnique" value="true"/>
+    </eAnnotations>
     <eOperations name="getIntValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="final Object value = getValue();&#xA;&#xA;if (value instanceof Number) {&#xA;&#x9;return ((Number)value).intValue();&#xA;}&#xA;&#xA;throw new IllegalStateException(&quot;Not an instanceof Number: &quot; + value);"/>
@@ -177,6 +180,11 @@
     <eOperations name="format" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="final Object value = getValue();&#xA;final String render = getRender();&#xA;&#xA;if (render != null &amp;&amp; !render.isEmpty()) {&#xA;&#x9;return String.format(render, value);&#xA;} else {&#xA;&#x9;return &quot;&quot; + value;&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getIntegerValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="final Object value = getValue();&#xA;&#xA;if (value instanceof Number) {&#xA;&#x9;return ((Number)value).intValue();&#xA;}&#xA;&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

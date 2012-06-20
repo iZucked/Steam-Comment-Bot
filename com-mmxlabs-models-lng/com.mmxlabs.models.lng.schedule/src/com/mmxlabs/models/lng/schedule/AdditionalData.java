@@ -26,7 +26,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  *
  * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getAdditionalData()
- * @model
+ * @model annotation="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject nonUnique='true'"
  * @generated
  */
 public interface AdditionalData extends NamedObject, AdditionalDataHolder {
@@ -152,6 +152,15 @@ public interface AdditionalData extends NamedObject, AdditionalDataHolder {
 	 * @generated
 	 */
 	String format();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final Object value = getValue();\n\nif (value instanceof Number) {\n\treturn ((Number)value).intValue();\n}\n\nreturn null;'"
+	 * @generated
+	 */
+	Integer getIntegerValue();
 
 } // end of  AdditionalData
 

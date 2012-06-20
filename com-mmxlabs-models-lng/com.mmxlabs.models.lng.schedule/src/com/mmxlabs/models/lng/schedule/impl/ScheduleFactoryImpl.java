@@ -6,8 +6,17 @@ package com.mmxlabs.models.lng.schedule.impl;
 
 import com.mmxlabs.models.lng.schedule.*;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.Iterable;
 import java.util.Calendar;
+
+import javax.xml.bind.DatatypeConverter;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
@@ -16,6 +25,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -399,19 +409,44 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * Bodge to read b64 encoded serialized objects
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public Object createObjectFromString(EDataType eDataType, String initialValue) {
-		return super.createFromString(eDataType, initialValue);
+		try {
+			final ByteArrayInputStream bais = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(initialValue));
+			final ObjectInputStream ois = new ObjectInputStream(bais);
+			return ois.readObject();
+		} catch (Exception e) {
+			return null;
+		} finally {
+			
+		}
+//		return super.createFromString(eDataType, initialValue);
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * This is a slightly grim approach to putting Serializable objects into the ecore.
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	public String convertObjectToString(EDataType eDataType, Object instanceValue) {
+		if (instanceValue instanceof Serializable) {
+			final Serializable s = (Serializable) instanceValue;
+			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			try {
+				final ObjectOutputStream oos = new ObjectOutputStream(baos);
+				oos.writeObject(s);
+				oos.flush();
+				oos.close();
+				final String b64 = DatatypeConverter.printBase64Binary(baos.toByteArray());
+				return b64;
+			} catch (IOException e) {
+			}
+			
+		}
 		return super.convertToString(eDataType, instanceValue);
 	}
 

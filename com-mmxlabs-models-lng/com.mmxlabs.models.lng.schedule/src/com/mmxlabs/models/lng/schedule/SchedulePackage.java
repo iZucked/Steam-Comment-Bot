@@ -3339,13 +3339,22 @@ public interface SchedulePackage extends EPackage {
 	int ADDITIONAL_DATA___FORMAT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 3;
 
 	/**
+	 * The operation id for the '<em>Get Integer Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADDITIONAL_DATA___GET_INTEGER_VALUE = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 4;
+
+	/**
 	 * The number of operations of the '<em>Additional Data</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADDITIONAL_DATA_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 4;
+	int ADDITIONAL_DATA_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataHolderImpl <em>Additional Data Holder</em>}' class.
@@ -4464,6 +4473,16 @@ public interface SchedulePackage extends EPackage {
 	EOperation getAdditionalData__Format();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getIntegerValue() <em>Get Integer Value</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Integer Value</em>' operation.
+	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getIntegerValue()
+	 * @generated
+	 */
+	EOperation getAdditionalData__GetIntegerValue();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder <em>Additional Data Holder</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5374,6 +5393,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EOperation ADDITIONAL_DATA___FORMAT = eINSTANCE.getAdditionalData__Format();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Integer Value</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation ADDITIONAL_DATA___GET_INTEGER_VALUE = eINSTANCE.getAdditionalData__GetIntegerValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataHolderImpl <em>Additional Data Holder</em>}' class.

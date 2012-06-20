@@ -1144,6 +1144,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getAdditionalData__GetIntegerValue() {
+		return additionalDataEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getAdditionalDataHolder() {
 		return additionalDataHolderEClass;
 	}
@@ -1360,6 +1369,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__RENDER);
 		createEOperation(additionalDataEClass, ADDITIONAL_DATA___GET_INT_VALUE);
 		createEOperation(additionalDataEClass, ADDITIONAL_DATA___FORMAT);
+		createEOperation(additionalDataEClass, ADDITIONAL_DATA___GET_INTEGER_VALUE);
 
 		additionalDataHolderEClass = createEClass(ADDITIONAL_DATA_HOLDER);
 		createEReference(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
@@ -1568,6 +1578,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEOperation(getAdditionalData__Format(), ecorePackage.getEString(), "format", 1, 1, IS_UNIQUE, IS_ORDERED);
 
+		initEOperation(getAdditionalData__GetIntegerValue(), ecorePackage.getEIntegerObject(), "getIntegerValue", 1, 1, IS_UNIQUE, IS_ORDERED);
+
 		initEClass(additionalDataHolderEClass, AdditionalDataHolder.class, "AdditionalDataHolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAdditionalDataHolder_AdditionalData(), this.getAdditionalData(), null, "additionalData", null, 0, -1, AdditionalDataHolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1598,6 +1610,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
+		createNamedObjectAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/mmxcore/validation/NamedObject</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createNamedObjectAnnotations() {
+		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";			
+		addAnnotation
+		  (additionalDataEClass, 
+		   source, 
+		   new String[] {
+			 "nonUnique", "true"
+		   });					
 	}
 
 } //SchedulePackageImpl
