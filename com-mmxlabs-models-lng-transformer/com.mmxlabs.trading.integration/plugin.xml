@@ -8,7 +8,7 @@
             transformer="com.mmxlabs.trading.integration.TradingTransformerExtension">
       </Transformer>
       <Transformer
-            transformer="com.mmxlabs.trading.integration.SimpleContractTransformer">
+            transformer="com.mmxlabs.trading.integration.StandardContractTransformer">
          <modelclass
                class=" com.mmxlabs.models.lng.commercial.NetbackPurchaseContract">
          </modelclass>
