@@ -266,7 +266,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		for (final Sequence sequence : schedule.getSequences()) {
 			final Assignment a = InputFactory.eINSTANCE.createAssignment();
 
-			if (sequence.getVessel() == null) {
+			if (sequence.getVessel() == null && !sequence.isSpotVessel()) {
 				continue;
 			}
 
@@ -290,9 +290,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				}
 			}
 
-			if (!a.getAssignedObjects().isEmpty() || sequence.isSpotVessel() == false) {
-				newAssignments.add(a);
-			}
+			newAssignments.add(a);
 		}
 
 		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), newAssignments));
