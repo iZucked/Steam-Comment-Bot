@@ -9,6 +9,7 @@ import org.eclipse.ocl.ecore.opposites.AllInstancesContentAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.AdditionalData;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -79,11 +80,19 @@ public class TradingExporterExtension implements IExporterExtension {
 						entityData.setName(entry.getEntity().getName());
 						entityData.setKey(entry.getEntity().getName());
 						final AdditionalData pnlData = ScheduleFactory.eINSTANCE.createAdditionalData();
-						pnlData.setIntegerValue((int)entry.getFinalGroupValue() / Calculator.ScaleFactor);
+						pnlData.setValue((int)entry.getFinalGroupValue() / Calculator.ScaleFactor);
 						pnlData.setName("P&L");
 						pnlData.setKey("pnl");
 						cargoAllocation.getAdditionalData().add(entityData);
 						entityData.getAdditionalData().add(pnlData);
+						
+						final AdditionalData dateData = ScheduleFactory.eINSTANCE.createAdditionalData();
+						dateData.setValue(entities.getDateFromHours(profitAndLoss.getBookingTime()));
+						dateData.setName("Date");
+						dateData.setKey("date");
+						entityData.getAdditionalData().add(dateData);
+						
+						entityData.getAdditionalData().add(exportDetailTree(entry.getDetails()));
 						
 //						final CargoRevenue revenue = ScheduleFactory.eINSTANCE.createCargoRevenue();
 //						revenue.setCargo(cargoAllocation);
@@ -144,5 +153,21 @@ public class TradingExporterExtension implements IExporterExtension {
 		entities = null;
 		outputSchedule = null;
 		annotatedSolution = null;
+	}
+
+	private AdditionalData exportDetailTree(final IDetailTree details) {
+		final AdditionalData ad = ScheduleFactory.eINSTANCE.createAdditionalData();
+		
+		ad.setName(details.getKey());
+		ad.setKey(details.getKey());
+		if (details.getValue() != null) {
+			ad.setValue(details.getValue());
+		}
+		
+		for (final IDetailTree child : details.getChildren()) {
+			ad.getAdditionalData().add(exportDetailTree(child));
+		}
+		
+		return ad;
 	}
 }
