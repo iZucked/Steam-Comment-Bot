@@ -4,22 +4,19 @@
  */
 package com.mmxlabs.trading.optimiser.contracts.impl;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
@@ -27,10 +24,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  * @author Tom Hinton
  * 
  */
-@RunWith(JMock.class)
 public class TestProfitSharingContract {
 
-	Mockery context = new JUnit4Mockery();
 
 	@Test
 	public void testProfitSharingPrice() {
@@ -43,17 +38,12 @@ public class TestProfitSharingContract {
 
 		// market purchase price - alpha - beta * (actual sales price) - gamma * (actual
 		// * sales price - reference sales price)
-		final IDischargeSlot option = context.mock(IDischargeSlot.class);
-		final IPort portA = context.mock(IPort.class, "portA");
-		final IPort portB = context.mock(IPort.class, "portB");
+		final IDischargeSlot option = mock(IDischargeSlot.class);
+		final IPort portA = mock(IPort.class, "portA");
+		final IPort portB = mock(IPort.class, "portB");
 
-		context.checking(new Expectations() {
-			{
-				allowing(option).getPort();
-				will(returnValue(portB));
-			}
-		});
-
+		when(option.getPort()).thenReturn(portB);
+		
 		baseMarketPorts.add(portA);
 
 		final Random random = new Random();
@@ -76,16 +66,12 @@ public class TestProfitSharingContract {
 
 		// market purchase price - alpha - beta * (actual sales price) - gamma * (actual
 		// * sales price - reference sales price)
-		final IDischargeSlot option = context.mock(IDischargeSlot.class);
-		final IPort portA = context.mock(IPort.class, "portA");
-		final IPort portB = context.mock(IPort.class, "portB");
+		final IDischargeSlot option = mock(IDischargeSlot.class);
+		final IPort portA = mock(IPort.class, "portA");
+		final IPort portB = mock(IPort.class, "portB");
 
-		context.checking(new Expectations() {
-			{
-				allowing(option).getPort();
-				will(returnValue(portA));
-			}
-		});
+		
+		when(option.getPort()).thenReturn(portA);
 
 		baseMarketPorts.add(portA);
 
