@@ -3204,13 +3204,22 @@ public interface SchedulePackage extends EPackage {
 	int ADDITIONAL_DATA__KEY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Integer Value</b></em>' attribute.
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADDITIONAL_DATA__INTEGER_VALUE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+	int ADDITIONAL_DATA__VALUE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Render</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADDITIONAL_DATA__RENDER = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Additional Data</em>' class.
@@ -3219,7 +3228,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADDITIONAL_DATA_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+	int ADDITIONAL_DATA_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -3312,13 +3321,31 @@ public interface SchedulePackage extends EPackage {
 	int ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Int Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADDITIONAL_DATA___GET_INT_VALUE = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Format</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADDITIONAL_DATA___FORMAT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 3;
+
+	/**
 	 * The number of operations of the '<em>Additional Data</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADDITIONAL_DATA_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 2;
+	int ADDITIONAL_DATA_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataHolderImpl <em>Additional Data Holder</em>}' class.
@@ -3416,6 +3443,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	int ITERABLE = 22;
+
+
+	/**
+	 * The meta object id for the '<em>Object</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.lang.Object
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
+	 * @generated
+	 */
+	int OBJECT = 23;
 
 
 	/**
@@ -4384,15 +4422,46 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getAdditionalData_Key();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getIntegerValue <em>Integer Value</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Integer Value</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getIntegerValue()
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getValue()
 	 * @see #getAdditionalData()
 	 * @generated
 	 */
-	EAttribute getAdditionalData_IntegerValue();
+	EAttribute getAdditionalData_Value();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getRender <em>Render</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Render</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getRender()
+	 * @see #getAdditionalData()
+	 * @generated
+	 */
+	EAttribute getAdditionalData_Render();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getIntValue() <em>Get Int Value</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Int Value</em>' operation.
+	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getIntValue()
+	 * @generated
+	 */
+	EOperation getAdditionalData__GetIntValue();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.AdditionalData#format() <em>Format</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Format</em>' operation.
+	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#format()
+	 * @generated
+	 */
+	EOperation getAdditionalData__Format();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder <em>Additional Data Holder</em>}'.
@@ -4476,6 +4545,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EDataType getIterable();
+
+	/**
+	 * Returns the meta object for data type '{@link java.lang.Object <em>Object</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Object</em>'.
+	 * @see java.lang.Object
+	 * @model instanceClass="java.lang.Object"
+	 * @generated
+	 */
+	EDataType getObject();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -5264,12 +5344,36 @@ public interface SchedulePackage extends EPackage {
 		EAttribute ADDITIONAL_DATA__KEY = eINSTANCE.getAdditionalData_Key();
 
 		/**
-		 * The meta object literal for the '<em><b>Integer Value</b></em>' attribute feature.
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute ADDITIONAL_DATA__INTEGER_VALUE = eINSTANCE.getAdditionalData_IntegerValue();
+		EAttribute ADDITIONAL_DATA__VALUE = eINSTANCE.getAdditionalData_Value();
+
+		/**
+		 * The meta object literal for the '<em><b>Render</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ADDITIONAL_DATA__RENDER = eINSTANCE.getAdditionalData_Render();
+
+		/**
+		 * The meta object literal for the '<em><b>Get Int Value</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation ADDITIONAL_DATA___GET_INT_VALUE = eINSTANCE.getAdditionalData__GetIntValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Format</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation ADDITIONAL_DATA___FORMAT = eINSTANCE.getAdditionalData__Format();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataHolderImpl <em>Additional Data Holder</em>}' class.
@@ -5344,6 +5448,16 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EDataType ITERABLE = eINSTANCE.getIterable();
+
+		/**
+		 * The meta object literal for the '<em>Object</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.lang.Object
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
+		 * @generated
+		 */
+		EDataType OBJECT = eINSTANCE.getObject();
 
 	}
 

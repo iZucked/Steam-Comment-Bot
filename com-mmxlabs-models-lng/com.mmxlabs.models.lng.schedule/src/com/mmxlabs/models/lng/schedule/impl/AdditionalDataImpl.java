@@ -39,7 +39,8 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataImpl#getAdditionalData <em>Additional Data</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataImpl#getKey <em>Key</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataImpl#getIntegerValue <em>Integer Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataImpl#getValue <em>Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataImpl#getRender <em>Render</em>}</li>
  * </ul>
  * </p>
  *
@@ -77,33 +78,53 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 	protected String key = KEY_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getIntegerValue() <em>Integer Value</em>}' attribute.
+	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getIntegerValue()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected static final int INTEGER_VALUE_EDEFAULT = 0;
+	protected static final Object VALUE_EDEFAULT = null;
 
 	/**
-	 * The cached value of the '{@link #getIntegerValue() <em>Integer Value</em>}' attribute.
+	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getIntegerValue()
+	 * @see #getValue()
 	 * @generated
 	 * @ordered
 	 */
-	protected int integerValue = INTEGER_VALUE_EDEFAULT;
+	protected Object value = VALUE_EDEFAULT;
 
 	/**
-	 * This is true if the Integer Value attribute has been set.
+	 * This is true if the Value attribute has been set.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	protected boolean integerValueESet;
+	protected boolean valueESet;
+
+	/**
+	 * The default value of the '{@link #getRender() <em>Render</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRender()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String RENDER_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getRender() <em>Render</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRender()
+	 * @generated
+	 * @ordered
+	 */
+	protected String render = RENDER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -162,8 +183,8 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public int getIntegerValue() {
-		return integerValue;
+	public Object getValue() {
+		return value;
 	}
 
 	/**
@@ -171,13 +192,13 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIntegerValue(int newIntegerValue) {
-		int oldIntegerValue = integerValue;
-		integerValue = newIntegerValue;
-		boolean oldIntegerValueESet = integerValueESet;
-		integerValueESet = true;
+	public void setValue(Object newValue) {
+		Object oldValue = value;
+		value = newValue;
+		boolean oldValueESet = valueESet;
+		valueESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.ADDITIONAL_DATA__INTEGER_VALUE, oldIntegerValue, integerValue, !oldIntegerValueESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.ADDITIONAL_DATA__VALUE, oldValue, value, !oldValueESet));
 	}
 
 	/**
@@ -185,13 +206,13 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void unsetIntegerValue() {
-		int oldIntegerValue = integerValue;
-		boolean oldIntegerValueESet = integerValueESet;
-		integerValue = INTEGER_VALUE_EDEFAULT;
-		integerValueESet = false;
+	public void unsetValue() {
+		Object oldValue = value;
+		boolean oldValueESet = valueESet;
+		value = VALUE_EDEFAULT;
+		valueESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.ADDITIONAL_DATA__INTEGER_VALUE, oldIntegerValue, INTEGER_VALUE_EDEFAULT, oldIntegerValueESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, SchedulePackage.ADDITIONAL_DATA__VALUE, oldValue, VALUE_EDEFAULT, oldValueESet));
 	}
 
 	/**
@@ -199,8 +220,60 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public boolean isSetIntegerValue() {
-		return integerValueESet;
+	public boolean isSetValue() {
+		return valueESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getRender() {
+		return render;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRender(String newRender) {
+		String oldRender = render;
+		render = newRender;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.ADDITIONAL_DATA__RENDER, oldRender, render));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getIntValue() {
+		final Object value = getValue();
+		
+		if (value instanceof Number) {
+			return ((Number)value).intValue();
+		}
+		
+		throw new IllegalStateException("Not an instanceof Number: " + value);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String format() {
+		final Object value = getValue();
+		final String render = getRender();
+		
+		if (render != null && !render.isEmpty()) {
+			return String.format(render, value);
+		} else {
+			return "" + value;
+		}
 	}
 
 	/**
@@ -257,8 +330,10 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 				return getAdditionalData();
 			case SchedulePackage.ADDITIONAL_DATA__KEY:
 				return getKey();
-			case SchedulePackage.ADDITIONAL_DATA__INTEGER_VALUE:
-				return getIntegerValue();
+			case SchedulePackage.ADDITIONAL_DATA__VALUE:
+				return getValue();
+			case SchedulePackage.ADDITIONAL_DATA__RENDER:
+				return getRender();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -279,8 +354,11 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 			case SchedulePackage.ADDITIONAL_DATA__KEY:
 				setKey((String)newValue);
 				return;
-			case SchedulePackage.ADDITIONAL_DATA__INTEGER_VALUE:
-				setIntegerValue((Integer)newValue);
+			case SchedulePackage.ADDITIONAL_DATA__VALUE:
+				setValue(newValue);
+				return;
+			case SchedulePackage.ADDITIONAL_DATA__RENDER:
+				setRender((String)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -300,8 +378,11 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 			case SchedulePackage.ADDITIONAL_DATA__KEY:
 				setKey(KEY_EDEFAULT);
 				return;
-			case SchedulePackage.ADDITIONAL_DATA__INTEGER_VALUE:
-				unsetIntegerValue();
+			case SchedulePackage.ADDITIONAL_DATA__VALUE:
+				unsetValue();
+				return;
+			case SchedulePackage.ADDITIONAL_DATA__RENDER:
+				setRender(RENDER_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -319,8 +400,10 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 				return additionalData != null && !additionalData.isEmpty();
 			case SchedulePackage.ADDITIONAL_DATA__KEY:
 				return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
-			case SchedulePackage.ADDITIONAL_DATA__INTEGER_VALUE:
-				return isSetIntegerValue();
+			case SchedulePackage.ADDITIONAL_DATA__VALUE:
+				return isSetValue();
+			case SchedulePackage.ADDITIONAL_DATA__RENDER:
+				return RENDER_EDEFAULT == null ? render != null : !RENDER_EDEFAULT.equals(render);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -383,6 +466,10 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
+			case SchedulePackage.ADDITIONAL_DATA___GET_INT_VALUE:
+				return getIntValue();
+			case SchedulePackage.ADDITIONAL_DATA___FORMAT:
+				return format();
 			case SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
 				return getAdditionalDataWithKey((String)arguments.get(0));
 			case SchedulePackage.ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE:
@@ -403,8 +490,10 @@ public class AdditionalDataImpl extends NamedObjectImpl implements AdditionalDat
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (key: ");
 		result.append(key);
-		result.append(", integerValue: ");
-		if (integerValueESet) result.append(integerValue); else result.append("<unset>");
+		result.append(", value: ");
+		if (valueESet) result.append(value); else result.append("<unset>");
+		result.append(", render: ");
+		result.append(render);
 		result.append(')');
 		return result.toString();
 	}

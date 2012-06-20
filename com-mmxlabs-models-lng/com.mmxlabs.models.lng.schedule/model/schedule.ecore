@@ -169,9 +169,21 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdditionalData" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject #//AdditionalDataHolder">
+    <eOperations name="getIntValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="final Object value = getValue();&#xA;&#xA;if (value instanceof Number) {&#xA;&#x9;return ((Number)value).intValue();&#xA;}&#xA;&#xA;throw new IllegalStateException(&quot;Not an instanceof Number: &quot; + value);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="format" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="final Object value = getValue();&#xA;final String render = getRender();&#xA;&#xA;if (render != null &amp;&amp; !render.isEmpty()) {&#xA;&#x9;return String.format(render, value);&#xA;} else {&#xA;&#x9;return &quot;&quot; + value;&#xA;}"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="integerValue" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="#//Object"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="render" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdditionalDataHolder">
     <eOperations name="getAdditionalDataWithKey" lowerBound="1" eType="#//AdditionalData">
@@ -196,4 +208,5 @@
   <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">
     <eTypeParameters name="T"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceClassName="java.lang.Object"/>
 </ecore:EPackage>

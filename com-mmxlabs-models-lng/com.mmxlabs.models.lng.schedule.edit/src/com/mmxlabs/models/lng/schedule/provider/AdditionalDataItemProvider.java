@@ -69,7 +69,8 @@ public class AdditionalDataItemProvider
 			super.getPropertyDescriptors(object);
 
 			addKeyPropertyDescriptor(object);
-			addIntegerValuePropertyDescriptor(object);
+			addValuePropertyDescriptor(object);
+			addRenderPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -97,23 +98,45 @@ public class AdditionalDataItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Integer Value feature.
+	 * This adds a property descriptor for the Value feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIntegerValuePropertyDescriptor(Object object) {
+	protected void addValuePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_AdditionalData_integerValue_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AdditionalData_integerValue_feature", "_UI_AdditionalData_type"),
-				 SchedulePackage.Literals.ADDITIONAL_DATA__INTEGER_VALUE,
+				 getString("_UI_AdditionalData_value_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdditionalData_value_feature", "_UI_AdditionalData_type"),
+				 SchedulePackage.Literals.ADDITIONAL_DATA__VALUE,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Render feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRenderPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_AdditionalData_render_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_AdditionalData_render_feature", "_UI_AdditionalData_type"),
+				 SchedulePackage.Literals.ADDITIONAL_DATA__RENDER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -186,7 +209,8 @@ public class AdditionalDataItemProvider
 
 		switch (notification.getFeatureID(AdditionalData.class)) {
 			case SchedulePackage.ADDITIONAL_DATA__KEY:
-			case SchedulePackage.ADDITIONAL_DATA__INTEGER_VALUE:
+			case SchedulePackage.ADDITIONAL_DATA__VALUE:
+			case SchedulePackage.ADDITIONAL_DATA__RENDER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.ADDITIONAL_DATA__ADDITIONAL_DATA:

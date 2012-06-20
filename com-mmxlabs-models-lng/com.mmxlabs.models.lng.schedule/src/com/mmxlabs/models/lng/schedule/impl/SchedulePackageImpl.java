@@ -214,6 +214,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	private EDataType iterableEDataType = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType objectEDataType = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -1101,8 +1108,35 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getAdditionalData_IntegerValue() {
+	public EAttribute getAdditionalData_Value() {
 		return (EAttribute)additionalDataEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getAdditionalData_Render() {
+		return (EAttribute)additionalDataEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getAdditionalData__GetIntValue() {
+		return additionalDataEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getAdditionalData__Format() {
+		return additionalDataEClass.getEOperations().get(1);
 	}
 
 	/**
@@ -1175,6 +1209,15 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EDataType getIterable() {
 		return iterableEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EDataType getObject() {
+		return objectEDataType;
 	}
 
 	/**
@@ -1313,7 +1356,10 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		additionalDataEClass = createEClass(ADDITIONAL_DATA);
 		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__KEY);
-		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__INTEGER_VALUE);
+		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__VALUE);
+		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__RENDER);
+		createEOperation(additionalDataEClass, ADDITIONAL_DATA___GET_INT_VALUE);
+		createEOperation(additionalDataEClass, ADDITIONAL_DATA___FORMAT);
 
 		additionalDataHolderEClass = createEClass(ADDITIONAL_DATA_HOLDER);
 		createEReference(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
@@ -1327,6 +1373,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		// Create data types
 		calendarEDataType = createEDataType(CALENDAR);
 		iterableEDataType = createEDataType(ITERABLE);
+		objectEDataType = createEDataType(OBJECT);
 	}
 
 	/**
@@ -1514,7 +1561,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(additionalDataEClass, AdditionalData.class, "AdditionalData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getAdditionalData_Key(), ecorePackage.getEString(), "key", null, 1, 1, AdditionalData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAdditionalData_IntegerValue(), ecorePackage.getEInt(), "integerValue", null, 1, 1, AdditionalData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAdditionalData_Value(), this.getObject(), "value", null, 1, 1, AdditionalData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getAdditionalData_Render(), ecorePackage.getEString(), "render", null, 1, 1, AdditionalData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEOperation(getAdditionalData__GetIntValue(), ecorePackage.getEInt(), "getIntValue", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEOperation(getAdditionalData__Format(), ecorePackage.getEString(), "format", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(additionalDataHolderEClass, AdditionalDataHolder.class, "AdditionalDataHolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAdditionalDataHolder_AdditionalData(), this.getAdditionalData(), null, "additionalData", null, 0, -1, AdditionalDataHolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1542,6 +1594,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 		initEDataType(iterableEDataType, Iterable.class, "Iterable", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(objectEDataType, Object.class, "Object", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

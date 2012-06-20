@@ -101,6 +101,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return createCalendarFromString(eDataType, initialValue);
 			case SchedulePackage.ITERABLE:
 				return createIterableFromString(eDataType, initialValue);
+			case SchedulePackage.OBJECT:
+				return createObjectFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -122,6 +124,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return convertCalendarToString(eDataType, instanceValue);
 			case SchedulePackage.ITERABLE:
 				return convertIterableToString(eDataType, instanceValue);
+			case SchedulePackage.OBJECT:
+				return convertObjectToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
@@ -391,6 +395,24 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 */
 	public String convertIterableToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Object createObjectFromString(EDataType eDataType, String initialValue) {
+		return super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertObjectToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
 	}
 
 	/**
