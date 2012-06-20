@@ -13,6 +13,7 @@ Export-Package: com.mmxlabs.trading.optimiser,
  com.mmxlabs.trading.optimiser.annotations.impl,
  com.mmxlabs.trading.optimiser.builder,
  com.mmxlabs.trading.optimiser.components,
+ com.mmxlabs.trading.optimiser.contracts.impl,
  com.mmxlabs.trading.optimiser.impl,
  com.mmxlabs.trading.optimiser.providers,
  com.mmxlabs.trading.optimiser.providers.impl
