@@ -168,7 +168,7 @@ public class CargoPnLReportView extends EMFReportView {
 					// TODO: make key well known
 					final AdditionalData data = allocation.getAdditionalDataWithPath(CollectionsUtil.makeArrayList(entityName, "pnl"));
 					if (data != null) {
-						value = data.getIntegerValue();
+						value = data.getIntValue();
 					}
 					// if ((allocation.getLoadRevenue() != null) && entity.equals(allocation.getLoadRevenue().getEntity())) {
 					// value += allocation.getLoadRevenue().getValue();
