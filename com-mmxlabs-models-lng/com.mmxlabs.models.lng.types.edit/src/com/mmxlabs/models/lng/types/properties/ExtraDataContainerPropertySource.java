@@ -18,7 +18,7 @@ public class ExtraDataContainerPropertySource implements IPropertySource {
 	
 	@Override
 	public Object getEditableValue() {
-		return null;
+		return this;
 	}
 
 	@Override
