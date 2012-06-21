@@ -9,7 +9,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
@@ -29,12 +29,12 @@ public interface IContractTransformer extends ITransformerExtension {
 	public IShippingPriceCalculator transformSalesContract(SalesContract sc);
 
 	/**
-	 * Create an {@link ILoadPriceCalculator2} from a {@link PurchaseContract}
+	 * Create an {@link ILoadPriceCalculator} from a {@link PurchaseContract}
 	 * 
 	 * @param pc
 	 * @return
 	 */
-	public ILoadPriceCalculator2 transformPurchaseContract(PurchaseContract pc);
+	public ILoadPriceCalculator transformPurchaseContract(PurchaseContract pc);
 
 	/**
 	 * Called when a slot has been transformed. This allows the transformer to get hold of any slot related extension data and do whatever it may want to do with it. This will be called for

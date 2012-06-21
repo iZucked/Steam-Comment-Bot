@@ -102,7 +102,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
@@ -297,7 +297,7 @@ public class LNGScenarioTransformer {
 
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
-			final ILoadPriceCalculator2 calculator = transformer.transformPurchaseContract(c);
+			final ILoadPriceCalculator calculator = transformer.transformPurchaseContract(c);
 			entities.addModelObject(c, calculator);
 		}
 
@@ -627,7 +627,7 @@ public class LNGScenarioTransformer {
 			final ITimeWindow loadWindow = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTime()),
 					convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTime()));
 
-			final ILoadPriceCalculator2 loadPriceCalculator;
+			final ILoadPriceCalculator loadPriceCalculator;
 			if (loadSlot.isSetFixedPrice()) {
 				final int fixedPrice = Calculator.scaleToInt(loadSlot.getFixedPrice());
 
@@ -640,7 +640,7 @@ public class LNGScenarioTransformer {
 				};
 			} else {
 				final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot.getContract());
-				loadPriceCalculator = entities.getOptimiserObject(purchaseContract, ILoadPriceCalculator2.class);
+				loadPriceCalculator = entities.getOptimiserObject(purchaseContract, ILoadPriceCalculator.class);
 			}
 
 			final ILoadOption load;

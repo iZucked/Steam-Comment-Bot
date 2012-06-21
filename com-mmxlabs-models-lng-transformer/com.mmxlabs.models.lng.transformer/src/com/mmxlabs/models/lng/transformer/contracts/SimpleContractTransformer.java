@@ -22,7 +22,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 
@@ -72,7 +72,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	@Override
-	public ILoadPriceCalculator2 transformPurchaseContract(final PurchaseContract pc) {
+	public ILoadPriceCalculator transformPurchaseContract(final PurchaseContract pc) {
 		return instantiate(pc);
 	}
 
