@@ -26,15 +26,31 @@ public class ExtraDataContainerPropertySource implements IPropertySource {
 		final List<IPropertyDescriptor> descriptors = new ArrayList<IPropertyDescriptor>();
 		
 		for (final ExtraData ed : container.getExtraData()) {
-			descriptors.add(new ExtraDataPropertyDescriptor(ed));
+			descriptors.add(createDescriptor(ed));
 		}
+		
+		createExtraDescriptors(descriptors);
 		
 		return descriptors.toArray(new IPropertyDescriptor[descriptors.size()]);
 	}
 
+	protected void createExtraDescriptors(final List<IPropertyDescriptor> descriptors) {
+		
+	}
+	
+	protected IPropertyDescriptor createDescriptor(final ExtraData ed) {
+		return new ExtraDataPropertyDescriptor(ed);
+	}
+	
 	@Override
 	public Object getPropertyValue(final Object id) {
-		return container.getDataWithKey(id.toString());
+		final ExtraData dataWithKey = container.getDataWithKey(id.toString());
+		
+		if (dataWithKey.getExtraData().isEmpty()) {
+			return dataWithKey.getValue();
+		} else {
+			return new ExtraDataContainerPropertySource(dataWithKey);
+		}
 	}
 
 	@Override
