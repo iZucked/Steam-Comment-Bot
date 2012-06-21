@@ -188,15 +188,6 @@
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
  </extension>
-  <extension
-       point="com.mmxlabs.models.ui.displaycompositefactories">
-    <displayCompositeFactory
-          eClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract"
-          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.NetbackPurchaseContractCompositeFactory"
-          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.NetbackPurchaseContractCompositeFactory"
-          inheritable="true">
-    </displayCompositeFactory>
- </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
     <factory
@@ -206,5 +197,22 @@
           outputEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
     </factory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.commercial.ui.inlineeditors.NotionalBallastParametersInlineEditorFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.inlineeditors.NotionalBallastParametersInlineEditorFactory">
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract">
+          </EClassExtends>
+       </OwnerAnyOf>
+       <FeatureAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
+          </EClassExtends>
+       </FeatureAnyOf>
+    </editorFactory>
  </extension>
 </plugin>
