@@ -66,7 +66,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
@@ -175,7 +175,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			
 			final HashMap<Pair<Port, Port>, UnitCostLine> bestCostSoFar = new HashMap<Pair<Port, Port>, UnitCostLine>();
 			
-			final ILoadPriceCalculator2 loadCalculator = new FixedPriceContract(0);
+			final ILoadPriceCalculator loadCalculator = new FixedPriceContract(0);
 			final IShippingPriceCalculator dischargeCalculator = new FixedPriceContract(Calculator.scaleToInt(spec.getCargoPrice()));
 			int i = 0;
 			
