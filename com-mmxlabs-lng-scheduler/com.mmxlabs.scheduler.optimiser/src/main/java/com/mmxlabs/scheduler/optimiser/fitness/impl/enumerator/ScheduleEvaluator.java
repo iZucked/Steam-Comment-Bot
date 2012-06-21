@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
@@ -32,7 +32,7 @@ public class ScheduleEvaluator {
 
 	private ICargoAllocator cargoAllocator;
 
-	private Collection<ILoadPriceCalculator2> loadPriceCalculators;
+	private Collection<ILoadPriceCalculator> loadPriceCalculators;
 	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
 
 	private Collection<ICargoAllocationFitnessComponent> allocationComponents;
@@ -63,7 +63,7 @@ public class ScheduleEvaluator {
 		// and then compute the resulting P&L fitness components.
 
 		// Prime the load price calculators with the scheduled result
-		for (final ILoadPriceCalculator2 calculator : loadPriceCalculators) {
+		for (final ILoadPriceCalculator calculator : loadPriceCalculators) {
 			calculator.prepareEvaluation(scheduledSequences);
 		}
 
@@ -97,7 +97,7 @@ public class ScheduleEvaluator {
 		this.allocationComponents = allocationComponents;
 	}
 
-	public void setLoadPriceCalculators(final Collection<ILoadPriceCalculator2> loadPriceCalculators) {
+	public void setLoadPriceCalculators(final Collection<ILoadPriceCalculator> loadPriceCalculators) {
 		this.loadPriceCalculators = loadPriceCalculators;
 	}
 

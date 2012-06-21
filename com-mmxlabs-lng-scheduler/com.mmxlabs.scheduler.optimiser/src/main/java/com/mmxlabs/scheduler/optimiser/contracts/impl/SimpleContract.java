@@ -11,7 +11,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoadPriceCalculator2, IShippingPriceCalculator {
+public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoadPriceCalculator, IShippingPriceCalculator {
 
 	@Override
 	public void prepareEvaluation(final ScheduledSequences sequences) {

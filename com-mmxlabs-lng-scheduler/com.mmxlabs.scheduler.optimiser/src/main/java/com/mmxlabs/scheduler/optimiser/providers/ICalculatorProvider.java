@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.providers;
 import java.util.Collection;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
@@ -20,7 +20,7 @@ public interface ICalculatorProvider extends IDataComponentProvider {
 	/**
 	 * @return A collection of all the load price calculators used in this problem
 	 */
-	Collection<ILoadPriceCalculator2> getLoadPriceCalculators();
+	Collection<ILoadPriceCalculator> getLoadPriceCalculators();
 
 	/**
 	 * @return A collection of all shipping price calculators used in this scenario.

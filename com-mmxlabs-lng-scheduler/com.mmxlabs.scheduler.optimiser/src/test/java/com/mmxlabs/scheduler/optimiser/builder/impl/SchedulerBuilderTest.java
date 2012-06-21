@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
@@ -55,7 +55,7 @@ public class SchedulerBuilderTest {
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
+		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 
 		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, false);
 	}
@@ -68,7 +68,7 @@ public class SchedulerBuilderTest {
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = context.mock(ITimeWindow.class);
 
-		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
+		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 
 		builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, false);
 	}
@@ -135,7 +135,7 @@ public class SchedulerBuilderTest {
 
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
-		final ILoadPriceCalculator2 contract = context.mock(ILoadPriceCalculator2.class);
+		final ILoadPriceCalculator contract = context.mock(ILoadPriceCalculator.class);
 
 		final ILoadSlot loadSlot = builder.createLoadSlot("id", port, window, 0, 0, contract, 0, 0, false, false, false);
 		final IDischargeSlot dischargeSlot = context.mock(IDischargeSlot.class);

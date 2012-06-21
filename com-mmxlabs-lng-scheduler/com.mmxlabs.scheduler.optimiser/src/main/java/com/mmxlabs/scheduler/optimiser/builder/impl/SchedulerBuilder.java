@@ -75,7 +75,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
@@ -259,7 +259,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ILoadPriceCalculator2 loadContract,
+	public ILoadSlot createLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ILoadPriceCalculator loadContract,
 			final int cargoCVValue, final int durationHours, final boolean cooldownSet, final boolean cooldownForbidden, final boolean optional) {
 
 		if (!ports.contains(port)) {
@@ -281,7 +281,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ILoadOption createVirtualLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ILoadPriceCalculator2 priceCalculator,
+	public ILoadOption createVirtualLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ILoadPriceCalculator priceCalculator,
 			final int cargoCVValue, final boolean slotIsOptional) {
 
 		final LoadOption slot = new LoadOption();
@@ -293,7 +293,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	private ISequenceElement configureLoadOption(final LoadOption slot, final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final ILoadPriceCalculator2 priceCalculator, final int cargoCVValue, final boolean optional) {
+			final ILoadPriceCalculator priceCalculator, final int cargoCVValue, final boolean optional) {
 		slot.setId(id);
 		slot.setPort(port);
 		slot.setTimeWindow(window);

@@ -8,7 +8,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -30,7 +30,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	/**
 	 * A price calculator which can compute the unit price for this option.
 	 */
-	private ILoadPriceCalculator2 loadPriceCalculator;
+	private ILoadPriceCalculator loadPriceCalculator;
 	/**
 	 * The CV value of gas at this option.
 	 */
@@ -58,7 +58,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	 * @param cargoCVValue
 	 *            - the CV value for gas here.
 	 */
-	public LoadOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minLoadVolume, final long maxLoadVolume, final ILoadPriceCalculator2 loadPriceCalculator,
+	public LoadOption(final String id, final IPort port, final ITimeWindow timeWindow, final long minLoadVolume, final long maxLoadVolume, final ILoadPriceCalculator loadPriceCalculator,
 			final int cargoCVValue) {
 		super(id, port, timeWindow);
 		this.minLoadVolume = minLoadVolume;
@@ -85,7 +85,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 		this.maxLoadVolume = maxLoadVolume;
 	}
 
-	public void setLoadPriceCalculator(final ILoadPriceCalculator2 loadPriceCalculator) {
+	public void setLoadPriceCalculator(final ILoadPriceCalculator loadPriceCalculator) {
 		this.loadPriceCalculator = loadPriceCalculator;
 	}
 
@@ -99,7 +99,7 @@ public class LoadOption extends PortSlot implements ILoadOption {
 	}
 
 	@Override
-	public ILoadPriceCalculator2 getLoadPriceCalculator() {
+	public ILoadPriceCalculator getLoadPriceCalculator() {
 		return loadPriceCalculator;
 	}
 

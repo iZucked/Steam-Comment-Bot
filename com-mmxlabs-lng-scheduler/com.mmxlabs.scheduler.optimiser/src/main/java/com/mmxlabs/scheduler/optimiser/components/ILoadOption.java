@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 
 /**
  * Supertype for things which can go where a load slot goes; these are actual physical load slots, or DES purchases. Anything that can bind to some discharge options is an {@link ILoadOption}.
@@ -39,5 +39,5 @@ public interface ILoadOption extends IPortSlot {
 	 * 
 	 * @return
 	 */
-	ILoadPriceCalculator2 getLoadPriceCalculator();
+	ILoadPriceCalculator getLoadPriceCalculator();
 }

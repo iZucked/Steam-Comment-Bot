@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.providers;
 
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
@@ -14,7 +14,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
  * 
  */
 public interface ICalculatorProviderEditor extends ICalculatorProvider {
-	void addLoadPriceCalculator(ILoadPriceCalculator2 calculator);
+	void addLoadPriceCalculator(ILoadPriceCalculator calculator);
 
 	void addShippingPriceCalculator(IShippingPriceCalculator calculator);
 }

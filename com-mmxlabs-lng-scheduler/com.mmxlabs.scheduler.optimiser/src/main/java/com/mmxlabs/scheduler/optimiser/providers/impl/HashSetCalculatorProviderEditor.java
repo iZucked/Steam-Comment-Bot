@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 
@@ -18,7 +18,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
  */
 public class HashSetCalculatorProviderEditor implements ICalculatorProviderEditor {
 	private final String name;
-	private final LinkedHashSet<ILoadPriceCalculator2> loadPriceCalculators = new LinkedHashSet<ILoadPriceCalculator2>();
+	private final LinkedHashSet<ILoadPriceCalculator> loadPriceCalculators = new LinkedHashSet<ILoadPriceCalculator>();
 	private final LinkedHashSet<IShippingPriceCalculator> shippingPriceCalculators = new LinkedHashSet<IShippingPriceCalculator>();
 
 	public HashSetCalculatorProviderEditor(final String name) {
@@ -26,7 +26,7 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	}
 
 	@Override
-	public Collection<ILoadPriceCalculator2> getLoadPriceCalculators() {
+	public Collection<ILoadPriceCalculator> getLoadPriceCalculators() {
 		return Collections.unmodifiableSet(loadPriceCalculators);
 	}
 
@@ -62,7 +62,7 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor#addLoadPriceCalculator(com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2)
 	 */
 	@Override
-	public void addLoadPriceCalculator(final ILoadPriceCalculator2 calculator) {
+	public void addLoadPriceCalculator(final ILoadPriceCalculator calculator) {
 		if (calculator != null) {
 			loadPriceCalculators.add(calculator);
 		}

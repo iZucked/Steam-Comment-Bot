@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -26,7 +26,7 @@ public final class LoadSlot extends LoadOption implements ILoadSlot {
 		setPortType(PortType.Load);
 	}
 
-	public LoadSlot(final String id, final IPort port, final ITimeWindow timwWindow, final long minLoadVolume, final long maxLoadVolume, final ILoadPriceCalculator2 loadPriceCalculator,
+	public LoadSlot(final String id, final IPort port, final ITimeWindow timwWindow, final long minLoadVolume, final long maxLoadVolume, final ILoadPriceCalculator loadPriceCalculator,
 			final int cargoCVValue, final boolean cooldownSet, final boolean cooldownForbidden) {
 		super(id, port, timwWindow, minLoadVolume, maxLoadVolume, loadPriceCalculator, cargoCVValue);
 		this.cooldownSet = cooldownSet;
