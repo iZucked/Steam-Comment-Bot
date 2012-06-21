@@ -2862,13 +2862,31 @@ public interface TypesPackage extends EPackage {
 	int EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = 1;
 
 	/**
+	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = 2;
+
+	/**
+	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING = 3;
+
+	/**
 	 * The number of operations of the '<em>Extra Data Container</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXTRA_DATA_CONTAINER_OPERATION_COUNT = 2;
+	int EXTRA_DATA_CONTAINER_OPERATION_COUNT = 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl <em>Extra Data</em>}' class.
@@ -2951,6 +2969,24 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXTRA_DATA___GET_DATA_WITH_KEY__STRING = EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING;
+
+	/**
+	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXTRA_DATA___ADD_EXTRA_DATA__STRING_STRING = EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING;
+
+	/**
+	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXTRA_DATA___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING = EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING;
 
 	/**
 	 * The operation id for the '<em>Get Value As</em>' operation.
@@ -3368,6 +3404,26 @@ public interface TypesPackage extends EPackage {
 	EOperation getExtraDataContainer__GetDataWithKey__String();
 
 	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String) <em>Add Extra Data</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Add Extra Data</em>' operation.
+	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String)
+	 * @generated
+	 */
+	EOperation getExtraDataContainer__AddExtraData__String_String();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, java.lang.String) <em>Add Extra Data</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Add Extra Data</em>' operation.
+	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, java.lang.String)
+	 * @generated
+	 */
+	EOperation getExtraDataContainer__AddExtraData__String_String_Serializable_String();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3755,6 +3811,24 @@ public interface TypesPackage extends EPackage {
 		 */
 		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = eINSTANCE
 				.getExtraDataContainer__GetDataWithKey__String();
+
+		/**
+		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = eINSTANCE
+				.getExtraDataContainer__AddExtraData__String_String();
+
+		/**
+		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING = eINSTANCE
+				.getExtraDataContainer__AddExtraData__String_String_Serializable_String();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.

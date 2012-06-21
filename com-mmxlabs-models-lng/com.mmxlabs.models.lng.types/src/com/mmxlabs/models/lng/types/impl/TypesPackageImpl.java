@@ -611,6 +611,24 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getExtraDataContainer__AddExtraData__String_String() {
+		return extraDataContainerEClass.getEOperations().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getExtraDataContainer__AddExtraData__String_String_Serializable_String() {
+		return extraDataContainerEClass.getEOperations().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getPortCapability() {
 		return portCapabilityEEnum;
 	}
@@ -721,6 +739,10 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE);
 		createEOperation(extraDataContainerEClass,
 				EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING);
+		createEOperation(extraDataContainerEClass,
+				EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING);
+		createEOperation(extraDataContainerEClass,
+				EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING);
 
 		// Create enums
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
@@ -950,6 +972,28 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				this.getExtraData(), "getDataWithKey", 1, 1, IS_UNIQUE,
 				IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+
+		op = initEOperation(
+				getExtraDataContainer__AddExtraData__String_String(),
+				this.getExtraData(), "addExtraData", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+
+		op = initEOperation(
+				getExtraDataContainer__AddExtraData__String_String_Serializable_String(),
+				this.getExtraData(), "addExtraData", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "name", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+		addEParameter(op, this.getSerializableObject(), "value", 1, 1,
+				IS_UNIQUE, IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "format", 1, 1, IS_UNIQUE,
 				IS_ORDERED);
 
 		// Initialize enums and add enum literals

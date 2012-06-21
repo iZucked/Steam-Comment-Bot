@@ -4,27 +4,22 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
-import com.mmxlabs.models.lng.types.ExtraData;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.types.TypesPackage;
-
-import java.lang.Iterable;
-
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.TypesFactory;
+import com.mmxlabs.models.lng.types.TypesPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -117,6 +112,32 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ExtraData addExtraData(String key, String name) {
+		final ExtraData result = TypesFactory.eINSTANCE.createExtraData();
+		result.setKey(key);
+		result.setName(name);
+		getExtraData().add(result);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExtraData addExtraData(String key, String name, Serializable value,
+			String format) {
+		final ExtraData result = addExtraData(key, name);
+		result.setValue(value);
+		result.setFormat(format);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd,
 			int featureID, NotificationChain msgs) {
@@ -202,6 +223,13 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 			return getDataWithPath((Iterable<String>) arguments.get(0));
 		case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING:
 			return getDataWithKey((String) arguments.get(0));
+		case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING:
+			return addExtraData((String) arguments.get(0),
+					(String) arguments.get(1));
+		case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING:
+			return addExtraData((String) arguments.get(0),
+					(String) arguments.get(1), (Serializable) arguments.get(2),
+					(String) arguments.get(3));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

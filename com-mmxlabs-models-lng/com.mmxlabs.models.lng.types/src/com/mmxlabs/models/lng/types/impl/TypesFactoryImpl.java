@@ -6,6 +6,7 @@
  */
 package com.mmxlabs.models.lng.types.impl;
 
+import com.mmxlabs.models.lng.types.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import java.lang.Iterable;
 import javax.xml.bind.DatatypeConverter;
 
 import org.eclipse.emf.ecore.EClass;
@@ -201,13 +203,14 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	public Serializable createSerializableObjectFromString(EDataType eDataType,
 			String initialValue) {
 		try {
-			final ByteArrayInputStream bais = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(initialValue));
+			final ByteArrayInputStream bais = new ByteArrayInputStream(
+					DatatypeConverter.parseBase64Binary(initialValue));
 			final ObjectInputStream ois = new ObjectInputStream(bais);
 			return (Serializable) ois.readObject();
 		} catch (Exception e) {
 			return null;
 		} finally {
-			
+
 		}
 	}
 
@@ -226,11 +229,12 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 				oos.writeObject(s);
 				oos.flush();
 				oos.close();
-				final String b64 = DatatypeConverter.printBase64Binary(baos.toByteArray());
+				final String b64 = DatatypeConverter.printBase64Binary(baos
+						.toByteArray());
 				return b64;
 			} catch (IOException e) {
 			}
-			
+
 		}
 		return "";
 	}

@@ -18,7 +18,7 @@ public class ExtraDataContainerPropertySource implements IPropertySource {
 	
 	@Override
 	public Object getEditableValue() {
-		return this;
+		return container;
 	}
 
 	@Override
@@ -46,11 +46,15 @@ public class ExtraDataContainerPropertySource implements IPropertySource {
 	public Object getPropertyValue(final Object id) {
 		final ExtraData dataWithKey = container.getDataWithKey(id.toString());
 		
-		if (dataWithKey.getExtraData().isEmpty()) {
-			return dataWithKey.getValue();
-		} else {
+		if (shouldExpand(dataWithKey)) {
 			return new ExtraDataContainerPropertySource(dataWithKey);
+		} else {
+			return dataWithKey;
 		}
+	}
+
+	protected boolean shouldExpand(ExtraData dataWithKey) {
+		return dataWithKey.getExtraData().isEmpty() == false;
 	}
 
 	@Override
