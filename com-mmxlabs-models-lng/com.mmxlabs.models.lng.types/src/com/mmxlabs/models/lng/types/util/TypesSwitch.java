@@ -323,6 +323,22 @@ public class TypesSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case TypesPackage.EXTRA_DATA: {
+			ExtraData extraData = (ExtraData) theEObject;
+			T result = caseExtraData(extraData);
+			if (result == null)
+				result = caseExtraDataContainer(extraData);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case TypesPackage.EXTRA_DATA_CONTAINER: {
+			ExtraDataContainer extraDataContainer = (ExtraDataContainer) theEObject;
+			T result = caseExtraDataContainer(extraDataContainer);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -613,6 +629,36 @@ public class TypesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseASalesContract(ASalesContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Extra Data</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Extra Data</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseExtraData(ExtraData object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseExtraDataContainer(ExtraDataContainer object) {
 		return null;
 	}
 

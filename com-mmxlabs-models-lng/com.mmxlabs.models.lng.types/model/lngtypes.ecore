@@ -109,4 +109,53 @@
       <details key="generatedType" value="com.mmxlabs.models.lng.commercial.SalesContract"/>
     </eAnnotations>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtraData" eSuperTypes="#//ExtraDataContainer">
+    <eOperations name="getValueAs" lowerBound="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (isSetValue()) {&#xA;&#x9;&#x9;&#x9;if (clazz.isInstance(getValue())) {&#xA;&#x9;&#x9;&#x9;&#x9;return clazz.cast(getValue());&#xA;&#x9;&#x9;&#x9;}&#xA;&#x9;&#x9;}&#xA;&#xA;&#x9;&#x9;return null;&#xA;"/>
+      </eAnnotations>
+      <eGenericType eTypeParameter="#//ExtraData/getValueAs/T"/>
+      <eTypeParameters name="T"/>
+      <eParameters name="clazz" lowerBound="1">
+        <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EJavaClass">
+          <eTypeArguments eTypeParameter="#//ExtraData/getValueAs/T"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="formatValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="if (isSetValue()) {&#xA;&#x9;final String s = getFormat();&#xA;&#x9;if (s != null &amp;&amp; !s.isEmpty()) {&#xA;&#x9;&#x9;return String.format(s, getValue());&#xA;&#x9;} else {&#xA;&#x9;&#x9;return getValue() + &quot;&quot;;&#xA;&#x9;}&#xA;}&#xA;return &quot;&quot;;"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="#//SerializableObject"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="format" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtraDataContainer">
+    <eOperations name="getDataWithPath" lowerBound="1" eType="#//ExtraData">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="java.util.Iterator&lt;String> iterator = keys.iterator();&#xA;&#x9;&#x9;if (iterator.hasNext() == false) return null;&#xA;&#x9;&#x9;ExtraData edc = getDataWithKey(iterator.next());&#xA;&#x9;&#x9;while (edc != null &amp;&amp; iterator.hasNext()) {&#xA;&#x9;&#x9;&#x9;edc = edc.getDataWithKey(iterator.next());&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;return edc;"/>
+      </eAnnotations>
+      <eParameters name="keys" lowerBound="1">
+        <eGenericType eClassifier="#//Iterable">
+          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+        </eGenericType>
+      </eParameters>
+    </eOperations>
+    <eOperations name="getDataWithKey" lowerBound="1" eType="#//ExtraData">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="for (final ExtraData e : getExtraData()) {&#xA;&#x9;if (e.getKey().equals(key)) return e;&#xA;}&#xA;return null;"/>
+      </eAnnotations>
+      <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="extraData" upperBound="-1"
+        eType="#//ExtraData" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="SerializableObject" instanceClassName="java.io.Serializable"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">
+    <eTypeParameters name="T"/>
+  </eClassifiers>
 </ecore:EPackage>

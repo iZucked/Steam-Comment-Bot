@@ -8,9 +8,13 @@ package com.mmxlabs.models.lng.types.impl;
 
 import com.mmxlabs.models.lng.types.ABaseFuel;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import com.mmxlabs.models.lng.types.ACargo;
@@ -30,11 +34,16 @@ import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import java.io.Serializable;
+import java.lang.Iterable;
+import org.eclipse.emf.ecore.EAttribute;
 
 /**
  * <!-- begin-user-doc -->
@@ -181,7 +190,35 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass extraDataEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass extraDataContainerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EEnum portCapabilityEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType serializableObjectEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType iterableEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -474,8 +511,126 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getExtraData() {
+		return extraDataEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExtraData_Key() {
+		return (EAttribute) extraDataEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExtraData_Name() {
+		return (EAttribute) extraDataEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExtraData_Value() {
+		return (EAttribute) extraDataEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExtraData_Format() {
+		return (EAttribute) extraDataEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getExtraData__GetValueAs__Class() {
+		return extraDataEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getExtraData__FormatValue() {
+		return extraDataEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getExtraDataContainer() {
+		return extraDataContainerEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getExtraDataContainer_ExtraData() {
+		return (EReference) extraDataContainerEClass.getEStructuralFeatures()
+				.get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getExtraDataContainer__GetDataWithPath__Iterable() {
+		return extraDataContainerEClass.getEOperations().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EOperation getExtraDataContainer__GetDataWithKey__String() {
+		return extraDataContainerEClass.getEOperations().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getPortCapability() {
 		return portCapabilityEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EDataType getSerializableObject() {
+		return serializableObjectEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EDataType getIterable() {
+		return iterableEDataType;
 	}
 
 	/**
@@ -551,8 +706,28 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		aSalesContractEClass = createEClass(ASALES_CONTRACT);
 
+		extraDataEClass = createEClass(EXTRA_DATA);
+		createEAttribute(extraDataEClass, EXTRA_DATA__KEY);
+		createEAttribute(extraDataEClass, EXTRA_DATA__NAME);
+		createEAttribute(extraDataEClass, EXTRA_DATA__VALUE);
+		createEAttribute(extraDataEClass, EXTRA_DATA__FORMAT);
+		createEOperation(extraDataEClass, EXTRA_DATA___GET_VALUE_AS__CLASS);
+		createEOperation(extraDataEClass, EXTRA_DATA___FORMAT_VALUE);
+
+		extraDataContainerEClass = createEClass(EXTRA_DATA_CONTAINER);
+		createEReference(extraDataContainerEClass,
+				EXTRA_DATA_CONTAINER__EXTRA_DATA);
+		createEOperation(extraDataContainerEClass,
+				EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE);
+		createEOperation(extraDataContainerEClass,
+				EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING);
+
 		// Create enums
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
+
+		// Create data types
+		serializableObjectEDataType = createEDataType(SERIALIZABLE_OBJECT);
+		iterableEDataType = createEDataType(ITERABLE);
 	}
 
 	/**
@@ -584,6 +759,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				.getEPackage(MMXCorePackage.eNS_URI);
 
 		// Create type parameters
+		addETypeParameter(iterableEDataType, "T");
 
 		// Set bounds for type parameters
 
@@ -631,6 +807,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				theMMXCorePackage.getNamedObject());
 		aPurchaseContractEClass.getESuperTypes().add(this.getAContract());
 		aSalesContractEClass.getESuperTypes().add(this.getAContract());
+		extraDataEClass.getESuperTypes().add(this.getExtraDataContainer());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(aPortEClass, APort.class, "APort", IS_ABSTRACT,
@@ -720,12 +897,74 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				"ASalesContract", IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
 
+		initEClass(extraDataEClass, ExtraData.class, "ExtraData", !IS_ABSTRACT,
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getExtraData_Key(), ecorePackage.getEString(), "key",
+				null, 1, 1, ExtraData.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getExtraData_Name(), ecorePackage.getEString(), "name",
+				null, 1, 1, ExtraData.class, !IS_TRANSIENT, !IS_VOLATILE,
+				IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+		initEAttribute(getExtraData_Value(), this.getSerializableObject(),
+				"value", null, 1, 1, ExtraData.class, !IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExtraData_Format(), ecorePackage.getEString(),
+				"format", null, 1, 1, ExtraData.class, !IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
+
+		op = initEOperation(getExtraData__GetValueAs__Class(), null,
+				"getValueAs", 1, 1, IS_UNIQUE, IS_ORDERED);
+		ETypeParameter t1 = addETypeParameter(op, "T");
+		EGenericType g1 = createEGenericType(ecorePackage.getEJavaClass());
+		EGenericType g2 = createEGenericType(t1);
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "clazz", 1, 1, IS_UNIQUE, IS_ORDERED);
+		g1 = createEGenericType(t1);
+		initEOperation(op, g1);
+
+		initEOperation(getExtraData__FormatValue(), ecorePackage.getEString(),
+				"formatValue", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(extraDataContainerEClass, ExtraDataContainer.class,
+				"ExtraDataContainer", !IS_ABSTRACT, !IS_INTERFACE,
+				IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getExtraDataContainer_ExtraData(), this.getExtraData(),
+				null, "extraData", null, 0, -1, ExtraDataContainer.class,
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
+				!IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED,
+				IS_ORDERED);
+
+		op = initEOperation(getExtraDataContainer__GetDataWithPath__Iterable(),
+				this.getExtraData(), "getDataWithPath", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+		g1 = createEGenericType(this.getIterable());
+		g2 = createEGenericType(ecorePackage.getEString());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "keys", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(getExtraDataContainer__GetDataWithKey__String(),
+				this.getExtraData(), "getDataWithKey", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE,
+				IS_ORDERED);
+
 		// Initialize enums and add enum literals
 		initEEnum(portCapabilityEEnum, PortCapability.class, "PortCapability");
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.LOAD);
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.DISCHARGE);
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.DRYDOCK);
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.MAINTENANCE);
+
+		// Initialize data types
+		initEDataType(serializableObjectEDataType, Serializable.class,
+				"SerializableObject", IS_SERIALIZABLE,
+				!IS_GENERATED_INSTANCE_CLASS);
+		initEDataType(iterableEDataType, Iterable.class, "Iterable",
+				IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

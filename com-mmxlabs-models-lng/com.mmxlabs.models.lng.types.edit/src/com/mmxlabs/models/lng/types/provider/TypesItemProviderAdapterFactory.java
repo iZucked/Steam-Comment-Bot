@@ -123,6 +123,53 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.ExtraData} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ExtraDataItemProvider extraDataItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.types.ExtraData}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createExtraDataAdapter() {
+		if (extraDataItemProvider == null) {
+			extraDataItemProvider = new ExtraDataItemProvider(this);
+		}
+
+		return extraDataItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.ExtraDataContainer} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ExtraDataContainerItemProvider extraDataContainerItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.types.ExtraDataContainer}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createExtraDataContainerAdapter() {
+		if (extraDataContainerItemProvider == null) {
+			extraDataContainerItemProvider = new ExtraDataContainerItemProvider(
+					this);
+		}
+
+		return extraDataContainerItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -228,6 +275,10 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 			aVesselSetItemProvider.dispose();
 		if (aBaseFuelItemProvider != null)
 			aBaseFuelItemProvider.dispose();
+		if (extraDataItemProvider != null)
+			extraDataItemProvider.dispose();
+		if (extraDataContainerItemProvider != null)
+			extraDataContainerItemProvider.dispose();
 	}
 
 }
