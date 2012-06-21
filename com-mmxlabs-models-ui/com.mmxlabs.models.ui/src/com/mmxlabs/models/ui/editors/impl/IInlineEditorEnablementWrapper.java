@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 
@@ -67,12 +68,12 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	}
 
 	@Override
-	public void display(final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 		if (this.input != null) {
 			this.input.eAdapters().remove(this);
 		}
 
-		wrapped.display(scenario, object, range);
+		wrapped.display(location, scenario, object, range);
 		this.input = object;
 
 		if (this.input != null) {

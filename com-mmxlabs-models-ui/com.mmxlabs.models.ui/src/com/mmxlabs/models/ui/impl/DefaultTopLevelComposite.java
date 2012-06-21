@@ -48,7 +48,7 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	}
 
 	@Override
-	public void display(final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
 		g.setText(EditorUtils.unmangle(eClass.getName()));
@@ -60,12 +60,12 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 
 		createChildComposites(root, object, eClass, this);
 
-		topLevel.display(root, object, range);
+		topLevel.display(location, root, object, range);
 		final Iterator<EReference> refs = childReferences.iterator();
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 
 		while (refs.hasNext()) {
-			children.next().display(root, (EObject) object.eGet(refs.next()), range);
+			children.next().display(location, root, (EObject) object.eGet(refs.next()), range);
 		}
 
 		setLayout(layoutProvider.createTopLevelLayout(root, object, childComposites.size() + 1));

@@ -91,15 +91,15 @@ public class MultiDetailDialog extends Dialog {
 	/**
 	 * This list of EObjects contains the proxy structure being edited in place of the real input
 	 */
-	private List<EObject> proxies = new ArrayList<EObject>();
+	private final List<EObject> proxies = new ArrayList<EObject>();
 
 	/**
 	 * This maps from proxy objects and features to set modes
 	 */
-	private Map<Pair<EObject, EStructuralFeature>, SetMode> featuresToSet = new HashMap<Pair<EObject, EStructuralFeature>, SetMode>();
+	private final Map<Pair<EObject, EStructuralFeature>, SetMode> featuresToSet = new HashMap<Pair<EObject, EStructuralFeature>, SetMode>();
 	private EClass editingClass;
 	private List<EObject> editedObjects;
-	private Map<EObject, List<EObject>> proxyCounterparts = new HashMap<EObject, List<EObject>>();
+	private final Map<EObject, List<EObject>> proxyCounterparts = new HashMap<EObject, List<EObject>>();
 	private IDisplayCompositeFactory displayCompositeFactory;
 	private IScenarioEditingLocation scenarioEditingLocation;
 
@@ -134,7 +134,7 @@ public class MultiDetailDialog extends Dialog {
 		displayComposite.setEditorWrapper(wrapper);
 		final ICommandHandler immediate = new ICommandHandler() {
 			@Override
-			public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
+			public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
 				command.execute();
 			}
 
@@ -149,13 +149,13 @@ public class MultiDetailDialog extends Dialog {
 			}
 		};
 		displayComposite.setCommandHandler(immediate);
-		displayComposite.display(rootObject, proxies.get(proxies.size() - 1), proxies);
+		displayComposite.display(scenarioEditingLocation, rootObject, proxies.get(proxies.size() - 1), proxies);
 		disableControls();
 		resizeAndCenter();
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(final Composite parent) {
 		final Composite c = (Composite) super.createDialogArea(parent);
 		dialogArea = c;
 
@@ -408,23 +408,23 @@ public class MultiDetailDialog extends Dialog {
 				}
 
 				@Override
-				public void setCommandHandler(ICommandHandler handler) {
+				public void setCommandHandler(final ICommandHandler handler) {
 					proxy.setCommandHandler(handler);
 				}
 
 				@Override
-				public void display(MMXRootObject scenario, EObject object, final Collection<EObject> range) {
+				public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 					key.setFirst(object);
-					proxy.display(scenario, object, range);
+					proxy.display(location,scenario, object, range);
 				}
 
 				@Override
-				public void setLabel(Label label) {
+				public void setLabel(final Label label) {
 					proxy.setLabel(label);
 				}
 
 				@Override
-				public void setEnabled(boolean enabled) {
+				public void setEnabled(final boolean enabled) {
 					proxy.setEnabled(enabled);
 				}
 			};

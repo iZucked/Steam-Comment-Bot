@@ -20,6 +20,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
@@ -79,7 +80,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	 * @param object
 	 */
 	@Override
-	public void display(final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
 		final EClass eClass = object.eClass();
 		setLayout(layoutProvider.createDetailLayout(root, object));
 		if (eClass != displayedClass) {
@@ -88,7 +89,7 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 			createControls(root, object);
 		}
 		for (final IInlineEditor editor : editors) {
-			editor.display(root, object, range);
+			editor.display(location, root, object, range);
 		}
 	}
 

@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -111,7 +112,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	}
 
 	@Override
-	public void display(final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		if (this.input != null) {
 			this.input.eAdapters().remove(this);
 		}

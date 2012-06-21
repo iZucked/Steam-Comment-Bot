@@ -11,6 +11,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 /**
  * This is an interface for things which can render EObjects from {@link MMXRootObject}s (scenarios, roughly speaking) to the display.
  * 
@@ -36,7 +37,7 @@ public interface IDisplayComposite {
 	 * @param root
 	 * @param value
 	 */
-	public void display(final MMXRootObject root, final EObject value, final Collection<EObject> range);
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range);
 	/**
 	 * Sets the command handler for any stuff that goes on in this composite.
 	 * @param commandHandler

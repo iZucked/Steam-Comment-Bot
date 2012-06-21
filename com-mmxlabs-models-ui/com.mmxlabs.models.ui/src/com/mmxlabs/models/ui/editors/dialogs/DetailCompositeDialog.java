@@ -426,7 +426,7 @@ public class DetailCompositeDialog extends Dialog {
 		displayComposite.getComposite().setLayoutData(
 				new GridData(GridData.FILL_BOTH));
 
-		displayComposite.display(rootObject, duplicate, ranges.get(selection));
+		displayComposite.display(scenarioEditingLocation, rootObject, duplicate, ranges.get(selection));
 
 		getShell().layout(true, true); // argh
 

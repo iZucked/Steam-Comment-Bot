@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 /**
  * Extension of {@link DefaultDetailComposite} which adds support for extensions in {@link MMXObject#getExtensions()}
@@ -24,9 +25,9 @@ public class MMXObjectDetailComposite extends DefaultDetailComposite {
 	}
 
 	@Override
-	public void display(MMXRootObject root, EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, MMXRootObject root, EObject object, final Collection<EObject> range) {
 		// handle extension fields.
-		super.display(root, object, range);
+		super.display(location, root, object, range);
 	}
 
 	

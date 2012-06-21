@@ -9,7 +9,6 @@ package com.mmxlabs.models.ui.editors;
  * All rights reserved.
  */
 
-
 import java.util.Collection;
 
 import org.eclipse.core.runtime.IStatus;
@@ -20,21 +19,27 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 /**
- * This is an interface for an inline editor. It is given an input, and should
- * generate commands and send them to the appropriate command processor when
- * stuff happens. It doesn't handle layout or provision of labels or anything.
+ * This is an interface for an inline editor. It is given an input, and should generate commands and send them to the appropriate command processor when stuff happens. It doesn't handle layout or
+ * provision of labels or anything.
  * 
  * @author Tom Hinton
  * 
  */
 public interface IInlineEditor {
 	public void setCommandHandler(final ICommandHandler handler);
-	public void display(final MMXRootObject scenario, final EObject object, final Collection<EObject> range);
+
+	public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range);
+
 	public Control createControl(final Composite parent);
-	void processValidation(IStatus status);	
+
+	void processValidation(IStatus status);
+
 	public EStructuralFeature getFeature();
+
 	void setLabel(Label label);
+
 	void setEnabled(boolean enabled);
 }

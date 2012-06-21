@@ -14,6 +14,7 @@ import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
 public class EnumCheckboxEditor extends BooleanInlineEditor {
 	private Enumerator enumValue;
@@ -42,8 +43,8 @@ public class EnumCheckboxEditor extends BooleanInlineEditor {
 	}
 
 	@Override
-	public void display(MMXRootObject context, EObject input, final Collection<EObject> range) {
-		super.display(context, input, range);
+	public void display(final IScenarioEditingLocation location, MMXRootObject context, EObject input, final Collection<EObject> range) {
+		super.display(location, context, input, range);
 		if (label != null) label.setText(labelPrefix + enumValue.getName());
 	}
 }

@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
@@ -46,12 +47,12 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	public void display(MMXRootObject context, EObject input, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, MMXRootObject context, EObject input, final Collection<EObject> range) {
 		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
 		if (valueProvider == null) {
 			log.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
 		}
-		super.display(context, input, range);
+		super.display(location, context, input, range);
 	}
 
 	@Override
