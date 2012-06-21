@@ -27,11 +27,11 @@ public class UnitCostMatrixDisplayCompositeFactory extends DefaultDisplayComposi
 	public IDisplayComposite createSublevelComposite(final Composite composite, final EClass eClass, final IScenarioEditingLocation location) {
 		return new DefaultDetailComposite(composite, SWT.NONE) {
 			@Override
-			public void display(final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+			public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
 				if (object instanceof UnitCostMatrix) {
 					((UnitCostMatrix) object).getCostLines().clear();
 				}
-				super.display(root, object, range);
+				super.display(location, root, object, range);
 			}
 		};
 	}

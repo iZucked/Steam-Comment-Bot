@@ -38,8 +38,8 @@ public class OptimiserSettingsToplevelComposite extends DefaultTopLevelComposite
 	}
 
 	@Override
-	public void display(final MMXRootObject root, final EObject object, final Collection<EObject> range) {
-		super.display(root, object, range);
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+		super.display(location, root, object, range);
 		// display sub-things
 		final Composite lower = new Composite(this, SWT.NONE);
 		final GridData gd = new GridData();

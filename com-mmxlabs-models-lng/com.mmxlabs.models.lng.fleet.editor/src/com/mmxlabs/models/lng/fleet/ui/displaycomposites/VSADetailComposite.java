@@ -53,6 +53,7 @@ import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
@@ -300,8 +301,8 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 	}
 	
 	@Override
-	public void display(final MMXRootObject root, final EObject value, final Collection<EObject> range) {
-		delegate.display(root, value, range);
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range) {
+		delegate.display(location, root, value, range);
 		tableViewer.setInput(value);
 		removeAdapter();
 		oldValue = (VesselStateAttributes) value;

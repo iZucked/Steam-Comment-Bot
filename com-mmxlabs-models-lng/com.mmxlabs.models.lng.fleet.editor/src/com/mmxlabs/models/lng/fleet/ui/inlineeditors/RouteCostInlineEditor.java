@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.window.Window;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.impl.DialogInlineEditor;
 
 public class RouteCostInlineEditor extends DialogInlineEditor {
@@ -19,18 +20,15 @@ public class RouteCostInlineEditor extends DialogInlineEditor {
 	}
 
 	@Override
-	public void display(MMXRootObject context, EObject input,
-			Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, MMXRootObject context, EObject input, Collection<EObject> range) {
 		this.rootObject = context;
-		super.display(context, input, range);
+		super.display(location, context, input, range);
 	}
 
 	@Override
 	protected Object displayDialog(final Object currentValue) {
 		final CanalCostsDialog ccd = new CanalCostsDialog(getShell());
-		if (ccd.open(new AdapterFactoryImpl(), commandHandler.getEditingDomain(), 
-				rootObject,
-				input, (EReference) feature) == Window.OK) {
+		if (ccd.open(new AdapterFactoryImpl(), commandHandler.getEditingDomain(), rootObject, input, (EReference) feature) == Window.OK) {
 			return ccd.getResult();
 		}
 		return null;

@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.provider.PortItemProviderAdapterFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 import com.mmxlabs.models.ui.editors.util.CommandUtil;
 
@@ -31,7 +32,7 @@ import com.mmxlabs.models.ui.editors.util.CommandUtil;
  * Editor for port groups which displays as a ticklist (maybe with categories?)
  * 
  * @author hinton
- *
+ * 
  */
 public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 	private CheckboxTableViewer viewer;
@@ -43,8 +44,7 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 	@Override
 	public Control createControl(Composite parent) {
 		viewer = CheckboxTableViewer.newCheckList(parent, SWT.V_SCROLL | SWT.BORDER);
-		viewer.setContentProvider(new AdapterFactoryContentProvider(new PortItemProviderAdapterFactory())
-		{
+		viewer.setContentProvider(new AdapterFactoryContentProvider(new PortItemProviderAdapterFactory()) {
 
 			@Override
 			public Object[] getElements(Object object) {
@@ -54,7 +54,7 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 						result.add(o);
 					}
 				}
-				
+
 				Collections.sort(result, (Comparator) new Comparator<NamedObject>() {
 					@Override
 					public int compare(NamedObject arg0, NamedObject arg1) {
@@ -70,17 +70,18 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 						return arg0.getName().compareTo(arg1.getName());
 					}
 				});
-				
+
 				return result.toArray();
 			}
 
 		});
-		
+
 		viewer.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
 				// todo label groups differently?
-				if (element instanceof NamedObject) return ((NamedObject) element).getName();
+				if (element instanceof NamedObject)
+					return ((NamedObject) element).getName();
 				return super.getText(element);
 			}
 		});
@@ -89,50 +90,47 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 			public boolean isGrayed(Object element) {
 				return element == input;
 			}
-			
+
 			@Override
 			public boolean isChecked(Object element) {
 				final Object value = getValue();
-				if (value instanceof Collection) return ((Collection) value).contains(element);
+				if (value instanceof Collection)
+					return ((Collection) value).contains(element);
 				return false;
 			}
 		});
-		
-		viewer.addCheckStateListener(new ICheckStateListener() {			
+
+		viewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(final CheckStateChangedEvent event) {
 				final Object element = event.getElement();
 				final ArrayList<Object> c = new ArrayList<Object>((Collection) getValue());
-				
+
 				if (event.getChecked()) {
 					c.add(element);
 				} else {
 					c.remove(element);
 				}
-				
+
 				doSetValue(c, false);
 			}
 		});
-		
+
 		return wrapControl(viewer.getControl());
 	}
-	
+
 	@Override
 	protected Command createSetCommand(Object value) {
-		final CompoundCommand setter = CommandUtil
-				.createMultipleAttributeSetter(
-						commandHandler.getEditingDomain(), input, feature,
-						(Collection) value);
+		final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection) value);
 		return setter;
 	}
 
 	PortModel pm = null;
-	
+
 	@Override
-	public void display(MMXRootObject context, EObject input,
-			Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, MMXRootObject context, EObject input, Collection<EObject> range) {
 		pm = context.getSubModel(PortModel.class);
-		super.display(context, input, range);
+		super.display(location, context, input, range);
 	}
 
 	@Override
@@ -140,13 +138,12 @@ public class PortGroupContentsEditor extends BasicAttributeInlineEditor {
 		viewer.setInput(pm);
 		viewer.refresh();
 	}
-	
 
 	@Override
 	public void setEnabled(final boolean enabled) {
 
 		viewer.getControl().setEnabled(enabled);
-		
+
 		super.setEnabled(enabled);
 	}
 }
