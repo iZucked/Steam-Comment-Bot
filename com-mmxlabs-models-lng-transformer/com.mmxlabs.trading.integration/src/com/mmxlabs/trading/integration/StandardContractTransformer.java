@@ -34,7 +34,7 @@ import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.AXPlusBCurve;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator2;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 
 /**
@@ -67,7 +67,7 @@ public class StandardContractTransformer implements IContractTransformer {
 		this.contractBuilder = null;
 	}
 
-	private ILoadPriceCalculator2 instantiatePC(final Contract c) {
+	private ILoadPriceCalculator instantiatePC(final Contract c) {
 		if (c instanceof ProfitSharePurchaseContract) {
 			final ProfitSharePurchaseContract contract = (ProfitSharePurchaseContract) c;
 			final Set<IPort> baseMarketPorts = new HashSet<IPort>();
@@ -106,7 +106,7 @@ public class StandardContractTransformer implements IContractTransformer {
 	}
 
 	@Override
-	public ILoadPriceCalculator2 transformPurchaseContract(final PurchaseContract pc) {
+	public ILoadPriceCalculator transformPurchaseContract(final PurchaseContract pc) {
 		return instantiatePC(pc);
 	}
 
