@@ -62,9 +62,11 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -861,6 +863,10 @@ public class DetailCompositeDialog extends Dialog {
 						final EObject original = entry.getKey();
 						final EObject duplicate = entry.getValue();
 
+						if (duplicate instanceof UUIDObject) {
+							((UUIDObject) duplicate).eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+						}
+						
 						adder.append(AddCommand.create(
 								commandHandler.getEditingDomain(),
 								original.eContainer(),
