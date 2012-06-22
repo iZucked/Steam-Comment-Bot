@@ -18,12 +18,22 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.VirtualCargo;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -248,6 +258,11 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getDischargeTime(), entries);
 			final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
 			annotatedSolution.getElementAnnotations().setAnnotation(element, TradingConstants.AI_profitAndLoss, annotation);
+
+			ILoadSlot loadOption = (ILoadSlot) currentAllocation.getLoadOption();
+			loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, (IDischargeSlot) currentAllocation.getDischargeOption(), currentAllocation.getLoadTime(), currentAllocation.getDischargeTime(),
+					currentAllocation.getDischargeM3Price(), (int)loadVolume, vessel, plan, shippingDetails);
+
 		}
 
 		return result;
@@ -259,7 +274,6 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 				+ plan.getTotalFuelCost(FuelComponent.PilotLight)
 				+ (includeLNG ? plan.getTotalFuelCost(FuelComponent.NBO) + plan.getTotalFuelCost(FuelComponent.IdleNBO) + plan.getTotalFuelCost(FuelComponent.FBO) : 0);
 
-		
 		final int hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
