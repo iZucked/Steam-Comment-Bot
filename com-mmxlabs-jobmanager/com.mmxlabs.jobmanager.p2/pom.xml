@@ -14,25 +14,6 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 
-	<dependencies>
-		<dependency>
-			<groupId>com.mmxlabs.jobmanager</groupId>
-			<artifactId>com.mmxlabs.jobmanager</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mmxlabs.jobmanager</groupId>
-			<artifactId>com.mmxlabs.jobmanager.eclipse</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.mmxlabs.jobmanager</groupId>
-			<artifactId>com.mmxlabs.jobmanager.ui</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
 	<build>
 		<plugins>
 

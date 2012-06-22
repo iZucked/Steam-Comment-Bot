@@ -31,8 +31,11 @@
 		<module>com.mmxlabs.jobmanager.ui</module>
 		<module>com.mmxlabs.jobmanager.eclipse</module>
 
-		<module>com.mmxlabs.jobmanager.tests</module>
+		<module>com.mmxlabs.jobmanager.feature</module>
+
 		<module>com.mmxlabs.jobmanager.p2</module>
+
+		<module>com.mmxlabs.jobmanager.tests</module>
 	</modules>
 
 	<build>
