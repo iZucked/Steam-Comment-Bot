@@ -36,6 +36,7 @@ import com.mmxlabs.models.lng.types.AVesselEvent;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesFactory;
@@ -205,6 +206,13 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * @generated
 	 */
 	private EEnum portCapabilityEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum extraDataFormatTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -556,6 +564,15 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getExtraData_FormatType() {
+		return (EAttribute) extraDataEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EOperation getExtraData__GetValueAs__Class() {
 		return extraDataEClass.getEOperations().get(0);
 	}
@@ -629,8 +646,26 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EOperation getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object() {
+		return extraDataContainerEClass.getEOperations().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getPortCapability() {
 		return portCapabilityEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getExtraDataFormatType() {
+		return extraDataFormatTypeEEnum;
 	}
 
 	/**
@@ -729,6 +764,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		createEAttribute(extraDataEClass, EXTRA_DATA__NAME);
 		createEAttribute(extraDataEClass, EXTRA_DATA__VALUE);
 		createEAttribute(extraDataEClass, EXTRA_DATA__FORMAT);
+		createEAttribute(extraDataEClass, EXTRA_DATA__FORMAT_TYPE);
 		createEOperation(extraDataEClass, EXTRA_DATA___GET_VALUE_AS__CLASS);
 		createEOperation(extraDataEClass, EXTRA_DATA___FORMAT_VALUE);
 
@@ -743,9 +779,12 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING);
 		createEOperation(extraDataContainerEClass,
 				EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING);
+		createEOperation(extraDataContainerEClass,
+				EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT);
 
 		// Create enums
 		portCapabilityEEnum = createEEnum(PORT_CAPABILITY);
+		extraDataFormatTypeEEnum = createEEnum(EXTRA_DATA_FORMAT_TYPE);
 
 		// Create data types
 		serializableObjectEDataType = createEDataType(SERIALIZABLE_OBJECT);
@@ -937,6 +976,10 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				"format", null, 1, 1, ExtraData.class, !IS_TRANSIENT,
 				!IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
+		initEAttribute(getExtraData_FormatType(),
+				this.getExtraDataFormatType(), "formatType", "AUTO", 1, 1,
+				ExtraData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		op = initEOperation(getExtraData__GetValueAs__Class(), null,
 				"getValueAs", 1, 1, IS_UNIQUE, IS_ORDERED);
@@ -993,8 +1036,25 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				IS_ORDERED);
 		addEParameter(op, this.getSerializableObject(), "value", 1, 1,
 				IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, ecorePackage.getEString(), "format", 1, 1, IS_UNIQUE,
-				IS_ORDERED);
+		addEParameter(op, this.getExtraDataFormatType(), "format", 1, 1,
+				IS_UNIQUE, IS_ORDERED);
+
+		op = initEOperation(
+				getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object(),
+				null, "getValueWithPathAs", 1, 1, IS_UNIQUE, IS_ORDERED);
+		t1 = addETypeParameter(op, "T");
+		g1 = createEGenericType(this.getIterable());
+		g2 = createEGenericType(ecorePackage.getEString());
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "path", 1, 1, IS_UNIQUE, IS_ORDERED);
+		g1 = createEGenericType(ecorePackage.getEJavaClass());
+		g2 = createEGenericType(t1);
+		g1.getETypeArguments().add(g2);
+		addEParameter(op, g1, "clazz", 1, 1, IS_UNIQUE, IS_ORDERED);
+		g1 = createEGenericType(t1);
+		addEParameter(op, g1, "defaultValue", 1, 1, IS_UNIQUE, IS_ORDERED);
+		g1 = createEGenericType(t1);
+		initEOperation(op, g1);
 
 		// Initialize enums and add enum literals
 		initEEnum(portCapabilityEEnum, PortCapability.class, "PortCapability");
@@ -1002,6 +1062,16 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.DISCHARGE);
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.DRYDOCK);
 		addEEnumLiteral(portCapabilityEEnum, PortCapability.MAINTENANCE);
+
+		initEEnum(extraDataFormatTypeEEnum, ExtraDataFormatType.class,
+				"ExtraDataFormatType");
+		addEEnumLiteral(extraDataFormatTypeEEnum, ExtraDataFormatType.AUTO);
+		addEEnumLiteral(extraDataFormatTypeEEnum, ExtraDataFormatType.INTEGER);
+		addEEnumLiteral(extraDataFormatTypeEEnum, ExtraDataFormatType.DURATION);
+		addEEnumLiteral(extraDataFormatTypeEEnum, ExtraDataFormatType.CURRENCY);
+		addEEnumLiteral(extraDataFormatTypeEEnum, ExtraDataFormatType.DATE);
+		addEEnumLiteral(extraDataFormatTypeEEnum,
+				ExtraDataFormatType.STRING_FORMAT);
 
 		// Initialize data types
 		initEDataType(serializableObjectEDataType, Serializable.class,

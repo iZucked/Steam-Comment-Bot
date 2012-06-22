@@ -100,6 +100,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 		switch (eDataType.getClassifierID()) {
 		case TypesPackage.PORT_CAPABILITY:
 			return createPortCapabilityFromString(eDataType, initialValue);
+		case TypesPackage.EXTRA_DATA_FORMAT_TYPE:
+			return createExtraDataFormatTypeFromString(eDataType, initialValue);
 		case TypesPackage.SERIALIZABLE_OBJECT:
 			return createSerializableObjectFromString(eDataType, initialValue);
 		case TypesPackage.ITERABLE:
@@ -120,6 +122,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 		switch (eDataType.getClassifierID()) {
 		case TypesPackage.PORT_CAPABILITY:
 			return convertPortCapabilityToString(eDataType, instanceValue);
+		case TypesPackage.EXTRA_DATA_FORMAT_TYPE:
+			return convertExtraDataFormatTypeToString(eDataType, instanceValue);
 		case TypesPackage.SERIALIZABLE_OBJECT:
 			return convertSerializableObjectToString(eDataType, instanceValue);
 		case TypesPackage.ITERABLE:
@@ -191,6 +195,31 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * @generated
 	 */
 	public String convertPortCapabilityToString(EDataType eDataType,
+			Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExtraDataFormatType createExtraDataFormatTypeFromString(
+			EDataType eDataType, String initialValue) {
+		ExtraDataFormatType result = ExtraDataFormatType.get(initialValue);
+		if (result == null)
+			throw new IllegalArgumentException("The value '" + initialValue
+					+ "' is not a valid enumerator of '" + eDataType.getName()
+					+ "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertExtraDataFormatTypeToString(EDataType eDataType,
 			Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}

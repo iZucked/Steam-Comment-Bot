@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.types.impl;
 
 import java.io.Serializable;
+import java.lang.Iterable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -18,6 +19,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
 
@@ -126,11 +128,27 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 	 * @generated
 	 */
 	public ExtraData addExtraData(String key, String name, Serializable value,
-			String format) {
+			ExtraDataFormatType format) {
 		final ExtraData result = addExtraData(key, name);
 		result.setValue(value);
-		result.setFormat(format);
+		result.setFormatType(format);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz,
+			T defaultValue) {
+		final ExtraData ed = getDataWithPath(path);
+		if (ed == null)
+			return defaultValue;
+		final T value = ed.getValueAs(clazz);
+		if (value == null)
+			return defaultValue;
+		return value;
 	}
 
 	/**
@@ -229,7 +247,10 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 		case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING:
 			return addExtraData((String) arguments.get(0),
 					(String) arguments.get(1), (Serializable) arguments.get(2),
-					(String) arguments.get(3));
+					(ExtraDataFormatType) arguments.get(3));
+		case TypesPackage.EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT:
+			return getValueWithPathAs((Iterable<String>) arguments.get(0),
+					(Class) arguments.get(1), arguments.get(2));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

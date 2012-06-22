@@ -75,11 +75,21 @@ public interface ExtraDataContainer extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model required="true" keyRequired="true" nameRequired="true" valueDataType="com.mmxlabs.models.lng.types.SerializableObject" valueRequired="true" formatRequired="true"
-	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final ExtraData result = addExtraData(key, name);\nresult.setValue(value);\nresult.setFormat(format);'"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final ExtraData result = addExtraData(key, name);\nresult.setValue(value);\nresult.setFormatType(format);\nreturn result;'"
 	 * @generated
 	 */
 	ExtraData addExtraData(String key, String name, Serializable value,
-			String format);
+			ExtraDataFormatType format);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true" pathDataType="com.mmxlabs.models.lng.types.Iterable<org.eclipse.emf.ecore.EString>" pathRequired="true" clazzRequired="true" defaultValueRequired="true"
+	 *        annotation="http://www.eclipse.org/emf/2002/GenModel body='final ExtraData ed = getDataWithPath(path);\nif (ed == null) return defaultValue;\nfinal T value = ed.getValueAs(clazz);\nif (value == null) return defaultValue;\nreturn value;'"
+	 * @generated
+	 */
+	<T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz,
+			T defaultValue);
 
 } // end of  ExtraDataContainer
 

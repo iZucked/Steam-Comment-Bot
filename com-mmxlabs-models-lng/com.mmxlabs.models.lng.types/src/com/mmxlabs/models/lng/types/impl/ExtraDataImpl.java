@@ -6,6 +6,9 @@ package com.mmxlabs.models.lng.types.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.EList;
@@ -13,6 +16,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.TypesPackage;
 
 /**
@@ -26,6 +30,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  *   <li>{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl#getValue <em>Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl#getFormat <em>Format</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl#getFormatType <em>Format Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -120,6 +125,26 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	 * @ordered
 	 */
 	protected String format = FORMAT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getFormatType() <em>Format Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFormatType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final ExtraDataFormatType FORMAT_TYPE_EDEFAULT = ExtraDataFormatType.AUTO;
+
+	/**
+	 * The cached value of the '{@link #getFormatType() <em>Format Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFormatType()
+	 * @generated
+	 * @ordered
+	 */
+	protected ExtraDataFormatType formatType = FORMAT_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -261,6 +286,30 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ExtraDataFormatType getFormatType() {
+		return formatType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFormatType(ExtraDataFormatType newFormatType) {
+		ExtraDataFormatType oldFormatType = formatType;
+		formatType = newFormatType == null ? FORMAT_TYPE_EDEFAULT
+				: newFormatType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					TypesPackage.EXTRA_DATA__FORMAT_TYPE, oldFormatType,
+					formatType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public <T> T getValueAs(Class<T> clazz) {
 		if (isSetValue()) {
 			if (clazz.isInstance(getValue())) {
@@ -279,11 +328,44 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	 */
 	public String formatValue() {
 		if (isSetValue()) {
-			final String s = getFormat();
-			if (s != null && !s.isEmpty()) {
-				return String.format(s, getValue());
-			} else {
-				return getValue() + "";
+			final Object o = getValue();
+			final String format = getFormat();
+			ExtraDataFormatType f = getFormatType();
+			if (f == ExtraDataFormatType.AUTO) {
+				if (o instanceof Integer)
+					f = ExtraDataFormatType.INTEGER;
+				else if (o instanceof Date)
+					f = ExtraDataFormatType.DATE;
+			}
+			switch (getFormatType()) {
+			case AUTO:
+				return "" + o;
+			case INTEGER:
+				return String.format("%,d", o);
+			case DURATION:
+				if (o instanceof Integer) {
+					final int totalHours = (Integer) o;
+					final int hrs = totalHours % 24;
+					final int days = totalHours / 24;
+					if (days > 0) {
+						return String.format("%d:%d", days, hrs);
+					} else {
+						return String.format("%d", hrs);
+					}
+				}
+				break;
+			case CURRENCY:
+				return String.format("$%,d", o);
+			case DATE:
+				DateFormat dateFormat;
+				if (format != null && !format.isEmpty()) {
+					dateFormat = new SimpleDateFormat(format);
+				} else {
+					dateFormat = DateFormat.getDateTimeInstance();
+				}
+				return dateFormat.format(o);
+			case STRING_FORMAT:
+				return String.format(format, o);
 			}
 		}
 		return "";
@@ -305,6 +387,8 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 			return getValue();
 		case TypesPackage.EXTRA_DATA__FORMAT:
 			return getFormat();
+		case TypesPackage.EXTRA_DATA__FORMAT_TYPE:
+			return getFormatType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -328,6 +412,9 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 			return;
 		case TypesPackage.EXTRA_DATA__FORMAT:
 			setFormat((String) newValue);
+			return;
+		case TypesPackage.EXTRA_DATA__FORMAT_TYPE:
+			setFormatType((ExtraDataFormatType) newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);
@@ -353,6 +440,9 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 		case TypesPackage.EXTRA_DATA__FORMAT:
 			setFormat(FORMAT_EDEFAULT);
 			return;
+		case TypesPackage.EXTRA_DATA__FORMAT_TYPE:
+			setFormatType(FORMAT_TYPE_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -376,6 +466,8 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 		case TypesPackage.EXTRA_DATA__FORMAT:
 			return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT
 					.equals(format);
+		case TypesPackage.EXTRA_DATA__FORMAT_TYPE:
+			return formatType != FORMAT_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -420,6 +512,8 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 			result.append("<unset>");
 		result.append(", format: ");
 		result.append(format);
+		result.append(", formatType: ");
+		result.append(formatType);
 		result.append(')');
 		return result.toString();
 	}

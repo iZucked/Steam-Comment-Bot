@@ -2880,13 +2880,22 @@ public interface TypesPackage extends EPackage {
 	int EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING = 3;
 
 	/**
+	 * The operation id for the '<em>Get Value With Path As</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = 4;
+
+	/**
 	 * The number of operations of the '<em>Extra Data Container</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXTRA_DATA_CONTAINER_OPERATION_COUNT = 4;
+	int EXTRA_DATA_CONTAINER_OPERATION_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl <em>Extra Data</em>}' class.
@@ -2944,13 +2953,22 @@ public interface TypesPackage extends EPackage {
 	int EXTRA_DATA__FORMAT = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Format Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXTRA_DATA__FORMAT_TYPE = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Extra Data</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EXTRA_DATA_FEATURE_COUNT = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 4;
+	int EXTRA_DATA_FEATURE_COUNT = EXTRA_DATA_CONTAINER_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Data With Path</em>' operation.
@@ -2987,6 +3005,15 @@ public interface TypesPackage extends EPackage {
 	 * @ordered
 	 */
 	int EXTRA_DATA___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING = EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING;
+
+	/**
+	 * The operation id for the '<em>Get Value With Path As</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXTRA_DATA___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT;
 
 	/**
 	 * The operation id for the '<em>Get Value As</em>' operation.
@@ -3026,6 +3053,16 @@ public interface TypesPackage extends EPackage {
 	int PORT_CAPABILITY = 21;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.ExtraDataFormatType
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataFormatType()
+	 * @generated
+	 */
+	int EXTRA_DATA_FORMAT_TYPE = 22;
+
+	/**
 	 * The meta object id for the '<em>Serializable Object</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3033,7 +3070,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getSerializableObject()
 	 * @generated
 	 */
-	int SERIALIZABLE_OBJECT = 22;
+	int SERIALIZABLE_OBJECT = 23;
 
 	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
@@ -3043,7 +3080,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 23;
+	int ITERABLE = 24;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.
@@ -3343,6 +3380,17 @@ public interface TypesPackage extends EPackage {
 	EAttribute getExtraData_Format();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getFormatType <em>Format Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Format Type</em>'.
+	 * @see com.mmxlabs.models.lng.types.ExtraData#getFormatType()
+	 * @see #getExtraData()
+	 * @generated
+	 */
+	EAttribute getExtraData_FormatType();
+
+	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraData#getValueAs(java.lang.Class) <em>Get Value As</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3414,14 +3462,24 @@ public interface TypesPackage extends EPackage {
 	EOperation getExtraDataContainer__AddExtraData__String_String();
 
 	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, java.lang.String) <em>Add Extra Data</em>}' operation.
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, com.mmxlabs.models.lng.types.ExtraDataFormatType) <em>Add Extra Data</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Add Extra Data</em>' operation.
-	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, java.lang.String)
+	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, com.mmxlabs.models.lng.types.ExtraDataFormatType)
 	 * @generated
 	 */
 	EOperation getExtraDataContainer__AddExtraData__String_String_Serializable_String();
+
+	/**
+	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getValueWithPathAs(java.lang.Iterable, java.lang.Class, java.lang.Object) <em>Get Value With Path As</em>}' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the '<em>Get Value With Path As</em>' operation.
+	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#getValueWithPathAs(java.lang.Iterable, java.lang.Class, java.lang.Object)
+	 * @generated
+	 */
+	EOperation getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
 
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}'.
@@ -3432,6 +3490,16 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getPortCapability();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Extra Data Format Type</em>'.
+	 * @see com.mmxlabs.models.lng.types.ExtraDataFormatType
+	 * @generated
+	 */
+	EEnum getExtraDataFormatType();
 
 	/**
 	 * Returns the meta object for data type '{@link java.io.Serializable <em>Serializable Object</em>}'.
@@ -3758,6 +3826,15 @@ public interface TypesPackage extends EPackage {
 		EAttribute EXTRA_DATA__FORMAT = eINSTANCE.getExtraData_Format();
 
 		/**
+		 * The meta object literal for the '<em><b>Format Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXTRA_DATA__FORMAT_TYPE = eINSTANCE
+				.getExtraData_FormatType();
+
+		/**
 		 * The meta object literal for the '<em><b>Get Value As</b></em>' operation.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3831,6 +3908,15 @@ public interface TypesPackage extends EPackage {
 				.getExtraDataContainer__AddExtraData__String_String_Serializable_String();
 
 		/**
+		 * The meta object literal for the '<em><b>Get Value With Path As</b></em>' operation.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EOperation EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = eINSTANCE
+				.getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -3839,6 +3925,16 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum PORT_CAPABILITY = eINSTANCE.getPortCapability();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.ExtraDataFormatType
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataFormatType()
+		 * @generated
+		 */
+		EEnum EXTRA_DATA_FORMAT_TYPE = eINSTANCE.getExtraDataFormatType();
 
 		/**
 		 * The meta object literal for the '<em>Serializable Object</em>' data type.
