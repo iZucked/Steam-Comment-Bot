@@ -158,6 +158,13 @@ public class TradingExporterExtension implements IExporterExtension {
 				} else {
 					ad.setValue(x/(double)Calculator.ScaleFactor);
 				}
+			} else if (details.getValue() instanceof Long) {
+				long x = (Long) details.getValue();
+				if (x % Calculator.ScaleFactor == 0) {
+					ad.setValue((int)(x/Calculator.ScaleFactor));
+				} else {
+					ad.setValue(x/(double)Calculator.ScaleFactor);
+				}
 			} else {
 				ad.setValue((Serializable) details.getValue());
 			}
