@@ -101,7 +101,7 @@ public class TestNetbackContract {
 
 		final VoyagePlan plan = new VoyagePlan();
 		plan.setSequence(new Object[] { null, ladenLeg, null, ballastLeg, null });
-		final int loadPrice = nbc.calculateLoadUnitPrice(slotA, slotB, 0, 0, 7500, 2000000, vessel, plan);
+		final int loadPrice = nbc.calculateLoadUnitPrice(slotA, slotB, 0, 0, 7500, 2000000, vessel, plan, null);
 
 		Assert.assertEquals(6263, loadPrice);
 	}

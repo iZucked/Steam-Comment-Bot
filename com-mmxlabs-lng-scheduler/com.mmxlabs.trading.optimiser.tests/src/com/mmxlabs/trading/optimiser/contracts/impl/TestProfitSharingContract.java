@@ -49,7 +49,7 @@ public class TestProfitSharingContract {
 		final Random random = new Random();
 		for (int i = 0; i < 100; i++) {
 			final int p = random.nextInt(10000);
-			final int price = psc.calculateLoadUnitPrice(null, option, 0, 0, p, 0, null, null);
+			final int price = psc.calculateLoadUnitPrice(null, option, 0, 0, p, 0, null, null, null);
 			double asp = p / 1000.0;
 			Assert.assertEquals(1.234 - 0.1 - asp - (0.3 * (asp - 4.321)), price / 1000.0, 1);
 		}
@@ -78,7 +78,7 @@ public class TestProfitSharingContract {
 		final Random random = new Random();
 		for (int i = 0; i < 100; i++) {
 			final int p = random.nextInt();
-			final int price = psc.calculateLoadUnitPrice(null, option, 0, 0, p, 0, null, null);
+			final int price = psc.calculateLoadUnitPrice(null, option, 0, 0, p, 0, null, null, null);
 			Assert.assertEquals(1.234 - 0.1 - ((p / 1000.0)), price / 1000.0, 1);
 		}
 	}
