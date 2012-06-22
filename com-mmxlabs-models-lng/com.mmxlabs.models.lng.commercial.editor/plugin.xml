@@ -175,7 +175,7 @@
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.NetbackPurchaseContractFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          factory="com.mmxlabs.models.lng.commercial.modelfactories.NetbackPurchaseContractFactory"
           label="Netback Purchase Contract"
           outputEClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract"
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
@@ -187,9 +187,6 @@
           outputEClass="com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract"
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
- </extension>
- <extension
-       point="com.mmxlabs.models.ui.modelfactories">
     <factory
           ID="com.mmxlabs.models.lng.commercial.NotionalBallastParametersFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
