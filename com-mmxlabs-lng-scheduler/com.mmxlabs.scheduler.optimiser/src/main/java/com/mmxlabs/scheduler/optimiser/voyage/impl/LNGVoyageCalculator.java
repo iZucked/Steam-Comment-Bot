@@ -578,10 +578,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateUnitPrice(details.getOptions().getToPortSlot(), cooldownTime);
 
 					// TODO is this how cooldown gas ought to be priced?
-					final int cooldownPricePerM3 = (int) Calculator.multiply(cooldownPricePerMMBTU, ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue());
+					if (details.getOptions().getToPortSlot() instanceof ILoadSlot) {
+						final int cooldownPricePerM3 = (int) Calculator.multiply(cooldownPricePerMMBTU, ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue());
 
-					details.setFuelUnitPrice(FuelComponent.Cooldown, cooldownPricePerM3);
-					cooldownM3Price = cooldownPricePerM3;
+						details.setFuelUnitPrice(FuelComponent.Cooldown, cooldownPricePerM3);
+						cooldownM3Price = cooldownPricePerM3;
+					} else {
+						cooldownM3Price = 1000000;
+					}
 				}
 			} else {
 				assert sequence[i] instanceof PortDetails;

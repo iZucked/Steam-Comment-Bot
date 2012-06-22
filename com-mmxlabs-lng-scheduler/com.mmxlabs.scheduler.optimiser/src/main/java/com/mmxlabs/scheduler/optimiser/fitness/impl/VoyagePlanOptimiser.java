@@ -29,7 +29,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author Simon Goodall
  * 
  */
-public final class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
+public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private static final int RELAXATION_STEP = 6;
 
