@@ -244,7 +244,7 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 		case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING:
 			return addExtraData((String) arguments.get(0),
 					(String) arguments.get(1));
-		case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING:
+		case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE:
 			return addExtraData((String) arguments.get(0),
 					(String) arguments.get(1), (Serializable) arguments.get(2),
 					(ExtraDataFormatType) arguments.get(3));

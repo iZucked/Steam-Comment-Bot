@@ -637,7 +637,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EOperation getExtraDataContainer__AddExtraData__String_String_Serializable_String() {
+	public EOperation getExtraDataContainer__AddExtraData__String_String_Serializable_ExtraDataFormatType() {
 		return extraDataContainerEClass.getEOperations().get(3);
 	}
 
@@ -777,8 +777,9 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING);
 		createEOperation(extraDataContainerEClass,
 				EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING);
-		createEOperation(extraDataContainerEClass,
-				EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING);
+		createEOperation(
+				extraDataContainerEClass,
+				EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE);
 		createEOperation(extraDataContainerEClass,
 				EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT);
 
@@ -1027,7 +1028,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				IS_ORDERED);
 
 		op = initEOperation(
-				getExtraDataContainer__AddExtraData__String_String_Serializable_String(),
+				getExtraDataContainer__AddExtraData__String_String_Serializable_ExtraDataFormatType(),
 				this.getExtraData(), "addExtraData", 1, 1, IS_UNIQUE,
 				IS_ORDERED);
 		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE,

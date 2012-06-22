@@ -57,6 +57,7 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 			addNamePropertyDescriptor(object);
 			addValuePropertyDescriptor(object);
 			addFormatPropertyDescriptor(object);
+			addFormatTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -134,6 +135,25 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Format Type feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFormatTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(
+				((ComposeableAdapterFactory) adapterFactory)
+						.getRootAdapterFactory(),
+				getResourceLocator(),
+				getString("_UI_ExtraData_formatType_feature"),
+				getString("_UI_PropertyDescriptor_description",
+						"_UI_ExtraData_formatType_feature",
+						"_UI_ExtraData_type"),
+				TypesPackage.Literals.EXTRA_DATA__FORMAT_TYPE, true, false,
+				false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
 	 * This returns ExtraData.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -174,6 +194,7 @@ public class ExtraDataItemProvider extends ExtraDataContainerItemProvider
 		case TypesPackage.EXTRA_DATA__NAME:
 		case TypesPackage.EXTRA_DATA__VALUE:
 		case TypesPackage.EXTRA_DATA__FORMAT:
+		case TypesPackage.EXTRA_DATA__FORMAT_TYPE:
 			fireNotifyChanged(new ViewerNotification(notification,
 					notification.getNotifier(), false, true));
 			return;

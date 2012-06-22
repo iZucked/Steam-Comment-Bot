@@ -2877,7 +2877,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING = 3;
+	int EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = 3;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -3004,7 +3004,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int EXTRA_DATA___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING = EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING;
+	int EXTRA_DATA___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -3469,7 +3469,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, com.mmxlabs.models.lng.types.ExtraDataFormatType)
 	 * @generated
 	 */
-	EOperation getExtraDataContainer__AddExtraData__String_String_Serializable_String();
+	EOperation getExtraDataContainer__AddExtraData__String_String_Serializable_ExtraDataFormatType();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getValueWithPathAs(java.lang.Iterable, java.lang.Class, java.lang.Object) <em>Get Value With Path As</em>}' operation.
@@ -3904,8 +3904,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_STRING = eINSTANCE
-				.getExtraDataContainer__AddExtraData__String_String_Serializable_String();
+		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = eINSTANCE
+				.getExtraDataContainer__AddExtraData__String_String_Serializable_ExtraDataFormatType();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Value With Path As</b></em>' operation.
