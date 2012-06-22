@@ -62,6 +62,14 @@
                name="preferenceCustomization"
                value="plugin_customization.ini">
          </property>
+         <property
+               name="aboutImage"
+               value="aboutImage.gif">
+         </property>
+         <property
+               name="aboutText"
+               value="ShipLingo">
+         </property>
       </product>
    </extension>
    <extension
