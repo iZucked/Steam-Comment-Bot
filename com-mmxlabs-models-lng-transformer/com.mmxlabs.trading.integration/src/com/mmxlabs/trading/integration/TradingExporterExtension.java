@@ -4,21 +4,20 @@
  */
 package com.mmxlabs.trading.integration;
 
-import org.eclipse.emf.common.util.EList;
-import org.eclipse.ocl.ecore.opposites.AllInstancesContentAdapter;
+import java.io.Serializable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.schedule.AdditionalData;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
+import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -27,12 +26,10 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.trading.optimiser.TradingConstants;
 import com.mmxlabs.trading.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.trading.optimiser.annotations.IProfitAndLossEntry;
-import com.mmxlabs.trading.optimiser.impl.Entity;
 
 /**
  * EMF export side for trading optimiser information. Model may need reworking, so this isn't exactly final.
@@ -76,23 +73,15 @@ public class TradingExporterExtension implements IExporterExtension {
 						}
 					}
 					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
-						final AdditionalData entityData = ScheduleFactory.eINSTANCE.createAdditionalData();
-						entityData.setName(entry.getEntity().getName());
-						entityData.setKey(entry.getEntity().getName());
-						final AdditionalData pnlData = ScheduleFactory.eINSTANCE.createAdditionalData();
-						pnlData.setValue((int)entry.getFinalGroupValue() / Calculator.ScaleFactor);
-						pnlData.setName("P&L");
-						pnlData.setKey("pnl");
-						cargoAllocation.getAdditionalData().add(entityData);
-						entityData.getAdditionalData().add(pnlData);
+						final ExtraData entityData = cargoAllocation.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
 						
-						final AdditionalData dateData = ScheduleFactory.eINSTANCE.createAdditionalData();
-						dateData.setValue(entities.getDateFromHours(profitAndLoss.getBookingTime()));
-						dateData.setName("Date");
-						dateData.setKey("date");
-						entityData.getAdditionalData().add(dateData);
+						final ExtraData pnlData = entityData.addExtraData("pnl", "P&L", (int)entry.getFinalGroupValue() / Calculator.ScaleFactor,
+								ExtraDataFormatType.CURRENCY);
 						
-						entityData.getAdditionalData().add(exportDetailTree(entry.getDetails()));
+						pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
+						ExtraData detail = exportDetailTree(entry.getDetails());
+						detail.setName("Details");
+						pnlData.getExtraData().add(detail);
 						
 //						final CargoRevenue revenue = ScheduleFactory.eINSTANCE.createCargoRevenue();
 //						revenue.setCargo(cargoAllocation);
@@ -155,17 +144,27 @@ public class TradingExporterExtension implements IExporterExtension {
 		annotatedSolution = null;
 	}
 
-	private AdditionalData exportDetailTree(final IDetailTree details) {
-		final AdditionalData ad = ScheduleFactory.eINSTANCE.createAdditionalData();
+	private ExtraData exportDetailTree(final IDetailTree details) {
+		final ExtraData ad = TypesFactory.eINSTANCE.createExtraData();
 		
 		ad.setName(details.getKey());
 		ad.setKey(details.getKey());
-		if (details.getValue() != null) {
-			ad.setValue(details.getValue());
+		
+		if (details.getValue() instanceof Serializable) {
+			if (details.getValue() instanceof Integer) {
+				int x = (Integer) details.getValue();
+				if (x % Calculator.ScaleFactor == 0) {
+					ad.setValue(x/Calculator.ScaleFactor);
+				} else {
+					ad.setValue(x/(double)Calculator.ScaleFactor);
+				}
+			} else {
+				ad.setValue((Serializable) details.getValue());
+			}
 		}
 		
 		for (final IDetailTree child : details.getChildren()) {
-			ad.getAdditionalData().add(exportDetailTree(child));
+			ad.getExtraData().add(exportDetailTree(child));
 		}
 		
 		return ad;
