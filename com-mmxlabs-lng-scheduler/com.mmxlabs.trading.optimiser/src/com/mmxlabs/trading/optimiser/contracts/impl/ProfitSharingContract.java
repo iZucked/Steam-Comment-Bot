@@ -7,6 +7,7 @@ package com.mmxlabs.trading.optimiser.contracts.impl;
 import java.util.Set;
 
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -50,7 +51,7 @@ public class ProfitSharingContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int actualSalesPrice, final int loadVolume,
-			final IVessel vessel, final VoyagePlan plan) {
+			final IVessel vessel, final VoyagePlan plan, IDetailTree annotation) {
 		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, actualSalesPrice);
 	}
 

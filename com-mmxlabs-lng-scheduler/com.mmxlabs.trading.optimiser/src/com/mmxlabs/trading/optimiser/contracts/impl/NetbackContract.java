@@ -6,6 +6,8 @@ package com.mmxlabs.trading.optimiser.contracts.impl;
 
 import java.util.Map;
 
+import com.mmxlabs.common.detailtree.DetailTree;
+import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -76,9 +78,9 @@ public class NetbackContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int salesPrice, final int loadVolume,
-			final IVessel vessel, final VoyagePlan plan) {
+			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
 
-		IVesselClass vesselClass = vessel.getVesselClass();
+		final IVesselClass vesselClass = vessel.getVesselClass();
 
 		final VoyageDetails ladenLeg = (VoyageDetails) plan.getSequence()[1];
 		// final VoyageDetails ballastLeg = (VoyageDetails) plan.getSequence()[3];
@@ -88,11 +90,11 @@ public class NetbackContract implements ILoadPriceCalculator {
 		long totalRealTransportCosts = ladenLeg.getRouteCost();
 		// fuel cost
 		for (final FuelComponent c : FuelComponent.values()) {
-			long fuelConsumption = ladenLeg.getFuelConsumption(c, c.getDefaultFuelUnit()) + ladenLeg.getRouteAdditionalConsumption(c, c.getDefaultFuelUnit());
+			final long fuelConsumption = ladenLeg.getFuelConsumption(c, c.getDefaultFuelUnit()) + ladenLeg.getRouteAdditionalConsumption(c, c.getDefaultFuelUnit());
 			totalRealTransportCosts += Calculator.multiply(fuelConsumption, ladenLeg.getFuelUnitPrice(c));
 		}
 
-		BallastParameters notionalBallastParameters = ballastParameters.get(vesselClass);
+		final BallastParameters notionalBallastParameters = ballastParameters.get(vesselClass);
 		// vessel cost (don't use calculator.multiply here; hours are not
 		// scaled, but price is)
 		final int hireRate;
@@ -113,9 +115,9 @@ public class NetbackContract implements ILoadPriceCalculator {
 		final int notionalReturnSpeed = notionalBallastParameters.getSpeed();
 
 		long result = Long.MAX_VALUE;
-		for (String route : notionalBallastParameters.getRoutes()) {
+		for (final String route : notionalBallastParameters.getRoutes()) {
 
-			Integer distance = distanceProvider.get(route).get(ladenLeg.getOptions().getToPortSlot().getPort(), ladenLeg.getOptions().getFromPortSlot().getPort());
+			final Integer distance = distanceProvider.get(route).get(ladenLeg.getOptions().getToPortSlot().getPort(), ladenLeg.getOptions().getFromPortSlot().getPort());
 			if (distance == null) {
 				continue;
 			}
@@ -145,6 +147,17 @@ public class NetbackContract implements ILoadPriceCalculator {
 			if (transportCostPerMMBTU < result) {
 				result = transportCostPerMMBTU;
 			}
+			
+			if (annotations != null) {
+				DetailTree tree = new DetailTree();
+				tree.addChild("Transport Time", notionalTransportTime);
+				tree.addChild("Distance", distance);
+				tree.addChild("NBO Costs", totalNBOCosts);
+				tree.addChild("Base Costs", totalBaseFuelCosts);
+				tree.addChild("$/MMBTu", transportCostPerMMBTU);
+				
+				annotations.addChild(tree);
+			}
 		}
 		return (int) (salesPrice - result - marginScaled);
 	}
@@ -159,7 +172,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 		return ballastParameters;
 	}
 
-	public void setBallastParameters(Map<IVesselClass, BallastParameters> ballastParameters) {
+	public void setBallastParameters(final Map<IVesselClass, BallastParameters> ballastParameters) {
 		this.ballastParameters = ballastParameters;
 	}
 }
