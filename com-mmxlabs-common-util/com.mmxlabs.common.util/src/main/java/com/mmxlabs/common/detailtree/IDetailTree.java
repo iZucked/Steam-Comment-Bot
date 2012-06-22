@@ -39,4 +39,8 @@ public interface IDetailTree {
 	 * @return
 	 */
 	public Object getValue();
+
+	void addChild(IDetailTree child);
+
+	IDetailTree addChild(String key, Object value);
 }
