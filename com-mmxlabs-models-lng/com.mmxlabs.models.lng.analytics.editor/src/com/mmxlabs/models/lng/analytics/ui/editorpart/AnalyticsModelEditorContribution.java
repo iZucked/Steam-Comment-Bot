@@ -71,6 +71,8 @@ public class AnalyticsModelEditorContribution extends BaseJointModelEditorContri
 	public IPropertySource getPropertySource(Object object) {
 		if (object instanceof UnitCostLine) {
 			return new UnitCostLinePropertySource((UnitCostLine)object);
+		} else if (object instanceof IPropertySource) {
+			return (IPropertySource) object;
 		}
 		return null;
 	}

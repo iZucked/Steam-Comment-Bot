@@ -7,6 +7,7 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.analytics;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.port.Port;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
@@ -39,7 +40,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface UnitCostLine extends MMXObject {
+public interface UnitCostLine extends MMXObject, ExtraDataContainer {
 	/**
 	 * Returns the value of the '<em><b>Unit Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->

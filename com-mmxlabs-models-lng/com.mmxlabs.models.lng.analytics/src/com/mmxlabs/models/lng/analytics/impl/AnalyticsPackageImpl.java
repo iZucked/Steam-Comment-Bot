@@ -739,6 +739,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		unitCostMatrixEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
 		unitCostMatrixEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		unitCostLineEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		unitCostLineEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
 		voyageEClass.getESuperTypes().add(this.getCostComponent());
 		visitEClass.getESuperTypes().add(this.getCostComponent());
 

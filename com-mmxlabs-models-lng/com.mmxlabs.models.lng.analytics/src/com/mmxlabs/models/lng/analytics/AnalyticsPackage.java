@@ -371,13 +371,22 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_LINE__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
+	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_LINE__EXTRA_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Unit Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__UNIT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+	int UNIT_COST_LINE__UNIT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Mmbtu Delivered</b></em>' attribute.
@@ -386,7 +395,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__MMBTU_DELIVERED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int UNIT_COST_LINE__MMBTU_DELIVERED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>From</b></em>' reference.
@@ -395,7 +404,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__FROM = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int UNIT_COST_LINE__FROM = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>To</b></em>' reference.
@@ -404,7 +413,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__TO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int UNIT_COST_LINE__TO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -413,7 +422,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int UNIT_COST_LINE__DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Volume Loaded</b></em>' attribute.
@@ -422,7 +431,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__VOLUME_LOADED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int UNIT_COST_LINE__VOLUME_LOADED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Volume Discharged</b></em>' attribute.
@@ -431,7 +440,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__VOLUME_DISCHARGED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int UNIT_COST_LINE__VOLUME_DISCHARGED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
@@ -440,7 +449,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__HIRE_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int UNIT_COST_LINE__HIRE_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Fuel Cost</b></em>' attribute.
@@ -449,7 +458,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__FUEL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int UNIT_COST_LINE__FUEL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Canal Cost</b></em>' attribute.
@@ -458,7 +467,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__CANAL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int UNIT_COST_LINE__CANAL_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Cost Components</b></em>' containment reference list.
@@ -467,7 +476,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__COST_COMPONENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int UNIT_COST_LINE__COST_COMPONENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
@@ -476,7 +485,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE__PORT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+	int UNIT_COST_LINE__PORT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The number of structural features of the '<em>Unit Cost Line</em>' class.
@@ -485,7 +494,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
+	int UNIT_COST_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
 
 
 	/**

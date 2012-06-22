@@ -4,18 +4,18 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.properties;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.mmxlabs.models.lng.analytics.FuelCost;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
+import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
 
 /**
  * Properties display for unit cost lines.
@@ -23,13 +23,12 @@ import com.mmxlabs.models.lng.analytics.Voyage;
  * @author hinton
  *
  */
-public class UnitCostLinePropertySource implements IPropertySource {
+public class UnitCostLinePropertySource extends ExtraDataContainerPropertySource {
 	/**
 	 * 
 	 */
 	private static final String OVERVIEW = "1. Overview";
 	private final UnitCostLine line;
-	private IPropertyDescriptor[] descriptors;
 	
 	private final ILabelProvider doubleLabelProvider = new LabelProvider() {
 		@Override
@@ -81,12 +80,13 @@ public class UnitCostLinePropertySource implements IPropertySource {
 	}
 	
 	public UnitCostLinePropertySource(final UnitCostLine line) {
+		super(line);
 		this.line = line;
-		createDescriptors();
 	}
 
-	private void createDescriptors() {
-		final ArrayList<IPropertyDescriptor> descriptors = new ArrayList<IPropertyDescriptor>();
+	@Override
+	protected void createExtraDescriptors(List<IPropertyDescriptor> descriptors) {
+		if (true) return;
 		
 		descriptors.add(makeDescriptor(new IPropertyGetter() {
 			@Override
@@ -159,8 +159,6 @@ public class UnitCostLinePropertySource implements IPropertySource {
 		addVoyageDescriptors(descriptors, "3. Laden Voyage", (Voyage) line.getCostComponents().get(1));
 		addVisitDescriptors(descriptors, "4. Discharge", (Visit) line.getCostComponents().get(2));
 		addVoyageDescriptors(descriptors, "5. Ballast Voyage", (Voyage) line.getCostComponents().get(3));
-		
-		this.descriptors = descriptors.toArray(new IPropertyDescriptor[descriptors.size()]);
 	}
 
 	/**
@@ -168,7 +166,7 @@ public class UnitCostLinePropertySource implements IPropertySource {
 	 * @param string
 	 * @param visit
 	 */
-	private void addVisitDescriptors(ArrayList<IPropertyDescriptor> descriptors, String category, final Visit visit) {
+	private void addVisitDescriptors(List<IPropertyDescriptor> descriptors, String category, final Visit visit) {
 		descriptors.add(makeDescriptor(new IPropertyGetter() {
 			@Override
 			public Object get(UnitCostLine line) {
@@ -197,7 +195,7 @@ public class UnitCostLinePropertySource implements IPropertySource {
 	 * @param string 
 	 * @param voyage
 	 */
-	private void addVoyageDescriptors(ArrayList<IPropertyDescriptor> descriptors, String category, final Voyage voyage) {
+	private void addVoyageDescriptors(List<IPropertyDescriptor> descriptors, String category, final Voyage voyage) {
 		descriptors.add(makeDescriptor(new IPropertyGetter() {
 			@Override
 			public Object get(UnitCostLine line) {
@@ -218,6 +216,24 @@ public class UnitCostLinePropertySource implements IPropertySource {
 				return voyage.getFuelCost();
 			}
 		}, "Fuel cost", category, costLabelProvider));
+		
+		for (final FuelCost fc : voyage.getFuelCosts()) {
+			descriptors.add(makeDescriptor(new IPropertyGetter() {
+				@Override
+				public Object get(UnitCostLine line) {
+					return fc;
+				}
+			}, fc.getName(), category, new LabelProvider(){
+				@Override
+				public String getText(Object element) {
+					if (element instanceof FuelCost) {
+						final FuelCost fc2 = (FuelCost) element;
+						return String.format("$%,d (%,d %s)", fc2.getCost(), fc2.getQuantity(), fc2.getUnit());
+					}
+					return "";
+				}
+			}));
+		}
 		
 		if (voyage.getRouteCost() > 0) {
 			descriptors.add(makeDescriptor(new IPropertyGetter() {
@@ -276,37 +292,13 @@ public class UnitCostLinePropertySource implements IPropertySource {
 		if (costLabelProvider2 != null) result.setLabelProvider(costLabelProvider2);
 		return result;
 	}
-
-	@Override
-	public Object getEditableValue() {
-		return null;
-	}
 	
-	@Override
-	public IPropertyDescriptor[] getPropertyDescriptors() {
-		return descriptors;
-	}
-
 	@Override
 	public Object getPropertyValue(Object id) {
 		if (id instanceof IPropertyGetter) {
 			return ((IPropertyGetter) id).get(line);
+		} else {
+			return super.getPropertyValue(id);
 		}
-		return null;
 	}
-
-	@Override
-	public boolean isPropertySet(Object id) {
-		return false;
-	}
-
-	@Override
-	public void resetPropertyValue(Object id) {
-	}
-
-	@Override
-	public void setPropertyValue(Object id, Object value) {
-
-	}
-
 }
