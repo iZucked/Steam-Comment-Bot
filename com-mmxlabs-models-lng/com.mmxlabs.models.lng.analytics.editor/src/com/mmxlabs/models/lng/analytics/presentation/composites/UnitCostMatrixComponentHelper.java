@@ -78,6 +78,7 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 		add_maximumLoadEditor(detailComposite, topClass);
 		add_minimumDischargeEditor(detailComposite, topClass);
 		add_maximumDischargeEditor(detailComposite, topClass);
+		add_retainHeelEditor(detailComposite, topClass);
 		add_cargoPriceEditor(detailComposite, topClass);
 		add_baseFuelPriceEditor(detailComposite, topClass);
 		add_cvValueEditor(detailComposite, topClass);
@@ -159,6 +160,15 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	protected void add_maximumDischargeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__MAXIMUM_DISCHARGE));
 	}
+	/**
+	 * Create the editor for the retainHeel feature on UnitCostMatrix
+	 *
+	 * @generated
+	 */
+	protected void add_retainHeelEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__RETAIN_HEEL));
+	}
+
 	/**
 	 * Create the editor for the cargoPrice feature on UnitCostMatrix
 	 *

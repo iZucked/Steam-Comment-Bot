@@ -33,6 +33,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMaximumLoad <em>Maximum Load</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMinimumDischarge <em>Minimum Discharge</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getMaximumDischarge <em>Maximum Discharge</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRetainHeel <em>Retain Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCargoPrice <em>Cargo Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCvValue <em>Cv Value</em>}</li>
@@ -306,6 +307,32 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setMaximumDischarge(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Retain Heel</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Retain Heel</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Retain Heel</em>' attribute.
+	 * @see #setRetainHeel(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_RetainHeel()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getRetainHeel();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRetainHeel <em>Retain Heel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Retain Heel</em>' attribute.
+	 * @see #getRetainHeel()
+	 * @generated
+	 */
+	void setRetainHeel(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Cargo Price</b></em>' attribute.

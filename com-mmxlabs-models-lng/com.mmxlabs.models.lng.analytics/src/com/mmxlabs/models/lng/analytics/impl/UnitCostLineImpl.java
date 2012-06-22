@@ -373,6 +373,44 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public ExtraData addExtraData(String key, String name) {
+		final ExtraData result = TypesFactory.eINSTANCE.createExtraData();
+		result.setKey(key);
+		result.setName(name);
+		getExtraData().add(result);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExtraData addExtraData(String key, String name, Serializable value, ExtraDataFormatType format) {
+		final ExtraData result = addExtraData(key, name);
+		result.setValue(value);
+		result.setFormatType(format);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz, T defaultValue) {
+		final ExtraData ed = getDataWithPath(path);
+		if (ed == null) return defaultValue;
+		final T value = ed.getValueAs(clazz);
+		if (value == null) return defaultValue;
+		return value;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public int getMmbtuDelivered() {
 		return mmbtuDelivered;
 	}
@@ -885,49 +923,6 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 		result.append(portCost);
 		result.append(')');
 		return result.toString();
-	}
-
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraData addExtraData(String key, String name) {
-		final ExtraData result = TypesFactory.eINSTANCE.createExtraData();
-		result.setKey(key);
-		result.setName(name);
-		getExtraData().add(result);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ExtraData addExtraData(String key, String name, Serializable value,
-			ExtraDataFormatType format) {
-		final ExtraData result = addExtraData(key, name);
-		result.setValue(value);
-		result.setFormatType(format);
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz,
-			T defaultValue) {
-		final ExtraData ed = getDataWithPath(path);
-		if (ed == null)
-			return defaultValue;
-		final T value = ed.getValueAs(clazz);
-		if (value == null)
-			return defaultValue;
-		return value;
 	}
 
 } // end of UnitCostLineImpl

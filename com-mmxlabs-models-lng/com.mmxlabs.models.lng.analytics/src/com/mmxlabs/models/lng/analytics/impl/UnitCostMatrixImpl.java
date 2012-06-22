@@ -55,6 +55,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getMaximumLoad <em>Maximum Load</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getMinimumDischarge <em>Minimum Discharge</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getMaximumDischarge <em>Maximum Discharge</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getRetainHeel <em>Retain Heel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCargoPrice <em>Cargo Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCvValue <em>Cv Value</em>}</li>
@@ -267,6 +268,26 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * @ordered
 	 */
 	protected int maximumDischarge = MAXIMUM_DISCHARGE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getRetainHeel() <em>Retain Heel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRetainHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int RETAIN_HEEL_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getRetainHeel() <em>Retain Heel</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRetainHeel()
+	 * @generated
+	 * @ordered
+	 */
+	protected int retainHeel = RETAIN_HEEL_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCargoPrice() <em>Cargo Price</em>}' attribute.
@@ -696,6 +717,27 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getRetainHeel() {
+		return retainHeel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRetainHeel(int newRetainHeel) {
+		int oldRetainHeel = retainHeel;
+		retainHeel = newRetainHeel;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_MATRIX__RETAIN_HEEL, oldRetainHeel, retainHeel));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public double getCargoPrice() {
 		return cargoPrice;
 	}
@@ -915,6 +957,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return getMinimumDischarge();
 			case AnalyticsPackage.UNIT_COST_MATRIX__MAXIMUM_DISCHARGE:
 				return getMaximumDischarge();
+			case AnalyticsPackage.UNIT_COST_MATRIX__RETAIN_HEEL:
+				return getRetainHeel();
 			case AnalyticsPackage.UNIT_COST_MATRIX__CARGO_PRICE:
 				return getCargoPrice();
 			case AnalyticsPackage.UNIT_COST_MATRIX__BASE_FUEL_PRICE:
@@ -978,6 +1022,9 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__MAXIMUM_DISCHARGE:
 				setMaximumDischarge((Integer)newValue);
+				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__RETAIN_HEEL:
+				setRetainHeel((Integer)newValue);
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__CARGO_PRICE:
 				setCargoPrice((Double)newValue);
@@ -1050,6 +1097,9 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__MAXIMUM_DISCHARGE:
 				setMaximumDischarge(MAXIMUM_DISCHARGE_EDEFAULT);
 				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__RETAIN_HEEL:
+				setRetainHeel(RETAIN_HEEL_EDEFAULT);
+				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__CARGO_PRICE:
 				setCargoPrice(CARGO_PRICE_EDEFAULT);
 				return;
@@ -1108,6 +1158,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return minimumDischarge != MINIMUM_DISCHARGE_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_MATRIX__MAXIMUM_DISCHARGE:
 				return maximumDischarge != MAXIMUM_DISCHARGE_EDEFAULT;
+			case AnalyticsPackage.UNIT_COST_MATRIX__RETAIN_HEEL:
+				return retainHeel != RETAIN_HEEL_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_MATRIX__CARGO_PRICE:
 				return cargoPrice != CARGO_PRICE_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_MATRIX__BASE_FUEL_PRICE:
@@ -1190,6 +1242,8 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		result.append(minimumDischarge);
 		result.append(", maximumDischarge: ");
 		result.append(maximumDischarge);
+		result.append(", retainHeel: ");
+		result.append(retainHeel);
 		result.append(", cargoPrice: ");
 		result.append(cargoPrice);
 		result.append(", baseFuelPrice: ");

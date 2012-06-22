@@ -448,7 +448,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					line.setPortCost(totalPortCost);
 
 					line.setVolumeLoaded((int) ((allocation.getDischargeVolume() + allocation.getFuelVolume()) / Calculator.ScaleFactor));
-					line.setVolumeDischarged((int) (allocation.getDischargeVolume() / Calculator.ScaleFactor));
+					line.setVolumeDischarged((int) (allocation.getDischargeVolume() / Calculator.ScaleFactor) - spec.getRetainHeel());
 
 					double cv = spec.isSetCvValue() ? spec.getCvValue() : line.getFrom().getCvValue();
 

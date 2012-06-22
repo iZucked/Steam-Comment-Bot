@@ -81,6 +81,7 @@ public class UnitCostMatrixItemProvider
 			addMaximumLoadPropertyDescriptor(object);
 			addMinimumDischargePropertyDescriptor(object);
 			addMaximumDischargePropertyDescriptor(object);
+			addRetainHeelPropertyDescriptor(object);
 			addCargoPricePropertyDescriptor(object);
 			addBaseFuelPricePropertyDescriptor(object);
 			addCvValuePropertyDescriptor(object);
@@ -335,6 +336,28 @@ public class UnitCostMatrixItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Retain Heel feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRetainHeelPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostMatrix_retainHeel_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_retainHeel_feature", "_UI_UnitCostMatrix_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__RETAIN_HEEL,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This adds a property descriptor for the Cargo Price feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -564,6 +587,7 @@ public class UnitCostMatrixItemProvider
 			case AnalyticsPackage.UNIT_COST_MATRIX__MAXIMUM_LOAD:
 			case AnalyticsPackage.UNIT_COST_MATRIX__MINIMUM_DISCHARGE:
 			case AnalyticsPackage.UNIT_COST_MATRIX__MAXIMUM_DISCHARGE:
+			case AnalyticsPackage.UNIT_COST_MATRIX__RETAIN_HEEL:
 			case AnalyticsPackage.UNIT_COST_MATRIX__CARGO_PRICE:
 			case AnalyticsPackage.UNIT_COST_MATRIX__BASE_FUEL_PRICE:
 			case AnalyticsPackage.UNIT_COST_MATRIX__CV_VALUE:
