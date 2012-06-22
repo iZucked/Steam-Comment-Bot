@@ -3,6 +3,13 @@
 
 <product name="ShipLiNGO" uid="com.mmxlabs.shiplingo.platform.app.product.id" id="com.mmxlabs.shiplingo.platform.app.product" application="com.mmxlabs.shiplingo.platform.app.application" version="1.0.0.qualifier" useFeatures="true" includeLaunchers="true">
 
+   <aboutInfo>
+      <image path="/com.mmxlabs.shiplingo.platform.app/aboutImage.gif"/>
+      <text>
+         ShipLingo
+      </text>
+   </aboutInfo>
+
    <configIni use="default">
    </configIni>
 
