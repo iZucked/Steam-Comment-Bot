@@ -9,7 +9,8 @@
       id="com.mmxlabs.shiplingo.platform.feature"
       label="Shiplingo Platform Feature"
       version="1.0.0.qualifier"
-      provider-name="Minimax Labs">
+      provider-name="Minimax Labs"
+      plugin="com.mmxlabs.shiplingo.platform.app">
 
    <description url="http://www.minimaxlabs.com/">
       MMX Labs Pugins for ShipLingo Demo
