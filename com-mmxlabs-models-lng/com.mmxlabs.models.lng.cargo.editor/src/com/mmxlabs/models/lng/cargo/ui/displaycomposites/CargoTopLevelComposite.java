@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Group;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
@@ -45,12 +46,12 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 	 */
 	protected IDisplayComposite bottomLevel = null;
 
-	public CargoTopLevelComposite(final Composite parent, final int style) {
-		super(parent, style);
+	public CargoTopLevelComposite(final Composite parent, final int style, final IScenarioEditingLocation location) {
+		super(parent, style, location);
 	}
 
 	@Override
-	public void display(final MMXRootObject root, final EObject object, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject object, final Collection<EObject> range) {
 
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
@@ -79,14 +80,14 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 		bottomLevel.setCommandHandler(commandHandler);
 		bottomLevel.setEditorWrapper(editorWrapper);
 
-		topLevel.display(root, object, range);
-		bottomLevel.display(root, object, range);
+		topLevel.display(location, root, object, range);
+		bottomLevel.display(location, root, object, range);
 
 		final Iterator<EReference> refs = childReferences.iterator();
 		final Iterator<IDisplayComposite> children = childComposites.iterator();
 
 		while (refs.hasNext()) {
-			children.next().display(root, (EObject) object.eGet(refs.next()), range);
+			children.next().display(location, root, (EObject) object.eGet(refs.next()), range);
 		}
 
 		// Overrides default layout factory so we get a single column rather than multiple columns and one row

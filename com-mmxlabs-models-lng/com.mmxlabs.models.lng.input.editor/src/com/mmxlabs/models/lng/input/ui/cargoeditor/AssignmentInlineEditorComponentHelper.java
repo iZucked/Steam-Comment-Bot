@@ -46,6 +46,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
@@ -109,7 +110,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		}
 
 		@Override
-		public void display(final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
+		public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 			label.setText("Assigned to");
 
 			if (inputObject != null) {

@@ -1,36 +1,42 @@
-package com.mmxlabs.models.lng.fleet.ui.inlineeditors;
+package com.mmxlabs.models.lng.commercial.ui.inlineeditors;
 
 import java.util.Collection;
 
-import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Label;
 
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.impl.DialogInlineEditor;
 
-public class RouteCostInlineEditor extends DialogInlineEditor {
+public class NotionalBallastParametersInlineEditor extends DialogInlineEditor {
 	private MMXRootObject rootObject;
 
-	public RouteCostInlineEditor(final EStructuralFeature feature) {
+	private IScenarioEditingLocation location;
+
+	public NotionalBallastParametersInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
 
 	@Override
 	public void display(final IScenarioEditingLocation location, MMXRootObject context, EObject input, Collection<EObject> range) {
 		this.rootObject = context;
+		this.location = location;
 		super.display(location, context, input, range);
 	}
 
 	@Override
 	protected Object displayDialog(final Object currentValue) {
-		final CanalCostsDialog ccd = new CanalCostsDialog(getShell());
-		if (ccd.open(new AdapterFactoryImpl(), commandHandler.getEditingDomain(), rootObject, input, (EReference) feature) == Window.OK) {
-			return ccd.getResult();
-		}
+
+		final DetailCompositeDialog dcd = new DetailCompositeDialog(getShell(), commandHandler);
+
+		dcd.setReturnDuplicates(false);
+
+		dcd.open(location, rootObject, input, CommercialPackage.eINSTANCE.getNetbackPurchaseContract_NotionalBallastParameters());
+
 		return null;
 	}
 

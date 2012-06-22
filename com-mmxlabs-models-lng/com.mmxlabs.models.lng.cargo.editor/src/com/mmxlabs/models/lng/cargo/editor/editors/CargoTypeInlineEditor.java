@@ -37,6 +37,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -60,6 +61,8 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 	protected boolean currentlySettingValue = false;
 
 	protected ICommandHandler commandHandler;
+	
+	protected IScenarioEditingLocation scenarioEditingLocation;
 
 	private final int style;
 
@@ -109,7 +112,7 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 	protected Label label;
 
 	@Override
-	public void display(final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		if (this.input != null) {
 			this.input.eAdapters().remove(this);
 		}

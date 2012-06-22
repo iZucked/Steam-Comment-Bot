@@ -22,6 +22,7 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
@@ -60,9 +61,9 @@ public class SlotComponentHelper extends BaseComponentHelper {
 		}
 		
 		@Override
-		public void display(MMXRootObject scenario, EObject object, Collection<EObject> range) {
+		public void display(final IScenarioEditingLocation location, MMXRootObject scenario, EObject object, Collection<EObject> range) {
 
-			super.display(scenario, object, range);
+			super.display(location, scenario, object, range);
 			
 			if (input instanceof LoadSlot) {
 				setEnabled(!((LoadSlot) input).isDESPurchase());

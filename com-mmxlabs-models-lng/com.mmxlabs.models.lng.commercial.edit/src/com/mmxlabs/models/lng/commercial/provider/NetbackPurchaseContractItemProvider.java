@@ -64,9 +64,32 @@ public class NetbackPurchaseContractItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addNotionalBallastParametersPropertyDescriptor(object);
 			addMarginPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Notional Ballast Parameters feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNotionalBallastParametersPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NetbackPurchaseContract_notionalBallastParameters_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_notionalBallastParameters_feature", "_UI_NetbackPurchaseContract_type"),
+				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS,
+				 false,
+				 false,
+				 false,
+				 null,
+				 null,
+				 null));
 	}
 
 	/**

@@ -14,6 +14,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -44,6 +45,7 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 	 */
 	public NotionalBallastParametersComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.NAMED_OBJECT));
 	}
 	
 	/**
@@ -66,9 +68,10 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_routesEditor(detailComposite, topClass);
 		add_speedEditor(detailComposite, topClass);
+		add_hireCostEditor(detailComposite, topClass);
 		add_nboRateEditor(detailComposite, topClass);
 		add_baseConsumptionEditor(detailComposite, topClass);
-		add_returnPortEditor(detailComposite, topClass);
+		add_vesselClassesEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the routes feature on NotionalBallastParameters
@@ -87,6 +90,15 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__SPEED));
 	}
 	/**
+	 * Create the editor for the hireCost feature on NotionalBallastParameters
+	 *
+	 * @generated
+	 */
+	protected void add_hireCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST));
+	}
+
+	/**
 	 * Create the editor for the nboRate feature on NotionalBallastParameters
 	 *
 	 * @generated
@@ -103,11 +115,11 @@ public class NotionalBallastParametersComponentHelper extends BaseComponentHelpe
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION));
 	}
 	/**
-	 * Create the editor for the returnPort feature on NotionalBallastParameters
+	 * Create the editor for the vesselClasses feature on NotionalBallastParameters
 	 *
 	 * @generated
 	 */
-	protected void add_returnPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT));
+	protected void add_vesselClassesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES));
 	}
 }

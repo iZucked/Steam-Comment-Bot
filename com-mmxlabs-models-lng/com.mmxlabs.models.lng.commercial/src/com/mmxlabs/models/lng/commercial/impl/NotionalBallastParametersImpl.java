@@ -7,25 +7,19 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.commercial.impl;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
-
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.Route;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.impl.EObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.types.AVesselClass;
+import com.mmxlabs.models.mmxcore.impl.NamedObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,15 +30,16 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getRoutes <em>Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getSpeed <em>Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getHireCost <em>Hire Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getNboRate <em>Nbo Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getBaseConsumption <em>Base Consumption</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getReturnPort <em>Return Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl#getVesselClasses <em>Vessel Classes</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class NotionalBallastParametersImpl extends EObjectImpl implements NotionalBallastParameters {
+public class NotionalBallastParametersImpl extends NamedObjectImpl implements NotionalBallastParameters {
 	/**
 	 * The cached value of the '{@link #getRoutes() <em>Routes</em>}' reference list.
 	 * <!-- begin-user-doc -->
@@ -83,6 +78,35 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 	 * @ordered
 	 */
 	protected boolean speedESet;
+
+	/**
+	 * The default value of the '{@link #getHireCost() <em>Hire Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HIRE_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHireCost() <em>Hire Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int hireCost = HIRE_COST_EDEFAULT;
+
+	/**
+	 * This is true if the Hire Cost attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean hireCostESet;
 
 	/**
 	 * The default value of the '{@link #getNboRate() <em>Nbo Rate</em>}' attribute.
@@ -143,23 +167,14 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 	protected boolean baseConsumptionESet;
 
 	/**
-	 * The cached value of the '{@link #getReturnPort() <em>Return Port</em>}' reference.
+	 * The cached value of the '{@link #getVesselClasses() <em>Vessel Classes</em>}' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getReturnPort()
+	 * @see #getVesselClasses()
 	 * @generated
 	 * @ordered
 	 */
-	protected Port returnPort;
-
-	/**
-	 * This is true if the Return Port reference has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean returnPortESet;
+	protected EList<AVesselClass> vesselClasses;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -236,6 +251,52 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 	 */
 	public boolean isSetSpeed() {
 		return speedESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHireCost() {
+		return hireCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHireCost(int newHireCost) {
+		int oldHireCost = hireCost;
+		hireCost = newHireCost;
+		boolean oldHireCostESet = hireCostESet;
+		hireCostESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST, oldHireCost, hireCost, !oldHireCostESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetHireCost() {
+		int oldHireCost = hireCost;
+		boolean oldHireCostESet = hireCostESet;
+		hireCost = HIRE_COST_EDEFAULT;
+		hireCostESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST, oldHireCost, HIRE_COST_EDEFAULT, oldHireCostESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetHireCost() {
+		return hireCostESet;
 	}
 
 	/**
@@ -335,62 +396,11 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port getReturnPort() {
-		if (returnPort != null && returnPort.eIsProxy()) {
-			InternalEObject oldReturnPort = (InternalEObject)returnPort;
-			returnPort = (Port)eResolveProxy(oldReturnPort);
-			if (returnPort != oldReturnPort) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT, oldReturnPort, returnPort));
-			}
+	public EList<AVesselClass> getVesselClasses() {
+		if (vesselClasses == null) {
+			vesselClasses = new EObjectResolvingEList<AVesselClass>(AVesselClass.class, this, CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES);
 		}
-		return returnPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Port basicGetReturnPort() {
-		return returnPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setReturnPort(Port newReturnPort) {
-		Port oldReturnPort = returnPort;
-		returnPort = newReturnPort;
-		boolean oldReturnPortESet = returnPortESet;
-		returnPortESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT, oldReturnPort, returnPort, !oldReturnPortESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetReturnPort() {
-		Port oldReturnPort = returnPort;
-		boolean oldReturnPortESet = returnPortESet;
-		returnPort = null;
-		returnPortESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT, oldReturnPort, null, oldReturnPortESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetReturnPort() {
-		return returnPortESet;
+		return vesselClasses;
 	}
 
 	/**
@@ -405,13 +415,14 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 				return getRoutes();
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__SPEED:
 				return getSpeed();
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST:
+				return getHireCost();
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__NBO_RATE:
 				return getNboRate();
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION:
 				return getBaseConsumption();
-			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT:
-				if (resolve) return getReturnPort();
-				return basicGetReturnPort();
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES:
+				return getVesselClasses();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -432,14 +443,18 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__SPEED:
 				setSpeed((Double)newValue);
 				return;
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST:
+				setHireCost((Integer)newValue);
+				return;
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__NBO_RATE:
 				setNboRate((Integer)newValue);
 				return;
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION:
 				setBaseConsumption((Integer)newValue);
 				return;
-			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT:
-				setReturnPort((Port)newValue);
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES:
+				getVesselClasses().clear();
+				getVesselClasses().addAll((Collection<? extends AVesselClass>)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -459,14 +474,17 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__SPEED:
 				unsetSpeed();
 				return;
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST:
+				unsetHireCost();
+				return;
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__NBO_RATE:
 				unsetNboRate();
 				return;
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION:
 				unsetBaseConsumption();
 				return;
-			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT:
-				unsetReturnPort();
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES:
+				getVesselClasses().clear();
 				return;
 		}
 		super.eUnset(featureID);
@@ -484,12 +502,14 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 				return routes != null && !routes.isEmpty();
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__SPEED:
 				return isSetSpeed();
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST:
+				return isSetHireCost();
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__NBO_RATE:
 				return isSetNboRate();
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION:
 				return isSetBaseConsumption();
-			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__RETURN_PORT:
-				return isSetReturnPort();
+			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES:
+				return vesselClasses != null && !vesselClasses.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -506,6 +526,8 @@ public class NotionalBallastParametersImpl extends EObjectImpl implements Notion
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (speed: ");
 		if (speedESet) result.append(speed); else result.append("<unset>");
+		result.append(", hireCost: ");
+		if (hireCostESet) result.append(hireCost); else result.append("<unset>");
 		result.append(", nboRate: ");
 		if (nboRateESet) result.append(nboRate); else result.append("<unset>");
 		result.append(", baseConsumption: ");

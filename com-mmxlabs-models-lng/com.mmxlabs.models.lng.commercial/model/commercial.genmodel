@@ -33,24 +33,27 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//IndexPriceContract/multiplier"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//NetbackPurchaseContract">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//NetbackPurchaseContract/notionalBallastParameters"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NetbackPurchaseContract/index"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NetbackPurchaseContract/constant"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NetbackPurchaseContract/multiplier"/>
+      <genFeatures property="Readonly" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//NetbackPurchaseContract/notionalBallastParameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NetbackPurchaseContract/margin"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//ProfitSharePurchaseContract">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ProfitSharePurchaseContract/baseMarket"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ProfitSharePurchaseContract/index"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/constant"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/multiplier"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ProfitSharePurchaseContract/baseMarketPorts"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ProfitSharePurchaseContract/baseMarketIndex"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/baseMarketConstant"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/baseMarketMultiplier"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ProfitSharePurchaseContract/refMarketIndex"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/refMarketConstant"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/refMarketMultiplier"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/share"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/margin"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//NotionalBallastParameters">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalBallastParameters/routes"/>
       <genFeatures createChild="false" propertyDescription="Notional speed" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalBallastParameters/speed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalBallastParameters/hireCost"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalBallastParameters/nboRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalBallastParameters/baseConsumption"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalBallastParameters/returnPort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalBallastParameters/vesselClasses"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
