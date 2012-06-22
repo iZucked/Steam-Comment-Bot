@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
+import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -29,7 +30,7 @@ public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoa
 
 	@Override
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePrice, final int loadVolume,
-			final IVessel vessel, final VoyagePlan plan) {
+			final IVessel vessel, final VoyagePlan plan, IDetailTree annotations) {
 		return calculateSimpleLoadUnitPrice(loadTime);
 	}
 

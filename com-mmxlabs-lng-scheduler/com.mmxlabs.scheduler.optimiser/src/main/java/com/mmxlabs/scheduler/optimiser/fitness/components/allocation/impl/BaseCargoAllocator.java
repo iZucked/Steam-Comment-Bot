@@ -237,7 +237,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		// if we load less, it might actually be worth less
 
 		final int loadCVPrice = loadSlot.getLoadPriceCalculator()
-				.calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume, vessel, plan);
+				.calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume, vessel, plan, null);
 
 		final int dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
 		final int loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
