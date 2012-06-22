@@ -9,6 +9,8 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
+import com.mmxlabs.models.lng.types.TypesFactory;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 import java.util.Collection;
@@ -312,6 +314,7 @@ public class CargoAllocationItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
+			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
 		}
 		return childrenFeatures;
 	}
@@ -369,6 +372,7 @@ public class CargoAllocationItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
+			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -390,6 +394,11 @@ public class CargoAllocationItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA,
 				 ScheduleFactory.eINSTANCE.createAdditionalData()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA,
+				 TypesFactory.eINSTANCE.createExtraData()));
 	}
 
 	/**

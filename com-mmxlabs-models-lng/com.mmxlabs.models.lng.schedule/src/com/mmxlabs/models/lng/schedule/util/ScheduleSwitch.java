@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.util;
 
 import com.mmxlabs.models.lng.schedule.*;
 
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -178,6 +179,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				T result = caseCargoAllocation(cargoAllocation);
 				if (result == null) result = caseMMXObject(cargoAllocation);
 				if (result == null) result = caseAdditionalDataHolder(cargoAllocation);
+				if (result == null) result = caseExtraDataContainer(cargoAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -572,6 +574,21 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseITimezoneProvider(ITimezoneProvider object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Extra Data Container</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseExtraDataContainer(ExtraDataContainer object) {
 		return null;
 	}
 

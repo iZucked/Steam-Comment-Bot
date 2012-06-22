@@ -1438,6 +1438,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		cargoAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cargoAllocationEClass.getESuperTypes().add(this.getAdditionalDataHolder());
+		cargoAllocationEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
 		slotAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		fitnessEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		portVisitEClass.getESuperTypes().add(this.getEvent());

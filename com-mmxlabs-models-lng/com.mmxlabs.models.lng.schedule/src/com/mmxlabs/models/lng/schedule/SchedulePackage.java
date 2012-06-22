@@ -2308,13 +2308,22 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__ADDITIONAL_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION__EXTRA_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LOAD_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int CARGO_ALLOCATION__LOAD_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
@@ -2323,7 +2332,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__DISCHARGE_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int CARGO_ALLOCATION__DISCHARGE_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Load Volume</b></em>' attribute.
@@ -2332,7 +2341,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LOAD_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int CARGO_ALLOCATION__LOAD_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Volume</b></em>' attribute.
@@ -2341,7 +2350,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__DISCHARGE_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_ALLOCATION__DISCHARGE_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
@@ -2350,7 +2359,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Laden Leg</b></em>' reference.
@@ -2359,7 +2368,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LADEN_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int CARGO_ALLOCATION__LADEN_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Leg</b></em>' reference.
@@ -2368,7 +2377,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__BALLAST_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int CARGO_ALLOCATION__BALLAST_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Laden Idle</b></em>' reference.
@@ -2377,7 +2386,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LADEN_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int CARGO_ALLOCATION__LADEN_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Idle</b></em>' reference.
@@ -2386,7 +2395,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__BALLAST_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int CARGO_ALLOCATION__BALLAST_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -2395,7 +2404,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
@@ -2404,7 +2413,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -2497,13 +2506,58 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
 
 	/**
+	 * The operation id for the '<em>Get Data With Path</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_DATA_WITH_PATH__ITERABLE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Get Data With Key</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_DATA_WITH_KEY__STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
+
+	/**
+	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
+
+	/**
+	 * The operation id for the '<em>Get Value With Path As</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_ALLOCATION___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
+
+	/**
 	 * The operation id for the '<em>Get Name</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
+	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Get Type</em>' operation.
@@ -2512,7 +2566,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
+	int CARGO_ALLOCATION___GET_TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 8;
 
 	/**
 	 * The number of operations of the '<em>Cargo Allocation</em>' class.
@@ -2521,7 +2575,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
+	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.

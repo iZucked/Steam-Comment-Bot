@@ -13,8 +13,14 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.cargo.Cargo;
 
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
+import com.mmxlabs.models.lng.types.TypesFactory;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
+import java.io.Serializable;
 import java.lang.Iterable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
@@ -37,6 +43,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getAdditionalData <em>Additional Data</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getExtraData <em>Extra Data</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLoadAllocation <em>Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getDischargeAllocation <em>Discharge Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLoadVolume <em>Load Volume</em>}</li>
@@ -62,6 +69,16 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * @ordered
 	 */
 	protected EList<AdditionalData> additionalData;
+
+	/**
+	 * The cached value of the '{@link #getExtraData() <em>Extra Data</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getExtraData()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ExtraData> extraData;
 
 	/**
 	 * The cached value of the '{@link #getLoadAllocation() <em>Load Allocation</em>}' reference.
@@ -631,6 +648,18 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<ExtraData> getExtraData() {
+		if (extraData == null) {
+			extraData = new EObjectContainmentEList<ExtraData>(ExtraData.class, this, SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA);
+		}
+		return extraData;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public String getName() {
@@ -652,6 +681,71 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		} 
 		return "Unknown";
 		
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExtraData getDataWithPath(Iterable<String> keys) {
+		java.util.Iterator<String> iterator = keys.iterator();
+				if (iterator.hasNext() == false) return null;
+				ExtraData edc = getDataWithKey(iterator.next());
+				while (edc != null && iterator.hasNext()) {
+					edc = edc.getDataWithKey(iterator.next());
+				}
+				return edc;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExtraData getDataWithKey(String key) {
+		for (final ExtraData e : getExtraData()) {
+			if (e.getKey().equals(key)) return e;
+		}
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExtraData addExtraData(String key, String name) {
+		final ExtraData result = TypesFactory.eINSTANCE.createExtraData();
+		result.setKey(key);
+		result.setName(name);
+		getExtraData().add(result);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExtraData addExtraData(String key, String name, Serializable value, ExtraDataFormatType format) {
+		final ExtraData result = addExtraData(key, name);
+		result.setValue(value);
+		result.setFormatType(format);
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz, T defaultValue) {
+		final ExtraData ed = getDataWithPath(path);
+		if (ed == null) return defaultValue;
+		final T value = ed.getValueAs(clazz);
+		if (value == null) return defaultValue;
+		return value;
 	}
 
 	/**
@@ -692,6 +786,8 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		switch (featureID) {
 			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
 				return ((InternalEList<?>)getAdditionalData()).basicRemove(otherEnd, msgs);
+			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
+				return ((InternalEList<?>)getExtraData()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -706,6 +802,8 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		switch (featureID) {
 			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
 				return getAdditionalData();
+			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
+				return getExtraData();
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
 				if (resolve) return getLoadAllocation();
 				return basicGetLoadAllocation();
@@ -750,6 +848,10 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
 				getAdditionalData().clear();
 				getAdditionalData().addAll((Collection<? extends AdditionalData>)newValue);
+				return;
+			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
+				getExtraData().clear();
+				getExtraData().addAll((Collection<? extends ExtraData>)newValue);
 				return;
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
 				setLoadAllocation((SlotAllocation)newValue);
@@ -796,6 +898,9 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
 				getAdditionalData().clear();
 				return;
+			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
+				getExtraData().clear();
+				return;
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
 				setLoadAllocation((SlotAllocation)null);
 				return;
@@ -840,6 +945,8 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		switch (featureID) {
 			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
 				return additionalData != null && !additionalData.isEmpty();
+			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
+				return extraData != null && !extraData.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
 				return loadAllocation != null;
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_ALLOCATION:
@@ -877,6 +984,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				default: return -1;
 			}
 		}
+		if (baseClass == ExtraDataContainer.class) {
+			switch (derivedFeatureID) {
+				case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA: return TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -890,6 +1003,12 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 		if (baseClass == AdditionalDataHolder.class) {
 			switch (baseFeatureID) {
 				case SchedulePackage.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA: return SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA;
+				default: return -1;
+			}
+		}
+		if (baseClass == ExtraDataContainer.class) {
+			switch (baseFeatureID) {
+				case TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA: return SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA;
 				default: return -1;
 			}
 		}
@@ -910,6 +1029,16 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				default: return -1;
 			}
 		}
+		if (baseClass == ExtraDataContainer.class) {
+			switch (baseOperationID) {
+				case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE: return SchedulePackage.CARGO_ALLOCATION___GET_DATA_WITH_PATH__ITERABLE;
+				case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING: return SchedulePackage.CARGO_ALLOCATION___GET_DATA_WITH_KEY__STRING;
+				case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING: return SchedulePackage.CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING;
+				case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE: return SchedulePackage.CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE;
+				case TypesPackage.EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT: return SchedulePackage.CARGO_ALLOCATION___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT;
+				default: return -1;
+			}
+		}
 		return super.eDerivedOperationID(baseOperationID, baseClass);
 	}
 
@@ -926,6 +1055,16 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return getName();
 			case SchedulePackage.CARGO_ALLOCATION___GET_TYPE:
 				return getType();
+			case SchedulePackage.CARGO_ALLOCATION___GET_DATA_WITH_PATH__ITERABLE:
+				return getDataWithPath((Iterable<String>)arguments.get(0));
+			case SchedulePackage.CARGO_ALLOCATION___GET_DATA_WITH_KEY__STRING:
+				return getDataWithKey((String)arguments.get(0));
+			case SchedulePackage.CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING:
+				return addExtraData((String)arguments.get(0), (String)arguments.get(1));
+			case SchedulePackage.CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE:
+				return addExtraData((String)arguments.get(0), (String)arguments.get(1), (Serializable)arguments.get(2), (ExtraDataFormatType)arguments.get(3));
+			case SchedulePackage.CARGO_ALLOCATION___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT:
+				return getValueWithPathAs((Iterable<String>)arguments.get(0), (Class)arguments.get(1), arguments.get(2));
 			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
 				return getAdditionalDataWithKey((String)arguments.get(0));
 			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE:

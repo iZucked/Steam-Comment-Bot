@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.lng.cargo.Cargo;
 
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import org.eclipse.emf.common.util.EList;
 
@@ -33,7 +34,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface CargoAllocation extends MMXObject, AdditionalDataHolder {
+public interface CargoAllocation extends MMXObject, AdditionalDataHolder, ExtraDataContainer {
 	/**
 	 * Returns the value of the '<em><b>Load Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->

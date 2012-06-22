@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.util;
 
 import com.mmxlabs.models.lng.schedule.*;
 
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
@@ -161,6 +162,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseITimezoneProvider(ITimezoneProvider object) {
 				return createITimezoneProviderAdapter();
+			}
+			@Override
+			public Adapter caseExtraDataContainer(ExtraDataContainer object) {
+				return createExtraDataContainerAdapter();
 			}
 			@Override
 			public Adapter caseNamedObject(NamedObject object) {
@@ -505,6 +510,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createITimezoneProviderAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ExtraDataContainer <em>Extra Data Container</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer
+	 * @generated
+	 */
+	public Adapter createExtraDataContainerAdapter() {
 		return null;
 	}
 
