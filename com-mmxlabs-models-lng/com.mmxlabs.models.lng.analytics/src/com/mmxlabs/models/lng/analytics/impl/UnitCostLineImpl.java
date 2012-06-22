@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.port.Port;
 
@@ -906,11 +907,27 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * @generated
 	 */
 	public ExtraData addExtraData(String key, String name, Serializable value,
-			String format) {
+			ExtraDataFormatType format) {
 		final ExtraData result = addExtraData(key, name);
 		result.setValue(value);
-		result.setFormat(format);
+		result.setFormatType(format);
 		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz,
+			T defaultValue) {
+		final ExtraData ed = getDataWithPath(path);
+		if (ed == null)
+			return defaultValue;
+		final T value = ed.getValueAs(clazz);
+		if (value == null)
+			return defaultValue;
+		return value;
 	}
 
 } // end of UnitCostLineImpl
