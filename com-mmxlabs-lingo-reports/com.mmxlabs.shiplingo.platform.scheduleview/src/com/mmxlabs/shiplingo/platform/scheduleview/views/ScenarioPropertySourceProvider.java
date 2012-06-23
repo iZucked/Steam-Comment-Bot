@@ -5,6 +5,7 @@
 package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EDataType;
@@ -23,6 +24,8 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
 
 /**
  * @author hinton
@@ -113,6 +116,120 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 			topName = "";
 		}
 
+		if (object instanceof ExtraDataContainer) {
+		final IPropertySource wrapper = new ExtraDataContainerPropertySource((ExtraDataContainer) object) {
+			@Override
+			public void setPropertyValue(final Object id, final Object value) {
+				if (id instanceof Pair) {
+				final Pair<IPropertySource, Object> pair = (Pair) id;
+				pair.getFirst().setPropertyValue(pair.getSecond(), value);
+				} else {
+					super.setPropertyValue(id, value);
+				}
+			}
+
+			@Override
+			public void resetPropertyValue(final Object id) {
+				if (id instanceof Pair) {
+				final Pair<IPropertySource, Object> pair = (Pair) id;
+				pair.getFirst().resetPropertyValue(pair.getSecond());
+				} else {
+					super.resetPropertyValue(id);
+				}
+			}
+
+			@Override
+			public boolean isPropertySet(final Object id) {
+				if (id instanceof Pair) {
+				final Pair<IPropertySource, Object> pair = (Pair) id;
+				return pair.getFirst().isPropertySet(pair.getSecond());
+				} else {
+					return super.isPropertySet(id);
+				}
+			}
+
+			@Override
+			public Object getPropertyValue(final Object id) {
+				if (id instanceof Pair) {
+				final Pair<IPropertySource, Object> pair = (Pair) id;
+				return pair.getFirst().getPropertyValue(pair.getSecond());
+				} else {
+					return super.getPropertyValue(id);
+				}
+			}
+			
+			@Override
+			protected void createExtraDescriptors(
+					List<IPropertyDescriptor> subDescriptors) {
+				for (final Pair<EReference, IPropertySource> refAndSource : subSources) {
+					final IPropertySource subSource = refAndSource.getSecond();
+					if (subSource == null) {
+						continue;
+					}
+					final String prefixName = refAndSource.getFirst() == null ? topName : refAndSource.getFirst().getName();
+
+					final IPropertyDescriptor[] subDescriptorList = subSource.getPropertyDescriptors();
+
+					for (final IPropertyDescriptor descriptor : subDescriptorList) {
+						final IPropertyDescriptor wrappedDescriptor = new IPropertyDescriptor() {
+							final Pair<Object, Object> id = new Pair<Object, Object>(subSource, descriptor.getId());
+
+							@Override
+							public CellEditor createPropertyEditor(final Composite parent) {
+								return descriptor.createPropertyEditor(parent);
+							}
+
+							@Override
+							public String getCategory() {
+								return prefixName;
+							}
+
+							@Override
+							public String getDescription() {
+								return descriptor.getDescription();
+							}
+
+							@Override
+							public String getDisplayName() {
+								return descriptor.getDisplayName();
+							}
+
+							@Override
+							public String[] getFilterFlags() {
+								return descriptor.getFilterFlags();
+							}
+
+							@Override
+							public Object getHelpContextIds() {
+								return descriptor.getHelpContextIds();
+							}
+
+							@Override
+							public Object getId() {
+								return id;
+							}
+
+							@Override
+							public ILabelProvider getLabelProvider() {
+								return descriptor.getLabelProvider();
+							}
+
+							@Override
+							public boolean isCompatibleWith(final IPropertyDescriptor anotherProperty) {
+								return descriptor.isCompatibleWith(anotherProperty);
+							}
+
+						};
+
+						// idToSourceMap.put(wrappedDescriptor.getId(),
+						// subSource);
+						subDescriptors.add(wrappedDescriptor);
+					}
+				}
+			}
+		};
+		return wrapper;
+		} else {
 		final IPropertySource wrapper = new IPropertySource() {
 			IPropertyDescriptor[] descriptors = null;
 
@@ -147,6 +264,15 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 				return pair.getFirst().getPropertyValue(pair.getSecond());
 			}
 
+			@Override
+			public Object getEditableValue() {
+				// System.err.println("Uh oh");
+				// TODO what is this?
+				return defaultSource.getEditableValue();
+				// return null;// idToSourceMap.get(id).getEditableValue(id,
+				// value);
+			}
+			
 			@Override
 			public IPropertyDescriptor[] getPropertyDescriptors() {
 				if (descriptors == null) {
@@ -223,17 +349,11 @@ public class ScenarioPropertySourceProvider implements IPropertySourceProvider {
 				return descriptors;
 			}
 
-			@Override
-			public Object getEditableValue() {
-				// System.err.println("Uh oh");
-				// TODO what is this?
-				return defaultSource.getEditableValue();
-				// return null;// idToSourceMap.get(id).getEditableValue(id,
-				// value);
-			}
+			
 		};
 
 		return wrapper;
+		}
 	}
 
 }

@@ -5,3 +5,4 @@ Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.doc;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Minimax Labs
 Require-Bundle: org.eclipse.help;bundle-version="3.5.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6

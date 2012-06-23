@@ -9,7 +9,8 @@
       id="com.mmxlabs.shiplingo.platform.feature"
       label="Shiplingo Platform Feature"
       version="1.0.0.qualifier"
-      provider-name="Minimax Labs">
+      provider-name="Minimax Labs"
+      plugin="com.mmxlabs.shiplingo.platform.app">
 
    <description url="http://www.minimaxlabs.com/">
       MMX Labs Pugins for ShipLingo Demo
@@ -41,10 +42,18 @@ All rights reserved.
          arch="x86_64"/>
 
    <requires>
-      <import feature="com.mmxlabs.models.lng.types.feature" version="1.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.models.lng.types.feature" version="2.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="1.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.ui.runtime.feature" version="1.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="1.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.jobmanager.feature" version="1.0.0"/>
+      <import feature="com.mmxlabs.models.lng.feature" version="1.0.0"/>
+      <import feature="com.mmxlabs.models.lng.transformer.feature" version="1.0.0"/>
+      <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="1.0.0"/>
+      <import feature="com.mmxlabs.models.ui.runtime.feature" version="1.0.0"/>
+      <import feature="com.mmxlabs.rcp.common.feature" version="1.0.0"/>
+      <import feature="com.mmxlabs.scenario.service.feature" version="1.0.0"/>
+      <import feature="com.mmxlabs.trading.optimiser.feature" version="1.0.0"/>
    </requires>
 
    <plugin
@@ -56,27 +65,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.shiplingo.platform.reports"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.ganttviewer"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.jobmanager"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.jobmanager.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -97,13 +85,6 @@ All rights reserved.
          unpack="false"/>
 
    <plugin
-         id="com.mmxlabs.rcp.common"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart"
          download-size="0"
          install-size="0"
@@ -112,13 +93,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.shiplingo.platform.doc"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.jobmanager.eclipse"
          download-size="0"
          install-size="0"
          version="0.0.0"

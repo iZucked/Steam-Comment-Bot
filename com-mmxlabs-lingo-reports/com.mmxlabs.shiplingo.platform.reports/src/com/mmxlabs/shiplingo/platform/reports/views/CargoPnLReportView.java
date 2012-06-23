@@ -18,10 +18,10 @@ import org.eclipse.swt.widgets.Display;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.schedule.AdditionalData;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
@@ -162,14 +162,12 @@ public class CargoPnLReportView extends EMFReportView {
 			public Integer getIntValue(final Object object) {
 				if (object instanceof CargoAllocation) {
 					// display P&L
-					int value = 0;
+					Integer value = 0;
 
 					final CargoAllocation allocation = (CargoAllocation) object;
 					// TODO: make key well known
-					final AdditionalData data = allocation.getAdditionalDataWithPath(CollectionsUtil.makeArrayList(entityName, "pnl"));
-					if (data != null) {
-						value = data.getIntegerValue();
-					}
+					
+					value = allocation.getValueWithPathAs(CollectionsUtil.makeArrayList(entityName, "pnl"), Integer.class, null);
 					// if ((allocation.getLoadRevenue() != null) && entity.equals(allocation.getLoadRevenue().getEntity())) {
 					// value += allocation.getLoadRevenue().getValue();
 					// }

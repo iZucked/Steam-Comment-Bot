@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -77,40 +75,6 @@ public class BasicCargoReportView extends EMFReportView {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				superProvider.inputChanged(viewer, oldInput, newInput);
-//				Display.getCurrent().asyncExec(new Runnable() {
-//					@Override
-//					public void run() {
-//						if (viewer.getControl().isDisposed()) {
-//							return;
-//						}
-////						final Set<MMXRootObject> scenarios = new HashSet<MMXRootObject>();
-////						if (newInput instanceof Iterable) {
-////							for (final Object element : ((Iterable<?>) newInput)) {
-////								if (element instanceof Schedule) {
-////									// find all referenced entities
-//////									for (final String s : entityColumnNames) {
-//////										removeColumn(s);
-//////									}
-//////									entityColumnNames.clear();
-////////
-//////									EObject o = (EObject) element;
-//////									while ((o != null) && !(o instanceof Scenario)) {
-//////										o = o.eContainer();
-//////									}
-//////
-//////									if (o != null) {
-//////										scenarios.add((Scenario) o);
-//////									}
-////								}
-////							}
-////
-////						}
-////						for (final Scenario scenario : scenarios) {
-////							addEntityColumns(scenario);
-////						}
-//						viewer.refresh();
-//					}
-//				});
 			}
 
 			@Override
@@ -150,44 +114,4 @@ public class BasicCargoReportView extends EMFReportView {
 			}
 		};
 	}
-
-	private final List<String> entityColumnNames = new ArrayList<String>();
-//
-//	protected void addEntityColumns(final Scenario o) {
-//		for (final LegalEntity e : o.getContractModel().getEntities()) {
-//			addEntityColumn(e);
-//		}
-//		addEntityColumn(o.getContractModel().getShippingEntity());
-//	}
-//
-//	private void addEntityColumn(final LegalEntity entity) {
-////		if (!(entity instanceof GroupEntity)) {
-////			return;
-////		}
-//		final String title = "Profit to " + entity.getName();
-//		entityColumnNames.add(title);
-//		addColumn(title, new IntegerFormatter() {
-//			@Override
-//			public Integer getIntValue(final Object object) {
-//				if (object instanceof CargoAllocation) {
-//					// display P&L
-//					int value = 0;
-//					final CargoAllocation allocation = (CargoAllocation) object;
-//					if ((allocation.getLoadRevenue() != null) && entity.equals(allocation.getLoadRevenue().getEntity())) {
-//						value += allocation.getLoadRevenue().getValue();
-//					}
-//					if ((allocation.getShippingRevenue() != null) && entity.equals(allocation.getShippingRevenue().getEntity())) {
-//						value += allocation.getShippingRevenue().getValue();
-//					}
-//					if ((allocation.getDischargeRevenue() != null) && entity.equals(allocation.getDischargeRevenue().getEntity())) {
-//						value += allocation.getDischargeRevenue().getValue();
-//					}
-//					return value;
-//				}
-//
-//				return null;
-//			}
-//		});
-//	}
-
 }

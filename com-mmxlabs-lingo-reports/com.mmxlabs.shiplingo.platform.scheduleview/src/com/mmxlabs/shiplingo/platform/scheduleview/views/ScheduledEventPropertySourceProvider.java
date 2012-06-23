@@ -6,6 +6,7 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -18,16 +19,17 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
-import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.schedule.AdditionalData;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
-import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
@@ -78,6 +80,7 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 	private class EventPropertySource implements IPropertySource {
 		private final Event event;
 		private IPropertyDescriptor[] descriptors = null;
+		private ExtraDataContainerPropertySource delegateSource;
 
 		public EventPropertySource(final Event event) {
 			this.event = event;
@@ -215,7 +218,14 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 					list.add(descriptor);
 				}
 			}
-
+			
+			if (event instanceof SlotVisit) {
+				final CargoAllocation allocation =  (((SlotVisit) event).getSlotAllocation().getCargoAllocation());
+				final ExtraDataContainerPropertySource delegateSource = new ExtraDataContainerPropertySource(allocation);
+				this.delegateSource = delegateSource;
+				list.addAll(Arrays.asList(delegateSource.getPropertyDescriptors()));
+			}
+			
 			descriptors = list.toArray(new IPropertyDescriptor[0]);
 
 			return descriptors;
@@ -233,7 +243,7 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 				}
 				return null;
 			} else {// properties for fuelmix
-				return null;
+				return delegateSource.getPropertyValue(id);
 			}
 		}
 
@@ -259,6 +269,8 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 		if (object instanceof Event) {
 			final Event event = (Event) object;
 			return new EventPropertySource(event);
+		} else if (object instanceof IPropertySource) {
+			return (IPropertySource) object;
 		}
 		return null;
 	}
