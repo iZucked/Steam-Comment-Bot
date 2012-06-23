@@ -4,14 +4,23 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.*;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Alert_Crimson;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Faded_Alpha;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Gas_Blue;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Green;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Light_Gas_Blue;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Light_Green;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Locked_White;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Slot_White;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.VesselEvent_Purple;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLate;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 
 import java.util.Collection;
 
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
-import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -25,25 +34,12 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourScheme;
 
-public class VesselStateColourScheme implements IScheduleViewColourScheme {
+public class VesselStateColourScheme extends ColourScheme {
 	
-	private GanttChartViewer viewer;
-
 	@Override
 	public String getName() {
 		return "Vessel State";
-	}
-
-	@Override
-	public GanttChartViewer getViewer() {
-		return viewer;
-	}
-
-	@Override
-	public void setViewer(final GanttChartViewer viewer) {
-		this.viewer = viewer;
 	}
 
 	@Override
@@ -55,10 +51,7 @@ public class VesselStateColourScheme implements IScheduleViewColourScheme {
 	public Color getBackground(final Object element) {
 		if (element instanceof Journey) {
 			final Journey journey = (Journey) element;
-			if (isRiskyVoyage(journey, findIdleForJourney(journey))) {
-				return ColorCache.getColor(Warning_Yellow);
-			} else
-				if (journey.isLaden()) {
+			if (journey.isLaden()) {
 				return ColorCache.getColor(Green);
 			} else {
 				return ColorCache.getColor(Gas_Blue);

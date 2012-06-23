@@ -3,14 +3,10 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
-import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourScheme;
 
-public class AlternatingCargoColourScheme implements IScheduleViewColourScheme {
-
-	private GanttChartViewer viewer;
+public class AlternatingCargoColourScheme extends ColourScheme {
 
 	private final Color baseColor;
 	private final Color secondaryColor;
@@ -33,21 +29,6 @@ public class AlternatingCargoColourScheme implements IScheduleViewColourScheme {
 	}
 
 	@Override
-	public GanttChartViewer getViewer() {
-		return viewer;
-	}
-
-	@Override
-	public void setViewer(final GanttChartViewer viewer) {
-		this.viewer = viewer;
-	}
-
-	@Override
-	public Color getForeground(final Object element) {
-		return null;
-	}
-
-	@Override
 	public Color getBackground(final Object element) {
 		if (element instanceof SlotVisit && ((SlotVisit) element).getSlotAllocation().getSlot() instanceof LoadSlot) {
 			// flip colour
@@ -58,20 +39,5 @@ public class AlternatingCargoColourScheme implements IScheduleViewColourScheme {
 			}
 		}
 		return selectedColor;
-	}
-
-	@Override
-	public int getAlpha(final Object element) {
-		return 255;
-	}
-
-	@Override
-	public Color getBorderColour(final Object element) {
-		return null;
-	}
-
-	@Override
-	public int getBorderWidth(final Object element) {
-		return 1;
 	}
 }

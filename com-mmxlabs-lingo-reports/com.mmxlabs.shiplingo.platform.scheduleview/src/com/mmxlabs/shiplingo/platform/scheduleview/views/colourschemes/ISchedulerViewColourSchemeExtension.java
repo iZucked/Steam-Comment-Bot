@@ -21,4 +21,7 @@ public interface ISchedulerViewColourSchemeExtension {
 	 */
 	@MapName("class")
 	IScheduleViewColourScheme createInstance();
+	
+	@MapName("isHighlighter")
+	String isHighlighter();
 }

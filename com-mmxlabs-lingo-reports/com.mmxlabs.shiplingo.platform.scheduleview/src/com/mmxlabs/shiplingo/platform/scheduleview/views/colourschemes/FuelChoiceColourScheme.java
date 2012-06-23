@@ -12,9 +12,8 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.shiplingo.platform.scheduleview.views.IScheduleViewColourScheme;
 
-public class FuelChoiceColourScheme implements IScheduleViewColourScheme {
+public class FuelChoiceColourScheme extends ColourScheme {
 
 	private GanttChartViewer viewer;
 

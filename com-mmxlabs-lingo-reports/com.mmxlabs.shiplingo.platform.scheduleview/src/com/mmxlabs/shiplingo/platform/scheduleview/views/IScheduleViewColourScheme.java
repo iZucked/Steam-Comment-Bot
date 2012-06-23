@@ -25,6 +25,20 @@ public interface IScheduleViewColourScheme {
 	 */
 	String getName();
 
+	/**
+	 * Returns the ID of this colour scheme
+	 * 
+	 * @return
+	 */
+	String getID();
+
+	/**
+	 * Sets the ID of this colour scheme
+	 * 
+	 * @return
+	 */
+	String setID(String id);
+
 	GanttChartViewer getViewer();
 
 	void setViewer(GanttChartViewer viewer);

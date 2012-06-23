@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerViewConstants.Highlight_;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerViewConstants.Show_Canals;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,7 +18,6 @@ import javax.inject.Inject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -32,12 +35,14 @@ import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IMemento;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
@@ -60,10 +65,10 @@ import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ISchedule
 
 public class SchedulerView extends ViewPart implements ISelectionListener {
 
-	private static final String SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME = "SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME";
-
 	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
-
+	
+//	public static final String = "";
+	
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -73,7 +78,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	private Action zoomInAction;
 	private Action zoomOutAction;
 
-	private Action toggleColourSchemeAction;
+	private Action colourSchemeAction;
 
 	// private ISelectionListener selectionListener;
 
@@ -87,8 +92,14 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	private ScenarioViewerSynchronizer jobManagerListener;
 
+	private IMemento memento;
+	private IMemento highlightMemento;
+	
 	@Inject
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemes;
+
+	private HighlightAction highlightAction;
+
 
 	/**
 	 * The constructor.
@@ -96,6 +107,37 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	public SchedulerView() {
 	}
 
+	@Override
+	public void init(IViewSite site, IMemento memento) throws PartInitException {
+		this.memento = memento;
+		
+		// check that it's the right memento - and non-null?...
+		
+		// set defaults from preference store for missing settings...
+//		for (String key : memento.getAttributeKeys()) { // need list from Constants and then the right getString/Boolean call below...
+//			if(memento.getString(key) == null){
+//				memento.putString(key, Activator.getDefault().getPreferenceStore().getString(key));
+//			}					
+//		}
+		if(memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null){
+			memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
+		}		
+		if(memento.getString(Show_Canals) == null){
+			memento.putBoolean(Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
+		}	
+		if(memento.getChild(Highlight_) == null){
+			memento.createChild(Highlight_);
+		}	
+		highlightMemento = memento.getChild(Highlight_);
+		super.init(site, memento);		
+	}
+
+	@Override
+	public void saveState(IMemento memento) {
+		super.saveState(memento);
+		memento.putMemento(this.memento);
+	}
+	
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize it.
 	 */
@@ -107,103 +149,31 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		// Gantt Chart settings object
 		final ISettings settings = new AbstractSettings() {
-			@Override
-			public boolean enableResizing() {
-				return false;
-			}
-
-			@Override
-			public Color getDefaultEventColor() {
-				return ColorCache.getColor(221, 220, 221);
-			}
-
-			@Override
-			public boolean showPlannedDates() {
-				return false;
-			}
-
-			@Override
-			public String getTextDisplayFormat() {
-				return "#name#";
-			}
-
-			@Override
-			public int getSectionTextSpacer() {
-				return 0;
-			}
-
-			@Override
-			public int getMinimumSectionHeight() {
-				return 5;
-			}
-
-			@Override
-			public int getNumberOfDaysToAppendForEndOfDay() {
-				return 0;
-			}
-
-			@Override
-			public boolean allowBlankAreaVerticalDragAndDropToMoveChart() {
+			@Override public boolean enableResizing() { return false; }
+			@Override public Color getDefaultEventColor() { return ColorCache.getColor(221, 220, 221); }
+			@Override public boolean showPlannedDates() { return false; }
+			@Override public String getTextDisplayFormat() { return "#name#";}
+			@Override public int getSectionTextSpacer() { return 0; }
+			@Override public int getMinimumSectionHeight() { return 5; }
+			@Override public int getNumberOfDaysToAppendForEndOfDay() { return 0; }
+			@Override public boolean allowBlankAreaVerticalDragAndDropToMoveChart() { return true; }
+			@Override public boolean lockHeaderOnVerticalScroll() { return true; }
+			@Override public boolean drawFillsToBottomWhenUsingGanttSections() { return true; }
+			@Override public int getSectionBarDividerHeight() { return 0; }
+			@Override public boolean showGradientEventBars() { return false; }
+			@Override public boolean drawSectionsWithGradients() { return false; }
+			@Override public boolean allowArrowKeysToScrollChart() {
 				return true;
 			}
-
-			@Override
-			public boolean lockHeaderOnVerticalScroll() {
-				return true;
-			}
-
-			@Override
-			public boolean drawFillsToBottomWhenUsingGanttSections() {
-				return true;
-			}
-
-			@Override
-			public int getSectionBarDividerHeight() {
-				return 0;
-			}
-
-			@Override
-			public boolean showGradientEventBars() {
+			@Override public boolean showBarsIn3D() {
 				return false;
 			}
-
-			@Override
-			public boolean drawSectionsWithGradients() {
-				return false;
+			public int getEventsTopSpacer() { return 5; }
+			public int getEventsBottomSpacer() { return 5;
 			}
-
-			@Override
-			public boolean allowArrowKeysToScrollChart() {
-				return true;
-			}
-
-			@Override
-			public boolean showBarsIn3D() {
-				return false;
-			}
-
-			public int getEventsTopSpacer() {
-				return 5;
-			}
-
-			public int getEventsBottomSpacer() {
-				return 5;
-			}
-
-			@Override
-			public boolean showDeleteMenuOption() {
-				return false;
-			}
-
-			@Override
-			public boolean showMenuItemsOnRightClick() {
-				return false;
-			}
-			
-			@Override
-			public int getSelectionLineWidth() {
-				return 3;
-			}
+			@Override public boolean showDeleteMenuOption() { return false; }
+			@Override public boolean showMenuItemsOnRightClick() { return false; }
+			@Override public int getSelectionLineWidth() { return 3; }
 		};
 
 		final IColorManager colourManager = new DefaultColorManager() {
@@ -241,10 +211,17 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider();
 		viewer.setContentProvider(contentProvider);
-		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer);
+		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento);
 
 		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemes) {
-			labelProvider.addColourScheme(ext.getID(), ext.createInstance());
+			IScheduleViewColourScheme cs = ext.createInstance();
+			String ID = ext.getID();
+			cs.setID(ID);
+			if(ext.isHighlighter().equalsIgnoreCase("true")){
+				labelProvider.addHighlighter(ID, cs);
+			} else {
+				labelProvider.addColourScheme(ID, cs);
+			}
 		}
 
 		viewer.setLabelProvider(labelProvider);
@@ -312,9 +289,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// .getSelection("com.mmxlabs.rcp.navigator");
 		// selectionListener.selectionChanged(null, selection);
 
-		final String defaultColourScheme = Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_DEFAULT_COLOUR_SCHEME);
-		if (defaultColourScheme != null) {
-			labelProvider.setScheme(defaultColourScheme);
+		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
+		if (colourScheme != null) {
+			labelProvider.setScheme(colourScheme);
 		}
 	}
 
@@ -366,8 +343,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(zoomInAction);
 		manager.add(zoomOutAction);
-		if (toggleColourSchemeAction != null) {
-			manager.add(toggleColourSchemeAction);
+		manager.add(highlightAction);
+		if (colourSchemeAction != null) {
+			manager.add(colourSchemeAction);
 		}
 		manager.add(sortModeAction);
 		manager.add(packAction);
@@ -378,13 +356,15 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
-
+		
+		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
+		
 		if (!Activator.getDefault().getPreferenceStore().getBoolean(SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION)) {
 
-			toggleColourSchemeAction = new ToggleColourSchemeAction((EMFScheduleLabelProvider) (viewer.getLabelProvider()));
+			colourSchemeAction = new ColourSchemeAction(this, (EMFScheduleLabelProvider) (viewer.getLabelProvider()), viewer);
 		}
 
-		sortModeAction = new SortModeAction(viewerComparator);
+		sortModeAction = new SortModeAction(this, viewer, (EMFScheduleLabelProvider) viewer.getLabelProvider(), viewerComparator);
 
 		packAction = new PackAction(viewer.getGanttChart());
 
@@ -469,110 +449,40 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		return propertySheetPage;
 	}
+//
+//	public class HighlightAction extends SchedulerViewAction {
+//
+//		public HighlightAction(SchedulerView schedulerView, GanttChartViewer viewer, EMFScheduleLabelProvider emfScheduleLabelProvider) {
+//			super("Highlight", IAction.AS_RADIO_BUTTON, schedulerView, viewer, emfScheduleLabelProvider);
+//			setImageDescriptor(Activator.getImageDescriptor("/icons/highlight.gif"));			
+//		}
+//
+//		@Override
+//		protected void createMenuItems(Menu menu) {
+//			
+//			final Action highlightTightJourneysAction = new Action("Tight Journeys", IAction.AS_CHECK_BOX) {
+//				@Override
+//				public void run() {
+//					lp.toggleHighlightTightJourneys();
+//					setChecked(lp.showCanals());
+//					viewer.setInput(viewer.getInput());
+//					schedulerView.redraw();
+//				}
+//			};			
+//			highlightTightJourneysAction.setChecked(lp.setHighlighter());
+//			final ActionContributionItem aci = new ActionContributionItem(highlightTightJourneysAction);
+//			aci.fill(menu, -1);
+//		}
+//	}
 
-	class ToggleColourSchemeAction extends Action implements IMenuCreator {
 
-		private final EMFScheduleLabelProvider lp;
-		private Menu lastMenu = null;
-
-		public ToggleColourSchemeAction(final EMFScheduleLabelProvider lp) {
-			super("Colour Scheme", IAction.AS_DROP_DOWN_MENU);
-			this.lp = lp;
-
-			setImageDescriptor(Activator.getImageDescriptor("/icons/colour_scheme.gif"));
-		}
-
-		@Override
-		public void run() {
-
-			final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
-			final IScheduleViewColourScheme currentScheme = lp.getCurrentScheme();
-			int nextIdx = -1;
-			if (currentScheme != null) {
-				nextIdx = colourSchemes.indexOf(currentScheme);
-				nextIdx = (nextIdx + 1) % colourSchemes.size();
-			}
-			if (nextIdx != -1) {
-				lp.setScheme(colourSchemes.get(nextIdx));
-			}
-
-			viewer.setInput(viewer.getInput());
-
-			redraw();
-		};
-
-		@Override
-		public IMenuCreator getMenuCreator() {
-			return this;
-		}
-
-		@Override
-		public Menu getMenu(final Menu parent) {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-
-			createMenuItems(lastMenu);
-
-			return lastMenu;
-		}
-
-		@Override
-		public Menu getMenu(final Control parent) {
-
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-			createMenuItems(lastMenu);
-			return lastMenu;
-		}
-
-		private void createMenuItems(final Menu menu) {
-
-			final List<IScheduleViewColourScheme> colourSchemes = lp.getColourSchemes();
-
-			for (final IScheduleViewColourScheme scheme : colourSchemes) {
-
-				final Action a = new Action(scheme.getName(), IAction.AS_RADIO_BUTTON) {
-					@Override
-					public void run() {
-						lp.setScheme(scheme);
-						viewer.setInput(viewer.getInput());
-						redraw();
-					}
-				};
-
-				// a.setActionDefinitionId(mode.toString());
-				final ActionContributionItem actionContributionItem = new ActionContributionItem(a);
-				actionContributionItem.fill(menu, -1);
-
-				// Set initially checked item.
-				if (lp.getCurrentScheme() == scheme) {
-					a.setChecked(true);
-				}
-			}
-		}
-
-		@Override
-		public void dispose() {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-				lastMenu = null;
-			}
-		}
-	};
-
-	class SortModeAction extends Action implements IMenuCreator {
+	class SortModeAction extends SchedulerViewAction {
 
 		private final ScenarioViewerComparator comparator;
-		private Menu lastMenu = null;
 
-		public SortModeAction(final ScenarioViewerComparator comparator) {
-			super("Sort", IAction.AS_DROP_DOWN_MENU);
+		public SortModeAction(SchedulerView schedulerView, GanttChartViewer viewer, EMFScheduleLabelProvider lp, final ScenarioViewerComparator comparator) {
+			super("Sort", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
 			this.comparator = comparator;
-
 			setImageDescriptor(Activator.getImageDescriptor("/icons/alphab_sort_co.gif"));
 		}
 
@@ -588,35 +498,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			viewer.setInput(viewer.getInput());
 		};
 
-		@Override
-		public IMenuCreator getMenuCreator() {
-			return this;
-		}
-
-		@Override
-		public Menu getMenu(final Menu parent) {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-
-			createMenuItems(lastMenu);
-
-			return lastMenu;
-		}
-
-		@Override
-		public Menu getMenu(final Control parent) {
-
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-			createMenuItems(lastMenu);
-			return lastMenu;
-		}
-
-		private void createMenuItems(final Menu menu) {
+		protected void createMenuItems(final Menu menu) {
 
 			for (final ScenarioViewerComparator.Mode mode : ScenarioViewerComparator.Mode.values()) {
 
@@ -636,14 +518,6 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				if (comparator.getMode() == mode) {
 					a.setChecked(true);
 				}
-			}
-		}
-
-		@Override
-		public void dispose() {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-				lastMenu = null;
 			}
 		}
 	}

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerViewConstants.*;
+
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,11 +19,13 @@ import java.util.TimeZone;
 import org.eclipse.jface.viewers.BaseLabelProvider;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.IMemento;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.IGanttChartColourProvider;
 import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.Port;
@@ -44,18 +48,28 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGanttChartToolTipProvider, IGanttChartColourProvider {
 
 	private final Map<String, IScheduleViewColourScheme> colourSchemesById = new HashMap<String, IScheduleViewColourScheme>();
-
 	private final List<IScheduleViewColourScheme> colourSchemes = new ArrayList<IScheduleViewColourScheme>();
+
+	private List<IScheduleViewColourScheme> highlighters = new ArrayList<IScheduleViewColourScheme>();
+	private Map<String, IScheduleViewColourScheme> highlightersById = new HashMap<String, IScheduleViewColourScheme>();
 
 	private IScheduleViewColourScheme currentScheme = null;
 
+	private List<IScheduleViewColourScheme> currentHighlighters = new ArrayList<IScheduleViewColourScheme>();
+
 	private final GanttChartViewer viewer;
+	
+	private final IMemento memento;
 
 	final DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 	final DateFormat tf = DateFormat.getTimeInstance(DateFormat.SHORT);
 
-	public EMFScheduleLabelProvider(final GanttChartViewer viewer) {
+	private boolean showCanals = false;
+
+	
+	public EMFScheduleLabelProvider(final GanttChartViewer viewer, IMemento memento) {
 		this.viewer = viewer;
+		this.memento = memento;
 	}
 
 	@Override
@@ -65,10 +79,11 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	@Override
 	public String getText(final Object element) {
+		String text = null;
 		if (element instanceof Sequence) {
 			final Sequence sequence = (Sequence) element;
 
-			String text = sequence.getName();
+			String seqText = sequence.getName();
 
 			// Add scenario instance name to field if multiple scenarios are selected
 			final Object input = viewer.getInput();
@@ -78,13 +93,19 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				final Collection<Object> collectedElements = output.getCollectedElements();
 				if (collectedElements.size() > 1) {
 					final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
-					text += "\n" + instance.getName();
+					seqText += "\n" + instance.getName();
 				}
 			}
-
-			return text;
+			text = seqText;
+		} else if (element instanceof Journey) {
+			Journey j = (Journey) element;
+			if (j.getRoute().contains("canal")){				
+				if(memento.getBoolean(Show_Canals)){
+					text = j.getRoute().replace("canal", "");
+				}
+			}
 		}
-		return null;
+		return text;
 	}
 
 	public void setScheme(final IScheduleViewColourScheme scheme) {
@@ -94,6 +115,30 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		this.currentScheme = scheme;
 		if (currentScheme != null) {
 			currentScheme.setViewer(viewer);
+			memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, scheme.getID());
+		}
+	}
+
+	public void toggleHighlighter(final String id) {
+		if (highlightersById.containsKey(id)) {
+			toggleHighlighter(highlightersById.get(id));
+		}
+	}
+
+	public void toggleHighlighter(final IScheduleViewColourScheme hi) {
+		
+		for (IScheduleViewColourScheme highlighter : currentHighlighters) {			
+			if(hi != null && hi == highlighter){
+				currentHighlighters.remove(highlighter);
+				highlighter.setViewer(null);
+				memento.getChild(Highlight_).putBoolean(hi.getID(), false);
+				return;
+			}
+		}	
+		if(hi != null){
+			currentHighlighters.add(hi);
+			hi.setViewer(viewer);
+			memento.putBoolean(hi.getID(), true);
 		}
 	}
 
@@ -103,6 +148,23 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		}
 	}
 
+	public void toggleShowCanals() {
+		showCanals  = !showCanals;
+		memento.putBoolean(Show_Canals, showCanals);
+	}
+
+	public boolean showCanals() {
+		return showCanals;
+	}
+
+	public void addHighlighter(String id, IScheduleViewColourScheme cs) {
+		if (id != null && !id.isEmpty()) {
+			highlightersById.put(id, cs);
+		}
+
+		highlighters.add(cs);
+	}	
+
 	protected final IScheduleViewColourScheme getCurrentScheme() {
 		return currentScheme;
 	}
@@ -111,6 +173,14 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		return colourSchemes;
 	}
 
+	protected List<IScheduleViewColourScheme> getHighlighters() {
+		return highlighters;
+	}
+	
+	protected final boolean isActive(IScheduleViewColourScheme hi) {
+		return currentHighlighters.contains(hi);
+	}
+	
 	private String dateToString(final Date date) {
 		return df.format(date) + " " + tf.format(date);
 	}
@@ -213,7 +283,11 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			return getText(element);
 		} else if (element instanceof Event) {
 			return "At " + port + (element instanceof Cooldown ? " (Cooldown)": ""); // + displayTypeName;
+		} else if (element instanceof SlotVisit) {
+			final SlotVisit sv = (SlotVisit) element;
+			return "At " + port + (sv.getSlotAllocation().getSlot() instanceof LoadSlot ? " (Load)": "(Discharge)"); // + displayTypeName;
 		}
+		
 		return null;
 	}
 
@@ -232,9 +306,15 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 
 	@Override
 	public Color getBackground(final Object element) {
-		if (currentScheme != null) {
+		
+		Color c = null;
+		for (IScheduleViewColourScheme highlighter : currentHighlighters) {			
+			if(c==null) c = highlighter.getBackground(element);
+		}	
+		
+		if (c == null && currentScheme != null) {
 
-			final Color color = currentScheme.getBackground(element);
+			c = currentScheme.getBackground(element);
 			// if (viewer.getSelection().isEmpty() == false) {
 			// final ISelection selection = viewer.getSelection();
 			// if (selection instanceof IStructuredSelection) {
@@ -249,9 +329,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			// }
 			// }
 			// }
-			return color;
 		}
-		return null;
+		return c;
 	}
 
 	public void addColourScheme(final String id, final IScheduleViewColourScheme colourScheme) {
@@ -326,7 +405,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 		if (currentScheme != null) {
 			return currentScheme.getBorderWidth(element);
 		}
-
 		return 1;
 	}
+
 }

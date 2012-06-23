@@ -3,7 +3,6 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 import java.util.Collection;
 import java.util.Date;
 
-import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.RGB;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
@@ -37,9 +36,6 @@ public class ColourSchemeUtil {
 	static final RGB Alert_Crimson = new RGB(255,0,0);
 	
 	static final int Faded_Alpha = 150;
-	
-	private static final float IdleRisk_threshold = 0.95f;
-	private static final float IdleRisk_speed = 19.0f;
 
 	
 	public static boolean isLate(Event ev) {
@@ -122,7 +118,7 @@ public class ColourSchemeUtil {
 		return null;
 	}
 
-	static boolean isRiskyVoyage(final Journey journey, final Idle idle) {
+	static boolean isRiskyVoyage(final Journey journey, final Idle idle, float IdleRisk_speed, float IdleRisk_threshold) {
 
 		if (journey == null) {
 			return false;
