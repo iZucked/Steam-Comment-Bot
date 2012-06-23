@@ -303,6 +303,8 @@ public class GanttChartViewer extends StructuredViewer {
 							event.setStatusBorderWidth(getLabelProviderBorderWidth(labelProvider, c));
 							event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
 
+							event.setHorizontalTextLocation(SWT.CENTER);
+
 							// Get tooltip from label provider
 							final AdvancedTooltip toolTip = getTooltip(labelProvider, c);
 							if (toolTip != null) {
