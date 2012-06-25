@@ -48,6 +48,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
@@ -225,29 +226,36 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 	@Override
 	public void save(final ScenarioInstance scenarioInstance) throws IOException {
-		final EObject instance = scenarioInstance.getInstance();
-		if (instance == null) {
-			return;
-		}
-		
-		fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
-		
-		final List<IModelInstance> models = new ArrayList<IModelInstance>();
-		for (final String uris : scenarioInstance.getSubModelURIs()) {
-			final IModelInstance modelInstance = modelService.getModel(resolveURI(uris));
-			if (modelInstance != null) {
-				models.add(modelInstance);
+		final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.SAVING);
+		if (lock.awaitClaim()) {
+			try {
+				final EObject instance = scenarioInstance.getInstance();
+				if (instance == null) {
+					return;
+				}
+				
+				fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
+				
+				final List<IModelInstance> models = new ArrayList<IModelInstance>();
+				for (final String uris : scenarioInstance.getSubModelURIs()) {
+					final IModelInstance modelInstance = modelService.getModel(resolveURI(uris));
+					if (modelInstance != null) {
+						models.add(modelInstance);
+					}
+				}
+				modelService.saveTogether(models);
+				// Update last modified date
+				final Metadata metadata = scenarioInstance.getMetadata();
+				if (metadata != null) {
+					metadata.setLastModified(new Date());
+				}
+				scenarioInstance.setDirty(false);
+				
+				fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
+			} finally {
+				lock.release();
 			}
 		}
-		modelService.saveTogether(models);
-		// Update last modified date
-		final Metadata metadata = scenarioInstance.getMetadata();
-		if (metadata != null) {
-			metadata.setLastModified(new Date());
-		}
-		scenarioInstance.setDirty(false);
-		
-		fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
 	}
 
 	@Override
