@@ -30,6 +30,8 @@ public interface ScenarioLock extends EObject {
 	public static final String EVALUATOR = "evaluator";
 	public static final String OPTIMISER = "optimiser";
 	public static final String NAVIGATOR = "navigator";
+	public static final String SAVING = "saving";
+	public static final String VALIDATION = "validation";
 
 	/**
 	 * Returns the value of the '<em><b>Available</b></em>' attribute.
