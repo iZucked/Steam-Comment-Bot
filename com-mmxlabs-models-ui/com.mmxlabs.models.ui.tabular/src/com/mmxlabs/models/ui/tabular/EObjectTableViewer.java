@@ -27,7 +27,6 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
@@ -501,6 +500,14 @@ public class EObjectTableViewer extends GridTableViewer {
 		return getGrid();
 	}
 
+	protected boolean claimValidationLock() {
+		return true;
+	}
+	
+	protected void releaseValidationLock() {
+		
+	}
+	
 	public void init(final IStructuredContentProvider contentProvider) {
 		final GridTableViewer viewer = this;
 		final Grid table = viewer.getGrid();
@@ -622,11 +629,16 @@ public class EObjectTableViewer extends GridTableViewer {
 
 				if (newInput != null) {
 					Display.getDefault().asyncExec(new Runnable() {
-
 						@Override
 						public void run() {
 							// Perform initial validation
-							validationAdapter.performValidation();
+							if (claimValidationLock()) {
+								try {									
+									validationAdapter.performValidation();
+								} finally {
+									releaseValidationLock();
+								}
+							}
 						}
 					});
 				}
