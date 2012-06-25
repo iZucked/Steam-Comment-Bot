@@ -219,4 +219,9 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	public static void deregisterView(final ScenarioViewerSynchronizer l) {
 		l.dispose();
 	}
+
+	@Override
+	public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
+		//TODO handle change to pin state.
+	}
 }
