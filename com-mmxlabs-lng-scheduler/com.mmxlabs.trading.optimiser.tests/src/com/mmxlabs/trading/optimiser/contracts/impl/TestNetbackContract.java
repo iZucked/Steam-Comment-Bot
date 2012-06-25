@@ -97,7 +97,7 @@ public class TestNetbackContract {
 		ballastParams.put(vesselClass, params);
 		
 		
-		final NetbackContract nbc = new NetbackContract(1234, distanceProvider, ballastParams);
+		final NetbackContract nbc = new NetbackContract(1234, 5678, distanceProvider, ballastParams);
 
 		final VoyagePlan plan = new VoyagePlan();
 		plan.setSequence(new Object[] { null, ladenLeg, null, ballastLeg, null });
