@@ -50,6 +50,7 @@ import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -194,6 +195,10 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 				if (o instanceof Cargo) {
 					return (Cargo) o;
+				}
+				if (o instanceof CargoAllocation) {
+					CargoAllocation cargoAllocation = (CargoAllocation) o;
+					return cargoAllocation.getInputCargo();
 				}
 				if (o instanceof LoadSlot) {
 					return ((LoadSlot) o).getCargo();
