@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -51,6 +50,10 @@ import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.types.AVessel;
@@ -202,6 +205,28 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 					final SlotAllocation slotAllocation = ((SlotVisit) o).getSlotAllocation();
 					if (slotAllocation != null) {
 						return getCargo(slotAllocation.getSlot());
+					}
+				}
+				if (o instanceof Journey) {
+					final Journey journey = (Journey) o;
+					final Sequence sequence = (Sequence) journey.eContainer();
+					int idx = sequence.getEvents().indexOf(journey);
+					while (idx-- > 0) {
+						final Event evt = sequence.getEvents().get(idx);
+						if (evt instanceof SlotVisit) {
+							return getCargo(evt);
+						}
+					}
+				}
+				if (o instanceof Idle) {
+					final Idle idle = (Idle) o;
+					final Sequence sequence = (Sequence) idle.eContainer();
+					int idx = sequence.getEvents().indexOf(idle);
+					while (idx-- > 0) {
+						final Event evt = sequence.getEvents().get(idx);
+						if (evt instanceof SlotVisit) {
+							return getCargo(evt);
+						}
 					}
 				}
 				return null;
