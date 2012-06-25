@@ -32,6 +32,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class NetbackContract implements ILoadPriceCalculator {
 	private int marginScaled;
+	private int floorPriceScaled;
 
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
@@ -53,16 +54,18 @@ public class NetbackContract implements ILoadPriceCalculator {
 		this.distanceProvider = distanceProvider;
 	}
 
-	public NetbackContract(final int marginScaled, final IMultiMatrixProvider<IPort, Integer> distanceProvider, final Map<IVesselClass, BallastParameters> ballastParameters) {
+	public NetbackContract(final int marginScaled, final int floorPriceScaled, final IMultiMatrixProvider<IPort, Integer> distanceProvider, final Map<IVesselClass, BallastParameters> ballastParameters) {
 		super();
 		setMarginScaled(marginScaled);
+		setFloorPriceScaled(floorPriceScaled);
 		setDistanceProvider(distanceProvider);
 		this.ballastParameters = ballastParameters;
 	}
 
-	public NetbackContract(final int marginScaled) {
+	public NetbackContract(final int marginScaled, final int floorPriceScaled) {
 		super();
 		setMarginScaled(marginScaled);
+		setFloorPriceScaled(floorPriceScaled);
 	}
 
 	/*
@@ -155,7 +158,11 @@ public class NetbackContract implements ILoadPriceCalculator {
 				tree.addChild("Base Costs", totalBaseFuelCosts);
 			}
 		}
-		return (int) (salesPrice - result - marginScaled);
+		int rawPrice = (int) (salesPrice - result - marginScaled);
+		if (rawPrice < floorPriceScaled) {
+			return floorPriceScaled;
+		}
+		return rawPrice;
 	}
 
 	@Override
@@ -170,5 +177,13 @@ public class NetbackContract implements ILoadPriceCalculator {
 
 	public void setBallastParameters(final Map<IVesselClass, BallastParameters> ballastParameters) {
 		this.ballastParameters = ballastParameters;
+	}
+
+	public int getFloorPriceScaled() {
+		return floorPriceScaled;
+	}
+
+	public void setFloorPriceScaled(int floorPriceScaled) {
+		this.floorPriceScaled = floorPriceScaled;
 	}
 }
