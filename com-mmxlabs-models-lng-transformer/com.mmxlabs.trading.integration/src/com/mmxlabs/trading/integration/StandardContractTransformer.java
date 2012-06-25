@@ -95,7 +95,8 @@ public class StandardContractTransformer implements IContractTransformer {
 				}
 			}
 
-			return contractBuilder.createNetbackContract(Calculator.scaleToInt(netbackPurchaseContract.getMargin()), notionalBallastParameterMap);
+			return contractBuilder.createNetbackContract(Calculator.scaleToInt(netbackPurchaseContract.getMargin()), Calculator.scaleToInt(netbackPurchaseContract.getFloorPrice()),
+					notionalBallastParameterMap);
 		}
 		return null;
 	}

@@ -42,8 +42,8 @@ public class StandardContractBuilder implements IBuilderExtension {
 		return new ProfitSharingContract(actualMarket, referenceMarket, margin, share, baseMarketPorts);
 	}
 
-	public NetbackContract createNetbackContract(final int buyersMargin, final Map<AVesselClass, NotionalBallastParameters> ballastParameters) {
-		final NetbackContract result = new NetbackContract(buyersMargin);
+	public NetbackContract createNetbackContract(final int buyersMargin, final int floorPrice, final Map<AVesselClass, NotionalBallastParameters> ballastParameters) {
+		final NetbackContract result = new NetbackContract(buyersMargin, floorPrice);
 
 		netbacks.put(result, ballastParameters);
 
