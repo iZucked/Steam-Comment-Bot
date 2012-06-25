@@ -907,13 +907,22 @@ public interface CommercialPackage extends EPackage {
 	int NETBACK_PURCHASE_CONTRACT__MARGIN = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Floor Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Netback Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int NETBACK_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
+	int NETBACK_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl <em>Profit Share Purchase Contract</em>}' class.
@@ -1460,6 +1469,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getNetbackPurchaseContract_Margin();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getFloorPrice <em>Floor Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Floor Price</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getFloorPrice()
+	 * @see #getNetbackPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getNetbackPurchaseContract_FloorPrice();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract <em>Profit Share Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1865,6 +1885,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute NETBACK_PURCHASE_CONTRACT__MARGIN = eINSTANCE.getNetbackPurchaseContract_Margin();
+
+		/**
+		 * The meta object literal for the '<em><b>Floor Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE = eINSTANCE.getNetbackPurchaseContract_FloorPrice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl <em>Profit Share Purchase Contract</em>}' class.

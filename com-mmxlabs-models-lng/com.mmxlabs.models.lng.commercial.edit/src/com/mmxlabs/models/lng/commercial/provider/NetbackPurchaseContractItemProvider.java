@@ -66,6 +66,7 @@ public class NetbackPurchaseContractItemProvider
 
 			addNotionalBallastParametersPropertyDescriptor(object);
 			addMarginPropertyDescriptor(object);
+			addFloorPricePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -106,6 +107,28 @@ public class NetbackPurchaseContractItemProvider
 				 getString("_UI_NetbackPurchaseContract_margin_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_margin_feature", "_UI_NetbackPurchaseContract_type"),
 				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__MARGIN,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Floor Price feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFloorPricePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_NetbackPurchaseContract_floorPrice_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_NetbackPurchaseContract_floorPrice_feature", "_UI_NetbackPurchaseContract_type"),
+				 CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE,
 				 true,
 				 false,
 				 false,
@@ -182,6 +205,7 @@ public class NetbackPurchaseContractItemProvider
 
 		switch (notification.getFeatureID(NetbackPurchaseContract.class)) {
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS:

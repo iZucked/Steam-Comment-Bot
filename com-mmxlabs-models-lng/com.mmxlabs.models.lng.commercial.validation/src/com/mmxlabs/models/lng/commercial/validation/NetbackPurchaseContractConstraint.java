@@ -54,6 +54,14 @@ public class NetbackPurchaseContractConstraint extends AbstractModelConstraint {
 					}
 				}
 			}
+			
+			if (contract.getFloorPrice() < 0.0) {
+
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
+						(IConstraintStatus) ctx.createFailureStatus("Floor price should be positive"));
+				dsd.addEObjectAndFeature(contract, CommercialPackage.eINSTANCE.getNetbackPurchaseContract_FloorPrice());
+				failures.add(dsd);
+			}
 		}
 		if (failures.isEmpty()) {
 			return ctx.createSuccessStatus();

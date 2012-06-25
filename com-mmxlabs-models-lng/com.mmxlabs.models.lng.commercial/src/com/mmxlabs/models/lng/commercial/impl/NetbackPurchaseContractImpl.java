@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.types.AIndex;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl#getNotionalBallastParameters <em>Notional Ballast Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl#getMargin <em>Margin</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.NetbackPurchaseContractImpl#getFloorPrice <em>Floor Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -66,6 +67,26 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * @ordered
 	 */
 	protected double margin = MARGIN_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getFloorPrice() <em>Floor Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFloorPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double FLOOR_PRICE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getFloorPrice() <em>Floor Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFloorPrice()
+	 * @generated
+	 * @ordered
+	 */
+	protected double floorPrice = FLOOR_PRICE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -124,6 +145,27 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getFloorPrice() {
+		return floorPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setFloorPrice(double newFloorPrice) {
+		double oldFloorPrice = floorPrice;
+		floorPrice = newFloorPrice;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE, oldFloorPrice, floorPrice));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -145,6 +187,8 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 				return getNotionalBallastParameters();
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
 				return getMargin();
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE:
+				return getFloorPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -165,6 +209,9 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
 				setMargin((Double)newValue);
 				return;
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE:
+				setFloorPrice((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -183,6 +230,9 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
 				setMargin(MARGIN_EDEFAULT);
 				return;
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE:
+				setFloorPrice(FLOOR_PRICE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -199,6 +249,8 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 				return notionalBallastParameters != null && !notionalBallastParameters.isEmpty();
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
 				return margin != MARGIN_EDEFAULT;
+			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE:
+				return floorPrice != FLOOR_PRICE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -215,6 +267,8 @@ public class NetbackPurchaseContractImpl extends PurchaseContractImpl implements
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (margin: ");
 		result.append(margin);
+		result.append(", floorPrice: ");
+		result.append(floorPrice);
 		result.append(')');
 		return result.toString();
 	}

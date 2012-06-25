@@ -67,6 +67,7 @@ public class NetbackPurchaseContractComponentHelper extends BaseComponentHelper 
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_notionalBallastParametersEditor(detailComposite, topClass);
 		add_marginEditor(detailComposite, topClass);
+		add_floorPriceEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the notionalBallastParameters feature on NetbackPurchaseContract
@@ -83,5 +84,14 @@ public class NetbackPurchaseContractComponentHelper extends BaseComponentHelper 
 	 */
 	protected void add_marginEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__MARGIN));
+	}
+
+	/**
+	 * Create the editor for the floorPrice feature on NetbackPurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_floorPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE));
 	}
 }

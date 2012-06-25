@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.types.AIndex;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getNotionalBallastParameters <em>Notional Ballast Parameters</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getMargin <em>Margin</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getFloorPrice <em>Floor Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -71,6 +72,32 @@ public interface NetbackPurchaseContract extends PurchaseContract {
 	 * @generated
 	 */
 	void setMargin(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Floor Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Floor Price</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Floor Price</em>' attribute.
+	 * @see #setFloorPrice(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getNetbackPurchaseContract_FloorPrice()
+	 * @model
+	 * @generated
+	 */
+	double getFloorPrice();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getFloorPrice <em>Floor Price</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Floor Price</em>' attribute.
+	 * @see #getFloorPrice()
+	 * @generated
+	 */
+	void setFloorPrice(double value);
 
 } // end of  NetbackPurchaseContract
 
