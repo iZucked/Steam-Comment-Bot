@@ -67,6 +67,10 @@ public class Activator extends AbstractUIPlugin {
 				}
 			}
 		}
+
+		@Override
+		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
+		}
 	};
 
 	/**
