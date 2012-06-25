@@ -1,13 +1,10 @@
 package com.mmxlabs.models.ui.validation;
 
 import java.util.Collections;
-import java.util.EventObject;
 import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.command.CommandStack;
-import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
