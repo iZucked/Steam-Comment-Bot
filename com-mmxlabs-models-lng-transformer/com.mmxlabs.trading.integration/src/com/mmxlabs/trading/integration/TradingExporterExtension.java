@@ -72,12 +72,13 @@ public class TradingExporterExtension implements IExporterExtension {
 							break;
 						}
 					}
+					int idx = 0;
 					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
-						final ExtraData entityData = cargoAllocation.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
+						final ExtraData entityData = cargoAllocation.addExtraData(entry.getEntity().getName() + idx++, entry.getEntity().getName());
 						
 						final ExtraData pnlData = entityData.addExtraData("pnl", "P&L", (int)entry.getFinalGroupValue() / Calculator.ScaleFactor,
 								ExtraDataFormatType.CURRENCY);
-						
+
 						pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
 						ExtraData detail = exportDetailTree(entry.getDetails());
 						detail.setName("Details");
