@@ -139,6 +139,12 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 					viewer.refresh(instance, true);
 			}
 		}
+
+		@Override
+		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
+			if (oldPin != null) viewer.refresh(oldPin, true);
+			if (newPin != null) viewer.refresh(newPin, true);
+		}
 	};
 
 	private final IEclipseJobManagerListener jobManagerListener = new IEclipseJobManagerListener() {

@@ -24,6 +24,8 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	
 	private final HashSet<ScenarioInstance> selection = new HashSet<ScenarioInstance>();
 	
+	private ScenarioInstance pin = null;
+	
 	public void select(final ScenarioInstance instance) {
 		if (!isSelected(instance)) {
 			selection.add(instance);
@@ -36,6 +38,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	public void deselect(final ScenarioInstance instance) {
 		if (isSelected(instance)) {
 			selection.remove(instance);
+			if (instance == pin) setPinnedInstance(null);
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 				listener.deselected(this, Collections.singleton(instance));
 			}
@@ -46,6 +49,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 		if (selection.isEmpty() == false) {
 			final HashSet<ScenarioInstance> copy = new HashSet<ScenarioInstance>(selection);
 			selection.clear();
+			setPinnedInstance(null);
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 				listener.deselected(this, copy);
 			}
@@ -77,5 +81,23 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 	public void toggleSelection(ScenarioInstance instance) {
 		if (isSelected(instance)) deselect(instance);
 		else select(instance);
+	}
+
+	@Override
+	public ScenarioInstance getPinnedInstance() {
+		return pin;
+	}
+	
+	public void setPinnedInstance(final ScenarioInstance instance) {
+		if (pin != instance) {
+			final ScenarioInstance oldPin = pin;
+			pin = instance;
+			if (instance != null && !isSelected(instance)) {
+				select(instance);
+			}
+			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
+				listener.pinned(this, oldPin, pin);
+			}
+		}
 	}
 }
