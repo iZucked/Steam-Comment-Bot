@@ -369,7 +369,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 				final InputModel input = location.getRootObject().getSubModel(InputModel.class);
 				if (input != null) {
-					return vessels.indexOf(AssignmentEditorHelper.getElementAssignment(input, cargo));
+					return vessels.indexOf(AssignmentEditorHelper.getElementAssignment(input, cargo).getAssignment());
 				}
 			}
 
