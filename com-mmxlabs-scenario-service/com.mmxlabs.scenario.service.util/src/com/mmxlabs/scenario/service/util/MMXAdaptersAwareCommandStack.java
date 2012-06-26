@@ -49,27 +49,25 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	@Override
 	public void undo() {
 		final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
-		final int getLock = lock.claimResponsibly();
-		
-		try {
-			if (editingDomain != null) {
-				final boolean isEnabled = editingDomain.isEnabled();
-				if (isEnabled) {
-					editingDomain.setAdaptersEnabled(false);
-				}
-				try {
-					super.undo();
-				} finally {
+		if (lock.awaitClaim()) {
+			try {
+				if (editingDomain != null) {
+					final boolean isEnabled = editingDomain.isEnabled();
 					if (isEnabled) {
-						editingDomain.setAdaptersEnabled(true);
+						editingDomain.setAdaptersEnabled(false);
 					}
+					try {
+						super.undo();
+					} finally {
+						if (isEnabled) {
+							editingDomain.setAdaptersEnabled(true);
+						}
+					}
+				} else {
+					super.undo();
 				}
-			} else {
-				super.undo();
-			}
-		} finally {
-			if (getLock == ScenarioLock.CLAIMED_BY_CALLER) {
-				lock.release();
+			} finally {
+				lock.release();	
 			}
 		}
 	}
@@ -77,26 +75,24 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	@Override
 	public void redo() {
 		final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
-		final int getLock = lock.claimResponsibly();
-
-		try {
-			if (editingDomain != null) {
-				final boolean isEnabled = editingDomain.isEnabled();
-				if (isEnabled) {
-					editingDomain.setAdaptersEnabled(false);
-				}
-				try {
-					super.redo();
-				} finally {
+		if (lock.awaitClaim()) {
+			try {
+				if (editingDomain != null) {
+					final boolean isEnabled = editingDomain.isEnabled();
 					if (isEnabled) {
-						editingDomain.setAdaptersEnabled(true);
+						editingDomain.setAdaptersEnabled(false);
 					}
+					try {
+						super.redo();
+					} finally {
+						if (isEnabled) {
+							editingDomain.setAdaptersEnabled(true);
+						}
+					}
+				} else {
+					super.redo();
 				}
-			} else {
-				super.redo();
-			}
-		} finally {
-			if (getLock == ScenarioLock.CLAIMED_BY_CALLER) {
+			} finally {
 				lock.release();
 			}
 		}
