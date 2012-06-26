@@ -189,8 +189,15 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 				String title = getEditorInput().getName();
 				if (locked) {
-					title += " (locked)";
+					for (final ScenarioLock lock : getScenarioInstance().getLocks()) {
+						if (lock.isClaimed()) {
+							title += " (locked for " + lock.getKey() +")";
+						}
+					}
 				}
+				
+				
+				
 				setPartName(title);
 			}
 		});
