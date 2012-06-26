@@ -108,6 +108,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 								instance.getLock(ScenarioLock.EVALUATOR).release();
 							}
 						} else {
+							log.debug("Didn't get lock, spinning");
 							spinLock = true;
 						}
 					} else {
