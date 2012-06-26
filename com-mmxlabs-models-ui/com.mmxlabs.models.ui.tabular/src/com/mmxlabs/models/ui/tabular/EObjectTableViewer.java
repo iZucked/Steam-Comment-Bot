@@ -67,8 +67,8 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * 
  */
 public class EObjectTableViewer extends GridTableViewer {
-	private static final String COLUMN_PATH = "COLUMN_PATH";
-	private static final String COLUMN_RENDERER = "COLUMN_RENDERER";
+	protected static final String COLUMN_PATH = "COLUMN_PATH";
+	protected static final String COLUMN_RENDERER = "COLUMN_RENDERER";
 	private final static Logger log = LoggerFactory.getLogger(EObjectTableViewer.class);
 	private static final String COLUMN_MANIPULATOR = "COLUMN_MANIPULATOR";
 	protected static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
@@ -503,11 +503,11 @@ public class EObjectTableViewer extends GridTableViewer {
 	protected boolean claimValidationLock() {
 		return true;
 	}
-	
+
 	protected void releaseValidationLock() {
-		
+
 	}
-	
+
 	public void init(final IStructuredContentProvider contentProvider) {
 		final GridTableViewer viewer = this;
 		final Grid table = viewer.getGrid();
@@ -633,7 +633,7 @@ public class EObjectTableViewer extends GridTableViewer {
 						public void run() {
 							// Perform initial validation
 							if (claimValidationLock()) {
-								try {									
+								try {
 									validationAdapter.performValidation();
 								} finally {
 									releaseValidationLock();
@@ -675,17 +675,30 @@ public class EObjectTableViewer extends GridTableViewer {
 					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
 					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
 
-					final Object v1 = path.get((EObject) e1);
-					final Object v2 = path.get((EObject) e2);
+					if (path != null) {
 
-					final Comparable left = renderer.getComparable(v1);
-					final Comparable right = renderer.getComparable(v2);
-					if (left == null) {
-						return -1;
-					} else if (right == null) {
-						return 1;
+						final Object v1 = path.get((EObject) e1);
+						final Object v2 = path.get((EObject) e2);
+
+						final Comparable left = renderer.getComparable(v1);
+						final Comparable right = renderer.getComparable(v2);
+						if (left == null) {
+							return -1;
+						} else if (right == null) {
+							return 1;
+						} else {
+							comparison = left.compareTo(right);
+						}
 					} else {
-						comparison = left.compareTo(right);
+						final Comparable left = renderer.getComparable(e1);
+						final Comparable right = renderer.getComparable(e2);
+						if (left == null) {
+							return -1;
+						} else if (right == null) {
+							return 1;
+						} else {
+							comparison = left.compareTo(right);
+						}
 					}
 				}
 				return sortDescending ? -comparison : comparison;
@@ -707,7 +720,8 @@ public class EObjectTableViewer extends GridTableViewer {
 				for (final GridColumn column : getGrid().getColumns()) {
 					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
 					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
-					if (path == null) continue;
+					if (path == null)
+						continue;
 					final Object fieldValue = path.get((EObject) element);
 					final Object filterValue = renderer.getFilterValue(fieldValue);
 					final Object renderValue = renderer.render(fieldValue);
