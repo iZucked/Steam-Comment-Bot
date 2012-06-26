@@ -57,7 +57,7 @@ public class ScenarioStorageUtil {
 		if (uuidDir.exists() == false) {
 			uuidDir.mkdirs();
 		}
-		return new File(uuidDir, escape(name) + ".sc2");
+		return new File(uuidDir, escape(name) + ".scenario");
 	}
 	
 	private String escape(String name) {

@@ -268,7 +268,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 		}
 
 		final String uuid = UUID.randomUUID().toString();
-		final URI resourceURI = URI.createPlatformResourceURI(containerResource.getFullPath().toString() + "/" + uuid + ".sc2", true);
+		final URI resourceURI = URI.createPlatformResourceURI(containerResource.getFullPath().toString() + "/" + uuid + ".scenario", true);
 		final URI manifestURI = URI.createURI("archive:" + resourceURI.toString() + "!/MANIFEST.xmi");
 
 		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();

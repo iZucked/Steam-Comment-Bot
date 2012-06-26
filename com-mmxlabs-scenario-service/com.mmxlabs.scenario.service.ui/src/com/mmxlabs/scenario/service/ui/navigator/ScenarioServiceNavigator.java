@@ -4,10 +4,14 @@
  */
 package com.mmxlabs.scenario.service.ui.navigator;
 
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.List;
+import java.util.Properties;
 
 import org.eclipse.core.commands.Command;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -52,7 +56,9 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
@@ -422,4 +428,37 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		}
 
 	}
+//	
+//	@Override
+//	public void saveState(IMemento aMemento) {
+//		// TODO Auto-generated method stub
+//		super.saveState(aMemento);
+//		
+//		Object[] expandedElements = getCommonViewer().getExpandedElements();
+//		
+//		Properties props = new Properties();
+//		
+//		for (Object obj : expandedElements) {
+//			
+//			if (obj instanceof Container) {
+//				Container container = (Container) obj;
+//				IScenarioService scenarioService = container.getScenarioService();
+//				String name = scenarioService.getName();
+//				String uriFragment = container.eResource().getURIFragment(container);
+				// TODO need to make this unique, but easy to parse.
+				// Might be an issue with same path, but different services.
+//				props.put(uriFragment, name);
+//			}
+//			
+//		}
+//		
+//		StringWriter writer  = new StringWriter();
+//		try {
+//			props.store(writer, null);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		memento.putString("NAVIGATOR_STATE", writer.getBuffer().toString());
+//	}
 }
