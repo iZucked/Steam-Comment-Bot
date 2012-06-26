@@ -32,6 +32,8 @@ public interface ScenarioLock extends EObject {
 	public static final String NAVIGATOR = "navigator";
 	public static final String SAVING = "saving";
 	public static final String VALIDATION = "validation";
+	public static final int CLAIMED_ELSEWHERE = 2;
+	public static final int CLAIMED_BY_CALLER = 1;
 
 	/**
 	 * Returns the value of the '<em><b>Available</b></em>' attribute.
@@ -170,5 +172,13 @@ public interface ScenarioLock extends EObject {
 	 * @generated
 	 */
 	void init();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model required="true"
+	 * @generated
+	 */
+	int claimResponsibly();
 
 } // ScenarioLock

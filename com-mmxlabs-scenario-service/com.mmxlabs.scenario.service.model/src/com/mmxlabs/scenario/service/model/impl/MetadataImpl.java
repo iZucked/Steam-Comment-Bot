@@ -192,7 +192,9 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 		String oldCreator = creator;
 		creator = newCreator;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.METADATA__CREATOR, oldCreator, creator));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.METADATA__CREATOR, oldCreator,
+					creator));
 	}
 
 	/**
@@ -213,7 +215,9 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 		Date oldCreated = created;
 		created = newCreated;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.METADATA__CREATED, oldCreated, created));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.METADATA__CREATED, oldCreated,
+					created));
 	}
 
 	/**
@@ -234,7 +238,9 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 		Date oldLastModified = lastModified;
 		lastModified = newLastModified;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.METADATA__LAST_MODIFIED, oldLastModified, lastModified));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.METADATA__LAST_MODIFIED,
+					oldLastModified, lastModified));
 	}
 
 	/**
@@ -255,7 +261,9 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 		String oldComment = comment;
 		comment = newComment;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.METADATA__COMMENT, oldComment, comment));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.METADATA__COMMENT, oldComment,
+					comment));
 	}
 
 	/**
@@ -276,7 +284,9 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 		String oldLastModifiedBy = lastModifiedBy;
 		lastModifiedBy = newLastModifiedBy;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.METADATA__LAST_MODIFIED_BY, oldLastModifiedBy, lastModifiedBy));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.METADATA__LAST_MODIFIED_BY,
+					oldLastModifiedBy, lastModifiedBy));
 	}
 
 	/**
@@ -297,7 +307,9 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 		String oldContentType = contentType;
 		contentType = newContentType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.METADATA__CONTENT_TYPE, oldContentType, contentType));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.METADATA__CONTENT_TYPE,
+					oldContentType, contentType));
 	}
 
 	/**
@@ -393,17 +405,23 @@ public class MetadataImpl extends EObjectImpl implements Metadata {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case ScenarioServicePackage.METADATA__CREATOR:
-			return CREATOR_EDEFAULT == null ? creator != null : !CREATOR_EDEFAULT.equals(creator);
+			return CREATOR_EDEFAULT == null ? creator != null
+					: !CREATOR_EDEFAULT.equals(creator);
 		case ScenarioServicePackage.METADATA__CREATED:
-			return CREATED_EDEFAULT == null ? created != null : !CREATED_EDEFAULT.equals(created);
+			return CREATED_EDEFAULT == null ? created != null
+					: !CREATED_EDEFAULT.equals(created);
 		case ScenarioServicePackage.METADATA__LAST_MODIFIED:
-			return LAST_MODIFIED_EDEFAULT == null ? lastModified != null : !LAST_MODIFIED_EDEFAULT.equals(lastModified);
+			return LAST_MODIFIED_EDEFAULT == null ? lastModified != null
+					: !LAST_MODIFIED_EDEFAULT.equals(lastModified);
 		case ScenarioServicePackage.METADATA__COMMENT:
-			return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			return COMMENT_EDEFAULT == null ? comment != null
+					: !COMMENT_EDEFAULT.equals(comment);
 		case ScenarioServicePackage.METADATA__LAST_MODIFIED_BY:
-			return LAST_MODIFIED_BY_EDEFAULT == null ? lastModifiedBy != null : !LAST_MODIFIED_BY_EDEFAULT.equals(lastModifiedBy);
+			return LAST_MODIFIED_BY_EDEFAULT == null ? lastModifiedBy != null
+					: !LAST_MODIFIED_BY_EDEFAULT.equals(lastModifiedBy);
 		case ScenarioServicePackage.METADATA__CONTENT_TYPE:
-			return CONTENT_TYPE_EDEFAULT == null ? contentType != null : !CONTENT_TYPE_EDEFAULT.equals(contentType);
+			return CONTENT_TYPE_EDEFAULT == null ? contentType != null
+					: !CONTENT_TYPE_EDEFAULT.equals(contentType);
 		}
 		return super.eIsSet(featureID);
 	}

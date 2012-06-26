@@ -34,7 +34,9 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+public class ScenarioServiceItemProviderAdapterFactory extends
+		ScenarioServiceAdapterFactory implements ComposeableAdapterFactory,
+		IChangeNotifier, IDisposable {
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -159,7 +161,8 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	@Override
 	public Adapter createScenarioInstanceAdapter() {
 		if (scenarioInstanceItemProvider == null) {
-			scenarioInstanceItemProvider = new ScenarioInstanceItemProvider(this);
+			scenarioInstanceItemProvider = new ScenarioInstanceItemProvider(
+					this);
 		}
 
 		return scenarioInstanceItemProvider;
@@ -218,7 +221,8 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	 * @generated
 	 */
 	public ComposeableAdapterFactory getRootAdapterFactory() {
-		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
+		return parentAdapterFactory == null ? this : parentAdapterFactory
+				.getRootAdapterFactory();
 	}
 
 	/**
@@ -227,7 +231,8 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
+	public void setParentAdapterFactory(
+			ComposedAdapterFactory parentAdapterFactory) {
 		this.parentAdapterFactory = parentAdapterFactory;
 	}
 
@@ -261,7 +266,8 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	public Object adapt(Object object, Object type) {
 		if (isFactoryForType(type)) {
 			Object adapter = super.adapt(object, type);
-			if (!(type instanceof Class<?>) || (((Class<?>) type).isInstance(adapter))) {
+			if (!(type instanceof Class<?>)
+					|| (((Class<?>) type).isInstance(adapter))) {
 				return adapter;
 			}
 		}

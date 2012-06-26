@@ -22,7 +22,8 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ScenarioServiceFactoryImpl extends EFactoryImpl implements ScenarioServiceFactory {
+public class ScenarioServiceFactoryImpl extends EFactoryImpl implements
+		ScenarioServiceFactory {
 	/**
 	 * Creates the default factory implementation.
 	 * <!-- begin-user-doc -->
@@ -31,7 +32,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	 */
 	public static ScenarioServiceFactory init() {
 		try {
-			ScenarioServiceFactory theScenarioServiceFactory = (ScenarioServiceFactory) EPackage.Registry.INSTANCE.getEFactory("http://com.mmxlabs.scenario.service/model/1");
+			ScenarioServiceFactory theScenarioServiceFactory = (ScenarioServiceFactory) EPackage.Registry.INSTANCE
+					.getEFactory("http://com.mmxlabs.scenario.service/model/1");
 			if (theScenarioServiceFactory != null) {
 				return theScenarioServiceFactory;
 			}
@@ -72,7 +74,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 		case ScenarioServicePackage.SCENARIO_LOCK:
 			return createScenarioLock();
 		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The class '" + eClass.getName()
+					+ "' is not a valid classifier");
 		}
 	}
 
@@ -85,7 +88,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	public Object createFromString(EDataType eDataType, String initialValue) {
 		switch (eDataType.getClassifierID()) {
 		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '"
+					+ eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -98,7 +102,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	public String convertToString(EDataType eDataType, Object instanceValue) {
 		switch (eDataType.getClassifierID()) {
 		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '"
+					+ eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
