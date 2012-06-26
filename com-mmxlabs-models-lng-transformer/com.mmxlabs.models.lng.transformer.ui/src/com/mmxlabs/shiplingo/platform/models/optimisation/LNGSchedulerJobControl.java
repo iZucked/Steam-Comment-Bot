@@ -181,6 +181,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		if (jobDescriptor.isOptimising() == false) {
 			// scheduleModel.setDirty(false);
 			// log.debug("Cleared dirty bit on " + scheduleModel);
+			//clear lock
+			scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
 			return false; // if we are not optimising, finish.
 		}
 		optimiser.step(REPORT_PERCENTAGE);
@@ -265,22 +267,25 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		List<Assignment> newAssignments = new LinkedList<Assignment>();
 		List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
 		
+		int spotIndex = 0;
 		for (final Sequence sequence : schedule.getSequences()) {
 			final Assignment a = InputFactory.eINSTANCE.createAssignment();
 			
 			if (sequence.getVessel() == null && !sequence.isSpotVessel()) {
 				continue;
 			}
-
+			
+			int thisIndex = 0;
 			if (sequence.isSpotVessel()) {
 				a.setAssignToSpot(true);
 				a.getVessels().add(sequence.getVesselClass());
+				thisIndex = spotIndex++;
 			} else {
 				a.setAssignToSpot(false);
 				a.getVessels().add(sequence.getVessel());
 			}
 
-			ElementAssignment prevAssignment = null;
+			int index = 0;
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
@@ -291,7 +296,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 						final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
 						ea.setAssignedObject(((LoadSlot) slot).getCargo());
 						ea.setAssignment(sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel());
-						if (prevAssignment != null) prevAssignment.setNextAssignment(ea);
+						ea.setSequence(index++);
+						ea.setSpotIndex(thisIndex);
 						newElementAssignments.add(ea);
 					}
 				} else if (event instanceof VesselEventVisit) {
@@ -299,7 +305,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
 					ea.setAssignedObject(((VesselEventVisit) event).getVesselEvent());
 					ea.setAssignment(sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel());
-					if (prevAssignment != null) prevAssignment.setNextAssignment(ea);
+					ea.setSequence(index++);
+					ea.setSpotIndex(thisIndex);
 					newElementAssignments.add(ea);
 				}
 			}
