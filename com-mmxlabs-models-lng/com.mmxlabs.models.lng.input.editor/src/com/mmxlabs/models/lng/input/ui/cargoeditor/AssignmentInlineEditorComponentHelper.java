@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
@@ -63,6 +64,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		private IReferenceValueProvider valueProvider;
 		private Collection<EObject> range;
 		private ElementAssignment elementAssignment;
+		private MMXRootObject rootObject;
 
 		public AssignmentInlineEditor() {
 			disposeListener = new DisposeListener() {
@@ -116,6 +118,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 			}
 
 			this.inputObject = object;
+			this.rootObject = scenario;
 			this.range = range;
 
 			if (inputObject != null) {
@@ -204,6 +207,20 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 					if (index >= 0) {
 						final EObject vessel = valueList.get(index);
 						if (elementAssignment != null) {
+							if (vessel instanceof VesselClass) {
+								// assign to a new spot
+								final InputModel im = rootObject.getSubModel(InputModel.class);
+								if (im != null) {
+									int maxSpot = 0;
+									for (final ElementAssignment ea : im.getElementAssignments()) {
+										maxSpot = Math.max(maxSpot, ea.getSpotIndex());
+									}
+									maxSpot++;
+									handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet) vessel, elementAssignment, maxSpot), 
+											elementAssignment, InputPackage.eINSTANCE.getElementAssignment_Assignment());
+								return;
+								}
+							}
 							handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet) vessel, elementAssignment), 
 									elementAssignment, InputPackage.eINSTANCE.getElementAssignment_Assignment());
 						}

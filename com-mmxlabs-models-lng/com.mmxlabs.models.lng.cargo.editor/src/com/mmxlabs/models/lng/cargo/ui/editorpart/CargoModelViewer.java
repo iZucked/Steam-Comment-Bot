@@ -15,7 +15,6 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
@@ -45,8 +44,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.actions.RewireAction;
 import com.mmxlabs.models.lng.cargo.ui.actions.RotateSlotsAction;
-import com.mmxlabs.models.lng.input.Assignment;
-import com.mmxlabs.models.lng.input.InputFactory;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
@@ -57,8 +55,6 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -351,6 +347,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 				if (value == null || value.equals(-1))
 					return;
 				final AVesselSet set = (AVesselSet) vessels.get((Integer) value);
+		
 				location.getEditingDomain().getCommandStack().execute(AssignmentEditorHelper.reassignElement(getEditingDomain(), input, (UUIDObject) object, set));
 			}
 		}

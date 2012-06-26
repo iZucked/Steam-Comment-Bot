@@ -309,7 +309,7 @@ public class InputJointModelEditorContribution extends
 				
 				final EditingDomain ed = editorPart.getEditingDomain();
 				//TODO sort out spot vessels.
-				ed.getCommandStack().execute(AssignmentEditorHelper.reassignElement(ed, modelObject, beforeTask, task, afterTask, newResource.getVesselOrClass()));
+				ed.getCommandStack().execute(AssignmentEditorHelper.reassignElement(ed, modelObject, beforeTask, task, afterTask, newResource.getVesselOrClass(), newResource.getSpotIndex()));
 				
 				updateEditorInput();
 //				editor.update();

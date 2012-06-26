@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
@@ -176,18 +177,12 @@ public class AssignmentEditorHelper {
 	
 	public static Command reassignElement(EditingDomain ed, InputModel modelObject, UUIDObject task, final AVesselSet destination) {
 		final ElementAssignment ea = getElementAssignment(modelObject, task);
-		return reassignElement(ed, destination, ea);
+		return reassignElement(ed, destination, ea, destination instanceof VesselClass ? getMaxSpot(modelObject) : 0);
 	}
 
 	public static Command reassignElement(EditingDomain ed,
 			final AVesselSet destination, final ElementAssignment ea) {
-		if (ea == null) return IdentityCommand.INSTANCE;
-		
-		final CompoundCommand cc = new CompoundCommand();
-		
-		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Assignment(), destination == null ? SetCommand.UNSET_VALUE : destination));
-		
-		return cc;
+		return reassignElement(ed, destination, ea, 0);
 	}
 
 	public static Command lockElement(EditingDomain ed, InputModel modelObject, UUIDObject task) {
@@ -234,13 +229,12 @@ public class AssignmentEditorHelper {
 		return result;
 	}
 
-	public static Command reassignElement(EditingDomain ed, InputModel modelObject, UUIDObject beforeTask, UUIDObject task,
-			UUIDObject afterTask, AVesselSet vesselOrClass) {
+	public static Command reassignElement(EditingDomain ed, InputModel modelObject, UUIDObject beforeTask, UUIDObject task, UUIDObject afterTask, AVesselSet vesselOrClass, int spotIndex) {
 		final ElementAssignment ea = getElementAssignment(modelObject, task);
 		if (ea == null) return IdentityCommand.INSTANCE;
 		final CompoundCommand cc = new CompoundCommand();
 		cc.append(reassignElement(ed, vesselOrClass, ea));
-		
+		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_SpotIndex(), spotIndex));
 		if (beforeTask != null) {
 			final ElementAssignment ea2 = getElementAssignment(modelObject, beforeTask);
 			if (ea2 != null) {
@@ -259,5 +253,25 @@ public class AssignmentEditorHelper {
 		
 		
 		return cc;
+	}
+
+	public static Command reassignElement(EditingDomain ed, AVesselSet destination, ElementAssignment ea, int maxSpot) {
+		if (ea == null) return IdentityCommand.INSTANCE;
+		
+		final CompoundCommand cc = new CompoundCommand();
+		
+		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Assignment(), destination == null ? SetCommand.UNSET_VALUE : destination));
+		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_SpotIndex(), maxSpot));
+		
+		return cc;
+	}
+	
+	public static int getMaxSpot(final InputModel im) {
+		int maxSpot = 0;
+		for (final ElementAssignment ea : im.getElementAssignments()) {
+			maxSpot = Math.max(maxSpot, ea.getSpotIndex());
+		}
+		maxSpot++;
+		return maxSpot;
 	}
 }
