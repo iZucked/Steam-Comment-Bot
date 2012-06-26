@@ -297,9 +297,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// selectionListener.selectionChanged(null, selection);
 
 		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
-		if (colourScheme != null) {
+//		if (colourScheme != null) {
 			labelProvider.setScheme(colourScheme);
-		}
+//		}
 	}
 
 	@Override

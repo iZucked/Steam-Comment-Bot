@@ -145,6 +145,8 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 	public void setScheme(final String id) {
 		if (colourSchemesById.containsKey(id)) {
 			setScheme(colourSchemesById.get(id));
+		} else {
+			setScheme(colourSchemes.get(0));
 		}
 	}
 
