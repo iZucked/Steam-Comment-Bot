@@ -81,6 +81,12 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.port.CapabilityGroup">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.port.presentation.composites.LocationComponentHelper"
+        id="com.mmxlabs.models.lng.port.helpers.Location"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.port.Location">
+  </componentHelper>
 		
 	</extension>
  <extension

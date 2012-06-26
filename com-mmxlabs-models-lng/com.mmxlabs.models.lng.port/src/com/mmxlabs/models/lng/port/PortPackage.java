@@ -108,6 +108,15 @@ public interface PortPackage extends EPackage {
 	int PORT__NAME = TypesPackage.APORT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__OTHER_NAMES = TypesPackage.APORT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Capabilities</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -189,13 +198,22 @@ public interface PortPackage extends EPackage {
 	int PORT__PORT_CODE = TypesPackage.APORT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Location</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT__LOCATION = TypesPackage.APORT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Port</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PORT_FEATURE_COUNT = TypesPackage.APORT_FEATURE_COUNT + 9;
+	int PORT_FEATURE_COUNT = TypesPackage.APORT_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -242,6 +260,15 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int ROUTE__NAME = TypesPackage.AROUTE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ROUTE__OTHER_NAMES = TypesPackage.AROUTE__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Lines</b></em>' containment reference list.
@@ -324,6 +351,15 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int PORT_GROUP__NAME = TypesPackage.APORT_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_GROUP__OTHER_NAMES = TypesPackage.APORT_SET__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Contents</b></em>' reference list.
@@ -537,6 +573,15 @@ public interface PortPackage extends EPackage {
 	int CAPABILITY_GROUP__NAME = TypesPackage.APORT_SET__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CAPABILITY_GROUP__OTHER_NAMES = TypesPackage.APORT_SET__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Capability</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -553,6 +598,52 @@ public interface PortPackage extends EPackage {
 	 * @ordered
 	 */
 	int CAPABILITY_GROUP_FEATURE_COUNT = TypesPackage.APORT_SET_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.port.impl.LocationImpl <em>Location</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.port.impl.LocationImpl
+	 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getLocation()
+	 * @generated
+	 */
+	int LOCATION = 6;
+
+	/**
+	 * The feature id for the '<em><b>Country</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION__COUNTRY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Lat</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION__LAT = 1;
+
+	/**
+	 * The feature id for the '<em><b>Lon</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION__LON = 2;
+
+	/**
+	 * The number of structural features of the '<em>Location</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOCATION_FEATURE_COUNT = 3;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Port <em>Port</em>}'.
@@ -662,6 +753,17 @@ public interface PortPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPort_PortCode();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.port.Port#getLocation <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Location</em>'.
+	 * @see com.mmxlabs.models.lng.port.Port#getLocation()
+	 * @see #getPort()
+	 * @generated
+	 */
+	EReference getPort_Location();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Route <em>Route</em>}'.
@@ -846,6 +948,49 @@ public interface PortPackage extends EPackage {
 	EAttribute getCapabilityGroup_Capability();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.port.Location <em>Location</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Location</em>'.
+	 * @see com.mmxlabs.models.lng.port.Location
+	 * @generated
+	 */
+	EClass getLocation();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Location#getCountry <em>Country</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Country</em>'.
+	 * @see com.mmxlabs.models.lng.port.Location#getCountry()
+	 * @see #getLocation()
+	 * @generated
+	 */
+	EAttribute getLocation_Country();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Location#getLat <em>Lat</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lat</em>'.
+	 * @see com.mmxlabs.models.lng.port.Location#getLat()
+	 * @see #getLocation()
+	 * @generated
+	 */
+	EAttribute getLocation_Lat();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.port.Location#getLon <em>Lon</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Lon</em>'.
+	 * @see com.mmxlabs.models.lng.port.Location#getLon()
+	 * @see #getLocation()
+	 * @generated
+	 */
+	EAttribute getLocation_Lon();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -948,6 +1093,14 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT__PORT_CODE = eINSTANCE.getPort_PortCode();
+
+		/**
+		 * The meta object literal for the '<em><b>Location</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PORT__LOCATION = eINSTANCE.getPort_Location();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.RouteImpl <em>Route</em>}' class.
@@ -1094,6 +1247,40 @@ public interface PortPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CAPABILITY_GROUP__CAPABILITY = eINSTANCE.getCapabilityGroup_Capability();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.port.impl.LocationImpl <em>Location</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.port.impl.LocationImpl
+		 * @see com.mmxlabs.models.lng.port.impl.PortPackageImpl#getLocation()
+		 * @generated
+		 */
+		EClass LOCATION = eINSTANCE.getLocation();
+
+		/**
+		 * The meta object literal for the '<em><b>Country</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOCATION__COUNTRY = eINSTANCE.getLocation_Country();
+
+		/**
+		 * The meta object literal for the '<em><b>Lat</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOCATION__LAT = eINSTANCE.getLocation_Lat();
+
+		/**
+		 * The meta object literal for the '<em><b>Lon</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LOCATION__LON = eINSTANCE.getLocation_Lon();
 
 	}
 

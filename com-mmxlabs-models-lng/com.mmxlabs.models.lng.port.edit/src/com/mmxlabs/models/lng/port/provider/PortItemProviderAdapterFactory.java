@@ -212,6 +212,29 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.port.Location} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LocationItemProvider locationItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.port.Location}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLocationAdapter() {
+		if (locationItemProvider == null) {
+			locationItemProvider = new LocationItemProvider(this);
+		}
+
+		return locationItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -316,6 +339,7 @@ public class PortItemProviderAdapterFactory extends PortAdapterFactory implement
 		if (routeLineItemProvider != null) routeLineItemProvider.dispose();
 		if (portModelItemProvider != null) portModelItemProvider.dispose();
 		if (capabilityGroupItemProvider != null) capabilityGroupItemProvider.dispose();
+		if (locationItemProvider != null) locationItemProvider.dispose();
 	}
 
 }

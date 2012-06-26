@@ -78,6 +78,15 @@ public interface PortFactory extends EFactory {
 	CapabilityGroup createCapabilityGroup();
 
 	/**
+	 * Returns a new object of class '<em>Location</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Location</em>'.
+	 * @generated
+	 */
+	Location createLocation();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
