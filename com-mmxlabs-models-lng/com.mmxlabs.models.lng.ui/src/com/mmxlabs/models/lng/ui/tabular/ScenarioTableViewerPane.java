@@ -79,7 +79,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		this.actionBars = actionBars;
 	}
 
-	protected ScenarioTableViewer getScenarioViewer() {
+	public ScenarioTableViewer getScenarioViewer() {
 		return scenarioViewer;
 	}
 
