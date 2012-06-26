@@ -265,9 +265,9 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 
 			//			System.err.println(getKey() + " acquired");
 
-			instance.setLocked(true);
 			claiming = false;
 			setClaimed(true);
+			instance.setLocked(true);
 			claimCount++;
 			return true;
 		}
@@ -297,9 +297,9 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 				}
 			}
 			//			System.err.println(getKey() + " acquired");
-			instance.setLocked(true);
 			claiming = false;
 			setClaimed(true);
+			instance.setLocked(true);
 			claimCount++;
 			return true;
 		}
