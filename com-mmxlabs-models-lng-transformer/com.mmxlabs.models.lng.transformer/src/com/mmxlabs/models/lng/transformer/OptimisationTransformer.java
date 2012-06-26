@@ -19,9 +19,12 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.input.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.optimiser.Constraint;
 import com.mmxlabs.models.lng.optimiser.Objective;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
@@ -179,7 +182,61 @@ public class OptimisationTransformer {
 		final Map<ISequenceElement, IResource> resourceAdvice = new HashMap<ISequenceElement, IResource>();
 		final InputModel inputModel = rootObject.getSubModel(InputModel.class);
 
-		if (!inputModel.getAssignments().isEmpty()) {
+		if (!inputModel.getElementAssignments().isEmpty()) {
+			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(inputModel, rootObject.getSubModel(FleetModel.class));
+			advice = new ModifiableSequences(data.getResources());
+			final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+			final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+			final IStartEndRequirementProvider serp = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
+			
+			for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
+				sequence.getValue().add(serp.getStartElement(sequence.getKey()));
+			}
+
+			final Map<IVesselClass, List<IVessel>> spotVesselsByClass = new HashMap<IVesselClass, List<IVessel>>();
+			for (final IResource resource : data.getResources()) {
+				final IVessel vessel = vp.getVessel(resource);
+				if (!vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER))
+					continue;
+
+				final IVesselClass vesselClass = vessel.getVesselClass();
+
+				List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
+				if (vesselsOfClass == null) {
+					vesselsOfClass = new LinkedList<IVessel>();
+					spotVesselsByClass.put(vesselClass, vesselsOfClass);
+				}
+
+				vesselsOfClass.add(vessel);
+			}
+			
+			seq_loop: for (final CollectedAssignment seq : assignments) {
+				IVessel vessel = null;
+				if (seq.isSpotVessel()) {
+					final IVesselClass vesselClass = mem.getOptimiserObject(seq.getVesselOrClass(), IVesselClass.class);
+					
+					final List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
+					if (vesselsOfClass == null || vesselsOfClass.isEmpty())
+						continue seq_loop;
+
+					vessel = vesselsOfClass.get(0);
+					vesselsOfClass.remove(0);
+
+					break;
+				} else {
+					vessel = mem.getOptimiserObject(seq.getVesselOrClass(), IVessel.class);
+				}
+				if (vessel == null) continue seq_loop;
+				final IResource resource = vp.getResource(vessel);
+				final IModifiableSequence sequence = advice.getModifiableSequence(resource);
+				
+				for (final UUIDObject assignedObject : seq.getAssignedObjects()) {
+					for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
+						sequence.add(element);
+					}
+				}
+			}
+		} else if (!inputModel.getAssignments().isEmpty()) {
 			log.debug("Creating advice for sequence builder");
 			advice = new ModifiableSequences(data.getResources());
 			final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);

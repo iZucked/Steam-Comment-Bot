@@ -29,7 +29,8 @@ Require-Bundle: com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-ver
  com.mmxlabs.models.lng.schedule;bundle-version="1.0.0",
  com.mmxlabs.models.lng.types;bundle-version="1.0.0",
  com.mmxlabs.models.lng.optimiser;bundle-version="1.0.0",
- com.mmxlabs.models.util;bundle-version="1.0.0"
+ com.mmxlabs.models.util;bundle-version="1.0.0",
+ com.mmxlabs.models.lng.input.editor;bundle-version="1.0.0"
 Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.contracts,
  com.mmxlabs.models.lng.transformer.export,
