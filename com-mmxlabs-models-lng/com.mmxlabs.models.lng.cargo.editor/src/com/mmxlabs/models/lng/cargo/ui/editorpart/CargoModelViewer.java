@@ -351,33 +351,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 				if (value == null || value.equals(-1))
 					return;
 				final AVesselSet set = (AVesselSet) vessels.get((Integer) value);
-				Assignment newAssignment;
-				if (set instanceof AVessel) {
-					// find vessel
-					newAssignment = AssignmentEditorHelper.getAssignmentForVessel(input, set);
-					if (newAssignment == null) {
-						newAssignment = InputFactory.eINSTANCE.createAssignment();
-						newAssignment.getVessels().add(set);
-						newAssignment.getAssignedObjects().add((UUIDObject) object);
-						location.getEditingDomain().getCommandStack().execute(AddCommand.create(location.getEditingDomain(), input, InputPackage.eINSTANCE.getInputModel_Assignments(), newAssignment));
-						return;
-					} else {
-						location.getEditingDomain()
-								.getCommandStack()
-								.execute(
-										AssignmentEditorHelper.taskReassigned(getEditingDomain(), input, (UUIDObject) object, null, null,
-												AssignmentEditorHelper.getAssignmentForTask(input, (UUIDObject) object), newAssignment));
-					}
-				} else if (set instanceof AVesselClass) {
-					// add to spot
-					newAssignment = InputFactory.eINSTANCE.createAssignment();
-					newAssignment.getVessels().add(set);
-					newAssignment.setAssignToSpot(true);
-					newAssignment.getAssignedObjects().add((UUIDObject) object);
-					location.getEditingDomain().getCommandStack().execute(AddCommand.create(location.getEditingDomain(), input, InputPackage.eINSTANCE.getInputModel_Assignments(), newAssignment));
-					return;
-				}
-
+				location.getEditingDomain().getCommandStack().execute(AssignmentEditorHelper.reassignElement(getEditingDomain(), input, (UUIDObject) object, set));
 			}
 		}
 
@@ -398,11 +372,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 				final InputModel input = location.getRootObject().getSubModel(InputModel.class);
 				if (input != null) {
-					for (final Assignment assignment : input.getAssignments()) {
-						if (assignment.getAssignedObjects().contains(cargo)) {
-							return vessels.indexOf(assignment.getVessels().iterator().next());
-						}
-					}
+					return vessels.indexOf(AssignmentEditorHelper.getElementAssignment(input, cargo));
 				}
 			}
 
