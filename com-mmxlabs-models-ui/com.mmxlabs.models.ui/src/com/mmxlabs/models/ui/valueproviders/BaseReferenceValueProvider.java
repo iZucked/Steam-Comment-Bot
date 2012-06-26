@@ -40,12 +40,16 @@ public abstract class BaseReferenceValueProvider extends MMXContentAdapter imple
 	/**
 	 * A comparator used to sort on the string in a pair of strings and ?s
 	 */
-	protected final Comparator<Pair<String, ?>> comparator = new Comparator<Pair<String, ?>>() {
-		@Override
-		public int compare(Pair<String, ?> o1, Pair<String, ?> o2) {
-			return o1.getFirst().compareTo(o2.getFirst());
-		}
-	};
+	protected final Comparator<Pair<String, ?>> comparator = createComparator();
+
+	protected Comparator<Pair<String, ?>> createComparator() {
+		return new Comparator<Pair<String, ?>>() {
+			@Override
+			public int compare(Pair<String, ?> o1, Pair<String, ?> o2) {
+				return o1.getFirst().compareTo(o2.getFirst());
+			}
+		};
+	}
 	
 	/**
 	 * Equivalent to {@link #BaseReferenceValueProvider(EAttribute)} with <code>MMXCorePackage.eINSTANCE.getNamedObject_Name()</code>
@@ -80,7 +84,7 @@ public abstract class BaseReferenceValueProvider extends MMXContentAdapter imple
 		final ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();
 
 		for (final EObject object : objects) {
-			result.add(new Pair<String, EObject>(object.eGet(nameAttribute)
+			result.add(new Pair<String, EObject>(getName(null, null, object)
 					 + "", object));
 		}
 
