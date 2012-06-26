@@ -12,6 +12,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import com.mmxlabs.datasources.IDistanceDataSource;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
@@ -55,7 +56,8 @@ public class CostMatrixView extends ScenarioInstanceView {
 				matrixViewer.dispose();
 				matrixViewer = null;
 			}
-
+			getSite().setSelectionProvider(null);
+			
 			final Composite parent = sash.getParent();
 			sash.dispose();
 			sash = new SashForm(parent, SWT.VERTICAL);
