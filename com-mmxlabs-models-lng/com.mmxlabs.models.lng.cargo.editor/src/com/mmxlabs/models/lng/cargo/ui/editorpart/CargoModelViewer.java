@@ -197,7 +197,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 					return (Cargo) o;
 				}
 				if (o instanceof CargoAllocation) {
-					CargoAllocation cargoAllocation = (CargoAllocation) o;
+					final CargoAllocation cargoAllocation = (CargoAllocation) o;
 					return cargoAllocation.getInputCargo();
 				}
 				if (o instanceof LoadSlot) {
