@@ -108,6 +108,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 								instance.getLock(ScenarioLock.EVALUATOR).release();
 							}
 						} else {
+							spinLock = true;
 							Thread.currentThread().interrupt(); //interrupt ourself to delay again, because we missed a claim.
 						}
 					} else {
