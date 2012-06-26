@@ -11,9 +11,7 @@ import javax.management.timer.Timer;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
-import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.IFilter;
 import org.eclipse.jface.window.Window;
@@ -36,32 +34,30 @@ import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.AssignmentEditor;
 import com.mmxlabs.models.lng.input.editor.IAssignmentInformationProvider;
 import com.mmxlabs.models.lng.input.editor.IAssignmentListener;
 import com.mmxlabs.models.lng.input.editor.IAssignmentProvider;
 import com.mmxlabs.models.lng.input.editor.ISizeListener;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.input.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
-import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 
 public class InputJointModelEditorContribution extends
 		BaseJointModelEditorContribution<InputModel> {
 	
 	private final HashMap<Pair<Port, Port>, Integer> minTravelTimes = new HashMap<Pair<Port, Port>, Integer>();
-	private AssignmentEditor<Assignment, UUIDObject> editor;
+	private AssignmentEditor<CollectedAssignment, UUIDObject> editor;
 	private MMXContentAdapter adapter = new MMXContentAdapter() {
 		private boolean process(final Notification n) {
 			if (!n.isTouch()) {
@@ -82,10 +78,17 @@ public class InputJointModelEditorContribution extends
 
 	protected void updateEditorInput() {
 		updateMinTravelTimes();
-		editor.setResources((List) modelObject.getAssignments());
+		
 		
 		CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+		
+		final List<Object> resources = new ArrayList<Object>();
+		resources.addAll(fleetModel.getVessels());
+		
+		// try and set up spot vessels. 
+		
+		editor.setResources(AssignmentEditorHelper.collectAssignments(modelObject, fleetModel));
 		
 		final List<UUIDObject> tasks = new ArrayList<UUIDObject>();
 		if (cargoModel != null) {
@@ -152,7 +155,7 @@ public class InputJointModelEditorContribution extends
 		
 		scroller.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 4, 1));
 		
-		editor = new AssignmentEditor<Assignment, UUIDObject>(scroller, SWT.NONE);
+		editor = new AssignmentEditor<CollectedAssignment, UUIDObject>(scroller, SWT.NONE);
 
 		scroller.setContent(editor);
 		scroller.setExpandHorizontal(true);
@@ -165,7 +168,7 @@ public class InputJointModelEditorContribution extends
 			}
 		});
 		
-		final IAssignmentInformationProvider<Assignment, UUIDObject> timing = new IAssignmentInformationProvider<Assignment, UUIDObject>() {
+		final IAssignmentInformationProvider<CollectedAssignment, UUIDObject> timing = new IAssignmentInformationProvider<CollectedAssignment, UUIDObject>() {
 			@Override
 			public Date getStartDate(UUIDObject task) {
 				return AssignmentEditorHelper.getStartDate(task);
@@ -186,9 +189,8 @@ public class InputJointModelEditorContribution extends
 			}
 
 			@Override
-			public String getResourceLabel(Assignment resource) {
-				if (resource.getVessels().isEmpty()) return "";
-				return resource.getVessels().iterator().next().getName();
+			public String getResourceLabel(CollectedAssignment resource) {
+				return resource.getVesselOrClass().getName();
 			}
 
 			private Port getEndPort(final UUIDObject task) {
@@ -226,39 +228,37 @@ public class InputJointModelEditorContribution extends
 							secondLine += " to " + ((CharterOutEvent) task).getRelocateTo().getName();
 					}
 				}
-				return getLabel(task) + secondLine;
+				return getLabel(task) + secondLine;// + "\n" + AssignmentEditorHelper.getElementAssignment(modelObject, task).getSequence();
 			}
 
 			@Override
 			public boolean isLocked(UUIDObject task) {
-				return modelObject.getLockedAssignedObjects().contains(task);
+				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(modelObject, task);
+				return elementAssignment == null ? false : elementAssignment.isLocked();
 			}
 
 			@Override
-			public Date getResourceStartDate(final Assignment resource) {
-				if (resource.getVessels().isEmpty() == false) {
-					final AVesselSet v = resource.getVessels().get(0);
-					if (v instanceof Vessel) {
-						final Vessel v2 = (Vessel) v;
+			public Date getResourceStartDate(final CollectedAssignment resource) {
+				if (resource.isSpotVessel() == false) {
+					
+						final Vessel v2 = (Vessel) resource.getVesselOrClass();
 						if (v2.getAvailability().isSetStartAfter()) {
 							return v2.getAvailability().getStartAfter();
 						}
-					}
+					
 				}
 				return null;
 			}
 
 			@Override
-			public Date getResourceEndDate(final Assignment resource) {
-				if (resource.getVessels().isEmpty() == false) {
-					final AVesselSet v = resource.getVessels().get(0);
-					if (v instanceof Vessel) {
-						final Vessel v2 = (Vessel) v;
+			public Date getResourceEndDate(final CollectedAssignment resource) {
+				if (resource.isSpotVessel() == false) {
+						final Vessel v2 = (Vessel) resource.getVesselOrClass();
 						if (v2.getAvailability().isSetStartAfter()) {
 							return v2.getAvailability().getEndBy();
 						}
 					}
-				}
+				
 				return null;
 			}
 
@@ -283,9 +283,9 @@ public class InputJointModelEditorContribution extends
 		
 		editor.setInformationProvider(timing);
 		
-		editor.setAssignmentProvider(new IAssignmentProvider<Assignment, UUIDObject>() {
+		editor.setAssignmentProvider(new IAssignmentProvider<CollectedAssignment, UUIDObject>() {
 			@Override
-			public List<UUIDObject> getAssignedObjects(Assignment resource) {
+			public List<UUIDObject> getAssignedObjects(CollectedAssignment resource) {
 				return resource.getAssignedObjects();
 			}
 
@@ -300,27 +300,32 @@ public class InputJointModelEditorContribution extends
 			}
 		});
 		
-		editor.addAssignmentListener(new IAssignmentListener<Assignment, UUIDObject>() {
+		editor.addAssignmentListener(new IAssignmentListener<CollectedAssignment, UUIDObject>() {
 			@Override
-			public void taskReassigned(UUIDObject task, UUIDObject beforeTask,
-					UUIDObject afterTask, Assignment oldResource,
-					Assignment newResource) {
-				final Command c = AssignmentEditorHelper.taskReassigned(editorPart.getEditingDomain(), modelObject, task, beforeTask, afterTask, oldResource, newResource);
+			public void taskReassigned(UUIDObject task, UUIDObject beforeTask, UUIDObject afterTask, CollectedAssignment oldResource, CollectedAssignment newResource) {
+//				final Command c = AssignmentEditorHelper.taskReassigned(editorPart.getEditingDomain(), modelObject, task, beforeTask, afterTask, oldResource, newResource);
 				
-				editorPart.getEditingDomain().getCommandStack().execute(c);
+//				editorPart.getEditingDomain().getCommandStack().execute(c);
 				
-				editor.update();
+				final EditingDomain ed = editorPart.getEditingDomain();
+				//TODO sort out spot vessels.
+				ed.getCommandStack().execute(AssignmentEditorHelper.reassignElement(ed, modelObject, beforeTask, task, afterTask, newResource.getVesselOrClass()));
+				
+				updateEditorInput();
+//				editor.update();
 			}
 
 			@Override
-			public void taskUnassigned(UUIDObject task, Assignment oldResource) {
+			public void taskUnassigned(UUIDObject task, CollectedAssignment oldResource) {
 				final EditingDomain ed = editorPart.getEditingDomain();
 				
-				final Command cc = AssignmentEditorHelper.totallyUnassign(ed, modelObject, task);
+//				final Command cc = AssignmentEditorHelper.totallyUnassign(ed, modelObject, task);
 				
-				ed.getCommandStack().execute(cc);
+//				ed.getCommandStack().execute(cc);
 				
-				editor.update();
+				ed.getCommandStack().execute(AssignmentEditorHelper.unassignElement(ed, modelObject, task));
+				updateEditorInput();
+//				editor.update();
 			}
 
 			@Override
@@ -338,19 +343,23 @@ public class InputJointModelEditorContribution extends
 			}
 
 			@Override
-			public void taskLocked(final UUIDObject task, final Assignment resource) {
+			public void taskLocked(final UUIDObject task, final CollectedAssignment resource) {
 				final EditingDomain ed = editorPart.getEditingDomain();
-				editorPart.getEditingDomain().getCommandStack().execute(
-						AddCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), 
-								task));
+//				editorPart.getEditingDomain().getCommandStack().execute(
+//						AddCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), 
+//								task));
+				ed.getCommandStack().execute(AssignmentEditorHelper.lockElement(ed, modelObject, task));
+				editor.redraw();
 			}
 
 			@Override
-			public void taskUnlocked(final UUIDObject task, final Assignment resource) {
+			public void taskUnlocked(final UUIDObject task, final CollectedAssignment resource) {
 				final EditingDomain ed = editorPart.getEditingDomain();
-				editorPart.getEditingDomain().getCommandStack().execute(
-						RemoveCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), 
-								task));
+//				editorPart.getEditingDomain().getCommandStack().execute(
+//						RemoveCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), 
+//								task));
+				ed.getCommandStack().execute(AssignmentEditorHelper.unlockElement(ed, modelObject, task));
+				editor.redraw();
 			}
 		});
 		
@@ -358,7 +367,7 @@ public class InputJointModelEditorContribution extends
 		final IFilter resourceFilter = new IFilter() {
 			@Override
 			public boolean select(Object toTest) {
-				final String name = timing.getResourceLabel((Assignment) toTest);
+				final String name = timing.getResourceLabel((CollectedAssignment) toTest);
 				final String pattern = resourceFilterText.getText().trim();
 				return match(name, pattern);
 			}

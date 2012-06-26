@@ -69,6 +69,7 @@ public class InputModelItemProvider
 			super.getPropertyDescriptors(object);
 
 			addLockedAssignedObjectsPropertyDescriptor(object);
+			addElementAssignmentsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -87,6 +88,28 @@ public class InputModelItemProvider
 				 getString("_UI_InputModel_lockedAssignedObjects_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_InputModel_lockedAssignedObjects_feature", "_UI_InputModel_type"),
 				 InputPackage.Literals.INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Element Assignments feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addElementAssignmentsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_InputModel_elementAssignments_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_InputModel_elementAssignments_feature", "_UI_InputModel_type"),
+				 InputPackage.Literals.INPUT_MODEL__ELEMENT_ASSIGNMENTS,
 				 true,
 				 false,
 				 true,

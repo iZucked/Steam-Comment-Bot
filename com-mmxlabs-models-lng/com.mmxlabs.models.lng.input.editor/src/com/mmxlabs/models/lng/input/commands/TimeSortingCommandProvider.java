@@ -79,20 +79,6 @@ public class TimeSortingCommandProvider implements IModelCommandProvider {
 		}
 		return null;
 	}
-	
-	private Command unassignTask(final UUIDObject o, final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides) {
-		InputModel input = rootObject.getSubModel(InputModel.class);
-		if (input != null) {
-			if (overrides.containsKey(input)) {
-				input = (InputModel) overrides.get(input);
-			}
-			final Assignment a = AssignmentEditorHelper.getAssignmentForTask(input, o);
-			if (a != null) {
-				return AssignmentEditorHelper.taskReassigned(editingDomain, input, o, null, null, null, a);
-			}
-		}
-		return null;
-	}
 
 	@Override
 	public void startCommandProvision() {

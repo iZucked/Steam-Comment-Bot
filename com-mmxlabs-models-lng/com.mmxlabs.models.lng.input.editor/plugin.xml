@@ -86,4 +86,13 @@
           modelClass="com.mmxlabs.models.lng.cargo.Cargo">
     </componentHelper>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.input.valueprovider.VesselValueProviderFactory"
+          id="com.mmxlabs.models.lng.input.editor.assignmentValueProvider"
+          ownerEClass="com.mmxlabs.models.lng.input.ElementAssignment"
+          referenceEClass="com.mmxlabs.models.lng.types.AVesselSet">
+    </valueProvider>
+ </extension>
 </plugin>

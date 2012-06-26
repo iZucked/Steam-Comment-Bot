@@ -42,6 +42,15 @@ public interface InputFactory extends EFactory {
 	Assignment createAssignment();
 
 	/**
+	 * Returns a new object of class '<em>Element Assignment</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Element Assignment</em>'.
+	 * @generated
+	 */
+	ElementAssignment createElementAssignment();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
