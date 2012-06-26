@@ -771,9 +771,6 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements
 		addEOperation(scenarioLockEClass, null, "init", 1, 1, IS_UNIQUE,
 				IS_ORDERED);
 
-		addEOperation(scenarioLockEClass, ecorePackage.getEInt(),
-				"claimResponsibly", 1, 1, IS_UNIQUE, IS_ORDERED);
-
 		// Initialize data types
 		initEDataType(iScenarioServiceEDataType, IScenarioService.class,
 				"IScenarioService", !IS_SERIALIZABLE,

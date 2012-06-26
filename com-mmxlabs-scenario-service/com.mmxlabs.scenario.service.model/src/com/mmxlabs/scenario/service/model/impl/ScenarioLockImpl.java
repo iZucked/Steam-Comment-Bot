@@ -237,6 +237,11 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	private boolean claiming = false;
 
 	/**
+	 * Depth of stacked calls to claim()
+	 */
+	private int claimCount = 0;
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated NOT
@@ -248,6 +253,7 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 			//			System.err.println(getKey() + " synch");
 			if (isClaimed()) {
 				//				System.err.println(getKey() + " already claimed");	
+				claimCount++;
 				return true;
 			}
 			claiming = true;
@@ -262,6 +268,7 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 			instance.setLocked(true);
 			claiming = false;
 			setClaimed(true);
+			claimCount++;
 			return true;
 		}
 	}
@@ -272,8 +279,30 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * @generated NOT
 	 */
 	public boolean awaitClaim() {
-		//		System.err.println(getKey() + " await claim");
-		return claimResponsibly() != 0;
+		final ScenarioInstance instance = getInstance();
+		synchronized (instance) {
+			//			System.err.println(getKey() + " await synch");
+			if (isClaimed()) {
+				//				System.err.println(getKey() + " already claimed");
+				claimCount++;
+				return true;
+			}
+			claiming = true;
+			while (instance.isLocked()) {
+				try {
+					//					System.err.println(getKey() + " waiting for unlock");
+					instance.wait();
+				} catch (InterruptedException e) {
+
+				}
+			}
+			//			System.err.println(getKey() + " acquired");
+			instance.setLocked(true);
+			claiming = false;
+			setClaimed(true);
+			claimCount++;
+			return true;
+		}
 	}
 
 	/**
@@ -287,10 +316,13 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 		synchronized (instance) {
 			//			System.err.println(getKey() + " release synch");
 			if (isClaimed()) {
-				setClaimed(false);
-				getInstance().setLocked(false);
-				//				System.err.println(getKey() + " waking up others");
-				getInstance().notifyAll();
+				claimCount--;
+				if (claimCount == 0) {
+					setClaimed(false);
+					getInstance().setLocked(false);
+					//		System.err.println(getKey() + " waking up others");
+					getInstance().notifyAll();
+				}
 			} else {
 				//				System.err.println(getKey() + " not actually claimed");
 			}
@@ -325,36 +357,6 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 			setAvailable(!instance.isLocked());
 			getInstance().eAdapters().add(lockWatcher);
 		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated NOT
-	 */
-	public int claimResponsibly() {
-		final ScenarioInstance instance = getInstance();
-		synchronized (instance) {
-			//			System.err.println(getKey() + " await synch");
-			if (isClaimed()) {
-				//				System.err.println(getKey() + " already claimed");
-				return CLAIMED_ELSEWHERE;
-			}
-			claiming = true;
-			while (instance.isLocked()) {
-				try {
-					//					System.err.println(getKey() + " waiting for unlock");
-					instance.wait();
-				} catch (InterruptedException e) {
-
-				}
-			}
-			//			System.err.println(getKey() + " acquired");
-			instance.setLocked(true);
-			claiming = false;
-			setClaimed(true);
-		}
-		return CLAIMED_BY_CALLER;
 	}
 
 	/**
