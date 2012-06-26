@@ -196,45 +196,49 @@ public class OptimisationTransformer {
 			final Map<IVesselClass, List<IVessel>> spotVesselsByClass = new HashMap<IVesselClass, List<IVessel>>();
 			for (final IResource resource : data.getResources()) {
 				final IVessel vessel = vp.getVessel(resource);
-				if (!vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER))
-					continue;
+				if (vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
+					final IVesselClass vesselClass = vessel.getVesselClass();
 
-				final IVesselClass vesselClass = vessel.getVesselClass();
+					List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
+					if (vesselsOfClass == null) {
+						vesselsOfClass = new LinkedList<IVessel>();
+						spotVesselsByClass.put(vesselClass, vesselsOfClass);
+					}
 
-				List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
-				if (vesselsOfClass == null) {
-					vesselsOfClass = new LinkedList<IVessel>();
-					spotVesselsByClass.put(vesselClass, vesselsOfClass);
+					vesselsOfClass.add(vessel);
 				}
-
-				vesselsOfClass.add(vessel);
 			}
 			
-			seq_loop: for (final CollectedAssignment seq : assignments) {
+			for (final CollectedAssignment seq : assignments) {
 				IVessel vessel = null;
+				log.debug("Processing assignment " + seq.getVesselOrClass().getName());
 				if (seq.isSpotVessel()) {
 					final IVesselClass vesselClass = mem.getOptimiserObject(seq.getVesselOrClass(), IVesselClass.class);
 					
 					final List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
-					if (vesselsOfClass == null || vesselsOfClass.isEmpty())
-						continue seq_loop;
-
-					vessel = vesselsOfClass.get(0);
-					vesselsOfClass.remove(0);
-
-					break;
+					if (!(vesselsOfClass == null || vesselsOfClass.isEmpty())) {
+						vessel = vesselsOfClass.get(0);
+						vesselsOfClass.remove(0);
+					}
 				} else {
 					vessel = mem.getOptimiserObject(seq.getVesselOrClass(), IVessel.class);
 				}
-				if (vessel == null) continue seq_loop;
-				final IResource resource = vp.getResource(vessel);
-				final IModifiableSequence sequence = advice.getModifiableSequence(resource);
-				
-				for (final UUIDObject assignedObject : seq.getAssignedObjects()) {
-					for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
-						sequence.add(element);
+				if (vessel != null) {
+					final IResource resource = vp.getResource(vessel);
+					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
+					
+					for (final UUIDObject assignedObject : seq.getAssignedObjects()) {
+						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
+							sequence.add(element);
+						}
 					}
+				} else {
+					log.debug("Vessel is missing: " + seq.getVesselOrClass().getName());
 				}
+			}
+			
+			for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
+				sequence.getValue().add(serp.getEndElement(sequence.getKey()));
 			}
 		} else if (!inputModel.getAssignments().isEmpty()) {
 			log.debug("Creating advice for sequence builder");
