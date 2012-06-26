@@ -169,12 +169,12 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	
 	@Override
 	public Value getValueAfter(final Date date) {
-		Value lastValue = null;
 		for (final IndexPoint<Value> point : getSortedPoints()) {
-			if (!point.getDate().after(date)) lastValue = point.getValue();
-			else return lastValue;
+			if (point.getDate().after(date)) {
+				return point.getValue();
+			}
 		}
-		return lastValue;
+		return null;
 	}
 
 	@Override
