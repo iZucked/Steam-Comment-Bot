@@ -4,13 +4,18 @@
  */
 package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
@@ -20,32 +25,43 @@ import org.eclipse.ui.IWorkbenchPart;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.importers.DataIndexImporter;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
+import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.DialogFeatureManipulator;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.models.util.importer.IClassImporter;
 
 public class IndexPane extends ScenarioTableViewerPane {
+
+	private List<EReference> path = null;
+
 	private boolean useIntegers;
 
 	public IndexPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
+
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		
+
+		this.path = path;
+
 		addTypicalColumn("Type", new NonEditableColumn() {
 			@Override
-			public String render(Object object) {
+			public String render(final Object object) {
 				if (object instanceof DerivedIndex) {
 					return "Expression";
 				} else {
@@ -54,21 +70,21 @@ public class IndexPane extends ScenarioTableViewerPane {
 			}
 		});
 		addNameManipulator("Name");
-		
-		addTypicalColumn("Content", new IndexValueManipulator());
-		
+
+		// addTypicalColumn("Content", new IndexValueManipulator());
+
 		defaultSetTitle("Indices");
 	}
-	
+
 	public void setUseIntegers(final boolean b) {
 		this.useIntegers = b;
 	}
-	
+
 	@Override
 	protected Action createImportAction() {
 		return new SimpleImportAction(getJointModelEditorPart(), getScenarioViewer()) {
 			@Override
-			protected IClassImporter getImporter(EReference containment) {
+			protected IClassImporter getImporter(final EReference containment) {
 				final IClassImporter result = super.getImporter(containment);
 				if (result instanceof DataIndexImporter) {
 					((DataIndexImporter) result).setParseAsInt(useIntegers);
@@ -79,79 +95,206 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	private class IndexValueManipulator implements ICellRenderer, ICellManipulator {
-		private BasicAttributeManipulator expressionManipulator = 
-				new BasicAttributeManipulator(
-						PricingPackage.eINSTANCE.getDerivedIndex_Expression(),
-						getEditingDomain());
-		
-		private BasicAttributeManipulator dataManipulator = 
-				new DialogFeatureManipulator(PricingPackage.eINSTANCE.getDataIndex_Points(), getEditingDomain()) {
-					
-					@Override
-					protected String renderValue(Object value) {
-						if (value == null) return "";
-						return ((List) value).size() + " points";
-					}
-					
-					@Override
-					protected Object openDialogBox(Control cellEditorWindow, Object object) {
-						return null;
-					}
-				};
-		
+		private final BasicAttributeManipulator expressionManipulator = new BasicAttributeManipulator(PricingPackage.eINSTANCE.getDerivedIndex_Expression(), getEditingDomain());
+
+		private final BasicAttributeManipulator dataManipulator = new DialogFeatureManipulator(PricingPackage.eINSTANCE.getDataIndex_Points(), getEditingDomain()) {
+
+			@Override
+			protected String renderValue(final Object value) {
+				if (value == null)
+					return "";
+				return ((List) value).size() + " points";
+			}
+
+			@Override
+			protected Object openDialogBox(final Control cellEditorWindow, final Object object) {
+				return null;
+			}
+		};
+
 		private BasicAttributeManipulator pick(final Object object) {
-			if (object instanceof DataIndex) return dataManipulator;
-			else return expressionManipulator;
+			if (object instanceof DataIndex)
+				return dataManipulator;
+			else
+				return expressionManipulator;
 		}
-		
+
 		@Override
-		public void setValue(Object object, Object value) {
+		public void setValue(final Object object, final Object value) {
 			pick(object).setValue(object, value);
 		}
 
 		@Override
-		public CellEditor getCellEditor(Composite parent, Object object) {
+		public CellEditor getCellEditor(final Composite parent, final Object object) {
 			return pick(object).getCellEditor(parent, object);
 		}
 
 		@Override
-		public Object getValue(Object object) {
+		public Object getValue(final Object object) {
 			return pick(object).getValue(object);
 		}
 
 		@Override
-		public boolean canEdit(Object object) {
+		public boolean canEdit(final Object object) {
 			return pick(object).canEdit(object);
 		}
 
 		@Override
-		public String render(Object object) {
+		public String render(final Object object) {
 			return pick(object).render(object);
 		}
 
 		@Override
-		public Comparable getComparable(Object object) {
+		public Comparable getComparable(final Object object) {
 			return pick(object).getComparable(object);
 		}
 
 		@Override
-		public Object getFilterValue(Object object) {
+		public Object getFilterValue(final Object object) {
 			return pick(object).getFilterValue(object);
 		}
 
 		@Override
-		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(
-				Object object) {
+		public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 			return pick(object).getExternalNotifiers(object);
 		}
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane#defaultSetTitle(java.lang.String)
 	 */
 	@Override
-	public void defaultSetTitle(String string) {
+	public void defaultSetTitle(final String string) {
 		super.defaultSetTitle(string);
+	}
+
+	public void removeColumn(final String title) {
+		// for (final ColumnHandler h : handlers) {
+		// if (h.title.equals(title)) {
+		// viewer.removeColumn(h.column);
+		// handlers.remove(h);
+		// handlersInOrder.remove(h);
+		// break;
+		// }
+		// }
+
+	}
+
+	protected ScenarioTableViewer constructViewer(final Composite parent) {
+		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
+			@Override
+			protected void inputChanged(final Object input, final Object oldInput) {
+				// TODO Auto-generated method stub
+				super.inputChanged(input, oldInput);
+
+				if (input instanceof PricingModel) {
+					final PricingModel pricingModel = (PricingModel) input;
+
+					Object obj = pricingModel;
+					for (final EReference ref : path) {
+						obj = ((EObject) obj).eGet(ref);
+					}
+
+					if (obj instanceof List) {
+						final List<Index<?>> indexCurve = (List<Index<?>>) obj;
+
+						Date minDate = null;
+						Date maxDate = null;
+						for (final Index<?> idx : indexCurve) {
+							for (final Date d : idx.getDates()) {
+								if (minDate == null || minDate.after(d)) {
+									minDate = d;
+								}
+								if (maxDate == null || maxDate.before(d)) {
+									maxDate = d;
+								}
+							}
+						}
+
+						final Calendar c = Calendar.getInstance();
+						c.setTime(minDate);
+						c.set(Calendar.MILLISECOND, 0);
+						c.set(Calendar.SECOND, 0);
+						c.set(Calendar.MINUTE, 0);
+						c.set(Calendar.HOUR, 0);
+						c.set(Calendar.DAY_OF_MONTH, 1);
+
+						while (c.getTime().before(maxDate)) {
+							addColumn(c, true);
+							c.add(Calendar.MONTH, 1);
+						}
+
+						viewer.refresh();
+					}
+				}
+
+			}
+
+			private void addColumn(final Calendar cal, final boolean sortable) {
+
+				final String date = String.format("%4d-%02d", cal.get(Calendar.YEAR), (cal.get(Calendar.MONTH) + 1));
+				final GridViewerColumn col = addSimpleColumn(date, sortable);
+				col.getColumn().setData("date", cal.getTime());
+
+				final ICellRenderer renderer = new ICellRenderer() {
+
+					@Override
+					public String render(final Object object) {
+						return object.toString();
+					}
+
+					@Override
+					public Object getFilterValue(final Object object) {
+						return null;
+					}
+
+					@Override
+					public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
+						return null;
+					}
+
+					@Override
+					public Comparable getComparable(final Object element) {
+						if (element instanceof Index) {
+							final Index<?> idx = (Index<?>) element;
+							final Date colDate = (Date) col.getColumn().getData("date");
+							final Object valueAfter = idx.getValueAfter(colDate);
+							if (valueAfter instanceof Integer) {
+								return (Integer) valueAfter;
+							} else if (valueAfter instanceof Double) {
+								return (Double) valueAfter;
+							}
+						}
+
+						return null;
+					}
+				};
+
+				col.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
+
+				col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
+
+					@Override
+					public String getText(final Object element) {
+						if (element instanceof Index) {
+							final Index<?> idx = (Index<?>) element;
+							final Date colDate = (Date) col.getColumn().getData("date");
+							final Object valueAfter = idx.getValueAfter(colDate);
+							if (valueAfter != null) {
+								if (valueAfter instanceof Integer) {
+									return String.format("%d", valueAfter);
+								} else {
+									return String.format("%01.3f", valueAfter);
+								}
+							}
+						}
+						return null;
+					}
+				});
+			}
+		};
 	}
 }
