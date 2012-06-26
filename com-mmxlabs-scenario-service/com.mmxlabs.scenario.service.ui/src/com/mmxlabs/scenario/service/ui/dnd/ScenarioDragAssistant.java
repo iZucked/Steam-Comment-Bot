@@ -181,8 +181,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 								}
 							}
 						}
-						return Status.OK_STATUS;
 					}
+					return Status.OK_STATUS;
 				}
 
 			}
