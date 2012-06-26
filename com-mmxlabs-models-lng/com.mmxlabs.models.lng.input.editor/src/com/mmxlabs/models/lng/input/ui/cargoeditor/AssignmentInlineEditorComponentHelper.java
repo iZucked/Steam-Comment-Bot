@@ -101,9 +101,13 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 		@Override
 		public EStructuralFeature getFeature() {
-			return null;
+			return InputPackage.eINSTANCE.getElementAssignment_Assignment();
 		}
 
+		public EObject getEditorTarget() {
+			return elementAssignment;
+		}
+		
 		@Override
 		public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 			label.setText("Assigned to");

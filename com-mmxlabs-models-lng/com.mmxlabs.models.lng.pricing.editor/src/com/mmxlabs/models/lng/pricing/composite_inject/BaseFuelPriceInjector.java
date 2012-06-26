@@ -84,6 +84,11 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			public void setEnabled(boolean enabled) {
 				numberEditor.setEnabled(enabled);
 			}
+
+			@Override
+			public EObject getEditorTarget() {
+				return numberEditor.getEditorTarget();
+			}
 		});
 	}
 

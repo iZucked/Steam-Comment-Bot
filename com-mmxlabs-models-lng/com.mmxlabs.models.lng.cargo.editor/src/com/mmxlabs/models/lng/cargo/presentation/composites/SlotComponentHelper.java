@@ -72,6 +72,11 @@ public class SlotComponentHelper extends BaseComponentHelper {
 				setEnabled(!((DischargeSlot) input).isFOBSale());
 			}
 		}
+
+		@Override
+		public EObject getEditorTarget() {
+			return wrapped.getEditorTarget();
+		}
 	};
 
 	/**
