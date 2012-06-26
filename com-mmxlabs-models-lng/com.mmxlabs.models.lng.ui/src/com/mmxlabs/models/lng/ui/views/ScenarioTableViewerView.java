@@ -33,6 +33,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 	protected void displayScenarioInstance(ScenarioInstance instance) {
 		if (instance != getScenarioInstance()) {
 			if (viewerPane != null) {
+				getSite().setSelectionProvider(null);
 				viewerPane.dispose();
 				viewerPane = null;
 			}
