@@ -226,17 +226,8 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getElementAssignment_NextAssignment() {
-		return (EReference)elementAssignmentEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getElementAssignment_Sequence() {
-		return (EAttribute)elementAssignmentEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)elementAssignmentEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -245,7 +236,7 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 	 * @generated
 	 */
 	public EAttribute getElementAssignment_SpotIndex() {
-		return (EAttribute)elementAssignmentEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)elementAssignmentEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -290,7 +281,6 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 		createEReference(elementAssignmentEClass, ELEMENT_ASSIGNMENT__ASSIGNED_OBJECT);
 		createEReference(elementAssignmentEClass, ELEMENT_ASSIGNMENT__ASSIGNMENT);
 		createEAttribute(elementAssignmentEClass, ELEMENT_ASSIGNMENT__LOCKED);
-		createEReference(elementAssignmentEClass, ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT);
 		createEAttribute(elementAssignmentEClass, ELEMENT_ASSIGNMENT__SEQUENCE);
 		createEAttribute(elementAssignmentEClass, ELEMENT_ASSIGNMENT__SPOT_INDEX);
 	}
@@ -346,7 +336,6 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 		initEReference(getElementAssignment_AssignedObject(), theMMXCorePackage.getUUIDObject(), null, "assignedObject", null, 1, 1, ElementAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getElementAssignment_Assignment(), theTypesPackage.getAVesselSet(), null, "assignment", null, 0, 1, ElementAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getElementAssignment_Locked(), ecorePackage.getEBoolean(), "locked", null, 1, 1, ElementAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getElementAssignment_NextAssignment(), this.getElementAssignment(), null, "nextAssignment", null, 0, 1, ElementAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getElementAssignment_Sequence(), ecorePackage.getEInt(), "sequence", null, 1, 1, ElementAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getElementAssignment_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 1, 1, ElementAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 

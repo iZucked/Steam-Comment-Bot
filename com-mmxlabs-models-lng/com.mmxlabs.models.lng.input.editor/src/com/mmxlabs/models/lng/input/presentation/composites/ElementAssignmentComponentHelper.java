@@ -69,7 +69,6 @@ public class ElementAssignmentComponentHelper extends BaseComponentHelper {
 		add_assignedObjectEditor(detailComposite, topClass);
 		add_assignmentEditor(detailComposite, topClass);
 		add_lockedEditor(detailComposite, topClass);
-		add_nextAssignmentEditor(detailComposite, topClass);
 		add_sequenceEditor(detailComposite, topClass);
 		add_spotIndexEditor(detailComposite, topClass);
 	}
@@ -97,15 +96,6 @@ public class ElementAssignmentComponentHelper extends BaseComponentHelper {
 	protected void add_lockedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, InputPackage.Literals.ELEMENT_ASSIGNMENT__LOCKED));
 	}
-	/**
-	 * Create the editor for the nextAssignment feature on ElementAssignment
-	 *
-	 * @generated
-	 */
-	protected void add_nextAssignmentEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, InputPackage.Literals.ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT));
-	}
-
 	/**
 	 * Create the editor for the sequence feature on ElementAssignment
 	 *

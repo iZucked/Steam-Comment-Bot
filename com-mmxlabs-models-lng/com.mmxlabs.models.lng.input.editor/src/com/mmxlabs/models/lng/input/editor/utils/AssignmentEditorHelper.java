@@ -169,8 +169,7 @@ public class AssignmentEditorHelper {
 		
 		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Assignment(), SetCommand.UNSET_VALUE));
 		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Locked(), false));
-		// TODO what about things which point to this as next assignment?
-		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_NextAssignment(), null));
+		
 		
 		return cc;
 	}
@@ -187,8 +186,6 @@ public class AssignmentEditorHelper {
 		final CompoundCommand cc = new CompoundCommand();
 		
 		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Assignment(), destination == null ? SetCommand.UNSET_VALUE : destination));
-		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_NextAssignment(), null));
-		//TODO again, things which point to this need updating.
 		
 		return cc;
 	}

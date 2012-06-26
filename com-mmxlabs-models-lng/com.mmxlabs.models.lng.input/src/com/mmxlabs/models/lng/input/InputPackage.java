@@ -253,22 +253,13 @@ public interface InputPackage extends EPackage {
 	int ELEMENT_ASSIGNMENT__LOCKED = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Next Assignment</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
-	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT_ASSIGNMENT__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int ELEMENT_ASSIGNMENT__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Spot Index</b></em>' attribute.
@@ -277,7 +268,7 @@ public interface InputPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT_ASSIGNMENT__SPOT_INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int ELEMENT_ASSIGNMENT__SPOT_INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Element Assignment</em>' class.
@@ -286,7 +277,7 @@ public interface InputPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENT_ASSIGNMENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int ELEMENT_ASSIGNMENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 
 	/**
@@ -417,17 +408,6 @@ public interface InputPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getElementAssignment_Locked();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.input.ElementAssignment#getNextAssignment <em>Next Assignment</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Next Assignment</em>'.
-	 * @see com.mmxlabs.models.lng.input.ElementAssignment#getNextAssignment()
-	 * @see #getElementAssignment()
-	 * @generated
-	 */
-	EReference getElementAssignment_NextAssignment();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.input.ElementAssignment#getSequence <em>Sequence</em>}'.
@@ -574,14 +554,6 @@ public interface InputPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute ELEMENT_ASSIGNMENT__LOCKED = eINSTANCE.getElementAssignment_Locked();
-
-		/**
-		 * The meta object literal for the '<em><b>Next Assignment</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT = eINSTANCE.getElementAssignment_NextAssignment();
 
 		/**
 		 * The meta object literal for the '<em><b>Sequence</b></em>' attribute feature.

@@ -33,7 +33,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.input.impl.ElementAssignmentImpl#getAssignedObject <em>Assigned Object</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.impl.ElementAssignmentImpl#getAssignment <em>Assignment</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.impl.ElementAssignmentImpl#isLocked <em>Locked</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.input.impl.ElementAssignmentImpl#getNextAssignment <em>Next Assignment</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.impl.ElementAssignmentImpl#getSequence <em>Sequence</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.impl.ElementAssignmentImpl#getSpotIndex <em>Spot Index</em>}</li>
  * </ul>
@@ -81,16 +80,6 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 	 * @ordered
 	 */
 	protected boolean locked = LOCKED_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getNextAssignment() <em>Next Assignment</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getNextAssignment()
-	 * @generated
-	 * @ordered
-	 */
-	protected ElementAssignment nextAssignment;
 
 	/**
 	 * The default value of the '{@link #getSequence() <em>Sequence</em>}' attribute.
@@ -253,44 +242,6 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ElementAssignment getNextAssignment() {
-		if (nextAssignment != null && nextAssignment.eIsProxy()) {
-			InternalEObject oldNextAssignment = (InternalEObject)nextAssignment;
-			nextAssignment = (ElementAssignment)eResolveProxy(oldNextAssignment);
-			if (nextAssignment != oldNextAssignment) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, InputPackage.ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT, oldNextAssignment, nextAssignment));
-			}
-		}
-		return nextAssignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ElementAssignment basicGetNextAssignment() {
-		return nextAssignment;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setNextAssignment(ElementAssignment newNextAssignment) {
-		ElementAssignment oldNextAssignment = nextAssignment;
-		nextAssignment = newNextAssignment;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, InputPackage.ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT, oldNextAssignment, nextAssignment));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public int getSequence() {
 		return sequence;
 	}
@@ -344,9 +295,6 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 				return basicGetAssignment();
 			case InputPackage.ELEMENT_ASSIGNMENT__LOCKED:
 				return isLocked();
-			case InputPackage.ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT:
-				if (resolve) return getNextAssignment();
-				return basicGetNextAssignment();
 			case InputPackage.ELEMENT_ASSIGNMENT__SEQUENCE:
 				return getSequence();
 			case InputPackage.ELEMENT_ASSIGNMENT__SPOT_INDEX:
@@ -371,9 +319,6 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 				return;
 			case InputPackage.ELEMENT_ASSIGNMENT__LOCKED:
 				setLocked((Boolean)newValue);
-				return;
-			case InputPackage.ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT:
-				setNextAssignment((ElementAssignment)newValue);
 				return;
 			case InputPackage.ELEMENT_ASSIGNMENT__SEQUENCE:
 				setSequence((Integer)newValue);
@@ -402,9 +347,6 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 			case InputPackage.ELEMENT_ASSIGNMENT__LOCKED:
 				setLocked(LOCKED_EDEFAULT);
 				return;
-			case InputPackage.ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT:
-				setNextAssignment((ElementAssignment)null);
-				return;
 			case InputPackage.ELEMENT_ASSIGNMENT__SEQUENCE:
 				setSequence(SEQUENCE_EDEFAULT);
 				return;
@@ -429,8 +371,6 @@ public class ElementAssignmentImpl extends MMXObjectImpl implements ElementAssig
 				return assignment != null;
 			case InputPackage.ELEMENT_ASSIGNMENT__LOCKED:
 				return locked != LOCKED_EDEFAULT;
-			case InputPackage.ELEMENT_ASSIGNMENT__NEXT_ASSIGNMENT:
-				return nextAssignment != null;
 			case InputPackage.ELEMENT_ASSIGNMENT__SEQUENCE:
 				return sequence != SEQUENCE_EDEFAULT;
 			case InputPackage.ELEMENT_ASSIGNMENT__SPOT_INDEX:

@@ -23,7 +23,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.input.ElementAssignment#getAssignedObject <em>Assigned Object</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.ElementAssignment#getAssignment <em>Assignment</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.ElementAssignment#isLocked <em>Locked</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.input.ElementAssignment#getNextAssignment <em>Next Assignment</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.ElementAssignment#getSequence <em>Sequence</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.ElementAssignment#getSpotIndex <em>Spot Index</em>}</li>
  * </ul>
@@ -111,32 +110,6 @@ public interface ElementAssignment extends MMXObject {
 	 * @generated
 	 */
 	void setLocked(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Next Assignment</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Next Assignment</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Next Assignment</em>' reference.
-	 * @see #setNextAssignment(ElementAssignment)
-	 * @see com.mmxlabs.models.lng.input.InputPackage#getElementAssignment_NextAssignment()
-	 * @model
-	 * @generated
-	 */
-	ElementAssignment getNextAssignment();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.input.ElementAssignment#getNextAssignment <em>Next Assignment</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Next Assignment</em>' reference.
-	 * @see #getNextAssignment()
-	 * @generated
-	 */
-	void setNextAssignment(ElementAssignment value);
 
 	/**
 	 * Returns the value of the '<em><b>Sequence</b></em>' attribute.
