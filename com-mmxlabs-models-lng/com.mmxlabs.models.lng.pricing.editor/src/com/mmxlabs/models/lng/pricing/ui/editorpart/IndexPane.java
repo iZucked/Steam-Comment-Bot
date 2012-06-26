@@ -214,17 +214,20 @@ public class IndexPane extends ScenarioTableViewerPane {
 							}
 						}
 
-						final Calendar c = Calendar.getInstance();
-						c.setTime(minDate);
-						c.set(Calendar.MILLISECOND, 0);
-						c.set(Calendar.SECOND, 0);
-						c.set(Calendar.MINUTE, 0);
-						c.set(Calendar.HOUR, 0);
-						c.set(Calendar.DAY_OF_MONTH, 1);
-
-						while (c.getTime().before(maxDate)) {
-							addColumn(c, true);
-							c.add(Calendar.MONTH, 1);
+						
+						if (minDate != null && maxDate != null) {
+							final Calendar c = Calendar.getInstance();
+							c.setTime(minDate);
+							c.set(Calendar.MILLISECOND, 0);
+							c.set(Calendar.SECOND, 0);
+							c.set(Calendar.MINUTE, 0);
+							c.set(Calendar.HOUR, 0);
+							c.set(Calendar.DAY_OF_MONTH, 1);
+	
+							while (c.getTime().before(maxDate)) {
+								addColumn(c, true);
+								c.add(Calendar.MONTH, 1);
+							}
 						}
 
 						viewer.refresh();
