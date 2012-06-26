@@ -44,7 +44,9 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.internal.util.ConfigurationElementMemento;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
@@ -110,6 +112,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
 		this.memento = memento;
+		if (this.memento == null) {
+			this.memento = XMLMemento.createWriteRoot("workbench");
+		}
 		
 		// check that it's the right memento - and non-null?...
 		
@@ -119,16 +124,18 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 //				memento.putString(key, Activator.getDefault().getPreferenceStore().getString(key));
 //			}					
 //		}
-		if(memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null){
-			memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
-		}		
-		if(memento.getString(Show_Canals) == null){
-			memento.putBoolean(Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
-		}	
-		if(memento.getChild(Highlight_) == null){
-			memento.createChild(Highlight_);
-		}	
-		highlightMemento = memento.getChild(Highlight_);
+		if (memento != null) {
+			if(memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null){
+				memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
+			}		
+			if(memento.getString(Show_Canals) == null){
+				memento.putBoolean(Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
+			}	
+			if(memento.getChild(Highlight_) == null){
+				memento.createChild(Highlight_);
+			}	
+			highlightMemento = memento.getChild(Highlight_);
+		}
 		super.init(site, memento);		
 	}
 
