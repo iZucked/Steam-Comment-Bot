@@ -40,13 +40,15 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 			}
 			if (parameter.getEOwner() instanceof LoadSlot) {
 				final LoadSlot slot = (LoadSlot) parameter.getEOwner();
-				if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
-					final boolean desPurchase = (Boolean) parameter.getValue();
-					if (desPurchase) {
-						if (slot.getCargo() != null) {
-							final Cargo cargo = slot.getCargo();
-							final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
-							if (dischargeSlot != null) {
+
+				if (slot.getCargo() != null) {
+					final Cargo cargo = slot.getCargo();
+					final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+					if (dischargeSlot != null) {
+
+						if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+							final boolean desPurchase = (Boolean) parameter.getValue();
+							if (desPurchase) {
 
 								final CompoundCommand cmd = new CompoundCommand("Convert to DES Purchase");
 								cmd.append(AssignmentEditorHelper.totallyUnassign(editingDomain, inputModel, cargo));
@@ -57,22 +59,26 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 
 								return cmd;
 							}
+						} else if (dischargeSlot.isFOBSale()) {
+							if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port() || parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
+								final CompoundCommand cmd = new CompoundCommand("FOB Sale update");
+								cmd.append(SetCommand.create(editingDomain, dischargeSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+								return cmd;
+							}
 						}
-					} else {
-						// Leave the validation errors to clean up..
 					}
 				}
 			}
 			if (parameter.getEOwner() instanceof DischargeSlot) {
 				final DischargeSlot slot = (DischargeSlot) parameter.getEOwner();
+				if (slot.getCargo() != null) {
+					final Cargo cargo = slot.getCargo();
+					final LoadSlot loadSlot = cargo.getLoadSlot();
+					if (loadSlot != null) {
 
-				if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
-					final boolean fobSale = (Boolean) parameter.getValue();
-					if (fobSale) {
-						if (slot.getCargo() != null) {
-							final Cargo cargo = slot.getCargo();
-							final LoadSlot loadSlot = cargo.getLoadSlot();
-							if (loadSlot != null) {
+						if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
+							final boolean fobSale = (Boolean) parameter.getValue();
+							if (fobSale) {
 
 								final CompoundCommand cmd = new CompoundCommand("Convert to FOB Sale");
 								cmd.append(AssignmentEditorHelper.totallyUnassign(editingDomain, inputModel, cargo));
@@ -83,9 +89,14 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 
 								return cmd;
 							}
+						} else if (loadSlot.isDESPurchase()) {
+							if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port() || parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
+								final CompoundCommand cmd = new CompoundCommand("DES Purchase update");
+								cmd.append(SetCommand.create(editingDomain, loadSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+								return cmd;
+							}
 						}
-					} else {
-						// Leave the validation errors to clean up..
+
 					}
 				}
 			}
