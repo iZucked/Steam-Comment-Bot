@@ -29,7 +29,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -46,6 +45,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -264,57 +264,44 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private Command derive(EditingDomain domain, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel) {
 		CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
-		List<Assignment> newAssignments = new LinkedList<Assignment>();
-		List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
+		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
 		
 		int spotIndex = 0;
 		for (final Sequence sequence : schedule.getSequences()) {
-			final Assignment a = InputFactory.eINSTANCE.createAssignment();
-			
 			if (sequence.getVessel() == null && !sequence.isSpotVessel()) {
 				continue;
 			}
 			
 			int thisIndex = 0;
 			if (sequence.isSpotVessel()) {
-				a.setAssignToSpot(true);
-				a.getVessels().add(sequence.getVesselClass());
 				thisIndex = spotIndex++;
-			} else {
-				a.setAssignToSpot(false);
-				a.getVessels().add(sequence.getVessel());
 			}
-
+			
+			final AVesselSet assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel();
 			int index = 0;
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
 
 					if (slot instanceof LoadSlot) {
-						a.getAssignedObjects().add(((LoadSlot) slot).getCargo());
-						
 						final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
 						ea.setAssignedObject(((LoadSlot) slot).getCargo());
-						ea.setAssignment(sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel());
+						ea.setAssignment(assignment);
 						ea.setSequence(index++);
 						ea.setSpotIndex(thisIndex);
 						newElementAssignments.add(ea);
 					}
 				} else if (event instanceof VesselEventVisit) {
-					a.getAssignedObjects().add(((VesselEventVisit) event).getVesselEvent());
 					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
 					ea.setAssignedObject(((VesselEventVisit) event).getVesselEvent());
-					ea.setAssignment(sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel());
+					ea.setAssignment(assignment);
 					ea.setSequence(index++);
 					ea.setSpotIndex(thisIndex);
 					newElementAssignments.add(ea);
 				}
 			}
-
-			newAssignments.add(a);
 		}
 
-		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), newAssignments));
 		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
 		
 		// rewire any cargos which require it
