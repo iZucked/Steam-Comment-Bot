@@ -134,7 +134,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 				}
 			}
 
-			valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(InputPackage.eINSTANCE.getAssignment(), InputPackage.eINSTANCE.getAssignment_Vessels());
+			valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(InputPackage.eINSTANCE.getElementAssignment(), InputPackage.eINSTANCE.getElementAssignment_Assignment());
 
 			updateDisplay(object);
 
