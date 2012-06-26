@@ -39,6 +39,8 @@ public interface IInlineEditor {
 
 	public EStructuralFeature getFeature();
 
+	public EObject getEditorTarget();
+	
 	void setLabel(Label label);
 
 	void setEnabled(boolean enabled);

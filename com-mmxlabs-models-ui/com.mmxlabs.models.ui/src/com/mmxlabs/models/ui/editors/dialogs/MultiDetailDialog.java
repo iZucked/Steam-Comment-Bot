@@ -119,6 +119,7 @@ public class MultiDetailDialog extends Dialog {
 	@Override
 	public void create() {
 		super.create();
+		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
 		createProxies();
 
 
@@ -127,7 +128,6 @@ public class MultiDetailDialog extends Dialog {
 			displayComposite = null;
 		}
 		
-		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, editingClass, scenarioEditingLocation);
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
 		
@@ -414,8 +414,8 @@ public class MultiDetailDialog extends Dialog {
 
 				@Override
 				public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
-					key.setFirst(object);
 					proxy.display(location,scenario, object, range);
+					key.setFirst(proxy.getEditorTarget());
 				}
 
 				@Override
@@ -426,6 +426,11 @@ public class MultiDetailDialog extends Dialog {
 				@Override
 				public void setEnabled(final boolean enabled) {
 					proxy.setEnabled(enabled);
+				}
+
+				@Override
+				public EObject getEditorTarget() {
+					return proxy.getEditorTarget();
 				}
 			};
 		}

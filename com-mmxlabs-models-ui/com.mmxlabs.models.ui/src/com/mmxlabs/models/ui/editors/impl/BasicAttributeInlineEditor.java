@@ -398,4 +398,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 		this.enabled = enabled;
 	}
+	
+	public EObject getEditorTarget() {
+		return input;
+	}
 }
