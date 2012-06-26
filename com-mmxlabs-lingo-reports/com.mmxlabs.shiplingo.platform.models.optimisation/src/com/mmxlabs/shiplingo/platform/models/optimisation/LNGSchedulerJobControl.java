@@ -30,6 +30,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
@@ -262,10 +263,11 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
 		List<Assignment> newAssignments = new LinkedList<Assignment>();
-
+		List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
+		
 		for (final Sequence sequence : schedule.getSequences()) {
 			final Assignment a = InputFactory.eINSTANCE.createAssignment();
-
+			
 			if (sequence.getVessel() == null && !sequence.isSpotVessel()) {
 				continue;
 			}
@@ -278,15 +280,27 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				a.getVessels().add(sequence.getVessel());
 			}
 
+			ElementAssignment prevAssignment = null;
 			for (final Event event : sequence.getEvents()) {
 				if (event instanceof SlotVisit) {
 					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
 
 					if (slot instanceof LoadSlot) {
 						a.getAssignedObjects().add(((LoadSlot) slot).getCargo());
+						
+						final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
+						ea.setAssignedObject(((LoadSlot) slot).getCargo());
+						ea.setAssignment(sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel());
+						if (prevAssignment != null) prevAssignment.setNextAssignment(ea);
+						newElementAssignments.add(ea);
 					}
 				} else if (event instanceof VesselEventVisit) {
 					a.getAssignedObjects().add(((VesselEventVisit) event).getVesselEvent());
+					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
+					ea.setAssignedObject(((VesselEventVisit) event).getVesselEvent());
+					ea.setAssignment(sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel());
+					if (prevAssignment != null) prevAssignment.setNextAssignment(ea);
+					newElementAssignments.add(ea);
 				}
 			}
 
@@ -294,7 +308,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		}
 
 		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), newAssignments));
-
+		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
+		
 		// rewire any cargos which require it
 		// TODO handle spot market cases, and free slots
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
