@@ -109,7 +109,6 @@ public class LiveEvaluator extends MMXAdapterImpl {
 							}
 						} else {
 							spinLock = true;
-							Thread.currentThread().interrupt(); //interrupt ourself to delay again, because we missed a claim.
 						}
 					} else {
 						log.debug("Could not find evaluator when evaluating " + instance.getName());
