@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.input.editorpart;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -79,16 +80,24 @@ public class InputJointModelEditorContribution extends
 	protected void updateEditorInput() {
 		updateMinTravelTimes();
 		
-		
 		CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 		
-		final List<Object> resources = new ArrayList<Object>();
-		resources.addAll(fleetModel.getVessels());
+		List<CollectedAssignment> resources = AssignmentEditorHelper.collectAssignments(modelObject, fleetModel);
 		
-		// try and set up spot vessels. 
+		Collections.sort(resources, new Comparator<CollectedAssignment>() {
+			@Override
+			public int compare(CollectedAssignment o1, CollectedAssignment o2) {
+				final int spotCompare = ((Boolean) o1.isSpotVessel()).compareTo(o2.isSpotVessel());
+				if (spotCompare == 0) {
+					return o1.getVesselOrClass().getName().compareTo(o2.getVesselOrClass().getName());
+				} else {
+					return spotCompare;
+				}
+			}
+		});
 		
-		editor.setResources(AssignmentEditorHelper.collectAssignments(modelObject, fleetModel));
+		editor.setResources(resources);
 		
 		final List<UUIDObject> tasks = new ArrayList<UUIDObject>();
 		if (cargoModel != null) {
@@ -105,6 +114,7 @@ public class InputJointModelEditorContribution extends
 	}
 	
 	protected void updateMinTravelTimes() {
+		//TODO run this only when ports change or speeds change.
 		final PortModel pm = rootObject.getSubModel(PortModel.class);
 		final FleetModel fm = rootObject.getSubModel(FleetModel.class);
 		minTravelTimes.clear();
