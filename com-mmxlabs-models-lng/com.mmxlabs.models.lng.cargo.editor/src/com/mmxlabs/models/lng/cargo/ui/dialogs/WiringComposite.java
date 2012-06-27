@@ -11,8 +11,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
+import javax.swing.InputMap;
+
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -38,6 +41,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -45,8 +49,11 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
@@ -215,7 +222,7 @@ public class WiringComposite extends Composite {
 
 		final List<Pair<String, EObject>> ports;
 		final List<Pair<String, EObject>> contracts;
-		private Label fobDESLabel;
+		private final Label fobDESLabel;
 
 		/**
 		 * Argh localized dates.
@@ -326,7 +333,7 @@ public class WiringComposite extends Composite {
 			return fobOrDES;
 		}
 
-		public void setFOBOrDES(boolean isFOBOrDes) {
+		public void setFOBOrDES(final boolean isFOBOrDes) {
 			this.fobOrDES = isFOBOrDes;
 			fobDESLabel.setVisible(isFOBOrDes);
 			// contractCombo.setVisible(!isFOBOrDes);
@@ -511,10 +518,10 @@ public class WiringComposite extends Composite {
 			rhsFleetComposite = new Label(this, SWT.NONE);
 			rhsFleetComposite.setText("Shipped");
 
-			GridData gd1 = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
+			final GridData gd1 = new GridData(SWT.RIGHT, SWT.CENTER, false, false);
 			gd1.horizontalSpan = 2;
 			lhsFleetComposite.setLayoutData(gd1);
-			GridData gd2 = new GridData(SWT.LEFT, SWT.CENTER, true, false);
+			final GridData gd2 = new GridData(SWT.LEFT, SWT.CENTER, true, false);
 			gd2.horizontalSpan = 1;
 			rhsFleetComposite.setLayoutData(gd2);
 
@@ -524,10 +531,10 @@ public class WiringComposite extends Composite {
 			rhsFOBDESComposite = new Label(this, SWT.NONE);
 			rhsFOBDESComposite.setText("FOB Sale");
 
-			GridData gd3 = new GridData(SWT.RIGHT, SWT.CENTER, true, false);
+			final GridData gd3 = new GridData(SWT.RIGHT, SWT.CENTER, true, false);
 			gd3.horizontalSpan = 2;
 			lhsFOBDESComposite.setLayoutData(gd3);
-			GridData gd4 = new GridData(SWT.LEFT, SWT.CENTER, true, false);
+			final GridData gd4 = new GridData(SWT.LEFT, SWT.CENTER, true, false);
 			gd4.horizontalSpan = 1;
 			rhsFOBDESComposite.setLayoutData(gd4);
 		}
@@ -564,52 +571,51 @@ public class WiringComposite extends Composite {
 	 * @return
 	 */
 	public boolean isWiringFeasible() {
-		
+
 		for (int loadIdx = 0; loadIdx < wiring.size() - 2; ++loadIdx) {
-			int dischargeIdx = wiring.get(loadIdx);
-			
+			final int dischargeIdx = wiring.get(loadIdx);
+
 			if (dischargeIdx == -1) {
 				return false;
 			}
-			
-			PortAndDateComposite load = lhsComposites.get(loadIdx);
-			PortAndDateComposite discharge = rhsComposites.get(dischargeIdx);
-			
+
+			final PortAndDateComposite load = lhsComposites.get(loadIdx);
+			final PortAndDateComposite discharge = rhsComposites.get(dischargeIdx);
+
 			if (load.isFOBOrDES() && discharge.isFOBOrDES()) {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
 
-	public Command createApplyCommand(final EditingDomain domain) {
+	public Command createApplyCommand(final EditingDomain domain, final MMXRootObject rootObject) {
 		final CompoundCommand command = new CompoundCommand();
 
 		// update modified properties
 		int index = 0;
 		for (final Cargo cargo : cargoes) {
-			boolean isDESPurchase = lhsComposites.get(index).isFOBOrDES();
-			boolean isFOBSale = rhsComposites.get(index).isFOBOrDES();
-			
-			command.append(SetCommand.create(domain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newNames.get(index)));
-			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), isDESPurchase));
-			if (isDESPurchase) {
-				command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort()));
-				command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate()));
-			} else {
+			final boolean isDESPurchase = lhsComposites.get(index).isFOBOrDES();
+			final boolean isFOBSale = rhsComposites.get(index).isFOBOrDES();
 
-				command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort()));
-				command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate()));
+			appendIfChanged(command, domain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newNames.get(index));
+			appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), isDESPurchase);
+			if (isDESPurchase) {
+				appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort());
+				appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate());
+			} else {
+				appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort());
+				appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate());
 			}
 
-			command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), isFOBSale));
+			appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), isFOBSale);
 			if (isFOBSale) {
-				command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort()));
-				command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate()));
+				appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort());
+				appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate());
 			} else {
-				command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort()));
-				command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate()));
+				appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort());
+				appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate());
 			}
 
 			index++;
@@ -623,12 +629,16 @@ public class WiringComposite extends Composite {
 				final Slot slot = cargoes.get(newTail).getDischargeSlot();
 				final Cargo cargo = cargoes.get(i);
 				command.append(SetCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), slot));
-				
-				boolean isDESPurchase = cargo.getLoadSlot().isDESPurchase();
-				boolean isFOBSale = ((DischargeSlot)slot).isFOBSale();
-				
+
+				final boolean isDESPurchase = cargo.getLoadSlot().isDESPurchase();
+				final boolean isFOBSale = ((DischargeSlot) slot).isFOBSale();
+
 				if (isFOBSale && isDESPurchase) {
 					throw new IllegalStateException("Cannot pair DES Purchase to FOB Sale");
+				}
+
+				if (isFOBSale || isDESPurchase) {
+					command.append(AssignmentEditorHelper.totallyUnassign(domain, rootObject.getSubModel(InputModel.class), cargo));
 				}
 			}
 		}
@@ -647,6 +657,15 @@ public class WiringComposite extends Composite {
 		// scenario's cargo model.
 
 		return command;
+	}
+
+	private void appendIfChanged(final CompoundCommand command, final EditingDomain domain, final EObject owner, final EStructuralFeature feature, final Object newValue) {
+		if (!Equality.isEqual(owner.eGet(feature), newValue)) {
+			command.append(SetCommand.create(domain, owner, feature, newValue));
+		}
+	}
+
+	public void appendIfChanged(final EditingDomain domain, final CompoundCommand command, final int index, final Cargo cargo) {
 	}
 
 	/**

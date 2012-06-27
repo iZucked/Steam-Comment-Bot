@@ -44,7 +44,7 @@ public class RewireAction extends ScenarioModifyingAction {
 			part.setDisableCommandProviders(true);
 			part.setDisableUpdates(true);
 
-			dialog.open(((IStructuredSelection) getLastSelection()).toList(), part.getEditingDomain(), new SlotPortValueProviderFactory().createReferenceValueProvider(
+			dialog.open(part.getRootObject(), ((IStructuredSelection) getLastSelection()).toList(), part.getEditingDomain(), new SlotPortValueProviderFactory().createReferenceValueProvider(
 					CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_Port(), part.getRootObject()),
 					part.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_Contract()));
 		} finally {

@@ -94,11 +94,11 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		final RewireAction rewire = new RewireAction(getJointModelEditorPart());
+		final RewireAction rewireAction = new RewireAction(getJointModelEditorPart());
 		final RotateSlotsAction rotate = new RotateSlotsAction(getJointModelEditorPart());
 		viewer.addSelectionChangedListener(rotate);
-		viewer.addSelectionChangedListener(rewire);
-		getToolBarManager().appendToGroup("edit", rewire);
+		viewer.addSelectionChangedListener(rewireAction);
+		getToolBarManager().appendToGroup("edit", rewireAction);
 		getToolBarManager().appendToGroup("edit", rotate);
 		getToolBarManager().update(true);
 		final MMXCorePackage mmx = MMXCorePackage.eINSTANCE;

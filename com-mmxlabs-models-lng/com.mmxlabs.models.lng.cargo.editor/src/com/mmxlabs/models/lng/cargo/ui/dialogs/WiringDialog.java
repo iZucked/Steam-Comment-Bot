@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
@@ -48,7 +49,7 @@ public class WiringDialog extends Dialog {
 		super(parent);
 	}
 
-	public void open(final List<Cargo> cargoes, final EditingDomain domain, final IReferenceValueProvider portProvider, final IReferenceValueProvider contractProvider) {
+	public void open(final MMXRootObject rootObject, final List<Cargo> cargoes, final EditingDomain domain, final IReferenceValueProvider portProvider, final IReferenceValueProvider contractProvider) {
 		final Shell shell = new Shell((SWT.DIALOG_TRIM & ~SWT.CLOSE) | SWT.APPLICATION_MODAL | SWT.RESIZE);
 		shell.setSize(1000, 600);
 		shell.setText("Redirection Wizard");
@@ -97,15 +98,12 @@ public class WiringDialog extends Dialog {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 
-				final Command c = wiringComposite.createApplyCommand(domain);
-				try {
-					if (c.canExecute()) {
-						domain.getCommandStack().execute(c);
-					} else {
-						throw new RuntimeException("Unable to execute wiring command");
-					}
-				} finally {
+				final Command c = wiringComposite.createApplyCommand(domain, rootObject);
+				if (c.canExecute()) {
+					domain.getCommandStack().execute(c);
 					shell.close();
+				} else {
+					throw new RuntimeException("Unable to execute wiring command");
 				}
 			}
 
