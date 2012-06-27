@@ -105,7 +105,7 @@ public final class ResourceAllocationConstraintChecker implements IPairwiseConst
 		//					disabling the pairwise version of this constraint shouldn't cause any overly bad problems, but it might be worth checking
 		//					in the constrained initial sequence builder to make sure that it's not having a knock-on there.
 
-		return true;//checkElement(first, resource) && checkElement(second, resource);
+		return checkElement(first, resource) && checkElement(second, resource);
 	}
 
 	private final boolean checkElement(final ISequenceElement element, final IResource resource) {
