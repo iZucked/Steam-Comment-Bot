@@ -37,7 +37,13 @@ public class CollectedAssignment {
 			@Override
 			public int compare(final ElementAssignment arg0, final ElementAssignment arg1) {
 				//TODO check for nulls.
+				if (arg0.getAssignedObject() == null) {
+					System.err.println("Dangling assignment!!");
+				}
 				
+				if (arg1.getAssignedObject() == null) {
+					System.err.println("Another dangling assignment!!");
+				}
 				final Date start0 = AssignmentEditorHelper.getStartDate(arg0.getAssignedObject());
 				final Date start1 = AssignmentEditorHelper.getStartDate(arg1.getAssignedObject());
 				final Date end0 = AssignmentEditorHelper.getEndDate(arg0.getAssignedObject());
