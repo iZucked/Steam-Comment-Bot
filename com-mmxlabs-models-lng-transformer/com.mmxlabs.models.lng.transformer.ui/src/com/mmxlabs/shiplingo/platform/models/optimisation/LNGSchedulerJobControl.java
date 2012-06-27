@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -278,6 +279,9 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
 		final HashSet<UUIDObject> previouslyLocked = new HashSet<UUIDObject>();
+		final List<ElementAssignment> oldAssignments = new ArrayList<ElementAssignment>(inputModel.getElementAssignments());
+		final HashSet<UUIDObject> reassigned = new HashSet<UUIDObject>();
+		
 		for (final ElementAssignment ai : inputModel.getElementAssignments()) {
 			if (ai.isLocked()) {
 				previouslyLocked.add(ai.getAssignedObject());
@@ -301,25 +305,25 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			final AVesselSet assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel();
 			int index = 0;
 			for (final Event event : sequence.getEvents()) {
+				UUIDObject object = null;
 				if (event instanceof SlotVisit) {
 					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
 
 					if (slot instanceof LoadSlot) {
-						final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
-						ea.setAssignedObject(((LoadSlot) slot).getCargo());
-						ea.setAssignment(assignment);
-						ea.setSequence(index++);
-						ea.setSpotIndex(thisIndex);
-						ea.setLocked(previouslyLocked.contains(ea.getAssignedObject()));
-						newElementAssignments.add(ea);						
+						object = ((LoadSlot) slot).getCargo();		
 					}
 				} else if (event instanceof VesselEventVisit) {
+					object = ((VesselEventVisit) event).getVesselEvent();
+				}
+				
+				if (object != null) {
 					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
-					ea.setAssignedObject(((VesselEventVisit) event).getVesselEvent());
+					ea.setAssignedObject(object);
 					ea.setAssignment(assignment);
 					ea.setSequence(index++);
 					ea.setSpotIndex(thisIndex);
-					ea.setLocked(previouslyLocked.contains(ea.getAssignedObject()));
+					ea.setLocked(previouslyLocked.contains(object));
+					reassigned.add(object);
 					newElementAssignments.add(ea);
 				}
 			}
