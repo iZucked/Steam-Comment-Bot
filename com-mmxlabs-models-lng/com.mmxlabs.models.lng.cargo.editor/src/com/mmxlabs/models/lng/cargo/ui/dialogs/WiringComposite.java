@@ -59,6 +59,11 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
  */
 public class WiringComposite extends Composite {
 	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
+	/**
+	 * The value of the ith element of wiring is the index of the other end of the wire; -1 indicates no wire is present.
+	 * 
+	 * There are more elements in here than in {@link #cargoes}, because of the extra terminals
+	 */
 	private final ArrayList<Integer> wiring = new ArrayList<Integer>();
 
 	final List<PortAndDateComposite> lhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
