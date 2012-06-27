@@ -63,7 +63,7 @@ public class RewireAction extends ScenarioModifyingAction {
 		if (selection.isEmpty())
 			return false;
 		if (selection instanceof IStructuredSelection) {
-			if (((IStructuredSelection) selection).size() < 2)
+			if (((IStructuredSelection) selection).isEmpty())
 				return false;
 			for (final Object o : ((IStructuredSelection) selection).toArray()) {
 				if (!(o instanceof Cargo)) {

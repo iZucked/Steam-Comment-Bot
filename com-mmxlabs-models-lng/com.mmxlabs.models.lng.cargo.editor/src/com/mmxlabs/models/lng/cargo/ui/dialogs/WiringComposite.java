@@ -167,6 +167,11 @@ public class WiringComposite extends Composite {
 		final String name = "New cargo " + (newCargoes.size() + 1);
 
 		newCargo.setName(name);
+		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newLoad.setName(name);
+		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newDischarge.setName("discharge - " + name);
+		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 
 		newNames.add(name);
 
