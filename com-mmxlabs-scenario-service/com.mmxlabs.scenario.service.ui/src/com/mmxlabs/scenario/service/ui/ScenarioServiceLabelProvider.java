@@ -39,11 +39,14 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 
 	private Color defaultMinorColour;
 
+	private Image pinImage;
+
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 		selectionProviderTracker.open();
 		showEnabledImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
 		showDisabledImage = ImageDescriptor.createWithFlags(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif"), SWT.IMAGE_DISABLE).createImage();
+		pinImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif").createImage();
 		noJobImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/no_job.gif").createImage();
 		jobComplete = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/complete_job.gif").createImage();
 		majorColor = new Color(Display.getDefault(), 240, 80, 85);
@@ -58,7 +61,8 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 		showDisabledImage.dispose();
 		noJobImage.dispose();
 		jobComplete.dispose();
-
+		pinImage.dispose();
+		
 		defaultMinorColour.dispose();
 		majorColor.dispose();
 		
@@ -93,7 +97,11 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 				final IScenarioServiceSelectionProvider service = selectionProviderTracker.getService();
 				if (service != null) {
 					if (service.isSelected((ScenarioInstance) object)) {
-						return showEnabledImage;
+						if (service.getPinnedInstance() == object) {
+							return pinImage;
+						} else {
+							return showEnabledImage;
+						}
 					} else {
 						return showDisabledImage;
 					}
