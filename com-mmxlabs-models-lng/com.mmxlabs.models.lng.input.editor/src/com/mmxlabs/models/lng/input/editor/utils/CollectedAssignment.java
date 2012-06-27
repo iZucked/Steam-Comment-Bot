@@ -44,6 +44,15 @@ public class CollectedAssignment {
 				final Date start1 = AssignmentEditorHelper.getStartDate(arg1.getAssignedObject());
 				final Date end0 = AssignmentEditorHelper.getEndDate(arg0.getAssignedObject());
 				final Date end1 = AssignmentEditorHelper.getEndDate(arg1.getAssignedObject());
+				
+				if (start0 == null && start1 != null) {
+					return -1;
+				} else if (start0 != null && start1 == null) {
+					return 1;
+				} else if (start0 == null && start1 == null) {
+					return 0;
+				}
+				
 				if (overlaps(start0, end0, start1, end1)) {
 					return ((Integer) arg0.getSequence()).compareTo(arg1.getSequence());
 				} else {
