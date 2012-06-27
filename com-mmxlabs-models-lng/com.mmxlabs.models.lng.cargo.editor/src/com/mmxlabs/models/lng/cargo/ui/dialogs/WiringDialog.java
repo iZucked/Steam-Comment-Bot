@@ -32,13 +32,10 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
- * A dialog which contains a {@link WiringComposite} - all the logic happens in
- * there.
+ * A dialog which contains a {@link WiringComposite} - all the logic happens in there.
  * 
  * 
- * Normal usage is to call {@link #open(List, EditingDomain)} with a list of
- * cargoes to rewire. If the user presses the OK button the dialog will then
- * execute a command to make the necessary changes.
+ * Normal usage is to call {@link #open(List, EditingDomain)} with a list of cargoes to rewire. If the user presses the OK button the dialog will then execute a command to make the necessary changes.
  * 
  * @author Tom Hinton
  * 
@@ -51,55 +48,47 @@ public class WiringDialog extends Dialog {
 		super(parent);
 	}
 
-	public void open(final List<Cargo> cargoes, final EditingDomain domain,
-			final IReferenceValueProvider portProvider, final IReferenceValueProvider contractProvider) {
-		final Shell shell = new Shell((SWT.DIALOG_TRIM & ~SWT.CLOSE)
-				| SWT.APPLICATION_MODAL | SWT.RESIZE);
+	public void open(final List<Cargo> cargoes, final EditingDomain domain, final IReferenceValueProvider portProvider, final IReferenceValueProvider contractProvider) {
+		final Shell shell = new Shell((SWT.DIALOG_TRIM & ~SWT.CLOSE) | SWT.APPLICATION_MODAL | SWT.RESIZE);
 		shell.setSize(1000, 600);
 		shell.setText("Redirection Wizard");
 		final GridLayout gl_shell = new GridLayout(1, false);
 		gl_shell.verticalSpacing = 6;
 		shell.setLayout(gl_shell);
 
-		final ScrolledComposite scrolledComposite = new ScrolledComposite(shell,
-				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
-		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
-				true, 1, 1));
+		final ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		scrolledComposite.setBounds(0, 0, 84, 84);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
 
-		final WiringComposite wiringComposite = new WiringComposite(
-				scrolledComposite, SWT.NONE);
+		final WiringComposite wiringComposite = new WiringComposite(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(wiringComposite);
-		scrolledComposite.setMinSize(wiringComposite.computeSize(SWT.DEFAULT,
-				SWT.DEFAULT));
+		scrolledComposite.setMinSize(wiringComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		scrolledComposite.setLayout(new FillLayout());
 
 		final Composite buttonsComposite = new Composite(shell, SWT.NONE);
-		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
-				false, false, 1, 1));
+		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		buttonsComposite.setBounds(0, 0, 64, 64);
 		buttonsComposite.setLayout(new GridLayout(3, false));
 
 		((GridLayout) buttonsComposite.getLayout()).marginWidth = 0;
 
-		 final Button btnOptimise = new Button(buttonsComposite, SWT.NONE);
-		 btnOptimise.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
-		 false, 1, 1));
-		 btnOptimise.setText("Add Cargo");
-		 
-		 btnOptimise.addSelectionListener(new SelectionAdapter() {
+		final Button btnOptimise = new Button(buttonsComposite, SWT.NONE);
+		btnOptimise.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		btnOptimise.setText("Add Cargo");
+
+		btnOptimise.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
 				wiringComposite.addNewCargo(null, false);
-			}});
+			}
+		});
 
 		final Button btnOk = new Button(buttonsComposite, SWT.NONE);
-		final GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
-				1, 1);
-//		gd_btnOk.widthHint = 50;
+		final GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		// gd_btnOk.widthHint = 50;
 		gd_btnOk.grabExcessHorizontalSpace = true;
 		btnOk.setLayoutData(gd_btnOk);
 		btnOk.setText("OK");
@@ -107,10 +96,17 @@ public class WiringDialog extends Dialog {
 		btnOk.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final Command c = wiringComposite.createApplyCommand(domain);
-				domain.getCommandStack().execute(c);
 
-				shell.close();
+				final Command c = wiringComposite.createApplyCommand(domain);
+				try {
+					if (c.canExecute()) {
+						domain.getCommandStack().execute(c);
+					} else {
+						throw new RuntimeException("Unable to execute wiring command");
+					}
+				} finally {
+					shell.close();
+				}
 			}
 
 			@Override
@@ -120,9 +116,8 @@ public class WiringDialog extends Dialog {
 		});
 
 		final Button btnCancel = new Button(buttonsComposite, SWT.NONE);
-		final GridData gd_btnCancel = new GridData(SWT.LEFT, SWT.CENTER, false,
-				false, 1, 1);
-//		gd_btnCancel.widthHint = 50;
+		final GridData gd_btnCancel = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		// gd_btnCancel.widthHint = 50;
 		btnCancel.setLayoutData(gd_btnCancel);
 		btnCancel.setText("Cancel");
 
@@ -160,8 +155,7 @@ public class WiringDialog extends Dialog {
 		final Rectangle shellBounds = getParent().getBounds();
 		final Point dialogSize = shell.getSize();
 
-		shell.setLocation(shellBounds.x + (shellBounds.width - dialogSize.x)
-				/ 2, shellBounds.y + (shellBounds.height - dialogSize.y) / 2);
+		shell.setLocation(shellBounds.x + (shellBounds.width - dialogSize.x) / 2, shellBounds.y + (shellBounds.height - dialogSize.y) / 2);
 
 		shell.open();
 		shell.setDefaultButton(btnOk);

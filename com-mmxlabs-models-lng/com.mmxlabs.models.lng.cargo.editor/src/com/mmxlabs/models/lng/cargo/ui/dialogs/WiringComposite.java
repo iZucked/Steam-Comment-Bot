@@ -559,7 +559,23 @@ public class WiringComposite extends Composite {
 	 * @return
 	 */
 	public boolean isWiringFeasible() {
-		return wiring.indexOf(-1) == wiring.size() - 1;
+		
+		for (int loadIdx = 0; loadIdx < wiring.size() - 2; ++loadIdx) {
+			int dischargeIdx = wiring.get(loadIdx);
+			
+			if (dischargeIdx == -1) {
+				return false;
+			}
+			
+			PortAndDateComposite load = lhsComposites.get(loadIdx);
+			PortAndDateComposite discharge = rhsComposites.get(dischargeIdx);
+			
+			if (load.isFOBOrDES() && discharge.isFOBOrDES()) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 
 	public Command createApplyCommand(final EditingDomain domain) {
@@ -568,25 +584,47 @@ public class WiringComposite extends Composite {
 		// update modified properties
 		int index = 0;
 		for (final Cargo cargo : cargoes) {
+			boolean isDESPurchase = lhsComposites.get(index).isFOBOrDES();
+			boolean isFOBSale = rhsComposites.get(index).isFOBOrDES();
+			
 			command.append(SetCommand.create(domain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newNames.get(index)));
-			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort()));
-			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate()));
-			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), lhsComposites.get(index).isFOBOrDES()));
-			command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort()));
-			command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate()));
-			command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), rhsComposites.get(index).isFOBOrDES()));
+			command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), isDESPurchase));
+			if (isDESPurchase) {
+				command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort()));
+				command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate()));
+			} else {
+
+				command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort()));
+				command.append(SetCommand.create(domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate()));
+			}
+
+			command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), isFOBSale));
+			if (isFOBSale) {
+				command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort()));
+				command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate()));
+			} else {
+				command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort()));
+				command.append(SetCommand.create(domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate()));
+			}
 
 			index++;
 		}
 
 		// todo sort out new cargo slots.
 
-		for (int i = 0; i < wiring.size() - 1; i++) {
+		for (int i = 0; i < wiring.size() - 2; i++) {
 			final int newTail = wiring.get(i);
 			if (newTail != i) {
 				final Slot slot = cargoes.get(newTail).getDischargeSlot();
 				final Cargo cargo = cargoes.get(i);
 				command.append(SetCommand.create(domain, cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), slot));
+				
+				boolean isDESPurchase = cargo.getLoadSlot().isDESPurchase();
+				boolean isFOBSale = ((DischargeSlot)slot).isFOBSale();
+				
+				if (isFOBSale && isDESPurchase) {
+					throw new IllegalStateException("Cannot pair DES Purchase to FOB Sale");
+				}
 			}
 		}
 
