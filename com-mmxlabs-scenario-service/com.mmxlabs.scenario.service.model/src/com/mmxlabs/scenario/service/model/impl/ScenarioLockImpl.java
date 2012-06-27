@@ -134,7 +134,9 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 		boolean oldAvailable = available;
 		available = newAvailable;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_LOCK__AVAILABLE, oldAvailable, available));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.SCENARIO_LOCK__AVAILABLE,
+					oldAvailable, available));
 	}
 
 	/**
@@ -155,7 +157,9 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 		boolean oldClaimed = claimed;
 		claimed = newClaimed;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_LOCK__CLAIMED, oldClaimed, claimed));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.SCENARIO_LOCK__CLAIMED, oldClaimed,
+					claimed));
 	}
 
 	/**
@@ -176,7 +180,8 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 		String oldKey = key;
 		key = newKey;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_LOCK__KEY, oldKey, key));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.SCENARIO_LOCK__KEY, oldKey, key));
 	}
 
 	/**
@@ -195,8 +200,10 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetInstance(ScenarioInstance newInstance, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject) newInstance, ScenarioServicePackage.SCENARIO_LOCK__INSTANCE, msgs);
+	public NotificationChain basicSetInstance(ScenarioInstance newInstance,
+			NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject) newInstance,
+				ScenarioServicePackage.SCENARIO_LOCK__INSTANCE, msgs);
 		return msgs;
 	}
 
@@ -206,22 +213,33 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * @generated
 	 */
 	public void setInstance(ScenarioInstance newInstance) {
-		if (newInstance != eInternalContainer() || (eContainerFeatureID() != ScenarioServicePackage.SCENARIO_LOCK__INSTANCE && newInstance != null)) {
+		if (newInstance != eInternalContainer()
+				|| (eContainerFeatureID() != ScenarioServicePackage.SCENARIO_LOCK__INSTANCE && newInstance != null)) {
 			if (EcoreUtil.isAncestor(this, newInstance))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+				throw new IllegalArgumentException(
+						"Recursive containment not allowed for " + toString());
 			NotificationChain msgs = null;
 			if (eInternalContainer() != null)
 				msgs = eBasicRemoveFromContainer(msgs);
 			if (newInstance != null)
-				msgs = ((InternalEObject) newInstance).eInverseAdd(this, ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS, ScenarioInstance.class, msgs);
+				msgs = ((InternalEObject) newInstance).eInverseAdd(this,
+						ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS,
+						ScenarioInstance.class, msgs);
 			msgs = basicSetInstance(newInstance, msgs);
 			if (msgs != null)
 				msgs.dispatch();
 		} else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_LOCK__INSTANCE, newInstance, newInstance));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					ScenarioServicePackage.SCENARIO_LOCK__INSTANCE,
+					newInstance, newInstance));
 	}
 
 	private boolean claiming = false;
+
+	/**
+	 * Depth of stacked calls to claim()
+	 */
+	private int claimCount = 0;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -235,6 +253,7 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 			//			System.err.println(getKey() + " synch");
 			if (isClaimed()) {
 				//				System.err.println(getKey() + " already claimed");	
+				claimCount++;
 				return true;
 			}
 			claiming = true;
@@ -246,9 +265,10 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 
 			//			System.err.println(getKey() + " acquired");
 
-			instance.setLocked(true);
 			claiming = false;
 			setClaimed(true);
+			instance.setLocked(true);
+			claimCount++;
 			return true;
 		}
 	}
@@ -259,12 +279,12 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * @generated NOT
 	 */
 	public boolean awaitClaim() {
-		//		System.err.println(getKey() + " await claim");
 		final ScenarioInstance instance = getInstance();
 		synchronized (instance) {
 			//			System.err.println(getKey() + " await synch");
 			if (isClaimed()) {
 				//				System.err.println(getKey() + " already claimed");
+				claimCount++;
 				return true;
 			}
 			claiming = true;
@@ -277,11 +297,12 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 				}
 			}
 			//			System.err.println(getKey() + " acquired");
-			instance.setLocked(true);
 			claiming = false;
 			setClaimed(true);
+			instance.setLocked(true);
+			claimCount++;
+			return true;
 		}
-		return true;
 	}
 
 	/**
@@ -295,10 +316,13 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 		synchronized (instance) {
 			//			System.err.println(getKey() + " release synch");
 			if (isClaimed()) {
-				setClaimed(false);
-				getInstance().setLocked(false);
-				//				System.err.println(getKey() + " waking up others");
-				getInstance().notifyAll();
+				claimCount--;
+				if (claimCount == 0) {
+					setClaimed(false);
+					getInstance().setLocked(false);
+					//		System.err.println(getKey() + " waking up others");
+					getInstance().notifyAll();
+				}
 			} else {
 				//				System.err.println(getKey() + " not actually claimed");
 			}
@@ -314,7 +338,9 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 		final Adapter lockWatcher = new AdapterImpl() {
 			@Override
 			public void notifyChanged(final Notification n) {
-				if (n.isTouch() == false && n.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_Locked()) {
+				if (n.isTouch() == false
+						&& n.getFeature() == ScenarioServicePackage.eINSTANCE
+								.getScenarioInstance_Locked()) {
 					if (n.getNewBooleanValue()) {
 						if (!claiming) {
 							setAvailable(false);
@@ -339,7 +365,8 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseAdd(InternalEObject otherEnd,
+			int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_LOCK__INSTANCE:
 			if (eInternalContainer() != null)
@@ -355,7 +382,8 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd,
+			int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_LOCK__INSTANCE:
 			return basicSetInstance(null, msgs);
@@ -369,10 +397,13 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+	public NotificationChain eBasicRemoveFromContainerFeature(
+			NotificationChain msgs) {
 		switch (eContainerFeatureID()) {
 		case ScenarioServicePackage.SCENARIO_LOCK__INSTANCE:
-			return eInternalContainer().eInverseRemove(this, ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS, ScenarioInstance.class, msgs);
+			return eInternalContainer().eInverseRemove(this,
+					ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS,
+					ScenarioInstance.class, msgs);
 		}
 		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
@@ -458,7 +489,8 @@ public class ScenarioLockImpl extends EObjectImpl implements ScenarioLock {
 		case ScenarioServicePackage.SCENARIO_LOCK__CLAIMED:
 			return claimed != CLAIMED_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_LOCK__KEY:
-			return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
+			return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT
+					.equals(key);
 		case ScenarioServicePackage.SCENARIO_LOCK__INSTANCE:
 			return getInstance() != null;
 		}

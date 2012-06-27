@@ -17,6 +17,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * Command Handler to revert {@link ScenarioInstance} to last saved state.
@@ -41,13 +42,21 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 				final Object element = iterator.next();
 				if (element instanceof ScenarioInstance) {
 					final ScenarioInstance model = (ScenarioInstance) element;
-					final Map<Class<?>, Object> adapters = model.getAdapters();
-					if (adapters != null) {
-						final BasicCommandStack stack = (BasicCommandStack) adapters.get(BasicCommandStack.class);
-						while (stack.isSaveNeeded() && stack.canUndo()) {
-							stack.undo();
+					final ScenarioLock lock = model.getLock(ScenarioLock.EDITORS);
+					if (lock.awaitClaim()) {
+						try {
+							final Map<Class<?>, Object> adapters = model
+									.getAdapters();
+							if (adapters != null) {
+								final BasicCommandStack stack = (BasicCommandStack) adapters
+										.get(BasicCommandStack.class);
+								while (stack.isSaveNeeded() && stack.canUndo()) {
+									stack.undo();
+								}
+							}
+						} finally {
+							lock.release();
 						}
-
 					}
 				}
 			}

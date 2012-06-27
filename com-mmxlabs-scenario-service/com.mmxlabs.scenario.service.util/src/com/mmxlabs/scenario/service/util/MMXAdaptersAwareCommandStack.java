@@ -6,6 +6,7 @@ import org.eclipse.emf.common.command.Command;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * Extended version of {@link BasicCommandStack} which overrides undo/redo to disable the {@link MMXAdapterImpl} instances while processing the commands.
@@ -13,7 +14,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * @author Simon Goodall
  * 
  */
-public final class MMXAdaptersAwareCommandStack extends BasicCommandStack {
+public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 	private CommandProviderAwareEditingDomain editingDomain;
 	private final ScenarioInstance instance;
 
@@ -26,6 +27,8 @@ public final class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 		this.instance = instance;
 	}
 
+	
+	
 	@Override
 	public void execute(final Command command) {
 		synchronized (instance) {
@@ -45,41 +48,53 @@ public final class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 
 	@Override
 	public void undo() {
-
-		if (editingDomain != null) {
-			final boolean isEnabled = editingDomain.isEnabled();
-			if (isEnabled) {
-				editingDomain.setAdaptersEnabled(false);
-			}
+		final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
+		if (lock.awaitClaim()) {
 			try {
-				super.undo();
-			} finally {
-				if (isEnabled) {
-					editingDomain.setAdaptersEnabled(true);
+				if (editingDomain != null) {
+					final boolean isEnabled = editingDomain.isEnabled();
+					if (isEnabled) {
+						editingDomain.setAdaptersEnabled(false);
+					}
+					try {
+						super.undo();
+					} finally {
+						if (isEnabled) {
+							editingDomain.setAdaptersEnabled(true);
+						}
+					}
+				} else {
+					super.undo();
 				}
+			} finally {
+				lock.release();	
 			}
-		} else {
-			super.undo();
 		}
 	}
 
 	@Override
 	public void redo() {
-
-		if (editingDomain != null) {
-			final boolean isEnabled = editingDomain.isEnabled();
-			if (isEnabled) {
-				editingDomain.setAdaptersEnabled(false);
-			}
+		final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
+		if (lock.awaitClaim()) {
 			try {
-				super.redo();
-			} finally {
-				if (isEnabled) {
-					editingDomain.setAdaptersEnabled(true);
+				if (editingDomain != null) {
+					final boolean isEnabled = editingDomain.isEnabled();
+					if (isEnabled) {
+						editingDomain.setAdaptersEnabled(false);
+					}
+					try {
+						super.redo();
+					} finally {
+						if (isEnabled) {
+							editingDomain.setAdaptersEnabled(true);
+						}
+					}
+				} else {
+					super.redo();
 				}
+			} finally {
+				lock.release();
 			}
-		} else {
-			super.redo();
 		}
 	}
 

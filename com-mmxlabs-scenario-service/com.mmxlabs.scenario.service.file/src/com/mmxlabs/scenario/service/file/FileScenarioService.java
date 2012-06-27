@@ -139,7 +139,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		try {
 			synchronized (resource) {				
 				resource.save(options);
-				log.debug("Saved " + resource.getURI());
+//				log.debug("Saved " + resource.getURI());
 			}
 		} catch (final Throwable e) {
 			log.error(e.getMessage(), e);
