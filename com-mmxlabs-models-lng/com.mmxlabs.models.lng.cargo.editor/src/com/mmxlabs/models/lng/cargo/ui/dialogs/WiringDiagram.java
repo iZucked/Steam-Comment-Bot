@@ -47,8 +47,19 @@ import com.mmxlabs.common.Pair;
  */
 public abstract class WiringDiagram extends Canvas implements PaintListener,
 		MouseListener, MouseMoveListener {
+	/**
+	 * Contains pairs whose first element is left terminal colour and second is right terminal colour,
+	 * for each element in {@link #wiring}
+	 */
 	private final List<Pair<Color, Color>> terminalColours = new ArrayList<Pair<Color, Color>>();
+	/**
+	 * Contains the colour for each wire; the ith colour applies to the wire from the ith left hand terminal
+	 */
 	private final List<Color> wireColours = new ArrayList<Color>();
+	/**
+	 * The actual wiring permutation; if the ith element is j, left hand terminal i is wired to right hand terminal j.
+	 * If the ith element is -1, the ith element is not connected to anywhere.
+	 */
 	private final List<Integer> wiring = new ArrayList<Integer>();
 
 	private int terminalSize = 10;
@@ -97,7 +108,10 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 
 	/**
 	 * Set all the terminal colours at once; the ith element is a pair, whose
-	 * first member is the left hand colour
+	 * first member is the left hand colour.
+	 * 
+	 * The list of colours should be the same size as the wiring list last passed to
+	 * {@link #setWiring(List)}
 	 * 
 	 * @param colours
 	 */
@@ -378,7 +392,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 	}
 
 	/**
-	 * subclassses should use this to provide the heights of the terminals.
+	 * subclassses should use this to provide the vertical positions of the terminals.
 	 * 
 	 * @return
 	 */
