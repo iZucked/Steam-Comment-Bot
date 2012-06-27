@@ -60,6 +60,7 @@ public class InputFactoryImpl extends EFactoryImpl implements InputFactory {
 		switch (eClass.getClassifierID()) {
 			case InputPackage.INPUT_MODEL: return createInputModel();
 			case InputPackage.ASSIGNMENT: return createAssignment();
+			case InputPackage.ELEMENT_ASSIGNMENT: return createElementAssignment();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -83,6 +84,16 @@ public class InputFactoryImpl extends EFactoryImpl implements InputFactory {
 	public Assignment createAssignment() {
 		AssignmentImpl assignment = new AssignmentImpl();
 		return assignment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ElementAssignment createElementAssignment() {
+		ElementAssignmentImpl elementAssignment = new ElementAssignmentImpl();
+		return elementAssignment;
 	}
 
 	/**

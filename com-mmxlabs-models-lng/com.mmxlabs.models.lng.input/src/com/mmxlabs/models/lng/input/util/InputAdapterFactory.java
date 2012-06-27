@@ -82,6 +82,10 @@ public class InputAdapterFactory extends AdapterFactoryImpl {
 				return createAssignmentAdapter();
 			}
 			@Override
+			public Adapter caseElementAssignment(ElementAssignment object) {
+				return createElementAssignmentAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -134,6 +138,20 @@ public class InputAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAssignmentAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.input.ElementAssignment <em>Element Assignment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.input.ElementAssignment
+	 * @generated
+	 */
+	public Adapter createElementAssignmentAdapter() {
 		return null;
 	}
 

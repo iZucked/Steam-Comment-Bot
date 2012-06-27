@@ -16,7 +16,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.management.timer.Timer;
 
@@ -88,7 +87,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		}
 	};
 
-	private final Collection<R> resources = new TreeSet<R>(resourceComparator);
+	private final Collection<R> resources = new ArrayList<R>();
 
 	private AssignmentEditorColors colors = null;
 

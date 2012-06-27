@@ -3,7 +3,9 @@ package com.mmxlabs.models.lng.input.editor.utils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.management.timer.Timer;
 
@@ -12,19 +14,25 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 public class AssignmentEditorHelper {
-	public static Date getStartDate(UUIDObject task) {
+	public static Date getStartDate(final UUIDObject task) {
 		if (task instanceof Cargo) {
 			return ((Cargo) task).getLoadSlot()
 					.getWindowStartWithSlotOrPortTime();
@@ -38,7 +46,7 @@ public class AssignmentEditorHelper {
 		}
 	}
 	
-	public static Date getEndDate(UUIDObject task) {
+	public static Date getEndDate(final UUIDObject task) {
 		if (task instanceof Cargo) {
 			return ((Cargo) task).getDischargeSlot().getWindowEndWithSlotOrPortTime();
 		} else if (task instanceof VesselEvent) {
@@ -139,5 +147,131 @@ public class AssignmentEditorHelper {
 			}
 		}
 		return null;
+	}
+
+	public static ElementAssignment getElementAssignment(final InputModel modelObject, final UUIDObject task) {
+		for (final ElementAssignment ea : modelObject.getElementAssignments()) {
+			if (ea.getAssignedObject() == task) return ea;
+		}
+		return null;
+	}
+	
+	// ELEMENT ASSIGNMENT STUFF
+	
+	public static Command unassignElement(EditingDomain ed, InputModel modelObject, UUIDObject task) {
+		final ElementAssignment ea = getElementAssignment(modelObject, task);
+		return unassignElement(ed, ea);
+	}
+
+	public static Command unassignElement(EditingDomain ed,
+			final ElementAssignment ea) {
+		if (ea == null) return IdentityCommand.INSTANCE;
+		final CompoundCommand cc = new CompoundCommand();
+		
+		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Assignment(), SetCommand.UNSET_VALUE));
+		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Locked(), false));
+		
+		
+		return cc;
+	}
+	
+	public static Command reassignElement(EditingDomain ed, InputModel modelObject, UUIDObject task, final AVesselSet destination) {
+		final ElementAssignment ea = getElementAssignment(modelObject, task);
+		return reassignElement(ed, destination, ea, destination instanceof VesselClass ? getMaxSpot(modelObject) : 0);
+	}
+
+	public static Command reassignElement(EditingDomain ed,
+			final AVesselSet destination, final ElementAssignment ea) {
+		return reassignElement(ed, destination, ea, 0);
+	}
+
+	public static Command lockElement(EditingDomain ed, InputModel modelObject, UUIDObject task) {
+		return lockElement(ed, getElementAssignment(modelObject, task));
+	}
+	
+	public static Command unlockElement(EditingDomain ed, InputModel modelObject, UUIDObject task) {
+		return unlockElement(ed, getElementAssignment(modelObject, task));
+	}
+	
+	public static Command lockElement(EditingDomain ed, ElementAssignment ea) {
+		if (ea == null) return IdentityCommand.INSTANCE;
+		return SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Locked(), true);
+	}
+	
+	public static Command unlockElement(EditingDomain ed, ElementAssignment ea) {
+		if (ea == null) return IdentityCommand.INSTANCE;
+		return SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Locked(), false);
+	}
+	
+	public static List<CollectedAssignment> collectAssignments(final InputModel im, final FleetModel fm) {
+		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
+		final Map<Pair<AVesselSet, Integer>, List<ElementAssignment>> grouping = new HashMap<Pair<AVesselSet, Integer>, List<ElementAssignment>>();
+		
+		for (final Vessel v : fm.getVessels()) {
+			grouping.put(new Pair<AVesselSet, Integer>(v, 0), new ArrayList<ElementAssignment>());
+		}
+		
+		for (final ElementAssignment ea : im.getElementAssignments()) {
+			if (ea.getAssignment() == null) continue;
+			final Pair<AVesselSet, Integer> k = new Pair<AVesselSet, Integer>(ea.getAssignment(), ea.getSpotIndex());
+			List<ElementAssignment> l = grouping.get(k);
+			if (l == null) {
+				l = new ArrayList<ElementAssignment>();
+				grouping.put(k, l);
+			}
+			l.add(ea);
+		}
+		
+		for (final Pair<AVesselSet, Integer> k : grouping.keySet()) {
+			result.add(new CollectedAssignment(grouping.get(k), k.getFirst(), k.getSecond()));
+		}
+		
+		return result;
+	}
+
+	public static Command reassignElement(EditingDomain ed, InputModel modelObject, UUIDObject beforeTask, UUIDObject task, UUIDObject afterTask, AVesselSet vesselOrClass, int spotIndex) {
+		final ElementAssignment ea = getElementAssignment(modelObject, task);
+		if (ea == null) return IdentityCommand.INSTANCE;
+		final CompoundCommand cc = new CompoundCommand();
+		cc.append(reassignElement(ed, vesselOrClass, ea));
+		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_SpotIndex(), spotIndex));
+		if (beforeTask != null) {
+			final ElementAssignment ea2 = getElementAssignment(modelObject, beforeTask);
+			if (ea2 != null) {
+				int newSeq = ea2.getSequence() + 1;
+				System.err.println("Set seq of " + ea + " to " + newSeq);
+				cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Sequence(), newSeq));
+			}
+		} else if (afterTask != null) {
+			final ElementAssignment ea2 = getElementAssignment(modelObject, afterTask);
+			if (ea2 != null) {
+				final int newSeq = ea2.getSequence() - 1;
+				System.err.println("Set seq of " + ea + " to " + newSeq);
+				cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Sequence(), newSeq));
+			}
+		}
+		
+		
+		return cc;
+	}
+
+	public static Command reassignElement(EditingDomain ed, AVesselSet destination, ElementAssignment ea, int maxSpot) {
+		if (ea == null) return IdentityCommand.INSTANCE;
+		
+		final CompoundCommand cc = new CompoundCommand();
+		
+		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Assignment(), destination == null ? SetCommand.UNSET_VALUE : destination));
+		cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_SpotIndex(), maxSpot));
+		
+		return cc;
+	}
+	
+	public static int getMaxSpot(final InputModel im) {
+		int maxSpot = 0;
+		for (final ElementAssignment ea : im.getElementAssignments()) {
+			maxSpot = Math.max(maxSpot, ea.getSpotIndex());
+		}
+		maxSpot++;
+		return maxSpot;
 	}
 }

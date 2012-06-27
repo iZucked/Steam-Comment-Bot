@@ -425,4 +425,8 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 		fobButton.setEnabled(enabled);
 		desButton.setEnabled(enabled);
 	}
+	
+	public EObject getEditorTarget() {
+		return input;
+	}
 }

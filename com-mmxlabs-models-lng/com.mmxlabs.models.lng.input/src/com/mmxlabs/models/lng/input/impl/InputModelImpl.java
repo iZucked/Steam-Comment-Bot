@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.input.impl;
 import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
 
@@ -38,6 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.input.impl.InputModelImpl#getAssignments <em>Assignments</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.input.impl.InputModelImpl#getLockedAssignedObjects <em>Locked Assigned Objects</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.input.impl.InputModelImpl#getElementAssignments <em>Element Assignments</em>}</li>
  * </ul>
  * </p>
  *
@@ -63,6 +65,16 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 	 * @ordered
 	 */
 	protected EList<UUIDObject> lockedAssignedObjects;
+
+	/**
+	 * The cached value of the '{@link #getElementAssignments() <em>Element Assignments</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getElementAssignments()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ElementAssignment> elementAssignments;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -112,11 +124,25 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<ElementAssignment> getElementAssignments() {
+		if (elementAssignments == null) {
+			elementAssignments = new EObjectContainmentEList<ElementAssignment>(ElementAssignment.class, this, InputPackage.INPUT_MODEL__ELEMENT_ASSIGNMENTS);
+		}
+		return elementAssignments;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case InputPackage.INPUT_MODEL__ASSIGNMENTS:
 				return ((InternalEList<?>)getAssignments()).basicRemove(otherEnd, msgs);
+			case InputPackage.INPUT_MODEL__ELEMENT_ASSIGNMENTS:
+				return ((InternalEList<?>)getElementAssignments()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -133,6 +159,8 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 				return getAssignments();
 			case InputPackage.INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS:
 				return getLockedAssignedObjects();
+			case InputPackage.INPUT_MODEL__ELEMENT_ASSIGNMENTS:
+				return getElementAssignments();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -154,6 +182,10 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 				getLockedAssignedObjects().clear();
 				getLockedAssignedObjects().addAll((Collection<? extends UUIDObject>)newValue);
 				return;
+			case InputPackage.INPUT_MODEL__ELEMENT_ASSIGNMENTS:
+				getElementAssignments().clear();
+				getElementAssignments().addAll((Collection<? extends ElementAssignment>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -172,6 +204,9 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 			case InputPackage.INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS:
 				getLockedAssignedObjects().clear();
 				return;
+			case InputPackage.INPUT_MODEL__ELEMENT_ASSIGNMENTS:
+				getElementAssignments().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -188,6 +223,8 @@ public class InputModelImpl extends UUIDObjectImpl implements InputModel {
 				return assignments != null && !assignments.isEmpty();
 			case InputPackage.INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS:
 				return lockedAssignedObjects != null && !lockedAssignedObjects.isEmpty();
+			case InputPackage.INPUT_MODEL__ELEMENT_ASSIGNMENTS:
+				return elementAssignments != null && !elementAssignments.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.BasicEList;
@@ -14,7 +17,11 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 /**
@@ -173,6 +180,7 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 		EClassifier classifier = eContainingFeature().getEGenericType().getETypeArguments().get(0).getERawType();
 		if (classifier instanceof EDataType) {
 			final EDataType dt = (EDataType) classifier;
+			
 			return (Value) dt.getEPackage().getEFactoryInstance().createFromString(dt, getExpression());
 		} else {
 			throw new RuntimeException("Can't understand classifier " + classifier);
@@ -183,6 +191,8 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 	public EList<Date> getDates() {
 		return new BasicEList<Date>(Collections.singleton(new Date(0)));
 	}
+	
+	
 } // end of DerivedIndexImpl
 
 // finish type fixing

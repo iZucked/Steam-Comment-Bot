@@ -5,10 +5,7 @@
 package com.mmxlabs.models.lng.cargo.importer;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.Map;
-
-import javax.management.timer.Timer;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -18,15 +15,13 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
@@ -99,94 +94,32 @@ public class CargoImporter extends DefaultClassImporter {
 				public void run(final IImportContext context) {
 					final InputModel im = context.getRootObject().getSubModel(InputModel.class);
 					if (im != null) {
-						for (final Assignment a : im.getAssignments()) {
-							if (a.getAssignedObjects().contains(cargo_)) return;
+						ElementAssignment existing = null;
+						for (final ElementAssignment ea : im.getElementAssignments()) {
+							if (ea.getAssignedObject() == cargo_) {
+								existing = ea;
+								break;
+							}
+						}
+						if (existing == null) {
+							existing = InputFactory.eINSTANCE.createElementAssignment();
+							im.getElementAssignments().add(existing);
+							existing.setAssignedObject(cargo_);
 						}
 						
 						// attempt to find vessel
 						NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
 						if (vessel instanceof Vessel) {
-							// assignment is not present, so use the one from here.
-							Assignment match = null;
-							for (final Assignment a : im.getAssignments()) {
-								if (a.getVessels().contains(vessel)) {
-									match = a;
-									break;
-								}
-							}
-							if (match == null) {
-								match = InputFactory.eINSTANCE.createAssignment();
-								match.getVessels().add((Vessel)vessel);
-								im.getAssignments().add(match);
-							}
-							insert(match, cargo_);
-
+							existing.setAssignment((AVesselSet) vessel);
 						} else {
 							context.addProblem(noVessel);
 						}
 					}
 				}
-				
-				private void insert(Assignment match, Cargo task) {
-					int position = 0;
-					
-					final Date start = getStartDate(task);
-					final Date end = getEndDate(task);
-
-					if (start != null && end != null) {
-						for (final UUIDObject o : match.getAssignedObjects()) {
-							final Date startO = getStartDate(o);
-//							final Date endO = getEndDate(o);
-							if (end.before(startO)) {
-								break;
-//							} else if (start.after(endO)) {
-//								position++;
-//								break;
-							} else {
-								position++;
-							}
-						}
-					}
-					
-					if (position == match.getAssignedObjects().size()) {
-						match.getAssignedObjects().add(task);
-					} else {
-						match.getAssignedObjects().add(position, task);
-					}
-				}
 
 				@Override
 				public int getStage() {
-					return IImportContext.STAGE_MODIFY_SUBMODELS;
-				}
-				
-				private Date getStartDate(UUIDObject task) {
-					if (task instanceof Cargo) {
-						return ((Cargo) task).getLoadSlot()
-								.getWindowStartWithSlotOrPortTime();
-					} else if (task instanceof VesselEvent) {
-						return
-								((VesselEvent) task).getStartBy();
-					} else if (task instanceof Slot) {
-						return ((Slot) task).getWindowStartWithSlotOrPortTime();
-					} else {
-						return null;
-					}
-				}
-				
-				private Date getEndDate(UUIDObject task) {
-					if (task instanceof Cargo) {
-						return ((Cargo) task).getDischargeSlot().getWindowEndWithSlotOrPortTime();
-					} else if (task instanceof VesselEvent) {
-						return 
-								new Date(
-								((VesselEvent) task).getStartBy().getTime()
-								+ Timer.ONE_DAY * ((VesselEvent)task).getDurationInDays());
-					} else if (task instanceof Slot) {
-						return ((Slot) task).getWindowEndWithSlotOrPortTime();
-					} else {
-						return null;
-					}
+					return IImportContext.STAGE_MODIFY_SUBMODELS + 10;
 				}
 			});
 		}

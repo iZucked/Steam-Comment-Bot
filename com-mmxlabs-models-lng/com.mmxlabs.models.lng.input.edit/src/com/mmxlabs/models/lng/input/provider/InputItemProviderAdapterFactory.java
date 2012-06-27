@@ -120,6 +120,29 @@ public class InputItemProviderAdapterFactory extends InputAdapterFactory impleme
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.input.ElementAssignment} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ElementAssignmentItemProvider elementAssignmentItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.input.ElementAssignment}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createElementAssignmentAdapter() {
+		if (elementAssignmentItemProvider == null) {
+			elementAssignmentItemProvider = new ElementAssignmentItemProvider(this);
+		}
+
+		return elementAssignmentItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -220,6 +243,7 @@ public class InputItemProviderAdapterFactory extends InputAdapterFactory impleme
 	public void dispose() {
 		if (inputModelItemProvider != null) inputModelItemProvider.dispose();
 		if (assignmentItemProvider != null) assignmentItemProvider.dispose();
+		if (elementAssignmentItemProvider != null) elementAssignmentItemProvider.dispose();
 	}
 
 }

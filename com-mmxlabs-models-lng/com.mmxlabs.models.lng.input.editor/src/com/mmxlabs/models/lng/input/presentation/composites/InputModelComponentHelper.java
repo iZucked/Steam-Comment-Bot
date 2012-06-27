@@ -67,6 +67,8 @@ public class InputModelComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_assignmentsEditor(detailComposite, topClass);
+		add_lockedAssignedObjectsEditor(detailComposite, topClass);
+		add_elementAssignmentsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the assignments feature on InputModel
@@ -75,5 +77,23 @@ public class InputModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_assignmentsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, InputPackage.Literals.INPUT_MODEL__ASSIGNMENTS));
+	}
+
+	/**
+	 * Create the editor for the lockedAssignedObjects feature on InputModel
+	 *
+	 * @generated
+	 */
+	protected void add_lockedAssignedObjectsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, InputPackage.Literals.INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS));
+	}
+
+	/**
+	 * Create the editor for the elementAssignments feature on InputModel
+	 *
+	 * @generated
+	 */
+	protected void add_elementAssignmentsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, InputPackage.Literals.INPUT_MODEL__ELEMENT_ASSIGNMENTS));
 	}
 }
