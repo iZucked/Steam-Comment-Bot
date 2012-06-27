@@ -12,6 +12,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDialog;
+import com.mmxlabs.models.lng.cargo.ui.valueproviders.SlotPortValueProviderFactory;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 
@@ -39,8 +40,17 @@ public class RewireAction extends ScenarioModifyingAction {
 	public void run() {
 		final WiringDialog dialog = new WiringDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
 
-		dialog.open(((IStructuredSelection) getLastSelection()).toList(), part.getEditingDomain(),
-				part.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_Port()));
+		try {
+			part.setDisableCommandProviders(true);
+			part.setDisableUpdates(true);
+
+			dialog.open(((IStructuredSelection) getLastSelection()).toList(), part.getEditingDomain(), new SlotPortValueProviderFactory().createReferenceValueProvider(
+					CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_Port(), part.getRootObject()),
+					part.getReferenceValueProviderCache().getReferenceValueProvider(CargoPackage.eINSTANCE.getSlot(), CargoPackage.eINSTANCE.getSlot_Contract()));
+		} finally {
+			part.setDisableCommandProviders(false);
+			part.setDisableUpdates(false);
+		}
 	}
 
 	/*
