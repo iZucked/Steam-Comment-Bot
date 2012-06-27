@@ -52,7 +52,7 @@ public class WiringDialog extends Dialog {
 	}
 
 	public void open(final List<Cargo> cargoes, final EditingDomain domain,
-			final IReferenceValueProvider portProvider) {
+			final IReferenceValueProvider portProvider, final IReferenceValueProvider contractProvider) {
 		final Shell shell = new Shell((SWT.DIALOG_TRIM & ~SWT.CLOSE)
 				| SWT.APPLICATION_MODAL | SWT.RESIZE);
 		shell.setSize(1000, 600);
@@ -93,7 +93,7 @@ public class WiringDialog extends Dialog {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				wiringComposite.addNewCargo(null);
+				wiringComposite.addNewCargo(null, false);
 			}});
 
 		final Button btnOk = new Button(buttonsComposite, SWT.NONE);
@@ -134,6 +134,7 @@ public class WiringDialog extends Dialog {
 		});
 
 		wiringComposite.setPortProvider(portProvider);
+		wiringComposite.setContractProvider(contractProvider);
 		wiringComposite.setCargoes(cargoes);
 
 		wiringComposite.addListener(SWT.Modify, new Listener() {

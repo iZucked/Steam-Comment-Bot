@@ -49,6 +49,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener,
 		MouseListener, MouseMoveListener {
 	private final List<Pair<Color, Color>> terminalColours = new ArrayList<Pair<Color, Color>>();
 	private final List<Color> wireColours = new ArrayList<Color>();
+	// Indices?
 	private final List<Integer> wiring = new ArrayList<Integer>();
 
 	private int terminalSize = 10;
