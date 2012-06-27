@@ -48,7 +48,11 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 
 	@Override
 	public void undo() {
-		final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
+		undo(ScenarioLock.EDITORS);
+	}
+
+	public void undo(final String lockKey) {
+		final ScenarioLock lock = instance.getLock(lockKey);
 		if (lock.awaitClaim()) {
 			try {
 				if (editingDomain != null) {
@@ -72,6 +76,7 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 		}
 	}
 
+	
 	@Override
 	public void redo() {
 		final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
