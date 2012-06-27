@@ -11,8 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
 
-import javax.swing.InputMap;
-
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EAttribute;
@@ -174,6 +172,11 @@ public class WiringComposite extends Composite {
 		final String name = "New cargo " + (newCargoes.size() + 1);
 
 		newCargo.setName(name);
+		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newLoad.setName(name);
+		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newDischarge.setName("discharge - " + name);
+		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 
 		newNames.add(name);
 
@@ -663,9 +666,6 @@ public class WiringComposite extends Composite {
 		if (!Equality.isEqual(owner.eGet(feature), newValue)) {
 			command.append(SetCommand.create(domain, owner, feature, newValue));
 		}
-	}
-
-	public void appendIfChanged(final EditingDomain domain, final CompoundCommand command, final int index, final Cargo cargo) {
 	}
 
 	/**
