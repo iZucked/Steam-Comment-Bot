@@ -69,7 +69,6 @@ public class InputModelItemProvider
 			super.getPropertyDescriptors(object);
 
 			addLockedAssignedObjectsPropertyDescriptor(object);
-			addElementAssignmentsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -97,28 +96,6 @@ public class InputModelItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Element Assignments feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addElementAssignmentsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_InputModel_elementAssignments_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_InputModel_elementAssignments_feature", "_UI_InputModel_type"),
-				 InputPackage.Literals.INPUT_MODEL__ELEMENT_ASSIGNMENTS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -131,6 +108,7 @@ public class InputModelItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(InputPackage.Literals.INPUT_MODEL__ASSIGNMENTS);
+			childrenFeatures.add(InputPackage.Literals.INPUT_MODEL__ELEMENT_ASSIGNMENTS);
 		}
 		return childrenFeatures;
 	}
@@ -186,6 +164,7 @@ public class InputModelItemProvider
 
 		switch (notification.getFeatureID(InputModel.class)) {
 			case InputPackage.INPUT_MODEL__ASSIGNMENTS:
+			case InputPackage.INPUT_MODEL__ELEMENT_ASSIGNMENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -207,6 +186,11 @@ public class InputModelItemProvider
 			(createChildParameter
 				(InputPackage.Literals.INPUT_MODEL__ASSIGNMENTS,
 				 InputFactory.eINSTANCE.createAssignment()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(InputPackage.Literals.INPUT_MODEL__ELEMENT_ASSIGNMENTS,
+				 InputFactory.eINSTANCE.createElementAssignment()));
 	}
 
 	/**

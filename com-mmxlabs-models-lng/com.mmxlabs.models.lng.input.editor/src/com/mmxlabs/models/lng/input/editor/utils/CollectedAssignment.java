@@ -6,10 +6,8 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -38,12 +36,24 @@ public class CollectedAssignment {
 		Collections.sort(assignments, new Comparator<ElementAssignment>() {
 			@Override
 			public int compare(final ElementAssignment arg0, final ElementAssignment arg1) {
-				//TODO check for nulls.
-				
 				final Date start0 = AssignmentEditorHelper.getStartDate(arg0.getAssignedObject());
 				final Date start1 = AssignmentEditorHelper.getStartDate(arg1.getAssignedObject());
 				final Date end0 = AssignmentEditorHelper.getEndDate(arg0.getAssignedObject());
 				final Date end1 = AssignmentEditorHelper.getEndDate(arg1.getAssignedObject());
+				
+				final boolean null0 = start0 == null || end0 == null;
+				final boolean null1 = start1 == null || end1 == null;
+				
+				if (null0) {
+					if (null1) {
+						return 0;
+					} else {
+						return -1;
+					}
+				} else if (null1) {
+					return 1;
+				}
+				
 				if (overlaps(start0, end0, start1, end1)) {
 					return ((Integer) arg0.getSequence()).compareTo(arg1.getSequence());
 				} else {
@@ -51,8 +61,7 @@ public class CollectedAssignment {
 				}
 			}
 
-			private boolean overlaps(Date start0, Date end0, Date start1,
-					Date end1) {
+			private boolean overlaps(final Date start0, final Date end0, final Date start1,final Date end1) {
 				return !(end0.before(start1) || end1.before(start0));
 			}
 		});

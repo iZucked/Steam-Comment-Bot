@@ -67,6 +67,8 @@ public class EventItemProvider
 			addStartPropertyDescriptor(object);
 			addEndPropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
+			addPreviousEventPropertyDescriptor(object);
+			addNextEventPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -129,6 +131,50 @@ public class EventItemProvider
 				 getString("_UI_Event_port_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Event_port_feature", "_UI_Event_type"),
 				 SchedulePackage.Literals.EVENT__PORT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Previous Event feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPreviousEventPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Event_previousEvent_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Event_previousEvent_feature", "_UI_Event_type"),
+				 SchedulePackage.Literals.EVENT__PREVIOUS_EVENT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Next Event feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addNextEventPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Event_nextEvent_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Event_nextEvent_feature", "_UI_Event_type"),
+				 SchedulePackage.Literals.EVENT__NEXT_EVENT,
 				 true,
 				 false,
 				 true,

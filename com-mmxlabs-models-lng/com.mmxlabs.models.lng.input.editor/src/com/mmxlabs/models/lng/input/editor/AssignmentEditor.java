@@ -699,10 +699,12 @@ public class AssignmentEditor<R, T> extends Canvas {
 		final int w = Math.max(MIN_WIDTH, getX(start, end));
 		// final int w = (int) Math.max(MIN_WIDTH, ((end.getTime() - start.getTime()) / SCALE_FACTOR));
 
+		gc.setAlpha(255);
 		if (task == getSelectedTask()) {
 			gc.setBackground(colors.selectedTaskGradientBottom);
 			gc.setForeground(colors.selectedTaskGradientTop);
 		} else if (informationProvider.isLocked(task)) {
+			gc.setAlpha(150);
 			gc.setBackground(colors.lockedTaskGradientBottom);
 			gc.setForeground(colors.lockedTaskGradientTop);
 		} else if (getSelectedTask() != null) {
