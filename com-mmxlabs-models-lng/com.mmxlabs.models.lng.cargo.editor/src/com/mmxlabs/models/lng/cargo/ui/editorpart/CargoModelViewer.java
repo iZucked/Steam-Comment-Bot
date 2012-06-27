@@ -44,6 +44,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.ui.actions.RewireAction;
 import com.mmxlabs.models.lng.cargo.ui.actions.RotateSlotsAction;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
@@ -368,7 +369,9 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 				final InputModel input = location.getRootObject().getSubModel(InputModel.class);
 				if (input != null) {
-					return vessels.indexOf(AssignmentEditorHelper.getElementAssignment(input, cargo).getAssignment());
+					ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(input, cargo);
+					if (assignment != null)
+						return vessels.indexOf(assignment.getAssignment());
 				}
 			}
 
