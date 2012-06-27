@@ -11,6 +11,7 @@ import javax.management.timer.Timer;
 
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -47,6 +48,7 @@ import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -54,6 +56,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.util.MMXAdaptersAwareCommandStack;
 
 public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private static final String LABEL_PREFIX = "Optimised: ";
@@ -131,7 +134,14 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
 				if (mostRecentCommand != null) {
 					if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
-						editingDomain.getCommandStack().undo();
+						final CommandStack stack = editingDomain.getCommandStack();
+						if (stack instanceof MMXAdaptersAwareCommandStack) {
+							// this is needed because we have claimed the lock under the given key
+							// so if we undo using EDITORS as the lock, we spin forever.
+							((MMXAdaptersAwareCommandStack) stack).undo(jobDescriptor.getLockKey());
+						} else {
+							stack.undo();
+						}
 					}
 				}
 			}
