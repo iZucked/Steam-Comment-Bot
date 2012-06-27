@@ -22,6 +22,8 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getStart <em>Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getEnd <em>End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getPort <em>Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getPreviousEvent <em>Previous Event</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getNextEvent <em>Next Event</em>}</li>
  * </ul>
  * </p>
  *
@@ -107,6 +109,62 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @generated
 	 */
 	void setPort(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Previous Event</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.Event#getNextEvent <em>Next Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Previous Event</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Previous Event</em>' reference.
+	 * @see #setPreviousEvent(Event)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_PreviousEvent()
+	 * @see com.mmxlabs.models.lng.schedule.Event#getNextEvent
+	 * @model opposite="nextEvent"
+	 * @generated
+	 */
+	Event getPreviousEvent();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getPreviousEvent <em>Previous Event</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Previous Event</em>' reference.
+	 * @see #getPreviousEvent()
+	 * @generated
+	 */
+	void setPreviousEvent(Event value);
+
+	/**
+	 * Returns the value of the '<em><b>Next Event</b></em>' reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.Event#getPreviousEvent <em>Previous Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Next Event</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Next Event</em>' reference.
+	 * @see #setNextEvent(Event)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_NextEvent()
+	 * @see com.mmxlabs.models.lng.schedule.Event#getPreviousEvent
+	 * @model opposite="previousEvent"
+	 * @generated
+	 */
+	Event getNextEvent();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getNextEvent <em>Next Event</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Next Event</em>' reference.
+	 * @see #getNextEvent()
+	 * @generated
+	 */
+	void setNextEvent(Event value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -71,6 +71,8 @@ public class EventComponentHelper extends BaseComponentHelper {
 		add_startEditor(detailComposite, topClass);
 		add_endEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
+		add_previousEventEditor(detailComposite, topClass);
+		add_nextEventEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the start feature on Event
@@ -95,5 +97,23 @@ public class EventComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__PORT));
+	}
+
+	/**
+	 * Create the editor for the previousEvent feature on Event
+	 *
+	 * @generated
+	 */
+	protected void add_previousEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__PREVIOUS_EVENT));
+	}
+
+	/**
+	 * Create the editor for the nextEvent feature on Event
+	 *
+	 * @generated
+	 */
+	protected void add_nextEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__NEXT_EVENT));
 	}
 }

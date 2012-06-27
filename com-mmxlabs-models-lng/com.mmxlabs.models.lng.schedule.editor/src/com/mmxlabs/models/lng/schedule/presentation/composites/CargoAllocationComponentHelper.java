@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule.presentation.composites;
 
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ public class CargoAllocationComponentHelper extends BaseComponentHelper {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER));
+		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.EXTRA_DATA_CONTAINER));
 	}
 	
 	/**

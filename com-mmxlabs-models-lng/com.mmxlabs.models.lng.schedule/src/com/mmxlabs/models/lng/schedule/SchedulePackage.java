@@ -652,13 +652,31 @@ public interface SchedulePackage extends EPackage {
 	int EVENT__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT__PREVIOUS_EVENT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT__NEXT_EVENT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -858,6 +876,24 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SLOT_VISIT__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -1104,6 +1140,24 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__PORT = EVENT__PORT;
 
 	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1328,6 +1382,24 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int JOURNEY__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -1608,6 +1680,24 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int IDLE__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2080,6 +2170,24 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int COOLDOWN__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -3032,6 +3140,24 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT__PORT = EVENT__PORT;
 
 	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3796,6 +3922,28 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getEvent_Port();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Event#getPreviousEvent <em>Previous Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Previous Event</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Event#getPreviousEvent()
+	 * @see #getEvent()
+	 * @generated
+	 */
+	EReference getEvent_PreviousEvent();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.Event#getNextEvent <em>Next Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Next Event</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Event#getNextEvent()
+	 * @see #getEvent()
+	 * @generated
+	 */
+	EReference getEvent_NextEvent();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Event#getDuration() <em>Get Duration</em>}' operation.
@@ -4867,6 +5015,22 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference EVENT__PORT = eINSTANCE.getEvent_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Previous Event</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EVENT__PREVIOUS_EVENT = eINSTANCE.getEvent_PreviousEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Next Event</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EVENT__NEXT_EVENT = eINSTANCE.getEvent_NextEvent();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Duration</b></em>' operation.

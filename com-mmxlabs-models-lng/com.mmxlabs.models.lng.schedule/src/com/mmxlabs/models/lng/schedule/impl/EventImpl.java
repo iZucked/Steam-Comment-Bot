@@ -11,6 +11,7 @@ import java.util.TimeZone;
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -35,6 +36,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getStart <em>Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getEnd <em>End</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getPort <em>Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getPreviousEvent <em>Previous Event</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getNextEvent <em>Next Event</em>}</li>
  * </ul>
  * </p>
  *
@@ -90,6 +93,26 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @ordered
 	 */
 	protected Port port;
+
+	/**
+	 * The cached value of the '{@link #getPreviousEvent() <em>Previous Event</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPreviousEvent()
+	 * @generated
+	 * @ordered
+	 */
+	protected Event previousEvent;
+
+	/**
+	 * The cached value of the '{@link #getNextEvent() <em>Next Event</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getNextEvent()
+	 * @generated
+	 * @ordered
+	 */
+	protected Event nextEvent;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -193,6 +216,126 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Event getPreviousEvent() {
+		if (previousEvent != null && previousEvent.eIsProxy()) {
+			InternalEObject oldPreviousEvent = (InternalEObject)previousEvent;
+			previousEvent = (Event)eResolveProxy(oldPreviousEvent);
+			if (previousEvent != oldPreviousEvent) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.EVENT__PREVIOUS_EVENT, oldPreviousEvent, previousEvent));
+			}
+		}
+		return previousEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Event basicGetPreviousEvent() {
+		return previousEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPreviousEvent(Event newPreviousEvent, NotificationChain msgs) {
+		Event oldPreviousEvent = previousEvent;
+		previousEvent = newPreviousEvent;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__PREVIOUS_EVENT, oldPreviousEvent, newPreviousEvent);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPreviousEvent(Event newPreviousEvent) {
+		if (newPreviousEvent != previousEvent) {
+			NotificationChain msgs = null;
+			if (previousEvent != null)
+				msgs = ((InternalEObject)previousEvent).eInverseRemove(this, SchedulePackage.EVENT__NEXT_EVENT, Event.class, msgs);
+			if (newPreviousEvent != null)
+				msgs = ((InternalEObject)newPreviousEvent).eInverseAdd(this, SchedulePackage.EVENT__NEXT_EVENT, Event.class, msgs);
+			msgs = basicSetPreviousEvent(newPreviousEvent, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__PREVIOUS_EVENT, newPreviousEvent, newPreviousEvent));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Event getNextEvent() {
+		if (nextEvent != null && nextEvent.eIsProxy()) {
+			InternalEObject oldNextEvent = (InternalEObject)nextEvent;
+			nextEvent = (Event)eResolveProxy(oldNextEvent);
+			if (nextEvent != oldNextEvent) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SchedulePackage.EVENT__NEXT_EVENT, oldNextEvent, nextEvent));
+			}
+		}
+		return nextEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Event basicGetNextEvent() {
+		return nextEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetNextEvent(Event newNextEvent, NotificationChain msgs) {
+		Event oldNextEvent = nextEvent;
+		nextEvent = newNextEvent;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__NEXT_EVENT, oldNextEvent, newNextEvent);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setNextEvent(Event newNextEvent) {
+		if (newNextEvent != nextEvent) {
+			NotificationChain msgs = null;
+			if (nextEvent != null)
+				msgs = ((InternalEObject)nextEvent).eInverseRemove(this, SchedulePackage.EVENT__PREVIOUS_EVENT, Event.class, msgs);
+			if (newNextEvent != null)
+				msgs = ((InternalEObject)newNextEvent).eInverseAdd(this, SchedulePackage.EVENT__PREVIOUS_EVENT, Event.class, msgs);
+			msgs = basicSetNextEvent(newNextEvent, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__NEXT_EVENT, newNextEvent, newNextEvent));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getDuration() {
@@ -267,6 +410,42 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case SchedulePackage.EVENT__PREVIOUS_EVENT:
+				if (previousEvent != null)
+					msgs = ((InternalEObject)previousEvent).eInverseRemove(this, SchedulePackage.EVENT__NEXT_EVENT, Event.class, msgs);
+				return basicSetPreviousEvent((Event)otherEnd, msgs);
+			case SchedulePackage.EVENT__NEXT_EVENT:
+				if (nextEvent != null)
+					msgs = ((InternalEObject)nextEvent).eInverseRemove(this, SchedulePackage.EVENT__PREVIOUS_EVENT, Event.class, msgs);
+				return basicSetNextEvent((Event)otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case SchedulePackage.EVENT__PREVIOUS_EVENT:
+				return basicSetPreviousEvent(null, msgs);
+			case SchedulePackage.EVENT__NEXT_EVENT:
+				return basicSetNextEvent(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SchedulePackage.EVENT__START:
@@ -276,6 +455,12 @@ public class EventImpl extends MMXObjectImpl implements Event {
 			case SchedulePackage.EVENT__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
+			case SchedulePackage.EVENT__PREVIOUS_EVENT:
+				if (resolve) return getPreviousEvent();
+				return basicGetPreviousEvent();
+			case SchedulePackage.EVENT__NEXT_EVENT:
+				if (resolve) return getNextEvent();
+				return basicGetNextEvent();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -296,6 +481,12 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return;
 			case SchedulePackage.EVENT__PORT:
 				setPort((Port)newValue);
+				return;
+			case SchedulePackage.EVENT__PREVIOUS_EVENT:
+				setPreviousEvent((Event)newValue);
+				return;
+			case SchedulePackage.EVENT__NEXT_EVENT:
+				setNextEvent((Event)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -318,6 +509,12 @@ public class EventImpl extends MMXObjectImpl implements Event {
 			case SchedulePackage.EVENT__PORT:
 				setPort((Port)null);
 				return;
+			case SchedulePackage.EVENT__PREVIOUS_EVENT:
+				setPreviousEvent((Event)null);
+				return;
+			case SchedulePackage.EVENT__NEXT_EVENT:
+				setNextEvent((Event)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -336,6 +533,10 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return END_EDEFAULT == null ? end != null : !END_EDEFAULT.equals(end);
 			case SchedulePackage.EVENT__PORT:
 				return port != null;
+			case SchedulePackage.EVENT__PREVIOUS_EVENT:
+				return previousEvent != null;
+			case SchedulePackage.EVENT__NEXT_EVENT:
+				return nextEvent != null;
 		}
 		return super.eIsSet(featureID);
 	}
