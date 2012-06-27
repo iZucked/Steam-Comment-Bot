@@ -5,6 +5,7 @@
 package com.mmxlabs.shiplingo.platform.models.optimisation;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -276,6 +277,13 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private Command derive(EditingDomain domain, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel) {
 		CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
+		final HashSet<UUIDObject> previouslyLocked = new HashSet<UUIDObject>();
+		for (final ElementAssignment ai : inputModel.getElementAssignments()) {
+			if (ai.isLocked()) {
+				previouslyLocked.add(ai.getAssignedObject());
+			}
+		}
+		
 		final List<Assignment> blank = Collections.emptyList();
 		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
 		
@@ -302,7 +310,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 						ea.setAssignment(assignment);
 						ea.setSequence(index++);
 						ea.setSpotIndex(thisIndex);
-						newElementAssignments.add(ea);
+						ea.setLocked(previouslyLocked.contains(ea.getAssignedObject()));
+						newElementAssignments.add(ea);						
 					}
 				} else if (event instanceof VesselEventVisit) {
 					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
@@ -310,6 +319,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					ea.setAssignment(assignment);
 					ea.setSequence(index++);
 					ea.setSpotIndex(thisIndex);
+					ea.setLocked(previouslyLocked.contains(ea.getAssignedObject()));
 					newElementAssignments.add(ea);
 				}
 			}
