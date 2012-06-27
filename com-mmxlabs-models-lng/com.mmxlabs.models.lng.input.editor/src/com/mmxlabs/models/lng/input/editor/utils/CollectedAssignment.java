@@ -61,8 +61,7 @@ public class CollectedAssignment {
 				}
 			}
 
-			private boolean overlaps(Date start0, Date end0, Date start1,
-					Date end1) {
+			private boolean overlaps(final Date start0, final Date end0, final Date start1,final Date end1) {
 				return !(end0.before(start1) || end1.before(start0));
 			}
 		});
