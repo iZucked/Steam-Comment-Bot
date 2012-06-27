@@ -57,11 +57,11 @@ public class WiringDialog extends Dialog {
 				| SWT.APPLICATION_MODAL | SWT.RESIZE);
 		shell.setSize(1000, 600);
 		shell.setText("Redirection Wizard");
-		GridLayout gl_shell = new GridLayout(1, false);
+		final GridLayout gl_shell = new GridLayout(1, false);
 		gl_shell.verticalSpacing = 6;
 		shell.setLayout(gl_shell);
 
-		ScrolledComposite scrolledComposite = new ScrolledComposite(shell,
+		final ScrolledComposite scrolledComposite = new ScrolledComposite(shell,
 				SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true,
 				true, 1, 1));
@@ -76,7 +76,7 @@ public class WiringDialog extends Dialog {
 				SWT.DEFAULT));
 		scrolledComposite.setLayout(new FillLayout());
 
-		Composite buttonsComposite = new Composite(shell, SWT.NONE);
+		final Composite buttonsComposite = new Composite(shell, SWT.NONE);
 		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER,
 				false, false, 1, 1));
 		buttonsComposite.setBounds(0, 0, 64, 64);
@@ -84,7 +84,7 @@ public class WiringDialog extends Dialog {
 
 		((GridLayout) buttonsComposite.getLayout()).marginWidth = 0;
 
-		 Button btnOptimise = new Button(buttonsComposite, SWT.NONE);
+		 final Button btnOptimise = new Button(buttonsComposite, SWT.NONE);
 		 btnOptimise.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true,
 		 false, 1, 1));
 		 btnOptimise.setText("Add Cargo");
@@ -92,12 +92,12 @@ public class WiringDialog extends Dialog {
 		 btnOptimise.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				wiringComposite.addNewCargo(null);
 			}});
 
 		final Button btnOk = new Button(buttonsComposite, SWT.NONE);
-		GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
+		final GridData gd_btnOk = new GridData(SWT.RIGHT, SWT.CENTER, false, false,
 				1, 1);
 //		gd_btnOk.widthHint = 50;
 		gd_btnOk.grabExcessHorizontalSpace = true;
@@ -106,7 +106,7 @@ public class WiringDialog extends Dialog {
 
 		btnOk.addSelectionListener(new SelectionListener() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final Command c = wiringComposite.createApplyCommand(domain);
 				domain.getCommandStack().execute(c);
 
@@ -114,13 +114,13 @@ public class WiringDialog extends Dialog {
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 
 			}
 		});
 
-		Button btnCancel = new Button(buttonsComposite, SWT.NONE);
-		GridData gd_btnCancel = new GridData(SWT.LEFT, SWT.CENTER, false,
+		final Button btnCancel = new Button(buttonsComposite, SWT.NONE);
+		final GridData gd_btnCancel = new GridData(SWT.LEFT, SWT.CENTER, false,
 				false, 1, 1);
 //		gd_btnCancel.widthHint = 50;
 		btnCancel.setLayoutData(gd_btnCancel);
@@ -128,7 +128,7 @@ public class WiringDialog extends Dialog {
 
 		btnCancel.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				shell.close();
 			}
 		});
@@ -141,7 +141,7 @@ public class WiringDialog extends Dialog {
 				final Listener me = this;
 				wiringComposite.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetDisposed(DisposeEvent e) {
+					public void widgetDisposed(final DisposeEvent e) {
 						wiringComposite.removeListener(SWT.Modify, me);
 					}
 				});
