@@ -36,12 +36,12 @@ public class CargoTypeAssignmentConstraint extends AbstractModelConstraint {
 		final List<IStatus> failures = new LinkedList<IStatus>();
 
 		if (object instanceof Assignment) {
-			Assignment assignment = (Assignment) object;
+			final Assignment assignment = (Assignment) object;
 
-			EList<UUIDObject> assignedObjects = assignment.getAssignedObjects();
+			final EList<UUIDObject> assignedObjects = assignment.getAssignedObjects();
 
-			Set<AVessel> vessels = SetUtils.getVessels(assignment.getVessels());
-			for (UUIDObject uuidObject : assignedObjects) {
+			final Set<AVessel> vessels = SetUtils.getVessels(assignment.getVessels());
+			for (final UUIDObject uuidObject : assignedObjects) {
 
 				Cargo cargo = null;
 				if (uuidObject instanceof LoadSlot) {
@@ -55,7 +55,7 @@ public class CargoTypeAssignmentConstraint extends AbstractModelConstraint {
 					if (cargo.getCargoType() != CargoType.FLEET) {
 						if (!vessels.isEmpty()) {
 							// TODO: Add Message
-							DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
+							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
 									+ " is assigned to a vessel " + vessels.toString()));
 							failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
 
