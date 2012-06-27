@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -274,6 +276,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private Command derive(EditingDomain domain, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel) {
 		CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
+		final List<Assignment> blank = Collections.emptyList();
 		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
 		
 		int spotIndex = 0;
@@ -313,6 +316,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		}
 
 		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
+		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), blank));
 		
 		// rewire any cargos which require it
 		// TODO handle spot market cases, and free slots
