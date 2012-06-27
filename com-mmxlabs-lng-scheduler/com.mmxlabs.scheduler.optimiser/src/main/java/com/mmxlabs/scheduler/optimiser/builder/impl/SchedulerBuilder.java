@@ -655,7 +655,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		portSlotsProvider.setPortSlot(endElement, endSlot);
 
 		resourceAllocationProvider.setAllowedResources(startElement, Collections.singleton(resource));
-		resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
+		// BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
+		
+//		resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
 
 		startEndRequirementProvider.setStartEndRequirements(resource, start, end);
 		startEndRequirementProvider.setStartEndElements(resource, startElement, endElement);
