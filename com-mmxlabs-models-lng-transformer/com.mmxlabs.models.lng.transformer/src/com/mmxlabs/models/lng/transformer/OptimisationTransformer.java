@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
@@ -228,6 +229,7 @@ public class OptimisationTransformer {
 					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
 					
 					for (final UUIDObject assignedObject : seq.getAssignedObjects()) {
+						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) continue;
 						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
 							sequence.add(element);
 						}
@@ -308,6 +310,7 @@ public class OptimisationTransformer {
 				} else {
 					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
 					for (final UUIDObject assignedObject : assignment.getAssignedObjects()) {
+						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) continue;
 						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
 							sequence.add(element);
 						}
