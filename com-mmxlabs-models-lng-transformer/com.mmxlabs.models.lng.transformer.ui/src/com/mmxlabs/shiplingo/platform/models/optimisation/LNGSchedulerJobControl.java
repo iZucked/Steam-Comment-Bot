@@ -279,7 +279,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
 		final HashSet<UUIDObject> previouslyLocked = new HashSet<UUIDObject>();
-		final List<ElementAssignment> oldAssignments = new ArrayList<ElementAssignment>(inputModel.getElementAssignments());
+
 		final HashSet<UUIDObject> reassigned = new HashSet<UUIDObject>();
 		
 		for (final ElementAssignment ai : inputModel.getElementAssignments()) {
@@ -326,6 +326,14 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					reassigned.add(object);
 					newElementAssignments.add(ea);
 				}
+			}
+		}
+		
+		// copy through assignments which were not present in the schedule
+		// TODO this will probably need some thought around optional elements
+		for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+			if (ea.getAssignedObject() != null && !reassigned.contains(ea.getAssignedObject())) {
+				newElementAssignments.add(ea);
 			}
 		}
 
