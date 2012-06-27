@@ -286,7 +286,6 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				guy.setEndElement(true);
 				chunks.add(guy);
 				final Collection<IResource> c = racdcp.getAllowedResources(place);
-				assert c.size() == 1;
 				endChunks.put(c.iterator().next(), guy);
 			} else if (entry.getValue().size() > 1) {
 				final SequenceChunk guy = new SequenceChunk();
