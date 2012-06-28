@@ -79,7 +79,7 @@ public class VSADetailComposite extends Composite implements IDisplayComposite {
 		final Label consumptionCurve = new Label(this, SWT.NONE);
 		consumptionCurve.setText("Fuel Consumption");
 		
-		final TableViewer tableViewer = new TableViewer(this);
+		final TableViewer tableViewer = new TableViewer(this, SWT.FULL_SELECTION);
 		final Table table = tableViewer.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.setLinesVisible(true);
