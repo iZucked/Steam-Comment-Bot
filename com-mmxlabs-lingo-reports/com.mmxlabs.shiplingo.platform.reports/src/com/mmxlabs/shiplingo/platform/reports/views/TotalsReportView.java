@@ -196,7 +196,7 @@ public class TotalsReportView extends ViewPart {
 		if (showDeltaColumn) {
 			if (delta == null) {
 				delta = new TableViewerColumn(viewer, SWT.NONE);
-				delta.getColumn().setText("Delta");
+				delta.getColumn().setText("Improvement");
 				delta.getColumn().pack();
 				addSortSelectionListener(delta.getColumn(), 4);
 				viewer.setLabelProvider(viewer.getLabelProvider());
