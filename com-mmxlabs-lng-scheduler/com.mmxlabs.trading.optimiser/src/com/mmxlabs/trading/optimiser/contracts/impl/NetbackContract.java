@@ -7,6 +7,8 @@ package com.mmxlabs.trading.optimiser.contracts.impl;
 import java.util.Map;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
+import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
+import com.mmxlabs.common.detailtree.impl.DurationDetailElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -152,10 +154,10 @@ public class NetbackContract implements ILoadPriceCalculator {
 
 			if (annotations != null) {
 				final IDetailTree tree = annotations.addChild("Netback - " + route, transportCostPerMMBTU);
-				tree.addChild("Transport Time", notionalTransportTime);
+				tree.addChild("Transport Time",  new DurationDetailElement(notionalTransportTime));
 				tree.addChild("Distance", distance);
-				tree.addChild("NBO Costs", totalNBOCosts);
-				tree.addChild("Base Costs", totalBaseFuelCosts);
+				tree.addChild("NBO Costs",  new CurrencyDetailElement(totalNBOCosts));
+				tree.addChild("Base Costs", new CurrencyDetailElement(totalBaseFuelCosts));
 			}
 		}
 		int rawPrice = (int) (salesPrice - result - marginScaled);
