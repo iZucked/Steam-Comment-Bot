@@ -12,7 +12,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
  * 
  * @author Simon Goodall
  */
-public interface IPortVisitEvent extends IScheduledEvent {
+public interface IPortVisitEvent extends IScheduledEvent, IFuelUsingEvent {
 
 	/**
 	 * Returns the {@link IPortSlot} being visited.
