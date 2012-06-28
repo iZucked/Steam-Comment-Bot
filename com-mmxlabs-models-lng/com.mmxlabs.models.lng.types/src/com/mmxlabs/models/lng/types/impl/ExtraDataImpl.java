@@ -355,7 +355,11 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 				}
 				break;
 			case CURRENCY:
-				return String.format("$%,d", o);
+				if (o instanceof Integer || o instanceof Long || o instanceof Short) {
+					return String.format("$%,d", o);
+				} else {
+					return String.format("$%0.3,f", o);
+				}
 			case DATE:
 				DateFormat dateFormat;
 				if (format != null && !format.isEmpty()) {
