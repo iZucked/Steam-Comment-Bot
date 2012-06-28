@@ -41,6 +41,7 @@ import org.eclipse.swt.widgets.Text;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -222,9 +223,12 @@ public class WiringComposite extends Composite {
 
 		private boolean fobOrDES = false;
 
-		final List<Pair<String, EObject>> ports;
+		List<Pair<String, EObject>> ports;
 		final List<Pair<String, EObject>> contracts;
 		private final Label fobDESLabel;
+		private final IReferenceValueProvider portValueProvider;
+
+		private final boolean isLoad;
 
 		/**
 		 * Argh localized dates.
@@ -232,8 +236,11 @@ public class WiringComposite extends Composite {
 		 * @param parent
 		 * @param style
 		 */
-		public PortAndDateComposite(final Composite parent, final int style, final IReferenceValueProvider portValueProvider, final IReferenceValueProvider contractReferenceProvider, final Slot slot) {
+		public PortAndDateComposite(final Composite parent, final int style, final boolean isLoad, final IReferenceValueProvider portValueProvider, final IReferenceValueProvider contractReferenceProvider,
+				final Slot slot) {
 			super(parent, style);
+			this.isLoad = isLoad;
+			this.portValueProvider = portValueProvider;
 			setLayout(new GridLayout(4, false));
 			fobDESLabel = new Label(this, SWT.NONE);
 			contractCombo = new Combo(this, SWT.READ_ONLY);
@@ -251,8 +258,8 @@ public class WiringComposite extends Composite {
 				contractCombo.add(shorten(p.getFirst()));
 			}
 
-			setPort(slot.getPort());
 			setContract(slot.getContract());
+			setPort(slot.getPort());
 			setDate(slot.getWindowStart());
 			if (slot instanceof LoadSlot && ((LoadSlot) slot).isDESPurchase()) {
 				fobDESLabel.setText("DES Purchase");
@@ -301,6 +308,29 @@ public class WiringComposite extends Composite {
 		 */
 		public void setContract(final Contract contract) {
 			contractCombo.setText(shorten(contract.getName()));
+			
+			updatePorts(contract);
+		}
+		
+		protected void updatePorts(final Contract contract) {
+			// Create a fake slot to pass into the value provider
+			final Slot slot = isLoad ? CargoFactory.eINSTANCE.createLoadSlot() : CargoFactory.eINSTANCE.createDischargeSlot();
+			slot.setContract(contract);
+			ports = portValueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Port());
+
+			// Keep the old name in case we can reuse it
+			final String oldName = portCombo.getText();
+			// Clear existing names
+
+			portCombo.removeAll();
+			// Add updated ports list
+			for (final Pair<String, EObject> p : ports) {
+				portCombo.add(shorten(p.getFirst()));
+			}
+			// Set an initial value...
+			portCombo.setText(shorten(ports.get(0).getFirst()));
+			// ... then try and restore port name
+			portCombo.setText(oldName);
 		}
 
 		public Date getDate() {
@@ -314,7 +344,11 @@ public class WiringComposite extends Composite {
 		}
 
 		public Port getPort() {
-			return (Port) ports.get(portCombo.getSelectionIndex()).getSecond();
+			int selectionIndex = portCombo.getSelectionIndex();
+			if (selectionIndex == -1) {
+				selectionIndex = 0;
+			}
+			return (Port) ports.get(selectionIndex).getSecond();
 		}
 
 		public Contract getContract() {
@@ -324,6 +358,10 @@ public class WiringComposite extends Composite {
 		@Override
 		public void widgetSelected(final SelectionEvent e) {
 			notifyListeners(SWT.Selection, new Event());
+			
+			if (e.widget == contractCombo) {
+				updatePorts(getContract());
+			}
 		}
 
 		@Override
@@ -415,7 +453,7 @@ public class WiringComposite extends Composite {
 			// }
 			// });
 
-			final PortAndDateComposite loadSide = new PortAndDateComposite(this, SWT.BORDER, portProvider, contractProvider, cargo.getLoadSlot());
+			final PortAndDateComposite loadSide = new PortAndDateComposite(this, SWT.BORDER, true, portProvider, contractProvider, cargo.getLoadSlot());
 
 			if (wiringDiagram == null) {
 				wiringDiagram = new WiringDiagram(this, getStyle() & ~SWT.BORDER) {
@@ -492,7 +530,7 @@ public class WiringComposite extends Composite {
 				};
 			}
 
-			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, SWT.BORDER, portProvider, contractProvider, cargo.getDischargeSlot());
+			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, SWT.BORDER, false, portProvider, contractProvider, cargo.getDischargeSlot());
 
 			final String id = newNames.get(index);
 
