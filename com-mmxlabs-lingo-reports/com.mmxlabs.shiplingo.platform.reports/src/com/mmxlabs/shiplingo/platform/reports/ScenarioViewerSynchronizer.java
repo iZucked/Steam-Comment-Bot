@@ -172,12 +172,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			if (instance instanceof MMXRootObject) {
 				final MMXRootObject rootObject = (MMXRootObject) instance;
 				rootObjects.add(rootObject);
-				final Collection<? extends Object> viewerContent;
-				if (collector instanceof IPinnableScenarioInstanceElementCollector) {
-					viewerContent = ((IPinnableScenarioInstanceElementCollector) collector).collectElements(rootObject, isPinned);
-				} else {
-					viewerContent = collector.collectElements(rootObject);
-				}
+				final Collection<? extends Object> viewerContent = collector.collectElements(rootObject, isPinned);
 				for (final Object o : viewerContent) {
 					sourceByElement.put(o, new Pair<ScenarioInstance, MMXRootObject>(job, rootObject));
 				}

@@ -280,10 +280,13 @@ public class TotalsReportView extends ViewPart {
 		// selectionChanged(null, selection);
 
 		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-
 			@Override
-			protected Collection<? extends Object> collectElements(Schedule schedule) {
-				return Collections.singleton(schedule);
+			protected Collection<? extends Object> collectElements(Schedule schedule, final boolean isPinned) {
+				if (isPinned) {
+					return Collections.emptySet();
+				} else {
+					return Collections.singleton(schedule);
+				}
 			}
 		});
 	}
