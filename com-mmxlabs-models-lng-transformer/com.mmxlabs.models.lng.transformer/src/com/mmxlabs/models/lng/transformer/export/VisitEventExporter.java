@@ -24,6 +24,8 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.events.IFuelUsingEvent;
+import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.IPortCostAnnotation;
@@ -105,6 +107,15 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setCargoAllocation(eAllocation);
+			
+			
+			
+			final IPortVisitEvent event = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
+
+			if (event != null) {
+				sv.getFuels().addAll(super.createFuelQuantities(event));
+			}
+			
 
 		} else if (slot instanceof IVesselEventPortSlot) {
 			// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
