@@ -368,41 +368,6 @@
             point="org.eclipse.ui.menus">
          <menuContribution
                locationURI="toolbar:com.mmxlabs.scenario.service.ui.navigator">
-            <command
-                  commandId="com.mmxlabs.commands.optimisation.evaluate"
-                  icon="icons/evaluate_schedule.gif"
-                  id="com.mmxlabs.scenario.service.toolbars.optimisation.evaluate"
-                  label="Evaluate schedule"
-                  style="push"
-                  tooltip="Evaluate scenario">
-            </command>
-               <command
-                     commandId="com.mmxlabs.commands.optimisation.play"
-                     disabledIcon="icons/dlcl16/resume_co.gif"
-                     icon="icons/elcl16/resume_co.gif"
-                     id="com.mmxlabs.scenario.service.toolbars.optimisation.play"
-                     label="Start/Resume Optimisation"
-                     style="push"
-                     tooltip="Start or resume optimisations">
-               </command>
-               <command
-                     commandId="com.mmxlabs.commands.optimisation.pause"
-                     disabledIcon="icons/dlcl16/suspend_co.gif"
-                     icon="icons/elcl16/suspend_co.gif"
-                     id="com.mmxlabs.scenario.service.toolbars.optimisation.pause"
-                     label="Pause Optimisation"
-                     style="push"
-                     tooltip="Pause optimisations">
-               </command>
-               <command
-                     commandId="com.mmxlabs.commands.optimisation.terminate"
-                     disabledIcon="icons/dlcl16/terminate_co.gif"
-                     icon="icons/elcl16/terminate_co.gif"
-                     id="com.mmxlabs.scenario.service.toolbars.optimisation.terminate"
-                     label="Terminate Optimisation"
-                     style="push"
-                     tooltip="Terminate optimisations">
-               </command>
                <command
                      commandId="com.mmxlabs.commands.optimisation.save"
                      disabledIcon="icons/dtool16/saveas_edit.gif"
@@ -428,8 +393,7 @@
                </command>
                <command
                      commandId="com.mmxlabs.commands.optimisation.forkandplay"
-                     disabledIcon="icons/dlcl16/resume_co.gif"
-                     icon="icons/elcl16/resume_co.gif"
+                     icon="icons/forkandoptimise.gif"
                      id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
                      label="Fork and Optimise"
                      style="push"
@@ -494,6 +458,16 @@
                   style="push"
                   toolbarPath="additions"
                   tooltip="Terminate optimisation">
+            </action>
+            <action
+                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.ForkAndStartOptimisationActionHandler"
+                  definitionId="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
+                  icon="icons/forkandoptimise.gif"
+                  id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
+                  label="Fork and Optmise"
+                  style="push"
+                  toolbarPath="additions"
+                  tooltip="Fork scenario and optmise the fork">
             </action>
          </editorContribution>
       </extension>
