@@ -4,14 +4,10 @@
  */
 package com.mmxlabs.scenario.service.ui.navigator;
 
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.Collection;
 import java.util.List;
-import java.util.Properties;
 
 import org.eclipse.core.commands.Command;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
@@ -56,9 +52,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.manager.IJobManager;
-import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
-import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;

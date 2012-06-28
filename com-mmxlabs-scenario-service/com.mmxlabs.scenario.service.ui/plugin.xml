@@ -106,6 +106,10 @@
             id="com.mmxlabs.scenario.service.ui.revert"
             name="Revert">
       </command>
+      <command
+            id="com.mmxlabs.scenario.service.ui.pin"
+            name="Pin">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -340,6 +344,21 @@
             </with>
          </activeWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.PinScenarioCommandHandler"
+            commandId="com.mmxlabs.scenario.service.ui.pin">
+         <activeWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false">
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                  </instanceof>
+               </iterate>
+            </with>
+         </activeWhen>
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -432,6 +451,60 @@
                label="Revert"
                style="push">
          </command>
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.pin"
+               label="Pin"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                        <not>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                           </test>
+                        </not>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.pin"
+               label="Unpin"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                        <test
+                              forcePluginActivation="true"
+                              property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                        </test>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -485,6 +558,16 @@
             class="com.mmxlabs.scenario.service.ui.editing.ScenarioServiceElementFactory"
             id="com.mmxlabs.scenario.service.ui.editing.ScenarioServiceElementFactory">
       </factory>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="com.mmxlabs.scenario.service.ui.propertytesters.PinStatePropertyTester"
+            id="com.mmxlabs.scenario.service.ui.propertytesters.PinStatePropertyTester"
+            namespace="com.mmxlabs.scenario.service.ui.properties"
+            properties="pinned"
+            type="com.mmxlabs.scenario.service.model.ScenarioInstance">
+      </propertyTester>
    </extension>
 
 </plugin>
