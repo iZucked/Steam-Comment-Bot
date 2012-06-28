@@ -21,7 +21,7 @@ import com.mmxlabs.models.lng.types.impl.AIndexImpl;
  *
  * @generated
  */
-public class IndexImpl<Value> extends AIndexImpl implements Index<Value> {
+public abstract class IndexImpl<Value> extends AIndexImpl implements Index<Value> {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -46,7 +46,7 @@ public class IndexImpl<Value> extends AIndexImpl implements Index<Value> {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Value getValueAfter(Date date) {
+	public Value getValueForMonth(Date date) {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
 		throw new UnsupportedOperationException();

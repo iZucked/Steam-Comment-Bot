@@ -77,7 +77,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.DATA_INDEX: return createDataIndex();
 			case PricingPackage.DERIVED_INDEX: return createDerivedIndex();
 			case PricingPackage.INDEX_POINT: return createIndexPoint();
-			case PricingPackage.INDEX: return createIndex();
 			case PricingPackage.FLEET_COST_MODEL: return createFleetCostModel();
 			case PricingPackage.ROUTE_COST: return createRouteCost();
 			case PricingPackage.CHARTER_COST_MODEL: return createCharterCostModel();
@@ -159,16 +158,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public <Value> IndexPoint<Value> createIndexPoint() {
 		IndexPointImpl<Value> indexPoint = new IndexPointImpl<Value>();
 		return indexPoint;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public <Value> Index<Value> createIndex() {
-		IndexImpl<Value> index = new IndexImpl<Value>();
-		return index;
 	}
 
 	/**

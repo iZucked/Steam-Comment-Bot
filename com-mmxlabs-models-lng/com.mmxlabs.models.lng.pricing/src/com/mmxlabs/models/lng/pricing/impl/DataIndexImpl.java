@@ -167,11 +167,17 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 		return sortedPoints;
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public Value getValueAfter(final Date date) {
+	public Value getValueForMonth(final Date date) {
 		for (final IndexPoint<Value> point : getSortedPoints()) {
-			if (point.getDate().after(date)) {
+			Date pDate = point.getDate();
+			if (pDate.getYear() == date.getYear() && pDate.getMonth() == date.getMonth()) {
 				return point.getValue();
+			}
+			// Sorted set, so break out if this condition is true
+			if (point.getDate().after(date)) {
+				return null;
 			}
 		}
 		return null;

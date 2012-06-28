@@ -60,15 +60,6 @@ public interface PricingFactory extends EFactory {
 	<Value> IndexPoint<Value> createIndexPoint();
 
 	/**
-	 * Returns a new object of class '<em>Index</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Index</em>'.
-	 * @generated
-	 */
-	<Value> Index<Value> createIndex();
-
-	/**
 	 * Returns a new object of class '<em>Fleet Cost Model</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

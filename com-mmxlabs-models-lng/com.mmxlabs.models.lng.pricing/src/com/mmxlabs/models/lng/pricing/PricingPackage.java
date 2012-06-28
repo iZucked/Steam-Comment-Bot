@@ -208,6 +208,15 @@ public interface PricingPackage extends EPackage {
 	int INDEX__NAME = TypesPackage.AINDEX__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX__OTHER_NAMES = TypesPackage.AINDEX__OTHER_NAMES;
+
+	/**
 	 * The number of structural features of the '<em>Index</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -261,6 +270,15 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int DATA_INDEX__NAME = INDEX__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DATA_INDEX__OTHER_NAMES = INDEX__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Points</b></em>' containment reference list.
@@ -325,6 +343,15 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int DERIVED_INDEX__NAME = INDEX__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DERIVED_INDEX__OTHER_NAMES = INDEX__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Expression</b></em>' attribute.
@@ -682,6 +709,15 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_MARKET__NAME = TypesPackage.ASPOT_MARKET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__OTHER_NAMES = TypesPackage.ASPOT_MARKET__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Availability</b></em>' reference.

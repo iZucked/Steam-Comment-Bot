@@ -186,22 +186,12 @@ public class PricingModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES,
-				 PricingFactory.eINSTANCE.createIndex()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES,
 				 PricingFactory.eINSTANCE.createDataIndex()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES,
 				 PricingFactory.eINSTANCE.createDerivedIndex()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES,
-				 PricingFactory.eINSTANCE.createIndex()));
 
 		newChildDescriptors.add
 			(createChildParameter

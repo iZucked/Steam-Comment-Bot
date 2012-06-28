@@ -52,9 +52,9 @@
       <eGenericType eTypeParameter="#//IndexPoint/Value"/>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Index" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AIndex">
+  <eClassifiers xsi:type="ecore:EClass" name="Index" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AIndex">
     <eTypeParameters name="Value"/>
-    <eOperations name="getValueAfter" lowerBound="1">
+    <eOperations name="getValueForMonth" lowerBound="1">
       <eGenericType eTypeParameter="#//Index/Value"/>
       <eParameters name="date" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
     </eOperations>

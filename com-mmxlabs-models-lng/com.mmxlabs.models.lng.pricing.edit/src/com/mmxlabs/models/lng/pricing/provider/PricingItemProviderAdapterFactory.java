@@ -165,29 +165,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.Index} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected IndexItemProvider indexItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.Index}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createIndexAdapter() {
-		if (indexItemProvider == null) {
-			indexItemProvider = new IndexItemProvider(this);
-		}
-
-		return indexItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.FleetCostModel} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -474,7 +451,6 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (dataIndexItemProvider != null) dataIndexItemProvider.dispose();
 		if (derivedIndexItemProvider != null) derivedIndexItemProvider.dispose();
 		if (indexPointItemProvider != null) indexPointItemProvider.dispose();
-		if (indexItemProvider != null) indexItemProvider.dispose();
 		if (fleetCostModelItemProvider != null) fleetCostModelItemProvider.dispose();
 		if (routeCostItemProvider != null) routeCostItemProvider.dispose();
 		if (charterCostModelItemProvider != null) charterCostModelItemProvider.dispose();

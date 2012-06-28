@@ -16,7 +16,7 @@ import com.mmxlabs.models.lng.types.AIndex;
  *
  *
  * @see com.mmxlabs.models.lng.pricing.PricingPackage#getIndex()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface Index<Value> extends AIndex {
@@ -27,7 +27,7 @@ public interface Index<Value> extends AIndex {
 	 * @model required="true" dateRequired="true"
 	 * @generated
 	 */
-	Value getValueAfter(Date date);
+	Value getValueForMonth(Date date);
 
 	/**
 	 * <!-- begin-user-doc -->

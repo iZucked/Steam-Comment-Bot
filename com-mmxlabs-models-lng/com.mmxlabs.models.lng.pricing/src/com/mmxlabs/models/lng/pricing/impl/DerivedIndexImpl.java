@@ -176,7 +176,7 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 	 * @see com.mmxlabs.models.lng.pricing.impl.IndexImpl#getValueAfter(java.util.Date)
 	 */
 	@Override
-	public Value getValueAfter(final Date date) {
+	public Value getValueForMonth(final Date date) {
 		EClassifier classifier = eContainingFeature().getEGenericType().getETypeArguments().get(0).getERawType();
 		if (classifier instanceof EDataType) {
 			final EDataType dt = (EDataType) classifier;

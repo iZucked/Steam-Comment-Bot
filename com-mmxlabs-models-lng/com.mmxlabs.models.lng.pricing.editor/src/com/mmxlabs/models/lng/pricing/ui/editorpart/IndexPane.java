@@ -264,7 +264,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 						if (element instanceof Index) {
 							final Index<?> idx = (Index<?>) element;
 							final Date colDate = (Date) col.getColumn().getData("date");
-							final Object valueAfter = idx.getValueAfter(colDate);
+							final Object valueAfter = idx.getValueForMonth(colDate);
 							if (valueAfter instanceof Integer) {
 								return (Integer) valueAfter;
 							} else if (valueAfter instanceof Double) {
@@ -285,7 +285,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 						if (element instanceof Index) {
 							final Index<?> idx = (Index<?>) element;
 							final Date colDate = (Date) col.getColumn().getData("date");
-							final Object valueAfter = idx.getValueAfter(colDate);
+							final Object valueAfter = idx.getValueForMonth(colDate);
 							if (valueAfter != null) {
 								if (valueAfter instanceof Integer) {
 									return String.format("%d", valueAfter);
