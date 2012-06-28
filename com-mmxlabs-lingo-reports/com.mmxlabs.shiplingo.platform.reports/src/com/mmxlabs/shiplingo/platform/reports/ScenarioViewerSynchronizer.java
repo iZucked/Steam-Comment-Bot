@@ -186,8 +186,6 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		}
 		
 		return new IScenarioViewerSynchronizerOutput() {
-
-			
 			@Override
 			public ScenarioInstance getScenarioInstance(Object object) {
 				return sourceByElement.get(object).getFirst();
@@ -206,6 +204,11 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			@Override
 			public Collection<MMXRootObject> getRootObjects() {
 				return rootObjects;
+			}
+
+			@Override
+			public boolean isPinned(Object object) {
+				return ScenarioViewerSynchronizer.this.selectionProvider.getPinnedInstance() == (getScenarioInstance(object));
 			}
 		};
 	}
