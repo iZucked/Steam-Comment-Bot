@@ -94,6 +94,8 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 			pin = instance;
 			if (instance != null && !isSelected(instance)) {
 				select(instance);
+			} else if (oldPin != null && pin == null) {
+				deselect(instance);
 			}
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 				listener.pinned(this, oldPin, pin);
