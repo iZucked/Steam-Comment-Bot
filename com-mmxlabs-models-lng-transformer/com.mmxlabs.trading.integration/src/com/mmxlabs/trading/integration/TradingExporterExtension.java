@@ -10,6 +10,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
+import com.mmxlabs.common.detailtree.IDetailTreeElement;
+import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
+import com.mmxlabs.common.detailtree.impl.DurationDetailElement;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -151,23 +154,36 @@ public class TradingExporterExtension implements IExporterExtension {
 		ad.setName(details.getKey());
 		ad.setKey(details.getKey());
 		
-		if (details.getValue() instanceof Serializable) {
-			if (details.getValue() instanceof Integer) {
-				int x = (Integer) details.getValue();
+		
+		Object value = details.getValue();
+		if (value instanceof IDetailTreeElement) {
+			IDetailTreeElement element = (IDetailTreeElement) value;
+			value = element.getObject();
+			if (element instanceof CurrencyDetailElement) {
+				ad.setFormatType(ExtraDataFormatType.CURRENCY);
+			}
+			else if (element instanceof DurationDetailElement) {
+				ad.setFormatType(ExtraDataFormatType.DURATION);
+			}
+		}
+		
+		if (value instanceof Serializable) {
+			if (value instanceof Integer) {
+				int x = (Integer) value;
 				if (x % Calculator.ScaleFactor == 0) {
 					ad.setValue(x/Calculator.ScaleFactor);
 				} else {
 					ad.setValue(x/(double)Calculator.ScaleFactor);
 				}
-			} else if (details.getValue() instanceof Long) {
-				long x = (Long) details.getValue();
+			} else if (value instanceof Long) {
+				long x = (Long)value;
 				if (x % Calculator.ScaleFactor == 0) {
 					ad.setValue((int)(x/Calculator.ScaleFactor));
 				} else {
 					ad.setValue(x/(double)Calculator.ScaleFactor);
 				}
 			} else {
-				ad.setValue((Serializable) details.getValue());
+				ad.setValue((Serializable) value);
 			}
 		}
 		
