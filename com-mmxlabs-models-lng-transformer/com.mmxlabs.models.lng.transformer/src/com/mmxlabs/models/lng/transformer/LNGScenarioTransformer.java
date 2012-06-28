@@ -501,7 +501,7 @@ public class LNGScenarioTransformer {
 
 		boolean gotOneEarlyDate = false;
 		for (final Date date : index.getDates()) {
-			final double value = index.getValueAfter(date);
+			final double value = index.getValueForMonth(date);
 			final int hours = convertTime(date);
 			if (hours < 0) {
 				if (gotOneEarlyDate)
@@ -829,7 +829,7 @@ public class LNGScenarioTransformer {
 			for (final CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
 				if (charterCost.getVesselClasses().contains(eVc)) {
 					if (charterCost.getCharterInPrice() != null) {
-						final Integer value = charterCost.getCharterInPrice().getValueAfter(latestTime);
+						final Integer value = charterCost.getCharterInPrice().getValueForMonth(latestTime);
 						if (value != null) {
 							charterInPrice = value;
 						} else {
