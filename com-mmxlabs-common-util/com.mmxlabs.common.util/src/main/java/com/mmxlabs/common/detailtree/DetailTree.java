@@ -44,6 +44,7 @@ public class DetailTree implements IDetailTree {
 		return value;
 	}
 
+	@Override
 	public void addChild(final IDetailTree child) {
 		children.add(child);
 	}
@@ -55,6 +56,7 @@ public class DetailTree implements IDetailTree {
 	 * @param value
 	 * @return the new child entry.
 	 */
+	@Override
 	public DetailTree addChild(final String key, final Object value) {
 		final DetailTree newChild = new DetailTree(key, value);
 		addChild(newChild);
