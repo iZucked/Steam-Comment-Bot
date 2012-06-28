@@ -160,6 +160,8 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		final ArrayList<Object> selectedObjects = new ArrayList<Object>();
 		final List<MMXRootObject> rootObjects = new ArrayList<MMXRootObject>();
 		
+		collector.beginCollecting();
+		
 		for (final ScenarioInstance job : selectionProvider.getSelection()) {
 			final IScenarioService scenarioService = job.getScenarioService();
 			final boolean isPinned = selectionProvider.getPinnedInstance() == job;
@@ -179,6 +181,8 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 				selectedObjects.addAll(viewerContent);
 			}
 		}
+		
+		collector.endCollecting();
 		
 		return new IScenarioViewerSynchronizerOutput() {
 			@Override

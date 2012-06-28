@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -67,7 +68,11 @@ public class TotalsReportView extends ViewPart {
 
 	private ScenarioViewerSynchronizer viewerSynchronizer;
 
-	static class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider {
+	private TotalsContentProvider contentProvider;
+
+	private TableViewerColumn delta;
+
+	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider {
 
 		private Font boldFont;
 
@@ -104,8 +109,20 @@ public class TotalsReportView extends ViewPart {
 						final long hours = d.fitness % 24;
 						return "" + days + "d, " + hours + "h";
 					} else {
-
 						return String.format("%,d", d.fitness);
+					}
+				case 4:
+					final List<RowData> pinned = TotalsReportView.this.contentProvider.getPinnedScenarioData();
+					for (final RowData ref : pinned) {
+						if (d.component.equals(ref.component)) {
+							final long delta = ref.fitness - d.fitness;
+							
+							if (TotalsContentProvider.TYPE_TIME.equals(d.type)) {
+								return String.format("%dd, %dh", delta/24, delta%24);
+							} else {
+								return String.format("%,d", delta);
+							}
+						}
 					}
 				}
 			}
@@ -175,6 +192,23 @@ public class TotalsReportView extends ViewPart {
 		viewer.refresh();
 	}
 
+	private void setShowDeltaColumn(final boolean showDeltaColumn) {
+		if (showDeltaColumn) {
+			if (delta == null) {
+				delta = new TableViewerColumn(viewer, SWT.NONE);
+				delta.getColumn().setText("Delta");
+				delta.getColumn().pack();
+				addSortSelectionListener(delta.getColumn(), 4);
+				viewer.setLabelProvider(viewer.getLabelProvider());
+			}
+		} else {
+			if (delta != null) {
+				delta.getColumn().dispose();
+				delta = null;
+			}
+		}
+	}
+	
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize it.
 	 */
@@ -190,14 +224,14 @@ public class TotalsReportView extends ViewPart {
 						|| ((oldInput instanceof IScenarioViewerSynchronizerOutput) && ((IScenarioViewerSynchronizerOutput) oldInput).getCollectedElements().isEmpty());
 
 				if (inputEmpty != oldInputEmpty) {
-
 					if (packColumnsAction != null) {
 						packColumnsAction.run();
 					}
 				}
 			};
 		};
-		viewer.setContentProvider(new TotalsContentProvider());
+		this.contentProvider = new TotalsContentProvider();
+		viewer.setContentProvider(contentProvider);
 		viewer.setInput(getViewSite());
 
 		final TableViewerColumn tvc0 = new TableViewerColumn(viewer, SWT.NONE);
@@ -280,13 +314,21 @@ public class TotalsReportView extends ViewPart {
 		// selectionChanged(null, selection);
 
 		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
+			private boolean seenPin = false;
+			@Override
+			public void beginCollecting() {
+				seenPin = false;
+			}
+
 			@Override
 			protected Collection<? extends Object> collectElements(Schedule schedule, final boolean isPinned) {
-				if (isPinned) {
-					return Collections.emptySet();
-				} else {
-					return Collections.singleton(schedule);
-				}
+				seenPin = seenPin || isPinned;
+				return Collections.singleton(schedule);
+			}
+
+			@Override
+			public void endCollecting() {
+				setShowDeltaColumn(seenPin);
 			}
 		});
 	}

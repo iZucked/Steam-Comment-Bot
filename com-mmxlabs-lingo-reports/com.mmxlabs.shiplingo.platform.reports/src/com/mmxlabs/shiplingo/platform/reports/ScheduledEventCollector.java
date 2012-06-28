@@ -8,22 +8,22 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 
 public class ScheduledEventCollector extends ScheduleElementCollector {
-		@Override
-		protected Collection<? extends Object> collectElements(Schedule schedule) {
-			final ArrayList<Object> result = new ArrayList<Object>();
-			for (final Sequence sequence : schedule.getSequences()) {
-				if (filter()) {
-					for (final Event e : sequence.getEvents()) if (filter(e)) result.add(e);
-				} else {
-					result.addAll(sequence.getEvents());
-				}
+	@Override
+	protected Collection<? extends Object> collectElements(Schedule schedule) {
+		final ArrayList<Object> result = new ArrayList<Object>();
+		for (final Sequence sequence : schedule.getSequences()) {
+			if (filter()) {
+				for (final Event e : sequence.getEvents()) if (filter(e)) result.add(e);
+			} else {
+				result.addAll(sequence.getEvents());
 			}
-			return result;
 		}
-		protected boolean filter(final Event event) {
-			return true;
-		}
-		protected boolean filter() {
-			return false;
-		}
+		return result;
 	}
+	protected boolean filter(final Event event) {
+		return true;
+	}
+	protected boolean filter() {
+		return false;
+	}
+}

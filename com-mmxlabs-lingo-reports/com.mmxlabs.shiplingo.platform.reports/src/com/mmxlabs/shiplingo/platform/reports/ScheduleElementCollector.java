@@ -7,6 +7,15 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
+/**
+ * Base class for things which collect stuff from the most recent schedule in a scenario.
+ * 
+ * Implementors <em>must</em> override one of {@link #collectElements(Schedule)} or {@link #collectElements(MMXRootObject, boolean)},
+ * otherwise this will get stuck in a mutually recursive stack overflow. Also, it wouldn't make sense not to override one.
+ * 
+ * @author hinton
+ *
+ */
 public abstract class ScheduleElementCollector implements IScenarioInstanceElementCollector {
 	@Override
 	public Collection<? extends Object> collectElements(final MMXRootObject rootObject, final boolean pinned) {
@@ -39,5 +48,13 @@ public abstract class ScheduleElementCollector implements IScenarioInstanceEleme
 			}
 		}
 		return null;
+	}
+	
+	public void beginCollecting() {
+		
+	}
+	
+	public void endCollecting() {
+		
 	}
 }
