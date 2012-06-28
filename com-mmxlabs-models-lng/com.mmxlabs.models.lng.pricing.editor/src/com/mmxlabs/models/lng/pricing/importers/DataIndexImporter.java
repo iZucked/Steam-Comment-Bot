@@ -9,6 +9,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -102,6 +103,15 @@ public class DataIndexImporter implements IClassImporter {
 			for (final String s : row.keySet()) {
 				try {
 					final Date date = shortDate.parse(s);
+					Calendar c = Calendar.getInstance();
+					c.setTime(date);
+					// Set back to start of month
+					c.set(Calendar.DAY_OF_MONTH, 1);
+					// Clear any other values
+					c.set(Calendar.HOUR_OF_DAY, 0);
+					c.set(Calendar.MINUTE, 0);
+					c.set(Calendar.SECOND, 0);
+					c.set(Calendar.MILLISECOND, 0);
 					if (row.get(s).isEmpty())
 						continue;
 					try {
