@@ -162,7 +162,8 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		
 		for (final ScenarioInstance job : selectionProvider.getSelection()) {
 			final IScenarioService scenarioService = job.getScenarioService();
-
+			final boolean isPinned = selectionProvider.getPinnedInstance() == job;
+			
 			EObject instance = null;
 			try {
 				instance = scenarioService.load(job);
@@ -171,7 +172,12 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			if (instance instanceof MMXRootObject) {
 				final MMXRootObject rootObject = (MMXRootObject) instance;
 				rootObjects.add(rootObject);
-				final Collection<? extends Object> viewerContent = collector.collectElements(rootObject);
+				final Collection<? extends Object> viewerContent;
+				if (collector instanceof IPinnableScenarioInstanceElementCollector) {
+					viewerContent = ((IPinnableScenarioInstanceElementCollector) collector).collectElements(rootObject, isPinned);
+				} else {
+					viewerContent = collector.collectElements(rootObject);
+				}
 				for (final Object o : viewerContent) {
 					sourceByElement.put(o, new Pair<ScenarioInstance, MMXRootObject>(job, rootObject));
 				}
@@ -222,6 +228,6 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 
 	@Override
 	public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
-		//TODO handle change to pin state.
+		refreshViewer();
 	}
 }

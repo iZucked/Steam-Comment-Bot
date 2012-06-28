@@ -65,7 +65,7 @@ public class TotalsReportView extends ViewPart {
 
 	private Action copyTableAction;
 
-	private ScenarioViewerSynchronizer jobManagerListener;
+	private ScenarioViewerSynchronizer viewerSynchronizer;
 
 	static class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider {
 
@@ -279,7 +279,7 @@ public class TotalsReportView extends ViewPart {
 		//
 		// selectionChanged(null, selection);
 
-		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
+		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
 
 			@Override
 			protected Collection<? extends Object> collectElements(Schedule schedule) {
@@ -372,7 +372,7 @@ public class TotalsReportView extends ViewPart {
 		// getSite().getPage().removeSelectionListener(
 		// "com.mmxlabs.rcp.navigator", this);
 
-		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
+		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
 		super.dispose();
 	}
 }
