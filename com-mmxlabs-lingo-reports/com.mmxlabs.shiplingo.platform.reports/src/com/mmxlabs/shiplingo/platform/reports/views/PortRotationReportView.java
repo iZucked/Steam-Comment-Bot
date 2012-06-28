@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -186,6 +187,19 @@ public class PortRotationReportView extends EMFReportView {
 		});
 
 		addColumn("Canal Cost", integerFormatter, sp.getJourney_Toll());
+		
+		addColumn("Port Costs", new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+				if (object instanceof PortVisit) {
+					final PortVisit visit = (PortVisit) object;
+					return visit.getPortCost();
+				}
+				return null;
+			}
+		});
+
+		
 		addColumn("Total Cost", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
