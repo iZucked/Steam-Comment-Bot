@@ -142,45 +142,33 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		output.add(new RowData(scheduleName, "Lateness", TYPE_TIME, lateness));
 
 		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost));
-
-		// compute revenues
-
-		// final Map<Entity, Long> totalRevenue = new HashMap<Entity, Long>();
-		//
-		// for (final BookedRevenue revenue : schedule.getRevenue()) {
-		// if (revenue.getEntity() == null) {
-		// continue;
-		// }
-		// if ((revenue.getEntity() instanceof GroupEntity) == false) {
-		// continue;
-		// }
-		// final Long l = totalRevenue.get(revenue.getEntity());
-		// totalRevenue.put(revenue.getEntity(), (l == null ? 0 : l.longValue()) + revenue.getValue());
-		// }
-		//
-		// long totalTotalRevenue = 0;
-		// for (final Map.Entry<Entity, Long> sum : totalRevenue.entrySet()) {
-		// output.add(new RowData(scheduleName, sum.getKey().getName(), false, sum.getValue()));
-		// totalTotalRevenue += sum.getValue();
-		// }
-		//
-		// output.add(new RowData(scheduleName, "Total Profit", false, totalTotalRevenue));
 	}
 
 	@Override
 	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+		pinnedData.clear();
 		rowData = new RowData[0];
 		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 			final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
 			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
 			for (final Object o : synchOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
-					createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), rowDataList);
+					if (synchOutput.isPinned(o)) {
+						createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), pinnedData);
+					} else {
+						createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), rowDataList);
+					}
 				}
 			}
 			rowData = rowDataList.toArray(rowData);
 		}
 
+	}
+	
+	private List<RowData> pinnedData = new ArrayList<RowData>();
+	
+	public List<RowData> getPinnedScenarioData() {
+		return pinnedData;
 	}
 
 	@Override

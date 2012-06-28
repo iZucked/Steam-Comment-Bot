@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -12,11 +11,13 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
@@ -36,7 +37,6 @@ public class CargoReportView extends EMFReportView {
 	public CargoReportView() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoReportView");
 
-		final CargoPackage c = CargoPackage.eINSTANCE;
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
 
 		final EAttribute name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
@@ -80,31 +80,122 @@ public class CargoReportView extends EMFReportView {
 
 		addColumn("Discharge Volume", integerFormatter, s.getCargoAllocation_DischargeVolume());
 
-		// addColumn("Laden Cost", new IntegerFormatter() {
-		// @Override
-		// public Integer getIntValue(final Object object) {
-		// final CargoAllocation a = (CargoAllocation) object;
-		// if ((a == null) || (a.getLadenIdle() == null) || (a.getLadenLeg() == null)) {
-		// return null;
-		// }
-		// return (int) (a.getLadenIdle().getTotalCost() + a.getLadenLeg().getTotalCost());
-		//
-		// }
-		// });
-		//
-		// addColumn("Ballast Cost", new IntegerFormatter() {
-		// @Override
-		// public Integer getIntValue(final Object object) {
-		// final CargoAllocation a = (CargoAllocation) object;
-		// if ((a == null) || (a.getBallastIdle() == null) || (a.getBallastLeg() == null)) {
-		// return null;
-		// }
-		// return (int) (a.getBallastIdle().getTotalCost() + a.getBallastLeg().getTotalCost());
-		// }
-		// });
-		//
-		// addColumn("Total Cost", integerFormatter, s.getCargoAllocation__GetTotalCost());
+		addColumn("Laden Cost", new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
 
+				if (object instanceof CargoAllocation) {
+					final CargoAllocation allocation = (CargoAllocation) object;
+
+					int total = 0;
+					final SlotAllocation slotAllocation = allocation.getLoadAllocation();
+					total += slotAllocation.getSlotVisit().getFuelCost();
+					total += slotAllocation.getSlotVisit().getHireCost();
+					total += slotAllocation.getSlotVisit().getPortCost();
+
+					final Journey journey = allocation.getLadenLeg();
+					if (journey != null) {
+						total += journey.getFuelCost();
+						total += journey.getHireCost();
+						total += journey.getToll();
+					}
+
+					final Idle idle = allocation.getLadenIdle();
+					if (idle != null) {
+						total += idle.getFuelCost();
+						total += idle.getHireCost();
+					}
+					return total;
+				}
+				return null;
+			}
+
+		});
+
+		addColumn("Ballast Cost", new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+
+				if (object instanceof CargoAllocation) {
+					final CargoAllocation allocation = (CargoAllocation) object;
+
+					int total = 0;
+
+					final SlotAllocation slotAllocation = allocation.getDischargeAllocation();
+					total += slotAllocation.getSlotVisit().getFuelCost();
+					total += slotAllocation.getSlotVisit().getHireCost();
+					total += slotAllocation.getSlotVisit().getPortCost();
+
+					final Journey journey = allocation.getBallastLeg();
+					if (journey != null) {
+						total += journey.getFuelCost();
+						total += journey.getHireCost();
+						total += journey.getToll();
+					}
+
+					final Idle idle = allocation.getBallastIdle();
+					if (idle != null) {
+						total += idle.getFuelCost();
+						total += idle.getHireCost();
+					}
+
+					return total;
+				}
+				return null;
+			}
+		});
+
+		addColumn("Total Cost", new IntegerFormatter() {
+			@Override
+			public Integer getIntValue(final Object object) {
+				if (object instanceof CargoAllocation) {
+					final CargoAllocation allocation = (CargoAllocation) object;
+
+					int total = 0;
+					{
+						final SlotAllocation slotAllocation = allocation.getLoadAllocation();
+						total += slotAllocation.getSlotVisit().getFuelCost();
+						total += slotAllocation.getSlotVisit().getHireCost();
+						total += slotAllocation.getSlotVisit().getPortCost();
+
+						final Journey journey = allocation.getLadenLeg();
+						if (journey != null) {
+							total += journey.getFuelCost();
+							total += journey.getHireCost();
+							total += journey.getToll();
+						}
+
+						final Idle idle = allocation.getLadenIdle();
+						if (idle != null) {
+							total += idle.getFuelCost();
+							total += idle.getHireCost();
+						}
+					}
+					{
+						final SlotAllocation slotAllocation = allocation.getDischargeAllocation();
+						total += slotAllocation.getSlotVisit().getFuelCost();
+						total += slotAllocation.getSlotVisit().getHireCost();
+						total += slotAllocation.getSlotVisit().getPortCost();
+
+						final Journey journey = allocation.getBallastLeg();
+						if (journey != null) {
+							total += journey.getFuelCost();
+							total += journey.getHireCost();
+							total += journey.getToll();
+						}
+
+						final Idle idle = allocation.getBallastIdle();
+						if (idle != null) {
+							total += idle.getFuelCost();
+							total += idle.getHireCost();
+						}
+					}
+					return total;
+				}
+				return null;
+
+			}
+		});
 	}
 
 	@Override
@@ -168,7 +259,6 @@ public class CargoReportView extends EMFReportView {
 			@Override
 			public Object[] getElements(final Object object) {
 
-				final ArrayList<CargoAllocation> allocations = new ArrayList<CargoAllocation>();
 				clearInputEquivalents();
 
 				final Object[] result = superProvider.getElements(object);
@@ -200,44 +290,4 @@ public class CargoReportView extends EMFReportView {
 			}
 		};
 	}
-
-	// private final List<String> entityColumnNames = new ArrayList<String>();
-
-	// protected void addEntityColumns(final Scenario o) {
-	// for (final Entity e : o.getContractModel().getEntities()) {
-	// addEntityColumn(e);
-	// }
-	// addEntityColumn(o.getContractModel().getShippingEntity());
-	// }
-	//
-	// private void addEntityColumn(final Entity entity) {
-	// if (!(entity instanceof GroupEntity)) {
-	// return;
-	// }
-	// final String title = "Profit to " + entity.getName();
-	// entityColumnNames.add(title);
-	// addColumn(title, new IntegerFormatter() {
-	// @Override
-	// public Integer getIntValue(final Object object) {
-	// if (object instanceof CargoAllocation) {
-	// // display P&L
-	// int value = 0;
-	// final CargoAllocation allocation = (CargoAllocation) object;
-	// if ((allocation.getLoadRevenue() != null) && entity.equals(allocation.getLoadRevenue().getEntity())) {
-	// value += allocation.getLoadRevenue().getValue();
-	// }
-	// if ((allocation.getShippingRevenue() != null) && entity.equals(allocation.getShippingRevenue().getEntity())) {
-	// value += allocation.getShippingRevenue().getValue();
-	// }
-	// if ((allocation.getDischargeRevenue() != null) && entity.equals(allocation.getDischargeRevenue().getEntity())) {
-	// value += allocation.getDischargeRevenue().getValue();
-	// }
-	// return value;
-	// }
-	//
-	// return null;
-	// }
-	// });
-	// }
-
 }
