@@ -12,7 +12,7 @@
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
 		<relativePath />
-		<version>13</version>
+		<version>14</version>
 	</parent>
 
 	<scm>
@@ -95,7 +95,6 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-source-plugin</artifactId>
-				<version>${tycho.version}</version>
 				<executions>
 					<execution>
 						<id>plugin-source</id>
