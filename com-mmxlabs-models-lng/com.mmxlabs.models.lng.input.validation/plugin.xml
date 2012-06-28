@@ -37,7 +37,7 @@
                   description body text
                </description>
                <target
-                     class="Assignment">
+                     class="ElementAssignment">
                </target>
             </constraint>
             <constraint
@@ -56,7 +56,7 @@
                   description body text
                </description>
                <target
-                     class="Assignment">
+                     class="ElementAssignment">
                </target>
             </constraint>
          </constraints>

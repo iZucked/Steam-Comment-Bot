@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
@@ -16,7 +15,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -35,32 +34,30 @@ public class CargoTypeAssignmentConstraint extends AbstractModelConstraint {
 
 		final List<IStatus> failures = new LinkedList<IStatus>();
 
-		if (object instanceof Assignment) {
-			final Assignment assignment = (Assignment) object;
+		if (object instanceof ElementAssignment) {
+			final ElementAssignment assignment = (ElementAssignment) object;
 
-			final EList<UUIDObject> assignedObjects = assignment.getAssignedObjects();
+			final UUIDObject uuidObject = assignment.getAssignedObject();
 
-			final Set<AVessel> vessels = SetUtils.getVessels(assignment.getVessels());
-			for (final UUIDObject uuidObject : assignedObjects) {
+			final Set<AVessel> vessels = SetUtils.getVessels(assignment.getAssignment());
 
-				Cargo cargo = null;
-				if (uuidObject instanceof LoadSlot) {
-					cargo = ((LoadSlot) uuidObject).getCargo();
-				} else if (uuidObject instanceof DischargeSlot) {
-					cargo = ((DischargeSlot) uuidObject).getCargo();
-				} else if (uuidObject instanceof Cargo) {
-					cargo = (Cargo) uuidObject;
-				}
-				if (cargo != null) {
-					if (cargo.getCargoType() != CargoType.FLEET) {
-						if (!vessels.isEmpty()) {
-							// TODO: Add Message
-							final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
-									+ " is assigned to a vessel " + vessels.toString()));
-							failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+			Cargo cargo = null;
+			if (uuidObject instanceof LoadSlot) {
+				cargo = ((LoadSlot) uuidObject).getCargo();
+			} else if (uuidObject instanceof DischargeSlot) {
+				cargo = ((DischargeSlot) uuidObject).getCargo();
+			} else if (uuidObject instanceof Cargo) {
+				cargo = (Cargo) uuidObject;
+			}
+			if (cargo != null) {
+				if (cargo.getCargoType() != CargoType.FLEET) {
+					if (!vessels.isEmpty()) {
 
-							failures.add(failure);
-						}
+						final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("None fleet cargo " + cargo.getName()
+								+ " is assigned to a vessel " + vessels.toString()));
+						failure.addEObjectAndFeature(cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+
+						failures.add(failure);
 					}
 				}
 			}

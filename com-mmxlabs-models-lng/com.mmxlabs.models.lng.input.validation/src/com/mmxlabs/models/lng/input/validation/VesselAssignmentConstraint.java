@@ -22,7 +22,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVessel;
@@ -43,12 +43,12 @@ public class VesselAssignmentConstraint extends AbstractModelConstraint {
 
 		final List<IStatus> failures = new LinkedList<IStatus>();
 
-		if (object instanceof Assignment) {
-			final Assignment assignment = (Assignment) object;
+		if (object instanceof ElementAssignment) {
+			final ElementAssignment assignment = (ElementAssignment) object;
 
-			final EList<UUIDObject> assignedObjects = assignment.getAssignedObjects();
+			final UUIDObject assignedObject = assignment.getAssignedObject();
 
-			final Set<AVessel> vessels = SetUtils.getVessels(assignment.getVessels());
+			final Set<AVessel> vessels = SetUtils.getVessels(assignment.getAssignment());
 
 			final Set<APort> restrictedPorts = new HashSet<APort>();
 			boolean firstPass = true;
@@ -79,7 +79,7 @@ public class VesselAssignmentConstraint extends AbstractModelConstraint {
 
 			// Next stage, check the cargoes, slots and events to see if they contain a restricted port.
 			for (final APort port : restrictedPorts) {
-				final SELECT query = new SELECT(new FROM(assignedObjects), new WHERE(new EObjectReferencerCondition(port)));
+				final SELECT query = new SELECT(new FROM(assignedObject), new WHERE(new EObjectReferencerCondition(port)));
 				final IQueryResult result = query.execute();
 
 				if (!result.isEmpty()) {
