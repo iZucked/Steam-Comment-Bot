@@ -39,12 +39,12 @@ public class PurchaseContractComponentHelper extends BaseComponentHelper {
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	public PurchaseContractComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.CONTRACT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.APURCHASE_CONTRACT));
+//		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.APURCHASE_CONTRACT));
 	}
 	
 	/**
