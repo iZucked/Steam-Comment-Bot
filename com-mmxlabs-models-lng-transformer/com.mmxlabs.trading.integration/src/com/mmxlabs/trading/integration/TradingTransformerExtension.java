@@ -47,7 +47,7 @@ public class TradingTransformerExtension implements ITransformerExtension {
 			if (e.getName().equalsIgnoreCase("Third-parties")) {
 				e2 = tradingBuilder.createExternalEntity(e.getName());
 			} else {
-				e2 = tradingBuilder.createGroupEntity(e.getName(), Calculator.scaleToInt(1.0), new ConstantValueCurve(Calculator.scaleToInt(0.25)), // TODO fix tax rates.
+				e2 = tradingBuilder.createGroupEntity(e.getName(), Calculator.scaleToInt(1.0), new ConstantValueCurve(Calculator.scaleToInt(0.0)), // TODO fix tax rates.
 						Calculator.scaleToInt(0));
 			}
 
