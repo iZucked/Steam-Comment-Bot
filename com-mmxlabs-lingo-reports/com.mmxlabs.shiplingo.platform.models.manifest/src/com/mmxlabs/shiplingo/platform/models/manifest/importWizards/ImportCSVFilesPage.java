@@ -18,7 +18,6 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.internal.service.GetBatchConstraintsOperation;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -157,7 +156,7 @@ public class ImportCSVFilesPage extends WizardPage {
 				ffe.getTextControl(g).addModifyListener(new ModifyListener() {
 					@Override
 					public void modifyText(final ModifyEvent e) {
-						String stringValue = ffe.getStringValue();
+						final String stringValue = ffe.getStringValue();
 						if (stringValue.isEmpty()) {
 							chunk.keys.remove(entry.getKey());
 						} else {
@@ -195,7 +194,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			final UUIDObject subModel = c.importer.importModel(readers, context);
 			models.add(subModel);
 			root.addSubModel(subModel);
-			} catch (Throwable th) {
+			} catch (final Throwable th) {
 				th.printStackTrace();
 			}
 			
@@ -216,7 +215,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			getContainer().run(false, false, new IRunnableWithProgress() {
 
 				@Override
-				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+				public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 					monitor.beginTask("Import Scenario", 2);
 					try {
@@ -254,9 +253,9 @@ public class ImportCSVFilesPage extends WizardPage {
 					}
 				}
 			});
-		} catch (InvocationTargetException e) {
+		} catch (final InvocationTargetException e) {
 			return null;
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			return null;
 		}
 
@@ -271,7 +270,7 @@ public class ImportCSVFilesPage extends WizardPage {
 		return scenarioInstance;
 	}
 
-	protected void setScenarioInstance(ScenarioInstance scenarioInstance) {
+	protected void setScenarioInstance(final ScenarioInstance scenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
 	}
 }
