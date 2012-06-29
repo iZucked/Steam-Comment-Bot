@@ -18,6 +18,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
+import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -29,8 +30,10 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
@@ -39,7 +42,6 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
@@ -103,7 +105,7 @@ public class FitnessReportView extends ViewPart {
 
 	private TableViewerColumn delta;
 
-	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider {
+	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, ITableColorProvider {
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 
@@ -115,16 +117,24 @@ public class FitnessReportView extends ViewPart {
 					return d.component;
 				} else {
 					if (index == 3) {
-						final List<RowData> pinnedData = contentProvider.getPinnedData();
-						for (final RowData data : pinnedData) {
-							if (d.component.equals(data.component)) {
-								return String.format("%,d", data.fitness - d.fitness);
-							}
+						final Long delta = getDelta(d);
+						if (delta != null) {
+							return String.format("%,d", delta);
 						}
 					} else {
 						return String.format("%,d", d.fitness);
 					}
 					
+				}
+			}
+			return "";
+		}
+		
+		private Long getDelta(final RowData d) {
+			final List<RowData> pinnedData = contentProvider.getPinnedData();
+			for (final RowData data : pinnedData) {
+				if (d.component.equals(data.component)) {
+					return data.fitness - d.fitness;
 				}
 			}
 			return null;
@@ -138,6 +148,27 @@ public class FitnessReportView extends ViewPart {
 		@Override
 		public void update(final ViewerCell cell) {
 
+		}
+		
+		@Override
+		public Color getForeground(Object element, int columnIndex) {
+			if (columnIndex == 3 && element instanceof RowData) {
+				final Long l = getDelta((RowData) element);
+				if (l == null || l.longValue() == 0l) {
+					return null;
+				} else if (l < 0) {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+				} else {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public Color getBackground(Object element, int columnIndex) {
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 
