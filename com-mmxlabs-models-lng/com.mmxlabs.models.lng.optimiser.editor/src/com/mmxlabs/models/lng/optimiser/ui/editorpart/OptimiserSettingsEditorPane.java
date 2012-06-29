@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.viewers.CellEditor;
@@ -32,14 +33,16 @@ import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
  * Simplistic editor for optimiser settings.
  * 
  * @author hinton
- *
+ * 
  */
 public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 	public OptimiserSettingsEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane#init(java.util.List, org.eclipse.emf.common.notify.AdapterFactory)
 	 */
 	@Override
@@ -47,39 +50,25 @@ public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory);
 		addNameManipulator("Name");
 
-		addTypicalColumn("Seed", 
-				new NumericAttributeManipulator(OptimiserPackage.eINSTANCE.getOptimiserSettings_Seed(),
-						getEditingDomain()));
-		
-		addTypicalColumn("Iterations", 
-				new NumericAttributeManipulator(
-						OptimiserPackage.eINSTANCE.getAnnealingSettings_Iterations()
-						,
-						getEditingDomain()), OptimiserPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings());
-		
-		addTypicalColumn("Epoch Length", 
-				new NumericAttributeManipulator(
-						OptimiserPackage.eINSTANCE.getAnnealingSettings_EpochLength()
-						,
-						getEditingDomain()), OptimiserPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings());
-		
-		addTypicalColumn("Cooling Parameter", 
-				new NumericAttributeManipulator(
-						OptimiserPackage.eINSTANCE.getAnnealingSettings_Cooling()
-						,
-						getEditingDomain()), OptimiserPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings());
-		
-		addTypicalColumn("Initial Temperature", 
-				new NumericAttributeManipulator(
-						OptimiserPackage.eINSTANCE.getAnnealingSettings_InitialTemperature()
-						,
-						getEditingDomain()), OptimiserPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings());
-		
+		addTypicalColumn("Seed", new NumericAttributeManipulator(OptimiserPackage.eINSTANCE.getOptimiserSettings_Seed(), getEditingDomain()));
+
+		addTypicalColumn("Iterations", new NumericAttributeManipulator(OptimiserPackage.eINSTANCE.getAnnealingSettings_Iterations(), getEditingDomain()),
+				OptimiserPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings());
+
+		addTypicalColumn("Epoch Length", new NumericAttributeManipulator(OptimiserPackage.eINSTANCE.getAnnealingSettings_EpochLength(), getEditingDomain()),
+				OptimiserPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings());
+
+		addTypicalColumn("Cooling Parameter", new NumericAttributeManipulator(OptimiserPackage.eINSTANCE.getAnnealingSettings_Cooling(), getEditingDomain()),
+				OptimiserPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings());
+
+		addTypicalColumn("Initial Temperature", new NumericAttributeManipulator(OptimiserPackage.eINSTANCE.getAnnealingSettings_InitialTemperature(), getEditingDomain()),
+				OptimiserPackage.eINSTANCE.getOptimiserSettings_AnnealingSettings());
+
 		addTypicalColumn("Is Default", new SelectedSettingsManipulator());
-		
+
 		defaultSetTitle("Optimiser Settings");
 	}
-	
+
 	class SelectedSettingsManipulator implements ICellRenderer, ICellManipulator {
 		@Override
 		public void setValue(final Object object, final Object value) {
@@ -87,8 +76,7 @@ public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 				final OptimiserSettings settings = (OptimiserSettings) object;
 				if (settings.eContainer() instanceof OptimiserModel) {
 					final OptimiserModel om = (OptimiserModel) settings.eContainer();
-					getEditingDomain().getCommandStack().execute(
-							SetCommand.create(getEditingDomain(), om, OptimiserPackage.eINSTANCE.getOptimiserModel_ActiveSetting(), settings));
+					getEditingDomain().getCommandStack().execute(SetCommand.create(getEditingDomain(), om, OptimiserPackage.eINSTANCE.getOptimiserModel_ActiveSetting(), settings));
 				}
 			}
 		}
@@ -102,8 +90,12 @@ public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 		public Object getValue(final Object object) {
 			if (object instanceof OptimiserSettings) {
 				final OptimiserSettings settings = (OptimiserSettings) object;
-				if (((OptimiserModel) settings.eContainer()).getActiveSetting() == settings)
-					return 0;
+				final EObject eContainer = settings.eContainer();
+				if (eContainer instanceof OptimiserModel) {
+					if (((OptimiserModel) eContainer).getActiveSetting() == settings) {
+						return 0;
+					}
+				}
 			}
 			return 1;
 		}
