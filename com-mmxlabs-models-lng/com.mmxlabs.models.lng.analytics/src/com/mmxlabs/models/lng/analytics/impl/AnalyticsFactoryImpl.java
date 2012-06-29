@@ -7,14 +7,21 @@
 package com.mmxlabs.models.lng.analytics.impl;
 
 import com.mmxlabs.models.lng.analytics.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.CostComponent;
+import com.mmxlabs.models.lng.analytics.FuelCost;
+import com.mmxlabs.models.lng.analytics.UnitCostLine;
+import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
+import com.mmxlabs.models.lng.analytics.Visit;
+import com.mmxlabs.models.lng.analytics.Voyage;
 
 /**
  * <!-- begin-user-doc -->
@@ -67,6 +74,7 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.VISIT: return createVisit();
 			case AnalyticsPackage.COST_COMPONENT: return createCostComponent();
 			case AnalyticsPackage.FUEL_COST: return createFuelCost();
+			case AnalyticsPackage.JOURNEY: return createJourney();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -140,6 +148,16 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public FuelCost createFuelCost() {
 		FuelCostImpl fuelCost = new FuelCostImpl();
 		return fuelCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Journey createJourney() {
+		JourneyImpl journey = new JourneyImpl();
+		return journey;
 	}
 
 	/**

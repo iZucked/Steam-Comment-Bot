@@ -31,7 +31,6 @@ public class CostMatrixView extends ScenarioInstanceView {
 	public void createPartControl(final Composite parent) {
 		sash = new SashForm(parent, SWT.VERTICAL);
 		listenToScenarioSelection();
-
 	}
 
 	@Override

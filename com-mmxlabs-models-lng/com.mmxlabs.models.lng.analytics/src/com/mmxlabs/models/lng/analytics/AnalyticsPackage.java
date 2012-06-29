@@ -6,12 +6,12 @@
  */
 package com.mmxlabs.models.lng.analytics;
 
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -764,6 +764,44 @@ public interface AnalyticsPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.JourneyImpl <em>Journey</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.JourneyImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getJourney()
+	 * @generated
+	 */
+	int JOURNEY = 7;
+
+	/**
+	 * The feature id for the '<em><b>From</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__FROM = 0;
+
+	/**
+	 * The feature id for the '<em><b>To</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__TO = 1;
+
+	/**
+	 * The number of structural features of the '<em>Journey</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY_FEATURE_COUNT = 2;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1340,6 +1378,38 @@ public interface AnalyticsPackage extends EPackage {
 	EAttribute getFuelCost_Cost();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.Journey <em>Journey</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Journey</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Journey
+	 * @generated
+	 */
+	EClass getJourney();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.Journey#getFrom <em>From</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>From</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Journey#getFrom()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EReference getJourney_From();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.Journey#getTo <em>To</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>To</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.Journey#getTo()
+	 * @see #getJourney()
+	 * @generated
+	 */
+	EReference getJourney_To();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1798,6 +1868,32 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute FUEL_COST__COST = eINSTANCE.getFuelCost_Cost();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.JourneyImpl <em>Journey</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.JourneyImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getJourney()
+		 * @generated
+		 */
+		EClass JOURNEY = eINSTANCE.getJourney();
+
+		/**
+		 * The meta object literal for the '<em><b>From</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOURNEY__FROM = eINSTANCE.getJourney_From();
+
+		/**
+		 * The meta object literal for the '<em><b>To</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference JOURNEY__TO = eINSTANCE.getJourney_To();
 
 	}
 

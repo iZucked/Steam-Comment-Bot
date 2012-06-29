@@ -7,10 +7,9 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.analytics;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

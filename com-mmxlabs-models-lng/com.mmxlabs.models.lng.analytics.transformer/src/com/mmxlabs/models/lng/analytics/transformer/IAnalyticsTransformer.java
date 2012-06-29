@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -29,4 +30,6 @@ public interface IAnalyticsTransformer {
 	 * @return
 	 */
 	public List<UnitCostLine> createCostLines(final MMXRootObject root, final UnitCostMatrix spec, final IProgressMonitor monitor);
+
+	UnitCostLine createCostLine(MMXRootObject root, UnitCostMatrix spec, Port from, Port to);
 }

@@ -57,6 +57,12 @@
 			helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.UnitCostLineComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.analytics.UnitCostLine" />
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.JourneyComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.helpers.Journey"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.analytics.Journey">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -93,6 +99,12 @@
           id="com.mmxlabs.models.lng.analytics.editor.ucmdcf"
           inheritable="false">
     </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.analytics.Journey"
+          factory="com.mmxlabs.models.lng.analytics.displaycomposites.JourneyDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.analytics.editor.jdcf"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="org.eclipse.ui.views">
@@ -103,5 +115,21 @@
           name="Cost Matrices"
           restorable="true">
     </view>
+    <view
+          category="com.mmxlabs.models.lng.views.logical"
+          class="com.mmxlabs.models.lng.analytics.ui.editorpart.JourneyView"
+          id="com.mmxlabs.models.lng.analytics.editor.view1"
+          name="Journey Costs"
+          restorable="true">
+    </view>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.valueproviders">
+    <valueProvider
+          factory="com.mmxlabs.models.lng.analytics.ui.valueproviders.JourneyPortReferenceValueProviderFactory"
+          id="com.mmxlabs.models.lng.analytics.editor.journeyValueProvider"
+          ownerEClass="com.mmxlabs.models.lng.analytics.Journey"
+          referenceEClass="com.mmxlabs.models.lng.types.APort">
+    </valueProvider>
  </extension>
 </plugin>

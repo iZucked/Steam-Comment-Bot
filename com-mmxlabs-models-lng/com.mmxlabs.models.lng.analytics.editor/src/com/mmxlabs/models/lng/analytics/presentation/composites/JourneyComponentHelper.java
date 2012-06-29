@@ -14,7 +14,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -22,11 +21,11 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
- * A component helper for AnalyticsModel instances
+ * A component helper for Journey instances
  *
  * @generated
  */
-public class AnalyticsModelComponentHelper extends BaseComponentHelper {
+public class JourneyComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -34,7 +33,7 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public AnalyticsModelComponentHelper() {
+	public JourneyComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
@@ -43,19 +42,18 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public AnalyticsModelComponentHelper(IAdapterManager adapterManager) {
+	public JourneyComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.UUID_OBJECT));
 	}
 	
 	/**
-	 * add editors to a composite, using AnalyticsModel as the supertype
+	 * add editors to a composite, using Journey as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, AnalyticsPackage.Literals.ANALYTICS_MODEL);	
+		addEditorsToComposite(detailComposite, AnalyticsPackage.Literals.JOURNEY);	
 	}
 	
 	/**
@@ -66,24 +64,23 @@ public class AnalyticsModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_roundTripMatricesEditor(detailComposite, topClass);
-		add_selectedMatrixEditor(detailComposite, topClass);
+		add_fromEditor(detailComposite, topClass);
+		add_toEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the roundTripMatrices feature on AnalyticsModel
+	 * Create the editor for the from feature on Journey
 	 *
 	 * @generated
 	 */
-	protected void add_roundTripMatricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES));
+	protected void add_fromEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.JOURNEY__FROM));
 	}
-
 	/**
-	 * Create the editor for the selectedMatrix feature on AnalyticsModel
+	 * Create the editor for the to feature on Journey
 	 *
 	 * @generated
 	 */
-	protected void add_selectedMatrixEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.ANALYTICS_MODEL__SELECTED_MATRIX));
+	protected void add_toEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.JOURNEY__TO));
 	}
 }

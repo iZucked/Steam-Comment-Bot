@@ -7,11 +7,11 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.analytics;
-import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.mmxcore.MMXObject;
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

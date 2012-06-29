@@ -89,6 +89,15 @@ public interface AnalyticsFactory extends EFactory {
 	FuelCost createFuelCost();
 
 	/**
+	 * Returns a new object of class '<em>Journey</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Journey</em>'.
+	 * @generated
+	 */
+	Journey createJourney();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

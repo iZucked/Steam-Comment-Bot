@@ -237,6 +237,29 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.Journey} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected JourneyItemProvider journeyItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.Journey}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createJourneyAdapter() {
+		if (journeyItemProvider == null) {
+			journeyItemProvider = new JourneyItemProvider(this);
+		}
+
+		return journeyItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -342,6 +365,7 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (visitItemProvider != null) visitItemProvider.dispose();
 		if (costComponentItemProvider != null) costComponentItemProvider.dispose();
 		if (fuelCostItemProvider != null) fuelCostItemProvider.dispose();
+		if (journeyItemProvider != null) journeyItemProvider.dispose();
 	}
 
 }

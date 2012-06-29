@@ -45,6 +45,14 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 		super(page, part, location, actionBars);
 	}
 
+	protected boolean showSelectionColumn() {
+		return false;
+	}
+	
+	protected boolean showEvaluateAction() {
+		return true;
+	}
+	
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
@@ -60,30 +68,34 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 
 		addTypicalColumn("LNG Price", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CargoPrice(), getEditingDomain()));
 
-		addTypicalColumn("Selected", new SelectedMatrixManipulator());
-		
-		final EvaluateUnitCostMatrixAction evaluateAction = new EvaluateUnitCostMatrixAction(getJointModelEditorPart());
-		getToolBarManager().appendToGroup(EDIT_GROUP, evaluateAction);
-		getToolBarManager().update(true);
-		viewer.addSelectionChangedListener(evaluateAction);
-		defaultSetTitle("Unit Cost Matrices");
+		if (showSelectionColumn()) {
+			addTypicalColumn("Selected", new SelectedMatrixManipulator());
+		}
 
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				final ISelection selection = event.getSelection();
-				if (selection instanceof IStructuredSelection) {
-					if (!selection.isEmpty()) {
-						if (((IStructuredSelection) selection).getFirstElement() instanceof UnitCostMatrix) {
-							final UnitCostMatrix matrix = (UnitCostMatrix) ((IStructuredSelection) selection).getFirstElement();
-							if (matrix.getCostLines().isEmpty()) {
-								evaluateAction.recomputeSettings(matrix);
+		if (showEvaluateAction()) {
+			final EvaluateUnitCostMatrixAction evaluateAction = new EvaluateUnitCostMatrixAction(getJointModelEditorPart());
+			getToolBarManager().appendToGroup(EDIT_GROUP, evaluateAction);
+			getToolBarManager().update(true);
+			viewer.addSelectionChangedListener(evaluateAction);
+			defaultSetTitle("Unit Cost Matrices");
+	
+			viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+				@Override
+				public void selectionChanged(final SelectionChangedEvent event) {
+					final ISelection selection = event.getSelection();
+					if (selection instanceof IStructuredSelection) {
+						if (!selection.isEmpty()) {
+							if (((IStructuredSelection) selection).getFirstElement() instanceof UnitCostMatrix) {
+								final UnitCostMatrix matrix = (UnitCostMatrix) ((IStructuredSelection) selection).getFirstElement();
+								if (matrix.getCostLines().isEmpty()) {
+									evaluateAction.recomputeSettings(matrix);
+								}
 							}
 						}
 					}
 				}
-			}
-		});
+			});
+		}
 	}
 	
 	
