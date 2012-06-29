@@ -4,16 +4,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -130,7 +126,6 @@ public class JourneyView extends ScenarioInstanceView {
 						} catch (Throwable th) {
 							return "";
 						}
-						
 					}
 				});
 			}
@@ -143,6 +138,9 @@ public class JourneyView extends ScenarioInstanceView {
 		pane.getViewer().setInput(getRootObject().getSubModel(AnalyticsModel.class));
 		
 		getViewSite().setSelectionProvider(pane.getViewer());
+		
+		top.layout(true);
+		top.pack(true);
 	}
 
 	@Override

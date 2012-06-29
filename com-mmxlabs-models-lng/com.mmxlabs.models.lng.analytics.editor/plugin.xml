@@ -118,7 +118,7 @@
     <view
           category="com.mmxlabs.models.lng.views.logical"
           class="com.mmxlabs.models.lng.analytics.ui.editorpart.JourneyView"
-          id="com.mmxlabs.models.lng.analytics.editor.view1"
+          id="com.mmxlabs.models.lng.analytics.editor.journeyView"
           name="Journey Costs"
           restorable="true">
     </view>
