@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -21,12 +22,12 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
+import com.mmxlabs.trading.optimiser.TradingConstants;
 
 public class CargoPnLReportView extends EMFReportView {
 	/**
@@ -98,14 +99,14 @@ public class CargoPnLReportView extends EMFReportView {
 							for (final MMXRootObject rootObject : rootObjects) {
 
 								final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-								final LegalEntity shippingEntity = commercialModel.getShippingEntity();
-								if (shippingEntity != null) {
-									entities.add(shippingEntity.getName());
+								for (final LegalEntity e : commercialModel.getEntities()) {
+									if (TradingConstants.THIRD_PARTIES.equals(e.getName())) {
+										continue;
+									}
+									entities.add(e.getName());
 								}
 							}
-							for (final String entity : entities) {
-								addEntityColumn(entity);
-							}
+							addPNLColumn(entities);
 						}
 
 						viewer.refresh();
@@ -153,7 +154,7 @@ public class CargoPnLReportView extends EMFReportView {
 
 	private final List<String> entityColumnNames = new ArrayList<String>();
 
-	private void addEntityColumn(final String entityName) {
+	private void addPNLColumn(final Collection<String> entityNames) {
 
 		final String title = /* entity.getName() + */"P&L";
 		entityColumnNames.add(title);
@@ -162,12 +163,46 @@ public class CargoPnLReportView extends EMFReportView {
 			public Integer getIntValue(final Object object) {
 				if (object instanceof CargoAllocation) {
 					// display P&L
-					Integer value = 0;
+					Integer value = null;
 
 					final CargoAllocation allocation = (CargoAllocation) object;
 					// TODO: make key well known
-					
-					value = allocation.getValueWithPathAs(CollectionsUtil.makeArrayList(entityName, "pnl"), Integer.class, null);
+					for (final String entityName : entityNames) {
+						{
+							final Integer v = allocation.getValueWithPathAs(CollectionsUtil.makeArrayList(TradingConstants.ExtraData_upstream, entityName, TradingConstants.ExtraData_pnl),
+									Integer.class, null);
+							if (v != null) {
+								if (value == null) {
+									value = v;
+								} else {
+									value = value.intValue() + v.intValue();
+								}
+							}
+						}
+						{
+							final Integer v = allocation.getValueWithPathAs(CollectionsUtil.makeArrayList(TradingConstants.ExtraData_shipped, entityName, TradingConstants.ExtraData_pnl),
+									Integer.class, null);
+							if (v != null) {
+								if (value == null) {
+									value = v;
+								} else {
+									value = value.intValue() + v.intValue();
+								}
+							}
+						}
+						{
+							final Integer v = allocation.getValueWithPathAs(CollectionsUtil.makeArrayList(TradingConstants.ExtraData_downstream, entityName, TradingConstants.ExtraData_pnl),
+									Integer.class, null);
+							if (v != null) {
+								if (value == null) {
+									value = v;
+								} else {
+									value = value.intValue() + v.intValue();
+								}
+							}
+						}
+
+					}
 					// if ((allocation.getLoadRevenue() != null) && entity.equals(allocation.getLoadRevenue().getEntity())) {
 					// value += allocation.getLoadRevenue().getValue();
 					// }
