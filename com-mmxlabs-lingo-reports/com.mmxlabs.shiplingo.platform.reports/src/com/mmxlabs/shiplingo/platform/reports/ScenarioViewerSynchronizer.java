@@ -160,9 +160,12 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		final ArrayList<Object> selectedObjects = new ArrayList<Object>();
 		final List<MMXRootObject> rootObjects = new ArrayList<MMXRootObject>();
 		
+		collector.beginCollecting();
+		
 		for (final ScenarioInstance job : selectionProvider.getSelection()) {
 			final IScenarioService scenarioService = job.getScenarioService();
-
+			final boolean isPinned = selectionProvider.getPinnedInstance() == job;
+			
 			EObject instance = null;
 			try {
 				instance = scenarioService.load(job);
@@ -171,7 +174,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			if (instance instanceof MMXRootObject) {
 				final MMXRootObject rootObject = (MMXRootObject) instance;
 				rootObjects.add(rootObject);
-				final Collection<? extends Object> viewerContent = collector.collectElements(rootObject);
+				final Collection<? extends Object> viewerContent = collector.collectElements(rootObject, isPinned);
 				for (final Object o : viewerContent) {
 					sourceByElement.put(o, new Pair<ScenarioInstance, MMXRootObject>(job, rootObject));
 				}
@@ -179,9 +182,9 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			}
 		}
 		
+		collector.endCollecting();
+		
 		return new IScenarioViewerSynchronizerOutput() {
-
-			
 			@Override
 			public ScenarioInstance getScenarioInstance(Object object) {
 				return sourceByElement.get(object).getFirst();
@@ -200,6 +203,11 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			@Override
 			public Collection<MMXRootObject> getRootObjects() {
 				return rootObjects;
+			}
+
+			@Override
+			public boolean isPinned(Object object) {
+				return ScenarioViewerSynchronizer.this.selectionProvider.getPinnedInstance() == (getScenarioInstance(object));
 			}
 		};
 	}
@@ -222,6 +230,6 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 
 	@Override
 	public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
-		//TODO handle change to pin state.
+		refreshViewer();
 	}
 }

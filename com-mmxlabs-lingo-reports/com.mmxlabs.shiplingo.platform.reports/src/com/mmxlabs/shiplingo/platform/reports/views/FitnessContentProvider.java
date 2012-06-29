@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,24 +44,33 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 		return rowData;
 	}
 
+	private List<RowData> pinnedData = new ArrayList<RowData>();
+	
+	public List<RowData> getPinnedData() {
+		return pinnedData;
+	}
+
 	@Override
 	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		rowData = new RowData[0];
+		pinnedData.clear();
 		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 			final IScenarioViewerSynchronizerOutput svso = (IScenarioViewerSynchronizerOutput) newInput;
 			final List<RowData> rowDataList = new LinkedList<RowData>();
 			for (final Object o : svso.getCollectedElements()) {
 				if (o instanceof Schedule) {
+					final List<RowData> destination = svso.isPinned(o) ? pinnedData : rowDataList;
+					
 					final Schedule schedule = (Schedule) o;
 					
 					long total = 0l;
 					for (final Fitness f : schedule.getFitnesses()) {
-						rowDataList.add(new RowData(svso.getScenarioInstance(o).getName(), f.getName(), f.getFitnessValue()));
+						destination.add(new RowData(svso.getScenarioInstance(o).getName(), f.getName(), f.getFitnessValue()));
 						if (!(f.getName().equals("iterations") || f.getName().equals("runtime"))) {
 							total += f.getFitnessValue();
 						}
 					}
-					rowDataList.add(new RowData(svso.getScenarioInstance(o).getName(), "Total", total));
+					destination.add(new RowData(svso.getScenarioInstance(o).getName(), "Total", total));
 
 				}
 			}

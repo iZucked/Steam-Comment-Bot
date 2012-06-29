@@ -111,10 +111,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void init(IViewSite site, IMemento memento) throws PartInitException {
-		this.memento = memento;
-		if (this.memento == null) {
-			this.memento = XMLMemento.createWriteRoot("workbench");
+		if (memento == null) {
+			memento = XMLMemento.createWriteRoot("workbench");
 		}
+		this.memento = memento;
 		
 		// check that it's the right memento - and non-null?...
 		
@@ -128,7 +128,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			if(memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null){
 				memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
 			}		
-			if(memento.getString(Show_Canals) == null){
+			if(memento.getBoolean(Show_Canals) == null){
 				memento.putBoolean(Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
 			}	
 			if(memento.getChild(Highlight_) == null){

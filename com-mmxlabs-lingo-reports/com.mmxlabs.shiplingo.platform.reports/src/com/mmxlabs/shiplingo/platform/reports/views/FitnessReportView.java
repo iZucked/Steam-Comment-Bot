@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -38,6 +39,7 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
@@ -97,7 +99,11 @@ public class FitnessReportView extends ViewPart {
 
 	private ScenarioViewerSynchronizer jobManagerListener;
 
-	static class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider {
+	private FitnessContentProvider contentProvider;
+
+	private TableViewerColumn delta;
+
+	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider {
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 
@@ -108,7 +114,17 @@ public class FitnessReportView extends ViewPart {
 				} else if (index == 1) {
 					return d.component;
 				} else {
-					return String.format("%,d", d.fitness);
+					if (index == 3) {
+						final List<RowData> pinnedData = contentProvider.getPinnedData();
+						for (final RowData data : pinnedData) {
+							if (d.component.equals(data.component)) {
+								return String.format("%,d", data.fitness - d.fitness);
+							}
+						}
+					} else {
+						return String.format("%,d", d.fitness);
+					}
+					
 				}
 			}
 			return null;
@@ -153,7 +169,8 @@ public class FitnessReportView extends ViewPart {
 				}
 			};
 		};
-		viewer.setContentProvider(new FitnessContentProvider());
+		this.contentProvider = new FitnessContentProvider();
+		viewer.setContentProvider(contentProvider);
 		viewer.setInput(getViewSite());
 
 		final TableViewerColumn tvc0 = new TableViewerColumn(viewer, SWT.NONE);
@@ -225,10 +242,23 @@ public class FitnessReportView extends ViewPart {
 		// selectionChanged(null, selection);
 
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
+			private boolean hasPin = false;
 			@Override
-			protected Collection<? extends Object> collectElements(Schedule schedule) {
+			public void beginCollecting() {
+				hasPin = false;
+			}
+
+			@Override
+			public void endCollecting() {
+				setShowDeltaColumn(hasPin);
+			}
+
+			@Override
+			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
+				hasPin = hasPin || pinned;
 				return Collections.singleton(schedule);
 			}
+
 		});
 	}
 
@@ -286,6 +316,23 @@ public class FitnessReportView extends ViewPart {
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
+	private void setShowDeltaColumn(final boolean showDeltaColumn) {
+		if (showDeltaColumn) {
+			if (delta == null) {
+				delta = new TableViewerColumn(viewer, SWT.NONE);
+				delta.getColumn().setText("Improvement");
+				delta.getColumn().pack();
+				addSortSelectionListener(delta.getColumn(), 4);
+				viewer.setLabelProvider(viewer.getLabelProvider());
+			}
+		} else {
+			if (delta != null) {
+				delta.getColumn().dispose();
+				delta = null;
+			}
+		}
+	}
+	
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
