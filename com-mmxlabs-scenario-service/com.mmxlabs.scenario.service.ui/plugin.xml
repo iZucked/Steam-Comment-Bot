@@ -569,5 +569,22 @@
             type="com.mmxlabs.scenario.service.model.ScenarioInstance">
       </propertyTester>
    </extension>
+   <extension
+         point="org.eclipse.ui.editorActions">
+      <editorContribution
+            id="com.mmxlabs.scenario.service.ui.editorActions"
+            targetID="com.mmxlabs.models.lng.demo.scneditor">
+         <action
+               class="com.mmxlabs.scenario.service.ui.editor.actions.PinStateEditorActionDelegate"
+               definitionId="com.mmxlabs.scenario.service.ui.pin"
+               icon="icons/pin_editor.gif"
+               id="com.mmxlabs.scenario.service.ui.togglePin"
+               label="Toggle pin for this scenario"
+               style="toggle"
+               toolbarPath="additions"
+               tooltip="Use this scenario as the pin for comparison">
+         </action>
+      </editorContribution>
+   </extension>
 
 </plugin>
