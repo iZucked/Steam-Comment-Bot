@@ -19,6 +19,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.IFontProvider;
+import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -30,6 +31,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -72,7 +74,7 @@ public class TotalsReportView extends ViewPart {
 
 	private TableViewerColumn delta;
 
-	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider {
+	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
 		private Font boldFont;
 
@@ -91,9 +93,19 @@ public class TotalsReportView extends ViewPart {
 			super.dispose();
 		}
 
+		protected Long getDelta(final RowData d) {
+			final List<RowData> pinned = TotalsReportView.this.contentProvider.getPinnedScenarioData();
+			for (final RowData ref : pinned) {
+				if (d.component.equals(ref.component)) {
+					final long delta = ref.fitness - d.fitness;
+					return delta;
+				}
+			}
+			return null;
+		}
+		
 		@Override
 		public String getColumnText(final Object obj, final int index) {
-
 			if (obj instanceof RowData) {
 				final RowData d = (RowData) obj;
 				switch (index) {
@@ -112,16 +124,12 @@ public class TotalsReportView extends ViewPart {
 						return String.format("%,d", d.fitness);
 					}
 				case 4:
-					final List<RowData> pinned = TotalsReportView.this.contentProvider.getPinnedScenarioData();
-					for (final RowData ref : pinned) {
-						if (d.component.equals(ref.component)) {
-							final long delta = ref.fitness - d.fitness;
-							
-							if (TotalsContentProvider.TYPE_TIME.equals(d.type)) {
-								return String.format("%dd, %dh", delta/24, delta%24);
-							} else {
-								return String.format("%,d", delta);
-							}
+					final Long l = getDelta(d);
+					if (l != null) {
+						if (TotalsContentProvider.TYPE_TIME.equals(d.type)) {
+							return String.format("%dd, %dh", l/24, l%24);
+						} else {
+							return String.format("%,d", l);
 						}
 					}
 				}
@@ -134,10 +142,6 @@ public class TotalsReportView extends ViewPart {
 			return null;
 		}
 
-		@Override
-		public void update(final ViewerCell cell) {
-
-		}
 
 		@Override
 		public Font getFont(Object element) {
@@ -150,6 +154,33 @@ public class TotalsReportView extends ViewPart {
 
 			return null;
 		}
+
+		@Override
+		public Color getForeground(Object element, int columnIndex) {
+			if (columnIndex == 4 && element instanceof RowData) {
+				final Long l = getDelta((RowData) element);
+				if (l == null || l.longValue() == 0l) {
+					return null;
+				} else if (l < 0) {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+				} else {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public Color getBackground(Object element, int columnIndex) {
+			return null;
+		}
+
+		@Override
+		public void update(ViewerCell cell) {
+			
+		}
+		
+		
 	}
 
 	/**
@@ -255,7 +286,7 @@ public class TotalsReportView extends ViewPart {
 		addSortSelectionListener(tvc2.getColumn(), 3);
 
 		viewer.setLabelProvider(new ViewLabelProvider());
-
+		
 		viewer.getTable().setLinesVisible(true);
 		viewer.getTable().setHeaderVisible(true);
 

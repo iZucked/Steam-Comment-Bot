@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.TableViewer;
@@ -32,6 +33,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
@@ -76,8 +78,11 @@ public class KPIReportView extends ViewPart {
 
 	private ScenarioViewerSynchronizer jobManagerListener;
 
-	static class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider {
+	private KPIContentProvider contentProvider;
 
+	private TableViewerColumn delta;
+
+	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 		private final Font boldFont;
 
 		public ViewLabelProvider() {
@@ -95,9 +100,17 @@ public class KPIReportView extends ViewPart {
 			super.dispose();
 		}
 
+		private Long getDelta(final RowData d) {
+			for (final RowData ref : contentProvider.getPinnedData()) {
+				if (ref.component.equals(d.component)) {
+					return ref.value - d.value;
+				}
+			}
+			return null;
+		}
+		
 		@Override
 		public String getColumnText(final Object obj, final int index) {
-
 			if (obj instanceof RowData) {
 				final RowData d = (RowData) obj;
 				switch (index) {
@@ -106,18 +119,25 @@ public class KPIReportView extends ViewPart {
 				case 1:
 					return d.component;
 				case 2:
-					if (KPIContentProvider.TYPE_TIME.equals(d.type)) {
-						final long days = d.value / 24;
-						final long hours = d.value % 24;
-						return "" + days + "d, " + hours + "h";
-					} else if (KPIContentProvider.TYPE_COST.equals(d.type)) {
-						return String.format("$%,d", d.value);
-					} else {
-						return String.format("%,d", d.value);
-					}
-				}
+					return format(d.value, d.type);
+				case 3:
+					return format(getDelta(d), d.type);
+				}					
 			}
 			return "";
+		}
+		
+		private String format(final Long value, final String type) {
+			if (value == null) return "";
+			if (KPIContentProvider.TYPE_TIME.equals(type)) {
+				final long days = value / 24;
+				final long hours = value % 24;
+				return "" + days + "d, " + hours + "h";
+			} else if (KPIContentProvider.TYPE_COST.equals(type)) {
+				return String.format("$%,d", value);
+			} else {
+				return String.format("%,d", value);
+			}
 		}
 
 		@Override
@@ -139,6 +159,26 @@ public class KPIReportView extends ViewPart {
 				}
 			}
 
+			return null;
+		}
+		
+		@Override
+		public Color getForeground(Object element, int columnIndex) {
+			if (columnIndex == 3 && element instanceof RowData) {
+				final Long l = getDelta((RowData) element);
+				if (l == null || l.longValue() == 0l) {
+					return null;
+				} else if (l < 0) {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
+				} else {
+					return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public Color getBackground(Object element, int columnIndex) {
 			return null;
 		}
 	}
@@ -205,7 +245,8 @@ public class KPIReportView extends ViewPart {
 				}
 			};
 		};
-		viewer.setContentProvider(new KPIContentProvider());
+		this.contentProvider = new KPIContentProvider();
+		viewer.setContentProvider(contentProvider);
 		viewer.setInput(getViewSite());
 
 		final TableViewerColumn tvc0 = new TableViewerColumn(viewer, SWT.NONE);
@@ -270,9 +311,21 @@ public class KPIReportView extends ViewPart {
 		contributeToActionBars();
 
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
+			private boolean hasPin = false;
+			@Override
+			public void beginCollecting() {
+				hasPin = false;
+			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule) {
+			public void endCollecting() {
+				setShowDeltaColumn(hasPin);
+			}
+			
+			@Override
+			protected Collection<? extends Object> collectElements(
+					Schedule schedule, boolean pinned) {
+				hasPin = hasPin || pinned;
 				return Collections.singleton(schedule);
 			}
 		});
@@ -387,5 +440,22 @@ public class KPIReportView extends ViewPart {
 
 		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
 		super.dispose();
+	}
+	
+	private void setShowDeltaColumn(final boolean showDeltaColumn) {
+		if (showDeltaColumn) {
+			if (delta == null) {
+				delta = new TableViewerColumn(viewer, SWT.NONE);
+				delta.getColumn().setText("Improvement");
+				delta.getColumn().pack();
+				addSortSelectionListener(delta.getColumn(), 4);
+				viewer.setLabelProvider(viewer.getLabelProvider());
+			}
+		} else {
+			if (delta != null) {
+				delta.getColumn().dispose();
+				delta = null;
+			}
+		}
 	}
 }
