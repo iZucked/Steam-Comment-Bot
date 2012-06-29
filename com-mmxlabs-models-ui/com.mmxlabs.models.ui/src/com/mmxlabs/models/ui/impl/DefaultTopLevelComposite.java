@@ -127,4 +127,8 @@ public class DefaultTopLevelComposite extends Composite implements IDisplayCompo
 	public ICommandHandler getCommandHandler() {
 		return commandHandler;
 	}
+
+	public void setLayoutProvider(final IDisplayCompositeLayoutProvider layoutProvider) {
+		this.layoutProvider = layoutProvider;
+	}
 }

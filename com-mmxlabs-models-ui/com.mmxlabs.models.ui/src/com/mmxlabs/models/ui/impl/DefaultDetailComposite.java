@@ -128,4 +128,8 @@ public class DefaultDetailComposite extends Composite implements IInlineEditorCo
 	public void setEditorWrapper(final IInlineEditorWrapper wrapper) {
 		this.wrapper = wrapper;
 	}
+
+	public void setLayoutProvider(IDisplayCompositeLayoutProvider layoutProvider) {
+		this.layoutProvider = layoutProvider;
+	}
 }
