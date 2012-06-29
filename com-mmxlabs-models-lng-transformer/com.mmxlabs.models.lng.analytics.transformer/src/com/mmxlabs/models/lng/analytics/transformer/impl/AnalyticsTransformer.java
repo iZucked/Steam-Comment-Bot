@@ -15,6 +15,8 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -102,9 +104,19 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class AnalyticsTransformer implements IAnalyticsTransformer {
 	@Override
+	public UnitCostLine createCostLine(final MMXRootObject root, final UnitCostMatrix spec, final Port from, final Port to) {
+		final UnitCostMatrix spec2 = EcoreUtil.copy(spec);
+		spec2.getPorts().clear();
+		spec2.getPorts().add(from);
+		spec2.getPorts().add(to);
+		List<UnitCostLine> createCostLines = createCostLines(root, spec2, new NullProgressMonitor());
+		if (createCostLines.isEmpty()) return null;
+		return createCostLines.get(0);
+	}
+	
+	@Override
 	public List<UnitCostLine> createCostLines(final MMXRootObject root, final UnitCostMatrix spec, final IProgressMonitor monitor) {
 		try {
-			
 			final PortModel portModel = root.getSubModel(PortModel.class);
 			final PricingModel pricing = root.getSubModel(PricingModel.class);
 
