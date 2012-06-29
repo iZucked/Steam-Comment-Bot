@@ -12,5 +12,13 @@ public class TradingConstants {
 
 	public static final String DCP_entityProvider = "entity-provider";
 	public static final String AI_profitAndLoss = "element-profit-and-loss";
+	
+	
+	public static final String THIRD_PARTIES = "Third-parties";
+	
+	public static final String ExtraData_pnl = "pnl";
+	public static final String ExtraData_upstream = "upstream";
+	public static final String ExtraData_downstream  = "downstream";
+	public static final String ExtraData_shipped = "shipped";
 
 }
