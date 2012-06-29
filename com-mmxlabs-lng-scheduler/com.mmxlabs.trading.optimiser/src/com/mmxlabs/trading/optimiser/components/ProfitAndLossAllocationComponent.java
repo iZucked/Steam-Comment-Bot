@@ -164,7 +164,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 			calibrationZeroLine = accumulator;
 		}
 
-		lastEvaluation = (calibrationZeroLine - accumulator) / Calculator.ScaleFactor;
+		lastEvaluation = (-accumulator) / Calculator.ScaleFactor;
 		return lastEvaluation;
 	}
 
