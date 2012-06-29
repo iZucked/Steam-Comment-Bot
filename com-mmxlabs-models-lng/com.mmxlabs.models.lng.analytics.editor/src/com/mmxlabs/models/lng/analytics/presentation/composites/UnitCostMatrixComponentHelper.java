@@ -230,9 +230,9 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the revenueShare feature on UnitCostMatrix
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_revenueShareEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__REVENUE_SHARE));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__REVENUE_SHARE));
 	}
 }
