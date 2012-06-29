@@ -100,7 +100,8 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		};
 		getSite().getPage().addPartListener(partListener);
 //		getSite().getPage().addSelectionListener(SCENARIO_NAVIGATOR_ID, this);
-		selectionChanged(null, getSite().getPage().getSelection(SCENARIO_NAVIGATOR_ID));
+		partListener.partActivated(getSite().getPage().getActiveEditor());
+//		selectionChanged(null, getSite().getPage().getSelection(SCENARIO_NAVIGATOR_ID));
 	}
 
 	@Override
