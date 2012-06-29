@@ -65,7 +65,7 @@ public class PasteScenarioCommandHandler extends AbstractHandler {
 		final Object localData = clipboard.getContents(LocalTransfer.getInstance());
 		final IScenarioService service = container.getScenarioService();
 		if (localData instanceof Iterable) {
-			for (final Object o : (Iterable)localData) {
+			for (final Object o : (Iterable<?>)localData) {
 				if (o instanceof ScenarioInstance) {
 					System.err.println("Local paste " + ((ScenarioInstance) o).getName());
 					service.duplicate((ScenarioInstance)o, container).setName("Copy of " + ((ScenarioInstance)o).getName());
