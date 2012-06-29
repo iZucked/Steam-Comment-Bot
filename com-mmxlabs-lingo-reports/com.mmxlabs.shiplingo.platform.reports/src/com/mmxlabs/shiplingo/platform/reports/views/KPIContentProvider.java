@@ -115,15 +115,22 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID));
 	}
 
+	private final List<RowData> pinnedData = new ArrayList<RowData>();
+	
+	public List<RowData> getPinnedData() {
+		return pinnedData;
+	}
+
 	@Override
 	public synchronized void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 		rowData = new RowData[0];
+		pinnedData.clear();
 		if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 			final IScenarioViewerSynchronizerOutput synchOutput = (IScenarioViewerSynchronizerOutput) newInput;
 			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
 			for (final Object o : synchOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
-					createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), rowDataList);
+					createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), synchOutput.isPinned(o) ? pinnedData : rowDataList);
 				}
 			}
 			rowData = rowDataList.toArray(rowData);
