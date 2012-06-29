@@ -57,9 +57,8 @@ public class TradingExporterExtension implements IExporterExtension {
 
 	@Override
 	public void finishExporting() {
-//		final EList<BookedRevenue> revenues = outputSchedule.getRevenue();
-		final IPortSlotProvider slotProvider = annotatedSolution.getContext().getOptimisationData()
-				.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		// final EList<BookedRevenue> revenues = outputSchedule.getRevenue();
+		final IPortSlotProvider slotProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
 			final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, TradingConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
 			if (profitAndLoss != null) {
@@ -77,66 +76,70 @@ public class TradingExporterExtension implements IExporterExtension {
 					}
 					int idx = 0;
 					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
-						final ExtraData entityData = cargoAllocation.addExtraData(entry.getEntity().getName() + idx++, entry.getEntity().getName());
-						
-						final ExtraData pnlData = entityData.addExtraData("pnl", "P&L", (int)entry.getFinalGroupValue() / Calculator.ScaleFactor,
+
+						// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
+						final ExtraData streamData;
+						switch (idx) {
+						case 0:
+							streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_upstream, "Upstream");
+							break;
+						case 1:
+							streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_shipped, "Shipping");
+							break;
+						case 2:
+							streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_downstream, "Downstream");
+							break;
+						default:
+							throw new IllegalStateException("Expected three item in the profit and loss list - got " + profitAndLoss.getEntries().size());
+						}
+
+						final ExtraData entityData = streamData.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
+
+						final ExtraData pnlData = entityData.addExtraData(TradingConstants.ExtraData_pnl, "P&L", (int) (entry.getFinalGroupValue() / Calculator.ScaleFactor),
 								ExtraDataFormatType.CURRENCY);
 
 						pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
 						ExtraData detail = exportDetailTree(entry.getDetails());
 						detail.setName("Details");
 						pnlData.getExtraData().add(detail);
-						
-//						final CargoRevenue revenue = ScheduleFactory.eINSTANCE.createCargoRevenue();
-//						revenue.setCargo(cargoAllocation);
-//						revenue.setEntity(entities.getModelObject(entry.getEntity(), Entity.class));
-//						revenue.setDate(entities.getDateFromHours(profitAndLoss.getBookingTime()));
-//						revenue.setValue((int) (entry.getFinalGroupValue() / Calculator.ScaleFactor));
-//						revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
-//						revenues.add(revenue);
-//						if (cargoAllocation.getLoadRevenue() == null) {
-//							cargoAllocation.setLoadRevenue(revenue);
-//						} else if (cargoAllocation.getShippingRevenue() == null) {
-//							cargoAllocation.setShippingRevenue(revenue);
-//						} else if (cargoAllocation.getDischargeRevenue() == null) {
-//							cargoAllocation.setDischargeRevenue(revenue);
-//						}
+
+						++idx;
 					}
 				} else if (slot instanceof IVesselEventPortSlot) {
-//					final VesselEvent modelEvent = entities.getModelObject(slot, VesselEvent.class);
-//					VesselEventVisit visit = null;
-//
-//					for (final Sequence sequence : outputSchedule.getSequences()) {
-//						for (final Event event : sequence.getEvents()) {
-//							if (event instanceof VesselEventVisit) {
-//								if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
-//									visit = (VesselEventVisit) event;
-//								}
-//							}
-//						}
-//					}
-//
-//					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
-//						final VesselEventRevenue revenue = ScheduleFactory.eINSTANCE.createVesselEventRevenue();
-//						revenue.setEntity(entities.getModelObject(entry.getEntity(), Entity.class));
-//						revenue.setDate(entities.getDateFromHours(profitAndLoss.getBookingTime()));
-//						revenue.setVesselEventVisit(visit);
-//						revenue.setValue((int) (entry.getFinalGroupValue() / Calculator.ScaleFactor));
-//						revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
-//						revenues.add(revenue);
-//						visit.setRevenue(revenue);
-//					}
+					// final VesselEvent modelEvent = entities.getModelObject(slot, VesselEvent.class);
+					// VesselEventVisit visit = null;
+					//
+					// for (final Sequence sequence : outputSchedule.getSequences()) {
+					// for (final Event event : sequence.getEvents()) {
+					// if (event instanceof VesselEventVisit) {
+					// if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
+					// visit = (VesselEventVisit) event;
+					// }
+					// }
+					// }
+					// }
+					//
+					// for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
+					// final VesselEventRevenue revenue = ScheduleFactory.eINSTANCE.createVesselEventRevenue();
+					// revenue.setEntity(entities.getModelObject(entry.getEntity(), Entity.class));
+					// revenue.setDate(entities.getDateFromHours(profitAndLoss.getBookingTime()));
+					// revenue.setVesselEventVisit(visit);
+					// revenue.setValue((int) (entry.getFinalGroupValue() / Calculator.ScaleFactor));
+					// revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
+					// revenues.add(revenue);
+					// visit.setRevenue(revenue);
+					// }
 				} else {
-//					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
-//						AdditionalData additionalData = ScheduleFactory.eINSTANCE.createAdditionalData();
-//
-//						final BookedRevenue revenue = ScheduleFactory.eINSTANCE.createBookedRevenue();
-//						revenue.setEntity(entities.getModelObject(entry.getEntity(), Entity.class));
-//						revenue.setDate(entities.getDateFromHours(profitAndLoss.getBookingTime()));
-//						revenue.setValue((int) (entry.getFinalGroupValue() / Calculator.ScaleFactor));
-//						revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
-//						revenues.add(revenue);
-//					}
+					// for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
+					// AdditionalData additionalData = ScheduleFactory.eINSTANCE.createAdditionalData();
+					//
+					// final BookedRevenue revenue = ScheduleFactory.eINSTANCE.createBookedRevenue();
+					// revenue.setEntity(entities.getModelObject(entry.getEntity(), Entity.class));
+					// revenue.setDate(entities.getDateFromHours(profitAndLoss.getBookingTime()));
+					// revenue.setValue((int) (entry.getFinalGroupValue() / Calculator.ScaleFactor));
+					// revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
+					// revenues.add(revenue);
+					// }
 				}
 			}
 		}
@@ -150,47 +153,45 @@ public class TradingExporterExtension implements IExporterExtension {
 
 	private ExtraData exportDetailTree(final IDetailTree details) {
 		final ExtraData ad = TypesFactory.eINSTANCE.createExtraData();
-		
+
 		ad.setName(details.getKey());
 		ad.setKey(details.getKey());
-		
-		
+
 		Object value = details.getValue();
 		if (value instanceof IDetailTreeElement) {
 			IDetailTreeElement element = (IDetailTreeElement) value;
 			value = element.getObject();
 			if (element instanceof CurrencyDetailElement) {
 				ad.setFormatType(ExtraDataFormatType.CURRENCY);
-			}
-			else if (element instanceof DurationDetailElement) {
+			} else if (element instanceof DurationDetailElement) {
 				ad.setFormatType(ExtraDataFormatType.DURATION);
 			}
 		}
-		
+
 		if (value instanceof Serializable) {
 			if (value instanceof Integer) {
 				int x = (Integer) value;
 				if (x % Calculator.ScaleFactor == 0) {
-					ad.setValue(x/Calculator.ScaleFactor);
+					ad.setValue(x / Calculator.ScaleFactor);
 				} else {
-					ad.setValue(x/(double)Calculator.ScaleFactor);
+					ad.setValue(x / (double) Calculator.ScaleFactor);
 				}
 			} else if (value instanceof Long) {
-				long x = (Long)value;
+				long x = (Long) value;
 				if (x % Calculator.ScaleFactor == 0) {
-					ad.setValue((int)(x/Calculator.ScaleFactor));
+					ad.setValue((int) (x / Calculator.ScaleFactor));
 				} else {
-					ad.setValue(x/(double)Calculator.ScaleFactor);
+					ad.setValue(x / (double) Calculator.ScaleFactor);
 				}
 			} else {
 				ad.setValue((Serializable) value);
 			}
 		}
-		
+
 		for (final IDetailTree child : details.getChildren()) {
 			ad.getExtraData().add(exportDetailTree(child));
 		}
-		
+
 		return ad;
 	}
 }
