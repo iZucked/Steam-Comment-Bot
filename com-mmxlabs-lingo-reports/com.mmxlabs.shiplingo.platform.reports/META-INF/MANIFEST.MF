@@ -31,7 +31,8 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.scenario.service.ui;bundle-version="1.0.0",
  com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
  org.slf4j.api;bundle-version="1.6.4",
- com.mmxlabs.models.ui;bundle-version="1.0.0"
+ com.mmxlabs.models.ui;bundle-version="1.0.0",
+ com.mmxlabs.trading.optimiser;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.shiplingo.platform.reports,
