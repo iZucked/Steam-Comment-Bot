@@ -2,6 +2,7 @@ package com.mmxlabs.models.lng.ui.tabular;
 
 import java.util.List;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EObject;
@@ -160,7 +161,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	public ScenarioTableViewer createViewer(final Composite parent) {
 		if (scenarioViewer == null) {
 			scenarioViewer = constructViewer(parent);
-			
+
 			scenarioViewer.addOpenListener(new IOpenListener() {
 
 				@Override
@@ -378,7 +379,12 @@ public class ScenarioTableViewerPane extends ViewerPane {
 					final List<?> objects = ((IStructuredSelection) sel).toList();
 					getJointModelEditorPart().setDisableUpdates(true);
 					try {
-						ed.getCommandStack().execute(DeleteCommand.create(ed, objects));
+						final Command deleteCommand = DeleteCommand.create(ed, objects);
+						if (deleteCommand.canExecute()) {
+							ed.getCommandStack().execute(deleteCommand);
+						} else {
+							throw new RuntimeException("Unable to execute delete command");
+						}
 					} finally {
 						getJointModelEditorPart().setDisableUpdates(false);
 					}
