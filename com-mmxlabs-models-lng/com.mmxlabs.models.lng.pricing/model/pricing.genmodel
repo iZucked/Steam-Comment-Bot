@@ -19,7 +19,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/charterIndices"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/fleetCost"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/routeCosts"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/portCosts"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/portCosts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/cooldownPrices"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//DataIndex">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//DataIndex/Value"/>
@@ -36,35 +37,56 @@
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//Index">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//Index/Value"/>
+      <genOperations ecoreOperation="pricing.ecore#//Index/getValueForMonth">
+        <genParameters ecoreParameter="pricing.ecore#//Index/getValueForMonth/date"/>
+      </genOperations>
+      <genOperations ecoreOperation="pricing.ecore#//Index/getDates"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//FleetCostModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//FleetCostModel/charterCosts"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//FleetCostModel/baseFuelPrices"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//RouteCost">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//RouteCost/routes"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//RouteCost/route"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//RouteCost/vesselClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//RouteCost/ladenCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//RouteCost/ballastCost"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//CharterCostModel">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CharterCostModel/vessels"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CharterCostModel/vesselClasses"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CharterCostModel/charterInPrice"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CharterCostModel/charterOutPrice"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CharterCostModel/spotCharterCount"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute pricing.ecore#//CharterCostModel/spotCharterCount"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//BaseFuelCost">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//BaseFuelCost/fuels"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//BaseFuelCost/price"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//BaseFuelCost/fuel"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute pricing.ecore#//BaseFuelCost/price"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//SpotMarket">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarket/availability"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarket/ports"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SpotMarket/minQuantity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SpotMarket/maxQuantity"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarket/notionalPort"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SpotMarket/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarket/contract"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PortCost">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortCost/ports"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortCost/vessels"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortCost/ladenCost"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortCost/ballastCost"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PortCost/entries"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PortCost/referenceCapacity"/>
+      <genOperations ecoreOperation="pricing.ecore#//PortCost/getPortCost">
+        <genParameters ecoreParameter="pricing.ecore#//PortCost/getPortCost/vesselClass"/>
+        <genParameters ecoreParameter="pricing.ecore#//PortCost/getPortCost/activity"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//PortCostEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PortCostEntry/activity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//PortCostEntry/cost"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//CooldownPrice">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CooldownPrice/ports"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CooldownPrice/index"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
