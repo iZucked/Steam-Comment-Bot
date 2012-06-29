@@ -5,12 +5,18 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -20,8 +26,11 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
+import com.mmxlabs.trading.optimiser.TradingConstants;
 
 /**
  * Content provider for the {@link CargoReportView}.
@@ -31,13 +40,14 @@ import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
  */
 public class KPIContentProvider implements IStructuredContentProvider {
 
-	private static final String TOTAL_COST = "Total Cost";
+	private static final String TOTAL_COST = "Total Shipping Cost";
+	private static final String TOTAL_PNL = "Total P&L";
 
 	public static final String TYPE_COST = "Cost";
 	public static final String TYPE_TIME = "Days, hours";
 
 	public static class RowData {
-		public RowData(final String scheduleName, final String component, final String type, final long value, String viewID) {
+		public RowData(final String scheduleName, final String component, final String type, final long value, final String viewID) {
 			super();
 			this.scheduleName = scheduleName;
 			this.component = component;
@@ -61,10 +71,25 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		return rowData;
 	}
 
-	private void createRowData(final Schedule schedule, String scheduleName, final List<RowData> output) {
+	private void createRowData(final Schedule schedule, final ScenarioInstance scenarioInstance, final List<RowData> output) {
+
+		final Set<String> validEntities = new HashSet<String>();
+		final EObject instance = scenarioInstance.getInstance();
+		if (instance instanceof MMXRootObject) {
+			final MMXRootObject rootObject = (MMXRootObject) instance;
+			final CommercialModel commercial = rootObject.getSubModel(CommercialModel.class);
+			if (commercial != null) {
+				for (final LegalEntity e : commercial.getEntities()) {
+//					if (!TradingConstants.THIRD_PARTIES.equals(e.getName())) {
+						validEntities.add(e.getName());
+//					}
+				}
+			}
+		}
 
 		long totalCost = 0l;
 		long lateness = 0;
+		long totalPNL = 0l;
 
 		for (final Sequence seq : schedule.getSequences()) {
 			for (final Event evt : seq.getEvents()) {
@@ -90,14 +115,19 @@ public class KPIContentProvider implements IStructuredContentProvider {
 
 					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 
-						long late = visit.getStart().getTime() - visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().getTime();
+						final long late = visit.getStart().getTime() - visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().getTime();
 						lateness += (late / 1000 / 60 / 60);
+					}
+
+					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
+						totalPNL += getCargoPNL(cargoAllocation, validEntities);
 					}
 
 				} else if (evt instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) evt;
 					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-						long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
+						final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
 						lateness += (late / 1000 / 60 / 60);
 					}
 				}
@@ -111,12 +141,45 @@ public class KPIContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		output.add(new RowData(scheduleName, "Lateness", TYPE_TIME, lateness, LatenessReportView.ID));
-		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID));
+		output.add(new RowData(scenarioInstance.getName(), "Lateness", TYPE_TIME, lateness, LatenessReportView.ID));
+		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID));
+		if (totalPNL != 0) {
+			output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalPNL, TotalsHierarchyView.ID));
+		}
+	}
+
+	private long getCargoPNL(final CargoAllocation allocation, final Set<String> validEntities) {
+		long total = 0l;
+
+		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_upstream));
+		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_shipped));
+		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_downstream));
+
+		return total;
+	}
+
+	public long getExtraDataTotalPNL(final Set<String> validEntities, final ExtraData extraData) {
+
+		long total = 0;
+		if (extraData == null) {
+			return total;
+		}
+		for (final ExtraData ed : extraData.getExtraData()) {
+			if (validEntities.contains(ed.getName())) {
+				final ExtraData data = ed.getDataWithKey(TradingConstants.ExtraData_pnl);
+				if (data != null) {
+					final Integer v = data.getValueAs(Integer.class);
+					if (v != null) {
+						total += v.longValue();
+					}
+				}
+			}
+		}
+		return total;
 	}
 
 	private final List<RowData> pinnedData = new ArrayList<RowData>();
-	
+
 	public List<RowData> getPinnedData() {
 		return pinnedData;
 	}
@@ -130,7 +193,8 @@ public class KPIContentProvider implements IStructuredContentProvider {
 			final ArrayList<RowData> rowDataList = new ArrayList<RowData>();
 			for (final Object o : synchOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
-					createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), synchOutput.isPinned(o) ? pinnedData : rowDataList);
+					final ScenarioInstance scenarioInstance = synchOutput.getScenarioInstance(o);
+					createRowData((Schedule) o, scenarioInstance, synchOutput.isPinned(o) ? pinnedData : rowDataList);
 				}
 			}
 			rowData = rowDataList.toArray(rowData);
