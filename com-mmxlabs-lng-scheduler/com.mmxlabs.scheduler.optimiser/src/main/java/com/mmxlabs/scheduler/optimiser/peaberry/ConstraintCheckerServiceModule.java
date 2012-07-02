@@ -11,6 +11,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 
@@ -37,6 +38,10 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PortTypeConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_vesselProvider)).export());
+
+		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(TimeSortConstraintCheckerFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(new TimeSortConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider, SchedulerConstants.DCP_vesselProvider))
+						.export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(TravelTimeConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new TravelTimeConstraintCheckerFactory()).export());
