@@ -22,6 +22,9 @@ import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -58,6 +61,9 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
+import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 
@@ -340,6 +346,19 @@ public class ScenarioTableViewerPane extends ViewerPane {
 					}
 				});
 			}
+		}
+
+		Action copyToClipboardAction = null;
+		if (viewer instanceof TableViewer) {
+			copyToClipboardAction = new CopyTableToClipboardAction(((TableViewer) viewer).getTable());
+		} else if (viewer instanceof TreeViewer) {
+			copyToClipboardAction = new CopyTreeToClipboardAction(((TreeViewer) viewer).getTree());
+		} else if (viewer instanceof GridTableViewer) {
+			copyToClipboardAction = new CopyGridToClipboardAction(((GridTableViewer) viewer).getGrid());
+		}
+
+		if (copyToClipboardAction != null) {
+			toolbar.add(copyToClipboardAction);
 		}
 
 		if (actionBars != null) {
