@@ -130,12 +130,19 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					// distance line is missing
 					// TODO customise message for this case.
 					// seems like a waste to run the same code twice
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), "infinity", formatHours(availableTime)));
+					IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(cargo.getName(), "infinity", formatHours(availableTime));
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 					dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port());
 					return dsd;
 				} else {
 					if (time > availableTime) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), formatHours(time), formatHours(availableTime)));
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), formatHours(time), formatHours(availableTime))) {
+							@Override
+							public int getSeverity() {
+								// If we can re-wire, then the optimiser can fix
+								return (cargo.isAllowRewiring()) ? IStatus.WARNING : IStatus.ERROR;
+							}
+						};
 						dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
 						return dsd;
 					}
