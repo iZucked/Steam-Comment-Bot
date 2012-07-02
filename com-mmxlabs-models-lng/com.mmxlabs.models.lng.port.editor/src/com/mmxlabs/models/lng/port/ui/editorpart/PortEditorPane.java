@@ -36,6 +36,8 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -55,6 +57,8 @@ import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class PortEditorPane extends ScenarioTableViewerPane {
+
+	private static final Logger log = LoggerFactory.getLogger(PortEditorPane.class);
 
 	public PortEditorPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
@@ -135,8 +139,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								getJointModelEditorPart().setDisableUpdates(true);
 								getEditingDomain().getCommandStack().execute(cc);
 								getJointModelEditorPart().setDisableUpdates(false);
-							} catch (IOException e) {
-								e.printStackTrace();
+							} catch (final IOException e) {
+								log.error(e.getMessage(), e);
 							}
 						}
 					};
@@ -189,8 +193,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								getJointModelEditorPart().getEditingDomain().getCommandStack()
 										.execute(AddCommand.create(getJointModelEditorPart().getEditingDomain(), pm, PortPackage.eINSTANCE.getPortModel_Routes(), importRoute));
 								getJointModelEditorPart().setDisableUpdates(false);
-							} catch (IOException e) {
-								e.printStackTrace();
+							} catch (final IOException e) {
+								log.error(e.getMessage(), e);
 							}
 						}
 					}
@@ -234,13 +238,12 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 									importRoute.setName(newName);
 									importRoute.setCanal(false);
 
-									getJointModelEditorPart().setDisableUpdates(true);
-									getJointModelEditorPart().getEditingDomain().getCommandStack()
-											.execute(AddCommand.create(getJointModelEditorPart().getEditingDomain(), pm, PortPackage.eINSTANCE.getPortModel_Routes(), importRoute));
-									getJointModelEditorPart().setDisableUpdates(false);
-								} catch (IOException e) {
-									e.printStackTrace();
-								}
+								getJointModelEditorPart().setDisableUpdates(true);
+								getJointModelEditorPart().getEditingDomain().getCommandStack()
+										.execute(AddCommand.create(getJointModelEditorPart().getEditingDomain(), pm, PortPackage.eINSTANCE.getPortModel_Routes(), importRoute));
+								getJointModelEditorPart().setDisableUpdates(false);
+							} catch (final IOException e) {
+								log.error(e.getMessage(), e);
 							}
 						
 					};
