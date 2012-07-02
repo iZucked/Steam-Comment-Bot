@@ -393,6 +393,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		setLinkingEnabled(true);
 
 		aSite.getPage().addPartListener(partListener);
+		
+		partListener.partActivated(getSite().getPage().getActiveEditor());
+
 	}
 
 	@Override
