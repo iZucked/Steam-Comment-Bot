@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.port.ui.editorpart;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -40,6 +41,7 @@ import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.importer.RouteImporter;
 import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
@@ -127,9 +129,9 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								cc.append(IdentityCommand.INSTANCE);
 								// remove old lines and add new ones.
 								if (r.getLines().isEmpty() == false)
-									cc.append(RemoveCommand.create(getEditingDomain(), r.getLines()));
+									cc.append(RemoveCommand.create(getEditingDomain(), new ArrayList<RouteLine>(r.getLines())));
 								if (importRoute.getLines().isEmpty() == false)
-									cc.append(AddCommand.create(getEditingDomain(), r, PortPackage.eINSTANCE.getRoute_Lines(), importRoute.getLines()));
+									cc.append(AddCommand.create(getEditingDomain(), r, PortPackage.eINSTANCE.getRoute_Lines(), new ArrayList<RouteLine>(importRoute.getLines())));
 								getJointModelEditorPart().setDisableUpdates(true);
 								getEditingDomain().getCommandStack().execute(cc);
 								getJointModelEditorPart().setDisableUpdates(false);
