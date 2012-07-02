@@ -35,7 +35,7 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 			return new MergedReferenceValueProvider(fleetModel, fleet.getFleetModel_VesselClasses(), fleet.getFleetModel_Vessels()) {
 				@Override
 				protected Pair<String, EObject> getEmptyObject() {
-					return new Pair<String, EObject>("Unassigned", null);
+					return new Pair<String, EObject>("<Unassigned>", null);
 				}
 				
 								
