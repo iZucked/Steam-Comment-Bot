@@ -193,4 +193,19 @@
           inheritable="true">
     </displayCompositeFactory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.port.ui.editors.PortInlineEditorFactory"
+          id="com.mmxlabs.models.lng.port.ui.editors.PortInlineEditorFactory">
+       <FeatureAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.port.Port">
+          </EClassExtends>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.types.APortSet">
+          </EClassExtends>
+       </FeatureAnyOf>
+    </editorFactory>
+ </extension>
 </plugin>
