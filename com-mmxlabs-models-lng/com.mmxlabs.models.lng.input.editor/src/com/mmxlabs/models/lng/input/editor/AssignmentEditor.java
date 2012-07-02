@@ -323,6 +323,9 @@ public class AssignmentEditor<R, T> extends Canvas {
 
 	protected void mouseDown(final MouseEvent e) {
 			final T task = findTaskAtCoordinates(e.x, e.y);
+			if (informationProvider.isLocked(task)) {
+				return;
+			}
 			if (task != null) {
 				switch (e.button) {
 				case 1:
