@@ -157,7 +157,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	protected final IFormatter containingScheduleFormatter = new BaseFormatter() {
 		@Override
-		public String format(Object object) {
+		public String format(final Object object) {
 			return synchronizerOutput.getScenarioInstance(object).getName();
 		}
 
@@ -285,13 +285,21 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	private IScenarioViewerSynchronizerOutput synchronizerOutput = null;
 
+	private ColumnHandler scheduleColumnHandler;
+
 	protected IStructuredContentProvider getContentProvider() {
 		return new IStructuredContentProvider() {
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				synchronizerOutput = null;
 				if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 					synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
+					if (scheduleColumnHandler != null) {
+						final GridViewerColumn c = scheduleColumnHandler.column;
+						if (c != null) {
+							c.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
+						}
+					}
 				}
 			}
 
@@ -301,7 +309,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			}
 
 			@Override
-			public Object[] getElements(Object inputElement) {
+			public Object[] getElements(final Object inputElement) {
 				if (inputElement instanceof IScenarioViewerSynchronizerOutput) {
 					final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) inputElement;
 					return output.getCollectedElements().toArray(new Object[output.getCollectedElements().size()]);
@@ -309,6 +317,12 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				return new Object[0];
 			}
 		};
+	}
+
+	protected ColumnHandler addScheduleColumn(final String title, final IFormatter formatter, final Object... path) {
+		final ColumnHandler handler = addColumn(title, formatter, path);
+		scheduleColumnHandler = handler;
+		return handler;
 	}
 
 	protected ColumnHandler addColumn(final String title, final IFormatter formatter, final Object... path) {

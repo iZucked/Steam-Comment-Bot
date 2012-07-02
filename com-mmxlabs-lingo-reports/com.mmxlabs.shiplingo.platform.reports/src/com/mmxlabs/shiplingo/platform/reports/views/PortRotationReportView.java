@@ -50,7 +50,7 @@ public class PortRotationReportView extends EMFReportView {
 
 		final EStructuralFeature name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
 
-		addColumn("Schedule", containingScheduleFormatter);
+		addScheduleColumn("Schedule", containingScheduleFormatter);
 
 		vesselColumn = addColumn("Vessel", objectFormatter, 
 				MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(),

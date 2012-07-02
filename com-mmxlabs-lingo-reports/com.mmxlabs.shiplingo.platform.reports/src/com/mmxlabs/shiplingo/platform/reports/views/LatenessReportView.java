@@ -30,7 +30,7 @@ public class LatenessReportView extends EMFReportView {
 
 	public LatenessReportView() {
 		super();
-		addColumn("Schedule", containingScheduleFormatter);
+		addScheduleColumn("Schedule", containingScheduleFormatter);
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
 

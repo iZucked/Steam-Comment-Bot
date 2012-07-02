@@ -39,7 +39,7 @@ public class BasicCargoReportView extends EMFReportView {
 
 		final EAttribute name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
 
-		addColumn("Schedule", containingScheduleFormatter);
+		addScheduleColumn("Schedule", containingScheduleFormatter);
 
 		// TODO cargo id not slot id.
 		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName());

@@ -35,7 +35,7 @@ public class CooldownReportView extends EMFReportView {
 	public CooldownReportView() {
 		super("com.mmxlabs.shiplingo.platform.reports.CooldownReportView");
 
-		addColumn("Schedule", containingScheduleFormatter);
+		addScheduleColumn("Schedule", containingScheduleFormatter);
 		addColumn("Vessel", objectFormatter, 
 				MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(),
 				SchedulePackage.eINSTANCE.getSequence__GetName());
