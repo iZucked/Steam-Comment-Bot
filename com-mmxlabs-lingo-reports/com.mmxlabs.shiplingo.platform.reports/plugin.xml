@@ -32,7 +32,7 @@
       </view>
       
        <view
-            name="Cargo P&amp;L"
+            name="Cargo Profit and Loss"
             icon="icons/cview16/exec_statistic_view.gif"
             category="com.mmxlabs.shiplingo.platform.reports"
             class="com.mmxlabs.shiplingo.platform.reports.views.CargoPnLReportView"
