@@ -13,9 +13,11 @@ public class PortInlineEditorFactory extends DefaultInlineEditorFactory {
 	}
 
 	@Override
-	public IInlineEditor createEditor(EClass owner, EStructuralFeature feature) {
-
-		return new PortMultiReferenceInlineEditor(feature);
+	public IInlineEditor createEditor(final EClass owner, final EStructuralFeature feature) {
+		if (feature.isMany()) {
+			return new PortMultiReferenceInlineEditor(feature);
+		}
+		return super.createEditor(owner, feature);
 	}
 
 }
