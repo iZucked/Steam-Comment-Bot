@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.models.optimisation;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -124,9 +123,9 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		saveInitialSolution(startSolution, 0);
 	}
 
-	private Schedule saveInitialSolution(final IAnnotatedSolution solution, int currentProgress) {
+	private Schedule saveInitialSolution(final IAnnotatedSolution solution, final int currentProgress) {
 
-		EditingDomain domain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
+		final EditingDomain domain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 		try {
 
 			if (domain instanceof CommandProviderAwareEditingDomain) {
@@ -135,7 +134,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 			// Rollback last "save" and re-apply to avoid long history of undos
 			if (currentProgress != 0) {
-				Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
+				final Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
 				if (mostRecentCommand != null) {
 					if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
 						final CommandStack stack = editingDomain.getCommandStack();
@@ -162,13 +161,13 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		final InputModel inputModel = scenario.getSubModel(InputModel.class);
 		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
 
-		String label = (currentProgress != 0) ? (LABEL_PREFIX + currentProgress + "%") : ("Evaluate");
+		final String label = (currentProgress != 0) ? (LABEL_PREFIX + currentProgress + "%") : ("Evaluate");
 		final CompoundCommand command = new CompoundCommand(label);
 
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
 		command.append(derive(editingDomain, schedule, inputModel, cargoModel));
-		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+		 command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 
 		if (!command.canExecute()) {
 			throw new RuntimeException("Unable to execute save schedule command");
@@ -180,7 +179,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		// However the dirty adapter sets dirty to true outside of a command...
 		//
 		//
-		scheduleModel.setDirty(false);
+//		scheduleModel.setDirty(false);
 		return schedule;
 	}
 
@@ -195,7 +194,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		if (jobDescriptor.isOptimising() == false) {
 			// scheduleModel.setDirty(false);
 			// log.debug("Cleared dirty bit on " + scheduleModel);
-			//clear lock
+			// clear lock
 			scenarioInstance.getLock(jobDescriptor.getLockKey()).release();
 			return false; // if we are not optimising, finish.
 		}
@@ -275,33 +274,33 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		return true;
 	}
 
-	private Command derive(EditingDomain domain, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel) {
-		CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
+	private Command derive(final EditingDomain domain, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel) {
+		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
 		final HashSet<UUIDObject> previouslyLocked = new HashSet<UUIDObject>();
 
 		final HashSet<UUIDObject> reassigned = new HashSet<UUIDObject>();
-		
+
 		for (final ElementAssignment ai : inputModel.getElementAssignments()) {
 			if (ai.isLocked()) {
 				previouslyLocked.add(ai.getAssignedObject());
 			}
 		}
-		
+
 		final List<Assignment> blank = Collections.emptyList();
 		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
-		
+
 		int spotIndex = 0;
 		for (final Sequence sequence : schedule.getSequences()) {
 			if (sequence.getVessel() == null && !sequence.isSpotVessel()) {
 				continue;
 			}
-			
+
 			int thisIndex = 0;
 			if (sequence.isSpotVessel()) {
 				thisIndex = spotIndex++;
 			}
-			
+
 			final AVesselSet assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel();
 			int index = 0;
 			for (final Event event : sequence.getEvents()) {
@@ -310,12 +309,12 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
 
 					if (slot instanceof LoadSlot) {
-						object = ((LoadSlot) slot).getCargo();		
+						object = ((LoadSlot) slot).getCargo();
 					}
 				} else if (event instanceof VesselEventVisit) {
 					object = ((VesselEventVisit) event).getVesselEvent();
 				}
-				
+
 				if (object != null) {
 					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
 					ea.setAssignedObject(object);
@@ -328,7 +327,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				}
 			}
 		}
-		
+
 		// copy through assignments which were not present in the schedule
 		// TODO this will probably need some thought around optional elements
 		for (final ElementAssignment ea : inputModel.getElementAssignments()) {
@@ -339,9 +338,11 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
 		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), blank));
-		
+
 		// rewire any cargos which require it
 		// TODO handle spot market cases, and free slots
+		final List<Command> nullCommands = new LinkedList<Command>();
+		final List<Command> setCommands = new LinkedList<Command>();
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
 			if (allocation.getInputCargo() == null) {
 				// this does not correspond directly to an input cargo;
@@ -354,10 +355,17 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 				// the cargo "belongs" to the load slot
 				// loadCargo.setDischargeSlot(discharge);
-				cmd.append(SetCommand.create(domain, loadCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), discharge));
-				dischargeCargo.setDischargeSlot(null);
-				cmd.append(SetCommand.create(domain, dischargeCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
+				setCommands.add(SetCommand.create(domain, loadCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), discharge));
+				nullCommands.add(SetCommand.create(domain, dischargeCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
+				cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
 			}
+		}
+		// Add the null commands first so they do not overwrite the set commands
+		for (final Command c : nullCommands) {
+			cmd.append(c);
+		}
+		for (final Command c : setCommands) {
+			cmd.append(c);
 		}
 
 		return cmd;
