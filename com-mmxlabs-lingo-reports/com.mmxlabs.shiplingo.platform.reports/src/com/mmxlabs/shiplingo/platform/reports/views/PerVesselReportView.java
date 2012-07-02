@@ -10,9 +10,9 @@ import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
@@ -27,32 +27,33 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 
 public class PerVesselReportView extends ViewPart {
 
-	private TableViewer tableViewer;
+	private GridTableViewer tableViewer;
 	private ScenarioViewerSynchronizer synchronizer;
-	private PackTableColumnsAction packColumnsAction;
-	private CopyTableToClipboardAction copyTableAction;
+	private PackGridTableColumnsAction packColumnsAction;
+	private CopyGridToClipboardAction copyTableAction;
 
 	private IScenarioViewerSynchronizerOutput lastInput;
+	private GridViewerColumn scheduleColumnViewer;
 	
 	@Override
 	public void createPartControl(final Composite parent) {
-		tableViewer = new TableViewer(parent);
+		tableViewer = new GridTableViewer(parent);
 		
-		tableViewer.getTable().setHeaderVisible(true);
-		tableViewer.getTable().setLinesVisible(true);
+		tableViewer.getGrid().setHeaderVisible(true);
+		tableViewer.getGrid().setLinesVisible(true);
 		
-		final TableViewerColumn scenario = new TableViewerColumn(tableViewer, SWT.NONE);
-		scenario.getColumn().setText("Scenario");
-		scenario.getColumn().pack();
-		scenario.setLabelProvider(
+		scheduleColumnViewer = new GridViewerColumn(tableViewer, SWT.NONE);
+		scheduleColumnViewer.getColumn().setText("Scenario");
+		scheduleColumnViewer.getColumn().pack();
+		scheduleColumnViewer.setLabelProvider(
 				new ColumnLabelProvider() {
 					@Override
 					public String getText(Object element) {
@@ -60,7 +61,7 @@ public class PerVesselReportView extends ViewPart {
 					}
 				});
 		
-		final TableViewerColumn name = new TableViewerColumn(tableViewer, SWT.NONE);
+		final GridViewerColumn name = new GridViewerColumn(tableViewer, SWT.NONE);
 		name.getColumn().setText("Vessel");
 		name.getColumn().pack();
 		name.setLabelProvider(
@@ -71,7 +72,7 @@ public class PerVesselReportView extends ViewPart {
 					}
 				});
 		
-		final TableViewerColumn hire = new TableViewerColumn(tableViewer, SWT.NONE);
+		final GridViewerColumn hire = new GridViewerColumn(tableViewer, SWT.NONE);
 		hire.getColumn().setText("Hire Cost");
 		hire.getColumn().pack();
 		hire.setLabelProvider(
@@ -82,7 +83,7 @@ public class PerVesselReportView extends ViewPart {
 					}
 				});
 		
-		final TableViewerColumn canal = new TableViewerColumn(tableViewer, SWT.NONE);
+		final GridViewerColumn canal = new GridViewerColumn(tableViewer, SWT.NONE);
 		canal.getColumn().setText("Canals");
 		canal.getColumn().pack();
 		canal.setLabelProvider(
@@ -93,7 +94,7 @@ public class PerVesselReportView extends ViewPart {
 					}
 				});
 		
-		final TableViewerColumn port = new TableViewerColumn(tableViewer, SWT.NONE);
+		final GridViewerColumn port = new GridViewerColumn(tableViewer, SWT.NONE);
 		port.getColumn().setText("Port Costs");
 		port.getColumn().pack();
 		port.setLabelProvider(
@@ -105,7 +106,7 @@ public class PerVesselReportView extends ViewPart {
 				});
 		
 		for (final Fuel fuel : Fuel.values()) {
-			final TableViewerColumn f = new TableViewerColumn(tableViewer, SWT.NONE);
+			final GridViewerColumn f = new GridViewerColumn(tableViewer, SWT.NONE);
 			f.getColumn().setText(fuel.name());
 			f.getColumn().pack();
 			f.setLabelProvider(
@@ -119,7 +120,7 @@ public class PerVesselReportView extends ViewPart {
 					});
 		}
 		
-		final TableViewerColumn utilisation = new TableViewerColumn(tableViewer, SWT.NONE);
+		final GridViewerColumn utilisation = new GridViewerColumn(tableViewer, SWT.NONE);
 		utilisation.getColumn().setText("Utilisation");
 		utilisation.getColumn().pack();
 		utilisation.setLabelProvider(
@@ -136,7 +137,12 @@ public class PerVesselReportView extends ViewPart {
 		tableViewer.setContentProvider(new IStructuredContentProvider() {			
 			@Override
 			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-				
+				if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+					final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
+					if (scheduleColumnViewer != null) {
+						scheduleColumnViewer.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
+					}
+				}
 			}
 			
 			@Override
@@ -177,7 +183,7 @@ public class PerVesselReportView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		tableViewer.getTable().setFocus();
+		tableViewer.getGrid().setFocus();
 	}
 
 	private class VesselCosts {
@@ -232,8 +238,8 @@ public class PerVesselReportView extends ViewPart {
 	}
 
 	private void makeActions() {
-		packColumnsAction = new PackTableColumnsAction(tableViewer);
-		copyTableAction = new CopyTableToClipboardAction(tableViewer.getTable());
+		packColumnsAction = new PackGridTableColumnsAction(tableViewer);
+		copyTableAction = new CopyGridToClipboardAction(tableViewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 }
