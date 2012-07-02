@@ -65,7 +65,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(List<EReference> path, AdapterFactory adapterFactory) {
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
 
 		addNameManipulator("Name");
@@ -76,19 +76,20 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);
-		
+
 		getToolBarManager().appendToGroup(EDIT_GROUP, new Action() {
 			{
-				setImageDescriptor(
-						AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
+				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
 			}
+
 			@Override
 			public void run() {
-				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getJointModelEditorPart().getShell(), PortEditorPane.this.getJointModelEditorPart().getDefaultCommandHandler());
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(PortEditorPane.this.getJointModelEditorPart().getShell(), PortEditorPane.this.getJointModelEditorPart()
+						.getDefaultCommandHandler());
 				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), PortPackage.eINSTANCE.getPortModel_PortGroups());
 			}
 		});
-		
+
 		getToolBarManager().update(true);
 		defaultSetTitle("Ports");
 	}
@@ -104,7 +105,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			protected void populate(Menu menu) {
+			protected void populate(final Menu menu) {
 				addActionToMenu(importPorts, menu);
 				final PortModel pm = getJointModelEditorPart().getRootObject().getSubModel(PortModel.class);
 				new MenuItem(menu, SWT.SEPARATOR);
@@ -115,7 +116,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					existingNames.add(r.getName());
 					final ImportAction importR = new ImportAction(getJointModelEditorPart()) {
 						@Override
-						protected void doImportStages(DefaultImportContext context) {
+						protected void doImportStages(final DefaultImportContext context) {
 							final FileDialog fileDialog = new FileDialog(part.getShell());
 							fileDialog.setFilterExtensions(new String[] { "*.csv" });
 							final String path = fileDialog.open();
@@ -154,7 +155,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				final ImportAction importNew = new ImportAction(getJointModelEditorPart()) {
 
 					@Override
-					protected void doImportStages(DefaultImportContext context) {
+					protected void doImportStages(final DefaultImportContext context) {
 						final FileDialog fileDialog = new FileDialog(part.getShell());
 						fileDialog.setFilterExtensions(new String[] { "*.csv" });
 						final String path = fileDialog.open();
@@ -203,7 +204,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				importNew.setText("Import new canal...");
 
 				addActionToMenu(importNew, menu);
-				
+
 				boolean hasMainRoute = false;
 				for (final Route r : pm.getRoutes()) {
 					if (r.isCanal() == false) {
@@ -215,7 +216,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 					final ImportAction importNew2 = new ImportAction(getJointModelEditorPart()) {
 
 						@Override
-						protected void doImportStages(DefaultImportContext context) {
+						protected void doImportStages(final DefaultImportContext context) {
 							final FileDialog fileDialog = new FileDialog(part.getShell());
 							fileDialog.setFilterExtensions(new String[] { "*.csv" });
 							final String path = fileDialog.open();
@@ -223,20 +224,19 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 							if (path == null)
 								return;
 
-							
-								final String newName = "Direct";
-								final RouteImporter routeImporter = new RouteImporter();
+							final String newName = "Direct";
+							final RouteImporter routeImporter = new RouteImporter();
 
-								CSVReader reader;
-								try {
-									reader = new CSVReader(path);
+							CSVReader reader;
+							try {
+								reader = new CSVReader(path);
 
-									final Route importRoute = routeImporter.importRoute(reader, context);
+								final Route importRoute = routeImporter.importRoute(reader, context);
 
-									context.run();
+								context.run();
 
-									importRoute.setName(newName);
-									importRoute.setCanal(false);
+								importRoute.setName(newName);
+								importRoute.setCanal(false);
 
 								getJointModelEditorPart().setDisableUpdates(true);
 								getJointModelEditorPart().getEditingDomain().getCommandStack()
@@ -245,7 +245,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 							} catch (final IOException e) {
 								log.error(e.getMessage(), e);
 							}
-						
+						}
+
 					};
 
 					importNew2.setText("Import direct distances...");
