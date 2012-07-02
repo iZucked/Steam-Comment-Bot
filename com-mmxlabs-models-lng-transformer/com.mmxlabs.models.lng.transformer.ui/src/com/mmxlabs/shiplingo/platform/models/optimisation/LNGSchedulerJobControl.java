@@ -167,7 +167,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
 		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
 		command.append(derive(editingDomain, schedule, inputModel, cargoModel));
-		 command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 
 		if (!command.canExecute()) {
 			throw new RuntimeException("Unable to execute save schedule command");
@@ -179,7 +179,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		// However the dirty adapter sets dirty to true outside of a command...
 		//
 		//
-//		scheduleModel.setDirty(false);
+		scheduleModel.setDirty(false);
 		return schedule;
 	}
 
