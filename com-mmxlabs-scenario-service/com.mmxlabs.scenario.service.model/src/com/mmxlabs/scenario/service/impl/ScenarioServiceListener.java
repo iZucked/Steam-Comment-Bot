@@ -42,4 +42,14 @@ public class ScenarioServiceListener implements IScenarioServiceListener {
 	public void onPostScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 
 	}
+
+	@Override
+	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+	}
+
+	@Override
+	public void onPostScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+	}
 }

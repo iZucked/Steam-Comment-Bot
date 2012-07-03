@@ -59,4 +59,20 @@ public interface IScenarioServiceListener {
 	 * @param scenarioInstance
 	 */
 	public void onPostScenarioInstanceDelete(IScenarioService scenarioService, ScenarioInstance scenarioInstance);
+
+	/**
+	 * Callback fired after a {@link ScenarioInstance} has been unloaded via {@link IScenarioService#save(ScenarioInstance)}. NOTE: Unload is currently not part of API
+	 * 
+	 * @param scenarioService
+	 * @param scenarioInstance
+	 */
+	void onPreScenarioInstanceUnload(IScenarioService scenarioService, ScenarioInstance scenarioInstance);
+
+	/**
+	 * Callback fired after a {@link ScenarioInstance} has been unloaded via {@link IScenarioService#save(ScenarioInstance)}. NOTE: Unload is currently not part of API
+	 * 
+	 * @param scenarioService
+	 * @param scenarioInstance
+	 */
+	void onPostScenarioInstanceUnload(IScenarioService scenarioService, ScenarioInstance scenarioInstance);
 }
