@@ -60,6 +60,7 @@
    </features>
 
    <configurations>
+      <plugin id="com.mmxlabs.models.lng.analytics.editor" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-common" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-core" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
