@@ -48,6 +48,10 @@ public class VesselAssignmentConstraint extends AbstractModelConstraint {
 
 			final UUIDObject assignedObject = assignment.getAssignedObject();
 
+			if (assignment.getAssignment() == null) {
+				return ctx.createSuccessStatus();
+			}
+			
 			final Set<AVessel> vessels = SetUtils.getVessels(assignment.getAssignment());
 
 			final Set<APort> restrictedPorts = new HashSet<APort>();
