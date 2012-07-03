@@ -5,23 +5,35 @@ import java.util.Map;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 
-public class LiveEvaluatorServiceListener {
+public class LiveEvaluatorServiceListener implements ILiveEvaluatorService {
 
 	private final Map<IScenarioService, LiveEvaluatorScenarioServiceListener> evaluatorMap = new HashMap<IScenarioService, LiveEvaluatorScenarioServiceListener>();
 
-	public void addScenarioService(IScenarioService scenarioService) {
-		final LiveEvaluatorScenarioServiceListener listener = new LiveEvaluatorScenarioServiceListener();
+	private boolean enabled = true;
+
+	public void addScenarioService(final IScenarioService scenarioService) {
+		final LiveEvaluatorScenarioServiceListener listener = new LiveEvaluatorScenarioServiceListener(enabled);
 		scenarioService.addScenarioServiceListener(listener);
 		evaluatorMap.put(scenarioService, listener);
+		listener.hookExisting(scenarioService);
 	}
 
-	public void removeScenarioService(IScenarioService scenarioService) {
+	public void removeScenarioService(final IScenarioService scenarioService) {
 		final LiveEvaluatorScenarioServiceListener listener = evaluatorMap.get(scenarioService);
 		scenarioService.removeScenarioServiceListener(listener);
 	}
-	
-	
-	public void setLiveEvaluatorEnabled(boolean enabled) {
-		
+
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.lng.analytics.ui.liveeval.ILiveEvaulatorService#setLiveEvaluatorEnabled(boolean)
+	 */
+	@Override
+	public void setLiveEvaluatorEnabled(final boolean enabled) {
+
+		this.enabled = false;
+		for (final LiveEvaluatorScenarioServiceListener l : evaluatorMap.values()) {
+			l.setEnabled(enabled);
+		}
+
+		System.out.println("Setting state to " + enabled);
 	}
 }
