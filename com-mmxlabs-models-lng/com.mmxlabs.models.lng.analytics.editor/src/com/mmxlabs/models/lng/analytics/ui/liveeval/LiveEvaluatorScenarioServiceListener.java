@@ -1,11 +1,10 @@
-package com.mmxlabs.models.lng.analytics.presentation;
+package com.mmxlabs.models.lng.analytics.ui.liveeval;
 
 import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.analytics.ui.liveeval.LiveEvaluator;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;

@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.analytics.presentation;
+package com.mmxlabs.models.lng.analytics.ui.liveeval;
 
 import java.util.HashMap;
 import java.util.Map;
