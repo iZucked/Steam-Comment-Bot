@@ -29,6 +29,20 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 			}
 		}
 	}
+	
+	@Override
+	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+		final EObject obj = scenarioInstance.getInstance();
+		if (obj instanceof MMXRootObject) {
+			final MMXRootObject rootObject = (MMXRootObject) obj;
+			final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
+			if (schedule != null) {
+				final LiveEvaluator evaluator = evaluatorMap.get(schedule);
+				schedule.eAdapters().remove(evaluator);
+				evaluatorMap.remove(schedule);
+			}
+		}
+	}
 
 	public void dispose() {
 		for (final Map.Entry<ScheduleModel, LiveEvaluator> e : evaluatorMap.entrySet()) {
