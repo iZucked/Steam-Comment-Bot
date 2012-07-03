@@ -20,46 +20,37 @@ import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 /**
- * This is the central singleton for the Analytics editor plugin.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the central singleton for the Analytics editor plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
+ * 
  * @generated
  */
 public final class AnalyticsEditorPlugin extends EMFPlugin {
 	/**
-	 * Keep track of the singleton.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public static final AnalyticsEditorPlugin INSTANCE = new AnalyticsEditorPlugin();
-	
+
 	/**
-	 * Keep track of the singleton.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	private static Implementation plugin;
 
 	/**
-	 * Create the instance.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Create the instance. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated
 	 */
 	public AnalyticsEditorPlugin() {
-		super
-			(new ResourceLocator [] {
-				LNGTypesEditPlugin.INSTANCE,
-				MmxcoreEditPlugin.INSTANCE,
-			});
+		super(new ResourceLocator[] { LNGTypesEditPlugin.INSTANCE, MmxcoreEditPlugin.INSTANCE, });
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the singleton instance.
 	 * @generated
 	 */
@@ -67,64 +58,72 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	public ResourceLocator getPluginResourceLocator() {
 		return plugin;
 	}
-	
+
 	/**
-	 * Returns the singleton instance of the Eclipse plugin.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @return the singleton instance.
 	 * @generated
 	 */
 	public static Implementation getPlugin() {
 		return plugin;
 	}
-	
+
 	/**
-	 * The actual implementation of the Eclipse <b>Plugin</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The actual implementation of the Eclipse <b>Plugin</b>. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated NO
 	 */
 	public static class Implementation extends EclipseUIPlugin {
 		private ServiceRegistration<IModelCommandProvider> commandService;
+
 		private ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator> evaluatorTracker;
-	
+		private LiveEvaluatorServiceListener scenarioServiceListener = new LiveEvaluatorServiceListener();
+
 		/**
-		 * Creates an instance.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		 * Creates an instance. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * 
 		 * @generated
 		 */
 		public Implementation() {
 			super();
-	
+
 			// Remember the static instance.
 			//
 			plugin = this;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 		 */
 		@Override
-		public void start(BundleContext context) throws Exception {
+		public void start(final BundleContext context) throws Exception {
 			super.start(context);
-			IModelCommandProvider commandProvider = new UnitCostMatrixCommandProvider();
-			commandService = context.registerService(IModelCommandProvider.class, commandProvider , null);
+			final IModelCommandProvider commandProvider = new UnitCostMatrixCommandProvider();
+			commandService = context.registerService(IModelCommandProvider.class, commandProvider, null);
 			evaluatorTracker = new ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator>(context, IScenarioInstanceEvaluator.class, null);
 			evaluatorTracker.open();
+			
+			scenarioServiceListener.init(context);
+
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 		 */
 		@Override
-		public void stop(BundleContext context) throws Exception {
+		public void stop(final BundleContext context) throws Exception {
+			scenarioServiceListener.dispose();
+
 			commandService.unregister();
 			evaluatorTracker.close();
 			super.stop(context);
 		}
-		
+
 		public IScenarioInstanceEvaluator getResourceEvaluator() {
 			return evaluatorTracker.getService();
 		}
