@@ -5,6 +5,7 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,6 +17,8 @@ import org.eclipse.jface.viewers.Viewer;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -130,6 +133,31 @@ public class KPIContentProvider implements IStructuredContentProvider {
 						final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
 						lateness += (late / 1000 / 60 / 60);
 					}
+				} else if (evt instanceof PortVisit) {
+					final PortVisit visit = (PortVisit) evt;
+					final Vessel vessel = seq.getVessel();
+					if (vessel == null) {
+						continue;
+					}
+					final VesselAvailability availability = vessel.getAvailability();
+					if (availability == null) {
+						continue;
+					}
+					if (seq.getEvents().indexOf(visit) == 0) {
+
+						final Date startBy = availability.getStartBy();
+						if (startBy != null && visit.getStart().after(startBy)) {
+							final long late = visit.getStart().getTime() - startBy.getTime();
+							lateness += (late / 1000 / 60 / 60);
+						}
+					} else if (seq.getEvents().indexOf(visit) == seq.getEvents().size() - 1) {
+						final Date endBy = availability.getEndBy();
+						if (endBy != null && visit.getStart().after(endBy)) {
+							final long late = visit.getStart().getTime() - endBy.getTime();
+							lateness += (late / 1000 / 60 / 60);
+						}
+					}
+					// setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
 				}
 			}
 		}
