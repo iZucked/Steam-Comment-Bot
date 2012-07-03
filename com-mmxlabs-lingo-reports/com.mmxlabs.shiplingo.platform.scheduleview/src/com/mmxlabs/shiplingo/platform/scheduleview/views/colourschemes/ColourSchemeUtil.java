@@ -55,7 +55,7 @@ public class ColourSchemeUtil {
 	
 	public static boolean isLocked(final Event event, GanttChartViewer viewer) {
 		// Stage 1: Find the cargo
-		final Sequence sequence = (Sequence) event.eContainer();
+		final Sequence sequence = event.getSequence();
 		int index = sequence.getEvents().indexOf(event);
 		Cargo cargo = null;
 		while (cargo == null && index >= 0 ) {
@@ -93,7 +93,7 @@ public class ColourSchemeUtil {
 	}
 	
 	static Idle findIdleForJourney(final Journey journey) {
-		final Sequence sequence = (Sequence) journey.eContainer();
+		final Sequence sequence = journey.getSequence();
 		final int index = sequence.getEvents().indexOf(journey);
 		if (index != -1 && index + 1 < sequence.getEvents().size()) {
 			final Event event = sequence.getEvents().get(index + 1);
@@ -107,7 +107,7 @@ public class ColourSchemeUtil {
 	
 	
 	static Journey findJourneyForIdle(final Idle idle) {
-		final Sequence sequence = (Sequence) idle.eContainer();
+		final Sequence sequence = idle.getSequence();
 		final int index = sequence.getEvents().indexOf(idle);
 		if (index != -1 && index - 1 >= 0) {
 			final Event event = sequence.getEvents().get(index - 1);

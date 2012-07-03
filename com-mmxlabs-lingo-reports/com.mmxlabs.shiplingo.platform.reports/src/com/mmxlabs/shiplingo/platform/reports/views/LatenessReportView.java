@@ -142,7 +142,7 @@ public class LatenessReportView extends EMFReportView {
 			return c;
 		} else if (object instanceof PortVisit) {
 			final PortVisit visit = (PortVisit) object;
-			final Sequence seq = (Sequence) visit.eContainer();
+			final Sequence seq = visit.getSequence();
 			final Vessel vessel = seq.getVessel();
 			if (vessel == null) {
 				return null;
@@ -231,7 +231,7 @@ public class LatenessReportView extends EMFReportView {
 					}
 				} else if (e instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) e;
-					final Sequence seq = (Sequence) visit.eContainer();
+					final Sequence seq = visit.getSequence();
 					final Vessel vessel = seq.getVessel();
 					if (vessel == null) {
 						return false;
