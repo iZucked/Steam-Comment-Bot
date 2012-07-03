@@ -30,7 +30,7 @@
     <eOperations name="isFleetVessel" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eOperations name="isTimeCharterVessel" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="events" upperBound="-1"
-        eType="#//Event" containment="true"/>
+        eType="#//Event" containment="true" eOpposite="#//Event/sequence"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel"
         unsettable="true"/>
@@ -58,6 +58,8 @@
         eOpposite="#//Event/nextEvent"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="nextEvent" eType="#//Event"
         eOpposite="#//Event/previousEvent"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="sequence" eType="#//Sequence"
+        eOpposite="#//Sequence/events"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SlotVisit" eSuperTypes="#//Event #//FuelUsage #//PortVisit">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"

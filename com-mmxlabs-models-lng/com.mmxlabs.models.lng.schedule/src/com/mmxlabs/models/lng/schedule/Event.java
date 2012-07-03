@@ -24,6 +24,7 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getPreviousEvent <em>Previous Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getNextEvent <em>Next Event</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Event#getSequence <em>Sequence</em>}</li>
  * </ul>
  * </p>
  *
@@ -165,6 +166,34 @@ public interface Event extends MMXObject, ITimezoneProvider {
 	 * @generated
 	 */
 	void setNextEvent(Event value);
+
+	/**
+	 * Returns the value of the '<em><b>Sequence</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.Sequence#getEvents <em>Events</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sequence</em>' container reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sequence</em>' container reference.
+	 * @see #setSequence(Sequence)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getEvent_Sequence()
+	 * @see com.mmxlabs.models.lng.schedule.Sequence#getEvents
+	 * @model opposite="events" transient="false"
+	 * @generated
+	 */
+	Sequence getSequence();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Event#getSequence <em>Sequence</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sequence</em>' container reference.
+	 * @see #getSequence()
+	 * @generated
+	 */
+	void setSequence(Sequence value);
 
 	/**
 	 * <!-- begin-user-doc -->

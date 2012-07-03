@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -182,7 +183,7 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 */
 	public EList<Event> getEvents() {
 		if (events == null) {
-			events = new EObjectContainmentEList<Event>(Event.class, this, SchedulePackage.SEQUENCE__EVENTS);
+			events = new EObjectContainmentWithInverseEList<Event>(Event.class, this, SchedulePackage.SEQUENCE__EVENTS, SchedulePackage.EVENT__SEQUENCE);
 		}
 		return events;
 	}
@@ -450,6 +451,21 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 */
 	public boolean isTimeCharterVessel() {
 		return isSetVessel() && getVessel().isSetTimeCharterRate();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case SchedulePackage.SEQUENCE__EVENTS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getEvents()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**

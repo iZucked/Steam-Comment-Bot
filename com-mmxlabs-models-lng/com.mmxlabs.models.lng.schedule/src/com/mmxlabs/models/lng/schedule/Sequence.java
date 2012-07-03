@@ -34,6 +34,7 @@ public interface Sequence extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Events</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.Event}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.schedule.Event#getSequence <em>Sequence</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Events</em>' containment reference isn't clear,
@@ -42,7 +43,8 @@ public interface Sequence extends MMXObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Events</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_Events()
-	 * @model containment="true"
+	 * @see com.mmxlabs.models.lng.schedule.Event#getSequence
+	 * @model opposite="sequence" containment="true"
 	 * @generated
 	 */
 	EList<Event> getEvents();

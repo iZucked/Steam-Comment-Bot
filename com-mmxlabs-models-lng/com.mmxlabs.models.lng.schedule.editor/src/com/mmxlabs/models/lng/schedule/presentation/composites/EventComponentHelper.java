@@ -73,6 +73,7 @@ public class EventComponentHelper extends BaseComponentHelper {
 		add_portEditor(detailComposite, topClass);
 		add_previousEventEditor(detailComposite, topClass);
 		add_nextEventEditor(detailComposite, topClass);
+		add_sequenceEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the start feature on Event
@@ -115,5 +116,14 @@ public class EventComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_nextEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__NEXT_EVENT));
+	}
+
+	/**
+	 * Create the editor for the sequence feature on Event
+	 *
+	 * @generated NOT
+	 */
+	protected void add_sequenceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.EVENT__SEQUENCE));
 	}
 }

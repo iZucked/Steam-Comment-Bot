@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -38,6 +39,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getPreviousEvent <em>Previous Event</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getNextEvent <em>Next Event</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.EventImpl#getSequence <em>Sequence</em>}</li>
  * </ul>
  * </p>
  *
@@ -336,6 +338,47 @@ public class EventImpl extends MMXObjectImpl implements Event {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Sequence getSequence() {
+		if (eContainerFeatureID() != SchedulePackage.EVENT__SEQUENCE) return null;
+		return (Sequence)eContainer();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetSequence(Sequence newSequence, NotificationChain msgs) {
+		msgs = eBasicSetContainer((InternalEObject)newSequence, SchedulePackage.EVENT__SEQUENCE, msgs);
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSequence(Sequence newSequence) {
+		if (newSequence != eInternalContainer() || (eContainerFeatureID() != SchedulePackage.EVENT__SEQUENCE && newSequence != null)) {
+			if (EcoreUtil.isAncestor(this, newSequence))
+				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+			NotificationChain msgs = null;
+			if (eInternalContainer() != null)
+				msgs = eBasicRemoveFromContainer(msgs);
+			if (newSequence != null)
+				msgs = ((InternalEObject)newSequence).eInverseAdd(this, SchedulePackage.SEQUENCE__EVENTS, Sequence.class, msgs);
+			msgs = basicSetSequence(newSequence, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.EVENT__SEQUENCE, newSequence, newSequence));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public int getDuration() {
@@ -420,6 +463,10 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				if (nextEvent != null)
 					msgs = ((InternalEObject)nextEvent).eInverseRemove(this, SchedulePackage.EVENT__PREVIOUS_EVENT, Event.class, msgs);
 				return basicSetNextEvent((Event)otherEnd, msgs);
+			case SchedulePackage.EVENT__SEQUENCE:
+				if (eInternalContainer() != null)
+					msgs = eBasicRemoveFromContainer(msgs);
+				return basicSetSequence((Sequence)otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -436,8 +483,24 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return basicSetPreviousEvent(null, msgs);
 			case SchedulePackage.EVENT__NEXT_EVENT:
 				return basicSetNextEvent(null, msgs);
+			case SchedulePackage.EVENT__SEQUENCE:
+				return basicSetSequence(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
+		switch (eContainerFeatureID()) {
+			case SchedulePackage.EVENT__SEQUENCE:
+				return eInternalContainer().eInverseRemove(this, SchedulePackage.SEQUENCE__EVENTS, Sequence.class, msgs);
+		}
+		return super.eBasicRemoveFromContainerFeature(msgs);
 	}
 
 	/**
@@ -461,6 +524,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 			case SchedulePackage.EVENT__NEXT_EVENT:
 				if (resolve) return getNextEvent();
 				return basicGetNextEvent();
+			case SchedulePackage.EVENT__SEQUENCE:
+				return getSequence();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -487,6 +552,9 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return;
 			case SchedulePackage.EVENT__NEXT_EVENT:
 				setNextEvent((Event)newValue);
+				return;
+			case SchedulePackage.EVENT__SEQUENCE:
+				setSequence((Sequence)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -515,6 +583,9 @@ public class EventImpl extends MMXObjectImpl implements Event {
 			case SchedulePackage.EVENT__NEXT_EVENT:
 				setNextEvent((Event)null);
 				return;
+			case SchedulePackage.EVENT__SEQUENCE:
+				setSequence((Sequence)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -537,6 +608,8 @@ public class EventImpl extends MMXObjectImpl implements Event {
 				return previousEvent != null;
 			case SchedulePackage.EVENT__NEXT_EVENT:
 				return nextEvent != null;
+			case SchedulePackage.EVENT__SEQUENCE:
+				return getSequence() != null;
 		}
 		return super.eIsSet(featureID);
 	}

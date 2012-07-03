@@ -670,13 +670,22 @@ public interface SchedulePackage extends EPackage {
 	int EVENT__NEXT_EVENT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EVENT__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Event</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int EVENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -894,6 +903,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int SLOT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT_VISIT__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -1158,6 +1176,15 @@ public interface SchedulePackage extends EPackage {
 	int VESSEL_EVENT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT_VISIT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1400,6 +1427,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int JOURNEY__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int JOURNEY__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -1698,6 +1734,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int IDLE__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int IDLE__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2188,6 +2233,15 @@ public interface SchedulePackage extends EPackage {
 	 * @ordered
 	 */
 	int COOLDOWN__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COOLDOWN__SEQUENCE = EVENT__SEQUENCE;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -3158,6 +3212,15 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT__NEXT_EVENT = EVENT__NEXT_EVENT;
 
 	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PORT_VISIT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
 	 * The feature id for the '<em><b>Port Cost</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3944,6 +4007,17 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getEvent_NextEvent();
+
+	/**
+	 * Returns the meta object for the container reference '{@link com.mmxlabs.models.lng.schedule.Event#getSequence <em>Sequence</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Sequence</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Event#getSequence()
+	 * @see #getEvent()
+	 * @generated
+	 */
+	EReference getEvent_Sequence();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Event#getDuration() <em>Get Duration</em>}' operation.
@@ -5031,6 +5105,14 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference EVENT__NEXT_EVENT = eINSTANCE.getEvent_NextEvent();
+
+		/**
+		 * The meta object literal for the '<em><b>Sequence</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference EVENT__SEQUENCE = eINSTANCE.getEvent_Sequence();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Duration</b></em>' operation.
