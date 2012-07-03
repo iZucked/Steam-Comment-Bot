@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.analytics.presentation.LiveEvaluatorServiceListener">
+   <implementation class="com.mmxlabs.models.lng.analytics.presentation.LiveEvaluatorServiceListener"/>
+   <reference bind="addScenarioService" cardinality="0..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="removeScenarioService"/>
+</scr:component>

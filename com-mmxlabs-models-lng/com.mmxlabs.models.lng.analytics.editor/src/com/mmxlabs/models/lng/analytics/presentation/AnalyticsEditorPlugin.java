@@ -78,7 +78,6 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		private ServiceRegistration<IModelCommandProvider> commandService;
 
 		private ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator> evaluatorTracker;
-		private LiveEvaluatorServiceListener scenarioServiceListener = new LiveEvaluatorServiceListener();
 
 		/**
 		 * Creates an instance. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -105,9 +104,6 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 			commandService = context.registerService(IModelCommandProvider.class, commandProvider, null);
 			evaluatorTracker = new ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator>(context, IScenarioInstanceEvaluator.class, null);
 			evaluatorTracker.open();
-			
-			scenarioServiceListener.init(context);
-
 		}
 
 		/*
@@ -117,8 +113,6 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		 */
 		@Override
 		public void stop(final BundleContext context) throws Exception {
-			scenarioServiceListener.dispose();
-
 			commandService.unregister();
 			evaluatorTracker.close();
 			super.stop(context);
