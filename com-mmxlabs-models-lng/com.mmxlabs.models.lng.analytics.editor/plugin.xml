@@ -132,4 +132,29 @@
           referenceEClass="com.mmxlabs.models.lng.types.APort">
     </valueProvider>
  </extension>
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          defaultHandler="com.mmxlabs.models.lng.analytics.ui.liveeval.LiveEvaluatorStateCommandHandler"
+          id="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
+          name="Toggle Live Evaluator">
+       <state
+             class="org.eclipse.jface.commands.ToggleState:true"
+             id="org.eclipse.ui.commands.toggleState">
+       </state>
+    </command>
+ </extension>
+ <extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+          locationURI="toolbar:com.mmxlabs.scenario.service.ui.navigator">
+       <command
+             commandId="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
+             icon="icons/bg-eval.gif"
+             label="Toggle Background Evaluation"
+             style="toggle">
+       </command>
+    </menuContribution>
+ </extension>
 </plugin>

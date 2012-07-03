@@ -9,11 +9,46 @@ import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListener {
 
 	private final Map<ScheduleModel, LiveEvaluator> evaluatorMap = new WeakHashMap<ScheduleModel, LiveEvaluator>();
+
+	private final boolean enabled;
+
+	public LiveEvaluatorScenarioServiceListener(final boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public LiveEvaluatorScenarioServiceListener() {
+		this(true);
+	}
+
+	public void hookExisting(final IScenarioService scenarioService) {
+		hookExisting(scenarioService.getServiceModel());
+	}
+
+	private void hookExisting(final Container container) {
+		for (final Container c : container.getElements()) {
+			if (c instanceof ScenarioInstance) {
+				final ScenarioInstance scenarioInstance = (ScenarioInstance) c;
+				final EObject obj = scenarioInstance.getInstance();
+				if (obj instanceof MMXRootObject) {
+					final MMXRootObject rootObject = (MMXRootObject) obj;
+					final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
+					if (schedule != null) {
+						final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance);
+						evaluator.setEnabled(enabled);
+						schedule.eAdapters().add(evaluator);
+						evaluatorMap.put(schedule, evaluator);
+					}
+				}
+			}
+			hookExisting(c);
+		}
+	}
 
 	@Override
 	public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
@@ -23,12 +58,13 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 			final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
 			if (schedule != null) {
 				final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance);
+				evaluator.setEnabled(enabled);
 				schedule.eAdapters().add(evaluator);
 				evaluatorMap.put(schedule, evaluator);
 			}
 		}
 	}
-	
+
 	@Override
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 		final EObject obj = scenarioInstance.getInstance();
@@ -52,5 +88,11 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 			}
 		}
 		evaluatorMap.clear();
+	}
+
+	public void setEnabled(final boolean enabled) {
+		for (final LiveEvaluator evaluator : evaluatorMap.values()) {
+			evaluator.setEnabled(enabled);
+		}
 	}
 }
