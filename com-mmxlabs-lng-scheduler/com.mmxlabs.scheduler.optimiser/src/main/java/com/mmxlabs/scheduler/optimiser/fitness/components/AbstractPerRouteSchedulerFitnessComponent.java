@@ -23,7 +23,7 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 
 	private final Map<IResource, Long> acceptedFitnesses = new HashMap<IResource, Long>();
 
-	private IResource currentResource;
+	protected IResource currentResource;
 	private long accumulator = 0;
 
 	public AbstractPerRouteSchedulerFitnessComponent(final String name, final IFitnessCore core) {

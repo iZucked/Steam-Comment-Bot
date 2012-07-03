@@ -10,14 +10,16 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
-import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -28,8 +30,9 @@ public class LatenessComponentTest {
 	@Test
 	public void testLatenessComponent() {
 		final String name = "name";
+		final String dcp = "dcp";
 		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore();
-		final LatenessComponent c = new LatenessComponent(name, core);
+		final LatenessComponent c = new LatenessComponent(name, dcp, core);
 
 		Assert.assertSame(name, c.getName());
 		Assert.assertSame(core, c.getFitnessCore());
@@ -39,25 +42,18 @@ public class LatenessComponentTest {
 	public void testInit() {
 
 		final String name = "name";
+		final String dcp = "dcp";
 		final CargoSchedulerFitnessCore core = null;
-		final LatenessComponent c = new LatenessComponent(name, core);
+		final LatenessComponent c = new LatenessComponent(name, dcp, core);
 
 		final IOptimisationData data = context.mock(IOptimisationData.class);
-
-		final String key = "provider-discount-curve";
-		final String componentName = "name";
-
-		final Class<IDiscountCurveProvider> classDiscountCurveProvider = IDiscountCurveProvider.class;
-		final IDiscountCurveProvider discountCurveProvider = context.mock(IDiscountCurveProvider.class);
-		final ICurve curve = context.mock(ICurve.class);
-
+		
+		final IStartEndRequirementProvider startEndRequirementProvider = context.mock(IStartEndRequirementProvider.class);
+		
 		context.checking(new Expectations() {
 			{
-				exactly(1).of(data).getDataComponentProvider(key, classDiscountCurveProvider);
-				will(returnValue(discountCurveProvider));
-
-				exactly(1).of(discountCurveProvider).getDiscountCurve(componentName);
-				will(returnValue(curve));
+				exactly(1).of(data).getDataComponentProvider(dcp, IStartEndRequirementProvider.class);
+				will(returnValue(startEndRequirementProvider));
 			}
 		});
 
@@ -84,14 +80,50 @@ public class LatenessComponentTest {
 		final int dischargeLateTime = 1;
 
 		final String name = "name";
+		final String dcp = "dcp";
 		final CargoSchedulerFitnessCore core = null;
-		final LatenessComponent c = new LatenessComponent(name, core);
-		c.init(null);
+		final LatenessComponent c = new LatenessComponent(name, dcp, core);
+		
+		final IOptimisationData data = context.mock(IOptimisationData.class);
+		
+		final IStartEndRequirementProvider startEndRequirementProvider = context.mock(IStartEndRequirementProvider.class);
+		
+		final IResource resource = context.mock(IResource.class);
+
+		final IStartEndRequirement startRequirement = context.mock(IStartEndRequirement.class, "Start");
+		final IStartEndRequirement endRequirement = context.mock(IStartEndRequirement.class, "End");
+		
+		context.checking(new Expectations() {
+			{
+				
+				exactly(1).of(data).getDataComponentProvider(dcp, IStartEndRequirementProvider.class);
+				will(returnValue(startEndRequirementProvider));
+			
+				exactly(1).of(startEndRequirementProvider).getStartRequirement(resource);
+				will(returnValue(startRequirement));
+				exactly(1).of(startEndRequirementProvider).getEndRequirement(resource);
+				will(returnValue(endRequirement));
+				
+				allowing(startRequirement).getTimeWindow();
+				allowing(endRequirement).getTimeWindow();
+				
+			}
+		});
+
+		c.init(data);
 
 		// set up time windows from load/discharge end/start times above
 		final TimeWindow window1 = new TimeWindow(loadStartTime, loadEndTime);
 		final TimeWindow window2 = new TimeWindow(dischargeStartTime, dischargeEndTime);
 
+		final PortDetails startDetails = new PortDetails();
+		final StartPortSlot startSlot = new StartPortSlot(0, 0, 0);
+		startDetails.setPortSlot(startSlot);
+		final PortDetails endDetails = new PortDetails();
+		final EndPortSlot endSlot = new EndPortSlot();
+		endDetails.setPortSlot(endSlot);
+
+		
 		final LoadSlot loadSlot = new LoadSlot();
 		loadSlot.setTimeWindow(window1);
 
@@ -104,17 +136,18 @@ public class LatenessComponentTest {
 		final PortDetails dischargeDetails = new PortDetails();
 		dischargeDetails.setPortSlot(dischargeSlot);
 
-		final Object[] routeSequence = new Object[] { loadDetails, null, dischargeDetails };
+		final Object[] routeSequence = new Object[] { startDetails, loadDetails, null, dischargeDetails, endDetails };
 		final VoyagePlan voyagePlan = new VoyagePlan();
 		voyagePlan.setSequence(routeSequence);
 
-		final IResource resource = context.mock(IResource.class);
 
 		c.startEvaluation();
 		c.startSequence(resource, true);
 		c.nextVoyagePlan(voyagePlan, voyageStartTime);
+		c.nextObject(startDetails, 0);
 		c.nextObject(loadDetails, loadEndTime + loadLateTime);
 		c.nextObject(dischargeDetails, dischargeEndTime + dischargeLateTime);
+		c.nextObject(endDetails, 0);
 
 		c.endSequence();
 

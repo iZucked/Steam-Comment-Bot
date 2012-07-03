@@ -4,11 +4,19 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 
 /**
@@ -22,9 +30,26 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 
 	private static final int PENALTY = 1000000;
 	private long accumulator = 0;
+	private final String dcpStartendrequirementprovider;
+	@Inject
+	private IStartEndRequirementProvider startEndRequirementProvider;
 
-	public LatenessComponent(final String name, final CargoSchedulerFitnessCore core) {
+	public IStartEndRequirementProvider getStartEndRequirementProvider() {
+		return startEndRequirementProvider;
+	}
+
+	public void setStartEndRequirementProvider(final IStartEndRequirementProvider startEndRequirementProvider) {
+		this.startEndRequirementProvider = startEndRequirementProvider;
+	}
+
+	public LatenessComponent(final String name, final String dcpStartendrequirementprovider, final CargoSchedulerFitnessCore core) {
 		super(name, core);
+		this.dcpStartendrequirementprovider = dcpStartendrequirementprovider;
+	}
+
+	@Override
+	public void init(final IOptimisationData data) {
+		setStartEndRequirementProvider(data.getDataComponentProvider(dcpStartendrequirementprovider, IStartEndRequirementProvider.class));
 	}
 
 	/*
@@ -47,7 +72,18 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
-			final ITimeWindow tw = detail.getPortSlot().getTimeWindow();
+			final IPortSlot portSlot = detail.getPortSlot();
+			final ITimeWindow tw;
+
+			if (portSlot instanceof StartPortSlot) {
+				final IStartEndRequirement req = startEndRequirementProvider.getStartRequirement(currentResource);
+				tw = req.getTimeWindow();
+			} else if (portSlot instanceof EndPortSlot) {
+				final IStartEndRequirement req = startEndRequirementProvider.getEndRequirement(currentResource);
+				tw = req.getTimeWindow();
+			} else {
+				tw = portSlot.getTimeWindow();
+			}
 
 			if ((tw != null) && (time > tw.getEnd())) {
 				// addDiscountedValue(time, 1000000*(time - tw.getEnd()));

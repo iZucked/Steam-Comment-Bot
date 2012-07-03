@@ -61,7 +61,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		allComponents = new ArrayList<ICargoFitnessComponent>();
 		allocationComponents = new ArrayList<ICargoAllocationFitnessComponent>();
 		schedulerComponents = new ArrayList<ICargoSchedulerFitnessComponent>(5);
-		schedulerComponents.add(new LatenessComponent(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, this));
+		schedulerComponents.add(new LatenessComponent(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, SchedulerConstants.DCP_startEndRequirementProvider, this));
 
 		schedulerComponents.add(new CapacityComponent(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, this));
 
