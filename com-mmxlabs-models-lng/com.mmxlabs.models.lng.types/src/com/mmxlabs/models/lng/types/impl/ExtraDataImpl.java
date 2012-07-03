@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Extra Data</b></em>'.
+ * @since 2.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -482,7 +483,6 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	 * @generated
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public Object eInvoke(int operationID, EList<?> arguments)
 			throws InvocationTargetException {
 		switch (operationID) {

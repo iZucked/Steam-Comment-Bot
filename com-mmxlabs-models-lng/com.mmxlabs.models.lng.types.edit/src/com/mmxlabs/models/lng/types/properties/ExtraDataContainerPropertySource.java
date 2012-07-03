@@ -9,6 +9,9 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 
+/**
+ * @since 2.0
+ */
 public class ExtraDataContainerPropertySource implements IPropertySource {
 	private ExtraDataContainer container;
 

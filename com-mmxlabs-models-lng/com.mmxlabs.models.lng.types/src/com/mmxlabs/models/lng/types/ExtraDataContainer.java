@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Extra Data Container</b></em>'.
+ * @since 2.0
  * <!-- end-user-doc -->
  *
  * <p>

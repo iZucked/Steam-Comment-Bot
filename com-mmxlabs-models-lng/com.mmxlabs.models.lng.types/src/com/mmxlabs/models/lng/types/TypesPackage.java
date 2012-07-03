@@ -2818,6 +2818,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl <em>Extra Data Container</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataContainer()
@@ -2828,6 +2829,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2837,6 +2839,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Extra Data Container</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2846,6 +2849,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Data With Path</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2855,6 +2859,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Data With Key</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2864,6 +2869,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2873,6 +2879,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2882,6 +2889,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2891,6 +2899,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Extra Data Container</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2900,6 +2909,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl <em>Extra Data</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.types.impl.ExtraDataImpl
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraData()
@@ -2910,6 +2920,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2919,6 +2930,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Key</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2928,6 +2940,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2937,6 +2950,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2946,6 +2960,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Format</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2955,6 +2970,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Format Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2964,6 +2980,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Extra Data</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2973,6 +2990,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Data With Path</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2982,6 +3000,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Data With Key</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2991,6 +3010,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3000,6 +3020,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3009,6 +3030,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3018,6 +3040,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Value As</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3027,6 +3050,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Format Value</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3036,6 +3060,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Extra Data</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -3055,6 +3080,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}' enum.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.types.ExtraDataFormatType
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataFormatType()
@@ -3065,6 +3091,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '<em>Serializable Object</em>' data type.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see java.io.Serializable
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getSerializableObject()
@@ -3075,6 +3102,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see java.lang.Iterable
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
@@ -3328,6 +3356,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ExtraData <em>Extra Data</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Extra Data</em>'.
 	 * @see com.mmxlabs.models.lng.types.ExtraData
@@ -3338,6 +3367,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getKey <em>Key</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Key</em>'.
 	 * @see com.mmxlabs.models.lng.types.ExtraData#getKey()
@@ -3349,6 +3379,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getName <em>Name</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see com.mmxlabs.models.lng.types.ExtraData#getName()
@@ -3360,6 +3391,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getValue <em>Value</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see com.mmxlabs.models.lng.types.ExtraData#getValue()
@@ -3371,6 +3403,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getFormat <em>Format</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Format</em>'.
 	 * @see com.mmxlabs.models.lng.types.ExtraData#getFormat()
@@ -3382,6 +3415,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.types.ExtraData#getFormatType <em>Format Type</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Format Type</em>'.
 	 * @see com.mmxlabs.models.lng.types.ExtraData#getFormatType()
@@ -3393,6 +3427,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraData#getValueAs(java.lang.Class) <em>Get Value As</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Value As</em>' operation.
 	 * @see com.mmxlabs.models.lng.types.ExtraData#getValueAs(java.lang.Class)
@@ -3403,6 +3438,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraData#formatValue() <em>Format Value</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Format Value</em>' operation.
 	 * @see com.mmxlabs.models.lng.types.ExtraData#formatValue()
@@ -3413,6 +3449,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ExtraDataContainer <em>Extra Data Container</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Extra Data Container</em>'.
 	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer
@@ -3423,6 +3460,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getExtraData <em>Extra Data</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Extra Data</em>'.
 	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#getExtraData()
@@ -3434,6 +3472,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getDataWithPath(java.lang.Iterable) <em>Get Data With Path</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Data With Path</em>' operation.
 	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#getDataWithPath(java.lang.Iterable)
@@ -3444,6 +3483,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getDataWithKey(java.lang.String) <em>Get Data With Key</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Data With Key</em>' operation.
 	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#getDataWithKey(java.lang.String)
@@ -3454,6 +3494,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String) <em>Add Extra Data</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Add Extra Data</em>' operation.
 	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String)
@@ -3464,6 +3505,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, com.mmxlabs.models.lng.types.ExtraDataFormatType) <em>Add Extra Data</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Add Extra Data</em>' operation.
 	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#addExtraData(java.lang.String, java.lang.String, java.io.Serializable, com.mmxlabs.models.lng.types.ExtraDataFormatType)
@@ -3474,6 +3516,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.types.ExtraDataContainer#getValueWithPathAs(java.lang.Iterable, java.lang.Class, java.lang.Object) <em>Get Value With Path As</em>}' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the '<em>Get Value With Path As</em>' operation.
 	 * @see com.mmxlabs.models.lng.types.ExtraDataContainer#getValueWithPathAs(java.lang.Iterable, java.lang.Class, java.lang.Object)
@@ -3494,6 +3537,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for enum '<em>Extra Data Format Type</em>'.
 	 * @see com.mmxlabs.models.lng.types.ExtraDataFormatType
@@ -3504,6 +3548,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for data type '{@link java.io.Serializable <em>Serializable Object</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>Serializable Object</em>'.
 	 * @see java.io.Serializable
@@ -3515,6 +3560,7 @@ public interface TypesPackage extends EPackage {
 	/**
 	 * Returns the meta object for data type '{@link java.lang.Iterable <em>Iterable</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for data type '<em>Iterable</em>'.
 	 * @see java.lang.Iterable
@@ -3786,6 +3832,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataImpl <em>Extra Data</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.types.impl.ExtraDataImpl
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraData()
@@ -3796,6 +3843,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3804,6 +3852,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3812,6 +3861,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3820,6 +3870,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Format</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3828,6 +3879,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Format Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3837,6 +3889,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Value As</b></em>' operation.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3846,6 +3899,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Format Value</b></em>' operation.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3855,6 +3909,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl <em>Extra Data Container</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataContainer()
@@ -3865,6 +3920,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Extra Data</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3874,6 +3930,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Data With Path</b></em>' operation.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3883,6 +3940,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Data With Key</b></em>' operation.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3892,6 +3950,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3901,6 +3960,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3910,6 +3970,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Get Value With Path As</b></em>' operation.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3929,6 +3990,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}' enum.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.types.ExtraDataFormatType
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataFormatType()
@@ -3939,6 +4001,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em>Serializable Object</em>' data type.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see java.io.Serializable
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getSerializableObject()
@@ -3949,6 +4012,7 @@ public interface TypesPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em>Iterable</em>' data type.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see java.lang.Iterable
 		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()

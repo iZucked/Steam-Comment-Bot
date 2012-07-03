@@ -127,6 +127,7 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 2.0
 	 */
 	protected ExtraDataItemProvider extraDataItemProvider;
 
@@ -148,6 +149,7 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.ExtraDataContainer} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

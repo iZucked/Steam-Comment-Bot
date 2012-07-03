@@ -47,6 +47,7 @@ public interface TypesFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Extra Data</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Extra Data</em>'.
 	 * @generated
@@ -56,6 +57,7 @@ public interface TypesFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Extra Data Container</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Extra Data Container</em>'.
 	 * @generated

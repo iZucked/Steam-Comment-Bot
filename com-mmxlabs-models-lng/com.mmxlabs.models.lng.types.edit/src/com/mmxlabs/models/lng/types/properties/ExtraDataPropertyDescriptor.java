@@ -6,6 +6,9 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 import com.mmxlabs.models.lng.types.ExtraData;
 
+/**
+ * @since 2.0
+ */
 public class ExtraDataPropertyDescriptor extends PropertyDescriptor {
 	private ExtraData object;
 	public ExtraDataPropertyDescriptor(ExtraData object) {

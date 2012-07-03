@@ -516,6 +516,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -525,6 +526,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -534,6 +536,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -543,6 +546,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -552,6 +556,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -561,6 +566,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -570,6 +576,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -579,6 +586,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -588,6 +596,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -597,6 +606,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -607,6 +617,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -616,6 +627,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -625,6 +637,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -634,6 +647,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -643,6 +657,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -661,6 +676,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -670,6 +686,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -679,6 +696,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

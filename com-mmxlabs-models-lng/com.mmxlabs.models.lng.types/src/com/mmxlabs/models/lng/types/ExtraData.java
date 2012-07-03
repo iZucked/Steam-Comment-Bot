@@ -9,6 +9,7 @@ import java.io.Serializable;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Extra Data</b></em>'.
+ * @since 2.0
  * <!-- end-user-doc -->
  *
  * <p>

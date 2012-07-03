@@ -156,6 +156,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -166,6 +167,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -201,6 +203,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -216,6 +219,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -226,6 +230,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -245,6 +250,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
@@ -270,6 +276,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -280,6 +287,7 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
