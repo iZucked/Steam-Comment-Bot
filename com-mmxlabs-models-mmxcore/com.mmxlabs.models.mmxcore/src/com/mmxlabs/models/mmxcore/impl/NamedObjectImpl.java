@@ -54,11 +54,11 @@ public class NamedObjectImpl extends MMXObjectImpl implements NamedObject {
 	/**
 	 * The cached value of the '{@link #getOtherNames() <em>Other Names</em>}' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.2
 	 * <!-- end-user-doc -->
 	 * @see #getOtherNames()
 	 * @generated
 	 * @ordered
-	 * @since 2.2
 	 */
 	protected EList<String> otherNames;
 
@@ -104,9 +104,9 @@ public class NamedObjectImpl extends MMXObjectImpl implements NamedObject {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.2
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.2
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
@@ -133,7 +133,7 @@ public class NamedObjectImpl extends MMXObjectImpl implements NamedObject {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- end-user-doc -->s
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")

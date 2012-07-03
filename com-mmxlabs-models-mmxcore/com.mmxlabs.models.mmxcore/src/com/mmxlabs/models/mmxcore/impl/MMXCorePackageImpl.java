@@ -261,9 +261,9 @@ public class MMXCorePackageImpl extends EPackageImpl implements MMXCorePackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.2
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.2
 	 */
 	public EAttribute getNamedObject_OtherNames() {
 		return (EAttribute)namedObjectEClass.getEStructuralFeatures().get(1);

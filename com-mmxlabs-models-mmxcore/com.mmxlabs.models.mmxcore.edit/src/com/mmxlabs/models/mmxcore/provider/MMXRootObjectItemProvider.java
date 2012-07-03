@@ -94,9 +94,9 @@ public class MMXRootObjectItemProvider
 	/**
 	 * This adds a property descriptor for the Other Names feature.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected void addOtherNamesPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add

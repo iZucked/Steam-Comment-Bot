@@ -101,9 +101,9 @@ public class MMXSubModelImpl extends MMXObjectImpl implements MMXSubModel {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.2
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.2
 	 */
 	public UUIDObject basicGetSubModelInstance() {
 		return subModelInstance;
