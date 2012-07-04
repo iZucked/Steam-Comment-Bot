@@ -24,7 +24,6 @@ import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.CostComponent;
-import com.mmxlabs.models.lng.analytics.FuelCost;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
@@ -46,7 +45,6 @@ import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
@@ -590,6 +588,6 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
 
 		builder.setVesselClassStateParamaters(vc, state, Calculator.scaleToInt(attrs.getNboRate()) / 24, Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
-				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24, cc);
+				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24,Calculator.scaleToInt(attrs.getInPortBaseRate()) / 24, cc);
 	}
 }
