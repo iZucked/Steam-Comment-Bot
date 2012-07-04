@@ -123,7 +123,7 @@ public class LNGScenarioTransformer {
 	private Date earliestTime;
 	private Date latestTime;
 
-	private SeriesParser indices = new SeriesParser();
+	private final SeriesParser indices = new SeriesParser();
 
 	@Inject(optional = true)
 	private Iterable<ContractTransformer> transformerExtensions;
@@ -146,7 +146,7 @@ public class LNGScenarioTransformer {
 	 */
 	final Set<ITransformerExtension> allTransformerExtensions = new LinkedHashSet<ITransformerExtension>();
 
-	private Map<VesselClass, List<IVessel>> spotVesselsByClass = new HashMap<VesselClass, List<IVessel>>();
+	private final Map<VesselClass, List<IVessel>> spotVesselsByClass = new HashMap<VesselClass, List<IVessel>>();
 
 	private final ArrayList<IVessel> allVessels = new ArrayList<IVessel>();
 
@@ -253,7 +253,7 @@ public class LNGScenarioTransformer {
 				final DataIndex<Double> di = (DataIndex) index;
 				final SortedSet<Pair<Date, Number>> vals = new TreeSet<Pair<Date, Number>>(new Comparator<Pair<Date, ?>>() {
 					@Override
-					public int compare(Pair<Date, ?> o1, Pair<Date, ?> o2) {
+					public int compare(final Pair<Date, ?> o1, final Pair<Date, ?> o2) {
 						return o1.getFirst().compareTo(o2.getFirst());
 					}
 				});
@@ -399,7 +399,7 @@ public class LNGScenarioTransformer {
 		return builder.getOptimisationData();
 	}
 
-	private void freezeInputModel(ISchedulerBuilder builder, ModelEntityMap entities) {
+	private void freezeInputModel(final ISchedulerBuilder builder, final ModelEntityMap entities) {
 		final InputModel input = rootObject.getSubModel(InputModel.class);
 		if (input != null) {
 			for (final UUIDObject o : input.getLockedAssignedObjects()) {
@@ -779,7 +779,7 @@ public class LNGScenarioTransformer {
 			}
 
 			// set tolls
-			PricingModel pm = rootObject.getSubModel(PricingModel.class);
+			final PricingModel pm = rootObject.getSubModel(PricingModel.class);
 			for (final RouteCost routeCost : pm.getRouteCosts()) {
 				final IVesselClass vesselClass = vesselAssociation.lookup(routeCost.getVesselClass());
 
@@ -869,7 +869,7 @@ public class LNGScenarioTransformer {
 			}
 
 			if (charterCount > 0) {
-				List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount);
+				final List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount);
 				spotVesselsByClass.put(eVc, spots);
 				allVessels.addAll(spots);
 			}
@@ -953,12 +953,23 @@ public class LNGScenarioTransformer {
 				return builder.createStartEndRequirement(window);
 			}
 		} else {
-			// TODO handle multiple start/end ports
-			final IPort port = portAssociation.lookup((Port) ports.iterator().next());
-			if (window == null) {
-				return builder.createStartEndRequirement(port);
+			if (ports.size() > 1) {
+				final Set<IPort> portSet = new HashSet<IPort>();
+				for (final APort p : ports) {
+					portSet.add(portAssociation.lookup((Port) p));
+				}
+				if (window == null) {
+					return builder.createStartEndRequirement(portSet);
+				} else {
+					return builder.createStartEndRequirement(portSet, window);
+				}
 			} else {
-				return builder.createStartEndRequirement(port, window);
+				final IPort port = portAssociation.lookup((Port) ports.iterator().next());
+				if (window == null) {
+					return builder.createStartEndRequirement(port);
+				} else {
+					return builder.createStartEndRequirement(port, window);
+				}
 			}
 		}
 
@@ -996,7 +1007,7 @@ public class LNGScenarioTransformer {
 		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
 
 		builder.setVesselClassStateParamaters(vc, state, Calculator.scaleToInt(attrs.getNboRate()) / 24, Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
-				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24, Calculator.scaleToInt(attrs.getInPortBaseRate()) / 24,cc);
+				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24, Calculator.scaleToInt(attrs.getInPortBaseRate()) / 24, cc);
 	}
 
 	// public void freezeStartSequences(final ISchedulerBuilder builder, final ModelEntityMap entities) {
