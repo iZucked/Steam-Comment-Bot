@@ -51,6 +51,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.util.validator.ScenarioInstanceValidator;
 
 /**
  * An abstract base class suitable for most scenario services.
@@ -126,10 +127,9 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			// log.debug("Instance " + instance.getUuid() + " already loaded");
 			return instance.getInstance();
 		}
-		
+
 		fireEvent(ScenarioServiceEvent.PRE_LOAD, instance);
 
-		
 		log.debug("Instance " + instance.getUuid() + " needs loading");
 		final List<EObject> parts = new ArrayList<EObject>();
 		final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
@@ -179,7 +179,10 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		modelService.resolve(parts);
 
 		fireEvent(ScenarioServiceEvent.POST_LOAD, instance);
-		
+
+		ScenarioInstanceValidator validator = new ScenarioInstanceValidator(instance);
+		validator.performValidation();
+
 		return implementation;
 	}
 
@@ -233,9 +236,9 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				if (instance == null) {
 					return;
 				}
-				
+
 				fireEvent(ScenarioServiceEvent.PRE_SAVE, scenarioInstance);
-				
+
 				final List<IModelInstance> models = new ArrayList<IModelInstance>();
 				for (final String uris : scenarioInstance.getSubModelURIs()) {
 					final IModelInstance modelInstance = modelService.getModel(resolveURI(uris));
@@ -250,7 +253,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 					metadata.setLastModified(new Date());
 				}
 				scenarioInstance.setDirty(false);
-				
+
 				fireEvent(ScenarioServiceEvent.POST_SAVE, scenarioInstance);
 			} finally {
 				lock.release();

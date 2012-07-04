@@ -14,7 +14,8 @@ Require-Bundle: org.eclipse.ui,
  org.slf4j.api;bundle-version="1.6.4",
  com.mmxlabs.model.service;bundle-version="1.0.0",
  org.eclipse.emf.query;bundle-version="1.2.100",
- com.mmxlabs.scenario.service.manifest;bundle-version="1.0.0"
+ com.mmxlabs.scenario.service.manifest;bundle-version="1.0.0",
+ com.mmxlabs.models.ui.validation;bundle-version="1.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.scenario.service.util
