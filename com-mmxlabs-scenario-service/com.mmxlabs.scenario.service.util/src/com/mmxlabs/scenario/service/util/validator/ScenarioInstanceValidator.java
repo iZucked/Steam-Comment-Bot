@@ -18,6 +18,7 @@ import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class ScenarioInstanceValidator extends MMXContentAdapter {
 
@@ -52,10 +53,19 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 
 			createValidator();
 
-			final IStatus status = helper.runValidation(validator, extraContext, modelRoots);
+			IStatus status = null;
+			// Perform initial validation
+			if (claimValidationLock()) {
+				try {
+					status = helper.runValidation(validator, extraContext, modelRoots);
 
-			// Notify implementors
-			validationStatus(status);
+				} finally {
+					releaseValidationLock();
+				}
+			}
+			if (status != null) {
+				validationStatus(status);
+			}
 		}
 
 	}
@@ -89,5 +99,15 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 			validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 			validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
 		}
+	}
+
+	protected boolean claimValidationLock() {
+		ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
+		return lock.claim();
+	}
+
+	protected void releaseValidationLock() {
+		ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
+		lock.release();
 	}
 }
