@@ -25,7 +25,7 @@ public class LiveEvaluatorStateCommandHandler extends AbstractHandler {
 		final ILiveEvaluatorService service = bundleContext.getService(serviceReference);
 
 		if (service != null) {
-			service.setLiveEvaluatorEnabled(oldValue);
+			service.setLiveEvaluatorEnabled(!oldValue);
 		}
 		return null;
 	}
