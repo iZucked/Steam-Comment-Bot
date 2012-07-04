@@ -12,10 +12,13 @@ import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -49,7 +52,7 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 		/**
 		 * Return to the last load port visited.
 		 */
-		RETURN_TO_LAST_LOAD,
+		RETURN_TO_LAST_LOAD, RETURN_TO_CLOSEST_IN_SET,
 	}
 
 	private IPortTypeProvider portTypeProvider;
@@ -59,6 +62,10 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 	private final Map<IResource, EndLocationRule> ruleMap = new HashMap<IResource, EndLocationSequenceManipulator.EndLocationRule>();
 
 	private IReturnElementProvider returnElementProvider;
+
+	private IStartEndRequirementProvider startEndRequirementProvider;
+
+	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
 	public EndLocationSequenceManipulator() {
 
@@ -87,7 +94,8 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 		case RETURN_TO_LAST_LOAD:
 			adjustLastElement(resource, sequence, getLastLoadElement(sequence));
 			break;
-		default:
+		case RETURN_TO_CLOSEST_IN_SET:
+			returnToClosestInSet(resource, sequence);
 			break;
 		}
 	}
@@ -111,6 +119,39 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 		}
 		return t;
 		// adjustLastElement(resource, sequence, t);
+	}
+
+	/**
+	 * Swap the dummy element in for the given sequence, and set its location to the given port.
+	 * 
+	 * @param resource
+	 * 
+	 * @param sequence
+	 * @param location
+	 */
+	private final void returnToClosestInSet(final IResource resource, final IModifiableSequence sequence) {
+		IStartEndRequirement endRequirement = startEndRequirementProvider.getEndRequirement(resource);
+
+		ISequenceElement lastVisit = sequence.get(sequence.size() - 2);
+		IPort fromPort = portProvider.getPortForElement(lastVisit);
+
+		IPort closestPort = null;
+		int closestPortDistance = Integer.MAX_VALUE;
+		for (IPort toPort : endRequirement.getLocations()) {
+			if (fromPort == toPort) {
+				closestPort = toPort;
+				break;
+			}
+			int distance = distanceProvider.getMinimumValue(fromPort, toPort);
+			if (distance < closestPortDistance) {
+				closestPort = toPort;
+				closestPortDistance = distance;
+			}
+		}
+
+		if (closestPort != null) {
+			sequence.set(sequence.size() - 1, returnElementProvider.getReturnElement(resource, closestPort));
+		}
 	}
 
 	/**
@@ -206,5 +247,21 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 	@Override
 	public void dispose() {
 		ruleMap.clear();
+	}
+
+	public IStartEndRequirementProvider getStartEndRequirementProvider() {
+		return startEndRequirementProvider;
+	}
+
+	public void setStartEndRequirementProvider(IStartEndRequirementProvider startEndRequirementProvider) {
+		this.startEndRequirementProvider = startEndRequirementProvider;
+	}
+
+	public IMultiMatrixProvider<IPort, Integer> getDistanceProvider() {
+		return distanceProvider;
+	}
+
+	public void setDistanceProvider(IMultiMatrixProvider<IPort, Integer> distanceProvider) {
+		this.distanceProvider = distanceProvider;
 	}
 }
