@@ -38,7 +38,9 @@ public class CargoTypeAssignmentConstraint extends AbstractModelConstraint {
 			final ElementAssignment assignment = (ElementAssignment) object;
 
 			final UUIDObject uuidObject = assignment.getAssignedObject();
-
+			if (assignment.getAssignment() == null) {
+				return ctx.createSuccessStatus();
+			}
 			final Set<AVessel> vessels = SetUtils.getVessels(assignment.getAssignment());
 
 			Cargo cargo = null;
