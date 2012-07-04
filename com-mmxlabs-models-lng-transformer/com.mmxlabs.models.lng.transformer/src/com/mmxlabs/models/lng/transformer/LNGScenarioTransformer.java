@@ -996,7 +996,7 @@ public class LNGScenarioTransformer {
 		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
 
 		builder.setVesselClassStateParamaters(vc, state, Calculator.scaleToInt(attrs.getNboRate()) / 24, Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
-				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24, cc);
+				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24, Calculator.scaleToInt(attrs.getInPortBaseRate()) / 24,cc);
 	}
 
 	// public void freezeStartSequences(final ISchedulerBuilder builder, final ModelEntityMap entities) {
