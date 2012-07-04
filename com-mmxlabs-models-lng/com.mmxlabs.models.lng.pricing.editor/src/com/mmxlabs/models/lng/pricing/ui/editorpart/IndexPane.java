@@ -8,13 +8,23 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
+import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
+import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
+import org.eclipse.nebula.widgets.formattedtext.NumberFormatter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -26,6 +36,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.importers.DataIndexImporter;
@@ -214,7 +226,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 							}
 						}
 
-						
 						if (minDate != null && maxDate != null) {
 							final Calendar c = Calendar.getInstance();
 							c.setTime(minDate);
@@ -223,9 +234,9 @@ public class IndexPane extends ScenarioTableViewerPane {
 							c.set(Calendar.MINUTE, 0);
 							c.set(Calendar.HOUR, 0);
 							c.set(Calendar.DAY_OF_MONTH, 1);
-	
+
 							while (c.getTime().before(maxDate)) {
-								addColumn(c, true);
+								addColumn(c, true, useIntegers);
 								c.add(Calendar.MONTH, 1);
 							}
 						}
@@ -236,7 +247,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 			}
 
-			private void addColumn(final Calendar cal, final boolean sortable) {
+			private void addColumn(final Calendar cal, final boolean sortable, final boolean isIntegerBased) {
 
 				final String date = String.format("%4d-%02d", cal.get(Calendar.YEAR), (cal.get(Calendar.MONTH) + 1));
 				final GridViewerColumn col = addSimpleColumn(date, sortable);
@@ -277,11 +288,125 @@ public class IndexPane extends ScenarioTableViewerPane {
 				};
 
 				col.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
+				final boolean isInt = false;
+				final ICellManipulator manipulator = new ICellManipulator() {
 
+					@SuppressWarnings("unchecked")
+					@Override
+					public void setValue(final Object element, final Object value) {
+
+						if (element instanceof DataIndex) {
+							final Date colDate = (Date) col.getColumn().getData("date");
+
+							if (isIntegerBased) {
+								setIndexPoint((Integer) value, (DataIndex<Integer>) element, colDate);
+
+							} else {
+
+								setIndexPoint((Double) value, (DataIndex<Double>) element, colDate);
+							}
+						}
+					}
+
+					@SuppressWarnings({ "deprecation" })
+					private <T> void setIndexPoint(final T value, final DataIndex<T> di, final Date colDate) {
+
+						for (final IndexPoint<T> p : di.getPoints()) {
+							if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonth() == colDate.getMonth()) {
+
+								final Command cmd = SetCommand.create(getEditingDomain(), p, PricingPackage.eINSTANCE.getIndexPoint_Value(), value);
+								if (!cmd.canExecute()) {
+									throw new RuntimeException("Unable to execute index set command");
+								}
+								getEditingDomain().getCommandStack().execute(cmd);
+
+								return;
+							}
+						}
+
+						final IndexPoint<T> p = PricingFactory.eINSTANCE.createIndexPoint();
+						p.setDate(colDate);
+						p.setValue(value);
+						final Command cmd = AddCommand.create(getEditingDomain(), di, PricingPackage.eINSTANCE.getDataIndex_Points(), p);
+						if (!cmd.canExecute()) {
+							throw new RuntimeException("Unable to execute index add command");
+						}
+						getEditingDomain().getCommandStack().execute(cmd);
+					}
+
+					@Override
+					public Object getValue(final Object element) {
+						if (element instanceof Index) {
+							final Index<?> idx = (Index<?>) element;
+							final Date colDate = (Date) col.getColumn().getData("date");
+							final Object valueAfter = idx.getValueForMonth(colDate);
+							if (valueAfter instanceof Integer) {
+								return (Integer) valueAfter;
+							} else if (valueAfter instanceof Double) {
+								return (Double) valueAfter;
+							}
+						}
+
+						return null;
+					}
+
+					@Override
+					public CellEditor getCellEditor(final Composite parent, final Object object) {
+
+						final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
+						final NumberFormatter formatter;
+						if (isInt) {
+							formatter = new IntegerFormatter();
+						} else {
+							formatter = new DoubleFormatter();
+						}
+
+						formatter.setFixedLengths(false, false);
+
+						result.setFormatter(formatter);
+
+						return result;
+					}
+
+					@Override
+					public boolean canEdit(final Object element) {
+						return (element instanceof DataIndex<?>);
+					}
+				};
+				col.getColumn().setData(EObjectTableViewer.COLUMN_MANIPULATOR, manipulator);
+
+				col.setEditingSupport(new EditingSupport((ColumnViewer) viewer) {
+					@Override
+					protected boolean canEdit(final Object element) {
+						return (lockedForEditing == false) && (manipulator != null) && manipulator.canEdit(element);
+					}
+
+					@Override
+					protected CellEditor getCellEditor(final Object element) {
+						return manipulator.getCellEditor(((GridTableViewer) viewer).getGrid(), element);
+					}
+
+					@Override
+					protected Object getValue(final Object element) {
+						return manipulator.getValue(element);
+					}
+
+					@Override
+					protected void setValue(final Object element, final Object value) {
+						// a value has come out of the celleditor and is being set on
+						// the element.
+						if (lockedForEditing) {
+							return;
+						}
+						manipulator.setValue(element, value);
+						refresh();
+					}
+				});
 				col.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
 
 					@Override
 					public String getText(final Object element) {
+
 						if (element instanceof Index) {
 							final Index<?> idx = (Index<?>) element;
 							final Date colDate = (Date) col.getColumn().getData("date");
