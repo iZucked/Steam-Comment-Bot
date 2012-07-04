@@ -48,6 +48,15 @@ public interface IVesselClass {
 	long getIdleConsumptionRate(VesselState vesselState);
 
 	/**
+	 * Returns the fuel consumption requirements when the vessel is in port. Units are MT Per Hour
+	 * 
+	 * @param vesselState
+	 * @return
+	 */
+
+	long getInPortConsumptionRate(VesselState vesselState);
+
+	/**
 	 * Returns the rate of NBO when the vessel is idle. Units are M3 Per Hour
 	 * 
 	 * @param vesselState
@@ -168,4 +177,5 @@ public interface IVesselClass {
 	 * @return scaled M3 of LNG
 	 */
 	long getCooldownVolume();
+
 }

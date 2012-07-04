@@ -37,6 +37,8 @@ public final class VesselClass implements IVesselClass {
 
 	private final EnumMap<VesselState, Long> idleConsumptionRate = new EnumMap<VesselState, Long>(VesselState.class);
 
+	private final EnumMap<VesselState, Long> inPortConsumptionRate = new EnumMap<VesselState, Long>(VesselState.class);
+
 	private final EnumMap<VesselState, Long> idleNBORate = new EnumMap<VesselState, Long>(VesselState.class);
 
 	private final EnumMap<VesselState, IConsumptionRateCalculator> consumptionRate = new EnumMap<VesselState, IConsumptionRateCalculator>(VesselState.class);
@@ -103,6 +105,11 @@ public final class VesselClass implements IVesselClass {
 	}
 
 	@Override
+	public long getInPortConsumptionRate(final VesselState vesselState) {
+		return CollectionsUtil.getValue(inPortConsumptionRate, vesselState, 0l);
+	}
+
+	@Override
 	public long getIdleNBORate(final VesselState vesselState) {
 		return CollectionsUtil.getValue(idleNBORate, vesselState, 0l);
 	}
@@ -140,6 +147,10 @@ public final class VesselClass implements IVesselClass {
 
 	public void setIdleConsumptionRate(final VesselState state, final long rate) {
 		this.idleConsumptionRate.put(state, rate);
+	}
+
+	public void setInPortConsumptionRate(final VesselState state, final long rate) {
+		this.inPortConsumptionRate.put(state, rate);
 	}
 
 	@Override

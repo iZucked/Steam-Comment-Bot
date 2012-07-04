@@ -222,7 +222,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IPortCostProviderEditor portCostProvider;
-	
+
 	/**
 	 * Keeps track of calculators
 	 */
@@ -656,8 +656,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		resourceAllocationProvider.setAllowedResources(startElement, Collections.singleton(resource));
 		// BugzID: 576 allow end element on any vessel, to prevent ResourceAllocationConstraint from disallowing 2opt2s at end
-		
-//		resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
+
+		// resourceAllocationProvider.setAllowedResources(endElement, Collections.singleton(resource));
 
 		startEndRequirementProvider.setStartEndRequirements(resource, start, end);
 		startEndRequirementProvider.setStartEndElements(resource, startElement, endElement);
@@ -788,8 +788,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			}
 		}
 		/**
-		 * The shortest time which the slowest vessel in the fleet can take to get from the latest
-		 * discharge back to the load for that discharge.
+		 * The shortest time which the slowest vessel in the fleet can take to get from the latest discharge back to the load for that discharge.
 		 */
 		final int maxFastReturnTime;
 		if ((dischargePort != null) && (loadPort != null)) {
@@ -853,7 +852,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		data.addDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, elementDurationsProvider);
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, portTypeProvider);
-		
+
 		data.addDataComponentProvider(SchedulerConstants.DCP_portCostProvider, portCostProvider);
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, resourceAllocationProvider);
@@ -935,7 +934,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void setVesselClassStateParamaters(final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
-			final int idleConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed) {
+			final int idleConsumptionRateInMTPerHour, final int inPortConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -952,6 +951,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
 		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
+		vc.setInPortConsumptionRate(state, inPortConsumptionRateInMTPerHour);
 		vc.setMinNBOSpeed(state, nboSpeed);
 	}
 
@@ -967,14 +967,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 */
 	@Override
 	public void setVesselClassStateParamaters(final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour, final int idleConsumptionRateInMTPerHour,
-			final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
+			final int inPortConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
 
 		// Convert rate to MT equivalent per hour
 		final int nboRateInMTPerHour = (int) Calculator.convertM3ToMT(nboRateInM3PerHour, vc.getBaseFuelConversionFactor());
 
 		final int nboSpeed = consumptionCalculatorInMTPerHour.getSpeed(nboRateInMTPerHour);
 
-		this.setVesselClassStateParamaters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour, nboSpeed);
+		this.setVesselClassStateParamaters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, inPortConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour,
+				nboSpeed);
 	}
 
 	@Override
@@ -1293,7 +1294,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setPortCost(IPort port, IVessel vessel, PortType portType,long cost) {
+	public void setPortCost(IPort port, IVessel vessel, PortType portType, long cost) {
 		portCostProvider.setPortCost(port, vessel, portType, cost);
 	}
 }

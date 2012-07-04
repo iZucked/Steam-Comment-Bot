@@ -89,13 +89,15 @@ public interface ISchedulerBuilder {
 	 *            Hourly scaled M3 of LNG rate of boil-off when idling
 	 * @param idleConsumptionRateInMTPerHour
 	 *            Hourly scaled MT of base fuel consumption rate when idle
+	 * @param inPortConsumptionRateInMTPerHour
+	 *            Hourly scale MT of base fuel consumption when in port.
 	 * @param consumptionRateCalculatorInMTPerHour
 	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
 	 * @param nboSpeed
 	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling.
 	 */
 	void setVesselClassStateParamaters(IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
-			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
+			int inPortConsumptionRateInMTPerHour, IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
@@ -108,11 +110,13 @@ public interface ISchedulerBuilder {
 	 *            Hourly scaled M3 of LNG rate of boil-off when idling
 	 * @param idleConsumptionRateInMTPerHour
 	 *            Hourly scaled MT of base fuel consumption rate when idle
+	 * @param inPortConsumptionRateInMTPerHour
+	 *            Hourly scale MT of base fuel consumption when in port.
 	 * @param consumptionRateCalculatorInMTPerHour
 	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
 	 */
 	void setVesselClassStateParamaters(IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
-			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
+			int inPortConsumptionRateInMTPerHour,IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
 
 	/**
 	 * Create a charter out event
@@ -369,8 +373,8 @@ public interface ISchedulerBuilder {
 	 *            Scaled conversion factor to convert from M3 to MMBTU of LNG
 	 * @return
 	 */
-	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours,
-			boolean cooldownSet, boolean cooldownForbidden, boolean slotIsOptional);
+	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours, boolean cooldownSet,
+			boolean cooldownForbidden, boolean slotIsOptional);
 
 	ILoadOption createVirtualLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, boolean slotIsOptional);
 
@@ -499,9 +503,10 @@ public interface ISchedulerBuilder {
 	 * @param iCurve
 	 */
 	void setFitnessComponentDiscountCurve(String name, ICurve iCurve);
-	
+
 	/**
 	 * Set the cost of visiting the given port + vessel in the given way.
+	 * 
 	 * @param port
 	 * @param vessel
 	 * @param portType
