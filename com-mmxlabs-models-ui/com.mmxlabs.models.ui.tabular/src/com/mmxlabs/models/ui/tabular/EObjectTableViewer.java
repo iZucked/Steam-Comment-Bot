@@ -572,7 +572,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 				contentProvider.inputChanged(viewer, oldInput, newInput);
 
-				if (statusProvider != null) {
+				if (statusProvider != null && newInput != null) {
 					// Perform initial validation
 					processStatus(statusProvider.getStatus());
 				}
