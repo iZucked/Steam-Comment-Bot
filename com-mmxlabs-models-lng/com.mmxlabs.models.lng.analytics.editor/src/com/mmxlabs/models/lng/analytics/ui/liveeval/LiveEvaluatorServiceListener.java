@@ -23,7 +23,9 @@ public class LiveEvaluatorServiceListener implements ILiveEvaluatorService {
 		scenarioService.removeScenarioServiceListener(listener);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.lng.analytics.ui.liveeval.ILiveEvaulatorService#setLiveEvaluatorEnabled(boolean)
 	 */
 	@Override
@@ -33,7 +35,5 @@ public class LiveEvaluatorServiceListener implements ILiveEvaluatorService {
 		for (final LiveEvaluatorScenarioServiceListener l : evaluatorMap.values()) {
 			l.setEnabled(enabled);
 		}
-
-		System.out.println("Setting state to " + enabled);
 	}
 }
