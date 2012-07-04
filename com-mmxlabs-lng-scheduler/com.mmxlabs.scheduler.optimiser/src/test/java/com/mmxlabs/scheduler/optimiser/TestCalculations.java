@@ -95,14 +95,14 @@ public class TestCalculations {
 		ladenKeypoints.put(20000, 1400l);
 		final InterpolatingConsumptionRateCalculator ladenConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ladenKeypoints);
 
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 1200, 1000, 500, ladenConsumptionCalculator);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 1200, 1000, 500, 0, ladenConsumptionCalculator);
 
 		final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 		ballastKeypoints.put(12000, 500l);
 		ballastKeypoints.put(20000, 1300l);
 		final InterpolatingConsumptionRateCalculator ballastConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ballastKeypoints);
 
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 1000, 800, 400, ballastConsumptionCalculator);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 1000, 800, 400, 0, ballastConsumptionCalculator);
 
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
@@ -510,14 +510,14 @@ public class TestCalculations {
 		ladenKeypoints.put(20000, 1400l);
 		final InterpolatingConsumptionRateCalculator ladenConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ladenKeypoints);
 
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 1200, 1000, 500, ladenConsumptionCalculator);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 1200, 1000, 500, 0, ladenConsumptionCalculator);
 
 		final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 		ballastKeypoints.put(12000, 500l);
 		ballastKeypoints.put(20000, 1300l);
 		final InterpolatingConsumptionRateCalculator ballastConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ballastKeypoints);
 
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 1000, 800, 400, ballastConsumptionCalculator);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 1000, 800, 400, 0, ballastConsumptionCalculator);
 
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
@@ -925,14 +925,14 @@ public class TestCalculations {
 		ladenKeypoints.put(20000, 1400l);
 		final InterpolatingConsumptionRateCalculator ladenConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ladenKeypoints);
 
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 1200, 1000, 500, ladenConsumptionCalculator);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 1200, 1000, 500, 0, ladenConsumptionCalculator);
 
 		final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 		ballastKeypoints.put(12000, 500l);
 		ballastKeypoints.put(20000, 1300l);
 		final InterpolatingConsumptionRateCalculator ballastConsumptionCalculator = new InterpolatingConsumptionRateCalculator(ballastKeypoints);
 
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 1000, 800, 400, ballastConsumptionCalculator);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 1000, 800, 400, 0, ballastConsumptionCalculator);
 
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));

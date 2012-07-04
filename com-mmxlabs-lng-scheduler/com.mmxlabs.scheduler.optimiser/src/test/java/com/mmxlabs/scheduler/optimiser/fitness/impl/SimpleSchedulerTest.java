@@ -89,8 +89,9 @@ public class SimpleSchedulerTest {
 
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, 0, Integer.MAX_VALUE, 0, 0);
 
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, consumptionCalculator, 15000);
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, consumptionCalculator, 15000);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, 0, consumptionCalculator, 15000);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, 0, consumptionCalculator,
+				15000);
 
 		// TODO: Setup start/end ports correctly
 		builder.createVessel("vessel-1", vesselClass1, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
@@ -164,7 +165,7 @@ public class SimpleSchedulerTest {
 		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null);
 
 		final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new ArrayList<String>(
-				constraintRegistry.getConstraintCheckerNames()), constraintRegistry,  new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);
+				constraintRegistry.getConstraintCheckerNames()), constraintRegistry, new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);
 
 		final IOptimiserProgressMonitor monitor = new IOptimiserProgressMonitor() {
 
