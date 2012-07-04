@@ -148,13 +148,16 @@
        point="org.eclipse.ui.menus">
     <menuContribution
           allPopups="false"
-          locationURI="toolbar:com.mmxlabs.scenario.service.ui.navigator">
-       <command
-             commandId="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
-             icon="icons/bg-eval.gif"
-             label="Toggle Background Evaluation"
-             style="toggle">
-       </command>
+          locationURI="toolbar:org.eclipse.ui.trim.status">
+       <toolbar
+             id="com.mmxlabs.models.lng.analytics.editor.toolbar1">
+          <command
+                commandId="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
+                icon="icons/bg-eval.gif"
+                label="Toggle Background Evaluation"
+                style="toggle">
+          </command>
+       </toolbar>
     </menuContribution>
  </extension>
 </plugin>
