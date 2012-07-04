@@ -32,7 +32,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 	private final Evaluator evaluator = new Evaluator();
 
 	private boolean enabled = true;
-	
+
 	public LiveEvaluator(final ScenarioInstance instance) {
 		this.instance = instance;
 	}
@@ -42,8 +42,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Dirty()) {
 			if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue()) {
 				queueEvaluate();
-//			} else if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue() == false) {
-//				dequeueEvaluate();
+				// } else if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue() == false) {
+				// dequeueEvaluate();
 			}
 		}
 	}
@@ -61,15 +61,15 @@ public class LiveEvaluator extends MMXAdapterImpl {
 		if (!enabled) {
 			return;
 		}
-		
+
 		if (evaluatorThread == null || !evaluatorThread.isAlive()) {
-			evaluatorThread = new Thread(evaluator , "Live Evaluator [" + instance.getName() + "]");
+			evaluatorThread = new Thread(evaluator, "Live Evaluator [" + instance.getName() + "]");
 			evaluatorThread.start();
 		} else {
 			evaluatorThread.interrupt();
 		}
 	}
-	
+
 	private void dequeueEvaluate() {
 		if (evaluatorThread != null && evaluatorThread.isAlive()) {
 			evaluator.kill();
@@ -79,10 +79,11 @@ public class LiveEvaluator extends MMXAdapterImpl {
 
 	private class Evaluator implements Runnable {
 		private boolean kill = false;
+
 		public void kill() {
 			kill = true;
 		}
-		
+
 		@Override
 		public void run() {
 			log.debug("Waiting 2s to evaluate " + instance.getName());
@@ -91,7 +92,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 				try {
 					spinLock = false;
 					Thread.sleep(2000);
-					
+
 					final IScenarioInstanceEvaluator evaluator = AnalyticsEditorPlugin.getPlugin().getResourceEvaluator();
 					if (evaluator != null) {
 						if (instance.getLock(ScenarioLock.EVALUATOR).claim()) {
@@ -99,11 +100,16 @@ public class LiveEvaluator extends MMXAdapterImpl {
 								log.debug("Checking dirty flag is still set");
 								final MMXRootObject root = (MMXRootObject) instance.getScenarioService().load(instance);
 								final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
-								if (!subModel.isDirty()) return;
+								if (!subModel.isDirty()) {
+									return;
+								}
+								if (!enabled) {
+									return;
+								}
 								log.debug("About to evaluate " + instance.getName());
-								evaluator.evaluate(instance);								
+								evaluator.evaluate(instance);
 							} catch (final Throwable th) {
-								
+
 							} finally {
 								instance.getLock(ScenarioLock.EVALUATOR).release();
 							}
@@ -117,8 +123,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 				} catch (final InterruptedException e) {
 					if (kill) {
 						spinLock = false;
-					}
-					else spinLock = true;
+					} else
+						spinLock = true;
 				}
 			}
 		}
@@ -131,7 +137,7 @@ public class LiveEvaluator extends MMXAdapterImpl {
 	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 		if (enabled) {
-			// We we re-enable check the dirty status and queue an evaluation if it is dirty 
+			// We we re-enable check the dirty status and queue an evaluation if it is dirty
 			final MMXRootObject root = (MMXRootObject) instance.getInstance();
 			if (root != null) {
 				final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
