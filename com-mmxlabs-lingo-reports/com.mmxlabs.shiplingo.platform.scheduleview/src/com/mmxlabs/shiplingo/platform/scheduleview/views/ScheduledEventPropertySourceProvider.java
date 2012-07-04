@@ -19,9 +19,10 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.schedule.AdditionalData;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -29,6 +30,7 @@ import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -105,8 +107,7 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 			for (final EAttribute attribute : eClass.getEAllAttributes()) {
 				// display attributes
 
-				if (attribute.equals(SchedulePackage.eINSTANCE.getEvent_Start()) || 
-						attribute.equals(SchedulePackage.eINSTANCE.getEvent_End())) {
+				if (attribute.equals(SchedulePackage.eINSTANCE.getEvent_Start()) || attribute.equals(SchedulePackage.eINSTANCE.getEvent_End())) {
 					continue;
 				}
 
@@ -130,29 +131,66 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 			}
 
 			if (event instanceof SlotVisit) {
-				PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getSlotVisit_SlotAllocation(),
-						SchedulePackage.eINSTANCE.getSlotAllocation_Slot(),
-						MMXCorePackage.eINSTANCE.getNamedObject_Name()), "Slot ID");
+				final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getSlotVisit_SlotAllocation(),
+						SchedulePackage.eINSTANCE.getSlotAllocation_Slot(), MMXCorePackage.eINSTANCE.getNamedObject_Name()), "Slot ID");
 				descriptor.setCategory(eClass.getName());
 				descriptor.setLabelProvider(lp);
 
 				list.add(descriptor);
 
-//				if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
-//					descriptor = new PropertyDescriptor(
-//							new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
-//					descriptor.setCategory(eClass.getName());
-//					descriptor.setLabelProvider(lp);
-//
-//					list.add(descriptor);
-//				} else {
-//					descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
-//							SchedulePackage.eINSTANCE.getCargoAllocation_DischargeVolume()), "Discharge Volume");
-//					descriptor.setCategory(eClass.getName());
-//					descriptor.setLabelProvider(lp);
-//
-//					list.add(descriptor);
-//				}
+				// if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
+				// descriptor = new PropertyDescriptor(
+				// new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
+				// descriptor.setCategory(eClass.getName());
+				// descriptor.setLabelProvider(lp);
+				//
+				// list.add(descriptor);
+				// } else {
+				// descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
+				// SchedulePackage.eINSTANCE.getCargoAllocation_DischargeVolume()), "Discharge Volume");
+				// descriptor.setCategory(eClass.getName());
+				// descriptor.setLabelProvider(lp);
+				//
+				// list.add(descriptor);
+				// }
+			}
+
+			if (event instanceof VesselEventVisit) {
+
+				final VesselEventVisit vesselEventVisit = (VesselEventVisit) event;
+				if (vesselEventVisit.getVesselEvent() instanceof CharterOutEvent) {
+					{
+						final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent(),
+								FleetPackage.eINSTANCE.getCharterOutEvent_HireRate()), "Daily Hire Rate");
+						descriptor.setCategory(eClass.getName());
+						descriptor.setLabelProvider(lp);
+
+						list.add(descriptor);
+					}
+					{
+						final PropertyDescriptor descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getVesselEventVisit_VesselEvent(),
+								FleetPackage.eINSTANCE.getCharterOutEvent_RepositioningFee()), "Repositioning Fee");
+						descriptor.setCategory(eClass.getName());
+						descriptor.setLabelProvider(lp);
+
+						list.add(descriptor);
+					}
+				}
+				// if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
+				// descriptor = new PropertyDescriptor(
+				// new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(), SchedulePackage.eINSTANCE.getCargoAllocation__GetLoadVolume()), "Load Volume");
+				// descriptor.setCategory(eClass.getName());
+				// descriptor.setLabelProvider(lp);
+				//
+				// list.add(descriptor);
+				// } else {
+				// descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getSlotVisit_CargoAllocation(),
+				// SchedulePackage.eINSTANCE.getCargoAllocation_DischargeVolume()), "Discharge Volume");
+				// descriptor.setCategory(eClass.getName());
+				// descriptor.setLabelProvider(lp);
+				//
+				// list.add(descriptor);
+				// }
 			}
 
 			{
@@ -171,14 +209,14 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 				});
 
 				list.add(descriptor);
-//
-//				if (event.getHireCost() > 0) {
-//					descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getScheduledEvent__GetHireCost()), "Hire Cost ($)");
-//					descriptor.setCategory(eClass.getName());
-//					descriptor.setLabelProvider(lp);
-//
-//					list.add(descriptor);
-//				}
+				//
+				// if (event.getHireCost() > 0) {
+				// descriptor = new PropertyDescriptor(new EMFPath(true, EventsPackage.eINSTANCE.getScheduledEvent__GetHireCost()), "Hire Cost ($)");
+				// descriptor.setCategory(eClass.getName());
+				// descriptor.setLabelProvider(lp);
+				//
+				// list.add(descriptor);
+				// }
 
 				descriptor = new PropertyDescriptor(new EMFPath(true, SchedulePackage.eINSTANCE.getEvent__GetLocalStart()),
 
@@ -218,14 +256,14 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 					list.add(descriptor);
 				}
 			}
-			
+
 			if (event instanceof SlotVisit) {
-				final CargoAllocation allocation =  (((SlotVisit) event).getSlotAllocation().getCargoAllocation());
+				final CargoAllocation allocation = (((SlotVisit) event).getSlotAllocation().getCargoAllocation());
 				final ExtraDataContainerPropertySource delegateSource = new ExtraDataContainerPropertySource(allocation);
 				this.delegateSource = delegateSource;
 				list.addAll(Arrays.asList(delegateSource.getPropertyDescriptors()));
 			}
-			
+
 			descriptors = list.toArray(new IPropertyDescriptor[0]);
 
 			return descriptors;
