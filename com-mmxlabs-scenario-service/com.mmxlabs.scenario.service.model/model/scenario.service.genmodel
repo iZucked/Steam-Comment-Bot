@@ -8,42 +8,42 @@
   <foreignModel>scenario.service.ecore</foreignModel>
   <genPackages prefix="ScenarioService" basePackage="com.mmxlabs.scenario.service"
       disposableProviderFactory="true" ecorePackage="scenario.service.ecore#/">
+    <genDataTypes ecoreDataType="scenario.service.ecore#//IScenarioService"/>
     <genClasses ecoreClass="scenario.service.ecore#//ScenarioModel">
       <genFeatures children="true" createChild="false" propertySortChoices="true"
           ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioModel/scenarioServices"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="scenario.service.ecore#//Container">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//Container/parent"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//Container/elements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Container/archived"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Container/name"/>
+      <genOperations ecoreOperation="scenario.service.ecore#//Container/getScenarioService"/>
+      <genOperations ecoreOperation="scenario.service.ecore#//Container/getContainedInstanceCount"/>
+    </genClasses>
+    <genClasses ecoreClass="scenario.service.ecore#//Folder">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//Folder/metadata"/>
+    </genClasses>
     <genClasses ecoreClass="scenario.service.ecore#//ScenarioService">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/description"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioService/scenarios"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioService/serviceRef"/>
     </genClasses>
     <genClasses ecoreClass="scenario.service.ecore#//ScenarioInstance">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/uuid"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/uri"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/locked"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/metadata"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/archived"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/initialSolution"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/variations"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/parameterSets"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/locked"/>
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/instance"/>
-    </genClasses>
-    <genClasses ecoreClass="scenario.service.ecore#//ParamSet">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ParamSet/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ParamSet/uuid"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ParamSet/uri"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ParamSet/metadata"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ParamSet/archived"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ParamSet/solutions"/>
-    </genClasses>
-    <genClasses ecoreClass="scenario.service.ecore#//Solution">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Solution/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Solution/uuid"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Solution/uri"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//Solution/metadata"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Solution/archived"/>
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//Solution/paramSet"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/adapters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/subModelURIs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/dependencyUUIDs"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/dirty"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/locks"/>
+      <genFeatures property="Readonly" createChild="false" propertyDescription="Last recorded validation status recorded as an IStatus severity code "
+          ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/validationStatusCode"/>
+      <genOperations ecoreOperation="scenario.service.ecore#//ScenarioInstance/getContainedInstanceCount"/>
+      <genOperations ecoreOperation="scenario.service.ecore#//ScenarioInstance/getLock">
+        <genParameters ecoreParameter="scenario.service.ecore#//ScenarioInstance/getLock/key"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="scenario.service.ecore#//Metadata">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Metadata/creator"/>
@@ -52,6 +52,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Metadata/comment"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Metadata/lastModifiedBy"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Metadata/contentType"/>
+    </genClasses>
+    <genClasses ecoreClass="scenario.service.ecore#//ScenarioLock">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioLock/available"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioLock/claimed"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioLock/key"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioLock/instance"/>
+      <genOperations ecoreOperation="scenario.service.ecore#//ScenarioLock/claim"/>
+      <genOperations ecoreOperation="scenario.service.ecore#//ScenarioLock/awaitClaim"/>
+      <genOperations ecoreOperation="scenario.service.ecore#//ScenarioLock/release"/>
+      <genOperations ecoreOperation="scenario.service.ecore#//ScenarioLock/init"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

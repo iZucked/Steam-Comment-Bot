@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLocks <em>Locks</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
  * </ul>
  * </p>
  *
@@ -242,6 +243,32 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	EList<ScenarioLock> getLocks();
+
+	/**
+	 * Returns the value of the '<em><b>Validation Status Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Validation Status Code</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Validation Status Code</em>' attribute.
+	 * @see #setValidationStatusCode(int)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_ValidationStatusCode()
+	 * @model
+	 * @generated
+	 */
+	int getValidationStatusCode();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Validation Status Code</em>' attribute.
+	 * @see #getValidationStatusCode()
+	 * @generated
+	 */
+	void setValidationStatusCode(int value);
 
 	/**
 	 * <!-- begin-user-doc -->

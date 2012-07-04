@@ -56,8 +56,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	ScenarioServicePackage eINSTANCE = com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl
-			.init();
+	ScenarioServicePackage eINSTANCE = com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl.init();
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioModelImpl <em>Scenario Model</em>}' class.
@@ -407,13 +406,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__LOCKS = CONTAINER_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Validation Status Code</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = CONTAINER_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Scenario Instance</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 9;
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -791,6 +799,17 @@ public interface ScenarioServicePackage extends EPackage {
 	EReference getScenarioInstance_Locks();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Validation Status Code</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EAttribute getScenarioInstance_ValidationStatusCode();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.Metadata <em>Metadata</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -969,8 +988,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SCENARIO_MODEL__SCENARIO_SERVICES = eINSTANCE
-				.getScenarioModel_ScenarioServices();
+		EReference SCENARIO_MODEL__SCENARIO_SERVICES = eINSTANCE.getScenarioModel_ScenarioServices();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl <em>Container</em>}' class.
@@ -1048,8 +1066,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_SERVICE__DESCRIPTION = eINSTANCE
-				.getScenarioService_Description();
+		EAttribute SCENARIO_SERVICE__DESCRIPTION = eINSTANCE.getScenarioService_Description();
 
 		/**
 		 * The meta object literal for the '<em><b>Service Ref</b></em>' attribute feature.
@@ -1057,8 +1074,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_SERVICE__SERVICE_REF = eINSTANCE
-				.getScenarioService_ServiceRef();
+		EAttribute SCENARIO_SERVICE__SERVICE_REF = eINSTANCE.getScenarioService_ServiceRef();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl <em>Scenario Instance</em>}' class.
@@ -1076,8 +1092,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_INSTANCE__UUID = eINSTANCE
-				.getScenarioInstance_Uuid();
+		EAttribute SCENARIO_INSTANCE__UUID = eINSTANCE.getScenarioInstance_Uuid();
 
 		/**
 		 * The meta object literal for the '<em><b>Metadata</b></em>' containment reference feature.
@@ -1085,8 +1100,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SCENARIO_INSTANCE__METADATA = eINSTANCE
-				.getScenarioInstance_Metadata();
+		EReference SCENARIO_INSTANCE__METADATA = eINSTANCE.getScenarioInstance_Metadata();
 
 		/**
 		 * The meta object literal for the '<em><b>Locked</b></em>' attribute feature.
@@ -1094,8 +1108,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_INSTANCE__LOCKED = eINSTANCE
-				.getScenarioInstance_Locked();
+		EAttribute SCENARIO_INSTANCE__LOCKED = eINSTANCE.getScenarioInstance_Locked();
 
 		/**
 		 * The meta object literal for the '<em><b>Instance</b></em>' reference feature.
@@ -1103,8 +1116,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SCENARIO_INSTANCE__INSTANCE = eINSTANCE
-				.getScenarioInstance_Instance();
+		EReference SCENARIO_INSTANCE__INSTANCE = eINSTANCE.getScenarioInstance_Instance();
 
 		/**
 		 * The meta object literal for the '<em><b>Adapters</b></em>' attribute feature.
@@ -1112,8 +1124,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_INSTANCE__ADAPTERS = eINSTANCE
-				.getScenarioInstance_Adapters();
+		EAttribute SCENARIO_INSTANCE__ADAPTERS = eINSTANCE.getScenarioInstance_Adapters();
 
 		/**
 		 * The meta object literal for the '<em><b>Sub Model UR Is</b></em>' attribute list feature.
@@ -1121,8 +1132,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_INSTANCE__SUB_MODEL_UR_IS = eINSTANCE
-				.getScenarioInstance_SubModelURIs();
+		EAttribute SCENARIO_INSTANCE__SUB_MODEL_UR_IS = eINSTANCE.getScenarioInstance_SubModelURIs();
 
 		/**
 		 * The meta object literal for the '<em><b>Dependency UUI Ds</b></em>' attribute list feature.
@@ -1130,8 +1140,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_INSTANCE__DEPENDENCY_UUI_DS = eINSTANCE
-				.getScenarioInstance_DependencyUUIDs();
+		EAttribute SCENARIO_INSTANCE__DEPENDENCY_UUI_DS = eINSTANCE.getScenarioInstance_DependencyUUIDs();
 
 		/**
 		 * The meta object literal for the '<em><b>Dirty</b></em>' attribute feature.
@@ -1139,8 +1148,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_INSTANCE__DIRTY = eINSTANCE
-				.getScenarioInstance_Dirty();
+		EAttribute SCENARIO_INSTANCE__DIRTY = eINSTANCE.getScenarioInstance_Dirty();
 
 		/**
 		 * The meta object literal for the '<em><b>Locks</b></em>' containment reference list feature.
@@ -1148,8 +1156,15 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SCENARIO_INSTANCE__LOCKS = eINSTANCE
-				.getScenarioInstance_Locks();
+		EReference SCENARIO_INSTANCE__LOCKS = eINSTANCE.getScenarioInstance_Locks();
+
+		/**
+		 * The meta object literal for the '<em><b>Validation Status Code</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_INSTANCE__VALIDATION_STATUS_CODE = eINSTANCE.getScenarioInstance_ValidationStatusCode();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -1183,8 +1198,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute METADATA__LAST_MODIFIED = eINSTANCE
-				.getMetadata_LastModified();
+		EAttribute METADATA__LAST_MODIFIED = eINSTANCE.getMetadata_LastModified();
 
 		/**
 		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
@@ -1200,8 +1214,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute METADATA__LAST_MODIFIED_BY = eINSTANCE
-				.getMetadata_LastModifiedBy();
+		EAttribute METADATA__LAST_MODIFIED_BY = eINSTANCE.getMetadata_LastModifiedBy();
 
 		/**
 		 * The meta object literal for the '<em><b>Content Type</b></em>' attribute feature.
@@ -1227,8 +1240,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute SCENARIO_LOCK__AVAILABLE = eINSTANCE
-				.getScenarioLock_Available();
+		EAttribute SCENARIO_LOCK__AVAILABLE = eINSTANCE.getScenarioLock_Available();
 
 		/**
 		 * The meta object literal for the '<em><b>Claimed</b></em>' attribute feature.
@@ -1252,8 +1264,7 @@ public interface ScenarioServicePackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SCENARIO_LOCK__INSTANCE = eINSTANCE
-				.getScenarioLock_Instance();
+		EReference SCENARIO_LOCK__INSTANCE = eINSTANCE.getScenarioLock_Instance();
 
 		/**
 		 * The meta object literal for the '<em>IScenario Service</em>' data type.

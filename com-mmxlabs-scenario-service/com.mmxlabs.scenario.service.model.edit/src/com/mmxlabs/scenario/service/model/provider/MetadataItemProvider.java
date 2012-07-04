@@ -32,9 +32,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class MetadataItemProvider extends ItemProviderAdapter implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class MetadataItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -73,15 +71,9 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addCreatorPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_Metadata_creator_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_Metadata_creator_feature", "_UI_Metadata_type"),
-				ScenarioServicePackage.Literals.METADATA__CREATOR, true, false,
-				false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Metadata_creator_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_Metadata_creator_feature", "_UI_Metadata_type"), ScenarioServicePackage.Literals.METADATA__CREATOR, true, false, false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -91,15 +83,9 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addCreatedPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_Metadata_created_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_Metadata_created_feature", "_UI_Metadata_type"),
-				ScenarioServicePackage.Literals.METADATA__CREATED, true, false,
-				false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Metadata_created_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_Metadata_created_feature", "_UI_Metadata_type"), ScenarioServicePackage.Literals.METADATA__CREATED, true, false, false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -109,17 +95,9 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addLastModifiedPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_Metadata_lastModified_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_Metadata_lastModified_feature",
-						"_UI_Metadata_type"),
-				ScenarioServicePackage.Literals.METADATA__LAST_MODIFIED, true,
-				false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
-				null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_Metadata_lastModified_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Metadata_lastModified_feature", "_UI_Metadata_type"),
+				ScenarioServicePackage.Literals.METADATA__LAST_MODIFIED, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -129,15 +107,9 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addCommentPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_Metadata_comment_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_Metadata_comment_feature", "_UI_Metadata_type"),
-				ScenarioServicePackage.Literals.METADATA__COMMENT, true, false,
-				false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Metadata_comment_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_Metadata_comment_feature", "_UI_Metadata_type"), ScenarioServicePackage.Literals.METADATA__COMMENT, true, false, false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -147,17 +119,9 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addLastModifiedByPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_Metadata_lastModifiedBy_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_Metadata_lastModifiedBy_feature",
-						"_UI_Metadata_type"),
-				ScenarioServicePackage.Literals.METADATA__LAST_MODIFIED_BY,
-				true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_Metadata_lastModifiedBy_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Metadata_lastModifiedBy_feature", "_UI_Metadata_type"),
+				ScenarioServicePackage.Literals.METADATA__LAST_MODIFIED_BY, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -167,18 +131,9 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	protected void addContentTypePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(
-						((ComposeableAdapterFactory) adapterFactory)
-								.getRootAdapterFactory(),
-						getResourceLocator(),
-						getString("_UI_Metadata_contentType_feature"),
-						getString("_UI_PropertyDescriptor_description",
-								"_UI_Metadata_contentType_feature",
-								"_UI_Metadata_type"),
-						ScenarioServicePackage.Literals.METADATA__CONTENT_TYPE,
-						true, false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_Metadata_contentType_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Metadata_contentType_feature", "_UI_Metadata_type"),
+				ScenarioServicePackage.Literals.METADATA__CONTENT_TYPE, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -189,8 +144,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-				getResourceLocator().getImage("full/obj16/Metadata"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Metadata"));
 	}
 
 	/**
@@ -202,8 +156,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 	@Override
 	public String getText(Object object) {
 		String label = ((Metadata) object).getCreator();
-		return label == null || label.length() == 0 ? getString("_UI_Metadata_type")
-				: getString("_UI_Metadata_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_Metadata_type") : getString("_UI_Metadata_type") + " " + label;
 	}
 
 	/**
@@ -224,8 +177,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 		case ScenarioServicePackage.METADATA__COMMENT:
 		case ScenarioServicePackage.METADATA__LAST_MODIFIED_BY:
 		case ScenarioServicePackage.METADATA__CONTENT_TYPE:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), false, true));
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -239,8 +191,7 @@ public class MetadataItemProvider extends ItemProviderAdapter implements
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 
