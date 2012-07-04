@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
@@ -52,4 +53,6 @@ public interface IScenarioEditingLocation extends IEditingDomainProvider {
 	public abstract Shell getShell();
 
 	public abstract ScenarioLock getEditorLock();
+	
+	public abstract IStatusProvider getStatusProvider();
 }

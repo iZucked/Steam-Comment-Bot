@@ -55,8 +55,8 @@ import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.tabular.filter.FilterUtils;
 import com.mmxlabs.models.ui.tabular.filter.IFilter;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
-import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.models.ui.validation.ValidationContentAdapter;
+import com.mmxlabs.models.ui.validation.IStatusProvider;
+import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
 import com.mmxlabs.models.util.emfpath.EMFPath;
 
 /**
@@ -75,6 +75,31 @@ public class EObjectTableViewer extends GridTableViewer {
 	protected static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
 
 	protected IColorProvider delegateColourProvider;
+
+	protected IStatusProvider statusProvider;
+
+	protected IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
+
+		@Override
+		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
+			final HashSet<Object> updates = new HashSet<Object>();
+			for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
+				if (!entry.getValue().isOK())
+					updates.add(entry.getKey());
+			}
+
+			validationErrors.clear();
+
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					processStatus(status);
+					// also update things which had an error before, in case they don't any more.
+					update(updates.toArray(), null);
+				}
+			});
+		}
+	};
 
 	final HashSet<EObject> objectsToUpdate = new HashSet<EObject>();
 	boolean waitingForUpdate = false;
@@ -164,8 +189,6 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private final ArrayList<GridColumn> columnSortOrder = new ArrayList<GridColumn>();
 
-	private IExtraValidationContext extraValidationContext;
-
 	/**
 	 * A one-element list referring to the EObject which contains all the display elements. #adapter uses this to determine when a notification comes on the top-level object, and so all the contents
 	 * should be refreshed (e.g. after an import)
@@ -242,8 +265,6 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	private boolean displayValidationErrors = true;
-
-	private ValidationContentAdapter validationAdapter;
 
 	final Map<Object, IStatus> validationErrors = new HashMap<Object, IStatus>();
 
@@ -493,19 +514,15 @@ public class EObjectTableViewer extends GridTableViewer {
 
 		currentElements.clear();
 		columnSortOrder.clear();
+
+		if (statusProvider != null) {
+			statusProvider.removeStatusChangedListener(statusChangedListener);
+		}
 	}
 
 	@Override
 	public Control getControl() {
 		return getGrid();
-	}
-
-	protected boolean claimValidationLock() {
-		return true;
-	}
-
-	protected void releaseValidationLock() {
-
 	}
 
 	public void init(final IStructuredContentProvider contentProvider) {
@@ -532,63 +549,6 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 		});
 
-		validationAdapter = new ValidationContentAdapter(extraValidationContext) {
-			@Override
-			public void validationStatus(final IStatus status) {
-				final HashSet<Object> updates = new HashSet<Object>();
-				for (final Map.Entry<Object, IStatus> entry : validationErrors.entrySet()) {
-					if (!entry.getValue().isOK())
-						updates.add(entry.getKey());
-				}
-
-				validationErrors.clear();
-
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						processStatus(status);
-						// also update things which had an error before, in case they don't any more.
-						update(updates.toArray(), null);
-					}
-				});
-
-			}
-
-			void processStatus(final IStatus status) {
-				if (status == null)
-					return;
-				if (status.isMultiStatus()) {
-					for (final IStatus s : status.getChildren()) {
-						processStatus(s);
-					}
-				}
-				if (status instanceof IDetailConstraintStatus) {
-					final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
-					if (!status.isOK()) {
-						updateObject(getElementForNotificationTarget(detailConstraintStatus.getTarget()), status);
-
-						for (final EObject e : detailConstraintStatus.getObjects()) {
-							updateObject(getElementForNotificationTarget(e), status);
-						}
-					}
-				}
-			}
-
-			void updateObject(final EObject object, final IStatus status) {
-				if (object != null) {
-					setStatus(object, status);
-					update(object, null);
-				}
-			}
-
-			void setStatus(final EObject e, final IStatus s) {
-				final IStatus existing = validationErrors.get(e);
-				if (existing == null || s.getSeverity() > existing.getSeverity()) {
-					validationErrors.put(e, s);
-				}
-			}
-		};
-
 		viewer.setContentProvider(
 
 		new IStructuredContentProvider() {
@@ -610,37 +570,11 @@ public class EObjectTableViewer extends GridTableViewer {
 					});
 				}
 
-				// Remove adapter from old input
-				if (oldInput instanceof EObject) {
-					final EObject eObject = (EObject) oldInput;
-					eObject.eAdapters().remove(validationAdapter);
-				}
-
 				contentProvider.inputChanged(viewer, oldInput, newInput);
 
-				// Tell the adapter to validate the input rather than changed objects
-				validationAdapter.setTarget(newInput);
-
-				// Add adapter to new input
-				if (newInput instanceof EObject) {
-					final EObject eObject = (EObject) newInput;
-					eObject.eAdapters().add(validationAdapter);
-				}
-
-				if (newInput != null) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							// Perform initial validation
-							if (claimValidationLock()) {
-								try {
-									validationAdapter.performValidation();
-								} finally {
-									releaseValidationLock();
-								}
-							}
-						}
-					});
+				if (statusProvider != null) {
+					// Perform initial validation
+					processStatus(statusProvider.getStatus());
 				}
 			}
 
@@ -915,17 +849,6 @@ public class EObjectTableViewer extends GridTableViewer {
 		column.getColumn().dispose();
 	}
 
-	public IExtraValidationContext getExtraValidationContext() {
-		return extraValidationContext;
-	}
-
-	public void setExtraValidationContext(final IExtraValidationContext extraValidationContext) {
-		this.extraValidationContext = extraValidationContext;
-		if (validationAdapter != null) {
-			validationAdapter.setExtraContext(extraValidationContext);
-		}
-	}
-
 	public IColorProvider getColourProvider() {
 		return delegateColourProvider;
 	}
@@ -936,5 +859,48 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	public Map<Object, IStatus> getValidationErrors() {
 		return validationErrors;
+	}
+
+	public IStatusProvider getStatusProvider() {
+		return statusProvider;
+	}
+
+	public void setStatusProvider(final IStatusProvider statusProvider) {
+		this.statusProvider = statusProvider;
+		statusProvider.addStatusChangedListener(statusChangedListener);
+	}
+
+	void processStatus(final IStatus status) {
+		if (status == null)
+			return;
+		if (status.isMultiStatus()) {
+			for (final IStatus s : status.getChildren()) {
+				processStatus(s);
+			}
+		}
+		if (status instanceof IDetailConstraintStatus) {
+			final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
+			if (!status.isOK()) {
+				updateObject(getElementForNotificationTarget(detailConstraintStatus.getTarget()), status);
+
+				for (final EObject e : detailConstraintStatus.getObjects()) {
+					updateObject(getElementForNotificationTarget(e), status);
+				}
+			}
+		}
+	}
+
+	void updateObject(final EObject object, final IStatus status) {
+		if (object != null) {
+			setStatus(object, status);
+			update(object, null);
+		}
+	}
+
+	void setStatus(final EObject e, final IStatus s) {
+		final IStatus existing = validationErrors.get(e);
+		if (existing == null || s.getSeverity() > existing.getSeverity()) {
+			validationErrors.put(e, s);
+		}
 	}
 }

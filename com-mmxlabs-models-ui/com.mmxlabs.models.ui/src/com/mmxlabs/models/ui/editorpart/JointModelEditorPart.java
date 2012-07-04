@@ -70,6 +70,7 @@ import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
+import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
@@ -102,6 +103,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	 * The root object from {@link #jointModel}
 	 */
 	private MMXRootObject rootObject;
+
+	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 
 	/**
 	 * The editing domain for controls to use. This is pretty standard, but hooks command creation to allow extra things there
@@ -154,7 +157,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private TreeViewer selectionViewer;
 
 	private Image editorTitleImage;
-	
+
 	private ScenarioLock editorLock;
 
 	private ISelectionListener externalSelectionChangedListener;
@@ -191,13 +194,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				if (locked) {
 					for (final ScenarioLock lock : getScenarioInstance().getLocks()) {
 						if (lock.isClaimed()) {
-							title += " (locked for " + lock.getKey() +")";
+							title += " (locked for " + lock.getKey() + ")";
 						}
 					}
 				}
-				
-				
-				
+
 				setPartName(title);
 			}
 		});
@@ -305,9 +306,11 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			}
 
 			scenarioInstance = instance;
-			
+
+			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(scenarioInstance);
+
 			editorLock = instance.getLock(ScenarioLock.EDITORS);
-			
+
 			EObject ro;
 			try {
 				ro = scenarioService.load(instance);
@@ -332,10 +335,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 					}
 				}
 			};
-//			instance.eAdapters().add(lockedAdapter);
+			// instance.eAdapters().add(lockedAdapter);
 
 			editorLock.eAdapters().add(lockedAdapter);
-			
+
 			if (ro instanceof MMXRootObject) {
 				root = (MMXRootObject) ro;
 			} else {
@@ -684,5 +687,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	public ScenarioLock getEditorLock() {
 		return editorLock;
+	}
+
+	@Override
+	public IStatusProvider getStatusProvider() {
+		return scenarioInstanceStatusProvider;
 	}
 }
