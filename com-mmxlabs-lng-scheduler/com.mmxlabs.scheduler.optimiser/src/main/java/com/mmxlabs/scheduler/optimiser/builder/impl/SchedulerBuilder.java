@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.builder.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -609,13 +610,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final StartPortSlot startSlot = new StartPortSlot(heelLimit, heelCVValue, heelUnitPrice);
 		startSlot.setId("start-" + name);
-		startSlot.setPort(start.hasPortRequirement() ? start.getLocation() : ANYWHERE);
+		startSlot.setPort((start.hasPortRequirement() && start.getLocation() != null) ? start.getLocation() : ANYWHERE);
 
 		startSlot.setTimeWindow(startWindow);
 
 		final EndPortSlot endSlot = new EndPortSlot();
 		endSlot.setId("end-" + name);
-		endSlot.setPort(end.hasPortRequirement() ? end.getLocation() : ANYWHERE);
+		endSlot.setPort((end.hasPortRequirement() && end.getLocation() != null) ? end.getLocation() : ANYWHERE);
 
 		// Create start/end sequence elements for this route
 		final SequenceElement startElement = new SequenceElement(indexingContext);
@@ -669,22 +670,32 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IStartEndRequirement createStartEndRequirement(final IPort fixedPort) {
-		return new StartEndRequirement(fixedPort, true, null);
+		return new StartEndRequirement(fixedPort, null, true, null);
+	}
+
+	@Override
+	public IStartEndRequirement createStartEndRequirement(final Collection<IPort> portSet) {
+		return new StartEndRequirement(null, portSet, true, null);
 	}
 
 	@Override
 	public IStartEndRequirement createStartEndRequirement(final ITimeWindow timeWindow) {
-		return new StartEndRequirement(ANYWHERE, false, timeWindow);
+		return new StartEndRequirement(ANYWHERE, null, false, timeWindow);
 	}
 
 	@Override
 	public IStartEndRequirement createStartEndRequirement(final IPort fixedPort, final ITimeWindow timeWindow) {
-		return new StartEndRequirement(fixedPort, true, timeWindow);
+		return new StartEndRequirement(fixedPort, null, true, timeWindow);
+	}
+
+	@Override
+	public IStartEndRequirement createStartEndRequirement(final Collection<IPort> portSet, final ITimeWindow timeWindow) {
+		return new StartEndRequirement(null, portSet, true, timeWindow);
 	}
 
 	@Override
 	public IStartEndRequirement createStartEndRequirement() {
-		return new StartEndRequirement(ANYWHERE, false, null);
+		return new StartEndRequirement(ANYWHERE, null, false, null);
 	}
 
 	@Override

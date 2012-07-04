@@ -4,18 +4,22 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import java.util.Collection;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 
 public class StartEndRequirement implements IStartEndRequirement {
-	IPort port;
-	boolean portIsSpecified;
-	ITimeWindow timeWindow;
+	private final IPort port;
+	private final Collection<IPort> portSet;
+	private final boolean portIsSpecified;
+	private final ITimeWindow timeWindow;
 
-	public StartEndRequirement(final IPort port, final boolean portIsSpecified, final ITimeWindow timeWindow) {
+	public StartEndRequirement(final IPort port, Collection<IPort> portSet, final boolean portIsSpecified, final ITimeWindow timeWindow) {
 		super();
 		this.port = port;
+		this.portSet = portSet;
 		this.portIsSpecified = portIsSpecified;
 		this.timeWindow = timeWindow;
 	}
@@ -38,5 +42,10 @@ public class StartEndRequirement implements IStartEndRequirement {
 	@Override
 	public ITimeWindow getTimeWindow() {
 		return timeWindow;
+	}
+
+	@Override
+	public Collection<IPort> getLocations() {
+		return portSet;
 	}
 }

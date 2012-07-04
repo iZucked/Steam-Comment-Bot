@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.builder;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -116,7 +117,7 @@ public interface ISchedulerBuilder {
 	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
 	 */
 	void setVesselClassStateParamaters(IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
-			int inPortConsumptionRateInMTPerHour,IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
+			int inPortConsumptionRateInMTPerHour, IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
 
 	/**
 	 * Create a charter out event
@@ -239,6 +240,23 @@ public interface ISchedulerBuilder {
 	 * @return
 	 */
 	IStartEndRequirement createStartEndRequirement(IPort fixedPort, ITimeWindow timeWindow);
+
+	/**
+	 * Create a requirement that the vessel start/end at the closet in the given set of ports, but at an arbitrary time
+	 * 
+	 * @param portSet
+	 * @return
+	 */
+	IStartEndRequirement createStartEndRequirement(Collection<IPort> portSet);
+
+	/**
+	 * Create a requirement that the vessel start/end at the closet in the given set of ports and time
+	 * 
+	 * @param portSet
+	 * @param fixedTime
+	 * @return
+	 */
+	IStartEndRequirement createStartEndRequirement(Collection<IPort> portSet, ITimeWindow timeWindow);
 
 	/**
 	 * Create a port with the given name and cooldown requirement
@@ -513,4 +531,5 @@ public interface ISchedulerBuilder {
 	 * @param cost
 	 */
 	void setPortCost(IPort port, IVessel vessel, PortType portType, long cost);
+
 }

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import java.util.Collection;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 
 /**
@@ -40,5 +42,7 @@ public interface IStartEndRequirement {
 	 * @return
 	 */
 	public IPort getLocation();
+	
+	public Collection<IPort> getLocations();
 
 }
