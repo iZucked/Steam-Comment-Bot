@@ -59,7 +59,6 @@ import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
-import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
@@ -262,7 +261,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		scenarioViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
 
-		scenarioViewer.setExtraValidationContext(new DefaultExtraValidationContext(getJointModelEditorPart().getRootObject()));
+		scenarioViewer.setStatusProvider(getJointModelEditorPart().getStatusProvider());
 
 		final Grid table = scenarioViewer.getGrid();
 
