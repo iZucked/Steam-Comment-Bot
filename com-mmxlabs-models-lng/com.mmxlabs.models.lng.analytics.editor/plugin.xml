@@ -139,7 +139,7 @@
           id="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
           name="Toggle Live Evaluator">
        <state
-             class="org.eclipse.jface.commands.ToggleState:true"
+             class="org.eclipse.ui.handlers.RegistryToggleState:true"
              id="org.eclipse.ui.commands.toggleState">
        </state>
     </command>
