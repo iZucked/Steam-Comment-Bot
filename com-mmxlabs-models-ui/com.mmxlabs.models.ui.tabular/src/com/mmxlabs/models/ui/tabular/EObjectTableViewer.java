@@ -67,10 +67,11 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * 
  */
 public class EObjectTableViewer extends GridTableViewer {
+	private final static Logger log = LoggerFactory.getLogger(EObjectTableViewer.class);
+
 	protected static final String COLUMN_PATH = "COLUMN_PATH";
 	protected static final String COLUMN_RENDERER = "COLUMN_RENDERER";
-	private final static Logger log = LoggerFactory.getLogger(EObjectTableViewer.class);
-	private static final String COLUMN_MANIPULATOR = "COLUMN_MANIPULATOR";
+	protected static final String COLUMN_MANIPULATOR = "COLUMN_MANIPULATOR";
 	protected static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
 	protected static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
 
@@ -244,7 +245,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private IFilter filter = null;
 
-	boolean lockedForEditing = false;
+	protected boolean lockedForEditing = false;
 
 	/**
 	 * @return True if editing is currently disabled on this table.
