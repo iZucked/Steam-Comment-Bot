@@ -17,15 +17,15 @@ import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
  * Basic scenario selection service implementation
  * 
  * @author hinton
- *
+ * 
  */
 public class ScenarioServiceSelectionProvider implements IScenarioServiceSelectionProvider {
 	private final List<IScenarioServiceSelectionChangedListener> listeners = new LinkedList<IScenarioServiceSelectionChangedListener>();
-	
+
 	private final HashSet<ScenarioInstance> selection = new HashSet<ScenarioInstance>();
-	
+
 	private ScenarioInstance pin = null;
-	
+
 	public void select(final ScenarioInstance instance) {
 		if (!isSelected(instance)) {
 			selection.add(instance);
@@ -34,17 +34,18 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 			}
 		}
 	}
-	
+
 	public void deselect(final ScenarioInstance instance) {
 		if (isSelected(instance)) {
 			selection.remove(instance);
-			if (instance == pin) setPinnedInstance(null);
+			if (instance == pin)
+				setPinnedInstance(null);
 			for (final IScenarioServiceSelectionChangedListener listener : listeners) {
 				listener.deselected(this, Collections.singleton(instance));
 			}
 		}
 	}
-	
+
 	public void deselectAll() {
 		if (selection.isEmpty() == false) {
 			final HashSet<ScenarioInstance> copy = new HashSet<ScenarioInstance>(selection);
@@ -55,39 +56,41 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 			}
 		}
 	}
-	
+
 	public boolean isSelected(final ScenarioInstance instance) {
 		return selection.contains(instance);
 	}
-	
+
 	@Override
 	public Collection<ScenarioInstance> getSelection() {
 		return Collections.unmodifiableSet(selection);
 	}
 
 	@Override
-	public void addSelectionChangedListener(IScenarioServiceSelectionChangedListener listener) {
+	public void addSelectionChangedListener(final IScenarioServiceSelectionChangedListener listener) {
 		listeners.add(listener);
 	}
-	
+
 	@Override
-	public void removeSelectionChangedListener(IScenarioServiceSelectionChangedListener listener) {
+	public void removeSelectionChangedListener(final IScenarioServiceSelectionChangedListener listener) {
 		listeners.remove(listener);
 	}
 
 	/**
 	 * @param instance
 	 */
-	public void toggleSelection(ScenarioInstance instance) {
-		if (isSelected(instance)) deselect(instance);
-		else select(instance);
+	public void toggleSelection(final ScenarioInstance instance) {
+		if (isSelected(instance))
+			deselect(instance);
+		else
+			select(instance);
 	}
 
 	@Override
 	public ScenarioInstance getPinnedInstance() {
 		return pin;
 	}
-	
+
 	public void setPinnedInstance(final ScenarioInstance instance) {
 		if (pin != instance) {
 			final ScenarioInstance oldPin = pin;
