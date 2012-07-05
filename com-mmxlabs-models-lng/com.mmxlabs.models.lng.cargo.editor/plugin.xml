@@ -188,6 +188,13 @@
           label="Cargo Group"
           targetEClass="com.mmxlabs.models.lng.cargo.CargoGroup">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.cargoGroupFactoryForCargoTable"
+          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.CargoGroupFactory"
+          label="Cargo Group"
+          outputEClass="com.mmxlabs.models.lng.cargo.CargoGroup"
+          targetEClass="com.mmxlabs.models.lng.cargo.Cargo">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
