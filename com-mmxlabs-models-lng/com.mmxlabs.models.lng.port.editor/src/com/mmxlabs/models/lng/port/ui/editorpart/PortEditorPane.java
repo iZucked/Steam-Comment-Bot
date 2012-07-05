@@ -46,11 +46,13 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.port.importer.RouteImporter;
 import com.mmxlabs.models.lng.port.ui.distanceeditor.DistanceEditorDialog;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.ui.actions.ImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
@@ -70,9 +72,10 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 		addNameManipulator("Name");
 
-		// for (final PortCapability capability : PortCapability.values()) {
-		// addTypicalColumn(capability.getName(), new CapabilityManipulator(capability, getJointModelEditorPart().getEditingDomain()));
-		// }
+		addTypicalColumn("Country", new BasicAttributeManipulator(PortPackage.eINSTANCE.getLocation_Country(), getEditingDomain()), PortPackage.eINSTANCE.getPort_Location());
+
+		addTypicalColumn(PortCapability.LOAD.getName(), new CapabilityManipulator(PortCapability.LOAD, getJointModelEditorPart().getEditingDomain()));
+		addTypicalColumn(PortCapability.DISCHARGE.getName(), new CapabilityManipulator(PortCapability.DISCHARGE, getJointModelEditorPart().getEditingDomain()));
 
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);
