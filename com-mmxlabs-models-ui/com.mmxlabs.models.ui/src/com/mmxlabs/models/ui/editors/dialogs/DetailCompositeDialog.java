@@ -540,7 +540,7 @@ public class DetailCompositeDialog extends Dialog {
 		return new Action("Create new " + factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD)) {
 			@Override
 			public void run() {
-				final Collection<? extends ISetting> settings = factory.createInstance(rootObject, sidebarContainer, sidebarContainment);
+				final Collection<? extends ISetting> settings = factory.createInstance(rootObject, sidebarContainer, sidebarContainment, null);
 				if (settings.isEmpty())
 					return;
 				// now create an add command, which will include adding any

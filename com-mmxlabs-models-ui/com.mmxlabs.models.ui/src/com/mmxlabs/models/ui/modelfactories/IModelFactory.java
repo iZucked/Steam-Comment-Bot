@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.viewers.ISelection;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -33,14 +34,16 @@ public interface IModelFactory {
 	 * @param rootObject the root object
 	 * @param container the object where the output should end up being contained
 	 * @param containment the reference in which the output should be contained
+	 * @param iSelection 
 	 * 
 	 * @return null if the operation did not happen, or the main part of whatever has been created (for example the cargo if a cargo has been created with some slots).
 	 */
-	public Collection<? extends ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment);
+	public Collection<? extends ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, ISelection iSelection);
 
 	public interface ISetting {
 		public EObject getInstance();
 		public EObject getContainer();
 		public EReference getContainment();
+		public ISelection getSelection();
 	}
 }

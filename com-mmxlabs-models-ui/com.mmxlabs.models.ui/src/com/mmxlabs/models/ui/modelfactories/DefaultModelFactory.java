@@ -8,6 +8,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -15,13 +16,16 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * The default model factory, which just instantiates stuff of the given class.
+ * 
  * @author hinton
- *
+ * 
  */
 public class DefaultModelFactory implements IModelFactory {
 	protected Date now;
@@ -30,9 +34,9 @@ public class DefaultModelFactory implements IModelFactory {
 	private String prototypeClass;
 
 	@Override
-	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment) {
+	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final ISelection selection) {
 		EObject output = null;
-		
+
 		if (prototypeClass == null) {
 			output = constructInstance(containment.getEReferenceType());
 		} else {
@@ -47,13 +51,14 @@ public class DefaultModelFactory implements IModelFactory {
 			if (output == null)
 				output = constructInstance(containment.getEReferenceType());
 		}
-		
+
+		addSelectionToInstance(output.eClass(), output, selection);
+
 		final Calendar nowCal = Calendar.getInstance();
 		nowCal.clear(Calendar.MILLISECOND);
 		nowCal.clear(Calendar.SECOND);
 		nowCal.clear(Calendar.MINUTE);
-		
-		
+
 		now = nowCal.getTime();
 		postprocess(output);
 		final EObject finalOutput = output;
@@ -72,6 +77,11 @@ public class DefaultModelFactory implements IModelFactory {
 			public EReference getContainment() {
 				return containment;
 			}
+
+			@Override
+			public ISelection getSelection() {
+				return selection;
+			}
 		};
 		return Collections.singleton(setting);
 	}
@@ -80,31 +90,40 @@ public class DefaultModelFactory implements IModelFactory {
 		final EObject object = eClass.getEPackage().getEFactoryInstance().create(eClass);
 
 		// create singly-contained sub objects, by default
-		
+
 		for (final EReference reference : object.eClass().getEAllReferences()) {
 			if (reference.isMany() == false && reference.isContainment() == true) {
 				object.eSet(reference, createSubInstance(object, reference));
 			}
 		}
-		
+
 		return object;
 	}
-	
+
 	protected EObject createSubInstance(final EObject top, final EReference reference) {
 		return constructInstance(reference.getEReferenceType());
 	}
-	
+
 	protected void postprocess(final EObject top) {
 		for (final EAttribute attribute : top.eClass().getEAllAttributes()) {
-			if (attribute.getEAttributeType() == EcorePackage.eINSTANCE.getEDate() && 
-					!attribute.isUnsettable() &&
-					top.eGet(attribute) == null) {
+			if (attribute.getEAttributeType() == EcorePackage.eINSTANCE.getEDate() && !attribute.isUnsettable() && top.eGet(attribute) == null) {
 				top.eSet(attribute, now);
 			}
 		}
 		for (final EObject o : top.eContents()) {
 			postprocess(o);
 		}
+	}
+
+	/**
+	 * Opportunity to process the selection and update the newly created instance.
+	 * 
+	 * @param cls
+	 * @param instance
+	 * @param selection
+	 */
+	protected void addSelectionToInstance(EClass cls, EObject instance, ISelection selection) {
+
 	}
 
 	@Override
