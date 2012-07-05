@@ -154,6 +154,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 			addTypicalColumn("Assignment", new AssignmentManipulator(part));
 		}
 
+		// Add action to create and edit cargo groups
 		getToolBarManager().appendToGroup(EDIT_GROUP, new Action() {
 			{
 				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
