@@ -306,6 +306,11 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			public IScenarioEditingLocation getEditorPart() {
 				return jointModelEditorPart;
 			}
+			
+			@Override
+			public ISelection getCurrentSelection() {
+				return viewer.getSelection();
+			}
 		});
 
 		if (addAction != null) {

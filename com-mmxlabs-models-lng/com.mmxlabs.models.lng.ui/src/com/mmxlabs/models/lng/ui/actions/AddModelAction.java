@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
@@ -43,6 +44,7 @@ public final class AddModelAction {
 		public EReference getContainment();
 		public MMXRootObject getRootObject();
 		public IScenarioEditingLocation getEditorPart();
+		ISelection getCurrentSelection();
 	}
 
 	public final static Action create(final EClass eClass, final IAddContext context) {
@@ -76,7 +78,7 @@ class SingleAddAction extends LockableAction {
 	 */
 	@Override
 	public void run() {
-		final Collection<? extends ISetting> settings = factory.createInstance(context.getRootObject(), context.getContainer(), context.getContainment());
+		final Collection<? extends ISetting> settings = factory.createInstance(context.getRootObject(), context.getContainer(), context.getContainment(), context.getCurrentSelection());
 		if (settings.isEmpty() == false) {
 			
 			final CompoundCommand add = new CompoundCommand();
