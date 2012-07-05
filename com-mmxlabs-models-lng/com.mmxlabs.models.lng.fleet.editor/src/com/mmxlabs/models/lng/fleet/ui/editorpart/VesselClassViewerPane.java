@@ -24,6 +24,7 @@ import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
@@ -266,6 +267,11 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 				@Override
 				public IScenarioEditingLocation getEditorPart() {
 					return jointModelEditor;
+				}
+				
+				@Override
+				public ISelection getCurrentSelection() {
+					return viewer.getSelection();
 				}
 			});
 			if (newBase != null) {

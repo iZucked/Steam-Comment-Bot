@@ -9,6 +9,7 @@ import java.util.Collection;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.jface.viewers.ISelection;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -27,12 +28,12 @@ public class CargoFactory extends DefaultModelFactory {
 		super();
 	}
 	@Override
-	public Collection<ISetting> createInstance(MMXRootObject rootObject, EObject container, EReference containment) {
+	public Collection<ISetting> createInstance(MMXRootObject rootObject, EObject container, EReference containment, final ISelection selection) {
 		final Collection<ISetting> loadSetting = slotFactory.createInstance(rootObject, container, 
-				CargoPackage.eINSTANCE.getCargoModel_LoadSlots());
+				CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), selection);
 		final Collection<ISetting> dischargeSetting = slotFactory.createInstance(rootObject, container, 
-				CargoPackage.eINSTANCE.getCargoModel_DischargeSlots());
-		final Collection<ISetting> superSetting = super.createInstance(rootObject, container, containment);
+				CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), selection);
+		final Collection<ISetting> superSetting = super.createInstance(rootObject, container, containment, selection);
 		
 		LoadSlot load = null;
 		DischargeSlot discharge = null;

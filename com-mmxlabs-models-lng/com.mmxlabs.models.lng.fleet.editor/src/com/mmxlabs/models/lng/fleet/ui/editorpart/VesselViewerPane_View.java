@@ -23,6 +23,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -96,12 +97,12 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), FleetPackage.eINSTANCE.getFleetModel_VesselClasses());
 			}
 		});
-		
+
 		getToolBarManager().appendToGroup(EDIT_GROUP, new Action() {
 			{
-				setImageDescriptor(
-						AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
+				setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.port.editor", "/icons/group.gif"));
 			}
+
 			@Override
 			public void run() {
 				final DetailCompositeDialog dcd = new DetailCompositeDialog(VesselViewerPane_View.this.getJointModelEditorPart().getShell(), VesselViewerPane_View.this.getJointModelEditorPart()
@@ -323,6 +324,11 @@ public class VesselViewerPane_View extends ScenarioTableViewerPane {
 				@Override
 				public IScenarioEditingLocation getEditorPart() {
 					return jointModelEditor;
+				}
+
+				@Override
+				public ISelection getCurrentSelection() {
+					return viewer.getSelection();
 				}
 			});
 			if (newBase != null) {
