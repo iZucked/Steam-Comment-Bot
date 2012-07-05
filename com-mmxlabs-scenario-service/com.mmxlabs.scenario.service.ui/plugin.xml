@@ -364,35 +364,6 @@
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
-            locationURI="toolbar:com.mmxlabs.scenario.service.ui.navigator">
-         <command
-               commandId="com.mmxlabs.scenario.service.ui.lock"
-               icon="icons/commands/lock.gif"
-               label="Lock"
-               style="push"
-               tooltip="Lock/Unlock Scenario">
-         </command>
-         <command
-               commandId="org.eclipse.ui.edit.delete"
-               label="Delete"
-               style="push"
-               tooltip="Delete Scenario">
-         </command>
-         <command
-               commandId="com.mmxlabs.scenario.service.ui.newfolder"
-               icon="icons/newfolder_wiz.gif"
-               label="New Folder"
-               style="push"
-               tooltip="Create a new folder">
-         </command>
-         <command
-               commandId="com.mmxlabs.scenario.service.ui.fork"
-               label="Fork"
-               style="push">
-         </command>
-      </menuContribution>
-      <menuContribution
-            allPopups="false"
             locationURI="popup:com.mmxlabs.scenario.service.ui.navigator">
          <command
                commandId="com.mmxlabs.scenario.service.ui.newfolder"
