@@ -60,94 +60,94 @@ public class AssignmentEditorHelper {
 			return null;
 		}
 	}
-	
-	public static Command taskReassigned(final EditingDomain ed, final InputModel modelObject, UUIDObject task, UUIDObject beforeTask,
-			UUIDObject afterTask, Assignment oldResource,
-			Assignment newResource) {
-		final CompoundCommand cc = new CompoundCommand();
-		
-		// this should definitely kill anything pre-existing
-		Command totallyUnassign = totallyUnassign(ed, modelObject, task);
-		cc.append(totallyUnassign);
-		
-		// copy the current state and remove all ocurrences of task, in order that when we get
-		// the position it's valid after the unassign command has executed.
-		final List<UUIDObject> assigned = new ArrayList<UUIDObject>(newResource.getAssignedObjects());
-		assigned.removeAll(Collections.singleton(task));
-		
-		int position;
-		if (beforeTask != null) {
-			position = assigned.indexOf(beforeTask);
-		} else if (afterTask != null) {
-			position = assigned.indexOf(afterTask) + 1;
-		} else {
-			position = 0;
-			
-			final Date start = getStartDate(task);
-			final Date end = getEndDate(task);
-
-			if (start != null && end != null) {
-				for (final UUIDObject o : assigned) {
-					final Date startO = getStartDate(o);
-//					final Date endO = getEndDate(o);
-					if (end.before(startO)) {
-						break;
-//					} else if (start.after(endO)) {
-//						position++;
+//	
+//	public static Command taskReassigned(final EditingDomain ed, final InputModel modelObject, UUIDObject task, UUIDObject beforeTask,
+//			UUIDObject afterTask, Assignment oldResource,
+//			Assignment newResource) {
+//		final CompoundCommand cc = new CompoundCommand();
+//		
+//		// this should definitely kill anything pre-existing
+//		Command totallyUnassign = totallyUnassign(ed, modelObject, task);
+//		cc.append(totallyUnassign);
+//		
+//		// copy the current state and remove all ocurrences of task, in order that when we get
+//		// the position it's valid after the unassign command has executed.
+//		final List<UUIDObject> assigned = new ArrayList<UUIDObject>(newResource.getAssignedObjects());
+//		assigned.removeAll(Collections.singleton(task));
+//		
+//		int position;
+//		if (beforeTask != null) {
+//			position = assigned.indexOf(beforeTask);
+//		} else if (afterTask != null) {
+//			position = assigned.indexOf(afterTask) + 1;
+//		} else {
+//			position = 0;
+//			
+//			final Date start = getStartDate(task);
+//			final Date end = getEndDate(task);
+//
+//			if (start != null && end != null) {
+//				for (final UUIDObject o : assigned) {
+//					final Date startO = getStartDate(o);
+////					final Date endO = getEndDate(o);
+//					if (end.before(startO)) {
 //						break;
-					} else {
-						position++;
-					}
-				}
-			}
-		}
-		
-		if (newResource.getAssignedObjects().isEmpty() || position == newResource.getAssignedObjects().size()) {
-			cc.append(AddCommand.create(ed, newResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
-		} else {
-			cc.append(AddCommand.create(ed, newResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task, position));
-		}
-		
-		return cc;
-	}
-
-	public static Command taskUnassigned(final EditingDomain ed, final InputModel modelObject, UUIDObject task, Assignment oldResource) {
-		final CompoundCommand cc = new CompoundCommand();
-		cc.append(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
-		cc.append(RemoveCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), task));
-		return cc;
-	}
-	
-	public static Command totallyUnassign(final EditingDomain ed, final InputModel modelObject, final UUIDObject task) {
-		final CompoundCommand kill = new CompoundCommand();
-		kill.append(IdentityCommand.INSTANCE);
-		for (final Assignment a : modelObject.getAssignments()) {
-			for (final UUIDObject b : a.getAssignedObjects()) {
-				if (b == task) {
-					kill.append(RemoveCommand.create(ed, a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
-				}
-			}
-		}
-		return kill;
-	}
-	
-	public static Assignment getAssignmentForTask(final InputModel inputModel, final UUIDObject object) {
-		for (final Assignment a : inputModel.getAssignments()) {
-			if (a.getAssignedObjects().contains(object)) {
-				return a;
-			}
-		}
-		return null;
-	}
-	
-	public static Assignment getAssignmentForVessel(final InputModel input, final AVesselSet set) {
-		for (final Assignment a : input.getAssignments()) {
-			if (a.getVessels().contains(set)) {
-				return a;
-			}
-		}
-		return null;
-	}
+////					} else if (start.after(endO)) {
+////						position++;
+////						break;
+//					} else {
+//						position++;
+//					}
+//				}
+//			}
+//		}
+//		
+//		if (newResource.getAssignedObjects().isEmpty() || position == newResource.getAssignedObjects().size()) {
+//			cc.append(AddCommand.create(ed, newResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
+//		} else {
+//			cc.append(AddCommand.create(ed, newResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task, position));
+//		}
+//		
+//		return cc;
+//	}
+//
+//	public static Command taskUnassigned(final EditingDomain ed, final InputModel modelObject, UUIDObject task, Assignment oldResource) {
+//		final CompoundCommand cc = new CompoundCommand();
+//		cc.append(RemoveCommand.create(ed, oldResource, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
+//		cc.append(RemoveCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(), task));
+//		return cc;
+//	}
+//	
+//	public static Command totallyUnassign(final EditingDomain ed, final InputModel modelObject, final UUIDObject task) {
+//		final CompoundCommand kill = new CompoundCommand();
+//		kill.append(IdentityCommand.INSTANCE);
+//		for (final Assignment a : modelObject.getAssignments()) {
+//			for (final UUIDObject b : a.getAssignedObjects()) {
+//				if (b == task) {
+//					kill.append(RemoveCommand.create(ed, a, InputPackage.eINSTANCE.getAssignment_AssignedObjects(), task));
+//				}
+//			}
+//		}
+//		return kill;
+//	}
+//	
+//	public static Assignment getAssignmentForTask(final InputModel inputModel, final UUIDObject object) {
+//		for (final Assignment a : inputModel.getAssignments()) {
+//			if (a.getAssignedObjects().contains(object)) {
+//				return a;
+//			}
+//		}
+//		return null;
+//	}
+//	
+//	public static Assignment getAssignmentForVessel(final InputModel input, final AVesselSet set) {
+//		for (final Assignment a : input.getAssignments()) {
+//			if (a.getVessels().contains(set)) {
+//				return a;
+//			}
+//		}
+//		return null;
+//	}
 
 	public static ElementAssignment getElementAssignment(final InputModel modelObject, final UUIDObject task) {
 		for (final ElementAssignment ea : modelObject.getElementAssignments()) {

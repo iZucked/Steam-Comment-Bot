@@ -35,6 +35,7 @@ public interface InputModel extends UUIDObject {
 	 * If the meaning of the '<em>Assignments</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+ 	 * @deprecated Use {@link #getElementAssignments()}
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Assignments</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.input.InputPackage#getInputModel_Assignments()
@@ -51,6 +52,7 @@ public interface InputModel extends UUIDObject {
 	 * If the meaning of the '<em>Locked Assigned Objects</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @deprecated Use {@link ElementAssignment#isLocked()}
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Locked Assigned Objects</em>' reference list.
 	 * @see com.mmxlabs.models.lng.input.InputPackage#getInputModel_LockedAssignedObjects()

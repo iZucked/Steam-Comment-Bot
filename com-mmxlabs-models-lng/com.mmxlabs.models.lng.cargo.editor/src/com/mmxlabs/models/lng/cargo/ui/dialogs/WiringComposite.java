@@ -678,7 +678,7 @@ public class WiringComposite extends Composite {
 				}
 
 				if (isFOBSale || isDESPurchase) {
-					command.append(AssignmentEditorHelper.totallyUnassign(domain, rootObject.getSubModel(InputModel.class), cargo));
+					command.append(AssignmentEditorHelper.unassignElement(domain, rootObject.getSubModel(InputModel.class), cargo));
 				}
 			}
 		}

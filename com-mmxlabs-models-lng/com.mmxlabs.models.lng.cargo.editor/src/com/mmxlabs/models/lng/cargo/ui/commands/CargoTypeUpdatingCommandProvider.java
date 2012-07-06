@@ -51,7 +51,7 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 							if (desPurchase) {
 
 								final CompoundCommand cmd = new CompoundCommand("Convert to DES Purchase");
-								cmd.append(AssignmentEditorHelper.totallyUnassign(editingDomain, inputModel, cargo));
+								cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
@@ -81,7 +81,7 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 							if (fobSale) {
 
 								final CompoundCommand cmd = new CompoundCommand("Convert to FOB Sale");
-								cmd.append(AssignmentEditorHelper.totallyUnassign(editingDomain, inputModel, cargo));
+								cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
