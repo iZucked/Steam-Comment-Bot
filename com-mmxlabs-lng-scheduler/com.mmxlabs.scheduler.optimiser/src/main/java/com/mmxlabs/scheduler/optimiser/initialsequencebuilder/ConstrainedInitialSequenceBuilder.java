@@ -31,6 +31,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -285,8 +286,12 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				guy.add(place);
 				guy.setEndElement(true);
 				chunks.add(guy);
-				final Collection<IResource> c = racdcp.getAllowedResources(place);
-				endChunks.put(c.iterator().next(), guy);
+				for (final IResource r : data.getResources()) {
+					if (place == startEndRequirementProvider.getEndElement(r)) {
+						endChunks.put(r, guy);
+						break;
+					}
+				}
 			} else if (entry.getValue().size() > 1) {
 				final SequenceChunk guy = new SequenceChunk();
 				guy.add(place);
