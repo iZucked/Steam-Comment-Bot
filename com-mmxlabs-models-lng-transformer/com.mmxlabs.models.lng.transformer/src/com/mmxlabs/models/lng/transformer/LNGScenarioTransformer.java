@@ -58,6 +58,7 @@ import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
@@ -81,6 +82,7 @@ import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer.ModelClass;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.AVessel;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -402,33 +404,33 @@ public class LNGScenarioTransformer {
 	private void freezeInputModel(final ISchedulerBuilder builder, final ModelEntityMap entities) {
 		final InputModel input = rootObject.getSubModel(InputModel.class);
 		if (input != null) {
-			for (final UUIDObject o : input.getLockedAssignedObjects()) {
-				Assignment assignment = null;
-				for (final Assignment a : input.getAssignments()) {
-					if (a.getAssignedObjects().contains(o)) {
-						assignment = a;
-						break;
-					}
+
+			for (final ElementAssignment assignment : input.getElementAssignments()) {
+
+				if (!assignment.isLocked()) {
+					continue;
 				}
 
-				if (assignment == null || assignment.getVessels().isEmpty())
-					continue;// o is not actually assigned to anything
+				final AVesselSet vesselSet = assignment.getAssignment();
 				final IVessel vessel;
-				if (assignment.isAssignToSpot()) {
-					final List<IVessel> spots = spotVesselsByClass.get(assignment.getVessels().iterator().next());
+				if (vesselSet instanceof VesselClass) {
+					final List<IVessel> spots = spotVesselsByClass.get(vesselSet);
 					if (spots != null && spots.isEmpty() == false) {
 						vessel = spots.get(0);
 						spots.remove(0);
 					} else {
 						vessel = null;
 					}
+
 				} else {
-					vessel = entities.getOptimiserObject(assignment.getVessels().get(0), IVessel.class);
+					assert vesselSet instanceof Vessel;
+					vessel = entities.getOptimiserObject(vesselSet, IVessel.class);
 				}
 
 				if (vessel == null)
 					continue;
 
+				final UUIDObject o = assignment.getAssignedObject();
 				if (o instanceof Cargo) {
 					final ICargo cargo = entities.getOptimiserObject(o, ICargo.class);
 					if (cargo != null) {
