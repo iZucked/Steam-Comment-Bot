@@ -9,6 +9,9 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
+import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -111,23 +114,24 @@ public class JourneyView extends ScenarioInstanceView {
 			@Override
 			public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 				super.init(path, adapterFactory);
-				addTypicalColumn("Unit Cost", new NonEditableColumn() {
-					@Override
-					public String render(final Object object) {
-						if (propertySheetPage != null) propertySheetPage.refresh();
-						if (journey.getFrom() == null || journey.getTo() == null) return "";
-						try {
-							final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) object, journey.getFrom(), journey.getTo());
-							if (line != null) {
-								return String.format("$%.2f", line.getUnitCost());
-							} else {
-								return "";
-							}
-						} catch (Throwable th) {
-							return "";
-						}
-					}
-				});
+				addTypicalColumn("Unit Cost", new UnitCostManipulator());
+//						new NonEditableColumn() {
+//					@Override
+//					public String render(final Object object) {
+//						if (propertySheetPage != null) propertySheetPage.refresh();
+//						if (journey.getFrom() == null || journey.getTo() == null) return "";
+//						try {
+//							final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) object, journey.getFrom(), journey.getTo());
+//							if (line != null) {
+//								return String.format("$%.2f", line.getUnitCost());
+//							} else {
+//								return "";
+//							}
+//						} catch (Throwable th) {
+//							return "";
+//						}
+//					}
+//				});
 			}
 		};
 		
@@ -184,4 +188,80 @@ public class JourneyView extends ScenarioInstanceView {
 		}
 		return null;
 	}
+	
+	private class UnitCostManipulator extends NonEditableColumn {
+		@Override
+		public String render(final Object object) {
+			if (propertySheetPage != null) propertySheetPage.refresh();
+			if (journey.getFrom() == null || journey.getTo() == null) return "";
+			final Double d = evaluate(object);
+			if (d == null) return "";
+			return String.format("$%.2f", d);
+		}
+
+		@Override
+		public CellEditor getCellEditor(final Composite parent, final Object object) {
+			final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
+			
+			result.setFormatter(new DoubleFormatter());
+			
+			return result;
+		}
+
+		@Override
+		public boolean canEdit(Object object) {
+			if (object instanceof UnitCostMatrix) {
+				if (((UnitCostMatrix) object).isSetSpeed()) {
+					return evaluate(object) != null;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public void setValue(Object o, Object value) {
+			// reverse calculate
+			
+			if (o instanceof UnitCostMatrix) {
+				if (journey.getFrom() == null || journey.getTo() == null) return;
+				try {
+					final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) o, journey.getFrom(), journey.getTo());
+					if (line != null) {
+						if (value instanceof Double) {
+							final Double d = (Double) value;
+							// now calc backwards.
+							// unit cost = ((ship cost) + (other cost)) / (mmbtu)
+							// mmbtu * unit cost = ship + other
+							// ship = mmbtu * unit - other
+							// ship day rate = mmbtu * unit - other / days
+							final double requiredShipCost = line.getMmbtuDelivered() * d - (line.getTotalCost() - line.getHireCost());
+							final int dayRate = (int) (24 * requiredShipCost / line.getDuration());
+							((UnitCostMatrix) o).setNotionalDayRate(dayRate);// TODO allow undo.
+						}
+					}
+				} catch (Throwable th) {
+				}
+			}
+		}
+
+		@Override
+		public Object getValue(Object object) {
+			return evaluate(object);
+		}
+		
+		private Double evaluate(final Object o) {
+			if (o instanceof UnitCostMatrix) {
+				if (journey.getFrom() == null || journey.getTo() == null) return null;
+				try {
+					final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) o, journey.getFrom(), journey.getTo());
+					if (line != null) {
+						return line.getUnitCost();
+					}
+				} catch (Throwable th) {
+				}
+			}
+			return null;
+		}
+	}
+	
 }
