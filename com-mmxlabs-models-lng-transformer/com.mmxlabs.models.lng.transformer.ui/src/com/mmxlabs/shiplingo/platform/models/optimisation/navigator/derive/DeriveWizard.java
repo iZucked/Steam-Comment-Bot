@@ -40,7 +40,7 @@ import com.mmxlabs.shiplingo.platform.models.manifest.wizards.ScenarioServiceNew
  */
 public class DeriveWizard extends Wizard implements IExportWizard {
 	private DeriveWizardPage sourcePage;
-	private ScenarioServiceNewScenarioPage destinationPage; 
+	private ScenarioServiceNewScenarioPage destinationPage;
 
 	@Override
 	public void init(final IWorkbench workbench, final IStructuredSelection selection) {
@@ -54,10 +54,11 @@ public class DeriveWizard extends Wizard implements IExportWizard {
 		final Collection<ScenarioInstance> inputs = sourcePage.getScenarioInstance();
 		final Container output = destinationPage.getScenarioContainer();
 		final String outputName = destinationPage.getFileName();
-		
-		if (inputs.isEmpty()) return false;
+
+		if (inputs.isEmpty())
+			return false;
 		final ScenarioInstance input = inputs.iterator().next();
-		
+
 		return derive(input, output, outputName);
 	}
 
@@ -65,71 +66,10 @@ public class DeriveWizard extends Wizard implements IExportWizard {
 		try {
 			final ScenarioInstance duplicate = output.getScenarioService().duplicate(input, output);
 			duplicate.setName(outputName);
-			
-//			// fix output model
-//			final EObject top = duplicate.getScenarioService().load(duplicate);
-//			if (top instanceof MMXRootObject) {
-//				final MMXRootObject root = (MMXRootObject) top;
-//				final InputModel inputModel = root.getSubModel(InputModel.class);
-//				final ScheduleModel scheduleModel = root.getSubModel(ScheduleModel.class);
-//				final CargoModel cargoModel = root.getSubModel(CargoModel.class);
-//				if (inputModel != null && scheduleModel != null && cargoModel != null) {
-//					inputModel.getAssignments().clear();
-//					
-//					if (scheduleModel.getOptimisedSchedule() != null) {
-//						derive(scheduleModel.getOptimisedSchedule(), inputModel, cargoModel);
-//					} else if (scheduleModel.getInitialSchedule() != null) {
-//						derive(scheduleModel.getInitialSchedule(), inputModel, cargoModel);
-//					}
-//					
-//					duplicate.getScenarioService().save(duplicate);
-//					return true;
-//				}
-//			}
 		} catch (IOException e) {
-		
+
 		}
 		return false;
-	}
-
-	private void derive(final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel) {
-		for (final Sequence sequence : schedule.getSequences()) {
-			final Assignment a = InputFactory.eINSTANCE.createAssignment();
-			if (sequence.isSpotVessel()) {
-				a.setAssignToSpot(true);
-				a.getVessels().add(sequence.getVesselClass());
-			} else {
-				a.setAssignToSpot(false);
-				a.getVessels().add(sequence.getVessel());
-			}
-			for (final Event event : sequence.getEvents()) {
-				if (event instanceof SlotVisit) {
-					a.getAssignedObjects().add(((SlotVisit) event).getSlotAllocation().getSlot());
-				} else if (event instanceof VesselEventVisit) {
-					a.getAssignedObjects().add(((VesselEventVisit) event).getVesselEvent());
-				}
-			}
-			if (!a.getAssignedObjects().isEmpty()) {
-				inputModel.getAssignments().add(a);
-			}
-		}
-		// rewire any cargos which require it
-		// TODO handle spot market cases, and free slots
-		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
-			if (allocation.getInputCargo() == null) {
-				// this does not correspond directly to an input cargo;
-				// get the slots, find their cargos, and adjust them?
-				final LoadSlot load = (LoadSlot) allocation.getLoadAllocation().getSlot();
-				final DischargeSlot discharge = (DischargeSlot) allocation.getDischargeAllocation().getSlot();
-				
-				final Cargo loadCargo = load.getCargo();
-				final Cargo dischargeCargo = discharge.getCargo();
-				
-				// the cargo "belongs" to the load slot
-				loadCargo.setDischargeSlot(discharge);
-				dischargeCargo.setDischargeSlot(null);
-			}
-		}
 	}
 
 	@Override
