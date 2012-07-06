@@ -10,6 +10,9 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -42,6 +45,7 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
 /**
@@ -66,6 +70,27 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		private ElementAssignment elementAssignment;
 		private MMXRootObject rootObject;
 
+		/**
+		 * {@link ControlDecoration} used to show validation messages.
+		 */
+		private ControlDecoration validationDecoration;
+
+		/**
+		 * Cached reference to the Information icon
+		 */
+		protected final FieldDecoration decorationInfo = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_INFORMATION);
+
+		/**
+		 * Cached reference to the Warning icon
+		 */
+		protected final FieldDecoration decorationWarning = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_WARNING);
+
+		/**
+		 * Cached reference to the Error icon
+		 */
+		protected final FieldDecoration decorationError = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
+
+		
 		public AssignmentInlineEditor() {
 			disposeListener = new DisposeListener() {
 				@Override
@@ -78,6 +103,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 							obj.eAdapters().remove(AssignmentInlineEditor.this);
 						}
 					}
+
 					e.widget.removeDisposeListener(this);
 				}
 
@@ -96,7 +122,114 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 		@Override
 		public void processValidation(final IStatus status) {
+			if (status.isOK()) {
+				// No problems, so hide decoration
+				validationDecoration.hide();
+			} else {
+				// Default severity
+				int severity = IStatus.INFO;
 
+				// Builder used to accumulate messages
+				final StringBuilder sb = new StringBuilder();
+
+				if (!status.isMultiStatus()) {
+					if (checkStatus(status)) {
+
+						sb.append(status.getMessage());
+
+						// Is severity worse, then note it
+						if (status.getSeverity() > severity) {
+							severity = status.getSeverity();
+						}
+					}
+
+				} else {
+					final IStatus[] children = status.getChildren();
+					for (final IStatus element : children) {
+						if (checkStatus(element)) {
+
+							sb.append(element.getMessage());
+							sb.append("\n");
+							// Is severity worse, then note it
+							if (element.getSeverity() > severity) {
+								severity = element.getSeverity();
+							}
+						}
+					}
+				}
+
+				if (sb.toString().isEmpty()) {
+					// No problems, so hide decoration
+					validationDecoration.hide();
+					return;
+				}
+
+				// Update description text
+				validationDecoration.setDescriptionText(sb.toString());
+
+				// Update icon
+				switch (severity) {
+				case IStatus.INFO:
+					validationDecoration.setImage(decorationInfo.getImage());
+					break;
+				case IStatus.WARNING:
+					validationDecoration.setImage(decorationWarning.getImage());
+					break;
+				case IStatus.ERROR:
+				default:
+					validationDecoration.setImage(decorationError.getImage());
+					break;
+				}
+
+				// Show the decoration.
+				validationDecoration.show();
+			}
+		}
+
+		/**
+		 * Check status message applies to this editor.
+		 * 
+		 * @param status
+		 * @return
+		 */
+		private boolean checkStatus(final IStatus status) {
+
+			if (status instanceof IDetailConstraintStatus) {
+				final IDetailConstraintStatus s = (IDetailConstraintStatus) status;
+
+				final Collection<EObject> objects = s.getObjects();
+				if (objects.contains(elementAssignment)) {
+					if (s.getFeaturesForEObject(elementAssignment).contains(InputPackage.eINSTANCE.getElementAssignment_Locked())
+							|| s.getFeaturesForEObject(elementAssignment).contains(InputPackage.eINSTANCE.getElementAssignment_Assignment())
+							|| s.getFeaturesForEObject(elementAssignment).contains(InputPackage.eINSTANCE.getElementAssignment_AssignedObject())) {
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+
+		public Control wrapControl(final Control c) {
+			// Create decorator for validation items
+			{
+				validationDecoration = new ControlDecoration(c, SWT.LEFT | SWT.TOP);
+				validationDecoration.hide();
+
+				// These should be the defaults...
+				validationDecoration.setShowHover(true);
+				validationDecoration.setShowOnlyOnFocus(false);
+
+				// Set a default image
+				// commented out, because this takes about 70% of the runtime of displaying the editor
+				// validationDecoration.setImage(decorationInfo.getImage());
+
+				// Hide by default
+			}
+
+			c.addDisposeListener(disposeListener);
+			return c;
 		}
 
 		@Override
@@ -107,7 +240,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		public EObject getEditorTarget() {
 			return elementAssignment;
 		}
-		
+
 		@Override
 		public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 			label.setText("Assigned to");
@@ -134,7 +267,8 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 				}
 			}
 
-			valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(InputPackage.eINSTANCE.getElementAssignment(), InputPackage.eINSTANCE.getElementAssignment_Assignment());
+			valueProvider = handler.getReferenceValueProviderProvider().getReferenceValueProvider(InputPackage.eINSTANCE.getElementAssignment(),
+					InputPackage.eINSTANCE.getElementAssignment_Assignment());
 
 			updateDisplay(object);
 
@@ -158,7 +292,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 			combo.removeAll();
 			nameList.clear();
 			valueList.clear();
-			
+
 			for (final Pair<String, EObject> v : values) {
 				valueList.add(v.getSecond());
 				nameList.add(v.getFirst());
@@ -196,9 +330,11 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
 					if (lock.getSelection()) {
-						handler.handleCommand(AssignmentEditorHelper.lockElement(handler.getEditingDomain(), elementAssignment), elementAssignment, InputPackage.eINSTANCE.getElementAssignment_Locked());
+						handler.handleCommand(AssignmentEditorHelper.lockElement(handler.getEditingDomain(), elementAssignment), elementAssignment,
+								InputPackage.eINSTANCE.getElementAssignment_Locked());
 					} else {
-						handler.handleCommand(AssignmentEditorHelper.unlockElement(handler.getEditingDomain(), elementAssignment), elementAssignment, InputPackage.eINSTANCE.getElementAssignment_Locked());
+						handler.handleCommand(AssignmentEditorHelper.unlockElement(handler.getEditingDomain(), elementAssignment), elementAssignment,
+								InputPackage.eINSTANCE.getElementAssignment_Locked());
 					}
 				}
 			});
@@ -220,19 +356,19 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 										maxSpot = Math.max(maxSpot, ea.getSpotIndex());
 									}
 									maxSpot++;
-									handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet) vessel, elementAssignment, maxSpot), 
-											elementAssignment, InputPackage.eINSTANCE.getElementAssignment_Assignment());
-								return;
+									handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet) vessel, elementAssignment, maxSpot), elementAssignment,
+											InputPackage.eINSTANCE.getElementAssignment_Assignment());
+									return;
 								}
 							}
-							handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet) vessel, elementAssignment), 
-									elementAssignment, InputPackage.eINSTANCE.getElementAssignment_Assignment());
+							handler.handleCommand(AssignmentEditorHelper.reassignElement(handler.getEditingDomain(), (AVesselSet) vessel, elementAssignment), elementAssignment,
+									InputPackage.eINSTANCE.getElementAssignment_Assignment());
 						}
 					}
 				}
 			});
 
-			return sub;
+			return wrapControl(sub);
 		}
 
 		@Override
@@ -249,8 +385,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 			Cargo cargo = null;
 			if (input instanceof LoadSlot) {
 				cargo = ((LoadSlot) input).getCargo();
-			}
-			else if (input instanceof DischargeSlot) {
+			} else if (input instanceof DischargeSlot) {
 				cargo = ((DischargeSlot) input).getCargo();
 			}
 
@@ -289,7 +424,8 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 	@Override
 	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
 		final EObject assignment = (EObject) AssignmentEditorHelper.getElementAssignment(root.getSubModel(InputModel.class), (UUIDObject) value);
-		if (assignment == null) return super.getExternalEditingRange(root, value);
+		if (assignment == null)
+			return super.getExternalEditingRange(root, value);
 		return Collections.singletonList(assignment);
 	}
 
