@@ -96,7 +96,7 @@ public class BasicCargoReportView extends EMFReportView {
 								allocation,
 								Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
 										allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
-										allocation.getLadenIdle(), allocation.getLadenLeg() }));
+										allocation.getLadenIdle(), allocation.getLadenLeg(), allocation.getInputCargo() }));
 					}
 				}
 

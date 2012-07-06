@@ -10,7 +10,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 
-
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -133,7 +132,7 @@ public class CargoPnLReportView extends EMFReportView {
 								allocation,
 								Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
 										allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
-										allocation.getLadenIdle(), allocation.getLadenLeg() }));
+										allocation.getLadenIdle(), allocation.getLadenLeg(), allocation.getInputCargo() }));
 					}
 				}
 

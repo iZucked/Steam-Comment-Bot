@@ -8,16 +8,24 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 
+import com.mmxlabs.common.Equality;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
@@ -272,7 +280,7 @@ public class CargoReportView extends EMFReportView {
 								allocation,
 								Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
 										allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
-										allocation.getLadenIdle(), allocation.getLadenLeg() }));
+										allocation.getLadenIdle(), allocation.getLadenLeg(), allocation.getInputCargo() }));
 					}
 				}
 

@@ -12,6 +12,7 @@ import java.util.TimeZone;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -223,7 +224,10 @@ public class LatenessReportView extends EMFReportView {
 						return true;
 					}
 
-					setInputEquivalents(visit, Collections.singleton((Object) visit.getSlotAllocation().getCargoAllocation()));
+					setInputEquivalents(
+							visit,
+							CollectionsUtil.makeArrayList2(Object.class, visit.getSlotAllocation().getCargoAllocation(), visit.getSlotAllocation().getSlot(), visit.getSlotAllocation().getCargoAllocation()
+									.getInputCargo()));
 				} else if (e instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) e;
 					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
