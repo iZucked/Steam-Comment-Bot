@@ -120,7 +120,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 				if (element instanceof Cargo) {
 					final Cargo cargo = (Cargo) element;
 					final InputModel inputModel = part.getRootObject().getSubModel(InputModel.class);
-					if (inputModel.getLockedAssignedObjects().contains(cargo)) {
+					final ElementAssignment assignment= AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
+					if (assignment != null && assignment.isLocked()) {
 						return lockedImage;
 					} else if (!cargo.isAllowRewiring()) {
 						return wiredImage;
