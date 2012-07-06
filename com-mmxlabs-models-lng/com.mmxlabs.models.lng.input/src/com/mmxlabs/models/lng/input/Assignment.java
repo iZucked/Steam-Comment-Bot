@@ -13,6 +13,7 @@ import org.eclipse.emf.common.util.EList;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Assignment</b></em>'.
+ * @deprecated Use {@link ElementAssignment}
  * <!-- end-user-doc -->
  *
  * <p>
