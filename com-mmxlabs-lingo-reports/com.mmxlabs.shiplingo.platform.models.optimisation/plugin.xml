@@ -156,33 +156,6 @@
             </activeWhen>
          </handler>
          <handler
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.derive.DeriveWizardHandler"
-               commandId="com.mmxlabs.commands.optimisation.save">
-           <enabledWhen>
-               <iterate
-                     ifEmpty="false">
-                  <and>
-                     <instanceof
-                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                     </instanceof>
-                  </and>
-               </iterate>
-            </enabledWhen>
-           <activeWhen>
-              <with
-                    variable="selection">
-                 <iterate
-                       ifEmpty="false">
-                    <and>
-                       <instanceof
-                             value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                       </instanceof>
-                    </and>
-                 </iterate>
-              </with>
-           </activeWhen>
-         </handler>
-         <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.EvaluateOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.evaluate">
             <enabledWhen>
@@ -343,11 +316,6 @@
                id="com.mmxlabs.commands.optimisation.terminate"
                name="Terminate Optimisation">
          </command>
-         <command
-               categoryId="com.mmxlabs.commands.category.optimisation"
-               id="com.mmxlabs.commands.optimisation.save"
-               name="Save Optimisation">
-         </command>
          <category
                id="com.mmxlabs.commands.category.scenario"
                name="Scenario Commands">
@@ -366,19 +334,6 @@
       
       <extension
             point="org.eclipse.ui.menus">
-         <menuContribution
-               locationURI="toolbar:com.mmxlabs.scenario.service.ui.navigator">
-               <command
-                     commandId="com.mmxlabs.commands.optimisation.save"
-                     disabledIcon="icons/dtool16/saveas_edit.gif"
-                     icon="icons/etool16/saveas_edit.gif"
-                     id="com.mmxlabs.scenario.service.toolbars.optimisation.save"
-                     label="Save Optimisation"
-                     mnemonic="S"
-                     style="push"
-                     tooltip="Save optimisations">
-               </command>
-         </menuContribution>
          <menuContribution
                allPopups="false"
                locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=additions">
