@@ -7,7 +7,9 @@ import org.eclipse.swt.graphics.RGB;
 
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
@@ -83,7 +85,8 @@ public class ColourSchemeUtil {
 					final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
 					final MMXRootObject rootObject = (MMXRootObject) instance.getInstance();
 					final InputModel inputModel = rootObject.getSubModel(InputModel.class);
-					if (inputModel.getLockedAssignedObjects().contains(cargo)) {
+					final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
+					if (assignment != null && assignment.isLocked()) {
 						return true;
 					}
 				}
