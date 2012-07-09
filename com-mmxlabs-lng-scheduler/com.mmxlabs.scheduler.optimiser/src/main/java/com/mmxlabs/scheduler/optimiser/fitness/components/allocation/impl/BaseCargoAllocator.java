@@ -163,6 +163,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 						ladenVoyage = (VoyageDetails) object;
 					} else if ((dischargeDetails != null) && (loadDetails != null)) {
 						ballastVoyage = (VoyageDetails) object;
+						assert plan != null;
 						addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
 						loadDetails = null;
 						dischargeDetails = null;
