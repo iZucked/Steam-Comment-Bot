@@ -31,6 +31,7 @@ import com.mmxlabs.models.lng.analytics.transformer.IAnalyticsTransformer;
 import com.mmxlabs.models.lng.analytics.transformer.impl.AnalyticsTransformer;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * An action which updates the values in a unit cost matrix or matrices
@@ -61,31 +62,37 @@ public class EvaluateUnitCostMatrixAction extends ScenarioModifyingAction {
 		final Job job = new Job("Recompute cost matrix " + matrix.getName()) {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
-				try {
-					final List<UnitCostLine> newLines = transformer.createCostLines(part.getRootObject(), matrix, monitor);
-					if (newLines == null)
-						return Status.CANCEL_STATUS;
-					final EditingDomain d = part.getEditingDomain();
-					final CompoundCommand replace = new CompoundCommand();
-					final Command rc = RemoveCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), matrix.getCostLines());
-					replace.append(rc);
-					final Command ac = AddCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), newLines);
-					replace.append(ac);
+				final ScenarioLock lock = part.getScenarioInstance().getLock(ScenarioLock.EVALUATOR);
+				if (lock.claim()) {
+					try {
 
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							try {
-								part.setDisableUpdates(true);
-								d.getCommandStack().execute(replace);
-							} finally {
-								part.setDisableUpdates(false);
+						final List<UnitCostLine> newLines = transformer.createCostLines(part.getRootObject(), matrix, monitor);
+						if (newLines == null)
+							return Status.CANCEL_STATUS;
+						final EditingDomain d = part.getEditingDomain();
+						final CompoundCommand replace = new CompoundCommand();
+						final Command rc = RemoveCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), matrix.getCostLines());
+						replace.append(rc);
+						final Command ac = AddCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), newLines);
+						replace.append(ac);
+
+						Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								try {
+									part.setDisableUpdates(true);
+									d.getCommandStack().execute(replace);
+								} finally {
+									part.setDisableUpdates(false);
+								}
 							}
-						}
-					});
-				} catch (final Exception e) {
-					log.error(e.getMessage(), e);
-					return Status.CANCEL_STATUS;
+						});
+					} catch (final Exception e) {
+						log.error(e.getMessage(), e);
+						return Status.CANCEL_STATUS;
+					} finally {
+						lock.release();
+					}
 				}
 				return Status.OK_STATUS;
 
