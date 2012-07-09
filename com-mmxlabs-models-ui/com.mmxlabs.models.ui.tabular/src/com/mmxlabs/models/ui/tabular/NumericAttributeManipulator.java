@@ -48,26 +48,25 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	@Override
 	public CellEditor createCellEditor(final Composite c, final Object object) {
 		final EDataType eType = (EDataType) field.getEType();
-		
-		
+
 		final FormattedTextCellEditor result = new FormattedTextCellEditor(c);
 		final NumberFormatter formatter;
-		if (field.getEType().equals(EcorePackage.eINSTANCE.getEInt())) {
+		if (eType.equals(EcorePackage.eINSTANCE.getEInt())) {
 			formatter = new IntegerFormatter();
-		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getELong())) {
+		} else if (eType.equals(EcorePackage.eINSTANCE.getELong())) {
 			formatter = new LongFormatter();
-		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEFloat())) {
+		} else if (eType.equals(EcorePackage.eINSTANCE.getEFloat())) {
 			formatter = new FloatFormatter();
-		} else if (field.getEType().equals(EcorePackage.eINSTANCE.getEDouble())) {
+		} else if (eType.equals(EcorePackage.eINSTANCE.getEDouble())) {
 			formatter = new DoubleFormatter();
 		} else {
 			formatter = null;
 		}
-		
-		formatter.setFixedLengths(false, false);
-		
-		result.setFormatter(formatter);
-		
+
+		if (formatter != null) {
+			formatter.setFixedLengths(false, false);
+			result.setFormatter(formatter);
+		}
 		return result;
 	}
 
@@ -88,7 +87,8 @@ public class NumericAttributeManipulator extends BasicAttributeManipulator {
 	@Override
 	public Comparable getComparable(final Object object) {
 		final Object object2 = super.getValue(object);
-		if (object2 instanceof Comparable) return (Comparable) object2;
+		if (object2 instanceof Comparable)
+			return (Comparable) object2;
 		return -Integer.MAX_VALUE;
 	}
 }
