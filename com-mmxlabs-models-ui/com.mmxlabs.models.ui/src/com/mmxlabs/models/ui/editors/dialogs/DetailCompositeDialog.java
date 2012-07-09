@@ -1048,7 +1048,7 @@ public class DetailCompositeDialog extends Dialog {
 	}
 
 	private Command makeEqualizer2(final EObject original, final EObject duplicate, final EditingDomain editingDomain) {
-		if (original == null && duplicate == null) {
+		if (original == null || duplicate == null) {
 			return null;// IdentityCommand.INSTANCE;
 		}
 		final CompoundCommand compound = new CompoundCommand();
