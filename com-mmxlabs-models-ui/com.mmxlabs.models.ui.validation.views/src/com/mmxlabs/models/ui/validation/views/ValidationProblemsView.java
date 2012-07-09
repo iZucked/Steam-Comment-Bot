@@ -262,15 +262,14 @@ public class ValidationProblemsView extends ViewPart {
 						public void run(final IProgressMonitor monitor) {
 							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
 							try {
-								activePage.openEditor(editorInput, descriptor.getId());
+								final IEditorPart editor = activePage.openEditor(editorInput, descriptor.getId());
 
 								IValidationStatusGoto gotor = null;
-								if (editorPart instanceof IValidationStatusGoto) {
-									gotor = (IValidationStatusGoto) editorPart;
-
+								if (editor instanceof IValidationStatusGoto) {
+									gotor = (IValidationStatusGoto) editor;
 								}
 								if (gotor == null) {
-									gotor = (IValidationStatusGoto) editorPart.getAdapter(IValidationStatusGoto.class);
+									gotor = (IValidationStatusGoto) editor.getAdapter(IValidationStatusGoto.class);
 								}
 
 								if (gotor != null) {
