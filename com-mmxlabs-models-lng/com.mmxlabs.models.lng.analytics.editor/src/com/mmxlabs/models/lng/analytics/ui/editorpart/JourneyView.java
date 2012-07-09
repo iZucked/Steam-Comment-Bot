@@ -158,7 +158,7 @@ public class JourneyView extends ScenarioInstanceView {
 
 	@Override
 	public void setFocus() {
-		
+		pane.getControl().setFocus();
 	}
 	
 	@Override
