@@ -21,6 +21,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
@@ -41,6 +43,8 @@ import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
  * 
  */
 public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
+	private static final Logger log = LoggerFactory.getLogger(UnitCostMatrixViewerPane.class);
+
 	public UnitCostMatrixViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part, location, actionBars);
 	}
@@ -48,11 +52,11 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 	protected boolean showSelectionColumn() {
 		return false;
 	}
-	
+
 	protected boolean showEvaluateAction() {
 		return true;
 	}
-	
+
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
@@ -78,7 +82,7 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 			getToolBarManager().update(true);
 			viewer.addSelectionChangedListener(evaluateAction);
 			defaultSetTitle("Unit Cost Matrices");
-	
+
 			viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 				@Override
 				public void selectionChanged(final SelectionChangedEvent event) {
@@ -88,7 +92,11 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 							if (((IStructuredSelection) selection).getFirstElement() instanceof UnitCostMatrix) {
 								final UnitCostMatrix matrix = (UnitCostMatrix) ((IStructuredSelection) selection).getFirstElement();
 								if (matrix.getCostLines().isEmpty()) {
-									evaluateAction.recomputeSettings(matrix);
+									try {
+										evaluateAction.recomputeSettings(matrix);
+									} catch (final Exception e) {
+										log.error(e.getMessage(), e);
+									}
 								}
 							}
 						}
@@ -97,8 +105,7 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 			});
 		}
 	}
-	
-	
+
 	class SelectedMatrixManipulator implements ICellRenderer, ICellManipulator {
 		@Override
 		public void setValue(final Object object, final Object value) {
@@ -107,7 +114,7 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 				if (settings.eContainer() instanceof AnalyticsModel) {
 					final AnalyticsModel cm = (AnalyticsModel) settings.eContainer();
 					if (cm != null)
-					getEditingDomain().getCommandStack().execute(SetCommand.create(getEditingDomain(), cm, AnalyticsPackage.eINSTANCE.getAnalyticsModel_SelectedMatrix(), settings));
+						getEditingDomain().getCommandStack().execute(SetCommand.create(getEditingDomain(), cm, AnalyticsPackage.eINSTANCE.getAnalyticsModel_SelectedMatrix(), settings));
 				}
 			}
 		}
@@ -121,7 +128,8 @@ public class UnitCostMatrixViewerPane extends ScenarioTableViewerPane {
 		public Object getValue(final Object object) {
 			if (object instanceof UnitCostMatrix) {
 				final UnitCostMatrix settings = (UnitCostMatrix) object;
-				if (settings.eContainer() == null) return 1;
+				if (settings.eContainer() == null)
+					return 1;
 				if (((AnalyticsModel) settings.eContainer()).getSelectedMatrix() == settings)
 					return 0;
 			}

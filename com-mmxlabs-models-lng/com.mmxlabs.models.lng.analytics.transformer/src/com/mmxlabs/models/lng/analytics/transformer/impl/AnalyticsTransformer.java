@@ -126,24 +126,30 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 			
 			final double speed;
+			Vessel vessel = spec.getVessel();
+			if (vessel == null) {
+				monitor.setCanceled(true);
+				return Collections.emptyList();
+			}
+			
 			if (spec.isSetSpeed()) {
 				speed = spec.getSpeed();
 			} else {
-				speed = spec.getVessel().getVesselClass().getMaxSpeed();
+				speed = vessel.getVesselClass().getMaxSpeed();
 			}
 			
 			
 			for (final Route route : spec.getAllowedRoutes().isEmpty() ? portModel.getRoutes() : spec.getAllowedRoutes()) {
 				VesselClassRouteParameters parametersForRoute = null;
 				RouteCost costForRoute = null;
-				for (final VesselClassRouteParameters parameters : spec.getVessel().getVesselClass().getRouteParameters()) {
+				for (final VesselClassRouteParameters parameters : vessel.getVesselClass().getRouteParameters()) {
 					if (parameters.getRoute() == route) {
 						parametersForRoute = parameters;
 						break;
 					}
 				}
 				for (final RouteCost routeCost : pricing.getRouteCosts()) {
-					if (routeCost.getRoute() == route && routeCost.getVesselClass() == spec.getVessel().getVesselClass()) {
+					if (routeCost.getRoute() == route && routeCost.getVesselClass() == vessel.getVesselClass()) {
 						costForRoute = routeCost;
 						break;
 					}
@@ -211,7 +217,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				/*
 				 * Create vessel class
 				 */
-				final Vessel modelVessel = spec.getVessel();
+				final Vessel modelVessel = vessel;
 
 				final VesselClass eVc = modelVessel.getVesselClass();
 				final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()),
@@ -228,14 +234,14 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				for (final Route route : spec.getAllowedRoutes().isEmpty() ? portModel.getRoutes() : spec.getAllowedRoutes()) {
 					VesselClassRouteParameters parametersForRoute = null;
 					RouteCost costForRoute = null;
-					for (final VesselClassRouteParameters parameters : spec.getVessel().getVesselClass().getRouteParameters()) {
+					for (final VesselClassRouteParameters parameters : vessel.getVesselClass().getRouteParameters()) {
 						if (parameters.getRoute() == route) {
 							parametersForRoute = parameters;
 							break;
 						}
 					}
 					for (final RouteCost routeCost : pricing.getRouteCosts()) {
-						if (routeCost.getRoute() == route && routeCost.getVesselClass() == spec.getVessel().getVesselClass()) {
+						if (routeCost.getRoute() == route && routeCost.getVesselClass() == vessel.getVesselClass()) {
 							costForRoute = routeCost;
 							break;
 						}

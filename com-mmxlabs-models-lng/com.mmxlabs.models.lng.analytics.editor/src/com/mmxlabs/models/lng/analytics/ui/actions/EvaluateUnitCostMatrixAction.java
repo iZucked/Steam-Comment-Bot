@@ -21,6 +21,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
@@ -34,68 +36,75 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
  * An action which updates the values in a unit cost matrix or matrices
  * 
  * @author hinton
- *
+ * 
  */
 public class EvaluateUnitCostMatrixAction extends ScenarioModifyingAction {
-	final IAnalyticsTransformer transformer = new AnalyticsTransformer();
-	private IScenarioEditingLocation part;
-	
+
+	private static final Logger log = LoggerFactory.getLogger(EvaluateUnitCostMatrixAction.class);
+
+	private final IAnalyticsTransformer transformer = new AnalyticsTransformer();
+	private final IScenarioEditingLocation part;
+
 	public EvaluateUnitCostMatrixAction(final IScenarioEditingLocation part) {
 		this.part = part;
 		setText("Evaluate Cost Matrix");
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", 
-				"$nl$/icons/recompute.gif"));
+		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.analytics.editor", "$nl$/icons/recompute.gif"));
 	}
-	
+
 	@Override
 	public void run() {
 		final UnitCostMatrix matrix = (UnitCostMatrix) ((IStructuredSelection) getLastSelection()).getFirstElement();
 		recomputeSettings(matrix);
 	}
-	
+
 	public void recomputeSettings(final UnitCostMatrix matrix) {
 		final Job job = new Job("Recompute cost matrix " + matrix.getName()) {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
-				final List<UnitCostLine> newLines = transformer.createCostLines(part.getRootObject(), matrix, monitor);
-				if (newLines == null) return Status.CANCEL_STATUS;
-				final EditingDomain d = part.getEditingDomain();
-				final CompoundCommand replace = new CompoundCommand();
-				final Command rc = RemoveCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), matrix.getCostLines());
-				replace.append(rc);
-				final Command ac = AddCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), newLines);
-				replace.append(ac);
+				try {
+					final List<UnitCostLine> newLines = transformer.createCostLines(part.getRootObject(), matrix, monitor);
+					if (newLines == null)
+						return Status.CANCEL_STATUS;
+					final EditingDomain d = part.getEditingDomain();
+					final CompoundCommand replace = new CompoundCommand();
+					final Command rc = RemoveCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), matrix.getCostLines());
+					replace.append(rc);
+					final Command ac = AddCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), newLines);
+					replace.append(ac);
 
-				Display.getDefault().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							part.setDisableUpdates(true);
-							d.getCommandStack().execute(replace);
-						} finally {
-							part.setDisableUpdates(false);
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							try {
+								part.setDisableUpdates(true);
+								d.getCommandStack().execute(replace);
+							} finally {
+								part.setDisableUpdates(false);
+							}
 						}
-					}
-				});
+					});
+				} catch (final Exception e) {
+					log.error(e.getMessage(), e);
+					return Status.CANCEL_STATUS;
+				}
 				return Status.OK_STATUS;
 
 			}
-			
+
 		};
-		
+
 		try {
-			
+
 			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("org.eclipse.ui.views.ProgressView");
-		} catch (PartInitException e) {
+		} catch (final PartInitException e) {
 		}
-		
+
 		job.schedule();
 	}
 
 	@Override
-	protected boolean isApplicableToSelection(ISelection selection) {
-		return (selection instanceof IStructuredSelection)
-				&& (((IStructuredSelection) selection).toList().size() == 1) &&
-				(((IStructuredSelection) selection).getFirstElement()) instanceof UnitCostMatrix;
+	protected boolean isApplicableToSelection(final ISelection selection) {
+		return (selection instanceof IStructuredSelection) && (((IStructuredSelection) selection).toList().size() == 1)
+				&& (((IStructuredSelection) selection).getFirstElement()) instanceof UnitCostMatrix;
 	}
 }
