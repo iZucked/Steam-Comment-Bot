@@ -74,36 +74,38 @@ public class TradingExporterExtension implements IExporterExtension {
 							break;
 						}
 					}
-					int idx = 0;
-					for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
+					if (cargoAllocation != null) {
+						int idx = 0;
+						for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
 
-						// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
-						final ExtraData streamData;
-						switch (idx) {
-						case 0:
-							streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_upstream, "Upstream");
-							break;
-						case 1:
-							streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_shipped, "Shipping");
-							break;
-						case 2:
-							streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_downstream, "Downstream");
-							break;
-						default:
-							throw new IllegalStateException("Expected three item in the profit and loss list - got " + profitAndLoss.getEntries().size());
+							// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
+							final ExtraData streamData;
+							switch (idx) {
+							case 0:
+								streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_upstream, "Upstream");
+								break;
+							case 1:
+								streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_shipped, "Shipping");
+								break;
+							case 2:
+								streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_downstream, "Downstream");
+								break;
+							default:
+								throw new IllegalStateException("Expected three item in the profit and loss list - got " + profitAndLoss.getEntries().size());
+							}
+
+							final ExtraData entityData = streamData.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
+
+							final ExtraData pnlData = entityData.addExtraData(TradingConstants.ExtraData_pnl, "P&L", (int) (entry.getFinalGroupValue() / Calculator.ScaleFactor),
+									ExtraDataFormatType.CURRENCY);
+
+							pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
+							ExtraData detail = exportDetailTree(entry.getDetails());
+							detail.setName("Details");
+							pnlData.getExtraData().add(detail);
+
+							++idx;
 						}
-
-						final ExtraData entityData = streamData.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
-
-						final ExtraData pnlData = entityData.addExtraData(TradingConstants.ExtraData_pnl, "P&L", (int) (entry.getFinalGroupValue() / Calculator.ScaleFactor),
-								ExtraDataFormatType.CURRENCY);
-
-						pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
-						ExtraData detail = exportDetailTree(entry.getDetails());
-						detail.setName("Details");
-						pnlData.getExtraData().add(detail);
-
-						++idx;
 					}
 				} else if (slot instanceof IVesselEventPortSlot) {
 					// final VesselEvent modelEvent = entities.getModelObject(slot, VesselEvent.class);
