@@ -57,9 +57,11 @@
       <feature id="com.mmxlabs.scenario.service.feature"/>
       <feature id="com.mmxlabs.trading.optimiser.feature"/>
       <feature id="com.mmxlabs.jobmanager.feature"/>
+      <feature id="com.mmxlabs.datasources.feature"/>
    </features>
 
    <configurations>
+      <plugin id="com.mmxlabs.datasources.atobviac" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.models.lng.analytics.editor" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-common" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-core" autoStart="true" startLevel="0" />
