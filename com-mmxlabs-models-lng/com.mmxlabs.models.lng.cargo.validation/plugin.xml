@@ -145,6 +145,24 @@
                      class="Slot">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.CargoTypeConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.CargoTypeConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Cargo Type Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  
+               </description>
+               <target
+                     class="Cargo">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
