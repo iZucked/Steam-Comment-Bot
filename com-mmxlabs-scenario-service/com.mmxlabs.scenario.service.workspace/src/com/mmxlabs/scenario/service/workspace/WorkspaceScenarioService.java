@@ -267,6 +267,10 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 			}
 		}
 
+		if (containerResource == null) {
+			throw new IllegalStateException("Container has no IResource mapping");
+		}
+		
 		final String uuid = UUID.randomUUID().toString();
 		final URI resourceURI = URI.createPlatformResourceURI(containerResource.getFullPath().toString() + "/" + uuid + ".scenario", true);
 		final URI manifestURI = URI.createURI("archive:" + resourceURI.toString() + "!/MANIFEST.xmi");
