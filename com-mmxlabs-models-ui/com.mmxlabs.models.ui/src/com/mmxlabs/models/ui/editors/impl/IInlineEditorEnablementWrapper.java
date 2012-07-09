@@ -27,6 +27,7 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
 public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl implements IInlineEditor {
 
 	protected EObject input;
+	protected Collection<EObject> ranges;
 
 	protected final IInlineEditor wrapped;
 
@@ -36,6 +37,13 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 			if (input != null) {
 				input.eAdapters().remove(IInlineEditorEnablementWrapper.this);
 			}
+
+			if (ranges != null) {
+				for (final EObject eObj : ranges) {
+					eObj.eAdapters().remove(this);
+				}
+			}
+
 			e.widget.removeDisposeListener(this);
 		}
 
@@ -72,12 +80,24 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 		if (this.input != null) {
 			this.input.eAdapters().remove(this);
 		}
+		if (this.ranges != null) {
+			for (final EObject eObj : this.ranges) {
+				eObj.eAdapters().remove(this);
+			}
+		}
 
 		wrapped.display(location, scenario, object, range);
 		this.input = object;
 
 		if (this.input != null) {
 			this.input.eAdapters().add(this);
+		}
+
+		this.ranges = range;
+		if (this.ranges != null) {
+			for (final EObject eObj : this.ranges) {
+				eObj.eAdapters().add(this);
+			}
 		}
 	}
 

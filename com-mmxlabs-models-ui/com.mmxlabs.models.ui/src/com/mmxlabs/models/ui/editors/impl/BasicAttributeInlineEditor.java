@@ -60,6 +60,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * Object being edited
 	 */
 	protected EObject input;
+	protected Collection<EObject> ranges;
 
 	protected final EStructuralFeature feature;
 	protected boolean currentlySettingValue = false;
@@ -98,13 +99,20 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 				if (input != null) {
 					input.eAdapters().remove(BasicAttributeInlineEditor.this);
 				}
+
+				if (ranges != null) {
+					for (final EObject eObj : ranges) {
+						eObj.eAdapters().remove(this);
+					}
+				}
+
 				e.widget.removeDisposeListener(this);
 			}
 		}
 	};
 
 	protected Label label;
-	
+
 	protected boolean enabled = true;
 
 	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
@@ -120,6 +128,17 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		if (input != null) {
 			input.eAdapters().add(this);
 			doUpdateDisplayWithValue();
+		}
+		if (this.ranges != null) {
+			for (final EObject eObj : this.ranges) {
+				eObj.eAdapters().remove(this);
+			}
+		}
+		this.ranges = range;
+		if (this.ranges != null) {
+			for (final EObject eObj : this.ranges) {
+				eObj.eAdapters().add(this);
+			}
 		}
 
 		// Update control tool-tips using IItemPropertyDescriptor
@@ -327,8 +346,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		// System.err.println("Creating set command (" + input + "." +
 		// feature.getName() + " <- " + value + ")");
 
-		final Command command = commandHandler.getEditingDomain().createCommand(SetCommand.class,
-				new CommandParameter(input, feature, value));
+		final Command command = commandHandler.getEditingDomain().createCommand(SetCommand.class, new CommandParameter(input, feature, value));
 
 		return command;
 	}
@@ -349,7 +367,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 			// Set a default image
 			// commented out, because this takes about 70% of the runtime of displaying the editor
-//			validationDecoration.setImage(decorationInfo.getImage());
+			// validationDecoration.setImage(decorationInfo.getImage());
 
 			// Hide by default
 		}
@@ -398,7 +416,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 		this.enabled = enabled;
 	}
-	
+
 	public EObject getEditorTarget() {
 		return input;
 	}
