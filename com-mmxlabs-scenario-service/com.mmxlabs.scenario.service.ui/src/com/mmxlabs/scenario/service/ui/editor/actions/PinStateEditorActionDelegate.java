@@ -21,18 +21,20 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 	private ScenarioServiceSelectionProvider selectionProvider;
 	private IEditorPart targetEditor;
 	private IAction action;
+	private IScenarioServiceSelectionChangedListener selectionChangedListener;
+
 	@Override
-	public void run(IAction action) {
-		
+	public void run(final IAction action) {
+
 	}
 
 	@Override
-	public void selectionChanged(IAction action, ISelection selection) {
-		
+	public void selectionChanged(final IAction action, final ISelection selection) {
+
 	}
 
 	@Override
-	public void setActiveEditor(IAction action, IEditorPart targetEditor) {
+	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
 		this.action = action;
 		this.targetEditor = targetEditor;
 		updateActionState();
@@ -41,13 +43,12 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 	private void updateActionState() {
 		boolean enabled = false;
 		boolean toggled = false;
-			if (targetEditor != null) {
-				IEditorInput input = targetEditor.getEditorInput();
-				if (input instanceof IScenarioServiceEditorInput) {
-					enabled = true;
-					if (selectionProvider.getPinnedInstance() != null) {
-					final ScenarioInstance instance = ((IScenarioServiceEditorInput) input)
-							.getScenarioInstance();
+		if (targetEditor != null && selectionProvider != null) {
+			final IEditorInput input = targetEditor.getEditorInput();
+			if (input instanceof IScenarioServiceEditorInput) {
+				enabled = true;
+				if (selectionProvider.getPinnedInstance() != null) {
+					final ScenarioInstance instance = ((IScenarioServiceEditorInput) input).getScenarioInstance();
 					if (instance == selectionProvider.getPinnedInstance()) {
 						toggled = true;
 					}
@@ -59,39 +60,42 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 			action.setChecked(toggled);
 		}
 	}
-	
+
 	@Override
 	public void init(final IAction action) {
 		selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-		selectionProvider.addSelectionChangedListener(new IScenarioServiceSelectionChangedListener() {
-			
+		selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
+
 			@Override
-			public void selected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> selected) {
-				
+			public void selected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> selected) {
+
 			}
-			
+
 			@Override
-			public void pinned(IScenarioServiceSelectionProvider provider,
-					ScenarioInstance oldPin, ScenarioInstance newPin) {
+			public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
 				updateActionState();
 			}
-			
+
 			@Override
-			public void deselected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> deselected) {
-				
+			public void deselected(final IScenarioServiceSelectionProvider provider, final Collection<ScenarioInstance> deselected) {
+
 			}
-		});
+		};
+		selectionProvider.addSelectionChangedListener(selectionChangedListener);
 	}
 
 	@Override
 	public void dispose() {
-		selectionProvider = null;
+		if (selectionProvider != null) {
+			selectionProvider.removeSelectionChangedListener(selectionChangedListener);
+			selectionProvider = null;
+		}
 	}
 
 	@Override
-	public void runWithEvent(IAction action, Event event) {
+	public void runWithEvent(final IAction action, final Event event) {
 		if (targetEditor != null) {
-			IEditorInput input = targetEditor.getEditorInput();
+			final IEditorInput input = targetEditor.getEditorInput();
 			if (input instanceof IScenarioServiceEditorInput) {
 				final ScenarioInstance instance = ((IScenarioServiceEditorInput) input).getScenarioInstance();
 				if (selectionProvider.getPinnedInstance() == instance) {
