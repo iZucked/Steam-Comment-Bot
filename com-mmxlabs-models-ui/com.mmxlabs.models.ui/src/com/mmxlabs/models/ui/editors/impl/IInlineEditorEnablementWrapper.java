@@ -40,7 +40,7 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 
 			if (ranges != null) {
 				for (final EObject eObj : ranges) {
-					eObj.eAdapters().remove(this);
+					eObj.eAdapters().remove(IInlineEditorEnablementWrapper.this);
 				}
 			}
 

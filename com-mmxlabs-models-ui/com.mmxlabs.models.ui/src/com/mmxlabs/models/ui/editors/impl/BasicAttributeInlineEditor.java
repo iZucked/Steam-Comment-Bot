@@ -102,7 +102,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 				if (ranges != null) {
 					for (final EObject eObj : ranges) {
-						eObj.eAdapters().remove(this);
+						eObj.eAdapters().remove(BasicAttributeInlineEditor.this);
 					}
 				}
 
