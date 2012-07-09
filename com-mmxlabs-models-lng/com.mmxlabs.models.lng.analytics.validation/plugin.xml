@@ -25,7 +25,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  This value must be set
+                  An object of type {0} has missing reference(s) for {1}.
                </message>
             </constraint>
             <constraint
