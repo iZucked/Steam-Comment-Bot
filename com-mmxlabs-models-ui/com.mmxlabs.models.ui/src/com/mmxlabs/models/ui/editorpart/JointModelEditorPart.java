@@ -14,8 +14,10 @@ import java.util.Stack;
 
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -69,8 +71,10 @@ import com.mmxlabs.models.ui.IScenarioInstanceProvider;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
+import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
@@ -88,7 +92,7 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * 
  */
 public class JointModelEditorPart extends MultiPageEditorPart implements IEditorPart, IEditingDomainProvider, ISelectionProvider, IScenarioEditingLocation, IMMXRootObjectProvider,
-		IScenarioInstanceProvider {
+		IScenarioInstanceProvider, IValidationStatusGoto {
 
 	/**
 	 * Flag to enable the default EMF tree view editor
@@ -329,7 +333,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 			lockedAdapter = new AdapterImpl() {
 				@Override
-				public void notifyChanged(Notification msg) {
+				public void notifyChanged(final Notification msg) {
 					if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioLock_Available()) {
 						setLocked(!msg.getNewBooleanValue());
 					}
@@ -692,5 +696,27 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	public IStatusProvider getStatusProvider() {
 		return scenarioInstanceStatusProvider;
+	}
+
+	@Override
+	public void openStatus(final IStatus status) {
+		// TODO Auto-generated method stub
+
+		if (status.isMultiStatus()) {
+			// Try first element
+			openStatus(status.getChildren()[0]);
+		}
+
+		for (final IJointModelEditorContribution contrib : contributions) {
+			if (contrib.canHandle(status)) {
+				contrib.handle(status);
+				return;
+			}
+		}
+
+	}
+
+	public void setActivePage(final int pageIndex) {
+		super.setActivePage(pageIndex);
 	}
 }
