@@ -5,9 +5,9 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="false"
-            class="com.mmxlabs.models.ui.validation.gui.ValidationProblemsView"
+            class="com.mmxlabs.models.ui.validation.views.ValidationProblemsView"
             icon="icons/problems_view.gif"
-            id="com.mmxlabs.models.ui.validation.gui.ValidationProblemsView"
+            id="com.mmxlabs.models.ui.validation.views.ValidationProblemsView"
             name="Validation Problems"
             restorable="true">
       </view>

@@ -1,14 +1,20 @@
-package com.mmxlabs.models.ui.validation.gui;
+package com.mmxlabs.models.ui.validation.views;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -17,7 +23,13 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorRegistry;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -27,17 +39,23 @@ import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.ui.validation.internal.Activator;
+import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusColumnLabelProvider;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusComparator;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusContentProvider;
+import com.mmxlabs.models.ui.validation.gui.ValidationStatusLabelProvider;
+import com.mmxlabs.models.ui.validation.views.internal.Activator;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 
 public class ValidationProblemsView extends ViewPart {
 
 	private static final Logger log = LoggerFactory.getLogger(ValidationProblemsView.class);
 
-	public static final String VIEW_ID = "com.mmxlabs.models.ui.validation.gui.ValidationProblemsView";
+	public static final String VIEW_ID = "com.mmxlabs.models.ui.validation.views.ValidationProblemsView";
 
 	private TreeViewer viewer;
 
@@ -86,7 +104,8 @@ public class ValidationProblemsView extends ViewPart {
 		viewer.getTree().setLinesVisible(true);
 		// viewer.getTree().setHeaderVisible(true);
 
-		viewer.setContentProvider(new ValidationStatusContentProvider());
+		final ValidationStatusContentProvider contentProvider = new ValidationStatusContentProvider();
+		viewer.setContentProvider(contentProvider);
 		viewer.setLabelProvider(new ValidationStatusLabelProvider());
 		viewer.setComparator(new ValidationStatusComparator());
 
@@ -131,20 +150,22 @@ public class ValidationProblemsView extends ViewPart {
 				if (selection instanceof IStructuredSelection) {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 
-					// TODO Auto-generated method stub
-					final IEditorPart activeEditor = getSite().getWorkbenchWindow().getActivePage().getActiveEditor();
-					IValidationStatusGoto gotor = null;
-					if (activeEditor instanceof IValidationStatusGoto) {
-						gotor = (IValidationStatusGoto) activeEditor;
+					Object element = iStructuredSelection.getFirstElement();
+					while (!(element instanceof ScenarioInstance)) {
 
+						element = contentProvider.getParent(element);
+						if (element instanceof Map.Entry) {
+							element = ((Map.Entry<?, ?>) element).getKey();
+						}
 					}
-					if (gotor == null) {
-						gotor = (IValidationStatusGoto) activeEditor.getAdapter(IValidationStatusGoto.class);
+					if (element instanceof ScenarioInstance) {
+						try {
+							openEditor((ScenarioInstance) element, (IStatus) iStructuredSelection.getFirstElement());
+						} catch (final PartInitException e) {
+							log.error(e.getMessage(), e);
+						}
 					}
 
-					if (gotor != null) {
-						gotor.openStatus((IStatus) iStructuredSelection.getFirstElement());
-					}
 				}
 			}
 		});
@@ -201,6 +222,74 @@ public class ValidationProblemsView extends ViewPart {
 				final ScenarioInstance instance = (ScenarioInstance) eObj;
 				instance.eAdapters().remove(scenarioInstanceChangedListener);
 				statusMap.remove(instance);
+			}
+		}
+	}
+
+	public void openEditor(final ScenarioInstance scenarioInstance, final IStatus status) throws PartInitException {
+
+		final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
+
+		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		final IEditorPart editorPart = activePage.findEditor(editorInput);
+		if (editorPart != null) {
+			activePage.activate(editorPart);
+
+			IValidationStatusGoto gotor = null;
+			if (editorPart instanceof IValidationStatusGoto) {
+				gotor = (IValidationStatusGoto) editorPart;
+
+			}
+			if (gotor == null) {
+				gotor = (IValidationStatusGoto) editorPart.getAdapter(IValidationStatusGoto.class);
+			}
+
+			if (gotor != null) {
+				gotor.openStatus(status);
+			}
+		} else {
+			final IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
+			final String contentTypeString = editorInput.getContentType();
+			final IContentType contentType = contentTypeString == null ? null : Platform.getContentTypeManager().getContentType(contentTypeString);
+
+			final IEditorDescriptor descriptor = registry.getDefaultEditor(editorInput.getName(), contentType);
+
+			if (descriptor != null) {
+
+				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
+				try {
+					dialog.run(false, false, new IRunnableWithProgress() {
+						public void run(final IProgressMonitor monitor) {
+							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
+							try {
+								activePage.openEditor(editorInput, descriptor.getId());
+
+								IValidationStatusGoto gotor = null;
+								if (editorPart instanceof IValidationStatusGoto) {
+									gotor = (IValidationStatusGoto) editorPart;
+
+								}
+								if (gotor == null) {
+									gotor = (IValidationStatusGoto) editorPart.getAdapter(IValidationStatusGoto.class);
+								}
+
+								if (gotor != null) {
+									gotor.openStatus(status);
+								}
+								monitor.worked(1);
+							} catch (final PartInitException e) {
+								log.error(e.getMessage(), e);
+							} finally {
+								monitor.done();
+							}
+						}
+					});
+				} catch (final InvocationTargetException e) {
+					log.error(e.getMessage(), e);
+				} catch (final InterruptedException e) {
+					log.error(e.getMessage(), e);
+				}
+
 			}
 		}
 	}

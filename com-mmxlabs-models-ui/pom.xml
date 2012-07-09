@@ -35,6 +35,7 @@
 		<module>com.mmxlabs.models.ui.runtime.feature</module>
 		<module>com.mmxlabs.models.mmxcore.validation</module>
 		<module>com.mmxlabs.models.ui.validation.tests</module>
+		<module>com.mmxlabs.models.ui.validation.views</module>
 	</modules>
 
 	<build>
