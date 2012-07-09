@@ -106,6 +106,7 @@ public class VesselClassInaccessiblePortConstraintCheckTest {
 			} else {
 				Assert.fail("Expected an inaccessible port for all vessel classes, but vessel class " + vesselClass.getName() + " didn't have a banned port.");
 			}
+			assert bannedPort != null;
 
 			Assert.assertTrue("inaccessible port still exists", vesselClass.getInaccessiblePorts().contains(bannedPort));
 			Assert.assertEquals("Only one inaccessible port expected", 1, vesselClass.getInaccessiblePorts().size());
