@@ -28,4 +28,4 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.mmxcore.validation;bundle-version="1.0.0",
  com.mmxlabs.models.ui.validation;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/component.xml, OSGI-INF/component2.xml, OSGI-INF/component3.xml
+Service-Component: OSGI-INF/*.xml
