@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            allowMultiple="false"
+            class="com.mmxlabs.models.ui.validation.gui.ValidationProblemsView"
+            icon="icons/problems_view.gif"
+            id="com.mmxlabs.models.ui.validation.gui.ValidationProblemsView"
+            name="Validation Problems"
+            restorable="true">
+      </view>
+   </extension>
+
+</plugin>
