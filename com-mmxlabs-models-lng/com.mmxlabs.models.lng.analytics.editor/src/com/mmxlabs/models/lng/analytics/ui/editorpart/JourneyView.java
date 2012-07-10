@@ -173,7 +173,7 @@ public class JourneyView extends ScenarioInstanceView {
 	@Override
 	public Object getAdapter(Class adapter) {
 		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
-			if (propertySheetPage == null) {
+			if (propertySheetPage == null && pane != null) {
 				propertySheetPage = new PropertySheetPage();
 				propertySheetPage.setPropertySourceProvider(new IPropertySourceProvider() {
 					@Override
@@ -186,7 +186,9 @@ public class JourneyView extends ScenarioInstanceView {
 								return null;
 							try {
 								final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) object, journey.getFrom(), journey.getTo());
-								return new UnitCostLinePropertySource(line);
+								if (line != null) {
+									return new UnitCostLinePropertySource(line);
+								}
 							} catch (Throwable th) {
 								return null;
 							}
