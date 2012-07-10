@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.fleet.editor.views;
 
 import java.util.Arrays;
