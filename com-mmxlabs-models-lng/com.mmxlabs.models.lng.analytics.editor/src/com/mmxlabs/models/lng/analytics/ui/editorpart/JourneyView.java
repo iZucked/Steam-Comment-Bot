@@ -167,6 +167,8 @@ public class JourneyView extends ScenarioInstanceView {
 	public void setFocus() {
 		if (pane != null && pane.getControl() != null && !pane.getControl().isDisposed()) {
 			pane.getControl().setFocus();
+		} else if (top != null && !top.isDisposed()) {
+			top.setFocus();
 		}
 	}
 
