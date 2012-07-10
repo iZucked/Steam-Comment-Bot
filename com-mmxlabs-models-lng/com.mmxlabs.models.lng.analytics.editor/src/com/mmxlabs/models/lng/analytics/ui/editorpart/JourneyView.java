@@ -61,6 +61,7 @@ public class JourneyView extends ScenarioInstanceView {
 
 	private void disposeContents() {
 		if (pane != null) {
+			pane.getControl().dispose();
 			pane.dispose();
 			pane = null;
 		}
