@@ -178,6 +178,9 @@ public class JourneyView extends ScenarioInstanceView {
 					@Override
 					public IPropertySource getPropertySource(Object object) {
 						if (object instanceof UnitCostMatrix) {
+							if (journey == null) {
+								return null;
+							}
 							if (journey.getFrom() == null || journey.getTo() == null)
 								return null;
 							try {
