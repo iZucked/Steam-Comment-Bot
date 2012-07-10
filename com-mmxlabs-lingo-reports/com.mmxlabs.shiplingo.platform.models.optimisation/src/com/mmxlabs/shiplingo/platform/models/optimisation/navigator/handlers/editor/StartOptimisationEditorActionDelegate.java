@@ -295,41 +295,64 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 	}
 
 	@Override
-	protected void stateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
+	protected void stateChanged(final IJobControl control, final EJobState oldState, final EJobState newState) {
 
-		boolean enabled = false;
-		switch (newState) {
-		case CANCELLED:
-			enabled = true;
-			break;
-		case CANCELLING:
-			break;
-		case COMPLETED:
-			enabled = true;
-			break;
-		case CREATED:
-			enabled = true;
-			break;
-		case INITIALISED:
-			enabled = true;
-			break;
-		case INITIALISING:
-			break;
-		case PAUSED:
-			enabled = true;
-			break;
-		case PAUSING:
-			break;
-		case RESUMING:
-			break;
-		case RUNNING:
-			break;
-		case UNKNOWN:
-			break;
+		if (action != null && editor != null && editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+			final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
-		}
-		if (action != null) {
-			action.setEnabled(enabled);
+			final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+
+			final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
+			final Object object = instance.getInstance();
+			if (object instanceof MMXRootObject) {
+				final String uuid = instance.getUuid();
+
+				final IJobDescriptor job = jobManager.findJobForResource(uuid);
+				if (job == null) {
+					action.setEnabled(true);
+					return;
+				}
+
+				final IJobControl actionControl = jobManager.getControlForJob(job);
+
+				if (actionControl == control) {
+
+					boolean enabled = false;
+					switch (newState) {
+					case CANCELLED:
+						enabled = true;
+						break;
+					case CANCELLING:
+						break;
+					case COMPLETED:
+						enabled = true;
+						break;
+					case CREATED:
+						enabled = true;
+						break;
+					case INITIALISED:
+						enabled = true;
+						break;
+					case INITIALISING:
+						break;
+					case PAUSED:
+						enabled = true;
+						break;
+					case PAUSING:
+						break;
+					case RESUMING:
+						break;
+					case RUNNING:
+						break;
+					case UNKNOWN:
+						break;
+
+					}
+					if (action != null) {
+						action.setEnabled(enabled);
+					}
+				}
+			}
 		}
 	}
 }
