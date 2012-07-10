@@ -31,10 +31,6 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 public class ForkAndStartOptimisationActionHandler extends StartOptimisationEditorActionDelegate {
 
-	private IEditorPart editor;
-
-	private IAction action;
-
 	public ForkAndStartOptimisationActionHandler() {
 		super(true);
 	}
@@ -93,6 +89,7 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 
 	@Override
 	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
+
 		this.editor = targetEditor;
 		this.action = action;
 
