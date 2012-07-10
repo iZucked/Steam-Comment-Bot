@@ -45,6 +45,7 @@ public class JourneyView extends ScenarioInstanceView {
 	private Journey journey;
 	private IDisplayComposite journeyComposite;
 	private PropertySheetPage propertySheetPage;
+	private AdapterImpl journeyChangedAdapter;
 
 	@Override
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
@@ -72,7 +73,11 @@ public class JourneyView extends ScenarioInstanceView {
 			inner.dispose();
 			inner = null;
 		}
-		journey = null;
+
+		if (journey != null) {
+			journey.eAdapters().remove(this.journeyChangedAdapter);
+			journey = null;
+		}
 	}
 
 	private void createContents() {
@@ -86,7 +91,7 @@ public class JourneyView extends ScenarioInstanceView {
 		upper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		journey = AnalyticsFactory.eINSTANCE.createJourney();
 
-		journey.eAdapters().add(new AdapterImpl() {
+		journeyChangedAdapter = new AdapterImpl() {
 			@Override
 			public void notifyChanged(Notification msg) {
 				if (!msg.isTouch()) {
@@ -98,7 +103,8 @@ public class JourneyView extends ScenarioInstanceView {
 					}
 				}
 			}
-		});
+		};
+		journey.eAdapters().add(journeyChangedAdapter);
 
 		IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(journey.eClass());
 		journeyComposite = factory.createToplevelComposite(upper, journey.eClass(), this);
@@ -158,7 +164,7 @@ public class JourneyView extends ScenarioInstanceView {
 
 	@Override
 	public void setFocus() {
-		if (pane != null && !pane.getControl().isDisposed()) {
+		if (pane != null && pane.getControl() != null && !pane.getControl().isDisposed()) {
 			pane.getControl().setFocus();
 		}
 	}
@@ -195,13 +201,19 @@ public class JourneyView extends ScenarioInstanceView {
 	private class UnitCostManipulator extends NonEditableColumn {
 		@Override
 		public String render(final Object object) {
-			if (propertySheetPage != null)
+			if (propertySheetPage != null) {
 				propertySheetPage.refresh();
-			if (journey.getFrom() == null || journey.getTo() == null)
+			}
+			if (journey == null) {
 				return "";
+			}
+			if (journey.getFrom() == null || journey.getTo() == null) {
+				return "";
+			}
 			final Double d = evaluate(object);
-			if (d == null)
+			if (d == null) {
 				return "";
+			}
 			return String.format("$%.2f", d);
 		}
 
@@ -258,6 +270,11 @@ public class JourneyView extends ScenarioInstanceView {
 
 		private Double evaluate(final Object o) {
 			if (o instanceof UnitCostMatrix) {
+
+				if (journey == null) {
+					return null;
+				}
+
 				if (journey.getFrom() == null || journey.getTo() == null)
 					return null;
 				try {
@@ -272,4 +289,11 @@ public class JourneyView extends ScenarioInstanceView {
 		}
 	}
 
+	public void dispose() {
+		disposeContents();
+		getSite().setSelectionProvider(null);
+
+		super.dispose();
+
+	}
 }
