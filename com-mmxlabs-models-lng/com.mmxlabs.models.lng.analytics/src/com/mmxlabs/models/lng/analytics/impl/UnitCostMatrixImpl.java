@@ -57,6 +57,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCostLines <em>Cost Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getAllowedRoutes <em>Allowed Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getRevenueShare <em>Revenue Share</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getLadenTimeAllowance <em>Laden Time Allowance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getBallastTimeAllowance <em>Ballast Time Allowance</em>}</li>
  * </ul>
  * </p>
  *
@@ -430,6 +432,46 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * @ordered
 	 */
 	protected double revenueShare = REVENUE_SHARE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getLadenTimeAllowance() <em>Laden Time Allowance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenTimeAllowance()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double LADEN_TIME_ALLOWANCE_EDEFAULT = 0.06;
+
+	/**
+	 * The cached value of the '{@link #getLadenTimeAllowance() <em>Laden Time Allowance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getLadenTimeAllowance()
+	 * @generated
+	 * @ordered
+	 */
+	protected double ladenTimeAllowance = LADEN_TIME_ALLOWANCE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getBallastTimeAllowance() <em>Ballast Time Allowance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastTimeAllowance()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double BALLAST_TIME_ALLOWANCE_EDEFAULT = 0.06;
+
+	/**
+	 * The cached value of the '{@link #getBallastTimeAllowance() <em>Ballast Time Allowance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBallastTimeAllowance()
+	 * @generated
+	 * @ordered
+	 */
+	protected double ballastTimeAllowance = BALLAST_TIME_ALLOWANCE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -910,6 +952,48 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getLadenTimeAllowance() {
+		return ladenTimeAllowance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setLadenTimeAllowance(double newLadenTimeAllowance) {
+		double oldLadenTimeAllowance = ladenTimeAllowance;
+		ladenTimeAllowance = newLadenTimeAllowance;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE, oldLadenTimeAllowance, ladenTimeAllowance));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getBallastTimeAllowance() {
+		return ballastTimeAllowance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setBallastTimeAllowance(double newBallastTimeAllowance) {
+		double oldBallastTimeAllowance = ballastTimeAllowance;
+		ballastTimeAllowance = newBallastTimeAllowance;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE, oldBallastTimeAllowance, ballastTimeAllowance));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -968,6 +1052,10 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return getAllowedRoutes();
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 				return getRevenueShare();
+			case AnalyticsPackage.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE:
+				return getLadenTimeAllowance();
+			case AnalyticsPackage.UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE:
+				return getBallastTimeAllowance();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -1045,6 +1133,12 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 				setRevenueShare((Double)newValue);
 				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE:
+				setLadenTimeAllowance((Double)newValue);
+				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE:
+				setBallastTimeAllowance((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -1117,6 +1211,12 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 				setRevenueShare(REVENUE_SHARE_EDEFAULT);
 				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE:
+				setLadenTimeAllowance(LADEN_TIME_ALLOWANCE_EDEFAULT);
+				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE:
+				setBallastTimeAllowance(BALLAST_TIME_ALLOWANCE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -1169,6 +1269,10 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return allowedRoutes != null && !allowedRoutes.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
 				return revenueShare != REVENUE_SHARE_EDEFAULT;
+			case AnalyticsPackage.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE:
+				return ladenTimeAllowance != LADEN_TIME_ALLOWANCE_EDEFAULT;
+			case AnalyticsPackage.UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE:
+				return ballastTimeAllowance != BALLAST_TIME_ALLOWANCE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -1249,6 +1353,10 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		result.append(returnIdleTime);
 		result.append(", revenueShare: ");
 		result.append(revenueShare);
+		result.append(", ladenTimeAllowance: ");
+		result.append(ladenTimeAllowance);
+		result.append(", ballastTimeAllowance: ");
+		result.append(ballastTimeAllowance);
 		result.append(')');
 		return result.toString();
 	}

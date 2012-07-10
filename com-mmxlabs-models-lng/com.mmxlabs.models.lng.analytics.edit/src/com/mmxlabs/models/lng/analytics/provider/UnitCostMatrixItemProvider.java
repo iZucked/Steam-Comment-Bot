@@ -89,6 +89,8 @@ public class UnitCostMatrixItemProvider
 			addReturnIdleTimePropertyDescriptor(object);
 			addAllowedRoutesPropertyDescriptor(object);
 			addRevenueSharePropertyDescriptor(object);
+			addLadenTimeAllowancePropertyDescriptor(object);
+			addBallastTimeAllowancePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -512,6 +514,50 @@ public class UnitCostMatrixItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Laden Time Allowance feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addLadenTimeAllowancePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostMatrix_ladenTimeAllowance_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_ladenTimeAllowance_feature", "_UI_UnitCostMatrix_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Ballast Time Allowance feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addBallastTimeAllowancePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostMatrix_ballastTimeAllowance_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_ballastTimeAllowance_feature", "_UI_UnitCostMatrix_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -594,6 +640,8 @@ public class UnitCostMatrixItemProvider
 			case AnalyticsPackage.UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME:
 			case AnalyticsPackage.UNIT_COST_MATRIX__RETURN_IDLE_TIME:
 			case AnalyticsPackage.UNIT_COST_MATRIX__REVENUE_SHARE:
+			case AnalyticsPackage.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE:
+			case AnalyticsPackage.UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:

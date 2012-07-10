@@ -85,6 +85,8 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 		add_costLinesEditor(detailComposite, topClass);
 		add_allowedRoutesEditor(detailComposite, topClass);
 		add_revenueShareEditor(detailComposite, topClass);
+		add_ladenTimeAllowanceEditor(detailComposite, topClass);
+		add_ballastTimeAllowanceEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the ports feature on UnitCostMatrix
@@ -194,18 +196,18 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the dischargeIdleTime feature on UnitCostMatrix
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_dischargeIdleTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME));
 	}
 	/**
 	 * Create the editor for the returnIdleTime feature on UnitCostMatrix
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_returnIdleTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__RETURN_IDLE_TIME));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__RETURN_IDLE_TIME));
 	}
 	/**
 	 * Create the editor for the costLines feature on UnitCostMatrix
@@ -232,5 +234,23 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_revenueShareEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 //		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__REVENUE_SHARE));
+	}
+
+	/**
+	 * Create the editor for the ladenTimeAllowance feature on UnitCostMatrix
+	 *
+	 * @generated
+	 */
+	protected void add_ladenTimeAllowanceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE));
+	}
+
+	/**
+	 * Create the editor for the ballastTimeAllowance feature on UnitCostMatrix
+	 *
+	 * @generated
+	 */
+	protected void add_ballastTimeAllowanceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE));
 	}
 }

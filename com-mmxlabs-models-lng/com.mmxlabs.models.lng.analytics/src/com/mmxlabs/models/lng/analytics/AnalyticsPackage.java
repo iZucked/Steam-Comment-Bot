@@ -343,13 +343,31 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_MATRIX__REVENUE_SHARE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
+	 * The feature id for the '<em><b>Laden Time Allowance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+
+	/**
+	 * The feature id for the '<em><b>Ballast Time Allowance</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+
+	/**
 	 * The number of structural features of the '<em>Unit Cost Matrix</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+	int UNIT_COST_MATRIX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl <em>Unit Cost Line</em>}' class.
@@ -1042,6 +1060,28 @@ public interface AnalyticsPackage extends EPackage {
 	EAttribute getUnitCostMatrix_RevenueShare();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getLadenTimeAllowance <em>Laden Time Allowance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Laden Time Allowance</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getLadenTimeAllowance()
+	 * @see #getUnitCostMatrix()
+	 * @generated
+	 */
+	EAttribute getUnitCostMatrix_LadenTimeAllowance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBallastTimeAllowance <em>Ballast Time Allowance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ballast Time Allowance</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBallastTimeAllowance()
+	 * @see #getUnitCostMatrix()
+	 * @generated
+	 */
+	EAttribute getUnitCostMatrix_BallastTimeAllowance();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.UnitCostLine <em>Unit Cost Line</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1610,6 +1650,22 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute UNIT_COST_MATRIX__REVENUE_SHARE = eINSTANCE.getUnitCostMatrix_RevenueShare();
+
+		/**
+		 * The meta object literal for the '<em><b>Laden Time Allowance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE = eINSTANCE.getUnitCostMatrix_LadenTimeAllowance();
+
+		/**
+		 * The meta object literal for the '<em><b>Ballast Time Allowance</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE = eINSTANCE.getUnitCostMatrix_BallastTimeAllowance();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl <em>Unit Cost Line</em>}' class.

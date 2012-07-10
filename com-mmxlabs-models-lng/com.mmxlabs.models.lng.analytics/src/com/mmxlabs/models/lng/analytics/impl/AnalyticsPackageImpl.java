@@ -355,6 +355,24 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getUnitCostMatrix_LadenTimeAllowance() {
+		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(18);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUnitCostMatrix_BallastTimeAllowance() {
+		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(19);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getUnitCostLine() {
 		return unitCostLineEClass;
 	}
@@ -707,6 +725,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__COST_LINES);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__ALLOWED_ROUTES);
 		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__REVENUE_SHARE);
+		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE);
+		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE);
 
 		unitCostLineEClass = createEClass(UNIT_COST_LINE);
 		createEAttribute(unitCostLineEClass, UNIT_COST_LINE__UNIT_COST);
@@ -813,6 +833,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getUnitCostMatrix_CostLines(), this.getUnitCostLine(), null, "costLines", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getUnitCostMatrix_AllowedRoutes(), theTypesPackage.getARoute(), null, "allowedRoutes", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_RevenueShare(), ecorePackage.getEDouble(), "revenueShare", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUnitCostMatrix_LadenTimeAllowance(), ecorePackage.getEDouble(), "ladenTimeAllowance", "0.06", 0, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getUnitCostMatrix_BallastTimeAllowance(), ecorePackage.getEDouble(), "ballastTimeAllowance", "0.06", 0, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitCostLineEClass, UnitCostLine.class, "UnitCostLine", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getUnitCostLine_UnitCost(), ecorePackage.getEDouble(), "unitCost", null, 1, 1, UnitCostLine.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -936,6 +958,22 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   });		
 		addAnnotation
 		  (getUnitCostMatrix_RevenueShare(), 
+		   source, 
+		   new String[] {
+			 "scale", "100",
+			 "formatString", "###.#",
+			 "unit", "%"
+		   });		
+		addAnnotation
+		  (getUnitCostMatrix_LadenTimeAllowance(), 
+		   source, 
+		   new String[] {
+			 "scale", "100",
+			 "formatString", "###.#",
+			 "unit", "%"
+		   });		
+		addAnnotation
+		  (getUnitCostMatrix_BallastTimeAllowance(), 
 		   source, 
 		   new String[] {
 			 "scale", "100",

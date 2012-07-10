@@ -41,6 +41,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCostLines <em>Cost Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRoutes <em>Allowed Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRevenueShare <em>Revenue Share</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getLadenTimeAllowance <em>Laden Time Allowance</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBallastTimeAllowance <em>Ballast Time Allowance</em>}</li>
  * </ul>
  * </p>
  *
@@ -446,6 +448,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * <p>
 	 * If the meaning of the '<em>Discharge Idle Time</em>' attribute isn't clear,
 	 * there really should be more of a description here...
+	 * @deprecated
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Discharge Idle Time</em>' attribute.
@@ -460,6 +463,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getDischargeIdleTime <em>Discharge Idle Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Discharge Idle Time</em>' attribute.
 	 * @see #getDischargeIdleTime()
@@ -473,6 +477,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * <p>
 	 * If the meaning of the '<em>Return Idle Time</em>' attribute isn't clear,
 	 * there really should be more of a description here...
+	 * @deprecated
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Return Idle Time</em>' attribute.
@@ -487,6 +492,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getReturnIdleTime <em>Return Idle Time</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Return Idle Time</em>' attribute.
 	 * @see #getReturnIdleTime()
@@ -552,6 +558,62 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	void setRevenueShare(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Laden Time Allowance</b></em>' attribute.
+	 * The default value is <code>"0.06"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Laden Time Allowance</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Laden Time Allowance</em>' attribute.
+	 * @see #setLadenTimeAllowance(double)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_LadenTimeAllowance()
+	 * @model default="0.06"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
+	 * @generated
+	 */
+	double getLadenTimeAllowance();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getLadenTimeAllowance <em>Laden Time Allowance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Laden Time Allowance</em>' attribute.
+	 * @see #getLadenTimeAllowance()
+	 * @generated
+	 */
+	void setLadenTimeAllowance(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Ballast Time Allowance</b></em>' attribute.
+	 * The default value is <code>"0.06"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Ballast Time Allowance</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Ballast Time Allowance</em>' attribute.
+	 * @see #setBallastTimeAllowance(double)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_BallastTimeAllowance()
+	 * @model default="0.06"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
+	 * @generated
+	 */
+	double getBallastTimeAllowance();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBallastTimeAllowance <em>Ballast Time Allowance</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Ballast Time Allowance</em>' attribute.
+	 * @see #getBallastTimeAllowance()
+	 * @generated
+	 */
+	void setBallastTimeAllowance(double value);
 
 } // end of  UnitCostMatrix
 
