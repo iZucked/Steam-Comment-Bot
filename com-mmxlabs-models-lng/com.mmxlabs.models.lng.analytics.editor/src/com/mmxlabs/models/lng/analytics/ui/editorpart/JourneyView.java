@@ -45,7 +45,7 @@ public class JourneyView extends ScenarioInstanceView {
 	private Journey journey;
 	private IDisplayComposite journeyComposite;
 	private PropertySheetPage propertySheetPage;
-	
+
 	@Override
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
 		if (instance != getScenarioInstance()) {
@@ -57,9 +57,9 @@ public class JourneyView extends ScenarioInstanceView {
 			}
 		}
 	}
-	
+
 	private void disposeContents() {
-		if (pane != null) {			
+		if (pane != null) {
 			pane.dispose();
 			pane = null;
 		}
@@ -67,14 +67,14 @@ public class JourneyView extends ScenarioInstanceView {
 			journeyComposite.getComposite().dispose();
 			journeyComposite = null;
 		}
-		
+
 		if (inner != null) {
 			inner.dispose();
 			inner = null;
 		}
 		journey = null;
 	}
-	
+
 	private void createContents() {
 		final Composite inner = new Composite(top, SWT.NONE);
 		inner.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -85,7 +85,7 @@ public class JourneyView extends ScenarioInstanceView {
 		upper.setLayout(new GridLayout());
 		upper.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		journey = AnalyticsFactory.eINSTANCE.createJourney();
-		
+
 		journey.eAdapters().add(new AdapterImpl() {
 			@Override
 			public void notifyChanged(Notification msg) {
@@ -99,12 +99,12 @@ public class JourneyView extends ScenarioInstanceView {
 				}
 			}
 		});
-		
+
 		IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(journey.eClass());
 		journeyComposite = factory.createToplevelComposite(upper, journey.eClass(), this);
 		journeyComposite.setCommandHandler(getDefaultCommandHandler());
 		journeyComposite.display(this, getRootObject(), journey, (Collection) Collections.emptyList());
-		
+
 		pane = new UnitCostMatrixViewerPane(getSite().getPage(), this, this, this.getViewSite().getActionBars()) {
 			@Override
 			protected boolean showEvaluateAction() {
@@ -115,34 +115,34 @@ public class JourneyView extends ScenarioInstanceView {
 			public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 				super.init(path, adapterFactory);
 				addTypicalColumn("Unit Cost", new UnitCostManipulator());
-//						new NonEditableColumn() {
-//					@Override
-//					public String render(final Object object) {
-//						if (propertySheetPage != null) propertySheetPage.refresh();
-//						if (journey.getFrom() == null || journey.getTo() == null) return "";
-//						try {
-//							final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) object, journey.getFrom(), journey.getTo());
-//							if (line != null) {
-//								return String.format("$%.2f", line.getUnitCost());
-//							} else {
-//								return "";
-//							}
-//						} catch (Throwable th) {
-//							return "";
-//						}
-//					}
-//				});
+				// new NonEditableColumn() {
+				// @Override
+				// public String render(final Object object) {
+				// if (propertySheetPage != null) propertySheetPage.refresh();
+				// if (journey.getFrom() == null || journey.getTo() == null) return "";
+				// try {
+				// final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) object, journey.getFrom(), journey.getTo());
+				// if (line != null) {
+				// return String.format("$%.2f", line.getUnitCost());
+				// } else {
+				// return "";
+				// }
+				// } catch (Throwable th) {
+				// return "";
+				// }
+				// }
+				// });
 			}
 		};
-		
+
 		pane.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 		pane.createControl(inner);
 		pane.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		pane.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getAnalyticsModel_RoundTripMatrices()), getAdapterFactory());
 		pane.getViewer().setInput(getRootObject().getSubModel(AnalyticsModel.class));
-		
+
 		getViewSite().setSelectionProvider(pane.getViewer());
-		
+
 		top.layout(true);
 		top.pack(true);
 	}
@@ -150,7 +150,7 @@ public class JourneyView extends ScenarioInstanceView {
 	@Override
 	public void createPartControl(final Composite parent) {
 		top = parent;
-		GridLayout gridLayout = new GridLayout(1,false);
+		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = gridLayout.marginHeight = 0;
 		top.setLayout(gridLayout);
 		listenToScenarioSelection();
@@ -158,9 +158,11 @@ public class JourneyView extends ScenarioInstanceView {
 
 	@Override
 	public void setFocus() {
-		pane.getControl().setFocus();
+		if (pane != null && !pane.getControl().isDisposed()) {
+			pane.getControl().setFocus();
+		}
 	}
-	
+
 	@Override
 	public Object getAdapter(Class adapter) {
 		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
@@ -170,7 +172,8 @@ public class JourneyView extends ScenarioInstanceView {
 					@Override
 					public IPropertySource getPropertySource(Object object) {
 						if (object instanceof UnitCostMatrix) {
-							if (journey.getFrom() == null || journey.getTo() == null) return null;
+							if (journey.getFrom() == null || journey.getTo() == null)
+								return null;
 							try {
 								final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) object, journey.getFrom(), journey.getTo());
 								return new UnitCostLinePropertySource(line);
@@ -188,23 +191,26 @@ public class JourneyView extends ScenarioInstanceView {
 		}
 		return null;
 	}
-	
+
 	private class UnitCostManipulator extends NonEditableColumn {
 		@Override
 		public String render(final Object object) {
-			if (propertySheetPage != null) propertySheetPage.refresh();
-			if (journey.getFrom() == null || journey.getTo() == null) return "";
+			if (propertySheetPage != null)
+				propertySheetPage.refresh();
+			if (journey.getFrom() == null || journey.getTo() == null)
+				return "";
 			final Double d = evaluate(object);
-			if (d == null) return "";
+			if (d == null)
+				return "";
 			return String.format("$%.2f", d);
 		}
 
 		@Override
 		public CellEditor getCellEditor(final Composite parent, final Object object) {
 			final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
-			
+
 			result.setFormatter(new DoubleFormatter());
-			
+
 			return result;
 		}
 
@@ -221,9 +227,10 @@ public class JourneyView extends ScenarioInstanceView {
 		@Override
 		public void setValue(Object o, Object value) {
 			// reverse calculate
-			
+
 			if (o instanceof UnitCostMatrix) {
-				if (journey.getFrom() == null || journey.getTo() == null) return;
+				if (journey.getFrom() == null || journey.getTo() == null)
+					return;
 				try {
 					final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) o, journey.getFrom(), journey.getTo());
 					if (line != null) {
@@ -248,10 +255,11 @@ public class JourneyView extends ScenarioInstanceView {
 		public Object getValue(Object object) {
 			return evaluate(object);
 		}
-		
+
 		private Double evaluate(final Object o) {
 			if (o instanceof UnitCostMatrix) {
-				if (journey.getFrom() == null || journey.getTo() == null) return null;
+				if (journey.getFrom() == null || journey.getTo() == null)
+					return null;
 				try {
 					final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) o, journey.getFrom(), journey.getTo());
 					if (line != null) {
@@ -263,5 +271,5 @@ public class JourneyView extends ScenarioInstanceView {
 			return null;
 		}
 	}
-	
+
 }
