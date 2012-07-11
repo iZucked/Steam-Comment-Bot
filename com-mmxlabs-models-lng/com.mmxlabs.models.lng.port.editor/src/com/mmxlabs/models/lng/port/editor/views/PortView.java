@@ -4,13 +4,13 @@
  */
 package com.mmxlabs.models.lng.port.editor.views;
 
-
 import java.util.Arrays;
 
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.editor.actions.MergePorts;
 import com.mmxlabs.models.lng.port.ui.editorpart.PortEditorPane;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 
@@ -21,7 +21,7 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 	public static final String ID = "com.mmxlabs.models.lng.port.editor.views.PortView";
 
 	public PortView() {
-		
+
 	}
 
 	@Override
@@ -31,10 +31,12 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 
 	@Override
 	protected void initViewerPane(PortEditorPane pane) {
-		pane.init(Arrays
-				.asList(new EReference[] { PortPackage.eINSTANCE
-						.getPortModel_Ports() }), null);
-		pane.getViewer().setInput(
-				getRootObject().getSubModel(PortModel.class));
+		pane.init(Arrays.asList(new EReference[] { PortPackage.eINSTANCE.getPortModel_Ports() }), null);
+		pane.getViewer().setInput(getRootObject().getSubModel(PortModel.class));
+
+		// Add action to create and edit cargo groups
+		pane.getToolBarManager().appendToGroup("edit", new MergePorts(this, pane.getScenarioViewer()));
+		pane.getToolBarManager().update(true);
+
 	}
 }
