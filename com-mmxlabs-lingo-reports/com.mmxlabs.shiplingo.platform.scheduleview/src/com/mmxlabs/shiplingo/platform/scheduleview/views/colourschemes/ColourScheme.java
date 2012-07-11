@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Faded_Alpha;

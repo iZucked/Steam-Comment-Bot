@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;

@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.shiplingo.platform.models.optimisation;
 
 import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
