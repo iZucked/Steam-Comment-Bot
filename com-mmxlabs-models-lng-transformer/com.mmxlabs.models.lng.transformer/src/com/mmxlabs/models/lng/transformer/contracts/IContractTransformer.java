@@ -10,7 +10,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 /**
  * Interface to Scenario Transformer extensions which handle contract logic.
@@ -21,12 +21,12 @@ import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
 public interface IContractTransformer extends ITransformerExtension {
 
 	/**
-	 * Create an {@link IShippingPriceCalculator} from a {@link SalesContract}.
+	 * Create an {@link ISalesPriceCalculator} from a {@link SalesContract}.
 	 * 
 	 * @param sc
 	 * @return
 	 */
-	public IShippingPriceCalculator transformSalesContract(SalesContract sc);
+	public ISalesPriceCalculator transformSalesContract(SalesContract sc);
 
 	/**
 	 * Create an {@link ILoadPriceCalculator} from a {@link PurchaseContract}

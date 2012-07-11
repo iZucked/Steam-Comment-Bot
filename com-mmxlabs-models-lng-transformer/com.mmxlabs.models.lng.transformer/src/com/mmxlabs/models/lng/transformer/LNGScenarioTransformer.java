@@ -57,11 +57,11 @@ import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
-import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
+import com.mmxlabs.models.lng.port.Location;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -95,7 +95,6 @@ import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -104,8 +103,9 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -305,7 +305,7 @@ public class LNGScenarioTransformer {
 
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
-			final IShippingPriceCalculator calculator = transformer.transformSalesContract(c);
+			final ISalesPriceCalculator calculator = transformer.transformSalesContract(c);
 			entities.addModelObject(c, calculator);
 		}
 
@@ -327,9 +327,9 @@ public class LNGScenarioTransformer {
 		 */
 		final PortModel portModel = rootObject.getSubModel(PortModel.class);
 
-		final Map<APort, IShippingPriceCalculator> cooldownCalculators = new HashMap<APort, IShippingPriceCalculator>();
+		final Map<APort, ICooldownPriceCalculator> cooldownCalculators = new HashMap<APort, ICooldownPriceCalculator>();
 		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
-			final IShippingPriceCalculator cooldownCalculator = new MarketPriceContract(indexAssociation.lookup(price.getIndex()), 0, Calculator.scaleToInt(1));
+			final ICooldownPriceCalculator cooldownCalculator = new MarketPriceContract(indexAssociation.lookup(price.getIndex()), 0, Calculator.scaleToInt(1));
 
 			for (final APort port : SetUtils.getPorts(price.getPorts())) {
 				cooldownCalculators.put(port, cooldownCalculator);
@@ -337,7 +337,13 @@ public class LNGScenarioTransformer {
 		}
 
 		for (final Port ePort : portModel.getPorts()) {
-			final IPort port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort));
+			final IPort port;
+			if (ePort.getLocation() != null) {
+				Location loc = ePort.getLocation();
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort), (float)loc.getLat(), (float)loc.getLon());
+			} else {
+				port = builder.createPort(ePort.getName(), !ePort.isAllowCooldown(), cooldownCalculators.get(ePort));
+			}
 			portAssociation.add(ePort, port);
 			portIndices.put(port, allPorts.size());
 			allPorts.add(port);
@@ -659,22 +665,22 @@ public class LNGScenarioTransformer {
 			final ITimeWindow dischargeWindow = builder.createTimeWindow(convertTime(earliestTime, dischargeSlot.getWindowStartWithSlotOrPortTime()),
 					convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTime()));
 
-			final IShippingPriceCalculator dischargePriceCalculator;
+			final ISalesPriceCalculator dischargePriceCalculator;
 
 			if (dischargeSlot.isSetFixedPrice()) {
 				final int fixedPrice = Calculator.scaleToInt(dischargeSlot.getFixedPrice());
-				dischargePriceCalculator = new IShippingPriceCalculator() {
+				dischargePriceCalculator = new ISalesPriceCalculator() {
 					@Override
 					public void prepareEvaluation(final ISequences sequences) {
 					}
 
 					@Override
-					public int calculateUnitPrice(final IPortSlot slot, final int time) {
+					public int calculateSalesUnitPrice(final IDischargeOption slot, final int time) {
 						return fixedPrice;
 					}
 				};
 			} else {
-				dischargePriceCalculator = entities.getOptimiserObject(dischargeSlot.getContract(), IShippingPriceCalculator.class);
+				dischargePriceCalculator = entities.getOptimiserObject(dischargeSlot.getContract(), ISalesPriceCalculator.class);
 			}
 
 			final IDischargeOption discharge;

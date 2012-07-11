@@ -23,7 +23,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 
 /**
@@ -67,7 +67,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	@Override
-	public IShippingPriceCalculator transformSalesContract(final SalesContract sc) {
+	public ISalesPriceCalculator transformSalesContract(final SalesContract sc) {
 		return instantiate(sc);
 	}
 
