@@ -181,7 +181,11 @@ public abstract class ImportAction extends LockableAction {
 		final HashMap<String, NamedObject> result = new HashMap<String, NamedObject>();
 		for (final EObject object : existingObjects) {
 			if (object instanceof NamedObject) {
-				result.put(((NamedObject) object).getName(), (NamedObject) object);
+				final NamedObject namedObject = (NamedObject) object;
+				result.put(namedObject.getName(), namedObject);
+				for (final String otherName : namedObject.getOtherNames()) {
+					result.put(otherName, namedObject);
+				}
 			}
 		}
 		return result;
