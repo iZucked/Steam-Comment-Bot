@@ -126,7 +126,7 @@
        point="com.mmxlabs.models.ui.modelfactories">
     <factory
           ID="com.mmxlabs.models.lng.port.editor.portFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          factory="com.mmxlabs.models.lng.port.ui.modelfactories.PortModelFactory"
           label="Port"
           targetEClass="com.mmxlabs.models.lng.port.Port">
     </factory>
