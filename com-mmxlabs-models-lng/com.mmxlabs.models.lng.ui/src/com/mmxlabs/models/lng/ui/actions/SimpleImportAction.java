@@ -22,7 +22,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class SimpleImportAction extends ImportAction {
 	private ScenarioTableViewer viewer;
@@ -31,21 +31,22 @@ public class SimpleImportAction extends ImportAction {
 		super(part);
 		this.viewer = viewer;
 	}
-	
+
 	@Override
 	protected void doImportStages(final DefaultImportContext context) {
 		final EObject container = viewer.getCurrentContainer();
 		final EReference containment = viewer.getCurrentContainment();
-		
+
 		final IClassImporter importer = getImporter(containment);
 		// open file picker
 
 		final FileDialog fileDialog = new FileDialog(part.getShell());
-		fileDialog.setFilterExtensions(new String[] {"*.csv"});
+		fileDialog.setFilterExtensions(new String[] { "*.csv" });
 		final String path = fileDialog.open();
-		
-		if (path == null) return;
-		
+
+		if (path == null)
+			return;
+
 		CSVReader reader;
 		try {
 			reader = new CSVReader(path);
@@ -56,8 +57,6 @@ public class SimpleImportAction extends ImportAction {
 			e.printStackTrace();
 		}
 	}
-
-
 
 	protected IClassImporter getImporter(final EReference containment) {
 		return Activator.getDefault().getImporterRegistry().getClassImporter(containment.getEReferenceType());
