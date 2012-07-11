@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
@@ -457,7 +458,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// Store unit prices for later on
 			// loadUnitPrice = loadSlot
 			// .getPurchasePriceAtTime(arrivalTimes[loadIdx / 2]);
-			dischargeUnitPrice = dischargeSlot.getDischargePriceCalculator().calculateUnitPrice(dischargeSlot, arrivalTimes[dischargeIdx / 2]);
+			dischargeUnitPrice = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, arrivalTimes[dischargeIdx / 2]);
 			// Store cargoCVValue
 			cargoCVValue = loadSlot.getCargoCVValue();
 
@@ -575,7 +576,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 					// TODO double check how/if this affects caching
 					// decisions
-					final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateUnitPrice(details.getOptions().getToPortSlot(), cooldownTime);
+					final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice((ILoadSlot)details.getOptions().getToPortSlot(), cooldownTime);
 
 					// TODO is this how cooldown gas ought to be priced?
 					if (details.getOptions().getToPortSlot() instanceof ILoadSlot) {

@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 /**
  * @author hinton
@@ -25,5 +25,5 @@ public interface IDischargeOption extends IPortSlot {
 	 */
 	long getMaxDischargeVolume();
 
-	IShippingPriceCalculator getDischargePriceCalculator();
+	ISalesPriceCalculator getDischargePriceCalculator();
 }

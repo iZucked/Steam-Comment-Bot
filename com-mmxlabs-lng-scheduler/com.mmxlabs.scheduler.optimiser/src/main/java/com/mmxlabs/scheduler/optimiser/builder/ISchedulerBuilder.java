@@ -29,8 +29,9 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
@@ -264,7 +265,7 @@ public interface ISchedulerBuilder {
 	 * @param name
 	 * @return
 	 */
-	IPort createPort(String name, boolean arriveCold, final IShippingPriceCalculator cooldownPriceCalculator);
+	IPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator);
 
 	/**
 	 * Create a port with an x/y co-ordinate.
@@ -274,7 +275,7 @@ public interface ISchedulerBuilder {
 	 * @param y
 	 * @return
 	 */
-	IXYPort createPort(String name, boolean arriveCold, final IShippingPriceCalculator cooldownPriceCalculator, float x, float y);
+	IXYPort createPort(String name, boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, float x, float y);
 
 	/**
 	 * Create a cargo with the specific from and to ports and associated time windows.
@@ -410,9 +411,9 @@ public interface ISchedulerBuilder {
 	 *            Scaled sales price in $/MMBTu
 	 * @return
 	 */
-	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator priceCalculator, int durationHours, boolean slotIsOptional);
+	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ISalesPriceCalculator priceCalculator, int durationHours, boolean slotIsOptional);
 
-	IDischargeOption createVirtualDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, IShippingPriceCalculator priceCalculator, boolean slotIsOptional);
+	IDischargeOption createVirtualDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ISalesPriceCalculator priceCalculator, boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these

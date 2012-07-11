@@ -76,8 +76,9 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.XYPort;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
@@ -247,13 +248,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	public void createAnywherePort() {
 		// Create the anywhere port
-		ANYWHERE = createPort("ANYWHERE", false, new IShippingPriceCalculator() {
+		ANYWHERE = createPort("ANYWHERE", false, new ICooldownPriceCalculator() {
 			@Override
 			public void prepareEvaluation(final ISequences sequences) {
 			}
 
 			@Override
-			public int calculateUnitPrice(final IPortSlot slot, final int time) {
+			public int calculateCooldownUnitPrice(final ILoadSlot slot, final int time) {
 				return 0;
 			}
 		});
@@ -332,7 +333,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IDischargeOption createVirtualDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
-			final IShippingPriceCalculator priceCalculator, final boolean slotIsOptional) {
+			final ISalesPriceCalculator priceCalculator, final boolean slotIsOptional) {
 
 		final DischargeOption slot = new DischargeOption();
 
@@ -344,7 +345,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	private ISequenceElement configureDischargeOption(final DischargeOption slot, final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final IShippingPriceCalculator priceCalculator, final boolean optional) {
+			final ISalesPriceCalculator priceCalculator, final boolean optional) {
 		slot.setId(id);
 		slot.setPort(port);
 		slot.setTimeWindow(window);
@@ -372,14 +373,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		addSlotToVolumeConstraints(slot);
 
-		calculatorProvider.addShippingPriceCalculator(priceCalculator);
+		calculatorProvider.addSalesPriceCalculator(priceCalculator);
 
 		return element;
 	}
 
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final IShippingPriceCalculator pricePerMMBTu, final int durationHours, final boolean optional) {
+			final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final boolean optional) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
@@ -422,7 +423,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IPort createPort(final String name, final boolean arriveCold, final IShippingPriceCalculator cooldownPriceCalculator) {
+	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator) {
 
 		final Port port = new Port(indexingContext);
 		port.setName(name);
@@ -446,7 +447,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		// create the return elements to return to this port using the ELSM
 
-		calculatorProvider.addShippingPriceCalculator(cooldownPriceCalculator);
+		calculatorProvider.addCooldownPriceCalculator(cooldownPriceCalculator);
 
 		return port;
 	}
@@ -499,7 +500,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IXYPort createPort(final String name, final boolean arriveCold, final IShippingPriceCalculator cooldownPriceCalculator, final float x, final float y) {
+	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y) {
 
 		final XYPort port = new XYPort(indexingContext);
 		port.setName(name);
@@ -514,7 +515,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			setPortToPortDistance(ANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
 		}
 
-		calculatorProvider.addShippingPriceCalculator(cooldownPriceCalculator);
+		// travel time from A to A should be zero, right?
+		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
+
+		calculatorProvider.addCooldownPriceCalculator(cooldownPriceCalculator);
 
 		return port;
 	}

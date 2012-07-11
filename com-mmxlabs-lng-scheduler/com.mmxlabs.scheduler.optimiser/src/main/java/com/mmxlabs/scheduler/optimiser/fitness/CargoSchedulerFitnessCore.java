@@ -22,7 +22,7 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CapacityComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterOutFitnessComponent;
@@ -124,7 +124,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public boolean evaluate(final ISequences sequences) {
-		for (final IShippingPriceCalculator shippingCalculator : calculatorProvider.getShippingPriceCalculators()) {
+		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences);
 		}
 
@@ -137,7 +137,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
-		for (final IShippingPriceCalculator shippingCalculator : calculatorProvider.getShippingPriceCalculators()) {
+		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences);
 		}
 
@@ -201,7 +201,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		lastAffectedResources.clear();
 		lastAffectedResources.addAll(sequences.getResources());
 
-		for (final IShippingPriceCalculator shippingCalculator : calculatorProvider.getShippingPriceCalculators()) {
+		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
 			shippingCalculator.prepareEvaluation(sequences);
 		}
 

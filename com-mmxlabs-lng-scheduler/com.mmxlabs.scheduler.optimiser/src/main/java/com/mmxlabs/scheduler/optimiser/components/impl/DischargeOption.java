@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -20,13 +20,13 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 
 	private long maxDischargeVolume;
 
-	private IShippingPriceCalculator priceCalculator;
+	private ISalesPriceCalculator priceCalculator;
 
 	public DischargeOption() {
 		setPortType(PortType.Discharge);
 	}
 
-	public DischargeOption(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume, final IShippingPriceCalculator priceCalculator) {
+	public DischargeOption(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume, final ISalesPriceCalculator priceCalculator) {
 		super(id, port, timwWindow);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
@@ -74,12 +74,12 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	/**
 	 * @param salesPriceCurve
 	 */
-	public void setDischargePriceCalculator(final IShippingPriceCalculator priceCalculator) {
+	public void setDischargePriceCalculator(final ISalesPriceCalculator priceCalculator) {
 		this.priceCalculator = priceCalculator;
 	}
 
 	@Override
-	public final IShippingPriceCalculator getDischargePriceCalculator() {
+	public final ISalesPriceCalculator getDischargePriceCalculator() {
 		return priceCalculator;
 	}
 

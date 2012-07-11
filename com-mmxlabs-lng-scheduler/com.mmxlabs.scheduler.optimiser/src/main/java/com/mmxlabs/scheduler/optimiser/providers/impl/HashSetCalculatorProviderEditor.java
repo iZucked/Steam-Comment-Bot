@@ -8,8 +8,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 
 /**
@@ -19,7 +20,8 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 public class HashSetCalculatorProviderEditor implements ICalculatorProviderEditor {
 	private final String name;
 	private final LinkedHashSet<ILoadPriceCalculator> loadPriceCalculators = new LinkedHashSet<ILoadPriceCalculator>();
-	private final LinkedHashSet<IShippingPriceCalculator> shippingPriceCalculators = new LinkedHashSet<IShippingPriceCalculator>();
+	private final LinkedHashSet<ISalesPriceCalculator> salesPriceCalculators = new LinkedHashSet<ISalesPriceCalculator>();
+	private final LinkedHashSet<ICooldownPriceCalculator> cooldownPriceCalculators = new LinkedHashSet<ICooldownPriceCalculator>();
 
 	public HashSetCalculatorProviderEditor(final String name) {
 		this.name = name;
@@ -36,8 +38,18 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider#getShippingPriceCalculators()
 	 */
 	@Override
-	public Collection<IShippingPriceCalculator> getShippingPriceCalculators() {
-		return Collections.unmodifiableSet(shippingPriceCalculators);
+	public Collection<ISalesPriceCalculator> getSalesPriceCalculators() {
+		return Collections.unmodifiableSet(salesPriceCalculators);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider#getCooldownPriceCalculators()
+	 */
+	@Override
+	public Collection<ICooldownPriceCalculator> getCooldownPriceCalculators() {
+		return Collections.unmodifiableSet(cooldownPriceCalculators);
 	}
 
 	/*
@@ -53,7 +65,8 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	@Override
 	public void dispose() {
 		loadPriceCalculators.clear();
-		shippingPriceCalculators.clear();
+		salesPriceCalculators.clear();
+		cooldownPriceCalculators.clear();
 	}
 
 	/*
@@ -71,12 +84,24 @@ public class HashSetCalculatorProviderEditor implements ICalculatorProviderEdito
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor#addShippingPriceCalculator(com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator)
+	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor#addSalesPriceCalculator(com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator)
 	 */
 	@Override
-	public void addShippingPriceCalculator(final IShippingPriceCalculator calculator) {
+	public void addSalesPriceCalculator(final ISalesPriceCalculator calculator) {
 		if (calculator != null) {
-			shippingPriceCalculators.add(calculator);
+			salesPriceCalculators.add(calculator);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor#addCooldownPriceCalculator(com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator)
+	 */
+	@Override
+	public void addCooldownPriceCalculator(final ICooldownPriceCalculator calculator) {
+		if (calculator != null) {
+			cooldownPriceCalculators.add(calculator);
 		}
 	}
 

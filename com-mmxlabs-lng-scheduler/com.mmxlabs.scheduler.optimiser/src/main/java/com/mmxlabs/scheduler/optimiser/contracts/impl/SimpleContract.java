@@ -10,10 +10,10 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -22,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoadPriceCalculator, IShippingPriceCalculator {
+public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
 
 	@Override
 	public void prepareEvaluation(final ScheduledSequences sequences) {
@@ -40,7 +40,12 @@ public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoa
 	}
 
 	@Override
-	public int calculateUnitPrice(final IPortSlot slot, final int time) {
+	public int calculateSalesUnitPrice(final IDischargeOption option, final int time) {
+		return calculateSimpleLoadUnitPrice(time);
+	}
+
+	@Override
+	public int calculateCooldownUnitPrice(final ILoadSlot slot, final int time) {
 		return calculateSimpleLoadUnitPrice(time);
 	}
 

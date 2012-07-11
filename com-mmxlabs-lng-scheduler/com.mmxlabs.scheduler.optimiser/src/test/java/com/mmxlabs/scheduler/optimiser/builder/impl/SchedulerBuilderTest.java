@@ -22,7 +22,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 @RunWith(JMock.class)
@@ -87,7 +87,7 @@ public class SchedulerBuilderTest {
 		final IPort port = context.mock(IPort.class);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		final IShippingPriceCalculator curve = context.mock(IShippingPriceCalculator.class);
+		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
 
 		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
 	}
@@ -100,7 +100,7 @@ public class SchedulerBuilderTest {
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = context.mock(ITimeWindow.class);
 
-		final IShippingPriceCalculator curve = context.mock(IShippingPriceCalculator.class);
+		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
 
 		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
 	}
@@ -119,7 +119,7 @@ public class SchedulerBuilderTest {
 		final IPort port = builder.createPort("port", false, null);
 		final ITimeWindow window = builder.createTimeWindow(0, 0);
 
-		final IShippingPriceCalculator curve = context.mock(IShippingPriceCalculator.class);
+		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
 
 		final ILoadSlot loadSlot = context.mock(ILoadSlot.class);
 

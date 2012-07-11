@@ -81,7 +81,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 				// loadPrice =
 				// ((ILoadSlot)
 				// slots[loadix]).getPurchasePriceAtTime(arrivalTimes.get(loadix));
-				dischargePrice = ((IDischargeSlot) slots[dischargeix]).getDischargePriceCalculator().calculateUnitPrice(slots[dischargeix], arrivalTimes.get(dischargeix));
+				dischargePrice = ((IDischargeSlot) slots[dischargeix]).getDischargePriceCalculator().calculateSalesUnitPrice((IDischargeSlot)slots[dischargeix], arrivalTimes.get(dischargeix));
 			} else {
 				// loadPrice =
 				dischargePrice = -1;

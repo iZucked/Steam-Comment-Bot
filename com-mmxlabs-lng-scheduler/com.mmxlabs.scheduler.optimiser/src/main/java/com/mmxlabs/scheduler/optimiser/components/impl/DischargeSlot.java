@@ -7,7 +7,7 @@ package com.mmxlabs.scheduler.optimiser.components.impl;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 /**
  * A physical discharge option; because there are no extra physical details here this just makes the superclass implement the extra interface.
@@ -20,7 +20,7 @@ public final class DischargeSlot extends DischargeOption implements IDischargeSl
 		super();
 	}
 
-	public DischargeSlot(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume, final IShippingPriceCalculator priceCalculator) {
+	public DischargeSlot(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume, final ISalesPriceCalculator priceCalculator) {
 		super(id, port, timwWindow, minDischargeVolume, maxDischargeVolume, priceCalculator);
 	}
 }

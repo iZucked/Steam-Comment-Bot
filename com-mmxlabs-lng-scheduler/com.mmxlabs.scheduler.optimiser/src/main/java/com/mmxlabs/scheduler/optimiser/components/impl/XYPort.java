@@ -8,7 +8,7 @@ import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 
 /**
  * Default implementation of {@link IXYPort}
@@ -23,7 +23,7 @@ public final class XYPort extends IndexedObject implements IXYPort {
 	/**
 	 * A calculator used to determine the price of cooldown LNG here.
 	 */
-	private IShippingPriceCalculator cooldownPriceCalculator;
+	private ICooldownPriceCalculator cooldownPriceCalculator;
 
 	private float x;
 
@@ -101,11 +101,11 @@ public final class XYPort extends IndexedObject implements IXYPort {
 	}
 
 	@Override
-	public IShippingPriceCalculator getCooldownPriceCalculator() {
+	public ICooldownPriceCalculator getCooldownPriceCalculator() {
 		return cooldownPriceCalculator;
 	}
 
-	public void setCooldownPriceCalculator(final IShippingPriceCalculator cooldownPriceCalculator) {
+	public void setCooldownPriceCalculator(final ICooldownPriceCalculator cooldownPriceCalculator) {
 		this.cooldownPriceCalculator = cooldownPriceCalculator;
 	}
 }

@@ -14,7 +14,7 @@ import org.junit.runner.RunWith;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 @RunWith(JMock.class)
 public class DischargeSlotTest {
@@ -28,7 +28,7 @@ public class DischargeSlotTest {
 		final ITimeWindow tw = context.mock(ITimeWindow.class);
 		final long minDischargeVolume = 10l;
 		final long maxDischargeVolume = 20l;
-		final IShippingPriceCalculator calculator = context.mock(IShippingPriceCalculator.class);
+		final ISalesPriceCalculator calculator = context.mock(ISalesPriceCalculator.class);
 
 		final DischargeSlot slot = new DischargeSlot(id, port, tw, minDischargeVolume, maxDischargeVolume, calculator);
 		Assert.assertSame(id, slot.getId());
@@ -61,7 +61,7 @@ public class DischargeSlotTest {
 
 	@Test
 	public void testGetSetSalesPriceCurve() {
-		final IShippingPriceCalculator curve = context.mock(IShippingPriceCalculator.class);
+		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
 		final DischargeSlot slot = new DischargeSlot();
 		Assert.assertNull(slot.getDischargePriceCalculator());
 		slot.setDischargePriceCalculator(curve);
@@ -72,18 +72,18 @@ public class DischargeSlotTest {
 	public void testGetSetSalesPriceCurveAtTime() {
 		final DischargeSlot slot = new DischargeSlot();
 
-		final IShippingPriceCalculator curve = context.mock(IShippingPriceCalculator.class);
+		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
 		slot.setDischargePriceCalculator(curve);
 
 		final int time = 1234;
 
 		context.checking(new Expectations() {
 			{
-				one(curve).calculateUnitPrice(slot, 1234);
+				one(curve).calculateSalesUnitPrice(slot, 1234);
 			}
 		});
 
-		slot.getDischargePriceCalculator().calculateUnitPrice(slot, time);
+		slot.getDischargePriceCalculator().calculateSalesUnitPrice(slot, time);
 
 		context.assertIsSatisfied();
 	}
@@ -97,8 +97,8 @@ public class DischargeSlotTest {
 		final IPort port2 = context.mock(IPort.class, "port2");
 		final ITimeWindow tw1 = context.mock(ITimeWindow.class, "tw1");
 		final ITimeWindow tw2 = context.mock(ITimeWindow.class, "tw2");
-		final IShippingPriceCalculator curve1 = context.mock(IShippingPriceCalculator.class, "curve1");
-		final IShippingPriceCalculator curve2 = context.mock(IShippingPriceCalculator.class, "curve2");
+		final ISalesPriceCalculator curve1 = context.mock(ISalesPriceCalculator.class, "curve1");
+		final ISalesPriceCalculator curve2 = context.mock(ISalesPriceCalculator.class, "curve2");
 
 		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve1);
 		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve1);

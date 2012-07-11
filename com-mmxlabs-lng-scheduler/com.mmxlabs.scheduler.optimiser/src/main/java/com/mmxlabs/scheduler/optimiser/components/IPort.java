@@ -5,7 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 import com.mmxlabs.common.indexedobjects.IIndexedObject;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 
 /**
  * This interface defines a Port, a physical location that can be used as a source or destination point for travel.
@@ -31,9 +31,9 @@ public interface IPort extends IIndexedObject {
 	boolean shouldVesselsArriveCold();
 
 	/**
-	 * A {@link IShippingPriceCalculator} used for pricing cooldown gas.
+	 * A {@link ICooldownPriceCalculator} used for pricing cooldown gas.
 	 * 
 	 * @return
 	 */
-	IShippingPriceCalculator getCooldownPriceCalculator();
+	ICooldownPriceCalculator getCooldownPriceCalculator();
 }
