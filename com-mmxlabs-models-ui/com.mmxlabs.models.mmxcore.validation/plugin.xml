@@ -32,7 +32,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  {0} has non-unique name {1}
+                  {0}
                </message>
                <description>
                   Named elements should have unique names.

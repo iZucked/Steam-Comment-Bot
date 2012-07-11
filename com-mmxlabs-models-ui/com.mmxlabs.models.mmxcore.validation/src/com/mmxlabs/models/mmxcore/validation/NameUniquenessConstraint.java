@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.mmxcore.validation;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,31 +36,30 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * 
  */
 public class NameUniquenessConstraint extends AbstractModelConstraint {
-	private IStatus validate(final IValidationContext ctx, final EAttribute nameAttribute) {
+	private IStatus validate(final IValidationContext ctx, final EAttribute nameAttribute, final EAttribute otherNamesAttribute) {
 		final EObject target = ctx.getTarget();
-		IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
-		final Pair<EObject, EReference> containerAndFeature = new Pair<EObject, EReference>(
-				extraValidationContext.getContainer(target), extraValidationContext.getContainment(target));
+		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
+		final Pair<EObject, EReference> containerAndFeature = new Pair<EObject, EReference>(extraValidationContext.getContainer(target), extraValidationContext.getContainment(target));
 
 		final EObject container = containerAndFeature.getFirst(); // target.eContainer();
 		if (container == null)
 			return ctx.createSuccessStatus();
 		final EStructuralFeature feature = containerAndFeature.getSecond();
 		if (feature != null && feature.isMany() && feature instanceof EReference && ((EReference) feature).getEReferenceType().getEAllAttributes().contains(nameAttribute)) {
-			
-			EAnnotation eAnnotation = target.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/validation/NamedObject");
+
+			final EAnnotation eAnnotation = target.eClass().getEAnnotation("http://www.mmxlabs.com/models/mmxcore/validation/NamedObject");
 			if (eAnnotation != null) {
 				if (Boolean.valueOf(eAnnotation.getDetails().get("nonUnique"))) {
 					return ctx.createSuccessStatus();
 				}
 			}
-			
+
 			Map<Pair<EObject, EReference>, Set<String>> badNames = (Map<Pair<EObject, EReference>, Set<String>>) ctx.getCurrentConstraintData();
 			if (badNames == null) {
 				badNames = new HashMap<Pair<EObject, EReference>, Set<String>>();
 				ctx.putCurrentConstraintData(badNames);
 			}
-			
+
 			Set<String> bad = badNames.get(containerAndFeature);
 			if (bad == null) {
 				bad = new HashSet<String>();
@@ -73,14 +73,36 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 						bad.add(n);
 					}
 					temp.add(n);
+					final Collection<String> names = (Collection<String>) no.eGet(otherNamesAttribute);
+					for (final String ns : names) {
+						if (n.equals(ns)) {
+							continue;
+						}
+						if (temp.contains(ns)) {
+							bad.add(ns);
+						}
+						temp.add(ns);
+					}
 				}
 			}
 
 			final String name = (String) target.eGet(nameAttribute);
 			if (bad.contains(name)) {
-				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(target.eClass().getName(), name));
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " has non-unique name " + name));
 				dsd.addEObjectAndFeature(target, nameAttribute);
 				return dsd;
+			}
+			final Collection<String> names = (Collection<String>) target.eGet(otherNamesAttribute);
+			for (final String ns : names) {
+				if (name.equals(ns)) {
+					continue;
+				}
+				if (bad.contains(ns)) {
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(target.eClass().getName() + " " + name
+							+ " has non-unique other name " + ns));
+					dsd.addEObjectAndFeature(target, nameAttribute);
+					return dsd;
+				}
 			}
 		}
 		return ctx.createSuccessStatus();
@@ -90,7 +112,7 @@ public class NameUniquenessConstraint extends AbstractModelConstraint {
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof NamedObject) {
-			return validate(ctx, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+			return validate(ctx, MMXCorePackage.eINSTANCE.getNamedObject_Name(), MMXCorePackage.eINSTANCE.getNamedObject_OtherNames());
 		}
 		return ctx.createSuccessStatus();
 	}
