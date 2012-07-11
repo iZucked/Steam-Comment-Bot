@@ -25,14 +25,15 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 	private ScenarioServiceSelectionProvider selectionProvider;
 	private IEditorPart targetEditor;
 	private IAction action;
+
 	@Override
 	public void run(IAction action) {
-		
+
 	}
 
 	@Override
 	public void selectionChanged(IAction action, ISelection selection) {
-		
+
 	}
 
 	@Override
@@ -45,13 +46,12 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 	private void updateActionState() {
 		boolean enabled = false;
 		boolean toggled = false;
-			if (targetEditor != null) {
-				IEditorInput input = targetEditor.getEditorInput();
-				if (input instanceof IScenarioServiceEditorInput) {
-					enabled = true;
-					if (selectionProvider.getPinnedInstance() != null) {
-					final ScenarioInstance instance = ((IScenarioServiceEditorInput) input)
-							.getScenarioInstance();
+		if (targetEditor != null && selectionProvider != null) {
+			IEditorInput input = targetEditor.getEditorInput();
+			if (input instanceof IScenarioServiceEditorInput) {
+				enabled = true;
+				if (selectionProvider.getPinnedInstance() != null) {
+					final ScenarioInstance instance = ((IScenarioServiceEditorInput) input).getScenarioInstance();
 					if (instance == selectionProvider.getPinnedInstance()) {
 						toggled = true;
 					}
@@ -63,26 +63,25 @@ public class PinStateEditorActionDelegate implements IEditorActionDelegate, IAct
 			action.setChecked(toggled);
 		}
 	}
-	
+
 	@Override
 	public void init(final IAction action) {
 		selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
 		selectionProvider.addSelectionChangedListener(new IScenarioServiceSelectionChangedListener() {
-			
+
 			@Override
 			public void selected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> selected) {
-				
+
 			}
-			
+
 			@Override
-			public void pinned(IScenarioServiceSelectionProvider provider,
-					ScenarioInstance oldPin, ScenarioInstance newPin) {
+			public void pinned(IScenarioServiceSelectionProvider provider, ScenarioInstance oldPin, ScenarioInstance newPin) {
 				updateActionState();
 			}
-			
+
 			@Override
 			public void deselected(IScenarioServiceSelectionProvider provider, Collection<ScenarioInstance> deselected) {
-				
+
 			}
 		});
 	}
