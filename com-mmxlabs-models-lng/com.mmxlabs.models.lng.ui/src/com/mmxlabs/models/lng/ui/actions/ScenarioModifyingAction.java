@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.models.lng.ui.actions;
 
 import org.eclipse.emf.edit.domain.EditingDomain;
