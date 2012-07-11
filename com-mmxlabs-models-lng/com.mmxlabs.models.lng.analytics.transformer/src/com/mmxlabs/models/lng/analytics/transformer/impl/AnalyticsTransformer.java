@@ -69,8 +69,9 @@ import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -188,7 +189,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			final HashMap<Pair<Port, Port>, UnitCostLine> bestCostSoFar = new HashMap<Pair<Port, Port>, UnitCostLine>();
 
 			final ILoadPriceCalculator loadCalculator = new FixedPriceContract(0);
-			final IShippingPriceCalculator dischargeCalculator = new FixedPriceContract(Calculator.scaleToInt(spec.getCargoPrice()));
+			final ISalesPriceCalculator dischargeCalculator = new FixedPriceContract(Calculator.scaleToInt(spec.getCargoPrice()));
 			int i = 0;
 
 			monitor.beginTask("Creating unit cost matrix", loadPorts.size());
@@ -200,7 +201,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				injector.injectMembers(builder);
 
 				final Association<Port, IPort> ports = new Association<Port, IPort>();
-				final IShippingPriceCalculator nullCalculator = new FixedPriceContract(0);
+				final ICooldownPriceCalculator nullCalculator = new FixedPriceContract(0);
 				for (final Port port : portModel.getPorts()) {
 					ports.add(port, builder.createPort(port.getName(), !port.isAllowCooldown(), nullCalculator));
 				}
