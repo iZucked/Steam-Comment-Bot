@@ -16,10 +16,9 @@ import org.eclipse.swt.widgets.Text;
 
 public class TextInlineEditor extends UnsettableInlineEditor {
 	private Text text;
-	private final int style;
+	protected final int style;
 
-	public TextInlineEditor(
-			final EStructuralFeature feature) {
+	public TextInlineEditor(final EStructuralFeature feature) {
 		this(feature, SWT.BORDER);
 	}
 
@@ -36,27 +35,26 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	public Control createValueControl(Composite parent) {
-		final Text text = new Text(parent, style);
+	public Control createValueControl(final Composite parent) {
+
+		text = createText(parent);
 
 		text.addModifyListener(new ModifyListener() {
 			{
 				final ModifyListener ml = this;
 				text.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetDisposed(DisposeEvent e) {
+					public void widgetDisposed(final DisposeEvent e) {
 						text.removeModifyListener(ml);
 					}
 				});
 			}
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(final ModifyEvent e) {
 				TextInlineEditor.this.doSetValue(text.getText(), false);
 			}
 		});
-
-		this.text = text;
 
 		return text;
 	}
@@ -72,13 +70,17 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	protected Object getInitialUnsetValue() {
 		return "";
 	}
-	
 
 	@Override
 	public void setEnabled(final boolean enabled) {
 
 		text.setEnabled(enabled);
-		
+
 		super.setEnabled(enabled);
+	}
+
+	protected Text createText(final Composite parent) {
+		final Text text = new Text(parent, style);
+		return text;
 	}
 }
