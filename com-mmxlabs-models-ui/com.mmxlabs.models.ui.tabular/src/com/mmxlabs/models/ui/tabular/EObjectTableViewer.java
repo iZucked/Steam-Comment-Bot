@@ -572,11 +572,14 @@ public class EObjectTableViewer extends GridTableViewer {
 				}
 
 				contentProvider.inputChanged(viewer, oldInput, newInput);
-
-				if (statusProvider != null && newInput != null) {
-					// Perform initial validation
-					processStatus(statusProvider.getStatus());
-				}
+				Display.getDefault().asyncExec(new Runnable() {
+					public void run() {
+						if (statusProvider != null && newInput != null) {
+							// Perform initial validation
+							processStatus(statusProvider.getStatus());
+						}
+					}
+				});
 			}
 
 			@Override
