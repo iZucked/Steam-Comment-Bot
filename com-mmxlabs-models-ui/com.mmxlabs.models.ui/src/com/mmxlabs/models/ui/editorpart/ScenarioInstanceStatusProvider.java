@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 
@@ -54,6 +55,10 @@ public class ScenarioInstanceStatusProvider implements IStatusProvider {
 
 	@Override
 	public IStatus getStatus() {
+		// Oops, must be called after dispose....
+		if (scenarioInstance == null) {
+			return Status.OK_STATUS;
+		}
 		return (IStatus) scenarioInstance.getAdapters().get(IStatus.class);
 	}
 
