@@ -68,7 +68,8 @@
          </property>
          <property
                name="aboutText"
-               value="ShipLingo">
+               value="Ship Lingo Platform
+Version {0}">
          </property>
       </product>
    </extension>

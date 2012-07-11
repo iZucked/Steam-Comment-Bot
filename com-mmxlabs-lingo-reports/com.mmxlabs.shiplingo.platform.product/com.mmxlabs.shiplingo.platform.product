@@ -6,7 +6,8 @@
    <aboutInfo>
       <image path="/com.mmxlabs.shiplingo.platform.app/aboutImage.gif"/>
       <text>
-         ShipLingo
+         Ship Lingo Platform
+Version {0}
       </text>
    </aboutInfo>
 
@@ -40,6 +41,7 @@
       <solaris include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</solaris>
       <windows include="false">org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6</windows>
    </vm>
+
 
    <plugins>
    </plugins>
