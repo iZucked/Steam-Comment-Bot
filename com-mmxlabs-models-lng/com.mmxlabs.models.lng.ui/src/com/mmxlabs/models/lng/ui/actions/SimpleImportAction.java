@@ -52,7 +52,12 @@ public class SimpleImportAction extends ImportAction {
 			reader = new CSVReader(path);
 			final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 			context.run();
-			part.getEditingDomain().getCommandStack().execute(mergeImports(container, containment, importedObjects));
+			Command cmd = mergeImports(container, containment, importedObjects);
+			if (cmd.canExecute()) {
+				part.getEditingDomain().getCommandStack().execute(cmd);
+			} else {
+				throw new RuntimeException("Error running import command");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
