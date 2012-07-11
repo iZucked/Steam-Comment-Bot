@@ -139,7 +139,7 @@ public abstract class ImportAction extends LockableAction {
 	 * @param rootObject
 	 * @return
 	 */
-	private Command replace(EditingDomain domain, EObject oldObject, EObject newObject, MMXRootObject rootObject) {
+	private Command replace(final EditingDomain domain, final EObject oldObject, final EObject newObject, final MMXRootObject rootObject) {
 		final CompoundCommand result = new CompoundCommand();
 		result.append(IdentityCommand.INSTANCE);
 		result.setDescription("Replacing " + oldObject + " with " + newObject);
@@ -150,7 +150,7 @@ public abstract class ImportAction extends LockableAction {
 		for (final MMXSubModel sub : rootObject.getSubModels()) {
 			subModels.add(sub.getSubModelInstance());
 		}
-		Collection<Setting> refsToOldObject = EcoreUtil.UsageCrossReferencer.find(oldObject, subModels);
+		final Collection<Setting> refsToOldObject = EcoreUtil.UsageCrossReferencer.find(oldObject, subModels);
 		for (final Setting setting : refsToOldObject) {
 			if (setting.getEStructuralFeature().isMany()) {
 				result.append(ReplaceCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), oldObject, Collections.singleton(newObject)));
@@ -177,7 +177,7 @@ public abstract class ImportAction extends LockableAction {
 		
 		return result;
 	}
-	private Map<String, NamedObject> collectNamedObjects(List<EObject> existingObjects) {
+	private Map<String, NamedObject> collectNamedObjects(final List<EObject> existingObjects) {
 		final HashMap<String, NamedObject> result = new HashMap<String, NamedObject>();
 		for (final EObject object : existingObjects) {
 			if (object instanceof NamedObject) {
