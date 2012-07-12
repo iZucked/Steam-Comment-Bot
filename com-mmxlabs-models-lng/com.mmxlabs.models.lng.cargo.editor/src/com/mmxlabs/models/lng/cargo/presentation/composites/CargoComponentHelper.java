@@ -65,7 +65,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);	
 	}
 
 	/**
