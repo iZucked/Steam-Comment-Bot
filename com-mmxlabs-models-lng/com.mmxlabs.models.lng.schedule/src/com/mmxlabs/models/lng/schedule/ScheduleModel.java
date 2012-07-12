@@ -57,6 +57,7 @@ public interface ScheduleModel extends UUIDObject {
 	 * <p>
 	 * If the meaning of the '<em>Optimised Schedule</em>' containment reference isn't clear,
 	 * there really should be more of a description here...
+	 * @deprecated
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Optimised Schedule</em>' containment reference.
@@ -70,6 +71,7 @@ public interface ScheduleModel extends UUIDObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getOptimisedSchedule <em>Optimised Schedule</em>}' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Optimised Schedule</em>' containment reference.
 	 * @see #getOptimisedSchedule()
