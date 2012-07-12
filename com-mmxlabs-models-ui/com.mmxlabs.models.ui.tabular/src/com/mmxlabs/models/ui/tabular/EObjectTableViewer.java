@@ -91,14 +91,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 			validationErrors.clear();
 
-			Display.getDefault().asyncExec(new Runnable() {
-				@Override
-				public void run() {
-					processStatus(status);
-					// also update things which had an error before, in case they don't any more.
-					update(updates.toArray(), null);
-				}
-			});
+			processStatus(status, true);
 		}
 	};
 
@@ -175,14 +168,8 @@ public class EObjectTableViewer extends GridTableViewer {
 	};
 
 	public EObject getElementForNotificationTarget(EObject source) {
-		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null)) {
-
-		}
-
-		if (source == null) {
-			final int ii = 0;
-		}
-
+		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null))
+			;
 		return source;
 	}
 
@@ -225,10 +212,6 @@ public class EObjectTableViewer extends GridTableViewer {
 					if (refreshOrGiveUp()) {
 						return;
 					}
-					// if (ImportUI.isImporting()) {
-					// ImportUI.refresh(EObjectTableViewer.this);
-					// return;
-					// }
 					for (final EObject e : changed) {
 						EObjectTableViewer.this.update(e, null);
 					}
@@ -572,14 +555,6 @@ public class EObjectTableViewer extends GridTableViewer {
 				}
 
 				contentProvider.inputChanged(viewer, oldInput, newInput);
-				Display.getDefault().asyncExec(new Runnable() {
-					public void run() {
-						if (statusProvider != null && newInput != null) {
-							// Perform initial validation
-							processStatus(statusProvider.getStatus());
-						}
-					}
-				});
 			}
 
 			@Override
@@ -597,6 +572,11 @@ public class EObjectTableViewer extends GridTableViewer {
 						currentElements.add((EObject) o);
 						updateObjectExternalNotifiers((EObject) o);
 					}
+				}
+
+				if (statusProvider != null && inputElement != null) {
+					// Perform initial validation
+					processStatus(statusProvider.getStatus(), false);
 				}
 
 				return elements;
@@ -874,30 +854,32 @@ public class EObjectTableViewer extends GridTableViewer {
 		statusProvider.addStatusChangedListener(statusChangedListener);
 	}
 
-	void processStatus(final IStatus status) {
+	void processStatus(final IStatus status, final boolean update) {
 		if (status == null)
 			return;
 		if (status.isMultiStatus()) {
 			for (final IStatus s : status.getChildren()) {
-				processStatus(s);
+				processStatus(s, update);
 			}
 		}
 		if (status instanceof IDetailConstraintStatus) {
 			final IDetailConstraintStatus detailConstraintStatus = (IDetailConstraintStatus) status;
 			if (!status.isOK()) {
-				updateObject(getElementForNotificationTarget(detailConstraintStatus.getTarget()), status);
+				updateObject(getElementForNotificationTarget(detailConstraintStatus.getTarget()), status, update);
 
 				for (final EObject e : detailConstraintStatus.getObjects()) {
-					updateObject(getElementForNotificationTarget(e), status);
+					updateObject(getElementForNotificationTarget(e), status, update);
 				}
 			}
 		}
 	}
 
-	void updateObject(final EObject object, final IStatus status) {
+	void updateObject(final EObject object, final IStatus status, final boolean update) {
 		if (object != null) {
 			setStatus(object, status);
-			update(object, null);
+			if (update) {
+				update(object, null);
+			}
 		}
 	}
 
