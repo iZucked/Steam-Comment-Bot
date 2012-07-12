@@ -15,6 +15,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
@@ -29,6 +31,9 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
  * 
  */
 public abstract class AbstractEclipseJobControl implements IJobControl {
+	
+	private static final Logger log = LoggerFactory.getLogger(AbstractEclipseJobControl.class);
+	
 	private class Runner extends Job {
 		public Runner(final String name) {
 			super(name);
@@ -69,6 +74,7 @@ public abstract class AbstractEclipseJobControl implements IJobControl {
 					}
 				}
 			} catch (final Throwable e) {
+				log.error(e.getMessage(), e);
 				kill();
 				setJobState(EJobState.CANCELLED);
 
