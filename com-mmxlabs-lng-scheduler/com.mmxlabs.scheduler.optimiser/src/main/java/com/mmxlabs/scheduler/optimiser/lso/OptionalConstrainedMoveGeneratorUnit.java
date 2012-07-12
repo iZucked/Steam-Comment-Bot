@@ -59,13 +59,14 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 	 * @return
 	 */
 	private IMove generateRemovingMove(final ISequenceElement element, final Pair<Integer, Integer> location) {
-		final ISequenceElement beforeElement = owner.sequences.getSequence(location.getFirst()).get(location.getSecond() - 1);
-		final ISequenceElement afterElement = owner.sequences.getSequence(location.getFirst()).get(location.getSecond() + 1);
+		final Integer locationIndex = location.getSecond();
+		final ISequenceElement beforeElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex - 1);
+		final ISequenceElement afterElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex + 1);
 
 		// check whether beforeElement can be before afterElement
 		if (owner.validFollowers.get(beforeElement).contains(afterElement)) {
 			// we can just cut out the optional element
-			return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), location.getSecond());
+			return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex);
 		} else {
 			// we need to do something to make the solution valid after removing this element
 			// either we can pop in another unused element, or we can patch something else in instead,
@@ -78,18 +79,18 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 			if (optionalElementsProvider.isElementOptional(beforeElement)) {
 				// check whether we can skip out both
-				final ISequenceElement beforeBeforeElement = owner.sequences.getSequence(location.getFirst()).get(location.getSecond() - 2);
+				final ISequenceElement beforeBeforeElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex - 2);
 				if (owner.validFollowers.get(beforeBeforeElement).contains(afterElement)) {
 					// remove both
-					// TODO MOVE HERE
+					return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex,locationIndex-1);
 				}
 			}
 
 			if (optionalElementsProvider.isElementOptional(afterElement)) {
-				final ISequenceElement afterAfterElement = owner.sequences.getSequence(location.getFirst()).get(location.getSecond() + 2);
+				final ISequenceElement afterAfterElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex + 2);
 				if (owner.validFollowers.get(beforeElement).contains(afterAfterElement)) {
 					// remove both
-					// TODO MOVE HERE
+					return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex+1,locationIndex);
 				}
 			}
 
@@ -97,7 +98,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 			final Pair<Integer, Integer> location2 = owner.reverseLookup.get(another);
 			if (location2.getFirst() == null) {
 				// this is a spare element, so we can rotate them
-				return new SwapOptionalElements(owner.sequences.getResources().get(location.getFirst()), location.getSecond(), location2.getSecond());
+				return new SwapOptionalElements(owner.sequences.getResources().get(location.getFirst()), locationIndex, location2.getSecond());
 			} else {
 				// try cutting them both out
 				// TODO consider whether we can make this more efficient
@@ -109,12 +110,12 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 					// here afterAnother can go after before; resource2 is the thing whose guy gets moved.
 					final IResource resource1 = owner.sequences.getResources().get(location2.getFirst());
 					final IResource resource2 = owner.sequences.getResources().get(location.getFirst());
-					return new RemoveAndFill(resource1, resource2, location2.getSecond(), location.getSecond());
+					return new RemoveAndFill(resource1, resource2, location2.getSecond(), locationIndex);
 				} else if (owner.validFollowers.get(beforeAnother).contains(afterElement)) {
 					// the converse of the above case.
 					final IResource resource1 = owner.sequences.getResources().get(location.getFirst());
 					final IResource resource2 = owner.sequences.getResources().get(location2.getFirst());
-					return new RemoveAndFill(resource1, resource2, location.getSecond(), location2.getSecond());
+					return new RemoveAndFill(resource1, resource2, locationIndex, location2.getSecond());
 				}
 			}
 		}
