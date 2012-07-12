@@ -47,7 +47,6 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 				final IScenarioService scenarioService = instance.getScenarioService();
 
 				try {
-					final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 					final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 					final Set<String> existingNames = new HashSet<String>();
@@ -66,9 +65,14 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 						newName = namePrefix + " (" + counter++ + ")";
 					}
 
-					fork.setName(getNewName(instance.getName(), newName));
+					final String finalNewName = getNewName(instance.getName(), newName);
+					if (finalNewName != null) {
+						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 
-					evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
+						fork.setName(finalNewName);
+
+						evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
+					}
 				} catch (final IOException e) {
 					throw new RuntimeException("Unable to fork scenario", e);
 				}
