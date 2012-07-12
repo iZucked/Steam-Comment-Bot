@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.lso.moves;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -20,12 +21,12 @@ import com.mmxlabs.optimiser.lso.IMove;
  */
 public class RemoveOptionalElement implements IMove {
 	final IResource resource;
-	final int elementIndex;
+	final int[] elementIndices;
 
-	public RemoveOptionalElement(final IResource resource, final int elementIndex) {
+	public RemoveOptionalElement(final IResource resource, final int... elementIndices) {
 		super();
 		this.resource = resource;
-		this.elementIndex = elementIndex;
+		this.elementIndices = elementIndices;
 	}
 
 	@Override
@@ -40,8 +41,13 @@ public class RemoveOptionalElement implements IMove {
 	 */
 	@Override
 	public void apply(final IModifiableSequences sequences) {
-		sequences.getModifiableUnusedElements().add(sequences.getSequence(resource).get(elementIndex));
-		sequences.getModifiableSequence(resource).remove(elementIndex);
+		int offset = 0;
+		Arrays.sort(elementIndices);
+		for (int elementIndex : elementIndices) {
+			sequences.getModifiableUnusedElements().add(sequences.getSequence(resource).get(elementIndex - offset));
+			sequences.getModifiableSequence(resource).remove(elementIndex- offset);
+			offset++;
+		}
 	}
 
 	/*
