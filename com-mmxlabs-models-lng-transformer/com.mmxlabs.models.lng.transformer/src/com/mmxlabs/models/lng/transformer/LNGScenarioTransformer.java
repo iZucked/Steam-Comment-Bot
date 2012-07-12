@@ -654,11 +654,11 @@ public class LNGScenarioTransformer {
 			final ILoadOption load;
 			if (loadSlot.isDESPurchase()) {
 				load = builder.createVirtualLoadSlot(loadSlot.getName(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
-						Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), false);
+						Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.isOptional());
 			} else {
 				load = builder.createLoadSlot(loadSlot.getName(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
 						Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(),
-						loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), false);
+						loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), loadSlot.isOptional());
 			}
 
 			final DischargeSlot dischargeSlot = eCargo.getDischargeSlot();
@@ -686,11 +686,11 @@ public class LNGScenarioTransformer {
 			final IDischargeOption discharge;
 			if (dischargeSlot.isFOBSale()) {
 				discharge = builder.createVirtualDischargeSlot(dischargeSlot.getName(), ports.lookup(dischargeSlot.getPort()), dischargeWindow,
-						Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator, false);
+						Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator,  dischargeSlot.isOptional());
 			} else {
 				discharge = builder.createDischargeSlot(dischargeSlot.getName(), ports.lookup(dischargeSlot.getPort()), dischargeWindow,
 						Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator,
-						dischargeSlot.getSlotOrPortDuration(), false);
+						dischargeSlot.getSlotOrPortDuration(), dischargeSlot.isOptional());
 			}
 			entities.addModelObject(loadSlot, load);
 			entities.addModelObject(dischargeSlot, discharge);
