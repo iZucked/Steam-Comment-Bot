@@ -152,6 +152,9 @@ public abstract class LocalSearchOptimiser implements ILocalSearchOptimiser {
 			// Replace all entries in the destination with those in the source
 			destinationSequence.replaceAll(sourceSequence);
 		}
+		// Update the unused elements array
+		destination.getModifiableUnusedElements().clear();
+		destination.getModifiableUnusedElements().addAll(source.getUnusedElements());
 	}
 
 	public final void setMoveGenerator(final IMoveGenerator moveGenerator) {
