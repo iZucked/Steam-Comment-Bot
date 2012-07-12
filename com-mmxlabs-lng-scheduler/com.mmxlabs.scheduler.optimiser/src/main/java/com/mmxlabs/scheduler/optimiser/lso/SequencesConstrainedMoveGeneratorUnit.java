@@ -142,12 +142,16 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 			// now check whether the element before the precursor can precede
 			// the first element in the segment
-			final ISequenceElement beforeInsert = owner.sequences.getSequence(posPrecursor.getFirst()).get(posPrecursor.getSecond() - 1);
+			final Integer first = posPrecursor.getFirst();
+			if (first == null) {
+				return null;
+			}
+			final ISequenceElement beforeInsert = owner.sequences.getSequence(first).get(posPrecursor.getSecond() - 1);
 			if (owner.validFollowers.get(beforeInsert).contains(firstElementInSegment)) {
 				// we have a legal 3opt2, so do that. It might be a 3opt1
 				// really, but that's OK
 				// so long as we don't insert a segment into itself.
-				if (posPrecursor.getFirst().equals(sequence1)) {
+				if (first.equals(sequence1)) {
 					// check for stupidity
 					final int position3 = posPrecursor.getSecond();
 					if ((position3 >= beforeFirstCut) && (position3 <= beforeSecondCut)) {
@@ -160,7 +164,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				result.setResource1Start(beforeFirstCut + 1);
 				result.setResource1End(beforeSecondCut);
 
-				result.setResource2(resources.get(posPrecursor.getFirst()));
+				result.setResource2(resources.get(first));
 				result.setResource2Position(posPrecursor.getSecond() + 1);
 				return result;
 			} else {
@@ -221,7 +225,12 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 					final ISequenceElement here = seq2.get(i);
 					for (final ISequenceElement elt : owner.validFollowers.get(here)) {
 						final Pair<Integer, Integer> loc = owner.reverseLookup.get(elt);
-						if (loc.getFirst().intValue() == sequence1) {
+						final Integer first = loc.getFirst();
+						if (first == null) {
+							// Most likely an optional element no longer in sequences
+							continue;
+						}
+						if (first.intValue() == sequence1) {
 							// it can be adjacent to something in sequence 1,
 							// that's good
 							if (loc.getSecond() > position1) {
@@ -236,7 +245,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 									}
 								} else {
 									// 4opt2 check
-									if (valid2opt2 && owner.validFollowers.get(owner.sequences.getSequence(loc.getFirst()).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
+									if (valid2opt2 && owner.validFollowers.get(owner.sequences.getSequence(first).get(loc.getSecond() - 1)).contains(seq2.get(i + 1))) {
 										viableSecondBreaks.add(new Pair<Integer, Integer>(i, loc.getSecond()));
 									}
 								}
