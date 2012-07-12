@@ -45,6 +45,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getDuration <em>Duration</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOptional <em>Optional</em>}</li>
  * </ul>
  * </p>
  *
@@ -242,6 +243,26 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @ordered
 	 */
 	protected boolean maxQuantityESet;
+
+	/**
+	 * The default value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean OPTIONAL_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isOptional() <em>Optional</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isOptional()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean optional = OPTIONAL_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -560,6 +581,27 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isOptional() {
+		return optional;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setOptional(boolean newOptional) {
+		boolean oldOptional = optional;
+		optional = newOptional;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__OPTIONAL, oldOptional, optional));
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -699,6 +741,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return getMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				return getMaxQuantity();
+			case CargoPackage.SLOT__OPTIONAL:
+				return isOptional();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -736,6 +780,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return;
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
+				return;
+			case CargoPackage.SLOT__OPTIONAL:
+				setOptional((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -775,6 +822,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				unsetMaxQuantity();
 				return;
+			case CargoPackage.SLOT__OPTIONAL:
+				setOptional(OPTIONAL_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -804,6 +854,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return isSetMinQuantity();
 			case CargoPackage.SLOT__MAX_QUANTITY:
 				return isSetMaxQuantity();
+			case CargoPackage.SLOT__OPTIONAL:
+				return optional != OPTIONAL_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -873,6 +925,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		if (minQuantityESet) result.append(minQuantity); else result.append("<unset>");
 		result.append(", maxQuantity: ");
 		if (maxQuantityESet) result.append(maxQuantity); else result.append("<unset>");
+		result.append(", optional: ");
+		result.append(optional);
 		result.append(')');
 		return result.toString();
 	}

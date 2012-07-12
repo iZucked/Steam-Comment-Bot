@@ -110,6 +110,15 @@ public interface CargoPackage extends EPackage {
 	int CARGO__NAME = TypesPackage.ACARGO__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO__OTHER_NAMES = TypesPackage.ACARGO__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Load Slot</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -291,6 +300,15 @@ public interface CargoPackage extends EPackage {
 	int SLOT__NAME = TypesPackage.ASLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__OTHER_NAMES = TypesPackage.ASLOT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -372,13 +390,22 @@ public interface CargoPackage extends EPackage {
 	int SLOT__MAX_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__OPTIONAL = TypesPackage.ASLOT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 9;
+	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -571,6 +598,15 @@ public interface CargoPackage extends EPackage {
 	int LOAD_SLOT__NAME = SLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__OTHER_NAMES = SLOT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -650,6 +686,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__MAX_QUANTITY = SLOT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__OPTIONAL = SLOT__OPTIONAL;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -896,6 +941,15 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__NAME = SLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__OTHER_NAMES = SLOT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -975,6 +1029,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__MAX_QUANTITY = SLOT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__OPTIONAL = SLOT__OPTIONAL;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -1484,6 +1547,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__NAME = LOAD_SLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__OTHER_NAMES = LOAD_SLOT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1563,6 +1635,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_LOAD_SLOT__MAX_QUANTITY = LOAD_SLOT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__OPTIONAL = LOAD_SLOT__OPTIONAL;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -1818,6 +1899,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__NAME = DISCHARGE_SLOT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__OTHER_NAMES = DISCHARGE_SLOT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1897,6 +1987,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__MAX_QUANTITY = DISCHARGE_SLOT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Optional</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__OPTIONAL = DISCHARGE_SLOT__OPTIONAL;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -2115,6 +2214,15 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int CARGO_GROUP__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CARGO_GROUP__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Cargoes</b></em>' reference list.
@@ -2387,6 +2495,17 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSlot_MaxQuantity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#isOptional <em>Optional</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Optional</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#isOptional()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_Optional();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getFixedPrice <em>Fixed Price</em>}'.
@@ -2826,6 +2945,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__MAX_QUANTITY = eINSTANCE.getSlot_MaxQuantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Optional</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__OPTIONAL = eINSTANCE.getSlot_Optional();
 
 		/**
 		 * The meta object literal for the '<em><b>Fixed Price</b></em>' attribute feature.
