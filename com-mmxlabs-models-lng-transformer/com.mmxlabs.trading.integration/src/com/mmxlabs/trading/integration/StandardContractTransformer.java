@@ -35,7 +35,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.AXPlusBCurve;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.IShippingPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 /**
  * 
@@ -102,7 +102,7 @@ public class StandardContractTransformer implements IContractTransformer {
 	}
 
 	@Override
-	public IShippingPriceCalculator transformSalesContract(final SalesContract sc) {
+	public ISalesPriceCalculator transformSalesContract(final SalesContract sc) {
 		return null;
 	}
 
