@@ -217,6 +217,7 @@ public interface MMXCorePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.2
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -572,6 +573,7 @@ public interface MMXCorePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.2
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -996,6 +998,7 @@ public interface MMXCorePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute list '{@link com.mmxlabs.models.mmxcore.NamedObject#getOtherNames <em>Other Names</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.2
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute list '<em>Other Names</em>'.
 	 * @see com.mmxlabs.models.mmxcore.NamedObject#getOtherNames()
@@ -1339,6 +1342,7 @@ public interface MMXCorePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Other Names</b></em>' attribute list feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.2
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
