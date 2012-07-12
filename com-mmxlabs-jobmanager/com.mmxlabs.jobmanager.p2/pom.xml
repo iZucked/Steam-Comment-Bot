@@ -53,7 +53,7 @@
 						<configuration>
 							<artifacts>
 								<artifact>
-									<file>${project.build.directory}/${project.artifactId}.zip</file>
+									<file>${project.build.directory}/${project.artifactId}-${project.version}.zip</file>
 									<type>zip</type>
 									<classifier>p2-repo</classifier>
 								</artifact>
