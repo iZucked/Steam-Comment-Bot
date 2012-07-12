@@ -49,7 +49,6 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 					final IScenarioService scenarioService = instance.getScenarioService();
 
 					try {
-						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 						final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 						final Set<String> existingNames = new HashSet<String>();
@@ -61,14 +60,18 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 							}
 						}
 
-						final String namePrefix = "Fork " +df.format(new Date()) + " - " + instance.getName();
+						final String namePrefix = "Fork " + df.format(new Date()) + " - " + instance.getName();
 						String newName = namePrefix;
 						int counter = 1;
 						while (existingNames.contains(newName)) {
 							newName = namePrefix + " (" + counter++ + ")";
 						}
 
-						fork.setName(getNewName(instance.getName(), newName));
+						final String finalNewName = getNewName(instance.getName(), newName);
+						if (finalNewName != null) {
+							final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
+							fork.setName(finalNewName);
+						}
 					} catch (final IOException e) {
 						throw new ExecutionException("Unable to fork scenario", e);
 					}
@@ -78,7 +81,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 
 		return null;
 	}
-	
+
 	private String getNewName(final String oldName, final String suggestedName) {
 		// TODO: Hook in an element specific validator
 		final IInputValidator validator = null;
