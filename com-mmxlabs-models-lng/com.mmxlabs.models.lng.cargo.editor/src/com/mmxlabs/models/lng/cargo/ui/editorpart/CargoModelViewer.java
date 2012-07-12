@@ -120,7 +120,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 				if (element instanceof Cargo) {
 					final Cargo cargo = (Cargo) element;
 					final InputModel inputModel = part.getRootObject().getSubModel(InputModel.class);
-					final ElementAssignment assignment= AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
+					final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
 					if (assignment != null && assignment.isLocked()) {
 						return lockedImage;
 					} else if (!cargo.isAllowRewiring()) {
@@ -272,9 +272,9 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 			@Override
 			public EObject getElementForNotificationTarget(final EObject source) {
 				if (source instanceof LoadSlot) {
-					return super.getElementForNotificationTarget( ((LoadSlot) source).getCargo());
+					return ((LoadSlot) source).getCargo();
 				} else if (source instanceof DischargeSlot) {
-					return super.getElementForNotificationTarget( ((DischargeSlot) source).getCargo());
+					return ((DischargeSlot) source).getCargo();
 				}
 
 				return super.getElementForNotificationTarget(source);
@@ -330,7 +330,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 		public AssignmentManipulator(final IScenarioEditingLocation location) {
 			this.location = location;
-			this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(InputPackage.eINSTANCE.getElementAssignment(), InputPackage.eINSTANCE.getElementAssignment_Assignment());
+			this.valueProvider = location.getReferenceValueProviderCache().getReferenceValueProvider(InputPackage.eINSTANCE.getElementAssignment(),
+					InputPackage.eINSTANCE.getElementAssignment_Assignment());
 			getValues();
 		}
 
@@ -349,7 +350,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 				if (value == null || value.equals(-1))
 					return;
 				final AVesselSet set = (AVesselSet) vessels.get((Integer) value);
-		
+
 				location.getEditingDomain().getCommandStack().execute(AssignmentEditorHelper.reassignElement(getEditingDomain(), input, (UUIDObject) object, set));
 			}
 		}
