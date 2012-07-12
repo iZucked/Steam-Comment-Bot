@@ -272,9 +272,9 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 			@Override
 			public EObject getElementForNotificationTarget(final EObject source) {
 				if (source instanceof LoadSlot) {
-					return ((LoadSlot) source).getCargo();
+					return super.getElementForNotificationTarget( ((LoadSlot) source).getCargo());
 				} else if (source instanceof DischargeSlot) {
-					return ((DischargeSlot) source).getCargo();
+					return super.getElementForNotificationTarget( ((DischargeSlot) source).getCargo());
 				}
 
 				return super.getElementForNotificationTarget(source);
