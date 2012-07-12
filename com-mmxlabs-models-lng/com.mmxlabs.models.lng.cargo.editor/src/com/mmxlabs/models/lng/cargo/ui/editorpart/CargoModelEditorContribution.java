@@ -19,22 +19,51 @@ import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class CargoModelEditorContribution extends BaseJointModelEditorContribution<CargoModel> {
-	private int pageNumber = 0;
-	private CargoModelViewer viewerPane;
+	private int cargoPageNumber = -1;
+	private int loadSlotPageNumber = -1;
+	private int dischargeSlotPageNumber = -1;
+	private CargoModelViewer cargoViewerPane;
+	private LoadSlotViewer loadSlotViewerPane;
+	private DischargeSlotViewer dischargeSlotViewerPane;
+
+	// Temp flag to turn on/off load/discharge slots during development
+	private static final boolean showSlotTabs = false;
 
 	@Override
 	public void addPages(final Composite parent) {
-		this.viewerPane = new CargoModelViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		viewerPane.createControl(parent);
-		viewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargoes()), editorPart.getAdapterFactory());
-		viewerPane.getViewer().setInput(modelObject);
-		pageNumber = editorPart.addPage(viewerPane.getControl());
-		editorPart.setPageText(pageNumber, "Cargoes");
+		{
+			this.cargoViewerPane = new CargoModelViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			cargoViewerPane.createControl(parent);
+			cargoViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargoes()), editorPart.getAdapterFactory());
+			cargoViewerPane.getViewer().setInput(modelObject);
+			cargoPageNumber = editorPart.addPage(cargoViewerPane.getControl());
+			editorPart.setPageText(cargoPageNumber, "Cargoes");
+		}
+		if (showSlotTabs) {
+			this.loadSlotViewerPane = new LoadSlotViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			loadSlotViewerPane.createControl(parent);
+			loadSlotViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_LoadSlots()), editorPart.getAdapterFactory());
+			loadSlotViewerPane.getViewer().setInput(modelObject);
+			loadSlotPageNumber = editorPart.addPage(loadSlotViewerPane.getControl());
+			editorPart.setPageText(loadSlotPageNumber, "Load Slots");
+		}
+		if (showSlotTabs) {
+			this.dischargeSlotViewerPane = new DischargeSlotViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			dischargeSlotViewerPane.createControl(parent);
+			dischargeSlotViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()), editorPart.getAdapterFactory());
+			dischargeSlotViewerPane.getViewer().setInput(modelObject);
+			dischargeSlotPageNumber = editorPart.addPage(dischargeSlotViewerPane.getControl());
+			editorPart.setPageText(dischargeSlotPageNumber, "Discharge Slots");
+		}
 	}
 
 	@Override
 	public void setLocked(final boolean locked) {
-		viewerPane.setLocked(locked);
+		cargoViewerPane.setLocked(locked);
+		if (showSlotTabs) {
+			loadSlotViewerPane.setLocked(locked);
+			dischargeSlotViewerPane.setLocked(locked);
+		}
 	}
 
 	@Override
@@ -68,10 +97,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				final DischargeSlot dischargeSlot = (DischargeSlot) dcsd.getTarget();
 				cargo = dischargeSlot.getCargo();
 			}
-			editorPart.setActivePage(pageNumber);
+			editorPart.setActivePage(cargoPageNumber);
 			if (cargo != null) {
-				viewerPane.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
+				cargoViewerPane.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
 			}
+			// TODO: Handle load/discharge slots better - e.g. if there is no cargo
 		}
 	}
 }
