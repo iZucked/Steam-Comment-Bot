@@ -105,9 +105,16 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 	@Override
 	public UnitCostLine createCostLine(final MMXRootObject root, final UnitCostMatrix spec, final Port from, final Port to) {
 		final UnitCostMatrix spec2 = EcoreUtil.copy(spec);
-		spec2.getPorts().clear();
-		spec2.getPorts().add(from);
-		spec2.getPorts().add(to);
+//		spec2.getPorts().clear();
+//		spec2.getPorts().add(from);
+//		spec2.getPorts().add(to);
+//		
+		
+		spec2.getFromPorts().clear();
+		spec2.getFromPorts().add(from);
+		spec2.getToPorts().clear();
+		spec2.getToPorts().add(to);
+		
 		final List<UnitCostLine> createCostLines = createCostLines(root, spec2, new NullProgressMonitor());
 		if (createCostLines.isEmpty())
 			return null;
@@ -141,19 +148,14 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 			for (final Route route : spec.getAllowedRoutes().isEmpty() ? portModel.getRoutes() : spec.getAllowedRoutes()) {
 				VesselClassRouteParameters parametersForRoute = null;
-				RouteCost costForRoute = null;
+
 				for (final VesselClassRouteParameters parameters : vessel.getVesselClass().getRouteParameters()) {
 					if (parameters.getRoute() == route) {
 						parametersForRoute = parameters;
 						break;
 					}
 				}
-				for (final RouteCost routeCost : pricing.getRouteCosts()) {
-					if (routeCost.getRoute() == route && routeCost.getVesselClass() == vessel.getVesselClass()) {
-						costForRoute = routeCost;
-						break;
-					}
-				}
+				
 				for (final RouteLine line : route.getLines()) {
 					final int travelTime = (int) Math.ceil(line.getDistance() / speed) + (parametersForRoute == null ? 0 : parametersForRoute.getExtraTransitTime());
 					final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
@@ -169,23 +171,35 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			/*
 			 * Create a cargo for each pair
 			 */
-
-			final Set<APort> includedPorts = SetUtils.getPorts(spec.getPorts());
-			if (includedPorts.isEmpty()) {
-				includedPorts.addAll(portModel.getPorts());
-			}
 			final List<Port> loadPorts = new ArrayList<Port>();
 			final List<Port> dischargePorts = new ArrayList<Port>();
-			for (final APort aport : includedPorts) {
-				if (aport instanceof Port) {
-					final Port port = (Port) aport;
+			
+			for (final APort port : SetUtils.getPorts(spec.getFromPorts())) {
+				if (port instanceof Port) {
+					loadPorts.add((Port) port);
+				}
+			}
+			
+			for (final APort port : SetUtils.getPorts(spec.getToPorts())) {
+				if (port instanceof Port) {
+					dischargePorts.add((Port) port);
+				}
+			}
+			
+			if (loadPorts.isEmpty()) {
+				for (final Port port : portModel.getPorts()) {
 					if (port.getCapabilities().contains(PortCapability.LOAD))
 						loadPorts.add(port);
+				}
+			}
+			
+			if (dischargePorts.isEmpty()) {
+				for (final Port port : portModel.getPorts()) {
 					if (port.getCapabilities().contains(PortCapability.DISCHARGE))
 						dischargePorts.add(port);
 				}
 			}
-
+			
 			final HashMap<Pair<Port, Port>, UnitCostLine> bestCostSoFar = new HashMap<Pair<Port, Port>, UnitCostLine>();
 
 			final ILoadPriceCalculator loadCalculator = new FixedPriceContract(0);
