@@ -213,10 +213,10 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 				final VesselClass eVc = modelVessel.getVesselClass();
 				//  If the spec defines a speed, change the min speed of the vessel to suit.
-				double minSpeed = eVc.getMinSpeed();
-				if (spec.isSetSpeed()) {
-					minSpeed = spec.getSpeed();
-				}
+				final double minSpeed = eVc.getMinSpeed();
+//				if (spec.isSetSpeed()) {
+//					minSpeed = spec.getSpeed();
+//				}
 				final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(minSpeed), Calculator.scaleToInt(eVc.getMaxSpeed()),
 						Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), Calculator.scaleToInt(eVc.getMinHeel()),
 
