@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.ui.actions;
 
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -58,44 +59,69 @@ public class EvaluateUnitCostMatrixAction extends ScenarioModifyingAction {
 		recomputeSettings(matrix);
 	}
 
+	private static final HashSet<UnitCostMatrix> evaluating = new HashSet<UnitCostMatrix>();
+	
+	private static boolean tryEvaluating(final UnitCostMatrix matrix) {
+		synchronized (evaluating) {
+			if (evaluating.contains(matrix)) {
+				return false;
+			}
+			evaluating.add(matrix);
+			return true;
+		}
+	}
+	
+	private static void endEvaluating(final UnitCostMatrix matrix) {
+		synchronized (evaluating) {
+			evaluating.remove(matrix);
+		}
+	}
+	
 	public void recomputeSettings(final UnitCostMatrix matrix) {
 		final Job job = new Job("Recompute cost matrix " + matrix.getName()) {
 			@Override
 			protected IStatus run(final IProgressMonitor monitor) {
-				final ScenarioLock lock = part.getScenarioInstance().getLock(ScenarioLock.EVALUATOR);
-				if (lock.claim()) {
-					try {
-
-						final List<UnitCostLine> newLines = transformer.createCostLines(part.getRootObject(), matrix, monitor);
-						if (newLines == null)
-							return Status.CANCEL_STATUS;
-						final EditingDomain d = part.getEditingDomain();
-						final CompoundCommand replace = new CompoundCommand();
-						final Command rc = RemoveCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), matrix.getCostLines());
-						replace.append(rc);
-						final Command ac = AddCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), newLines);
-						replace.append(ac);
-
-						Display.getDefault().asyncExec(new Runnable() {
-							@Override
-							public void run() {
+					if (tryEvaluating(matrix)) {
+						try {
+							final ScenarioLock lock = part.getScenarioInstance().getLock(ScenarioLock.EVALUATOR);
+							if (lock.claim()) {
 								try {
-									part.setDisableUpdates(true);
-									d.getCommandStack().execute(replace);
+			
+									final List<UnitCostLine> newLines = transformer.createCostLines(part.getRootObject(), matrix, monitor);
+									if (newLines == null)
+										return Status.CANCEL_STATUS;
+									final EditingDomain d = part.getEditingDomain();
+									final CompoundCommand replace = new CompoundCommand();
+									final Command rc = RemoveCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), matrix.getCostLines());
+									replace.append(rc);
+									final Command ac = AddCommand.create(d, matrix, AnalyticsPackage.eINSTANCE.getUnitCostMatrix_CostLines(), newLines);
+									replace.append(ac);
+			
+									Display.getDefault().asyncExec(new Runnable() {
+										@Override
+										public void run() {
+											try {
+												part.setDisableUpdates(true);
+												d.getCommandStack().execute(replace);
+											} finally {
+												part.setDisableUpdates(false);
+											}
+										}
+									});
+								} catch (final Exception e) {
+									log.error(e.getMessage(), e);
+									return Status.CANCEL_STATUS;
 								} finally {
-									part.setDisableUpdates(false);
+									lock.release();
 								}
 							}
-						});
-					} catch (final Exception e) {
-						log.error(e.getMessage(), e);
+							return Status.OK_STATUS;
+						} finally {
+							endEvaluating(matrix);
+						}
+					} else {
 						return Status.CANCEL_STATUS;
-					} finally {
-						lock.release();
 					}
-				}
-				return Status.OK_STATUS;
-
 			}
 
 		};
