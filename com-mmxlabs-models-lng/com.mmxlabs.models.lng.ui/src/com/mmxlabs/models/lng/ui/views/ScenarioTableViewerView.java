@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.ui.views;
 
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -34,7 +35,7 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 	protected abstract void initViewerPane(T pane);
 
 	@Override
-	protected void displayScenarioInstance(ScenarioInstance instance) {
+	protected void displayScenarioInstance(final ScenarioInstance instance) {
 		if (instance != getScenarioInstance()) {
 			if (viewerPane != null) {
 				getSite().setSelectionProvider(null);
@@ -69,10 +70,21 @@ public abstract class ScenarioTableViewerView<T extends ScenarioTableViewerPane>
 	}
 
 	@Override
-	public void setLocked(boolean locked) {
+	public void setLocked(final boolean locked) {
 		if (viewerPane != null) {
 			viewerPane.setLocked(locked);
 		}
 		super.setLocked(locked);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jface.viewers.Viewer#setSelection(org.eclipse.jface.viewers.ISelection, boolean)
+	 */
+	protected void setSelection(final ISelection selection, final boolean reveal) {
+		if (viewerPane != null) {
+			viewerPane.getScenarioViewer().setSelection(selection, reveal);
+		}
 	}
 }
