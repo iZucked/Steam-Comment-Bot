@@ -66,6 +66,8 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_portsEditor(detailComposite, topClass);
+		add_fromPortsEditor(detailComposite, topClass);
+		add_toPortsEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
 		add_notionalDayRateEditor(detailComposite, topClass);
 		add_speedEditor(detailComposite, topClass);
@@ -89,11 +91,31 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the ports feature on UnitCostMatrix
 	 *
-	 * @generated
+	 * Disabled because ports is deprecated in favour of from and to ports.
+	 *
+	 * @generated NO
 	 */
 	protected void add_portsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__PORTS));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__PORTS));
 	}
+	/**
+	 * Create the editor for the fromPorts feature on UnitCostMatrix
+	 *
+	 * @generated
+	 */
+	protected void add_fromPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__FROM_PORTS));
+	}
+
+	/**
+	 * Create the editor for the toPorts feature on UnitCostMatrix
+	 *
+	 * @generated
+	 */
+	protected void add_toPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_MATRIX__TO_PORTS));
+	}
+
 	/**
 	 * Create the editor for the vessel feature on UnitCostMatrix
 	 *

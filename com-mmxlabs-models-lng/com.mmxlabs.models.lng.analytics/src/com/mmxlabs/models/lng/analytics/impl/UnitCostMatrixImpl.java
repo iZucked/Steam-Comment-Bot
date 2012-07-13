@@ -36,6 +36,8 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getOtherNames <em>Other Names</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getPorts <em>Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getFromPorts <em>From Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getToPorts <em>To Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getNotionalDayRate <em>Notional Day Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getSpeed <em>Speed</em>}</li>
@@ -100,6 +102,26 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * @ordered
 	 */
 	protected EList<APortSet> ports;
+
+	/**
+	 * The cached value of the '{@link #getFromPorts() <em>From Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getFromPorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet> fromPorts;
+
+	/**
+	 * The cached value of the '{@link #getToPorts() <em>To Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getToPorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet> toPorts;
 
 	/**
 	 * The cached value of the '{@link #getVessel() <em>Vessel</em>}' reference.
@@ -531,6 +553,30 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			ports = new EObjectResolvingEList<APortSet>(APortSet.class, this, AnalyticsPackage.UNIT_COST_MATRIX__PORTS);
 		}
 		return ports;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<APortSet> getFromPorts() {
+		if (fromPorts == null) {
+			fromPorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS);
+		}
+		return fromPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<APortSet> getToPorts() {
+		if (toPorts == null) {
+			toPorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS);
+		}
+		return toPorts;
 	}
 
 	/**
@@ -1013,6 +1059,10 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return getOtherNames();
 			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
 				return getPorts();
+			case AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS:
+				return getFromPorts();
+			case AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS:
+				return getToPorts();
 			case AnalyticsPackage.UNIT_COST_MATRIX__VESSEL:
 				if (resolve) return getVessel();
 				return basicGetVessel();
@@ -1075,6 +1125,14 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
 				getPorts().clear();
 				getPorts().addAll((Collection<? extends APortSet>)newValue);
+				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS:
+				getFromPorts().clear();
+				getFromPorts().addAll((Collection<? extends APortSet>)newValue);
+				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS:
+				getToPorts().clear();
+				getToPorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__VESSEL:
 				setVessel((Vessel)newValue);
@@ -1156,6 +1214,12 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
 				getPorts().clear();
 				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS:
+				getFromPorts().clear();
+				return;
+			case AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS:
+				getToPorts().clear();
+				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__VESSEL:
 				setVessel((Vessel)null);
 				return;
@@ -1231,6 +1295,10 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return otherNames != null && !otherNames.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
 				return ports != null && !ports.isEmpty();
+			case AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS:
+				return fromPorts != null && !fromPorts.isEmpty();
+			case AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS:
+				return toPorts != null && !toPorts.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__VESSEL:
 				return vessel != null;
 			case AnalyticsPackage.UNIT_COST_MATRIX__NOTIONAL_DAY_RATE:

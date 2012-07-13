@@ -71,6 +71,8 @@ public class UnitCostMatrixItemProvider
 			addNamePropertyDescriptor(object);
 			addOtherNamesPropertyDescriptor(object);
 			addPortsPropertyDescriptor(object);
+			addFromPortsPropertyDescriptor(object);
+			addToPortsPropertyDescriptor(object);
 			addVesselPropertyDescriptor(object);
 			addNotionalDayRatePropertyDescriptor(object);
 			addSpeedPropertyDescriptor(object);
@@ -151,6 +153,50 @@ public class UnitCostMatrixItemProvider
 				 getString("_UI_UnitCostMatrix_ports_feature"),
 				 getString("_UI_UnitCostMatrix_ports_description"),
 				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the From Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addFromPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostMatrix_fromPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_fromPorts_feature", "_UI_UnitCostMatrix_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__FROM_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the To Ports feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addToPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostMatrix_toPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostMatrix_toPorts_feature", "_UI_UnitCostMatrix_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_MATRIX__TO_PORTS,
 				 true,
 				 false,
 				 true,
