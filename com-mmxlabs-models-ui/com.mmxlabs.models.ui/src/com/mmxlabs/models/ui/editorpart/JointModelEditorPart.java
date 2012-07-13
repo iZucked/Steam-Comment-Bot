@@ -280,7 +280,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
 			}
 			return propertySheetPage;
+		} else if (adapter.isAssignableFrom(IValidationStatusGoto.class)) {
+			return this;
 		}
+
 		return super.getAdapter(adapter);
 	}
 
@@ -700,7 +703,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	@Override
 	public void openStatus(final IStatus status) {
-		// TODO Auto-generated method stub
 
 		if (status.isMultiStatus()) {
 			// Try first element
@@ -713,7 +715,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				return;
 			}
 		}
-
 	}
 
 	public void setActivePage(final int pageIndex) {
