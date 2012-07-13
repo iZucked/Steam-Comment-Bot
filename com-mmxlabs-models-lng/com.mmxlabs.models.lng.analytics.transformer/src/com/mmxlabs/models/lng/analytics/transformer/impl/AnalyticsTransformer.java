@@ -262,7 +262,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				final List<ICargo> cargoes = new ArrayList<ICargo>(dischargePorts.size());
 				final List<IVessel> vessels = new ArrayList<IVessel>(dischargePorts.size());
 
-				final Map<ICargo, int[]> allowances = spec.isSetSpeed() ? new HashMap<ICargo, int[]>() : null;
+//				final Map<ICargo, int[]> allowances = spec.isSetSpeed() ? new HashMap<ICargo, int[]>() : null;
 
 				for (final Port dischargePort : dischargePorts) {
 					// compute time windows
@@ -305,9 +305,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
 							cargoes.add(cargo);
 
-							if (spec.isSetSpeed()) {
-								allowances.put(cargo, new int[] { ladenAllowance, ballastAllowance });
-							}
+							
 
 							// create vessel
 
