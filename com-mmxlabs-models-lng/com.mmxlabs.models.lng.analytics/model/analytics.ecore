@@ -100,7 +100,7 @@
         defaultValueLiteral="0.06">
       <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
         <details key="scale" value="100"/>
-        <details key="formatString" value="###.#"/>
+        <details key="formatString" value="##0.#"/>
         <details key="unit" value="%"/>
       </eAnnotations>
     </eStructuralFeatures>

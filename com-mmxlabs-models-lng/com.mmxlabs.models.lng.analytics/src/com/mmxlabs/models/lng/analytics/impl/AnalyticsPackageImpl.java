@@ -989,7 +989,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		   source, 
 		   new String[] {
 			 "scale", "100",
-			 "formatString", "###.#",
+			 "formatString", "##0.#",
 			 "unit", "%"
 		   });		
 		addAnnotation

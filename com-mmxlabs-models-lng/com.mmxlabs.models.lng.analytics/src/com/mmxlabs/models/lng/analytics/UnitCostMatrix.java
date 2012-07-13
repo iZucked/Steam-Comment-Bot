@@ -605,7 +605,7 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @see #setLadenTimeAllowance(double)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_LadenTimeAllowance()
 	 * @model default="0.06"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='###.#' unit='%'"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat scale='100' formatString='##0.#' unit='%'"
 	 * @generated
 	 */
 	double getLadenTimeAllowance();
