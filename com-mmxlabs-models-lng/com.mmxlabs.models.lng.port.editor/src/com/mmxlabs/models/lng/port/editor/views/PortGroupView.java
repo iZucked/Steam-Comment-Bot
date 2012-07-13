@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
@@ -26,6 +27,7 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -39,6 +41,7 @@ import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupEditorPane;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class PortGroupView extends ScenarioInstanceView {
@@ -227,6 +230,27 @@ public class PortGroupView extends ScenarioInstanceView {
 				sash.setWeights(new int[]{2,2});
 			}
 			parent.layout(true);
+		}
+	}
+	
+	@Override
+	public void openStatus(final IStatus status) {
+		if (status.isMultiStatus()) {
+			// Try first element
+			openStatus(status.getChildren()[0]);
+		}
+
+		if (status instanceof DetailConstraintStatusDecorator) {
+
+			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+			PortGroup portGroup = null;
+			if (dcsd.getTarget() instanceof PortGroup) {
+				portGroup = (PortGroup) dcsd.getTarget();
+			}
+			if (portGroup != null) {
+				getSite().getPage().activate(this);
+				viewerPane.getScenarioViewer().setSelection(new StructuredSelection(portGroup), true);
+			}
 		}
 	}
 }
