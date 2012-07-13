@@ -6,7 +6,9 @@ package com.mmxlabs.models.lng.analytics.ui.views;
 
 import java.util.Collections;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -19,10 +21,12 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
+import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.ui.editorpart.CostMatrixViewer;
 import com.mmxlabs.models.lng.analytics.ui.editorpart.UnitCostMatrixViewerPane;
 import com.mmxlabs.models.lng.analytics.ui.properties.UnitCostLinePropertySource;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class CostMatrixView extends ScenarioInstanceView {
@@ -44,7 +48,7 @@ public class CostMatrixView extends ScenarioInstanceView {
 
 	@Override
 	public void setCurrentViewer(Viewer viewer) {
-		
+
 	}
 
 	@Override
@@ -59,7 +63,7 @@ public class CostMatrixView extends ScenarioInstanceView {
 				matrixViewer = null;
 			}
 			getSite().setSelectionProvider(null);
-			
+
 			final Composite parent = sash.getParent();
 			sash.dispose();
 			sash = new SashForm(parent, SWT.VERTICAL);
@@ -88,7 +92,7 @@ public class CostMatrixView extends ScenarioInstanceView {
 					@Override
 					public IPropertySource getPropertySource(Object object) {
 						if (object instanceof UnitCostLine) {
-							return new UnitCostLinePropertySource((UnitCostLine)object);
+							return new UnitCostLinePropertySource((UnitCostLine) object);
 						} else if (object instanceof IPropertySource) {
 							return (IPropertySource) object;
 						}
@@ -100,6 +104,21 @@ public class CostMatrixView extends ScenarioInstanceView {
 		}
 		return null;
 	}
-	
-	
+
+	@Override
+	public void openStatus(IStatus status) {
+		if (status.isMultiStatus()) {
+			// Try first element
+			openStatus(status.getChildren()[0]);
+		}
+
+		if (status instanceof DetailConstraintStatusDecorator) {
+			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
+			if (dcsd.getTarget() instanceof UnitCostMatrix) {
+				getSite().getPage().activate(this);
+				this.viewerPane.getScenarioViewer().setSelection(new StructuredSelection(dcsd.getTarget()), true);
+			}
+		}
+	}
+
 }
