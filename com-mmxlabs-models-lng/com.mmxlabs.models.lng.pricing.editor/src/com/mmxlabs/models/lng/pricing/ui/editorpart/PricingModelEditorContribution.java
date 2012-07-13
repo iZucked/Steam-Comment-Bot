@@ -34,8 +34,8 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 	private IndexPane charterIndicesPane;
 	private IndexPane commodityPane;
 
-	private final int indexPage = -1;
-	private final int costsPage = -1;
+	private int indexPage = -1;
+	private int costsPage = -1;
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -63,7 +63,8 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		cool.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_CooldownPrices() }), editorPart.getAdapterFactory());
 		cool.getViewer().setInput(modelObject);
 
-		editorPart.setPageText(editorPart.addPage(sash), "Costs");
+		costsPage = editorPart.addPage(sash);
+		editorPart.setPageText(costsPage, "Costs");
 	}
 
 	private void addIndexPage(final Composite parent) {
@@ -90,8 +91,8 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 				editorPart.getAdapterFactory());
 		fleetCostPane.getViewer().setInput(modelObject);
 
-		final int page = editorPart.addPage(sash);
-		editorPart.setPageText(page, "Markets");
+		indexPage = editorPart.addPage(sash);
+		editorPart.setPageText(indexPage, "Markets");
 	}
 
 	@Override
