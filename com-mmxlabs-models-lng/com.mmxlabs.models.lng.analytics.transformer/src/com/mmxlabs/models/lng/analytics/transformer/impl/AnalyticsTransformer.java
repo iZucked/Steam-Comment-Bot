@@ -212,7 +212,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				final Vessel modelVessel = vessel;
 
 				final VesselClass eVc = modelVessel.getVesselClass();
-				final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()),
+				//  If the spec defines a speed, change the min speed of the vessel to suit.
+				double minSpeed = eVc.getMinSpeed();
+				if (spec.isSetSpeed()) {
+					minSpeed = spec.getSpeed();
+				}
+				final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(minSpeed), Calculator.scaleToInt(eVc.getMaxSpeed()),
 						Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), Calculator.scaleToInt(eVc.getMinHeel()),
 
 						Calculator.scaleToInt(spec.getBaseFuelPrice()),
@@ -340,12 +345,6 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					times[0] = 0;
 					times[1] = cargo.getDischargeOption().getTimeWindow().getStart();
 					times[2] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart();
-
-					if (spec.isSetSpeed()) {
-						final int[] allowance = allowances.get(cargo);
-						times[1] -= allowance[0];
-						times[2] -= allowance[1];
-					}
 				}
 				/*
 				 * Create a fitness core and evaluate+annotate the sequences
