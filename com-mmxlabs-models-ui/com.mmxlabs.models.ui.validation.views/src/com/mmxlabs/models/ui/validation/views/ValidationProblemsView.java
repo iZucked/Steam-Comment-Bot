@@ -31,6 +31,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorRegistry;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IViewReference;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
@@ -164,7 +166,10 @@ public class ValidationProblemsView extends ViewPart {
 					}
 					if (element instanceof ScenarioInstance) {
 						try {
-							openEditor((ScenarioInstance) element, (IStatus) iStructuredSelection.getFirstElement());
+							final IStatus status = (IStatus) iStructuredSelection.getFirstElement();
+							final ScenarioInstance instance = (ScenarioInstance) element;
+							openEditor(instance, status);
+							openViews(instance, status);
 						} catch (final PartInitException e) {
 							log.error(e.getMessage(), e);
 						}
@@ -293,6 +298,32 @@ public class ValidationProblemsView extends ViewPart {
 					log.error(e.getMessage(), e);
 				}
 
+			}
+		}
+	}
+
+	public void openViews(final ScenarioInstance scenarioInstance, final IStatus status) {
+
+		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		final IViewReference[] viewReferences = activePage.getViewReferences();
+		for (final IViewReference viewRef : viewReferences) {
+			// Only try views which have been activated
+			final IViewPart view = viewRef.getView(false);
+			if (view == null) {
+				continue;
+			}
+			IValidationStatusGoto gotor = null;
+			if (view instanceof IValidationStatusGoto) {
+				gotor = (IValidationStatusGoto) view;
+
+			}
+			if (gotor == null) {
+				gotor = (IValidationStatusGoto) view.getAdapter(IValidationStatusGoto.class);
+			}
+
+			if (gotor != null) {
+				// TODO: How to determine content i.e. which scenario instance?
+				gotor.openStatus(status);
 			}
 		}
 	}
