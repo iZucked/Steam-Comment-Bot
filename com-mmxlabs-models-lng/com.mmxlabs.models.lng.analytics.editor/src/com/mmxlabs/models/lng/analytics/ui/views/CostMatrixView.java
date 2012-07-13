@@ -103,10 +103,7 @@ public class CostMatrixView extends ScenarioInstanceView {
 			}
 			return propertySheetPage;
 		}
-		else if (adapter.isAssignableFrom(IValidationStatusGoto.class)) {
-			return this;
-		}
-		return null;
+		return super.getAdapter(adapter);
 	}
 
 	@Override
