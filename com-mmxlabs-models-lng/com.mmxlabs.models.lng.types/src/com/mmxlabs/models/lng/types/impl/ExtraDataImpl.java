@@ -349,9 +349,9 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 					final int hrs = totalHours % 24;
 					final int days = totalHours / 24;
 					if (days > 0) {
-						return String.format("%d:%d", days, hrs);
+						return String.format("%dd, %dh", days, hrs);
 					} else {
-						return String.format("%d", hrs);
+						return String.format("%dh", hrs);
 					}
 				}
 				break;
