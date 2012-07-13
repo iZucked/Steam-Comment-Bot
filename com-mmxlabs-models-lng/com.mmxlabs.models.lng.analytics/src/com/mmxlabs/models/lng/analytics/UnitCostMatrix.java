@@ -20,6 +20,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getPorts <em>Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getFromPorts <em>From Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getToPorts <em>To Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getVessel <em>Vessel</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getNotionalDayRate <em>Notional Day Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getSpeed <em>Speed</em>}</li>
@@ -55,6 +57,9 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * If the meaning of the '<em>Ports</em>' reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * 
+	 * @deprecated due to {@link #getFromPorts()} and {@link #getToPorts()}
+	 * 
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Ports</em>' reference list.
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_Ports()
@@ -62,6 +67,38 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	EList<APortSet> getPorts();
+
+	/**
+	 * Returns the value of the '<em><b>From Ports</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>From Ports</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>From Ports</em>' reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_FromPorts()
+	 * @model
+	 * @generated
+	 */
+	EList<APortSet> getFromPorts();
+
+	/**
+	 * Returns the value of the '<em><b>To Ports</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>To Ports</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>To Ports</em>' reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_ToPorts()
+	 * @model
+	 * @generated
+	 */
+	EList<APortSet> getToPorts();
 
 	/**
 	 * Returns the value of the '<em><b>Vessel</b></em>' reference.

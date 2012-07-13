@@ -200,7 +200,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getUnitCostMatrix_Vessel() {
+	public EReference getUnitCostMatrix_FromPorts() {
 		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -209,25 +209,25 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getUnitCostMatrix_ToPorts() {
+		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getUnitCostMatrix_Vessel() {
+		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EAttribute getUnitCostMatrix_NotionalDayRate() {
-		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getUnitCostMatrix_Speed() {
-		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getUnitCostMatrix_RoundTrip() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -236,7 +236,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_MinimumLoad() {
+	public EAttribute getUnitCostMatrix_Speed() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(5);
 	}
 
@@ -245,7 +245,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_MaximumLoad() {
+	public EAttribute getUnitCostMatrix_RoundTrip() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(6);
 	}
 
@@ -254,7 +254,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_MinimumDischarge() {
+	public EAttribute getUnitCostMatrix_MinimumLoad() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(7);
 	}
 
@@ -263,7 +263,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_MaximumDischarge() {
+	public EAttribute getUnitCostMatrix_MaximumLoad() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(8);
 	}
 
@@ -272,7 +272,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_RetainHeel() {
+	public EAttribute getUnitCostMatrix_MinimumDischarge() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(9);
 	}
 
@@ -281,7 +281,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_CargoPrice() {
+	public EAttribute getUnitCostMatrix_MaximumDischarge() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(10);
 	}
 
@@ -290,7 +290,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_BaseFuelPrice() {
+	public EAttribute getUnitCostMatrix_RetainHeel() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(11);
 	}
 
@@ -299,7 +299,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_CvValue() {
+	public EAttribute getUnitCostMatrix_CargoPrice() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(12);
 	}
 
@@ -308,7 +308,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_DischargeIdleTime() {
+	public EAttribute getUnitCostMatrix_BaseFuelPrice() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(13);
 	}
 
@@ -317,7 +317,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EAttribute getUnitCostMatrix_ReturnIdleTime() {
+	public EAttribute getUnitCostMatrix_CvValue() {
 		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(14);
 	}
 
@@ -326,8 +326,26 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getUnitCostMatrix_DischargeIdleTime() {
+		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(15);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getUnitCostMatrix_ReturnIdleTime() {
+		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(16);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EReference getUnitCostMatrix_CostLines() {
-		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(15);
+		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(17);
 	}
 
 	/**
@@ -336,7 +354,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EReference getUnitCostMatrix_AllowedRoutes() {
-		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(16);
+		return (EReference)unitCostMatrixEClass.getEStructuralFeatures().get(18);
 	}
 
 	/**
@@ -345,7 +363,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EAttribute getUnitCostMatrix_RevenueShare() {
-		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(17);
+		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(19);
 	}
 
 	/**
@@ -354,7 +372,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EAttribute getUnitCostMatrix_LadenTimeAllowance() {
-		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(18);
+		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(20);
 	}
 
 	/**
@@ -363,7 +381,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EAttribute getUnitCostMatrix_BallastTimeAllowance() {
-		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(19);
+		return (EAttribute)unitCostMatrixEClass.getEStructuralFeatures().get(21);
 	}
 
 	/**
@@ -706,6 +724,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		unitCostMatrixEClass = createEClass(UNIT_COST_MATRIX);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__PORTS);
+		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__FROM_PORTS);
+		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__TO_PORTS);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__VESSEL);
 		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__NOTIONAL_DAY_RATE);
 		createEAttribute(unitCostMatrixEClass, UNIT_COST_MATRIX__SPEED);
@@ -814,6 +834,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 		initEClass(unitCostMatrixEClass, UnitCostMatrix.class, "UnitCostMatrix", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getUnitCostMatrix_Ports(), theTypesPackage.getAPortSet(), null, "ports", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUnitCostMatrix_FromPorts(), theTypesPackage.getAPortSet(), null, "fromPorts", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getUnitCostMatrix_ToPorts(), theTypesPackage.getAPortSet(), null, "toPorts", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getUnitCostMatrix_Vessel(), theTypesPackage.getAVessel(), null, "vessel", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_NotionalDayRate(), ecorePackage.getEInt(), "notionalDayRate", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getUnitCostMatrix_Speed(), ecorePackage.getEDouble(), "speed", null, 1, 1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
