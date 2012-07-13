@@ -7,6 +7,7 @@ package com.mmxlabs.models.ui.editorpart;
 import java.io.IOException;
 import java.util.Stack;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -36,14 +37,15 @@ import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
+import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
-public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider {
-	private static final String SCENARIO_NAVIGATOR_ID = "com.mmxlabs.scenario.service.ui.navigator";
+public abstract class ScenarioInstanceView extends ViewPart implements IScenarioEditingLocation, ISelectionListener, IScenarioInstanceProvider, IMMXRootObjectProvider, IValidationStatusGoto {
+
 	private ScenarioInstance scenarioInstance;
 	private ScenarioInstanceStatusProvider scenarioInstanceStatusProvider;
 	private ReferenceValueProviderCache valueProviderCache;
@@ -109,6 +111,15 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 		// getSite().getPage().addSelectionListener(SCENARIO_NAVIGATOR_ID, this);
 		partListener.partActivated(getSite().getPage().getActiveEditor());
 		// selectionChanged(null, getSite().getPage().getSelection(SCENARIO_NAVIGATOR_ID));
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Object getAdapter(Class adapter) {
+		if (adapter.isAssignableFrom(IValidationStatusGoto.class)) {
+			return this;
+		}
+		return super.getAdapter(adapter);
 	}
 
 	@Override
@@ -287,4 +298,10 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	public IStatusProvider getStatusProvider() {
 		return scenarioInstanceStatusProvider;
 	}
+
+	@Override
+	public void openStatus(final IStatus status) {
+		// Do nothing by default
+	}
+
 }
