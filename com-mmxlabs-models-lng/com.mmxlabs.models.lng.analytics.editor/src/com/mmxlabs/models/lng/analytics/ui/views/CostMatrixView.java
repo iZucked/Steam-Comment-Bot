@@ -122,4 +122,12 @@ public class CostMatrixView extends ScenarioInstanceView {
 		}
 	}
 
+	@Override
+	public void setLocked(final boolean locked) {
+		if (viewerPane != null) {
+			viewerPane.setLocked(locked);
+		}
+		super.setLocked(locked);
+	}
+
 }

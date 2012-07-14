@@ -306,6 +306,15 @@ public class JourneyView extends ScenarioInstanceView {
 		getSite().setSelectionProvider(null);
 
 		super.dispose();
-
 	}
+	
+
+	@Override
+	public void setLocked(final boolean locked) {
+		if (pane != null) {
+			pane.setLocked(locked);
+		}
+		super.setLocked(locked);
+	}
+
 }
