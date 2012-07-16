@@ -19,7 +19,8 @@ Require-Bundle: org.eclipse.ui,
  com.mmxlabs.models.lng.types;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.rcp.common;bundle-version="1.0.0",
  com.mmxlabs.models.ui.validation;bundle-version="1.0.0",
- com.mmxlabs.scenario.service.model;bundle-version="1.0.0"
+ com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
+ org.slf4j.api;bundle-version="1.6.4"
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.lng.ui,
  com.mmxlabs.models.lng.ui.actions,
