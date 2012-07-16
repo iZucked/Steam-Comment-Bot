@@ -169,10 +169,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		command.append(derive(editingDomain, schedule, inputModel, cargoModel));
 		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 
-		if (!command.canExecute()) {
-			throw new RuntimeException("Unable to execute save schedule command");
-		}
-
 		editingDomain.getCommandStack().execute(command);
 
 		// Hmm, should this be done here or as part of a command - it is a persisted item.
