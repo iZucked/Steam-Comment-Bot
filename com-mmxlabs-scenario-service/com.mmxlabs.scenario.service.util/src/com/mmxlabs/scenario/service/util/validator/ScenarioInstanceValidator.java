@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.ModelValidationService;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
@@ -26,7 +27,7 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class ScenarioInstanceValidator extends MMXContentAdapter {
 
-	private ScenarioInstance scenarioInstance;
+	private final ScenarioInstance scenarioInstance;
 
 	private IBatchValidator validator = null;
 
@@ -50,26 +51,33 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 	public void performValidation() {
 		// Run the validation
 		if (extraContext != null) {
-			final Collection<EObject> modelRoots = new LinkedList<EObject>();
-			for (final MMXSubModel subModel : extraContext.getRootObject().getSubModels()) {
-				modelRoots.add(subModel.getSubModelInstance());
-			}
 
-			createValidator();
+			Display.getDefault().asyncExec(new Runnable() {
 
-			IStatus status = null;
-			// Perform initial validation
-			if (claimValidationLock()) {
-				try {
-					status = helper.runValidation(validator, extraContext, modelRoots);
+				@Override
+				public void run() {
+					final Collection<EObject> modelRoots = new LinkedList<EObject>();
+					for (final MMXSubModel subModel : extraContext.getRootObject().getSubModels()) {
+						modelRoots.add(subModel.getSubModelInstance());
+					}
 
-				} finally {
-					releaseValidationLock();
+					createValidator();
+
+					IStatus status = null;
+					// Perform initial validation
+					if (claimValidationLock()) {
+						try {
+							status = helper.runValidation(validator, extraContext, modelRoots);
+
+						} finally {
+							releaseValidationLock();
+						}
+					}
+					if (status != null) {
+						validationStatus(status);
+					}
 				}
-			}
-			if (status != null) {
-				validationStatus(status);
-			}
+			});
 		}
 
 	}
@@ -106,12 +114,12 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 	}
 
 	protected boolean claimValidationLock() {
-		ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
+		final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
 		return lock.claim();
 	}
 
 	protected void releaseValidationLock() {
-		ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
+		final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
 		lock.release();
 	}
 }
