@@ -41,9 +41,13 @@ class CapabilityManipulator implements ICellRenderer, ICellManipulator {
 
 		final Port p = (Port) object;
 		if ((Integer) value == 0) {
-			editingDomain.getCommandStack().execute(AddCommand.create(editingDomain, p, PortPackage.eINSTANCE.getPort_Capabilities(), capability));
+			if (!p.getCapabilities().contains(capability)) {
+				editingDomain.getCommandStack().execute(AddCommand.create(editingDomain, p, PortPackage.eINSTANCE.getPort_Capabilities(), capability));
+			}
 		} else {
-			editingDomain.getCommandStack().execute(RemoveCommand.create(editingDomain, p, PortPackage.eINSTANCE.getPort_Capabilities(), capability));
+			if (p.getCapabilities().contains(capability)) {
+				editingDomain.getCommandStack().execute(RemoveCommand.create(editingDomain, p, PortPackage.eINSTANCE.getPort_Capabilities(), capability));
+			}
 		}
 	}
 
