@@ -533,7 +533,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 			}
 			
 			gc.fillRectangle(0, topOfCurrentRow+1, getSize().x, rowHeight-1);
-			final int rowLeft = leftOffset-VERTICAL_SPACE_BETWEEN_TASKS+ getX(minDate, startDate);
+			final int rowLeft = leftOffset-VERTICAL_SPACE_BETWEEN_TASKS+ (minDate != null ? getX(minDate, startDate) : 0);
 			
 //			gc.setBackground(colors.limitColor);
 //			gc.setAlpha(100);
