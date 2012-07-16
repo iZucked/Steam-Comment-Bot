@@ -31,6 +31,8 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -59,6 +61,8 @@ import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
+
+	private static final Logger log = LoggerFactory.getLogger(VesselViewerPane_Editor.class);
 
 	// TODO: Make these colours a preference so they can be consistently used across various UI parts
 	private final Color tcVessel = new Color(Display.getDefault(), 150, 210, 230);
@@ -144,7 +148,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 							context.run();
 							part.getEditingDomain().getCommandStack().execute(mergeLists(container, containment, new ArrayList<EObject>(importedObjects)));
 						} catch (final IOException e) {
-							e.printStackTrace();
+							log.error(e.getMessage(), e);
 						}
 					}
 				};
@@ -173,7 +177,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 							part.getEditingDomain().getCommandStack()
 									.execute(mergeLists(getScenarioViewer().getCurrentContainer(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels(), new ArrayList<EObject>(importedObjects)));
 						} catch (final IOException e) {
-							e.printStackTrace();
+							log.error(e.getMessage(), e);
 						}
 					}
 				};

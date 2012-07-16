@@ -350,6 +350,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 					final int index = combo.getSelectionIndex();
 					if (index >= 0) {
 						final EObject vessel = valueList.get(index);
+						// Uh oh.....
 						if (elementAssignment != null) {
 							if (vessel instanceof VesselClass) {
 								// assign to a new spot
