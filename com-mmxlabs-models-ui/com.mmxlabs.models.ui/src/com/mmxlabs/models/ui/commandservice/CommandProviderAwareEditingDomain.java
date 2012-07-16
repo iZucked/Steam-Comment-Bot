@@ -48,20 +48,22 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 		this.enabled = enabled;
 
 		for (final MMXSubModel subModel : rootObject.getSubModels()) {
-			if (enabled)
+			if (enabled) {
 				enableAdapters(subModel.getSubModelInstance());
-			else
+			} else {
 				disableAdapters(subModel.getSubModelInstance());
+			}
 		}
 	}
 
 	public void setAdaptersEnabled(final boolean enabled, final boolean skip) {
 		this.enabled = enabled;
 		for (final MMXSubModel subModel : rootObject.getSubModels()) {
-			if (enabled)
+			if (enabled) {
 				enableAdapters(subModel.getSubModelInstance(), skip);
-			else
+			} else {
 				disableAdapters(subModel.getSubModelInstance());
+			}
 		}
 	}
 
@@ -72,8 +74,9 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				((IMMXAdapter) a).disable();
 			}
 		}
-		for (final EObject o : top.eContents())
+		for (final EObject o : top.eContents()) {
 			disableAdapters(o);
+		}
 	}
 
 	private void enableAdapters(final EObject top) {
@@ -83,8 +86,9 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				((IMMXAdapter) a).enable();
 			}
 		}
-		for (final EObject o : top.eContents())
+		for (final EObject o : top.eContents()) {
 			enableAdapters(o);
+		}
 	}
 
 	private void enableAdapters(final EObject top, final boolean skip) {
@@ -93,8 +97,9 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				((IMMXAdapter) a).enable(skip);
 			}
 		}
-		for (final EObject o : top.eContents())
+		for (final EObject o : top.eContents()) {
 			enableAdapters(o, skip);
+		}
 	}
 
 	@Override
@@ -105,8 +110,9 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 			final CompoundCommand wrapper = new CompoundCommand();
 			wrapper.append(normal);
 			final IModelCommandProvider[] providers = commandProviderTracker.getServices(new IModelCommandProvider[0]);
-			for (final IModelCommandProvider provider : providers)
+			for (final IModelCommandProvider provider : providers) {
 				provider.startCommandProvision();
+			}
 
 			for (final IModelCommandProvider provider : providers) {
 				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject, overrides, commandClass, commandParameter, normal);
@@ -120,8 +126,9 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 				}
 			}
 
-			for (final IModelCommandProvider provider : providers)
+			for (final IModelCommandProvider provider : providers) {
 				provider.endCommandProvision();
+			}
 
 			return wrapper.unwrap();
 		} else {
