@@ -184,6 +184,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 	}
 
 	public void removeColumn(final String title) {
+		// TODO: Implement?
 		// for (final ColumnHandler h : handlers) {
 		// if (h.title.equals(title)) {
 		// viewer.removeColumn(h.column);
@@ -192,14 +193,12 @@ public class IndexPane extends ScenarioTableViewerPane {
 		// break;
 		// }
 		// }
-
 	}
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, getJointModelEditorPart()) {
 			@Override
 			protected void inputChanged(final Object input, final Object oldInput) {
-				// TODO Auto-generated method stub
 				super.inputChanged(input, oldInput);
 
 				if (input instanceof PricingModel) {
@@ -216,6 +215,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 						Date minDate = null;
 						Date maxDate = null;
 						for (final Index<?> idx : indexCurve) {
+							if (!(idx instanceof DataIndex<?>)) {
+								continue;
+							}
+							
 							for (final Date d : idx.getDates()) {
 								if (minDate == null || minDate.after(d)) {
 									minDate = d;
@@ -272,8 +275,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 					@Override
 					public Comparable getComparable(final Object element) {
-						if (element instanceof Index) {
-							final Index<?> idx = (Index<?>) element;
+						if (element instanceof DataIndex) {
+							final DataIndex<?> idx = (DataIndex<?>) element;
 							final Date colDate = (Date) col.getColumn().getData("date");
 							final Object valueAfter = idx.getValueForMonth(colDate);
 							if (valueAfter instanceof Integer) {
@@ -336,8 +339,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 					@Override
 					public Object getValue(final Object element) {
-						if (element instanceof Index) {
-							final Index<?> idx = (Index<?>) element;
+						if (element instanceof DataIndex) {
+							final DataIndex<?> idx = (DataIndex<?>) element;
 							final Date colDate = (Date) col.getColumn().getData("date");
 							final Object valueAfter = idx.getValueForMonth(colDate);
 							if (valueAfter instanceof Integer) {
@@ -407,8 +410,8 @@ public class IndexPane extends ScenarioTableViewerPane {
 					@Override
 					public String getText(final Object element) {
 
-						if (element instanceof Index) {
-							final Index<?> idx = (Index<?>) element;
+						if (element instanceof DataIndex) {
+							final DataIndex<?> idx = (DataIndex<?>) element;
 							final Date colDate = (Date) col.getColumn().getData("date");
 							final Object valueAfter = idx.getValueForMonth(colDate);
 							if (valueAfter != null) {
