@@ -310,7 +310,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			public IScenarioEditingLocation getEditorPart() {
 				return jointModelEditorPart;
 			}
-			
+
 			@Override
 			public ISelection getCurrentSelection() {
 				return viewer.getSelection();
@@ -407,11 +407,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 					getJointModelEditorPart().setDisableUpdates(true);
 					try {
 						final Command deleteCommand = DeleteCommand.create(ed, objects);
-						if (deleteCommand.canExecute()) {
-							ed.getCommandStack().execute(deleteCommand);
-						} else {
-							throw new RuntimeException("Unable to execute delete command");
-						}
+						ed.getCommandStack().execute(deleteCommand);
 					} finally {
 						getJointModelEditorPart().setDisableUpdates(false);
 					}
