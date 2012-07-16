@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.analytics.ui.liveeval;
 
 import java.util.Map;
 import java.util.WeakHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.eclipse.emf.ecore.EObject;
 
@@ -18,9 +20,11 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListener {
 
-	private final Map<ScheduleModel, LiveEvaluator> evaluatorMap = new WeakHashMap<ScheduleModel, LiveEvaluator>();
+	private final Map<ScenarioInstance, LiveEvaluator> evaluatorMap = new WeakHashMap<ScenarioInstance, LiveEvaluator>();
 
 	private final boolean enabled;
+
+	private ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public LiveEvaluatorScenarioServiceListener(final boolean enabled) {
 		this.enabled = enabled;
@@ -43,10 +47,11 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 					final MMXRootObject rootObject = (MMXRootObject) obj;
 					final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
 					if (schedule != null) {
-						final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance);
+						final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
 						evaluator.setEnabled(enabled);
 						schedule.eAdapters().add(evaluator);
-						evaluatorMap.put(schedule, evaluator);
+						scenarioInstance.eAdapters().add(evaluator);
+						evaluatorMap.put(scenarioInstance, evaluator);
 					}
 				}
 			}
@@ -61,34 +66,47 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 			final MMXRootObject rootObject = (MMXRootObject) obj;
 			final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
 			if (schedule != null) {
-				final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance);
+				final LiveEvaluator evaluator = new LiveEvaluator(scenarioInstance, executor);
 				evaluator.setEnabled(enabled);
 				schedule.eAdapters().add(evaluator);
-				evaluatorMap.put(schedule, evaluator);
+				scenarioInstance.eAdapters().add(evaluator);
+				evaluatorMap.put(scenarioInstance, evaluator);
 			}
 		}
 	}
 
 	@Override
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+		final LiveEvaluator eval = evaluatorMap.get(scenarioInstance);
 		final EObject obj = scenarioInstance.getInstance();
-		if (obj instanceof MMXRootObject) {
-			final MMXRootObject rootObject = (MMXRootObject) obj;
-			final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
-			if (schedule != null) {
-				final LiveEvaluator evaluator = evaluatorMap.get(schedule);
-				schedule.eAdapters().remove(evaluator);
-				evaluatorMap.remove(schedule);
+
+		if (scenarioInstance != null && eval != null) {
+			scenarioInstance.eAdapters().remove(eval);
+			if (obj instanceof MMXRootObject) {
+				final MMXRootObject rootObject = (MMXRootObject) obj;
+				final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
+				if (schedule != null) {
+					schedule.eAdapters().remove(eval);
+				}
 			}
 		}
+		evaluatorMap.remove(scenarioInstance);
 	}
 
 	public void dispose() {
-		for (final Map.Entry<ScheduleModel, LiveEvaluator> e : evaluatorMap.entrySet()) {
-			final ScheduleModel model = e.getKey();
+		for (final Map.Entry<ScenarioInstance, LiveEvaluator> e : evaluatorMap.entrySet()) {
+			final ScenarioInstance scenarioInstance = e.getKey();
 			final LiveEvaluator eval = e.getValue();
-			if (model != null && eval != null) {
-				model.eAdapters().remove(eval);
+			if (scenarioInstance != null && eval != null) {
+				scenarioInstance.eAdapters().remove(eval);
+				final EObject obj = scenarioInstance.getInstance();
+				if (obj instanceof MMXRootObject) {
+					final MMXRootObject rootObject = (MMXRootObject) obj;
+					final ScheduleModel schedule = rootObject.getSubModel(ScheduleModel.class);
+					if (schedule != null) {
+						schedule.eAdapters().remove(eval);
+					}
+				}
 			}
 		}
 		evaluatorMap.clear();

@@ -6,10 +6,11 @@ package com.mmxlabs.models.lng.analytics.ui.liveeval;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 /**
  * Updates schedule when their dirty bit is set.
@@ -33,10 +35,13 @@ public class LiveEvaluator extends MMXAdapterImpl {
 	private final ScenarioInstance instance;
 	private final Evaluator evaluator = new Evaluator();
 
+	private final ExecutorService executor;
+
 	private boolean enabled = true;
 
-	public LiveEvaluator(final ScenarioInstance instance) {
+	public LiveEvaluator(final ScenarioInstance instance, final ExecutorService executor) {
 		this.instance = instance;
+		this.executor = executor;
 	}
 
 	@Override
@@ -46,6 +51,11 @@ public class LiveEvaluator extends MMXAdapterImpl {
 				queueEvaluate();
 				// } else if (notification.getEventType() == Notification.SET && notification.getNewBooleanValue() == false) {
 				// dequeueEvaluate();
+			}
+		} else if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {
+			// If error validation improves from an error status, queue a validation as previously it would not have been queued.
+			if (notification.getOldIntValue() == IStatus.ERROR && notification.getNewIntValue() != IStatus.ERROR) {
+				queueEvaluate();
 			}
 		}
 	}
@@ -64,12 +74,11 @@ public class LiveEvaluator extends MMXAdapterImpl {
 			return;
 		}
 
-		
 		// Do not bother to evaluate if there is an error.
 		if (instance.getValidationStatusCode() == IStatus.ERROR) {
 			return;
 		}
-		
+
 		if (evaluatorThread == null || !evaluatorThread.isAlive()) {
 			evaluatorThread = new Thread(evaluator, "Live Evaluator [" + instance.getName() + "]");
 			evaluatorThread.start();
@@ -103,19 +112,43 @@ public class LiveEvaluator extends MMXAdapterImpl {
 
 					final IScenarioInstanceEvaluator evaluator = AnalyticsEditorPlugin.getPlugin().getResourceEvaluator();
 					if (evaluator != null) {
+
+						// Perform some checks here - retry again after lock is claimed just in case....
+						
+						if (!enabled) {
+							return;
+						}
+						// Do not bother to evaluate if there is an error.
+						if (instance.getValidationStatusCode() == IStatus.ERROR) {
+							return;
+						}
+
 						if (instance.getLock(ScenarioLock.EVALUATOR).claim()) {
 							try {
-								log.debug("Checking dirty flag is still set");
-								final MMXRootObject root = (MMXRootObject) instance.getScenarioService().load(instance);
-								final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
-								if (!subModel.isDirty()) {
-									return;
-								}
-								if (!enabled) {
-									return;
-								}
-								log.debug("About to evaluate " + instance.getName());
-								evaluator.evaluate(instance);
+								// Submit request to queue
+								executor.submit(new Callable<Object>() {
+									@Override
+									public Object call() throws Exception {
+										log.debug("Checking evaluation is still required");
+										// Check enabled state
+										if (!enabled) {
+											return null;
+										}
+										// Do not bother to evaluate if there is an error.
+										if (instance.getValidationStatusCode() == IStatus.ERROR) {
+											return null;
+										}
+										final MMXRootObject root = (MMXRootObject) instance.getScenarioService().load(instance);
+										final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
+										if (!subModel.isDirty()) {
+											return null;
+										}
+										log.debug("About to evaluate " + instance.getName());
+										evaluator.evaluate(instance);
+
+										return null;
+									}
+								});
 							} catch (final Throwable th) {
 
 							} finally {
@@ -131,8 +164,9 @@ public class LiveEvaluator extends MMXAdapterImpl {
 				} catch (final InterruptedException e) {
 					if (kill) {
 						spinLock = false;
-					} else
+					} else {
 						spinLock = true;
+					}
 				}
 			}
 		}
@@ -150,6 +184,8 @@ public class LiveEvaluator extends MMXAdapterImpl {
 			if (root != null) {
 				final ScheduleModel subModel = root.getSubModel(ScheduleModel.class);
 				if (subModel.isDirty()) {
+					log.debug("Queue");
+
 					queueEvaluate();
 				}
 			}
