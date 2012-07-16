@@ -7,7 +7,9 @@ package com.mmxlabs.models.lng.analytics.ui.liveeval;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +64,12 @@ public class LiveEvaluator extends MMXAdapterImpl {
 			return;
 		}
 
+		
+		// Do not bother to evaluate if there is an error.
+		if (instance.getValidationStatusCode() == IStatus.ERROR) {
+			return;
+		}
+		
 		if (evaluatorThread == null || !evaluatorThread.isAlive()) {
 			evaluatorThread = new Thread(evaluator, "Live Evaluator [" + instance.getName() + "]");
 			evaluatorThread.start();
