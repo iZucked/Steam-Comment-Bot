@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.ui.tabular;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
@@ -26,6 +27,8 @@ import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
@@ -69,6 +72,7 @@ import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class ScenarioTableViewerPane extends ViewerPane {
 	protected static final String VIEW_GROUP = "view";
@@ -400,17 +404,26 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 			@Override
 			public void run() {
-				final ISelection sel = getLastSelection();
-				if (sel instanceof IStructuredSelection) {
-					final EditingDomain ed = jointModelEditorPart.getEditingDomain();
-					final List<?> objects = ((IStructuredSelection) sel).toList();
-					getJointModelEditorPart().setDisableUpdates(true);
-					try {
+				final ScenarioLock editorLock = jointModelEditorPart.getEditorLock();
+				editorLock.awaitClaim();
+				getJointModelEditorPart().setDisableUpdates(true);
+				try {
+					final ISelection sel = getLastSelection();
+					if (sel instanceof IStructuredSelection) {
+						final EditingDomain ed = jointModelEditorPart.getEditingDomain();
+						// Copy selection
+						final List<?> objects = new ArrayList<Object>(((IStructuredSelection) sel).toList());
+
+						// Clear current selection
+						selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
+						
+						// Execute command
 						final Command deleteCommand = DeleteCommand.create(ed, objects);
 						ed.getCommandStack().execute(deleteCommand);
-					} finally {
-						getJointModelEditorPart().setDisableUpdates(false);
 					}
+				} finally {
+					editorLock.release();
+					getJointModelEditorPart().setDisableUpdates(false);
 				}
 			}
 
