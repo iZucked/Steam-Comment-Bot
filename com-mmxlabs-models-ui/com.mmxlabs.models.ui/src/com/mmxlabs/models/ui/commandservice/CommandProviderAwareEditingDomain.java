@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.ui.commandservice;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 import org.eclipse.emf.common.command.Command;
@@ -12,8 +16,11 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.CommandParameter;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
@@ -22,6 +29,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * EditingDomain implementation which is aware of {@link IModelCommandProvider}s and provides a mechanism to enable or disable their execution.
@@ -104,8 +112,22 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 
 	@Override
 	public Command createCommand(final Class<? extends Command> commandClass, final CommandParameter commandParameter) {
-		final Command normal = super.createCommand(commandClass, commandParameter);
-
+		final Command normal;
+		if (commandClass == DeleteCommand.class) {
+			normal = new DeleteCommand(this, commandParameter.getCollection()) {
+				protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(final Collection<EObject> eObjects) {
+					final List<EObject> subModels = new ArrayList<EObject>(rootObject.getSubModels().size());
+					for (final MMXSubModel m : rootObject.getSubModels()) {
+						final UUIDObject subModelInstance = m.getSubModelInstance();
+						subModels.add(subModelInstance);
+					}
+					return EcoreUtil.UsageCrossReferencer.findAll(eObjects, subModels);
+				}
+			};
+		} else {
+			normal = super.createCommand(commandClass, commandParameter);
+		}
+		
 		if (!isCommandProvidersDisabled()) {
 			final CompoundCommand wrapper = new CompoundCommand();
 			wrapper.append(normal);
