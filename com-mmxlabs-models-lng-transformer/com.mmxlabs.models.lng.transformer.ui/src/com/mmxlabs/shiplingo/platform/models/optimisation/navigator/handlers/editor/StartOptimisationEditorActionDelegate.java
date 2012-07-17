@@ -52,10 +52,6 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 
 	protected final boolean optimising;
 
-	private IEditorPart editor;
-
-	private IAction action;
-
 	/**
 	 * The constructor.
 	 */
@@ -252,8 +248,8 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 
 	@Override
 	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
-		this.editor = targetEditor;
-		this.action = action;
+
+		super.setActiveEditor(action, targetEditor);
 
 		final boolean enabled = false;
 		if (action != null && targetEditor != null && targetEditor.getEditorInput() instanceof IScenarioServiceEditorInput) {
@@ -295,7 +291,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 	}
 
 	@Override
-	protected void stateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
+	protected void stateChanged(final IJobControl control, final EJobState oldState, final EJobState newState) {
 
 		boolean enabled = false;
 		switch (newState) {

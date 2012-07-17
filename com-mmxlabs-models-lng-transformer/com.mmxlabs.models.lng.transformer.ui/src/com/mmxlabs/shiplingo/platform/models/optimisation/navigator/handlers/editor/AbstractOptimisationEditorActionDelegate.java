@@ -9,6 +9,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IActionDelegate2;
 import org.eclipse.ui.IEditorActionDelegate;
+import org.eclipse.ui.IEditorPart;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManagerListener;
@@ -19,6 +20,9 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.jobs.impl.JobControlAdapter;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
@@ -35,11 +39,33 @@ public abstract class AbstractOptimisationEditorActionDelegate implements IEdito
 	private final IJobControlListener jobListener = new JobControlAdapter() {
 
 		@Override
-		public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
+		public boolean jobStateChanged(final IJobControl control, final EJobState oldState, final EJobState newState) {
 
-			// Fire the event
-			stateChanged(job, oldState, newState);
+			if (action != null && editor != null && editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
+				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 
+				final IScenarioServiceEditorInput iScenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
+
+				final ScenarioInstance instance = iScenarioServiceEditorInput.getScenarioInstance();
+				final Object object = instance.getInstance();
+				if (object instanceof MMXRootObject) {
+					final String uuid = instance.getUuid();
+
+					final IJobDescriptor job = jobManager.findJobForResource(uuid);
+					if (job == null) {
+						action.setEnabled(true);
+						return true;
+					}
+
+					final IJobControl actionControl = jobManager.getControlForJob(job);
+
+					if (actionControl == control) {
+
+						// Fire the event
+						stateChanged(control, oldState, newState);
+					}
+				}
+			}
 			return true;
 		}
 	};
@@ -62,6 +88,8 @@ public abstract class AbstractOptimisationEditorActionDelegate implements IEdito
 			control.removeListener(jobListener);
 		}
 	};
+	protected IEditorPart editor;
+	protected IAction action;
 
 	/**
 	 * The constructor.
@@ -104,6 +132,12 @@ public abstract class AbstractOptimisationEditorActionDelegate implements IEdito
 	@Override
 	public void runWithEvent(final IAction action, final Event event) {
 		run(action);
+	}
+
+	@Override
+	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
+		this.editor = targetEditor;
+		this.action = action;
 	}
 
 }
