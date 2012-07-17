@@ -37,13 +37,12 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.model.service.IModelService;
+import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
+import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
-import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -51,7 +50,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-import com.mmxlabs.scenario.service.util.validator.ScenarioInstanceValidator;
+import com.mmxlabs.scenario.service.util.internal.Activator;
 
 /**
  * An abstract base class suitable for most scenario services.
@@ -179,9 +178,6 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		modelService.resolve(parts);
 
 		fireEvent(ScenarioServiceEvent.POST_LOAD, instance);
-
-		ScenarioInstanceValidator validator = new ScenarioInstanceValidator(instance);
-		validator.performValidation();
 
 		return implementation;
 	}
