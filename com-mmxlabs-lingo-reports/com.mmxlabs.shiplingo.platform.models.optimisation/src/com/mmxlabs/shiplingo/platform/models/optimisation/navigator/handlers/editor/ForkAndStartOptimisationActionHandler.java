@@ -31,10 +31,6 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 public class ForkAndStartOptimisationActionHandler extends StartOptimisationEditorActionDelegate {
 
-	private IEditorPart editor;
-
-	private IAction action;
-
 	public ForkAndStartOptimisationActionHandler() {
 		super(true);
 	}
@@ -51,7 +47,6 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 				final IScenarioService scenarioService = instance.getScenarioService();
 
 				try {
-					final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 					final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 					final Set<String> existingNames = new HashSet<String>();
@@ -70,9 +65,14 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 						newName = namePrefix + " (" + counter++ + ")";
 					}
 
-					fork.setName(getNewName(instance.getName(), newName));
+					final String finalNewName = getNewName(instance.getName(), newName);
+					if (finalNewName != null) {
+						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 
-					evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
+						fork.setName(finalNewName);
+
+						evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
+					}
 				} catch (final IOException e) {
 					throw new RuntimeException("Unable to fork scenario", e);
 				}
@@ -93,6 +93,7 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 
 	@Override
 	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
+
 		this.editor = targetEditor;
 		this.action = action;
 

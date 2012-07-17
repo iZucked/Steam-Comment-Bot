@@ -41,3 +41,4 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.scheduler.optimiser;version="1.0.0"
 Bundle-Activator: com.mmxlabs.shiplingo.platform.models.manifest.internal.Activator
+Service-Component: OSGI-INF/*.xml

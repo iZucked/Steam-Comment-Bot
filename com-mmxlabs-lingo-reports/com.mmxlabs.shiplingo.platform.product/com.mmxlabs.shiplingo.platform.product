@@ -6,7 +6,8 @@
    <aboutInfo>
       <image path="/com.mmxlabs.shiplingo.platform.app/aboutImage.gif"/>
       <text>
-         ShipLingo
+         Ship Lingo Platform
+Version {0}
       </text>
    </aboutInfo>
 
@@ -66,6 +67,7 @@
       <plugin id="com.mmxlabs.optimiser.optimiser-common" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.optimiser.optimiser-core" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" autoStart="true" startLevel="0" />
+      <plugin id="com.mmxlabs.shiplingo.platform.models.manifest" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.trading.integration" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="0" />
