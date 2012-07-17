@@ -1,7 +1,12 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.scenario.service.util;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.commandservice.CommandProviderAwareEditingDomain;
@@ -27,10 +32,12 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 		this.instance = instance;
 	}
 
-	
-	
 	@Override
 	public void execute(final Command command) {
+		// Check command can execute, if not try and report something useful
+		if (!command.canExecute()) {
+			throwExceptionOnBadCommand(command);
+		}
 		synchronized (instance) {
 			final boolean isEnabled = editingDomain.isEnabled();
 			if (isEnabled) {
@@ -42,6 +49,20 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 				if (isEnabled) {
 					editingDomain.setAdaptersEnabled(true);
 				}
+			}
+		}
+	}
+
+	private void throwExceptionOnBadCommand(final Command command) {
+
+		if (command instanceof CompoundCommand) {
+			final CompoundCommand compoundCommand = (CompoundCommand) command;
+			for (final Command cmd : compoundCommand.getCommandList()) {
+				throwExceptionOnBadCommand(cmd);
+			}
+		} else {
+			if (!command.canExecute()) {
+				throw new RuntimeException("Unable to execute command: " + command);
 			}
 		}
 	}
@@ -71,12 +92,11 @@ public class MMXAdaptersAwareCommandStack extends BasicCommandStack {
 					super.undo();
 				}
 			} finally {
-				lock.release();	
+				lock.release();
 			}
 		}
 	}
 
-	
 	@Override
 	public void redo() {
 		final ScenarioLock lock = instance.getLock(ScenarioLock.EDITORS);
