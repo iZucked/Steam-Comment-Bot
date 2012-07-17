@@ -13,7 +13,7 @@ import org.osgi.util.tracker.ServiceTracker;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
-import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
+import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.ui.extensions.ExtensionConfigurationModule;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IDisplayCompositeFactoryRegistry;
