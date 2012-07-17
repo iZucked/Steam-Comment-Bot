@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" deactivate="dispose" name="com.mmxlabs.models.ui.validation.scenarios.ScenarioInstanceValidatorScenarioServiceListener">
+   <implementation class="com.mmxlabs.models.ui.validation.scenarios.ScenarioInstanceValidatorScenarioServiceListener"/>
+   <reference bind="bind" cardinality="0..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="unbind"/>
+</scr:component>

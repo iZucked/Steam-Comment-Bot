@@ -17,3 +17,5 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.ui.validation,
  com.mmxlabs.models.ui.validation.gui
 Import-Package: com.mmxlabs.common;version="1.0.0"
+Service-Component: OSGI-INF/*.xml
+
