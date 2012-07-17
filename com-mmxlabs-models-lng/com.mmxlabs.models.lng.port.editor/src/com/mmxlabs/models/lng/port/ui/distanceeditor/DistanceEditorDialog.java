@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.port.ui.distanceeditor;
 
 import java.lang.ref.WeakReference;
-import java.util.concurrent.locks.Lock;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;

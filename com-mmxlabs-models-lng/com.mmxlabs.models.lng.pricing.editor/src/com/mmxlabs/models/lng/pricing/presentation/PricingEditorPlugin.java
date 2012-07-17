@@ -10,11 +10,11 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
+import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.lng.pricing.ui.commands.BaseFuelCostModelCommandProvider;
 import com.mmxlabs.models.lng.pricing.ui.commands.RouteCostModelCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 /**
  * This is the central singleton for the Pricing editor plugin.

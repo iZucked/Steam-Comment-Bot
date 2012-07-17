@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.ResourceLocator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
+import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.CargoTypeUpdatingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider;
@@ -17,7 +18,6 @@ import com.mmxlabs.models.lng.cargo.ui.commands.SlotDeletingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.SlotNameUpdatingCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
-import com.mmxlabs.models.ui.commandservice.IModelCommandProvider;
 
 /**
  * This is the central singleton for the Cargo editor plugin.

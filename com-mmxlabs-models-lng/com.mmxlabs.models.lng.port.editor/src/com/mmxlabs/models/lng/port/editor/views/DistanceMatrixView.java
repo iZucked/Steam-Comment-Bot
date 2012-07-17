@@ -4,17 +4,9 @@
  */
 package com.mmxlabs.models.lng.port.editor.views;
 
-import java.util.Arrays;
-
-import org.eclipse.emf.ecore.EReference;
-import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import com.mmxlabs.models.lng.port.PortModel;
-import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.ui.editorpart.PortGroupEditorPane;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 

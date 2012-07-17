@@ -10,9 +10,9 @@ import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.models.common.commandservice.BaseModelCommandProvider;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.commandservice.BaseModelCommandProvider;
 
 public class SlotDeletingCommandProvider extends BaseModelCommandProvider {
 	@Override

@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.analytics.ui.editorpart.UnitCostMatrixViewerPane;
 import com.mmxlabs.models.lng.analytics.ui.properties.UnitCostLinePropertySource;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class CostMatrixView extends ScenarioInstanceView {
