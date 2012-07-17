@@ -73,6 +73,7 @@ public class LNGModelCorrectorScenarioServiceListener extends ScenarioServiceLis
 		for (final IScenarioService s : scenarioServices) {
 			s.removeScenarioServiceListener(this);
 		}
+		scenarioServices.clear();
 	}
 
 	public void bind(final IScenarioService scenarioService) {
