@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension-point id="com.mmxlabs.lngscheduler.transformer" name="transformers" schema="schema/com.mmxlabs.lngscheduler.contracts.exsd"/>
+   <extension-point id="com.mmxlabs.lngscheduler.exporter" name="exporters" schema="schema/com.mmxlabs.lngscheduler.exporter.exsd"/>
+   <extension
+         id="com.mmxlabs.lngscheduler.emf-extras.contracts"
+         point="com.mmxlabs.lngscheduler.transformer">
+      <Transformer
+            transformer="com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer">
+         <modelclass
+               class="com.mmxlabs.models.lng.commercial.FixedPriceContract">
+         </modelclass>
+         <modelclass
+               class="com.mmxlabs.models.lng.commercial.IndexPriceContract">
+         </modelclass>
+      </Transformer>
+   </extension> 
+</plugin>

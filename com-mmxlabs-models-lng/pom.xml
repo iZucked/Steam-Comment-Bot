@@ -64,6 +64,8 @@
 		<module>com.mmxlabs.models.lng.analytics.edit</module>
 		<module>com.mmxlabs.models.lng.analytics.editor</module>
 		<module>com.mmxlabs.models.lng.analytics.validation</module>
+
+		<module>com.mmxlabs.models.lng.transformer</module>
 		<module>com.mmxlabs.models.lng.analytics.transformer</module>
 
 		<module>com.mmxlabs.models.lng.feature</module>
