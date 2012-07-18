@@ -9,7 +9,7 @@
 		<version>1-SNAPSHOT</version>
 	</parent>
 	<artifactId>target-definition</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<build>
@@ -28,14 +28,9 @@
 						<configuration>
 							<artifacts>
 								<artifact>
-									<file>shiplingo.target</file>
+									<file>indigo.target</file>
 									<type>target</type>
-									<classifier>shiplingo</classifier>
-								</artifact>
-								<artifact>
-									<file>shiplingo-indigo.target</file>
-									<type>target</type>
-									<classifier>shiplingo-indigo</classifier>
+									<classifier>indigo</classifier>
 								</artifact>
 							</artifacts>
 						</configuration>

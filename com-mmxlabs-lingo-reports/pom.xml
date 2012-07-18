@@ -26,9 +26,7 @@
 	</ciManagement>
 
 	<modules>
-		<!-- Platform target file - disabled as we use the repositories section 
-			below to allow local mirrors of p2 repositories -->
-		<!-- <module>target-definition</module> -->
+		<module>target-definition</module>
 
 		<!-- Product file project -->
 		<module>com.mmxlabs.shiplingo.platform.product</module>
@@ -72,6 +70,18 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
 
+ 					<resolver>p2</resolver>
+
+                                        <target>
+                                                <artifact>
+                                                        <groupId>com.mmxlabs.shiplingo.platform</groupId>
+                                                        <artifactId>target-definition</artifactId>
+                                                        <version>1.0.0-SNAPSHOT</version>
+                                                        <classifier>indigo</classifier>
+                                                </artifact>
+                                        </target>
+
+
 					<environments>
 <!--
 						<environment>
@@ -112,66 +122,7 @@
 		</plugins>
 	</build>
 
-
 	<repositories>
-
-		<!-- We use repositories defined here rather than the platform target to 
-			allow local mirrors to be specified in settings.xml -->
-
-		<repository>
-			<id>indigo</id>
-			<url>http://download.eclipse.org/releases/indigo</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>eclipse-3.7</id>
-			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>swtbot</id>
-			<url>http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>edapt-updates</id>
-			<url>http://download.eclipse.org/edapt/update-site/</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>nebula-main-snapshots</id>
-			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>nebula-incubation-snapshots</id>
-			<url>http://download.eclipse.org/technology/nebula/incubation/snapshot</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>orbit</id>
-			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>mmxlabs-p2-snapshots</id>
-			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>mmxlabs-p2-external</id>
-			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/</url>
-			<layout>p2</layout>
-		</repository>
-
 		<repository>
 			<id>mmxlabs-jre</id>
 			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/jre</url>
