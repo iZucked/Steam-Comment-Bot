@@ -2,6 +2,17 @@
 <?pde version="3.8"?><target name="Models LNG Target (Indigo)" sequenceNumber="1">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="0.0.0"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.lng.scheduler/nightly" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.optimiser.optimiser-common" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso" version="0.0.0"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.optimiser/nightly" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.models.lng.ui/nightly/" id="mmxlabs-releases"/>
 </location>
@@ -73,6 +84,8 @@
 <repository location="http://download.eclipse.org/edapt/update-site"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.google.guava" version="11.0.1"/>
+<unit id="com.google.guava.source" version="11.0.1"/>
 <unit id="org.ops4j.peaberry.activation.source" version="1.2.0"/>
 <unit id="org.ops4j.peaberry.eclipse.source" version="1.2.0"/>
 <unit id="org.ops4j.peaberry.source" version="1.2.0"/>
