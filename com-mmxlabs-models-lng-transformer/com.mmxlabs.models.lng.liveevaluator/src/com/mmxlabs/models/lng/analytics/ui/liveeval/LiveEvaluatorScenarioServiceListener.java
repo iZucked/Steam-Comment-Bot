@@ -24,7 +24,7 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 
 	private final boolean enabled;
 
-	private ExecutorService executor = Executors.newSingleThreadExecutor();
+	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
 	public LiveEvaluatorScenarioServiceListener(final boolean enabled) {
 		this.enabled = enabled;
@@ -73,6 +73,11 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 				evaluatorMap.put(scenarioInstance, evaluator);
 			}
 		}
+	}
+
+	@Override
+	public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+		onPreScenarioInstanceUnload(scenarioService, scenarioInstance);
 	}
 
 	@Override
