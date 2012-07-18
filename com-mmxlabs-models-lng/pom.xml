@@ -144,52 +144,5 @@
 		</plugins>
 	</build>
 
-	<repositories>
-
-		<repository>
-			<id>indigo</id>
-			<url>http://download.eclipse.org/releases/indigo</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>eclipse-3.7</id>
-			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
-			<layout>p2</layout>
-		</repository>
-        
-
-		<repository>
-			<id>nebula-main-snapshots</id>
-			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>nebula-incubation-snapshots</id>
-			<url>http://download.eclipse.org/technology/nebula/incubation/snapshot</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>orbit</id>
-			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>mmxlabs-p2-external</id>
-			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>mmxlabs-p2-snapshots</id>
-			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/</url>
-			<layout>p2</layout>
-		</repository>
-
-	</repositories>
-
 </project>
 
