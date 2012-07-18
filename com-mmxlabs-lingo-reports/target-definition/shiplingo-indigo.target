@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.6"?><target name="MMXLabs Target" sequenceNumber="36">
+<?pde version="3.6"?><target name="MMXLabs Workspace Target" sequenceNumber="36">
 <locations>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.edapt.recorder.feature.feature.group" version="0.0.0"/>
