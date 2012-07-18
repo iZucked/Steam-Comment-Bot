@@ -155,7 +155,6 @@ public class LNGScenarioTransformer {
 
 	private OptimiserSettings defaultSettings = null;
 
-	
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
 	 * 
@@ -413,12 +412,15 @@ public class LNGScenarioTransformer {
 
 	private void freezeInputModel(final ISchedulerBuilder builder, final ModelEntityMap entities) {
 
-		final OptimiserSettings settings = rootObject.getSubModel(OptimiserSettings.class);
 		Date freezeDate = null;
-		if (settings != null) {
-			final OptimisationRange range = settings.getRange();
-			if (range != null) {
-				freezeDate = range.getOptimiseAfter();
+		final OptimiserModel optimiserModel = rootObject.getSubModel(OptimiserModel.class);
+		if (optimiserModel != null) {
+			final OptimiserSettings settings = optimiserModel.getActiveSetting();
+			if (settings != null) {
+				final OptimisationRange range = settings.getRange();
+				if (range != null) {
+					freezeDate = range.getOptimiseAfter();
+				}
 			}
 		}
 
@@ -429,21 +431,21 @@ public class LNGScenarioTransformer {
 				final UUIDObject o = assignment.getAssignedObject();
 
 				boolean freeze = assignment.isLocked();
-				
+
 				if (!freeze && freezeDate != null) {
 					if (o instanceof Cargo) {
-						Cargo cargo = (Cargo) o;
+						final Cargo cargo = (Cargo) o;
 						if (cargo.getLoadSlot().getWindowStart().before(freezeDate)) {
 							freeze = true;
 						}
 					} else if (o instanceof VesselEvent) {
-						VesselEvent vesselEvent = (VesselEvent) o;
+						final VesselEvent vesselEvent = (VesselEvent) o;
 						if (vesselEvent.getStartBy().before(freezeDate)) {
 							freeze = true;
 						}
 					}
 				}
-				
+
 				if (!freeze) {
 					continue;
 				}
@@ -1051,8 +1053,6 @@ public class LNGScenarioTransformer {
 		builder.setVesselClassStateParamaters(vc, state, Calculator.scaleToInt(attrs.getNboRate()) / 24, Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
 				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24, Calculator.scaleToInt(attrs.getInPortBaseRate()) / 24, cc);
 	}
-
-
 
 	/**
 	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
