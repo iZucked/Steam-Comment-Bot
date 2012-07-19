@@ -90,8 +90,6 @@ public class RemoveAndFill implements IMove {
 	 */
 	@Override
 	public boolean validate(final ISequences sequences) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
-
 }

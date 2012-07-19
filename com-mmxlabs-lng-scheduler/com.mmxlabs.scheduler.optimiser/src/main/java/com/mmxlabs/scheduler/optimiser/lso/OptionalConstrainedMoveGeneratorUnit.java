@@ -14,8 +14,10 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.lso.moves.InsertOptionalElements;
+import com.mmxlabs.scheduler.optimiser.lso.moves.MoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.RemoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.RemoveOptionalElement;
+import com.mmxlabs.scheduler.optimiser.lso.moves.ReplaceMoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.SwapOptionalElements;
 
 /**
@@ -82,7 +84,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 				final ISequenceElement beforeBeforeElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex - 2);
 				if (owner.validFollowers.get(beforeBeforeElement).contains(afterElement)) {
 					// remove both
-					return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex,locationIndex-1);
+					return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex, locationIndex - 1);
 				}
 			}
 
@@ -90,7 +92,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 				final ISequenceElement afterAfterElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex + 2);
 				if (owner.validFollowers.get(beforeElement).contains(afterAfterElement)) {
 					// remove both
-					return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex+1,locationIndex);
+					return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex + 1, locationIndex);
 				}
 			}
 
@@ -172,13 +174,18 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 								if (owner.validFollowers.get(beforeCandidate).contains(afterCandidate)) {
 									// we can just cut out candidate
 									// TODO MOVE HERE
+									return new MoveAndFill(owner.getSequences().getResources().get(candidatePosition.getFirst()), owner.getSequences().getResources().get(sequence),
+											candidatePosition.getSecond(), unusedIndex, followerPosition.getSecond(), false);
 								} else {
 									final ConstrainedMoveGenerator.Followers<ISequenceElement> beforeFollowers = owner.validFollowers.get(beforeCandidate);
 									for (final ISequenceElement spare : owner.sequences.getUnusedElements()) {
 										// TODO this loop could be a hashset intersection; not sure what's faster.
 										if (beforeFollowers.contains(spare) && owner.validFollowers.get(spare).contains(afterCandidate)) {
 											// we have a working filler element to do the move above.
-											// TODO MOVE HERE
+											final Pair<Integer, Integer> fillerPosition = owner.reverseLookup.get(spare);
+
+											return new ReplaceMoveAndFill(owner.getSequences().getResources().get(candidatePosition.getFirst()), owner.getSequences().getResources()
+													.get(followerPosition.getFirst()), candidatePosition.getSecond(), followerPosition.getSecond(), fillerPosition.getSecond(), unusedIndex, false);
 										}
 									}
 								}

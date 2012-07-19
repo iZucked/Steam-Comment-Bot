@@ -61,5 +61,4 @@ public class InsertOptionalElements implements IMove {
 	public boolean validate(final ISequences sequences) {
 		return true;
 	}
-
 }
