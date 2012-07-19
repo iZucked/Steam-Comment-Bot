@@ -10,6 +10,8 @@
 
    <extension
          point="org.eclipse.help.toc">
+      <index path="index">
+      </index>
       <toc
             file="toc.xml"
             primary="true">
