@@ -1,4 +1,4 @@
-<project name="Build specific targets and properties" default="noDefault">
+<project name="Build specific targets and properties" default="post.build.jars">
     <target name="post.build.jars">
         <help.buildHelpIndex manifest="plugin.xml" destination="."/>
     </target>
