@@ -34,3 +34,6 @@ syntax: regexp
 ^com\.mmxlabs\.shiplingo\.platform\.doc/\.classpath$
 syntax: regexp
 ^\.settings$
+
+syntax: regexp
+^com\.mmxlabs\.shiplingo\.platform\.doc/index$
