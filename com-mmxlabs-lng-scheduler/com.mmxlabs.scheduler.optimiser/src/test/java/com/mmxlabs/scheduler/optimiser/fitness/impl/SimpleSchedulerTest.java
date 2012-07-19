@@ -140,6 +140,8 @@ public class SimpleSchedulerTest {
 
 		// ....
 
+		builder.buildXYDistances();
+		
 		// Generate the optimisation data
 		final IOptimisationData data = builder.getOptimisationData();
 

@@ -13,6 +13,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
@@ -532,5 +533,10 @@ public interface ISchedulerBuilder {
 	 * @param cost
 	 */
 	void setPortCost(IPort port, IVessel vessel, PortType portType, long cost);
+
+	/**
+	 * Generate x y distance matrix. Note, this will overwrite any data set via {@link #setPortToPortDistance(IPort, IPort, String, int)} for the {@link IMultiMatrixProvider#Default_Key} route.
+	 */
+	void buildXYDistances();
 
 }

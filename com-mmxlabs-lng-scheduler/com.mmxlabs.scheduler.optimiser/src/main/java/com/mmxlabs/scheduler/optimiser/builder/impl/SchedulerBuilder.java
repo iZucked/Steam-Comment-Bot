@@ -742,28 +742,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IOptimisationData getOptimisationData() {
-		// generate x y distance matrix
-		if (false) {
-			for (final IPort from : ports) {
-				if (!(from instanceof IXYPort)) {
-					continue;
-				}
-				for (final IPort to : ports) {
-					if (to instanceof IXYPort) {
-						final double dist = distanceProvider.getDistance((IXYPort) from, (IXYPort) to);
-						final int iDist = (int) dist;
-
-						final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(IMultiMatrixProvider.Default_Key);
-
-						matrix.set(from, to, iDist);
-					}
-				}
-			}
-		}
 
 		// setup fake vessels for virtual elements.
 		final IVesselClass virtualClass = createVesselClass("virtual", 0, 1000000000, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0, 0);
-		final Set<IVesselClass> virtualClassSet = Collections.singleton(virtualClass);
 		for (final ISequenceElement element : unshippedElements) {
 			// create a new resource for each of these guys, and bind them to their resources
 			final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, 0, VesselInstanceType.VIRTUAL, createStartEndRequirement(), createStartEndRequirement(), 0, 0, 0);
@@ -888,6 +869,26 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		return data;
+	}
+
+
+	@Override
+	public void buildXYDistances() {
+		for (final IPort from : ports) {
+			if (!(from instanceof IXYPort)) {
+				continue;
+			}
+			for (final IPort to : ports) {
+				if (to instanceof IXYPort) {
+					final double dist = distanceProvider.getDistance((IXYPort) from, (IXYPort) to);
+					final int iDist = (int) dist;
+
+					final IMatrixEditor<IPort, Integer> matrix = (IMatrixEditor<IPort, Integer>) portDistanceProvider.get(IMultiMatrixProvider.Default_Key);
+
+					matrix.set(from, to, iDist);
+				}
+			}
+		}
 	}
 
 	@Override
