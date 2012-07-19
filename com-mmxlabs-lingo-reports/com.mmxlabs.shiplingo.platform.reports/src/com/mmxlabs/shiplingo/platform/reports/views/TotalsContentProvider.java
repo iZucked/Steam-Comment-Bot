@@ -14,6 +14,12 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
@@ -63,7 +69,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		return rowData;
 	}
 
-	private void createRowData(final Schedule schedule, String scheduleName, final List<RowData> output) {
+	private void createRowData(final Schedule schedule, final String scheduleName, final List<RowData> output) {
 		/**
 		 * Stores the total fuel costs for each type of fuel - this may not be the detailed output we want, I don't know
 		 */
@@ -74,10 +80,23 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		long canals = 0;
 		long hire = 0;
 		long portCost = 0;
-		
+
 		long lateness = 0;
+		long capacityViolations = 0;
 
 		for (final Sequence seq : schedule.getSequences()) {
+
+			int vesselCapacity = Integer.MAX_VALUE;
+			final Vessel vessel = seq.getVessel();
+			if (vessel != null) {
+				vesselCapacity = vessel.getVesselClass().getCapacity();
+			} else {
+				final VesselClass vesselClass = seq.getVesselClass();
+				if (vesselClass != null) {
+					vesselCapacity = vesselClass.getCapacity();
+				}
+			}
+
 			for (final Event evt : seq.getEvents()) {
 				hire += evt.getHireCost();
 				totalCost += evt.getHireCost();
@@ -108,16 +127,44 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 					final SlotVisit visit = (SlotVisit) evt;
 
 					if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
-						
-						long late = visit.getStart().getTime() -  visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().getTime();
-						lateness += (late / 1000 / 60/ 60);
+
+						final long late = visit.getStart().getTime() - visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime().getTime();
+						lateness += (late / 1000 / 60 / 60);
+					}
+
+					final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
+					if (visit.getSlotAllocation().getSlot() != null) {
+						final Slot slot = visit.getSlotAllocation().getSlot();
+						if (slot instanceof LoadSlot) {
+							final LoadSlot loadSlot = (LoadSlot) slot;
+							final int minQuantity = loadSlot.getMinQuantity();
+							final int maxQuantity = loadSlot.getMaxQuantity();
+							if (maxQuantity != 0 && maxQuantity < cargoAllocation.getLoadVolume()) {
+								capacityViolations++;
+							} else if (minQuantity != 0 && minQuantity > cargoAllocation.getLoadVolume()) {
+								capacityViolations++;
+							} else if (vesselCapacity < cargoAllocation.getLoadVolume()) {
+								capacityViolations++;
+							}
+						} else if (slot instanceof DischargeSlot) {
+							final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+							final int minQuantity = dischargeSlot.getMinQuantity();
+							final int maxQuantity = dischargeSlot.getMaxQuantity();
+							if (maxQuantity != 0 && maxQuantity < cargoAllocation.getDischargeVolume()) {
+								capacityViolations++;
+							} else if (minQuantity != 0 && minQuantity > cargoAllocation.getDischargeVolume()) {
+								capacityViolations++;
+							} else if (vesselCapacity < cargoAllocation.getDischargeVolume()) {
+								capacityViolations++;
+							}
+						}
 					}
 
 				} else if (evt instanceof VesselEventVisit) {
 					final VesselEventVisit vev = (VesselEventVisit) evt;
 					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
-						long late = evt.getStart().getTime() -  vev.getVesselEvent().getStartBy().getTime();
-						lateness += (late / 1000 / 60/ 60);
+						final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
+						lateness += (late / 1000 / 60 / 60);
 					}
 				}
 			}
@@ -137,9 +184,10 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		output.add(new RowData(scheduleName, "Canal Fees", TYPE_COST, canals));
 		output.add(new RowData(scheduleName, "Charter Fees", TYPE_COST, hire));
 		output.add(new RowData(scheduleName, "Distance", TYPE_COST, distance));
-		
+
 		output.add(new RowData(scheduleName, "Port Costs", TYPE_COST, portCost));
 		output.add(new RowData(scheduleName, "Lateness", TYPE_TIME, lateness));
+		output.add(new RowData(scheduleName, "Capacity", "Count", capacityViolations));
 
 		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost));
 	}
@@ -164,9 +212,9 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		}
 
 	}
-	
-	private List<RowData> pinnedData = new ArrayList<RowData>();
-	
+
+	private final List<RowData> pinnedData = new ArrayList<RowData>();
+
 	public List<RowData> getPinnedScenarioData() {
 		return pinnedData;
 	}
