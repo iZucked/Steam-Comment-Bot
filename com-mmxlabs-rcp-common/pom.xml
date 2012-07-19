@@ -29,8 +29,10 @@
 	<modules>
 		<module>target-definition</module>
 		<module>com.mmxlabs.rcp.common</module>
+		<module>com.mmxlabs.rcp.common.win32</module>
+
 		<module>com.mmxlabs.ganttviewer</module>
-		
+
 		<module>com.mmxlabs.models.common</module>
 
 		<module>com.mmxlabs.rcp.common.feature</module>
@@ -60,7 +62,7 @@
 				<configuration>
 
 					<resolver>p2</resolver>
-	 
+
 					<target>
 						<artifact>
 							<groupId>com.mmxlabs.rcp.common</groupId>
