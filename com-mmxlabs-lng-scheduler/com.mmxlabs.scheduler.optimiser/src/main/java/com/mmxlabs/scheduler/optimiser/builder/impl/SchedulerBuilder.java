@@ -20,7 +20,7 @@ import javax.inject.Provider;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
-import com.mmxlabs.common.indexedobjects.impl.SimpleIndexingContext;
+import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.components.impl.TimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
@@ -172,7 +172,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private final Map<IPortSlot, Set<IVesselClass>> slotVesselClassRestrictions = new HashMap<IPortSlot, Set<IVesselClass>>();
 
-	private final IIndexingContext indexingContext = new SimpleIndexingContext();
+	private final IIndexingContext indexingContext = new CheckingIndexingContext();
 
 	@Inject
 	private IXYPortDistanceCalculator distanceProvider;
