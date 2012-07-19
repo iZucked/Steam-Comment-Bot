@@ -4,51 +4,29 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
-import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IXYPort;
-import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 
 /**
- * Default implementation of {@link IXYPort}
+ * Extended implementation of {@link Port} providing a X/Y location of some kind.
  * 
  * @author Simon Goodall
  * 
  */
-public final class XYPort extends IndexedObject implements IXYPort {
-
-	private String name;
-
-	/**
-	 * A calculator used to determine the price of cooldown LNG here.
-	 */
-	private ICooldownPriceCalculator cooldownPriceCalculator;
+public final class XYPort extends Port implements IXYPort {
 
 	private float x;
 
 	private float y;
-
-	private boolean arriveCold;
 
 	public XYPort(final IIndexingContext context) {
 		super(context);
 	}
 
 	public XYPort(final IIndexingContext context, final String name, final float x, final float y) {
-		super(context);
-		this.name = name;
+		super(context, name);
 		this.x = x;
 		this.y = y;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	public void setName(final String name) {
-		this.name = name;
 	}
 
 	@Override
@@ -81,31 +59,10 @@ public final class XYPort extends IndexedObject implements IXYPort {
 			if (y != p.y) {
 				return false;
 			}
-			if (!Equality.isEqual(name, p.name)) {
-				return false;
-			}
 
-			return true;
+			return super.equals(obj);
 		}
 
 		return false;
-	}
-
-	@Override
-	public boolean shouldVesselsArriveCold() {
-		return arriveCold;
-	}
-
-	public void setShouldVesselsArriveCold(final boolean arriveCold) {
-		this.arriveCold = arriveCold;
-	}
-
-	@Override
-	public ICooldownPriceCalculator getCooldownPriceCalculator() {
-		return cooldownPriceCalculator;
-	}
-
-	public void setCooldownPriceCalculator(final ICooldownPriceCalculator cooldownPriceCalculator) {
-		this.cooldownPriceCalculator = cooldownPriceCalculator;
 	}
 }

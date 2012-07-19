@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
  * @author Simon Goodall
  * 
  */
-public final class Port extends IndexedObject implements IPort {
+public class Port extends IndexedObject implements IPort {
 	/**
 	 * The name of the port
 	 */
