@@ -310,9 +310,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				throw new IllegalStateException("Scenario Service does not exist yet a scenario service editor input has been used");
 			}
 
-			scenarioInstance = instance;
 
-			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(scenarioInstance);
 
 			editorLock = instance.getLock(ScenarioLock.EDITORS);
 
@@ -326,6 +324,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			if (ro == null) {
 				throw new RuntimeException("Instance was not loaded");
 			}
+			scenarioInstance = instance;
+			scenarioInstanceStatusProvider = new ScenarioInstanceStatusProvider(scenarioInstance);
 
 			commandStack = (BasicCommandStack) instance.getAdapters().get(BasicCommandStack.class);
 			editingDomain = (CommandProviderAwareEditingDomain) instance.getAdapters().get(EditingDomain.class);
