@@ -37,3 +37,5 @@ syntax: regexp
 
 syntax: regexp
 ^com\.mmxlabs\.shiplingo\.platform\.doc/index$
+syntax: regexp
+^com\.mmxlabs\.shiplingo\.platform\.doc/workspace$
