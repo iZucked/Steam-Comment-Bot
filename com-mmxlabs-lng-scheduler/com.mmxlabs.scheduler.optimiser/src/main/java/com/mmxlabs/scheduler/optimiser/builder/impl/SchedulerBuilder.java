@@ -426,29 +426,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator) {
 
 		final Port port = new Port(indexingContext);
-		port.setName(name);
-
-		port.setCooldownPriceCalculator(cooldownPriceCalculator);
-
-		port.setShouldVesselsArriveCold(arriveCold);
-
-		ports.add(port);
-
-		/*
-		 * ANYWHERE is not present in the /real/ distance matrix, so we must set its distances here.
-		 */
-		if (ANYWHERE != null) {
-			setPortToPortDistance(port, ANYWHERE, IMultiMatrixProvider.Default_Key, 0);
-			setPortToPortDistance(ANYWHERE, port, IMultiMatrixProvider.Default_Key, 0);
-		}
-
-		// travel time from A to A should be zero, right?
-		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
-
-		// create the return elements to return to this port using the ELSM
-
-		calculatorProvider.addCooldownPriceCalculator(cooldownPriceCalculator);
-
+		buildPort(port, name, arriveCold, cooldownPriceCalculator);
 		return port;
 	}
 
@@ -503,9 +481,24 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public IXYPort createPort(final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator, final float x, final float y) {
 
 		final XYPort port = new XYPort(indexingContext);
-		port.setName(name);
+		buildPort(port, name, arriveCold, cooldownPriceCalculator);
 		port.setX(x);
 		port.setY(y);
+
+		return port;
+	}
+
+	/**
+	 * Method to set common properties etc for {@link Port} implementations.
+	 * 
+	 * @param port
+	 * @param name
+	 * @param arriveCold
+	 * @param cooldownPriceCalculator
+	 */
+	private void buildPort(final Port port, final String name, final boolean arriveCold, final ICooldownPriceCalculator cooldownPriceCalculator) {
+
+		port.setName(name);
 		port.setShouldVesselsArriveCold(arriveCold);
 		port.setCooldownPriceCalculator(cooldownPriceCalculator);
 		ports.add(port);
@@ -519,8 +512,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		this.setPortToPortDistance(port, port, IMultiMatrixProvider.Default_Key, 0);
 
 		calculatorProvider.addCooldownPriceCalculator(cooldownPriceCalculator);
-
-		return port;
 	}
 
 	@Override
@@ -752,7 +743,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IOptimisationData getOptimisationData() {
 		// generate x y distance matrix
-		if (true) {
+		if (false) {
 			for (final IPort from : ports) {
 				if (!(from instanceof IXYPort)) {
 					continue;
@@ -1309,7 +1300,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setPortCost(IPort port, IVessel vessel, PortType portType, long cost) {
+	public void setPortCost(final IPort port, final IVessel vessel, final PortType portType, final long cost) {
 		portCostProvider.setPortCost(port, vessel, portType, cost);
 	}
 }
