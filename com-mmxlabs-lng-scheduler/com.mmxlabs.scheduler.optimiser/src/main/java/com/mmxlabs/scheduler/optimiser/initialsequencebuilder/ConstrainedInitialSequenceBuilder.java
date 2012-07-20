@@ -231,9 +231,12 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			final SequenceChunk chunk = new SequenceChunk();
 			if (portTypeProvider.getPortType(head) == PortType.End) {
 				chunk.setEndElement(true);
-				final Collection<IResource> c = racdcp.getAllowedResources(head);
-				assert c.size() == 1;
-				endChunks.put(c.iterator().next(), chunk);
+				for (final IResource r : data.getResources()) {
+					if (head == startEndRequirementProvider.getEndElement(r)) {
+						endChunks.put(r, chunk);
+						break;
+					}
+				}
 			}
 			chunk.add(head);
 			while (followerCache.get(head).size() == 1) {
@@ -244,9 +247,12 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				chunk.add(head);
 				if (portTypeProvider.getPortType(head) == PortType.End) {
 					chunk.setEndElement(true);
-					final Collection<IResource> c = racdcp.getAllowedResources(head);
-					assert c.size() == 1;
-					endChunks.put(c.iterator().next(), chunk);
+					for (final IResource r : data.getResources()) {
+						if (head == startEndRequirementProvider.getEndElement(r)) {
+							endChunks.put(r, chunk);
+							break;
+						}
+					}
 				}
 			}
 			chunks.add(chunk);
@@ -326,13 +332,13 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 				final int rc1 = chunk1.getResourceCount();
 				final int rc2 = chunk2.getResourceCount();
-				
+
 				if (rc1 < rc2) {
 					return -1;
 				} else if (rc1 > rc2) {
 					return 1;
 				}
-				
+
 				final ISequenceElement o1 = chunk1.get(0);
 				final ISequenceElement o2 = chunk2.get(0);
 
@@ -349,7 +355,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				final int duration2 = slot4.getTimeWindow().getStart() - slot2.getTimeWindow().getStart();
 
 				// if one is much longer than the other, do it first.
-				
+
 				if (duration1 > duration2) {
 					return -1;
 				} else if (duration1 < duration2) {
@@ -365,7 +371,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				} else if (s1 > s2) {
 					return 1;
 				}
-				
+
 				return chunk1.toString().compareTo(chunk2.toString());
 			}
 		};
@@ -373,7 +379,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		Collections.sort(chunks, comparator);
 
 		log.debug(chunks + "");
-		
+
 		final ChunkChecker chunkChecker = new ChunkChecker(checker);
 		final Map<IResource, List<SequenceChunk>> sequences = new LinkedHashMap<IResource, List<SequenceChunk>>();
 
