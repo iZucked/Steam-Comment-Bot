@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.shiplingo.platform.its.tests.calculation;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -12,6 +14,12 @@ import java.util.concurrent.TimeUnit;
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -61,12 +69,16 @@ import com.mmxlabs.models.lng.transformer.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
+import com.mmxlabs.scenario.service.manifest.Manifest;
+import com.mmxlabs.scenario.service.manifest.ManifestFactory;
+import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.shiplingo.platform.its.tests.ContractExtensionTestModule;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
@@ -295,7 +307,7 @@ public class ScenarioTools {
 
 		HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 		vessel.setStartHeel(heelOptions);
-		
+
 		fleetModel.getVessels().add(vessel);
 
 		final PortModel portModel = scenario.getSubModel(PortModel.class);
@@ -369,15 +381,13 @@ public class ScenarioTools {
 		load.setCargoCV(cvValue);
 
 		final Date now = new Date();
-		
+
 		load.setWindowSize(0);
 		load.setDuration(0);
-		final TimeZone loadZone = TimeZone.getTimeZone(
-				A.getTimeZone() == null || A.getTimeZone().isEmpty() ? "UTC" : A.getTimeZone());
-		
-		final TimeZone dischargeZone = TimeZone.getTimeZone(
-				B.getTimeZone() == null || B.getTimeZone().isEmpty() ? "UTC" : B.getTimeZone());
-		
+		final TimeZone loadZone = TimeZone.getTimeZone(A.getTimeZone() == null || A.getTimeZone().isEmpty() ? "UTC" : A.getTimeZone());
+
+		final TimeZone dischargeZone = TimeZone.getTimeZone(B.getTimeZone() == null || B.getTimeZone().isEmpty() ? "UTC" : B.getTimeZone());
+
 		final Calendar loadCalendar = Calendar.getInstance(loadZone);
 		loadCalendar.setTime(now);
 		load.setWindowStartTime(loadCalendar.get(Calendar.HOUR_OF_DAY));
@@ -385,14 +395,14 @@ public class ScenarioTools {
 		loadCalendar.set(Calendar.MINUTE, 0);
 		loadCalendar.set(Calendar.SECOND, 0);
 		loadCalendar.set(Calendar.MILLISECOND, 0);
-		
+
 		load.setWindowStart(loadCalendar.getTime());
 
-//		System.err.println(load.getWindowStartWithSlotOrPortTime());
-//		System.err.println(now);
-		
+		// System.err.println(load.getWindowStartWithSlotOrPortTime());
+		// System.err.println(now);
+
 		final Date dischargeDate = new Date(now.getTime() + (Timer.ONE_HOUR * travelTime));
-		
+
 		final Calendar dischargeCalendar = Calendar.getInstance(dischargeZone);
 		dischargeCalendar.setTime(dischargeDate);
 		dis.setWindowStartTime(dischargeCalendar.get(Calendar.HOUR_OF_DAY));
@@ -401,16 +411,17 @@ public class ScenarioTools {
 		dischargeCalendar.set(Calendar.SECOND, 0);
 		dischargeCalendar.set(Calendar.MILLISECOND, 0);
 		dis.setWindowStart(dischargeCalendar.getTime());
-		
+
 		dis.setWindowSize(0);
 		dis.setDuration(0);
-		
-//		System.err.println(dis.getWindowStartWithSlotOrPortTime());
-//		System.err.println(dischargeDate);
+
+		// System.err.println(dis.getWindowStartWithSlotOrPortTime());
+		// System.err.println(dischargeDate);
 
 		if (useDryDock) {
 			// Set up dry dock.
 			final DryDockEvent dryDock = FleetFactory.eINSTANCE.createDryDockEvent();
+			dryDock.setName("Dry-dock");
 			dryDock.setDurationInDays(0);
 			dryDock.setPort(A);
 			// add to scenario's fleet model
@@ -419,6 +430,8 @@ public class ScenarioTools {
 			final Date thenNext = new Date(dischargeDate.getTime() + (Timer.ONE_HOUR * travelTime));
 			dryDock.setStartAfter(thenNext);
 			dryDock.setStartBy(thenNext);
+
+			dryDock.getAllowedVessels().add(vessel);
 		}
 
 		cargo.setName("CARGO");
@@ -533,9 +546,9 @@ public class ScenarioTools {
 		vessel.setName("Vessel");
 
 		final VesselAvailability availability = FleetFactory.eINSTANCE.createVesselAvailability();
-		
+
 		vessel.setStartHeel(FleetFactory.eINSTANCE.createHeelOptions());
-		
+
 		vessel.setAvailability(availability);
 
 		fleetModel.getVessels().add(vessel);
@@ -597,13 +610,12 @@ public class ScenarioTools {
 		charterOut.setPort(A);
 		charterOut.setRelocateTo(A);
 		charterOut.setName("Charter Out");
-		
+
 		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 		heelOptions.setVolumeAvailable(heelLimit);
 		heelOptions.setCvValue(cvValue);
 		heelOptions.setPricePerMMBTU(dischargePrice);
 		charterOut.setHeelOptions(heelOptions);
-		
 
 		charterOut.setDurationInDays(charterOutTimeDays);
 		// charterOut.setDailyCharterOutPrice(0);
@@ -635,6 +647,16 @@ public class ScenarioTools {
 	public static Schedule evaluate(final MMXRootObject scenario) {
 
 		final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
+		
+		// Code to dump out the scenario to disk
+		if (false) {
+			try {
+				storeToFile(scenario, new File("c:/temp/test.scenario"));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 		final ModelEntityMap entities = transformer.getEntities();
 		final OptimisationTransformer ot = transformer.getOptimisationTransformer();
@@ -698,7 +720,7 @@ public class ScenarioTools {
 		System.err.println("\tRoute: " + journey.getRoute() + ", Distance: " + journey.getDistance() + ", Duration: " + journey.getDuration() + ", Speed: " + journey.getSpeed());
 		printFuel(journey.getFuels());
 		// FIXME: Update for API changes
-		 System.err.println("\tRoute cost: $" + journey.getToll() + ", Total cost: $" + (journey.getToll() + journey.getFuelCost() + journey.getHireCost()));
+		System.err.println("\tRoute cost: $" + journey.getToll() + ", Total cost: $" + (journey.getToll() + journey.getFuelCost() + journey.getHireCost()));
 	}
 
 	/**
@@ -807,4 +829,54 @@ public class ScenarioTools {
 			return "Ballast";
 		}
 	}
+
+	public static void storeToFile(final MMXRootObject instance, final File file) throws IOException {
+		final ResourceSetImpl resourceSet = new ResourceSetImpl();
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
+
+		manifest.setScenarioType("com.mmxlabs.shiplingo.platform.models.manifest.scnfile");
+		// manifest.setUUID(instance.getUuid());
+		final URI manifestURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/MANIFEST.xmi");
+		final Resource manifestResource = resourceSet.createResource(manifestURI);
+
+		manifestResource.getContents().add(manifest);
+
+		final URIConverter conv = resourceSet.getURIConverter();
+
+		int index = 0;
+		// long l = System.currentTimeMillis();
+		//
+		for (MMXSubModel sub : instance.getSubModels()) {
+			final EObject top = sub.getSubModelInstance();
+			final URI relativeURI = URI.createURI("/" + top.eClass().getName() + index++ + ".xmi");
+			manifest.getModelURIs().add(relativeURI.toString());
+			final URI resolved = relativeURI.resolve(manifestURI);
+			final Resource r2 = resourceSet.createResource(resolved);
+			r2.getContents().add(top);
+			r2.save(null);
+		}
+
+		// for (final String partURI : partURIs) {
+		// final URI u = scenarioService.resolveURI(partURI);
+		// final InputStream input = conv.createInputStream(u);
+		// final URI relativeURI = URI.createURI("/" + index++ +"-" + u.segment(u.segmentCount()-1));
+		// manifest.getModelURIs().add(relativeURI.toString());
+		// final URI resolved = relativeURI.resolve(manifestURI);
+		// final OutputStream output = conv.createOutputStream(resolved);
+		// try {
+		// int b;
+		// while ((b = input.read(buffer)) != -1) {
+		// output.write(buffer, 0, b);
+		// }
+		//
+		// output.flush();
+		// } finally {
+		// output.close();
+		// }
+		// }
+		// System.err.println("time: " + (System.currentTimeMillis() - l));
+		manifestResource.save(null);
+	}
+
 }
