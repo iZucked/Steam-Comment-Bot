@@ -64,8 +64,9 @@ public class ScenarioInstanceValidatorScenarioServiceListener extends ScenarioSe
 	@Override
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 		final ScenarioInstanceValidator validator = instanceMap.get(scenarioInstance);
-
-		validator.dispose();
+		if (validator != null) {
+			validator.dispose();
+		}
 		instanceMap.remove(scenarioInstance);
 	}
 
