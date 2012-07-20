@@ -71,7 +71,8 @@ public interface IScenarioService {
 	ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException;
 
 	/**
-	 * Delete the given scenario instance from this scenario service.
+	 * Delete the given scenario instance from this scenario service. Throws an {@link IllegalArgumentException} if the container is owned by another {@link IScenarioService}. This method can also be
+	 * used to delete models which are not contained by any {@link IScenarioService}. In such cases the sub-models will be deleted but no {@link IScenarioServiceListener} events will be invoked.
 	 * 
 	 * @param container
 	 */

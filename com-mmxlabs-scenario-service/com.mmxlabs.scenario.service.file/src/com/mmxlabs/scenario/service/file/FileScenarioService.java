@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
+import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -149,6 +150,10 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	@Override
 	public void delete(final Container container) {
+		final IScenarioService scenarioService = container.getScenarioService();
+		if (scenarioService != null && scenarioService != this) {
+			throw new IllegalArgumentException("Cannot delete a container instance that belongs to another scenario service");
+		}
 		{
 			while (container.getElements().isEmpty() == false) {
 				delete(container.getElements().get(0));
@@ -172,9 +177,10 @@ public class FileScenarioService extends AbstractScenarioService {
 		// destroy models, if there are any
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance instance = (ScenarioInstance) container;
-		
-			fireEvent(ScenarioServiceEvent.PRE_DELETE, instance);
-			
+
+			if (scenarioService != null) {
+				fireEvent(ScenarioServiceEvent.PRE_DELETE, instance);
+			}
 			for (final String modelInstanceURI : instance.getSubModelURIs()) {
 				try {
 					final IModelInstance modelInstance = modelService.getModel(resolveURI(modelInstanceURI));
@@ -183,15 +189,16 @@ public class FileScenarioService extends AbstractScenarioService {
 					log.error("Whilst deleting instance " + instance.getName() + ", IO exception deleting submodel " + modelInstanceURI, e);
 				}
 			}
-			
-			try {
-				final Resource resource = resourceSet.createResource(resolveURI("instances/"+instance.getUuid() + ".xmi"));
-				resource.delete(null);
-				resourceSet.getResources().remove(resource);
-			} catch (final Throwable th) {
+
+			if (scenarioService != null) {
+				try {
+					final Resource resource = resourceSet.createResource(resolveURI("instances/" + instance.getUuid() + ".xmi"));
+					resource.delete(null);
+					resourceSet.getResources().remove(resource);
+				} catch (final Throwable th) {
+				}
+				fireEvent(ScenarioServiceEvent.POST_DELETE, instance);
 			}
-			
-			fireEvent(ScenarioServiceEvent.POST_DELETE, instance);
 		}
 	}
 
