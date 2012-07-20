@@ -80,7 +80,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		final IPath workspaceLocation = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 
 		storeURI = URI.createFileURI(workspaceLocation + modelURIString);
-		
+
 		IResource resource = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation(Path.fromOSString(storeURI.toFileString()));
 		if (resource == null) {
 			// get first part of it and make project
@@ -121,13 +121,14 @@ public class FileScenarioService extends AbstractScenarioService {
 	}
 
 	private void createFolder(IResource resource) throws CoreException {
-		if (resource.exists()) return;
+		if (resource.exists())
+			return;
 		createFolder(resource.getParent()); // ensure parent exists
-		//create this resource
+		// create this resource
 		if (resource instanceof IProject) {
 			((IProject) resource).create(null);
 		} else if (resource instanceof IFolder) {
-			((IFolder)resource).create(true, true, null);
+			((IFolder) resource).create(true, true, null);
 		}
 	}
 
@@ -137,9 +138,9 @@ public class FileScenarioService extends AbstractScenarioService {
 
 	public void save() {
 		try {
-			synchronized (resource) {				
+			synchronized (resource) {
 				resource.save(options);
-//				log.debug("Saved " + resource.getURI());
+				// log.debug("Saved " + resource.getURI());
 			}
 		} catch (final Throwable e) {
 			log.error(e.getMessage(), e);
@@ -153,20 +154,21 @@ public class FileScenarioService extends AbstractScenarioService {
 				delete(container.getElements().get(0));
 			}
 		}
-		
+
 		final EObject parent = container.eContainer();
 		if (parent != null) {
 			final EStructuralFeature containment = container.eContainingFeature();
 			if (container != null && containment != null) {
 				if (containment.isMany()) {
 					final EList<EObject> value = (EList<EObject>) parent.eGet(containment);
-					while (value.remove(container));
+					while (value.remove(container))
+						;
 				} else {
 					parent.eSet(containment, null);
 				}
 			}
 		}
-		
+
 		// destroy models, if there are any
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance instance = (ScenarioInstance) container;
@@ -192,36 +194,37 @@ public class FileScenarioService extends AbstractScenarioService {
 			fireEvent(ScenarioServiceEvent.POST_DELETE, instance);
 		}
 	}
-	
+
 	@Override
 	public void save(final ScenarioInstance scenarioInstance) throws IOException {
-		//store manifest
+		// store manifest
 		try {
-			final Resource resource = resourceSet.createResource(resolveURI("instances/"+scenarioInstance.getUuid() + ".xmi"));
+			final Resource resource = resourceSet.createResource(resolveURI("instances/" + scenarioInstance.getUuid() + ".xmi"));
 			final ScenarioInstance copy = EcoreUtil.copy(scenarioInstance);
 			resource.getContents().add(copy);
 			resource.save(null);
 			resourceSet.getResources().remove(resource);
-		} catch (final Throwable th) {}
-		
+		} catch (final Throwable th) {
+		}
+
 		super.save(scenarioInstance);
 	}
 
 	@Override
 	public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) throws IOException {
 		log.debug("Inserting scenario into " + container);
-		
+
 		final String uuid = UUID.randomUUID().toString();
 		final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
-		
+
 		newInstance.setUuid(uuid);
 		newInstance.setMetadata(metadata);
-		
+
 		for (final ScenarioInstance dependency : dependencies) {
 			newInstance.getDependencyUUIDs().add(dependency.getUuid());
 		}
-		
+
 		int index = 0;
 		for (final EObject model : models) {
 //			URI rel = URI.createURI("./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
@@ -235,7 +238,7 @@ public class FileScenarioService extends AbstractScenarioService {
 			}
 			newInstance.getSubModelURIs().add(uriString);
 		}
-		
+
 		container.getElements().add(newInstance);
 		load(newInstance);
 		save(newInstance);
@@ -248,14 +251,14 @@ public class FileScenarioService extends AbstractScenarioService {
 		public void notifyChanged(Notification notification) {
 			super.notifyChanged(notification);
 			if (notification.isTouch() == false) {
-				if (notification.getFeature() instanceof EStructuralFeature && ((EStructuralFeature)notification.getFeature()).isTransient())
+				if (notification.getFeature() instanceof EStructuralFeature && ((EStructuralFeature) notification.getFeature()).isTransient())
 					return;
 				save();
 			}
 		}
-		
+
 	};
-	
+
 	@Override
 	protected ScenarioService initServiceModel() {
 		resource = resourceSet.createResource(storeURI);
@@ -264,9 +267,9 @@ public class FileScenarioService extends AbstractScenarioService {
 			resource.load(options);
 			resourceExisted = true;
 		} catch (final IOException ex) {
-			
+
 		}
-		
+
 		if (resource.getContents().isEmpty()) {
 			resource.getContents().add(ScenarioServiceFactory.eINSTANCE.createScenarioService());
 			if (resourceExisted) {
@@ -276,13 +279,9 @@ public class FileScenarioService extends AbstractScenarioService {
 			// back-up resource
 			try {
 				log.debug("Backing up " + storeURI);
-				final InputStream inputStream = resourceSet.getURIConverter()
-						.createInputStream(storeURI);
+				final InputStream inputStream = resourceSet.getURIConverter().createInputStream(storeURI);
 				try {
-					final OutputStream outputStream = resourceSet
-							.getURIConverter().createOutputStream(
-									URI.createURI(storeURI.toString()
-											+ ".backup"));
+					final OutputStream outputStream = resourceSet.getURIConverter().createOutputStream(URI.createURI(storeURI.toString() + ".backup"));
 					int x;
 					while ((x = inputStream.read()) != -1) {
 						outputStream.write(x);
@@ -298,20 +297,21 @@ public class FileScenarioService extends AbstractScenarioService {
 		}
 
 		final ScenarioService result = (ScenarioService) resource.getContents().get(0);
-		
+
 		result.setDescription("File scenario service with store " + storeURI);
-	
+
 		// modify any old scenarios to fix wrong pointing
 		makeRelativeURIs(result);
 		recoverLostScenarios(result);
-		
+
 		result.eAdapters().add(saveAdapter);
-		
+
 		return result;
 	}
 
 	/**
 	 * Simple method to recover any lost scenarios (those which are in the instances/ dir, but not in the scenario service)
+	 * 
 	 * @param result
 	 */
 	private void recoverLostScenarios(final ScenarioService result) {
@@ -357,11 +357,11 @@ public class FileScenarioService extends AbstractScenarioService {
 								if (!recoveredSubInstances.contains(theInstance.getUuid())) {
 									recoveredInstances.put(theInstance.getUuid(), theInstance);
 								}
-								
+
 							}
 							resourceSet.getResources().remove(resource);
 						} catch (final Throwable th) {
-							
+
 						}
 					}
 				}
@@ -376,8 +376,8 @@ public class FileScenarioService extends AbstractScenarioService {
 	private void makeRelativeURIs(final Container container) {
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance instance = (ScenarioInstance) container;
-			
-			for (int index = 0; index<instance.getSubModelURIs().size(); index++) {
+
+			for (int index = 0; index < instance.getSubModelURIs().size(); index++) {
 				final String uriString = instance.getSubModelURIs().get(index);
 				final URI uri = URI.createURI(uriString);
 				if (uri.isRelative() == false) {
