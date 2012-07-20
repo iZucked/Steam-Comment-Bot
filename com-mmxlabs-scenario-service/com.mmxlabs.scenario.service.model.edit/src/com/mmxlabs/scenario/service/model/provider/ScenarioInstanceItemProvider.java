@@ -98,8 +98,8 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 	 */
 	protected void addAdaptersPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_ScenarioInstance_adapters_feature"), getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_adapters_feature", "_UI_ScenarioInstance_type"),
-				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__ADAPTERS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+				getString("_UI_ScenarioInstance_adapters_feature"), getString("_UI_ScenarioInstance_adapters_description"), ScenarioServicePackage.Literals.SCENARIO_INSTANCE__ADAPTERS, true, false,
+				false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**

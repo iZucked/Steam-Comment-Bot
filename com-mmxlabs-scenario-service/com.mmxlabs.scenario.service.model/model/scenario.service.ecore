@@ -24,6 +24,7 @@
         eType="#//Container" containment="true" eOpposite="#//Container/parent"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="archived" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="hidden" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Folder" eSuperTypes="#//Container">
     <eStructuralFeatures xsi:type="ecore:EReference" name="metadata" eType="#//Metadata"

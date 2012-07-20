@@ -34,6 +34,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#getElements <em>Elements</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#isArchived <em>Archived</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ContainerImpl#isHidden <em>Hidden</em>}</li>
  * </ul>
  * </p>
  *
@@ -89,6 +90,26 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * @ordered
 	 */
 	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isHidden() <em>Hidden</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHidden()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean HIDDEN_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isHidden() <em>Hidden</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isHidden()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean hidden = HIDDEN_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -210,6 +231,27 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHidden(boolean newHidden) {
+		boolean oldHidden = hidden;
+		hidden = newHidden;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.CONTAINER__HIDDEN, oldHidden, hidden));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public IScenarioService getScenarioService() {
 		EObject up = this;
 		while (up != null && !(up instanceof ScenarioService)) {
@@ -301,6 +343,8 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 			return isArchived();
 		case ScenarioServicePackage.CONTAINER__NAME:
 			return getName();
+		case ScenarioServicePackage.CONTAINER__HIDDEN:
+			return isHidden();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -327,6 +371,9 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 		case ScenarioServicePackage.CONTAINER__NAME:
 			setName((String) newValue);
 			return;
+		case ScenarioServicePackage.CONTAINER__HIDDEN:
+			setHidden((Boolean) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -351,6 +398,9 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 		case ScenarioServicePackage.CONTAINER__NAME:
 			setName(NAME_EDEFAULT);
 			return;
+		case ScenarioServicePackage.CONTAINER__HIDDEN:
+			setHidden(HIDDEN_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -371,6 +421,8 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 			return archived != ARCHIVED_EDEFAULT;
 		case ScenarioServicePackage.CONTAINER__NAME:
 			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+		case ScenarioServicePackage.CONTAINER__HIDDEN:
+			return hidden != HIDDEN_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -390,6 +442,8 @@ public abstract class ContainerImpl extends EObjectImpl implements Container {
 		result.append(archived);
 		result.append(", name: ");
 		result.append(name);
+		result.append(", hidden: ");
+		result.append(hidden);
 		result.append(')');
 		return result.toString();
 	}

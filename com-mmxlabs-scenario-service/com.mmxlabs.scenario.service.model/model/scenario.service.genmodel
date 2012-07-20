@@ -16,8 +16,11 @@
     <genClasses image="false" ecoreClass="scenario.service.ecore#//Container">
       <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//Container/parent"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//Container/elements"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Container/archived"/>
+      <genFeatures createChild="false" propertyDescription="Flag indicating this container (and children) has been archived."
+          ecoreFeature="ecore:EAttribute scenario.service.ecore#//Container/archived"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//Container/name"/>
+      <genFeatures createChild="false" propertyDescription="Flag indicating that this container should be hidden from the default view"
+          ecoreFeature="ecore:EAttribute scenario.service.ecore#//Container/hidden"/>
       <genOperations ecoreOperation="scenario.service.ecore#//Container/getScenarioService"/>
       <genOperations ecoreOperation="scenario.service.ecore#//Container/getContainedInstanceCount"/>
     </genClasses>
@@ -33,7 +36,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/metadata"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/locked"/>
       <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference scenario.service.ecore#//ScenarioInstance/instance"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/adapters"/>
+      <genFeatures createChild="false" propertyDescription="Handy transient store for data items such as a shared editing domain, command stack etc"
+          ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/adapters"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/subModelURIs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/dependencyUUIDs"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute scenario.service.ecore#//ScenarioInstance/dirty"/>

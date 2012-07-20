@@ -218,6 +218,15 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getContainer_Hidden() {
+		return (EAttribute) containerEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getFolder() {
 		return folderEClass;
 	}
@@ -511,6 +520,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEReference(containerEClass, CONTAINER__ELEMENTS);
 		createEAttribute(containerEClass, CONTAINER__ARCHIVED);
 		createEAttribute(containerEClass, CONTAINER__NAME);
+		createEAttribute(containerEClass, CONTAINER__HIDDEN);
 
 		folderEClass = createEClass(FOLDER);
 		createEReference(folderEClass, FOLDER__METADATA);
@@ -595,6 +605,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		initEAttribute(getContainer_Archived(), ecorePackage.getEBoolean(), "archived", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContainer_Name(), ecorePackage.getEString(), "name", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
+				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContainer_Hidden(), ecorePackage.getEBoolean(), "hidden", null, 0, 1, com.mmxlabs.scenario.service.model.Container.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(containerEClass, this.getIScenarioService(), "getScenarioService", 1, 1, IS_UNIQUE, IS_ORDERED);

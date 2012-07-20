@@ -133,13 +133,22 @@ public interface ScenarioServicePackage extends EPackage {
 	int CONTAINER__NAME = 3;
 
 	/**
+	 * The feature id for the '<em><b>Hidden</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTAINER__HIDDEN = 4;
+
+	/**
 	 * The number of structural features of the '<em>Container</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTAINER_FEATURE_COUNT = 4;
+	int CONTAINER_FEATURE_COUNT = 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.FolderImpl <em>Folder</em>}' class.
@@ -186,6 +195,15 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @ordered
 	 */
 	int FOLDER__NAME = CONTAINER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Hidden</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOLDER__HIDDEN = CONTAINER__HIDDEN;
 
 	/**
 	 * The feature id for the '<em><b>Metadata</b></em>' containment reference.
@@ -250,6 +268,15 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @ordered
 	 */
 	int SCENARIO_SERVICE__NAME = CONTAINER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Hidden</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_SERVICE__HIDDEN = CONTAINER__HIDDEN;
 
 	/**
 	 * The feature id for the '<em><b>Description</b></em>' attribute.
@@ -323,6 +350,15 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @ordered
 	 */
 	int SCENARIO_INSTANCE__NAME = CONTAINER__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Hidden</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE__HIDDEN = CONTAINER__HIDDEN;
 
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
@@ -635,6 +671,17 @@ public interface ScenarioServicePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getContainer_Name();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.Container#isHidden <em>Hidden</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hidden</em>'.
+	 * @see com.mmxlabs.scenario.service.model.Container#isHidden()
+	 * @see #getContainer()
+	 * @generated
+	 */
+	EAttribute getContainer_Hidden();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.Folder <em>Folder</em>}'.
@@ -1031,6 +1078,14 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTAINER__NAME = eINSTANCE.getContainer_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Hidden</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTAINER__HIDDEN = eINSTANCE.getContainer_Hidden();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.FolderImpl <em>Folder</em>}' class.

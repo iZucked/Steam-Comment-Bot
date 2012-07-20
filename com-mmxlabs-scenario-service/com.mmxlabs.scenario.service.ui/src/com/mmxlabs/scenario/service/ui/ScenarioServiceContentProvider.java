@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
+import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -29,6 +30,7 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 	private boolean showFolders = true;
 	private boolean showMetadata = false;
 	private boolean showArchivedElements = false;
+	private boolean showHiddenElements = false;
 
 	private final Map<Object, Boolean> filteredElements = new WeakHashMap<Object, Boolean>();
 
@@ -89,14 +91,24 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 			boolean filtered = true;
 
+			boolean mayBeShow = false;
+			if (e instanceof Container) {
+				Container container = (Container) e;
+				if (container.isHidden() && isShowHiddenElements()) {
+					mayBeShow = true;
+				}
+				if (container.isArchived() || isShowArchivedElements()) {
+					mayBeShow = true;
+				}
+			}
 			if (e instanceof ScenarioInstance) {
 				if (isShowScenarioInstances()) {
-					final ScenarioInstance instance = (ScenarioInstance) e;
-					if (!instance.isArchived() || isShowArchivedElements())
-						filtered = false;
+					filtered = !mayBeShow;
 				}
 			} else if (e instanceof Folder) {
-				filtered = !isShowFolders();
+				if (isShowFolders()) {
+					filtered = !mayBeShow;
+				}
 			} else if (e instanceof Metadata) {
 				filtered = !isShowMetadata();
 			} else if (e instanceof ScenarioModel) {
@@ -108,7 +120,6 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			} else {
 				filtered = true;
 			}
-
 			if (filtered) {
 				filteredElements.put(e, true);
 			} else {
@@ -177,5 +188,13 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 
 	public void setShowMetadata(final boolean showMetadata) {
 		this.showMetadata = showMetadata;
+	}
+
+	public boolean isShowHiddenElements() {
+		return showHiddenElements;
+	}
+
+	public void setShowHiddenElements(boolean showHiddenElements) {
+		this.showHiddenElements = showHiddenElements;
 	}
 }

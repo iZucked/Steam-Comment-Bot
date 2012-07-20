@@ -59,6 +59,7 @@ public class ContainerItemProvider extends ItemProviderAdapter implements IEditi
 
 			addArchivedPropertyDescriptor(object);
 			addNamePropertyDescriptor(object);
+			addHiddenPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -71,8 +72,8 @@ public class ContainerItemProvider extends ItemProviderAdapter implements IEditi
 	 */
 	protected void addArchivedPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
-				getString("_UI_Container_archived_feature"), getString("_UI_PropertyDescriptor_description", "_UI_Container_archived_feature", "_UI_Container_type"),
-				ScenarioServicePackage.Literals.CONTAINER__ARCHIVED, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
+				getString("_UI_Container_archived_feature"), getString("_UI_Container_archived_description"), ScenarioServicePackage.Literals.CONTAINER__ARCHIVED, true, false, false,
+				ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -85,6 +86,17 @@ public class ContainerItemProvider extends ItemProviderAdapter implements IEditi
 		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Container_name_feature"),
 				getString("_UI_PropertyDescriptor_description", "_UI_Container_name_feature", "_UI_Container_type"), ScenarioServicePackage.Literals.CONTAINER__NAME, true, false, false,
 				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Hidden feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHiddenPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_Container_hidden_feature"),
+				getString("_UI_Container_hidden_description"), ScenarioServicePackage.Literals.CONTAINER__HIDDEN, true, false, false, ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -143,6 +155,7 @@ public class ContainerItemProvider extends ItemProviderAdapter implements IEditi
 		switch (notification.getFeatureID(Container.class)) {
 		case ScenarioServicePackage.CONTAINER__ARCHIVED:
 		case ScenarioServicePackage.CONTAINER__NAME:
+		case ScenarioServicePackage.CONTAINER__HIDDEN:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.CONTAINER__ELEMENTS:

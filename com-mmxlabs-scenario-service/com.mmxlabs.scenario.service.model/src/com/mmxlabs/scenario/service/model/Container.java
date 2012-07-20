@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#getElements <em>Elements</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#isArchived <em>Archived</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.Container#getName <em>Name</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.Container#isHidden <em>Hidden</em>}</li>
  * </ul>
  * </p>
  *
@@ -126,6 +127,32 @@ public interface Container extends EObject {
 	 * @generated
 	 */
 	void setName(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Hidden</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Hidden</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hidden</em>' attribute.
+	 * @see #setHidden(boolean)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getContainer_Hidden()
+	 * @model
+	 * @generated
+	 */
+	boolean isHidden();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.Container#isHidden <em>Hidden</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hidden</em>' attribute.
+	 * @see #isHidden()
+	 * @generated
+	 */
+	void setHidden(boolean value);
 
 	/**
 	 * <!-- begin-user-doc -->
