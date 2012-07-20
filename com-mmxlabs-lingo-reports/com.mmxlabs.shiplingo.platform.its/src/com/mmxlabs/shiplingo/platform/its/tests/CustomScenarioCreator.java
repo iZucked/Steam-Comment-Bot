@@ -53,6 +53,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
@@ -99,11 +100,13 @@ public class CustomScenarioCreator {
 		commercialModel.getEntities().add(s);
 		commercialModel.setShippingEntity(s);
 
-		e.setName("Other");
+		e.setName("Third-parties");
 		s.setName("Shipping");
 
 		sc = CommercialFactory.eINSTANCE.createFixedPriceContract();
+		sc.setName("Sales Contract");
 		pc = CommercialFactory.eINSTANCE.createFixedPriceContract();
+		pc.setName("Purchase Contract");
 
 		sc.setEntity(e);
 		pc.setEntity(e);
@@ -113,7 +116,7 @@ public class CustomScenarioCreator {
 		commercialModel.getPurchaseContracts().add(pc);
 
 		Route r = PortFactory.eINSTANCE.createRoute();
-		r.setName("default");
+		r.setName(ScenarioTools.defaultRouteName);
 		portModel.getRoutes().add(r);
 
 		// ScenarioUtils.addDefaultSettings(scenario);
@@ -440,6 +443,7 @@ public class CustomScenarioCreator {
 
 		// Set up dry dock.
 		final DryDockEvent dryDock = FleetFactory.eINSTANCE.createDryDockEvent();
+		dryDock.setName("Drydock");
 		dryDock.setDurationInDays(durationDays);
 		dryDock.setPort(startPort);
 		// add to scenario's fleet model
