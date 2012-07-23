@@ -96,8 +96,12 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 				Container container = (Container) e;
 				if (container.isHidden() && isShowHiddenElements()) {
 					mayBeShow = true;
+				} else if (!container.isHidden()) {
+					mayBeShow = true;
 				}
 				if (container.isArchived() || isShowArchivedElements()) {
+					mayBeShow = true;
+				} else if (!container.isArchived()) {
 					mayBeShow = true;
 				}
 			}
