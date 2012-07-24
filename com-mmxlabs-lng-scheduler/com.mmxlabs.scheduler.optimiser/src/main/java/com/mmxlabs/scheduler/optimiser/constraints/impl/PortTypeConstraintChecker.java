@@ -14,7 +14,9 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -39,14 +41,16 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 	private final String name;
 
-	private final String key, vesselKey;
+	private final String portTypeKey, portSlotKey, vesselKey;
 
 	private IPortTypeProvider portTypeProvider;
+	private IPortSlotProvider portSlotProvider;
 	private IVesselProvider vesselProvider;
 
-	public PortTypeConstraintChecker(final String name, final String key, final String vesselKey) {
+	public PortTypeConstraintChecker(final String name, final String portTypeKey, final String vesselKey, final String portSlotKey) {
 		this.name = name;
-		this.key = key;
+		this.portTypeKey = portTypeKey;
+		this.portSlotKey = portSlotKey;
 		this.vesselKey = vesselKey;
 	}
 
@@ -81,7 +85,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	@Override
 	public void setOptimisationData(final IOptimisationData optimisationData) {
 
-		setPortTypeProvider(optimisationData.getDataComponentProvider(key, IPortTypeProvider.class));
+		setPortTypeProvider(optimisationData.getDataComponentProvider(portTypeKey, IPortTypeProvider.class));
+		setPortSlotProvider(optimisationData.getDataComponentProvider(portSlotKey, IPortSlotProvider.class));
 
 		setVesselProvider(optimisationData.getDataComponentProvider(vesselKey, IVesselProvider.class));
 	}
@@ -94,6 +99,30 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	 * @return
 	 */
 	public final boolean checkSequence(final ISequence sequence, final List<String> messages, final VesselInstanceType instanceType) {
+
+		if (instanceType == VesselInstanceType.VIRTUAL) {
+			int size = sequence.size();
+			// if (size == 2) {
+			// PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
+			// PortType ptEnd = portTypeProvider.getPortType(sequence.get(1));
+			// return ptStart == PortType.Start && ptEnd == PortType.End;
+			// }
+			if (size == 3) {
+				PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
+				PortType pt1 = portTypeProvider.getPortType(sequence.get(1));
+				PortType ptEnd = portTypeProvider.getPortType(sequence.get(2));
+				return ptStart == PortType.Start && ptEnd == PortType.End && (pt1 == PortType.Load || pt1 == PortType.Discharge);
+			}
+			if (size == 4) {
+				PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
+				PortType pt1 = portTypeProvider.getPortType(sequence.get(1));
+				PortType pt2 = portTypeProvider.getPortType(sequence.get(2));
+				PortType ptEnd = portTypeProvider.getPortType(sequence.get(3));
+				return ptStart == PortType.Start && ptEnd == PortType.End && pt1 == PortType.Load && pt2 == PortType.Discharge;
+			}
+
+			return false;
+		}
 
 		boolean seenLoad = false;
 		boolean seenDischarge = false;
@@ -177,6 +206,13 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 				}
 				break;
 			case End:
+				if (seenLoad) {
+					// Need a discharge
+					if (messages != null) {
+						messages.add("Cannot leave unused Need to PortType.Load");
+					}
+					return false;
+				}
 				break;
 			default:
 				if (messages != null) {
@@ -229,22 +265,49 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			return false;
 		}
 
-		if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge)) {
-			return false; // first port should be a load slot (TODO is this
-							// true?)
+		// Check Virtual Routes
+		final IVessel vessel = vesselProvider.getVessel(resource);
+		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+
+			if (firstType.equals(PortType.Discharge) && !secondType.equals(PortType.End)) {
+				return false;
+			}
+
+			if (secondType.equals(PortType.Load) && !firstType.equals(PortType.Start)) {
+				return false;
+			}
+
+			if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.Load)) {
+				return false;
+			}
+			if (firstType.equals(PortType.Start) && secondType.equals(PortType.End)) {
+				return false;
+			}
+			return true;
 		}
 
-		// load must precede discharge or waypoint, but nothing else
-		if (firstType.equals(PortType.Load)) {
-			return (secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint));
-		}
-
-		// discharge may precede anything but Discharge (and start, but we
-		// already did that)
-		if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.Discharge)) {
+		// Discharge must follow a load
+		if (!firstType.equals(PortType.Load) && secondType.equals(PortType.Discharge)) {
 			return false;
 		}
+		//
+		if (!secondType.equals(PortType.Discharge) && firstType.equals(PortType.Load)) {
+			return false;
+		}
+		// if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge)) {
+		// return false; // first port should be a load slot (TODO is this
+		// // true?)
+		// }
 
+		// // load must precede discharge or waypoint, but nothing else
+		// if (firstType.equals(PortType.Load)) {
+		// return (secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint));
+		// }
+
+		//
+		// if (firstType != PortType.Start && (first.getName().equals("Test Market-2-Aliaga") || second.getName().equals("Test Market-2-Aliaga"))) {
+		// final int ii = 0;
+		// }
 		return true;
 	}
 
@@ -266,7 +329,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 		// load must precede discharge or waypoint, but nothing else
 		if (firstType.equals(PortType.Load)) {
-			
+
 			if (!(secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint))) {
 				return "Discharge or Waypoint must follow a Load";
 			}
@@ -278,6 +341,26 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			return "Discharge cannot follow a discharge";
 		}
 
+		// Check Virtual Routes
+		final IVessel vessel = vesselProvider.getVessel(resource);
+		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+
+			if (firstType.equals(PortType.Discharge)) {
+				return "Nothing can come after a discharge on a virtual vessel";
+			}
+			if (secondType.equals(PortType.Load)) {
+				return "Nothing can come before a load on a virtual vessel";
+			}
+		}
+
 		return null;
+	}
+
+	public IPortSlotProvider getPortSlotProvider() {
+		return portSlotProvider;
+	}
+
+	public void setPortSlotProvider(final IPortSlotProvider portSlotProvider) {
+		this.portSlotProvider = portSlotProvider;
 	}
 }

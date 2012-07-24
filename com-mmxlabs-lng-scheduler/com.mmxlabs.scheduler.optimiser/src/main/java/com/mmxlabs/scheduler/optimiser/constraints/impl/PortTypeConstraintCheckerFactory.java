@@ -20,7 +20,8 @@ public final class PortTypeConstraintCheckerFactory implements IConstraintChecke
 
 	public static final String NAME = "PortTypeConstraintChecker";
 
-	private final String key;
+	private final String portTypeKey;
+	private final String portSlotKey;
 
 	private final String vesselKey;
 
@@ -29,8 +30,9 @@ public final class PortTypeConstraintCheckerFactory implements IConstraintChecke
 	 * 
 	 * @param key
 	 */
-	public PortTypeConstraintCheckerFactory(final String key, final String vesselKey) {
-		this.key = key;
+	public PortTypeConstraintCheckerFactory(final String portTypeKey, final String portSlotKey, final String vesselKey) {
+		this.portSlotKey = portSlotKey;
+		this.portTypeKey = portTypeKey;
 		this.vesselKey = vesselKey;
 	}
 
@@ -41,6 +43,6 @@ public final class PortTypeConstraintCheckerFactory implements IConstraintChecke
 
 	@Override
 	public IConstraintChecker instantiate() {
-		return new PortTypeConstraintChecker(NAME, key, vesselKey);
+		return new PortTypeConstraintChecker(NAME, portTypeKey, vesselKey, portSlotKey);
 	}
 }
