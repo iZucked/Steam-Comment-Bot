@@ -18,6 +18,11 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
+import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -35,7 +40,9 @@ public class LNGModelCorrector {
 
 		fixMissingPortLocations(cmd, rootObject, ed);
 		fixMissingElementAssignments(cmd, rootObject, ed);
-
+		if (false) {
+			fixMissingSpotCargoMarkets(cmd, rootObject, ed);
+		}
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
 		}
@@ -80,6 +87,39 @@ public class LNGModelCorrector {
 				final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
 				ea.setAssignedObject(c);
 				cmd.append(AddCommand.create(ed, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), ea));
+			}
+
+		}
+		if (!cmd.isEmpty()) {
+			parent.append(cmd);
+		}
+	}
+
+	private void fixMissingSpotCargoMarkets(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
+
+		final CompoundCommand cmd = new CompoundCommand("Fix missing spot cargo markets");
+		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
+		if (pricingModel != null) {
+
+			if (pricingModel.getDesPurchaseSpotMarket() == null) {
+				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
+				group.setType(SpotType.DES_PURCHASE);
+				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesPurchaseSpotMarket(), group));
+			}
+			if (pricingModel.getDesSalesSpotMarket() == null) {
+				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
+				group.setType(SpotType.DES_SALE);
+				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesSalesSpotMarket(), group));
+			}
+			if (pricingModel.getFobPurchasesSpotMarket() == null) {
+				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
+				group.setType(SpotType.FOB_PURCHASE);
+				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobPurchasesSpotMarket(), group));
+			}
+			if (pricingModel.getFobSalesSpotMarket() == null) {
+				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
+				group.setType(SpotType.FOB_SALE);
+				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket(), group));
 			}
 
 		}
