@@ -7,8 +7,6 @@ package com.mmxlabs.shiplingo.platform.its.tests;
 import java.util.Collections;
 
 import org.eclipse.core.runtime.Platform;
-import org.ops4j.peaberry.ServiceRegistry;
-import org.ops4j.peaberry.eclipse.EclipseRegistry;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
@@ -35,16 +33,15 @@ public class ContractExtensionTestModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
-
 		if (!Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toInstance(createFitnessFunctionRegistry());
 			bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
 			bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
 
-		final SimpleContractTransformer sct = new SimpleContractTransformer();
+			final SimpleContractTransformer sct = new SimpleContractTransformer();
 
-		final ContractTransformer transformer = new ContractTransformerWrapper(sct, sct.getContractEClasses());
-		bind(TypeLiterals.iterable(ContractTransformer.class)).toInstance(Collections.singleton(transformer));
+			final ContractTransformer transformer = new ContractTransformerWrapper(sct, sct.getContractEClasses());
+			bind(TypeLiterals.iterable(ContractTransformer.class)).toInstance(Collections.singleton(transformer));
 		}
 	}
 
@@ -84,7 +81,8 @@ public class ContractExtensionTestModule extends AbstractModule {
 			constraintCheckerRegistry.registerConstraintCheckerFactory(constraintFactory);
 		}
 
-		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_vesselProvider));
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider,
+				SchedulerConstants.DCP_vesselProvider));
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new TravelTimeConstraintCheckerFactory());
 
