@@ -3,6 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
+import com.mmxlabs.models.lng.pricing.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import org.eclipse.emf.common.notify.Notification;
@@ -455,10 +457,14 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 		} else if (isSetSlotVisit()) {
 			return getSlotVisit().getPort();
 		} else if (isSetSpotMarket()) {
-			return ((SpotMarket)getSpotMarket()).getNotionalPort();
-		} else {
-			return null;
+			final ASpotMarket market = getSpotMarket();
+			if (market instanceof FOBSalesMarket) {
+				return ((FOBSalesMarket) market).getLoadPort();
+			} else if (market instanceof FOBPurchasesMarket) {
+				return ((FOBPurchasesMarket) market).getNotionalPort();
+			}
 		}
+		return null;
 	}
 
 	/**
