@@ -59,6 +59,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -70,6 +72,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderEditor;
@@ -205,6 +208,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final IPortCostProviderEditor portCosts = new IndexedPortCostEditor(SchedulerConstants.DCP_portCostProvider);
 		bind(IPortCostProvider.class).toInstance(portCosts);
 		bind(IPortCostProviderEditor.class).toInstance(portCosts);
+		
+		final ISlotGroupCountProviderEditor slotGroupCountProvider = new HashMapSlotGroupCountProviderEditor(SchedulerConstants.DCP_slotGroupProvider);
+		bind(ISlotGroupCountProvider.class).toInstance(slotGroupCountProvider);
+		bind(ISlotGroupCountProviderEditor.class).toInstance(slotGroupCountProvider);
 	}
 
 	/**

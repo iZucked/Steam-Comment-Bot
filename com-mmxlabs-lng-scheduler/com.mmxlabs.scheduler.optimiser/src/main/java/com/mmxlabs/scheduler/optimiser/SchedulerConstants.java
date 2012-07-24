@@ -46,4 +46,5 @@ public final class SchedulerConstants {
 	 */
 	public static final String G_AI_fitnessPerRoute = "general-info-fitness-per-route";
 	public static final String DCP_optionalElementsProvider = "provider-optional-elements";
+	public static final String DCP_slotGroupProvider = "provider-slot-group-count";
 }
