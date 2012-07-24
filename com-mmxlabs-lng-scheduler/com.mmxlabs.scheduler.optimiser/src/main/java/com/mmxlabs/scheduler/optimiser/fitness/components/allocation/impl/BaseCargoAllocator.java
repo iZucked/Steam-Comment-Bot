@@ -170,8 +170,10 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 					}
 				}
 			}
-			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
-				addVirtualCargo(loadDetails, dischargeDetails);
+			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL ) {
+				if (loadDetails != null && dischargeDetails != null) {
+					addVirtualCargo(loadDetails, dischargeDetails);
+				}
 			}
 
 		}
@@ -237,8 +239,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		// the load CV price is the notional maximum price
 		// if we load less, it might actually be worth less
 
-		final int loadCVPrice = loadSlot.getLoadPriceCalculator()
-				.calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume, vessel, plan, null);
+		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume, vessel,
+				plan, null);
 
 		final int dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
 		final int loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
@@ -301,8 +303,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		variableTable.put(dischargeSlot, ci);
 
 		// We have to load this much LNG no matter what
-		 forcedLoadVolume.add(0l);
-		 this.vesselCapacity.add(Long.MAX_VALUE);
+		forcedLoadVolume.add(0l);
+		this.vesselCapacity.add(Long.MAX_VALUE);
 
 		final int cargoCVValue = loadSlot.getCargoCVValue();
 
