@@ -9,10 +9,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -34,17 +36,43 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 
 	@Override
 	public Object[] getChildren(final Object parent) {
+
 		if (parent instanceof IScenarioViewerSynchronizerOutput) {
 			final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) parent;
 			final List<Object> result = new ArrayList<Object>();
 			for (final Object o : synchronizerOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
-					result.addAll(((Schedule) o).getSequences());
+					EList<Sequence> sequences = ((Schedule) o).getSequences();
+					
+					for (Sequence seq : sequences) {
+						// TODO: Need a proper flag
+						if (seq.getName().equals("<no vessel>")) {
+							if (seq.getEvents().size() > 0) {
+								result.add(seq);
+							}
+						} else {
+							result.add(seq);
+						}
+					}
+//					return seqs.toArray();
+//					result.addAll(sequences);
 				}
 			}
 			return result.toArray();
 		} else if (parent instanceof Schedule) {
-			return ((Schedule) parent).getSequences().toArray();
+			EList<Sequence> sequences = ((Schedule) parent).getSequences();
+			List<Sequence> seqs = new ArrayList<Sequence>(sequences.size());
+			for (Sequence seq : sequences) {
+				// TODO: Need a proper flag
+				if (seq.getName().equals("<no vessel>")) {
+					if (seq.getEvents().size() > 2) {
+						seqs.add(seq);
+					}
+				} else {
+					seqs.add(seq);
+				}
+			}
+			return seqs.toArray();
 		} else if (parent instanceof Sequence) {
 			final Sequence sequence = (Sequence) parent;
 			return sequence.getEvents().toArray();
