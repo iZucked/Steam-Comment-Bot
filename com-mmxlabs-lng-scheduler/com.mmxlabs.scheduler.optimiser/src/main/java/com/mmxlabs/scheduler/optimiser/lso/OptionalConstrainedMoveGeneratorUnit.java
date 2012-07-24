@@ -62,8 +62,9 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 	 */
 	private IMove generateRemovingMove(final ISequenceElement element, final Pair<Integer, Integer> location) {
 		final Integer locationIndex = location.getSecond();
-		final ISequenceElement beforeElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex - 1);
-		final ISequenceElement afterElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex + 1);
+		final ISequence locationSequence = owner.sequences.getSequence(location.getFirst());
+		final ISequenceElement beforeElement = locationSequence.get(locationIndex - 1);
+		final ISequenceElement afterElement = locationSequence.get(locationIndex + 1);
 
 		// check whether beforeElement can be before afterElement
 		if (owner.validFollowers.get(beforeElement).contains(afterElement)) {
@@ -81,7 +82,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 			if (optionalElementsProvider.isElementOptional(beforeElement)) {
 				// check whether we can skip out both
-				final ISequenceElement beforeBeforeElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex - 2);
+				final ISequenceElement beforeBeforeElement = locationSequence.get(locationIndex - 2);
 				if (owner.validFollowers.get(beforeBeforeElement).contains(afterElement)) {
 					// remove both
 					return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex, locationIndex - 1);
@@ -89,7 +90,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 			}
 
 			if (optionalElementsProvider.isElementOptional(afterElement)) {
-				final ISequenceElement afterAfterElement = owner.sequences.getSequence(location.getFirst()).get(locationIndex + 2);
+				final ISequenceElement afterAfterElement = locationSequence.get(locationIndex + 2);
 				if (owner.validFollowers.get(beforeElement).contains(afterAfterElement)) {
 					// remove both
 					return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex + 1, locationIndex);
@@ -141,12 +142,12 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 				final int sequence = followerPosition.getFirst();
 				final int position = followerPosition.getSecond();
 				// this is the element currently before the follower
-				final ISequenceElement beforeFollower = owner.sequences.getSequence(sequence).get(position);
+				final ISequenceElement beforeFollower = owner.sequences.getSequence(sequence).get(position-1);
 				// these are the elements which can go after what's currently before the follower
 				final ConstrainedMoveGenerator.Followers<ISequenceElement> beforeFollowerFollowers = owner.validFollowers.get(beforeFollower);
 				if (beforeFollowerFollowers.contains(unused)) {
 					// we can insert directly
-					return new InsertOptionalElements(owner.getSequences().getResources().get(sequence), position - 1, new int[] { unusedIndex });
+					return new InsertOptionalElements(owner.getSequences().getResources().get(sequence), position -1, new int[] { unusedIndex });
 				} else {
 					// we need to find something else to pop in
 					// which (a) can go after what's currently before f
