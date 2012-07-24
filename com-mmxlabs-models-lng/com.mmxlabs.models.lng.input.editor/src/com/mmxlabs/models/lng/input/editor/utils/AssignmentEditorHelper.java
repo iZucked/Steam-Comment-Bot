@@ -51,6 +51,7 @@ public class AssignmentEditorHelper {
 		if (task instanceof Cargo) {
 			final DischargeSlot dischargeSlot = ((Cargo) task).getDischargeSlot();
 			if (dischargeSlot == null) {
+				// TODO: Maybe use the Load slot?
 				return null;
 			}
 			return dischargeSlot.getWindowEndWithSlotOrPortTime();
