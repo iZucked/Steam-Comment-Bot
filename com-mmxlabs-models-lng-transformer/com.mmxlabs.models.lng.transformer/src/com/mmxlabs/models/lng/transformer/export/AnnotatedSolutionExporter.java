@@ -38,12 +38,14 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -79,9 +81,9 @@ public class AnnotatedSolutionExporter {
 	}
 
 	public boolean addPlatformExporterExtensions() {
-		
+
 		// TOOD: Peaberry
-		
+
 		if (Platform.getExtensionRegistry() == null) {
 			log.warn("addPlatformExporterExtensions() called without a platform - skipping");
 			return false;
@@ -141,7 +143,6 @@ public class AnnotatedSolutionExporter {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 
 			final Sequence eSequence = factory.createSequence();
-			
 
 			// TODO use spot rates correctly.
 			final int hireRate;
@@ -159,6 +160,7 @@ public class AnnotatedSolutionExporter {
 
 			eSequence.setDailyHireRate((hireRate * 24) / 1000);
 
+			ISequence sequence = annotatedSolution.getSequences().getSequence(resource);
 			switch (vessel.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
@@ -168,9 +170,12 @@ public class AnnotatedSolutionExporter {
 			case VIRTUAL:
 				// oops should do something here
 				// Skip and process differently
+				if (sequence.size() < 4) {
+					continue;
+			}
 				break;
 			case SPOT_CHARTER:
-				if (annotatedSolution.getSequences().getSequence(resource).size() < 2)
+				if (sequence.size() < 2)
 					continue;
 
 				eSequence.setVesselClass(entities.getModelObject(vessel.getVesselClass(), VesselClass.class));
@@ -189,11 +194,13 @@ public class AnnotatedSolutionExporter {
 			default:
 				break;
 			}
-			
-			if (eSequence.getName().equals("<no vessel>") || (eSequence.getVessel() == null && eSequence.getVesselClass() == null)) {
-				log.error("No vessel set on sequence!?");
+
+			if (vessel.getVesselInstanceType() != VesselInstanceType.VIRTUAL) {
+				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVessel() == null && eSequence.getVesselClass() == null)) {
+					log.error("No vessel set on sequence!?");
+				}
 			}
-			
+
 			sequences.add(eSequence);
 
 			{
@@ -235,7 +242,7 @@ public class AnnotatedSolutionExporter {
 			};
 
 			final List<Event> eventsForElement = new ArrayList<Event>();
-			for (final ISequenceElement element : annotatedSolution.getSequences().getSequence(resource)) {
+			for (final ISequenceElement element : sequence) {
 				// get annotations for this element
 				final Map<String, Object> annotations = elementAnnotations.getAnnotations(element);
 
