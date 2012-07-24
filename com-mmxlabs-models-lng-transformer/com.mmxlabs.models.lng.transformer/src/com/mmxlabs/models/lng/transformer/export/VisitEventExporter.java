@@ -22,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IFuelUsingEvent;
@@ -60,7 +61,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		final Port ePort = entities.getModelObject(slot.getPort(), Port.class);
 		if (ePort == null) {
-			return null;
+			// Port maybe null for e.g. DES Purchases.
+			// return null;
 		}
 
 		PortVisit portVisit = null;
