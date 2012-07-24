@@ -85,6 +85,7 @@ public final class ModifiableSequences implements IModifiableSequences {
 			// store the new object
 			sequenceMap.put(r, modifiableSequence);
 		}
+		this.unusedElements.addAll(sequences.getUnusedElements());
 	}
 
 	@Override
