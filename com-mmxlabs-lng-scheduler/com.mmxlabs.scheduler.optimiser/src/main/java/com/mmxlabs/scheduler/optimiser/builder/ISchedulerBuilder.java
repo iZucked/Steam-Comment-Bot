@@ -539,4 +539,20 @@ public interface ISchedulerBuilder {
 	 */
 	void buildXYDistances();
 
+	/**
+	 * Permit all real discharge slots which are located at one of the {@link IPort}s in the provided {@link Collection} to be re-wired to the given DES Purchase.
+	 * 
+	 * @param desPurchase
+	 * @param dischargePorts
+	 */
+	void bindDischargeSlotsToDESPurchase(ILoadOption desPurchase, Collection<IPort> dischargePorts);
+
+	/**
+	 * Place a {@link Collection} of {@link IPortSlot}s into a "count" group - that is a group in which only the count number of elements may be used.
+	 * 
+	 * @param slots
+	 * @param count
+	 */
+	void createSlotGroupCount(Collection<IPortSlot> slots, int count);
+
 }

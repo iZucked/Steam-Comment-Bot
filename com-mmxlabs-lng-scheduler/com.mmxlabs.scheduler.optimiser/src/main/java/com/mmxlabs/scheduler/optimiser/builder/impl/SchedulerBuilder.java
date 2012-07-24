@@ -89,6 +89,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -114,6 +115,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	private final List<IVesselClass> vesselClasses = new LinkedList<IVesselClass>();
 
 	private final List<IVessel> vessels = new LinkedList<IVessel>();
+	private final List<IVessel> realVessels = new LinkedList<IVessel>();
 
 	private final List<ICargo> cargoes = new LinkedList<ICargo>();
 
@@ -237,6 +239,19 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	private Provider<IMatrixEditor<IPort, Integer>> matrixEditorProvider;
 
+	@Inject
+	private ISlotGroupCountProviderEditor slotGroupCountProvider;
+
+	/**
+	 * Fake vessel class for virtual elements.
+	 */
+	private IVesselClass virtualClass;
+
+	/**
+	 * Map between a virtual sequence element and the virtual {@link IVesselEvent} instance representing it.
+	 */
+	private final Map<ISequenceElement, IVessel> virtualVesselMap = new HashMap<ISequenceElement, IVessel>();
+
 	public SchedulerBuilder() {
 		indexingContext.registerType(SequenceElement.class);
 		indexingContext.registerType(Port.class);
@@ -246,7 +261,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	// @Inject to trigger call after constructor
 	@Inject
-	public void createAnywherePort() {
+	public void init() {
 		// Create the anywhere port
 		ANYWHERE = createPort("ANYWHERE", false, new ICooldownPriceCalculator() {
 			@Override
@@ -258,6 +273,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				return 0;
 			}
 		});
+
+		// setup fake vessels for virtual elements.
+		virtualClass = createVesselClass("virtual", 0, 1000000000, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0, 0);
 	}
 
 	@Override
@@ -283,13 +301,19 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ILoadOption createVirtualLoadSlot(final String id, final IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ILoadPriceCalculator priceCalculator,
+	public ILoadOption createVirtualLoadSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ILoadPriceCalculator priceCalculator,
 			final int cargoCVValue, final boolean slotIsOptional) {
+
+		if (port == null) {
+			port = ANYWHERE;
+		}
 
 		final LoadOption slot = new LoadOption();
 		final ISequenceElement element = configureLoadOption(slot, id, port, window, minVolume, maxVolume, priceCalculator, cargoCVValue, slotIsOptional);
 
 		unshippedElements.add(element);
+
+		createVirtualVessel(element);
 
 		return slot;
 	}
@@ -332,14 +356,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IDischargeOption createVirtualDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
-			final ISalesPriceCalculator priceCalculator, final boolean slotIsOptional) {
+	public IDischargeOption createVirtualDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ISalesPriceCalculator priceCalculator,
+			final boolean slotIsOptional) {
+
+		if (port == null) {
+			port = ANYWHERE;
+		}
 
 		final DischargeOption slot = new DischargeOption();
 
 		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolume, maxVolume, priceCalculator, slotIsOptional);
 
 		unshippedElements.add(element);
+
+		createVirtualVessel(element);
 
 		return slot;
 	}
@@ -379,8 +409,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final boolean optional) {
+	public IDischargeSlot createDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ISalesPriceCalculator pricePerMMBTu,
+			final int durationHours, final boolean optional) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
@@ -592,6 +622,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vessel.setHourlyCharterOutPrice(hourlyCharterOutRate);
 
 		vessels.add(vessel);
+		if (vesselInstanceType != VesselInstanceType.VIRTUAL) {
+			realVessels.add(vessel);
+		}
 
 		final IResource resource = new Resource(indexingContext, name);
 		resources.add(resource);
@@ -743,15 +776,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IOptimisationData getOptimisationData() {
 
-		// setup fake vessels for virtual elements.
-		final IVesselClass virtualClass = createVesselClass("virtual", 0, 1000000000, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0, 0);
-		for (final ISequenceElement element : unshippedElements) {
-			// create a new resource for each of these guys, and bind them to their resources
-			final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, 0, VesselInstanceType.VIRTUAL, createStartEndRequirement(), createStartEndRequirement(), 0, 0, 0);
-			// Bind every slot to its vessel
-			constrainSlotToVessels(portSlotsProvider.getPortSlot(element), Collections.singleton(virtualVessel));
-		}
-
 		// create return elements before fixing time windows,
 		// because the next bit will have to patch up their time windows
 		createReturnElements();
@@ -858,6 +882,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, optionalElements);
 
+		data.addDataComponentProvider(SchedulerConstants.DCP_slotGroupProvider, slotGroupCountProvider);
+
 		for (final IBuilderExtension extension : extensions) {
 			for (final Pair<String, IDataComponentProvider> provider : extension.createDataComponentProviders(data)) {
 				data.addDataComponentProvider(provider.getFirst(), provider.getSecond());
@@ -871,6 +897,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return data;
 	}
 
+	private IVessel createVirtualVessel(final ISequenceElement element) {
+		// create a new resource for each of these guys, and bind them to their resources
+		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, 0, VesselInstanceType.VIRTUAL, createStartEndRequirement(), createStartEndRequirement(), 0, 0, 0);
+		// Bind every slot to its vessel
+		constrainSlotToVessels(portSlotsProvider.getPortSlot(element), Collections.singleton(virtualVessel));
+
+		virtualVesselMap.put(element, virtualVessel);
+
+		return virtualVessel;
+	}
 
 	@Override
 	public void buildXYDistances() {
@@ -1303,5 +1339,46 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public void setPortCost(final IPort port, final IVessel vessel, final PortType portType, final long cost) {
 		portCostProvider.setPortCost(port, vessel, portType, cost);
+	}
+
+	@Override
+	public void bindDischargeSlotsToDESPurchase(final ILoadOption desPurchase, final Collection<IPort> dischargePorts) {
+
+		final ISequenceElement desElement = portSlotsProvider.getElement(desPurchase);
+
+		// Look up virtual vessel
+		final IVessel virtualVessel = virtualVesselMap.get(desElement);
+		if (virtualVessel == null) {
+			throw new IllegalArgumentException("DES Purchase is not linked to a virtual vesssel");
+		}
+
+		for (final IDischargeOption option : dischargeSlots) {
+
+			if (option instanceof DischargeSlot) {
+
+				if (dischargePorts.contains(option.getPort())) {
+					// Get current allocation
+
+					Set<IVessel> set = slotVesselRestrictions.get(option);
+					if (set == null || set.isEmpty()) {
+						set = new HashSet<IVessel>(realVessels);
+					}
+					set.add(virtualVessel);
+
+					constrainSlotToVessels(option, set);
+				}
+			}
+
+		}
+	}
+
+	@Override
+	public void createSlotGroupCount(final Collection<IPortSlot> slots, final int count) {
+		final Collection<ISequenceElement> elements = new ArrayList<ISequenceElement>(slots.size());
+		for (final IPortSlot slot : slots) {
+			elements.add(portSlotsProvider.getElement(slot));
+		}
+
+		slotGroupCountProvider.createSlotGroup(elements, count);
 	}
 }
