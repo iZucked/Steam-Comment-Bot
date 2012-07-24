@@ -1,0 +1,24 @@
+package com.mmxlabs.optimiser.core.constraints;
+
+import com.mmxlabs.optimiser.core.ISequences;
+
+/**
+ * The {@link IReducingContraintChecker} is an extended version of an {@link IConstraintChecker}. A {@link IConstraintChecker} which also implements {@link IReducingContraintChecker} permits some
+ * constraint violations providing that the number of violations does not increase. This permits the optimisation to start with a less than ideal situation and not make it worse. For example, let's
+ * assume only 4 out of a set of 8 sequence elements are permitted in the solution. However a user has constructed an initial solution with 5 of these elements. Normally this would be rejected as an
+ * invalid solution, but if we implements the {@link IReducingContraintChecker} interface we can record the initial count of 5 and use that as the limit rather than 4 and permit the optimisation to
+ * continue and remove the element. As the count reduces, the constraint checker can revert back to normal behaviour.
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public interface IReducingContraintChecker extends IConstraintChecker {
+
+	/**
+	 * Pass through an {@link ISequences} object which is considered to be valid even if it violates the basic constraint. This will be invoked whenever a {@link ISequences} state is accepted.
+	 * 
+	 * @param sequences
+	 */
+	void sequencesAccepted(ISequences sequences);
+
+}
