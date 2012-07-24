@@ -65,11 +65,8 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_availabilityEditor(detailComposite, topClass);
-		add_portsEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
-		add_notionalPortEditor(detailComposite, topClass);
-		add_typeEditor(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
 	}
 	/**
@@ -79,14 +76,6 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_availabilityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_MARKET__AVAILABILITY));
-	}
-	/**
-	 * Create the editor for the ports feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_portsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_MARKET__PORTS));
 	}
 	/**
 	 * Create the editor for the minQuantity feature on SpotMarket
@@ -103,24 +92,6 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_MARKET__MAX_QUANTITY));
-	}
-
-	/**
-	 * Create the editor for the notionalPort feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_notionalPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_MARKET__NOTIONAL_PORT));
-	}
-
-	/**
-	 * Create the editor for the type feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_typeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_MARKET__TYPE));
 	}
 
 	/**

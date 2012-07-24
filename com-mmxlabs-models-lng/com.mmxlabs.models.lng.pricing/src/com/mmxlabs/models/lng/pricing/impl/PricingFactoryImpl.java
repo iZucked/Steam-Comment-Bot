@@ -81,10 +81,15 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.ROUTE_COST: return createRouteCost();
 			case PricingPackage.CHARTER_COST_MODEL: return createCharterCostModel();
 			case PricingPackage.BASE_FUEL_COST: return createBaseFuelCost();
-			case PricingPackage.SPOT_MARKET: return createSpotMarket();
+			case PricingPackage.SPOT_MARKET_GROUP: return createSpotMarketGroup();
 			case PricingPackage.PORT_COST: return createPortCost();
 			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
+			case PricingPackage.DES_PURCHASE_MARKET: return createDESPurchaseMarket();
+			case PricingPackage.DES_SALES_MARKET: return createDESSalesMarket();
+			case PricingPackage.FOB_PURCHASES_MARKET: return createFOBPurchasesMarket();
+			case PricingPackage.FOB_SALES_MARKET: return createFOBSalesMarket();
+			case PricingPackage.SPOT_AVAILABILITY: return createSpotAvailability();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -205,9 +210,9 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SpotMarket createSpotMarket() {
-		SpotMarketImpl spotMarket = new SpotMarketImpl();
-		return spotMarket;
+	public SpotMarketGroup createSpotMarketGroup() {
+		SpotMarketGroupImpl spotMarketGroup = new SpotMarketGroupImpl();
+		return spotMarketGroup;
 	}
 
 	/**
@@ -238,6 +243,56 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public CooldownPrice createCooldownPrice() {
 		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
 		return cooldownPrice;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DESPurchaseMarket createDESPurchaseMarket() {
+		DESPurchaseMarketImpl desPurchaseMarket = new DESPurchaseMarketImpl();
+		return desPurchaseMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DESSalesMarket createDESSalesMarket() {
+		DESSalesMarketImpl desSalesMarket = new DESSalesMarketImpl();
+		return desSalesMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FOBPurchasesMarket createFOBPurchasesMarket() {
+		FOBPurchasesMarketImpl fobPurchasesMarket = new FOBPurchasesMarketImpl();
+		return fobPurchasesMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FOBSalesMarket createFOBSalesMarket() {
+		FOBSalesMarketImpl fobSalesMarket = new FOBSalesMarketImpl();
+		return fobSalesMarket;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SpotAvailability createSpotAvailability() {
+		SpotAvailabilityImpl spotAvailability = new SpotAvailabilityImpl();
+		return spotAvailability;
 	}
 
 	/**

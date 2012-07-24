@@ -17,8 +17,12 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
+import com.mmxlabs.models.lng.pricing.DESSalesMarket;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
+import com.mmxlabs.models.lng.pricing.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
@@ -28,7 +32,9 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SpotAvailability;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
+import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -108,6 +114,13 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass spotMarketGroupEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass spotMarketEClass = null;
 
 	/**
@@ -130,6 +143,41 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass cooldownPriceEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass desPurchaseMarketEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass desSalesMarketEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fobPurchasesMarketEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fobSalesMarketEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass spotAvailabilityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -263,6 +311,42 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EReference getPricingModel_CooldownPrices() {
 		return (EReference)pricingModelEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_DesPurchaseSpotMarket() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_DesSalesSpotMarket() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_FobPurchasesSpotMarket() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getPricingModel_FobSalesSpotMarket() {
+		return (EReference)pricingModelEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -486,6 +570,42 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getSpotMarketGroup() {
+		return spotMarketGroupEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSpotMarketGroup_Availability() {
+		return (EReference)spotMarketGroupEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSpotMarketGroup_Type() {
+		return (EAttribute)spotMarketGroupEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSpotMarketGroup_Markets() {
+		return (EReference)spotMarketGroupEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getSpotMarket() {
 		return spotMarketEClass;
 	}
@@ -504,17 +624,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSpotMarket_Ports() {
-		return (EReference)spotMarketEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getSpotMarket_MinQuantity() {
-		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -523,25 +634,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	public EAttribute getSpotMarket_MaxQuantity() {
-		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getSpotMarket_NotionalPort() {
-		return (EReference)spotMarketEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSpotMarket_Type() {
-		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)spotMarketEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -550,7 +643,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	public EReference getSpotMarket_Contract() {
-		return (EReference)spotMarketEClass.getEStructuralFeatures().get(6);
+		return (EReference)spotMarketEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -648,6 +741,123 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getDESPurchaseMarket() {
+		return desPurchaseMarketEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getDESPurchaseMarket_Cv() {
+		return (EAttribute)desPurchaseMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDESPurchaseMarket_DestinationPorts() {
+		return (EReference)desPurchaseMarketEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getDESSalesMarket() {
+		return desSalesMarketEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDESSalesMarket_NotionalPort() {
+		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getFOBPurchasesMarket() {
+		return fobPurchasesMarketEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFOBPurchasesMarket_NotionalPort() {
+		return (EReference)fobPurchasesMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFOBPurchasesMarket_Cv() {
+		return (EAttribute)fobPurchasesMarketEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getFOBSalesMarket() {
+		return fobSalesMarketEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFOBSalesMarket_LoadPort() {
+		return (EReference)fobSalesMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSpotAvailability() {
+		return spotAvailabilityEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSpotAvailability_Constant() {
+		return (EAttribute)spotAvailabilityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSpotAvailability_Curve() {
+		return (EReference)spotAvailabilityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getSpotType() {
 		return spotTypeEEnum;
 	}
@@ -687,6 +897,10 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(pricingModelEClass, PRICING_MODEL__ROUTE_COSTS);
 		createEReference(pricingModelEClass, PRICING_MODEL__PORT_COSTS);
 		createEReference(pricingModelEClass, PRICING_MODEL__COOLDOWN_PRICES);
+		createEReference(pricingModelEClass, PRICING_MODEL__DES_PURCHASE_SPOT_MARKET);
+		createEReference(pricingModelEClass, PRICING_MODEL__DES_SALES_SPOT_MARKET);
+		createEReference(pricingModelEClass, PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET);
+		createEReference(pricingModelEClass, PRICING_MODEL__FOB_SALES_SPOT_MARKET);
 
 		dataIndexEClass = createEClass(DATA_INDEX);
 		createEReference(dataIndexEClass, DATA_INDEX__POINTS);
@@ -720,13 +934,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(baseFuelCostEClass, BASE_FUEL_COST__FUEL);
 		createEAttribute(baseFuelCostEClass, BASE_FUEL_COST__PRICE);
 
+		spotMarketGroupEClass = createEClass(SPOT_MARKET_GROUP);
+		createEReference(spotMarketGroupEClass, SPOT_MARKET_GROUP__AVAILABILITY);
+		createEAttribute(spotMarketGroupEClass, SPOT_MARKET_GROUP__TYPE);
+		createEReference(spotMarketGroupEClass, SPOT_MARKET_GROUP__MARKETS);
+
 		spotMarketEClass = createEClass(SPOT_MARKET);
 		createEReference(spotMarketEClass, SPOT_MARKET__AVAILABILITY);
-		createEReference(spotMarketEClass, SPOT_MARKET__PORTS);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MIN_QUANTITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MAX_QUANTITY);
-		createEReference(spotMarketEClass, SPOT_MARKET__NOTIONAL_PORT);
-		createEAttribute(spotMarketEClass, SPOT_MARKET__TYPE);
 		createEReference(spotMarketEClass, SPOT_MARKET__CONTRACT);
 
 		portCostEClass = createEClass(PORT_COST);
@@ -741,6 +957,24 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		cooldownPriceEClass = createEClass(COOLDOWN_PRICE);
 		createEReference(cooldownPriceEClass, COOLDOWN_PRICE__PORTS);
 		createEReference(cooldownPriceEClass, COOLDOWN_PRICE__INDEX);
+
+		desPurchaseMarketEClass = createEClass(DES_PURCHASE_MARKET);
+		createEAttribute(desPurchaseMarketEClass, DES_PURCHASE_MARKET__CV);
+		createEReference(desPurchaseMarketEClass, DES_PURCHASE_MARKET__DESTINATION_PORTS);
+
+		desSalesMarketEClass = createEClass(DES_SALES_MARKET);
+		createEReference(desSalesMarketEClass, DES_SALES_MARKET__NOTIONAL_PORT);
+
+		fobPurchasesMarketEClass = createEClass(FOB_PURCHASES_MARKET);
+		createEReference(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__NOTIONAL_PORT);
+		createEAttribute(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__CV);
+
+		fobSalesMarketEClass = createEClass(FOB_SALES_MARKET);
+		createEReference(fobSalesMarketEClass, FOB_SALES_MARKET__LOAD_PORT);
+
+		spotAvailabilityEClass = createEClass(SPOT_AVAILABILITY);
+		createEAttribute(spotAvailabilityEClass, SPOT_AVAILABILITY__CONSTANT);
+		createEReference(spotAvailabilityEClass, SPOT_AVAILABILITY__CURVE);
 
 		// Create enums
 		spotTypeEEnum = createEEnum(SPOT_TYPE);
@@ -799,6 +1033,10 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		spotMarketEClass.getESuperTypes().add(theTypesPackage.getASpotMarket());
 		portCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cooldownPriceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		desPurchaseMarketEClass.getESuperTypes().add(this.getSpotMarket());
+		desSalesMarketEClass.getESuperTypes().add(this.getSpotMarket());
+		fobPurchasesMarketEClass.getESuperTypes().add(this.getSpotMarket());
+		fobSalesMarketEClass.getESuperTypes().add(this.getSpotMarket());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -814,6 +1052,10 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getPricingModel_RouteCosts(), this.getRouteCost(), null, "routeCosts", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_PortCosts(), this.getPortCost(), null, "portCosts", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getPricingModel_CooldownPrices(), this.getCooldownPrice(), null, "cooldownPrices", null, 0, -1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_DesPurchaseSpotMarket(), this.getSpotMarketGroup(), null, "desPurchaseSpotMarket", null, 1, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_DesSalesSpotMarket(), this.getSpotMarketGroup(), null, "desSalesSpotMarket", null, 1, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_FobPurchasesSpotMarket(), this.getSpotMarketGroup(), null, "fobPurchasesSpotMarket", null, 1, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getPricingModel_FobSalesSpotMarket(), this.getSpotMarketGroup(), null, "fobSalesSpotMarket", null, 1, 1, PricingModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(dataIndexEClass, DataIndex.class, "DataIndex", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		g1 = createEGenericType(this.getIndexPoint());
@@ -864,16 +1106,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getBaseFuelCost_Fuel(), theTypesPackage.getABaseFuel(), null, "fuel", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getBaseFuelCost_Price(), ecorePackage.getEDouble(), "price", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(spotMarketEClass, SpotMarket.class, "SpotMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		g1 = createEGenericType(this.getIndex());
-		g2 = createEGenericType(ecorePackage.getEIntegerObject());
-		g1.getETypeArguments().add(g2);
-		initEReference(getSpotMarket_Availability(), g1, null, "availability", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSpotMarket_Ports(), theTypesPackage.getAPortSet(), null, "ports", null, 0, -1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEClass(spotMarketGroupEClass, SpotMarketGroup.class, "SpotMarketGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSpotMarketGroup_Availability(), this.getSpotAvailability(), null, "availability", null, 1, 1, SpotMarketGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSpotMarketGroup_Type(), this.getSpotType(), "type", null, 1, 1, SpotMarketGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSpotMarketGroup_Markets(), this.getSpotMarket(), null, "markets", null, 0, -1, SpotMarketGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(spotMarketEClass, SpotMarket.class, "SpotMarket", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSpotMarket_Availability(), this.getSpotAvailability(), null, "availability", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSpotMarket_NotionalPort(), theTypesPackage.getAPort(), null, "notionalPort", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSpotMarket_Type(), this.getSpotType(), "type", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSpotMarket_Contract(), theTypesPackage.getAContract(), null, "contract", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(portCostEClass, PortCost.class, "PortCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -895,6 +1136,27 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(ecorePackage.getEDoubleObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getCooldownPrice_Index(), g1, null, "index", null, 1, 1, CooldownPrice.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(desPurchaseMarketEClass, DESPurchaseMarket.class, "DESPurchaseMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getDESPurchaseMarket_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, DESPurchaseMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDESPurchaseMarket_DestinationPorts(), theTypesPackage.getAPortSet(), null, "destinationPorts", null, 0, -1, DESPurchaseMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(desSalesMarketEClass, DESSalesMarket.class, "DESSalesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDESSalesMarket_NotionalPort(), theTypesPackage.getAPort(), null, "notionalPort", null, 1, 1, DESSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(fobPurchasesMarketEClass, FOBPurchasesMarket.class, "FOBPurchasesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFOBPurchasesMarket_NotionalPort(), theTypesPackage.getAPort(), null, "notionalPort", null, 1, 1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getFOBPurchasesMarket_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(fobSalesMarketEClass, FOBSalesMarket.class, "FOBSalesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getFOBSalesMarket_LoadPort(), theTypesPackage.getAPort(), null, "loadPort", null, 1, 1, FOBSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(spotAvailabilityEClass, SpotAvailability.class, "SpotAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSpotAvailability_Constant(), ecorePackage.getEInt(), "constant", null, 0, 1, SpotAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		g1 = createEGenericType(this.getDataIndex());
+		g2 = createEGenericType(ecorePackage.getEIntegerObject());
+		g1.getETypeArguments().add(g2);
+		initEReference(getSpotAvailability_Curve(), g1, null, "curve", null, 1, 1, SpotAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(spotTypeEEnum, SpotType.class, "SpotType");

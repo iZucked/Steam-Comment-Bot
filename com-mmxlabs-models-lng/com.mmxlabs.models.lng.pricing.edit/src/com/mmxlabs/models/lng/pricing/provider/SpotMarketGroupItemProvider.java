@@ -1,16 +1,27 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
+
+import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
+import com.mmxlabs.models.lng.pricing.SpotType;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
+import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -19,20 +30,17 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
+import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-import com.mmxlabs.models.lng.types.provider.ASpotMarketItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.SpotMarket} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.SpotMarketGroup} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SpotMarketItemProvider
-	extends ASpotMarketItemProvider
+public class SpotMarketGroupItemProvider
+	extends ItemProviderAdapter
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -45,7 +53,7 @@ public class SpotMarketItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SpotMarketItemProvider(AdapterFactory adapterFactory) {
+	public SpotMarketGroupItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -60,111 +68,73 @@ public class SpotMarketItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addAvailabilityPropertyDescriptor(object);
-			addMinQuantityPropertyDescriptor(object);
-			addMaxQuantityPropertyDescriptor(object);
-			addContractPropertyDescriptor(object);
+			addTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Availability feature.
+	 * This adds a property descriptor for the Type feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addAvailabilityPropertyDescriptor(Object object) {
+	protected void addTypePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SpotMarket_availability_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_availability_feature", "_UI_SpotMarket_type"),
-				 PricingPackage.Literals.SPOT_MARKET__AVAILABILITY,
+				 getString("_UI_SpotMarketGroup_type_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarketGroup_type_feature", "_UI_SpotMarketGroup_type"),
+				 PricingPackage.Literals.SPOT_MARKET_GROUP__TYPE,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Min Quantity feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMinQuantityPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SpotMarket_minQuantity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_minQuantity_feature", "_UI_SpotMarket_type"),
-				 PricingPackage.Literals.SPOT_MARKET__MIN_QUANTITY,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(PricingPackage.Literals.SPOT_MARKET_GROUP__AVAILABILITY);
+			childrenFeatures.add(PricingPackage.Literals.SPOT_MARKET_GROUP__MARKETS);
+		}
+		return childrenFeatures;
 	}
 
 	/**
-	 * This adds a property descriptor for the Max Quantity feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMaxQuantityPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SpotMarket_maxQuantity_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_maxQuantity_feature", "_UI_SpotMarket_type"),
-				 PricingPackage.Literals.SPOT_MARKET__MAX_QUANTITY,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
-	 * This adds a property descriptor for the Contract feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addContractPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SpotMarket_contract_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_contract_feature", "_UI_SpotMarket_type"),
-				 PricingPackage.Literals.SPOT_MARKET__CONTRACT,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This returns SpotMarket.gif.
+	 * This returns SpotMarketGroup.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SpotMarket"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/SpotMarketGroup"));
 	}
 
 	/**
@@ -175,10 +145,11 @@ public class SpotMarketItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SpotMarket)object).getName();
+		SpotType labelValue = ((SpotMarketGroup)object).getType();
+		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_SpotMarket_type") :
-			getString("_UI_SpotMarket_type") + " " + label;
+			getString("_UI_SpotMarketGroup_type") :
+			getString("_UI_SpotMarketGroup_type") + " " + label;
 	}
 
 	/**
@@ -192,10 +163,13 @@ public class SpotMarketItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(SpotMarket.class)) {
-			case PricingPackage.SPOT_MARKET__MIN_QUANTITY:
-			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
+		switch (notification.getFeatureID(SpotMarketGroup.class)) {
+			case PricingPackage.SPOT_MARKET_GROUP__TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case PricingPackage.SPOT_MARKET_GROUP__AVAILABILITY:
+			case PricingPackage.SPOT_MARKET_GROUP__MARKETS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -211,6 +185,31 @@ public class SpotMarketItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.SPOT_MARKET_GROUP__AVAILABILITY,
+				 PricingFactory.eINSTANCE.createSpotAvailability()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.SPOT_MARKET_GROUP__MARKETS,
+				 PricingFactory.eINSTANCE.createDESPurchaseMarket()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.SPOT_MARKET_GROUP__MARKETS,
+				 PricingFactory.eINSTANCE.createDESSalesMarket()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.SPOT_MARKET_GROUP__MARKETS,
+				 PricingFactory.eINSTANCE.createFOBPurchasesMarket()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(PricingPackage.Literals.SPOT_MARKET_GROUP__MARKETS,
+				 PricingFactory.eINSTANCE.createFOBSalesMarket()));
 	}
 
 	/**

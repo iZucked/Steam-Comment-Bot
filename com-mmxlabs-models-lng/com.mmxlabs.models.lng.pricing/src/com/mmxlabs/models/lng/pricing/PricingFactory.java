@@ -96,13 +96,13 @@ public interface PricingFactory extends EFactory {
 	BaseFuelCost createBaseFuelCost();
 
 	/**
-	 * Returns a new object of class '<em>Spot Market</em>'.
+	 * Returns a new object of class '<em>Spot Market Group</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Spot Market</em>'.
+	 * @return a new object of class '<em>Spot Market Group</em>'.
 	 * @generated
 	 */
-	SpotMarket createSpotMarket();
+	SpotMarketGroup createSpotMarketGroup();
 
 	/**
 	 * Returns a new object of class '<em>Port Cost</em>'.
@@ -130,6 +130,51 @@ public interface PricingFactory extends EFactory {
 	 * @generated
 	 */
 	CooldownPrice createCooldownPrice();
+
+	/**
+	 * Returns a new object of class '<em>DES Purchase Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>DES Purchase Market</em>'.
+	 * @generated
+	 */
+	DESPurchaseMarket createDESPurchaseMarket();
+
+	/**
+	 * Returns a new object of class '<em>DES Sales Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>DES Sales Market</em>'.
+	 * @generated
+	 */
+	DESSalesMarket createDESSalesMarket();
+
+	/**
+	 * Returns a new object of class '<em>FOB Purchases Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>FOB Purchases Market</em>'.
+	 * @generated
+	 */
+	FOBPurchasesMarket createFOBPurchasesMarket();
+
+	/**
+	 * Returns a new object of class '<em>FOB Sales Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>FOB Sales Market</em>'.
+	 * @generated
+	 */
+	FOBSalesMarket createFOBSalesMarket();
+
+	/**
+	 * Returns a new object of class '<em>Spot Availability</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Spot Availability</em>'.
+	 * @generated
+	 */
+	SpotAvailability createSpotAvailability();
 
 	/**
 	 * Returns the package supported by this factory.

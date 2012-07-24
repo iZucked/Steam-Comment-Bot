@@ -123,6 +123,10 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createBaseFuelCostAdapter();
 			}
 			@Override
+			public Adapter caseSpotMarketGroup(SpotMarketGroup object) {
+				return createSpotMarketGroupAdapter();
+			}
+			@Override
 			public Adapter caseSpotMarket(SpotMarket object) {
 				return createSpotMarketAdapter();
 			}
@@ -137,6 +141,26 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseCooldownPrice(CooldownPrice object) {
 				return createCooldownPriceAdapter();
+			}
+			@Override
+			public Adapter caseDESPurchaseMarket(DESPurchaseMarket object) {
+				return createDESPurchaseMarketAdapter();
+			}
+			@Override
+			public Adapter caseDESSalesMarket(DESSalesMarket object) {
+				return createDESSalesMarketAdapter();
+			}
+			@Override
+			public Adapter caseFOBPurchasesMarket(FOBPurchasesMarket object) {
+				return createFOBPurchasesMarketAdapter();
+			}
+			@Override
+			public Adapter caseFOBSalesMarket(FOBSalesMarket object) {
+				return createFOBSalesMarketAdapter();
+			}
+			@Override
+			public Adapter caseSpotAvailability(SpotAvailability object) {
+				return createSpotAvailabilityAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -305,6 +329,20 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.SpotMarketGroup <em>Spot Market Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.SpotMarketGroup
+	 * @generated
+	 */
+	public Adapter createSpotMarketGroupAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.SpotMarket <em>Spot Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -357,6 +395,76 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createCooldownPriceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.DESPurchaseMarket <em>DES Purchase Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.DESPurchaseMarket
+	 * @generated
+	 */
+	public Adapter createDESPurchaseMarketAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.DESSalesMarket <em>DES Sales Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.DESSalesMarket
+	 * @generated
+	 */
+	public Adapter createDESSalesMarketAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.FOBPurchasesMarket <em>FOB Purchases Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.FOBPurchasesMarket
+	 * @generated
+	 */
+	public Adapter createFOBPurchasesMarketAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.FOBSalesMarket <em>FOB Sales Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.FOBSalesMarket
+	 * @generated
+	 */
+	public Adapter createFOBSalesMarketAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.SpotAvailability <em>Spot Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.pricing.SpotAvailability
+	 * @generated
+	 */
+	public Adapter createSpotAvailabilityAdapter() {
 		return null;
 	}
 

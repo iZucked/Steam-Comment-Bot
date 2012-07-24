@@ -117,6 +117,24 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SpotMarketComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.helpers.SpotMarket"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.pricing.SpotMarket">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DESPurchaseMarketComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.helpers.DESPurchaseMarket"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.pricing.DESPurchaseMarket">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SpotAvailabilityComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.helpers.SpotAvailability"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.pricing.SpotAvailability">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -186,6 +204,12 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Port Cost"
           targetEClass="com.mmxlabs.models.lng.pricing.PortCost">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.pricing.editor.SpotMarket"
+          factory="com.mmxlabs.models.lng.pricing.ui.modelfactories.SpotMarketFactory"
+          label="Spot Market"
+          targetEClass="com.mmxlabs.models.lng.pricing.SpotMarket">
     </factory>
  </extension>
  <extension

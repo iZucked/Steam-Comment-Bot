@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.pricing.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -16,6 +17,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.SpotAvailability;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -29,37 +31,24 @@ import com.mmxlabs.models.lng.types.impl.ASpotMarketImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getAvailability <em>Availability</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getMaxQuantity <em>Max Quantity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getNotionalPort <em>Notional Port</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getType <em>Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
+public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	/**
-	 * The cached value of the '{@link #getAvailability() <em>Availability</em>}' reference.
+	 * The cached value of the '{@link #getAvailability() <em>Availability</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAvailability()
 	 * @generated
 	 * @ordered
 	 */
-	protected Index<Integer> availability;
-
-	/**
-	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPorts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<APortSet> ports;
+	protected SpotAvailability availability;
 
 	/**
 	 * The default value of the '{@link #getMinQuantity() <em>Min Quantity</em>}' attribute.
@@ -102,36 +91,6 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getNotionalPort() <em>Notional Port</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getNotionalPort()
-	 * @generated
-	 * @ordered
-	 */
-	protected Port notionalPort;
-
-	/**
-	 * The default value of the '{@link #getType() <em>Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getType()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final SpotType TYPE_EDEFAULT = SpotType.FOB_SALE;
-
-	/**
-	 * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getType()
-	 * @generated
-	 * @ordered
-	 */
-	protected SpotType type = TYPE_EDEFAULT;
-
-	/**
 	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -166,15 +125,7 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
-	public Index<Integer> getAvailability() {
-		if (availability != null && availability.eIsProxy()) {
-			InternalEObject oldAvailability = (InternalEObject)availability;
-			availability = (Index<Integer>)eResolveProxy(oldAvailability);
-			if (availability != oldAvailability) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.SPOT_MARKET__AVAILABILITY, oldAvailability, availability));
-			}
-		}
+	public SpotAvailability getAvailability() {
 		return availability;
 	}
 
@@ -183,20 +134,14 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index<Integer> basicGetAvailability() {
-		return availability;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setAvailability(Index<Integer> newAvailability) {
-		Index<Integer> oldAvailability = availability;
+	public NotificationChain basicSetAvailability(SpotAvailability newAvailability, NotificationChain msgs) {
+		SpotAvailability oldAvailability = availability;
 		availability = newAvailability;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SPOT_MARKET__AVAILABILITY, oldAvailability, availability));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.SPOT_MARKET__AVAILABILITY, oldAvailability, newAvailability);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -204,11 +149,18 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<APortSet> getPorts() {
-		if (ports == null) {
-			ports = new EObjectResolvingEList<APortSet>(APortSet.class, this, PricingPackage.SPOT_MARKET__PORTS);
+	public void setAvailability(SpotAvailability newAvailability) {
+		if (newAvailability != availability) {
+			NotificationChain msgs = null;
+			if (availability != null)
+				msgs = ((InternalEObject)availability).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.SPOT_MARKET__AVAILABILITY, null, msgs);
+			if (newAvailability != null)
+				msgs = ((InternalEObject)newAvailability).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.SPOT_MARKET__AVAILABILITY, null, msgs);
+			msgs = basicSetAvailability(newAvailability, msgs);
+			if (msgs != null) msgs.dispatch();
 		}
-		return ports;
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SPOT_MARKET__AVAILABILITY, newAvailability, newAvailability));
 	}
 
 	/**
@@ -258,65 +210,6 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Port getNotionalPort() {
-		if (notionalPort != null && notionalPort.eIsProxy()) {
-			InternalEObject oldNotionalPort = (InternalEObject)notionalPort;
-			notionalPort = (Port)eResolveProxy(oldNotionalPort);
-			if (notionalPort != oldNotionalPort) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.SPOT_MARKET__NOTIONAL_PORT, oldNotionalPort, notionalPort));
-			}
-		}
-		return notionalPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Port basicGetNotionalPort() {
-		return notionalPort;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setNotionalPort(Port newNotionalPort) {
-		Port oldNotionalPort = notionalPort;
-		notionalPort = newNotionalPort;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SPOT_MARKET__NOTIONAL_PORT, oldNotionalPort, notionalPort));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotType getType() {
-		return type;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setType(SpotType newType) {
-		SpotType oldType = type;
-		type = newType == null ? TYPE_EDEFAULT : newType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SPOT_MARKET__TYPE, oldType, type));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Contract getContract() {
 		if (contract != null && contract.eIsProxy()) {
 			InternalEObject oldContract = (InternalEObject)contract;
@@ -356,22 +249,28 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	 * @generated
 	 */
 	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case PricingPackage.SPOT_MARKET__AVAILABILITY:
+				return basicSetAvailability(null, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PricingPackage.SPOT_MARKET__AVAILABILITY:
-				if (resolve) return getAvailability();
-				return basicGetAvailability();
-			case PricingPackage.SPOT_MARKET__PORTS:
-				return getPorts();
+				return getAvailability();
 			case PricingPackage.SPOT_MARKET__MIN_QUANTITY:
 				return getMinQuantity();
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				return getMaxQuantity();
-			case PricingPackage.SPOT_MARKET__NOTIONAL_PORT:
-				if (resolve) return getNotionalPort();
-				return basicGetNotionalPort();
-			case PricingPackage.SPOT_MARKET__TYPE:
-				return getType();
 			case PricingPackage.SPOT_MARKET__CONTRACT:
 				if (resolve) return getContract();
 				return basicGetContract();
@@ -389,23 +288,13 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case PricingPackage.SPOT_MARKET__AVAILABILITY:
-				setAvailability((Index<Integer>)newValue);
-				return;
-			case PricingPackage.SPOT_MARKET__PORTS:
-				getPorts().clear();
-				getPorts().addAll((Collection<? extends APortSet>)newValue);
+				setAvailability((SpotAvailability)newValue);
 				return;
 			case PricingPackage.SPOT_MARKET__MIN_QUANTITY:
 				setMinQuantity((Integer)newValue);
 				return;
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
-				return;
-			case PricingPackage.SPOT_MARKET__NOTIONAL_PORT:
-				setNotionalPort((Port)newValue);
-				return;
-			case PricingPackage.SPOT_MARKET__TYPE:
-				setType((SpotType)newValue);
 				return;
 			case PricingPackage.SPOT_MARKET__CONTRACT:
 				setContract((Contract)newValue);
@@ -423,22 +312,13 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case PricingPackage.SPOT_MARKET__AVAILABILITY:
-				setAvailability((Index<Integer>)null);
-				return;
-			case PricingPackage.SPOT_MARKET__PORTS:
-				getPorts().clear();
+				setAvailability((SpotAvailability)null);
 				return;
 			case PricingPackage.SPOT_MARKET__MIN_QUANTITY:
 				setMinQuantity(MIN_QUANTITY_EDEFAULT);
 				return;
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
-				return;
-			case PricingPackage.SPOT_MARKET__NOTIONAL_PORT:
-				setNotionalPort((Port)null);
-				return;
-			case PricingPackage.SPOT_MARKET__TYPE:
-				setType(TYPE_EDEFAULT);
 				return;
 			case PricingPackage.SPOT_MARKET__CONTRACT:
 				setContract((Contract)null);
@@ -457,16 +337,10 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 		switch (featureID) {
 			case PricingPackage.SPOT_MARKET__AVAILABILITY:
 				return availability != null;
-			case PricingPackage.SPOT_MARKET__PORTS:
-				return ports != null && !ports.isEmpty();
 			case PricingPackage.SPOT_MARKET__MIN_QUANTITY:
 				return minQuantity != MIN_QUANTITY_EDEFAULT;
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
-			case PricingPackage.SPOT_MARKET__NOTIONAL_PORT:
-				return notionalPort != null;
-			case PricingPackage.SPOT_MARKET__TYPE:
-				return type != TYPE_EDEFAULT;
 			case PricingPackage.SPOT_MARKET__CONTRACT:
 				return contract != null;
 		}
@@ -487,8 +361,6 @@ public class SpotMarketImpl extends ASpotMarketImpl implements SpotMarket {
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");
 		result.append(maxQuantity);
-		result.append(", type: ");
-		result.append(type);
 		result.append(')');
 		return result.toString();
 	}

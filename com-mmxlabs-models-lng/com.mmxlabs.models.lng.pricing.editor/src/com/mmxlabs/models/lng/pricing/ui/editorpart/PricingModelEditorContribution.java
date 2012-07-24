@@ -23,6 +23,8 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SpotMarket;
+import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -36,11 +38,13 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 
 	private int indexPage = -1;
 	private int costsPage = -1;
+	private int spotCargoMarketsPage = -1;
 
 	@Override
 	public void addPages(final Composite parent) {
 		addIndexPage(parent);
 		addCostsPage(parent);
+		addSpotCargoMarketPage(parent);
 	}
 
 	private void addCostsPage(final Composite parent) {
@@ -95,6 +99,43 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		editorPart.setPageText(indexPage, "Markets");
 	}
 
+	private void addSpotCargoMarketPage(final Composite parent) {
+		final SashForm sash = new SashForm(parent, SWT.HORIZONTAL);
+		final SashForm sash2 = new SashForm(sash, SWT.VERTICAL);
+		final SashForm sash3 = new SashForm(sash, SWT.VERTICAL);
+
+		SpotMarketGroupPane desPurchasePane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		desPurchasePane.createControl(sash2);
+		desPurchasePane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_DesPurchaseSpotMarket(), PricingPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
+				editorPart.getAdapterFactory());
+		desPurchasePane.getViewer().setInput(modelObject);
+		desPurchasePane.defaultSetTitle("DES Purchases");
+
+		SpotMarketGroupPane desSalesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		desSalesPane.createControl(sash2);
+		desSalesPane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_DesSalesSpotMarket(), PricingPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
+				editorPart.getAdapterFactory());
+		desSalesPane.getViewer().setInput(modelObject);
+		desSalesPane.defaultSetTitle("DES Sales");
+
+		SpotMarketGroupPane fobSalesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		fobSalesPane.createControl(sash3);
+		fobSalesPane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket(), PricingPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
+				editorPart.getAdapterFactory());
+		fobSalesPane.getViewer().setInput(modelObject);
+		fobSalesPane.defaultSetTitle("FOB Sales");
+
+		SpotMarketGroupPane fobPurchasesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		fobPurchasesPane.createControl(sash3);
+		fobPurchasesPane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FobPurchasesSpotMarket(), PricingPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
+				editorPart.getAdapterFactory());
+		fobPurchasesPane.getViewer().setInput(modelObject);
+		fobPurchasesPane.defaultSetTitle("FOB Purchases");
+
+		spotCargoMarketsPage = editorPart.addPage(sash);
+		editorPart.setPageText(spotCargoMarketsPage, "Spot Cargoes");
+	}
+
 	@Override
 	public void setLocked(final boolean locked) {
 		route.setLocked(locked);
@@ -130,6 +171,9 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 				return true;
 			}
 			if (target instanceof CharterCostModel) {
+				return true;
+			}
+			if (target instanceof SpotMarketGroup || target instanceof SpotMarket) {
 				return true;
 			}
 		}
@@ -180,6 +224,12 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 			if (target instanceof CharterCostModel) {
 				editorPart.setActivePage(indexPage);
 				fleetCostPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
+				return;
+			}
+			if (target instanceof SpotMarketGroup || target instanceof SpotMarket) {
+				editorPart.setActivePage(spotCargoMarketsPage);
+
+				// fleetCostPane.getScenarioViewer().setSelection(new StructuredSelection(target), true);
 				return;
 			}
 		}

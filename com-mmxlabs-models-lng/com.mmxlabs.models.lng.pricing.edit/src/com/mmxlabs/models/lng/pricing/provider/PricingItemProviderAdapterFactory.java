@@ -257,26 +257,26 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SpotMarket} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SpotMarketGroup} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected SpotMarketItemProvider spotMarketItemProvider;
+	protected SpotMarketGroupItemProvider spotMarketGroupItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.SpotMarket}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.SpotMarketGroup}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
-	public Adapter createSpotMarketAdapter() {
-		if (spotMarketItemProvider == null) {
-			spotMarketItemProvider = new SpotMarketItemProvider(this);
+	public Adapter createSpotMarketGroupAdapter() {
+		if (spotMarketGroupItemProvider == null) {
+			spotMarketGroupItemProvider = new SpotMarketGroupItemProvider(this);
 		}
 
-		return spotMarketItemProvider;
+		return spotMarketGroupItemProvider;
 	}
 
 	/**
@@ -346,6 +346,121 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		}
 
 		return cooldownPriceItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.DESPurchaseMarket} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DESPurchaseMarketItemProvider desPurchaseMarketItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.DESPurchaseMarket}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDESPurchaseMarketAdapter() {
+		if (desPurchaseMarketItemProvider == null) {
+			desPurchaseMarketItemProvider = new DESPurchaseMarketItemProvider(this);
+		}
+
+		return desPurchaseMarketItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.DESSalesMarket} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected DESSalesMarketItemProvider desSalesMarketItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.DESSalesMarket}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createDESSalesMarketAdapter() {
+		if (desSalesMarketItemProvider == null) {
+			desSalesMarketItemProvider = new DESSalesMarketItemProvider(this);
+		}
+
+		return desSalesMarketItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.FOBPurchasesMarket} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FOBPurchasesMarketItemProvider fobPurchasesMarketItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.FOBPurchasesMarket}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFOBPurchasesMarketAdapter() {
+		if (fobPurchasesMarketItemProvider == null) {
+			fobPurchasesMarketItemProvider = new FOBPurchasesMarketItemProvider(this);
+		}
+
+		return fobPurchasesMarketItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.FOBSalesMarket} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FOBSalesMarketItemProvider fobSalesMarketItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.FOBSalesMarket}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFOBSalesMarketAdapter() {
+		if (fobSalesMarketItemProvider == null) {
+			fobSalesMarketItemProvider = new FOBSalesMarketItemProvider(this);
+		}
+
+		return fobSalesMarketItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.SpotAvailability} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SpotAvailabilityItemProvider spotAvailabilityItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.SpotAvailability}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSpotAvailabilityAdapter() {
+		if (spotAvailabilityItemProvider == null) {
+			spotAvailabilityItemProvider = new SpotAvailabilityItemProvider(this);
+		}
+
+		return spotAvailabilityItemProvider;
 	}
 
 	/**
@@ -455,10 +570,15 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (routeCostItemProvider != null) routeCostItemProvider.dispose();
 		if (charterCostModelItemProvider != null) charterCostModelItemProvider.dispose();
 		if (baseFuelCostItemProvider != null) baseFuelCostItemProvider.dispose();
-		if (spotMarketItemProvider != null) spotMarketItemProvider.dispose();
+		if (spotMarketGroupItemProvider != null) spotMarketGroupItemProvider.dispose();
 		if (portCostItemProvider != null) portCostItemProvider.dispose();
 		if (portCostEntryItemProvider != null) portCostEntryItemProvider.dispose();
 		if (cooldownPriceItemProvider != null) cooldownPriceItemProvider.dispose();
+		if (desPurchaseMarketItemProvider != null) desPurchaseMarketItemProvider.dispose();
+		if (desSalesMarketItemProvider != null) desSalesMarketItemProvider.dispose();
+		if (fobPurchasesMarketItemProvider != null) fobPurchasesMarketItemProvider.dispose();
+		if (fobSalesMarketItemProvider != null) fobSalesMarketItemProvider.dispose();
+		if (spotAvailabilityItemProvider != null) spotAvailabilityItemProvider.dispose();
 	}
 
 }

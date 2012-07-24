@@ -153,13 +153,49 @@ public interface PricingPackage extends EPackage {
 	int PRICING_MODEL__COOLDOWN_PRICES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Des Purchase Spot Market</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__DES_PURCHASE_SPOT_MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Des Sales Spot Market</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__DES_SALES_SPOT_MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Fob Purchases Spot Market</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Fob Sales Spot Market</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICING_MODEL__FOB_SALES_SPOT_MARKET = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int PRICING_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.IndexImpl <em>Index</em>}' class.
@@ -665,6 +701,52 @@ public interface PricingPackage extends EPackage {
 	int BASE_FUEL_COST_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketGroupImpl <em>Spot Market Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.SpotMarketGroupImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSpotMarketGroup()
+	 * @generated
+	 */
+	int SPOT_MARKET_GROUP = 9;
+
+	/**
+	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET_GROUP__AVAILABILITY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET_GROUP__TYPE = 1;
+
+	/**
+	 * The feature id for the '<em><b>Markets</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET_GROUP__MARKETS = 2;
+
+	/**
+	 * The number of structural features of the '<em>Spot Market Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET_GROUP_FEATURE_COUNT = 3;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl <em>Spot Market</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -672,7 +754,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSpotMarket()
 	 * @generated
 	 */
-	int SPOT_MARKET = 9;
+	int SPOT_MARKET = 10;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -720,7 +802,7 @@ public interface PricingPackage extends EPackage {
 	int SPOT_MARKET__OTHER_NAMES = TypesPackage.ASPOT_MARKET__OTHER_NAMES;
 
 	/**
-	 * The feature id for the '<em><b>Availability</b></em>' reference.
+	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -729,22 +811,13 @@ public interface PricingPackage extends EPackage {
 	int SPOT_MARKET__AVAILABILITY = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_MARKET__PORTS = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__MIN_QUANTITY = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 2;
+	int SPOT_MARKET__MIN_QUANTITY = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -753,25 +826,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__MAX_QUANTITY = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 3;
-
-	/**
-	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_MARKET__NOTIONAL_PORT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 4;
-
-	/**
-	 * The feature id for the '<em><b>Type</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_MARKET__TYPE = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 5;
+	int SPOT_MARKET__MAX_QUANTITY = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Contract</b></em>' reference.
@@ -780,7 +835,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET__CONTRACT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 6;
+	int SPOT_MARKET__CONTRACT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 3;
 
 	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
@@ -789,7 +844,7 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET_FEATURE_COUNT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 7;
+	int SPOT_MARKET_FEATURE_COUNT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.PortCostImpl <em>Port Cost</em>}' class.
@@ -799,7 +854,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCost()
 	 * @generated
 	 */
-	int PORT_COST = 10;
+	int PORT_COST = 11;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -863,7 +918,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getPortCostEntry()
 	 * @generated
 	 */
-	int PORT_COST_ENTRY = 11;
+	int PORT_COST_ENTRY = 12;
 
 	/**
 	 * The feature id for the '<em><b>Activity</b></em>' attribute.
@@ -900,7 +955,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getCooldownPrice()
 	 * @generated
 	 */
-	int COOLDOWN_PRICE = 12;
+	int COOLDOWN_PRICE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -948,6 +1003,497 @@ public interface PricingPackage extends EPackage {
 	int COOLDOWN_PRICE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.DESPurchaseMarketImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDESPurchaseMarket()
+	 * @generated
+	 */
+	int DES_PURCHASE_MARKET = 14;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__EXTENSIONS = SPOT_MARKET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__PROXIES = SPOT_MARKET__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__UUID = SPOT_MARKET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__NAME = SPOT_MARKET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__OTHER_NAMES = SPOT_MARKET__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__AVAILABILITY = SPOT_MARKET__AVAILABILITY;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__MIN_QUANTITY = SPOT_MARKET__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__CONTRACT = SPOT_MARKET__CONTRACT;
+
+	/**
+	 * The feature id for the '<em><b>Cv</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__CV = SPOT_MARKET_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Destination Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__DESTINATION_PORTS = SPOT_MARKET_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>DES Purchase Market</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.DESSalesMarketImpl <em>DES Sales Market</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.DESSalesMarketImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDESSalesMarket()
+	 * @generated
+	 */
+	int DES_SALES_MARKET = 15;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__EXTENSIONS = SPOT_MARKET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__PROXIES = SPOT_MARKET__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__UUID = SPOT_MARKET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__NAME = SPOT_MARKET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__OTHER_NAMES = SPOT_MARKET__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__AVAILABILITY = SPOT_MARKET__AVAILABILITY;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__MIN_QUANTITY = SPOT_MARKET__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__CONTRACT = SPOT_MARKET__CONTRACT;
+
+	/**
+	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__NOTIONAL_PORT = SPOT_MARKET_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>DES Sales Market</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.FOBPurchasesMarketImpl <em>FOB Purchases Market</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.FOBPurchasesMarketImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getFOBPurchasesMarket()
+	 * @generated
+	 */
+	int FOB_PURCHASES_MARKET = 16;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__EXTENSIONS = SPOT_MARKET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__PROXIES = SPOT_MARKET__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__UUID = SPOT_MARKET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__NAME = SPOT_MARKET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__OTHER_NAMES = SPOT_MARKET__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__AVAILABILITY = SPOT_MARKET__AVAILABILITY;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__MIN_QUANTITY = SPOT_MARKET__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__CONTRACT = SPOT_MARKET__CONTRACT;
+
+	/**
+	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__NOTIONAL_PORT = SPOT_MARKET_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Cv</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__CV = SPOT_MARKET_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>FOB Purchases Market</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.FOBSalesMarketImpl <em>FOB Sales Market</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.FOBSalesMarketImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getFOBSalesMarket()
+	 * @generated
+	 */
+	int FOB_SALES_MARKET = 17;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__EXTENSIONS = SPOT_MARKET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__PROXIES = SPOT_MARKET__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__UUID = SPOT_MARKET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__NAME = SPOT_MARKET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__OTHER_NAMES = SPOT_MARKET__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Availability</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__AVAILABILITY = SPOT_MARKET__AVAILABILITY;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__MIN_QUANTITY = SPOT_MARKET__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__CONTRACT = SPOT_MARKET__CONTRACT;
+
+	/**
+	 * The feature id for the '<em><b>Load Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__LOAD_PORT = SPOT_MARKET_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>FOB Sales Market</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET_FEATURE_COUNT = SPOT_MARKET_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.SpotAvailabilityImpl <em>Spot Availability</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.pricing.impl.SpotAvailabilityImpl
+	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSpotAvailability()
+	 * @generated
+	 */
+	int SPOT_AVAILABILITY = 18;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_AVAILABILITY__CONSTANT = 0;
+
+	/**
+	 * The feature id for the '<em><b>Curve</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_AVAILABILITY__CURVE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Spot Availability</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_AVAILABILITY_FEATURE_COUNT = 2;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.SpotType <em>Spot Type</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -955,7 +1501,7 @@ public interface PricingPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSpotType()
 	 * @generated
 	 */
-	int SPOT_TYPE = 13;
+	int SPOT_TYPE = 19;
 
 
 	/**
@@ -1033,6 +1579,50 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getPricingModel_CooldownPrices();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.PricingModel#getDesPurchaseSpotMarket <em>Des Purchase Spot Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Des Purchase Spot Market</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getDesPurchaseSpotMarket()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_DesPurchaseSpotMarket();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.PricingModel#getDesSalesSpotMarket <em>Des Sales Spot Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Des Sales Spot Market</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getDesSalesSpotMarket()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_DesSalesSpotMarket();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.PricingModel#getFobPurchasesSpotMarket <em>Fob Purchases Spot Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Fob Purchases Spot Market</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getFobPurchasesSpotMarket()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_FobPurchasesSpotMarket();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.PricingModel#getFobSalesSpotMarket <em>Fob Sales Spot Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Fob Sales Spot Market</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.PricingModel#getFobSalesSpotMarket()
+	 * @see #getPricingModel()
+	 * @generated
+	 */
+	EReference getPricingModel_FobSalesSpotMarket();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DataIndex <em>Data Index</em>}'.
@@ -1291,6 +1881,49 @@ public interface PricingPackage extends EPackage {
 	EAttribute getBaseFuelCost_Price();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SpotMarketGroup <em>Spot Market Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Spot Market Group</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotMarketGroup
+	 * @generated
+	 */
+	EClass getSpotMarketGroup();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.SpotMarketGroup#getAvailability <em>Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Availability</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotMarketGroup#getAvailability()
+	 * @see #getSpotMarketGroup()
+	 * @generated
+	 */
+	EReference getSpotMarketGroup_Availability();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SpotMarketGroup#getType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Type</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotMarketGroup#getType()
+	 * @see #getSpotMarketGroup()
+	 * @generated
+	 */
+	EAttribute getSpotMarketGroup_Type();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.pricing.SpotMarketGroup#getMarkets <em>Markets</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Markets</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotMarketGroup#getMarkets()
+	 * @see #getSpotMarketGroup()
+	 * @generated
+	 */
+	EReference getSpotMarketGroup_Markets();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SpotMarket <em>Spot Market</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1301,26 +1934,15 @@ public interface PricingPackage extends EPackage {
 	EClass getSpotMarket();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getAvailability <em>Availability</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getAvailability <em>Availability</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Availability</em>'.
+	 * @return the meta object for the containment reference '<em>Availability</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.SpotMarket#getAvailability()
 	 * @see #getSpotMarket()
 	 * @generated
 	 */
 	EReference getSpotMarket_Availability();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getPorts <em>Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Ports</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SpotMarket#getPorts()
-	 * @see #getSpotMarket()
-	 * @generated
-	 */
-	EReference getSpotMarket_Ports();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getMinQuantity <em>Min Quantity</em>}'.
@@ -1343,28 +1965,6 @@ public interface PricingPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSpotMarket_MaxQuantity();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getNotionalPort <em>Notional Port</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Notional Port</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SpotMarket#getNotionalPort()
-	 * @see #getSpotMarket()
-	 * @generated
-	 */
-	EReference getSpotMarket_NotionalPort();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getType <em>Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Type</em>'.
-	 * @see com.mmxlabs.models.lng.pricing.SpotMarket#getType()
-	 * @see #getSpotMarket()
-	 * @generated
-	 */
-	EAttribute getSpotMarket_Type();
 
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getContract <em>Contract</em>}'.
@@ -1485,6 +2085,144 @@ public interface PricingPackage extends EPackage {
 	EReference getCooldownPrice_Index();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DESPurchaseMarket <em>DES Purchase Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>DES Purchase Market</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DESPurchaseMarket
+	 * @generated
+	 */
+	EClass getDESPurchaseMarket();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.DESPurchaseMarket#getCv <em>Cv</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cv</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DESPurchaseMarket#getCv()
+	 * @see #getDESPurchaseMarket()
+	 * @generated
+	 */
+	EAttribute getDESPurchaseMarket_Cv();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.pricing.DESPurchaseMarket#getDestinationPorts <em>Destination Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Destination Ports</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DESPurchaseMarket#getDestinationPorts()
+	 * @see #getDESPurchaseMarket()
+	 * @generated
+	 */
+	EReference getDESPurchaseMarket_DestinationPorts();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.DESSalesMarket <em>DES Sales Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>DES Sales Market</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DESSalesMarket
+	 * @generated
+	 */
+	EClass getDESSalesMarket();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.DESSalesMarket#getNotionalPort <em>Notional Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Notional Port</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.DESSalesMarket#getNotionalPort()
+	 * @see #getDESSalesMarket()
+	 * @generated
+	 */
+	EReference getDESSalesMarket_NotionalPort();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.FOBPurchasesMarket <em>FOB Purchases Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>FOB Purchases Market</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.FOBPurchasesMarket
+	 * @generated
+	 */
+	EClass getFOBPurchasesMarket();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.FOBPurchasesMarket#getNotionalPort <em>Notional Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Notional Port</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.FOBPurchasesMarket#getNotionalPort()
+	 * @see #getFOBPurchasesMarket()
+	 * @generated
+	 */
+	EReference getFOBPurchasesMarket_NotionalPort();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.FOBPurchasesMarket#getCv <em>Cv</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cv</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.FOBPurchasesMarket#getCv()
+	 * @see #getFOBPurchasesMarket()
+	 * @generated
+	 */
+	EAttribute getFOBPurchasesMarket_Cv();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.FOBSalesMarket <em>FOB Sales Market</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>FOB Sales Market</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.FOBSalesMarket
+	 * @generated
+	 */
+	EClass getFOBSalesMarket();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.FOBSalesMarket#getLoadPort <em>Load Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Load Port</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.FOBSalesMarket#getLoadPort()
+	 * @see #getFOBSalesMarket()
+	 * @generated
+	 */
+	EReference getFOBSalesMarket_LoadPort();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.SpotAvailability <em>Spot Availability</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Spot Availability</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotAvailability
+	 * @generated
+	 */
+	EClass getSpotAvailability();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.SpotAvailability#getConstant <em>Constant</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Constant</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotAvailability#getConstant()
+	 * @see #getSpotAvailability()
+	 * @generated
+	 */
+	EAttribute getSpotAvailability_Constant();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.pricing.SpotAvailability#getCurve <em>Curve</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Curve</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.SpotAvailability#getCurve()
+	 * @see #getSpotAvailability()
+	 * @generated
+	 */
+	EReference getSpotAvailability_Curve();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.pricing.SpotType <em>Spot Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1573,6 +2311,38 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference PRICING_MODEL__COOLDOWN_PRICES = eINSTANCE.getPricingModel_CooldownPrices();
+
+		/**
+		 * The meta object literal for the '<em><b>Des Purchase Spot Market</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__DES_PURCHASE_SPOT_MARKET = eINSTANCE.getPricingModel_DesPurchaseSpotMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Des Sales Spot Market</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__DES_SALES_SPOT_MARKET = eINSTANCE.getPricingModel_DesSalesSpotMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Fob Purchases Spot Market</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET = eINSTANCE.getPricingModel_FobPurchasesSpotMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Fob Sales Spot Market</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PRICING_MODEL__FOB_SALES_SPOT_MARKET = eINSTANCE.getPricingModel_FobSalesSpotMarket();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DataIndexImpl <em>Data Index</em>}' class.
@@ -1783,6 +2553,40 @@ public interface PricingPackage extends EPackage {
 		EAttribute BASE_FUEL_COST__PRICE = eINSTANCE.getBaseFuelCost_Price();
 
 		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketGroupImpl <em>Spot Market Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.SpotMarketGroupImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSpotMarketGroup()
+		 * @generated
+		 */
+		EClass SPOT_MARKET_GROUP = eINSTANCE.getSpotMarketGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Availability</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET_GROUP__AVAILABILITY = eINSTANCE.getSpotMarketGroup_Availability();
+
+		/**
+		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_MARKET_GROUP__TYPE = eINSTANCE.getSpotMarketGroup_Type();
+
+		/**
+		 * The meta object literal for the '<em><b>Markets</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET_GROUP__MARKETS = eINSTANCE.getSpotMarketGroup_Markets();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl <em>Spot Market</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1793,20 +2597,12 @@ public interface PricingPackage extends EPackage {
 		EClass SPOT_MARKET = eINSTANCE.getSpotMarket();
 
 		/**
-		 * The meta object literal for the '<em><b>Availability</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Availability</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference SPOT_MARKET__AVAILABILITY = eINSTANCE.getSpotMarket_Availability();
-
-		/**
-		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SPOT_MARKET__PORTS = eINSTANCE.getSpotMarket_Ports();
 
 		/**
 		 * The meta object literal for the '<em><b>Min Quantity</b></em>' attribute feature.
@@ -1823,22 +2619,6 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SPOT_MARKET__MAX_QUANTITY = eINSTANCE.getSpotMarket_MaxQuantity();
-
-		/**
-		 * The meta object literal for the '<em><b>Notional Port</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SPOT_MARKET__NOTIONAL_PORT = eINSTANCE.getSpotMarket_NotionalPort();
-
-		/**
-		 * The meta object literal for the '<em><b>Type</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SPOT_MARKET__TYPE = eINSTANCE.getSpotMarket_Type();
 
 		/**
 		 * The meta object literal for the '<em><b>Contract</b></em>' reference feature.
@@ -1933,6 +2713,120 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COOLDOWN_PRICE__INDEX = eINSTANCE.getCooldownPrice_Index();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.DESPurchaseMarketImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDESPurchaseMarket()
+		 * @generated
+		 */
+		EClass DES_PURCHASE_MARKET = eINSTANCE.getDESPurchaseMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Cv</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DES_PURCHASE_MARKET__CV = eINSTANCE.getDESPurchaseMarket_Cv();
+
+		/**
+		 * The meta object literal for the '<em><b>Destination Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DES_PURCHASE_MARKET__DESTINATION_PORTS = eINSTANCE.getDESPurchaseMarket_DestinationPorts();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.DESSalesMarketImpl <em>DES Sales Market</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.DESSalesMarketImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getDESSalesMarket()
+		 * @generated
+		 */
+		EClass DES_SALES_MARKET = eINSTANCE.getDESSalesMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Notional Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference DES_SALES_MARKET__NOTIONAL_PORT = eINSTANCE.getDESSalesMarket_NotionalPort();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.FOBPurchasesMarketImpl <em>FOB Purchases Market</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.FOBPurchasesMarketImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getFOBPurchasesMarket()
+		 * @generated
+		 */
+		EClass FOB_PURCHASES_MARKET = eINSTANCE.getFOBPurchasesMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Notional Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FOB_PURCHASES_MARKET__NOTIONAL_PORT = eINSTANCE.getFOBPurchasesMarket_NotionalPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Cv</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FOB_PURCHASES_MARKET__CV = eINSTANCE.getFOBPurchasesMarket_Cv();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.FOBSalesMarketImpl <em>FOB Sales Market</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.FOBSalesMarketImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getFOBSalesMarket()
+		 * @generated
+		 */
+		EClass FOB_SALES_MARKET = eINSTANCE.getFOBSalesMarket();
+
+		/**
+		 * The meta object literal for the '<em><b>Load Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FOB_SALES_MARKET__LOAD_PORT = eINSTANCE.getFOBSalesMarket_LoadPort();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.SpotAvailabilityImpl <em>Spot Availability</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.pricing.impl.SpotAvailabilityImpl
+		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getSpotAvailability()
+		 * @generated
+		 */
+		EClass SPOT_AVAILABILITY = eINSTANCE.getSpotAvailability();
+
+		/**
+		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SPOT_AVAILABILITY__CONSTANT = eINSTANCE.getSpotAvailability_Constant();
+
+		/**
+		 * The meta object literal for the '<em><b>Curve</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_AVAILABILITY__CURVE = eINSTANCE.getSpotAvailability_Curve();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.SpotType <em>Spot Type</em>}' enum.

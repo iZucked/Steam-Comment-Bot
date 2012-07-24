@@ -160,6 +160,12 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case PricingPackage.SPOT_MARKET_GROUP: {
+				SpotMarketGroup spotMarketGroup = (SpotMarketGroup)theEObject;
+				T result = caseSpotMarketGroup(spotMarketGroup);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case PricingPackage.SPOT_MARKET: {
 				SpotMarket spotMarket = (SpotMarket)theEObject;
 				T result = caseSpotMarket(spotMarket);
@@ -187,6 +193,56 @@ public class PricingSwitch<T> extends Switch<T> {
 				CooldownPrice cooldownPrice = (CooldownPrice)theEObject;
 				T result = caseCooldownPrice(cooldownPrice);
 				if (result == null) result = caseMMXObject(cooldownPrice);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.DES_PURCHASE_MARKET: {
+				DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket)theEObject;
+				T result = caseDESPurchaseMarket(desPurchaseMarket);
+				if (result == null) result = caseSpotMarket(desPurchaseMarket);
+				if (result == null) result = caseASpotMarket(desPurchaseMarket);
+				if (result == null) result = caseUUIDObject(desPurchaseMarket);
+				if (result == null) result = caseNamedObject(desPurchaseMarket);
+				if (result == null) result = caseMMXObject(desPurchaseMarket);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.DES_SALES_MARKET: {
+				DESSalesMarket desSalesMarket = (DESSalesMarket)theEObject;
+				T result = caseDESSalesMarket(desSalesMarket);
+				if (result == null) result = caseSpotMarket(desSalesMarket);
+				if (result == null) result = caseASpotMarket(desSalesMarket);
+				if (result == null) result = caseUUIDObject(desSalesMarket);
+				if (result == null) result = caseNamedObject(desSalesMarket);
+				if (result == null) result = caseMMXObject(desSalesMarket);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.FOB_PURCHASES_MARKET: {
+				FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket)theEObject;
+				T result = caseFOBPurchasesMarket(fobPurchasesMarket);
+				if (result == null) result = caseSpotMarket(fobPurchasesMarket);
+				if (result == null) result = caseASpotMarket(fobPurchasesMarket);
+				if (result == null) result = caseUUIDObject(fobPurchasesMarket);
+				if (result == null) result = caseNamedObject(fobPurchasesMarket);
+				if (result == null) result = caseMMXObject(fobPurchasesMarket);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.FOB_SALES_MARKET: {
+				FOBSalesMarket fobSalesMarket = (FOBSalesMarket)theEObject;
+				T result = caseFOBSalesMarket(fobSalesMarket);
+				if (result == null) result = caseSpotMarket(fobSalesMarket);
+				if (result == null) result = caseASpotMarket(fobSalesMarket);
+				if (result == null) result = caseUUIDObject(fobSalesMarket);
+				if (result == null) result = caseNamedObject(fobSalesMarket);
+				if (result == null) result = caseMMXObject(fobSalesMarket);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case PricingPackage.SPOT_AVAILABILITY: {
+				SpotAvailability spotAvailability = (SpotAvailability)theEObject;
+				T result = caseSpotAvailability(spotAvailability);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -330,6 +386,21 @@ public class PricingSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Spot Market Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Spot Market Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSpotMarketGroup(SpotMarketGroup object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Spot Market</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -386,6 +457,81 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCooldownPrice(CooldownPrice object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>DES Purchase Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>DES Purchase Market</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDESPurchaseMarket(DESPurchaseMarket object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>DES Sales Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>DES Sales Market</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDESSalesMarket(DESSalesMarket object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>FOB Purchases Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>FOB Purchases Market</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFOBPurchasesMarket(FOBPurchasesMarket object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>FOB Sales Market</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>FOB Sales Market</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFOBSalesMarket(FOBSalesMarket object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Spot Availability</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Spot Availability</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSpotAvailability(SpotAvailability object) {
 		return null;
 	}
 
