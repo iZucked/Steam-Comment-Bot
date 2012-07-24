@@ -29,7 +29,7 @@ public class DefaultModelFactory implements IModelFactory {
 	protected Date now;
 	private String extensionID;
 	private String label;
-	private String prototypeClass;
+	protected String prototypeClass;
 
 	@Override
 	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final ISelection selection) {
