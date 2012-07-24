@@ -474,7 +474,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		// chunks have been scheduled sequentially as best we can, now try
 		// inserting any leftovers
 		log.info("Trying to insert " + chunks.size() + " unscheduled elements into solution (" + chunks + ")");
-		while (!chunks.isEmpty()) {
+		int numTries = 1000 + chunks.size();
+		while (!chunks.isEmpty() && numTries-- != 0) {
 			final Iterator<SequenceChunk> iterator = chunks.iterator();
 			while (iterator.hasNext()) {
 				top: {
