@@ -35,18 +35,17 @@ public class ContractExtensionTestModule extends AbstractModule {
 	@Override
 	protected void configure() {
 
-		bind(ServiceRegistry.class).to(EclipseRegistry.class);
 
 		if (!Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toInstance(createFitnessFunctionRegistry());
 			bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
 			bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
-		}
 
 		final SimpleContractTransformer sct = new SimpleContractTransformer();
 
 		final ContractTransformer transformer = new ContractTransformerWrapper(sct, sct.getContractEClasses());
 		bind(TypeLiterals.iterable(ContractTransformer.class)).toInstance(Collections.singleton(transformer));
+		}
 	}
 
 	private IEvaluationProcessRegistry createEvaluationProcessRegistry() {

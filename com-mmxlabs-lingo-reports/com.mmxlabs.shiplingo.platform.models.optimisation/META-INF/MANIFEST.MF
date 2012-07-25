@@ -41,4 +41,4 @@ Import-Package: com.mmxlabs.common;version="1.0.0",
  com.mmxlabs.optimiser.core.scenario.common;version="1.0.0",
  com.mmxlabs.optimiser.lso;version="1.0.0",
  com.mmxlabs.optimiser.lso.impl;version="1.0.0"
-Service-Component: OSGI-INF/component.xml
+Service-Component: OSGI-INF/*.xml
