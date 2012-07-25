@@ -383,15 +383,15 @@
                   tooltip="Evaluate scenario">
             </action>
             <action
-                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
-                  definitionId="com.mmxlabs.commands.optimisation.play"
-                  disabledIcon="icons/dlcl16/resume_co.gif"
-                  icon="icons/elcl16/resume_co.gif"
-                  id="com.mmxlabs.shiplingo.platform.models.optimisation.play"
-                  label="Start/Resume Optimisation"
+                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.StopOptimisationEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.terminate"
+                  disabledIcon="icons/dlcl16/terminate_co.gif"
+                  icon="icons/elcl16/terminate_co.gif"
+                  id="com.mmxlabs.shiplingo.platform.models.optimisation.stop"
+                  label="Stop Optimisation"
                   style="push"
                   toolbarPath="additions"
-                  tooltip="Start or Resume optimisation">
+                  tooltip="Terminate optimisation">
             </action>
             <action
                   class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.PauseOptimisationEditorActionDelegate"
@@ -405,14 +405,15 @@
                   tooltip="Pause optimisation">
             </action>
             <action
-                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.StopOptimisationEditorActionDelegate"
-                  disabledIcon="icons/dlcl16/terminate_co.gif"
-                  icon="icons/elcl16/terminate_co.gif"
-                  id="com.mmxlabs.shiplingo.platform.models.optimisation.stop"
-                  label="Stop Optimisation"
+                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.play"
+                  disabledIcon="icons/dlcl16/resume_co.gif"
+                  icon="icons/elcl16/resume_co.gif"
+                  id="com.mmxlabs.shiplingo.platform.models.optimisation.play"
+                  label="Start/Resume Optimisation"
                   style="push"
                   toolbarPath="additions"
-                  tooltip="Terminate optimisation">
+                  tooltip="Start or Resume optimisation">
             </action>
             <action
                   class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.ForkAndStartOptimisationActionHandler"
