@@ -16,26 +16,16 @@ import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.Co
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLate;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 
-import java.util.Collection;
-
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.input.ElementAssignment;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.fleet.CharterOutEvent;
+import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 public class VesselStateColourScheme extends ColourScheme {
 	
@@ -66,7 +56,13 @@ public class VesselStateColourScheme extends ColourScheme {
 				return ColorCache.getColor(Light_Gas_Blue);
 			}
 		} else if (element instanceof VesselEventVisit) {
-			return ColorCache.getColor(VesselEvent_Purple);
+			VesselEventVisit vev = (VesselEventVisit) element;
+			if(vev.getVesselEvent() instanceof DryDockEvent){
+				return ColorCache.getColor(VesselEvent_Purple);
+			}
+			else if(vev.getVesselEvent() instanceof CharterOutEvent){
+				return ColorCache.getColor(90, 150, 0);
+			}			
 		}
 
 		// else if (mode == Mode.Lateness) {
@@ -106,52 +102,5 @@ public class VesselStateColourScheme extends ColourScheme {
 			if(isLocked(event, viewer)) return ColorCache.getColor(Locked_White);
 		}
 		return null;
-	}
-
-	@Override
-	public int getBorderWidth(final Object element) {
-
-		if (element instanceof Event) {
-			final Event event = (Event) element;
-
-			// Stage 1: Find the cargo
-			final Sequence sequence = (Sequence) event.eContainer();
-			int index = sequence.getEvents().indexOf(event);
-			Cargo cargo = null;
-			while (cargo == null && index >= 0) {
-				Object obj = sequence.getEvents().get(index);
-				if (obj instanceof SlotVisit) {
-					final SlotVisit slotVisit = ((SlotVisit) obj);
-					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
-					final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
-					cargo = cargoAllocation.getInputCargo();
-				} else if (obj instanceof VesselEventVisit) {
-					break;
-				}
-				--index;
-			}
-
-			// Stage 2: Find the input assignment
-			if (cargo != null) {
-
-				final Object input = viewer.getInput();
-				if (input instanceof IScenarioViewerSynchronizerOutput) {
-					final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) input;
-
-					final Collection<Object> collectedElements = output.getCollectedElements();
-					if (collectedElements.size() > 0) {
-						final ScenarioInstance instance = output.getScenarioInstance(sequence.eContainer());
-						final MMXRootObject rootObject = (MMXRootObject) instance.getInstance();
-						final InputModel inputModel = rootObject.getSubModel(InputModel.class);
-						final ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, cargo);
-						if (assignment != null && assignment.isLocked()) {
-							return 1;
-						}
-					}
-				}
-			}
-		}
-
-		return 1;
 	}
 }
