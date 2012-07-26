@@ -141,7 +141,7 @@ public class SimpleSchedulerTest {
 		// ....
 
 		builder.buildXYDistances();
-		
+
 		// Generate the optimisation data
 		final IOptimisationData data = builder.getOptimisationData();
 
@@ -224,7 +224,8 @@ public class SimpleSchedulerTest {
 		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);
 
-		final PortTypeConstraintCheckerFactory constraintFactory3 = new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_vesselProvider);
+		final PortTypeConstraintCheckerFactory constraintFactory3 = new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider,
+				SchedulerConstants.DCP_vesselProvider);
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory3);
 
 		return constraintRegistry;
