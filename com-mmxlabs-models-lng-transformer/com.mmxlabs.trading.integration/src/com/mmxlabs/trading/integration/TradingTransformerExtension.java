@@ -4,13 +4,16 @@
  */
 package com.mmxlabs.trading.integration;
 
+import java.util.Collection;
+
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
@@ -27,11 +30,11 @@ import com.mmxlabs.trading.optimiser.builder.TradingBuilderExtension;
 public class TradingTransformerExtension implements ITransformerExtension {
 
 	private MMXRootObject rootObject;
-	private ModelEntityMap entities;
+	private ResourcelessModelEntityMap entities;
 	private TradingBuilderExtension tradingBuilder;
 
 	@Override
-	public void startTransforming(MMXRootObject rootObject, ModelEntityMap map, ISchedulerBuilder builder) {
+	public void startTransforming(MMXRootObject rootObject, ResourcelessModelEntityMap map, ISchedulerBuilder builder) {
 		this.rootObject = rootObject;
 		this.entities = map;
 		tradingBuilder = new TradingBuilderExtension();
@@ -70,14 +73,14 @@ public class TradingTransformerExtension implements ITransformerExtension {
 		tradingBuilder.setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));
 
 		// set up contract association or slot association or whatever
-		CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-		for (final Cargo c : cargoModel.getCargoes()) {
-			final IPortSlot load = entities.getOptimiserObject(c.getLoadSlot(), IPortSlot.class);
-			final IPortSlot dis = entities.getOptimiserObject(c.getDischargeSlot(), IPortSlot.class);
-			final IEntity loadEntity = entities.getOptimiserObject(c.getLoadSlot().getContract().getEntity(), IEntity.class);
-			final IEntity dischargeEntity = entities.getOptimiserObject(c.getDischargeSlot().getContract().getEntity(), IEntity.class);
-			tradingBuilder.setEntityForSlot(loadEntity, load);
-			tradingBuilder.setEntityForSlot(dischargeEntity, dis);
+		final Collection<Slot> slots = entities.getAllModelObjects(Slot.class);
+		for (Slot slot : slots) {
+			final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
+			if (portSlot != null) {
+				final IEntity entity = entities.getOptimiserObject(slot.getContract().getEntity(), IEntity.class);
+				tradingBuilder.setEntityForSlot(entity, portSlot);
+				
+			}
 		}
 	}
 }
