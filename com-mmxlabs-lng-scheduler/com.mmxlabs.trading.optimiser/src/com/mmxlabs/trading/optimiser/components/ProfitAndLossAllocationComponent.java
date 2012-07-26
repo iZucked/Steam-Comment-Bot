@@ -18,22 +18,16 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.VirtualCargo;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -140,19 +134,40 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 		for (final ScheduledSequence sequence : solution) {
 			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
+
 			int time = sequence.getStartTime();
 			for (final VoyagePlan plan : sequence.getVoyagePlans()) {
-				final PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
-				final PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
-				if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeOption()))) {
-					final long cargoGroupValue = evaluate(plan, currentAllocation, vessel, annotatedSolution);
-					accumulator += cargoGroupValue;
-					if (allocationIterator.hasNext()) {
-						currentAllocation = allocationIterator.next();
-					} else {
-						currentAllocation = null;
+				boolean cargo = false;
+				if (plan.getSequence().length >= 3) {
+
+					PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
+					PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
+					if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeOption()))) {
+						cargo = true;
+						final long cargoGroupValue = evaluate(plan, currentAllocation, vessel, annotatedSolution);
+						accumulator += cargoGroupValue;
+						if (allocationIterator.hasNext()) {
+							currentAllocation = allocationIterator.next();
+						} else {
+							currentAllocation = null;
+						}
+					} else if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL && plan.getSequence().length == 4) {
+						firstDetails = (PortDetails) plan.getSequence()[1];
+						lastDetails = (PortDetails) plan.getSequence()[2];
+						if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeOption()))) {
+							cargo = true;
+							final long cargoGroupValue = evaluate(plan, currentAllocation, vessel, annotatedSolution);
+							accumulator += cargoGroupValue;
+							if (allocationIterator.hasNext()) {
+								currentAllocation = allocationIterator.next();
+							} else {
+								currentAllocation = null;
+							}
+						}
 					}
-				} else {
+				}
+
+				if (!cargo) {
 					final long otherGroupValue = evaluate(plan, vessel, time, annotatedSolution);
 					accumulator += otherGroupValue;
 				}
@@ -259,9 +274,14 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 			final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
 			annotatedSolution.getElementAnnotations().setAnnotation(element, TradingConstants.AI_profitAndLoss, annotation);
 
-			ILoadSlot loadOption = (ILoadSlot) currentAllocation.getLoadOption();
-			loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, (IDischargeSlot) currentAllocation.getDischargeOption(), currentAllocation.getLoadTime(), currentAllocation.getDischargeTime(),
-					currentAllocation.getDischargeM3Price(), (int)loadVolume, vessel, plan, shippingDetails);
+			final ILoadOption loadOption = currentAllocation.getLoadOption();
+			if (loadOption instanceof ILoadSlot) {
+				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) currentAllocation.getDischargeOption(), currentAllocation.getLoadTime(),
+						currentAllocation.getDischargeTime(), currentAllocation.getDischargeM3Price(), (int) loadVolume, vessel, plan, shippingDetails);
+			} else {
+				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, (IDischargeSlot) currentAllocation.getDischargeOption(), currentAllocation.getLoadTime(),
+						currentAllocation.getDischargeTime(), currentAllocation.getDischargeM3Price(), shippingDetails);
+			}
 
 		}
 
