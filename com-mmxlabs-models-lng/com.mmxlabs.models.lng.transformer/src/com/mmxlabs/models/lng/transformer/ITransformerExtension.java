@@ -23,7 +23,7 @@ public interface ITransformerExtension {
 	 * @param map
 	 * @param builder
 	 */
-	public void startTransforming(MMXRootObject rootObject, ModelEntityMap map, ISchedulerBuilder builder);
+	public void startTransforming(MMXRootObject rootObject, ResourcelessModelEntityMap map, ISchedulerBuilder builder);
 
 	/**
 	 * This method will be called just before the transformation is completed and the builder's {@link ISchedulerBuilder#getOptimisationData()} method is called.
