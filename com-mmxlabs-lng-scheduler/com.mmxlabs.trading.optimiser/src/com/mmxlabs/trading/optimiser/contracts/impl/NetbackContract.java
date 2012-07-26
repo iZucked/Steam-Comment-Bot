@@ -168,7 +168,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 	}
 
 	@Override
-	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice) {
+	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice, IDetailTree annotations) {
 		// TODO implement me
 		throw new RuntimeException("A netback requires shipping costs - not yet handled");
 	}

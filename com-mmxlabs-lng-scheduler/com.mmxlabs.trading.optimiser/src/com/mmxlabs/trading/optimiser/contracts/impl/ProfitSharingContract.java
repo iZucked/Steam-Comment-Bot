@@ -52,11 +52,11 @@ public class ProfitSharingContract implements ILoadPriceCalculator {
 	@Override
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int actualSalesPrice, final int loadVolume,
 			final IVessel vessel, final VoyagePlan plan, IDetailTree annotation) {
-		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, actualSalesPrice);
+		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, actualSalesPrice, annotation);
 	}
 
 	@Override
-	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int actualSalesPrice) {
+	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int actualSalesPrice, IDetailTree annotations) {
 		final int marketPurchasePrice = (int) market.getValueAtPoint(loadTime);
 
 		int basePrice = marketPurchasePrice - marginScaled - actualSalesPrice;
