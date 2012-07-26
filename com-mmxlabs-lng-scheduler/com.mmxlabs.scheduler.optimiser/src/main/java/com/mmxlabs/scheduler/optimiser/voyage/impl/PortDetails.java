@@ -24,7 +24,7 @@ public final class PortDetails implements Cloneable {
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 
 	private final LongFastEnumMap<CapacityViolationType> capacityViolations = new LongFastEnumMap<CapacityViolationType>(CapacityViolationType.values().length);
-	
+
 	private int visitDuration;
 
 	private IPortSlot portSlot;
@@ -85,12 +85,13 @@ public final class PortDetails implements Cloneable {
 	public final boolean equals(final Object obj) {
 
 		if (obj instanceof PortDetails) {
+			
 			final PortDetails d = (PortDetails) obj;
 
 			if (visitDuration != d.visitDuration) {
 				return false;
 			}
-			
+
 			if (!Equality.isEqual(capacityViolations, d.capacityViolations)) {
 				return false;
 			}
@@ -110,13 +111,20 @@ public final class PortDetails implements Cloneable {
 
 	@Override
 	public final int hashCode() {
-		
+
 		return Objects.hashCode(visitDuration, capacityViolations, fuelConsumption, portSlot);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "PortDetails [fuelConsumption=" + fuelConsumption + ", visitDuration=" + visitDuration + ", portSlot=" + portSlot + ", capacityViolations=" + capacityViolations + "]";
+		// @formatter:off
+		return Objects.toStringHelper(PortDetails.class)
+				.add("fuelConsumption", fuelConsumption)
+				.add("visitDuration", visitDuration)
+				.add("portSlot", portSlot)
+				.add("capacityViolations", capacityViolations)
+				.toString();
+		// @formatter:on
 	}
 
 	@Override
