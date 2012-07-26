@@ -833,6 +833,8 @@ public class LNGScenarioTransformer {
 
 								// Create a fake model object to add in here;
 								SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
+								desSlot.setDESPurchase(true);
+								desSlot.setName(id);
 								desSlot.setArriveCold(false);
 								desSlot.setCargoCV(desPurchaseMarket.getCv());
 								desSlot.setWindowStart(new Date(startTime.getTime()));
