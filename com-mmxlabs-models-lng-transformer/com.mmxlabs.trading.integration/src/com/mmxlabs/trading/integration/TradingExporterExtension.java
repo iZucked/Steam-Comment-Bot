@@ -26,7 +26,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -65,7 +65,7 @@ public class TradingExporterExtension implements IExporterExtension {
 				// emit p&l entry - depends on the type of slot associated with the element.
 				final IPortSlot slot = slotProvider.getPortSlot(element);
 
-				if (slot instanceof ILoadSlot) {
+				if (slot instanceof ILoadOption) {
 					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
 					CargoAllocation cargoAllocation = null;
 					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
