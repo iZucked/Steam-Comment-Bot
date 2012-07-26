@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -30,7 +31,7 @@ public class LNGTransformer {
 	private final Injector injector;
 
 	@Inject
-	private ModelEntityMap entities;
+	private ResourcelessModelEntityMap entities;
 
 	@Inject
 	private LNGScenarioTransformer lngScenarioTransformer;
@@ -77,7 +78,7 @@ public class LNGTransformer {
 		return scenario;
 	}
 
-	public ModelEntityMap getEntities() {
+	public ResourcelessModelEntityMap getEntities() {
 		return entities;
 	}
 

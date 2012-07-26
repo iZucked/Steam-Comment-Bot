@@ -244,7 +244,7 @@ public class LNGScenarioTransformer {
 	 * @return
 	 * @throws IncompleteScenarioException
 	 */
-	public IOptimisationData createOptimisationData(final ModelEntityMap entities) throws IncompleteScenarioException {
+	public IOptimisationData createOptimisationData(final ResourcelessModelEntityMap entities) throws IncompleteScenarioException {
 		/*
 		 * Set reference for hour 0
 		 */
@@ -831,19 +831,21 @@ public class LNGScenarioTransformer {
 								final ILoadOption desPurchaseSlot = builder.createVirtualLoadSlot(id, null, tw, Calculator.scale(market.getMinQuantity()), Calculator.scale(market.getMaxQuantity()),
 										priceCalculator, cargoCVValue, false);
 
-								for (final IContractTransformer contractTransformer : contractTransformers) {
-									contractTransformer.slotTransformed(null, desPurchaseSlot);
-								}
 								// Create a fake model object to add in here;
-								SpotLoadSlot desSlot  = CargoFactory.eINSTANCE.createSpotLoadSlot();
+								SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 								desSlot.setArriveCold(false);
 								desSlot.setCargoCV(desPurchaseMarket.getCv());
 								desSlot.setWindowStart(new Date(startTime.getTime()));
-								long duration = endTime.getTime() / startTime.getTime() / 1000 /60/ 60/24; 
-								desSlot.setWindowSize((int)duration);
+								desSlot.setContract(desPurchaseMarket.getContract());
+								long duration = endTime.getTime() / startTime.getTime() / 1000 / 60 / 60 / 24;
+								desSlot.setWindowSize((int) duration);
 								// Key piece of information
 								desSlot.setMarket(desPurchaseMarket);
-								 entities.addModelObject(desSlot, desPurchaseSlot);
+								entities.addModelObject(desSlot, desPurchaseSlot);
+
+								for (final IContractTransformer contractTransformer : contractTransformers) {
+									contractTransformer.slotTransformed(desSlot, desPurchaseSlot);
+								}
 
 								builder.bindDischargeSlotsToDESPurchase(desPurchaseSlot, marketPorts);
 

@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
@@ -38,7 +41,7 @@ public class ResourcelessModelEntityMap extends ModelEntityMap {
 	}
 
 	@Override
-	public void setScenario(MMXRootObject rootObject) {
+	public void setScenario(final MMXRootObject rootObject) {
 	}
 
 	@Override
@@ -46,5 +49,16 @@ public class ResourcelessModelEntityMap extends ModelEntityMap {
 		super.dispose();
 		modelToOptimiser.clear();
 		optimiserToModel.clear();
+	}
+
+	public <T extends EObject> Collection<T> getAllModelObjects(final Class<? extends T> clz) {
+
+		final List<T> objects = new LinkedList<T>();
+		for (final Object obj : modelToOptimiser.keySet()) {
+			if (clz.isInstance(obj)) {
+				objects.add(clz.cast(obj));
+			}
+		}
+		return objects;
 	}
 }
