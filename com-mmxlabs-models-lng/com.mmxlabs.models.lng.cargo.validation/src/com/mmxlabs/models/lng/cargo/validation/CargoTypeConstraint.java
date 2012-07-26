@@ -12,12 +12,8 @@ import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
-import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CargoType;
-import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class CargoTypeConstraint extends AbstractModelConstraint {
 	/*
@@ -31,16 +27,16 @@ public class CargoTypeConstraint extends AbstractModelConstraint {
 
 		final List<IStatus> failures = new LinkedList<IStatus>();
 		if (object instanceof Cargo) {
-			final Cargo cargo = (Cargo) object;
-			if (cargo.isAllowRewiring() && cargo.getCargoType() != CargoType.FLEET) {
-
-				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Non-shipped cargo  " + cargo.getName()
-						+ " cannot be re-wired."));
-
-				failure.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring());
-
-				failures.add(failure);
-			}
+//			final Cargo cargo = (Cargo) object;
+//			if (cargo.isAllowRewiring() && cargo.getCargoType() != CargoType.FLEET) {
+//
+//				final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Non-shipped cargo  " + cargo.getName()
+//						+ " cannot be re-wired."));
+//
+//				failure.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_AllowRewiring());
+//
+//				failures.add(failure);
+//			}
 		}
 
 		if (failures.isEmpty()) {
