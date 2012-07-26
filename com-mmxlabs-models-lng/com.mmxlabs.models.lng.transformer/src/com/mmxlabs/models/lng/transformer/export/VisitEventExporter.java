@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
@@ -22,11 +24,8 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.events.IFuelUsingEvent;
-import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.IPortCostAnnotation;
@@ -77,7 +76,12 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			output.getSlotAllocations().add(slotAllocation);
 			// TODO this will have to look at market-generated slots.
-			slotAllocation.setSlot(entities.getModelObject(slot, Slot.class));
+			Slot optSlot = entities.getModelObject(slot, Slot.class);
+			if (optSlot instanceof SpotSlot) {
+				slotAllocation.setSpotMarket(((SpotLoadSlot) optSlot).getMarket());
+			} else {
+				slotAllocation.setSlot(optSlot);
+			}
 			portVisit = sv;
 
 			// Output allocation info.
