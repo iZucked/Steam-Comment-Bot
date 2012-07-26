@@ -364,37 +364,28 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			if (allocation.getInputCargo() == null) {
 				// this does not correspond directly to an input cargo;
 				// get the slots, find their cargos, and adjust them?
-				LoadSlot load = (LoadSlot) allocation.getLoadAllocation().getSlot();
+				final LoadSlot load = (LoadSlot) allocation.getLoadAllocation().getSlot();
 				final DischargeSlot discharge = (DischargeSlot) allocation.getDischargeAllocation().getSlot();
 
-				if (load == null) {
-					ASpotMarket spotMarket = allocation.getLoadAllocation().getSpotMarket();
-					if (spotMarket == null) {
-						// Not sure when we would get here...
-						load = CargoFactory.eINSTANCE.createLoadSlot();
-						load.setName("Optimiser Load Slot " + allocation.getLoadAllocation().getName());
-					} else {
-						// Assuming a DES Purchase - but could also be a FOB Purchase?
-						load = CargoFactory.eINSTANCE.createSpotLoadSlot();
-						((SpotLoadSlot) load).setMarket(spotMarket);
-						load.setDESPurchase(true);
-						load.setName("Optimiser DES Purchase " + " - " + spotMarket.getName() + " - " + discharge.getPort().getName() + " - " + discharge.getWindowStart());
-					}
-					load.setContract((PurchaseContract) allocation.getLoadAllocation().getContract());
+				// Spot market options
 
-					load.setPort(discharge.getPort());
-					load.setOptional(true);
-					load.setWindowStart(discharge.getWindowStart());
+				// Slots created in the builder have no container so add it the container now as it is used.
+				if (load.eContainer() == null) {
+					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), load));
+				}
 
+				// Optional loads may not have an orignal cargo, so create one now.
+				if (load.getCargo() == null) {
 					final Cargo c = CargoFactory.eINSTANCE.createCargo();
 					c.setAllowRewiring(true);
 					c.setLoadSlot(load);
 					c.setName(load.getName());
-					// load.setName(allocation.getName());
-					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), load));
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), c));
 
-					cmd.append(SetCommand.create(domain, allocation.getLoadAllocation(), SchedulePackage.eINSTANCE.getSlotAllocation_Slot(), load));
+				}
+				// "Load port" is the discharge port for DES purchases
+				if (load.isDESPurchase()) {
+					cmd.append(SetCommand.create(domain, load, CargoPackage.eINSTANCE.getSlot_Port(), discharge.getPort()));
 				}
 
 				final Cargo loadCargo = load.getCargo();
