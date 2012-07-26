@@ -37,11 +37,13 @@ import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -832,8 +834,16 @@ public class LNGScenarioTransformer {
 								for (final IContractTransformer contractTransformer : contractTransformers) {
 									contractTransformer.slotTransformed(null, desPurchaseSlot);
 								}
-								// Hmm
-								// entities.addModelObject(loadSlot, desPurchaseSlot);
+								// Create a fake model object to add in here;
+								SpotLoadSlot desSlot  = CargoFactory.eINSTANCE.createSpotLoadSlot();
+								desSlot.setArriveCold(false);
+								desSlot.setCargoCV(desPurchaseMarket.getCv());
+								desSlot.setWindowStart(new Date(startTime.getTime()));
+								long duration = endTime.getTime() / startTime.getTime() / 1000 /60/ 60/24; 
+								desSlot.setWindowSize((int)duration);
+								// Key piece of information
+								desSlot.setMarket(desPurchaseMarket);
+								 entities.addModelObject(desSlot, desPurchaseSlot);
 
 								builder.bindDischargeSlotsToDESPurchase(desPurchaseSlot, marketPorts);
 
