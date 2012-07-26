@@ -44,7 +44,8 @@ public class PortTypeConstraintCheckerTest {
 		final String name = "checker";
 		final String key = "key";
 		final String vkey = "vkey";
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker(name, key, vkey);
+		final String pskey = "pskey";
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker(name, key, vkey, pskey);
 
 		Assert.assertSame(name, checker.getName());
 	}
@@ -52,7 +53,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT1() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -99,7 +100,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT2() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -146,7 +147,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString1() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -193,7 +194,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString2() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -243,6 +244,7 @@ public class PortTypeConstraintCheckerTest {
 		final String name = "checker";
 		final String key = "key";
 		final String vkey = "vkey";
+		final String pskey = "pskey";
 
 		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
 		final OptimisationData data = new OptimisationData();
@@ -250,7 +252,7 @@ public class PortTypeConstraintCheckerTest {
 
 		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
 		data.addDataComponentProvider(vkey, vesselProvider);
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker(name, key, vkey);
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker(name, key, vkey, pskey);
 		checker.setOptimisationData(data);
 
 		Assert.assertSame(portTypeProvider, checker.getPortTypeProvider());
@@ -262,7 +264,7 @@ public class PortTypeConstraintCheckerTest {
 	 */
 	@Test
 	public void testCheckSequence1() {
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -297,7 +299,7 @@ public class PortTypeConstraintCheckerTest {
 	 */
 	@Test
 	public void testCheckSequence2() {
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -323,7 +325,7 @@ public class PortTypeConstraintCheckerTest {
 
 	@Test
 	public void testCheckSequence3() {
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -349,7 +351,7 @@ public class PortTypeConstraintCheckerTest {
 
 	@Test
 	public void testCheckSequence4() {
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -381,7 +383,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence5() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -419,7 +421,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence6() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -455,7 +457,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence7() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -491,7 +493,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence8() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -525,7 +527,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence9() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -559,7 +561,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence10() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -595,7 +597,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence11() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -631,7 +633,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence12() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -667,7 +669,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence13() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -703,7 +705,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence14() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
@@ -737,7 +739,7 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence15() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey");
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
 
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
 		checker.setPortTypeProvider(portTypeProvider);
