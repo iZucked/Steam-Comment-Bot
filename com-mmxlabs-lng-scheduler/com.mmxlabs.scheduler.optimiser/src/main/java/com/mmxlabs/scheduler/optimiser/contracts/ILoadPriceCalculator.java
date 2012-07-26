@@ -51,5 +51,5 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param dischargeOption
 	 * @return
 	 */
-	public int calculateLoadUnitPrice(ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice);
+	public int calculateLoadUnitPrice(ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice, IDetailTree annotations);
 }

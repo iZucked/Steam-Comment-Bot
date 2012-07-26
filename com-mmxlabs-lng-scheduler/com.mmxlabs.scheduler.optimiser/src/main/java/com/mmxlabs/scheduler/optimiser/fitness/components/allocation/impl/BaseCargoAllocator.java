@@ -316,7 +316,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		// the load CV price is the notional maximum price
 		// if we load less, it might actually be worth less
 
-		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, time, dischargeCVPrice);
+		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, time, dischargeCVPrice, null);
 
 		final int dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
 		final int loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
