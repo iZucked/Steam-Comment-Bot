@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import javax.management.timer.Timer;
 
@@ -15,6 +16,8 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -28,16 +31,20 @@ import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -50,6 +57,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -164,17 +172,24 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		final String label = (currentProgress != 0) ? (LABEL_PREFIX + currentProgress + "%") : ("Evaluate");
 		final CompoundCommand command = new CompoundCommand(label);
 
-		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
-		command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
-		command.append(derive(editingDomain, schedule, inputModel, cargoModel));
-		// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+		try {
 
+			if (domain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) domain).setCommandProvidersDisabled(true);
+			}
+			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
+			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
+			command.append(derive(editingDomain, schedule, inputModel, cargoModel));
+			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
+		} finally {
+			if (domain instanceof CommandProviderAwareEditingDomain) {
+				((CommandProviderAwareEditingDomain) domain).setCommandProvidersDisabled(false);
+			}
+		}
 		editingDomain.getCommandStack().execute(command);
 
 		// Hmm, should this be done here or as part of a command - it is a persisted item.
 		// However the dirty adapter sets dirty to true outside of a command...
-		//
-		//
 		scheduleModel.setDirty(false);
 		return schedule;
 	}
@@ -339,12 +354,48 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		// TODO handle spot market cases, and free slots
 		final List<Command> nullCommands = new LinkedList<Command>();
 		final List<Command> setCommands = new LinkedList<Command>();
+
+		// Maintain the set of cargoes which we a) remove the discharge slot and b) and one to.
+		// If the subtract b from a what is left should be the cargoes removed from the solution .. hopefully optional..
+		final Set<Cargo> nullCargoes = new HashSet<Cargo>();
+		final Set<Cargo> setCargoes = new HashSet<Cargo>();
+
 		for (final CargoAllocation allocation : schedule.getCargoAllocations()) {
 			if (allocation.getInputCargo() == null) {
 				// this does not correspond directly to an input cargo;
 				// get the slots, find their cargos, and adjust them?
-				final LoadSlot load = (LoadSlot) allocation.getLoadAllocation().getSlot();
+				LoadSlot load = (LoadSlot) allocation.getLoadAllocation().getSlot();
 				final DischargeSlot discharge = (DischargeSlot) allocation.getDischargeAllocation().getSlot();
+
+				if (load == null) {
+					ASpotMarket spotMarket = allocation.getLoadAllocation().getSpotMarket();
+					if (spotMarket == null) {
+						// Not sure when we would get here...
+						load = CargoFactory.eINSTANCE.createLoadSlot();
+						load.setName("Optimiser Load Slot " + allocation.getLoadAllocation().getName());
+					} else {
+						// Assuming a DES Purchase - but could also be a FOB Purchase?
+						load = CargoFactory.eINSTANCE.createSpotLoadSlot();
+						((SpotLoadSlot) load).setMarket(spotMarket);
+						load.setDESPurchase(true);
+						load.setName("Optimiser DES Purchase " + " - " + spotMarket.getName() + " - " + discharge.getPort().getName() + " - " + discharge.getWindowStart());
+					}
+					load.setContract((PurchaseContract) allocation.getLoadAllocation().getContract());
+
+					load.setPort(discharge.getPort());
+					load.setOptional(true);
+					load.setWindowStart(discharge.getWindowStart());
+
+					final Cargo c = CargoFactory.eINSTANCE.createCargo();
+					c.setAllowRewiring(true);
+					c.setLoadSlot(load);
+					c.setName(load.getName());
+					// load.setName(allocation.getName());
+					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), load));
+					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), c));
+
+					cmd.append(SetCommand.create(domain, allocation.getLoadAllocation(), SchedulePackage.eINSTANCE.getSlotAllocation_Slot(), load));
+				}
 
 				final Cargo loadCargo = load.getCargo();
 				final Cargo dischargeCargo = discharge.getCargo();
@@ -352,16 +403,34 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				// the cargo "belongs" to the load slot
 				// loadCargo.setDischargeSlot(discharge);
 				setCommands.add(SetCommand.create(domain, loadCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), discharge));
+				setCargoes.add(loadCargo);
+
 				nullCommands.add(SetCommand.create(domain, dischargeCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
+				nullCargoes.add(dischargeCargo);
+
 				cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
 			}
 		}
+
 		// Add the null commands first so they do not overwrite the set commands
 		for (final Command c : nullCommands) {
 			cmd.append(c);
 		}
 		for (final Command c : setCommands) {
 			cmd.append(c);
+		}
+
+		nullCargoes.removeAll(setCargoes);
+		if (!nullCargoes.isEmpty()) {
+			for (final Cargo c : nullCargoes) {
+				// Sanity check
+				if (!c.getLoadSlot().isOptional()) {
+					throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
+				}
+				cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
+				final Command create = DeleteCommand.create(domain, c);
+				cmd.append(create);
+			}
 		}
 
 		return cmd;
