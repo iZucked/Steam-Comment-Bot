@@ -76,12 +76,11 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			output.getSlotAllocations().add(slotAllocation);
 			// TODO this will have to look at market-generated slots.
-			Slot optSlot = entities.getModelObject(slot, Slot.class);
+			final Slot optSlot = entities.getModelObject(slot, Slot.class);
 			if (optSlot instanceof SpotSlot) {
 				slotAllocation.setSpotMarket(((SpotLoadSlot) optSlot).getMarket());
-			} else {
-				slotAllocation.setSlot(optSlot);
 			}
+			slotAllocation.setSlot(optSlot);
 			portVisit = sv;
 
 			// Output allocation info.
@@ -113,15 +112,12 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			sv.setSlotAllocation(slotAllocation);
 			slotAllocation.setCargoAllocation(eAllocation);
-			
-			
-			
+
 			final IPortVisitEvent event = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
 
 			if (event != null) {
 				sv.getFuels().addAll(super.createFuelQuantities(event));
 			}
-			
 
 		} else if (slot instanceof IVesselEventPortSlot) {
 			// final ICharterOutPortSlot cslot = (ICharterOutPortSlot) slot;
