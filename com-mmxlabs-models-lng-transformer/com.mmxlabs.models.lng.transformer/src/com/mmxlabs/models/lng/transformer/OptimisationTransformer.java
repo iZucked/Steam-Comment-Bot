@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -201,7 +202,15 @@ public class OptimisationTransformer {
 						// TODO: Need a FOB/DES provider!
 						final Collection<IResource> allowedResources = rac.getAllowedResources(element);
 						if (allowedResources.size() == 1) {
-							IResource resource = allowedResources.iterator().next();
+							final IResource resource = allowedResources.iterator().next();
+							final Cargo cargo = ((LoadSlot) slot).getCargo();
+							if (cargo != null) {
+								final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+								final IPortSlot optimiserObject2 = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
+								final ISequenceElement element2 = psp.getElement(optimiserObject2);
+								advice.getModifiableSequence(resource).add(element);
+								advice.getModifiableSequence(resource).add(element2);
+							}
 						}
 					}
 				}
@@ -279,7 +288,16 @@ public class OptimisationTransformer {
 						// TODO: Need a FOB/DES provider!
 						final Collection<IResource> allowedResources = rac.getAllowedResources(element);
 						if (allowedResources.size() == 1) {
-							IResource resource = allowedResources.iterator().next();
+							final IResource resource = allowedResources.iterator().next();
+
+							final Cargo cargo = ((LoadSlot) slot).getCargo();
+							if (cargo != null) {
+								final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+								final IPortSlot optimiserObject2 = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
+								final ISequenceElement element2 = psp.getElement(optimiserObject2);
+								advice.getModifiableSequence(resource).add(element);
+								advice.getModifiableSequence(resource).add(element2);
+							}
 						}
 					}
 				}
