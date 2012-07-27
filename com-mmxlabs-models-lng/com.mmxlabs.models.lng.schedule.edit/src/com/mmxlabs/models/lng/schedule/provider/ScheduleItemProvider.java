@@ -68,6 +68,7 @@ public class ScheduleItemProvider
 
 			addCompletePropertyDescriptor(object);
 			addCargoAllocationsPropertyDescriptor(object);
+			addUnusedElementsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -108,6 +109,28 @@ public class ScheduleItemProvider
 				 getString("_UI_Schedule_cargoAllocations_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_Schedule_cargoAllocations_feature", "_UI_Schedule_type"),
 				 SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Unused Elements feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addUnusedElementsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Schedule_unusedElements_feature"),
+				 getString("_UI_Schedule_unusedElements_description"),
+				 SchedulePackage.Literals.SCHEDULE__UNUSED_ELEMENTS,
 				 true,
 				 false,
 				 true,

@@ -8,6 +8,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Unscheduled Cargo</b></em>'.
+ * @deprecated
  * <!-- end-user-doc -->
  *
  * <p>

@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.mmxcore.MMXObject;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +22,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getFitnesses <em>Fitnesses</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getUnusedElements <em>Unused Elements</em>}</li>
  * </ul>
  * </p>
  *
@@ -79,6 +81,7 @@ public interface Schedule extends MMXObject {
 	 * If the meaning of the '<em>Unscheduled Cargoes</em>' containment reference list isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Unscheduled Cargoes</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_UnscheduledCargoes()
@@ -134,6 +137,22 @@ public interface Schedule extends MMXObject {
 	 * @generated
 	 */
 	EList<Fitness> getFitnesses();
+
+	/**
+	 * Returns the value of the '<em><b>Unused Elements</b></em>' reference list.
+	 * The list contents are of type {@link org.eclipse.emf.ecore.EObject}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Unused Elements</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Unused Elements</em>' reference list.
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_UnusedElements()
+	 * @model transient="true"
+	 * @generated
+	 */
+	EList<EObject> getUnusedElements();
 
 } // end of  Schedule
 

@@ -9,8 +9,8 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 
+import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 import java.util.Collection;
@@ -21,11 +21,13 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
@@ -41,6 +43,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getFitnesses <em>Fitnesses</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getUnusedElements <em>Unused Elements</em>}</li>
  * </ul>
  * </p>
  *
@@ -116,6 +119,16 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @ordered
 	 */
 	protected EList<Fitness> fitnesses;
+
+	/**
+	 * The cached value of the '{@link #getUnusedElements() <em>Unused Elements</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getUnusedElements()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<EObject> unusedElements;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -222,6 +235,18 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EList<EObject> getUnusedElements() {
+		if (unusedElements == null) {
+			unusedElements = new EObjectResolvingEList<EObject>(EObject.class, this, SchedulePackage.SCHEDULE__UNUSED_ELEMENTS);
+		}
+		return unusedElements;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -259,6 +284,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return getSlotAllocations();
 			case SchedulePackage.SCHEDULE__FITNESSES:
 				return getFitnesses();
+			case SchedulePackage.SCHEDULE__UNUSED_ELEMENTS:
+				return getUnusedElements();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -295,6 +322,10 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				getFitnesses().clear();
 				getFitnesses().addAll((Collection<? extends Fitness>)newValue);
 				return;
+			case SchedulePackage.SCHEDULE__UNUSED_ELEMENTS:
+				getUnusedElements().clear();
+				getUnusedElements().addAll((Collection<? extends EObject>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -325,6 +356,9 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__FITNESSES:
 				getFitnesses().clear();
 				return;
+			case SchedulePackage.SCHEDULE__UNUSED_ELEMENTS:
+				getUnusedElements().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -349,6 +383,8 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return slotAllocations != null && !slotAllocations.isEmpty();
 			case SchedulePackage.SCHEDULE__FITNESSES:
 				return fitnesses != null && !fitnesses.isEmpty();
+			case SchedulePackage.SCHEDULE__UNUSED_ELEMENTS:
+				return unusedElements != null && !unusedElements.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
