@@ -50,7 +50,6 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 				final IScenarioService scenarioService = instance.getScenarioService();
 
 				try {
-					final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 					final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 					final Set<String> existingNames = new HashSet<String>();
@@ -69,7 +68,12 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 						newName = namePrefix + " (" + counter++ + ")";
 					}
 
-					fork.setName(getNewName(instance.getName(), newName));
+					final String finalNewName = getNewName(instance.getName(), newName);
+					if (finalNewName != null) {
+						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
+
+						fork.setName(finalNewName);
+					}
 				} catch (final IOException e) {
 					throw new RuntimeException("Unable to fork scenario", e);
 				}
