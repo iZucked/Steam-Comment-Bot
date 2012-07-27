@@ -757,9 +757,6 @@ public class LNGScenarioTransformer {
 					}
 					builder.setCargoVesselRestriction(cargo, vesselsForCargo);
 				}
-			} else {
-				// Move generators should not permit this, but specify here just in case
-				builder.setCargoVesselRestriction(cargo, Collections.<IVessel> emptySet());
 			}
 
 		}
@@ -829,7 +826,7 @@ public class LNGScenarioTransformer {
 								final ILoadPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ILoadPriceCalculator.class);
 
 								final ILoadOption desPurchaseSlot = builder.createVirtualLoadSlot(id, null, tw, Calculator.scale(market.getMinQuantity()), Calculator.scale(market.getMaxQuantity()),
-										priceCalculator, cargoCVValue, false);
+										priceCalculator, cargoCVValue, true);
 
 								// Create a fake model object to add in here;
 								SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
@@ -839,6 +836,7 @@ public class LNGScenarioTransformer {
 								desSlot.setCargoCV(desPurchaseMarket.getCv());
 								desSlot.setWindowStart(new Date(startTime.getTime()));
 								desSlot.setContract(desPurchaseMarket.getContract());
+								desSlot.setOptional(true);
 								long duration = endTime.getTime() / startTime.getTime() / 1000 / 60 / 60 / 24;
 								desSlot.setWindowSize((int) duration);
 								// Key piece of information
