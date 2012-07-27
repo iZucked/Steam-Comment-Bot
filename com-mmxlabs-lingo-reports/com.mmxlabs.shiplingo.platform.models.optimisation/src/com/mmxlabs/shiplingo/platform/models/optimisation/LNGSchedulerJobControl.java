@@ -432,7 +432,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				final LoadSlot loadSlot = (LoadSlot) eObj;
 				if (loadSlot.getCargo() != null) {
 					final Cargo c = loadSlot.getCargo();
-
+					//Avoid potential dual delete from previous clause 
+					if (nullCargoes.contains(c)) {
+						continue;
+					}
 					// Sanity check
 					if (!loadSlot.isOptional()) {
 						throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
