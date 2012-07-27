@@ -6,48 +6,92 @@ package com.mmxlabs.model.service.impl;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
+import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 
 public class ModelInstance implements IModelInstance {
+	private static final Logger log = LoggerFactory.getLogger(ModelInstance.class);
 	private final Resource resource;
+	private boolean dirty = false;
+	private EObject modelObject = null;
+	
+	private MMXContentAdapter dirtyAdapter = new MMXContentAdapter() {
+		@Override
+		public void reallyNotifyChanged(final Notification notification) {
+			if (!notification.isTouch()) {
+				dirty = true;
+				modelObject.eAdapters().remove(this);
+			}
+		}
 
+		@Override
+		protected void missedNotifications(final List<Notification> missed) {
+			for (final Notification notification : missed.toArray(new Notification[missed.size()])) {
+				reallyNotifyChanged(notification);
+				if (dirty) break;
+			}
+		}
+	};
+	
 	public ModelInstance(final Resource resource) {
 		this.resource = resource;
 	}
 
 	@Override
 	public EObject getModel() throws IOException {
-
 		if (!resource.isLoaded()) {
 			resource.load(Collections.emptyMap());
+			if (resource.getContents().isEmpty()) {
+				throw new IOException("Failed to get contents for " + resource.getURI() + ", as it is empty");
+			} else {
+				modelObject = resource.getContents().get(0);
+				modelObject.eAdapters().add(dirtyAdapter);
+			}
 		}
-		if (resource.getContents().isEmpty()) {
-			throw new IOException("Failed to get contents for " + resource.getURI() + ", as it is empty");
-		} else {
-			return resource.getContents().get(0);
-		}
+		return modelObject;
 	}
 
 	@Override
 	public void save() throws IOException {
+		if (!isDirty()) {
+			log.debug("Not saving " + resource.getURI() + ", as it's not modified");
+			return;
+		}
 		final EObject model = getModel();
 		try {
 			switchAdapters(model, false);
-			resource.save(Collections.emptyMap());
+			doActualSave();
 		} finally {
 			switchAdapters(model, true);
 		}
 	}
 
 	public void saveWithMany() throws IOException {
+		if (!isDirty()) {
+			log.debug("Not saving " + resource.getURI() + ", as it's not modified");
+			return;
+		}
+		doActualSave();
+	}
+	
+	private void doActualSave() throws IOException {
+		log.debug("Saving " + resource.getURI());			
+		
 		resource.save(Collections.emptyMap());
+		
+		dirty = false;
+		modelObject.eAdapters().add(dirtyAdapter);
 	}
 
 	/**
@@ -84,5 +128,10 @@ public class ModelInstance implements IModelInstance {
 	@Override
 	public URI getURI() {
 		return resource.getURI();
+	}
+
+	@Override
+	public boolean isDirty() {
+		return dirty;
 	}
 }

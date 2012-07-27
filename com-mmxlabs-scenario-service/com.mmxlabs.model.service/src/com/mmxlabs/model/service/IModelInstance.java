@@ -47,6 +47,11 @@ public interface IModelInstance {
 	 * TODO: Should this be here or part of EditingDomain?
 	 */
 	void rollback();
+	
+	/**
+	 * @return true iff this model instance has been changed since last save.
+	 */
+	boolean isDirty();
 
 	URI getURI();
 }
