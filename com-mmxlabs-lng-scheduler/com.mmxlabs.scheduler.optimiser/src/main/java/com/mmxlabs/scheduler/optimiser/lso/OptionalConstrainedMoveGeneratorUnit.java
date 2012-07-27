@@ -67,7 +67,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 		final ISequenceElement afterElement = locationSequence.get(locationIndex + 1);
 
 		// check whether beforeElement can be before afterElement
-		if (owner.validFollowers.get(beforeElement).contains(afterElement)) {
+		if (owner.getRandom().nextBoolean() && owner.validFollowers.get(beforeElement).contains(afterElement)) {
 			// we can just cut out the optional element
 			return new RemoveOptionalElement(owner.sequences.getResources().get(location.getFirst()), locationIndex);
 		} else {
