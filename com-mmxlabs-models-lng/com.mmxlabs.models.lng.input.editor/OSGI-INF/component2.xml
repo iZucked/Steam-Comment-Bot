@@ -5,9 +5,9 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.input.editor.assignmentDeleter">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.models.lng.input.editor.assignmentDeleter">
    <implementation class="com.mmxlabs.models.lng.input.commands.AssignmentDeletingCommandProvider"/>
    <service>
-      <provide interface="com.mmxlabs.models.ui.commandservice.IModelCommandProvider"/>
+      <provide interface="com.mmxlabs.models.common.commandservice.IModelCommandProvider"/>
    </service>
 </scr:component>
