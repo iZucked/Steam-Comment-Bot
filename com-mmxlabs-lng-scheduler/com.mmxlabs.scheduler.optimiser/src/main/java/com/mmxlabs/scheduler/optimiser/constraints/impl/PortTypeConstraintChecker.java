@@ -269,21 +269,20 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
 
-			if (firstType.equals(PortType.Discharge) && !secondType.equals(PortType.End)) {
-				return false;
+			if (firstType.equals(PortType.Start) && secondType.equals(PortType.End)) {
+				return true;
+			}
+			if (firstType.equals(PortType.Start) && secondType.equals(PortType.Load)) {
+				return true;
+			}
+			if (firstType.equals(PortType.Load) && secondType.equals(PortType.Discharge)) {
+				return true;
+			}
+			if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.End)) {
+				return true;
 			}
 
-			if (secondType.equals(PortType.Load) && !firstType.equals(PortType.Start)) {
-				return false;
-			}
-
-			if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.Load)) {
-				return false;
-			}
-//			if (firstType.equals(PortType.Start) && secondType.equals(PortType.End)) {
-//				return false;
-//			}
-			return true;
+			return false;
 		}
 
 		// Discharge must follow a load
