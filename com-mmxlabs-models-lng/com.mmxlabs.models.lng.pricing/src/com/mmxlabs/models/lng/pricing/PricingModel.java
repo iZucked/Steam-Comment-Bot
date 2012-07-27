@@ -151,7 +151,7 @@ public interface PricingModel extends UUIDObject {
 	 * @return the value of the '<em>Des Purchase Spot Market</em>' containment reference.
 	 * @see #setDesPurchaseSpotMarket(SpotMarketGroup)
 	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getPricingModel_DesPurchaseSpotMarket()
-	 * @model containment="true" required="true" derived="true"
+	 * @model containment="true" required="true"
 	 * @generated
 	 */
 	SpotMarketGroup getDesPurchaseSpotMarket();

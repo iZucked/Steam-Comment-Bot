@@ -25,7 +25,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="cooldownPrices" upperBound="-1"
         eType="#//CooldownPrice" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="desPurchaseSpotMarket"
-        lowerBound="1" eType="#//SpotMarketGroup" derived="true" containment="true"/>
+        lowerBound="1" eType="#//SpotMarketGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="desSalesSpotMarket" lowerBound="1"
         eType="#//SpotMarketGroup" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fobPurchasesSpotMarket"
