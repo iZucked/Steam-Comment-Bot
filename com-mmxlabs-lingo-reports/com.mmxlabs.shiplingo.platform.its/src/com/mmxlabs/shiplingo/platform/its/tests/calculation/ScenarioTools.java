@@ -63,8 +63,8 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
@@ -78,7 +78,6 @@ import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scenario.service.manifest.Manifest;
 import com.mmxlabs.scenario.service.manifest.ManifestFactory;
-import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.shiplingo.platform.its.tests.ContractExtensionTestModule;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
@@ -658,7 +657,7 @@ public class ScenarioTools {
 			}
 		}
 
-		final ModelEntityMap entities = transformer.getEntities();
+		final ResourcelessModelEntityMap entities = transformer.getEntities();
 		final OptimisationTransformer ot = transformer.getOptimisationTransformer();
 
 		final IOptimisationData data = transformer.getOptimisationData();
