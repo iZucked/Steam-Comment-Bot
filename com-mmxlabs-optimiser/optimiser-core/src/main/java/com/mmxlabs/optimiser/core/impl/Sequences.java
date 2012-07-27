@@ -78,6 +78,7 @@ public final class Sequences implements ISequences {
 			// store the new object
 			sequenceMap.put(r, sequence);
 		}
+		this.unusedElements.addAll(sequences.getUnusedElements());
 	}
 
 	@Override
