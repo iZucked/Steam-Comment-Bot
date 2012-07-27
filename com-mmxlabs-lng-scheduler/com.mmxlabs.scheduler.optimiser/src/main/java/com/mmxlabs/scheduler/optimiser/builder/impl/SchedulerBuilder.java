@@ -1291,6 +1291,24 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
 		}
+		
+		// Finally, allow any other slot to be linked to any non-virtual vessel. This helps the optional move generator.
+		final HashSet<IResource> allowedResources = new HashSet<IResource>();
+
+		for (final IVessel vessel : vessels) {
+		
+				allowedResources.add(vesselProvider.getResource(vessel));
+		}
+		
+		final HashSet<IPortSlot> unrestrictedSlots = new HashSet<IPortSlot>();
+		unrestrictedSlots.addAll(loadSlots);
+		unrestrictedSlots.addAll(dischargeSlots);
+		unrestrictedSlots.addAll(vesselEvents);
+
+		unrestrictedSlots.removeAll(restrictedSlots);
+		for (IPortSlot slot : unrestrictedSlots) {
+			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
+		}
 	}
 
 	@Override
