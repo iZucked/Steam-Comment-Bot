@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -43,9 +44,11 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -160,7 +163,7 @@ public class AnnotatedSolutionExporter {
 
 			eSequence.setDailyHireRate((hireRate * 24) / 1000);
 
-			ISequence sequence = annotatedSolution.getSequences().getSequence(resource);
+			final ISequence sequence = annotatedSolution.getSequences().getSequence(resource);
 			switch (vessel.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
@@ -172,7 +175,7 @@ public class AnnotatedSolutionExporter {
 				// Skip and process differently
 				if (sequence.size() < 4) {
 					continue;
-			}
+				}
 				break;
 			case SPOT_CHARTER:
 				if (sequence.size() < 2)
@@ -312,6 +315,15 @@ public class AnnotatedSolutionExporter {
 						&& allocation.getDischargeAllocation().getSlot() == cargo.getDischargeSlot()) {
 					allocation.setInputCargo(cargo);
 				}
+			}
+		}
+
+		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		for (final ISequenceElement element : annotatedSolution.getSequences().getUnusedElements()) {
+			final IPortSlot slot = portSlotProvider.getPortSlot(element);
+			final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+			if (slot != null) {
+				output.getUnusedElements().add(modelSlot);
 			}
 		}
 
