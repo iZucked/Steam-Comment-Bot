@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -34,11 +35,10 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
@@ -53,11 +53,10 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
-import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -85,7 +84,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private Schedule intermediateSchedule = null;
 
-	private ModelEntityMap entities;
+	private ResourcelessModelEntityMap entities;
 
 	private LocalSearchOptimiser optimiser;
 
@@ -374,21 +373,23 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), load));
 				}
 
-				// Optional loads may not have an orignal cargo, so create one now.
+				// Optional loads may not have an original cargo, so create one now.
+				final Cargo loadCargo;
 				if (load.getCargo() == null) {
 					final Cargo c = CargoFactory.eINSTANCE.createCargo();
 					c.setAllowRewiring(true);
-					c.setLoadSlot(load);
 					c.setName(load.getName());
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), c));
-
+					cmd.append(SetCommand.create(domain, c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), load));
+					loadCargo = c;
+				} else {
+					loadCargo = load.getCargo();
 				}
 				// "Load port" is the discharge port for DES purchases
 				if (load.isDESPurchase()) {
 					cmd.append(SetCommand.create(domain, load, CargoPackage.eINSTANCE.getSlot_Port(), discharge.getPort()));
 				}
 
-				final Cargo loadCargo = load.getCargo();
 				final Cargo dischargeCargo = discharge.getCargo();
 
 				// the cargo "belongs" to the load slot
@@ -398,6 +399,9 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 				nullCommands.add(SetCommand.create(domain, dischargeCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
 				nullCargoes.add(dischargeCargo);
+				if (dischargeCargo.getCargoType() != CargoType.FLEET) {
+					final int ii = 0;
+				}
 
 				cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
 			}
@@ -419,8 +423,23 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
 				}
 				cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
-				final Command create = DeleteCommand.create(domain, c);
-				cmd.append(create);
+				cmd.append(DeleteCommand.create(domain, c));
+			}
+		}
+		// For slots which are no longer used, remove the cargo
+		for (final EObject eObj : schedule.getUnusedElements()) {
+			if (eObj instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) eObj;
+				if (loadSlot.getCargo() != null) {
+					final Cargo c = loadSlot.getCargo();
+
+					// Sanity check
+					if (!loadSlot.isOptional()) {
+						throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
+					}
+					cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
+					cmd.append(DeleteCommand.create(domain, c));
+				}
 			}
 		}
 
