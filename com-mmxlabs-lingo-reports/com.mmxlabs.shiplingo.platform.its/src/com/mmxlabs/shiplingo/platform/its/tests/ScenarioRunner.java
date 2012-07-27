@@ -8,8 +8,8 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
-import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
@@ -32,7 +32,7 @@ public class ScenarioRunner {
 
 	private IOptimisationData data;
 	private IOptimisationContext context;
-	private ModelEntityMap entities;
+	private ResourcelessModelEntityMap entities;
 	private LocalSearchOptimiser optimiser;
 
 	private Schedule intialSchedule;
