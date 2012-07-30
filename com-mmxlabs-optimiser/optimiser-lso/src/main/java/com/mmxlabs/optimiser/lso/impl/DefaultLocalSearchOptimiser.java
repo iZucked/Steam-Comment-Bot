@@ -13,6 +13,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -62,6 +63,10 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 			final IModifiableSequences fullSequences = new ModifiableSequences(currentRawSequences);
 			manipulator.manipulate(fullSequences);
 
+			// Prime IReducingConstraintCheckers with initial state
+			for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {
+				checker.sequencesAccepted(fullSequences);
+			}
 			// Prime fitness cores with initial sequences
 			fitnessEvaluator.setOptimisationData(data);
 			fitnessEvaluator.setInitialSequences(fullSequences);
@@ -71,7 +76,6 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 		getMoveGenerator().setSequences(potentialRawSequences);
 
 		final IAnnotatedSolution annotatedBestSolution = fitnessEvaluator.getBestAnnotatedSolution(optimiserContext, false);
-		// fitnessEvaluator.getBestSequences()
 
 		annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_iterations, 0);
 		annotatedBestSolution.setGeneralAnnotation(OptimiserConstants.G_AI_runtime, 0l);
@@ -121,6 +125,11 @@ public class DefaultLocalSearchOptimiser extends LocalSearchOptimiser {
 
 			// Test move and update state if accepted
 			if (fitnessEvaluator.evaluateSequences(potentialFullSequences, move.getAffectedResources())) {
+
+				// Update IReducingConstraintCheckers with new state
+				for (final IReducingContraintChecker checker : getReducingConstraintCheckers()) {
+					checker.sequencesAccepted(potentialFullSequences);
+				}
 
 				// Success update state for new sequences
 				updateSequences(potentialRawSequences, currentRawSequences, move.getAffectedResources());
