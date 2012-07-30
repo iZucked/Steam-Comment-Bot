@@ -68,15 +68,17 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 
 	private String formatHours(final int hours) {
 		if (hours < 24) {
-			if (hours == 1) return hours + " hour";
-			else return hours + " hours";
+			if (hours == 1)
+				return hours + " hour";
+			else
+				return hours + " hours";
 		} else {
 			int remainderHours = hours % 24;
 			int days = hours / 24;
 			return days + " day" + (days > 1 ? "s" : "") + (remainderHours > 0 ? (", " + remainderHours + " hour" + (remainderHours > 1 ? "s" : "")) : "");
 		}
 	}
-	
+
 	/**
 	 * Validate that the available time is enough to get from A to B, if it's not negative
 	 * 
@@ -98,7 +100,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					// Cannot perform our validation, so return
 					return ctx.createSuccessStatus();
 				}
-				
+
 				for (final VesselClass vc : fleetModel.getVesselClasses()) {
 					maxSpeedKnots = Math.max(vc.getMaxSpeed(), maxSpeedKnots);
 				}
@@ -114,7 +116,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 							collectMinTimes(minTimes, parameters.getRoute(), parameters.getExtraTransitTime(), vesselClass.getMaxSpeed());
 						}
 					}
-					
+
 					for (final Route route : scenario.getSubModel(PortModel.class).getRoutes()) {
 						if (route.isCanal() == false) {
 							collectMinTimes(minTimes, route, 0, maxSpeedKnots);
@@ -136,13 +138,8 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 					return dsd;
 				} else {
 					if (time > availableTime) {
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), formatHours(time), formatHours(availableTime))) {
-							@Override
-							public int getSeverity() {
-								// If we can re-wire, then the optimiser can fix
-								return (cargo.isAllowRewiring()) ? IStatus.WARNING : IStatus.ERROR;
-							}
-						};
+						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(cargo.getName(), formatHours(time),
+								formatHours(availableTime)), (cargo.isAllowRewiring()) ? IStatus.WARNING : IStatus.ERROR);
 						dsd.addEObjectAndFeature(cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart());
 						return dsd;
 					}
