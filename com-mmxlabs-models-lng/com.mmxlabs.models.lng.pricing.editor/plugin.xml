@@ -120,7 +120,7 @@
   <componentHelper
         helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SpotMarketComponentHelper"
         id="com.mmxlabs.models.lng.pricing.helpers.SpotMarket"
-        inheritable="false"
+        inheritable="true"
         modelClass="com.mmxlabs.models.lng.pricing.SpotMarket">
   </componentHelper>
   <componentHelper
