@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.ui.validation.gui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IStatus;
@@ -39,11 +41,14 @@ public class ValidationStatusContentProvider implements ITreeContentProvider {
 		if (inputElement instanceof Map) {
 			@SuppressWarnings("unchecked")
 			final Map<ScenarioInstance, IStatus> map = (Map<ScenarioInstance, IStatus>) inputElement;
-			final Object[] array = map.entrySet().toArray();
-			for (final Object o : array) {
-				parentsMap.put(o, inputElement);
+			final List<Object> values = new ArrayList<Object>(map.size());
+			for (final Map.Entry<ScenarioInstance, IStatus> entry : map.entrySet()) {
+				if (entry.getValue() != null) {
+					values.add(entry);
+					parentsMap.put(entry, inputElement);
+				}
 			}
-			return array;
+			return values.toArray();
 		} else if (inputElement instanceof IStatus) {
 			final IStatus status = (IStatus) inputElement;
 			if (status.isMultiStatus()) {
@@ -65,11 +70,14 @@ public class ValidationStatusContentProvider implements ITreeContentProvider {
 		if (parentElement instanceof Map) {
 			@SuppressWarnings("unchecked")
 			final Map<ScenarioInstance, IStatus> map = (Map<ScenarioInstance, IStatus>) parentElement;
-			final Object[] array = map.entrySet().toArray();
-			for (final Object o : array) {
-				parentsMap.put(o, parentElement);
+			final List<Object> values = new ArrayList<Object>(map.size());
+			for (final Map.Entry<ScenarioInstance, IStatus> entry : map.entrySet()) {
+				if (entry.getValue() != null) {
+					values.add(entry);
+					parentsMap.put(entry, parentElement);
+				}
 			}
-			return array;
+			return values.toArray();
 		}
 		if (parentElement instanceof Map.Entry) {
 			@SuppressWarnings("unchecked")
@@ -102,7 +110,7 @@ public class ValidationStatusContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(final Object element) {
 		if (element instanceof Map) {
-			final Map<?,?> map = (Map<?,?>) element;
+			final Map<?, ?> map = (Map<?, ?>) element;
 			return !map.isEmpty();
 		}
 		if (element instanceof Map.Entry) {
