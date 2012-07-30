@@ -134,6 +134,12 @@
           id="com.mmxlabs.models.lng.cargo.editor.cargoGroupValueProvider"
           referenceEClass="com.mmxlabs.models.lng.cargo.CargoGroup">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.cargo.ui.valueproviders.SpotMarketValueProviderFactory"
+          id="com.mmxlabs.models.lng.cargo.ui.valueproviders.SpotMarketValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.cargo.SpotSlot"
+          referenceEClass="com.mmxlabs.models.lng.types.ASpotMarket">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">

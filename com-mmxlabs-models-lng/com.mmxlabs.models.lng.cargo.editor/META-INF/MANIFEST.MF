@@ -32,5 +32,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.lng.input.editor;bundle-version="1.0.0",
  com.mmxlabs.models.lng.schedule;bundle-version="1.0.0",
  com.mmxlabs.models.lng.fleet;bundle-version="1.0.0",
- com.mmxlabs.models.common;bundle-version="1.0.0"
+ com.mmxlabs.models.common;bundle-version="1.0.0",
+ com.mmxlabs.models.lng.pricing;bundle-version="1.0.0",
+ com.google.guava;bundle-version="11.0.1"
 Bundle-ActivationPolicy: lazy
