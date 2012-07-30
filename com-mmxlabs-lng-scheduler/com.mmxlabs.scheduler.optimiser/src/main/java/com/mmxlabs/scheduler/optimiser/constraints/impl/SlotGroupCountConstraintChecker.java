@@ -74,6 +74,7 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 			tracker.currentCount = 0;
 			tracker.permittedCount = 0;
 			tracker.constraintedCount = group.getCount();
+			trackers.put(group, tracker);
 		}
 	}
 
