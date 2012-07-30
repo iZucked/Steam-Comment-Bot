@@ -23,7 +23,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 public class ModelInstance implements IModelInstance {
 	private static final Logger log = LoggerFactory.getLogger(ModelInstance.class);
 	private final Resource resource;
-	private final MMXCoreResourceHandler handler = new MMXCoreResourceHandler();
 	private boolean dirty = false;
 	private EObject modelObject = null;
 
@@ -53,9 +52,7 @@ public class ModelInstance implements IModelInstance {
 	@Override
 	public EObject getModel() throws IOException {
 		if (!resource.isLoaded()) {
-			handler.preLoad(resource);
 			resource.load(Collections.emptyMap());
-			handler.postLoad(resource);
 			if (resource.getContents().isEmpty()) {
 				throw new IOException("Failed to get contents for " + resource.getURI() + ", as it is empty");
 			} else {
@@ -92,9 +89,7 @@ public class ModelInstance implements IModelInstance {
 
 	private void doActualSave() throws IOException {
 		log.debug("Saving " + resource.getURI());
-		handler.preSave(resource);
 		resource.save(Collections.emptyMap());
-		handler.postSave(resource);
 		dirty = false;
 		modelObject.eAdapters().add(dirtyAdapter);
 	}
