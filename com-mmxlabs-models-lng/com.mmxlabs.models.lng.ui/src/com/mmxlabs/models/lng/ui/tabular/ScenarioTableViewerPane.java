@@ -416,7 +416,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 						// Clear current selection
 						selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
-						
+
 						// Execute command
 						final Command deleteCommand = DeleteCommand.create(ed, objects);
 						ed.getCommandStack().execute(deleteCommand);
