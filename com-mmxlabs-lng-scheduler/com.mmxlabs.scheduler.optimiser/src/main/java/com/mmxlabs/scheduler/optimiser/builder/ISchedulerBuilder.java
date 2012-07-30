@@ -548,6 +548,14 @@ public interface ISchedulerBuilder {
 	void bindDischargeSlotsToDESPurchase(ILoadOption desPurchase, Collection<IPort> dischargePorts);
 
 	/**
+	 * Permit all real load slots at the given {@link IPort} to be re-wired to the given FOB Sale.
+	 * 
+	 * @param desPurchase
+	 * @param dischargePorts
+	 */
+	void bindLoadSlotsToFOBSale(IDischargeOption fobSale, IPort loadPort);
+
+	/**
 	 * Place a {@link Collection} of {@link IPortSlot}s into a "count" group - that is a group in which only the count number of elements may be used.
 	 * 
 	 * @param slots

@@ -413,7 +413,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IDischargeSlot createDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ISalesPriceCalculator pricePerMMBTu,
+	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ISalesPriceCalculator pricePerMMBTu,
 			final int durationHours, final boolean optional) {
 
 		if (!ports.contains(port)) {
@@ -1313,7 +1313,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		unrestrictedSlots.addAll(vesselEvents);
 
 		unrestrictedSlots.removeAll(restrictedSlots);
-		for (IPortSlot slot : unrestrictedSlots) {
+		for (final IPortSlot slot : unrestrictedSlots) {
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
 		}
 	}
@@ -1382,6 +1382,37 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			if (option instanceof DischargeSlot) {
 
 				if (dischargePorts.contains(option.getPort())) {
+					// Get current allocation
+
+					Set<IVessel> set = slotVesselRestrictions.get(option);
+					if (set == null || set.isEmpty()) {
+						set = new HashSet<IVessel>(realVessels);
+					}
+					set.add(virtualVessel);
+
+					constrainSlotToVessels(option, set);
+				}
+			}
+
+		}
+	}
+
+	@Override
+	public void bindLoadSlotsToFOBSale(final IDischargeOption fobSake, final IPort loadPort) {
+
+		final ISequenceElement desElement = portSlotsProvider.getElement(fobSake);
+
+		// Look up virtual vessel
+		final IVessel virtualVessel = virtualVesselMap.get(desElement);
+		if (virtualVessel == null) {
+			throw new IllegalArgumentException("FOB Sale is not linked to a virtual vesssel");
+		}
+
+		for (final ILoadOption option : loadSlots) {
+
+			if (option instanceof LoadSlot) {
+
+				if (loadPort == option.getPort()) {
 					// Get current allocation
 
 					Set<IVessel> set = slotVesselRestrictions.get(option);
