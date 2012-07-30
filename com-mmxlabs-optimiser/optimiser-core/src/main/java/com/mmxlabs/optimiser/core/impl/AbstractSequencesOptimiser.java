@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -50,30 +52,12 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	 * {@link IllegalStateException} on error.
 	 */
 	public void init() {
-
-		if (numberOfIterations < 1) {
-			throw new IllegalStateException("Number of iterations is less than 1");
-		}
-
-		if (constraintCheckers == null) {
-			throw new IllegalStateException("Constraint Checkers list is not set");
-		}
-
-		if (fitnessEvaluator == null) {
-			throw new IllegalStateException("Fitness Evaluator is not set");
-		}
-
-		if (sequenceManipulator == null) {
-			throw new IllegalStateException("Sequence Manipulator is not set");
-		}
-
-		if (progressMonitor == null) {
-			throw new IllegalStateException("Progress Monitor is not set");
-		}
-
-		if (reportInterval < 1) {
-			throw new IllegalStateException("Report interval is not set");
-		}
+		checkState(numberOfIterations > 0, "Number of iterations is less than 1");
+		checkState(constraintCheckers != null, "Constraint Checkers list is not set");
+		checkState(fitnessEvaluator != null, "Fitness Evaluator is not set");
+		checkState(sequenceManipulator != null, "Sequence Manipulator is not set");
+		checkState(progressMonitor != null, "Progress Monitor is not set");
+		checkState(reportInterval > 0, "Report interval is not set");
 	}
 
 	/**
