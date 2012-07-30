@@ -27,7 +27,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private DischargeSlotViewer dischargeSlotViewerPane;
 
 	// Temp flag to turn on/off load/discharge slots during development
-	private static final boolean showSlotTabs = false;
+	private static final boolean showSlotTabs = true;
 
 	@Override
 	public void addPages(final Composite parent) {
