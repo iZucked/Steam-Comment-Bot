@@ -245,7 +245,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IVirtualVesselSlotProviderEditor virtualVesselSlotProviderEditor;
-	
+
 	/**
 	 * Fake vessel class for virtual elements.
 	 */
@@ -888,6 +888,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_slotGroupProvider, slotGroupCountProvider);
 
+		data.addDataComponentProvider(SchedulerConstants.DCP_virtualVesselSlotProvider, virtualVesselSlotProviderEditor);
+
 		for (final IBuilderExtension extension : extensions) {
 			for (final Pair<String, IDataComponentProvider> provider : extension.createDataComponentProviders(data)) {
 				data.addDataComponentProvider(provider.getFirst(), provider.getSecond());
@@ -909,7 +911,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		virtualVesselMap.put(element, virtualVessel);
 		virtualVesselSlotProviderEditor.setVesselForElement(virtualVessel, element);
-		
+
 		return virtualVessel;
 	}
 
@@ -1296,15 +1298,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
 		}
-		
+
 		// Finally, allow any other slot to be linked to any non-virtual vessel. This helps the optional move generator.
 		final HashSet<IResource> allowedResources = new HashSet<IResource>();
 
 		for (final IVessel vessel : vessels) {
-		
-				allowedResources.add(vesselProvider.getResource(vessel));
+
+			allowedResources.add(vesselProvider.getResource(vessel));
 		}
-		
+
 		final HashSet<IPortSlot> unrestrictedSlots = new HashSet<IPortSlot>();
 		unrestrictedSlots.addAll(loadSlots);
 		unrestrictedSlots.addAll(dischargeSlots);
