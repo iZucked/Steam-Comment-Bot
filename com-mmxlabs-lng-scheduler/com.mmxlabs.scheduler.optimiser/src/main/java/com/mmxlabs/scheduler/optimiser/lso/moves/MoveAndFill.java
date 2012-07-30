@@ -54,7 +54,7 @@ public class MoveAndFill implements IMove {
 		this.resource1 = resource1;
 		this.resource2 = resource2;
 		this.usedElementIndex = usedElementIndex;
-		this.unusedElementIndex = insertionIndex;
+		this.unusedElementIndex = unusedElementIndex;
 		this.insertionIndex = insertionIndex;
 		this.unusedFirst = unusedFirst;
 	}
