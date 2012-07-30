@@ -257,7 +257,7 @@ public class LocalSearchOptimiserTest {
 		final TestLocalSearchOptimiser lso = new TestLocalSearchOptimiser();
 
 		// Wrap source in unmodifiable wrapper to make sure we do not change it!
-		lso.updateSequences(new UnmodifiableSequencesWrapper(source), destination, affectedResources);
+		lso.callUpdateSequences(new UnmodifiableSequencesWrapper(source), destination, affectedResources);
 
 		// Check source and dest sequences contain the same values
 		for (int i = 0; i < 5; ++i) {
@@ -302,7 +302,7 @@ public class LocalSearchOptimiserTest {
 			}
 		});
 
-		lso.updateSequences(source, destination, affectedResources);
+		lso.callUpdateSequences(source, destination, affectedResources);
 
 		context.assertIsSatisfied();
 	}
@@ -358,25 +358,12 @@ public class LocalSearchOptimiserTest {
 		/**
 		 * Make public rather than protected for the tests
 		 */
-		@Override
-		public void updateSequences(final ISequences source, final IModifiableSequences destination, final Collection<IResource> affectedResources) {
+		public void callUpdateSequences(final ISequences source, final IModifiableSequences destination, final Collection<IResource> affectedResources) {
 			super.updateSequences(source, destination, affectedResources);
 		}
 
 		@Override
 		public IAnnotatedSolution start(final IOptimisationContext context) {
-			fail("This is not part of the test.");
-			return null;
-		}
-
-		@Override
-		public IAnnotatedSolution getBestSolution(final boolean b) {
-			fail("This is not part of the test.");
-			return null;
-		}
-
-		@Override
-		public IAnnotatedSolution getCurrentSolution(final boolean b) {
 			fail("This is not part of the test.");
 			return null;
 		}
