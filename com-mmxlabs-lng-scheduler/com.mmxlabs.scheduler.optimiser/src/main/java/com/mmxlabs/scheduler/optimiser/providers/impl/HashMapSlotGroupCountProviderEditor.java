@@ -35,6 +35,7 @@ public final class HashMapSlotGroupCountProviderEditor implements ISlotGroupCoun
 	public SlotGroup createSlotGroup(final Collection<ISequenceElement> elements, final int count) {
 
 		final SlotGroup slotGroup = new SlotGroup(elements, count);
+		slotGroups.add(slotGroup);
 
 		for (final ISequenceElement element : elements) {
 			final Collection<SlotGroup> group;
