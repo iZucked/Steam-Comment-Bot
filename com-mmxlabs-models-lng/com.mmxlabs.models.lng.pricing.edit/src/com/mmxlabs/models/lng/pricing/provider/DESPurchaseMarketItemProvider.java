@@ -63,6 +63,7 @@ public class DESPurchaseMarketItemProvider
 
 			addCvPropertyDescriptor(object);
 			addDestinationPortsPropertyDescriptor(object);
+			addContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -103,6 +104,28 @@ public class DESPurchaseMarketItemProvider
 				 getString("_UI_DESPurchaseMarket_destinationPorts_feature"),
 				 getString("_UI_PropertyDescriptor_description", "_UI_DESPurchaseMarket_destinationPorts_feature", "_UI_DESPurchaseMarket_type"),
 				 PricingPackage.Literals.DES_PURCHASE_MARKET__DESTINATION_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Contract feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addContractPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_DESPurchaseMarket_contract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_DESPurchaseMarket_contract_feature", "_UI_DESPurchaseMarket_type"),
+				 PricingPackage.Literals.DES_PURCHASE_MARKET__CONTRACT,
 				 true,
 				 false,
 				 true,

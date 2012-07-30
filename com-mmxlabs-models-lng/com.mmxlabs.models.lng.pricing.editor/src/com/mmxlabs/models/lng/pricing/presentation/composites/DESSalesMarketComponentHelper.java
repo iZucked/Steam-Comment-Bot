@@ -67,6 +67,7 @@ public class DESSalesMarketComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_notionalPortEditor(detailComposite, topClass);
+		add_contractEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the notionalPort feature on DESSalesMarket
@@ -75,5 +76,14 @@ public class DESSalesMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_notionalPortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.DES_SALES_MARKET__NOTIONAL_PORT));
+	}
+
+	/**
+	 * Create the editor for the contract feature on DESSalesMarket
+	 *
+	 * @generated
+	 */
+	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.DES_SALES_MARKET__CONTRACT));
 	}
 }

@@ -63,7 +63,6 @@ public class SpotMarketItemProvider
 			addAvailabilityPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
-			addContractPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -130,28 +129,6 @@ public class SpotMarketItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Contract feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addContractPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SpotMarket_contract_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotMarket_contract_feature", "_UI_SpotMarket_type"),
-				 PricingPackage.Literals.SPOT_MARKET__CONTRACT,
-				 true,
-				 false,
-				 true,
-				 null,
 				 null,
 				 null));
 	}

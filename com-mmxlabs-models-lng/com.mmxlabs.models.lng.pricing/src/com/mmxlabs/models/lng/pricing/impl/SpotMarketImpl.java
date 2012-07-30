@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SpotAvailability;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
+import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.impl.ASpotMarketImpl;
@@ -33,7 +34,6 @@ import com.mmxlabs.models.lng.types.impl.ASpotMarketImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getMaxQuantity <em>Max Quantity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.SpotMarketImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -89,16 +89,6 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	 * @ordered
 	 */
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected Contract contract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -210,37 +200,10 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Contract getContract() {
-		if (contract != null && contract.eIsProxy()) {
-			InternalEObject oldContract = (InternalEObject)contract;
-			contract = (Contract)eResolveProxy(oldContract);
-			if (contract != oldContract) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.SPOT_MARKET__CONTRACT, oldContract, contract));
-			}
-		}
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Contract basicGetContract() {
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setContract(Contract newContract) {
-		Contract oldContract = contract;
-		contract = newContract;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.SPOT_MARKET__CONTRACT, oldContract, contract));
+	public AContract getContract() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
 	}
 
 	/**
@@ -271,9 +234,6 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 				return getMinQuantity();
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				return getMaxQuantity();
-			case PricingPackage.SPOT_MARKET__CONTRACT:
-				if (resolve) return getContract();
-				return basicGetContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -296,9 +256,6 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
 				return;
-			case PricingPackage.SPOT_MARKET__CONTRACT:
-				setContract((Contract)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -320,9 +277,6 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
 				return;
-			case PricingPackage.SPOT_MARKET__CONTRACT:
-				setContract((Contract)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -341,8 +295,6 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 				return minQuantity != MIN_QUANTITY_EDEFAULT;
 			case PricingPackage.SPOT_MARKET__MAX_QUANTITY:
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
-			case PricingPackage.SPOT_MARKET__CONTRACT:
-				return contract != null;
 		}
 		return super.eIsSet(featureID);
 	}

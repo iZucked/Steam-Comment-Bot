@@ -3,6 +3,7 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
+import com.mmxlabs.models.lng.types.AContract;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -21,7 +22,6 @@ import com.mmxlabs.models.lng.types.ASpotMarket;
  *   <li>{@link com.mmxlabs.models.lng.pricing.SpotMarket#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SpotMarket#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.SpotMarket#getMaxQuantity <em>Max Quantity</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.SpotMarket#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -109,30 +109,12 @@ public interface SpotMarket extends ASpotMarket {
 	void setMaxQuantity(int value);
 
 	/**
-	 * Returns the value of the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Contract</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contract</em>' reference.
-	 * @see #setContract(Contract)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getSpotMarket_Contract()
-	 * @model required="true"
-	 * @generated
-	 */
-	Contract getContract();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.SpotMarket#getContract <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Contract</em>' reference.
-	 * @see #getContract()
+	 * @model kind="operation"
 	 * @generated
 	 */
-	void setContract(Contract value);
+	AContract getContract();
 
 } // end of  SpotMarket
 

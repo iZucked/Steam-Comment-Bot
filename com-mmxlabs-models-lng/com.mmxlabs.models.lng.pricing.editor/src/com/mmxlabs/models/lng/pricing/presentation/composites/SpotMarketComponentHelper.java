@@ -67,7 +67,6 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 		add_availabilityEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
-		add_contractEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the availability feature on SpotMarket
@@ -92,14 +91,5 @@ public class SpotMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_MARKET__MAX_QUANTITY));
-	}
-
-	/**
-	 * Create the editor for the contract feature on SpotMarket
-	 *
-	 * @generated
-	 */
-	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_MARKET__CONTRACT));
 	}
 }

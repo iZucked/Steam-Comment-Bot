@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 import com.mmxlabs.models.lng.types.APortSet;
 
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -20,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
@@ -33,6 +35,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.DESPurchaseMarketImpl#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.DESPurchaseMarketImpl#getDestinationPorts <em>Destination Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.DESPurchaseMarketImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -68,6 +71,16 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 	 * @ordered
 	 */
 	protected EList<APortSet> destinationPorts;
+
+	/**
+	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getContract()
+	 * @generated
+	 * @ordered
+	 */
+	protected PurchaseContract contract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -126,6 +139,44 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public PurchaseContract getContract() {
+		if (contract != null && contract.eIsProxy()) {
+			InternalEObject oldContract = (InternalEObject)contract;
+			contract = (PurchaseContract)eResolveProxy(oldContract);
+			if (contract != oldContract) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.DES_PURCHASE_MARKET__CONTRACT, oldContract, contract));
+			}
+		}
+		return contract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PurchaseContract basicGetContract() {
+		return contract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setContract(PurchaseContract newContract) {
+		PurchaseContract oldContract = contract;
+		contract = newContract;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.DES_PURCHASE_MARKET__CONTRACT, oldContract, contract));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -133,6 +184,9 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 				return getCv();
 			case PricingPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS:
 				return getDestinationPorts();
+			case PricingPackage.DES_PURCHASE_MARKET__CONTRACT:
+				if (resolve) return getContract();
+				return basicGetContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -153,6 +207,9 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 				getDestinationPorts().clear();
 				getDestinationPorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
+			case PricingPackage.DES_PURCHASE_MARKET__CONTRACT:
+				setContract((PurchaseContract)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -171,6 +228,9 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 			case PricingPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS:
 				getDestinationPorts().clear();
 				return;
+			case PricingPackage.DES_PURCHASE_MARKET__CONTRACT:
+				setContract((PurchaseContract)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -187,6 +247,8 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 				return cv != CV_EDEFAULT;
 			case PricingPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS:
 				return destinationPorts != null && !destinationPorts.isEmpty();
+			case PricingPackage.DES_PURCHASE_MARKET__CONTRACT:
+				return contract != null;
 		}
 		return super.eIsSet(featureID);
 	}

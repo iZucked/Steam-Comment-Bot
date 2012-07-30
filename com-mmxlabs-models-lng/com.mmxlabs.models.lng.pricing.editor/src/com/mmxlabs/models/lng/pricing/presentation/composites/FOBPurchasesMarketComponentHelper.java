@@ -68,6 +68,7 @@ public class FOBPurchasesMarketComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_notionalPortEditor(detailComposite, topClass);
 		add_cvEditor(detailComposite, topClass);
+		add_contractEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the notionalPort feature on FOBPurchasesMarket
@@ -84,5 +85,14 @@ public class FOBPurchasesMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cvEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.FOB_PURCHASES_MARKET__CV));
+	}
+
+	/**
+	 * Create the editor for the contract feature on FOBPurchasesMarket
+	 *
+	 * @generated
+	 */
+	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.FOB_PURCHASES_MARKET__CONTRACT));
 	}
 }

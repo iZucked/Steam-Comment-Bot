@@ -124,16 +124,34 @@
         modelClass="com.mmxlabs.models.lng.pricing.SpotMarket">
   </componentHelper>
   <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SpotAvailabilityComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.helpers.SpotAvailability"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.pricing.SpotAvailability">
+  </componentHelper>
+  <componentHelper
         helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DESPurchaseMarketComponentHelper"
         id="com.mmxlabs.models.lng.pricing.helpers.DESPurchaseMarket"
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.pricing.DESPurchaseMarket">
   </componentHelper>
   <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SpotAvailabilityComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.helpers.SpotAvailability"
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DESSalesMarketComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.helpers.DESSalesMarket"
         inheritable="false"
-        modelClass="com.mmxlabs.models.lng.pricing.SpotAvailability">
+        modelClass="com.mmxlabs.models.lng.pricing.DESSalesMarket">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.FOBPurchasesMarketComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.helpers.FOBPurchasesMarket"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.pricing.FOBPurchasesMarket">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.FOBSalesMarketComponentHelper"
+        id="com.mmxlabs.models.lng.pricing.helpers.FOBSalesMarket"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.pricing.FOBSalesMarket">
   </componentHelper>
 		
 	</extension>

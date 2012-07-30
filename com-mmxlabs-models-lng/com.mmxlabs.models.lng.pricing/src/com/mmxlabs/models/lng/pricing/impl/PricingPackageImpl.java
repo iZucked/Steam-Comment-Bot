@@ -642,15 +642,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSpotMarket_Contract() {
-		return (EReference)spotMarketEClass.getEStructuralFeatures().get(3);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getPortCost() {
 		return portCostEClass;
 	}
@@ -768,6 +759,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getDESPurchaseMarket_Contract() {
+		return (EReference)desPurchaseMarketEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getDESSalesMarket() {
 		return desSalesMarketEClass;
 	}
@@ -779,6 +779,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EReference getDESSalesMarket_NotionalPort() {
 		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getDESSalesMarket_Contract() {
+		return (EReference)desSalesMarketEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -813,6 +822,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EReference getFOBPurchasesMarket_Contract() {
+		return (EReference)fobPurchasesMarketEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getFOBSalesMarket() {
 		return fobSalesMarketEClass;
 	}
@@ -824,6 +842,15 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 */
 	public EReference getFOBSalesMarket_LoadPort() {
 		return (EReference)fobSalesMarketEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getFOBSalesMarket_Contract() {
+		return (EReference)fobSalesMarketEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -943,7 +970,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(spotMarketEClass, SPOT_MARKET__AVAILABILITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MIN_QUANTITY);
 		createEAttribute(spotMarketEClass, SPOT_MARKET__MAX_QUANTITY);
-		createEReference(spotMarketEClass, SPOT_MARKET__CONTRACT);
 
 		portCostEClass = createEClass(PORT_COST);
 		createEReference(portCostEClass, PORT_COST__PORTS);
@@ -961,16 +987,20 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		desPurchaseMarketEClass = createEClass(DES_PURCHASE_MARKET);
 		createEAttribute(desPurchaseMarketEClass, DES_PURCHASE_MARKET__CV);
 		createEReference(desPurchaseMarketEClass, DES_PURCHASE_MARKET__DESTINATION_PORTS);
+		createEReference(desPurchaseMarketEClass, DES_PURCHASE_MARKET__CONTRACT);
 
 		desSalesMarketEClass = createEClass(DES_SALES_MARKET);
 		createEReference(desSalesMarketEClass, DES_SALES_MARKET__NOTIONAL_PORT);
+		createEReference(desSalesMarketEClass, DES_SALES_MARKET__CONTRACT);
 
 		fobPurchasesMarketEClass = createEClass(FOB_PURCHASES_MARKET);
 		createEReference(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__NOTIONAL_PORT);
 		createEAttribute(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__CV);
+		createEReference(fobPurchasesMarketEClass, FOB_PURCHASES_MARKET__CONTRACT);
 
 		fobSalesMarketEClass = createEClass(FOB_SALES_MARKET);
 		createEReference(fobSalesMarketEClass, FOB_SALES_MARKET__LOAD_PORT);
+		createEReference(fobSalesMarketEClass, FOB_SALES_MARKET__CONTRACT);
 
 		spotAvailabilityEClass = createEClass(SPOT_AVAILABILITY);
 		createEAttribute(spotAvailabilityEClass, SPOT_AVAILABILITY__CONSTANT);
@@ -1115,7 +1145,8 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEReference(getSpotMarket_Availability(), this.getSpotAvailability(), null, "availability", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSpotMarket_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSpotMarket_Contract(), theTypesPackage.getAContract(), null, "contract", null, 1, 1, SpotMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(spotMarketEClass, theTypesPackage.getAContract(), "getContract", 0, 1, IS_UNIQUE, IS_ORDERED);
 
 		initEClass(portCostEClass, PortCost.class, "PortCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getPortCost_Ports(), theTypesPackage.getAPortSet(), null, "ports", null, 0, -1, PortCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1140,16 +1171,20 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		initEClass(desPurchaseMarketEClass, DESPurchaseMarket.class, "DESPurchaseMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getDESPurchaseMarket_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, DESPurchaseMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getDESPurchaseMarket_DestinationPorts(), theTypesPackage.getAPortSet(), null, "destinationPorts", null, 0, -1, DESPurchaseMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDESPurchaseMarket_Contract(), theTypesPackage.getAPurchaseContract(), null, "contract", null, 1, 1, DESPurchaseMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(desSalesMarketEClass, DESSalesMarket.class, "DESSalesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDESSalesMarket_NotionalPort(), theTypesPackage.getAPort(), null, "notionalPort", null, 1, 1, DESSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getDESSalesMarket_Contract(), theTypesPackage.getASalesContract(), null, "contract", null, 1, 1, DESSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fobPurchasesMarketEClass, FOBPurchasesMarket.class, "FOBPurchasesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFOBPurchasesMarket_NotionalPort(), theTypesPackage.getAPort(), null, "notionalPort", null, 1, 1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getFOBPurchasesMarket_Cv(), ecorePackage.getEDouble(), "cv", null, 0, 1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFOBPurchasesMarket_Contract(), theTypesPackage.getAPurchaseContract(), null, "contract", null, 1, 1, FOBPurchasesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fobSalesMarketEClass, FOBSalesMarket.class, "FOBSalesMarket", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFOBSalesMarket_LoadPort(), theTypesPackage.getAPort(), null, "loadPort", null, 1, 1, FOBSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFOBSalesMarket_Contract(), theTypesPackage.getASalesContract(), null, "contract", null, 1, 1, FOBSalesMarket.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(spotAvailabilityEClass, SpotAvailability.class, "SpotAvailability", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSpotAvailability_Constant(), ecorePackage.getEInt(), "constant", null, 0, 1, SpotAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
