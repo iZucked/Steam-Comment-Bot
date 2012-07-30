@@ -37,11 +37,13 @@ public class ColourSchemeUtil {
 	static final RGB Slot_White = new RGB(255,255,255);
 	static final RGB Locked_White = new RGB(255,255,255);
 	static final RGB VesselEvent_Purple = new RGB(120, 0, 120);
+	static final RGB VesselEvent_Green = new RGB(0, 225, 150);
+	static final RGB VesselEvent_Brown = new RGB(120, 120, 60);
 	
 	static final RGB Warning_Yellow = new RGB(255,255,25);
 	static final RGB Alert_Crimson = new RGB(255,0,0);
 	
-	static final int Faded_Alpha = 150;
+	static final int Faded_Alpha = 200;
 
 	
 	public static boolean isLate(Event ev) {
