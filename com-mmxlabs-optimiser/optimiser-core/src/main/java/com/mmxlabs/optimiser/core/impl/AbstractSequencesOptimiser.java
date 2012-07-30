@@ -145,7 +145,7 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	public final void setConstraintCheckers(final List<IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
 		this.reducingConstraintCheckers = new ArrayList<IReducingContraintChecker>(constraintCheckers.size());
-		for (IConstraintChecker checker : constraintCheckers) {
+		for (final IConstraintChecker checker : constraintCheckers) {
 			if (checker instanceof IReducingContraintChecker) {
 				reducingConstraintCheckers.add((IReducingContraintChecker) checker);
 			}
