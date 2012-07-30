@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -372,6 +371,9 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				if (load.eContainer() == null) {
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), load));
 				}
+				if (discharge.eContainer() == null) {
+					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), discharge));
+				}
 
 				// Optional loads may not have an original cargo, so create one now.
 				final Cargo loadCargo;
@@ -397,10 +399,9 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				setCommands.add(SetCommand.create(domain, loadCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), discharge));
 				setCargoes.add(loadCargo);
 
-				nullCommands.add(SetCommand.create(domain, dischargeCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
-				nullCargoes.add(dischargeCargo);
-				if (dischargeCargo.getCargoType() != CargoType.FLEET) {
-					final int ii = 0;
+				if (dischargeCargo != null) {
+					nullCommands.add(SetCommand.create(domain, dischargeCargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
+					nullCargoes.add(dischargeCargo);
 				}
 
 				cmd.append(SetCommand.create(domain, allocation, SchedulePackage.eINSTANCE.getCargoAllocation_InputCargo(), loadCargo));
@@ -416,26 +417,13 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		}
 
 		nullCargoes.removeAll(setCargoes);
-		if (!nullCargoes.isEmpty()) {
-			for (final Cargo c : nullCargoes) {
-				// Sanity check
-				if (!c.getLoadSlot().isOptional()) {
-					throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
-				}
-				cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
-				cmd.append(DeleteCommand.create(domain, c));
-			}
-		}
 		// For slots which are no longer used, remove the cargo
 		for (final EObject eObj : schedule.getUnusedElements()) {
 			if (eObj instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) eObj;
 				if (loadSlot.getCargo() != null) {
 					final Cargo c = loadSlot.getCargo();
-					//Avoid potential dual delete from previous clause 
-					if (nullCargoes.contains(c)) {
-						continue;
-					}
+					nullCargoes.remove(c);
 					// Sanity check
 					if (!loadSlot.isOptional()) {
 						throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
@@ -446,6 +434,17 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			}
 		}
 
+		// TODO: We do not expect to get here!
+		if (!nullCargoes.isEmpty()) {
+			for (final Cargo c : nullCargoes) {
+				// Sanity check
+				if (!c.getLoadSlot().isOptional()) {
+					throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
+				}
+				cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
+				cmd.append(DeleteCommand.create(domain, c));
+			}
+		}
 		return cmd;
 
 	}
