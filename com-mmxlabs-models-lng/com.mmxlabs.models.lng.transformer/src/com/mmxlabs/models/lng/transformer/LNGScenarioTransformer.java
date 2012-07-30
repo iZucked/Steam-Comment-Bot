@@ -43,6 +43,7 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -73,6 +74,7 @@ import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
+import com.mmxlabs.models.lng.pricing.DESSalesMarket;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
@@ -771,7 +773,13 @@ public class LNGScenarioTransformer {
 		}
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
-		final SpotMarketGroup desPurchaseSpotMarket = pricingModel.getDesPurchaseSpotMarket();
+		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, latestDate, pricingModel.getDesPurchaseSpotMarket());
+		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, entities, latestDate, pricingModel.getDesSalesSpotMarket());
+
+	}
+
+	private void buildDESPurchaseSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
+			final ModelEntityMap entities, final Date latestDate, final SpotMarketGroup desPurchaseSpotMarket) {
 		if (desPurchaseSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = desPurchaseSpotMarket.getAvailability();
@@ -829,7 +837,7 @@ public class LNGScenarioTransformer {
 										priceCalculator, cargoCVValue, true);
 
 								// Create a fake model object to add in here;
-								SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
+								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 								desSlot.setDESPurchase(true);
 								desSlot.setName(id);
 								desSlot.setArriveCold(false);
@@ -837,7 +845,7 @@ public class LNGScenarioTransformer {
 								desSlot.setWindowStart(new Date(startTime.getTime()));
 								desSlot.setContract(desPurchaseMarket.getContract());
 								desSlot.setOptional(true);
-								long duration = endTime.getTime() / startTime.getTime() / 1000 / 60 / 60 / 24;
+								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60 / 24;
 								desSlot.setWindowSize((int) duration);
 								// Key piece of information
 								desSlot.setMarket(desPurchaseMarket);
@@ -869,7 +877,94 @@ public class LNGScenarioTransformer {
 				startTime = cal.getTime();
 			}
 		}
+	}
 
+	private void buildDESSalesSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
+			final ModelEntityMap entities, final Date latestDate, final SpotMarketGroup desSalesSpotMarket) {
+		if (desSalesSpotMarket != null) {
+
+			final SpotAvailability groupAvailability = desSalesSpotMarket.getAvailability();
+
+			// Loop over the date range in the optimisation generating market slots
+			final Calendar cal = Calendar.getInstance();
+			cal.setTime(earliestTime);
+
+			// Set back to start of month
+			cal.set(Calendar.DAY_OF_MONTH, 1);
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+
+			Date startTime = cal.getTime();
+			while (startTime.before(latestDate)) {
+
+				// Roll forward
+				cal.add(Calendar.MONTH, 1);
+				final Date endTime = cal.getTime();
+
+				final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
+
+				for (final SpotMarket market : desSalesSpotMarket.getMarkets()) {
+					assert market instanceof DESSalesMarket;
+					if (market instanceof DESSalesMarket) {
+						final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+						final APort notionalAPort = desSalesMarket.getNotionalPort();
+						final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
+
+						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
+
+						if (count > 0) {
+							final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
+							for (int i = 0; i < count; ++i) {
+
+								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
+
+								final String id = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-" + i;
+
+								final ISalesPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ISalesPriceCalculator.class);
+
+								// Create a fake model object to add in here;
+								final SpotDischargeSlot desSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
+								desSlot.setName(id);
+								desSlot.setWindowStart(new Date(startTime.getTime()));
+								desSlot.setContract(desSalesMarket.getContract());
+								desSlot.setOptional(true);
+								desSlot.setPort((Port) notionalAPort);
+								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l / 24l;
+								desSlot.setWindowSize((int) duration);
+
+								final IDischargeOption desSalesSlot = builder.createDischargeSlot(id, notionalIPort, tw, Calculator.scale(market.getMinQuantity()),
+										Calculator.scale(market.getMaxQuantity()), priceCalculator, desSlot.getSlotOrPortDuration(), true);
+
+								// Key piece of information
+								desSlot.setMarket(desSalesMarket);
+								entities.addModelObject(desSlot, desSalesSlot);
+
+								for (final IContractTransformer contractTransformer : contractTransformers) {
+									contractTransformer.slotTransformed(desSlot, desSalesSlot);
+								}
+
+								marketSlots.add(desSalesSlot);
+								marketGroupSlots.add(desSalesSlot);
+							}
+							// Take this count and add into a constraint.
+							builder.createSlotGroupCount(marketSlots, count);
+						}
+					}
+				}
+
+				// Take group availability curve and add into a constraint.
+				if (groupAvailability != null) {
+					final int count = getAvailabilityForDate(groupAvailability, startTime);
+					if (count > 0) {
+						builder.createSlotGroupCount(marketGroupSlots, count);
+					}
+				}
+
+				startTime = cal.getTime();
+			}
+		}
 	}
 
 	private int getAvailabilityForDate(final SpotAvailability availability, final Date startTime) {
