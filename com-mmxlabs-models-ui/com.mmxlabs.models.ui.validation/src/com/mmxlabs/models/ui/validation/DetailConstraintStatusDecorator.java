@@ -18,9 +18,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.eclipse.emf.validation.model.IModelConstraint;
 
 /**
- * Implementation of {@link IDetailConstraintStatus} wrapping a
- * {@link IConstraintStatus} instance and adding in the extra methods for the
- * {@link IDetailConstraintStatus} interface
+ * Implementation of {@link IDetailConstraintStatus} wrapping a {@link IConstraintStatus} instance and adding in the extra methods for the {@link IDetailConstraintStatus} interface
  * 
  * @author Simon Goodall
  * 
@@ -28,10 +26,16 @@ import org.eclipse.emf.validation.model.IModelConstraint;
 public class DetailConstraintStatusDecorator implements IDetailConstraintStatus {
 
 	private final IConstraintStatus status;
+	private final int severity;
 	private final Map<EObject, Collection<EStructuralFeature>> objectMap = new HashMap<EObject, Collection<EStructuralFeature>>();
 
 	public DetailConstraintStatusDecorator(final IConstraintStatus status) {
+		this(status, status.getSeverity());
+	}
+
+	public DetailConstraintStatusDecorator(final IConstraintStatus status, final int severity) {
 		this.status = status;
+		this.severity = severity;
 	}
 
 	@Override
@@ -76,7 +80,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 
 	@Override
 	public int getSeverity() {
-		return status.getSeverity();
+		return severity;
 	}
 
 	@Override
@@ -95,8 +99,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 	}
 
 	@Override
-	public Collection<EStructuralFeature> getFeaturesForEObject(
-			final EObject obj) {
+	public Collection<EStructuralFeature> getFeaturesForEObject(final EObject obj) {
 		if (objectMap.containsKey(obj)) {
 			return objectMap.get(obj);
 		}
@@ -108,8 +111,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 		return objectMap.keySet();
 	}
 
-	public void addEObjectAndFeature(final EObject obj,
-			final EStructuralFeature feature) {
+	public void addEObjectAndFeature(final EObject obj, final EStructuralFeature feature) {
 		final Collection<EStructuralFeature> features;
 		if (objectMap.containsKey(obj)) {
 			features = objectMap.get(obj);
