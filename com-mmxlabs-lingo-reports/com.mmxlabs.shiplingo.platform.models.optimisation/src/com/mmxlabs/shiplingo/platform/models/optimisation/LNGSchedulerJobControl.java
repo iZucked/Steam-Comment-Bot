@@ -5,9 +5,11 @@
 package com.mmxlabs.shiplingo.platform.models.optimisation;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.management.timer.Timer;
@@ -19,6 +21,7 @@ import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -38,6 +41,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
@@ -290,63 +294,9 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		final HashSet<UUIDObject> reassigned = new HashSet<UUIDObject>();
 
-		for (final ElementAssignment ai : inputModel.getElementAssignments()) {
-			if (ai.isLocked()) {
-				previouslyLocked.add(ai.getAssignedObject());
-			}
-		}
-
-		final List<Assignment> blank = Collections.emptyList();
-		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
-
-		int spotIndex = 0;
-		for (final Sequence sequence : schedule.getSequences()) {
-			if (sequence.getVessel() == null && !sequence.isSpotVessel()) {
-				continue;
-			}
-
-			int thisIndex = 0;
-			if (sequence.isSpotVessel()) {
-				thisIndex = spotIndex++;
-			}
-
-			final AVesselSet assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel();
-			int index = 0;
-			for (final Event event : sequence.getEvents()) {
-				UUIDObject object = null;
-				if (event instanceof SlotVisit) {
-					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
-
-					if (slot instanceof LoadSlot) {
-						object = ((LoadSlot) slot).getCargo();
-					}
-				} else if (event instanceof VesselEventVisit) {
-					object = ((VesselEventVisit) event).getVesselEvent();
-				}
-
-				if (object != null) {
-					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
-					ea.setAssignedObject(object);
-					ea.setAssignment(assignment);
-					ea.setSequence(index++);
-					ea.setSpotIndex(thisIndex);
-					ea.setLocked(previouslyLocked.contains(object));
-					reassigned.add(object);
-					newElementAssignments.add(ea);
-				}
-			}
-		}
-
-		// copy through assignments which were not present in the schedule
-		// TODO this will probably need some thought around optional elements
-		for (final ElementAssignment ea : inputModel.getElementAssignments()) {
-			if (ea.getAssignedObject() != null && !reassigned.contains(ea.getAssignedObject())) {
-				newElementAssignments.add(ea);
-			}
-		}
-
-		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
-		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), blank));
+		// The ElementAssignment needs a cargo linked to a slot. Not all slots will have a cargo until after the command generated here is executed. Therefore build up a map to perform the link. Fall
+		// back to slot.getCargo() is there is no mapping.
+		final Map<LoadSlot, Cargo> slotToCargoMap = new HashMap<LoadSlot, Cargo>();
 
 		// rewire any cargos which require it
 		// TODO handle spot market cases, and free slots
@@ -384,6 +334,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					cmd.append(AddCommand.create(domain, cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), c));
 					cmd.append(SetCommand.create(domain, c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), load));
 					loadCargo = c;
+					slotToCargoMap.put(load, c);
 				} else {
 					loadCargo = load.getCargo();
 				}
@@ -431,6 +382,15 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
 					cmd.append(DeleteCommand.create(domain, c));
 				}
+
+			}
+
+			if (eObj instanceof SpotSlot) {
+				final SpotSlot spotSlot = (SpotSlot) eObj;
+				// Market slot, we can remove it.
+				if (spotSlot.getMarket() != null && eObj.eContainer() != null) {
+					cmd.append(RemoveCommand.create(domain, eObj));
+				}
 			}
 		}
 
@@ -445,6 +405,70 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				cmd.append(DeleteCommand.create(domain, c));
 			}
 		}
+
+		for (final ElementAssignment ai : inputModel.getElementAssignments()) {
+			if (ai.isLocked()) {
+				previouslyLocked.add(ai.getAssignedObject());
+			}
+		}
+
+		final List<Assignment> blank = Collections.emptyList();
+		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
+
+		int spotIndex = 0;
+		for (final Sequence sequence : schedule.getSequences()) {
+			if (sequence.getVessel() == null && !sequence.isSpotVessel()) {
+				continue;
+			}
+
+			int thisIndex = 0;
+			if (sequence.isSpotVessel()) {
+				thisIndex = spotIndex++;
+			}
+
+			final AVesselSet assignment = sequence.isSpotVessel() ? sequence.getVesselClass() : sequence.getVessel();
+			int index = 0;
+			for (final Event event : sequence.getEvents()) {
+				UUIDObject object = null;
+				if (event instanceof SlotVisit) {
+					final Slot slot = ((SlotVisit) event).getSlotAllocation().getSlot();
+
+					if (slot instanceof LoadSlot) {
+
+						final LoadSlot loadSlot = (LoadSlot) slot;
+						object = slotToCargoMap.get(loadSlot);
+						if (object == null) {
+							object = loadSlot.getCargo();
+						}
+					}
+				} else if (event instanceof VesselEventVisit) {
+					object = ((VesselEventVisit) event).getVesselEvent();
+				}
+
+				if (object != null) {
+					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
+					ea.setAssignedObject(object);
+					ea.setAssignment(assignment);
+					ea.setSequence(index++);
+					ea.setSpotIndex(thisIndex);
+					ea.setLocked(previouslyLocked.contains(object));
+					reassigned.add(object);
+					newElementAssignments.add(ea);
+				}
+			}
+		}
+
+		// copy through assignments which were not present in the schedule
+		// TODO this will probably need some thought around optional elements
+		for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+			if (ea.getAssignedObject() != null && !reassigned.contains(ea.getAssignedObject())) {
+				newElementAssignments.add(ea);
+			}
+		}
+
+		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
+		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), blank));
+
 		return cmd;
 
 	}
