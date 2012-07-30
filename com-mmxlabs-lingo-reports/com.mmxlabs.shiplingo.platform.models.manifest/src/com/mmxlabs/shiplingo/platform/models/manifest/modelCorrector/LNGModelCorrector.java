@@ -40,9 +40,7 @@ public class LNGModelCorrector {
 
 		fixMissingPortLocations(cmd, rootObject, ed);
 		fixMissingElementAssignments(cmd, rootObject, ed);
-		if (false) {
-			fixMissingSpotCargoMarkets(cmd, rootObject, ed);
-		}
+		fixMissingSpotCargoMarkets(cmd, rootObject, ed);
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
 		}
