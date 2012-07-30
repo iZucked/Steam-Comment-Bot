@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.optimiser.lso.impl;
 
+import static com.google.common.base.Preconditions.checkState;
+
 import java.util.Collection;
 
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -28,9 +30,7 @@ public abstract class LocalSearchOptimiser extends AbstractSequencesOptimiser im
 	public void init() {
 
 		super.init();
-		if (moveGenerator == null) {
-			throw new IllegalStateException("Move Generator is not set");
-		}
+		checkState(moveGenerator != null, "Move Generator is not set");
 	}
 
 	public final void setMoveGenerator(final IMoveGenerator moveGenerator) {
