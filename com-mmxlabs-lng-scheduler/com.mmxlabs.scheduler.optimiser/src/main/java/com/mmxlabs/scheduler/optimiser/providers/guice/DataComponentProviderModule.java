@@ -65,6 +65,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
@@ -75,6 +77,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEd
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapSlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirementEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortCostEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
@@ -204,14 +207,18 @@ public class DataComponentProviderModule extends AbstractModule {
 		final IOptionalElementsProviderEditor optionalElements = new IndexedOptionalElementsEditor(SchedulerConstants.DCP_optionalElementsProvider);
 		bind(IOptionalElementsProvider.class).toInstance(optionalElements);
 		bind(IOptionalElementsProviderEditor.class).toInstance(optionalElements);
-		
+
 		final IPortCostProviderEditor portCosts = new IndexedPortCostEditor(SchedulerConstants.DCP_portCostProvider);
 		bind(IPortCostProvider.class).toInstance(portCosts);
 		bind(IPortCostProviderEditor.class).toInstance(portCosts);
-		
+
 		final ISlotGroupCountProviderEditor slotGroupCountProvider = new HashMapSlotGroupCountProviderEditor(SchedulerConstants.DCP_slotGroupProvider);
 		bind(ISlotGroupCountProvider.class).toInstance(slotGroupCountProvider);
 		bind(ISlotGroupCountProviderEditor.class).toInstance(slotGroupCountProvider);
+
+		final IVirtualVesselSlotProviderEditor virtualVesselSlotProviderEditor = new HashMapVirtualVesselSlotProviderEditor(SchedulerConstants.DCP_virtualVesselSlotProvider);
+		bind(IVirtualVesselSlotProvider.class).toInstance(virtualVesselSlotProviderEditor);
+		bind(IVirtualVesselSlotProviderEditor.class).toInstance(virtualVesselSlotProviderEditor);
 	}
 
 	/**

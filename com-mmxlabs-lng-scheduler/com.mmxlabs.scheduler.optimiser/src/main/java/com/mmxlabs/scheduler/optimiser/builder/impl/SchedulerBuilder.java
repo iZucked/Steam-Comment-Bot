@@ -92,6 +92,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -242,6 +243,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	private ISlotGroupCountProviderEditor slotGroupCountProvider;
 
+	@Inject
+	private IVirtualVesselSlotProviderEditor virtualVesselSlotProviderEditor;
+	
 	/**
 	 * Fake vessel class for virtual elements.
 	 */
@@ -904,7 +908,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		constrainSlotToVessels(portSlotsProvider.getPortSlot(element), Collections.singleton(virtualVessel));
 
 		virtualVesselMap.put(element, virtualVessel);
-
+		virtualVesselSlotProviderEditor.setVesselForElement(virtualVessel, element);
+		
 		return virtualVessel;
 	}
 
