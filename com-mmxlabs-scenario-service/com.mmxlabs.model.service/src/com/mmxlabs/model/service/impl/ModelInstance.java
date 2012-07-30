@@ -26,7 +26,7 @@ public class ModelInstance implements IModelInstance {
 	private boolean dirty = false;
 	private EObject modelObject = null;
 
-	private MMXContentAdapter dirtyAdapter = new MMXContentAdapter() {
+	private final MMXContentAdapter dirtyAdapter = new MMXContentAdapter() {
 		@Override
 		public void reallyNotifyChanged(final Notification notification) {
 			if (!notification.isTouch()) {
@@ -45,8 +45,17 @@ public class ModelInstance implements IModelInstance {
 		}
 	};
 
-	public ModelInstance(final Resource resource) {
+	public ModelInstance(final Resource resource, boolean dirty) {
 		this.resource = resource;
+		this.dirty = dirty;
+		if (!resource.getContents().isEmpty()) {
+			modelObject = resource.getContents().get(0);
+			modelObject.eAdapters().add(dirtyAdapter);
+		}
+	}
+
+	public ModelInstance(final Resource resource) {
+		this(resource, false);
 	}
 
 	@Override
@@ -99,7 +108,7 @@ public class ModelInstance implements IModelInstance {
 	 * 
 	 * @param model
 	 */
-	private void switchAdapters(EObject model, boolean on) {
+	private void switchAdapters(final EObject model, final boolean on) {
 		if (model == null)
 			return;
 		for (final Adapter a : model.eAdapters()) {

@@ -33,6 +33,7 @@ import com.mmxlabs.model.service.IModelService;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.util.MMXCoreBinaryResourceFactoryImpl;
 import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 
 /**
@@ -47,9 +48,13 @@ public class ModelService implements IModelService {
 	final Map<URI, IModelInstance> cache = new HashMap<URI, IModelInstance>();
 
 	private final MMXCoreResourceFactoryImpl resourceFactory = new MMXCoreResourceFactoryImpl();
+	private final MMXCoreBinaryResourceFactoryImpl binaryResourceFactory = new MMXCoreBinaryResourceFactoryImpl();
 	final ResourceSet resourceSet = new ResourceSetImpl();
 
 	public ModelService() {
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmb", binaryResourceFactory);
+		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", resourceFactory);
+		// Default to XMI factory
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", resourceFactory);
 
 		resourceSet.getLoadOptions().put(XMLResource.OPTION_DEFER_IDREF_RESOLUTION, true);
@@ -60,9 +65,9 @@ public class ModelService implements IModelService {
 	@Override
 	public IModelInstance getModel(final URI uri) throws IOException {
 		synchronized (cache) {
-			if (cache.containsKey(uri))
+			if (cache.containsKey(uri)) {
 				return cache.get(uri);
-
+			}
 			final ModelInstance instance = new ModelInstance(resourceSet.createResource(uri));
 			cache.put(uri, instance);
 			return instance;
@@ -70,22 +75,22 @@ public class ModelService implements IModelService {
 	}
 
 	@Override
-	public IModelInstance copyTo(IModelInstance from, URI to) throws IOException {
+	public IModelInstance copyTo(final IModelInstance from, final URI to) throws IOException {
 		return store(EcoreUtil.copy(from.getModel()), to);
 	}
 
 	@Override
-	public void copyTo(URI from, URI to) throws IOException {
+	public void copyTo(final URI from, final URI to) throws IOException {
 		copyTo(getModel(from), to);
 	}
 
 	@Override
-	public void delete(IModelInstance instance) throws IOException {
+	public void delete(final IModelInstance instance) throws IOException {
 		instance.delete();
 	}
 
 	@Override
-	public Collection<IModelInstance> getModels(Collection<URI> uris) throws IOException {
+	public Collection<IModelInstance> getModels(final Collection<URI> uris) throws IOException {
 		final List<IModelInstance> result = new ArrayList<IModelInstance>(uris.size());
 		for (final URI uri : uris) {
 			result.add(getModel(uri));
@@ -102,7 +107,7 @@ public class ModelService implements IModelService {
 			}
 			final Resource resource = resourceSet.createResource(uri);
 			resource.getContents().add(instance);
-			final IModelInstance result = new ModelInstance(resource);
+			final IModelInstance result = new ModelInstance(resource, true);
 			
 			cache.put(uri,  result);
 			
@@ -124,7 +129,7 @@ public class ModelService implements IModelService {
 	}
 
 	@Override
-	public void resolve(List<EObject> parts) {
+	public void resolve(final List<EObject> parts) {
 		final HashMap<String, UUIDObject> table = new HashMap<String, UUIDObject>();
 		for (final EObject part : parts) {
 			collect(part, table);
@@ -135,7 +140,7 @@ public class ModelService implements IModelService {
 		}
 	}
 
-	private void resolve(EObject part, HashMap<String, UUIDObject> table) {
+	private void resolve(final EObject part, final HashMap<String, UUIDObject> table) {
 		if (part == null) {
 			log.warn("Asked to resolve references in a null object");
 			return;
@@ -183,7 +188,7 @@ public class ModelService implements IModelService {
 					touchedInstances.add(instance);
 					instance.saveWithMany();
 				}
-			} catch (IOException error) {
+			} catch (final IOException error) {
 				// if an instance didn't save, copy all the backups back
 				for (final IModelInstance instance : touchedInstances) {
 					final byte[] backup = backups.get(instance);
@@ -201,7 +206,7 @@ public class ModelService implements IModelService {
 		}
 	}
 	
-	private void switchAdapters(EObject model, boolean on) {
+	private void switchAdapters(final EObject model, final boolean on) {
 		if (model == null) return;
 		for (final Adapter a : model.eAdapters().toArray(new Adapter[0])) {
 			if (a instanceof IMMXAdapter) {
