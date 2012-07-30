@@ -78,8 +78,8 @@ public class DischargeSlotViewer extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain));
 
-		addTypicalColumn(" Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain));
-		addTypicalColumn("Cargo ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain), pkg.getLoadSlot_Cargo());
+		addTypicalColumn("Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain));
+		addTypicalColumn("Cargo ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain), pkg.getDischargeSlot_Cargo());
 
 		// final InputModel input = part.getRootObject().getSubModel(InputModel.class);
 
