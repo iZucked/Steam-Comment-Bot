@@ -340,25 +340,6 @@ public class DetailCompositeDialog extends Dialog {
 		checkButtonEnablement();
 	}
 
-	/**
-	 * Extract message hierarchy and construct the tool tip message.
-	 * 
-	 * @param status
-	 * @return
-	 */
-	private String getMessages(final IStatus status) {
-		if (status.isMultiStatus()) {
-			final StringBuilder sb = new StringBuilder();
-			for (final IStatus s : status.getChildren()) {
-				sb.append(getMessages(s));
-				sb.append("\n");
-			}
-			return sb.toString();
-		} else {
-			return status.getMessage();
-		}
-	}
-
 	private void checkButtonEnablement() {
 		for (final boolean b : objectValidity.values()) {
 			if (!b) {
@@ -690,8 +671,6 @@ public class DetailCompositeDialog extends Dialog {
 
 	private EObject sidebarContainer;
 
-	private Text errorText;
-
 	/**
 	 * This version of the open method also displays the sidebar and allows for creation and deletion of objects in the sidebar.
 	 * 
@@ -962,87 +941,6 @@ public class DetailCompositeDialog extends Dialog {
 				l.clear();
 			} else {
 				duplicate.eSet(reference, null);
-			}
-		}
-	}
-
-	private Command replaceOriginals(final EditingDomain editingDomain, final MMXRootObject rootObject) {
-		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-			((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(true);
-		}
-
-		try {
-
-			final CompoundCommand compound = new CompoundCommand();
-			// compound.append(IdentityCommand.INSTANCE);
-
-			// clear references to original and replace with references to the new,
-			// except in unique multiple references that already contain the new
-
-			final List<EObject> parts = new ArrayList<EObject>(rootObject.getSubModels().size());
-			for (final MMXSubModel sub : rootObject.getSubModels()) {
-				parts.add(sub.getSubModelInstance());
-			}
-
-			final Map<EObject, Collection<Setting>> referencesToOriginals = EcoreUtil.UsageCrossReferencer.findAll(originalToDuplicate.keySet(), parts);
-
-			for (final Map.Entry<EObject, Collection<Setting>> entry : referencesToOriginals.entrySet()) {
-				final EObject original = entry.getKey();
-				final EObject duplicate = originalToDuplicate.get(original);
-
-				for (final Setting setting : entry.getValue()) {
-					final EObject owner = setting.getEObject();
-					if (originalToDuplicate.keySet().contains(owner))
-						continue;
-					final EStructuralFeature feature = setting.getEStructuralFeature();
-					if (feature instanceof EReference) {
-						final EReference reference = (EReference) feature;
-						if (reference.isMany()) {
-							final List<EObject> l = (List<EObject>) owner.eGet(reference);
-							if (reference.isUnique()) {
-								if (l.contains(duplicate)) { // we can't add twice
-									compound.append(RemoveCommand.create(editingDomain, owner, feature, original));
-								} else {
-									compound.append(SetCommand.create(editingDomain, owner, feature, duplicate, l.indexOf(original)));
-								}
-							} else {
-								int index = 0;
-								for (final EObject e : l) {
-									if (e == original) {
-										compound.append(SetCommand.create(editingDomain, owner, feature, duplicate, index));
-									}
-									index++;
-								}
-							}
-						} else {
-							compound.append(SetCommand.create(editingDomain, owner, reference, duplicate));
-						}
-					}
-				}
-			}
-
-			// set containers (usages above are only non-containment)
-			for (final Map.Entry<EObject, EObject> entry : originalToDuplicate.entrySet()) {
-				final EObject original = entry.getKey();
-				final EObject duplicate = entry.getValue();
-				final EObject container = original.eContainer();
-				final EReference containment = (EReference) original.eContainingFeature();
-				if (container == null || containment == null)
-					continue;
-				if (containment.isMany()) {
-					compound.append(SetCommand.create(editingDomain, container, containment, duplicate, ((List) container.eGet(containment)).indexOf(original)));
-				} else {
-					compound.append(SetCommand.create(editingDomain, container, containment, duplicate));
-				}
-			}
-
-			if (compound.isEmpty()) {
-				return null;
-			}
-			return compound;
-		} finally {
-			if (editingDomain instanceof CommandProviderAwareEditingDomain) {
-				((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(false);
 			}
 		}
 	}
