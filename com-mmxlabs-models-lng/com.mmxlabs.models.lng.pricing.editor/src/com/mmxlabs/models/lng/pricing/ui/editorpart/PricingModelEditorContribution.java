@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
+import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -104,28 +105,28 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		final SashForm sash2 = new SashForm(sash, SWT.VERTICAL);
 		final SashForm sash3 = new SashForm(sash, SWT.VERTICAL);
 
-		SpotMarketGroupPane desPurchasePane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		final SpotMarketGroupPane desPurchasePane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.DES_PURCHASE);
 		desPurchasePane.createControl(sash2);
 		desPurchasePane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_DesPurchaseSpotMarket(), PricingPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
 				editorPart.getAdapterFactory());
 		desPurchasePane.getViewer().setInput(modelObject);
 		desPurchasePane.defaultSetTitle("DES Purchases");
 
-		SpotMarketGroupPane desSalesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		final SpotMarketGroupPane desSalesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.DES_SALE);
 		desSalesPane.createControl(sash2);
 		desSalesPane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_DesSalesSpotMarket(), PricingPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
 				editorPart.getAdapterFactory());
 		desSalesPane.getViewer().setInput(modelObject);
 		desSalesPane.defaultSetTitle("DES Sales");
 
-		SpotMarketGroupPane fobSalesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		final SpotMarketGroupPane fobSalesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.FOB_SALE);
 		fobSalesPane.createControl(sash3);
 		fobSalesPane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket(), PricingPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
 				editorPart.getAdapterFactory());
 		fobSalesPane.getViewer().setInput(modelObject);
 		fobSalesPane.defaultSetTitle("FOB Sales");
 
-		SpotMarketGroupPane fobPurchasesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		final SpotMarketGroupPane fobPurchasesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.FOB_PURCHASE);
 		fobPurchasesPane.createControl(sash3);
 		fobPurchasesPane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FobPurchasesSpotMarket(), PricingPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
 				editorPart.getAdapterFactory());
