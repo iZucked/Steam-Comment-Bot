@@ -155,24 +155,40 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 					final ISequenceElement beforeFollower = owner.sequences.getSequence(sequence).get(position - 1);
 					// these are the elements which can go after what's currently before the follower
 					final ConstrainedMoveGenerator.Followers<ISequenceElement> beforeFollowerFollowers = owner.validFollowers.get(beforeFollower);
-					IResource resource = owner.getSequences().getResources().get(sequence);
+					final IResource resource = owner.getSequences().getResources().get(sequence);
 					if (!checkResource(unused, resource)) {
 						continue LOOP_TRIES;
 					}
-					if (beforeFollowerFollowers.contains(unused)) {
+
+					int numChoices = 1;
+					final boolean canInsert = beforeFollowerFollowers.contains(unused);
+					final boolean canSwap = optionalElementsProvider.getOptionalElements().contains(beforeFollower);
+
+					if (canInsert) {
+						++numChoices;
+					}
+					if (canSwap) {
+						++numChoices;
+					}
+					final int choice = owner.getRandom().nextInt(numChoices);
+
+					if ((numChoices == 3 && choice == 0) || numChoices == 2 && choice == 0 && canInsert) {
 						// we can insert directly
 						return new InsertOptionalElements(resource, position - 1, new int[] { unusedIndex });
+					} else if ((numChoices == 3 && choice == 1) || numChoices == 2 && choice == 1 && canSwap) {
+						// We can swap!
+						return new SwapOptionalElements(resource, position - 1, unusedIndex);
 					} else {
 						// we need to find something else to pop in
 						// which (a) can go after what's currently before f
 						// and (b) has unused in its follower set
-						List<Integer> elements = new ArrayList<Integer>(beforeFollowerFollowers.size());
+						final List<Integer> elements = new ArrayList<Integer>(beforeFollowerFollowers.size());
 						for (int i = 0; i < beforeFollowerFollowers.size(); ++i) {
 							elements.add(i);
 						}
 						Collections.shuffle(elements, owner.getRandom());
 
-						LOOP_ELEMENTS: for (int idx : elements) {
+						LOOP_ELEMENTS: for (final int idx : elements) {
 							final ISequenceElement candidate = beforeFollowerFollowers.get(idx);
 							final Pair<Integer, Integer> candidatePosition = owner.reverseLookup.get(candidate);
 							if (owner.validFollowers.get(candidate).contains(unused)) {
@@ -198,7 +214,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 										continue LOOP_ELEMENTS;
 									}
 
-									IResource candidateResource = owner.getSequences().getResources().get(candidatePosition.getFirst());
+									final IResource candidateResource = owner.getSequences().getResources().get(candidatePosition.getFirst());
 									if (owner.validFollowers.get(beforeCandidate).contains(afterCandidate)) {
 
 										// we can just cut out candidate
@@ -207,7 +223,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 									} else {
 										final ConstrainedMoveGenerator.Followers<ISequenceElement> beforeFollowers = owner.validFollowers.get(beforeCandidate);
 
-										List<ISequenceElement> spares = new ArrayList<ISequenceElement>(owner.sequences.getUnusedElements());
+										final List<ISequenceElement> spares = new ArrayList<ISequenceElement>(owner.sequences.getUnusedElements());
 										Collections.shuffle(spares, owner.getRandom());
 										LOOP_SPARES: for (final ISequenceElement spare : spares) {
 
@@ -220,11 +236,11 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 												// we have a working filler element to do the move above.
 												final Pair<Integer, Integer> fillerPosition = owner.reverseLookup.get(spare);
-												boolean check = checkResource(candidate, resource);
+												final boolean check = checkResource(candidate, resource);
 												checkResource(candidate, resource);
 
-												return new ReplaceMoveAndFill(candidateResource, resource, candidatePosition.getSecond(), followerPosition.getSecond(),
-														fillerPosition.getSecond(), unusedIndex, false);
+												return new ReplaceMoveAndFill(candidateResource, resource, candidatePosition.getSecond(), followerPosition.getSecond(), fillerPosition.getSecond(),
+														unusedIndex, false);
 											}
 										}
 									}
@@ -239,38 +255,38 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 					// pick something live and insert next to it.
 					// these are the things which can come after follower
 					final ConstrainedMoveGenerator.Followers<ISequenceElement> followerFollowers = owner.validFollowers.get(follower);
-					
-					List<Integer> elements = new ArrayList<Integer>(followerFollowers.size());
+
+					final List<Integer> elements = new ArrayList<Integer>(followerFollowers.size());
 					for (int i = 0; i < followerFollowers.size(); ++i) {
 						elements.add(i);
 					}
 					Collections.shuffle(elements, owner.getRandom());
 
-					
-					LOOP_ELEMENTS: for (int idx : elements) {
+					LOOP_ELEMENTS: for (final int idx : elements) {
 						final ISequenceElement insertElement = followerFollowers.get(idx);
-//					final ISequenceElement insertElement = followerFollowers.get(RandomHelper.nextIntBetween(owner.random, 0, followerFollowers.size() - 1));
-					final Pair<Integer, Integer> insertPosition = owner.reverseLookup.get(insertElement);
-					if (insertPosition.getFirst() != null) {
-						final int insertSequence = insertPosition.getFirst();
-						final int insertBefore = insertPosition.getSecond();
+						// final ISequenceElement insertElement = followerFollowers.get(RandomHelper.nextIntBetween(owner.random, 0, followerFollowers.size() - 1));
+						final Pair<Integer, Integer> insertPosition = owner.reverseLookup.get(insertElement);
+						if (insertPosition.getFirst() != null) {
+							final int insertSequence = insertPosition.getFirst();
+							final int insertBefore = insertPosition.getSecond();
 
-						IResource resource = owner.sequences.getResources().get(insertSequence);
-						
-						if (!checkResource(insertElement, resource)) {
-							continue LOOP_ELEMENTS;
+							final IResource resource = owner.sequences.getResources().get(insertSequence);
+
+							if (!checkResource(insertElement, resource)) {
+								continue LOOP_ELEMENTS;
+							}
+							return new InsertOptionalElements(resource, insertBefore - 1, new int[] { unusedIndex, followerPosition.getSecond() });
 						}
-						return new InsertOptionalElements(resource, insertBefore - 1, new int[] { unusedIndex, followerPosition.getSecond() });
 					}
-				}}
+				}
 			}
 		}
 		return null;
 	}
 
-	private boolean checkResource(final ISequenceElement elmenet, IResource resource) {
+	private boolean checkResource(final ISequenceElement elmenet, final IResource resource) {
 
-		Collection<IResource> allowedResources = racDCP.getAllowedResources(elmenet);
+		final Collection<IResource> allowedResources = racDCP.getAllowedResources(elmenet);
 		if (allowedResources == null) {
 			return true;
 		}
