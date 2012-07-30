@@ -162,6 +162,12 @@
           id="com.mmxlabs.models.lng.pricing.editor.indexProvider"
           referenceEClass="com.mmxlabs.models.lng.types.AIndex">
     </valueProvider>
+    <valueProvider
+          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.SpotMarketPortValueProviderFactory"
+          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.SpotMarketPortValueProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.pricing.SpotMarket"
+          referenceEClass="com.mmxlabs.models.lng.types.APort">
+    </valueProvider>
  </extension>
  <extension
        point="com.mmxlabs.models.util.import.submodels">
