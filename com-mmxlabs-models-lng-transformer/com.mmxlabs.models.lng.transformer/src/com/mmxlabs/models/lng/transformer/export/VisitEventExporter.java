@@ -78,7 +78,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			// TODO this will have to look at market-generated slots.
 			final Slot optSlot = entities.getModelObject(slot, Slot.class);
 			if (optSlot instanceof SpotSlot) {
-				slotAllocation.setSpotMarket(((SpotLoadSlot) optSlot).getMarket());
+				slotAllocation.setSpotMarket(((SpotSlot) optSlot).getMarket());
 			}
 			slotAllocation.setSlot(optSlot);
 			portVisit = sv;
