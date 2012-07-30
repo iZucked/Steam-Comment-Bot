@@ -49,13 +49,14 @@ public class MMXCoreResourceFactoryImpl extends XMIResourceFactoryImpl
 	 * Load several related resources which are using MMXProxy objects, and then link up the proxies within the set.
 	 * @param uris
 	 * @return
+	 * @deprecated See {@link MMXCoreHandlerUtil#loadAndLink(List, org.eclipse.emf.ecore.resource.Resource.Factory.Registry)}
 	 */
 	public List<Resource> loadAndLink(final List<URI> uris) {
 		final ArrayList<Resource> result = new ArrayList<Resource>(uris.size());
 		for (final URI uri : uris) {
 			result.add(createResource(uri));
 		}
-		MMXCoreResourceHandler.postLoad(result);
+		MMXCoreHandlerUtil.postLoad(result);
 		return result;
 	}
 	
@@ -65,6 +66,7 @@ public class MMXCoreResourceFactoryImpl extends XMIResourceFactoryImpl
 	 * 
 	 * @param resources
 	 * @return
+	 * @deprecated see {@link MMXCoreHandlerUtil#composeRootObject(List)}
 	 */
 	public MMXRootObject composeRootObject(final List<Resource> resources) {
 		MMXRootObject rootObject = null;
@@ -93,6 +95,7 @@ public class MMXCoreResourceFactoryImpl extends XMIResourceFactoryImpl
 	 * 
 	 * @param uris
 	 * @return
+	 * @deprecated ser {@link MMXCoreHandlerUtil#loadLinkAndCompose(List, org.eclipse.emf.ecore.resource.Resource.Factory.Registry)}
 	 */
 	public MMXRootObject loadLinkAndCompose(final List<URI> uris) {
 		return composeRootObject(loadAndLink(uris));

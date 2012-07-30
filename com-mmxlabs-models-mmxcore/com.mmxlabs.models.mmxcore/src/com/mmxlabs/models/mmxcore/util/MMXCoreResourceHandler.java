@@ -26,76 +26,36 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * To correct proxies when a resource is loaded use the static method {@link #postLoad(Collection)}
  * 
  * @author hinton
- *
+ * 
  */
 public class MMXCoreResourceHandler implements ResourceHandler {
 	/**
 	 * Restore proxies across a collection of resources which have been loaded together
+	 * 
 	 * @param resources
+	 * @deprecated Use {@link MMXCoreHandlerUtil#postLoad(Collection)} instead
 	 */
-	public static void postLoad(Collection<Resource> resources) {
-		final Map<String, UUIDObject> keyedObjects = new HashMap<String, UUIDObject>();
-		for (final Resource resource : resources) {
-			final TreeIterator<EObject> iterator = resource.getAllContents();
-			while (iterator.hasNext()) {
-				final EObject o = iterator.next();
-				if (o instanceof MMXObject){
-					((MMXObject) o).collectUUIDObjects(keyedObjects);
-					iterator.prune();
-				}
-			}
-		}
-		for (final Resource resource : resources) {
-			final TreeIterator<EObject> iterator = resource.getAllContents();
-			while (iterator.hasNext()) {
-				final EObject o = iterator.next();
-				if (o instanceof MMXObject){
-					((MMXObject) o).resolveProxies(keyedObjects);
-					((MMXObject) o).restoreProxies();
-				}
-			}
-		}
-	}
-	
-	@Override
-	public void preLoad(XMLResource resource, InputStream inputStream,
-			Map<?, ?> options) {
-		if (resource instanceof ResourceImpl) {
-			((ResourceImpl) resource).setIntrinsicIDToEObjectMap(new HashMap<String, EObject>());
-		}
+	public static void postLoad(final Collection<Resource> resources) {
+		MMXCoreHandlerUtil.postLoad(resources);
 	}
 
 	@Override
-	public void postLoad(XMLResource resource, InputStream inputStream,
-			Map<?, ?> options) {
-		if (resource instanceof ResourceImpl) {
-			((ResourceImpl) resource).setIntrinsicIDToEObjectMap(null);
-		}
+	public void preLoad(final XMLResource resource, final InputStream inputStream, final Map<?, ?> options) {
+		MMXCoreHandlerUtil.preLoad(resource);
 	}
 
 	@Override
-	public void preSave(XMLResource resource, OutputStream outputStream,
-			Map<?, ?> options) {
-		final TreeIterator<EObject> iterator = resource.getAllContents();
-		while (iterator.hasNext()) {
-			final EObject o = iterator.next();
-			if (o instanceof MMXObject){
-				((MMXObject) o).makeProxies();
-				iterator.prune();
-			}
-		}
+	public void postLoad(final XMLResource resource, final InputStream inputStream, final Map<?, ?> options) {
+		MMXCoreHandlerUtil.postLoad(resource);
 	}
 
 	@Override
-	public void postSave(XMLResource resource, OutputStream outputStream,
-			Map<?, ?> options) {
-		final TreeIterator<EObject> iterator = resource.getAllContents();
-		while (iterator.hasNext()) {
-			final EObject o = iterator.next();
-			if (o instanceof MMXObject){
-				((MMXObject) o).restoreProxies();
-				iterator.prune();
-			}
-		}
+	public void preSave(final XMLResource resource, final OutputStream outputStream, final Map<?, ?> options) {
+		MMXCoreHandlerUtil.preSave(resource);
+	}
+
+	@Override
+	public void postSave(final XMLResource resource, final OutputStream outputStream, final Map<?, ?> options) {
+		MMXCoreHandlerUtil.postSave(resource);
 	}
 }
