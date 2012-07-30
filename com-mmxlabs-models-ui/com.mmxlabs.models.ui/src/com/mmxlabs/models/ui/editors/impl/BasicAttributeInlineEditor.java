@@ -261,36 +261,12 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			validationDecoration.hide();
 		} else {
 			// Default severity
-			int severity = IStatus.INFO;
+			int severity = IStatus.OK;
 
 			// Builder used to accumulate messages
 			final StringBuilder sb = new StringBuilder();
 
-			if (!status.isMultiStatus()) {
-				if (checkStatus(status)) {
-
-					sb.append(status.getMessage());
-
-					// Is severity worse, then note it
-					if (status.getSeverity() > severity) {
-						severity = status.getSeverity();
-					}
-				}
-
-			} else {
-				final IStatus[] children = status.getChildren();
-				for (final IStatus element : children) {
-					if (checkStatus(element)) {
-
-						sb.append(element.getMessage());
-						sb.append("\n");
-						// Is severity worse, then note it
-						if (element.getSeverity() > severity) {
-							severity = element.getSeverity();
-						}
-					}
-				}
-			}
+			severity = checkStatus(status, IStatus.OK, sb);
 
 			if (sb.toString().isEmpty()) {
 				// No problems, so hide decoration
@@ -326,20 +302,40 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * @param status
 	 * @return
 	 */
-	private boolean checkStatus(final IStatus status) {
+	private int checkStatus(final IStatus status, int currentSeverity, final StringBuilder sb) {
+		if (status.isMultiStatus()) {
+			final IStatus[] children = status.getChildren();
+			for (final IStatus element : children) {
+				final int severity = checkStatus(element, currentSeverity, sb);
 
+				// Is severity worse, then note it
+				if (severity > currentSeverity) {
+					currentSeverity = status.getSeverity();
+				}
+
+			}
+		}
 		if (status instanceof IDetailConstraintStatus) {
-			final IDetailConstraintStatus s = (IDetailConstraintStatus) status;
+			final IDetailConstraintStatus element = (IDetailConstraintStatus) status;
 
-			final Collection<EObject> objects = s.getObjects();
+			final Collection<EObject> objects = element.getObjects();
 			if (objects.contains(input)) {
-				if (s.getFeaturesForEObject(input).contains(feature)) {
-					return true;
+				if (element.getFeaturesForEObject(input).contains(feature)) {
+
+					sb.append(element.getMessage());
+					sb.append("\n");
+
+					// Is severity worse, then note it
+					if (element.getSeverity() > currentSeverity) {
+						currentSeverity = status.getSeverity();
+					}
+
+					return currentSeverity;
 				}
 			}
 		}
 
-		return false;
+		return currentSeverity;
 	}
 
 	protected Command createSetCommand(final Object value) {
