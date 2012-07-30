@@ -7,6 +7,7 @@ package com.mmxlabs.optimiser.core;
 import java.util.List;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
 
 /**
  * Extended {@link IOptimiser} interface for optimising {@link ISequences}.
@@ -29,6 +30,13 @@ public interface ISequencesOptimiser extends IOptimiser {
 	 * @return
 	 */
 	List<IConstraintChecker> getConstraintCheckers();
+
+	/**
+	 * Returns the list of {@link #getConstraintCheckers()} which also implement @link {IReducingContraintChecker}
+	 * 
+	 * @return
+	 */
+	List<IReducingContraintChecker> getReducingConstraintCheckers();
 
 	/**
 	 * Returns the {@link ISequencesManipulator} used to transform {@link ISequences} into a new {@link ISequences} object to validate and evaluate each iteration.

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.optimiser.core.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.ISequencesOptimiser;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
+import com.mmxlabs.optimiser.core.constraints.IReducingContraintChecker;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 
 public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser {
@@ -40,6 +42,8 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 	private IOptimisationContext currentContext;
 
 	private long startTime;
+
+	private List<IReducingContraintChecker> reducingConstraintCheckers;
 
 	/**
 	 * Initialise method checking the object has all the correct pieces of data to be able to perform the {@link #optimise(IOptimisationContext, Collection, Object)} method. Throws an
@@ -140,6 +144,9 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 			// Replace all entries in the destination with those in the source
 			destinationSequence.replaceAll(sourceSequence);
 		}
+		// Update the unused elements array
+		destination.getModifiableUnusedElements().clear();
+		destination.getModifiableUnusedElements().addAll(source.getUnusedElements());
 	}
 
 	public final void setNumberOfIterations(final int numberOfIterations) {
@@ -153,11 +160,22 @@ public abstract class AbstractSequencesOptimiser implements ISequencesOptimiser 
 
 	public final void setConstraintCheckers(final List<IConstraintChecker> constraintCheckers) {
 		this.constraintCheckers = constraintCheckers;
+		this.reducingConstraintCheckers = new ArrayList<IReducingContraintChecker>(constraintCheckers.size());
+		for (IConstraintChecker checker : constraintCheckers) {
+			if (checker instanceof IReducingContraintChecker) {
+				reducingConstraintCheckers.add((IReducingContraintChecker) checker);
+			}
+		}
 	}
 
 	@Override
 	public final List<IConstraintChecker> getConstraintCheckers() {
 		return constraintCheckers;
+	}
+
+	@Override
+	public final List<IReducingContraintChecker> getReducingConstraintCheckers() {
+		return reducingConstraintCheckers;
 	}
 
 	public final void setFitnessEvaluator(final IFitnessEvaluator fitnessEvaluator) {
