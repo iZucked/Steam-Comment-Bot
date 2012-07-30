@@ -28,32 +28,25 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 /**
  * Special case for restricting load slots to load contracts and vice versa for discharge.
  * 
- * TODO hook the filtering in in a more intelligent way; it would be good if you could get the delegate
- * to notify on update to cached values, so as to recache filtered values.
+ * TODO hook the filtering in in a more intelligent way; it would be good if you could get the delegate to notify on update to cached values, so as to recache filtered values.
  * 
  * @author hinton
- *
+ * 
  */
 public class SlotContractValueProviderFactory implements IReferenceValueProviderFactory {
 	private final IReferenceValueProviderFactory delegate;
 
 	public SlotContractValueProviderFactory() {
-		this.delegate = Activator
-				.getDefault()
-				.getReferenceValueProviderFactoryRegistry()
-				.getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(),
-						TypesPackage.eINSTANCE.getAContract());
+		this.delegate = Activator.getDefault().getReferenceValueProviderFactoryRegistry().getValueProviderFactory(EcorePackage.eINSTANCE.getEClass(), TypesPackage.eINSTANCE.getAContract());
 	}
 
 	@Override
-	public IReferenceValueProvider createReferenceValueProvider(
-			final EClass owner, final EReference reference,
-			final MMXRootObject rootObject) {
-		if (delegate == null) return null;
-		final IReferenceValueProvider delegateFactory = delegate
-				.createReferenceValueProvider(owner, reference, rootObject);
-		
-//		if (delegateFactory == null) return null;
+	public IReferenceValueProvider createReferenceValueProvider(final EClass owner, final EReference reference, final MMXRootObject rootObject) {
+		if (delegate == null)
+			return null;
+		final IReferenceValueProvider delegateFactory = delegate.createReferenceValueProvider(owner, reference, rootObject);
+
+		// if (delegateFactory == null) return null;
 		if (reference == CargoPackage.eINSTANCE.getSlot_Contract()) {
 			return new IReferenceValueProvider() {
 				@Override
@@ -63,37 +56,27 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 
 				@Override
 				public boolean updateOnChangeToFeature(Object changedFeature) {
-					return delegateFactory
-							.updateOnChangeToFeature(changedFeature);
+					return delegateFactory.updateOnChangeToFeature(changedFeature);
 				}
 
 				@Override
-				public Iterable<Pair<Notifier, List<Object>>> getNotifiers(
-						EObject referer, EReference feature,
-						EObject referenceValue) {
-					return delegateFactory.getNotifiers(referer, feature,
-							referenceValue);
+				public Iterable<Pair<Notifier, List<Object>>> getNotifiers(EObject referer, EReference feature, EObject referenceValue) {
+					return delegateFactory.getNotifiers(referer, feature, referenceValue);
 				}
 
 				@Override
-				public String getName(EObject referer, EReference feature,
-						EObject referenceValue) {
-					return delegateFactory.getName(referer, feature,
-							referenceValue);
+				public String getName(EObject referer, EReference feature, EObject referenceValue) {
+					return delegateFactory.getName(referer, feature, referenceValue);
 				}
 
 				@Override
-				public List<Pair<String, EObject>> getAllowedValues(
-						final EObject target, final EStructuralFeature field) {
-					final List<Pair<String, EObject>> delegateValue = delegateFactory
-							.getAllowedValues(target, field);
+				public List<Pair<String, EObject>> getAllowedValues(final EObject target, final EStructuralFeature field) {
+					final List<Pair<String, EObject>> delegateValue = delegateFactory.getAllowedValues(target, field);
 
 					if (target instanceof LoadSlot) {
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> value : delegateValue) {
-							if (((EReference) (value.getSecond().eContainingFeature())).getEReferenceType().isSuperTypeOf(
-											CommercialPackage.eINSTANCE.getPurchaseContract()))
-											{
+							if (((EReference) (value.getSecond().eContainingFeature())).getEReferenceType().isSuperTypeOf(CommercialPackage.eINSTANCE.getPurchaseContract())) {
 								filteredList.add(value);
 							}
 						}
@@ -101,14 +84,13 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 					} else if (target instanceof DischargeSlot) {
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> value : delegateValue) {
-							if (((EReference) (value.getSecond().eContainingFeature())).getEReferenceType().isSuperTypeOf(
-									CommercialPackage.eINSTANCE.getSalesContract())) {
+							if (((EReference) (value.getSecond().eContainingFeature())).getEReferenceType().isSuperTypeOf(CommercialPackage.eINSTANCE.getSalesContract())) {
 								filteredList.add(value);
 							}
 						}
 						return filteredList;
 					}
-					
+
 					return delegateValue;
 				}
 			};
