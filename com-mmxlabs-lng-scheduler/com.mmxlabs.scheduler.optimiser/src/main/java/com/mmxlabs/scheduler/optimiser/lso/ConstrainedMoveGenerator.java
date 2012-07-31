@@ -59,6 +59,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
 	 */
 	protected final Map<ISequenceElement, Followers<ISequenceElement>> validFollowers = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
+	protected final Map<ISequenceElement, Followers<ISequenceElement>> validPreceeders = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
 
 	/**
 	 * A reverse lookup table from elements to positions
@@ -149,12 +150,15 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			reverseLookup.put(e1, new Pair<Integer, Integer>(0, 0));
 
 			final LinkedHashSet<ISequenceElement> followers = new LinkedHashSet<ISequenceElement>();
+			final LinkedHashSet<ISequenceElement> preceeders = new LinkedHashSet<ISequenceElement>();
 
 			for (final ISequenceElement e2 : data.getSequenceElements()) {
 				if (e1 == e2) {
 					continue;
 				}
+
 				if (checker.allowSequence(e1, e2)) {
+
 					if (followers.size() == 1) {
 						validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, followers.iterator().next()));
 					}
@@ -163,9 +167,14 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 						validBreaks.add(new Pair<ISequenceElement, ISequenceElement>(e1, e2));
 					}
 				}
+
+				if (checker.allowSequence(e2, e1)) {
+					preceeders.add(e2);
+				}
 			}
 
 			validFollowers.put(e1, new Followers<ISequenceElement>(followers));
+			validPreceeders.put(e1, new Followers<ISequenceElement>(preceeders));
 		}
 
 		this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
