@@ -413,8 +413,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3, final ISalesPriceCalculator pricePerMMBTu,
-			final int durationHours, final boolean optional) {
+	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
+			final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final boolean optional) {
 
 		if (!ports.contains(port)) {
 			throw new IllegalArgumentException("IPort was not created by this builder");
@@ -1267,6 +1267,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		restrictedSlots.addAll(slotVesselClassRestrictions.keySet());
 
 		for (final IPortSlot slot : restrictedSlots) {
+
 			Set<IVessel> allowedVessels = slotVesselRestrictions.get(slot);
 			if (allowedVessels == null) {
 				allowedVessels = Collections.emptySet();
@@ -1295,7 +1296,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					allowedResources.add(vesselProvider.getResource(vessel));
 				}
 			}
-
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
 		}
 
@@ -1303,7 +1303,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		final HashSet<IResource> allowedResources = new HashSet<IResource>();
 
 		for (final IVessel vessel : vessels) {
-
+			// Skip virtual vessels
+			if (virtualVesselMap.values().contains(vessel)) {
+				continue;
+			}
 			allowedResources.add(vesselProvider.getResource(vessel));
 		}
 
@@ -1311,7 +1314,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		unrestrictedSlots.addAll(loadSlots);
 		unrestrictedSlots.addAll(dischargeSlots);
 		unrestrictedSlots.addAll(vesselEvents);
-
+		unrestrictedSlots.removeAll(unshippedElements);
 		unrestrictedSlots.removeAll(restrictedSlots);
 		for (final IPortSlot slot : unrestrictedSlots) {
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
@@ -1377,6 +1380,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			throw new IllegalArgumentException("DES Purchase is not linked to a virtual vesssel");
 		}
 
+		final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(desPurchase));
 		for (final IDischargeOption option : dischargeSlots) {
 
 			if (option instanceof DischargeSlot) {
@@ -1384,13 +1388,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				if (dischargePorts.contains(option.getPort())) {
 					// Get current allocation
 
-					Set<IVessel> set = slotVesselRestrictions.get(option);
-					if (set == null || set.isEmpty()) {
-						set = new HashSet<IVessel>(realVessels);
-					}
-					set.add(virtualVessel);
+					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
+					if (matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
 
-					constrainSlotToVessels(option, set);
+						Set<IVessel> set = slotVesselRestrictions.get(option);
+						if (set == null || set.isEmpty()) {
+							set = new HashSet<IVessel>(realVessels);
+						}
+						set.add(virtualVessel);
+
+						constrainSlotToVessels(option, set);
+					}
 				}
 			}
 
@@ -1398,15 +1406,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void bindLoadSlotsToFOBSale(final IDischargeOption fobSake, final IPort loadPort) {
+	public void bindLoadSlotsToFOBSale(final IDischargeOption fobSale, final IPort loadPort) {
 
-		final ISequenceElement desElement = portSlotsProvider.getElement(fobSake);
+		final ISequenceElement desElement = portSlotsProvider.getElement(fobSale);
 
 		// Look up virtual vessel
 		final IVessel virtualVessel = virtualVesselMap.get(desElement);
 		if (virtualVessel == null) {
 			throw new IllegalArgumentException("FOB Sale is not linked to a virtual vesssel");
 		}
+		final List<ITimeWindow> tw1 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(fobSale));
 
 		for (final ILoadOption option : loadSlots) {
 
@@ -1415,17 +1424,45 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				if (loadPort == option.getPort()) {
 					// Get current allocation
 
-					Set<IVessel> set = slotVesselRestrictions.get(option);
-					if (set == null || set.isEmpty()) {
-						set = new HashSet<IVessel>(realVessels);
-					}
-					set.add(virtualVessel);
+					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
+					if (matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+						Set<IVessel> set = slotVesselRestrictions.get(option);
+						if (set == null || set.isEmpty()) {
+							set = new HashSet<IVessel>(realVessels);
+						}
+						set.add(virtualVessel);
 
-					constrainSlotToVessels(option, set);
+						constrainSlotToVessels(option, set);
+					}
 				}
 			}
 
 		}
+	}
+
+	/**
+	 * Return true if the time windows overlap in some way.
+	 * 
+	 * @param tw1
+	 * @param tw2
+	 * @return
+	 */
+	private boolean matchingWindows(final List<ITimeWindow> tw1, final List<ITimeWindow> tw2) {
+
+		for (final ITimeWindow t1 : tw1) {
+			for (final ITimeWindow t2 : tw2) {
+				// End is within
+				if (t1.getEnd() >= t2.getStart() && t1.getEnd() <= t2.getEnd()) {
+					return true;
+				}
+				if (t1.getStart() >= t2.getStart() && t1.getStart() <= t2.getEnd()) {
+					return true;
+				}
+			}
+
+		}
+
+		return false;
 	}
 
 	@Override
