@@ -37,7 +37,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	private IScenarioServiceSelectionProvider selectionProvider;
 	private HashSet<ScheduleModel> adaptees = new HashSet<ScheduleModel>();
 	private IScenarioInstanceElementCollector collector;
-	
+
 	public ScenarioViewerSynchronizer(final Viewer viewer, final IScenarioInstanceElementCollector collector) {
 		this.viewer = viewer;
 		this.collector = collector;
@@ -48,9 +48,9 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 				adaptInstance(instance);
 			}
 		} else {
-		    log.warn("Viewer synchronizer for " + viewer.getClass() + " didn't find a selection provider"); 
+			log.warn("Viewer synchronizer for " + viewer.getClass() + " didn't find a selection provider");
 		}
-		
+
 		refreshViewer();
 	}
 
@@ -79,7 +79,9 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 
 	private ScheduleModel getScheduleModel(ScenarioInstance instance) {
 		final IScenarioService scenarioService = instance.getScenarioService();
-
+		if (scenarioService == null) {
+			return null;
+		}
 		EObject object = null;
 		try {
 			object = scenarioService.load(instance);
@@ -119,7 +121,8 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	@Override
 	protected void missedNotifications(final List<Notification> notifications) {
 		for (final Notification notification : notifications) {
-			if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule() || notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule()) {
+			if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule()
+					|| notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule()) {
 				refreshViewer();
 				return;
 			}
@@ -127,7 +130,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	}
 
 	private boolean needsRefresh;
-	
+
 	private final Runnable refresh = new Runnable() {
 		@Override
 		public void run() {
@@ -152,24 +155,25 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			Display.getDefault().asyncExec(refresh);
 		}
 	}
-	
+
 	private IScenarioViewerSynchronizerOutput collectObjects() {
 		final IScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-		
+
 		final HashMap<Object, Pair<ScenarioInstance, MMXRootObject>> sourceByElement = new HashMap<Object, Pair<ScenarioInstance, MMXRootObject>>();
 		final ArrayList<Object> selectedObjects = new ArrayList<Object>();
 		final List<MMXRootObject> rootObjects = new ArrayList<MMXRootObject>();
-		
+
 		collector.beginCollecting();
-		
+
 		for (final ScenarioInstance job : selectionProvider.getSelection()) {
 			final IScenarioService scenarioService = job.getScenarioService();
 			final boolean isPinned = selectionProvider.getPinnedInstance() == job;
-			
+
 			EObject instance = null;
 			try {
 				instance = scenarioService.load(job);
-			} catch (IOException e) {}
+			} catch (IOException e) {
+			}
 
 			if (instance instanceof MMXRootObject) {
 				final MMXRootObject rootObject = (MMXRootObject) instance;
@@ -181,25 +185,25 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 				selectedObjects.addAll(viewerContent);
 			}
 		}
-		
+
 		collector.endCollecting();
-		
+
 		return new IScenarioViewerSynchronizerOutput() {
 			@Override
 			public ScenarioInstance getScenarioInstance(Object object) {
 				return sourceByElement.get(object).getFirst();
 			}
-			
+
 			@Override
 			public MMXRootObject getRootObject(Object object) {
 				return sourceByElement.get(object).getSecond();
 			}
-			
+
 			@Override
 			public Collection<Object> getCollectedElements() {
 				return selectedObjects;
 			}
-			
+
 			@Override
 			public Collection<MMXRootObject> getRootObjects() {
 				return rootObjects;
@@ -211,7 +215,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 			}
 		};
 	}
-	
+
 	/**
 	 * Creates a {@link IJobManagerListener} to call {@link Viewer#setInput(Object)} when the currently selected {@link IManagedJob}s state or progress changes for jobs registered with the
 	 * {@link IJobManager}. Call {@link #deregisterView(IJobManagerListener)} with the listener when it is no longer required. This method will call {@link Viewer#setInput(Object)} immediately with
