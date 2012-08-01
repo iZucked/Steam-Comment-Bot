@@ -6,6 +6,7 @@ package com.mmxlabs.model.service.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -178,6 +179,8 @@ public class ModelService implements IModelService {
 						creator.write(buf, 0, value);
 					}
 					backups.put(instance, f);
+				} catch (final FileNotFoundException e) {
+					// Ignore this as the original resource may not exist yet. This can happen we we first create a resource and persist it.
 				} finally {
 					if (creator != null) {
 						creator.close();
