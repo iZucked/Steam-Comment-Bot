@@ -4,18 +4,14 @@
  */
 package com.mmxlabs.shiplingo.platform.models.manifest;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.edapt.migration.MigrationException;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -37,7 +33,6 @@ import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -48,14 +43,6 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.models.mmxcore.jointmodel.EmptyJointModelRelease;
-import com.mmxlabs.models.mmxcore.jointmodel.IJointModelRelease;
-import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
-import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Entry;
-import com.mmxlabs.shiplingo.platform.models.manifest.manifest.Manifest;
-import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestFactory;
-import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage;
 
 /**
  * This is an example LNG joint model; each client will have a different implementation of this.
@@ -67,8 +54,7 @@ import com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage;
  * @author hinton
  * 
  */
-public class ManifestJointModel extends JointModel {
-	private static final List<IJointModelRelease> releases = new LinkedList<IJointModelRelease>();
+public class ManifestJointModel {
 	private static final String PORT_MODEL_KEY = "port-model";
 	private static final String FLEET_MODEL_KEY = "fleet-model";
 	private static final String CARGO_MODEL_KEY = "cargo-model";
@@ -86,9 +72,6 @@ public class ManifestJointModel extends JointModel {
 	private static final Map<EClass, String> modelClassKeys = new LinkedHashMap<EClass, String>();
 
 	static {
-		releases.add(new EmptyJointModelRelease(PORT_MODEL_KEY, 0, FLEET_MODEL_KEY, 0, CARGO_MODEL_KEY, 0, PRICING_MODEL_KEY, 0, INPUT_MODEL_KEY, 0, SCHEDULE_MODEL_KEY, 0, COMMERCIAL_MODEL_KEY, 0,
-				OPTIMISER_MODEL_KEY, 0));
-
 		modelClassKeys.put(PortPackage.eINSTANCE.getPortModel(), PORT_MODEL_KEY);
 		modelClassKeys.put(FleetPackage.eINSTANCE.getFleetModel(), FLEET_MODEL_KEY);
 		modelClassKeys.put(CargoPackage.eINSTANCE.getCargoModel(), CARGO_MODEL_KEY);
@@ -105,54 +88,26 @@ public class ManifestJointModel extends JointModel {
 		modelClassKeys.put(MMXCorePackage.eINSTANCE.getMMXRootObject(), ROOT_MODEL_KEY);
 	}
 
-	private URI rootURI;
-
-	private Manifest manifest;
-
-	protected void setFile(final URI rootURI) throws IOException {
-		this.rootURI = rootURI;
-	}
-
-	protected Resource createManifestResource() {
-		ManifestPackage.eINSTANCE.getEntry(); // trigger load of package?
-		return getResourceSet().createResource(getArchiveURI("MANIFEST.xmi"));
-	}
-
-	protected URI getArchiveURI(final String relativePath) {
-		return URI.createURI("archive:" + rootURI.toString() + "!/" + relativePath);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.models.mmxcore.jointmodel.JointModel#needsUpgrade()
-	 */
-	@Override
-	protected boolean needsUpgrade() {
-		return manifest.getCurrentVersion() != getReleases().size() - 1;
-	}
-
-	public static ManifestJointModel createEmptyModel(final URI target) throws IOException {
-		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		rootObject.setVersion(releases.size() - 1);
-		// TODO sort out how to create blank models; should there be an extension for this?
-		rootObject.addSubModel(PortFactory.eINSTANCE.createPortModel());
-		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
-		rootObject.addSubModel(CargoFactory.eINSTANCE.createCargoModel());
-		rootObject.addSubModel(PricingFactory.eINSTANCE.createPricingModel());
-		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
-		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
-		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
-		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
-		rootObject.addSubModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
-
-		final ManifestJointModel result = new ManifestJointModel(rootObject, target);
-		return result;
-	}
+//
+//	public static ManifestJointModel createEmptyModel(final URI target) throws IOException {
+//		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+//		// TODO sort out how to create blank models; should there be an extension for this?
+//		rootObject.addSubModel(PortFactory.eINSTANCE.createPortModel());
+//		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
+//		rootObject.addSubModel(CargoFactory.eINSTANCE.createCargoModel());
+//		rootObject.addSubModel(PricingFactory.eINSTANCE.createPricingModel());
+//		rootObject.addSubModel(InputFactory.eINSTANCE.createInputModel());
+//		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
+//		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
+//		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
+//		rootObject.addSubModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
+//
+////		final ManifestJointModel result = new ManifestJointModel(rootObject, target);
+//		return result;
+//	}
 
 	public static MMXRootObject createEmptyInstance(List<EObject> models) {
 		final MMXRootObject rootObject = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		rootObject.setVersion(releases.size() - 1);
 		// TODO sort out how to create blank models; should there be an extension for this?
 		rootObject.addSubModel(PortFactory.eINSTANCE.createPortModel());
 		rootObject.addSubModel(FleetFactory.eINSTANCE.createFleetModel());
@@ -176,106 +131,85 @@ public class ManifestJointModel extends JointModel {
 		return rootObject;
 	}
 
-	public static void createEmptySubModels(List<EObject> models) {
-		{
-			PortModel portModel = PortFactory.eINSTANCE.createPortModel();
-			final Route direct = PortFactory.eINSTANCE.createRoute();
-			direct.setName("Direct");
-			portModel.getRoutes().add(direct);
-			models.add(portModel);
-		}
-		models.add(FleetFactory.eINSTANCE.createFleetModel());
-		models.add(CargoFactory.eINSTANCE.createCargoModel());
-
-		{
-			PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
-			models.add(pricingModel);
-			FleetCostModel fleetCostModel = PricingFactory.eINSTANCE.createFleetCostModel();
-			pricingModel.setFleetCost(fleetCostModel);
-		}
-
-		models.add(InputFactory.eINSTANCE.createInputModel());
-		models.add(ScheduleFactory.eINSTANCE.createScheduleModel());
-		models.add(CommercialFactory.eINSTANCE.createCommercialModel());
-		models.add(OptimiserFactory.eINSTANCE.createOptimiserModel());
-		models.add(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
-
-	}
-
-	public ManifestJointModel(final MMXRootObject rootObject, final URI file_) throws IOException {
-		setFile(file_);
-		final Resource resource = createManifestResource();
-		manifest = ManifestFactory.eINSTANCE.createManifest();
-		resource.getContents().add(manifest);
-		setRootObject(rootObject);
-	}
-
-	public ManifestJointModel(final URI file_) throws FileNotFoundException, IOException, MigrationException {
-		setFile(file_);
-		final Resource resource = createManifestResource();
-		resource.load(null);
-		manifest = (Manifest) resource.getContents().iterator().next();
-
-		for (final Entry e : manifest.getEntries()) {
-			addSubModel(e.getSubModelKey(), getArchiveURI(e.getRelativePath()));
-		}
-
-		load();
-	}
-
-	@Override
-	public void save() throws IOException {
-		// if (!file.exists()) {
-		// // create empty zipfile
-		// file.getParentFile().mkdirs();
-		// final ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(file));
-		// zos.setComment("See MANIFEST.xmi for more information");
-		// zos.flush();
-		// zos.close();
-		// }
-		manifest.setCurrentVersion(getReleases().size() - 1);
-		super.save();
-		manifest.getEntries().clear();
-		for (final Map.Entry<String, URI> keyAndURI : subModels.entrySet()) {
-			final Entry e = ManifestFactory.eINSTANCE.createEntry();
-			e.setSubModelKey(keyAndURI.getKey());
-			e.setRelativePath(getRelativePath(keyAndURI.getValue()));
-			manifest.getEntries().add(e);
-		}
-		manifest.eResource().save(null);
-	}
-
-	/**
-	 * Find the path within archive of the given URI.
-	 * 
-	 * @param value
-	 * @return
-	 */
-	private String getRelativePath(final URI value) {
-		final String[] parts = value.toString().split("!");
-		return parts[parts.length - 1].substring(1);// strip off leading slash
-	}
-
-	@Override
-	protected URI createURI(final UUIDObject object) {
-		final String modelKey = modelClassKeys.get(object.eClass());
-		final URI result = getArchiveURI(object.eClass().getName() + "-" + object.getUuid() + ".xmi");
-
-		if (modelKey != null)
-			addSubModel(modelKey, result);
-
-		return result;
-	}
-
-	@Override
-	protected List<IJointModelRelease> getReleases() {
-		return releases;
-	}
-
-	@Override
-	public MMXRootObject getRootObject() {
-		return super.getRootObject();
-	}
+//	public static void createEmptySubModels(List<EObject> models) {
+//		{
+//			PortModel portModel = PortFactory.eINSTANCE.createPortModel();
+//			final Route direct = PortFactory.eINSTANCE.createRoute();
+//			direct.setName("Direct");
+//			portModel.getRoutes().add(direct);
+//			models.add(portModel);
+//		}
+//		models.add(FleetFactory.eINSTANCE.createFleetModel());
+//		models.add(CargoFactory.eINSTANCE.createCargoModel());
+//
+//		{
+//			PricingModel pricingModel = PricingFactory.eINSTANCE.createPricingModel();
+//			models.add(pricingModel);
+//			FleetCostModel fleetCostModel = PricingFactory.eINSTANCE.createFleetCostModel();
+//			pricingModel.setFleetCost(fleetCostModel);
+//		}
+//
+//		models.add(InputFactory.eINSTANCE.createInputModel());
+//		models.add(ScheduleFactory.eINSTANCE.createScheduleModel());
+//		models.add(CommercialFactory.eINSTANCE.createCommercialModel());
+//		models.add(OptimiserFactory.eINSTANCE.createOptimiserModel());
+//		models.add(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
+//
+//	}
+//
+//	public ManifestJointModel(final MMXRootObject rootObject, final URI file_) throws IOException {
+//		setFile(file_);
+//		final Resource resource = createManifestResource();
+//		manifest = ManifestFactory.eINSTANCE.createManifest();
+//		resource.getContents().add(manifest);
+//		setRootObject(rootObject);
+//	}
+//
+//	public ManifestJointModel(final URI file_) throws FileNotFoundException, IOException, MigrationException {
+//		setFile(file_);
+//		final Resource resource = createManifestResource();
+//		resource.load(null);
+//		manifest = (Manifest) resource.getContents().iterator().next();
+//
+//		for (final Entry e : manifest.getEntries()) {
+//			addSubModel(e.getSubModelKey(), getArchiveURI(e.getRelativePath()));
+//		}
+//
+//		load();
+//	}
+//
+//
+//	/**
+//	 * Find the path within archive of the given URI.
+//	 * 
+//	 * @param value
+//	 * @return
+//	 */
+//	private String getRelativePath(final URI value) {
+//		final String[] parts = value.toString().split("!");
+//		return parts[parts.length - 1].substring(1);// strip off leading slash
+//	}
+//
+//	@Override
+//	protected URI createURI(final UUIDObject object) {
+//		final String modelKey = modelClassKeys.get(object.eClass());
+//		final URI result = getArchiveURI(object.eClass().getName() + "-" + object.getUuid() + ".xmi");
+//
+//		if (modelKey != null)
+//			addSubModel(modelKey, result);
+//
+//		return result;
+//	}
+//
+//	@Override
+//	protected List<IJointModelRelease> getReleases() {
+//		return releases;
+//	}
+//
+//	@Override
+//	public MMXRootObject getRootObject() {
+//		return super.getRootObject();
+//	}
 
 	public static Iterable<EClass> getSubmodelClasses() {
 		return modelClassKeys.keySet();
