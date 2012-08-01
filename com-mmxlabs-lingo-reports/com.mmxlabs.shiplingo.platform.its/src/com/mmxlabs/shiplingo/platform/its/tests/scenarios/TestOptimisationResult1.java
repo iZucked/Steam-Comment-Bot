@@ -18,7 +18,7 @@ public class TestOptimisationResult1 extends AbstractOptimisationResultTester {
 	public void testOptimisationResult() throws IOException, InterruptedException, IncompleteScenarioException, MigrationException {
 
 		// Load the scenario to test
-		final URL url = getClass().getResource("/scenarios/TestOptimisationResult1.scn");
+		final URL url = getClass().getResource("/scenarios/TestOptimisationResult1.scenario");
 
 		runScenario(url);
 	}
