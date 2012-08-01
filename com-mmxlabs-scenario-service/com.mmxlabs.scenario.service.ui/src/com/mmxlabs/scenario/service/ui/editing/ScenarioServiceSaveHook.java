@@ -76,7 +76,7 @@ public class ScenarioServiceSaveHook {
 		final MessageDialog d = new MessageDialog(Display.getDefault().getActiveShell(), "Save Scenarios", null, String.format("There are %d unsaved scenarios - do you wish to save them?",
 				dirtyScenarios.size()), MessageDialog.QUESTION, new String[] { "&Save All", "&Discard All", "&Cancel" }, 0);
 		final int ret = d.open();
-		if (ret == 2) {
+		if (ret == 2  || ret == -1) {
 			// Cancel
 			return false;
 		} else if (ret == 1) {
