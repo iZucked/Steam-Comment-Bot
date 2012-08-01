@@ -7,7 +7,9 @@ package com.mmxlabs.scheduler.optimiser.lso;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
@@ -182,14 +184,22 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 						// we need to find something else to pop in
 						// which (a) can go after what's currently before f
 						// and (b) has unused in its follower set
-						final List<Integer> elements = new ArrayList<Integer>(beforeFollowerFollowers.size());
-						for (int i = 0; i < beforeFollowerFollowers.size(); ++i) {
-							elements.add(i);
+						final Set<ISequenceElement> bffSet = new LinkedHashSet<ISequenceElement>(beforeFollowerFollowers.size());
+						for (ISequenceElement e : beforeFollowerFollowers) {
+							bffSet.add(e);
 						}
-						Collections.shuffle(elements, owner.getRandom());
+						final ConstrainedMoveGenerator.Followers<ISequenceElement> unusedPreceeders = owner.validPreceeders.get(unused);
+						final Set<ISequenceElement> upSet = new LinkedHashSet<ISequenceElement>(unusedPreceeders.size());
+						for (ISequenceElement e : unusedPreceeders) {
+							upSet.add(e);
+						}
+						// Keep intersection
+						bffSet.retainAll(upSet);
 
-						LOOP_ELEMENTS: for (final int idx : elements) {
-							final ISequenceElement candidate = beforeFollowerFollowers.get(idx);
+						List<ISequenceElement> candidates = new ArrayList<ISequenceElement>(bffSet);
+						Collections.shuffle(candidates, owner.getRandom());
+
+						LOOP_ELEMENTS: for (final ISequenceElement candidate : candidates) {
 							final Pair<Integer, Integer> candidatePosition = owner.reverseLookup.get(candidate);
 							if (owner.validFollowers.get(candidate).contains(unused)) {
 								if (candidatePosition.getFirst() == null) {
