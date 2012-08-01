@@ -261,7 +261,7 @@ public class LNGScenarioTransformer {
 		 * First, create all the market curves (should these come through the builder?)
 		 */
 
-		final Association<Index, ICurve> indexAssociation = new Association<Index, ICurve>();
+		final Association<Index<?>, ICurve> indexAssociation = new Association<Index<?>, ICurve>();
 
 		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
 		for (final Index<Double> index : pricingModel.getCommodityIndices()) {
@@ -665,7 +665,7 @@ public class LNGScenarioTransformer {
 	 * @param entities
 	 * @param defaultRewiring
 	 */
-	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> ports, final Association<Index, ICurve> indexAssociation,
+	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> ports, final Association<Index<?>, ICurve> indexAssociation,
 			final Association<Vessel, IVessel> vesselAssociation, final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean defaultRewiring) {
 
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
@@ -766,7 +766,7 @@ public class LNGScenarioTransformer {
 		}
 	}
 
-	private void buildSpotCargoMarkets(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Index, ICurve> indexAssociation,
+	private void buildSpotCargoMarkets(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Index<?>, ICurve> indexAssociation,
 			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities) {
 
 		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
