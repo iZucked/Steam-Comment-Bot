@@ -24,6 +24,8 @@ import com.mmxlabs.models.lng.pricing.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
+import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
+import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -52,6 +54,8 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 
 			if (spotMarket instanceof DESPurchaseMarket) {
 				final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) spotMarket;
+
+				checkSpotMarketGroup(ctx, failures, spotMarket, SpotType.DES_PURCHASE);
 
 				if (desPurchaseMarket.getCv() < 0.001) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A positive CV value should be set"));
@@ -87,6 +91,8 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 			if (spotMarket instanceof DESSalesMarket) {
 				final DESSalesMarket desSalesMarket = (DESSalesMarket) spotMarket;
 
+				checkSpotMarketGroup(ctx, failures, spotMarket, SpotType.DES_SALE);
+
 				final Port notionalPort = desSalesMarket.getNotionalPort();
 				if (notionalPort == null || notionalPort.getCapabilities().contains(PortCapability.DISCHARGE) == false) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A notional discharge port must be set"));
@@ -103,6 +109,8 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 
 			if (spotMarket instanceof FOBPurchasesMarket) {
 				final FOBPurchasesMarket fobPurchasesMarket = (FOBPurchasesMarket) spotMarket;
+
+				checkSpotMarketGroup(ctx, failures, spotMarket, SpotType.FOB_PURCHASE);
 
 				final Port notionalPort = fobPurchasesMarket.getNotionalPort();
 				if (notionalPort == null || notionalPort.getCapabilities().contains(PortCapability.LOAD) == false) {
@@ -126,6 +134,8 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 
 			if (spotMarket instanceof FOBSalesMarket) {
 				final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) spotMarket;
+
+				checkSpotMarketGroup(ctx, failures, spotMarket, SpotType.FOB_SALE);
 
 				final Port loadPort = fobSalesMarket.getLoadPort();
 				if (loadPort == null || loadPort.getCapabilities().contains(PortCapability.LOAD) == false) {
@@ -152,6 +162,18 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				multi.add(s);
 			}
 			return multi;
+		}
+	}
+
+	private void checkSpotMarketGroup(final IValidationContext ctx, final List<IStatus> failures, final SpotMarket spotMarket, final SpotType spotType) {
+		if (spotMarket.eContainer() instanceof SpotMarketGroup) {
+			final SpotMarketGroup spotMarketGroup = (SpotMarketGroup) spotMarket.eContainer();
+			if (spotMarketGroup.getType() != spotType) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(spotMarket.eClass().getName()
+						+ " is in the SpotMarketGroup for " + spotType));
+				dsd.addEObjectAndFeature(spotMarketGroup, PricingPackage.eINSTANCE.getSpotMarketGroup_Markets());
+				failures.add(dsd);
+			}
 		}
 	}
 }
