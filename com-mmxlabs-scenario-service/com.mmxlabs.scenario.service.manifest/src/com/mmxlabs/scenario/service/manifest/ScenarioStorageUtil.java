@@ -24,6 +24,7 @@ import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.util.MMXCoreBinaryResourceFactoryImpl;
+import com.mmxlabs.models.mmxcore.util.MMXCoreHandlerUtil;
 import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -217,6 +218,11 @@ public class ScenarioStorageUtil {
 
 					result.getDependencyUUIDs().addAll(manifest.getDependencyUUIDs());
 
+					if (preLoad) {
+						MMXCoreHandlerUtil.postLoad(resourceSet.getResources());
+					}
+					
+					
 					return result;
 				}
 			}
