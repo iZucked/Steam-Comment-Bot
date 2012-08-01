@@ -79,13 +79,13 @@ public class OptimisationRepeatabilityTest {
 	@Test
 	public void testScenario() throws IOException, InterruptedException, MigrationException, IncompleteScenarioException {
 
-		final URL url = getClass().getResource("/test.scenario");
+		final URL url = getClass().getResource("/OptimisationRepeatabilityTest.scenario");
 
 		testScenario(url, 5);
 	}
 
 	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException, MigrationException, IncompleteScenarioException {
-		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), true);
+		ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), true);
 
 		final MMXRootObject originalScenario = (MMXRootObject) instance.getInstance();
 
@@ -144,7 +144,7 @@ public class OptimisationRepeatabilityTest {
 		}
 	}
 
-	MMXRootObject duplicate(final MMXRootObject original) {
+	MMXRootObject duplicate(MMXRootObject original) {
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 		for (final MMXSubModel subModel : original.getSubModels()) {
 			originalSubModels.add(subModel.getSubModelInstance());
@@ -152,8 +152,8 @@ public class OptimisationRepeatabilityTest {
 
 		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
 
-		final MMXRootObject duplicate = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		for (final EObject eObject : duppedSubModels) {
+		MMXRootObject duplicate = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+		for (EObject eObject : duppedSubModels) {
 			duplicate.addSubModel((UUIDObject) eObject);
 		}
 
