@@ -4,12 +4,14 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -45,6 +47,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -88,10 +91,12 @@ import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.pricing.SpotAvailability;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
+import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer.ModelClass;
 import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
@@ -165,6 +170,18 @@ public class LNGScenarioTransformer {
 	private final ArrayList<IVessel> allVessels = new ArrayList<IVessel>();
 
 	private OptimiserSettings defaultSettings = null;
+
+	/**
+	 * The {@link Set} of ID strings already used. The UI should restrict user entered data items from clashing, but generated ID's may well clash with user ones.
+	 */
+	private final Set<String> usedIDStrings = new HashSet<String>();
+
+	/**
+	 * A {@link Map} of existing spot market slots by ID. This map is used later when building the spot market options.
+	 */
+	private final Map<String, Slot> marketSlotsByID = new HashMap<String, Slot>();
+
+	private final EnumMap<SpotType, TreeMap<String, Collection<Slot>>> existingSpotCount = new EnumMap<SpotType, TreeMap<String, Collection<Slot>>>(SpotType.class);
 
 	/**
 	 * Create a transformer for the given scenario; the class holds a reference, so changes made to the scenario after construction will be reflected in calls to the various helper methods.
@@ -679,6 +696,8 @@ public class LNGScenarioTransformer {
 
 			final LoadSlot loadSlot = eCargo.getLoadSlot();
 
+			usedIDStrings.add(loadSlot.getName());
+
 			final ITimeWindow loadWindow = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTime()),
 					convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTime()));
 
@@ -709,6 +728,8 @@ public class LNGScenarioTransformer {
 			}
 
 			final DischargeSlot dischargeSlot = eCargo.getDischargeSlot();
+			usedIDStrings.add(dischargeSlot.getName());
+
 			final ITimeWindow dischargeWindow = builder.createTimeWindow(convertTime(earliestTime, dischargeSlot.getWindowStartWithSlotOrPortTime()),
 					convertTime(earliestTime, dischargeSlot.getWindowEndWithSlotOrPortTime()));
 
@@ -761,6 +782,15 @@ public class LNGScenarioTransformer {
 					}
 					builder.setCargoVesselRestriction(cargo, vesselsForCargo);
 				}
+			}
+			// Store market slots for lookup when building spot markets.
+			if (loadSlot instanceof SpotSlot) {
+				marketSlotsByID.put(loadSlot.getName(), loadSlot);
+				addSpotSlotToCount((SpotSlot) loadSlot);
+			}
+			if (dischargeSlot instanceof SpotSlot) {
+				marketSlotsByID.put(dischargeSlot.getName(), dischargeSlot);
+				addSpotSlotToCount((SpotSlot) dischargeSlot);
 			}
 
 		}
@@ -823,17 +853,33 @@ public class LNGScenarioTransformer {
 							}
 						}
 
+						final Collection<Slot> existing = getSpotSlots(SpotType.DES_PURCHASE, getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
-						if (count > 0) {
-							final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
-							for (int i = 0; i < count; ++i) {
+						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
+						for (final Slot slot : existing) {
+							final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
+							marketSlots.add(portSlot);
+							marketGroupSlots.add(portSlot);
+						}
+
+						int remaining = count - existing.size();
+						if (remaining > 0) {
+							int offset = 0;
+							for (int i = 0; i < remaining; ++i) {
 
 								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
 								final int cargoCVValue = Calculator.scaleToInt(desPurchaseMarket.getCv());
 
-								final String id = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-" + i;
+								final String idPrefix = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-";
+
+								// Avoid ID clash
+								String id = idPrefix + (i + offset);
+								while (usedIDStrings.contains(id)) {
+									id = idPrefix + (i + ++offset);
+								}
+								usedIDStrings.add(id);
 
 								final ILoadPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ILoadPriceCalculator.class);
 
@@ -864,6 +910,8 @@ public class LNGScenarioTransformer {
 								marketSlots.add(desPurchaseSlot);
 								marketGroupSlots.add(desPurchaseSlot);
 							}
+						}
+						if (marketSlots.size() > count) {
 							// Take this count and add into a constraint.
 							builder.createSlotGroupCount(marketSlots, count);
 						}
@@ -873,7 +921,7 @@ public class LNGScenarioTransformer {
 				// Take group availability curve and add into a constraint.
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
-					if (count > 0) {
+					if (marketGroupSlots.size() > count) {
 						builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
@@ -916,15 +964,30 @@ public class LNGScenarioTransformer {
 						final Port loadPort = (Port) fobSaleMarket.getLoadPort();
 						final IPort loadIPort = portAssociation.lookup(loadPort);
 
+						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_SALE, getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
-						if (count > 0) {
-							final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
-							for (int i = 0; i < count; ++i) {
+						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
+						for (final Slot slot : existing) {
+							final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
+							marketSlots.add(portSlot);
+							marketGroupSlots.add(portSlot);
+						}
+
+						int remaining = count - existing.size();
+						if (remaining > 0) {
+							int offset = 0;
+							for (int i = 0; i < remaining; ++i) {
 
 								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
-								final String id = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-" + i;
+								final String idPrefix = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-";
+
+								String id = idPrefix + (i + offset);
+								while (usedIDStrings.contains(id)) {
+									id = idPrefix + (i + ++offset);
+								}
+								usedIDStrings.add(id);
 
 								final ISalesPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ISalesPriceCalculator.class);
 
@@ -954,6 +1017,9 @@ public class LNGScenarioTransformer {
 								marketSlots.add(fobSaleSlot);
 								marketGroupSlots.add(fobSaleSlot);
 							}
+						}
+
+						if (marketSlots.size() > count) {
 							// Take this count and add into a constraint.
 							builder.createSlotGroupCount(marketSlots, count);
 						}
@@ -963,7 +1029,7 @@ public class LNGScenarioTransformer {
 				// Take group availability curve and add into a constraint.
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
-					if (count > 0) {
+					if (marketGroupSlots.size() > count) {
 						builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
@@ -1006,15 +1072,30 @@ public class LNGScenarioTransformer {
 						final APort notionalAPort = desSalesMarket.getNotionalPort();
 						final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
 
+						final Collection<Slot> existing = getSpotSlots(SpotType.DES_SALE, getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 
-						if (count > 0) {
-							final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
-							for (int i = 0; i < count; ++i) {
+						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
+						for (final Slot slot : existing) {
+							final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
+							marketSlots.add(portSlot);
+							marketGroupSlots.add(portSlot);
+						}
+
+						int remaining = count - existing.size();
+						if (remaining > 0) {
+							int offset = 0;
+							for (int i = 0; i < remaining; ++i) {
 
 								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
-								final String id = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-" + i;
+								final String idPrefix = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-";
+
+								String id = idPrefix + (i + offset);
+								while (usedIDStrings.contains(id)) {
+									id = idPrefix + (i + ++offset);
+								}
+								usedIDStrings.add(id);
 
 								final ISalesPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ISalesPriceCalculator.class);
 
@@ -1042,6 +1123,8 @@ public class LNGScenarioTransformer {
 								marketSlots.add(desSalesSlot);
 								marketGroupSlots.add(desSalesSlot);
 							}
+						}
+						if (marketSlots.size() > count) {
 							// Take this count and add into a constraint.
 							builder.createSlotGroupCount(marketSlots, count);
 						}
@@ -1051,7 +1134,7 @@ public class LNGScenarioTransformer {
 				// Take group availability curve and add into a constraint.
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
-					if (count > 0) {
+					if (marketGroupSlots.size() > count) {
 						builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
@@ -1094,16 +1177,33 @@ public class LNGScenarioTransformer {
 						final APort notionalAPort = fobPurchaseMarket.getNotionalPort();
 						final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
 
-						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
 						final int cargoCVValue = Calculator.scaleToInt(fobPurchaseMarket.getCv());
 
-						if (count > 0) {
-							final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
-							for (int i = 0; i < count; ++i) {
+						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_PURCHASE, getKeyForDate(startTime));
+						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
+
+						final List<IPortSlot> marketSlots = new ArrayList<IPortSlot>(count);
+						for (final Slot slot : existing) {
+							final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
+							marketSlots.add(portSlot);
+							marketGroupSlots.add(portSlot);
+						}
+
+						int remaining = count - existing.size();
+						if (remaining > 0) {
+							int offset = 0;
+							for (int i = 0; i < remaining; ++i) {
 
 								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
-								final String id = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-" + i;
+								final String idPrefix = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-";
+
+								String id = idPrefix + (i + offset);
+								while (usedIDStrings.contains(id)) {
+
+									id = idPrefix + (i + ++offset);
+								}
+								usedIDStrings.add(id);
 
 								final ILoadPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ILoadPriceCalculator.class);
 
@@ -1133,6 +1233,8 @@ public class LNGScenarioTransformer {
 								marketSlots.add(fobPurchaseSlot);
 								marketGroupSlots.add(fobPurchaseSlot);
 							}
+						}
+						if (marketSlots.size() > count) {
 							// Take this count and add into a constraint.
 							builder.createSlotGroupCount(marketSlots, count);
 						}
@@ -1142,7 +1244,7 @@ public class LNGScenarioTransformer {
 				// Take group availability curve and add into a constraint.
 				if (groupAvailability != null) {
 					final int count = getAvailabilityForDate(groupAvailability, startTime);
-					if (count > 0) {
+					if (marketGroupSlots.size() > count) {
 						builder.createSlotGroupCount(marketGroupSlots, count);
 					}
 				}
@@ -1493,5 +1595,70 @@ public class LNGScenarioTransformer {
 			}
 		}
 		return defaultSettings;
+	}
+
+	/**
+	 * Add the spot slot to the existing market spot slot counter.
+	 * 
+	 * @param spotSlot
+	 */
+	private void addSpotSlotToCount(final SpotSlot spotSlot) {
+		final ASpotMarket market = spotSlot.getMarket();
+		final SpotType spotType;
+		if (market instanceof DESPurchaseMarket) {
+			spotType = SpotType.DES_PURCHASE;
+		} else if (market instanceof DESSalesMarket) {
+			spotType = SpotType.DES_SALE;
+		} else if (market instanceof FOBPurchasesMarket) {
+			spotType = SpotType.FOB_PURCHASE;
+		} else if (market instanceof FOBSalesMarket) {
+			spotType = SpotType.FOB_SALE;
+		} else {
+			log.warn("Spot slot with an invalid market found");
+			return;
+		}
+
+		final TreeMap<String, Collection<Slot>> curve;
+		if (existingSpotCount.containsKey(spotType)) {
+			curve = existingSpotCount.get(spotType);
+		} else {
+			curve = new TreeMap<String, Collection<Slot>>();
+			existingSpotCount.put(spotType, curve);
+		}
+		if (spotSlot instanceof Slot) {
+			final Slot slot = (Slot) spotSlot;
+			final String key = getKeyForDate(slot.getWindowStart());
+			final Collection<Slot> slots;
+			if (curve.containsKey(key)) {
+				slots = curve.get(key);
+			} else {
+				slots = new LinkedList<Slot>();
+				curve.put(key, slots);
+			}
+			slots.add(slot);
+		}
+	}
+
+	private int getSpotSlotCount(final SpotType spotType, final String key) {
+
+		return getSpotSlots(spotType, key).size();
+	}
+
+	private Collection<Slot> getSpotSlots(final SpotType spotType, final String key) {
+		if (existingSpotCount.containsKey(spotType)) {
+			final TreeMap<String, Collection<Slot>> curve = existingSpotCount.get(spotType);
+			if (curve.containsKey(key)) {
+				final Collection<Slot> slots = curve.get(key);
+				if (slots != null) {
+					return slots;
+				}
+			}
+		}
+		return Collections.emptyList();
+	}
+
+	private String getKeyForDate(final Date date) {
+		final String key = new SimpleDateFormat("yyyy-mm").format(date);
+		return key;
 	}
 }
