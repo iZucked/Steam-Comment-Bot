@@ -4,8 +4,9 @@
  */
 package com.mmxlabs.model.service.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -108,9 +109,9 @@ public class ModelService implements IModelService {
 			final Resource resource = resourceSet.createResource(uri);
 			resource.getContents().add(instance);
 			final IModelInstance result = new ModelInstance(resource, true);
-			
-			cache.put(uri,  result);
-			
+
+			cache.put(uri, result);
+
 			return result;
 		}
 	}
@@ -157,32 +158,40 @@ public class ModelService implements IModelService {
 	@Override
 	public void saveTogether(final Collection<IModelInstance> instances) throws IOException {
 		// 1. backup all old model files
-		
+
 		synchronized (this) {
 			final URIConverter converter = resourceSet.getURIConverter();
-			final HashMap<IModelInstance, byte[]> backups = new HashMap<IModelInstance, byte[]>();
+			final HashMap<IModelInstance, File> backups = new HashMap<IModelInstance, File>();
 			// first copy every instance's current save state into a byte array
 			for (final IModelInstance instance : instances) {
+				final File f = File.createTempFile("mmx", "backup");
+				f.deleteOnExit();
+
+				InputStream input = null;
+				FileOutputStream creator = null;
 				try {
-					final InputStream input = converter
-							.createInputStream(instance.getURI());
-					final ByteArrayOutputStream creator = new ByteArrayOutputStream(
-							2048); // 2K? is this a reasonable size?
+					input = converter.createInputStream(instance.getURI());
+					creator = new FileOutputStream(f);
 					int value;
-					while ((value = input.read()) != -1)
-						creator.write(value);
-					creator.flush();
-					backups.put(instance, creator.toByteArray());
-					creator.close();
-					input.close();
-				} catch (final FileNotFoundException fnfe) {
+					final byte[] buf = new byte[4096];
+					while ((value = input.read(buf)) != -1) {
+						creator.write(buf, 0, value);
+					}
+					backups.put(instance, f);
+				} finally {
+					if (creator != null) {
+						creator.close();
+					}
+					if (input != null) {
+						input.close();
+					}
 				}
 			}
 			// now try saving each instance
 			final List<IModelInstance> touchedInstances = new ArrayList<IModelInstance>();
-				for (final IModelInstance instance : instances) {
-					switchAdapters(instance.getModel(), false);
-				}
+			for (final IModelInstance instance : instances) {
+				switchAdapters(instance.getModel(), false);
+			}
 			try {
 				for (final IModelInstance instance : instances) {
 					touchedInstances.add(instance);
@@ -191,27 +200,51 @@ public class ModelService implements IModelService {
 			} catch (final IOException error) {
 				// if an instance didn't save, copy all the backups back
 				for (final IModelInstance instance : touchedInstances) {
-					final byte[] backup = backups.get(instance);
-					final OutputStream output = converter.createOutputStream(instance.getURI());
-					output.write(backup);
-					output.flush();
-					output.close();
+
+					final File backup = backups.get(instance);
+					InputStream input = null;
+					OutputStream output = null;
+					try {
+						output = converter.createOutputStream(instance.getURI());
+						input = new FileInputStream(backup);
+						int value;
+						final byte[] buf = new byte[4096];
+						while ((value = input.read(buf)) != -1) {
+							output.write(buf, 0, value);
+						}
+					} finally {
+						if (output != null) {
+							output.close();
+						}
+						if (input != null) {
+							input.close();
+						}
+					}
+
 				}
+
 				throw error;
 			} finally {
 				for (final IModelInstance instance : instances) {
 					switchAdapters(instance.getModel(), true);
 				}
 			}
+			// Clean up temp files
+			for (final File f : backups.values()) {
+				f.delete();
+			}
 		}
 	}
-	
+
 	private void switchAdapters(final EObject model, final boolean on) {
-		if (model == null) return;
+		if (model == null)
+			return;
 		for (final Adapter a : model.eAdapters().toArray(new Adapter[0])) {
 			if (a instanceof IMMXAdapter) {
-				if (on) ((IMMXAdapter) a).enable(true);
-				else ((IMMXAdapter) a).disable();
+				if (on)
+					((IMMXAdapter) a).enable(true);
+				else
+					((IMMXAdapter) a).disable();
 			}
 		}
 		for (final EObject child : model.eContents()) {
