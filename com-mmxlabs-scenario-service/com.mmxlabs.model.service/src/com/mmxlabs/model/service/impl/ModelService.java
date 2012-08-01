@@ -4,12 +4,12 @@
  */
 package com.mmxlabs.model.service.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -161,27 +161,19 @@ public class ModelService implements IModelService {
 
 		synchronized (this) {
 			final URIConverter converter = resourceSet.getURIConverter();
-			final HashMap<IModelInstance, File> backups = new HashMap<IModelInstance, File>();
+			final HashMap<IModelInstance, Path> backups = new HashMap<IModelInstance, Path>();
 			// first copy every instance's current save state into a byte array
 			for (final IModelInstance instance : instances) {
-				final File f = File.createTempFile("mmx", "backup");
-				f.deleteOnExit();
+				final Path f = Files.createTempFile("mmx", "backup");
 
 				InputStream input = null;
-				FileOutputStream creator = null;
 				try {
 					input = converter.createInputStream(instance.getURI());
-					creator = new FileOutputStream(f);
-					int value;
-					final byte[] buf = new byte[4096];
-					while ((value = input.read(buf)) != -1) {
-						creator.write(buf, 0, value);
-					}
+					Files.copy(input, f, StandardCopyOption.REPLACE_EXISTING);
+
 					backups.put(instance, f);
 				} finally {
-					if (creator != null) {
-						creator.close();
-					}
+
 					if (input != null) {
 						input.close();
 					}
@@ -201,23 +193,14 @@ public class ModelService implements IModelService {
 				// if an instance didn't save, copy all the backups back
 				for (final IModelInstance instance : touchedInstances) {
 
-					final File backup = backups.get(instance);
-					InputStream input = null;
+					final Path backup = backups.get(instance);
 					OutputStream output = null;
 					try {
 						output = converter.createOutputStream(instance.getURI());
-						input = new FileInputStream(backup);
-						int value;
-						final byte[] buf = new byte[4096];
-						while ((value = input.read(buf)) != -1) {
-							output.write(buf, 0, value);
-						}
+						Files.copy(backup, output);
 					} finally {
 						if (output != null) {
 							output.close();
-						}
-						if (input != null) {
-							input.close();
 						}
 					}
 
@@ -230,8 +213,8 @@ public class ModelService implements IModelService {
 				}
 			}
 			// Clean up temp files
-			for (final File f : backups.values()) {
-				f.delete();
+			for (final Path f : backups.values()) {
+				f.toFile().delete();
 			}
 		}
 	}
