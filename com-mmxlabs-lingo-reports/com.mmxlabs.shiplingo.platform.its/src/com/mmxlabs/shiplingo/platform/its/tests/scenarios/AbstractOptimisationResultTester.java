@@ -9,8 +9,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
@@ -19,15 +23,31 @@ import junit.framework.Assert;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edapt.migration.MigrationException;
 
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.scenario.service.manifest.ManifestPackage;
+import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.its.tests.ScenarioRunner;
-import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
  * 
@@ -46,7 +66,18 @@ public class AbstractOptimisationResultTester {
 	static {
 		// Trigger EMF initialisation outside of eclipse environment.
 		@SuppressWarnings("unused")
-		final MMXCorePackage einstance = MMXCorePackage.eINSTANCE;
+		Object instance = null;
+		instance = MMXCorePackage.eINSTANCE;
+		instance = ManifestPackage.eINSTANCE;
+		instance = AnalyticsPackage.eINSTANCE;
+		instance = CargoPackage.eINSTANCE;
+		instance = CommercialPackage.eINSTANCE;
+		instance = FleetPackage.eINSTANCE;
+		instance = InputPackage.eINSTANCE;
+		instance = OptimiserPackage.eINSTANCE;
+		instance = PortPackage.eINSTANCE;
+		instance = PricingPackage.eINSTANCE;
+		instance = SchedulePackage.eINSTANCE;
 		// Add other packages?
 	}
 
@@ -74,12 +105,12 @@ public class AbstractOptimisationResultTester {
 	 * @throws InterruptedException
 	 */
 	public void runScenario(final URL url) throws IOException, IncompleteScenarioException, MigrationException {
+		ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), true);
 		
-		ManifestJointModel originalJointModel = new ManifestJointModel(URI.createURI(url.toString()));
-		final MMXRootObject originalScenario = originalJointModel.getRootObject();
+		final MMXRootObject originalScenario = (MMXRootObject) instance.getInstance();
 
 		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
-		final MMXRootObject copy = EcoreUtil.copy(originalScenario);
+		final MMXRootObject copy = duplicate(originalScenario);
 
 		// Create two scenario runners.
 		// TODO are two necessary?
@@ -175,5 +206,60 @@ public class AbstractOptimisationResultTester {
 
 		// test totals are equal
 		Assert.assertEquals("Total original fitnesses equal current fitnesses", totalOriginalFitness, totalCurrentFitness);
+	}
+	
+	MMXRootObject duplicate(MMXRootObject original) {
+		final List<EObject> originalSubModels = new ArrayList<EObject>();
+		for (final MMXSubModel subModel : original.getSubModels()) {
+			originalSubModels.add( subModel.getSubModelInstance());
+		}
+
+		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
+		
+		MMXRootObject duplicate = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+		for(EObject eObject : duppedSubModels) {
+			duplicate.addSubModel((UUIDObject)eObject);
+		}
+		
+		resolve(duppedSubModels);
+		
+		return duplicate;
+
+	}
+	
+	private void collect(final EObject object, final HashMap<String, UUIDObject> table) {
+		if (object == null) {
+			return;
+		}
+		if (object instanceof MMXObject)
+			((MMXObject) object).collectUUIDObjects(table);
+		else {
+			for (final EObject o : object.eContents())
+				collect(o, table);
+		}
+	}
+
+	public void resolve(final Collection<EObject> parts) {
+		final HashMap<String, UUIDObject> table = new HashMap<String, UUIDObject>();
+		for (final EObject part : parts) {
+			collect(part, table);
+		}
+		// now restore proxies
+		for (final EObject part : parts) {
+			resolve(part, table);
+		}
+	}
+
+	private void resolve(final EObject part, final HashMap<String, UUIDObject> table) {
+		if (part == null) {
+			return;
+		}
+		if (part instanceof MMXObject) {
+			((MMXObject) part).resolveProxies(table);
+			((MMXObject) part).restoreProxies();
+		} else {
+			for (final EObject child : part.eContents())
+				resolve(child, table);
+		}
 	}
 }
