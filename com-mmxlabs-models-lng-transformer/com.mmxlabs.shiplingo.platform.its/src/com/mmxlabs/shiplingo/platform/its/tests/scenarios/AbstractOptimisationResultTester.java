@@ -101,12 +101,12 @@ public class AbstractOptimisationResultTester {
 	 * 
 	 * @throws IOException
 	 * @throws IncompleteScenarioException
-	 * @throws MigrationException 
+	 * @throws MigrationException
 	 * @throws InterruptedException
 	 */
 	public void runScenario(final URL url) throws IOException, IncompleteScenarioException, MigrationException {
 		ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), true);
-		
+
 		final MMXRootObject originalScenario = (MMXRootObject) instance.getInstance();
 
 		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
@@ -207,26 +207,26 @@ public class AbstractOptimisationResultTester {
 		// test totals are equal
 		Assert.assertEquals("Total original fitnesses equal current fitnesses", totalOriginalFitness, totalCurrentFitness);
 	}
-	
+
 	MMXRootObject duplicate(MMXRootObject original) {
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 		for (final MMXSubModel subModel : original.getSubModels()) {
-			originalSubModels.add( subModel.getSubModelInstance());
+			originalSubModels.add(subModel.getSubModelInstance());
 		}
 
 		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
-		
+
 		MMXRootObject duplicate = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		for(EObject eObject : duppedSubModels) {
-			duplicate.addSubModel((UUIDObject)eObject);
+		for (EObject eObject : duppedSubModels) {
+			duplicate.addSubModel((UUIDObject) eObject);
 		}
-		
+
 		resolve(duppedSubModels);
-		
+
 		return duplicate;
 
 	}
-	
+
 	private void collect(final EObject object, final HashMap<String, UUIDObject> table) {
 		if (object == null) {
 			return;
