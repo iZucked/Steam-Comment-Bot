@@ -7,25 +7,7 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
- <extension
-         point="org.eclipse.ui.handlers">
-       <handler
-             class="com.mmxlabs.shiplingo.platform.models.optimisation.jobmanager.handlers.SaveOptimisationJobHandler"
-             commandId="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.SaveOptimisationJob">
-          <enabledWhen>
-             <or>
-                <iterate
-                      ifEmpty="false"
-                      operator="or">
-                   <instanceof
-                         value="com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor">
-                   </instanceof>
-                </iterate>
-             </or>
-          </enabledWhen>
-       </handler>
-   </extension>
-<extension
+	<extension
             point="org.eclipse.ui.handlers">
          <handler
                class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StartOptimisationHandler"
@@ -225,19 +207,6 @@
          <extension
             point="org.eclipse.core.runtime.adapters">
          <factory
-               adaptableType="org.eclipse.core.resources.IResource"
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario.ScenarioTreeNodeClassAdapterFactory">
-            <adapter
-                  type="com.mmxlabs.models.mmxcore.MMXRootObject">
-            </adapter>
-            <adapter
-                  type="com.mmxlabs.models.lng.schedule.Schedule">
-            </adapter>
-            <adapter
-                  type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
-            </adapter>
-         </factory>
-         <factory
                adaptableType="com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor"
                class="com.mmxlabs.shiplingo.platform.models.optimisation.adapterfactories.LNGJobControlAdapterFactory">
             <adapter
@@ -252,48 +221,6 @@
             </adapter>
          </factory>
       </extension>
-      
-      <extension
-         point="org.eclipse.ui.navigator.viewer">
-      
-      <viewerContentBinding
-            viewerId="com.mmxlabs.rcp.navigator">
-         <includes>
-            
-            <contentExtension
-                  pattern="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.navigator.scenario.ScenarioContent">
-            </contentExtension>
-         </includes>
-      </viewerContentBinding>
-   </extension>
-   
-   <extension
-         point="org.eclipse.ui.navigator.navigatorContent">
-     
-       <navigatorContent
-            activeByDefault="true"
-            contentProvider="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario.ScenarioContentProvider"
-            id="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.navigator.scenario.ScenarioContent"
-            labelProvider="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.scenario.ScenarioLabelProvider"
-            name="Scenario Content Provider"
-            priority="highest">
-         <triggerPoints>
-            <or>
-               <test
-                     forcePluginActivation="true"
-                     property="org.eclipse.core.resources.extension"
-                     value="scn">
-               </test>
-            </or></triggerPoints>
-         <possibleChildren>
-            <or>
-               <instanceof
-                     value="org.eclipse.core.resources.IResource">
-               </instanceof>
-            </or>
-         </possibleChildren>
-      </navigatorContent>
-   </extension>
    
       <extension
             point="org.eclipse.ui.commands">
