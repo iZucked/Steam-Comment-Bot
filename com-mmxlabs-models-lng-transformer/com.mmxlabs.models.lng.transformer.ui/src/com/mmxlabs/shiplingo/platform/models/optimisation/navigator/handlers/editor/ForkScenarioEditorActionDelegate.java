@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -21,13 +20,11 @@ import org.eclipse.ui.IActionDelegate2;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
 
-import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
-import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
  * @author Simon Goodall
@@ -36,8 +33,6 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2 {
 
 	private IEditorPart editor;
-
-	private IAction action;
 
 	@Override
 	public void run(final IAction action) {
@@ -95,7 +90,6 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 	@Override
 	public void setActiveEditor(final IAction action, final IEditorPart targetEditor) {
 		this.editor = targetEditor;
-		this.action = action;
 		if (action != null) {
 			action.setEnabled(true);
 		}
