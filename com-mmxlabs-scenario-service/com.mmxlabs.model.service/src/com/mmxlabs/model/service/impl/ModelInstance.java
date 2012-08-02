@@ -32,6 +32,7 @@ public class ModelInstance implements IModelInstance {
 			if (!notification.isTouch()) {
 				dirty = true;
 				modelObject.eAdapters().remove(this);
+				log.debug("Marking " + resource.getURI() + " as dirty");
 			}
 		}
 
@@ -51,7 +52,9 @@ public class ModelInstance implements IModelInstance {
 		this.dirty = dirty;
 		if (!resource.getContents().isEmpty()) {
 			modelObject = resource.getContents().get(0);
-			modelObject.eAdapters().add(dirtyAdapter);
+			if (!dirty) {
+				modelObject.eAdapters().add(dirtyAdapter);
+			}
 		}
 	}
 
