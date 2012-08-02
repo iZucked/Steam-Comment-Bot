@@ -33,9 +33,8 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.model.service.IModelService;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
-import com.mmxlabs.models.mmxcore.MMXObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.util.MMXCoreBinaryResourceFactoryImpl;
+import com.mmxlabs.models.mmxcore.util.MMXCoreHandlerUtil;
 import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 
 /**
@@ -117,43 +116,9 @@ public class ModelService implements IModelService {
 		}
 	}
 
-	private void collect(final EObject object, final HashMap<String, UUIDObject> table) {
-		if (object == null) {
-			log.warn("Given a null object to collect UUIDObjects from");
-			return;
-		}
-		if (object instanceof MMXObject)
-			((MMXObject) object).collectUUIDObjects(table);
-		else {
-			for (final EObject o : object.eContents())
-				collect(o, table);
-		}
-	}
-
 	@Override
 	public void resolve(final List<EObject> parts) {
-		final HashMap<String, UUIDObject> table = new HashMap<String, UUIDObject>();
-		for (final EObject part : parts) {
-			collect(part, table);
-		}
-		// now restore proxies
-		for (final EObject part : parts) {
-			resolve(part, table);
-		}
-	}
-
-	private void resolve(final EObject part, final HashMap<String, UUIDObject> table) {
-		if (part == null) {
-			log.warn("Asked to resolve references in a null object");
-			return;
-		}
-		if (part instanceof MMXObject) {
-			((MMXObject) part).resolveProxies(table);
-			((MMXObject) part).restoreProxies();
-		} else {
-			for (final EObject child : part.eContents())
-				resolve(child, table);
-		}
+		MMXCoreHandlerUtil.restoreProxiesForEObjects(parts);
 	}
 
 	@Override
