@@ -44,6 +44,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.util.MMXCoreHandlerUtil;
 import com.mmxlabs.scenario.service.manifest.ManifestPackage;
 import com.mmxlabs.scenario.service.manifest.ScenarioStorageUtil;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -221,45 +222,9 @@ public class AbstractOptimisationResultTester {
 			duplicate.addSubModel((UUIDObject) eObject);
 		}
 
-		resolve(duppedSubModels);
+		MMXCoreHandlerUtil.restoreProxiesForEObjects(duppedSubModels);
 
 		return duplicate;
 
-	}
-
-	private void collect(final EObject object, final HashMap<String, UUIDObject> table) {
-		if (object == null) {
-			return;
-		}
-		if (object instanceof MMXObject)
-			((MMXObject) object).collectUUIDObjects(table);
-		else {
-			for (final EObject o : object.eContents())
-				collect(o, table);
-		}
-	}
-
-	public void resolve(final Collection<EObject> parts) {
-		final HashMap<String, UUIDObject> table = new HashMap<String, UUIDObject>();
-		for (final EObject part : parts) {
-			collect(part, table);
-		}
-		// now restore proxies
-		for (final EObject part : parts) {
-			resolve(part, table);
-		}
-	}
-
-	private void resolve(final EObject part, final HashMap<String, UUIDObject> table) {
-		if (part == null) {
-			return;
-		}
-		if (part instanceof MMXObject) {
-			((MMXObject) part).resolveProxies(table);
-			((MMXObject) part).restoreProxies();
-		} else {
-			for (final EObject child : part.eContents())
-				resolve(child, table);
-		}
 	}
 }
