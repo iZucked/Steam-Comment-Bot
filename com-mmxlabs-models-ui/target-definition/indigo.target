@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Models LNG UI Target (Indigo)" sequenceNumber="1">
+<?pde version="3.8"?><target name="Models UI Target (Indigo)" sequenceNumber="1">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.common.common-util" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.models.mmxcore/nightly/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
