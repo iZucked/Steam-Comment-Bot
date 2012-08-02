@@ -7,18 +7,11 @@ package com.mmxlabs.models.mmxcore.util;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.XMLResource.ResourceHandler;
-
-import com.mmxlabs.models.mmxcore.MMXObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * Resource handler which automatically creates / destroys proxies when a resource is saved.
@@ -36,7 +29,7 @@ public class MMXCoreResourceHandler implements ResourceHandler {
 	 * @deprecated Use {@link MMXCoreHandlerUtil#postLoad(Collection)} instead
 	 */
 	public static void postLoad(final Collection<Resource> resources) {
-		MMXCoreHandlerUtil.postLoad(resources);
+		MMXCoreHandlerUtil.restoreProxiesForResources(resources);
 	}
 
 	@Override

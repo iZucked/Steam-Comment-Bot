@@ -5,26 +5,19 @@
 package com.mmxlabs.models.mmxcore.util;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory;
 import org.eclipse.emf.ecore.resource.impl.BinaryResourceImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
 /**
  * An MMX resource factory using {@link BinaryResourceImpl}s;
  * 
  * @author Simon Goodall
- * @since 2.2
+ * @since 2.3
  */
 public class MMXCoreBinaryResourceFactoryImpl extends XMIResourceFactoryImpl implements Factory {
 

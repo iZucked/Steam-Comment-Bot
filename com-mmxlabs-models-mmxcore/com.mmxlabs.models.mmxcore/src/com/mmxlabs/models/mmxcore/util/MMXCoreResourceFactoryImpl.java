@@ -56,7 +56,7 @@ public class MMXCoreResourceFactoryImpl extends XMIResourceFactoryImpl
 		for (final URI uri : uris) {
 			result.add(createResource(uri));
 		}
-		MMXCoreHandlerUtil.postLoad(result);
+		MMXCoreHandlerUtil.restoreProxiesForResources(result);
 		return result;
 	}
 	

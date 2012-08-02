@@ -27,7 +27,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * To correct proxies when a resource is loaded use the static method {@link #postLoad(Collection)}
  * 
  * @author hinton
- * @since 2.2
+ * @since 2.3
  * @noinstantiate This class is not intended to be instantiated by clients.
  */
 public final class MMXCoreHandlerUtil {
@@ -41,7 +41,7 @@ public final class MMXCoreHandlerUtil {
 	 * 
 	 * @param resources
 	 */
-	public static void postLoad(final Collection<Resource> resources) {
+	public static void restoreProxiesForResources(final Collection<Resource> resources) {
 		final Map<String, UUIDObject> keyedObjects = new HashMap<String, UUIDObject>();
 		for (final Resource resource : resources) {
 			final TreeIterator<EObject> iterator = resource.getAllContents();
@@ -62,6 +62,22 @@ public final class MMXCoreHandlerUtil {
 					((MMXObject) o).restoreProxies();
 				}
 			}
+		}
+	}
+
+	/**
+	 * Restore proxies across a collection of EObjects which have been loaded together
+	 * 
+	 * @param resources
+	 */
+	public static void restoreProxiesForEObjects(final Collection<EObject> parts) {
+		final HashMap<String, UUIDObject> table = new HashMap<String, UUIDObject>();
+		for (final EObject part : parts) {
+			collect(part, table);
+		}
+		// now restore proxies
+		for (final EObject part : parts) {
+			resolve(part, table);
 		}
 	}
 
@@ -110,7 +126,7 @@ public final class MMXCoreHandlerUtil {
 		for (final URI uri : uris) {
 			result.add(createResource(registry, uri, null));
 		}
-		MMXCoreHandlerUtil.postLoad(result);
+		MMXCoreHandlerUtil.restoreProxiesForResources(result);
 		return result;
 	}
 
@@ -163,6 +179,31 @@ public final class MMXCoreHandlerUtil {
 			return result;
 		} else {
 			return null;
+		}
+	}
+
+	private static void collect(final EObject object, final HashMap<String, UUIDObject> table) {
+		if (object == null) {
+			return;
+		}
+		if (object instanceof MMXObject)
+			((MMXObject) object).collectUUIDObjects(table);
+		else {
+			for (final EObject o : object.eContents())
+				collect(o, table);
+		}
+	}
+
+	private static void resolve(final EObject part, final HashMap<String, UUIDObject> table) {
+		if (part == null) {
+			return;
+		}
+		if (part instanceof MMXObject) {
+			((MMXObject) part).resolveProxies(table);
+			((MMXObject) part).restoreProxies();
+		} else {
+			for (final EObject child : part.eContents())
+				resolve(child, table);
 		}
 	}
 }
