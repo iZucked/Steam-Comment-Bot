@@ -58,7 +58,7 @@
 				<configuration>
 
 					<resolver>p2</resolver>
-	 
+
 					<target>
 						<artifact>
 							<groupId>com.mmxlabs.models.ui</groupId>
@@ -67,7 +67,6 @@
 							<classifier>indigo</classifier>
 						</artifact>
 					</target>
-
 
 					<environments>
 
@@ -108,7 +107,6 @@
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-source-plugin</artifactId>
-				<version>${tycho.version}</version>
 				<executions>
 					<execution>
 						<id>plugin-source</id>
@@ -118,44 +116,8 @@
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
-		<pluginManagement>
-			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.codehaus.mojo
-										</groupId>
-										<artifactId>
-											buildnumber-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.0,)
-										</versionRange>
-										<goals>
-											<goal>hgchangeset</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
+
 	</build>
 
 </project>
