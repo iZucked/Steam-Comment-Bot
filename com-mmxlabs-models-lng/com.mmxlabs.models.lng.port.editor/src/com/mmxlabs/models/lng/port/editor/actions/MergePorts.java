@@ -40,7 +40,6 @@ import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
@@ -111,7 +110,6 @@ public class MergePorts extends LockableAction {
 			if (res.length == 1) {
 				try {
 					part.setDisableCommandProviders(true);
-					part.setDisableUpdates(true);
 
 					final EditingDomain domain = part.getEditingDomain();
 
@@ -126,7 +124,6 @@ public class MergePorts extends LockableAction {
 					}
 				} finally {
 					part.setDisableCommandProviders(false);
-					part.setDisableUpdates(false);
 				}
 			}
 		}
@@ -241,10 +238,11 @@ public class MergePorts extends LockableAction {
 		}
 		final Collection<Setting> refsToOldObject = EcoreUtil.UsageCrossReferencer.find(oldObject, subModels);
 		for (final Setting setting : refsToOldObject) {
+			final EObject eObject = setting.getEObject();
 			if (setting.getEStructuralFeature().isMany()) {
-				result.append(ReplaceCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), oldObject, Collections.singleton(newObject)));
+				result.append(ReplaceCommand.create(domain, eObject, setting.getEStructuralFeature(), oldObject, Collections.singleton(newObject)));
 			} else {
-				result.append(SetCommand.create(domain, setting.getEObject(), setting.getEStructuralFeature(), newObject));
+				result.append(SetCommand.create(domain, eObject, setting.getEStructuralFeature(), newObject));
 			}
 		}
 
@@ -256,12 +254,6 @@ public class MergePorts extends LockableAction {
 					result.append(replace(domain, (EObject) oldObject.eGet(reference), (EObject) newObject.eGet(reference), rootObject));
 				}
 			}
-		}
-
-		// equalize UUIDs for replacements.
-		// this is safe because we delete the old objects before adding new objects.
-		if (oldObject instanceof UUIDObject && newObject instanceof UUIDObject) {
-			result.append(SetCommand.create(domain, newObject, MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), ((UUIDObject) oldObject).getUuid()));
 		}
 
 		return result;
