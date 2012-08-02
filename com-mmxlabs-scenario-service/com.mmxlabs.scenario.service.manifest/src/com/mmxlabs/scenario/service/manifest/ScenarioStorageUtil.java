@@ -219,7 +219,7 @@ public class ScenarioStorageUtil {
 					result.getDependencyUUIDs().addAll(manifest.getDependencyUUIDs());
 
 					if (preLoad) {
-						MMXCoreHandlerUtil.postLoad(resourceSet.getResources());
+						MMXCoreHandlerUtil.restoreProxiesForResources(resourceSet.getResources());
 					}
 					
 					
