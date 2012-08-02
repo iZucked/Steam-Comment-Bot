@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -85,9 +84,10 @@ public class OptimisationRepeatabilityTest {
 	}
 
 	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException, MigrationException, IncompleteScenarioException {
-		ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), true);
+		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), true);
 
-		final MMXRootObject originalScenario = (MMXRootObject) instance.getInstance();
+		// Initial duplicate to remove e.g. eResource references.
+		final MMXRootObject originalScenario = duplicate((MMXRootObject) instance.getInstance());
 
 		final ScenarioRunner[] scenarioRunners = new ScenarioRunner[numTries];
 		for (int i = 0; i < numTries; ++i) {
@@ -100,7 +100,7 @@ public class OptimisationRepeatabilityTest {
 
 			if (i > 0) {
 				// Ensure same initial schedules
-				final MatchModel match = MatchService.doMatch(scenarioRunners[0].getIntialSchedule(), scenarioRunners[i].getIntialSchedule(), null);
+				final MatchModel match = MatchService.doMatch(scenarioRunners[i].getIntialSchedule(), scenarioRunners[0].getIntialSchedule(), null);
 				final DiffModel diff = DiffService.doDiff(match);
 				final EList<DiffElement> differences = diff.getDifferences();
 				// Dump any differences to std.err before asserting
@@ -117,7 +117,7 @@ public class OptimisationRepeatabilityTest {
 			scenarioRunners[i].run();
 			if (i > 0) {
 				// Ensure same final schedules
-				final MatchModel match = MatchService.doMatch(scenarioRunners[0].getFinalSchedule(), scenarioRunners[i].getFinalSchedule(), null);
+				final MatchModel match = MatchService.doMatch(scenarioRunners[i].getFinalSchedule(), scenarioRunners[0].getFinalSchedule(), null);
 				final DiffModel diff = DiffService.doDiff(match);
 				final EList<DiffElement> differences = diff.getDifferences();
 
@@ -132,7 +132,7 @@ public class OptimisationRepeatabilityTest {
 
 		// Ensure source model is unchanged
 		for (int i = 0; i < numTries; ++i) {
-			final MatchModel match = MatchService.doMatch(originalScenario, scenarioRunners[i].getScenario(), null);
+			final MatchModel match = MatchService.doMatch(scenarioRunners[i].getScenario(), originalScenario, null);
 			final DiffModel diff = DiffService.doDiff(match);
 			final EList<DiffElement> differences = diff.getDifferences();
 			// Dump any differences to std.err before asserting
@@ -140,11 +140,11 @@ public class OptimisationRepeatabilityTest {
 				System.err.println(d.toString());
 			}
 
-			Assert.assertTrue("final solution 0 and " + i + " should be the same", differences.isEmpty());
+			Assert.assertTrue("final solution 0 and " + i + " should be the same: " + differences, differences.isEmpty());
 		}
 	}
 
-	MMXRootObject duplicate(MMXRootObject original) {
+	MMXRootObject duplicate(final MMXRootObject original) {
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 		for (final MMXSubModel subModel : original.getSubModels()) {
 			originalSubModels.add(subModel.getSubModelInstance());
@@ -152,8 +152,9 @@ public class OptimisationRepeatabilityTest {
 
 		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
 
-		MMXRootObject duplicate = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-		for (EObject eObject : duppedSubModels) {
+		final MMXRootObject duplicate = EcoreUtil.copy(original);
+		duplicate.getSubModels().clear();
+		for (final EObject eObject : duppedSubModels) {
 			duplicate.addSubModel((UUIDObject) eObject);
 		}
 
