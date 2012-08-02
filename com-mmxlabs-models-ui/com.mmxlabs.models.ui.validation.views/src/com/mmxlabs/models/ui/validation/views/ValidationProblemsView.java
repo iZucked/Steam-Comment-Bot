@@ -52,6 +52,8 @@ import com.mmxlabs.models.ui.validation.gui.ValidationStatusContentProvider;
 import com.mmxlabs.models.ui.validation.gui.ValidationStatusLabelProvider;
 import com.mmxlabs.models.ui.validation.views.internal.Activator;
 import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.IScenarioServiceListener;
+import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
@@ -81,7 +83,6 @@ public class ValidationProblemsView extends ViewPart {
 				}
 				viewer.refresh();
 			}
-
 		}
 	};
 
@@ -94,12 +95,28 @@ public class ValidationProblemsView extends ViewPart {
 				final ServiceReference<IScenarioService> ref = (ServiceReference<IScenarioService>) event.getServiceReference();
 				final IScenarioService service = context.getService(ref);
 				addContentAdapters(service);
+				service.addScenarioServiceListener(scenarioServiceListener);
 			} else if (event.getType() == ServiceEvent.UNREGISTERING) {
 				final ServiceReference<IScenarioService> ref = (ServiceReference<IScenarioService>) event.getServiceReference();
 				final IScenarioService service = context.getService(ref);
 				removeContentAdapters(service);
+				service.removeScenarioServiceListener(scenarioServiceListener);
 			}
 
+		}
+	};
+
+	private final IScenarioServiceListener scenarioServiceListener = new ScenarioServiceListener() {
+		public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			hookScenarioInstance(scenarioInstance);
+		}
+
+		public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			releaseScenarioInstance(scenarioInstance);
+		}
+
+		public void onPreScenarioInstanceDelete(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+			releaseScenarioInstance(scenarioInstance);
 		}
 	};
 
@@ -133,8 +150,9 @@ public class ValidationProblemsView extends ViewPart {
 		try {
 			serviceReferences = context.getServiceReferences(IScenarioService.class, null);
 			for (final ServiceReference<IScenarioService> ref : serviceReferences) {
-				addContentAdapters(context.getService(ref));
-
+				final IScenarioService service = context.getService(ref);
+				addContentAdapters(service);
+				service.addScenarioServiceListener(scenarioServiceListener);
 			}
 		} catch (final InvalidSyntaxException e) {
 			log.error(e.getMessage(), e);
@@ -188,7 +206,9 @@ public class ValidationProblemsView extends ViewPart {
 		try {
 			serviceReferences = context.getServiceReferences(IScenarioService.class, null);
 			for (final ServiceReference<IScenarioService> ref : serviceReferences) {
-				removeContentAdapters(context.getService(ref));
+				final IScenarioService service = context.getService(ref);
+				service.removeScenarioServiceListener(scenarioServiceListener);
+				removeContentAdapters(service);
 
 			}
 		} catch (final InvalidSyntaxException e) {
@@ -209,14 +229,18 @@ public class ValidationProblemsView extends ViewPart {
 		final TreeIterator<EObject> itr = model.eAllContents();
 		while (itr.hasNext()) {
 			final EObject eObj = itr.next();
-			if (eObj instanceof ScenarioInstance) {
-				final ScenarioInstance instance = (ScenarioInstance) eObj;
-				instance.eAdapters().add(scenarioInstanceChangedListener);
-				if (instance.getValidationStatusCode() != IStatus.OK) {
-					final Map<Class<?>, Object> adapters = instance.getAdapters();
-					if (adapters != null) {
-						statusMap.put(instance, (IStatus) adapters.get(IStatus.class));
-					}
+			hookScenarioInstance(eObj);
+		}
+	}
+
+	private void hookScenarioInstance(final EObject eObj) {
+		if (eObj instanceof ScenarioInstance) {
+			final ScenarioInstance instance = (ScenarioInstance) eObj;
+			instance.eAdapters().add(scenarioInstanceChangedListener);
+			if (instance.getValidationStatusCode() != IStatus.OK) {
+				final Map<Class<?>, Object> adapters = instance.getAdapters();
+				if (adapters != null) {
+					statusMap.put(instance, (IStatus) adapters.get(IStatus.class));
 				}
 			}
 		}
@@ -227,11 +251,15 @@ public class ValidationProblemsView extends ViewPart {
 		final TreeIterator<EObject> itr = model.eAllContents();
 		while (itr.hasNext()) {
 			final EObject eObj = itr.next();
-			if (eObj instanceof ScenarioInstance) {
-				final ScenarioInstance instance = (ScenarioInstance) eObj;
-				instance.eAdapters().remove(scenarioInstanceChangedListener);
-				statusMap.remove(instance);
-			}
+			releaseScenarioInstance(eObj);
+		}
+	}
+
+	private void releaseScenarioInstance(final EObject eObj) {
+		if (eObj instanceof ScenarioInstance) {
+			final ScenarioInstance instance = (ScenarioInstance) eObj;
+			instance.eAdapters().remove(scenarioInstanceChangedListener);
+			statusMap.remove(instance);
 		}
 	}
 
