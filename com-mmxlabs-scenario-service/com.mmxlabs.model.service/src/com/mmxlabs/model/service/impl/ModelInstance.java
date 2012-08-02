@@ -39,8 +39,9 @@ public class ModelInstance implements IModelInstance {
 		protected void missedNotifications(final List<Notification> missed) {
 			for (final Notification notification : missed.toArray(new Notification[missed.size()])) {
 				reallyNotifyChanged(notification);
-				if (dirty)
+				if (dirty) {
 					break;
+				}
 			}
 		}
 	};
