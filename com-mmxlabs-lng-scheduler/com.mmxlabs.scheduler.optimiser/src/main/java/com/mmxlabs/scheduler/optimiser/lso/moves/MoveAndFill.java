@@ -71,9 +71,6 @@ public class MoveAndFill implements IMove {
 	 */
 	@Override
 	public void apply(final IModifiableSequences sequences) {
-		// we are going to kill elements 1 and 2
-		// and then put the element before 2 where 1 was
-		// so 2 is the "discharge" and 1 is the "load"
 
 		final IModifiableSequence seq1 = sequences.getModifiableSequence(resource1);
 		final IModifiableSequence seq2 = sequences.getModifiableSequence(resource2);
