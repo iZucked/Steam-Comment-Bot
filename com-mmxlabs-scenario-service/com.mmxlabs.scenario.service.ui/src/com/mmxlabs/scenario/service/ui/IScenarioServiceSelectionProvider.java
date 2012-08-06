@@ -22,15 +22,22 @@ public interface IScenarioServiceSelectionProvider {
 	 * @return
 	 */
 	Collection<ScenarioInstance> getSelection();
-	
+
 	/**
 	 * @return the currently pinned instance; this is always a member of the selection.
 	 */
 	ScenarioInstance getPinnedInstance();
+
+	void setPinnedInstance(ScenarioInstance referenceInstance);
 
 	void addSelectionChangedListener(IScenarioServiceSelectionChangedListener listener);
 
 	void removeSelectionChangedListener(IScenarioServiceSelectionChangedListener listener);
 
 	boolean isSelected(ScenarioInstance instance);
+
+	void deselectAll();
+
+	void select(ScenarioInstance scenarioInstance);
+
 }

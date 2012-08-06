@@ -110,6 +110,21 @@
             id="com.mmxlabs.scenario.service.ui.pin"
             name="Pin">
       </command>
+      <command
+            id="com.mmxlabs.scenario.service.ui.diffedit"
+            name="Diff/Edit">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commandImages">
+      <image
+            commandId="com.mmxlabs.scenario.service.ui.fork"
+            icon="icons/fork.gif">
+      </image>
+      <image
+            commandId="com.mmxlabs.scenario.service.ui.lock"
+            icon="icons/commands/lock.gif">
+      </image>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -359,6 +374,10 @@
             </with>
          </activeWhen>
       </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.DiffEditScenarioCommandHandler"
+            commandId="com.mmxlabs.scenario.service.ui.diffedit">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.menus">
@@ -476,6 +495,11 @@
                </and>
             </visibleWhen>
          </command>
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.diffedit"
+               label="Diff/Edit"
+               style="push">
+         </command>
       </menuContribution>
    </extension>
    <extension
@@ -494,17 +518,6 @@
             </instanceof>
          </selectionEnablement>
       </linkHelper>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commandImages">
-      <image
-            commandId="com.mmxlabs.scenario.service.ui.fork"
-            icon="icons/fork.gif">
-      </image>
-      <image
-            commandId="com.mmxlabs.scenario.service.ui.lock"
-            icon="icons/commands/lock.gif">
-      </image>
    </extension>
    <extension
          point="org.eclipse.ui.decorators">
