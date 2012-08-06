@@ -215,11 +215,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		currentProgress += REPORT_PERCENTAGE;
 
 		if ((currentProgress % 5) == 0) {
-			if (intermediateSchedule != null) {
-				// ((EList<EObject>) intermediateSchedule.eContainer().eGet(
-				// intermediateSchedule.eContainingFeature()))
-				// .remove(intermediateSchedule);
-			}
 			intermediateSchedule = saveInitialSolution(optimiser.getBestSolution(false), currentProgress);
 		}
 
@@ -341,6 +336,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				// "Load port" is the discharge port for DES purchases
 				if (load.isDESPurchase()) {
 					cmd.append(SetCommand.create(domain, load, CargoPackage.eINSTANCE.getSlot_Port(), discharge.getPort()));
+				}
+				// If the cargo is to become a FOB Sale - then we remove the vessel assignment.
+				if (discharge.isFOBSale()) {
+					cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, loadCargo));
 				}
 
 				final Cargo dischargeCargo = discharge.getCargo();
