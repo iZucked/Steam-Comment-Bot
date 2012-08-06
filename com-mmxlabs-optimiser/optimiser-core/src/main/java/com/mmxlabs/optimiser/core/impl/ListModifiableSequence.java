@@ -51,8 +51,8 @@ public final class ListModifiableSequence implements IModifiableSequence {
 	}
 
 	@Override
-	public void remove(final int index) {
-		list.remove(index);
+	public ISequenceElement remove(final int index) {
+		return list.remove(index);
 	}
 
 	@Override
