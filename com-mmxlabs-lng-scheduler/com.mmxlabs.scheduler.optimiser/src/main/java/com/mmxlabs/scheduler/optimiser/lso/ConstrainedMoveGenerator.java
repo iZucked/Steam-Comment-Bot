@@ -53,7 +53,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	 * 
 	 * TODO make this a parameter.
 	 */
-	private static final double optionalMoveFrequency = 0.05;
+	private static final double optionalMoveFrequency = 0.30;
 
 	/**
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
@@ -127,7 +127,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private final LegalSequencingChecker checker;
 
 	private final SequencesConstrainedMoveGeneratorUnit sequencesMoveGenerator;
-	private final OptionalConstrainedMoveGeneratorUnit optionalMoveGenerator;
+//	private final OptionalConstrainedMoveGeneratorUnit optionalMoveGenerator;
+	private final ShuffleElementsMoveGenerator optionalMoveGenerator;
 
 	protected final IOptimisationContext context;
 
@@ -182,7 +183,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			final IOptionalElementsProvider optionalElementsProvider = context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider,
 					IOptionalElementsProvider.class);
 			if (optionalElementsProvider.getOptionalElements().size() > 0) {
-				this.optionalMoveGenerator = new OptionalConstrainedMoveGeneratorUnit(this);
+				this.optionalMoveGenerator = new ShuffleElementsMoveGenerator(this);
 			} else {
 				this.optionalMoveGenerator = null;
 			}
