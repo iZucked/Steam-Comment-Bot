@@ -100,13 +100,13 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 		for (final ISequenceElement element : sequence) {
 			if (prevElement != null) {
 				if (!checkPairwiseConstraint(prevElement, element, resource)) {
-					return false;
+					return true;
 				}
 				prevElement = element;
 			}
 		}
 
-		return true;
+		return false;
 	}
 
 	@Override
