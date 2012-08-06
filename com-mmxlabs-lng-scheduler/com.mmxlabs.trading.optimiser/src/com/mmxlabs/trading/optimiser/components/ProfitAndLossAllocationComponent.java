@@ -18,6 +18,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -195,7 +196,8 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 	 */
 	private long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final IAnnotatedSolution annotatedSolution) {
 		// get each entity
-		final IEntity downstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getDischargeOption());
+		IDischargeOption dischargeOption = currentAllocation.getDischargeOption();
+		final IEntity downstreamEntity = entityProvider.getEntityForSlot(dischargeOption);
 		final IEntity upstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getLoadOption());
 
 		final int dischargePricePerM3 = currentAllocation.getDischargeM3Price();
@@ -275,11 +277,11 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 			annotatedSolution.getElementAnnotations().setAnnotation(element, TradingConstants.AI_profitAndLoss, annotation);
 
 			final ILoadOption loadOption = currentAllocation.getLoadOption();
-			if (loadOption instanceof ILoadSlot) {
-				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) currentAllocation.getDischargeOption(), currentAllocation.getLoadTime(),
+			if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
+				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, currentAllocation.getLoadTime(),
 						currentAllocation.getDischargeTime(), currentAllocation.getDischargeM3Price(), (int) loadVolume, vessel, plan, shippingDetails);
 			} else {
-				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, (IDischargeSlot) currentAllocation.getDischargeOption(), currentAllocation.getLoadTime(),
+				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getLoadTime(),
 						currentAllocation.getDischargeTime(), currentAllocation.getDischargeM3Price(), shippingDetails);
 			}
 
