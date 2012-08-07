@@ -137,9 +137,6 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 		final PortType firstType = portTypeProvider.getPortType(first);
 		final PortType secondType = portTypeProvider.getPortType(second);
 
-		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
-		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
-
 		final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 		final ISequenceElement endElement = startEndProvider.getEndElement(resource);
 
