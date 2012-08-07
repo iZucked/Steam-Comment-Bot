@@ -8,7 +8,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.ui.IEditorPart;
 
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -23,7 +22,7 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 	private final ScenarioInstance parent;
 	private final ScenarioInstance child;
 
-	private boolean complete = false;
+	private boolean cleanUpOnDispose = true;
 
 	public DefaultDiffEditHandler(final ScenarioInstance child, final ScenarioInstance parent) {
 		this.child = child;
@@ -31,22 +30,31 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 	}
 
 	@Override
+	public void onPreEditorCancel() {
+		cleanUpOnDispose = false;
+
+	}
+
+	@Override
 	public void onEditorCancel() {
 
 		final IScenarioService scenarioService = child.getScenarioService();
 		scenarioService.delete(child);
-
-		complete = true;
 	}
 
 	@Override
 	public void onEditorDisposed() {
 
 		// TODO: Prompt user to apply changes?
-		if (!complete) {
+		if (cleanUpOnDispose) {
 			final IScenarioService scenarioService = child.getScenarioService();
 			scenarioService.delete(child);
 		}
+	}
+
+	@Override
+	public void onPreEditorApply() {
+		cleanUpOnDispose = false;
 	}
 
 	@Override
@@ -97,8 +105,6 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 
 		final IScenarioService scenarioService = child.getScenarioService();
 		scenarioService.delete(child);
-
-		complete = true;
 	}
 
 }
