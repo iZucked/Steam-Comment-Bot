@@ -102,17 +102,17 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 		if (instanceType == VesselInstanceType.VIRTUAL) {
 			int size = sequence.size();
-			 if (size == 2) {
-			 PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
-			 PortType ptEnd = portTypeProvider.getPortType(sequence.get(1));
-			 return ptStart == PortType.Start && ptEnd == PortType.End;
-			 }
-//			if (size == 3) {
-//				PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
-//				PortType pt1 = portTypeProvider.getPortType(sequence.get(1));
-//				PortType ptEnd = portTypeProvider.getPortType(sequence.get(2));
-//				return ptStart == PortType.Start && ptEnd == PortType.End && (pt1 == PortType.Load || pt1 == PortType.Discharge);
-//			}
+			if (size == 2) {
+				PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
+				PortType ptEnd = portTypeProvider.getPortType(sequence.get(1));
+				return ptStart == PortType.Start && ptEnd == PortType.End;
+			}
+			// if (size == 3) {
+			// PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
+			// PortType pt1 = portTypeProvider.getPortType(sequence.get(1));
+			// PortType ptEnd = portTypeProvider.getPortType(sequence.get(2));
+			// return ptStart == PortType.Start && ptEnd == PortType.End && (pt1 == PortType.Load || pt1 == PortType.Discharge);
+			// }
 			if (size == 4) {
 				PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
 				PortType pt1 = portTypeProvider.getPortType(sequence.get(1));
@@ -269,16 +269,16 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
 
-			if (firstType.equals(PortType.Start) && secondType.equals(PortType.End)) {
+			if (firstType == PortType.Start && secondType == PortType.End) {
 				return true;
 			}
-			if (firstType.equals(PortType.Start) && secondType.equals(PortType.Load)) {
+			if (firstType == PortType.Start && secondType == PortType.Load) {
 				return true;
 			}
-			if (firstType.equals(PortType.Load) && secondType.equals(PortType.Discharge)) {
+			if (firstType == PortType.Load && secondType == PortType.Discharge) {
 				return true;
 			}
-			if (firstType.equals(PortType.Discharge) && secondType.equals(PortType.End)) {
+			if (firstType == PortType.Discharge && secondType == PortType.End) {
 				return true;
 			}
 
@@ -286,11 +286,11 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		}
 
 		// Discharge must follow a load
-		if (!firstType.equals(PortType.Load) && secondType.equals(PortType.Discharge)) {
+		if (firstType != PortType.Load && secondType == PortType.Discharge) {
 			return false;
 		}
 		//
-		if (!secondType.equals(PortType.Discharge) && firstType.equals(PortType.Load)) {
+		if (secondType != PortType.Discharge && firstType == PortType.Load) {
 			return false;
 		}
 		// if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge)) {
