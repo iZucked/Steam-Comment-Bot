@@ -51,9 +51,9 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 		applyAction = new Action("Apply") {
 			public void run() {
 				if (activeEditor != null) {
-					IEditorInput editorInput = activeEditor.getEditorInput();
+					final IEditorInput editorInput = activeEditor.getEditorInput();
 					if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
-						IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) editorInput;
+						final IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) editorInput;
 						ssInput.getDiffEditHandler().onPreEditorApply();
 						activeEditor.getSite().getPage().closeEditor(activeEditor, false);
 						ssInput.getDiffEditHandler().onEditorApply();
@@ -66,9 +66,9 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 			public void run() {
 
 				if (activeEditor != null) {
-					IEditorInput editorInput = activeEditor.getEditorInput();
+					final IEditorInput editorInput = activeEditor.getEditorInput();
 					if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
-						IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) editorInput;
+						final IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) editorInput;
 						ssInput.getDiffEditHandler().onPreEditorCancel();
 						activeEditor.getSite().getPage().closeEditor(activeEditor, false);
 						ssInput.getDiffEditHandler().onEditorCancel();
@@ -134,7 +134,7 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	public void deactivate() {
 		activeEditor.removePropertyListener(this);
 		if (activeEditor != null) {
-			IEditorInput editorInput = activeEditor.getEditorInput();
+			final IEditorInput editorInput = activeEditor.getEditorInput();
 			if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
 				getActionBars().getStatusLineManager().remove(applyContributionItem);
 				getActionBars().getStatusLineManager().remove(cancelContributionItem);
@@ -149,7 +149,7 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 	public void activate() {
 		activeEditor.addPropertyListener(this);
 		if (activeEditor != null) {
-			IEditorInput editorInput = activeEditor.getEditorInput();
+			final IEditorInput editorInput = activeEditor.getEditorInput();
 			if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
 				getActionBars().getStatusLineManager().add(applyContributionItem);
 				getActionBars().getStatusLineManager().add(cancelContributionItem);
