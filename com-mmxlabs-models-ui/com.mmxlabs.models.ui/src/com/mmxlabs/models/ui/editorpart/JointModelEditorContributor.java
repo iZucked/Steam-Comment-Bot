@@ -54,6 +54,7 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 					IEditorInput editorInput = activeEditor.getEditorInput();
 					if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
 						IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) editorInput;
+						ssInput.getDiffEditHandler().onPreEditorApply();
 						activeEditor.getSite().getPage().closeEditor(activeEditor, false);
 						ssInput.getDiffEditHandler().onEditorApply();
 					}
@@ -68,6 +69,7 @@ public class JointModelEditorContributor extends MultiPageEditorActionBarContrib
 					IEditorInput editorInput = activeEditor.getEditorInput();
 					if (editorInput instanceof IScenarioServiceDiffingEditorInput) {
 						IScenarioServiceDiffingEditorInput ssInput = (IScenarioServiceDiffingEditorInput) editorInput;
+						ssInput.getDiffEditHandler().onPreEditorCancel();
 						activeEditor.getSite().getPage().closeEditor(activeEditor, false);
 						ssInput.getDiffEditHandler().onEditorCancel();
 					}
