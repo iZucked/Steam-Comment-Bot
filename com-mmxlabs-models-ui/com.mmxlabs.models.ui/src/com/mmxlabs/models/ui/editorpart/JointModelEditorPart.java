@@ -34,7 +34,6 @@ import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -84,6 +83,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.scenario.service.ui.editing.IDiffEditHandler;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceDiffingEditorInput;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
@@ -177,6 +177,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	private IScenarioServiceSelectionProvider scenarioSelectionProvider;
 
+	private IDiffEditHandler diffEditHandler;
+
 	public JointModelEditorPart() {
 	}
 
@@ -236,6 +238,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 						saving = true;
 						monitor.beginTask("Saving", 1);
 						scenarioService.save(scenarioInstance);
+
 						monitor.worked(1);
 					} catch (final IOException e) {
 						log.error("IO Error during save", e);
@@ -313,6 +316,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 			instance = ssInput.getCurrentScenarioInstance();
 
+			diffEditHandler = ssInput.getDiffEditHandler();
+
 			referenceInstance = ssInput.getReferenceScenarioInstance();
 			referenceLock = referenceInstance.getLock(ScenarioLock.EDITORS);
 
@@ -366,7 +371,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				};
 				getSite().getPage().addPartListener(referencePinPartListener);
 
-				setPinMode();
 			}
 		} else if (input instanceof IScenarioServiceEditorInput) {
 
@@ -469,6 +473,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		};
 		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(externalSelectionChangedListener);
 
+		setPinMode();
 	}
 
 	protected void setPinMode() {
@@ -531,14 +536,19 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	@Override
 	public void dispose() {
+		if (referenceLock != null) {
+			referenceLock.release();
+		}
+
+		if (diffEditHandler != null) {
+			diffEditHandler.onEditorDisposed();
+		}
 
 		if (referencePinPartListener != null) {
 			getSite().getPage().removePartListener(referencePinPartListener);
 		}
-		getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(externalSelectionChangedListener);
-
-		if (referenceLock != null) {
-			referenceLock.release();
+		if (externalSelectionChangedListener != null) {
+			getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(externalSelectionChangedListener);
 		}
 
 		if (editorLock != null) {
@@ -548,9 +558,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.dispose();
 		}
-
-		referenceValueProviderCache.dispose();
-
+		if (referenceValueProviderCache != null) {
+			referenceValueProviderCache.dispose();
+		}
 		if (editorTitleImage != null) {
 			editorTitleImage.dispose();
 		}
