@@ -168,7 +168,9 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 		for (final ScenarioInstance job : selectionProvider.getSelection()) {
 			final IScenarioService scenarioService = job.getScenarioService();
 			final boolean isPinned = selectionProvider.getPinnedInstance() == job;
-
+			if (scenarioService == null) {
+				continue;
+			}
 			EObject instance = null;
 			try {
 				instance = scenarioService.load(job);
