@@ -67,8 +67,16 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 
 				@Override
 				public void run() {
+					if (extraContext == null) {
+						return;
+					}
+					
 					final Collection<EObject> modelRoots = new LinkedList<EObject>();
-					for (final MMXSubModel subModel : extraContext.getRootObject().getSubModels()) {
+					final MMXRootObject rootObject = extraContext.getRootObject();
+					if (rootObject == null) {
+						return;
+					}
+					for (final MMXSubModel subModel : rootObject.getSubModels()) {
 						modelRoots.add(subModel.getSubModelInstance());
 					}
 
