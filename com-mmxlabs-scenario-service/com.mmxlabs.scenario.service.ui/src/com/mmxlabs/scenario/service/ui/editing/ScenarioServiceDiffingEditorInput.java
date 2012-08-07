@@ -8,12 +8,12 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.ui.provider.ExtendedImageRegistry;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IPersistableElement;
 
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.provider.ScenarioServiceItemProviderAdapterFactory;
+import com.mmxlabs.scenario.service.ui.internal.DefaultDiffEditHandler;
 
 public class ScenarioServiceDiffingEditorInput implements IScenarioServiceDiffingEditorInput /* , IPersistableElement */{
 
@@ -22,9 +22,12 @@ public class ScenarioServiceDiffingEditorInput implements IScenarioServiceDiffin
 	private final ScenarioInstance referenceScenarioInstance;
 	private final ScenarioInstance scenarioInstance;
 
+	private final IDiffEditHandler diffEditHandler;
+
 	public ScenarioServiceDiffingEditorInput(final ScenarioInstance scenarioInstance, final ScenarioInstance referenceScenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
 		this.referenceScenarioInstance = referenceScenarioInstance;
+		diffEditHandler = new DefaultDiffEditHandler(scenarioInstance, referenceScenarioInstance);
 	}
 
 	@Override
@@ -102,9 +105,14 @@ public class ScenarioServiceDiffingEditorInput implements IScenarioServiceDiffin
 		}
 		return false;
 	}
+
 	/*
 	 * @Override public void saveState(final IMemento memento) { ScenarioServiceElementFactory.saveState(memento, this); }
 	 * 
 	 * @Override public String getFactoryId() { return ScenarioServiceElementFactory.ID_FACTORY; }
 	 */
+	@Override
+	public IDiffEditHandler getDiffEditHandler() {
+		return diffEditHandler;
+	}
 }
