@@ -328,8 +328,9 @@ public class DetailCompositeDialog extends Dialog {
 		// }
 
 		final boolean problem = status.matches(IStatus.ERROR);
-		for (final EObject object : currentEditorTargets)
+		for (final EObject object : currentEditorTargets) {
 			objectValidity.put(object, !problem);
+		}
 
 		if (displayComposite != null)
 			displayComposite.displayValidationStatus(status);
