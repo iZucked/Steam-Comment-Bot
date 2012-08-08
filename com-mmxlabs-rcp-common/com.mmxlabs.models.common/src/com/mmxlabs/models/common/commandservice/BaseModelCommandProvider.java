@@ -52,6 +52,7 @@ public abstract class BaseModelCommandProvider implements IModelCommandProvider 
 	 * @param parameter
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	private Collection<Object> collect(CommandParameter parameter) {
 		if (parameter.getCollection() != null)
 			return (Collection<Object>) parameter.getCollection();
