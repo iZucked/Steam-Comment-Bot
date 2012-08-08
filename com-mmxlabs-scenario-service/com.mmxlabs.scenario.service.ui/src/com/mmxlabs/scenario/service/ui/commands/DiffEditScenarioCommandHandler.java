@@ -80,7 +80,7 @@ public class DiffEditScenarioCommandHandler extends AbstractHandler {
 						}
 						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 						fork.setName(newName);
-						// fork.setHidden(true);
+						fork.setHidden(true);
 
 						openScenarioInstance(activePage, fork, instance);
 					} catch (final Exception e) {
