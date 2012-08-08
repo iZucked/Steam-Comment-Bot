@@ -47,19 +47,20 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 	public static final String TYPE_TIME = "Days, hours";
 
 	public static class RowData {
-		public RowData(final String scheduleName, final String component, final String type, final long fitness) {
+		public RowData(final String scheduleName, final String component, final String type, final long fitness, final boolean minimise) {
 			super();
 			this.scheduleName = scheduleName;
 			this.component = component;
 			this.type = type;
 			this.fitness = fitness;
+			this.minimise = minimise;
 		}
 
 		public final String scheduleName;
 		public final String component;
 		public final String type;
 		public final long fitness;
-
+		public final boolean minimise;
 	}
 
 	private RowData[] rowData = new RowData[0];
@@ -178,18 +179,18 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 		}
 
 		for (final Entry<Fuel, Long> entry : totalFuelCosts.entrySet()) {
-			output.add(new RowData(scheduleName, entry.getKey().toString(), TYPE_COST, entry.getValue()));
+			output.add(new RowData(scheduleName, entry.getKey().toString(), TYPE_COST, entry.getValue(), true));
 		}
 
-		output.add(new RowData(scheduleName, "Canal Fees", TYPE_COST, canals));
-		output.add(new RowData(scheduleName, "Charter Fees", TYPE_COST, hire));
-		output.add(new RowData(scheduleName, "Distance", TYPE_COST, distance));
+		output.add(new RowData(scheduleName, "Canal Fees", TYPE_COST, canals, true));
+		output.add(new RowData(scheduleName, "Charter Fees", TYPE_COST, hire, true));
+		output.add(new RowData(scheduleName, "Distance", TYPE_COST, distance, true));
 
-		output.add(new RowData(scheduleName, "Port Costs", TYPE_COST, portCost));
-		output.add(new RowData(scheduleName, "Lateness", TYPE_TIME, lateness));
-		output.add(new RowData(scheduleName, "Capacity", "Count", capacityViolations));
+		output.add(new RowData(scheduleName, "Port Costs", TYPE_COST, portCost, true));
+		output.add(new RowData(scheduleName, "Lateness", TYPE_TIME, lateness, true));
+		output.add(new RowData(scheduleName, "Capacity", "Count", capacityViolations, true));
 
-		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost));
+		output.add(new RowData(scheduleName, TOTAL_COST, TYPE_COST, totalCost, true));
 	}
 
 	@Override

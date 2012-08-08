@@ -78,12 +78,12 @@ public class TotalsReportView extends ViewPart {
 
 	class ViewLabelProvider extends CellLabelProvider implements ITableLabelProvider, IFontProvider, ITableColorProvider {
 
-		private Font boldFont;
+		private final Font boldFont;
 
 		public ViewLabelProvider() {
-			Font systemFont = Display.getDefault().getSystemFont();
+			final Font systemFont = Display.getDefault().getSystemFont();
 			// Clone the font data
-			FontData fd = new FontData(systemFont.getFontData()[0].toString());
+			final FontData fd = new FontData(systemFont.getFontData()[0].toString());
 			// Set the bold bit.
 			fd.setStyle(fd.getStyle() | SWT.BOLD);
 			boldFont = new Font(Display.getDefault(), fd);
@@ -99,13 +99,13 @@ public class TotalsReportView extends ViewPart {
 			final List<RowData> pinned = TotalsReportView.this.contentProvider.getPinnedScenarioData();
 			for (final RowData ref : pinned) {
 				if (d.component.equals(ref.component)) {
-					final long delta = ref.fitness - d.fitness;
+					final long delta = d.fitness - ref.fitness;
 					return delta;
 				}
 			}
 			return null;
 		}
-		
+
 		@Override
 		public String getColumnText(final Object obj, final int index) {
 			if (obj instanceof RowData) {
@@ -129,7 +129,7 @@ public class TotalsReportView extends ViewPart {
 					final Long l = getDelta(d);
 					if (l != null) {
 						if (TotalsContentProvider.TYPE_TIME.equals(d.type)) {
-							return String.format("%dd, %dh", l/24, l%24);
+							return String.format("%dd, %dh", l / 24, l % 24);
 						} else {
 							return String.format("%,d", l);
 						}
@@ -144,9 +144,8 @@ public class TotalsReportView extends ViewPart {
 			return null;
 		}
 
-
 		@Override
-		public Font getFont(Object element) {
+		public Font getFont(final Object element) {
 			if (element instanceof RowData) {
 				final RowData d = (RowData) element;
 				if ("Total Cost".equals(d.component)) {
@@ -158,12 +157,13 @@ public class TotalsReportView extends ViewPart {
 		}
 
 		@Override
-		public Color getForeground(Object element, int columnIndex) {
+		public Color getForeground(final Object element, final int columnIndex) {
 			if (columnIndex == 4 && element instanceof RowData) {
-				final Long l = getDelta((RowData) element);
+				final RowData rowData = (RowData) element;
+				final Long l = getDelta(rowData);
 				if (l == null || l.longValue() == 0l) {
 					return null;
-				} else if (l < 0) {
+				} else if ((l < 0 && !rowData.minimise) || (l > 0 && rowData.minimise)) {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 				} else {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
@@ -173,16 +173,15 @@ public class TotalsReportView extends ViewPart {
 		}
 
 		@Override
-		public Color getBackground(Object element, int columnIndex) {
+		public Color getBackground(final Object element, final int columnIndex) {
 			return null;
 		}
 
 		@Override
-		public void update(ViewerCell cell) {
-			
+		public void update(final ViewerCell cell) {
+
 		}
-		
-		
+
 	}
 
 	/**
@@ -219,8 +218,8 @@ public class TotalsReportView extends ViewPart {
 			sortColumns.add(0, value);
 		}
 
-//		viewer.getTable().setSortColumn(column);
-//		viewer.getTable().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
+		// viewer.getTable().setSortColumn(column);
+		// viewer.getTable().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
 
 		viewer.refresh();
 	}
@@ -229,7 +228,7 @@ public class TotalsReportView extends ViewPart {
 		if (showDeltaColumn) {
 			if (delta == null) {
 				delta = new GridViewerColumn(viewer, SWT.NONE);
-				delta.getColumn().setText("Improvement");
+				delta.getColumn().setText("Change");
 				delta.getColumn().pack();
 				addSortSelectionListener(delta.getColumn(), 4);
 				viewer.setLabelProvider(viewer.getLabelProvider());
@@ -241,7 +240,7 @@ public class TotalsReportView extends ViewPart {
 			}
 		}
 	}
-	
+
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize it.
 	 */
@@ -261,7 +260,7 @@ public class TotalsReportView extends ViewPart {
 						packColumnsAction.run();
 					}
 				}
-				
+
 				if (input instanceof IScenarioViewerSynchronizerOutput) {
 					final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) input;
 					if (scheduleColumnViewer != null) {
@@ -295,7 +294,7 @@ public class TotalsReportView extends ViewPart {
 		addSortSelectionListener(tvc2.getColumn(), 3);
 
 		viewer.setLabelProvider(new ViewLabelProvider());
-		
+
 		viewer.getGrid().setLinesVisible(true);
 		viewer.getGrid().setHeaderVisible(true);
 
@@ -304,8 +303,8 @@ public class TotalsReportView extends ViewPart {
 		sortColumns.add(3);
 		sortColumns.add(1);
 
-//		viewer.getGrid().setSortColumn(tvc0.getColumn());
-//		viewer.getGrid().setSortDirection(SWT.UP);
+		// viewer.getGrid().setSortColumn(tvc0.getColumn());
+		// viewer.getGrid().setSortDirection(SWT.UP);
 
 		viewer.setComparator(new ViewerComparator() {
 			@Override
@@ -355,13 +354,14 @@ public class TotalsReportView extends ViewPart {
 
 		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
 			private boolean seenPin = false;
+
 			@Override
 			public void beginCollecting() {
 				seenPin = false;
 			}
 
 			@Override
-			protected Collection<? extends Object> collectElements(Schedule schedule, final boolean isPinned) {
+			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
 				seenPin = seenPin || isPinned;
 				return Collections.singleton(schedule);
 			}
