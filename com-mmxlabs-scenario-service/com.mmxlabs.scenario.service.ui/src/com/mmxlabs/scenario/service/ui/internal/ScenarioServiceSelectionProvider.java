@@ -26,6 +26,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 
 	private ScenarioInstance pin = null;
 
+	@Override
 	public void select(final ScenarioInstance instance) {
 		if (!isSelected(instance)) {
 			selection.add(instance);
@@ -35,6 +36,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 		}
 	}
 
+	@Override
 	public void deselect(final ScenarioInstance instance) {
 		if (isSelected(instance)) {
 			selection.remove(instance);
@@ -46,6 +48,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 		}
 	}
 
+	@Override
 	public void deselectAll() {
 		if (selection.isEmpty() == false) {
 			final HashSet<ScenarioInstance> copy = new HashSet<ScenarioInstance>(selection);
@@ -57,6 +60,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 		}
 	}
 
+	@Override
 	public boolean isSelected(final ScenarioInstance instance) {
 		return selection.contains(instance);
 	}
@@ -91,6 +95,7 @@ public class ScenarioServiceSelectionProvider implements IScenarioServiceSelecti
 		return pin;
 	}
 
+	@Override
 	public void setPinnedInstance(final ScenarioInstance instance) {
 		if (pin != instance) {
 			final ScenarioInstance oldPin = pin;
