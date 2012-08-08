@@ -105,7 +105,7 @@ public class KPIReportView extends ViewPart {
 		private Long getDelta(final RowData d) {
 			for (final RowData ref : contentProvider.getPinnedData()) {
 				if (ref.component.equals(d.component)) {
-					return ref.value - d.value;
+					return d.value - ref.value;
 				}
 			}
 			return null;
@@ -168,10 +168,11 @@ public class KPIReportView extends ViewPart {
 		@Override
 		public Color getForeground(final Object element, final int columnIndex) {
 			if (columnIndex == 3 && element instanceof RowData) {
-				final Long l = getDelta((RowData) element);
+				RowData rowData = (RowData) element;
+				final Long l = getDelta(rowData);
 				if (l == null || l.longValue() == 0l) {
 					return null;
-				} else if (l < 0) {
+				} else if ((l < 0 && !rowData.minimise) || (l > 0 && rowData.minimise)) {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_RED);
 				} else {
 					return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GREEN);
@@ -456,7 +457,7 @@ public class KPIReportView extends ViewPart {
 		if (showDeltaColumn) {
 			if (delta == null) {
 				delta = new GridViewerColumn(viewer, SWT.NONE);
-				delta.getColumn().setText("Improvement");
+				delta.getColumn().setText("Change");
 				delta.getColumn().pack();
 				addSortSelectionListener(delta.getColumn(), 4);
 				viewer.setLabelProvider(viewer.getLabelProvider());

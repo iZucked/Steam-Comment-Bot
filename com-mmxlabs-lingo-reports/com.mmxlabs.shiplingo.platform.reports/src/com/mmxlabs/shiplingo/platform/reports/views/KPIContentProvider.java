@@ -50,13 +50,14 @@ public class KPIContentProvider implements IStructuredContentProvider {
 	public static final String TYPE_TIME = "Days, hours";
 
 	public static class RowData {
-		public RowData(final String scheduleName, final String component, final String type, final long value, final String viewID) {
+		public RowData(final String scheduleName, final String component, final String type, final long value, final String viewID, final boolean minimise) {
 			super();
 			this.scheduleName = scheduleName;
 			this.component = component;
 			this.type = type;
 			this.value = value;
 			this.viewID = viewID;
+			this.minimise = minimise;
 		}
 
 		public final String scheduleName;
@@ -64,6 +65,7 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		public final String type;
 		public final String viewID;
 		public final long value;
+		public final boolean minimise;
 
 	}
 
@@ -83,9 +85,9 @@ public class KPIContentProvider implements IStructuredContentProvider {
 			final CommercialModel commercial = rootObject.getSubModel(CommercialModel.class);
 			if (commercial != null) {
 				for (final LegalEntity e : commercial.getEntities()) {
-//					if (!TradingConstants.THIRD_PARTIES.equals(e.getName())) {
-						validEntities.add(e.getName());
-//					}
+					// if (!TradingConstants.THIRD_PARTIES.equals(e.getName())) {
+					validEntities.add(e.getName());
+					// }
 				}
 			}
 		}
@@ -169,10 +171,10 @@ public class KPIContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		output.add(new RowData(scenarioInstance.getName(), "Lateness", TYPE_TIME, lateness, LatenessReportView.ID));
-		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID));
+		output.add(new RowData(scenarioInstance.getName(), "Lateness", TYPE_TIME, lateness, LatenessReportView.ID, true));
+		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true));
 		if (totalPNL != 0) {
-			output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalPNL, TotalsHierarchyView.ID));
+			output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalPNL, TotalsHierarchyView.ID, false));
 		}
 	}
 
