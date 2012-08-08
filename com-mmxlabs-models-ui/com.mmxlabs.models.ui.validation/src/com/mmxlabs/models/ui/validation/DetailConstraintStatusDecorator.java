@@ -95,7 +95,7 @@ public class DetailConstraintStatusDecorator implements IDetailConstraintStatus 
 
 	@Override
 	public boolean matches(final int severityMask) {
-		return status.matches(severityMask);
+		return (severity & severityMask) != 0;
 	}
 
 	@Override
