@@ -40,4 +40,6 @@ public interface IScenarioServiceSelectionProvider {
 
 	void select(ScenarioInstance scenarioInstance);
 
+	void deselect(ScenarioInstance scenarioInstance);
+
 }
