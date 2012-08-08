@@ -34,6 +34,7 @@ import org.eclipse.emf.edit.ui.celleditor.AdapterFactoryTreeEditor;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -131,6 +132,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private ISelection editorSelection = StructuredSelection.EMPTY;
 
 	private List<IJointModelEditorContribution> contributions = new LinkedList<IJointModelEditorContribution>();
+
 	private final ICommandHandler defaultCommandHandler = new ICommandHandler() {
 		@Override
 		public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
@@ -216,9 +218,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 					}
 				}
 
-				updateTitleImage(getEditorInput());
-
 				setPartName(title);
+
+				updateTitleImage(getEditorInput());
 			}
 		});
 	}
@@ -324,14 +326,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			// TODO: Sensible?
 			referenceLock.awaitClaim();
 
-			BundleContext bundleContext = Activator.getDefault().getBundle().getBundleContext();
-			ServiceReference<IScenarioServiceSelectionProvider> serviceReference = bundleContext.getServiceReference(IScenarioServiceSelectionProvider.class);
+			final BundleContext bundleContext = Activator.getDefault().getBundle().getBundleContext();
+			final ServiceReference<IScenarioServiceSelectionProvider> serviceReference = bundleContext.getServiceReference(IScenarioServiceSelectionProvider.class);
 			scenarioSelectionProvider = bundleContext.getService(serviceReference);
 			if (scenarioSelectionProvider != null) {
 				referencePinPartListener = new IPartListener() {
 
 					@Override
-					public void partOpened(IWorkbenchPart part) {
+					public void partOpened(final IWorkbenchPart part) {
 						if (part == JointModelEditorPart.this) {
 							// Ensure pin is set.
 							setPinMode();
@@ -340,19 +342,19 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 					}
 
 					@Override
-					public void partDeactivated(IWorkbenchPart part) {
+					public void partDeactivated(final IWorkbenchPart part) {
 						// TODO Auto-generated method stub
 
 					}
 
 					@Override
-					public void partClosed(IWorkbenchPart part) {
+					public void partClosed(final IWorkbenchPart part) {
 						// TODO Auto-generated method stub
 
 					}
 
 					@Override
-					public void partBroughtToTop(IWorkbenchPart part) {
+					public void partBroughtToTop(final IWorkbenchPart part) {
 						if (part == JointModelEditorPart.this) {
 							// Ensure pin is set.
 							setPinMode();
@@ -361,7 +363,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 					}
 
 					@Override
-					public void partActivated(IWorkbenchPart part) {
+					public void partActivated(final IWorkbenchPart part) {
 						if (part == JointModelEditorPart.this) {
 							// Ensure pin is set.
 							setPinMode();
@@ -430,8 +432,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 		this.rootObject = root;
 
-		setLocked(!editorLock.isAvailable());
-
 		{
 			commandStack.addCommandStackListener(new CommandStackListener() {
 				@Override
@@ -474,6 +474,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(externalSelectionChangedListener);
 
 		setPinMode();
+		setLocked(!editorLock.isAvailable());
 	}
 
 	protected void setPinMode() {
@@ -487,21 +488,32 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		}
 	}
 
+	protected void unsetPinMode() {
+
+		if (scenarioSelectionProvider != null) {
+			if (scenarioSelectionProvider.getPinnedInstance() == referenceInstance) {
+				scenarioSelectionProvider.deselect(scenarioInstance);
+				scenarioSelectionProvider.setPinnedInstance(null);
+			}
+		}
+	}
+
 	private void updateTitleImage(final IEditorInput editorInput) {
-		// if (scenarioInstance == null) {
-		// return;
-		// }
-		// if (editorInput instanceof IScenarioServiceEditorInput) {
-		// final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) getEditorInput();
-		// final ImageDescriptor imageDescriptor = ssInput.getImageDescriptor();
-		// if (imageDescriptor != null) {
-		// if (editorTitleImage != null) {
-		// editorTitleImage.dispose();
-		// }
-		// editorTitleImage = imageDescriptor.createImage();
-		// setTitleImage(editorTitleImage);
-		// }
-		// }
+		if (scenarioInstance == null) {
+			return;
+		}
+		if (editorInput instanceof IScenarioServiceEditorInput) {
+			final IScenarioServiceEditorInput ssInput = (IScenarioServiceEditorInput) getEditorInput();
+			final ImageDescriptor imageDescriptor = ssInput.getImageDescriptor();
+			if (imageDescriptor != null) {
+				final Image img = editorTitleImage;
+				editorTitleImage = imageDescriptor.createImage();
+				setTitleImage(editorTitleImage);
+				if (img != null) {
+					img.dispose();
+				}
+			}
+		}
 	}
 
 	/*
@@ -539,6 +551,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		if (referenceLock != null) {
 			referenceLock.release();
 		}
+
+		unsetPinMode();
 
 		if (diffEditHandler != null) {
 			diffEditHandler.onEditorDisposed();
