@@ -47,8 +47,7 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 
 		// TODO: Prompt user to apply changes?
 		if (cleanUpOnDispose) {
-			final IScenarioService scenarioService = child.getScenarioService();
-			scenarioService.delete(child);
+			cleanUp();
 		}
 	}
 
@@ -103,8 +102,16 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 			editingDomain.setCommandProvidersDisabled(false);
 		}
 
+		cleanUp();
+	}
+
+	private void cleanUp() {
 		final IScenarioService scenarioService = child.getScenarioService();
 		scenarioService.delete(child);
+		
+		// Unset pin 
+		
+		// Deselect entry
 	}
 
 }
