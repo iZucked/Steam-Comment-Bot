@@ -28,7 +28,7 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 public class CargoModelImporter implements ISubmodelImporter {
 	private static final String CARGO_KEY = "CARGO";
 	private static final String CARGO_GROUP_KEY = "CARGO-GROUP";
-	private final IClassImporter cargoImporter = Activator.getDefault().getImporterRegistry().getClassImporter(CargoPackage.eINSTANCE.getCargo());
+	private final CargoImporter cargoImporter = new CargoImporter();
 
 	private final IClassImporter cargoGroupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(CargoPackage.eINSTANCE.getCargoGroup());
 
@@ -72,7 +72,8 @@ public class CargoModelImporter implements ISubmodelImporter {
 
 	@Override
 	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
-		output.put(CARGO_KEY, cargoImporter.exportObjects(((CargoModel) model).getCargoes(), root));
-		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(((CargoModel) model).getCargoGroups(), root));
+		CargoModel cargoModel = (CargoModel) model;
+		output.put(CARGO_KEY, cargoImporter.exportObjects(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), root));
+		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), root));
 	}
 }

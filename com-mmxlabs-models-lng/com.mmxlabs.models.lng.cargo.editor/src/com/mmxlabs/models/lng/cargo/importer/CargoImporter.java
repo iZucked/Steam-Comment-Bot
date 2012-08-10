@@ -6,6 +6,9 @@ package com.mmxlabs.models.lng.cargo.importer;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +26,7 @@ import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
@@ -35,6 +39,39 @@ public class CargoImporter extends DefaultClassImporter {
 	@Override
 	protected boolean shouldFlattenReference(final EReference reference) {
 		return super.shouldFlattenReference(reference) || reference == CargoPackage.eINSTANCE.getCargo_LoadSlot() || reference == CargoPackage.eINSTANCE.getCargo_DischargeSlot();
+	}
+
+	public Collection<Map<String, String>> exportObjects(final Collection<Cargo> cargoes, final Collection<LoadSlot> loadSlots, final Collection<DischargeSlot> dischargeSlots, final MMXRootObject root) {
+
+		final List<Map<String, String>> data = new LinkedList<Map<String, String>>();
+
+		data.addAll(super.exportObjects(cargoes, root));
+		{
+			for (final LoadSlot slot : loadSlots) {
+				if (slot.getCargo() == null) {
+					final Map<String, String> result = new LinkedHashMap<String, String>();
+					final Map<String, String> subMap = super.exportObjects(Collections.singleton(slot), root).iterator().next();
+					for (final Map.Entry<String, String> e : subMap.entrySet()) {
+						result.put(CargoPackage.eINSTANCE.getCargo_LoadSlot().getName() + DefaultClassImporter.DOT + e.getKey(), e.getValue());
+					}
+					data.add(result);
+				}
+			}
+		}
+		{
+			for (final DischargeSlot slot : dischargeSlots) {
+				if (slot.getCargo() == null) {
+					final Map<String, String> result = new LinkedHashMap<String, String>();
+					final Map<String, String> subMap = super.exportObjects(Collections.singleton(slot), root).iterator().next();
+					for (final Map.Entry<String, String> e : subMap.entrySet()) {
+						result.put(CargoPackage.eINSTANCE.getCargo_DischargeSlot().getName() + DefaultClassImporter.DOT + e.getKey(), e.getValue());
+					}
+					data.add(result);
+				}
+			}
+		}
+
+		return data;
 	}
 
 	@Override
@@ -54,7 +91,7 @@ public class CargoImporter extends DefaultClassImporter {
 
 		// fix missing names
 
-		List<EObject> newResults = new ArrayList<EObject>(3);
+		final List<EObject> newResults = new ArrayList<EObject>(3);
 		boolean keepCargo = true;
 		if (load.getWindowStart() == null) {
 			keepCargo = false;
@@ -131,7 +168,7 @@ public class CargoImporter extends DefaultClassImporter {
 						}
 
 						// attempt to find vessel
-						NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
+						final NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
 						if (vessel instanceof Vessel) {
 							existing.setAssignment((AVesselSet) vessel);
 						} else {
@@ -149,4 +186,5 @@ public class CargoImporter extends DefaultClassImporter {
 
 		return newResults;
 	}
+
 }
