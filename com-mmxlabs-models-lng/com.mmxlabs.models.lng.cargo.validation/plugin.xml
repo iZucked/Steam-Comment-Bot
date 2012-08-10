@@ -31,7 +31,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  message body text
+                  {0}
                </message>
             </constraint>
             <constraint
