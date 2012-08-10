@@ -28,29 +28,25 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 public class CargoModelImporter implements ISubmodelImporter {
 	private static final String CARGO_KEY = "CARGO";
 	private static final String CARGO_GROUP_KEY = "CARGO-GROUP";
-	private IClassImporter cargoImporter = Activator.getDefault()
-			.getImporterRegistry()
-			.getClassImporter(CargoPackage.eINSTANCE.getCargo());
-	
-	private IClassImporter cargoGroupImporter = Activator.getDefault()
-			.getImporterRegistry()
-			.getClassImporter(CargoPackage.eINSTANCE.getCargoGroup());
-	
-	private HashMap<String, String> inputs = new HashMap<String, String>();
+	private final IClassImporter cargoImporter = Activator.getDefault().getImporterRegistry().getClassImporter(CargoPackage.eINSTANCE.getCargo());
+
+	private final IClassImporter cargoGroupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(CargoPackage.eINSTANCE.getCargoGroup());
+
+	private final HashMap<String, String> inputs = new HashMap<String, String>();
 	{
 		inputs.put(CARGO_KEY, "Cargoes");
 		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
 	}
+
 	@Override
 	public Map<String, String> getRequiredInputs() {
 		return inputs;
 	}
 
 	@Override
-	public UUIDObject importModel(Map<String, CSVReader> inputs,
-			IImportContext context) {
+	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
-		
+
 		if (inputs.containsKey(CARGO_KEY)) {
 			final CSVReader reader = inputs.get(CARGO_KEY);
 			final Collection<EObject> values = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
@@ -64,20 +60,19 @@ public class CargoModelImporter implements ISubmodelImporter {
 				}
 			}
 		}
-		
+
 		if (inputs.containsKey(CARGO_GROUP_KEY)) {
 			final CSVReader reader = inputs.get(CARGO_GROUP_KEY);
 			final Collection<EObject> values = cargoGroupImporter.importObjects(CargoPackage.eINSTANCE.getCargoGroup(), reader, context);
 			cargoModel.getCargoGroups().addAll((Collection<? extends CargoGroup>) values);
 		}
-		
+
 		return cargoModel;
 	}
 
 	@Override
-	public void exportModel(MMXRootObject root,
-			UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
 		output.put(CARGO_KEY, cargoImporter.exportObjects(((CargoModel) model).getCargoes(), root));
-		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(((CargoModel)model).getCargoGroups(), root));
+		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(((CargoModel) model).getCargoGroups(), root));
 	}
 }
