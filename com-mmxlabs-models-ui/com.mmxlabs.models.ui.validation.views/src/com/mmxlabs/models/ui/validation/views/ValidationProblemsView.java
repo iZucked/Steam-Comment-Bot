@@ -135,7 +135,8 @@ public class ValidationProblemsView extends ViewPart {
 		{
 			final TreeViewerColumn col = new TreeViewerColumn(viewer, SWT.NONE);
 			col.setLabelProvider(new ValidationStatusColumnLabelProvider());
-			col.getColumn().setWidth(500);
+			col.getColumn().setWidth(1000);
+			col.getColumn().setResizable(true);
 		}
 
 		context = Activator.getDefault().getBundle().getBundleContext();
