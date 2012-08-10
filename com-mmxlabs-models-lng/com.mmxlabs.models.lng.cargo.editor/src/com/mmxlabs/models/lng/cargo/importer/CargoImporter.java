@@ -4,7 +4,9 @@
  */
 package com.mmxlabs.models.lng.cargo.importer;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EClass;
@@ -42,14 +44,35 @@ public class CargoImporter extends DefaultClassImporter {
 		DischargeSlot discharge = null;
 		Cargo cargo = null;
 		for (final EObject o : result) {
-			if (o instanceof Cargo) cargo = (Cargo) o;
-			else if (o instanceof LoadSlot) load = (LoadSlot) o;
-			else if (o instanceof DischargeSlot) discharge = (DischargeSlot) o;
+			if (o instanceof Cargo)
+				cargo = (Cargo) o;
+			else if (o instanceof LoadSlot)
+				load = (LoadSlot) o;
+			else if (o instanceof DischargeSlot)
+				discharge = (DischargeSlot) o;
 		}
-		
+
 		// fix missing names
-		
-		
+
+		List<EObject> newResults = new ArrayList<EObject>(3);
+		boolean keepCargo = true;
+		if (load.getWindowStart() == null) {
+			keepCargo = false;
+		} else {
+			newResults.add(load);
+		}
+		if (discharge.getWindowStart() == null) {
+			keepCargo = false;
+		} else {
+			newResults.add(discharge);
+		}
+		if (!keepCargo) {
+			cargo.setLoadSlot(null);
+			cargo.setDischargeSlot(null);
+		} else {
+			newResults.add(cargo);
+		}
+
 		if (cargo != null && cargo.getName() != null && cargo.getName().trim().isEmpty() == false) {
 			final String cargoName = cargo.getName().trim();
 			if (load != null && (load.getName() == null || load.getName().trim().isEmpty())) {
@@ -60,14 +83,14 @@ public class CargoImporter extends DefaultClassImporter {
 						load2.setName("load-" + cargoName);
 						context.registerNamedObject(load2);
 					}
-					
+
 					@Override
 					public int getStage() {
 						return IImportContext.STAGE_MODIFY_ATTRIBUTES;
 					}
 				});
 			}
-			
+
 			if (discharge != null && (discharge.getName() == null || discharge.getName().trim().isEmpty())) {
 				final DischargeSlot discharge2 = discharge;
 				context.doLater(new IDeferment() {
@@ -76,7 +99,7 @@ public class CargoImporter extends DefaultClassImporter {
 						discharge2.setName("discharge-" + cargoName);
 						context.registerNamedObject(discharge2);
 					}
-					
+
 					@Override
 					public int getStage() {
 						return IImportContext.STAGE_MODIFY_ATTRIBUTES;
@@ -84,8 +107,8 @@ public class CargoImporter extends DefaultClassImporter {
 				});
 			}
 		}
-		
-		if (row.containsKey(ASSIGNMENT)) {
+
+		if (keepCargo && row.containsKey(ASSIGNMENT)) {
 			final Cargo cargo_ = cargo;
 			final String assignedTo = row.get(ASSIGNMENT);
 			final IImportProblem noVessel = context.createProblem("Cannot find vessel " + assignedTo, true, true, true);
@@ -106,7 +129,7 @@ public class CargoImporter extends DefaultClassImporter {
 							im.getElementAssignments().add(existing);
 							existing.setAssignedObject(cargo_);
 						}
-						
+
 						// attempt to find vessel
 						NamedObject vessel = context.getNamedObject(assignedTo, FleetPackage.eINSTANCE.getVessel());
 						if (vessel instanceof Vessel) {
@@ -123,7 +146,7 @@ public class CargoImporter extends DefaultClassImporter {
 				}
 			});
 		}
-		
-		return result;
+
+		return newResults;
 	}
 }
