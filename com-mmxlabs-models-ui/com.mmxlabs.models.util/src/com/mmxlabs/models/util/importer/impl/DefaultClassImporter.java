@@ -35,8 +35,8 @@ import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 
 public class DefaultClassImporter implements IClassImporter {
-	private static final String KIND_KEY = "kind";
-	private static final String DOT = ".";
+	protected static final String KIND_KEY = "kind";
+	protected static final String DOT = ".";
 
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
