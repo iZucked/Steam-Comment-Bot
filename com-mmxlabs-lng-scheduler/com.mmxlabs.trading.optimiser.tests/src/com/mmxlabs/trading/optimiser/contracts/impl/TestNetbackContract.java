@@ -82,7 +82,7 @@ public class TestNetbackContract {
 		when(vessel.getVesselClass()).thenReturn(vesselClass);
 		when(vessel.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
 
-		when(vesselClass.getHourlyCharterInPrice()).thenReturn(1000);
+		when(vessel.getHourlyCharterInPrice()).thenReturn(1000);
 
 		when(slotA.getPort()).thenReturn(A);
 		when(slotB.getPort()).thenReturn(B);
