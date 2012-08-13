@@ -1387,30 +1387,10 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			int charterInPrice = 0;
-
-			int charterCount = 0;
-			for (final CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
-				if (charterCost.getVesselClasses().contains(eVc)) {
-					if (charterCost.getCharterInPrice() != null) {
-						final Integer value = charterCost.getCharterInPrice().getValueForMonth(latestTime);
-						if (value != null) {
-							charterInPrice = value;
-						} else {
-							charterInPrice = 0;
-						}
-					} else {
-						charterInPrice = 0;
-					}
-					// charterOutPrice = charterCost.getCharterOutPrice().getValueAfter(latestTime);
-					charterCount = charterCost.getSpotCharterCount();
-				}
-			}
-
 			final IVesselClass vc = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()),
 					Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), Calculator.scaleToInt(eVc.getMinHeel()), baseFuelPrice,
-					Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()), Calculator.scaleToInt(eVc.getPilotLightRate()) / 24, Calculator.scaleToInt(charterInPrice / 24.0),
-					eVc.getWarmingTime(), eVc.getCoolingTime(), Calculator.scale(eVc.getCoolingVolume()));
+					Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()), Calculator.scaleToInt(eVc.getPilotLightRate()) / 24, eVc.getWarmingTime(), eVc.getCoolingTime(),
+					Calculator.scale(eVc.getCoolingVolume()));
 
 			vesselClassAssociation.add(eVc, vc);
 
@@ -1432,12 +1412,6 @@ public class LNGScenarioTransformer {
 				builder.setVesselClassInaccessiblePorts(vc, inaccessiblePorts);
 			}
 
-			if (charterCount > 0) {
-				final List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount);
-				spotVesselsByClass.put(eVc, spots);
-				allVessels.addAll(spots);
-			}
-
 			entities.addModelObject(eVc, vc);
 		}
 
@@ -1451,17 +1425,49 @@ public class LNGScenarioTransformer {
 			final IStartEndRequirement endRequirement = createRequirement(builder, portAssociation, eV.getAvailability().isSetEndAfter() ? eV.getAvailability().getEndAfter() : null, eV
 					.getAvailability().isSetEndBy() ? eV.getAvailability().getEndBy() : null, SetUtils.getPorts(eV.getAvailability().getEndAt()));
 
-			final int dailyCharterPrice = eV.isSetTimeCharterRate() ? eV.getTimeCharterRate() : vesselClassAssociation.lookup(eV.getVesselClass()).getHourlyCharterInPrice() * 24;
+			// TODO: Hook up once charter out opt implemented
+			final int dailyCharterInPrice = eV.isSetTimeCharterRate() ? eV.getTimeCharterRate() : 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
+			final int dailyCharterOutPrice = 0;
 
 			final long heelLimit = eV.getStartHeel().isSetVolumeAvailable() ? Calculator.scale(eV.getStartHeel().getVolumeAvailable()) : 0;
 
-			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), (int) (Calculator.scale(dailyCharterPrice) / 24),
-					eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
-					Calculator.scaleToInt(eV.getStartHeel().getCvValue()), Calculator.scaleToInt(eV.getStartHeel().getPricePerMMBTU()));
+			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), (int) (Calculator.scale(dailyCharterInPrice) / 24),
+					(int) (Calculator.scale(dailyCharterOutPrice) / 24), eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement,
+					heelLimit, Calculator.scaleToInt(eV.getStartHeel().getCvValue()), Calculator.scaleToInt(eV.getStartHeel().getPricePerMMBTU()));
 			vesselAssociation.add(eV, vessel);
 
 			entities.addModelObject(eV, vessel);
 			allVessels.add(vessel);
+		}
+
+		{
+
+			int charterInPrice = 0;
+
+			int charterCount = 0;
+			for (final CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
+
+				for (VesselClass eVc : charterCost.getVesselClasses()) {
+					if (charterCost.getCharterInPrice() != null) {
+						final Integer value = charterCost.getCharterInPrice().getBackwardsValueForMonth(latestTime);
+						if (value != null) {
+							charterInPrice = value;
+						} else {
+							charterInPrice = 0;
+						}
+					} else {
+						charterInPrice = 0;
+					}
+					// charterOutPrice = charterCost.getCharterOutPrice().getValueAfter(latestTime);
+					charterCount = charterCost.getSpotCharterCount();
+					if (charterCount > 0) {
+						final List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount, Calculator.scaleToInt(charterInPrice / 24.0));
+						spotVesselsByClass.put(eVc, spots);
+						allVessels.addAll(spots);
+					}
+				}
+			}
+
 		}
 		//
 		// /*
