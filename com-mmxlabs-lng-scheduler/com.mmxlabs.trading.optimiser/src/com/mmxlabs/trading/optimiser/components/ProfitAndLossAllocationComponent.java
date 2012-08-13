@@ -299,10 +299,10 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 		final int hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
-			hireRate = vessel.getVesselClass().getHourlyCharterInPrice();
+			hireRate = vessel.getHourlyCharterInPrice();
 			break;
 		case TIME_CHARTER:
-			hireRate = vessel.getHourlyCharterOutPrice();
+			hireRate = vessel.getHourlyCharterInPrice();
 			break;
 		default:
 			hireRate = 0;

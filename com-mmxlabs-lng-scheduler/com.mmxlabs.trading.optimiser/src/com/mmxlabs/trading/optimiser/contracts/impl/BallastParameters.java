@@ -41,7 +41,7 @@ public final class BallastParameters {
 		if (hireCost != null) {
 			return hireCost.intValue();
 		}
-		return vesselClass.getHourlyCharterInPrice();
+		return 0;//vesselClass.getHourlyCharterInPrice();
 	}
 
 	public final long getNBORate() {

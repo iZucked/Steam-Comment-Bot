@@ -104,10 +104,10 @@ public class NetbackContract implements ILoadPriceCalculator {
 		final int hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
-			hireRate = vesselClass.getHourlyCharterInPrice();
+			hireRate = vessel.getHourlyCharterInPrice();
 			break;
 		case TIME_CHARTER:
-			hireRate = vessel.getHourlyCharterOutPrice();
+			hireRate = vessel.getHourlyCharterInPrice();
 			break;
 		default:
 			hireRate = notionalBallastParameters.getHireCost(dischargeTime);
