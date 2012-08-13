@@ -50,11 +50,9 @@ import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.ui.actions.SimpleImportAction;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -210,31 +208,20 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 						return getCargo(slotAllocation.getSlot());
 					}
 				}
-				if (o instanceof Journey) {
-					final Journey journey = (Journey) o;
-					final Sequence sequence = (Sequence) journey.eContainer();
-					int idx = sequence.getEvents().indexOf(journey);
-					while (idx-- > 0) {
-						final Event evt = sequence.getEvents().get(idx);
-						if (evt instanceof SlotVisit) {
+
+				if (o instanceof Event) {
+					Event evt = (Event) o;
+					while (evt != null) {
+						if (evt instanceof VesselEventVisit) {
+							return null;
+						} else if (evt instanceof SlotVisit) {
 							return getCargo(evt);
 						}
-					}
-				}
-				if (o instanceof Idle) {
-					final Idle idle = (Idle) o;
-					final Sequence sequence = (Sequence) idle.eContainer();
-					int idx = sequence.getEvents().indexOf(idle);
-					while (idx-- > 0) {
-						final Event evt = sequence.getEvents().get(idx);
-						if (evt instanceof SlotVisit) {
-							return getCargo(evt);
-						}
+						evt = evt.getPreviousEvent();
 					}
 				}
 				return null;
 			}
-
 		});
 	}
 
@@ -395,7 +382,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		}
 
 		@Override
-		public Comparable getComparable(final Object object) {
+		public Comparable<?> getComparable(final Object object) {
 			return render(object);
 		}
 
