@@ -184,6 +184,44 @@ public class DataIndexImpl<Value> extends IndexImpl<Value> implements DataIndex<
 	}
 
 	@Override
+	public Value getForwardValueForMonth(final Date date) {
+		for (final IndexPoint<Value> point : getSortedPoints()) {
+			Date pDate = point.getDate();
+			if (pDate.getYear() == date.getYear() && pDate.getMonth() >= date.getMonth() || pDate.getYear() > date.getYear()) {
+				return point.getValue();
+			}
+			// Sorted set, so break out if this condition is true
+			if (point.getDate().after(date)) {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Value getBackwardsValueForMonth(final Date date) {
+		IndexPoint<Value> lastPoint = null;
+		for (final IndexPoint<Value> point : getSortedPoints()) {
+			Date pDate = point.getDate();
+			if (pDate.getYear() == date.getYear() && pDate.getMonth() == date.getMonth()) {
+				return point.getValue();
+			}
+			// Sorted set, so break out if this condition is true
+			if (point.getDate().after(date)) {
+				if (lastPoint != null) {
+					return lastPoint.getValue();
+				}
+				return null;
+			}
+			lastPoint = point;
+		}
+		if (lastPoint != null) {
+			return lastPoint.getValue();
+		}
+		return null;
+	}
+
+	@Override
 	public EList<Date> getDates() {
 		final EList<Date> result = new BasicEList<Date>();
 		for (final IndexPoint<Value> s : getSortedPoints())
