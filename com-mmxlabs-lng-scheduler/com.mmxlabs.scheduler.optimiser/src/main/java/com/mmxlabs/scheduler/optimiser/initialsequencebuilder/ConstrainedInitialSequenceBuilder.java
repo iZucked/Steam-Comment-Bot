@@ -129,7 +129,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 	}
 
 	@Override
-	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, Map<ISequenceElement, IResource> resourceSuggestion) {
+	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, Map<ISequenceElement, IResource> resourceSuggestion,
+			Map<ISequenceElement, ISequenceElement> pairingHints) {
 
 		if (resourceSuggestion == null) {
 			resourceSuggestion = Collections.emptyMap();
@@ -180,12 +181,18 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		for (final ISequenceElement element1 : unsequencedElements) {
 			final Set<ISequenceElement> after1 = new LinkedHashSet<ISequenceElement>();
 			followerCache.put(element1, after1);
-			for (final ISequenceElement element2 : data.getSequenceElements()) {
-				if (element1 == element2) {
-					continue;
-				}
-				if (checker.allowSequence(element1, element2)) {
-					after1.add(element2);
+			if (pairingHints.containsKey(element1)) {
+				after1.add(pairingHints.get(element1));
+			} else {
+
+				for (final ISequenceElement element2 : data.getSequenceElements()) {
+					if (element1 == element2) {
+						continue;
+					}
+
+					if (checker.allowSequence(element1, element2)) {
+						after1.add(element2);
+					}
 				}
 			}
 			// part of a chain
@@ -473,7 +480,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		// chunks have been scheduled sequentially as best we can, now try
 		// inserting any leftovers
 		log.info("Trying to insert " + chunks.size() + " unscheduled elements into solution (" + chunks + ")");
-		int numTries = 1000 + chunks.size();
+		int numTries = chunks.size();
 		while (!chunks.isEmpty() && numTries-- != 0) {
 			final Iterator<SequenceChunk> iterator = chunks.iterator();
 			while (iterator.hasNext()) {

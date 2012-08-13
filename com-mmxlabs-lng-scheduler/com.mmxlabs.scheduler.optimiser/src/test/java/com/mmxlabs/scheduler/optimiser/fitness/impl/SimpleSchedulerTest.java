@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -164,7 +165,7 @@ public class SimpleSchedulerTest {
 
 		// Generate initial state
 		final IInitialSequenceBuilder sequenceBuilder = new ConstrainedInitialSequenceBuilder(constraintRegistry.getConstraintCheckerFactories());
-		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null);
+		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement>emptyMap());
 
 		final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new ArrayList<String>(
 				constraintRegistry.getConstraintCheckerNames()), constraintRegistry, new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);
