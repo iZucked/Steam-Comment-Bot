@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -105,16 +104,16 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 	@Override
 	public UnitCostLine createCostLine(final MMXRootObject root, final UnitCostMatrix spec, final Port from, final Port to) {
 		final UnitCostMatrix spec2 = EcoreUtil.copy(spec);
-//		spec2.getPorts().clear();
-//		spec2.getPorts().add(from);
-//		spec2.getPorts().add(to);
-//		
-		
+		// spec2.getPorts().clear();
+		// spec2.getPorts().add(from);
+		// spec2.getPorts().add(to);
+		//
+
 		spec2.getFromPorts().clear();
 		spec2.getFromPorts().add(from);
 		spec2.getToPorts().clear();
 		spec2.getToPorts().add(to);
-		
+
 		final List<UnitCostLine> createCostLines = createCostLines(root, spec2, new NullProgressMonitor());
 		if (createCostLines.isEmpty())
 			return null;
@@ -155,7 +154,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 						break;
 					}
 				}
-				
+
 				for (final RouteLine line : route.getLines()) {
 					final int travelTime = (int) Math.ceil(line.getDistance() / speed) + (parametersForRoute == null ? 0 : parametersForRoute.getExtraTransitTime());
 					final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
@@ -173,33 +172,33 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			 */
 			final List<Port> loadPorts = new ArrayList<Port>();
 			final List<Port> dischargePorts = new ArrayList<Port>();
-			
+
 			for (final APort port : SetUtils.getPorts(spec.getFromPorts())) {
 				if (port instanceof Port) {
 					loadPorts.add((Port) port);
 				}
 			}
-			
+
 			for (final APort port : SetUtils.getPorts(spec.getToPorts())) {
 				if (port instanceof Port) {
 					dischargePorts.add((Port) port);
 				}
 			}
-			
+
 			if (loadPorts.isEmpty()) {
 				for (final Port port : portModel.getPorts()) {
 					if (port.getCapabilities().contains(PortCapability.LOAD))
 						loadPorts.add(port);
 				}
 			}
-			
+
 			if (dischargePorts.isEmpty()) {
 				for (final Port port : portModel.getPorts()) {
 					if (port.getCapabilities().contains(PortCapability.DISCHARGE))
 						dischargePorts.add(port);
 				}
 			}
-			
+
 			final HashMap<Pair<Port, Port>, UnitCostLine> bestCostSoFar = new HashMap<Pair<Port, Port>, UnitCostLine>();
 
 			final ILoadPriceCalculator loadCalculator = new FixedPriceContract(0);
@@ -226,17 +225,18 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				final Vessel modelVessel = vessel;
 
 				final VesselClass eVc = modelVessel.getVesselClass();
-				//  If the spec defines a speed, change the min speed of the vessel to suit.
+				// If the spec defines a speed, change the min speed of the vessel to suit.
 				final double minSpeed = eVc.getMinSpeed();
-//				if (spec.isSetSpeed()) {
-//					minSpeed = spec.getSpeed();
-//				}
+				// if (spec.isSetSpeed()) {
+				// minSpeed = spec.getSpeed();
+				// }
 				final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(minSpeed), Calculator.scaleToInt(eVc.getMaxSpeed()),
 						Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), Calculator.scaleToInt(eVc.getMinHeel()),
 
 						Calculator.scaleToInt(spec.getBaseFuelPrice()),
 
-						Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()), Calculator.scaleToInt(eVc.getPilotLightRate()) / 24, Calculator.scaleToInt(spec.getNotionalDayRate() / 24.0),
+						Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()), Calculator.scaleToInt(eVc.getPilotLightRate()) / 24,
+
 						eVc.getWarmingTime(), eVc.getCoolingTime(), Calculator.scale(eVc.getCoolingVolume()));
 
 				buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
@@ -276,7 +276,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				final List<ICargo> cargoes = new ArrayList<ICargo>(dischargePorts.size());
 				final List<IVessel> vessels = new ArrayList<IVessel>(dischargePorts.size());
 
-//				final Map<ICargo, int[]> allowances = spec.isSetSpeed() ? new HashMap<ICargo, int[]>() : null;
+				// final Map<ICargo, int[]> allowances = spec.isSetSpeed() ? new HashMap<ICargo, int[]>() : null;
 
 				for (final Port dischargePort : dischargePorts) {
 					// compute time windows
@@ -319,15 +319,13 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
 							cargoes.add(cargo);
 
-							
-
 							// create vessel
 
 							final int timeAtReturn = timeAtDischarge + dischargePort.getDischargeDuration() + minTimeDL + ballastAllowance;
 							final ITimeWindow returnWindow = builder.createTimeWindow(timeAtReturn, timeAtReturn);
 
-							vessels.add(builder.createVessel("vessel-" + i++, vesselClass, 0, VesselInstanceType.SPOT_CHARTER, builder.createStartEndRequirement(),
-									builder.createStartEndRequirement(returnWindow), 0, 0, 0));
+							vessels.add(builder.createVessel("vessel-" + i++, vesselClass, 0, Calculator.scaleToInt(spec.getNotionalDayRate() / 24.0), VesselInstanceType.SPOT_CHARTER,
+									builder.createStartEndRequirement(), builder.createStartEndRequirement(returnWindow), 0, 0, 0));
 						}
 					}
 				}
