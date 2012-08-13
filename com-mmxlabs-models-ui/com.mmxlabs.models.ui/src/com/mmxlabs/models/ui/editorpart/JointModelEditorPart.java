@@ -766,7 +766,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				//
 				selectionChangedListener = new ISelectionChangedListener() {
 					// This just notifies those things that are affected by the
-					// section.
+					// selection.
 					//
 					@Override
 					public void selectionChanged(final SelectionChangedEvent selectionChangedEvent) {
