@@ -145,4 +145,9 @@ public final class ListModifiableSequence implements IModifiableSequence {
 		}
 		return hashCode;
 	}
+
+	@Override
+	public String toString() {
+		return list.toString();
+	}
 }
