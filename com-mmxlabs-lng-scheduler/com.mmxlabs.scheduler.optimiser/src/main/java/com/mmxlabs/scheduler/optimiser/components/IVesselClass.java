@@ -114,24 +114,6 @@ public interface IVesselClass {
 	 */
 	long getNBORate(VesselState vesselState);
 
-	// /**
-	// * Returns the minimum speed to travel at when using NBO. This will
-	// * typically be equivalent to the speed required to use up all NBO as fuel.
-	// *
-	// * @param state
-	// * @return
-	// */
-	// int getNBOSpeed(VesselState state);
-	//
-	// /**
-	// * Set the minimum speed to travel at when using NBO. This will typically be
-	// * equivalent to the speed required to use up all NBO as fuel.
-	// *
-	// * @param vesselState
-	// * @param nboSpeed
-	// */
-	// void setNBOSpeed(VesselState vesselState, int nboSpeed);
-
 	/**
 	 * Returns the unit price of base fuel for this vessel class, where the unit is {@link FuelComponent#getDefaultFuelUnit()}
 	 * 
@@ -145,13 +127,6 @@ public interface IVesselClass {
 	 * @return
 	 */
 	int getBaseFuelConversionFactor();
-
-	/**
-	 * Returns the hourly rate at which vessels of this class can be chartered in.
-	 * 
-	 * @return hourly charter price
-	 */
-	int getHourlyCharterInPrice();
 
 	/**
 	 * The time in hours for which these vessels can idle with no heel without the tanks becoming warm and thus requiring a cooldown.

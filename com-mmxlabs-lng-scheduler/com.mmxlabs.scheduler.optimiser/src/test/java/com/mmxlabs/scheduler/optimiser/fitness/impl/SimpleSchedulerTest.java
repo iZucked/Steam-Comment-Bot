@@ -88,16 +88,16 @@ public class SimpleSchedulerTest {
 		keypoints.put(20000, 20000l);
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
-		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0, 0);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, 0, consumptionCalculator, 15000);
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, 0, consumptionCalculator,
 				15000);
 
 		// TODO: Setup start/end ports correctly
-		builder.createVessel("vessel-1", vesselClass1, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVessel("vessel-2", vesselClass1, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVessel("vessel-3", vesselClass1, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0);
+		builder.createVessel("vessel-1", vesselClass1, 0, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
+		builder.createVessel("vessel-2", vesselClass1, 0, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
+		builder.createVessel("vessel-3", vesselClass1, 0, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0);
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);

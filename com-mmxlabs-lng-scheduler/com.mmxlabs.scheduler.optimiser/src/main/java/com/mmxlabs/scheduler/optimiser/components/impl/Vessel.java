@@ -30,6 +30,8 @@ public final class Vessel extends IndexedObject implements IVessel {
 
 	private int hourlyCharterOutPrice;
 
+	private int hourlyCharterInPrice;
+
 	@Override
 	public String getName() {
 		return name;
@@ -69,5 +71,14 @@ public final class Vessel extends IndexedObject implements IVessel {
 
 	public void setHourlyCharterOutPrice(final int hourlyCharterOutPrice) {
 		this.hourlyCharterOutPrice = hourlyCharterOutPrice;
+	}
+
+	@Override
+	public int getHourlyCharterInPrice() {
+		return hourlyCharterInPrice;
+	}
+
+	public void setHourlyCharterInPrice(final int hourlyCharterInPrice) {
+		this.hourlyCharterInPrice = hourlyCharterInPrice;
 	}
 }
