@@ -105,9 +105,13 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
-		final EObject object = ctx.getTarget();
+		EObject object = ctx.getTarget();
+		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
+		EObject original = extraValidationContext.getReplacement(object);
 
 		if (object instanceof Slot) {
+
+			Slot slot = (Slot) object;
 
 			final Object currentConstraintData = ctx.getCurrentConstraintData();
 			PortSlotCounter psc;
@@ -118,8 +122,8 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 				psc = (PortSlotCounter) currentConstraintData;
 			}
 
-			final Slot slot = (Slot) object;
 			final Collection<Slot> slotOverlaps = psc.slotOverlaps(slot);
+			slotOverlaps.remove(original);
 			assert slotOverlaps.contains(slot) == false;
 			if (slotOverlaps.isEmpty()) {
 				return ctx.createSuccessStatus();
