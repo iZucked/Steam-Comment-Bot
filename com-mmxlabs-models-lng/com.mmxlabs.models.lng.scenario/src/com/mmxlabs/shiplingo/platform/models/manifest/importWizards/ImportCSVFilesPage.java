@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -42,7 +43,6 @@ import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
-import com.mmxlabs.models.util.Activator;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
@@ -52,23 +52,25 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
+import com.mmxlabs.shiplingo.platform.models.manifest.internal.Activator;
 import com.mmxlabs.shiplingo.platform.models.manifest.wizards.ScenarioServiceNewScenarioPage;
 
 public class ImportCSVFilesPage extends WizardPage {
 
+	private static final String FILTER_KEY = "lastSelection";
+	private static final String SECTION_NAME = "ImportCSVFilesPage.section";
+
 	private static final Logger log = LoggerFactory.getLogger(ImportCSVFilesPage.class);
 
 	private class Chunk {
-		public final EClass eClass;
 		public final ISubmodelImporter importer;
 		public final Map<String, String> keys;
 		public final Map<String, String> friendlyNames = new HashMap<String, String>();
 
 		public final Map<String, FileFieldEditor> editors = new HashMap<String, FileFieldEditor>();
 
-		public Chunk(final EClass eClass, final ISubmodelImporter importer) {
+		public Chunk(final ISubmodelImporter importer) {
 			super();
-			this.eClass = eClass;
 			this.importer = importer;
 			this.keys = new HashMap<String, String>();
 		}
@@ -120,8 +122,17 @@ public class ImportCSVFilesPage extends WizardPage {
 		auto.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
+
+				final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+
+				IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+				final String filter = section == null ? null : section.get(FILTER_KEY);
 				// display file open dialog and then fill out files if the exist.
 				final DirectoryDialog dd = new DirectoryDialog(getShell());
+				if (filter != null) {
+					dd.setFilterPath(filter);
+				}
+
 				final String d = dd.open();
 
 				if (d != null) {
@@ -131,8 +142,13 @@ public class ImportCSVFilesPage extends WizardPage {
 							c.setFromDirectory(dir);
 						}
 					}
-					// Trigger 'Next' button focus 
+					// Trigger 'Next' button focus
 					setPageComplete(true);
+
+					if (section == null) {
+						section = dialogSettings.addNewSection(SECTION_NAME);
+					}
+					section.put(FILTER_KEY, dir.toString());
 				}
 			}
 		});
@@ -141,7 +157,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(subModelClass);
 			if (importer == null)
 				continue;
-			final Chunk chunk = new Chunk(subModelClass, importer);
+			final Chunk chunk = new Chunk(importer);
 			final Map<String, String> parts = importer.getRequiredInputs();
 			chunks.add(chunk);
 			chunk.friendlyNames.putAll(parts);
@@ -191,13 +207,13 @@ public class ImportCSVFilesPage extends WizardPage {
 				}
 			}
 			try {
-			final UUIDObject subModel = c.importer.importModel(readers, context);
-			models.add(subModel);
-			root.addSubModel(subModel);
+				final UUIDObject subModel = c.importer.importModel(readers, context);
+				models.add(subModel);
+				root.addSubModel(subModel);
 			} catch (final Throwable th) {
 				th.printStackTrace();
 			}
-			
+
 		}
 
 		context.setRootObject(root);
