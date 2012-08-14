@@ -67,9 +67,9 @@ import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ISchedule
 public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
-	
-//	public static final String = "";
-	
+
+	// public static final String = "";
+
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -95,12 +95,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	private IMemento memento;
 	private IMemento highlightMemento;
-	
+
 	@Inject
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemes;
 
 	private HighlightAction highlightAction;
-
 
 	/**
 	 * The constructor.
@@ -109,41 +108,41 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	}
 
 	@Override
-	public void init(IViewSite site, IMemento memento) throws PartInitException {
+	public void init(final IViewSite site, IMemento memento) throws PartInitException {
 		if (memento == null) {
 			memento = XMLMemento.createWriteRoot("workbench");
 		}
 		this.memento = memento;
-		
+
 		// check that it's the right memento - and non-null?...
-		
+
 		// set defaults from preference store for missing settings...
-//		for (String key : memento.getAttributeKeys()) { // need list from Constants and then the right getString/Boolean call below...
-//			if(memento.getString(key) == null){
-//				memento.putString(key, Activator.getDefault().getPreferenceStore().getString(key));
-//			}					
-//		}
+		// for (String key : memento.getAttributeKeys()) { // need list from Constants and then the right getString/Boolean call below...
+		// if(memento.getString(key) == null){
+		// memento.putString(key, Activator.getDefault().getPreferenceStore().getString(key));
+		// }
+		// }
 		if (memento != null) {
-			if(memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null){
+			if (memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null) {
 				memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
-			}		
-			if(memento.getBoolean(Show_Canals) == null){
+			}
+			if (memento.getBoolean(Show_Canals) == null) {
 				memento.putBoolean(Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
-			}	
-			if(memento.getChild(Highlight_) == null){
+			}
+			if (memento.getChild(Highlight_) == null) {
 				memento.createChild(Highlight_);
-			}	
+			}
 			highlightMemento = memento.getChild(Highlight_);
 		}
-		super.init(site, memento);		
+		super.init(site, memento);
 	}
 
 	@Override
-	public void saveState(IMemento memento) {
+	public void saveState(final IMemento memento) {
 		super.saveState(memento);
 		memento.putMemento(this.memento);
 	}
-	
+
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize it.
 	 */
@@ -155,40 +154,112 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		// Gantt Chart settings object
 		final ISettings settings = new AbstractSettings() {
-			@Override public boolean enableResizing() { return false; }
-			@Override public Color getDefaultEventColor() { return ColorCache.getColor(221, 220, 221); }
-			@Override public boolean showPlannedDates() { return false; }
-			@Override public String getTextDisplayFormat() { return "#name#";}
-			@Override public int getSectionTextSpacer() { return 0; }
-			@Override public int getMinimumSectionHeight() { return 5; }
-			@Override public int getNumberOfDaysToAppendForEndOfDay() { return 0; }
-			@Override public boolean allowBlankAreaVerticalDragAndDropToMoveChart() { return true; }
-			@Override public boolean lockHeaderOnVerticalScroll() { return true; }
-			@Override public boolean drawFillsToBottomWhenUsingGanttSections() { return true; }
-			@Override public int getSectionBarDividerHeight() { return 0; }
-			@Override public boolean showGradientEventBars() { return false; }
-			@Override public boolean drawSectionsWithGradients() { return false; }
-			@Override public boolean allowArrowKeysToScrollChart() {
-				return true;
-			}
-			@Override public boolean showBarsIn3D() {
+			@Override
+			public boolean enableResizing() {
 				return false;
 			}
-			public int getEventsTopSpacer() { return 5; }
-			public int getEventsBottomSpacer() { return 5;
+
+			@Override
+			public Color getDefaultEventColor() {
+				return ColorCache.getColor(221, 220, 221);
 			}
-			@Override public boolean showDeleteMenuOption() { return false; }
-			@Override public boolean showMenuItemsOnRightClick() { return false; }
-			@Override public int getSelectionLineWidth() { return 3; }
+
+			@Override
+			public boolean showPlannedDates() {
+				return false;
+			}
+
+			@Override
+			public String getTextDisplayFormat() {
+				return "#name#";
+			}
+
+			@Override
+			public int getSectionTextSpacer() {
+				return 0;
+			}
+
+			@Override
+			public int getMinimumSectionHeight() {
+				return 5;
+			}
+
+			@Override
+			public int getNumberOfDaysToAppendForEndOfDay() {
+				return 0;
+			}
+
+			@Override
+			public boolean allowBlankAreaVerticalDragAndDropToMoveChart() {
+				return true;
+			}
+
+			@Override
+			public boolean lockHeaderOnVerticalScroll() {
+				return true;
+			}
+
+			@Override
+			public boolean drawFillsToBottomWhenUsingGanttSections() {
+				return true;
+			}
+
+			@Override
+			public int getSectionBarDividerHeight() {
+				return 0;
+			}
+
+			@Override
+			public boolean showGradientEventBars() {
+				return false;
+			}
+
+			@Override
+			public boolean drawSectionsWithGradients() {
+				return false;
+			}
+
+			@Override
+			public boolean allowArrowKeysToScrollChart() {
+				return true;
+			}
+
+			@Override
+			public boolean showBarsIn3D() {
+				return false;
+			}
+
+			public int getEventsTopSpacer() {
+				return 5;
+			}
+
+			public int getEventsBottomSpacer() {
+				return 5;
+			}
+
+			@Override
+			public boolean showDeleteMenuOption() {
+				return false;
+			}
+
+			@Override
+			public boolean showMenuItemsOnRightClick() {
+				return false;
+			}
+
+			@Override
+			public int getSelectionLineWidth() {
+				return 3;
+			}
 		};
 
 		final IColorManager colourManager = new DefaultColorManager() {
-			
+
 			@Override
 			public boolean useAlphaDrawing() {
 				return true;
 			};
-			
+
 			@Override
 			public Color getTextColor() {
 				return ColorCache.getWhite();
@@ -211,6 +282,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 					}
 				}
 			}
+
 		};
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
@@ -220,10 +292,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento);
 
 		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemes) {
-			IScheduleViewColourScheme cs = ext.createInstance();
-			String ID = ext.getID();
+			final IScheduleViewColourScheme cs = ext.createInstance();
+			final String ID = ext.getID();
 			cs.setID(ID);
-			if(ext.isHighlighter().equalsIgnoreCase("true")){
+			if (ext.isHighlighter().equalsIgnoreCase("true")) {
 				labelProvider.addHighlighter(ID, cs);
 			} else {
 				labelProvider.addColourScheme(ID, cs);
@@ -296,9 +368,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// selectionListener.selectionChanged(null, selection);
 
 		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
-//		if (colourScheme != null) {
-			labelProvider.setScheme(colourScheme);
-//		}
+		// if (colourScheme != null) {
+		labelProvider.setScheme(colourScheme);
+		// }
 	}
 
 	@Override
@@ -362,9 +434,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
-		
+
 		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
-		
+
 		if (!Activator.getDefault().getPreferenceStore().getBoolean(SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION)) {
 
 			colourSchemeAction = new ColourSchemeAction(this, (EMFScheduleLabelProvider) (viewer.getLabelProvider()), viewer);
@@ -486,7 +558,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		private final ScenarioViewerComparator comparator;
 
-		public SortModeAction(SchedulerView schedulerView, GanttChartViewer viewer, EMFScheduleLabelProvider lp, final ScenarioViewerComparator comparator) {
+		public SortModeAction(final SchedulerView schedulerView, final GanttChartViewer viewer, final EMFScheduleLabelProvider lp, final ScenarioViewerComparator comparator) {
 			super("Sort", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
 			this.comparator = comparator;
 			setImageDescriptor(Activator.getImageDescriptor("/icons/alphab_sort_co.gif"));
@@ -530,12 +602,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, ISelection selection) {
-		// TODO make selection more obvious - the gantt selection box is small
-		// TODO this seems hard, having taken a look.
 		if (part == this) {
 			return;
 		}
-		// Ignore property page activation - otherwise we loose the selecion
+		// Ignore property page activation - otherwise we loose the selection
 		if (part instanceof PropertySheet) {
 			return;
 		}
