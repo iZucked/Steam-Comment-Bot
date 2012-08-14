@@ -46,7 +46,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.util.ConfigurationElementMemento;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
