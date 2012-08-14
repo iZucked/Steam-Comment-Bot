@@ -204,8 +204,17 @@ public class GanttChartViewer extends StructuredViewer {
 			// Use the internalMap to obtain the list of events we are selecting
 			selectedEvents = new ArrayList<GanttEvent>(l.size());
 			for (final Object obj : l) {
-				if ((obj != null) && internalMap.containsKey(obj)) {
-					selectedEvents.add(internalMap.get(obj));
+				if (obj != null) {
+					if (internalMap.containsKey(obj)) {
+						selectedEvents.add(internalMap.get(obj));
+					} else if (getComparer() != null) {
+						for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
+							if (getComparer().equals(e.getKey(), obj)) {
+
+								selectedEvents.add(internalMap.get(e.getKey()));
+							}
+						}
+					}
 				}
 			}
 		} else {
