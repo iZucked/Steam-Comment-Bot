@@ -28,8 +28,6 @@ import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
 import org.eclipse.nebula.widgets.ganttchart.GanttSection;
 import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.IGanttEventListener;
-import org.eclipse.nebula.widgets.ganttchart.ILanguageManager;
-import org.eclipse.nebula.widgets.ganttchart.IPaintManager;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -453,35 +451,5 @@ public class GanttChartViewer extends StructuredViewer {
 			return gcProvider.getElementPlannedEndTime(element);
 		}
 		return null;
-	}
-
-	@SuppressWarnings("unused")
-	private void replaceGanttChart() {
-
-		// Create a new gantt chart
-		final Composite parent = ganttChart.getParent();
-		final int style = ganttChart.getStyle();
-		final ISettings settings = ganttChart.getSettings();
-		final IColorManager colorManager = ganttChart.getColorManager();
-		final IPaintManager paintManager = ganttChart.getPaintManager();
-		final ILanguageManager languageManager = ganttChart.getLanguageManger();
-
-		ganttChart.removeGanttEventListener(ganttEventListener);
-
-		final IContentProvider contentProvider = getContentProvider();
-		final ILabelProvider labelProvider = (ILabelProvider) getLabelProvider();
-
-		ganttChart.dispose();
-
-		// TODO: We may need to wrap up within another composite to ensure
-		// control is replaced in the same place as previous control within
-		// parent.
-		ganttChart = new GanttChart(parent, style, settings, colorManager, paintManager, languageManager);
-
-		// Restore content and label providers
-		setContentProvider(contentProvider);
-		setLabelProvider(labelProvider);
-
-		ganttChart.addGanttEventListener(ganttEventListener);
 	}
 }
