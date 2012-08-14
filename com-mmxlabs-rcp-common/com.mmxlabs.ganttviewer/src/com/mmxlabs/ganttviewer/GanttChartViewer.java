@@ -51,7 +51,7 @@ public class GanttChartViewer extends StructuredViewer {
 
 	private static final Logger log = LoggerFactory.getLogger(GanttChartViewer.class);
 
-	private GanttChart ganttChart;
+	private final GanttChart ganttChart;
 
 	private final Map<Object, GanttEvent> internalMap = new HashMap<Object, GanttEvent>();
 	private final Map<GanttEvent, Object> internalReverseMap = new HashMap<GanttEvent, Object>();
