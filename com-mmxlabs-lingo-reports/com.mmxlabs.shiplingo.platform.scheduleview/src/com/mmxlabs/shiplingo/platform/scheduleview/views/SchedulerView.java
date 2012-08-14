@@ -319,36 +319,6 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		hookContextMenu();
 		contributeToActionBars();
 
-		// /*
-		// * Add selection listener. may need tidying up.
-		// */
-		//
-		// selectionListener = new ISelectionListener() {
-		//
-		// @Override
-		// public void selectionChanged(final IWorkbenchPart part,
-		// final ISelection selection) {
-		//
-		// final List<Schedule> schedules = ScheduleAdapter
-		// .getSchedules(selection);
-		// if (!schedules.isEmpty()) {
-		// final boolean needFit = viewer.getInput() == null;
-		// setInput(schedules);
-		// if (needFit) {
-		// Display.getDefault().asyncExec(new Runnable() {
-		//
-		// @Override
-		// public void run() {
-		// packAction.run();
-		// }
-		// });
-		// }
-		// } else {
-		// setInput(null);
-		// }
-		// }
-		// };
-
 		getSite().setSelectionProvider(viewer);
 		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
@@ -357,15 +327,6 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 				return Collections.singleton(schedule);
 			}
 		});
-
-		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-		// selectionListener);
-
-		// // Update view from current selection
-		// final ISelection selection = getSite().getWorkbenchWindow()
-		// .getSelectionService()
-		// .getSelection("com.mmxlabs.rcp.navigator");
-		// selectionListener.selectionChanged(null, selection);
 
 		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
 		// if (colourScheme != null) {
@@ -527,31 +488,6 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		return propertySheetPage;
 	}
-//
-//	public class HighlightAction extends SchedulerViewAction {
-//
-//		public HighlightAction(SchedulerView schedulerView, GanttChartViewer viewer, EMFScheduleLabelProvider emfScheduleLabelProvider) {
-//			super("Highlight", IAction.AS_RADIO_BUTTON, schedulerView, viewer, emfScheduleLabelProvider);
-//			setImageDescriptor(Activator.getImageDescriptor("/icons/highlight.gif"));			
-//		}
-//
-//		@Override
-//		protected void createMenuItems(Menu menu) {
-//			
-//			final Action highlightTightJourneysAction = new Action("Tight Journeys", IAction.AS_CHECK_BOX) {
-//				@Override
-//				public void run() {
-//					lp.toggleHighlightTightJourneys();
-//					setChecked(lp.showCanals());
-//					viewer.setInput(viewer.getInput());
-//					schedulerView.redraw();
-//				}
-//			};			
-//			highlightTightJourneysAction.setChecked(lp.setHighlighter());
-//			final ActionContributionItem aci = new ActionContributionItem(highlightTightJourneysAction);
-//			aci.fill(menu, -1);
-//		}
-//	}
 
 
 	class SortModeAction extends SchedulerViewAction {
