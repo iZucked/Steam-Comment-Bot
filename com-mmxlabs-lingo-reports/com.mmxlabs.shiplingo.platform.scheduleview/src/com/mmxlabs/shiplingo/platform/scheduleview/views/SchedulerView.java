@@ -9,8 +9,11 @@ import static com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerViewCon
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,9 +26,11 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.DefaultColorManager;
@@ -51,13 +56,17 @@ import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
@@ -287,7 +296,49 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
-		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider();
+		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider() {
+
+			@Override
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+				super.inputChanged(viewer, oldInput, newInput);
+				clearInputEquivalents();
+			}
+
+			@Override
+			public Object[] getChildren(final Object parent) {
+
+				final Object[] result = super.getChildren(parent);
+				if (result != null) {
+					for (final Object event : result) {
+						if (event instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) event;
+							setInputEquivalents(
+									event,
+									Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation(),
+											slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo() }));
+
+							// } else if (event instanceof Idle) {
+							// setInputEquivalents(event, Arrays.asList(new Object[] { ((Idle) event).getSlotAllocation().getCargoAllocation() }));
+
+						} else if (event instanceof CargoAllocation) {
+							final CargoAllocation allocation = (CargoAllocation) event;
+
+							setInputEquivalents(
+									allocation,
+									Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
+											allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
+											allocation.getLadenIdle(), allocation.getLadenLeg(), allocation.getInputCargo() }));
+
+						} else if (event instanceof VesselEventVisit) {
+							setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
+						} else {
+							setInputEquivalents(event, Collections.emptyList());
+						}
+					}
+				}
+				return result;
+			}
+		};
 		viewer.setContentProvider(contentProvider);
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento);
 
@@ -308,6 +359,24 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// E.g. mode?
 		// Move into separate class
 		viewer.setComparator(viewerComparator);
+
+		viewer.setComparer(new IElementComparer() {
+			@Override
+			public int hashCode(final Object element) {
+				return element.hashCode();
+			}
+
+			@Override
+			public boolean equals(Object a, Object b) {
+				if (!contents.contains(a) && equivalents.containsKey(a)) {
+					a = equivalents.get(a);
+				}
+				if (!contents.contains(b) && equivalents.containsKey(b)) {
+					b = equivalents.get(b);
+				}
+				return Equality.isEqual(a, b);
+			}
+		});
 
 		viewer.setInput(getViewSite());
 
@@ -489,8 +558,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		return propertySheetPage;
 	}
 
-
-	class SortModeAction extends SchedulerViewAction {
+	private class SortModeAction extends SchedulerViewAction {
 
 		private final ScenarioViewerComparator comparator;
 
@@ -552,12 +620,18 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			for (final Object o : sel.toList()) {
 				if (o instanceof CargoAllocation) {
 					final CargoAllocation allocation = (CargoAllocation) o;
+					objects.add(allocation.getInputCargo());
 					objects.add(allocation.getLoadAllocation().getSlotVisit());
 					objects.add(allocation.getLadenLeg());
 					objects.add(allocation.getLadenIdle());
 					objects.add(allocation.getDischargeAllocation().getSlotVisit());
 					objects.add(allocation.getBallastLeg());
 					objects.add(allocation.getBallastIdle());
+				} else if (o instanceof Cargo) {
+					final Cargo cargo = (Cargo) o;
+					objects.add(cargo);
+					objects.add(cargo.getLoadSlot());
+					objects.add(cargo.getDischargeSlot());
 				} else {
 					objects.add(o);
 				}
@@ -566,4 +640,20 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		}
 		viewer.setSelection(selection);
 	}
+
+	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
+	private final HashSet<Object> contents = new HashSet<Object>();
+
+	protected void setInputEquivalents(final Object input, final Collection<Object> objectEquivalents) {
+		for (final Object o : objectEquivalents) {
+			equivalents.put(o, input);
+		}
+		contents.add(input);
+	}
+
+	protected void clearInputEquivalents() {
+		equivalents.clear();
+		contents.clear();
+	}
+
 }
