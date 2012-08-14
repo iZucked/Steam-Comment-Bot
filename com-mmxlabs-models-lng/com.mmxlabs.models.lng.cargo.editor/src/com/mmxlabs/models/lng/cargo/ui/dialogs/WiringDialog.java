@@ -10,6 +10,8 @@ import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -57,16 +59,28 @@ public class WiringDialog extends Dialog {
 		gl_shell.verticalSpacing = 6;
 		shell.setLayout(gl_shell);
 
-		final ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		final ScrolledComposite scrolledComposite = new ScrolledComposite(shell, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL |SWT.DOUBLE_BUFFERED);
 		scrolledComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		scrolledComposite.setBounds(0, 0, 84, 84);
 		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setExpandVertical(true);
+		scrolledComposite.setAlwaysShowScrollBars(true);
 
 		final WiringComposite wiringComposite = new WiringComposite(scrolledComposite, SWT.NONE);
 		scrolledComposite.setContent(wiringComposite);
 		scrolledComposite.setMinSize(wiringComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		scrolledComposite.setLayout(new FillLayout());
+
+
+	    scrolledComposite.addControlListener(new ControlAdapter() {
+	        public void controlResized(ControlEvent e) {
+	          Rectangle r = scrolledComposite.getClientArea();
+	          scrolledComposite.setMinSize(shell.computeSize(r.width,
+	              SWT.DEFAULT));
+	        }
+	      });
+
+		
 
 		final Composite buttonsComposite = new Composite(shell, SWT.NONE);
 		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
