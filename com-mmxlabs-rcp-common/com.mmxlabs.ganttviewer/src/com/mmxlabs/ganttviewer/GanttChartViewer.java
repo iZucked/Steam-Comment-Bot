@@ -75,7 +75,7 @@ public class GanttChartViewer extends StructuredViewer {
 	public GanttChartViewer(final Composite parent, final int style, final ISettings settings, final IColorManager colourManager) {
 		this(new GanttChart(parent, style, settings, colourManager));
 	}
-	
+
 	public GanttChartViewer(final GanttChart ganttChart) {
 		this.ganttChart = ganttChart;
 		hookControl(ganttChart);
@@ -294,12 +294,12 @@ public class GanttChartViewer extends StructuredViewer {
 							if (statusColour != null) {
 								event.setStatusColor(statusColour);
 							}
-							
+
 							final Color statusBorderColour = getLabelProviderBorderColor(labelProvider, c);
 							if (statusBorderColour != null) {
 								event.setStatusBorderColor(statusBorderColour);
 							}
-							
+
 							event.setStatusBorderWidth(getLabelProviderBorderWidth(labelProvider, c));
 							event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
 
@@ -360,14 +360,13 @@ public class GanttChartViewer extends StructuredViewer {
 		return 1;
 	}
 
-	
 	private int getLabelProviderAlpha(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IGanttChartColourProvider) {
 			return ((IGanttChartColourProvider) labelProvider).getAlpha(c);
 		}
 		return 255;
 	}
-	
+
 	private AdvancedTooltip getTooltip(final ILabelProvider labelProvider, final Object c) {
 
 		if (labelProvider instanceof IGanttChartToolTipProvider) {
