@@ -9,6 +9,7 @@ import java.util.Collections;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -55,6 +56,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			dischargeSlotPageNumber = editorPart.addPage(dischargeSlotViewerPane.getControl());
 			editorPart.setPageText(dischargeSlotPageNumber, "Discharge Slots");
 		}
+		
+		Control wiringControl = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		int wiringPageNumnber = editorPart.addPage(wiringControl);
+		editorPart.setPageText(wiringPageNumnber, "Wiring");
 	}
 
 	@Override

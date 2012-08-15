@@ -2,10 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.cargo.ui.dialogs;
+package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -13,6 +12,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -22,8 +22,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -44,22 +42,19 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.presentation.composites.SlotInlineEditorWrapper;
+import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDiagram;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
-import com.mmxlabs.models.ui.editors.IDisplayComposite;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
+import com.mmxlabs.models.ui.validation.IStatusProvider;
+import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 /**
@@ -71,7 +66,7 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  * @author Tom Hinton
  * 
  */
-public class WiringComposite extends Composite {
+public class CargoWiringComposite extends Composite {
 	final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 
 	private IScenarioEditingLocation location;
@@ -81,10 +76,20 @@ public class WiringComposite extends Composite {
 	}
 
 	public void setLocation(IScenarioEditingLocation location) {
+
+		if (this.location != null) {
+			this.location.getStatusProvider().removeStatusChangedListener(statusChangedListener);
+		}
+
 		this.location = location;
+		if (this.location != null) {
+			this.location.getStatusProvider().addStatusChangedListener(statusChangedListener);
+		}
 	}
 
 	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
+	private final ArrayList<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
+	private final ArrayList<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
 	/**
 	 * The value of the ith element of wiring is the index of the other end of the wire; -1 indicates no wire is present.
 	 * 
@@ -105,14 +110,11 @@ public class WiringComposite extends Composite {
 
 	final List<Cargo> newCargoes = new LinkedList<Cargo>();
 
-	private IReferenceValueProvider portProvider;
-	private IReferenceValueProvider contractProvider;
-
 	/**
 	 * @param parent
 	 * @param style
 	 */
-	public WiringComposite(final Composite parent, final int style) {
+	public CargoWiringComposite(final Composite parent, final int style) {
 		super(parent, style);
 		createLayout();
 		// setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
@@ -133,6 +135,8 @@ public class WiringComposite extends Composite {
 		this.cargoes.addAll(cargoes);
 		for (int i = 0; i < cargoes.size(); i++) {
 			wiring.add(i); // set default wiring
+			loadSlots.add(cargoes.get(i).getLoadSlot());
+			dischargeSlots.add(cargoes.get(i).getDischargeSlot());
 		}
 
 		wiring.add(-1); // bogus element for the add terminals.
@@ -148,7 +152,7 @@ public class WiringComposite extends Composite {
 		createChildren();
 	}
 
-	public void addNewCargo(final List<Integer> newWiring, final boolean isFOBorDES) {
+	public Command addNewCargo(final List<Integer> newWiring, final boolean isFOBorDES) {
 		// buffer LHS and RHS values (yuck)
 		final List<Port> lhsPorts = new ArrayList<Port>(lhsComposites.size());
 		final List<Port> rhsPorts = new ArrayList<Port>(rhsComposites.size());
@@ -163,14 +167,12 @@ public class WiringComposite extends Composite {
 			lhsPorts.add(c.getPort());
 			lhsDates.add(c.getDate());
 			lhsContracts.add(c.getContract());
-			lhsFOBORDES.add(c.isFOBOrDES());
 		}
 
 		for (final PortAndDateComposite c : rhsComposites) {
 			rhsPorts.add(c.getPort());
 			rhsDates.add(c.getDate());
 			rhsContracts.add(c.getContract());
-			rhsFOBORDES.add(c.isFOBOrDES());
 		}
 
 		if (newWiring != null) {
@@ -184,6 +186,7 @@ public class WiringComposite extends Composite {
 		final Cargo newCargo = EcoreUtil.copy(prototype);
 		final LoadSlot newLoad = EcoreUtil.copy(prototype.getLoadSlot());
 		newLoad.setDESPurchase(isFOBorDES);
+
 		final DischargeSlot newDischarge = EcoreUtil.copy(prototype.getDischargeSlot());
 		newDischarge.setFOBSale(isFOBorDES);
 		newCargo.setLoadSlot(newLoad);
@@ -223,6 +226,8 @@ public class WiringComposite extends Composite {
 		// }
 
 		layout();
+		
+		return IdentityCommand.INSTANCE;
 	}
 
 	private void createLayout() {
@@ -232,236 +237,6 @@ public class WiringComposite extends Composite {
 		// layout.makeColumnsEqualWidth = false;
 
 		setLayout(layout);
-	}
-
-	private class PortAndDateComposite extends Composite implements SelectionListener, IDisplayComposite, IInlineEditorContainer {
-
-		private Slot slot;
-		protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
-		private static final int LONG_LENGTH = 20;
-		// public final DateTime dateTime;
-		// public final Combo contractCombo;
-		// public final Combo portCombo;
-		// private int hours;
-
-		private boolean fobOrDES = false;
-
-		// List<Pair<String, EObject>> ports;
-		// // final List<Pair<String, EObject>> contracts;
-		// private final Label fobDESLabel;
-		// private final IReferenceValueProvider portValueProvider;
-
-		private final boolean isLoad;
-
-		/**
-		 * Argh localized dates.
-		 * 
-		 * @param parent
-		 * @param style
-		 */
-		public PortAndDateComposite(final Composite parent, final int style, final boolean isLoad, final IReferenceValueProvider portValueProvider,
-				final IReferenceValueProvider contractReferenceProvider, final Slot slot) {
-			super(parent, style);
-			this.isLoad = isLoad;
-			// this.portValueProvider = portValueProvider;
-			setLayout(new GridLayout(4, false));
-			// fobDESLabel = new Label(this, SWT.NONE);
-			// contractCombo = new Combo(this, SWT.READ_ONLY);
-			// portCombo = new Combo(this, SWT.READ_ONLY);
-			// dateTime = new DateTime(this, SWT.MEDIUM | SWT.DATE);
-			// ports = portValueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Port());
-			// contracts = contractReferenceProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Contract());
-			//
-			// // trim port names
-			// for (final Pair<String, EObject> p : ports) {
-			// portCombo.add(shorten(p.getFirst()));
-			// }
-			//
-			// for (final Pair<String, EObject> p : contracts) {
-			// contractCombo.add(shorten(p.getFirst()));
-			// }
-			//
-			// setContract(slot.getContract());
-			// setPort(slot.getPort());
-			// setDate(slot.getWindowStart());
-			// if (slot instanceof LoadSlot && ((LoadSlot) slot).isDESPurchase()) {
-			// fobDESLabel.setText("DES Purchase");
-			// setFOBOrDES(true);
-			// } else if (slot instanceof DischargeSlot && ((DischargeSlot) slot).isFOBSale()) {
-			// fobDESLabel.setText("FOB Sale");
-			// setFOBOrDES(true);
-			// } else {
-			// fobDESLabel.setText("        ");
-			// setFOBOrDES(false);
-			// }
-			// portCombo.addSelectionListener(this);
-			// contractCombo.addSelectionListener(this);
-			// dateTime.addSelectionListener(this);
-			//
-
-			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__CONTRACT)));
-			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
-			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__WINDOW_START)));
-
-		}
-
-		//
-		// private String shorten(final String longString) {
-		// if (longString.length() > LONG_LENGTH + 3) {
-		// return longString.substring(0, LONG_LENGTH) + "...";
-		// }
-		// return longString;
-		// }
-		//
-		// /**
-		// * @param date
-		// */
-		// public void setDate(final Date date) {
-		// final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(getPort().getTimeZone()));
-		// cal.clear();
-		// cal.setTime(date);
-		//
-		// dateTime.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-		//
-		// hours = cal.get(Calendar.HOUR_OF_DAY);
-		// }
-		//
-		// /**
-		// * @param port
-		// */
-		// public void setPort(final Port port) {
-		// portCombo.setText(shorten(port.getName()));
-		// }
-		//
-		// /**
-		// * @param contract
-		// */
-		// public void setContract(final Contract contract) {
-		// contractCombo.setText(shorten(contract.getName()));
-		//
-		// updatePorts(contract);
-		// }
-		//
-		// protected void updatePorts(final Contract contract) {
-		// // Create a fake slot to pass into the value provider
-		// final Slot slot = isLoad ? CargoFactory.eINSTANCE.createLoadSlot() : CargoFactory.eINSTANCE.createDischargeSlot();
-		// slot.setContract(contract);
-		// ports = portValueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Port());
-		//
-		// // Keep the old name in case we can reuse it
-		// final String oldName = portCombo.getText();
-		// // Clear existing names
-		//
-		// portCombo.removeAll();
-		// // Add updated ports list
-		// for (final Pair<String, EObject> p : ports) {
-		// portCombo.add(shorten(p.getFirst()));
-		// }
-		// // Set an initial value...
-		// portCombo.setText(shorten(ports.get(0).getFirst()));
-		// // ... then try and restore port name
-		// portCombo.setText(oldName);
-		// }
-		//
-		public Date getDate() {
-			return slot.getWindowStart();
-		}
-
-		//
-		public Port getPort() {
-			return slot.getPort();
-		}
-
-		public Contract getContract() {
-			return slot.getContract();
-			// return (Contract) contracts.get(contractCombo.getSelectionIndex()).getSecond();
-		}
-
-		//
-		// @Override
-		// public void widgetSelected(final SelectionEvent e) {
-		// notifyListeners(SWT.Selection, new Event());
-		//
-		// if (e.widget == contractCombo) {
-		// updatePorts(getContract());
-		// }
-		// }
-		//
-		// @Override
-		// public void widgetDefaultSelected(final SelectionEvent e) {
-		// notifyListeners(SWT.DefaultSelection, new Event());
-		// }
-
-		public boolean isFOBOrDES() {
-			return fobOrDES;
-		}
-
-		//
-		// public void setFOBOrDES(final boolean isFOBOrDes) {
-		// this.fobOrDES = isFOBOrDes;
-		// fobDESLabel.setVisible(isFOBOrDes);
-		// // contractCombo.setVisible(!isFOBOrDes);
-		// portCombo.setVisible(!isFOBOrDes);
-		// dateTime.setVisible(!isFOBOrDes);
-		// }
-		//
-		@Override
-		public void addInlineEditor(IInlineEditor editor) {
-			// TODO Auto-generated method stub
-			editors.add(editor);
-			editor.setCommandHandler(commandHandler);
-			editor.createControl(this);
-		}
-
-		@Override
-		public Composite getComposite() {
-			// TODO Auto-generated method stub
-			return this;
-		}
-
-		@Override
-		public void display(IScenarioEditingLocation location, MMXRootObject root, EObject value, Collection<EObject> range) {
-			// TODO Auto-generated method stub
-			if (value instanceof Slot) {
-				slot = (Slot) value;
-			} else {
-				slot = null;
-			}
-			for (IInlineEditor editor : editors) {
-				editor.display(location, root, value, range);
-			}
-
-		}
-
-		@Override
-		public void setCommandHandler(ICommandHandler commandHandler) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void setEditorWrapper(IInlineEditorWrapper wrapper) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void displayValidationStatus(IStatus status) {
-			for (final IInlineEditor editor : editors) {
-				editor.processValidation(status);
-			}
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// TODO Auto-generated method stub
-
-		}
 	}
 
 	private void updateWiringColours(final WiringDiagram diagram, final List<Integer> wiring, final List<PortAndDateComposite> loads, final List<PortAndDateComposite> discharge) {
@@ -535,9 +310,9 @@ public class WiringComposite extends Composite {
 			// }
 			// });
 
-			final PortAndDateComposite loadSide = new PortAndDateComposite(this, SWT.BORDER, true, portProvider, contractProvider, cargo.getLoadSlot());
+			final PortAndDateComposite loadSide = new PortAndDateComposite(this, SWT.BORDER, cargo.getLoadSlot());
 			loadSide.setCommandHandler(commandHandler);
-			loadSide.display(location, location.getRootObject(), cargo.getLoadSlot(), Lists.<EObject>newArrayList(cargo, cargo.getLoadSlot(), cargo.getDischargeSlot()));
+			loadSide.display(location, location.getRootObject(), cargo.getLoadSlot(), Lists.<EObject> newArrayList(cargo, cargo.getLoadSlot(), cargo.getDischargeSlot()));
 			if (wiringDiagram == null) {
 				wiringDiagram = new WiringDiagram(this, getStyle() & ~SWT.BORDER) {
 					@Override
@@ -577,11 +352,26 @@ public class WiringComposite extends Composite {
 					@Override
 					protected void wiringChanged(final List<Integer> newWiring) {
 
+						CompoundCommand cmd = new CompoundCommand("Re-wire cargoes");
+						for (int i = 0; i < newWiring.size()-2; ++i) {
+							Cargo c = cargoes.get(i);
+							if (c != null) {
+								Integer newIndex = newWiring.get(i);
+								if (newIndex >= 0) {
+									DischargeSlot otherDischarge = dischargeSlots.get(newIndex);
+									if (c.getDischargeSlot() != otherDischarge) {
+										cmd.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
+									}
+								} else {
+									cmd.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
+								}
+							}
+						}
 						// check for wiring to add terminal
 						final int topIndex = newWiring.size() - 2;
 						final int bottomIndex = newWiring.size() - 1;
 						if (newWiring.get(topIndex) != -1 || newWiring.indexOf(topIndex) != -1) {
-							addNewCargo(new ArrayList<Integer>(newWiring), false);
+							cmd.append(addNewCargo(new ArrayList<Integer>(newWiring), false));
 						} else if (newWiring.get(bottomIndex) != -1 || newWiring.indexOf(bottomIndex) != -1) {
 
 							if (newWiring.get(bottomIndex) != -1) {
@@ -591,13 +381,18 @@ public class WiringComposite extends Composite {
 								newWiring.set(newWiring.indexOf(bottomIndex), newWiring.size() - 2);
 
 							}
-							addNewCargo(new ArrayList<Integer>(newWiring), true);
+							cmd.append(addNewCargo(new ArrayList<Integer>(newWiring), true));
 						} else {
-							WiringComposite.this.wiring.clear();
-							WiringComposite.this.wiring.addAll(newWiring);
+							CargoWiringComposite.this.wiring.clear();
+							CargoWiringComposite.this.wiring.addAll(newWiring);
 							updateWiringColours(this, newWiring, lhsComposites, rhsComposites);
 						}
-						WiringComposite.this.notifyListeners(SWT.Modify, new Event());
+
+						if (!cmd.isEmpty()) {
+							location.getEditingDomain().getCommandStack().execute(cmd);
+						}
+
+						CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
 					}
 				};
 				// wiring diagram is tall
@@ -613,9 +408,9 @@ public class WiringComposite extends Composite {
 				};
 			}
 
-			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, SWT.BORDER, false, portProvider, contractProvider, cargo.getDischargeSlot());
+			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, SWT.BORDER, cargo.getDischargeSlot());
 			dischargeSide.setCommandHandler(commandHandler);
-			dischargeSide.display(location, location.getRootObject(), cargo.getDischargeSlot(), Lists.<EObject>newArrayList(cargo, cargo.getLoadSlot(), cargo.getDischargeSlot()));
+			dischargeSide.display(location, location.getRootObject(), cargo.getDischargeSlot(), Lists.<EObject> newArrayList(cargo, cargo.getLoadSlot(), cargo.getDischargeSlot()));
 			final String id = newNames.get(index);
 
 			lhsComposites.add(loadSide);
@@ -703,12 +498,6 @@ public class WiringComposite extends Composite {
 				return false;
 			}
 
-			final PortAndDateComposite load = lhsComposites.get(loadIdx);
-			final PortAndDateComposite discharge = rhsComposites.get(dischargeIdx);
-
-			if (load.isFOBOrDES() && discharge.isFOBOrDES()) {
-				return false;
-			}
 		}
 
 		return true;
@@ -718,35 +507,6 @@ public class WiringComposite extends Composite {
 		final CompoundCommand command = new CompoundCommand();
 
 		// update modified properties
-		int index = 0;
-		for (final Cargo cargo : cargoes) {
-			final boolean isDESPurchase = lhsComposites.get(index).isFOBOrDES();
-			final boolean isFOBSale = rhsComposites.get(index).isFOBOrDES();
-
-			appendIfChanged(command, domain, cargo, MMXCorePackage.eINSTANCE.getNamedObject_Name(), newNames.get(index));
-			appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getLoadSlot_DESPurchase(), isDESPurchase);
-			if (isDESPurchase) {
-				appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort());
-				appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate());
-			} else {
-				appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort());
-				appendIfChanged(command, domain, cargo.getLoadSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate());
-			}
-
-			appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getDischargeSlot_FOBSale(), isFOBSale);
-			if (isFOBSale) {
-				appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), lhsComposites.get(index).getPort());
-				appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), lhsComposites.get(index).getDate());
-			} else {
-				appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_Port(), rhsComposites.get(index).getPort());
-				appendIfChanged(command, domain, cargo.getDischargeSlot(), CargoPackage.eINSTANCE.getSlot_WindowStart(), rhsComposites.get(index).getDate());
-			}
-
-			index++;
-		}
-
-		// todo sort out new cargo slots.
-
 		for (int i = 0; i < wiring.size() - 2; i++) {
 			final int newTail = wiring.get(i);
 			if (newTail != i) {
@@ -789,24 +549,6 @@ public class WiringComposite extends Composite {
 		}
 	}
 
-	/**
-	 * Set the portProvider
-	 * 
-	 * @param portProvider
-	 */
-	public void setPortProvider(final IReferenceValueProvider portProvider) {
-		this.portProvider = portProvider;
-	}
-
-	/**
-	 * Set the contractProvider
-	 * 
-	 * @param contractProvider
-	 */
-	public void setContractProvider(final IReferenceValueProvider contractProvider) {
-		this.contractProvider = contractProvider;
-	}
-
 	private IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
 	private ICommandHandler commandHandler = new ICommandHandler() {
 
@@ -829,12 +571,29 @@ public class WiringComposite extends Composite {
 		}
 	};
 
-	// @Override
-	// public void addInlineEditor(IInlineEditor editor) {
-	// editor = wrapper.wrap(editor);
-	// if (editor != null) {
-	// editor.setCommandHandler(commandHandler);
-	// editors.add(editor);
-	// }
-	// }
+	public void setStatusProvider(final IStatusProvider statusProvider) {
+		statusProvider.addStatusChangedListener(statusChangedListener);
+	}
+
+	protected IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
+
+		@Override
+		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
+
+			for (PortAndDateComposite c : lhsComposites) {
+				c.displayValidationStatus(status);
+			}
+			for (PortAndDateComposite c : rhsComposites) {
+				c.displayValidationStatus(status);
+			}
+		}
+	};
+
+	@Override
+	public void dispose() {
+		if (this.location != null) {
+			this.location.getStatusProvider().removeStatusChangedListener(statusChangedListener);
+		}
+
+	}
 }
