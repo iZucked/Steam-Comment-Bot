@@ -29,3 +29,5 @@ syntax: regexp
 ^com\.mmxlabs\.rcp\.common\.tests/screenshots$
 syntax: regexp
 ^com\.mmxlabs\.rcp\.common\.p2/\.project$
+syntax: glob
+target-definition/.classpath
