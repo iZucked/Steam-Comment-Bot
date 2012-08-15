@@ -53,7 +53,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	 * 
 	 * TODO make this a parameter.
 	 */
-	private static final double optionalMoveFrequency = 0.30;
+	private static final double optionalMoveFrequency = 0.10;
+	private static final double shuffleMoveFrequency = 0.20;
 
 	/**
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
@@ -127,8 +128,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private final LegalSequencingChecker checker;
 
 	private final SequencesConstrainedMoveGeneratorUnit sequencesMoveGenerator;
-//	private final OptionalConstrainedMoveGeneratorUnit optionalMoveGenerator;
-	private final ShuffleElementsMoveGenerator optionalMoveGenerator;
+	private final OptionalConstrainedMoveGeneratorUnit optionalMoveGenerator;
+	private final ShuffleElementsMoveGenerator shuffleMoveGenerator;
 
 	protected final IOptimisationContext context;
 
@@ -179,11 +180,12 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		}
 
 		this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
+		this.shuffleMoveGenerator = new ShuffleElementsMoveGenerator(this);
 		if (context.getOptimisationData().getDataComponentProviders().contains(SchedulerConstants.DCP_optionalElementsProvider)) {
 			final IOptionalElementsProvider optionalElementsProvider = context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider,
 					IOptionalElementsProvider.class);
 			if (optionalElementsProvider.getOptionalElements().size() > 0) {
-				this.optionalMoveGenerator = new ShuffleElementsMoveGenerator(this);
+				this.optionalMoveGenerator = new OptionalConstrainedMoveGeneratorUnit(this);
 			} else {
 				this.optionalMoveGenerator = null;
 			}
@@ -196,6 +198,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	public IMove generateMove() {
 		if ((optionalMoveGenerator != null) && (random.nextDouble() < optionalMoveFrequency)) {
 			return optionalMoveGenerator.generateMove();
+		} else if ((shuffleMoveGenerator != null) && (random.nextDouble() < shuffleMoveFrequency)) {
+			return shuffleMoveGenerator.generateMove();
 		} else {
 			return sequencesMoveGenerator.generateMove();
 		}
