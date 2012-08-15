@@ -226,6 +226,13 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 	}
 
+	@Override
+	protected void missedNotifications(final List<Notification> missed) {
+		for (final Notification n : missed) {
+			reallyNotifyChanged(n);
+		}
+	}
+
 	/**
 	 * Subclasses should use this method to display a value
 	 */
