@@ -161,8 +161,7 @@ public class ScenarioStorageUtil {
 	 * @return
 	 */
 	public static ScenarioInstance loadInstanceFromFile(final String filePath) {
-		final URI manifestURI = URI.createURI("archive:" + URI.createFileURI(filePath) + "!/MANIFEST.xmi");
-		return loadInstanceFromURI(manifestURI, false);
+		return loadInstanceFromURI(URI.createFileURI(filePath) , false);
 	}
 
 	/**
