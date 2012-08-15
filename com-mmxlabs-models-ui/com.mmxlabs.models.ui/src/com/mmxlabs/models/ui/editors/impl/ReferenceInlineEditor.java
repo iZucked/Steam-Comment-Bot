@@ -42,12 +42,12 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	private final ArrayList<String> nameList = new ArrayList<String>();
 	private final ArrayList<EObject> valueList = new ArrayList<EObject>();
 
-	public ReferenceInlineEditor(EStructuralFeature feature) {
+	public ReferenceInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, MMXRootObject context, EObject input, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
 		if (valueProvider == null) {
 			log.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
@@ -65,19 +65,19 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 				final SelectionListener sl = this;
 				combo.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetDisposed(DisposeEvent e) {
+					public void widgetDisposed(final DisposeEvent e) {
 						combo.removeSelectionListener(sl);
 					}
 				});
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				doSetValue(valueList.get(nameList.indexOf(combo.getText())), false);
 			}
 
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 
 			}
 		});
@@ -89,8 +89,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	protected void updateControl() {
 		if (combo.isDisposed())
 			return;
-		final List<Pair<String, EObject>> values = valueProvider
-				.getAllowedValues(input, feature);
+		final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(input, feature);
 		// update combo contents
 		combo.removeAll();
 		nameList.clear();
@@ -120,16 +119,15 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	protected boolean updateOnChangeToFeature(Object changedFeature) {
+	protected boolean updateOnChangeToFeature(final Object changedFeature) {
 		return valueProvider.updateOnChangeToFeature(changedFeature);
 	}
-	
 
 	@Override
 	public void setEnabled(final boolean enabled) {
 
 		combo.setEnabled(enabled);
-		
+
 		super.setEnabled(enabled);
 	}
 }
