@@ -103,8 +103,10 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range) {
 		if (value instanceof Slot) {
 			slot = (Slot) value;
+			this.setVisible(true);
 		} else {
 			slot = null;
+			this.setVisible(false);
 		}
 		for (final IInlineEditor editor : editors) {
 			editor.setCommandHandler(commandHandler);
