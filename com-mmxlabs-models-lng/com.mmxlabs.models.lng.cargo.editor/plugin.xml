@@ -225,6 +225,18 @@
           label="FOB Sale Slot"
           targetEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.spotLoadSlotFactory"
+          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.SpotLoadSlotFactory"
+          label="Spot Load Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.SpotLoadSlot">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.spotDischargeSlotFactory"
+          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.SpotDischargeSlotFactory"
+          label="Spot Discharge Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
