@@ -43,6 +43,8 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	 * Contains pairs whose first element is left terminal colour and second is right terminal colour, for each element in {@link #wiring}
 	 */
 	private final List<Pair<Color, Color>> terminalColours = new ArrayList<Pair<Color, Color>>();
+	private final List<Boolean> leftTerminalValid = new ArrayList<Boolean>();
+	private final List<Boolean> rightTerminalValid = new ArrayList<Boolean>();
 	/**
 	 * Contains the colour for each wire; the ith colour applies to the wire from the ith left hand terminal
 	 */
@@ -113,6 +115,21 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	public void setWireColors(final List<Color> colours) {
 		wireColours.clear();
 		wireColours.addAll(colours);
+	}
+
+	public void setLeftTerminalValid(final int index, final boolean valid) {
+		leftTerminalValid.set(index, valid);
+	}
+
+	public void setRightTerminalValid(final int index, final boolean valid) {
+		rightTerminalValid.set(index, valid);
+	}
+
+	public void setTerminalsValid(final List<Boolean> leftTerminalsValid, final List<Boolean> rightTerminalsValid) {
+		this.leftTerminalValid.clear();
+		this.leftTerminalValid.addAll(leftTerminalsValid);
+		this.rightTerminalValid.clear();
+		this.rightTerminalValid.addAll(rightTerminalsValid);
 	}
 
 	public void setWiring(final List<Integer> wiring) {
@@ -224,16 +241,18 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 			// draw terminal blobs
 			// final int midpoint = vMidPoints.get(i);
-			graphics.setBackground(terminalColours.get(i).getFirst());
+			if (i >= wiring.size() - 2 || leftTerminalValid.get(i)) {
+				graphics.setBackground(terminalColours.get(i).getFirst());
 
-			graphics.fillOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
-			graphics.drawOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
+				graphics.fillOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
+				graphics.drawOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
+			}
+			if (i >= wiring.size() - 2 || rightTerminalValid.get(i)) {
+				graphics.setBackground(terminalColours.get(i).getSecond());
 
-			graphics.setBackground(terminalColours.get(i).getSecond());
-
-			graphics.fillOval(ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
-			graphics.drawOval(ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
-
+				graphics.fillOval(ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
+				graphics.drawOval(ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
+			}
 			i++;
 
 		}
@@ -313,7 +332,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 				terminal++;
 			}
 
-			final boolean draggedToNowhere = terminal >= positions.size();
+			final boolean draggedToNowhere = terminal >= positions.size() || (terminal < wiring.size() - 2 && !(draggingFromLeft ? rightTerminalValid.get(terminal) : leftTerminalValid.get(terminal)));
 
 			final Rectangle ca = getClientArea();
 

@@ -94,7 +94,6 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  */
 public class CargoWiringComposite extends Composite {
 	final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-	private final MenuManager menuManager;
 
 	private IScenarioEditingLocation location;
 
@@ -117,6 +116,9 @@ public class CargoWiringComposite extends Composite {
 	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
 	private final ArrayList<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
 	private final ArrayList<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
+
+	private final ArrayList<Boolean> leftTerminalsValid = new ArrayList<Boolean>();
+	private final ArrayList<Boolean> rightTerminalsValid = new ArrayList<Boolean>();
 	/**
 	 * The value of the ith element of wiring is the index of the other end of the wire; -1 indicates no wire is present.
 	 * 
@@ -149,31 +151,9 @@ public class CargoWiringComposite extends Composite {
 		super(parent, style);
 		createLayout();
 		this.site = site;
-		// setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
-		menuManager = new MenuManager("#PopupMenu");
-		site.registerContextMenu(menuManager, site.getSelectionProvider());
-
-		menuManager.setRemoveAllWhenShown(true);
-
-		menuManager.addMenuListener(menuListener);
-
-		final Menu m = menuManager.createContextMenu(this);
-		this.setMenu(m);
 	}
-
-	private final IMenuListener menuListener = new IMenuListener() {
-
-		@Override
-		public void menuAboutToShow(final IMenuManager manager) {
-			// TODO Auto-generated method stub
-
-			final Action a = new Action("Action!") {
-
-			};
-			manager.add(a);
-		}
-	};
 
 	/**
 	 * Set the cargoes, and reset the wiring to match these cargoes.
@@ -191,16 +171,24 @@ public class CargoWiringComposite extends Composite {
 		this.cargoes.clear();
 		this.newCargoes.clear();
 		this.cargoes.addAll(cargoes);
+		this.leftTerminalsValid.clear();
+		this.rightTerminalsValid.clear();
 		for (int i = 0; i < cargoes.size(); i++) {
 			wiring.add(i); // set default wiring
 			loadSlots.add(cargoes.get(i).getLoadSlot());
 			dischargeSlots.add(cargoes.get(i).getDischargeSlot());
+			leftTerminalsValid.add(true);
+			rightTerminalsValid.add(true);
 		}
 
 		numberOfRows = cargoes.size();
 
 		wiring.add(-1); // bogus element for the add terminals.
 		wiring.add(-1); // bogus element for the add terminals.
+		leftTerminalsValid.add(true);
+		rightTerminalsValid.add(true);
+		leftTerminalsValid.add(true);
+		rightTerminalsValid.add(true);
 
 		createChildren();
 	}
@@ -261,6 +249,8 @@ public class CargoWiringComposite extends Composite {
 	private void createChildren() {
 		lhsComposites.clear();
 		rhsComposites.clear();
+		leftTerminalsValid.clear();
+		rightTerminalsValid.clear();
 		if (wiringDiagram != null) {
 			wiringDiagram.dispose();
 			wiringDiagram = null;
@@ -281,6 +271,7 @@ public class CargoWiringComposite extends Composite {
 			loadSide.display(location, location.getRootObject(), loadSlots.get(index), Collections.<EObject> emptyList());
 
 			loadSide.addMenuListener(createLoadSlotMenuListener(loadSlots.get(index)));
+			leftTerminalsValid.add(loadSlots.get(index) != null);
 
 			if (wiringDiagram == null) {
 				wiringDiagram = new WiringDiagram(this, getStyle() & ~SWT.BORDER) {
@@ -335,6 +326,7 @@ public class CargoWiringComposite extends Composite {
 			dischargeSide.display(location, location.getRootObject(), dischargeSlots.get(index), Collections.<EObject> emptyList());
 			final String id = "ID";// newNames.get(index);
 
+			rightTerminalsValid.add(dischargeSlots.get(index) != null);
 			dischargeSide.addMenuListener(createDischargeSlotMenuListener(dischargeSlots.get(index)));
 
 			lhsComposites.add(loadSide);
@@ -387,6 +379,7 @@ public class CargoWiringComposite extends Composite {
 		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		wiringDiagram.setWiring(wiring);
+		wiringDiagram.setTerminalsValid(leftTerminalsValid, rightTerminalsValid);
 		final ArrayList<Pair<Color, Color>> terminalColors = new ArrayList<Pair<Color, Color>>();
 		final ArrayList<Color> wireColors = new ArrayList<Color>();
 		final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
@@ -488,7 +481,6 @@ public class CargoWiringComposite extends Composite {
 	}
 
 	private void ensureCapacity(final int size, final List<?>... lists) {
-		// TODO Auto-generated method stub
 		for (final List<? extends Object> l : lists) {
 			if (l.size() < size) {
 				l.add(size - 1, null);
@@ -603,19 +595,19 @@ public class CargoWiringComposite extends Composite {
 			}
 		}
 
-		if (newWiring.get(topIndex) != -1 || newWiring.indexOf(topIndex) != -1) {
-			// cmd.append(addNewCargo(new ArrayList<Integer>(newWiring), false));
-		} else if (newWiring.get(bottomIndex) != -1 || newWiring.indexOf(bottomIndex) != -1) {
-
-			if (newWiring.get(bottomIndex) != -1) {
-				newWiring.set(newWiring.size() - 2, newWiring.get(bottomIndex));
-				newWiring.set(newWiring.size() - 1, -1);
-			} else {
-				newWiring.set(newWiring.indexOf(bottomIndex), newWiring.size() - 2);
-
+		if (newWiring.get(topIndex) != -1 ){
+			LoadSlot loadSlot = createNewLoad(cargoModel, newWiring.get(topIndex) == -1);
+			ensureCapacity(topIndex + 1, cargoes, loadSlots, dischargeSlots);
+			loadSlots.set(topIndex, loadSlot);
+			{
+				// create a cargo
+				Cargo c = createNewCargo(cargoModel);
+				cargoes.set(topIndex, c);
+				currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(topIndex), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlots.get(topIndex)));
+				currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(topIndex), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlots.get(newWiring.get(topIndex))));
 			}
-		} else {
-			// TODO: Handle new Load Slot
+			addNewElement = true;
+			
 		}
 
 		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
@@ -862,14 +854,13 @@ public class CargoWiringComposite extends Composite {
 			cargoes.set(loadIdx, cargo);
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(loadIdx), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(loadIdx), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
-			
+
 			final int current = wiring.indexOf(dischargeIdx);
 			if (current != -1) {
 				wiring.set(current, -1);
 			}
 			wiring.set(loadIdx, dischargeIdx);
 
-			
 		}
 
 		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
@@ -1004,7 +995,6 @@ public class CargoWiringComposite extends Composite {
 			sb.append(slot.getContract().getName());
 			sb.append(" - ");
 		}
-		;
 
 		if (includePort) {
 			sb.append(slot.getPort().getName());
