@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.validation;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -38,9 +39,18 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 
 		private final DateFormat df = DateFormat.getDateInstance();
 
+		/**
+		 * Returns a modifiable {@link Collection} of {@link Slot} objects which overlap the given {@link Slot}.
+		 * 
+		 * @param slot
+		 * @return
+		 */
 		public Collection<Slot> slotOverlaps(final Slot slot) {
 
 			final Date windowStart = slot.getWindowStart();
+			if (windowStart == null) {
+				return Collections.emptySet();
+			}
 			final Calendar cal = Calendar.getInstance();
 			cal.setTime(windowStart);
 			int windowSize = slot.getWindowSize();
@@ -49,15 +59,14 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			do {
 				final String dateKey = dateToString(cal.getTime());
 				final Collection<Slot> slots = getSlots(slot, dateKey);
-				slots.add(slot);
-				final boolean overlaps = slots.contains(slot) ? slots.size() > 1 : slots.size() > 0;
-				if (overlaps) {
-					overlappingSlots.addAll(slots);
-					overlappingSlots.remove(slot);
-				}
+				// final boolean overlaps = slots.contains(slot) ? slots.size() > 1 : slots.size() > 0;
+				// if (overlaps) {
+				overlappingSlots.addAll(slots);
+				// overlappingSlots.remove(slot);
+				// }
 				windowSize -= 24;
 				cal.add(Calendar.DAY_OF_MONTH, 1);
-			} while (windowSize > 24);
+			} while (windowSize > 0);
 
 			return overlappingSlots;
 		}
@@ -65,6 +74,9 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 		public void addSlot(final Slot slot) {
 
 			final Date windowStart = slot.getWindowStart();
+			if (windowStart == null) {
+				return;
+			}
 			final Calendar cal = Calendar.getInstance();
 			cal.setTime(windowStart);
 			int windowSize = slot.getWindowSize();
@@ -74,7 +86,7 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 				slots.add(slot);
 				windowSize -= 24;
 				cal.add(Calendar.DAY_OF_MONTH, 1);
-			} while (windowSize > 24);
+			} while (windowSize > 0);
 		}
 
 		private Collection<Slot> getSlots(final Slot slot, final String dateKey) {
@@ -107,7 +119,8 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 	public IStatus validate(final IValidationContext ctx) {
 		EObject object = ctx.getTarget();
 		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
-		EObject original = extraValidationContext.getReplacement(object);
+		EObject original = extraValidationContext.getOriginal(object);
+		EObject replacement = extraValidationContext.getReplacement(object);
 
 		if (object instanceof Slot) {
 
@@ -123,7 +136,10 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 			}
 
 			final Collection<Slot> slotOverlaps = psc.slotOverlaps(slot);
+			// Remove "this" slot to avoid conflicts
 			slotOverlaps.remove(original);
+			slotOverlaps.remove(slot);
+			slotOverlaps.remove(replacement);
 			assert slotOverlaps.contains(slot) == false;
 			if (slotOverlaps.isEmpty()) {
 				return ctx.createSuccessStatus();
