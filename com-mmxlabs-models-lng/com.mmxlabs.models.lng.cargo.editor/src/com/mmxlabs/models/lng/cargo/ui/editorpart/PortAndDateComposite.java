@@ -29,7 +29,7 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
 	private ICommandHandler commandHandler;
 
-	public PortAndDateComposite(final Composite parent, final int style, final Slot slot) {
+	public PortAndDateComposite(final Composite parent, final int style) {
 		super(parent, style);
 		setLayout(new GridLayout(4, false));
 
@@ -40,14 +40,23 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	}
 
 	public Date getDate() {
+		if (slot == null) {
+			return null;
+		}
 		return slot.getWindowStart();
 	}
 
 	public Port getPort() {
+		if (slot == null) {
+			return null;
+		}
 		return slot.getPort();
 	}
 
 	public Contract getContract() {
+		if (slot == null) {
+			return null;
+		}
 		return slot.getContract();
 	}
 
