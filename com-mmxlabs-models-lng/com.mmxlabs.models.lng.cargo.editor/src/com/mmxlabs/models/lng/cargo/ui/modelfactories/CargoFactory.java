@@ -20,38 +20,38 @@ import com.mmxlabs.models.ui.modelfactories.DefaultModelFactory;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class CargoFactory extends DefaultModelFactory {
 	private final DefaultModelFactory slotFactory = new DefaultModelFactory();
+
 	public CargoFactory() {
 		super();
 	}
+
 	@Override
-	public Collection<ISetting> createInstance(MMXRootObject rootObject, EObject container, EReference containment, final ISelection selection) {
-		final Collection<ISetting> loadSetting = slotFactory.createInstance(rootObject, container, 
-				CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), selection);
-		final Collection<ISetting> dischargeSetting = slotFactory.createInstance(rootObject, container, 
-				CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), selection);
+	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final ISelection selection) {
+		final Collection<ISetting> loadSetting = slotFactory.createInstance(rootObject, container, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), selection);
+		final Collection<ISetting> dischargeSetting = slotFactory.createInstance(rootObject, container, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), selection);
 		final Collection<ISetting> superSetting = super.createInstance(rootObject, container, containment, selection);
-		
+
 		LoadSlot load = null;
 		DischargeSlot discharge = null;
-		for (final ISetting setting : loadSetting) 
+		for (final ISetting setting : loadSetting)
 			if (setting.getInstance() instanceof LoadSlot)
 				load = (LoadSlot) setting.getInstance();
-		
-		for (final ISetting setting : dischargeSetting) 
+
+		for (final ISetting setting : dischargeSetting)
 			if (setting.getInstance() instanceof DischargeSlot)
 				discharge = (DischargeSlot) setting.getInstance();
-		
+
 		for (final ISetting setting : superSetting) {
 			if (setting.getInstance() instanceof Cargo) {
 				((Cargo) setting.getInstance()).setLoadSlot(load);
 				((Cargo) setting.getInstance()).setDischargeSlot(discharge);
 			}
 		}
-		
+
 		final ArrayList<ISetting> result = new ArrayList<ISetting>();
 		result.addAll(superSetting);
 		result.addAll(loadSetting);
