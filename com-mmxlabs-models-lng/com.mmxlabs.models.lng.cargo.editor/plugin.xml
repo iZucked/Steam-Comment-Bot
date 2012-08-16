@@ -201,6 +201,30 @@
           outputEClass="com.mmxlabs.models.lng.cargo.CargoGroup"
           targetEClass="com.mmxlabs.models.lng.cargo.Cargo">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.loadSlotFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Load Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.dischargeSlotFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Discharge Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.desPurchaseSlotFactory"
+          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.DESPurchaseFactory"
+          label="DES Purchase Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.fobSaleSlotFactory"
+          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.FOBSaleFactory"
+          label="FOB Sale Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
