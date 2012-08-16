@@ -134,11 +134,6 @@ public class CargoWiringComposite extends Composite {
 	private Label lhsFOBDESComposite;
 	private Label rhsFOBDESComposite;
 
-	// final List<String> newNames = new ArrayList<String>();
-	// final List<String> newTypes = new ArrayList<String>();
-
-	final List<Cargo> newCargoes = new LinkedList<Cargo>();
-
 	private int numberOfRows = 0;
 
 	private final IWorkbenchPartSite site;
@@ -169,7 +164,6 @@ public class CargoWiringComposite extends Composite {
 		this.loadSlots.clear();
 		this.dischargeSlots.clear();
 		this.cargoes.clear();
-		this.newCargoes.clear();
 		this.cargoes.addAll(cargoes);
 		this.leftTerminalsValid.clear();
 		this.rightTerminalsValid.clear();
@@ -257,14 +251,10 @@ public class CargoWiringComposite extends Composite {
 		}
 		int index = 0;
 		for (int ii = 0; ii < numberOfRows; ++ii) {
-			final Text idLabel = new Text(this, SWT.RIGHT | SWT.BORDER);
 
-			idLabel.addModifyListener(new ModifyListener() {
-				@Override
-				public void modifyText(final ModifyEvent e) {
-					// newNames.set(finalIndex, idLabel.getText());
-				}
-			});
+			NamedObjectNameComposite idComposite = new NamedObjectNameComposite(this, SWT.BORDER);
+			idComposite.setCommandHandler(commandHandler);
+			idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
 
 			final PortAndDateComposite loadSide = new PortAndDateComposite(this, SWT.BORDER, site);
 			loadSide.setCommandHandler(commandHandler);
@@ -331,7 +321,6 @@ public class CargoWiringComposite extends Composite {
 
 			lhsComposites.add(loadSide);
 			rhsComposites.add(dischargeSide);
-			idLabel.setText(id);
 
 			loadSide.addListener(SWT.Selection, selectionListener);
 			dischargeSide.addListener(SWT.Selection, selectionListener);
@@ -339,7 +328,7 @@ public class CargoWiringComposite extends Composite {
 			loadSide.addListener(SWT.DefaultSelection, selectionListener);
 			dischargeSide.addListener(SWT.DefaultSelection, selectionListener);
 
-			idLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+			idComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 			loadSide.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
 			dischargeSide.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
 
@@ -468,13 +457,8 @@ public class CargoWiringComposite extends Composite {
 
 	private Cargo createNewCargo(final CargoModel cargoModel) {
 		// Create a cargo
-		final String name = "New cargo" + (newCargoes.size() + 1);
-
 		final Cargo newCargo = createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
-		newCargo.setName(name);
 		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-
-		newCargoes.add(newCargo);
 
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
 		return newCargo;
@@ -492,10 +476,9 @@ public class CargoWiringComposite extends Composite {
 
 		final SpotLoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getSpotLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 		newLoad.setDESPurchase(isDESPurchase);
-		final String name = "New cargo " + (newCargoes.size() + 1);
-		newLoad.setName("load-" + name);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newLoad.setMarket(market);
+		newLoad.setContract((Contract) market.getContract());
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 		return newLoad;
@@ -505,8 +488,6 @@ public class CargoWiringComposite extends Composite {
 
 		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 		newLoad.setDESPurchase(isDESPurchase);
-		final String name = "New cargo " + (newCargoes.size() + 1);
-		newLoad.setName("load-" + name);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
@@ -517,8 +498,6 @@ public class CargoWiringComposite extends Composite {
 
 		final DischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
 		newDischarge.setFOBSale(isFOBSale);
-		final String name = "New cargo " + (newCargoes.size() + 1);
-		newDischarge.setName("discharge-" + name);
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
@@ -528,10 +507,9 @@ public class CargoWiringComposite extends Composite {
 
 		final SpotDischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getSpotDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
 		newDischarge.setFOBSale(isFOBSale);
-		final String name = "New cargo " + (newCargoes.size() + 1);
-		newDischarge.setName("discharge-" + name);
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newDischarge.setMarket(market);
+		newDischarge.setContract((Contract) market.getContract());
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
 	}
@@ -561,6 +539,7 @@ public class CargoWiringComposite extends Composite {
 				} else {
 					// create a new cargo
 					c = createNewCargo(cargoModel);
+					c.setName(loadSlots.get(i).getName());
 					ensureCapacity(i + 1, cargoes, loadSlots, dischargeSlots);
 					cargoes.set(i, c);
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(i), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlots.get(i)));
@@ -584,6 +563,7 @@ public class CargoWiringComposite extends Composite {
 				if (c == null) {
 					// create a cargo
 					c = createNewCargo(cargoModel);
+					c.setName(loadSlots.get(i).getName());
 					ensureCapacity(i + 1, cargoes, loadSlots, dischargeSlots);
 					cargoes.set(i, c);
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(i), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlots.get(i)));
@@ -595,19 +575,21 @@ public class CargoWiringComposite extends Composite {
 			}
 		}
 
-		if (newWiring.get(topIndex) != -1 ){
+		if (newWiring.get(topIndex) != -1) {
 			LoadSlot loadSlot = createNewLoad(cargoModel, newWiring.get(topIndex) == -1);
 			ensureCapacity(topIndex + 1, cargoes, loadSlots, dischargeSlots);
 			loadSlots.set(topIndex, loadSlot);
 			{
 				// create a cargo
 				Cargo c = createNewCargo(cargoModel);
+				c.setName(loadSlots.get(topIndex).getName());
 				cargoes.set(topIndex, c);
 				currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(topIndex), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlots.get(topIndex)));
-				currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(topIndex), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlots.get(newWiring.get(topIndex))));
+				currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(topIndex), CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
+						dischargeSlots.get(newWiring.get(topIndex))));
 			}
 			addNewElement = true;
-			
+
 		}
 
 		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
@@ -738,10 +720,39 @@ public class CargoWiringComposite extends Composite {
 				loadSlot = (LoadSlot) source;
 				dischargeSlot = createNewSpotDischarge(cargoModel, isSpecial, market);
 			} else {
-				SpotLoadSlot spotLoadSlot = createNewSpotLoad(cargoModel, isSpecial, market);
-				spotLoadSlot.setMarket(market);
-				spotLoadSlot.setContract((Contract) market.getContract());
-				loadSlot = spotLoadSlot;
+				loadSlot = createNewSpotLoad(cargoModel, isSpecial, market);
+				dischargeSlot = (DischargeSlot) source;
+			}
+			runWiringUpdate(loadSlot, dischargeSlot);
+
+		}
+	}
+
+	class CreateSlotAction extends Action {
+
+		private final Slot source;
+		private final boolean sourceIsLoad;
+		private final boolean isSpecial;
+
+		public CreateSlotAction(final String name, final Slot source, final boolean sourceIsLoad, boolean isSpecial) {
+			super(name);
+			this.source = source;
+			this.sourceIsLoad = sourceIsLoad;
+			this.isSpecial = isSpecial;
+		}
+
+		@Override
+		public void run() {
+			final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
+
+			currentWiringCommand = new CompoundCommand("Rewire Cargoes");
+			LoadSlot loadSlot;
+			DischargeSlot dischargeSlot;
+			if (sourceIsLoad) {
+				loadSlot = (LoadSlot) source;
+				dischargeSlot = createNewDischarge(cargoModel, isSpecial);
+			} else {
+				loadSlot = createNewLoad(cargoModel, isSpecial);
 				dischargeSlot = (DischargeSlot) source;
 			}
 			runWiringUpdate(loadSlot, dischargeSlot);
@@ -849,6 +860,7 @@ public class CargoWiringComposite extends Composite {
 			wiring.set(loadIdx, dischargeIdx);
 		} else {
 			cargo = createNewCargo(cargoModel);
+			cargo.setName(loadSlot.getName());
 			ensureCapacity(loadIdx + 1, dischargeSlots, cargoes, loadSlots);
 
 			cargoes.set(loadIdx, cargo);
