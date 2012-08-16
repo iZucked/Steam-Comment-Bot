@@ -6,8 +6,12 @@ import java.util.LinkedList;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.IWorkbenchPartSite;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -28,8 +32,9 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	private Slot slot;
 	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
 	private ICommandHandler commandHandler;
+	private MenuManager menuManager;
 
-	public PortAndDateComposite(final Composite parent, final int style) {
+	public PortAndDateComposite(final Composite parent, final int style, IWorkbenchPartSite site) {
 		super(parent, style);
 		setLayout(new GridLayout(4, false));
 
@@ -37,6 +42,28 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
 		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__WINDOW_START)));
 
+		// Create a context menu for this control. Menu items will be populated using the IMenuListeners add using #addMenuListener
+		menuManager = new MenuManager("#PopupMenu");
+		site.registerContextMenu(menuManager, site.getSelectionProvider());
+		menuManager.setRemoveAllWhenShown(true);
+		Menu m = menuManager.createContextMenu(this);
+		this.setMenu(m);
+	}
+
+	@Override
+	public void dispose() {
+
+		slot = null;
+
+		super.dispose();
+	}
+
+	public void addMenuListener(IMenuListener l) {
+		menuManager.addMenuListener(l);
+	}
+
+	public void removeMenuListener(IMenuListener l) {
+		menuManager.removeMenuListener(l);
 	}
 
 	public Date getDate() {
@@ -102,4 +129,5 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 			editor.processValidation(status);
 		}
 	}
+
 }
