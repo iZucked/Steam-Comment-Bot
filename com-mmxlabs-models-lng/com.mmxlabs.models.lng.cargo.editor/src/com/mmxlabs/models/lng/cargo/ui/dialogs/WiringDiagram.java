@@ -67,7 +67,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	 * @param parent
 	 * @param style
 	 */
-	public WiringDiagram(final Composite parent, int style) {
+	public WiringDiagram(final Composite parent, final int style) {
 		super(parent, style | SWT.DOUBLE_BUFFERED);
 		addPaintListener(this);
 		addMouseListener(this);
@@ -128,7 +128,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		return terminalSize;
 	}
 
-	public void setTerminalSize(int terminalSize) {
+	public void setTerminalSize(final int terminalSize) {
 		this.terminalSize = terminalSize;
 	}
 
@@ -136,7 +136,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		return pathWidth;
 	}
 
-	public void setPathWidth(int pathWidth) {
+	public void setPathWidth(final int pathWidth) {
 		this.pathWidth = pathWidth;
 	}
 
@@ -162,7 +162,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 		graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 
-		Rectangle ca = getClientArea();
+		final Rectangle ca = getClientArea();
 
 		graphics.fillRectangle(0, 0, ca.width, ca.height);
 
@@ -173,14 +173,16 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		for (int i = 0; i < wiring.size(); i++) {
 			final int destination = wiring.get(i);
 
-			if (destination < 0)
+			if (destination < 0) {
 				continue; // no wire
+			}
 
 			if (dragging) {
-				if (draggingFromLeft && draggingFrom == i)
+				if (draggingFromLeft && draggingFrom == i) {
 					continue;
-				else if (!draggingFromLeft && destination == draggingFrom)
+				} else if (!draggingFromLeft && destination == draggingFrom) {
 					continue;
+				}
 			}
 
 			final float startMid = terminalPositions.get(i);
@@ -254,13 +256,15 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		int terminal = 0;
 		final List<Float> positions = getTerminalPositions();
 		for (final float y : positions) {
-			if (e.y >= (y - terminalSize / 2) && e.y <= (y + terminalSize / 2))
+			if (e.y >= (y - terminalSize / 2) && e.y <= (y + terminalSize / 2)) {
 				break;
+			}
 			terminal++;
 		}
 
-		if (terminal >= positions.size())
+		if (terminal >= positions.size()) {
 			return;
+		}
 
 		// now find column
 		if ((e.x >= terminalSize && e.x <= 2 * terminalSize)) {
@@ -293,6 +297,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 	@Override
 	public void mouseUp(final MouseEvent e) {
+
 		// if we are dragging, awesome, we have finished.
 		if (dragging) {
 			dragging = false;
@@ -302,12 +307,13 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 			int terminal = 0;
 
 			for (final float y : positions) {
-				if (e.y >= (y - terminalSize / 2) && e.y <= (y + terminalSize / 2))
+				if (e.y >= (y - terminalSize / 2) && e.y <= (y + terminalSize / 2)) {
 					break;
+				}
 				terminal++;
 			}
 
-			boolean draggedToNowhere = terminal >= positions.size();
+			final boolean draggedToNowhere = terminal >= positions.size();
 
 			final Rectangle ca = getClientArea();
 
@@ -318,22 +324,26 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 				// arrived in left column from right
 				final int ix = wiring.indexOf(draggingFrom);
 				if (control) {
-					if (ix >= 0)
+					if (ix >= 0) {
 						wiring.set(ix, wiring.get(terminal));
+					}
 				} else {
-					if (ix >= 0)
+					if (ix >= 0) {
 						wiring.set(ix, -1);
+					}
 				}
 				wiring.set(terminal, draggingFrom);
 			} else if (!draggedToNowhere && draggingFromLeft && (e.x >= ca.width - terminalSize * 2 && e.x <= ca.width - terminalSize)) {
 				// arrived in right column
 				final int ix = wiring.indexOf(terminal);
 				if (control) {
-					if (ix >= 0)
+					if (ix >= 0) {
 						wiring.set(ix, wiring.get(draggingFrom));
+					}
 				} else {
-					if (ix >= 0)
+					if (ix >= 0) {
 						wiring.set(ix, -1);
+					}
 				}
 				wiring.set(draggingFrom, terminal);
 			} else {
@@ -350,8 +360,9 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 			wiringChanged(wiring);
 		}
 
-		if (!isDisposed())
+		if (!isDisposed()) {
 			redraw();
+		}
 	}
 
 	/**
