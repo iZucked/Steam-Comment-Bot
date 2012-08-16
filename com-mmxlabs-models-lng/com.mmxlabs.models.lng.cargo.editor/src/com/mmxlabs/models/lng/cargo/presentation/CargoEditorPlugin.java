@@ -14,7 +14,6 @@ import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.CargoTypeUpdatingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.DateUpdatingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.PortUpdatingCommandProvider;
-import com.mmxlabs.models.lng.cargo.ui.commands.SlotDeletingCommandProvider;
 import com.mmxlabs.models.lng.cargo.ui.commands.SlotNameUpdatingCommandProvider;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
@@ -89,7 +88,6 @@ public final class CargoEditorPlugin extends EMFPlugin {
 		private ServiceRegistration<IModelCommandProvider> dateCorrectorRegistration;
 		private ServiceRegistration<IModelCommandProvider> portCorrectorRegistration;
 		private ServiceRegistration<IModelCommandProvider> slotNameCorrectorRegistration;
-		private ServiceRegistration<IModelCommandProvider> slotDeletingRegistration;
 		private ServiceRegistration<IModelCommandProvider> cargoTypeUpdaterRegistration;
 
 		/**
@@ -113,7 +111,6 @@ public final class CargoEditorPlugin extends EMFPlugin {
 			dateCorrectorRegistration = context.registerService(IModelCommandProvider.class, new DateUpdatingCommandProvider(), null);
 			portCorrectorRegistration = context.registerService(IModelCommandProvider.class, new PortUpdatingCommandProvider(), null);
 			slotNameCorrectorRegistration = context.registerService(IModelCommandProvider.class, new SlotNameUpdatingCommandProvider(), null);
-			slotDeletingRegistration = context.registerService(IModelCommandProvider.class, new SlotDeletingCommandProvider(), null);
 			cargoTypeUpdaterRegistration = context.registerService(IModelCommandProvider.class, new CargoTypeUpdatingCommandProvider(), null);
 		}
 
@@ -125,7 +122,6 @@ public final class CargoEditorPlugin extends EMFPlugin {
 			dateCorrectorRegistration.unregister();
 			portCorrectorRegistration.unregister();
 			slotNameCorrectorRegistration.unregister();
-			slotDeletingRegistration.unregister();
 			cargoTypeUpdaterRegistration.unregister();
 			
 			super.stop(context);
