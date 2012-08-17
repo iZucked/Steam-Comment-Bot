@@ -116,10 +116,12 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		gd.verticalIndent = 0;
 		switch(column){
 			case 0:
-				gd.widthHint = 120; // contract
+				gd.widthHint = 120; // ID
 			case 1:
-				gd.widthHint = 120; // port
+				gd.widthHint = 120; // contract
 			case 2:
+				gd.widthHint = 120; // port
+			case 3:
 				gd.widthHint = 120; // date
 		}
 		control.setLayoutData(gd);
