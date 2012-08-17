@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
@@ -241,13 +242,13 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 			// draw terminal blobs
 			// final int midpoint = vMidPoints.get(i);
-			if (i >= wiring.size() - 2 || leftTerminalValid.get(i)) {
+			if ( leftTerminalValid.get(i)) {
 				graphics.setBackground(terminalColours.get(i).getFirst());
 
 				graphics.fillOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
 				graphics.drawOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
 			}
-			if (i >= wiring.size() - 2 || rightTerminalValid.get(i)) {
+			if (rightTerminalValid.get(i)) {
 				graphics.setBackground(terminalColours.get(i).getSecond());
 
 				graphics.fillOval(ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
@@ -316,7 +317,31 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 	@Override
 	public void mouseUp(final MouseEvent e) {
+		
+		
+		
+		
+		if (e.button == 3) {
+			final List<Float> positions = getTerminalPositions();
 
+			int terminal = 0;
+
+			for (final float y : positions) {
+				if (e.y >= (y - terminalSize / 2) && e.y <= (y + terminalSize / 2)) {
+					break;
+				}
+				terminal++;
+			}
+
+			final boolean draggedToNowhere = terminal >= positions.size() ||  !(draggingFromLeft ? rightTerminalValid.get(terminal) : leftTerminalValid.get(terminal));
+
+			if (!draggedToNowhere) {
+				openContextMenu(draggingFromLeft, terminal, e.x, e.y);
+			}
+			return;
+			
+		}
+		
 		// if we are dragging, awesome, we have finished.
 		if (dragging) {
 			dragging = false;
@@ -332,7 +357,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 				terminal++;
 			}
 
-			final boolean draggedToNowhere = terminal >= positions.size() || (terminal < wiring.size() - 2 && !(draggingFromLeft ? rightTerminalValid.get(terminal) : leftTerminalValid.get(terminal)));
+			final boolean draggedToNowhere = terminal >= positions.size() ||!(draggingFromLeft ? rightTerminalValid.get(terminal) : leftTerminalValid.get(terminal));
 
 			final Rectangle ca = getClientArea();
 
@@ -395,4 +420,6 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	 * called to tell subclasses wiring has changed. Probably should use listener pattern really. Called just before a redraw, so setting colours will take effect immediately;
 	 */
 	protected abstract void wiringChanged(final List<Integer> newWiring);
+	
+	protected void openContextMenu(boolean leftSide, int terminal, int mouseX, int mouseY){}
 }
