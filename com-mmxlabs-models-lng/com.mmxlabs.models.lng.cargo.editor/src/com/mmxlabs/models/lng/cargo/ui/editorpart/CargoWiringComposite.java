@@ -399,7 +399,6 @@ public class CargoWiringComposite extends Composite {
 				gd3.widthHint = 90;
 				wiringDiagram.setLayoutData(gd3);
 //				wiringDiagram.setBackground(WHITE);
-
 			}
 
 			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, false);
