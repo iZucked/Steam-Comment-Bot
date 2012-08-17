@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.presentation.composites.SlotInlineEditorWrapper;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
@@ -41,7 +42,7 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	public PortAndDateComposite(final Composite parent, final int style, IWorkbenchPartSite site, boolean isLoad) {
 		super(parent, style);
 
-		GridLayout gridLayout = new GridLayout(3, false);
+		GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.marginHeight = 0;
 //		gridLayout.marginBottom = 0;
 //		gridLayout.marginTop = 0;
@@ -55,6 +56,7 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		gridLayout.marginWidth = 0;
 		setLayout(gridLayout);
 		
+		addInlineEditor(ComponentHelperUtils.createDefaultEditor(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.Literals.NAMED_OBJECT__NAME));
 		addInlineEditor(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__CONTRACT));
 		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
 		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__WINDOW_START)));
