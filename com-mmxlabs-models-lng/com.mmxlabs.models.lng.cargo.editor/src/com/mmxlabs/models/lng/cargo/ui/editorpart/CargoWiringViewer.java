@@ -49,14 +49,14 @@ public class CargoWiringViewer extends Composite {
 				scrolledComposite.setMinSize(parent.computeSize(r.width, SWT.DEFAULT));
 			}
 		});
-
-		final Composite buttonsComposite = new Composite(this, SWT.NONE);
-		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		buttonsComposite.setBounds(0, 0, 64, 64);
-		buttonsComposite.setLayout(new GridLayout(3, false));
-
-		((GridLayout) buttonsComposite.getLayout()).marginWidth = 0;
-
+//
+//		final Composite buttonsComposite = new Composite(this, SWT.NONE);
+//		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+//		buttonsComposite.setBounds(0, 0, 64, 64);
+//		buttonsComposite.setLayout(new GridLayout(3, false));
+//
+//		((GridLayout) buttonsComposite.getLayout()).marginWidth = 0;
+//
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 
 		wiringComposite.setCargoes(cargoModel.getCargoes());
