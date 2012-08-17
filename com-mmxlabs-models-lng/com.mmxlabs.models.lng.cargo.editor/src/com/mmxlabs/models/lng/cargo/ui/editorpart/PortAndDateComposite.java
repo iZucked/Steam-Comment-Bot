@@ -161,6 +161,11 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
+		
+		if (isDisposed()) {
+			return;
+		}
+		
 		for (final IInlineEditor editor : editors) {
 			editor.processValidation(status);
 		}
