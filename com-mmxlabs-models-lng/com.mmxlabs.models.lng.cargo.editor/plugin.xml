@@ -214,18 +214,6 @@
           targetEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.cargo.editor.desPurchaseSlotFactory"
-          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.DESPurchaseFactory"
-          label="DES Purchase Slot"
-          targetEClass="com.mmxlabs.models.lng.cargo.LoadSlot">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.cargo.editor.fobSaleSlotFactory"
-          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.FOBSaleFactory"
-          label="FOB Sale Slot"
-          targetEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
-    </factory>
-    <factory
           ID="com.mmxlabs.models.lng.cargo.editor.spotLoadSlotFactory"
           factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.SpotLoadSlotFactory"
           label="Spot Load Slot"
