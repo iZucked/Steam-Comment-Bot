@@ -252,7 +252,7 @@ public class OptimisationTransformer {
 						final LoadSlot loadSlot = cargo.getLoadSlot();
 						if (loadSlot != null) {
 
-							final IPortSlot dischargeObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
+							final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
 							final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
 							final IVessel vessel = virtualVesselSlotProvider.getVesselForElement(dischargeElement);
 							final IResource res = vp.getResource(vessel);
