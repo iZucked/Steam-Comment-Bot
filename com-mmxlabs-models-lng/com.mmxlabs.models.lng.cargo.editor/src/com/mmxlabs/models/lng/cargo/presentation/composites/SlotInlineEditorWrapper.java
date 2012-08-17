@@ -24,19 +24,18 @@ public class SlotInlineEditorWrapper extends IInlineEditorEnablementWrapper {
 	}
 
 	@Override
-	public void notifyChanged(Notification notification) {
-		// TODO Auto-generated method stub
+	public void notifyChanged(final Notification notification) {
 		super.notifyChanged(notification);
 	}
-	
+
 	@Override
-	protected void missedNotifications(List<Notification> missed) {
-		for (Notification n : missed) {
+	protected void missedNotifications(final List<Notification> missed) {
+		for (final Notification n : missed) {
 			reallyNotifyChanged(n);
 		}
 		super.missedNotifications(missed);
 	}
-	
+
 	@Override
 	public void reallyNotifyChanged(final Notification notification) {
 		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
@@ -52,16 +51,15 @@ public class SlotInlineEditorWrapper extends IInlineEditorEnablementWrapper {
 			}
 		}
 	}
-	
+
 	@Override
-	public void display(final IScenarioEditingLocation location, MMXRootObject scenario, EObject object, Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 
 		super.display(location, scenario, object, range);
-		
+
 		if (input instanceof LoadSlot) {
 			setEnabled(!((LoadSlot) input).isDESPurchase());
-		}
-		else if (input instanceof DischargeSlot) {
+		} else if (input instanceof DischargeSlot) {
 			setEnabled(!((DischargeSlot) input).isFOBSale());
 		}
 	}
