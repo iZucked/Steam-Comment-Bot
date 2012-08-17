@@ -20,7 +20,6 @@ import java.util.TreeSet;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -44,7 +43,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.IWorkbenchPartSite;
 
@@ -69,7 +67,6 @@ import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -112,27 +109,92 @@ public class CargoWiringComposite extends Composite {
 		}
 	}
 
-	private MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
-
-		protected void missedNotifications(java.util.List<Notification> missed) {
-			for (Notification n : missed) {
-				reallyNotifyChanged(n);
-			}
-		};
-
-		@Override
-		public void reallyNotifyChanged(Notification notification) {
-
-			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
-				return;
-			}
-
-			// TODO: Check cargo added/remove
-			// TODO: Check wiring change
-			
-			
-		}
-	};
+//	private MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
+//
+//		protected void missedNotifications(java.util.List<Notification> missed) {
+//			for (Notification n : missed) {
+//				reallyNotifyChanged(n);
+//			}
+//		}
+//
+//		@Override
+//		public void reallyNotifyChanged(Notification notification) {
+//
+//			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
+//				return;
+//			}
+//
+//			boolean rowAdded = false;
+//			boolean performUpdate = false;
+//
+//			if (notification.getNotifier() instanceof Cargo) {
+//				Cargo cargo = (Cargo) notification.getNotifier();
+//				// Check cargo wiring
+//				if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_LoadSlot()) {
+//					// TODO: Do we need to handle this?
+//				} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_DischargeSlot()) {
+//
+//					if (cargoes.contains(cargo)) {
+//						DischargeSlot oldSlot = (DischargeSlot) notification.getOldValue();
+//						DischargeSlot newSlot = (DischargeSlot) notification.getNewValue();
+//						int oldIndex = -1;
+//						int newIndex = -1;
+//						if (dischargeSlots.contains(oldSlot)) {
+//							oldIndex = dischargeSlots.indexOf(oldSlot);
+//						}
+//						if (dischargeSlots.contains(newSlot)) {
+//							newIndex = dischargeSlots.indexOf(newSlot);
+//						}
+//
+//						int loadIdx = loadSlots.indexOf(cargo.getLoadSlot());
+//						// If we have the cargo in scope so should the load
+//						assert loadIdx != -1;
+//
+//						if (newIndex == -1) {
+//							// New discharge slot does not exist yet
+//							ensureCapacity(numberOfRows + 1, caroges, loadSlots, dischargeSlots);
+//							wiring.add(numberOfRows);
+//							rowAdded = true;
+//						} else if (wiring.get(loadIdx) != newIndex) {
+//							// New wiring
+//							wiring.set(loadIdx, newIndex);
+//						} else {
+//							// Existing wiring - perhaps we made the change...
+//						}
+//					}
+//				}
+//			} else if (notification.getNotifier() instanceof CargoModel) {
+//				if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_Cargoes()) {
+//					if (notification.getEventType() == Notification.ADD || notification.getEventType() == Notification.ADD_MANY) {
+//
+//					}
+//				} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_LoadSlots()) {
+//				} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()) {
+//
+//				}
+//			}
+//
+//
+//			if (rowAdded) {
+//				numberOfRows++;
+//				
+//				for (final Control c : getChildren()) {
+//					c.dispose();
+//				}
+//				
+//				createChildren();
+//				layout();
+//				CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
+//
+//			} else if (performUpdate) {
+//				wiringDiagram.setWiring(wiring);
+//				updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
+//				CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
+//				
+//			}
+//
+//		}
+//	};
 
 	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
 	private final ArrayList<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
@@ -454,8 +516,8 @@ public class CargoWiringComposite extends Composite {
 		// }
 
 		// add bogus packing label
-//		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
-//		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		// new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
+		// new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		wiringDiagram.setWiring(wiring);
 		wiringDiagram.setTerminalsValid(leftTerminalsValid, rightTerminalsValid);
@@ -910,7 +972,7 @@ public class CargoWiringComposite extends Composite {
 			loadIdx = loadSlots.indexOf(loadSlot);
 		} else {
 			loadIdx = numberOfRows;
-			ensureCapacity(loadIdx + 1, cargoes,loadSlots, dischargeSlots);
+			ensureCapacity(loadIdx + 1, cargoes, loadSlots, dischargeSlots);
 			loadSlots.set(loadIdx, loadSlot);
 			insertedLoad = true;
 			// Inserting the load slot - should insert the cargo and discharge also
@@ -925,8 +987,6 @@ public class CargoWiringComposite extends Composite {
 			}
 		}
 
-		
-		
 		// Find or add discharge slot to discharge slots list (and bring in cargo and load if not present)
 		final int dischargeIdx;
 		boolean insertedDischarge = false;
@@ -934,7 +994,7 @@ public class CargoWiringComposite extends Composite {
 			dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
 		} else {
 			dischargeIdx = numberOfRows;
-			ensureCapacity(dischargeIdx + 1, cargoes,loadSlots, dischargeSlots);
+			ensureCapacity(dischargeIdx + 1, cargoes, loadSlots, dischargeSlots);
 			dischargeSlots.set(dischargeIdx, dischargeSlot);
 			insertedDischarge = true;
 
