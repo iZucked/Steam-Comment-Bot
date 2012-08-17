@@ -344,7 +344,7 @@ public class CargoWiringComposite extends Composite {
 					}
 				};
 				// wiring diagram is tall
-				wiringDiagram.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, cargoes.size() + 2));
+				wiringDiagram.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, numberOfRows));
 
 			}
 
@@ -477,6 +477,9 @@ public class CargoWiringComposite extends Composite {
 				c.displayValidationStatus(status);
 			}
 			for (final PortAndDateComposite c : rhsComposites) {
+				c.displayValidationStatus(status);
+			}
+			for (final NamedObjectNameComposite c : idComposites) {
 				c.displayValidationStatus(status);
 			}
 		}
@@ -917,7 +920,7 @@ public class CargoWiringComposite extends Composite {
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(loadIdx), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
 
 			wiring.set(loadIdx, dischargeIdx);
-			
+
 			if (!insertedLoad && !insertedDischarge) {
 				// If we've inserted then all the composites are currently recreated, otherwise update inline
 				idComposites.get(loadIdx).display(location, location.getRootObject(), cargo, null);
