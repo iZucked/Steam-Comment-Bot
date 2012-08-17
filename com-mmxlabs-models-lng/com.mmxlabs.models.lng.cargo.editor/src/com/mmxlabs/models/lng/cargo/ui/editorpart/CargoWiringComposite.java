@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -68,6 +69,7 @@ import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -110,6 +112,28 @@ public class CargoWiringComposite extends Composite {
 		}
 	}
 
+	private MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
+
+		protected void missedNotifications(java.util.List<Notification> missed) {
+			for (Notification n : missed) {
+				reallyNotifyChanged(n);
+			}
+		};
+
+		@Override
+		public void reallyNotifyChanged(Notification notification) {
+
+			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
+				return;
+			}
+
+			// TODO: Check cargo added/remove
+			// TODO: Check wiring change
+			
+			
+		}
+	};
+
 	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
 	private final ArrayList<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
 	private final ArrayList<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
@@ -145,7 +169,7 @@ public class CargoWiringComposite extends Composite {
 	public CargoWiringComposite(final Composite parent, final int style, final IWorkbenchPartSite site) {
 		super(parent, style);
 		createLayout();
-		
+
 		this.site = site;
 		setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 		// menuManager = new MenuManager("#PopupMenu");
@@ -265,7 +289,7 @@ public class CargoWiringComposite extends Composite {
 		int index = 0;
 		for (int ii = 0; ii < numberOfRows; ++ii) {
 
-			NamedObjectNameComposite idComposite = new NamedObjectNameComposite(this, getStyle() & ~SWT.BORDER){
+			NamedObjectNameComposite idComposite = new NamedObjectNameComposite(this, getStyle() & ~SWT.BORDER) {
 				@Override
 				public void addInlineEditor(final IInlineEditor editor) {
 					editors.add(editor);
@@ -274,22 +298,22 @@ public class CargoWiringComposite extends Composite {
 					GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 					gd.widthHint = 60;
 					control.setLayoutData(gd);
-					control.setBackground(WHITE);		
+					control.setBackground(WHITE);
 				}
 			};
 			idComposite.setCommandHandler(commandHandler);
 			idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
 			idComposites.add(idComposite);
 			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-//			gd.widthHint = 70;
-//			gd.grabExcessHorizontalSpace = true;
-//			gd.grabExcessVerticalSpace = true;
+			// gd.widthHint = 70;
+			// gd.grabExcessHorizontalSpace = true;
+			// gd.grabExcessVerticalSpace = true;
 			idComposite.setLayoutData(gd);
 
 			final PortAndDateComposite loadSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, true);
 			GridData gd2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 			loadSide.setLayoutData(gd2);
-			loadSide.setBackground(WHITE);		
+			loadSide.setBackground(WHITE);
 
 			loadSide.setCommandHandler(commandHandler);
 			loadSide.display(location, location.getRootObject(), loadSlots.get(index), Collections.<EObject> emptyList());
@@ -371,17 +395,17 @@ public class CargoWiringComposite extends Composite {
 					}
 				};
 				// wiring diagram is tall
-				wiringDiagram.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, numberOfRows));
+				GridData gd3 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, numberOfRows);
 				gd3.widthHint = 90;
 				wiringDiagram.setLayoutData(gd3);
-				wiringDiagram.setBackground(WHITE);
+//				wiringDiagram.setBackground(WHITE);
 
 			}
 
 			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, false);
 			dischargeSide.setCommandHandler(commandHandler);
 			dischargeSide.display(location, location.getRootObject(), dischargeSlots.get(index), Collections.<EObject> emptyList());
-			dischargeSide.setBackground(WHITE);		
+			dischargeSide.setBackground(WHITE);
 
 			rightTerminalsValid.add(dischargeSlots.get(index) != null);
 			dischargeSide.addMenuListener(createDischargeSlotMenuListener(dischargeSlots.get(index)));
@@ -395,9 +419,9 @@ public class CargoWiringComposite extends Composite {
 			loadSide.addListener(SWT.DefaultSelection, selectionListener);
 			dischargeSide.addListener(SWT.DefaultSelection, selectionListener);
 
-			idComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-			loadSide.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false));
-			dischargeSide.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false));
+			idComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+			loadSide.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
+			dischargeSide.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 
 			index++;
 		}
@@ -431,8 +455,8 @@ public class CargoWiringComposite extends Composite {
 		// }
 
 		// add bogus packing label
-		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
-		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
+//		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
+//		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
 		wiringDiagram.setWiring(wiring);
 		wiringDiagram.setTerminalsValid(leftTerminalsValid, rightTerminalsValid);
@@ -886,40 +910,45 @@ public class CargoWiringComposite extends Composite {
 		if (loadSlots.contains(loadSlot)) {
 			loadIdx = loadSlots.indexOf(loadSlot);
 		} else {
-			loadIdx = loadSlots.size();
-			loadSlots.add(loadSlot);
+			loadIdx = numberOfRows;
+			ensureCapacity(loadIdx + 1, cargoes,loadSlots, dischargeSlots);
+			loadSlots.set(loadIdx, loadSlot);
 			insertedLoad = true;
 			// Inserting the load slot - should insert the cargo and discharge also
 			final Cargo c = loadSlot.getCargo();
 
-			ensureCapacity(loadIdx + 1, cargoes, dischargeSlots);
-			ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
 			if (c != null) {
 				cargoes.set(loadIdx, c);
 				dischargeSlots.set(loadIdx, c.getDischargeSlot());
+				wiring.add(loadIdx);
+			} else {
+				wiring.add(-1);
 			}
-			wiring.set(numberOfRows, numberOfRows);
 		}
 
+		
+		
 		// Find or add discharge slot to discharge slots list (and bring in cargo and load if not present)
 		final int dischargeIdx;
 		boolean insertedDischarge = false;
 		if (dischargeSlots.contains(dischargeSlot)) {
 			dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
 		} else {
-			dischargeIdx = dischargeSlots.size();
-			dischargeSlots.add(dischargeSlot);
+			dischargeIdx = numberOfRows;
+			ensureCapacity(dischargeIdx + 1, cargoes,loadSlots, dischargeSlots);
+			dischargeSlots.set(dischargeIdx, dischargeSlot);
 			insertedDischarge = true;
 
 			// Inserting the discharge slot - should insert the cargo and load also
 			final Cargo c = dischargeSlot.getCargo();
 
-			ensureCapacity(dischargeIdx + 1, cargoes, loadSlots);
 			if (c != null) {
 				cargoes.set(dischargeIdx, c);
 				loadSlots.set(dischargeIdx, c.getLoadSlot());
+				wiring.add(dischargeIdx);
+			} else {
+				wiring.add(-1);
 			}
-			wiring.set(numberOfRows, numberOfRows);
 		}
 
 		// Discharge has an existing slot, so remove the cargo & wiring
