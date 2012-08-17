@@ -178,7 +178,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		final GC graphics = e.gc;
 		graphics.setAntialias(SWT.ON);
 
-		graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 
 		final Rectangle ca = getClientArea();
 

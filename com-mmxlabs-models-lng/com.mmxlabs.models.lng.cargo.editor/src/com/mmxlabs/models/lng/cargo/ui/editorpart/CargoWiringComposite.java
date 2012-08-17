@@ -71,6 +71,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
@@ -144,9 +145,9 @@ public class CargoWiringComposite extends Composite {
 	public CargoWiringComposite(final Composite parent, final int style, final IWorkbenchPartSite site) {
 		super(parent, style);
 		createLayout();
+		
 		this.site = site;
 		setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-
 		// menuManager = new MenuManager("#PopupMenu");
 		// site.registerContextMenu(menuManager, site.getSelectionProvider());
 		// menuManager.setRemoveAllWhenShown(true);
@@ -193,12 +194,17 @@ public class CargoWiringComposite extends Composite {
 	}
 
 	private void createLayout() {
-		final GridLayout layout = new GridLayout();
 
-		layout.numColumns = 4;
-		// layout.makeColumnsEqualWidth = false;
-
-		setLayout(layout);
+		final GridLayout gridLayout = new GridLayout(4, false);
+		gridLayout.marginHeight = 0;
+		gridLayout.marginBottom = 0;
+		gridLayout.marginTop = 0;
+		gridLayout.horizontalSpacing = 0;
+		gridLayout.verticalSpacing = 0;
+		gridLayout.marginRight = 0;
+		gridLayout.marginLeft = 0;
+		gridLayout.marginWidth = 0;
+		setLayout(gridLayout);
 	}
 
 	private void updateWiringColours(final WiringDiagram diagram, final List<Integer> wiring, final List<PortAndDateComposite> loads, final List<PortAndDateComposite> discharge) {
@@ -255,15 +261,36 @@ public class CargoWiringComposite extends Composite {
 			wiringDiagram.dispose();
 			wiringDiagram = null;
 		}
+		final Color WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 		int index = 0;
 		for (int ii = 0; ii < numberOfRows; ++ii) {
 
-			final NamedObjectNameComposite idComposite = new NamedObjectNameComposite(this, SWT.BORDER);
+			NamedObjectNameComposite idComposite = new NamedObjectNameComposite(this, getStyle() & ~SWT.BORDER){
+				@Override
+				public void addInlineEditor(final IInlineEditor editor) {
+					editors.add(editor);
+					editor.setCommandHandler(commandHandler);
+					Control control = editor.createControl(this);
+					GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+					gd.widthHint = 60;
+					control.setLayoutData(gd);
+					control.setBackground(WHITE);		
+				}
+			};
 			idComposite.setCommandHandler(commandHandler);
 			idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
 			idComposites.add(idComposite);
+			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+//			gd.widthHint = 70;
+//			gd.grabExcessHorizontalSpace = true;
+//			gd.grabExcessVerticalSpace = true;
+			idComposite.setLayoutData(gd);
 
-			final PortAndDateComposite loadSide = new PortAndDateComposite(this, SWT.BORDER, site);
+			final PortAndDateComposite loadSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, true);
+			GridData gd2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+			loadSide.setLayoutData(gd2);
+			loadSide.setBackground(WHITE);		
+
 			loadSide.setCommandHandler(commandHandler);
 			loadSide.display(location, location.getRootObject(), loadSlots.get(index), Collections.<EObject> emptyList());
 
@@ -345,12 +372,16 @@ public class CargoWiringComposite extends Composite {
 				};
 				// wiring diagram is tall
 				wiringDiagram.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, numberOfRows));
+				gd3.widthHint = 90;
+				wiringDiagram.setLayoutData(gd3);
+				wiringDiagram.setBackground(WHITE);
 
 			}
 
-			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, SWT.BORDER, site);
+			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, false);
 			dischargeSide.setCommandHandler(commandHandler);
 			dischargeSide.display(location, location.getRootObject(), dischargeSlots.get(index), Collections.<EObject> emptyList());
+			dischargeSide.setBackground(WHITE);		
 
 			rightTerminalsValid.add(dischargeSlots.get(index) != null);
 			dischargeSide.addMenuListener(createDischargeSlotMenuListener(dischargeSlots.get(index)));
@@ -967,7 +998,7 @@ public class CargoWiringComposite extends Composite {
 					loadSlot = (LoadSlot) target;
 					dischargeSlot = (DischargeSlot) source;
 				}
-				// Filter out current paring
+				// Filter out current pairing
 				if (loadSlot.getCargo() != null && loadSlot.getCargo() == dischargeSlot.getCargo()) {
 					continue;
 				}

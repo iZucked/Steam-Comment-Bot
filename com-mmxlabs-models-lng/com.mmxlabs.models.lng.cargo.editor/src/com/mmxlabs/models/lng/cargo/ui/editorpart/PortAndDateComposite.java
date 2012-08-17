@@ -8,8 +8,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IWorkbenchPartSite;
 
@@ -34,10 +38,23 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	private ICommandHandler commandHandler;
 	private MenuManager menuManager;
 
-	public PortAndDateComposite(final Composite parent, final int style, IWorkbenchPartSite site) {
+	public PortAndDateComposite(final Composite parent, final int style, IWorkbenchPartSite site, boolean isLoad) {
 		super(parent, style);
-		setLayout(new GridLayout(4, false));
 
+		GridLayout gridLayout = new GridLayout(3, false);
+		gridLayout.marginHeight = 0;
+//		gridLayout.marginBottom = 0;
+//		gridLayout.marginTop = 0;
+		gridLayout.horizontalSpacing = 1;
+		gridLayout.verticalSpacing = 0;
+		if(isLoad){
+			gridLayout.marginRight = 5;
+		} else{
+			gridLayout.marginLeft = 5;
+		}
+		gridLayout.marginWidth = 0;
+		setLayout(gridLayout);
+		
 		addInlineEditor(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__CONTRACT));
 		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
 		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__WINDOW_START)));
@@ -91,7 +108,20 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	public void addInlineEditor(final IInlineEditor editor) {
 		editors.add(editor);
 		editor.setCommandHandler(commandHandler);
-		editor.createControl(this);
+		Control control = editor.createControl(this);
+		int column = editors.size();
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, false, false);
+		gd.verticalIndent = 0;
+		switch(column){
+			case 0:
+				gd.widthHint = 120; // contract
+			case 1:
+				gd.widthHint = 120; // port
+			case 2:
+				gd.widthHint = 120; // date
+		}
+		control.setLayoutData(gd);
+		control.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));		
 	}
 
 	@Override

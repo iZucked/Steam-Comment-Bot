@@ -73,6 +73,16 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 
 		public void addSlot(final Slot slot) {
 
+			if (slot instanceof LoadSlot) {
+				LoadSlot load = (LoadSlot) slot;
+				if (load.isDESPurchase()) return;				
+			}
+			else if (slot instanceof DischargeSlot) {
+				DischargeSlot disch = (DischargeSlot) slot;
+				if (disch.isFOBSale()) {
+					return;
+				}
+			}
 			final Date windowStart = slot.getWindowStart();
 			if (windowStart == null) {
 				return;
@@ -125,6 +135,16 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 		if (object instanceof Slot) {
 
 			Slot slot = (Slot) object;
+			if (slot instanceof LoadSlot) {
+				LoadSlot load = (LoadSlot) slot;
+				if (load.isDESPurchase()) return ctx.createSuccessStatus();				
+			}
+			else if (slot instanceof DischargeSlot) {
+				DischargeSlot disch = (DischargeSlot) slot;
+				if (disch.isFOBSale()) {
+					return ctx.createSuccessStatus();
+				}
+			}
 
 			final Object currentConstraintData = ctx.getCurrentConstraintData();
 			PortSlotCounter psc;

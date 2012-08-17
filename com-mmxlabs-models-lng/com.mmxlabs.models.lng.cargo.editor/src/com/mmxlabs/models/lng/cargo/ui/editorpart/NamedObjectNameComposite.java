@@ -5,8 +5,11 @@ import java.util.LinkedList;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -27,8 +30,17 @@ public class NamedObjectNameComposite extends Composite implements IDisplayCompo
 
 	public NamedObjectNameComposite(final Composite parent, final int style) {
 		super(parent, style);
-		setLayout(new GridLayout(4, false));
-
+		GridLayout gridLayout = new GridLayout(1, false);
+		gridLayout.marginHeight = 0;
+//		gridLayout.marginBottom = 0;
+//		gridLayout.marginTop = 0;
+		gridLayout.horizontalSpacing = 0;
+		gridLayout.verticalSpacing = 0;
+//		gridLayout.marginRight = 0;
+//		gridLayout.marginLeft = 0	;
+		gridLayout.marginWidth = 0;
+		setLayout(gridLayout);
+		
 		addInlineEditor(ComponentHelperUtils.createDefaultEditor(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.Literals.NAMED_OBJECT__NAME));
 	}
 
@@ -51,7 +63,9 @@ public class NamedObjectNameComposite extends Composite implements IDisplayCompo
 	public void addInlineEditor(final IInlineEditor editor) {
 		editors.add(editor);
 		editor.setCommandHandler(commandHandler);
-		editor.createControl(this);
+		Control control = editor.createControl(this);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, false, false);
+		control.setLayoutData(gd);
 	}
 
 	@Override
