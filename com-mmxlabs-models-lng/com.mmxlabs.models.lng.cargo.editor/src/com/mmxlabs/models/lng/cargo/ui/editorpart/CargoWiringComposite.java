@@ -122,6 +122,7 @@ public class CargoWiringComposite extends Composite {
 	 */
 	private final ArrayList<Integer> wiring = new ArrayList<Integer>();
 
+	final List<NamedObjectNameComposite> idComposites = new ArrayList<NamedObjectNameComposite>(cargoes.size());
 	final List<PortAndDateComposite> lhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
 	final List<PortAndDateComposite> rhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
 
@@ -188,13 +189,6 @@ public class CargoWiringComposite extends Composite {
 
 		numberOfRows = cargoes.size();
 
-		wiring.add(-1); // bogus element for the add terminals.
-		wiring.add(-1); // bogus element for the add terminals.
-		leftTerminalsValid.add(true);
-		rightTerminalsValid.add(true);
-		leftTerminalsValid.add(true);
-		rightTerminalsValid.add(true);
-
 		createChildren();
 	}
 
@@ -256,6 +250,7 @@ public class CargoWiringComposite extends Composite {
 		rhsComposites.clear();
 		leftTerminalsValid.clear();
 		rightTerminalsValid.clear();
+		idComposites.clear();
 		if (wiringDiagram != null) {
 			wiringDiagram.dispose();
 			wiringDiagram = null;
@@ -266,6 +261,7 @@ public class CargoWiringComposite extends Composite {
 			final NamedObjectNameComposite idComposite = new NamedObjectNameComposite(this, SWT.BORDER);
 			idComposite.setCommandHandler(commandHandler);
 			idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
+			idComposites.add(idComposite);
 
 			final PortAndDateComposite loadSide = new PortAndDateComposite(this, SWT.BORDER, site);
 			loadSide.setCommandHandler(commandHandler);
@@ -585,6 +581,7 @@ public class CargoWiringComposite extends Composite {
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(i), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlots.get(i)));
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(i), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
 					// New element added - but no increase in number of rows...
+					idComposites.get(i).display(location, location.getRootObject(), c, null);
 				}
 			} else if (newIndex == -1) {
 				final Cargo c = cargoes.get(i);
@@ -592,6 +589,7 @@ public class CargoWiringComposite extends Composite {
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
 					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), c));
 					cargoes.set(i, null);
+					idComposites.get(i).display(location, location.getRootObject(), null, null);
 				} else {
 					// Error?
 				}
@@ -639,7 +637,6 @@ public class CargoWiringComposite extends Composite {
 		CargoWiringComposite.this.wiring.addAll(newWiring);
 		if (addNewElement) {
 			numberOfRows++;
-			CargoWiringComposite.this.wiring.add(-1);
 
 			for (final Control c : getChildren()) {
 				c.dispose();
@@ -862,12 +859,12 @@ public class CargoWiringComposite extends Composite {
 			final Cargo c = loadSlot.getCargo();
 
 			ensureCapacity(loadIdx + 1, cargoes, dischargeSlots);
+			ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
 			if (c != null) {
 				cargoes.set(loadIdx, c);
 				dischargeSlots.set(loadIdx, c.getDischargeSlot());
 			}
 			wiring.set(numberOfRows, numberOfRows);
-			wiring.add(-1);
 		}
 
 		// Find or add discharge slot to discharge slots list (and bring in cargo and load if not present)
@@ -889,21 +886,26 @@ public class CargoWiringComposite extends Composite {
 				loadSlots.set(dischargeIdx, c.getLoadSlot());
 			}
 			wiring.set(numberOfRows, numberOfRows);
-			wiring.add(-1);
+		}
+
+		// Discharge has an existing slot, so remove the cargo & wiring
+		if (dischargeSlot.getCargo() != null) {
+			final int current = wiring.indexOf(dischargeIdx);
+			if (current != -1) {
+				wiring.set(current, -1);
+				if (cargoes.get(current) != null) {
+					// TODO: Really if the first if was true, the other two ifs should also be true
+					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), dischargeSlot.getCargo()));
+					cargoes.set(current, null);
+					idComposites.get(current).display(location, location.getRootObject(), null, null);
+				}
+			}
 		}
 
 		// Do we need to create a new cargo or re-wire and existing one.
 		Cargo cargo = loadSlot.getCargo();
 		if (cargo != null) {
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(loadIdx), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
-			final int current = wiring.indexOf(dischargeIdx);
-			if (current != -1) {
-				wiring.set(current, -1);
-				if (cargoes.get(current) != null) {
-					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), dischargeSlot.getCargo()));
-					cargoes.set(current, null);
-				}
-			}
 			wiring.set(loadIdx, dischargeIdx);
 		} else {
 			cargo = createNewCargo(cargoModel);
@@ -914,12 +916,12 @@ public class CargoWiringComposite extends Composite {
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(loadIdx), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(loadIdx), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
 
-			final int current = wiring.indexOf(dischargeIdx);
-			if (current != -1) {
-				wiring.set(current, -1);
-			}
 			wiring.set(loadIdx, dischargeIdx);
-
+			
+			if (!insertedLoad && !insertedDischarge) {
+				// If we've inserted then all the composites are currently recreated, otherwise update inline
+				idComposites.get(loadIdx).display(location, location.getRootObject(), cargo, null);
+			}
 		}
 
 		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
