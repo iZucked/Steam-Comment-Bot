@@ -371,11 +371,10 @@ public class CargoWiringComposite extends Composite {
 					}
 				};
 				// wiring diagram is tall
-				wiringDiagram.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, numberOfRows));
+				GridData gd3 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, numberOfRows);
 				gd3.widthHint = 90;
 				wiringDiagram.setLayoutData(gd3);
 				wiringDiagram.setBackground(WHITE);
-
 			}
 
 			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, false);
