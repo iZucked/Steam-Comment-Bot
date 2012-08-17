@@ -48,9 +48,13 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
-		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
-		if (valueProvider == null) {
-			log.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
+		if (input == null) {
+			valueProvider = null;
+		} else {
+			valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
+			if (valueProvider == null) {
+				log.error("Could not get a value provider for " + input.eClass().getName() + "." + feature.getName());
+			}
 		}
 		super.display(location, context, input, range);
 	}
@@ -87,8 +91,9 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateControl() {
-		if (combo.isDisposed())
+		if (combo.isDisposed()) {
 			return;
+		}
 		final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(input, feature);
 		// update combo contents
 		combo.removeAll();
@@ -104,13 +109,15 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		if (combo.isDisposed())
+		if (combo.isDisposed()) {
 			return;
+		}
 		final int curIndex = valueList.indexOf(value);
-		if (curIndex == -1)
+		if (curIndex == -1) {
 			combo.setText("");
-		else
+		} else {
 			combo.setText(nameList.get(curIndex));
+		}
 	}
 
 	@Override
