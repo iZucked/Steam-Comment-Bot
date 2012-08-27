@@ -682,7 +682,7 @@ public class LNGScenarioTransformer {
 	 * @param entities
 	 * @param defaultRewiring
 	 */
-	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> ports, final Association<Index<?>, ICurve> indexAssociation,
+	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Index<?>, ICurve> indexAssociation,
 			final Association<Vessel, IVessel> vesselAssociation, final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean defaultRewiring) {
 
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
@@ -719,10 +719,10 @@ public class LNGScenarioTransformer {
 
 			final ILoadOption load;
 			if (loadSlot.isDESPurchase()) {
-				load = builder.createVirtualLoadSlot(loadSlot.getName(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
+				load = builder.createVirtualLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
 						Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.isOptional());
 			} else {
-				load = builder.createLoadSlot(loadSlot.getName(), ports.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
+				load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
 						Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(),
 						loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), loadSlot.isOptional());
 			}
@@ -753,11 +753,11 @@ public class LNGScenarioTransformer {
 
 			final IDischargeOption discharge;
 			if (dischargeSlot.isFOBSale()) {
-				discharge = builder.createVirtualDischargeSlot(dischargeSlot.getName(), ports.lookup(dischargeSlot.getPort()), dischargeWindow,
+				discharge = builder.createVirtualDischargeSlot(dischargeSlot.getName(), portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow,
 						Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator,
 						dischargeSlot.isOptional());
 			} else {
-				discharge = builder.createDischargeSlot(dischargeSlot.getName(), ports.lookup(dischargeSlot.getPort()), dischargeWindow,
+				discharge = builder.createDischargeSlot(dischargeSlot.getName(), portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow,
 						Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator,
 						dischargeSlot.getSlotOrPortDuration(), dischargeSlot.isOptional());
 			}
@@ -767,6 +767,37 @@ public class LNGScenarioTransformer {
 			for (final IContractTransformer contractTransformer : contractTransformers) {
 				contractTransformer.slotTransformed(loadSlot, load);
 				contractTransformer.slotTransformed(dischargeSlot, discharge);
+			}
+
+			// Bind FOB/DES slots to resource
+			if (loadSlot.isDESPurchase()) {
+				if (loadSlot instanceof SpotLoadSlot) {
+					SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
+					final Set<IPort> marketPorts = new HashSet<IPort>();
+					{
+						ASpotMarket market = spotLoadSlot.getMarket();
+						if (market instanceof DESPurchaseMarket) {
+							final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+							final Set<APort> portSet = SetUtils.getPorts(desPurchaseMarket.getDestinationPorts());
+							for (final APort ap : portSet) {
+								if (ap instanceof Port) {
+									final IPort ip = portAssociation.lookup((Port) ap);
+									if (ip != null) {
+										marketPorts.add(ip);
+									}
+								}
+							}
+						}
+
+					}
+					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
+				} else {
+					// Bind to this port -- TODO: Fix to discharge?
+					builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(discharge.getPort()));
+				}
+			}
+			if (dischargeSlot.isFOBSale()) {
+				builder.bindLoadSlotsToFOBSale(discharge, load.getPort());
 			}
 
 			final ICargo cargo = builder.createCargo(eCargo.getName(), load, discharge, eCargo.isSetAllowRewiring() ? eCargo.isAllowRewiring() : defaultRewiring);
