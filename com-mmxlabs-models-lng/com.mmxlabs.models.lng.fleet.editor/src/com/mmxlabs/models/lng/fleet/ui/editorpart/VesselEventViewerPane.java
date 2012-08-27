@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.validation.model.IModelConstraint;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.ui.IActionBars;
@@ -22,6 +23,7 @@ import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -69,8 +71,8 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Port", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVesselEvent_Port(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Duration", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselEvent_DurationInDays(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Vessels",
-				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
-						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+				new VesselEventVesselsManipulator(FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
+						MMXCorePackage.eINSTANCE.getNamedObject_Name(),jointModelEditor.getRootObject().getSubModel(InputModel.class)));
 
 		setTitle("Vessel Events", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 

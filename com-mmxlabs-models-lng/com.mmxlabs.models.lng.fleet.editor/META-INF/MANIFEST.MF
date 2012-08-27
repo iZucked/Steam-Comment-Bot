@@ -29,5 +29,6 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.scenario.service.model;bundle-version="1.0.0",
  com.mmxlabs.models.ui.validation;bundle-version="1.0.0",
  org.slf4j.api;bundle-version="1.6.4",
- com.mmxlabs.models.lng.schedule;bundle-version="1.0.0"
+ com.mmxlabs.models.lng.schedule;bundle-version="1.0.0",
+ com.mmxlabs.models.lng.input.editor;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
