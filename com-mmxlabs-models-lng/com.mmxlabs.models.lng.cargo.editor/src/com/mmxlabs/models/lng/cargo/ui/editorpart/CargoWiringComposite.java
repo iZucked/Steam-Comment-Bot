@@ -494,8 +494,8 @@ public class CargoWiringComposite extends Composite {
 
 		wiringDiagram.setWireColors(wireColors);
 		wiringDiagram.setTerminalColors(terminalColors);
-		updateWiringColours(wiringDiagram, wiring, lhsComposites, lhsComposites);
-		
+		updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
+
 		// update locked status.
 		setLocked(locked);
 	}
