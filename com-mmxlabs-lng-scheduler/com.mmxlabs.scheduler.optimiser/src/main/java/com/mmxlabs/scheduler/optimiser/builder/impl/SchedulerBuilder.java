@@ -1388,7 +1388,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					// Get current allocation
 
 					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-					if (matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+					if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
 
 						Set<IVessel> set = slotVesselRestrictions.get(option);
 						if (set == null || set.isEmpty()) {
@@ -1424,7 +1424,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					// Get current allocation
 
 					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-					if (matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+					if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
 						Set<IVessel> set = slotVesselRestrictions.get(option);
 						if (set == null || set.isEmpty()) {
 							set = new HashSet<IVessel>(realVessels);
