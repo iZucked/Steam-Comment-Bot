@@ -12,7 +12,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -55,20 +54,11 @@ public class CargoWiringViewer extends Composite {
 		scrolledComposite.setLayout(new FillLayout());
 		wiringComposite.setLocation(location);
 
-		scrolledComposite.addControlListener(new ControlAdapter() {
+		this.addControlListener(new ControlAdapter() {
 			public void controlResized(final ControlEvent e) {
-				final Rectangle r = scrolledComposite.getClientArea();
-				scrolledComposite.setMinSize(parent.computeSize(r.width, SWT.DEFAULT));
+				scrolledComposite.setMinSize(wiringComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			}
 		});
-		//
-		// final Composite buttonsComposite = new Composite(this, SWT.NONE);
-		// buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		// buttonsComposite.setBounds(0, 0, 64, 64);
-		// buttonsComposite.setLayout(new GridLayout(3, false));
-		//
-		// ((GridLayout) buttonsComposite.getLayout()).marginWidth = 0;
-		//
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 
 		wiringComposite.setCargoes(cargoModel.getCargoes());
