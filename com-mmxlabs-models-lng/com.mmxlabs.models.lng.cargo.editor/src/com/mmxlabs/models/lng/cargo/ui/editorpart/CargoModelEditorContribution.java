@@ -9,7 +9,6 @@ import java.util.Collections;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -23,9 +22,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private int cargoPageNumber = -1;
 	private int loadSlotPageNumber = -1;
 	private int dischargeSlotPageNumber = -1;
+	private int wiringPageNumber = -1;;
 	private CargoModelViewer cargoViewerPane;
 	private LoadSlotViewer loadSlotViewerPane;
 	private DischargeSlotViewer dischargeSlotViewerPane;
+	private CargoWiringViewer wiringViewer;
 
 	// Temp flag to turn on/off load/discharge slots during development
 	private static final boolean showSlotTabs = true;
@@ -57,9 +58,9 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			editorPart.setPageText(dischargeSlotPageNumber, "Discharge Slots");
 		}
 		
-		Control wiringControl = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		int wiringPageNumnber = editorPart.addPage(wiringControl);
-		editorPart.setPageText(wiringPageNumnber, "Wiring");
+		wiringViewer = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		wiringPageNumber = editorPart.addPage(wiringViewer);
+		editorPart.setPageText(wiringPageNumber, "Wiring");
 	}
 
 	@Override
@@ -69,6 +70,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			loadSlotViewerPane.setLocked(locked);
 			dischargeSlotViewerPane.setLocked(locked);
 		}
+		wiringViewer.setLocked(locked);
 	}
 
 	@Override
