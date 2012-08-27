@@ -38,20 +38,20 @@ public class ElementAssignmentConstraint extends AbstractModelConstraint {
 
 			final UUIDObject assignedObject = assignment.getAssignedObject();
 
-			if (assignment.getAssignment() == null) {
+			if (assignedObject == null) {
 				return ctx.createSuccessStatus();
 			}
 
-			if (assignment.getAssignment() instanceof Cargo) {
+			if (assignedObject instanceof Cargo) {
 				return ctx.createSuccessStatus();
 			}
 
-			if (assignment.getAssignment() instanceof VesselEvent) {
+			if (assignedObject instanceof VesselEvent) {
 				return ctx.createSuccessStatus();
 			}
 
 			final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-					"Element Assignment has unexpected assigned object of type %s. Expected Cargo or VesselEvent objects", assignedObject.eClass().getName())));
+					"Element Assignment has unexpected assigned object of type %s. Expected Cargo or VesselEvent object type.", assignedObject.eClass().getName())));
 			failure.addEObjectAndFeature(assignment, InputPackage.eINSTANCE.getElementAssignment_AssignedObject());
 
 			failures.add(failure);
