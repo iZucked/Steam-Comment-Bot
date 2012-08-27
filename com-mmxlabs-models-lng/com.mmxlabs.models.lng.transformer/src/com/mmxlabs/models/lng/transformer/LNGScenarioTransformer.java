@@ -772,10 +772,10 @@ public class LNGScenarioTransformer {
 			// Bind FOB/DES slots to resource
 			if (loadSlot.isDESPurchase()) {
 				if (loadSlot instanceof SpotLoadSlot) {
-					SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
+					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
 					final Set<IPort> marketPorts = new HashSet<IPort>();
 					{
-						ASpotMarket market = spotLoadSlot.getMarket();
+						final ASpotMarket market = spotLoadSlot.getMarket();
 						if (market instanceof DESPurchaseMarket) {
 							final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 							final Set<APort> portSet = SetUtils.getPorts(desPurchaseMarket.getDestinationPorts());
@@ -894,7 +894,7 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
-						int remaining = count - existing.size();
+						final int remaining = count - existing.size();
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
@@ -1005,7 +1005,7 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
-						int remaining = count - existing.size();
+						final int remaining = count - existing.size();
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
@@ -1113,7 +1113,7 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
-						int remaining = count - existing.size();
+						final int remaining = count - existing.size();
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
@@ -1220,7 +1220,7 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
-						int remaining = count - existing.size();
+						final int remaining = count - existing.size();
 						if (remaining > 0) {
 							int offset = 0;
 							for (int i = 0; i < remaining; ++i) {
@@ -1478,7 +1478,7 @@ public class LNGScenarioTransformer {
 			int charterCount = 0;
 			for (final CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
 
-				for (VesselClass eVc : charterCost.getVesselClasses()) {
+				for (final VesselClass eVc : charterCost.getVesselClasses()) {
 					if (charterCost.getCharterInPrice() != null) {
 						final Integer value = charterCost.getCharterInPrice().getBackwardsValueForMonth(latestTime);
 						if (value != null) {
