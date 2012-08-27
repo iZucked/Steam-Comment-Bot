@@ -61,7 +61,7 @@ public class AssignmentImporter {
 										ea.setAssignment((AVesselSet) v);
 									} else if (v instanceof VesselClass) {
 										ea.setSpotIndex(sc.spotCount++);
-										ea.setAssignedObject((UUIDObject) v);
+										ea.setAssignment((AVesselSet) v);
 									}
 									
 									im.getElementAssignments().add(ea);
