@@ -5,6 +5,7 @@
 package com.mmxlabs.models.util.importer.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -25,71 +26,79 @@ import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
 
 public class DefaultImportContext implements IImportContext {
-	private LinkedList<IDeferment> deferments = new LinkedList<IDeferment>();
-	private LinkedList<IDeferment> reschedule = new LinkedList<IDeferment>();
+	private final LinkedList<IDeferment> deferments = new LinkedList<IDeferment>();
+	private final LinkedList<IDeferment> reschedule = new LinkedList<IDeferment>();
 	private boolean running = false;
-	
-	private HashMap<String, List<NamedObject>> namedObjects = new HashMap<String, List<NamedObject>>();
+
+	private final HashMap<String, List<NamedObject>> namedObjects = new HashMap<String, List<NamedObject>>();
 	private static final Logger log = LoggerFactory.getLogger(DefaultImportContext.class);
-	
+
 	@Override
-	public NamedObject getNamedObject(String name, EClass preferredType) {
+	public NamedObject getNamedObject(final String name, final EClass preferredType) {
 		final List<NamedObject> matches = namedObjects.get(name);
 		if (matches == null) {
 			log.warn("No objects with name " + name + " have been imported");
 			final String lowerName = name.toLowerCase();
-			if (!lowerName.equals(name)) return getNamedObject(lowerName, preferredType);
+			if (!lowerName.equals(name)) {
+				return getNamedObject(lowerName, preferredType);
+			}
 			return null;
 		}
 		int match = Integer.MAX_VALUE;
 		NamedObject best = null;
 		for (final NamedObject o : matches) {
 			if (preferredType.isSuperTypeOf(o.eClass())) {
-				int thisMatch = EMFUtils.getMinimumGenerations(o.eClass(), preferredType);
+				final int thisMatch = EMFUtils.getMinimumGenerations(o.eClass(), preferredType);
 				if (thisMatch <= match) {
 					match = thisMatch;
 					best = o;
 				}
 			}
-		} 
-		
+		}
+
 		if (best == null) {
 			final ArrayList<String> typeNames = new ArrayList<String>();
 			for (final NamedObject o : matches) {
 				typeNames.add(o.eClass().getName());
 			}
-			log.warn("Could not locate instance of " +preferredType.getName() + " with name " + name +". "
-					+ "Objects with that name are of types " + typeNames);
+			log.warn("Could not locate instance of " + preferredType.getName() + " with name " + name + ". " + "Objects with that name are of types " + typeNames);
 		}
-		
+
 		return best;
 	}
 
 	@Override
-	public void registerNamedObject(NamedObject object) {
+	public Collection<NamedObject> getNamedObjects(final String name) {
+		return Collections.unmodifiableCollection(namedObjects.get(name));
+	}
+
+	@Override
+	public void registerNamedObject(final NamedObject object) {
 		registerObjectWithName(object, object.getName());
 
 		for (final String otherName : object.getOtherNames()) {
 			registerObjectWithName(object, otherName);
 		}
 	}
-	
+
 	private void registerObjectWithName(final NamedObject object, final String name) {
-		if (name == null) return;
+		if (name == null) {
+			return;
+		}
 		List<NamedObject> others = namedObjects.get(name);
 		if (others == null) {
 			others = new LinkedList<NamedObject>();
 			namedObjects.put(name, others);
 		}
 		others.add(object);
-		
+
 		if (name.equals(name.toLowerCase()) == false) {
 			registerObjectWithName(object, name.toLowerCase());
 		}
 	}
 
 	@Override
-	public void doLater(IDeferment deferment) {
+	public void doLater(final IDeferment deferment) {
 		if (running) {
 			reschedule.add(deferment);
 		} else {
@@ -103,16 +112,18 @@ public class DefaultImportContext implements IImportContext {
 			final Iterator<IDeferment> iterator = deferments.iterator();
 			deferments.addAll(reschedule);
 			reschedule.clear();
-			
+
 			Collections.sort(deferments, new Comparator<IDeferment>() {
 				@Override
-				public int compare(IDeferment o1, IDeferment o2) {
+				public int compare(final IDeferment o1, final IDeferment o2) {
 					return ((Integer) o1.getStage()).compareTo(o2.getStage());
 				}
 			});
-			
+
 			while (iterator.hasNext()) {
-				if (reschedule.isEmpty() == false) break;
+				if (reschedule.isEmpty() == false) {
+					break;
+				}
 				final IDeferment deferment = iterator.next();
 				iterator.remove();
 				deferment.run(this);
@@ -121,29 +132,30 @@ public class DefaultImportContext implements IImportContext {
 		running = false;
 	}
 
-	private Stack<CSVReader> readerStack = new Stack<CSVReader>();
+	private final Stack<CSVReader> readerStack = new Stack<CSVReader>();
+
 	@Override
 	public void pushReader(final CSVReader reader) {
 		readerStack.push(reader);
 	}
+
 	@Override
 	public void popReader() {
 		readerStack.pop();
 	}
-	
+
 	@Override
 	public void addProblem(final IImportProblem problem) {
 		problems.add(problem);
 	}
-	
+
 	private class DefaultImportProblem implements IImportProblem {
 		private final String filename;
 		private final Integer lineNumber;
 		private final String field;
 		private final String message;
-		
-		
-		public DefaultImportProblem(String filename, Integer lineNumber, String field, String message) {
+
+		public DefaultImportProblem(final String filename, final Integer lineNumber, final String field, final String message) {
 			super();
 			this.filename = filename;
 			this.lineNumber = lineNumber;
@@ -155,7 +167,6 @@ public class DefaultImportContext implements IImportContext {
 		public String getFilename() {
 			return filename;
 		}
-
 
 		@Override
 		public Integer getLineNumber() {
@@ -172,7 +183,9 @@ public class DefaultImportContext implements IImportContext {
 			return message;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#hashCode()
 		 */
 		@Override
@@ -187,40 +200,54 @@ public class DefaultImportContext implements IImportContext {
 			return result;
 		}
 
-		/* (non-Javadoc)
+		/*
+		 * (non-Javadoc)
+		 * 
 		 * @see java.lang.Object#equals(java.lang.Object)
 		 */
 		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
+		public boolean equals(final Object obj) {
+			if (this == obj) {
 				return true;
-			if (obj == null)
+			}
+			if (obj == null) {
 				return false;
-			if (getClass() != obj.getClass())
+			}
+			if (getClass() != obj.getClass()) {
 				return false;
-			DefaultImportProblem other = (DefaultImportProblem) obj;
-			if (!getOuterType().equals(other.getOuterType()))
+			}
+			final DefaultImportProblem other = (DefaultImportProblem) obj;
+			if (!getOuterType().equals(other.getOuterType())) {
 				return false;
+			}
 			if (field == null) {
-				if (other.field != null)
+				if (other.field != null) {
 					return false;
-			} else if (!field.equals(other.field))
+				}
+			} else if (!field.equals(other.field)) {
 				return false;
+			}
 			if (filename == null) {
-				if (other.filename != null)
+				if (other.filename != null) {
 					return false;
-			} else if (!filename.equals(other.filename))
+				}
+			} else if (!filename.equals(other.filename)) {
 				return false;
+			}
 			if (lineNumber == null) {
-				if (other.lineNumber != null)
+				if (other.lineNumber != null) {
 					return false;
-			} else if (!lineNumber.equals(other.lineNumber))
+				}
+			} else if (!lineNumber.equals(other.lineNumber)) {
 				return false;
+			}
 			if (message == null) {
-				if (other.message != null)
+				if (other.message != null) {
 					return false;
-			} else if (!message.equals(other.message))
+				}
+			} else if (!message.equals(other.message)) {
 				return false;
+			}
 			return true;
 		}
 
@@ -228,9 +255,9 @@ public class DefaultImportContext implements IImportContext {
 			return DefaultImportContext.this;
 		}
 	}
-	
+
 	@Override
-	public IImportProblem createProblem(final String string, boolean trackFile, boolean trackLine, boolean trackField) {
+	public IImportProblem createProblem(final String string, final boolean trackFile, final boolean trackLine, final boolean trackField) {
 		if (readerStack.isEmpty()) {
 			return new DefaultImportProblem(null, null, null, string);
 		} else {
@@ -244,9 +271,9 @@ public class DefaultImportContext implements IImportContext {
 		}
 	}
 
-	private LinkedHashSet<IImportProblem> problems = new LinkedHashSet<IImportContext.IImportProblem>();
+	private final LinkedHashSet<IImportProblem> problems = new LinkedHashSet<IImportContext.IImportProblem>();
 	private MMXRootObject rootObject;
-	
+
 	@Override
 	public List<IImportProblem> getProblems() {
 		return new ArrayList<IImportProblem>(problems);
@@ -257,11 +284,13 @@ public class DefaultImportContext implements IImportContext {
 		return rootObject;
 	}
 
-	public void setRootObject(MMXRootObject root) {
+	public void setRootObject(final MMXRootObject root) {
 		this.rootObject = root;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see com.mmxlabs.models.util.importer.IImportContext#peekReader()
 	 */
 	@Override
