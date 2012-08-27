@@ -167,6 +167,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		optionalElements.removeAll(pairingHints.values());
 
 		// Add all elements to the unsequenced set.
+		final Set<ISequenceElement> sequencedElements = new LinkedHashSet<ISequenceElement>();
 		final Set<ISequenceElement> unsequencedElements = new LinkedHashSet<ISequenceElement>();
 		unsequencedElements.addAll(data.getSequenceElements());
 
@@ -447,6 +448,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 							}
 						}
 						sequence.add(there);
+						for (ISequenceElement e : there) {
+							if (!sequencedElements.add(e)) {
+								log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+							}
+						}
 						log.info("Adding chunk " + there);
 						here = there;
 						iterator.remove();
@@ -466,6 +472,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					final SequenceChunk chunk = new SequenceChunk();
 					chunk.add(element);
 					sequence.add(chunk);
+					for (ISequenceElement e : chunk) {
+						if (!sequencedElements.add(e)) {
+							log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+						}
+					}
 				}
 
 				// Resource is unused, so lets try and add in some unused chunk using the resource suggestion.
@@ -492,6 +503,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 						if (chunkChecker.canFollow(here, there, resource)) {
 							sequence.add(there);
+							for (ISequenceElement e : there) {
+								if (!sequencedElements.add(e)) {
+									log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+								}
+							}
 							here = there;
 							iterator.remove();
 							if (vesselProvider.getVessel(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
@@ -530,7 +546,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 						log.info("Trying to insert on " + suggestedResource);
 						final List<SequenceChunk> sequence = sequences.get(suggestedResource);
 
-						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource)) {
+						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource, sequencedElements)) {
 							break top;
 						} else {
 							log.info("Could not insert at suggested location");
@@ -540,7 +556,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					for (final Map.Entry<IResource, List<SequenceChunk>> entry : sequences.entrySet()) {
 						final IResource res = entry.getKey();
 						final List<SequenceChunk> sequence = entry.getValue();
-						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, res)) {
+						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, res, sequencedElements)) {
 							break top;
 						}
 					}
@@ -621,10 +637,15 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		return result;
 	}
 
-	private boolean tryInsertingChunk(final ChunkChecker chunkChecker, final Iterator<SequenceChunk> iterator, final SequenceChunk here, final List<SequenceChunk> sequence, final IResource res) {
+	private boolean tryInsertingChunk(final ChunkChecker chunkChecker, final Iterator<SequenceChunk> iterator, final SequenceChunk here, final List<SequenceChunk> sequence, final IResource res, 	final Set<ISequenceElement> sequencedElements) {
 		if (here.isEndElement()) {
 			if (chunkChecker.canFollow(sequence.get(sequence.size() - 1), here, res)) {
 				sequence.add(here);
+				for (ISequenceElement e : here) {
+					if (!sequencedElements.add(e)) {
+						log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+					}
+				}
 				iterator.remove();
 				return true;
 				// break top;
@@ -633,6 +654,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			for (int i = 0; i < (sequence.size() - 1); i++) {
 				if (chunkChecker.canInsert(sequence.get(i), here, sequence.get(i + 1), res)) {
 					sequence.add(i + 1, here);
+					for (ISequenceElement e : here) {
+						if (!sequencedElements.add(e)) {
+							log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+						}
+					}
 					iterator.remove();
 					return true;
 					// break top;
