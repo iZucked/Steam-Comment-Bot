@@ -310,8 +310,9 @@ public class OptimisationTransformer {
 					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
 
 					for (final UUIDObject assignedObject : seq.getAssignedObjects()) {
-						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET)
+						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) {
 							continue;
+						}
 						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
 							sequence.add(element);
 						}
@@ -326,7 +327,7 @@ public class OptimisationTransformer {
 				if (assignment.getVessels().isEmpty())
 					continue assignments;
 				IVessel vessel = null;
-				;
+				
 				if (assignment.isAssignToSpot()) {
 					if (inputModel.getLockedAssignedObjects().containsAll(assignment.getAssignedObjects())) {
 						continue assignments; // these will get assigned by their constraints.
