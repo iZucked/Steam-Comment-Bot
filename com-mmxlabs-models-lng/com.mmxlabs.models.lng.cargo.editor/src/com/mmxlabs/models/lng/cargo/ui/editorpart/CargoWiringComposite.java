@@ -102,6 +102,18 @@ public class CargoWiringComposite extends Composite {
 	private final Object updateLock = new Object();
 
 	private final MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
+		public void notifyChanged(Notification notification) {
+
+			super.notifyChanged(notification);
+
+		};
+
+		public void enable(boolean skip) {
+			// Normally this means we should ignore anything that has happened.
+			// However here we ignore this and process the data anyway.
+			// TODO: This needs testing!
+			super.enable(false);
+		};
 
 		protected void missedNotifications(final List<Notification> missed) {
 			final ArrayList<Notification> missedNotifications = new ArrayList<Notification>(missed);
@@ -198,7 +210,6 @@ public class CargoWiringComposite extends Composite {
 
 					} else if (notification.getEventType() == Notification.REMOVE) {
 						final Cargo cargo = (Cargo) notification.getOldValue();
-						cargo.eAdapters().remove(cargoChangeAdapter);
 						final LoadSlot loadSlot = cargo.getLoadSlot();
 						final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
 
@@ -314,9 +325,6 @@ public class CargoWiringComposite extends Composite {
 
 		if (dischargeSlot != null) {
 
-			if (dischargeSlot.getName().toLowerCase().contains("DES Sales-2013-8-0".toLowerCase())) {
-				int ii = 0;
-			}
 			if (dischargeSlots.contains(dischargeSlot)) {
 				dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
 			} else {
@@ -837,9 +845,6 @@ public class CargoWiringComposite extends Composite {
 	}
 
 	private void ensureCapacity(final int size, final List<?>... lists) {
-		System.out.println("Ensure capacpity " + size);
-		System.out.flush();
-
 		for (final List<? extends Object> l : lists) {
 			if (l.size() < size) {
 				l.add(size - 1, null);
