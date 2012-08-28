@@ -870,13 +870,13 @@ public class CargoWiringComposite extends Composite {
 		currentWiringCommand = new CompoundCommand("Rewire Cargoes");
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 
-		boolean addNewElement = false;
 		for (int i = 0; i < newWiring.size(); ++i) {
 			if (wiring.get(i).equals(newWiring.get(i))) {
 				// No change
 				continue;
 			}
 			final Integer newIndex = newWiring.get(i);
+			LoadSlot loadSlot = loadSlots.get(i);
 			if (newIndex >= 0 && newIndex < newWiring.size()) {
 				final DischargeSlot otherDischarge = dischargeSlots.get(newIndex);
 				Cargo c = cargoes.get(i);
@@ -887,164 +887,60 @@ public class CargoWiringComposite extends Composite {
 				} else {
 					// create a new cargo
 					c = createNewCargo(cargoModel);
-					c.setName(loadSlots.get(i).getName());
-					ensureCapacity(i + 1, cargoes, loadSlots, dischargeSlots);
-					cargoes.set(i, c);
-					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(i), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlots.get(i)));
-					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(i), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
-					// New element added - but no increase in number of rows...
-					idComposites.get(i).display(location, location.getRootObject(), c, null);
+					c.setName(loadSlot.getName());
+					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
+					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
 				}
 			} else if (newIndex == -1) {
 				final Cargo c = cargoes.get(i);
 				if (c != null) {
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
 					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), c));
-					cargoes.set(i, null);
-					idComposites.get(i).display(location, location.getRootObject(), null, null);
 				} else {
 					// Error?
 				}
 			} else {
 				final DischargeSlot dischargeSlot = createNewDischarge(cargoModel, false);
-				ensureCapacity(newIndex + 1, cargoes, loadSlots, dischargeSlots);
+				// ensureCapacity(newIndex + 1, cargoes, loadSlots, dischargeSlots);
 				dischargeSlots.set(newIndex, dischargeSlot);
 				Cargo c = cargoes.get(i);
 				if (c == null) {
 					// create a cargo
 					c = createNewCargo(cargoModel);
-					c.setName(loadSlots.get(i).getName());
-					ensureCapacity(i + 1, cargoes, loadSlots, dischargeSlots);
-					cargoes.set(i, c);
-					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(i), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlots.get(i)));
-					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(i), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlots.get(newIndex)));
+					c.setName(loadSlot.getName());
+					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
+					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
 				} else {
-					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(i), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlots.get(newIndex)));
+					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
 				}
-				addNewElement = true;
 			}
 		}
-		//
-		// if (newWiring.get(topIndex) != -1) {
-		// final LoadSlot loadSlot = createNewLoad(cargoModel, newWiring.get(topIndex) == -1);
-		// ensureCapacity(topIndex + 1, cargoes, loadSlots, dischargeSlots);
-		// loadSlots.set(topIndex, loadSlot);
-		// {
-		// // create a cargo
-		// final Cargo c = createNewCargo(cargoModel);
-		// c.setName(loadSlots.get(topIndex).getName());
-		// cargoes.set(topIndex, c);
-		// currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(topIndex), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlots.get(topIndex)));
-		// currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(topIndex), CargoPackage.eINSTANCE.getCargo_DischargeSlot(),
-		// dischargeSlots.get(newWiring.get(topIndex))));
-		// }
-		// addNewElement = true;
-		//
-		// }
 
 		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
 		currentWiringCommand = null;
-
-		CargoWiringComposite.this.wiring.clear();
-		CargoWiringComposite.this.wiring.addAll(newWiring);
-
-		if (addNewElement) {
-			if (wiring.get(numberOfRows) == null) {
-				wiring.set(numberOfRows, -1);
-			}
-			numberOfRows++;
-		}
-		performControlUpdate(addNewElement);
 	}
 
 	private void runWiringUpdate(final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 
-		// final int loadIdx;
-		// // Find or add load slot to load slots list (and bring in cargo and discharge if not present)
-		// boolean insertedLoad = false;
-		// if (loadSlots.contains(loadSlot)) {
-		// loadIdx = loadSlots.indexOf(loadSlot);
-		// } else {
-		// loadIdx = numberOfRows;
-		// ensureCapacity(loadIdx + 1, cargoes, loadSlots, dischargeSlots);
-		// loadSlots.set(loadIdx, loadSlot);
-		// insertedLoad = true;
-		// // Inserting the load slot - should insert the cargo and discharge also
-		// final Cargo c = loadSlot.getCargo();
-		//
-		// if (c != null) {
-		// cargoes.set(loadIdx, c);
-		// dischargeSlots.set(loadIdx, c.getDischargeSlot());
-		// wiring.add(loadIdx);
-		// } else {
-		// wiring.add(-1);
-		// }
-		// }
-		//
-		// // Find or add discharge slot to discharge slots list (and bring in cargo and load if not present)
-		// final int dischargeIdx;
-		// boolean insertedDischarge = false;
-		// if (dischargeSlots.contains(dischargeSlot)) {
-		// dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
-		// } else {
-		// dischargeIdx = numberOfRows;
-		// ensureCapacity(dischargeIdx + 1, cargoes, loadSlots, dischargeSlots);
-		// dischargeSlots.set(dischargeIdx, dischargeSlot);
-		// insertedDischarge = true;
-		//
-		// // Inserting the discharge slot - should insert the cargo and load also
-		// final Cargo c = dischargeSlot.getCargo();
-		//
-		// if (c != null) {
-		// cargoes.set(dischargeIdx, c);
-		// loadSlots.set(dischargeIdx, c.getLoadSlot());
-		// wiring.add(dischargeIdx);
-		// } else {
-		// wiring.add(-1);
-		// }
-		// }
-
 		// Discharge has an existing slot, so remove the cargo & wiring
 		if (dischargeSlot.getCargo() != null) {
-			// final int current = wiring.indexOf(dischargeIdx);
-			// if (current != -1) {
-			// // wiring.set(current, -1);
-			// if (cargoes.get(current) != null) {
-			// TODO: Really if the first if was true, the other two ifs should also be true
 			currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), dischargeSlot.getCargo()));
-			// cargoes.set(current, null);
-			// idComposites.get(current).display(location, location.getRootObject(), null, null);
-			// }
-			// }
 		}
 
 		// Do we need to create a new cargo or re-wire and existing one.
 		Cargo cargo = loadSlot.getCargo();
 		if (cargo != null) {
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
-			// wiring.set(loadIdx, dischargeIdx);
 		} else {
 			cargo = createNewCargo(cargoModel);
 			cargo.setName(loadSlot.getName());
-			// ensureCapacity(loadIdx + 1, dischargeSlots, cargoes, loadSlots);
-			//
-			// cargoes.set(loadIdx, cargo);
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
-
-			// wiring.set(loadIdx, dischargeIdx);
-			//
-			// if (!insertedLoad && !insertedDischarge) {
-			// // If we've inserted then all the composites are currently recreated, otherwise update inline
-			// idComposites.get(loadIdx).display(location, location.getRootObject(), cargo, null);
-			// }
 		}
 
 		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
 		currentWiringCommand = null;
-
-		// performControlUpdate(insertedLoad || insertedDischarge);
 	}
 
 	private void createMenus(final IMenuManager manager, final Slot source, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
