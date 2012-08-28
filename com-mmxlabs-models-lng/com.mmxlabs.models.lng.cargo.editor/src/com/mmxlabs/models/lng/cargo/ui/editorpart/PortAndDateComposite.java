@@ -9,8 +9,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -38,15 +41,16 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
 	private ICommandHandler commandHandler;
 	private final MenuManager menuManager;
+	private Button ctxButton;
 
 	public PortAndDateComposite(final Composite parent, final int style, final IWorkbenchPartSite site, final boolean isLoad) {
 		super(parent, style);
 
-		final GridLayout gridLayout = new GridLayout(4, false);
+		final GridLayout gridLayout = new GridLayout(5, false);
 		gridLayout.marginHeight = 0;
 		// gridLayout.marginBottom = 0;
 		// gridLayout.marginTop = 0;
-		gridLayout.horizontalSpacing = 1;
+		gridLayout.horizontalSpacing = 5;
 		gridLayout.verticalSpacing = 0;
 		if (isLoad) {
 			gridLayout.marginRight = 5;
@@ -55,11 +59,18 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		}
 		gridLayout.marginWidth = 0;
 		setLayout(gridLayout);
-
+		if (!isLoad) {
+			ctxButton = new Button(this, SWT.PUSH);
+			ctxButton.setText("<");
+		}
 		addInlineEditor(ComponentHelperUtils.createDefaultEditor(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.Literals.NAMED_OBJECT__NAME));
 		addInlineEditor(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__CONTRACT));
 		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
 		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__WINDOW_START)));
+		if (isLoad) {
+			ctxButton = new Button(this, SWT.PUSH);
+			ctxButton.setText(">");
+		}
 
 		// Create a context menu for this control. Menu items will be populated using the IMenuListeners add using #addMenuListener
 		menuManager = new MenuManager("#PopupMenu");
@@ -67,6 +78,20 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		menuManager.setRemoveAllWhenShown(true);
 		final Menu m = menuManager.createContextMenu(this);
 		this.setMenu(m);
+		ctxButton.setMenu(m);
+		ctxButton.addSelectionListener(new SelectionListener() {
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				m.setLocation(ctxButton.toDisplay(e.x, e.y));
+				m.setVisible(true);
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+
+			}
+		});
 	}
 
 	@Override
