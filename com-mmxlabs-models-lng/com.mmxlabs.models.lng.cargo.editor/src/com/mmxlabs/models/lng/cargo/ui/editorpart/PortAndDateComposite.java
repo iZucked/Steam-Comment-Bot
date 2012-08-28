@@ -37,25 +37,25 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	private Slot slot;
 	protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
 	private ICommandHandler commandHandler;
-	private MenuManager menuManager;
+	private final MenuManager menuManager;
 
-	public PortAndDateComposite(final Composite parent, final int style, IWorkbenchPartSite site, boolean isLoad) {
+	public PortAndDateComposite(final Composite parent, final int style, final IWorkbenchPartSite site, final boolean isLoad) {
 		super(parent, style);
 
-		GridLayout gridLayout = new GridLayout(4, false);
+		final GridLayout gridLayout = new GridLayout(4, false);
 		gridLayout.marginHeight = 0;
-//		gridLayout.marginBottom = 0;
-//		gridLayout.marginTop = 0;
+		// gridLayout.marginBottom = 0;
+		// gridLayout.marginTop = 0;
 		gridLayout.horizontalSpacing = 1;
 		gridLayout.verticalSpacing = 0;
-		if(isLoad){
+		if (isLoad) {
 			gridLayout.marginRight = 5;
-		} else{
+		} else {
 			gridLayout.marginLeft = 5;
 		}
 		gridLayout.marginWidth = 0;
 		setLayout(gridLayout);
-		
+
 		addInlineEditor(ComponentHelperUtils.createDefaultEditor(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.Literals.NAMED_OBJECT__NAME));
 		addInlineEditor(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__CONTRACT));
 		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
@@ -65,7 +65,7 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		menuManager = new MenuManager("#PopupMenu");
 		site.registerContextMenu(menuManager, site.getSelectionProvider());
 		menuManager.setRemoveAllWhenShown(true);
-		Menu m = menuManager.createContextMenu(this);
+		final Menu m = menuManager.createContextMenu(this);
 		this.setMenu(m);
 	}
 
@@ -77,11 +77,11 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		super.dispose();
 	}
 
-	public void addMenuListener(IMenuListener l) {
+	public void addMenuListener(final IMenuListener l) {
 		menuManager.addMenuListener(l);
 	}
 
-	public void removeMenuListener(IMenuListener l) {
+	public void removeMenuListener(final IMenuListener l) {
 		menuManager.removeMenuListener(l);
 	}
 
@@ -110,22 +110,22 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	public void addInlineEditor(final IInlineEditor editor) {
 		editors.add(editor);
 		editor.setCommandHandler(commandHandler);
-		Control control = editor.createControl(this);
-		int column = editors.size();
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, false, false);
+		final Control control = editor.createControl(this);
+		final int column = editors.size();
+		final GridData gd = new GridData(SWT.FILL, SWT.FILL, false, false);
 		gd.verticalIndent = 0;
-		switch(column){
-			case 0:
-				gd.widthHint = 120; // ID
-			case 1:
-				gd.widthHint = 120; // contract
-			case 2:
-				gd.widthHint = 120; // port
-			case 3:
-				gd.widthHint = 120; // date
+		switch (column) {
+		case 0:
+			gd.widthHint = 120; // ID
+		case 1:
+			gd.widthHint = 120; // contract
+		case 2:
+			gd.widthHint = 120; // port
+		case 3:
+			gd.widthHint = 120; // date
 		}
 		control.setLayoutData(gd);
-		control.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));		
+		control.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
 	}
 
 	@Override
@@ -161,13 +161,20 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
-		
+
 		if (isDisposed()) {
 			return;
 		}
-		
+
 		for (final IInlineEditor editor : editors) {
 			editor.processValidation(status);
+		}
+	}
+
+	@Override
+	public void setEnabled(final boolean enabled) {
+		for (final IInlineEditor editor : editors) {
+			editor.setEnabled(enabled);
 		}
 	}
 

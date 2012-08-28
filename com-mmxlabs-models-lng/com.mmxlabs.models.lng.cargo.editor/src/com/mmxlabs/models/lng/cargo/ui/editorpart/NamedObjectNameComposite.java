@@ -32,15 +32,15 @@ public class NamedObjectNameComposite extends Composite implements IDisplayCompo
 		super(parent, style);
 		GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginHeight = 0;
-//		gridLayout.marginBottom = 0;
-//		gridLayout.marginTop = 0;
+		// gridLayout.marginBottom = 0;
+		// gridLayout.marginTop = 0;
 		gridLayout.horizontalSpacing = 0;
 		gridLayout.verticalSpacing = 0;
-//		gridLayout.marginRight = 0;
-//		gridLayout.marginLeft = 0	;
+		// gridLayout.marginRight = 0;
+		// gridLayout.marginLeft = 0 ;
 		gridLayout.marginWidth = 0;
 		setLayout(gridLayout);
-		
+
 		addInlineEditor(ComponentHelperUtils.createDefaultEditor(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.Literals.NAMED_OBJECT__NAME));
 	}
 
@@ -106,4 +106,10 @@ public class NamedObjectNameComposite extends Composite implements IDisplayCompo
 		}
 	}
 
+	@Override
+	public void setEnabled(final boolean enabled) {
+		for (final IInlineEditor editor : editors) {
+			editor.setEnabled(enabled);
+		}
+	}
 }
