@@ -135,6 +135,10 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 
 	@Override
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range) {
+
+		if (isDisposed()) {
+			return;
+		}
 		if (value instanceof Slot) {
 			slot = (Slot) value;
 			this.setVisible(true);
@@ -176,6 +180,10 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		for (final IInlineEditor editor : editors) {
 			editor.setEnabled(enabled);
 		}
+	}
+
+	public Slot getSlot() {
+		return slot;
 	}
 
 }
