@@ -437,15 +437,21 @@ public class SlotVisitImpl extends EventImpl implements SlotVisit {
 		final SlotAllocation slotAllocation = getSlotAllocation();
 		final Slot slot = slotAllocation.getSlot();
 		if (slot != null) {
-			
+
 			// Show cargo ID rather than slot ID.
 			// TODO: Perhaps this should be a UI configurable option
 			if (slot instanceof LoadSlot) {
-				return ((LoadSlot) slot).getCargo().getName();
+				final Cargo cargo = ((LoadSlot) slot).getCargo();
+				if (cargo != null) {
+					return cargo.getName();
+				}
 			} else if (slot instanceof DischargeSlot) {
-				return ((DischargeSlot) slot).getCargo().getName();
+				final Cargo cargo = ((DischargeSlot) slot).getCargo();
+				if (cargo != null) {
+					return cargo.getName();
+				}
 			}
-			
+
 			return slot.getName();
 		}
 		return "";
