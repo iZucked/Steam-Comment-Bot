@@ -74,15 +74,21 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 		public void addSlot(final Slot slot) {
 
 			if (slot instanceof LoadSlot) {
-				LoadSlot load = (LoadSlot) slot;
-				if (load.isDESPurchase()) return;				
-			}
-			else if (slot instanceof DischargeSlot) {
-				DischargeSlot disch = (DischargeSlot) slot;
+				final LoadSlot load = (LoadSlot) slot;
+				if (load.isDESPurchase()) {
+					return;
+				}
+			} else if (slot instanceof DischargeSlot) {
+				final DischargeSlot disch = (DischargeSlot) slot;
 				if (disch.isFOBSale()) {
 					return;
 				}
 			}
+
+			if (slot instanceof SpotSlot) {
+				return;
+			}
+
 			final Date windowStart = slot.getWindowStart();
 			if (windowStart == null) {
 				return;
@@ -127,23 +133,27 @@ public class SlotDateOverlapConstraint extends AbstractModelConstraint {
 
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
-		EObject object = ctx.getTarget();
+		final EObject object = ctx.getTarget();
 		final IExtraValidationContext extraValidationContext = Activator.getDefault().getExtraValidationContext();
-		EObject original = extraValidationContext.getOriginal(object);
-		EObject replacement = extraValidationContext.getReplacement(object);
+		final EObject original = extraValidationContext.getOriginal(object);
+		final EObject replacement = extraValidationContext.getReplacement(object);
 
 		if (object instanceof Slot) {
 
-			Slot slot = (Slot) object;
+			final Slot slot = (Slot) object;
 			if (slot instanceof LoadSlot) {
-				LoadSlot load = (LoadSlot) slot;
-				if (load.isDESPurchase()) return ctx.createSuccessStatus();				
-			}
-			else if (slot instanceof DischargeSlot) {
-				DischargeSlot disch = (DischargeSlot) slot;
+				final LoadSlot load = (LoadSlot) slot;
+				if (load.isDESPurchase()) {
+					return ctx.createSuccessStatus();
+				}
+			} else if (slot instanceof DischargeSlot) {
+				final DischargeSlot disch = (DischargeSlot) slot;
 				if (disch.isFOBSale()) {
 					return ctx.createSuccessStatus();
 				}
+			}
+			if (slot instanceof SpotSlot) {
+				return ctx.createSuccessStatus();
 			}
 
 			final Object currentConstraintData = ctx.getCurrentConstraintData();
