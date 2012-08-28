@@ -148,10 +148,15 @@ public class LNGModelCorrector {
 
 		final CompoundCommand cmd = new CompoundCommand("Remove bad element assignments");
 		final InputModel inputModel = rootObject.getSubModel(InputModel.class);
+		final Set<UUIDObject> seenObjects = new HashSet<UUIDObject>();
 		if (inputModel != null) {
 
 			for (final ElementAssignment ea : inputModel.getElementAssignments()) {
 				final UUIDObject assignedObject = ea.getAssignedObject();
+				// Delete duplicates
+				if (!seenObjects.add(assignedObject)) {
+					cmd.append(DeleteCommand.create(ed, ea));
+				}
 				if (assignedObject instanceof Cargo) {
 					continue;
 				}
