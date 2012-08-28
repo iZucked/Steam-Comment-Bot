@@ -614,7 +614,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					actualSize++;
 				}
 			}
-
+			actualElements.addAll(unusedElements);
 			actualSize += unusedElements.size();
 
 			int expectedSize = 0;
