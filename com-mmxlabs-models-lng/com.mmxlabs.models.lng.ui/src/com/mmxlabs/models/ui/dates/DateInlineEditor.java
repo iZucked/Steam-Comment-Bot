@@ -32,6 +32,9 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void updateValueDisplay(Object value) {
+		if (formattedText.getControl() == null || formattedText.getControl().isDisposed()) {
+			return;
+		}
 		dateFormatter.setTimeZone(LocalDateUtil.getTimeZone(input, (EAttribute) this.feature));
 		formattedText.setValue(value);
 	}
