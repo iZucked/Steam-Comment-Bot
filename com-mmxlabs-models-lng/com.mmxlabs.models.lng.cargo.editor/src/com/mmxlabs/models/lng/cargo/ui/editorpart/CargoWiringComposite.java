@@ -60,6 +60,8 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDiagram;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
 import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
@@ -869,6 +871,7 @@ public class CargoWiringComposite extends Composite {
 	protected void doWiringChanged(final List<Integer> newWiring) {
 		currentWiringCommand = new CompoundCommand("Rewire Cargoes");
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
+		final InputModel inputModel = location.getRootObject().getSubModel(InputModel.class);
 
 		for (int i = 0; i < newWiring.size(); ++i) {
 			if (wiring.get(i).equals(newWiring.get(i))) {
@@ -891,6 +894,7 @@ public class CargoWiringComposite extends Composite {
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
 				}
+				appendFOBDESCommands(currentWiringCommand, location.getEditingDomain(), inputModel, c, loadSlot, otherDischarge);
 			} else if (newIndex == -1) {
 				final Cargo c = cargoes.get(i);
 				if (c != null) {
@@ -913,6 +917,8 @@ public class CargoWiringComposite extends Composite {
 				} else {
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
 				}
+				appendFOBDESCommands(currentWiringCommand, location.getEditingDomain(), inputModel, c, loadSlot, dischargeSlot);
+
 			}
 		}
 
@@ -920,8 +926,29 @@ public class CargoWiringComposite extends Composite {
 		currentWiringCommand = null;
 	}
 
+	private void appendFOBDESCommands(CompoundCommand cmd, EditingDomain editingDomain, InputModel inputModel, Cargo cargo, LoadSlot loadSlot, DischargeSlot dischargeSlot) {
+
+		if (loadSlot.isDESPurchase()) {
+			cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
+
+			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
+			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
+			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
+			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+		} else if (dischargeSlot.isFOBSale()) {
+			cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
+			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
+			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
+			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
+			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+
+		}
+
+	}
+
 	private void runWiringUpdate(final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
+		final InputModel inputModel = location.getRootObject().getSubModel(InputModel.class);
 
 		// Discharge has an existing slot, so remove the cargo & wiring
 		if (dischargeSlot.getCargo() != null) {
@@ -938,6 +965,8 @@ public class CargoWiringComposite extends Composite {
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
 		}
+
+		appendFOBDESCommands(currentWiringCommand, location.getEditingDomain(), inputModel, cargo, loadSlot, dischargeSlot);
 
 		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
 		currentWiringCommand = null;
