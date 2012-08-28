@@ -1,4 +1,5 @@
 /**
+
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
@@ -8,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.jface.action.MenuManager;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -84,7 +85,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	 * @param i
 	 * @param color
 	 */
-	public void setLeftTerminalColor(final int index, final Color color) {
+	public synchronized void setLeftTerminalColor(final int index, final Color color) {
 		terminalColours.get(index).setFirst(color);
 	}
 
@@ -94,7 +95,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	 * @param i
 	 * @param color
 	 */
-	public void setRightTerminalColor(final int index, final Color color) {
+	public synchronized void setRightTerminalColor(final int index, final Color color) {
 		terminalColours.get(index).setSecond(color);
 	}
 
@@ -105,36 +106,36 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	 * 
 	 * @param colours
 	 */
-	public void setTerminalColors(final List<Pair<Color, Color>> colours) {
+	public synchronized void setTerminalColors(final List<Pair<Color, Color>> colours) {
 		terminalColours.clear();
 		terminalColours.addAll(colours);
 	}
 
-	public void setWireColor(final int index, final Color color) {
+	public synchronized void setWireColor(final int index, final Color color) {
 		wireColours.set(index, color);
 	}
 
-	public void setWireColors(final List<Color> colours) {
+	public synchronized void setWireColors(final List<Color> colours) {
 		wireColours.clear();
 		wireColours.addAll(colours);
 	}
 
-	public void setLeftTerminalValid(final int index, final boolean valid) {
+	public synchronized void setLeftTerminalValid(final int index, final boolean valid) {
 		leftTerminalValid.set(index, valid);
 	}
 
-	public void setRightTerminalValid(final int index, final boolean valid) {
+	public synchronized void setRightTerminalValid(final int index, final boolean valid) {
 		rightTerminalValid.set(index, valid);
 	}
 
-	public void setTerminalsValid(final List<Boolean> leftTerminalsValid, final List<Boolean> rightTerminalsValid) {
+	public synchronized void setTerminalsValid(final List<Boolean> leftTerminalsValid, final List<Boolean> rightTerminalsValid) {
 		this.leftTerminalValid.clear();
 		this.leftTerminalValid.addAll(leftTerminalsValid);
 		this.rightTerminalValid.clear();
 		this.rightTerminalValid.addAll(rightTerminalsValid);
 	}
 
-	public void setWiring(final List<Integer> wiring) {
+	public synchronized void setWiring(final List<Integer> wiring) {
 		this.wiring.clear();
 		this.wiring.addAll(wiring);
 	}
@@ -147,7 +148,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		return terminalSize;
 	}
 
-	public void setTerminalSize(final int terminalSize) {
+	public synchronized void setTerminalSize(final int terminalSize) {
 		this.terminalSize = terminalSize;
 	}
 
@@ -155,11 +156,11 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		return pathWidth;
 	}
 
-	public void setPathWidth(final int pathWidth) {
+	public synchronized void setPathWidth(final int pathWidth) {
 		this.pathWidth = pathWidth;
 	}
 
-	private Path makeConnector(final Device d, final float x1, final float y1, final float x2, final float y2) {
+	private synchronized Path makeConnector(final Device d, final float x1, final float y1, final float x2, final float y2) {
 		final Path path = new Path(d);
 
 		final float xMidpoint = (x1 + x2) / 2.0f;
@@ -174,8 +175,15 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	}
 
 	@Override
-	public void paintControl(final PaintEvent e) {
+	public synchronized void paintControl(final PaintEvent e) {
+
 		final List<Float> terminalPositions = getTerminalPositions();
+		// Copy arrays in case of concurrent change during paint
+		List<Integer> wiring2 = new ArrayList<Integer>(wiring);
+		List<Boolean> leftTerminalValid2 = new ArrayList<Boolean>(leftTerminalValid);
+		List<Pair<Color, Color>> terminalColours2 = new ArrayList<Pair<Color, Color>>(terminalColours);
+		List<Boolean> rightTerminalValid2 = new ArrayList<Boolean>(rightTerminalValid);
+
 		final GC graphics = e.gc;
 		graphics.setAntialias(SWT.ON);
 
@@ -189,8 +197,8 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		graphics.setLineWidth(pathWidth);
 
 		// draw paths
-		for (int i = 0; i < wiring.size(); i++) {
-			final int destination = wiring.get(i);
+		for (int i = 0; i < wiring2.size(); i++) {
+			final int destination = wiring2.get(i);
 
 			if (destination < 0) {
 				continue; // no wire
@@ -243,14 +251,14 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 			// draw terminal blobs
 			// final int midpoint = vMidPoints.get(i);
-			if (leftTerminalValid.get(i)) {
-				graphics.setBackground(terminalColours.get(i).getFirst());
+			if (leftTerminalValid2.get(i)) {
+				graphics.setBackground(terminalColours2.get(i).getFirst());
 
 				graphics.fillOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
 				graphics.drawOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
 			}
-			if (rightTerminalValid.get(i)) {
-				graphics.setBackground(terminalColours.get(i).getSecond());
+			if (rightTerminalValid2.get(i)) {
+				graphics.setBackground(terminalColours2.get(i).getSecond());
 
 				graphics.fillOval(ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
 				graphics.drawOval(ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
@@ -319,6 +327,9 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 		// if we are dragging, move the wire terminus and refresh
 		if (dragging) {
+
+			// checkScroll(e);
+
 			dragX = e.x;
 			dragY = e.y;
 			redraw();

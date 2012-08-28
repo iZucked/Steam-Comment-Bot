@@ -36,6 +36,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
@@ -103,187 +104,185 @@ public class CargoWiringComposite extends Composite {
 	private final MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
 
 		protected void missedNotifications(final List<Notification> missed) {
-			for (final Notification n : new ArrayList<Notification>(missed)) {
-				reallyNotifyChanged(n);
-			}
+			final ArrayList<Notification> missedNotifications = new ArrayList<Notification>(missed);
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					synchronized (updateLock) {
+						for (final Notification n : missedNotifications) {
+							localNotifyChanged(n);
+						}
+						performControlUpdate(false);
+
+					}
+				}
+			});
 		}
 
 		@Override
 		public synchronized void reallyNotifyChanged(final Notification notification) {
+			Display.getDefault().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+					synchronized (updateLock) {
+						localNotifyChanged(notification);
+						performControlUpdate(false);
+
+					}
+				}
+			});
+		}
+
+		public synchronized void localNotifyChanged(final Notification notification) {
 
 			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
 				return;
 			}
-			synchronized (updateLock) {
 
-				// for (int i = 0; i < numberOfRows; ++i) {
-				// assert wiring.get(i) != null;
-				// }
+			boolean rowAdded = false;
+			boolean performUpdate = false;
 
-				boolean rowAdded = false;
-				boolean performUpdate = false;
+			if (notification.getNotifier() instanceof Cargo) {
+				final Cargo cargo = (Cargo) notification.getNotifier();
+				// Check cargo wiring
+				if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_LoadSlot()) {
+					final Cargo c = (Cargo) notification.getNotifier();
+					final LoadSlot loadSlot = (LoadSlot) notification.getNewValue();
+					final DischargeSlot dischargeSlot = c.getDischargeSlot();
 
-				if (notification.getNotifier() instanceof Cargo) {
-					final Cargo cargo = (Cargo) notification.getNotifier();
-					// Check cargo wiring
-					if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_LoadSlot()) {
-						final Cargo c = (Cargo) notification.getNotifier();
-						final LoadSlot loadSlot = (LoadSlot) notification.getNewValue();
-						final DischargeSlot dischargeSlot = c.getDischargeSlot();
-
-						final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
-						if (ret == 2) {
-							rowAdded = true;
-						} else if (ret == 1) {
-							performUpdate = true;
-						}
-
-						if (loadSlot == null) {
-							final LoadSlot oldLoadSlot = (LoadSlot) notification.getOldValue();
-							if (loadSlots.contains(oldLoadSlot)) {
-								final int loadIdx = loadSlots.indexOf(oldLoadSlot);
-								wiring.set(loadIdx, -1);
-								cargoes.set(loadIdx, null);
-								performUpdate = true;
-							}
-						}
-
-					} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_DischargeSlot()) {
-						final Cargo c = (Cargo) notification.getNotifier();
-						final LoadSlot loadSlot = c.getLoadSlot();
-						final DischargeSlot dischargeSlot = (DischargeSlot) notification.getNewValue();
-
-						final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
-						if (ret == 2) {
-							rowAdded = true;
-						} else if (ret == 1) {
-							performUpdate = true;
-						}
-					}
-				} else if (notification.getNotifier() instanceof CargoModel) {
-					if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_Cargoes()) {
-						if (notification.getEventType() == Notification.ADD) {
-							final Cargo cargo = (Cargo) notification.getNewValue();
-							cargo.eAdapters().add(cargoChangeAdapter);
-							final LoadSlot loadSlot = cargo.getLoadSlot();
-							final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
-
-							final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
-							if (ret == 2) {
-								rowAdded = true;
-							} else if (ret == 1) {
-								performUpdate = true;
-							}
-
-						} else if (notification.getEventType() == Notification.REMOVE) {
-							final Cargo cargo = (Cargo) notification.getOldValue();
-							cargo.eAdapters().remove(cargoChangeAdapter);
-							final LoadSlot loadSlot = cargo.getLoadSlot();
-							final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
-
-							final int ret = performCargoUpdate(null, loadSlot, dischargeSlot);
-							if (ret == 2) {
-								rowAdded = true;
-							} else if (ret == 1) {
-								performUpdate = true;
-							}
-						}
-					} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_LoadSlots()) {
-						if (notification.getEventType() == Notification.REMOVE) {
-							final LoadSlot slot = (LoadSlot) notification.getOldValue();
-							if (loadSlots.contains(slot)) {
-								// Remove slot
-								final int index = loadSlots.indexOf(slot);
-								loadSlots.set(index, null);
-								// Remove the wiring
-								wiring.set(index, -1);
-								// Probably be handled later - but to be safe...
-								cargoes.set(index, null);
-								performUpdate = true;
-							}
-						}
-					} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()) {
-						if (notification.getEventType() == Notification.REMOVE) {
-							final DischargeSlot slot = (DischargeSlot) notification.getOldValue();
-							if (dischargeSlots.contains(slot)) {
-								// Remove slot
-								final int index = dischargeSlots.indexOf(slot);
-								dischargeSlots.set(index, null);
-								// Remove the wiring
-								final int wiringIndex = wiring.indexOf(index);
-								if (wiringIndex != -1) {
-									wiring.set(wiringIndex, -1);
-									// Probably be handled later - but to be safe...
-									cargoes.set(wiringIndex, null);
-								}
-								performUpdate = true;
-							}
-						}
-					}
-				}
-
-				// Perform a prune of empty rows
-				boolean rowRemoved = false;
-				for (int i = numberOfRows - 1; i >= 0; --i) {
-					if (loadSlots.get(i) == null && dischargeSlots.get(i) == null) {
-						cargoes.remove(i);
-						loadSlots.remove(i);
-						dischargeSlots.remove(i);
-
-						// Re-index wiring
-						for (int j = 0; j < numberOfRows; ++j) {
-							final int idx = wiring.get(j);
-							if (idx > i) {
-								wiring.set(j, idx - 1);
-							}
-						}
-
-						wiring.remove(i);
-						numberOfRows--;
+					final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
+					if (ret == 2) {
+						rowAdded = true;
+					} else if (ret == 1) {
 						performUpdate = true;
-						rowRemoved = true;
+					}
+
+					if (loadSlot == null) {
+						final LoadSlot oldLoadSlot = (LoadSlot) notification.getOldValue();
+						if (loadSlots.contains(oldLoadSlot)) {
+							final int loadIdx = loadSlots.indexOf(oldLoadSlot);
+							wiring.set(loadIdx, -1);
+							cargoes.set(loadIdx, null);
+							performUpdate = true;
+						}
+					}
+
+				} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_DischargeSlot()) {
+					final Cargo c = (Cargo) notification.getNotifier();
+					final LoadSlot loadSlot = c.getLoadSlot();
+					final DischargeSlot dischargeSlot = (DischargeSlot) notification.getNewValue();
+
+					final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
+					if (ret == 2) {
+						rowAdded = true;
+					} else if (ret == 1) {
+						performUpdate = true;
 					}
 				}
+			} else if (notification.getNotifier() instanceof CargoModel) {
+				if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_Cargoes()) {
+					if (notification.getEventType() == Notification.ADD) {
+						final Cargo cargo = (Cargo) notification.getNewValue();
+						cargo.eAdapters().add(cargoChangeAdapter);
+						final LoadSlot loadSlot = cargo.getLoadSlot();
+						final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
 
-				if (rowAdded) {
+						final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
+						if (ret == 2) {
+							rowAdded = true;
+						} else if (ret == 1) {
+							performUpdate = true;
+						}
 
-					if (wiring.get(numberOfRows) == null) {
-						wiring.set(numberOfRows, -1);
+					} else if (notification.getEventType() == Notification.REMOVE) {
+						final Cargo cargo = (Cargo) notification.getOldValue();
+						cargo.eAdapters().remove(cargoChangeAdapter);
+						final LoadSlot loadSlot = cargo.getLoadSlot();
+						final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+
+						final int ret = performCargoUpdate(null, loadSlot, dischargeSlot);
+						if (ret == 2) {
+							rowAdded = true;
+						} else if (ret == 1) {
+							performUpdate = true;
+						}
 					}
-					numberOfRows++;
-
-					Display.getDefault().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							performControlUpdate(true);
+				} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_LoadSlots()) {
+					if (notification.getEventType() == Notification.REMOVE) {
+						final LoadSlot slot = (LoadSlot) notification.getOldValue();
+						if (loadSlots.contains(slot)) {
+							// Remove slot
+							final int index = loadSlots.indexOf(slot);
+							loadSlots.set(index, null);
+							// Remove the wiring
+							wiring.set(index, -1);
+							// Probably be handled later - but to be safe...
+							cargoes.set(index, null);
+							performUpdate = true;
 						}
-
-					});
-				} else if (rowRemoved) {
-
-					Display.getDefault().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							performControlUpdate(true);
+					}
+				} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()) {
+					if (notification.getEventType() == Notification.REMOVE) {
+						final DischargeSlot slot = (DischargeSlot) notification.getOldValue();
+						if (dischargeSlots.contains(slot)) {
+							// Remove slot
+							final int index = dischargeSlots.indexOf(slot);
+							dischargeSlots.set(index, null);
+							// Remove the wiring
+							final int wiringIndex = wiring.indexOf(index);
+							if (wiringIndex != -1) {
+								wiring.set(wiringIndex, -1);
+								// Probably be handled later - but to be safe...
+								cargoes.set(wiringIndex, null);
+							}
+							performUpdate = true;
 						}
-
-					});
-				} else if (performUpdate) {
-					wiringDiagram.setWiring(wiring);
-					Display.getDefault().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-							performControlUpdate(false);
-						}
-					});
+					}
 				}
-
 			}
+
+			// Perform a prune of empty rows
+			boolean rowRemoved = false;
+			for (int i = numberOfRows - 1; i >= 0; --i) {
+				if (loadSlots.get(i) == null && dischargeSlots.get(i) == null) {
+					cargoes.remove(i);
+					loadSlots.remove(i);
+					dischargeSlots.remove(i);
+
+					// Re-index wiring
+					for (int j = 0; j < numberOfRows; ++j) {
+						final int idx = wiring.get(j);
+						if (idx > i) {
+							wiring.set(j, idx - 1);
+						}
+					}
+
+					wiring.remove(i);
+					numberOfRows--;
+					performUpdate = true;
+					rowRemoved = true;
+				}
+			}
+
+			if (rowAdded) {
+
+				if (wiring.get(numberOfRows) == null) {
+					wiring.set(numberOfRows, -1);
+				}
+				numberOfRows++;
+
+				// performControlUpdate(true);
+			} else if (rowRemoved) {
+
+				// performControlUpdate(true);
+			} else if (performUpdate) {
+				wiringDiagram.setWiring(wiring);
+
+				// performControlUpdate(false);
+			}
+
 		}
 	};
 
@@ -314,6 +313,10 @@ public class CargoWiringComposite extends Composite {
 		}
 
 		if (dischargeSlot != null) {
+
+			if (dischargeSlot.getName().toLowerCase().contains("DES Sales-2013-8-0".toLowerCase())) {
+				int ii = 0;
+			}
 			if (dischargeSlots.contains(dischargeSlot)) {
 				dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
 			} else {
@@ -628,8 +631,10 @@ public class CargoWiringComposite extends Composite {
 				idComposite.setLayoutData(gd);
 				idComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 			}
-			idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
 
+			if (true || idComposite.getObject() != cargoes.get(index)) {
+				idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
+			}
 			final PortAndDateComposite loadSide;
 			if (index < lhsComposites.size()) {
 				loadSide = lhsComposites.get(index);
@@ -648,15 +653,23 @@ public class CargoWiringComposite extends Composite {
 				loadSide.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
 			}
-			loadSide.display(location, location.getRootObject(), loadSlots.get(index), Collections.<EObject> emptyList());
-
+			if (true || loadSide.getSlot() != loadSlots.get(index)) {
+				loadSide.display(location, location.getRootObject(), loadSlots.get(index), Collections.<EObject> emptyList());
+			}
 			leftTerminalsValid.add(loadSlots.get(index) != null);
 
 			if (wiringDiagram == null) {
 				wiringDiagram = new WiringDiagram(this, getStyle() & ~SWT.BORDER) {
 
 					@Override
-					protected List<Float> getTerminalPositions() {
+					public synchronized void paintControl(PaintEvent e) {
+						synchronized (updateLock) {
+							super.paintControl(e);
+						}
+					}
+
+					@Override
+					protected synchronized List<Float> getTerminalPositions() {
 						final float littleOffset = getBounds().y;
 						final ArrayList<Float> vMidPoints = new ArrayList<Float>(numberOfRows);
 						// get vertical coordinates of labels
@@ -665,6 +678,9 @@ public class CargoWiringComposite extends Composite {
 						float lastMidpoint = 0;
 
 						for (int i = 0; i < numberOfRows; ++i) {
+							if (i >= lhsComposites.size()) {
+								continue;
+							}
 							final Composite l = lhsComposites.get(i);
 							final Rectangle lbounds = l.getBounds();
 							lastMidpointButOne = lastMidpoint;
@@ -676,7 +692,7 @@ public class CargoWiringComposite extends Composite {
 					}
 
 					@Override
-					protected void wiringChanged(final List<Integer> newWiring) {
+					protected synchronized void wiringChanged(final List<Integer> newWiring) {
 						doWiringChanged(newWiring);
 					}
 
@@ -735,7 +751,9 @@ public class CargoWiringComposite extends Composite {
 				dischargeSide.addListener(SWT.DefaultSelection, selectionListener);
 				dischargeSide.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
 			}
-			dischargeSide.display(location, location.getRootObject(), dischargeSlots.get(index), Collections.<EObject> emptyList());
+			if (true || dischargeSide.getSlot() != dischargeSlots.get(index)) {
+				dischargeSide.display(location, location.getRootObject(), dischargeSlots.get(index), Collections.<EObject> emptyList());
+			}
 			rightTerminalsValid.add(dischargeSlots.get(index) != null);
 		}
 
@@ -830,17 +848,16 @@ public class CargoWiringComposite extends Composite {
 	}
 
 	private void performControlUpdate(final boolean rowAdded) {
-
 		synchronized (updateLock) {
 
-			if (rowAdded) {
-				createChildren();
-				layout();
-				CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
-			} else {
-				updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
-				CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
-			}
+			// if (rowAdded) {
+			createChildren();
+			layout();
+			CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
+			// } else {
+			// updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
+			// CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
+			// }
 		}
 	}
 
