@@ -183,11 +183,11 @@
                   class="com.mmxlabs.models.lng.cargo.validation.OptionalSlotConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.OptionalSlotConstraint"
                   isEnabledByDefault="true"
-                  lang="com.mmxlabs.models.lng.cargo.validation.constraint1"
+                  lang="Java"
                   mode="Batch"
                   name="Optional Slots"
                   severity="ERROR"
-                  statusCode="com.mmxlabs.models.lng.cargo.validation.constraint1">
+                  statusCode="1">
                <message>
                   Non-optional slot {0} is not assigned to a cargo.
                </message>
