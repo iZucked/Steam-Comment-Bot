@@ -21,6 +21,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
@@ -34,8 +35,14 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 
 public class AssignmentEditorHelper {
 	public static Date getStartDate(final UUIDObject task) {
+
 		if (task instanceof Cargo) {
-			return ((Cargo) task).getLoadSlot().getWindowStartWithSlotOrPortTime();
+			final LoadSlot loadSlot = ((Cargo) task).getLoadSlot();
+			if (loadSlot == null) {
+				// This may happen during a sequence of notifications
+				return null;
+			}
+			return loadSlot.getWindowStartWithSlotOrPortTime();
 		} else if (task instanceof VesselEvent) {
 			return ((VesselEvent) task).getStartBy();
 		} else if (task instanceof Slot) {
