@@ -926,7 +926,7 @@ public class LNGScenarioTransformer {
 								desSlot.setWindowStart(new Date(startTime.getTime()));
 								desSlot.setContract(desPurchaseMarket.getContract());
 								desSlot.setOptional(true);
-								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60 / 24;
+								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60;
 								desSlot.setWindowSize((int) duration);
 								// Key piece of information
 								desSlot.setMarket(desPurchaseMarket);
@@ -1033,7 +1033,7 @@ public class LNGScenarioTransformer {
 								fobSlot.setWindowStart(new Date(startTime.getTime()));
 								fobSlot.setContract(fobSaleMarket.getContract());
 								fobSlot.setOptional(true);
-								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60 / 24;
+								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60;
 								fobSlot.setWindowSize((int) duration);
 								// Key piece of information
 								fobSlot.setMarket(fobSaleMarket);
@@ -1137,7 +1137,7 @@ public class LNGScenarioTransformer {
 								desSlot.setContract(desSalesMarket.getContract());
 								desSlot.setOptional(true);
 								desSlot.setPort((Port) notionalAPort);
-								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l / 24l;
+								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l;
 								desSlot.setWindowSize((int) duration);
 
 								final IDischargeOption desSalesSlot = builder.createDischargeSlot(id, notionalIPort, tw, Calculator.scale(market.getMinQuantity()),
@@ -1247,7 +1247,7 @@ public class LNGScenarioTransformer {
 								fobSlot.setArriveCold(true);
 								fobSlot.setCargoCV(fobPurchaseMarket.getCv());
 								fobSlot.setPort((Port) notionalAPort);
-								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l / 24l;
+								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l;
 								fobSlot.setWindowSize((int) duration);
 
 								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(id, notionalIPort, tw, Calculator.scale(market.getMinQuantity()), Calculator.scale(market.getMaxQuantity()),
