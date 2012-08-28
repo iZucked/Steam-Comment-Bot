@@ -75,6 +75,10 @@ public class NamedObjectNameComposite extends Composite implements IDisplayCompo
 
 	@Override
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range) {
+		
+		if (isDisposed()) {
+			return;
+		}
 		if (value instanceof NamedObject) {
 			object = (NamedObject) value;
 			this.setVisible(true);
@@ -101,6 +105,10 @@ public class NamedObjectNameComposite extends Composite implements IDisplayCompo
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
+
+		if (isDisposed()) {
+			return;
+		}
 		for (final IInlineEditor editor : editors) {
 			editor.processValidation(status);
 		}
@@ -111,5 +119,9 @@ public class NamedObjectNameComposite extends Composite implements IDisplayCompo
 		for (final IInlineEditor editor : editors) {
 			editor.setEnabled(enabled);
 		}
+	}
+
+	public NamedObject getObject() {
+		return object;
 	}
 }
