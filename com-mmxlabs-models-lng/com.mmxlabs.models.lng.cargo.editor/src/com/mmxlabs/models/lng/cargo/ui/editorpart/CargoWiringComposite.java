@@ -98,7 +98,7 @@ public class CargoWiringComposite extends Composite {
 
 	private boolean locked = false;
 
-	private Object updateLock = new Object();
+	private final Object updateLock = new Object();
 
 	private final MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
 
@@ -141,7 +141,7 @@ public class CargoWiringComposite extends Composite {
 						if (loadSlot == null) {
 							final LoadSlot oldLoadSlot = (LoadSlot) notification.getOldValue();
 							if (loadSlots.contains(oldLoadSlot)) {
-								int loadIdx = loadSlots.indexOf(oldLoadSlot);
+								final int loadIdx = loadSlots.indexOf(oldLoadSlot);
 								wiring.set(loadIdx, -1);
 								cargoes.set(loadIdx, null);
 								performUpdate = true;
@@ -199,6 +199,7 @@ public class CargoWiringComposite extends Composite {
 								wiring.set(index, -1);
 								// Probably be handled later - but to be safe...
 								cargoes.set(index, null);
+								performUpdate = true;
 							}
 						}
 					} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()) {
@@ -215,8 +216,32 @@ public class CargoWiringComposite extends Composite {
 									// Probably be handled later - but to be safe...
 									cargoes.set(wiringIndex, null);
 								}
+								performUpdate = true;
 							}
 						}
+					}
+				}
+
+				// Perform a prune of empty rows
+				boolean rowRemoved = false;
+				for (int i = numberOfRows - 1; i >= 0; --i) {
+					if (loadSlots.get(i) == null && dischargeSlots.get(i) == null) {
+						cargoes.remove(i);
+						loadSlots.remove(i);
+						dischargeSlots.remove(i);
+
+						// Re-index wiring
+						for (int j = 0; j < numberOfRows; ++j) {
+							final int idx = wiring.get(j);
+							if (idx > i) {
+								wiring.set(j, idx - 1);
+							}
+						}
+
+						wiring.remove(i);
+						numberOfRows--;
+						performUpdate = true;
+						rowRemoved = true;
 					}
 				}
 
@@ -226,6 +251,17 @@ public class CargoWiringComposite extends Composite {
 						wiring.set(numberOfRows, -1);
 					}
 					numberOfRows++;
+
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							performControlUpdate(true);
+						}
+
+					});
+				} else if (rowRemoved) {
 
 					Display.getDefault().asyncExec(new Runnable() {
 
@@ -269,7 +305,7 @@ public class CargoWiringComposite extends Composite {
 				rowAdded = true;
 			}
 		} else if (cargo != null) {
-			int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
+			final int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
 			if (oldIndex != -1) {
 				wiring.set(oldIndex, -1);
 				cargoes.set(oldIndex, null);
@@ -288,7 +324,7 @@ public class CargoWiringComposite extends Composite {
 				rowAdded = true;
 			}
 		} else if (cargo != null) {
-			int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
+			final int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
 			if (oldIndex != -1) {
 				wiring.set(oldIndex, -1);
 				cargoes.set(oldIndex, null);
@@ -622,13 +658,14 @@ public class CargoWiringComposite extends Composite {
 					@Override
 					protected List<Float> getTerminalPositions() {
 						final float littleOffset = getBounds().y;
-						final ArrayList<Float> vMidPoints = new ArrayList<Float>(cargoes.size());
+						final ArrayList<Float> vMidPoints = new ArrayList<Float>(numberOfRows);
 						// get vertical coordinates of labels
 
 						float lastMidpointButOne = 0;
 						float lastMidpoint = 0;
 
-						for (final Composite l : lhsComposites) {
+						for (int i = 0; i < numberOfRows; ++i) {
+							final Composite l = lhsComposites.get(i);
 							final Rectangle lbounds = l.getBounds();
 							lastMidpointButOne = lastMidpoint;
 							lastMidpoint = -littleOffset + lbounds.y + lbounds.height / 2.0f;
@@ -700,7 +737,20 @@ public class CargoWiringComposite extends Composite {
 			}
 			dischargeSide.display(location, location.getRootObject(), dischargeSlots.get(index), Collections.<EObject> emptyList());
 			rightTerminalsValid.add(dischargeSlots.get(index) != null);
+		}
 
+		// Dispose extra controls
+		while (lhsComposites.size() > numberOfRows) {
+			final Composite c = lhsComposites.remove(lhsComposites.size() - 1);
+			c.dispose();
+		}
+		while (rhsComposites.size() > numberOfRows) {
+			final Composite c = rhsComposites.remove(rhsComposites.size() - 1);
+			c.dispose();
+		}
+		while (idComposites.size() > numberOfRows) {
+			final Composite c = idComposites.remove(idComposites.size() - 1);
+			c.dispose();
 		}
 
 		wiringDiagram.setWiring(wiring);
@@ -779,7 +829,7 @@ public class CargoWiringComposite extends Composite {
 		}
 	}
 
-	private void performControlUpdate(boolean rowAdded) {
+	private void performControlUpdate(final boolean rowAdded) {
 
 		synchronized (updateLock) {
 
