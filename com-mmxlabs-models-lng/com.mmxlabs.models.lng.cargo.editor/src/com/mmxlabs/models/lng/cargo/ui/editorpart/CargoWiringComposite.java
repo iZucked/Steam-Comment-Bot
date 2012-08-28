@@ -20,6 +20,7 @@ import java.util.TreeSet;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -58,6 +59,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDiagram;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
 import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -67,6 +69,8 @@ import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
@@ -83,9 +87,8 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  * A composite for displaying a wiring editor. Contains a {@link WiringDiagram}, which lets the user view and edit a matching in a bipartite graph, and provides the interfacing logic to apply a new
  * matching to the cargoes passed in through {@link #setCargoes(List)}.
  * 
- * The {@link #createApplyCommand(EditingDomain)} applies the changes.
  * 
- * @author Tom Hinton
+ * @author Tom Hinton, Simon Goodall
  * 
  */
 public class CargoWiringComposite extends Composite {
@@ -95,108 +98,226 @@ public class CargoWiringComposite extends Composite {
 
 	private boolean locked = false;
 
-	public IScenarioEditingLocation getEditingLocation() {
-		return location;
-	}
+	private Object updateLock = new Object();
 
-	public void setLocation(final IScenarioEditingLocation location) {
+	private final MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
 
-		if (this.location != null) {
-			this.location.getStatusProvider().removeStatusChangedListener(statusChangedListener);
+		protected void missedNotifications(final List<Notification> missed) {
+			for (final Notification n : new ArrayList<Notification>(missed)) {
+				reallyNotifyChanged(n);
+			}
 		}
 
-		this.location = location;
-		if (this.location != null) {
-			this.location.getStatusProvider().addStatusChangedListener(statusChangedListener);
+		@Override
+		public synchronized void reallyNotifyChanged(final Notification notification) {
+
+			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
+				return;
+			}
+			synchronized (updateLock) {
+
+				// for (int i = 0; i < numberOfRows; ++i) {
+				// assert wiring.get(i) != null;
+				// }
+
+				boolean rowAdded = false;
+				boolean performUpdate = false;
+
+				if (notification.getNotifier() instanceof Cargo) {
+					final Cargo cargo = (Cargo) notification.getNotifier();
+					// Check cargo wiring
+					if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_LoadSlot()) {
+						final Cargo c = (Cargo) notification.getNotifier();
+						final LoadSlot loadSlot = (LoadSlot) notification.getNewValue();
+						final DischargeSlot dischargeSlot = c.getDischargeSlot();
+
+						final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
+						if (ret == 2) {
+							rowAdded = true;
+						} else if (ret == 1) {
+							performUpdate = true;
+						}
+
+						if (loadSlot == null) {
+							final LoadSlot oldLoadSlot = (LoadSlot) notification.getOldValue();
+							if (loadSlots.contains(oldLoadSlot)) {
+								int loadIdx = loadSlots.indexOf(oldLoadSlot);
+								wiring.set(loadIdx, -1);
+								cargoes.set(loadIdx, null);
+								performUpdate = true;
+							}
+						}
+
+					} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_DischargeSlot()) {
+						final Cargo c = (Cargo) notification.getNotifier();
+						final LoadSlot loadSlot = c.getLoadSlot();
+						final DischargeSlot dischargeSlot = (DischargeSlot) notification.getNewValue();
+
+						final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
+						if (ret == 2) {
+							rowAdded = true;
+						} else if (ret == 1) {
+							performUpdate = true;
+						}
+					}
+				} else if (notification.getNotifier() instanceof CargoModel) {
+					if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_Cargoes()) {
+						if (notification.getEventType() == Notification.ADD) {
+							final Cargo cargo = (Cargo) notification.getNewValue();
+							cargo.eAdapters().add(cargoChangeAdapter);
+							final LoadSlot loadSlot = cargo.getLoadSlot();
+							final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+
+							final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
+							if (ret == 2) {
+								rowAdded = true;
+							} else if (ret == 1) {
+								performUpdate = true;
+							}
+
+						} else if (notification.getEventType() == Notification.REMOVE) {
+							final Cargo cargo = (Cargo) notification.getOldValue();
+							cargo.eAdapters().remove(cargoChangeAdapter);
+							final LoadSlot loadSlot = cargo.getLoadSlot();
+							final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+
+							final int ret = performCargoUpdate(null, loadSlot, dischargeSlot);
+							if (ret == 2) {
+								rowAdded = true;
+							} else if (ret == 1) {
+								performUpdate = true;
+							}
+						}
+					} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_LoadSlots()) {
+						if (notification.getEventType() == Notification.REMOVE) {
+							final LoadSlot slot = (LoadSlot) notification.getOldValue();
+							if (loadSlots.contains(slot)) {
+								// Remove slot
+								final int index = loadSlots.indexOf(slot);
+								loadSlots.set(index, null);
+								// Remove the wiring
+								wiring.set(index, -1);
+								// Probably be handled later - but to be safe...
+								cargoes.set(index, null);
+							}
+						}
+					} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()) {
+						if (notification.getEventType() == Notification.REMOVE) {
+							final DischargeSlot slot = (DischargeSlot) notification.getOldValue();
+							if (dischargeSlots.contains(slot)) {
+								// Remove slot
+								final int index = dischargeSlots.indexOf(slot);
+								dischargeSlots.set(index, null);
+								// Remove the wiring
+								final int wiringIndex = wiring.indexOf(index);
+								if (wiringIndex != -1) {
+									wiring.set(wiringIndex, -1);
+									// Probably be handled later - but to be safe...
+									cargoes.set(wiringIndex, null);
+								}
+							}
+						}
+					}
+				}
+
+				if (rowAdded) {
+
+					if (wiring.get(numberOfRows) == null) {
+						wiring.set(numberOfRows, -1);
+					}
+					numberOfRows++;
+
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							performControlUpdate(true);
+						}
+
+					});
+				} else if (performUpdate) {
+					wiringDiagram.setWiring(wiring);
+					Display.getDefault().asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+							performControlUpdate(false);
+						}
+					});
+				}
+
+			}
+		}
+	};
+
+	private int performCargoUpdate(final Cargo cargo, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
+
+		int loadIdx = -1;
+		int dischargeIdx = -1;
+		boolean performUpdate = false;
+		boolean rowAdded = false;
+		if (loadSlot != null) {
+			if (loadSlots.contains(loadSlot)) {
+				loadIdx = loadSlots.indexOf(loadSlot);
+			} else {
+				loadIdx = numberOfRows;
+				ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
+				wiring.set(numberOfRows, -1);
+
+				loadSlots.set(loadIdx, loadSlot);
+				rowAdded = true;
+			}
+		} else if (cargo != null) {
+			int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
+			if (oldIndex != -1) {
+				wiring.set(oldIndex, -1);
+				cargoes.set(oldIndex, null);
+				performUpdate = true;
+			}
+		}
+
+		if (dischargeSlot != null) {
+			if (dischargeSlots.contains(dischargeSlot)) {
+				dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
+			} else {
+				dischargeIdx = numberOfRows;
+				ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
+
+				dischargeSlots.set(dischargeIdx, dischargeSlot);
+				rowAdded = true;
+			}
+		} else if (cargo != null) {
+			int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
+			if (oldIndex != -1) {
+				wiring.set(oldIndex, -1);
+				cargoes.set(oldIndex, null);
+				performUpdate = true;
+			}
+		}
+
+		if (loadIdx != -1 && dischargeIdx != -1 && cargo != null) {
+			cargoes.set(loadIdx, cargo);
+			wiring.set(loadIdx, dischargeIdx);
+			performUpdate = true;
+		}
+
+		if (cargo == null) {
+			if (loadIdx != -1) {
+				cargoes.set(loadIdx, null);
+				wiring.set(loadIdx, -1);
+				performUpdate = true;
+			}
+		}
+
+		if (rowAdded) {
+			return 2;
+		} else if (performUpdate) {
+			return 1;
+		} else {
+			return 0;
 		}
 	}
-
-	// private MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
-	//
-	// protected void missedNotifications(java.util.List<Notification> missed) {
-	// for (Notification n : missed) {
-	// reallyNotifyChanged(n);
-	// }
-	// }
-	//
-	// @Override
-	// public void reallyNotifyChanged(Notification notification) {
-	//
-	// if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
-	// return;
-	// }
-	//
-	// boolean rowAdded = false;
-	// boolean performUpdate = false;
-	//
-	// if (notification.getNotifier() instanceof Cargo) {
-	// Cargo cargo = (Cargo) notification.getNotifier();
-	// // Check cargo wiring
-	// if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_LoadSlot()) {
-	// // TODO: Do we need to handle this?
-	// } else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_DischargeSlot()) {
-	//
-	// if (cargoes.contains(cargo)) {
-	// DischargeSlot oldSlot = (DischargeSlot) notification.getOldValue();
-	// DischargeSlot newSlot = (DischargeSlot) notification.getNewValue();
-	// int oldIndex = -1;
-	// int newIndex = -1;
-	// if (dischargeSlots.contains(oldSlot)) {
-	// oldIndex = dischargeSlots.indexOf(oldSlot);
-	// }
-	// if (dischargeSlots.contains(newSlot)) {
-	// newIndex = dischargeSlots.indexOf(newSlot);
-	// }
-	//
-	// int loadIdx = loadSlots.indexOf(cargo.getLoadSlot());
-	// // If we have the cargo in scope so should the load
-	// assert loadIdx != -1;
-	//
-	// if (newIndex == -1) {
-	// // New discharge slot does not exist yet
-	// ensureCapacity(numberOfRows + 1, caroges, loadSlots, dischargeSlots);
-	// wiring.add(numberOfRows);
-	// rowAdded = true;
-	// } else if (wiring.get(loadIdx) != newIndex) {
-	// // New wiring
-	// wiring.set(loadIdx, newIndex);
-	// } else {
-	// // Existing wiring - perhaps we made the change...
-	// }
-	// }
-	// }
-	// } else if (notification.getNotifier() instanceof CargoModel) {
-	// if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_Cargoes()) {
-	// if (notification.getEventType() == Notification.ADD || notification.getEventType() == Notification.ADD_MANY) {
-	//
-	// }
-	// } else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_LoadSlots()) {
-	// } else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()) {
-	//
-	// }
-	// }
-	//
-	//
-	// if (rowAdded) {
-	// numberOfRows++;
-	//
-	// for (final Control c : getChildren()) {
-	// c.dispose();
-	// }
-	//
-	// createChildren();
-	// layout();
-	// CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
-	//
-	// } else if (performUpdate) {
-	// wiringDiagram.setWiring(wiring);
-	// updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
-	// CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
-	//
-	// }
-	//
-	// }
-	// };
 
 	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
 	private final ArrayList<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
@@ -215,16 +336,59 @@ public class CargoWiringComposite extends Composite {
 	final List<PortAndDateComposite> lhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
 	final List<PortAndDateComposite> rhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
 
-	// private Label lhsFleetComposite;
-	// private Label rhsFleetComposite;
-	// private Label lhsFOBDESComposite;
-	// private Label rhsFOBDESComposite;
-
 	private int numberOfRows = 0;
 
 	private final IWorkbenchPartSite site;
 
 	// private final MenuManager menuManager;
+
+	protected IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
+
+		@Override
+		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
+
+			for (final PortAndDateComposite c : lhsComposites) {
+				c.displayValidationStatus(status);
+			}
+			for (final PortAndDateComposite c : rhsComposites) {
+				c.displayValidationStatus(status);
+			}
+			for (final NamedObjectNameComposite c : idComposites) {
+				c.displayValidationStatus(status);
+			}
+		}
+	};
+
+	WiringDiagram wiringDiagram = null;
+
+	Listener selectionListener = new Listener() {
+		@Override
+		public void handleEvent(final Event event) {
+			updateWiringColours(wiringDiagram, wiringDiagram.getWiring(), lhsComposites, rhsComposites);
+		}
+	};
+
+	private final IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
+
+	private final ICommandHandler commandHandler = new ICommandHandler() {
+
+		@Override
+		public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
+			location.getEditingDomain().getCommandStack().execute(command);
+		}
+
+		@Override
+		public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
+			return location.getReferenceValueProviderCache();
+		}
+
+		@Override
+		public EditingDomain getEditingDomain() {
+			return location.getEditingDomain();
+		}
+	};
+
+	CompoundCommand currentWiringCommand = null;
 
 	/**
 	 * @param parent
@@ -251,6 +415,25 @@ public class CargoWiringComposite extends Composite {
 		// this.setMenu(m);
 	}
 
+	@Override
+	public void dispose() {
+		if (this.location != null) {
+			this.location.getStatusProvider().removeStatusChangedListener(statusChangedListener);
+
+			final MMXRootObject rootObject = location.getRootObject();
+			if (rootObject != null) {
+				final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+				if (cargoModel != null) {
+					cargoModel.eAdapters().remove(cargoChangeAdapter);
+					for (final Cargo c : cargoModel.getCargoes()) {
+						c.eAdapters().remove(cargoChangeAdapter);
+					}
+				}
+			}
+
+		}
+	}
+
 	/**
 	 * Set the cargoes, and reset the wiring to match these cargoes.
 	 * 
@@ -269,6 +452,7 @@ public class CargoWiringComposite extends Composite {
 		this.leftTerminalsValid.clear();
 		this.rightTerminalsValid.clear();
 		for (int i = 0; i < cargoes.size(); i++) {
+
 			wiring.add(i); // set default wiring
 			loadSlots.add(cargoes.get(i).getLoadSlot());
 			dischargeSlots.add(cargoes.get(i).getDischargeSlot());
@@ -279,6 +463,80 @@ public class CargoWiringComposite extends Composite {
 		numberOfRows = cargoes.size();
 
 		createChildren();
+	}
+
+	public void setStatusProvider(final IStatusProvider statusProvider) {
+		statusProvider.addStatusChangedListener(statusChangedListener);
+	}
+
+	public IScenarioEditingLocation getEditingLocation() {
+		return location;
+	}
+
+	public void setLocation(final IScenarioEditingLocation location) {
+
+		if (this.location != null) {
+			this.location.getStatusProvider().removeStatusChangedListener(statusChangedListener);
+
+			final MMXRootObject rootObject = location.getRootObject();
+			if (rootObject != null) {
+				final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+				if (cargoModel != null) {
+					cargoModel.eAdapters().remove(cargoChangeAdapter);
+					for (final Cargo c : cargoModel.getCargoes()) {
+						c.eAdapters().remove(cargoChangeAdapter);
+					}
+				}
+			}
+
+		}
+
+		this.location = location;
+		if (this.location != null) {
+			this.location.getStatusProvider().addStatusChangedListener(statusChangedListener);
+
+			final MMXRootObject rootObject = location.getRootObject();
+			if (rootObject != null) {
+				final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+				if (cargoModel != null) {
+					cargoModel.eAdapters().add(cargoChangeAdapter);
+					for (final Cargo c : cargoModel.getCargoes()) {
+						c.eAdapters().add(cargoChangeAdapter);
+					}
+				}
+			}
+
+		}
+	}
+
+	public void setLocked(final boolean locked) {
+		this.locked = locked;
+		wiringDiagram.setLocked(locked);
+		for (final PortAndDateComposite c : lhsComposites) {
+			c.setEnabled(!locked);
+		}
+		for (final PortAndDateComposite c : rhsComposites) {
+			c.setEnabled(!locked);
+		}
+		for (final NamedObjectNameComposite c : idComposites) {
+			c.setEnabled(!locked);
+		}
+	}
+
+	/**
+	 * @return
+	 */
+	public boolean isWiringFeasible() {
+
+		for (int loadIdx = 0; loadIdx < wiring.size(); ++loadIdx) {
+			final int dischargeIdx = wiring.get(loadIdx);
+
+			if (dischargeIdx == -1) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	private void createLayout() {
@@ -295,94 +553,67 @@ public class CargoWiringComposite extends Composite {
 		setLayout(gridLayout);
 	}
 
-	private void updateWiringColours(final WiringDiagram diagram, final List<Integer> wiring, final List<PortAndDateComposite> loads, final List<PortAndDateComposite> discharge) {
-		final Color red = Display.getCurrent().getSystemColor(SWT.COLOR_RED);
-		final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
-		final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-
-		for (int i = 0; i < numberOfRows; ++i) {
-			diagram.setLeftTerminalColor(i, red);
-			diagram.setRightTerminalColor(i, red);
-		}
-		for (int i = 0; i < numberOfRows; i++) {
-			final int j = wiring.get(i);
-			if (j == -1) {
-				continue;
-			}
-
-			// check dates
-			final Date loadDate = loads.get(i).getDate();
-			if (loadDate == null) {
-				continue;
-			}
-			final Date dischargeDate = discharge.get(j).getDate();
-			if (dischargeDate == null) {
-				continue;
-			}
-			diagram.setLeftTerminalColor(i, green);
-			diagram.setRightTerminalColor(j, green);
-			// TODO this is not exactly proper validation.
-			if (dischargeDate.before(loadDate)) {
-				diagram.setWireColor(i, red);
-			} else {
-				diagram.setWireColor(i, black);
-			}
-		}
-		diagram.redraw();
-	}
-
-	WiringDiagram wiringDiagram = null;
-	Listener selectionListener = new Listener() {
-		@Override
-		public void handleEvent(final Event event) {
-			updateWiringColours(wiringDiagram, wiringDiagram.getWiring(), lhsComposites, rhsComposites);
-		}
-	};
-
 	private void createChildren() {
-		lhsComposites.clear();
-		rhsComposites.clear();
+		// lhsComposites.clear();
+		// rhsComposites.clear();
 		leftTerminalsValid.clear();
 		rightTerminalsValid.clear();
-		idComposites.clear();
-		if (wiringDiagram != null) {
-			wiringDiagram.dispose();
-			wiringDiagram = null;
-		}
+		// idComposites.clear();
+		// if (wiringDiagram != null) {
+		// wiringDiagram.dispose();
+		// wiringDiagram = null;
+		// }
 		final Color WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
-		int index = 0;
-		for (int ii = 0; ii < numberOfRows; ++ii) {
+		for (int index = 0; index < numberOfRows; ++index) {
 
-			final NamedObjectNameComposite idComposite = new NamedObjectNameComposite(this, getStyle() & ~SWT.BORDER) {
-				@Override
-				public void addInlineEditor(final IInlineEditor editor) {
-					editors.add(editor);
-					editor.setCommandHandler(commandHandler);
-					final Control control = editor.createControl(this);
-					final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-					gd.widthHint = 60;
-					control.setLayoutData(gd);
-					control.setBackground(WHITE);
-				}
-			};
-			idComposite.setCommandHandler(commandHandler);
+			final NamedObjectNameComposite idComposite;
+			if (index < idComposites.size()) {
+				idComposite = idComposites.get(index);
+			} else {
+
+				idComposite = new NamedObjectNameComposite(this, getStyle() & ~SWT.BORDER) {
+					@Override
+					public void addInlineEditor(final IInlineEditor editor) {
+						editors.add(editor);
+						editor.setCommandHandler(commandHandler);
+						final Control control = editor.createControl(this);
+						final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+						gd.widthHint = 60;
+						control.setLayoutData(gd);
+						control.setBackground(WHITE);
+					}
+				};
+				idComposite.setCommandHandler(commandHandler);
+				idComposites.add(idComposite);
+				final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+				// gd.widthHint = 70;
+				// gd.grabExcessHorizontalSpace = true;
+				// gd.grabExcessVerticalSpace = true;
+				idComposite.setLayoutData(gd);
+				idComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+			}
 			idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
-			idComposites.add(idComposite);
-			final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-			// gd.widthHint = 70;
-			// gd.grabExcessHorizontalSpace = true;
-			// gd.grabExcessVerticalSpace = true;
-			idComposite.setLayoutData(gd);
 
-			final PortAndDateComposite loadSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, true);
-			final GridData gd2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-			loadSide.setLayoutData(gd2);
-			loadSide.setBackground(WHITE);
+			final PortAndDateComposite loadSide;
+			if (index < lhsComposites.size()) {
+				loadSide = lhsComposites.get(index);
+			} else {
+				loadSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, true);
+				final GridData gd2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+				loadSide.setLayoutData(gd2);
+				loadSide.setBackground(WHITE);
 
-			loadSide.setCommandHandler(commandHandler);
+				loadSide.setCommandHandler(commandHandler);
+
+				loadSide.addMenuListener(createLoadSlotMenuListener(loadSlots.get(index)));
+				lhsComposites.add(loadSide);
+				loadSide.addListener(SWT.Selection, selectionListener);
+				loadSide.addListener(SWT.DefaultSelection, selectionListener);
+				loadSide.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
+
+			}
 			loadSide.display(location, location.getRootObject(), loadSlots.get(index), Collections.<EObject> emptyList());
 
-			loadSide.addMenuListener(createLoadSlotMenuListener(loadSlots.get(index)));
 			leftTerminalsValid.add(loadSlots.get(index) != null);
 
 			if (wiringDiagram == null) {
@@ -443,6 +674,8 @@ public class CargoWiringComposite extends Composite {
 						//
 					}
 				};
+			}
+			if (index == 0) {
 				// wiring diagram is tall
 				final GridData gd3 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, numberOfRows);
 				gd3.widthHint = 90;
@@ -451,28 +684,23 @@ public class CargoWiringComposite extends Composite {
 				// wiringDiagram.setBackground(WHITE);
 			}
 
-			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, false);
-			dischargeSide.setCommandHandler(commandHandler);
+			final PortAndDateComposite dischargeSide;
+
+			if (index < rhsComposites.size()) {
+				dischargeSide = rhsComposites.get(index);
+			} else {
+				dischargeSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, false);
+				dischargeSide.setCommandHandler(commandHandler);
+				dischargeSide.setBackground(WHITE);
+				dischargeSide.addMenuListener(createDischargeSlotMenuListener(dischargeSlots.get(index)));
+				rhsComposites.add(dischargeSide);
+				dischargeSide.addListener(SWT.Selection, selectionListener);
+				dischargeSide.addListener(SWT.DefaultSelection, selectionListener);
+				dischargeSide.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+			}
 			dischargeSide.display(location, location.getRootObject(), dischargeSlots.get(index), Collections.<EObject> emptyList());
-			dischargeSide.setBackground(WHITE);
-
 			rightTerminalsValid.add(dischargeSlots.get(index) != null);
-			dischargeSide.addMenuListener(createDischargeSlotMenuListener(dischargeSlots.get(index)));
 
-			lhsComposites.add(loadSide);
-			rhsComposites.add(dischargeSide);
-
-			loadSide.addListener(SWT.Selection, selectionListener);
-			dischargeSide.addListener(SWT.Selection, selectionListener);
-
-			loadSide.addListener(SWT.DefaultSelection, selectionListener);
-			dischargeSide.addListener(SWT.DefaultSelection, selectionListener);
-
-			idComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-			loadSide.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
-			dischargeSide.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
-
-			index++;
 		}
 
 		wiringDiagram.setWiring(wiring);
@@ -504,81 +732,46 @@ public class CargoWiringComposite extends Composite {
 	 * TODO highlight lines when mouseover labels TODO feedback validation state to containing dialog TODO generate command to apply changes.
 	 */
 
-	/**
-	 * @return
-	 */
-	public boolean isWiringFeasible() {
+	private synchronized void updateWiringColours(final WiringDiagram diagram, final List<Integer> wiring, final List<PortAndDateComposite> loads, final List<PortAndDateComposite> discharge) {
+		final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+		final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
+		final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 
-		for (int loadIdx = 0; loadIdx < wiring.size() - 2; ++loadIdx) {
-			final int dischargeIdx = wiring.get(loadIdx);
+		for (int i = 0; i < numberOfRows; ++i) {
+			diagram.setLeftTerminalColor(i, red);
+			diagram.setRightTerminalColor(i, red);
+		}
+		for (int i = 0; i < numberOfRows; i++) {
+			final int j = wiring.get(i);
+			if (j == -1) {
+				continue;
+			}
 
-			if (dischargeIdx == -1) {
-				return false;
+			// check dates
+			final Date loadDate = loads.get(i).getDate();
+			if (loadDate == null) {
+				continue;
+			}
+			final Date dischargeDate = discharge.get(j).getDate();
+			if (dischargeDate == null) {
+				continue;
+			}
+			diagram.setLeftTerminalColor(i, green);
+			diagram.setRightTerminalColor(j, green);
+			// TODO this is not exactly proper validation.
+			if (dischargeDate.before(loadDate)) {
+				diagram.setWireColor(i, red);
+			} else {
+				diagram.setWireColor(i, black);
 			}
 		}
-
-		return true;
-	}
-
-	private final IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
-	private final ICommandHandler commandHandler = new ICommandHandler() {
-
-		@Override
-		public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
-			location.getEditingDomain().getCommandStack().execute(command);
-		}
-
-		@Override
-		public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
-			return location.getReferenceValueProviderCache();
-		}
-
-		@Override
-		public EditingDomain getEditingDomain() {
-			return location.getEditingDomain();
-		}
-	};
-
-	public void setStatusProvider(final IStatusProvider statusProvider) {
-		statusProvider.addStatusChangedListener(statusChangedListener);
-	}
-
-	protected IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
-
-		@Override
-		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
-
-			for (final PortAndDateComposite c : lhsComposites) {
-				c.displayValidationStatus(status);
-			}
-			for (final PortAndDateComposite c : rhsComposites) {
-				c.displayValidationStatus(status);
-			}
-			for (final NamedObjectNameComposite c : idComposites) {
-				c.displayValidationStatus(status);
-			}
-		}
-	};
-
-	@Override
-	public void dispose() {
-		if (this.location != null) {
-			this.location.getStatusProvider().removeStatusChangedListener(statusChangedListener);
-		}
-	}
-
-	CompoundCommand currentWiringCommand = null;
-
-	private Cargo createNewCargo(final CargoModel cargoModel) {
-		// Create a cargo
-		final Cargo newCargo = createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
-		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-
-		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
-		return newCargo;
+		diagram.redraw();
 	}
 
 	private void ensureCapacity(final int size, final List<?>... lists) {
+		System.out.println("Ensure capacpity " + size);
+		System.out.flush();
+
 		for (final List<? extends Object> l : lists) {
 			if (l.size() < size) {
 				l.add(size - 1, null);
@@ -586,55 +779,24 @@ public class CargoWiringComposite extends Composite {
 		}
 	}
 
-	private SpotLoadSlot createNewSpotLoad(final CargoModel cargoModel, final boolean isDESPurchase, final SpotMarket market) {
+	private void performControlUpdate(boolean rowAdded) {
 
-		final SpotLoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getSpotLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
-		newLoad.setDESPurchase(isDESPurchase);
-		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-		newLoad.setMarket(market);
-		newLoad.setContract((Contract) market.getContract());
-		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+		synchronized (updateLock) {
 
-		return newLoad;
-	}
-
-	private LoadSlot createNewLoad(final CargoModel cargoModel, final boolean isDESPurchase) {
-
-		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
-		newLoad.setDESPurchase(isDESPurchase);
-		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-
-		return newLoad;
-	}
-
-	private DischargeSlot createNewDischarge(final CargoModel cargoModel, final boolean isFOBSale) {
-
-		final DischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
-		newDischarge.setFOBSale(isFOBSale);
-		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-		return newDischarge;
-	}
-
-	private SpotDischargeSlot createNewSpotDischarge(final CargoModel cargoModel, final boolean isFOBSale, final SpotMarket market) {
-
-		final SpotDischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getSpotDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
-		newDischarge.setFOBSale(isFOBSale);
-		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-		newDischarge.setMarket(market);
-		newDischarge.setContract((Contract) market.getContract());
-		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-		return newDischarge;
+			if (rowAdded) {
+				createChildren();
+				layout();
+				CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
+			} else {
+				updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
+				CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
+			}
+		}
 	}
 
 	protected void doWiringChanged(final List<Integer> newWiring) {
 		currentWiringCommand = new CompoundCommand("Rewire Cargoes");
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
-
-		// check for wiring to add terminal
-		// final int topIndex = newWiring.size() - 2;
-		// final int bottomIndex = newWiring.size() - 1;
 
 		boolean addNewElement = false;
 		for (int i = 0; i < newWiring.size(); ++i) {
@@ -713,20 +875,253 @@ public class CargoWiringComposite extends Composite {
 
 		CargoWiringComposite.this.wiring.clear();
 		CargoWiringComposite.this.wiring.addAll(newWiring);
+
 		if (addNewElement) {
-			numberOfRows++;
-
-			for (final Control c : getChildren()) {
-				c.dispose();
+			if (wiring.get(numberOfRows) == null) {
+				wiring.set(numberOfRows, -1);
 			}
+			numberOfRows++;
+		}
+		performControlUpdate(addNewElement);
+	}
 
-			createChildren();
-			layout();
-		} else {
-			updateWiringColours(wiringDiagram, newWiring, lhsComposites, rhsComposites);
+	private void runWiringUpdate(final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
+		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
+
+		// final int loadIdx;
+		// // Find or add load slot to load slots list (and bring in cargo and discharge if not present)
+		// boolean insertedLoad = false;
+		// if (loadSlots.contains(loadSlot)) {
+		// loadIdx = loadSlots.indexOf(loadSlot);
+		// } else {
+		// loadIdx = numberOfRows;
+		// ensureCapacity(loadIdx + 1, cargoes, loadSlots, dischargeSlots);
+		// loadSlots.set(loadIdx, loadSlot);
+		// insertedLoad = true;
+		// // Inserting the load slot - should insert the cargo and discharge also
+		// final Cargo c = loadSlot.getCargo();
+		//
+		// if (c != null) {
+		// cargoes.set(loadIdx, c);
+		// dischargeSlots.set(loadIdx, c.getDischargeSlot());
+		// wiring.add(loadIdx);
+		// } else {
+		// wiring.add(-1);
+		// }
+		// }
+		//
+		// // Find or add discharge slot to discharge slots list (and bring in cargo and load if not present)
+		// final int dischargeIdx;
+		// boolean insertedDischarge = false;
+		// if (dischargeSlots.contains(dischargeSlot)) {
+		// dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
+		// } else {
+		// dischargeIdx = numberOfRows;
+		// ensureCapacity(dischargeIdx + 1, cargoes, loadSlots, dischargeSlots);
+		// dischargeSlots.set(dischargeIdx, dischargeSlot);
+		// insertedDischarge = true;
+		//
+		// // Inserting the discharge slot - should insert the cargo and load also
+		// final Cargo c = dischargeSlot.getCargo();
+		//
+		// if (c != null) {
+		// cargoes.set(dischargeIdx, c);
+		// loadSlots.set(dischargeIdx, c.getLoadSlot());
+		// wiring.add(dischargeIdx);
+		// } else {
+		// wiring.add(-1);
+		// }
+		// }
+
+		// Discharge has an existing slot, so remove the cargo & wiring
+		if (dischargeSlot.getCargo() != null) {
+			// final int current = wiring.indexOf(dischargeIdx);
+			// if (current != -1) {
+			// // wiring.set(current, -1);
+			// if (cargoes.get(current) != null) {
+			// TODO: Really if the first if was true, the other two ifs should also be true
+			currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), dischargeSlot.getCargo()));
+			// cargoes.set(current, null);
+			// idComposites.get(current).display(location, location.getRootObject(), null, null);
+			// }
+			// }
 		}
 
-		CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
+		// Do we need to create a new cargo or re-wire and existing one.
+		Cargo cargo = loadSlot.getCargo();
+		if (cargo != null) {
+			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
+			// wiring.set(loadIdx, dischargeIdx);
+		} else {
+			cargo = createNewCargo(cargoModel);
+			cargo.setName(loadSlot.getName());
+			// ensureCapacity(loadIdx + 1, dischargeSlots, cargoes, loadSlots);
+			//
+			// cargoes.set(loadIdx, cargo);
+			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
+			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
+
+			// wiring.set(loadIdx, dischargeIdx);
+			//
+			// if (!insertedLoad && !insertedDischarge) {
+			// // If we've inserted then all the composites are currently recreated, otherwise update inline
+			// idComposites.get(loadIdx).display(location, location.getRootObject(), cargo, null);
+			// }
+		}
+
+		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+		currentWiringCommand = null;
+
+		// performControlUpdate(insertedLoad || insertedDischarge);
+	}
+
+	private void createMenus(final IMenuManager manager, final Slot source, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
+
+		final TreeMap<String, TreeSet<Slot>> slotsByDate = new TreeMap<String, TreeSet<Slot>>();
+		final TreeMap<String, TreeSet<Slot>> slotsByContract = new TreeMap<String, TreeSet<Slot>>();
+		final TreeMap<String, TreeSet<Slot>> slotsByPort = new TreeMap<String, TreeSet<Slot>>();
+
+		for (final Slot target : possibleTargets) {
+
+			final int daysDifference;
+			// Perform some filtering on the possible targets
+			{
+				final LoadSlot loadSlot;
+				final DischargeSlot dischargeSlot;
+				if (sourceIsLoad) {
+					loadSlot = (LoadSlot) source;
+					dischargeSlot = (DischargeSlot) target;
+				} else {
+					loadSlot = (LoadSlot) target;
+					dischargeSlot = (DischargeSlot) source;
+				}
+				// Filter out current pairing
+				if (loadSlot.getCargo() != null && loadSlot.getCargo() == dischargeSlot.getCargo()) {
+					continue;
+				}
+
+				// Filter backwards pairings
+				if (loadSlot.getWindowStart().after(dischargeSlot.getWindowStart())) {
+					continue;
+				}
+				final long diff = dischargeSlot.getWindowStart().getTime() - loadSlot.getWindowStart().getTime();
+				daysDifference = (int) (diff / 1000 / 60 / 60 / 24);
+			}
+
+			final Contract contract = target.getContract();
+			if (contract != null) {
+				addSlotToTargets(target, contract.getName(), slotsByContract);
+			}
+			final Port port = target.getPort();
+			if (port != null) {
+				addSlotToTargets(target, port.getName(), slotsByPort);
+			}
+
+			if (daysDifference < 5) {
+				addSlotToTargets(target, "Less than 5 Days", slotsByDate);
+			}
+			if (daysDifference < 10) {
+				addSlotToTargets(target, "Less than 10 Days", slotsByDate);
+			}
+			if (daysDifference < 20) {
+				addSlotToTargets(target, "Less than 20 Days", slotsByDate);
+			}
+			if (daysDifference < 30) {
+				addSlotToTargets(target, "Less than 30 Days", slotsByDate);
+			}
+			if (daysDifference < 60) {
+				addSlotToTargets(target, "Less than 60 Days", slotsByDate);
+			}
+			addSlotToTargets(target, "Any", slotsByDate);
+
+		}
+		{
+			buildSubMenu(manager, "Slots By Contract", source, sourceIsLoad, slotsByContract, false, true);
+			buildSubMenu(manager, "Slots By Date", source, sourceIsLoad, slotsByDate, true, true);
+			buildSubMenu(manager, "Slots By Port", source, sourceIsLoad, slotsByPort, true, false);
+		}
+	}
+
+	private void addSlotToTargets(final Slot target, final String group, final TreeMap<String, TreeSet<Slot>> targets) {
+		TreeSet<Slot> targetGroupSlots;
+		if (targets.containsKey(group)) {
+			targetGroupSlots = targets.get(group);
+		} else {
+			targetGroupSlots = createSlotTreeSet();
+			targets.put(group, targetGroupSlots);
+		}
+		targetGroupSlots.add(target);
+	}
+
+	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final TreeMap<String, TreeSet<Slot>> targets,
+			final boolean includeContract, final boolean includePort) {
+		final MenuManager subMenu = new MenuManager(name, null);
+		for (final Map.Entry<String, TreeSet<Slot>> e : targets.entrySet()) {
+			final MenuManager subSubMenu = new MenuManager(e.getKey(), null);
+			for (final Slot target : e.getValue()) {
+				createWireAction(subSubMenu, source, target, sourceIsLoad, includeContract, includePort);
+			}
+			subMenu.add(subSubMenu);
+		}
+		manager.add(subMenu);
+	}
+
+	private TreeSet<Slot> createSlotTreeSet() {
+		final TreeSet<Slot> slotsByDate = new TreeSet<Slot>(new Comparator<Slot>() {
+
+			@Override
+			public int compare(final Slot o1, final Slot o2) {
+				return o1.getWindowStart().compareTo(o2.getWindowStart());
+			}
+		});
+		return slotsByDate;
+	}
+
+	private String getActionName(final Slot slot, final boolean includePort, final boolean includeContract) {
+		final StringBuilder sb = new StringBuilder();
+
+		if (includeContract && slot.getContract() != null) {
+			sb.append(slot.getContract().getName());
+			sb.append(" - ");
+		}
+
+		if (includePort && slot.getPort() != null) {
+			sb.append(slot.getPort().getName());
+			sb.append(" - ");
+		}
+		{
+			sb.append(DateFormat.getDateInstance().format(slot.getWindowStart()));
+			sb.append(" - ");
+		}
+		{
+			sb.append(slot.getName());
+			sb.append(" - ");
+
+		}
+		Cargo c = null;
+		if (slot instanceof LoadSlot) {
+			if (((LoadSlot) slot).isDESPurchase()) {
+				sb.append("(DES Purchase) ");
+			}
+			c = ((LoadSlot) slot).getCargo();
+		}
+		if (slot instanceof DischargeSlot) {
+			if (((DischargeSlot) slot).isFOBSale()) {
+				sb.append("(FOB Sale) ");
+			}
+			c = ((DischargeSlot) slot).getCargo();
+		}
+		if (slot instanceof SpotSlot) {
+			sb.append(((SpotSlot) slot).getMarket().getName());
+			sb.append(" - ");
+
+		}
+		if (c != null) {
+			sb.append(" (Cargo " + c.getName() + ")");
+		} else {
+			sb.append("(unused)");
+		}
+		return sb.toString();
 	}
 
 	private <T> T createObject(final EClass clz, final EReference reference, final EObject container) {
@@ -747,6 +1142,57 @@ public class CargoWiringComposite extends Composite {
 		return null;
 	}
 
+	private Cargo createNewCargo(final CargoModel cargoModel) {
+		// Create a cargo
+		final Cargo newCargo = createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
+		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+
+		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
+		return newCargo;
+	}
+
+	private SpotLoadSlot createNewSpotLoad(final CargoModel cargoModel, final boolean isDESPurchase, final SpotMarket market) {
+
+		final SpotLoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getSpotLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+		newLoad.setDESPurchase(isDESPurchase);
+		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newLoad.setMarket(market);
+		newLoad.setContract((Contract) market.getContract());
+		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+
+		return newLoad;
+	}
+
+	private LoadSlot createNewLoad(final CargoModel cargoModel, final boolean isDESPurchase) {
+
+		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+		newLoad.setDESPurchase(isDESPurchase);
+		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+
+		return newLoad;
+	}
+
+	private DischargeSlot createNewDischarge(final CargoModel cargoModel, final boolean isFOBSale) {
+
+		final DischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
+		newDischarge.setFOBSale(isFOBSale);
+		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+		return newDischarge;
+	}
+
+	private SpotDischargeSlot createNewSpotDischarge(final CargoModel cargoModel, final boolean isFOBSale, final SpotMarket market) {
+
+		final SpotDischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getSpotDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
+		newDischarge.setFOBSale(isFOBSale);
+		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newDischarge.setMarket(market);
+		newDischarge.setContract((Contract) market.getContract());
+		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+		return newDischarge;
+	}
+
 	IMenuListener createLoadSlotMenuListener(final LoadSlot loadSlot) {
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 		final IMenuListener l = new IMenuListener() {
@@ -763,6 +1209,29 @@ public class CargoWiringComposite extends Composite {
 					createMenus(manager, loadSlot, cargoModel.getDischargeSlots(), true);
 					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
+				}
+			}
+		};
+		return l;
+
+	}
+
+	IMenuListener createDischargeSlotMenuListener(final DischargeSlot dischargeSlot) {
+		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
+		final IMenuListener l = new IMenuListener() {
+
+			@Override
+			public void menuAboutToShow(final IMenuManager manager) {
+				final MenuManager newMenuManager = new MenuManager("New...", null);
+				manager.add(newMenuManager);
+				if (dischargeSlot.isFOBSale()) {
+					createNewSlotMenu(newMenuManager, dischargeSlot, false);
+					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
+				} else {
+					createNewSlotMenu(newMenuManager, dischargeSlot, false);
+					createMenus(manager, dischargeSlot, cargoModel.getLoadSlots(), false);
+					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
+					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 				}
 			}
 		};
@@ -878,29 +1347,6 @@ public class CargoWiringComposite extends Composite {
 		}
 	}
 
-	IMenuListener createDischargeSlotMenuListener(final DischargeSlot dischargeSlot) {
-		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
-		final IMenuListener l = new IMenuListener() {
-
-			@Override
-			public void menuAboutToShow(final IMenuManager manager) {
-				final MenuManager newMenuManager = new MenuManager("New...", null);
-				manager.add(newMenuManager);
-				if (dischargeSlot.isFOBSale()) {
-					createNewSlotMenu(newMenuManager, dischargeSlot, false);
-					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
-				} else {
-					createNewSlotMenu(newMenuManager, dischargeSlot, false);
-					createMenus(manager, dischargeSlot, cargoModel.getLoadSlots(), false);
-					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
-					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
-				}
-			}
-		};
-		return l;
-
-	}
-
 	class WireAction extends Action {
 
 		final private LoadSlot loadSlot;
@@ -921,273 +1367,12 @@ public class CargoWiringComposite extends Composite {
 
 	}
 
-	private void runWiringUpdate(final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
-		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
-
-		final int loadIdx;
-		// Find or add load slot to load slots list (and bring in cargo and discharge if not present)
-		boolean insertedLoad = false;
-		if (loadSlots.contains(loadSlot)) {
-			loadIdx = loadSlots.indexOf(loadSlot);
-		} else {
-			loadIdx = numberOfRows;
-			ensureCapacity(loadIdx + 1, cargoes, loadSlots, dischargeSlots);
-			loadSlots.set(loadIdx, loadSlot);
-			insertedLoad = true;
-			// Inserting the load slot - should insert the cargo and discharge also
-			final Cargo c = loadSlot.getCargo();
-
-			if (c != null) {
-				cargoes.set(loadIdx, c);
-				dischargeSlots.set(loadIdx, c.getDischargeSlot());
-				wiring.add(loadIdx);
-			} else {
-				wiring.add(-1);
-			}
-		}
-
-		// Find or add discharge slot to discharge slots list (and bring in cargo and load if not present)
-		final int dischargeIdx;
-		boolean insertedDischarge = false;
-		if (dischargeSlots.contains(dischargeSlot)) {
-			dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
-		} else {
-			dischargeIdx = numberOfRows;
-			ensureCapacity(dischargeIdx + 1, cargoes, loadSlots, dischargeSlots);
-			dischargeSlots.set(dischargeIdx, dischargeSlot);
-			insertedDischarge = true;
-
-			// Inserting the discharge slot - should insert the cargo and load also
-			final Cargo c = dischargeSlot.getCargo();
-
-			if (c != null) {
-				cargoes.set(dischargeIdx, c);
-				loadSlots.set(dischargeIdx, c.getLoadSlot());
-				wiring.add(dischargeIdx);
-			} else {
-				wiring.add(-1);
-			}
-		}
-
-		// Discharge has an existing slot, so remove the cargo & wiring
-		if (dischargeSlot.getCargo() != null) {
-			final int current = wiring.indexOf(dischargeIdx);
-			if (current != -1) {
-				wiring.set(current, -1);
-				if (cargoes.get(current) != null) {
-					// TODO: Really if the first if was true, the other two ifs should also be true
-					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), dischargeSlot.getCargo()));
-					cargoes.set(current, null);
-					idComposites.get(current).display(location, location.getRootObject(), null, null);
-				}
-			}
-		}
-
-		// Do we need to create a new cargo or re-wire and existing one.
-		Cargo cargo = loadSlot.getCargo();
-		if (cargo != null) {
-			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(loadIdx), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
-			wiring.set(loadIdx, dischargeIdx);
-		} else {
-			cargo = createNewCargo(cargoModel);
-			cargo.setName(loadSlot.getName());
-			ensureCapacity(loadIdx + 1, dischargeSlots, cargoes, loadSlots);
-
-			cargoes.set(loadIdx, cargo);
-			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(loadIdx), CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
-			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargoes.get(loadIdx), CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
-
-			wiring.set(loadIdx, dischargeIdx);
-
-			if (!insertedLoad && !insertedDischarge) {
-				// If we've inserted then all the composites are currently recreated, otherwise update inline
-				idComposites.get(loadIdx).display(location, location.getRootObject(), cargo, null);
-			}
-		}
-
-		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
-		currentWiringCommand = null;
-
-		if (insertedLoad || insertedDischarge) {
-			numberOfRows++;
-
-			for (final Control c : getChildren()) {
-				c.dispose();
-			}
-
-			createChildren();
-			layout();
-		} else {
-			wiringDiagram.setWiring(wiring);
-			updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
-		}
-
-		CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
-	}
-
-	private void createMenus(final IMenuManager manager, final Slot source, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
-
-		final TreeMap<String, TreeSet<Slot>> slotsByDate = new TreeMap<String, TreeSet<Slot>>();
-		final TreeMap<String, TreeSet<Slot>> slotsByContract = new TreeMap<String, TreeSet<Slot>>();
-		final TreeMap<String, TreeSet<Slot>> slotsByPort = new TreeMap<String, TreeSet<Slot>>();
-
-		for (final Slot target : possibleTargets) {
-
-			final int daysDifference;
-			// Perform some filtering on the possible targets
-			{
-				final LoadSlot loadSlot;
-				final DischargeSlot dischargeSlot;
-				if (sourceIsLoad) {
-					loadSlot = (LoadSlot) source;
-					dischargeSlot = (DischargeSlot) target;
-				} else {
-					loadSlot = (LoadSlot) target;
-					dischargeSlot = (DischargeSlot) source;
-				}
-				// Filter out current pairing
-				if (loadSlot.getCargo() != null && loadSlot.getCargo() == dischargeSlot.getCargo()) {
-					continue;
-				}
-
-				// Filter backwards pairings
-				if (loadSlot.getWindowStart().after(dischargeSlot.getWindowStart())) {
-					continue;
-				}
-				final long diff = dischargeSlot.getWindowStart().getTime() - loadSlot.getWindowStart().getTime();
-				daysDifference = (int) (diff / 1000 / 60 / 60 / 24);
-			}
-
-			addSlotToTargets(target, target.getContract().getName(), slotsByContract);
-			addSlotToTargets(target, target.getPort().getName(), slotsByPort);
-
-			if (daysDifference < 5) {
-				addSlotToTargets(target, "Less than 5 Days", slotsByDate);
-			}
-			if (daysDifference < 10) {
-				addSlotToTargets(target, "Less than 10 Days", slotsByDate);
-			}
-			if (daysDifference < 20) {
-				addSlotToTargets(target, "Less than 20 Days", slotsByDate);
-			}
-			if (daysDifference < 30) {
-				addSlotToTargets(target, "Less than 30 Days", slotsByDate);
-			}
-			if (daysDifference < 60) {
-				addSlotToTargets(target, "Less than 60 Days", slotsByDate);
-			}
-			addSlotToTargets(target, "Any", slotsByDate);
-
-		}
-		{
-			buildSubMenu(manager, "Slots By Contract", source, sourceIsLoad, slotsByContract, false, true);
-			buildSubMenu(manager, "Slots By Date", source, sourceIsLoad, slotsByDate, true, true);
-			buildSubMenu(manager, "Slots By Port", source, sourceIsLoad, slotsByPort, true, false);
-		}
-	}
-
-	private void addSlotToTargets(final Slot target, final String group, final TreeMap<String, TreeSet<Slot>> targets) {
-		TreeSet<Slot> targetGroupSlots;
-		if (targets.containsKey(group)) {
-			targetGroupSlots = targets.get(group);
-		} else {
-			targetGroupSlots = createSlotTreeSet();
-			targets.put(group, targetGroupSlots);
-		}
-		targetGroupSlots.add(target);
-	}
-
-	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final TreeMap<String, TreeSet<Slot>> targets,
-			final boolean includeContract, final boolean includePort) {
-		final MenuManager subMenu = new MenuManager(name, null);
-		for (final Map.Entry<String, TreeSet<Slot>> e : targets.entrySet()) {
-			final MenuManager subSubMenu = new MenuManager(e.getKey(), null);
-			for (final Slot target : e.getValue()) {
-				createWireAction(subSubMenu, source, target, sourceIsLoad, includeContract, includePort);
-			}
-			subMenu.add(subSubMenu);
-		}
-		manager.add(subMenu);
-	}
-
 	private void createWireAction(final MenuManager subMenu, final Slot source, final Slot target, final boolean sourceIsLoad, final boolean includeContract, final boolean includePort) {
 		final String name = getActionName(target, includeContract, includePort);
 		if (sourceIsLoad) {
 			subMenu.add(new WireAction(name, (LoadSlot) source, (DischargeSlot) target));
 		} else {
 			subMenu.add(new WireAction(name, (LoadSlot) target, (DischargeSlot) source));
-		}
-	}
-
-	private TreeSet<Slot> createSlotTreeSet() {
-		final TreeSet<Slot> slotsByDate = new TreeSet<Slot>(new Comparator<Slot>() {
-
-			@Override
-			public int compare(final Slot o1, final Slot o2) {
-				return o1.getWindowStart().compareTo(o2.getWindowStart());
-			}
-		});
-		return slotsByDate;
-	}
-
-	private String getActionName(final Slot slot, final boolean includePort, final boolean includeContract) {
-		final StringBuilder sb = new StringBuilder();
-
-		if (includeContract) {
-			sb.append(slot.getContract().getName());
-			sb.append(" - ");
-		}
-
-		if (includePort) {
-			sb.append(slot.getPort().getName());
-			sb.append(" - ");
-		}
-		{
-			sb.append(DateFormat.getDateInstance().format(slot.getWindowStart()));
-			sb.append(" - ");
-		}
-		{
-			sb.append(slot.getName());
-			sb.append(" - ");
-
-		}
-		Cargo c = null;
-		if (slot instanceof LoadSlot) {
-			if (((LoadSlot) slot).isDESPurchase()) {
-				sb.append("(DES Purchase) ");
-			}
-			c = ((LoadSlot) slot).getCargo();
-		}
-		if (slot instanceof DischargeSlot) {
-			if (((DischargeSlot) slot).isFOBSale()) {
-				sb.append("(FOB Sale) ");
-			}
-			c = ((DischargeSlot) slot).getCargo();
-		}
-		if (slot instanceof SpotSlot) {
-			sb.append(((SpotSlot) slot).getMarket().getName());
-			sb.append(" - ");
-
-		}
-		if (c != null) {
-			sb.append(" (Cargo " + c.getName() + ")");
-		} else {
-			sb.append("(unused)");
-		}
-		return sb.toString();
-	}
-
-	public void setLocked(final boolean locked) {
-		this.locked = locked;
-		wiringDiagram.setLocked(locked);
-		for (final PortAndDateComposite c : lhsComposites) {
-			c.setEnabled(!locked);
-		}
-		for (final PortAndDateComposite c : rhsComposites) {
-			c.setEnabled(!locked);
-		}
-		for (final NamedObjectNameComposite c : idComposites) {
-			c.setEnabled(!locked);
 		}
 	}
 }
