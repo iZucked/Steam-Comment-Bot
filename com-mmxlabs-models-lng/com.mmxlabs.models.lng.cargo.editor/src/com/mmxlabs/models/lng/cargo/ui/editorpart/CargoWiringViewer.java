@@ -48,7 +48,13 @@ public class CargoWiringViewer extends Composite {
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setAlwaysShowScrollBars(true);
 
-		wiringComposite = new CargoWiringComposite(scrolledComposite, SWT.NONE, part.getSite());
+		wiringComposite = new CargoWiringComposite(scrolledComposite, SWT.NONE, part.getSite()) {
+			@Override
+			public void layout() {
+				super.layout();
+				scrolledComposite.setMinSize(wiringComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+			}
+		};
 		scrolledComposite.setContent(wiringComposite);
 		scrolledComposite.setMinSize(wiringComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		scrolledComposite.setLayout(new FillLayout());
