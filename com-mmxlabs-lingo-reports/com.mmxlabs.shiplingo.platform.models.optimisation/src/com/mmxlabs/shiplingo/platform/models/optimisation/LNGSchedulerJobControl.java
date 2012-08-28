@@ -388,6 +388,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				final SpotSlot spotSlot = (SpotSlot) eObj;
 				// Market slot, we can remove it.
 				if (spotSlot.getMarket() != null && eObj.eContainer() != null) {
+					// Remove rather than full delete as we may wish to re-use the object later
 					cmd.append(RemoveCommand.create(domain, eObj));
 				}
 			}
