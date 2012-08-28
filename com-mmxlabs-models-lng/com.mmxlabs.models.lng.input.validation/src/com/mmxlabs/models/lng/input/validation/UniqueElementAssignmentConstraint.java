@@ -8,6 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -16,6 +17,8 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
@@ -44,11 +47,16 @@ public class UniqueElementAssignmentConstraint extends AbstractModelConstraint {
 				if (assignedObject == null) {
 					continue;
 				}
-
 				if (seenObjects.containsKey(assignedObject)) {
-
-					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
-							"Element Assignment already exists for UUID object %s. ", assignedObject.getUuid())));
+					final String message;
+					if (assignedObject instanceof Cargo) {
+						message = String.format("Element Assignment already exists for Cargo %s.", ((Cargo) assignedObject).getName());
+					} else if (assignedObject instanceof VesselEvent) {
+						message = String.format("Element Assignment already exists for Vessel Event %s.", ((VesselEvent) assignedObject).getName());
+					} else {
+						message = String.format("Element Assignment already exists for UUID object %s.", assignedObject.getUuid());
+					}
+					final DetailConstraintStatusDecorator failure = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 					failure.addEObjectAndFeature(assignment, InputPackage.eINSTANCE.getElementAssignment_AssignedObject());
 
 					failures.add(failure);
