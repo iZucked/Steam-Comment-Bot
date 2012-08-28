@@ -244,6 +244,10 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * @param value
 	 */
 	protected synchronized void doSetValue(final Object value, final boolean forceCommandExecution) {
+		
+		if (input == null) {
+			return;
+		}
 		// System.err.println("setvalue on " + feature.getName() + " to " +
 		// value + " (" + currentlySettingValue + ")");
 		if (currentlySettingValue) {
