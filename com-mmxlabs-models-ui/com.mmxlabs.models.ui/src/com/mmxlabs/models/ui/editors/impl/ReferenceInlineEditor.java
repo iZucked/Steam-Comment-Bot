@@ -132,7 +132,9 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public void setEnabled(final boolean enabled) {
-
+		if (combo.isDisposed()) {
+			return;
+		}
 		combo.setEnabled(enabled);
 
 		super.setEnabled(enabled);

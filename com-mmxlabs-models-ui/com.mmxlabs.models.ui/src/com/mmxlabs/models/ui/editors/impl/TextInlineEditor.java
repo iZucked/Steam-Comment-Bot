@@ -73,7 +73,9 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public void setEnabled(final boolean enabled) {
-
+		if (text.isDisposed()) {
+			return;
+		}
 		text.setEnabled(enabled);
 
 		super.setEnabled(enabled);
