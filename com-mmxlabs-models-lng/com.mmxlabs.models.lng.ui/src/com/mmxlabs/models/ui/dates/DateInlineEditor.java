@@ -25,11 +25,11 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 		super(feature);
 		this.dateFormatter = formatter;
 	}
-	
+
 	public DateInlineEditor(final EStructuralFeature feature) {
 		this(feature, new DateTimeFormatter("dd/MM/yyyy HH:00"));
 	}
-	
+
 	@Override
 	protected void updateValueDisplay(Object value) {
 		dateFormatter.setTimeZone(LocalDateUtil.getTimeZone(input, (EAttribute) this.feature));
@@ -44,26 +44,27 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	@Override
 	protected Control createValueControl(Composite parent) {
 		formattedText = new FormattedText(parent);
-		
+
 		formattedText.setFormatter(dateFormatter);
-		
+
 		formattedText.getControl().addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(final ModifyEvent e) {
 				if (formattedText.isValid()) {
-					doSetValue((Date)formattedText.getValue(), false);
+					doSetValue((Date) formattedText.getValue(), false);
 				}
 			}
 		});
 		return formattedText.getControl();
 	}
-	
 
 	@Override
 	public void setEnabled(final boolean enabled) {
-
+		if (formattedText.getControl().isDisposed()) {
+			return;
+		}
 		formattedText.getControl().setEnabled(enabled);
-		
+
 		super.setEnabled(enabled);
 	}
 }
