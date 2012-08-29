@@ -15,6 +15,7 @@ import javax.management.timer.Timer;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -159,9 +160,11 @@ public class AssignmentEditorHelper {
 	// }
 
 	public static ElementAssignment getElementAssignment(final InputModel modelObject, final UUIDObject task) {
-		for (final ElementAssignment ea : modelObject.getElementAssignments()) {
-			if (ea.getAssignedObject() == task)
+		final List<ElementAssignment> elementAssignments = new ArrayList<ElementAssignment>(modelObject.getElementAssignments());
+		for (final ElementAssignment ea : elementAssignments) {
+			if (ea.getAssignedObject() == task) {
 				return ea;
+			}
 		}
 		return null;
 	}
