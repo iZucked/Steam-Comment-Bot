@@ -147,6 +147,8 @@ public class AnnotatedSolutionExporter {
 
 			final Sequence eSequence = factory.createSequence();
 
+			boolean skipStartEndElements = false;
+
 			// TODO use spot rates correctly.
 			final int hireRate;
 			switch (vessel.getVesselInstanceType()) {
@@ -176,6 +178,7 @@ public class AnnotatedSolutionExporter {
 				if (sequence.size() < 4) {
 					continue;
 				}
+				skipStartEndElements = true;
 				break;
 			case SPOT_CHARTER:
 				if (sequence.size() < 2)
@@ -245,7 +248,12 @@ public class AnnotatedSolutionExporter {
 			};
 
 			final List<Event> eventsForElement = new ArrayList<Event>();
-			for (final ISequenceElement element : sequence) {
+			for (int i = 0; i < sequence.size(); ++i) {
+
+				final ISequenceElement element = sequence.get(i);
+				if (skipStartEndElements && (i == 0 || i == sequence.size() - 1)) {
+					continue;
+				}
 				// get annotations for this element
 				final Map<String, Object> annotations = elementAnnotations.getAnnotations(element);
 
@@ -264,7 +272,7 @@ public class AnnotatedSolutionExporter {
 				events.addAll(eventsForElement);
 				eventsForElement.clear();
 			}
-			
+
 			// Setup next/prev events.
 			Event prev = null;
 			for (final Event event : events) {
