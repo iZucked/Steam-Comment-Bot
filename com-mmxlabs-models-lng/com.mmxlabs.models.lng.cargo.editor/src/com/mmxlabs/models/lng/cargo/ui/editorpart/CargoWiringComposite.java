@@ -116,6 +116,7 @@ public class CargoWiringComposite extends Composite {
 		public void enable(final boolean skip) {
 			// Normally this means we should ignore anything that has happened.
 			// However here we ignore this and process the data anyway.
+			// This is needed to process data during the optimisation set schedule undo() phase
 			// TODO: This needs testing!
 			super.enable(false);
 		};
