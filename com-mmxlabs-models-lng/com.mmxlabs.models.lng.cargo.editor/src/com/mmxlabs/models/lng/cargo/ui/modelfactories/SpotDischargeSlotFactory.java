@@ -9,15 +9,14 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.ui.modelfactories.DefaultModelFactory;
 
 public class SpotDischargeSlotFactory extends DefaultModelFactory {
 
 	protected EObject constructInstance(EClass eClass) {
 
-		if (CargoPackage.eINSTANCE.getLoadSlot() == eClass) {
-			eClass = CargoPackage.eINSTANCE.getSpotLoadSlot();
+		if (CargoPackage.eINSTANCE.getDischargeSlot() == eClass) {
+			eClass = CargoPackage.eINSTANCE.getSpotDischargeSlot();
 		}
 
 		final EObject object = eClass.getEPackage().getEFactoryInstance().create(eClass);
