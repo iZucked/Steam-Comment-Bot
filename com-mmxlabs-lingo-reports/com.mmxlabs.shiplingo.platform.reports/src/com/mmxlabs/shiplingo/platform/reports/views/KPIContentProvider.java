@@ -100,8 +100,7 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		long totalPNL = 0l;
 
 		for (final Sequence seq : schedule.getSequences()) {
-			
-			boolean cargoVoyage = false;
+
 			for (final Event evt : seq.getEvents()) {
 				totalCost += evt.getHireCost();
 				if (evt instanceof FuelUsage) {
@@ -114,9 +113,6 @@ public class KPIContentProvider implements IStructuredContentProvider {
 				if (evt instanceof Journey) {
 					final Journey journey = (Journey) evt;
 					totalCost += journey.getToll();
-					if (!cargoVoyage) {
-//						totalPNL += getEventPNL(evt);
-					}
 				}
 				if (evt instanceof PortVisit) {
 					final int cost = ((PortVisit) evt).getPortCost();
@@ -133,13 +129,11 @@ public class KPIContentProvider implements IStructuredContentProvider {
 					}
 
 					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
-						cargoVoyage = true;
 						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
 						totalPNL += getCargoPNL(cargoAllocation, validEntities);
 					}
 
 				} else if (evt instanceof VesselEventVisit) {
-					cargoVoyage = false;
 					final VesselEventVisit vev = (VesselEventVisit) evt;
 					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
 						final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
@@ -147,10 +141,10 @@ public class KPIContentProvider implements IStructuredContentProvider {
 					}
 					totalPNL += getCargoPNL(vev, validEntities);
 				} else if (evt instanceof StartEvent) {
-					StartEvent startEvent = (StartEvent) evt;
+					final StartEvent startEvent = (StartEvent) evt;
 					totalPNL += getCargoPNL(startEvent, validEntities);
 				} else if (evt instanceof EndEvent) {
-					EndEvent endEvent = (EndEvent) evt;
+					final EndEvent endEvent = (EndEvent) evt;
 					totalPNL += getCargoPNL(endEvent, validEntities);
 				} else if (evt instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) evt;
@@ -204,15 +198,16 @@ public class KPIContentProvider implements IStructuredContentProvider {
 
 		return total;
 	}
-//	private long getOtherPNL(final Event event allocation, final Set<String> validEntities) {
-//		long total = 0l;
-//		
-//		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_upstream));
-//		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_shipped));
-//		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_downstream));
-//		
-//		return total;
-//	}
+
+	// private long getOtherPNL(final Event event allocation, final Set<String> validEntities) {
+	// long total = 0l;
+	//
+	// total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_upstream));
+	// total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_shipped));
+	// total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_downstream));
+	//
+	// return total;
+	// }
 
 	public long getExtraDataTotalPNL(final Set<String> validEntities, final ExtraData extraData) {
 
