@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -63,6 +65,7 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
 import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -75,6 +78,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 import com.mmxlabs.models.ui.Activator;
+import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
@@ -934,15 +938,45 @@ public class CargoWiringComposite extends Composite {
 			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getLoadSlot_ArriveCold(), false));
 			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
-			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
-			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+			if (loadSlot instanceof SpotSlot) {
+				setSpotSlotTimeWindow(editingDomain, loadSlot, dischargeSlot, cmd);
+			} else {
+				cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
+				cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+			}
 		} else if (dischargeSlot.isFOBSale()) {
 			cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
 			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
-			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
-			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+			if (dischargeSlot instanceof SpotSlot) {
+				setSpotSlotTimeWindow(editingDomain, dischargeSlot, loadSlot, cmd);
+			} else {
+				cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
+				cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+			}
 		}
+	}
+
+	private void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, final Slot otherSlot, final CompoundCommand cmd) {
+		// Spot market - make a month range.
+		final Calendar cal = Calendar.getInstance();
+		final TimeZone zone = LocalDateUtil.getTimeZone(otherSlot.getPort(), PortPackage.eINSTANCE.getPort_TimeZone());
+		cal.setTimeZone(zone);
+		cal.setTime(otherSlot.getWindowStart());
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.DAY_OF_MONTH, 0);
+		final Date start = cal.getTime();
+		final long startMillis = cal.getTimeInMillis();
+		cal.add(Calendar.MONTH, 1);
+		final long endMillis = cal.getTimeInMillis();
+		final int windowSize = (int)((endMillis - startMillis) / 1000 / 60 / 60);
+
+		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));
+		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), start));
+		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), 0));
 	}
 
 	private void runWiringUpdate(final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {

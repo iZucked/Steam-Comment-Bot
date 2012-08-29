@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.commands;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
+import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -18,9 +21,13 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.dates.LocalDateUtil;
 
 /**
  * 
@@ -53,17 +60,27 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 								final CompoundCommand cmd = new CompoundCommand("Convert to DES Purchase");
 								cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getLoadSlot_ArriveCold(), false));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 
+								if (slot instanceof SpotSlot) {
+									setSpotSlotTimeWindow(editingDomain, slot, dischargeSlot, cmd);
+								} else {
+									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
+									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
+								}
 								return cmd;
 							}
 						} else if (dischargeSlot.isFOBSale()) {
 							if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port() || parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
 								final CompoundCommand cmd = new CompoundCommand("FOB Sale update");
-								cmd.append(SetCommand.create(editingDomain, dischargeSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+
+								if (dischargeSlot instanceof SpotSlot) {
+									setSpotSlotTimeWindow(editingDomain, dischargeSlot, slot, (Date) parameter.getValue(), cmd);
+								} else {
+									cmd.append(SetCommand.create(editingDomain, dischargeSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+								}
+
 								return cmd;
 							}
 						}
@@ -83,17 +100,26 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 
 								final CompoundCommand cmd = new CompoundCommand("Convert to FOB Sale");
 								cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
-								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 
+								if (slot instanceof SpotSlot) {
+									setSpotSlotTimeWindow(editingDomain, slot, loadSlot, cmd);
+								} else {
+									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
+									cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
+								}
 								return cmd;
 							}
 						} else if (loadSlot.isDESPurchase()) {
 							if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port() || parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
 								final CompoundCommand cmd = new CompoundCommand("DES Purchase update");
-								cmd.append(SetCommand.create(editingDomain, loadSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+
+								if (loadSlot instanceof SpotSlot) {
+									setSpotSlotTimeWindow(editingDomain, loadSlot, slot, (Date) parameter.getValue(), cmd);
+								} else {
+									cmd.append(SetCommand.create(editingDomain, loadSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+								}
 								return cmd;
 							}
 						}
@@ -103,6 +129,50 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 			}
 		}
 		return null;
+	}
+
+	private void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, final Slot otherSlot, final CompoundCommand cmd) {
+		// Spot market - make a month range.
+		final Calendar cal = Calendar.getInstance();
+		final TimeZone zone = LocalDateUtil.getTimeZone(otherSlot.getPort(), PortPackage.eINSTANCE.getPort_TimeZone());
+		cal.setTimeZone(zone);
+		cal.setTime(otherSlot.getWindowStart());
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.DAY_OF_MONTH, 0);
+		final Date start = cal.getTime();
+		final long startMillis = cal.getTimeInMillis();
+		cal.add(Calendar.MONTH, 1);
+		final long endMillis = cal.getTimeInMillis();
+		final int windowSize = (int) ((endMillis - startMillis) / 1000 / 60 / 60);
+
+		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));
+		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), start));
+		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), 0));
+	}
+
+	private void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, Slot otherSlot, Date newDate, final CompoundCommand cmd) {
+		// Spot market - make a month range.
+		final Calendar cal = Calendar.getInstance();
+		final TimeZone zone = LocalDateUtil.getTimeZone(otherSlot.getPort(), PortPackage.eINSTANCE.getPort_TimeZone());
+		cal.setTimeZone(zone);
+		cal.setTime(newDate);
+		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.DAY_OF_MONTH, 0);
+		final Date start = cal.getTime();
+		final long startMillis = cal.getTimeInMillis();
+		cal.add(Calendar.MONTH, 1);
+		final long endMillis = cal.getTimeInMillis();
+		final int windowSize = (int) ((endMillis - startMillis) / 1000 / 60 / 60);
+
+		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));
+		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), start));
+		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), 0));
 	}
 
 	@Override
