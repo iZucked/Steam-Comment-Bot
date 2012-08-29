@@ -7,6 +7,8 @@ package com.mmxlabs.models.lng.transformer.export;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
@@ -23,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
@@ -66,7 +69,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		PortVisit portVisit = null;
 
 		lastPortVisited = ePort;
-
+		CargoAllocation eAllocation = null;
 		if (slot instanceof IDischargeOption || slot instanceof ILoadOption) {
 
 			final SlotVisit sv = factory.createSlotVisit();
@@ -84,7 +87,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 			// Output allocation info.
 			final IAllocationAnnotation allocation = (IAllocationAnnotation) annotations.get(SchedulerConstants.AI_volumeAllocationInfo);
-			CargoAllocation eAllocation = allocations.get(slot);
+			eAllocation = allocations.get(slot);
 
 			if (eAllocation == null) {
 				eAllocation = scheduleFactory.createCargoAllocation();
@@ -164,6 +167,24 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 		final IPortCostAnnotation cost = (IPortCostAnnotation) annotations.get(SchedulerConstants.AI_portCostInfo);
 		if (cost != null) {
 			portVisit.setPortCost((int) (cost.getPortCost() / Calculator.ScaleFactor));
+		}
+
+		// Handle FOB/DES stuff
+		if (eAllocation != null) {
+			if (eAllocation.getLoadAllocation() != null && eAllocation.getDischargeAllocation() != null) {
+				final SlotAllocation loadAllocation = eAllocation.getLoadAllocation();
+				final SlotAllocation dischargeAllocation = eAllocation.getDischargeAllocation();
+
+				if (((LoadSlot) loadAllocation.getSlot()).isDESPurchase()) {
+					loadAllocation.getSlotVisit().setPort(dischargeAllocation.getSlotVisit().getPort());
+					loadAllocation.getSlotVisit().setStart(dischargeAllocation.getSlotVisit().getStart());
+					loadAllocation.getSlotVisit().setEnd(dischargeAllocation.getSlotVisit().getEnd());
+				} else if (((DischargeSlot) dischargeAllocation.getSlot()).isFOBSale()) {
+					dischargeAllocation.getSlotVisit().setPort(loadAllocation.getSlotVisit().getPort());
+					dischargeAllocation.getSlotVisit().setStart(loadAllocation.getSlotVisit().getStart());
+					dischargeAllocation.getSlotVisit().setEnd(loadAllocation.getSlotVisit().getEnd());
+				}
+			}
 		}
 
 		return portVisit;
