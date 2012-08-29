@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -63,8 +64,10 @@ import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
@@ -616,7 +619,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection sel = (IStructuredSelection) selection;
-			final List<Object> objects = new ArrayList<Object>(sel.toList().size());
+			List<Object> objects = new ArrayList<Object>(sel.toList().size());
 			for (final Object o : sel.toList()) {
 				if (o instanceof CargoAllocation) {
 					final CargoAllocation allocation = (CargoAllocation) o;
@@ -636,6 +639,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 					objects.add(o);
 				}
 			}
+			objects = expandSelection(objects);
 			selection = new StructuredSelection(objects);
 		}
 		viewer.setSelection(selection);
@@ -654,6 +658,41 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	protected void clearInputEquivalents() {
 		equivalents.clear();
 		contents.clear();
+	}
+
+	/**
+	 * Helper method to expand cargo selections to include the whole set of events representing the cargo
+	 * @param selectedObjects
+	 * @return
+	 */
+	private List<Object> expandSelection(final List<Object> selectedObjects) {
+		final Set<Object> newSelection = new HashSet<Object>(selectedObjects.size());
+		for (final Object o : selectedObjects) {
+			newSelection.add(o);
+			if (o instanceof Slot) {
+				final Slot slot = (Slot) o;
+				final Object object = equivalents.get(slot);
+				if (object instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) object;
+					newSelection.add(slotVisit);
+					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+					newSelection.add(slotAllocation);
+					if (slotAllocation != null) {
+						final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+						if (cargoAllocation != null) {
+							newSelection.add(cargoAllocation);
+							newSelection.add(cargoAllocation.getLadenLeg());
+							newSelection.add(cargoAllocation.getLadenIdle());
+							newSelection.add(cargoAllocation.getBallastLeg());
+							newSelection.add(cargoAllocation.getBallastIdle());
+						}
+					}
+				}
+			}
+		}
+		newSelection.retainAll(contents);
+		return new ArrayList<Object>(newSelection);
+
 	}
 
 }
