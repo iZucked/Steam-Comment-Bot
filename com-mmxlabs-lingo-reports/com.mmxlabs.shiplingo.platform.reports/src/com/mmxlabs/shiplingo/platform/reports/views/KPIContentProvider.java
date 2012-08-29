@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -28,8 +29,10 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
@@ -97,6 +100,8 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		long totalPNL = 0l;
 
 		for (final Sequence seq : schedule.getSequences()) {
+			
+			boolean cargoVoyage = false;
 			for (final Event evt : seq.getEvents()) {
 				totalCost += evt.getHireCost();
 				if (evt instanceof FuelUsage) {
@@ -109,6 +114,9 @@ public class KPIContentProvider implements IStructuredContentProvider {
 				if (evt instanceof Journey) {
 					final Journey journey = (Journey) evt;
 					totalCost += journey.getToll();
+					if (!cargoVoyage) {
+//						totalPNL += getEventPNL(evt);
+					}
 				}
 				if (evt instanceof PortVisit) {
 					final int cost = ((PortVisit) evt).getPortCost();
@@ -125,16 +133,25 @@ public class KPIContentProvider implements IStructuredContentProvider {
 					}
 
 					if (visit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+						cargoVoyage = true;
 						final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
 						totalPNL += getCargoPNL(cargoAllocation, validEntities);
 					}
 
 				} else if (evt instanceof VesselEventVisit) {
+					cargoVoyage = false;
 					final VesselEventVisit vev = (VesselEventVisit) evt;
 					if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
 						final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
 						lateness += (late / 1000 / 60 / 60);
 					}
+					totalPNL += getCargoPNL(vev, validEntities);
+				} else if (evt instanceof StartEvent) {
+					StartEvent startEvent = (StartEvent) evt;
+					totalPNL += getCargoPNL(startEvent, validEntities);
+				} else if (evt instanceof EndEvent) {
+					EndEvent endEvent = (EndEvent) evt;
+					totalPNL += getCargoPNL(endEvent, validEntities);
 				} else if (evt instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) evt;
 					final Vessel vessel = seq.getVessel();
@@ -178,7 +195,7 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		}
 	}
 
-	private long getCargoPNL(final CargoAllocation allocation, final Set<String> validEntities) {
+	private long getCargoPNL(final ExtraDataContainer allocation, final Set<String> validEntities) {
 		long total = 0l;
 
 		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_upstream));
@@ -187,6 +204,15 @@ public class KPIContentProvider implements IStructuredContentProvider {
 
 		return total;
 	}
+//	private long getOtherPNL(final Event event allocation, final Set<String> validEntities) {
+//		long total = 0l;
+//		
+//		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_upstream));
+//		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_shipped));
+//		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_downstream));
+//		
+//		return total;
+//	}
 
 	public long getExtraDataTotalPNL(final Set<String> validEntities, final ExtraData extraData) {
 
