@@ -124,4 +124,14 @@
           inheritable="false">
     </displayCompositeFactory>
  </extension>
+ <extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.models.lng.views.logical"
+          class="com.mmxlabs.models.lng.optimiser.editor.views.OptimiserSettingsView"
+          id="com.mmxlabs.models.lng.optimiser.editor.views.OptimiserSettingsView"
+          name="Optimiser Settings"
+          restorable="true">
+    </view>
+ </extension>
 </plugin>
