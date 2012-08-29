@@ -67,7 +67,7 @@ public class CargoWiringViewer extends Composite {
 		});
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 
-		wiringComposite.setCargoes(cargoModel.getCargoes());
+		wiringComposite.setCargoes(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots());
 	}
 
 	public void setLocked(final boolean locked) {

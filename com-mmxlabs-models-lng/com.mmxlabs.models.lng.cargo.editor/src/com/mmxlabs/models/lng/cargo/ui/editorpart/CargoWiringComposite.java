@@ -65,7 +65,6 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
 import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.PricingModel;
@@ -108,13 +107,13 @@ public class CargoWiringComposite extends Composite {
 	private final Object updateLock = new Object();
 
 	private final MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
-		public void notifyChanged(Notification notification) {
+		public void notifyChanged(final Notification notification) {
 
 			super.notifyChanged(notification);
 
 		};
 
-		public void enable(boolean skip) {
+		public void enable(final boolean skip) {
 			// Normally this means we should ignore anything that has happened.
 			// However here we ignore this and process the data anyway.
 			// TODO: This needs testing!
@@ -490,9 +489,9 @@ public class CargoWiringComposite extends Composite {
 	/**
 	 * Set the cargoes, and reset the wiring to match these cargoes.
 	 * 
-	 * @param cargoes
+	 * @param newCargoes
 	 */
-	public void setCargoes(final List<Cargo> cargoes) {
+	public void setCargoes(final List<Cargo> newCargoes, final List<LoadSlot> loadSlots, final List<DischargeSlot> dischargeSlots) {
 		// delete existing children
 		for (final Control c : getChildren()) {
 			c.dispose();
@@ -501,19 +500,40 @@ public class CargoWiringComposite extends Composite {
 		this.loadSlots.clear();
 		this.dischargeSlots.clear();
 		this.cargoes.clear();
-		this.cargoes.addAll(cargoes);
+		this.cargoes.addAll(newCargoes);
 		this.leftTerminalsValid.clear();
 		this.rightTerminalsValid.clear();
-		for (int i = 0; i < cargoes.size(); i++) {
+		for (int i = 0; i < newCargoes.size(); i++) {
 
-			wiring.add(i); // set default wiring
-			loadSlots.add(cargoes.get(i).getLoadSlot());
-			dischargeSlots.add(cargoes.get(i).getDischargeSlot());
-			leftTerminalsValid.add(true);
-			rightTerminalsValid.add(true);
+			this.wiring.add(i); // set default wiring
+			this.loadSlots.add(newCargoes.get(i).getLoadSlot());
+			this.dischargeSlots.add(newCargoes.get(i).getDischargeSlot());
+			this.leftTerminalsValid.add(true);
+			this.rightTerminalsValid.add(true);
 		}
 
-		numberOfRows = cargoes.size();
+		for (final LoadSlot slot : loadSlots) {
+			if (slot.getCargo() == null) {
+				this.cargoes.add(null);
+				this.loadSlots.add(slot);
+				this.dischargeSlots.add(null);
+				this.wiring.add(-1);
+				this.leftTerminalsValid.add(false);
+				this.rightTerminalsValid.add(false);
+			}
+		}
+		for (final DischargeSlot slot : dischargeSlots) {
+			if (slot.getCargo() == null) {
+				this.loadSlots.add(null);
+				this.cargoes.add(null);
+				this.dischargeSlots.add(slot);
+				this.wiring.add(-1);
+				this.leftTerminalsValid.add(false);
+				this.rightTerminalsValid.add(false);
+			}
+		}
+
+		numberOfRows = wiring.size();
 
 		createChildren();
 	}
@@ -676,7 +696,7 @@ public class CargoWiringComposite extends Composite {
 				wiringDiagram = new WiringDiagram(this, SWT.NONE) {
 
 					@Override
-					public synchronized void paintControl(PaintEvent e) {
+					public synchronized void paintControl(final PaintEvent e) {
 						synchronized (updateLock) {
 							super.paintControl(e);
 						}
@@ -883,7 +903,7 @@ public class CargoWiringComposite extends Composite {
 				continue;
 			}
 			final Integer newIndex = newWiring.get(i);
-			LoadSlot loadSlot = loadSlots.get(i);
+			final LoadSlot loadSlot = loadSlots.get(i);
 			if (newIndex >= 0 && newIndex < newWiring.size()) {
 				final DischargeSlot otherDischarge = dischargeSlots.get(newIndex);
 				Cargo c = cargoes.get(i);
@@ -930,7 +950,8 @@ public class CargoWiringComposite extends Composite {
 		currentWiringCommand = null;
 	}
 
-	private void appendFOBDESCommands(CompoundCommand cmd, EditingDomain editingDomain, InputModel inputModel, Cargo cargo, LoadSlot loadSlot, DischargeSlot dischargeSlot) {
+	private void appendFOBDESCommands(final CompoundCommand cmd, final EditingDomain editingDomain, final InputModel inputModel, final Cargo cargo, final LoadSlot loadSlot,
+			final DischargeSlot dischargeSlot) {
 
 		if (loadSlot.isDESPurchase()) {
 			cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
@@ -967,13 +988,13 @@ public class CargoWiringComposite extends Composite {
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MINUTE, 0);
-//		cal.set(Calendar.HOUR_OF_DAY, 0);
+		// cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		final Date start = cal.getTime();
 		final long startMillis = cal.getTimeInMillis();
 		cal.add(Calendar.MONTH, 1);
 		final long endMillis = cal.getTimeInMillis();
-		final int windowSize = (int)((endMillis - startMillis) / 1000 / 60 / 60);
+		final int windowSize = (int) ((endMillis - startMillis) / 1000 / 60 / 60);
 
 		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));
 		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), start));
@@ -1121,7 +1142,7 @@ public class CargoWiringComposite extends Composite {
 			sb.append(" - ");
 		}
 		{
-			DateFormat df = DateFormat.getDateInstance();
+			final DateFormat df = DateFormat.getDateInstance();
 			if (slot.getPort() != null) {
 				final TimeZone zone = LocalDateUtil.getTimeZone(slot, CargoPackage.eINSTANCE.getSlot_WindowStart());
 				df.setTimeZone(zone);
