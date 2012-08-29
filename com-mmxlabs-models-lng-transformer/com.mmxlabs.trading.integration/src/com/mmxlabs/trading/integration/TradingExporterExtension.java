@@ -15,20 +15,30 @@ import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
 import com.mmxlabs.common.detailtree.impl.DurationDetailElement;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.trading.optimiser.TradingConstants;
 import com.mmxlabs.trading.optimiser.annotations.IProfitAndLossAnnotation;
@@ -75,62 +85,65 @@ public class TradingExporterExtension implements IExporterExtension {
 						}
 					}
 					if (cargoAllocation != null) {
-						int idx = 0;
-						for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
-
-							// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
-							final ExtraData streamData;
-							switch (idx) {
-							case 0:
-								streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_upstream, "Upstream");
-								break;
-							case 1:
-								streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_shipped, "Shipping");
-								break;
-							case 2:
-								streamData = cargoAllocation.addExtraData(TradingConstants.ExtraData_downstream, "Downstream");
-								break;
-							default:
-								throw new IllegalStateException("Expected three item in the profit and loss list - got " + profitAndLoss.getEntries().size());
-							}
-
-							final ExtraData entityData = streamData.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
-
-							final ExtraData pnlData = entityData.addExtraData(TradingConstants.ExtraData_pnl, "P&L", (int) (entry.getFinalGroupValue() / Calculator.ScaleFactor),
-									ExtraDataFormatType.CURRENCY);
-
-							pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
-							ExtraData detail = exportDetailTree(entry.getDetails());
-							detail.setName("Details");
-							pnlData.getExtraData().add(detail);
-
-							++idx;
-						}
+						setPandLentries(profitAndLoss, cargoAllocation);
 					}
 				} else if (slot instanceof IVesselEventPortSlot) {
-					// final VesselEvent modelEvent = entities.getModelObject(slot, VesselEvent.class);
-					// VesselEventVisit visit = null;
+					final com.mmxlabs.models.lng.fleet.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.fleet.VesselEvent.class);
+					VesselEventVisit visit = null;
 					//
-					// for (final Sequence sequence : outputSchedule.getSequences()) {
-					// for (final Event event : sequence.getEvents()) {
-					// if (event instanceof VesselEventVisit) {
-					// if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
-					// visit = (VesselEventVisit) event;
+					for (final Sequence sequence : outputSchedule.getSequences()) {
+						for (final Event event : sequence.getEvents()) {
+							if (event instanceof VesselEventVisit) {
+								if (((VesselEventVisit) event).getVesselEvent() == modelEvent) {
+									visit = (VesselEventVisit) event;
+								}
+							}
+						}
+					}
+					if (visit != null) {
+						setPandLentries(profitAndLoss, visit);
+					}
 					// }
-					// }
-					// }
-					// }
+				} else if (slot instanceof StartPortSlot) {
+					StartEvent startEvent = null;
 					//
-					// for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
-					// final VesselEventRevenue revenue = ScheduleFactory.eINSTANCE.createVesselEventRevenue();
-					// revenue.setEntity(entities.getModelObject(entry.getEntity(), Entity.class));
-					// revenue.setDate(entities.getDateFromHours(profitAndLoss.getBookingTime()));
-					// revenue.setVesselEventVisit(visit);
-					// revenue.setValue((int) (entry.getFinalGroupValue() / Calculator.ScaleFactor));
-					// revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
-					// revenues.add(revenue);
-					// visit.setRevenue(revenue);
-					// }
+					for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
+						final ISequence seq = annotatedSolution.getSequences().getSequence(i);
+						if (seq.get(0) == element) {
+							final Sequence sequence = outputSchedule.getSequences().get(i);
+							if (sequence.getEvents().size() > 0) {
+								final Event evt = sequence.getEvents().get(0);
+								if (evt instanceof StartEvent) {
+									startEvent = (StartEvent) evt;
+									break;
+								}
+							}
+						}
+					}
+
+					if (startEvent != null) {
+						setPandLentries(profitAndLoss, startEvent);
+					}
+				} else if (slot instanceof EndPortSlot) {
+					EndEvent endEvent = null;
+					//
+					for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
+						final ISequence seq = annotatedSolution.getSequences().getSequence(i);
+						if (seq.get(0) == element) {
+							final Sequence sequence = outputSchedule.getSequences().get(i);
+							if (sequence.getEvents().size() > 0) {
+								final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
+								if (evt instanceof EndEvent) {
+									endEvent = (EndEvent) evt;
+									break;
+								}
+							}
+						}
+					}
+
+					if (endEvent != null) {
+						setPandLentries(profitAndLoss, endEvent);
+					}
 				} else {
 					// for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
 					// AdditionalData additionalData = ScheduleFactory.eINSTANCE.createAdditionalData();
@@ -153,6 +166,39 @@ public class TradingExporterExtension implements IExporterExtension {
 		annotatedSolution = null;
 	}
 
+	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ExtraDataContainer container) {
+		int idx = 0;
+		for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
+
+			// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
+			final ExtraData streamData;
+			switch (idx) {
+			case 0:
+				streamData = container.addExtraData(TradingConstants.ExtraData_upstream, "Upstream");
+				break;
+			case 1:
+				streamData = container.addExtraData(TradingConstants.ExtraData_shipped, "Shipping");
+				break;
+			case 2:
+				streamData = container.addExtraData(TradingConstants.ExtraData_downstream, "Downstream");
+				break;
+			default:
+				throw new IllegalStateException("Expected three item in the profit and loss list - got " + profitAndLoss.getEntries().size());
+			}
+
+			final ExtraData entityData = streamData.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
+
+			final ExtraData pnlData = entityData.addExtraData(TradingConstants.ExtraData_pnl, "P&L", (int) (entry.getFinalGroupValue() / Calculator.ScaleFactor), ExtraDataFormatType.CURRENCY);
+
+			pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
+			final ExtraData detail = exportDetailTree(entry.getDetails());
+			detail.setName("Details");
+			pnlData.getExtraData().add(detail);
+
+			++idx;
+		}
+	}
+
 	private ExtraData exportDetailTree(final IDetailTree details) {
 		final ExtraData ad = TypesFactory.eINSTANCE.createExtraData();
 
@@ -161,7 +207,7 @@ public class TradingExporterExtension implements IExporterExtension {
 
 		Object value = details.getValue();
 		if (value instanceof IDetailTreeElement) {
-			IDetailTreeElement element = (IDetailTreeElement) value;
+			final IDetailTreeElement element = (IDetailTreeElement) value;
 			value = element.getObject();
 			if (element instanceof CurrencyDetailElement) {
 				ad.setFormatType(ExtraDataFormatType.CURRENCY);
@@ -172,14 +218,14 @@ public class TradingExporterExtension implements IExporterExtension {
 
 		if (value instanceof Serializable) {
 			if (value instanceof Integer) {
-				int x = (Integer) value;
+				final int x = (Integer) value;
 				if (x % Calculator.ScaleFactor == 0) {
 					ad.setValue(x / Calculator.ScaleFactor);
 				} else {
 					ad.setValue(x / (double) Calculator.ScaleFactor);
 				}
 			} else if (value instanceof Long) {
-				long x = (Long) value;
+				final long x = (Long) value;
 				if (x % Calculator.ScaleFactor == 0) {
 					ad.setValue((int) (x / Calculator.ScaleFactor));
 				} else {
