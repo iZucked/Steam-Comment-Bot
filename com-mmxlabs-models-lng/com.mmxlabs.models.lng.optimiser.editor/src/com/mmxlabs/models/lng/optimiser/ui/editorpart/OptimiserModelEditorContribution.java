@@ -4,13 +4,9 @@
  */
 package com.mmxlabs.models.lng.optimiser.ui.editorpart;
 
-import java.util.Arrays;
-
-import org.eclipse.emf.ecore.EReference;
 import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
-import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.ui.editorpart.BaseJointModelEditorContribution;
 
 /**
