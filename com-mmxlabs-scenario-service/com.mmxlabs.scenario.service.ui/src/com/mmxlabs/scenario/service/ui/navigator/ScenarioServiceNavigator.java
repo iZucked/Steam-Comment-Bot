@@ -5,8 +5,6 @@
 package com.mmxlabs.scenario.service.ui.navigator;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.commands.Command;
