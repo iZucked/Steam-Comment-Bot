@@ -37,7 +37,7 @@ public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 				if (parameter.getEStructuralFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 					final Slot load = cargo.getLoadSlot();
 					final Slot discharge = cargo.getDischargeSlot();
-					final CompoundCommand fixer = new CompoundCommand();
+					final CompoundCommand fixer = new CompoundCommand("Slot Name Update");
 					fixer.append(IdentityCommand.INSTANCE);
 					if (load != null) {
 						fixer.append(SetCommand.create(editingDomain, load, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "load-" + parameter.getValue()));
