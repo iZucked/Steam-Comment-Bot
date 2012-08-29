@@ -959,15 +959,14 @@ public class CargoWiringComposite extends Composite {
 
 	private void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, final Slot otherSlot, final CompoundCommand cmd) {
 		// Spot market - make a month range.
-		final Calendar cal = Calendar.getInstance();
-		final TimeZone zone = LocalDateUtil.getTimeZone(otherSlot.getPort(), PortPackage.eINSTANCE.getPort_TimeZone());
-		cal.setTimeZone(zone);
+		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+
 		cal.setTime(otherSlot.getWindowStart());
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.DAY_OF_MONTH, 0);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
 		final Date start = cal.getTime();
 		final long startMillis = cal.getTimeInMillis();
 		cal.add(Calendar.MONTH, 1);
