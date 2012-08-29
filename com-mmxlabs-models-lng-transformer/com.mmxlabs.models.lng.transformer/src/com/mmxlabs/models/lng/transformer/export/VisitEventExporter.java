@@ -15,23 +15,26 @@ import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.PortVisit;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.IPortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -42,12 +45,14 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  */
 public class VisitEventExporter extends BaseAnnotationExporter {
 	private IPortSlotProvider portSlotProvider;
+	private IPortTypeProvider portTypeProvider;
 	private final HashMap<IPortSlot, CargoAllocation> allocations = new HashMap<IPortSlot, CargoAllocation>();
 	private Port lastPortVisited = null;
 
 	@Override
 	public void init() {
 		this.portSlotProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		this.portTypeProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 		allocations.clear();
 	}
 
@@ -144,7 +149,29 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			vev.setVesselEvent(event);
 			portVisit = vev;
 		} else {
-			portVisit = factory.createPortVisit();
+
+			final PortType portType = portTypeProvider.getPortType(element);
+			if (portType == PortType.Start) {
+				final StartEvent startEvent = ScheduleFactory.eINSTANCE.createStartEvent();
+
+				final IPortVisitEvent event = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
+				if (event != null) {
+					startEvent.getFuels().addAll(super.createFuelQuantities(event));
+				}
+
+				portVisit = startEvent;
+			} else if (portType == PortType.End) {
+				final EndEvent endEvent = ScheduleFactory.eINSTANCE.createEndEvent();
+
+				final IPortVisitEvent event = (IPortVisitEvent) annotations.get(SchedulerConstants.AI_visitInfo);
+				if (event != null) {
+					endEvent.getFuels().addAll(super.createFuelQuantities(event));
+				}
+
+				portVisit = endEvent;
+			} else {
+				portVisit = factory.createPortVisit();
+			}
 		}
 
 		portVisit.setPort(ePort);
