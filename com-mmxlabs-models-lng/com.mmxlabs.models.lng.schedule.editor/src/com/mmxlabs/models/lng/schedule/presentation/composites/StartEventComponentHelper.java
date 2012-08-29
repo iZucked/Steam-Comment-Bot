@@ -1,6 +1,8 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.schedule.presentation.composites;
 
@@ -20,11 +22,11 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
- * A component helper for VesselEventVisit instances
+ * A component helper for StartEvent instances
  *
  * @generated
  */
-public class VesselEventVisitComponentHelper extends BaseComponentHelper {
+public class StartEventComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -32,30 +34,31 @@ public class VesselEventVisitComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public VesselEventVisitComponentHelper() {
+	public StartEventComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
 	/**
-	 * Construct a new instance of this helper
+	 * Construct a new instance of this helpser
 	 *
 	 * @generated
 	 */
-	public VesselEventVisitComponentHelper(IAdapterManager adapterManager) {
+	public StartEventComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.EVENT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.FUEL_USAGE));
 		superClassesHelpers.addAll(registry.getComponentHelpers(SchedulePackage.Literals.PORT_VISIT));
 		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.EXTRA_DATA_CONTAINER));
 	}
 	
 	/**
-	 * add editors to a composite, using VesselEventVisit as the supertype
+	 * add editors to a composite, using StartEvent as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, SchedulePackage.Literals.VESSEL_EVENT_VISIT);	
+		addEditorsToComposite(detailComposite, SchedulePackage.Literals.START_EVENT);	
 	}
 	
 	/**
@@ -66,14 +69,14 @@ public class VesselEventVisitComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_vesselEventEditor(detailComposite, topClass);
+		add_slotAllocationEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the vesselEvent feature on VesselEventVisit
+	 * Create the editor for the slotAllocation feature on StartEvent
 	 *
 	 * @generated
 	 */
-	protected void add_vesselEventEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.VESSEL_EVENT_VISIT__VESSEL_EVENT));
+	protected void add_slotAllocationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.START_EVENT__SLOT_ALLOCATION));
 	}
 }

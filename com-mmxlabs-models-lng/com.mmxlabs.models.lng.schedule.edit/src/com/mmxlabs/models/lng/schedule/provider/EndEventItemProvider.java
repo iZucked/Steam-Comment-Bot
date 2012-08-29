@@ -1,15 +1,19 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.schedule.provider;
 
 
+import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.TypesPackage;
+
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +22,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -29,12 +34,12 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.VesselEventVisit} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.EndEvent} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class VesselEventVisitItemProvider
+public class EndEventItemProvider
 	extends EventItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -48,7 +53,7 @@ public class VesselEventVisitItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public VesselEventVisitItemProvider(AdapterFactory adapterFactory) {
+	public EndEventItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -64,7 +69,7 @@ public class VesselEventVisitItemProvider
 			super.getPropertyDescriptors(object);
 
 			addPortCostPropertyDescriptor(object);
-			addVesselEventPropertyDescriptor(object);
+			addSlotAllocationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -92,19 +97,19 @@ public class VesselEventVisitItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Vessel Event feature.
+	 * This adds a property descriptor for the Slot Allocation feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addVesselEventPropertyDescriptor(Object object) {
+	protected void addSlotAllocationPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_VesselEventVisit_vesselEvent_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_VesselEventVisit_vesselEvent_feature", "_UI_VesselEventVisit_type"),
-				 SchedulePackage.Literals.VESSEL_EVENT_VISIT__VESSEL_EVENT,
+				 getString("_UI_EndEvent_slotAllocation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EndEvent_slotAllocation_feature", "_UI_EndEvent_type"),
+				 SchedulePackage.Literals.END_EVENT__SLOT_ALLOCATION,
 				 true,
 				 false,
 				 true,
@@ -125,8 +130,8 @@ public class VesselEventVisitItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
+			childrenFeatures.add(SchedulePackage.Literals.FUEL_USAGE__FUELS);
 			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
-			childrenFeatures.add(SchedulePackage.Literals.VESSEL_EVENT_VISIT__VESSEL_EVENT);
 		}
 		return childrenFeatures;
 	}
@@ -145,14 +150,14 @@ public class VesselEventVisitItemProvider
 	}
 
 	/**
-	 * This returns VesselEventVisit.gif.
+	 * This returns EndEvent.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/VesselEventVisit"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/EndEvent"));
 	}
 
 	/**
@@ -163,11 +168,11 @@ public class VesselEventVisitItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		Date labelValue = ((VesselEventVisit)object).getStart();
+		Date labelValue = ((EndEvent)object).getStart();
 		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_VesselEventVisit_type") :
-			getString("_UI_VesselEventVisit_type") + " " + label;
+			getString("_UI_EndEvent_type") :
+			getString("_UI_EndEvent_type") + " " + label;
 	}
 
 	/**
@@ -181,11 +186,12 @@ public class VesselEventVisitItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(VesselEventVisit.class)) {
-			case SchedulePackage.VESSEL_EVENT_VISIT__PORT_COST:
+		switch (notification.getFeatureID(EndEvent.class)) {
+			case SchedulePackage.END_EVENT__PORT_COST:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case SchedulePackage.VESSEL_EVENT_VISIT__EXTRA_DATA:
+			case SchedulePackage.END_EVENT__FUELS:
+			case SchedulePackage.END_EVENT__EXTRA_DATA:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -202,6 +208,11 @@ public class VesselEventVisitItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.FUEL_USAGE__FUELS,
+				 ScheduleFactory.eINSTANCE.createFuelQuantity()));
 
 		newChildDescriptors.add
 			(createChildParameter

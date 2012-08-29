@@ -289,6 +289,16 @@ public class SequenceItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createStartEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createEndEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__FITNESSES,
 				 ScheduleFactory.eINSTANCE.createFitness()));
 	}
