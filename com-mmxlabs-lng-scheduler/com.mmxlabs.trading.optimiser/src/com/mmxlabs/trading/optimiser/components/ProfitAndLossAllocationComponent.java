@@ -281,8 +281,8 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, currentAllocation.getLoadTime(),
 						currentAllocation.getDischargeTime(), currentAllocation.getDischargeM3Price(), (int) loadVolume, vessel, plan, shippingDetails);
 			} else {
-				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getLoadTime(),
-						currentAllocation.getDischargeTime(), currentAllocation.getDischargeM3Price(), shippingDetails);
+				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getLoadTime(), currentAllocation.getDischargeTime(),
+						currentAllocation.getDischargeM3Price(), shippingDetails);
 			}
 
 		}
@@ -291,10 +291,20 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 	}
 
 	private long getCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG) {
-		final long shippingCosts = plan.getTotalRouteCost() + plan.getTotalFuelCost(FuelComponent.Base) + plan.getTotalFuelCost(FuelComponent.Base_Supplemental)
-				+ plan.getTotalFuelCost(FuelComponent.Cooldown) + plan.getTotalFuelCost(FuelComponent.IdleBase) + plan.getTotalFuelCost(FuelComponent.IdlePilotLight)
+		// @formatter:off
+		final long shippingCosts = plan.getTotalRouteCost()
+				+ plan.getTotalFuelCost(FuelComponent.Base) 
+				+ plan.getTotalFuelCost(FuelComponent.Base_Supplemental)
+				+ plan.getTotalFuelCost(FuelComponent.Cooldown)
+				+ plan.getTotalFuelCost(FuelComponent.IdleBase)
+				+ plan.getTotalFuelCost(FuelComponent.IdlePilotLight)
 				+ plan.getTotalFuelCost(FuelComponent.PilotLight)
-				+ (includeLNG ? plan.getTotalFuelCost(FuelComponent.NBO) + plan.getTotalFuelCost(FuelComponent.IdleNBO) + plan.getTotalFuelCost(FuelComponent.FBO) : 0);
+				+ (includeLNG
+						? plan.getTotalFuelCost(FuelComponent.NBO) 
+						+ plan.getTotalFuelCost(FuelComponent.FBO) 
+						+ plan.getTotalFuelCost(FuelComponent.IdleNBO)
+						: 0);
+		// @formatter:on
 
 		final int hireRate;
 		switch (vessel.getVesselInstanceType()) {
