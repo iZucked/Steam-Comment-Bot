@@ -29,7 +29,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private CargoWiringViewer wiringViewer;
 
 	// Temp flag to turn on/off load/discharge slots during development
-	private static final boolean showSlotTabs = true;
+	private static final boolean showSlotTabs = false;
 
 	@Override
 	public void addPages(final Composite parent) {
