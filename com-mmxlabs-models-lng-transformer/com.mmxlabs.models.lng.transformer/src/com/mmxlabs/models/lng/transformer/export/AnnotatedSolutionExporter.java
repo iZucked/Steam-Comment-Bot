@@ -264,6 +264,16 @@ public class AnnotatedSolutionExporter {
 				events.addAll(eventsForElement);
 				eventsForElement.clear();
 			}
+			
+			// Setup next/prev events.
+			Event prev = null;
+			for (final Event event : events) {
+				if (prev != null) {
+					prev.setNextEvent(event);
+					event.setPreviousEvent(prev);
+				}
+				prev = event;
+			}
 		}
 
 		// patch up idle events with no port
