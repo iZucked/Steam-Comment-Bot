@@ -116,6 +116,22 @@
                      class="InputModel">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.input.validation.AllowedVesselAssignmentConstraint"
+                  id="com.mmxlabs.models.lng.input.validation.AllowedVesselAssignmentConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Allowed Vessel Assignment Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ElementAssignment">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
