@@ -620,7 +620,7 @@ public class CargoWiringComposite extends Composite {
 				idComposite = idComposites.get(index);
 			} else {
 
-				idComposite = new NamedObjectNameComposite(this, getStyle() & ~SWT.BORDER) {
+				idComposite = new NamedObjectNameComposite(this, SWT.NONE) {
 					@Override
 					public void addInlineEditor(final IInlineEditor editor) {
 						editors.add(editor);
@@ -649,7 +649,7 @@ public class CargoWiringComposite extends Composite {
 			if (index < lhsComposites.size()) {
 				loadSide = lhsComposites.get(index);
 			} else {
-				loadSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, true);
+				loadSide = new PortAndDateComposite(this,SWT.NONE, site, true);
 				final GridData gd2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 				loadSide.setLayoutData(gd2);
 				loadSide.setBackground(WHITE);
@@ -669,7 +669,7 @@ public class CargoWiringComposite extends Composite {
 			leftTerminalsValid.add(loadSlots.get(index) != null);
 
 			if (wiringDiagram == null) {
-				wiringDiagram = new WiringDiagram(this, getStyle() & ~SWT.BORDER) {
+				wiringDiagram = new WiringDiagram(this, SWT.NONE) {
 
 					@Override
 					public synchronized void paintControl(PaintEvent e) {
@@ -752,7 +752,7 @@ public class CargoWiringComposite extends Composite {
 			if (index < rhsComposites.size()) {
 				dischargeSide = rhsComposites.get(index);
 			} else {
-				dischargeSide = new PortAndDateComposite(this, getStyle() & ~SWT.BORDER, site, false);
+				dischargeSide = new PortAndDateComposite(this, SWT.NONE, site, false);
 				dischargeSide.setCommandHandler(commandHandler);
 				dischargeSide.setBackground(WHITE);
 				dischargeSide.addMenuListener(createDischargeSlotMenuListener(dischargeSlots.get(index)));
@@ -1144,6 +1144,9 @@ public class CargoWiringComposite extends Composite {
 		final Cargo newCargo = createObject(CargoPackage.eINSTANCE.getCargo(), CargoPackage.eINSTANCE.getCargoModel_Cargoes(), cargoModel);
 		newCargo.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 
+		// Allow re-wiring
+		newCargo.setAllowRewiring(true);
+		
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
 		return newCargo;
 	}
