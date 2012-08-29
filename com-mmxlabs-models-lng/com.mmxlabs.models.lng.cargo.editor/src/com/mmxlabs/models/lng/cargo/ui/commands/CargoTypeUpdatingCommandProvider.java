@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.commands;
 
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -133,12 +134,14 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 
 	private void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, final Slot otherSlot, final CompoundCommand cmd) {
 		// Spot market - make a month range.
-		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		final Calendar cal = Calendar.getInstance();
+		final TimeZone zone = LocalDateUtil.getTimeZone(otherSlot.getPort(), PortPackage.eINSTANCE.getPort_TimeZone());
+		cal.setTimeZone(zone);
 		cal.setTime(otherSlot.getWindowStart());
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
+//		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
 		final Date start = cal.getTime();
 		final long startMillis = cal.getTimeInMillis();
@@ -153,13 +156,19 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 
 	private void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, Slot otherSlot, Date newDate, final CompoundCommand cmd) {
 		// Spot market - make a month range.
-		final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+		final Calendar cal = Calendar.getInstance();
+		final TimeZone zone = LocalDateUtil.getTimeZone(otherSlot.getPort(), PortPackage.eINSTANCE.getPort_TimeZone());
+		cal.setTimeZone(zone);
 		cal.setTime(newDate);
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.HOUR_OF_DAY, 0);
+//		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.DAY_OF_MONTH, 1);
+		DateFormat df = DateFormat.getDateTimeInstance();
+		df.setTimeZone(zone);
+		System.out.println(df.format(newDate));
+		System.out.println(df.format(cal.getTime()));
 		final Date start = cal.getTime();
 		final long startMillis = cal.getTimeInMillis();
 		cal.add(Calendar.MONTH, 1);
