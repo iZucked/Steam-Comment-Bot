@@ -42,7 +42,6 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.ui.actions.RewireAction;
 import com.mmxlabs.models.lng.cargo.ui.actions.RotateSlotsAction;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -92,11 +91,11 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-		final RewireAction rewireAction = new RewireAction(getJointModelEditorPart());
+//		final RewireAction rewireAction = new RewireAction(getJointModelEditorPart());
 		final RotateSlotsAction rotate = new RotateSlotsAction(getJointModelEditorPart());
 		viewer.addSelectionChangedListener(rotate);
-		viewer.addSelectionChangedListener(rewireAction);
-		getToolBarManager().appendToGroup("edit", rewireAction);
+//		viewer.addSelectionChangedListener(rewireAction);
+//		getToolBarManager().appendToGroup("edit", rewireAction);
 		getToolBarManager().appendToGroup("edit", rotate);
 		getToolBarManager().update(true);
 		final MMXCorePackage mmx = MMXCorePackage.eINSTANCE;
