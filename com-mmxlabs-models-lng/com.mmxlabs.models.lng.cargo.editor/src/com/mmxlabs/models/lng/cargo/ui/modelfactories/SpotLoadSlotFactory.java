@@ -9,7 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.ui.modelfactories.DefaultModelFactory;
 
 public class SpotLoadSlotFactory extends DefaultModelFactory {
