@@ -52,6 +52,7 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 
 								final CompoundCommand cmd = new CompoundCommand("Convert to DES Purchase");
 								cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
+								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getLoadSlot_ArriveCold(), false));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
 								cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));

@@ -649,7 +649,7 @@ public class CargoWiringComposite extends Composite {
 			if (index < lhsComposites.size()) {
 				loadSide = lhsComposites.get(index);
 			} else {
-				loadSide = new PortAndDateComposite(this,SWT.NONE, site, true);
+				loadSide = new PortAndDateComposite(this, SWT.NONE, site, true);
 				final GridData gd2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 				loadSide.setLayoutData(gd2);
 				loadSide.setBackground(WHITE);
@@ -931,6 +931,7 @@ public class CargoWiringComposite extends Composite {
 		if (loadSlot.isDESPurchase()) {
 			cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, cargo));
 
+			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getLoadSlot_ArriveCold(), false));
 			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
 			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
@@ -941,9 +942,7 @@ public class CargoWiringComposite extends Composite {
 			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
 			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
 			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
-
 		}
-
 	}
 
 	private void runWiringUpdate(final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
@@ -1146,7 +1145,7 @@ public class CargoWiringComposite extends Composite {
 
 		// Allow re-wiring
 		newCargo.setAllowRewiring(true);
-		
+
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_Cargoes(), newCargo));
 		return newCargo;
 	}
