@@ -1302,7 +1302,7 @@ public class CargoWiringComposite extends Composite {
 		newDischarge.setContract((Contract) market.getContract());
 		if (market instanceof DESSalesMarket) {
 
-			DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+			final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
 			newDischarge.setPort((Port) desSalesMarket.getNotionalPort());
 		}
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
@@ -1326,6 +1326,7 @@ public class CargoWiringComposite extends Composite {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
 				}
+				createDeleteSlotMenu(manager, loadSlot);
 			}
 		};
 		return l;
@@ -1349,9 +1350,38 @@ public class CargoWiringComposite extends Composite {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 				}
+				createDeleteSlotMenu(manager, dischargeSlot);
 			}
+
 		};
 		return l;
+
+	}
+
+	private void createDeleteSlotMenu(final IMenuManager newMenuManager, final Slot slot) {
+		final Action deleteAction = new Action("Delete") {
+			@Override
+			public void run() {
+
+				currentWiringCommand = new CompoundCommand("Delete slot");
+				currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), slot));
+				Cargo cargo = null;
+				if (slot instanceof LoadSlot) {
+					final LoadSlot loadSlot = (LoadSlot) slot;
+					cargo = loadSlot.getCargo();
+				}
+				if (slot instanceof DischargeSlot) {
+					final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+					cargo = dischargeSlot.getCargo();
+				}
+				if (cargo != null) {
+					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), cargo));
+				}
+				location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+				currentWiringCommand = null;
+			}
+		};
+		newMenuManager.add(deleteAction);
 
 	}
 
