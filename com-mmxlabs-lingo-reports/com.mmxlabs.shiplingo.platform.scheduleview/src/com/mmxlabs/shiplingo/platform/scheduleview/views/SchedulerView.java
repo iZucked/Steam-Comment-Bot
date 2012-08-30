@@ -662,6 +662,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	/**
 	 * Helper method to expand cargo selections to include the whole set of events representing the cargo
+	 * 
 	 * @param selectedObjects
 	 * @return
 	 */
