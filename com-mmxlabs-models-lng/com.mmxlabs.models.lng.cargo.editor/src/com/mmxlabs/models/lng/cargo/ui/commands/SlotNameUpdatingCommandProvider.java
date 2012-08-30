@@ -40,7 +40,7 @@ public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 					final CompoundCommand fixer = new CompoundCommand("Slot Name Update");
 					fixer.append(IdentityCommand.INSTANCE);
 					if (load != null) {
-						fixer.append(SetCommand.create(editingDomain, load, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "load-" + parameter.getValue()));
+						fixer.append(SetCommand.create(editingDomain, load, MMXCorePackage.eINSTANCE.getNamedObject_Name(),parameter.getValue()));
 					}
 
 					if (discharge != null) {

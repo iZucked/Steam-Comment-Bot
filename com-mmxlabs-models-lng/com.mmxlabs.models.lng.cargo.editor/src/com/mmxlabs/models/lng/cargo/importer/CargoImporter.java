@@ -117,7 +117,7 @@ public class CargoImporter extends DefaultClassImporter {
 				context.doLater(new IDeferment() {
 					@Override
 					public void run(final IImportContext context) {
-						load2.setName("load-" + cargoName);
+						load2.setName(cargoName);
 						context.registerNamedObject(load2);
 					}
 
