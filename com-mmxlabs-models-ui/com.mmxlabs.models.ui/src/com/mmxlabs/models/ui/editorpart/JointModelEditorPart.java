@@ -204,23 +204,35 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				JointModelEditorPart.this.locked = locked;
+				boolean validationLock = false;
+				boolean lockFound = false;
+				String title = getEditorInput().getName();
+				for (final ScenarioLock lock : getScenarioInstance().getLocks()) {
+					if (lock.isClaimed()) {
+						if (lock.getKey() == ScenarioLock.VALIDATION) {
+							// Validation locks should not really stop editing, so track that here
+							validationLock = true;
+						} else {
+							title += " (locked for " + lock.getKey() + ")";
+							// It is possible (due to asyncExec) that the lock has since been cleared, so see whether it is still live now
+							lockFound = true;
+						}
+					}
+				}
+				setPartName(title);
+				updateTitleImage(getEditorInput());
+
+				// Use the detected lock status, rather than provided to get the new lock status - ignore validation locks
+				boolean newLock = !validationLock && lockFound;
+				// Only update state if it has changed.
+				if (JointModelEditorPart.this.locked == newLock) {
+					return;
+				}
+				JointModelEditorPart.this.locked = newLock;
 				for (final IJointModelEditorContribution contribution : contributions) {
 					contribution.setLocked(locked);
 				}
 
-				String title = getEditorInput().getName();
-				if (locked) {
-					for (final ScenarioLock lock : getScenarioInstance().getLocks()) {
-						if (lock.isClaimed()) {
-							title += " (locked for " + lock.getKey() + ")";
-						}
-					}
-				}
-
-				setPartName(title);
-
-				updateTitleImage(getEditorInput());
 			}
 		});
 	}
