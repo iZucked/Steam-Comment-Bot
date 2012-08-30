@@ -14,14 +14,15 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fuel;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -206,13 +207,19 @@ public class EventPropertySource implements IPropertySource {
 			}
 		}
 
-		if (event instanceof SlotVisit) {
-			final CargoAllocation allocation = (((SlotVisit) event).getSlotAllocation().getCargoAllocation());
-			final ExtraDataContainerPropertySource delegateSource = new ExtraDataContainerPropertySource(allocation);
+		ExtraDataContainer container = null;
+		if (event instanceof ExtraDataContainer) {
+			container = (ExtraDataContainer) event;
+		} else if (event instanceof SlotAllocation) {
+			container = (((SlotAllocation) event).getCargoAllocation());
+		} else if (event instanceof SlotVisit) {
+			container = (((SlotVisit) event).getSlotAllocation().getCargoAllocation());
+		}
+		if (container != null) {
+			final ExtraDataContainerPropertySource delegateSource = new ExtraDataContainerPropertySource(container);
 			this.delegateSource = delegateSource;
 			list.addAll(Arrays.asList(delegateSource.getPropertyDescriptors()));
 		}
-
 		descriptors = list.toArray(new IPropertyDescriptor[0]);
 
 		return descriptors;
