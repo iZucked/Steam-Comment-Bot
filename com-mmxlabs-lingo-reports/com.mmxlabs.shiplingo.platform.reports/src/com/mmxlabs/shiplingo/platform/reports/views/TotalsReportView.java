@@ -145,6 +145,11 @@ public class TotalsReportView extends ViewPart {
 		}
 
 		@Override
+		public void update(final ViewerCell cell) {
+
+		}
+
+		@Override
 		public Font getFont(final Object element) {
 			if (element instanceof RowData) {
 				final RowData d = (RowData) element;
@@ -176,12 +181,6 @@ public class TotalsReportView extends ViewPart {
 		public Color getBackground(final Object element, final int columnIndex) {
 			return null;
 		}
-
-		@Override
-		public void update(final ViewerCell cell) {
-
-		}
-
 	}
 
 	/**
@@ -224,25 +223,8 @@ public class TotalsReportView extends ViewPart {
 		viewer.refresh();
 	}
 
-	private void setShowDeltaColumn(final boolean showDeltaColumn) {
-		if (showDeltaColumn) {
-			if (delta == null) {
-				delta = new GridViewerColumn(viewer, SWT.NONE);
-				delta.getColumn().setText("Change");
-				delta.getColumn().pack();
-				addSortSelectionListener(delta.getColumn(), 4);
-				viewer.setLabelProvider(viewer.getLabelProvider());
-			}
-		} else {
-			if (delta != null) {
-				delta.getColumn().dispose();
-				delta = null;
-			}
-		}
-	}
-
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize it.
+	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -258,13 +240,6 @@ public class TotalsReportView extends ViewPart {
 				if (inputEmpty != oldInputEmpty) {
 					if (packColumnsAction != null) {
 						packColumnsAction.run();
-					}
-				}
-
-				if (input instanceof IScenarioViewerSynchronizerOutput) {
-					final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) input;
-					if (scheduleColumnViewer != null) {
-						scheduleColumnViewer.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
 					}
 				}
 			};
@@ -342,33 +317,27 @@ public class TotalsReportView extends ViewPart {
 		makeActions();
 		hookContextMenu();
 		contributeToActionBars();
-		//
-		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-		// this);
-		//
-		// final ISelection selection = getSite().getWorkbenchWindow()
-		// .getSelectionService()
-		// .getSelection("com.mmxlabs.rcp.navigator");
-		//
-		// selectionChanged(null, selection);
 
 		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			private boolean seenPin = false;
+			private boolean hasPin = false;
+			private int numberOfSchedules;
 
 			@Override
 			public void beginCollecting() {
-				seenPin = false;
-			}
-
-			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
-				seenPin = seenPin || isPinned;
-				return Collections.singleton(schedule);
+				hasPin = false;
+				numberOfSchedules = 0;
 			}
 
 			@Override
 			public void endCollecting() {
-				setShowDeltaColumn(seenPin);
+				setShowColumns(hasPin, numberOfSchedules);
+			}
+
+			@Override
+			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
+				hasPin = hasPin || pinned;
+				++numberOfSchedules;
+				return Collections.singleton(schedule);
 			}
 		});
 	}
@@ -457,5 +426,24 @@ public class TotalsReportView extends ViewPart {
 
 		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
 		super.dispose();
+	}
+
+	private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
+		if (showDeltaColumn) {
+			if (delta == null) {
+				delta = new GridViewerColumn(viewer, SWT.NONE);
+				delta.getColumn().setText("Change");
+				delta.getColumn().pack();
+				addSortSelectionListener(delta.getColumn(), 4);
+				viewer.setLabelProvider(viewer.getLabelProvider());
+			}
+		} else {
+			if (delta != null) {
+				delta.getColumn().dispose();
+				delta = null;
+			}
+		}
+
+		scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > (showDeltaColumn ? 2 : 1));
 	}
 }

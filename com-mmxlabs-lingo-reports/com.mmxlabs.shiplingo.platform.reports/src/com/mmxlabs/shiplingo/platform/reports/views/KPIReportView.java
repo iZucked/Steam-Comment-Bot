@@ -76,7 +76,7 @@ public class KPIReportView extends ViewPart {
 
 	private Action copyTableAction;
 
-	private ScenarioViewerSynchronizer jobManagerListener;
+	private ScenarioViewerSynchronizer viewerSynchronizer;
 
 	private KPIContentProvider contentProvider;
 
@@ -168,7 +168,7 @@ public class KPIReportView extends ViewPart {
 		@Override
 		public Color getForeground(final Object element, final int columnIndex) {
 			if (columnIndex == 3 && element instanceof RowData) {
-				RowData rowData = (RowData) element;
+				final RowData rowData = (RowData) element;
 				final Long l = getDelta(rowData);
 				if (l == null || l.longValue() == 0l) {
 					return null;
@@ -221,14 +221,14 @@ public class KPIReportView extends ViewPart {
 			sortColumns.add(0, value);
 		}
 
-//		viewer.getGrid().setSortColumn(column);
-//		viewer.getGrid().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
+		// viewer.getGrid().setSortColumn(column);
+		// viewer.getGrid().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
 
 		viewer.refresh();
 	}
 
 	/**
-	 * This is a callback that will allow us to create the viewer and initialize it.
+	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -245,13 +245,6 @@ public class KPIReportView extends ViewPart {
 
 					if (packColumnsAction != null) {
 						packColumnsAction.run();
-					}
-				}
-
-				if (input instanceof IScenarioViewerSynchronizerOutput) {
-					final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) input;
-					if (scheduleColumnViewer != null) {
-						scheduleColumnViewer.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
 					}
 				}
 			};
@@ -321,22 +314,25 @@ public class KPIReportView extends ViewPart {
 		hookContextMenu();
 		contributeToActionBars();
 
-		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
+		viewerSynchronizer = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
 			private boolean hasPin = false;
+			private int numberOfSchedules;
 
 			@Override
 			public void beginCollecting() {
 				hasPin = false;
+				numberOfSchedules = 0;
 			}
 
 			@Override
 			public void endCollecting() {
-				setShowDeltaColumn(hasPin);
+				setShowColumns(hasPin, numberOfSchedules);
 			}
 
 			@Override
 			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
 				hasPin = hasPin || pinned;
+				++numberOfSchedules;
 				return Collections.singleton(schedule);
 			}
 		});
@@ -449,11 +445,11 @@ public class KPIReportView extends ViewPart {
 	@Override
 	public void dispose() {
 
-		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
+		ScenarioViewerSynchronizer.deregisterView(viewerSynchronizer);
 		super.dispose();
 	}
 
-	private void setShowDeltaColumn(final boolean showDeltaColumn) {
+	private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
 		if (showDeltaColumn) {
 			if (delta == null) {
 				delta = new GridViewerColumn(viewer, SWT.NONE);
@@ -468,5 +464,7 @@ public class KPIReportView extends ViewPart {
 				delta = null;
 			}
 		}
+
+		scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > (showDeltaColumn ? 2 : 1));
 	}
 }
