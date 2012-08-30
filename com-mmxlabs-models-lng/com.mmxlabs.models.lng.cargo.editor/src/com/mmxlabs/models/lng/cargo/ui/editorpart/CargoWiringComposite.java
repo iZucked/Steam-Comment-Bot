@@ -66,6 +66,7 @@ import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
+import com.mmxlabs.models.lng.pricing.DESSalesMarket;
 import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
@@ -1299,6 +1300,11 @@ public class CargoWiringComposite extends Composite {
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newDischarge.setMarket(market);
 		newDischarge.setContract((Contract) market.getContract());
+		if (market instanceof DESSalesMarket) {
+
+			DESSalesMarket desSalesMarket = (DESSalesMarket) market;
+			newDischarge.setPort((Port) desSalesMarket.getNotionalPort());
+		}
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
 	}
