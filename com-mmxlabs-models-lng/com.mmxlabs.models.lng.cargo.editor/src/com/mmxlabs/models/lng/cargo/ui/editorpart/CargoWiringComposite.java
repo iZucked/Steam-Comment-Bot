@@ -385,7 +385,7 @@ public class CargoWiringComposite extends Composite {
 	 */
 	private final ArrayList<Integer> wiring = new ArrayList<Integer>();
 
-	final List<NamedObjectNameComposite> idComposites = new ArrayList<NamedObjectNameComposite>(cargoes.size());
+//	final List<NamedObjectNameComposite> idComposites = new ArrayList<NamedObjectNameComposite>(cargoes.size());
 	final List<PortAndDateComposite> lhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
 	final List<PortAndDateComposite> rhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
 
@@ -406,9 +406,9 @@ public class CargoWiringComposite extends Composite {
 			for (final PortAndDateComposite c : rhsComposites) {
 				c.displayValidationStatus(status);
 			}
-			for (final NamedObjectNameComposite c : idComposites) {
-				c.displayValidationStatus(status);
-			}
+//			for (final NamedObjectNameComposite c : idComposites) {
+//				c.displayValidationStatus(status);
+//			}
 		}
 	};
 
@@ -584,6 +584,11 @@ public class CargoWiringComposite extends Composite {
 	}
 
 	public void setLocked(final boolean locked) {
+
+		if (this.locked == locked) {
+			return;
+		}
+
 		this.locked = locked;
 		wiringDiagram.setLocked(locked);
 		for (final PortAndDateComposite c : lhsComposites) {
@@ -592,9 +597,9 @@ public class CargoWiringComposite extends Composite {
 		for (final PortAndDateComposite c : rhsComposites) {
 			c.setEnabled(!locked);
 		}
-		for (final NamedObjectNameComposite c : idComposites) {
-			c.setEnabled(!locked);
-		}
+//		for (final NamedObjectNameComposite c : idComposites) {
+//			c.setEnabled(!locked);
+//		}
 	}
 
 	/**
@@ -615,7 +620,7 @@ public class CargoWiringComposite extends Composite {
 
 	private void createLayout() {
 
-		final GridLayout gridLayout = new GridLayout(4, false);
+		final GridLayout gridLayout = new GridLayout(3, false);
 		gridLayout.marginHeight = 0;
 		gridLayout.marginBottom = 0;
 		gridLayout.marginTop = 0;
@@ -628,6 +633,7 @@ public class CargoWiringComposite extends Composite {
 	}
 
 	private void createChildren() {
+		boolean alwaysUpdate = false;
 		// lhsComposites.clear();
 		// rhsComposites.clear();
 		leftTerminalsValid.clear();
@@ -640,40 +646,46 @@ public class CargoWiringComposite extends Composite {
 		final Color WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 		for (int index = 0; index < numberOfRows; ++index) {
 
-			final NamedObjectNameComposite idComposite;
-			if (index < idComposites.size()) {
-				idComposite = idComposites.get(index);
-			} else {
-
-				idComposite = new NamedObjectNameComposite(this, SWT.NONE) {
-					@Override
-					public void addInlineEditor(final IInlineEditor editor) {
-						editors.add(editor);
-						editor.setCommandHandler(commandHandler);
-						final Control control = editor.createControl(this);
-						final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-						gd.widthHint = 60;
-						control.setLayoutData(gd);
-						control.setBackground(WHITE);
-					}
-				};
-				idComposite.setCommandHandler(commandHandler);
-				idComposites.add(idComposite);
-				final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-				// gd.widthHint = 70;
-				// gd.grabExcessHorizontalSpace = true;
-				// gd.grabExcessVerticalSpace = true;
-				idComposite.setLayoutData(gd);
-				idComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-			}
-
-			if (true || idComposite.getObject() != cargoes.get(index)) {
-				idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
-			}
+//			final NamedObjectNameComposite idComposite;
+//			final boolean newIdComposite;
+//			if (index < idComposites.size()) {
+//				idComposite = idComposites.get(index);
+//				newIdComposite = false;
+//			} else {
+//				newIdComposite = true;
+//				idComposite = new NamedObjectNameComposite(this, SWT.NONE) {
+//					@Override
+//					public void addInlineEditor(final IInlineEditor editor) {
+//						editors.add(editor);
+//						editor.setCommandHandler(commandHandler);
+//						final Control control = editor.createControl(this);
+//						final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+//						gd.widthHint = 60;
+//						control.setLayoutData(gd);
+//						control.setBackground(WHITE);
+//					}
+//				};
+//				idComposite.setCommandHandler(commandHandler);
+//				idComposites.add(idComposite);
+//				final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+//				// gd.widthHint = 70;
+//				// gd.grabExcessHorizontalSpace = true;
+//				// gd.grabExcessVerticalSpace = true;
+//				idComposite.setLayoutData(gd);
+//				idComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+//				idComposite.setEnabled(!locked);
+//			}
+//
+//			if (alwaysUpdate || newIdComposite || idComposite.getObject() != cargoes.get(index)) {
+//				idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
+//			}
+			boolean newLoadSide = false;
 			final PortAndDateComposite loadSide;
 			if (index < lhsComposites.size()) {
 				loadSide = lhsComposites.get(index);
+				newLoadSide = false;
 			} else {
+				newLoadSide = true;
 				loadSide = new PortAndDateComposite(this, SWT.NONE, site, true);
 				final GridData gd2 = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
 				loadSide.setLayoutData(gd2);
@@ -687,8 +699,9 @@ public class CargoWiringComposite extends Composite {
 				loadSide.addListener(SWT.DefaultSelection, selectionListener);
 				loadSide.setLayoutData(new GridData(SWT.RIGHT, SWT.TOP, false, false));
 
+				loadSide.setEnabled(!locked);
 			}
-			if (true || loadSide.getSlot() != loadSlots.get(index)) {
+			if (alwaysUpdate || newLoadSide || loadSide.getSlot() != loadSlots.get(index)) {
 				loadSide.display(location, location.getRootObject(), loadSlots.get(index), Collections.<EObject> emptyList());
 			}
 			leftTerminalsValid.add(loadSlots.get(index) != null);
@@ -762,6 +775,7 @@ public class CargoWiringComposite extends Composite {
 						//
 					}
 				};
+				wiringDiagram.setLocked(locked);
 			}
 			if (index == 0) {
 				// wiring diagram is tall
@@ -772,11 +786,14 @@ public class CargoWiringComposite extends Composite {
 				// wiringDiagram.setBackground(WHITE);
 			}
 
+			boolean newDischargeSide;
 			final PortAndDateComposite dischargeSide;
 
 			if (index < rhsComposites.size()) {
 				dischargeSide = rhsComposites.get(index);
+				newDischargeSide = false;
 			} else {
+				newDischargeSide = true;
 				dischargeSide = new PortAndDateComposite(this, SWT.NONE, site, false);
 				dischargeSide.setCommandHandler(commandHandler);
 				dischargeSide.setBackground(WHITE);
@@ -785,8 +802,9 @@ public class CargoWiringComposite extends Composite {
 				dischargeSide.addListener(SWT.Selection, selectionListener);
 				dischargeSide.addListener(SWT.DefaultSelection, selectionListener);
 				dischargeSide.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false));
+				dischargeSide.setEnabled(!locked);
 			}
-			if (true || dischargeSide.getSlot() != dischargeSlots.get(index)) {
+			if (alwaysUpdate || newDischargeSide || dischargeSide.getSlot() != dischargeSlots.get(index)) {
 				dischargeSide.display(location, location.getRootObject(), dischargeSlots.get(index), Collections.<EObject> emptyList());
 			}
 			rightTerminalsValid.add(dischargeSlots.get(index) != null);
@@ -801,10 +819,10 @@ public class CargoWiringComposite extends Composite {
 			final Composite c = rhsComposites.remove(rhsComposites.size() - 1);
 			c.dispose();
 		}
-		while (idComposites.size() > numberOfRows) {
-			final Composite c = idComposites.remove(idComposites.size() - 1);
-			c.dispose();
-		}
+//		while (idComposites.size() > numberOfRows) {
+//			final Composite c = idComposites.remove(idComposites.size() - 1);
+//			c.dispose();
+//		}
 
 		wiringDiagram.setWiring(wiring);
 		wiringDiagram.setTerminalsValid(leftTerminalsValid, rightTerminalsValid);
@@ -826,9 +844,6 @@ public class CargoWiringComposite extends Composite {
 		wiringDiagram.setWireColors(wireColors);
 		wiringDiagram.setTerminalColors(terminalColors);
 		updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
-
-		// update locked status.
-		setLocked(locked);
 	}
 
 	/*
