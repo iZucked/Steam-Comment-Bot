@@ -279,14 +279,17 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 			severity = checkStatus(status, IStatus.OK, sb);
 
-			if (sb.toString().isEmpty()) {
+			String description = sb.toString();
+			if (description.isEmpty()) {
 				// No problems, so hide decoration
 				validationDecoration.hide();
 				return;
 			}
 
 			// Update description text
-			validationDecoration.setDescriptionText(sb.toString());
+			if (!description.equals(validationDecoration.getDescriptionText())) {
+				validationDecoration.setDescriptionText(description);
+			}
 
 			// Update icon
 			switch (severity) {
