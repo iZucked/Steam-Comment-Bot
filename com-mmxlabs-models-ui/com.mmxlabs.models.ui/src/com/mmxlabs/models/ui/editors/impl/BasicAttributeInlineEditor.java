@@ -31,6 +31,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -200,8 +201,16 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 		currentlySettingValue = true;
 
-		updateDisplay(getValue());
-		currentlySettingValue = false;
+		final Runnable runnable = new Runnable() {
+
+			@Override
+			public void run() {
+
+				updateDisplay(getValue());
+				currentlySettingValue = false;
+			}
+		};
+		Display.getDefault().asyncExec(runnable);
 	}
 
 	/**
@@ -244,7 +253,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * @param value
 	 */
 	protected synchronized void doSetValue(final Object value, final boolean forceCommandExecution) {
-		
+
 		if (input == null) {
 			return;
 		}

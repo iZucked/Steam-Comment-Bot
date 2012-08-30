@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
 
@@ -127,7 +126,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	@Override
-	protected synchronized void doSetValue(final Object value, boolean forceCommandExecution) {
+	protected synchronized void doSetValue(final Object value, final boolean forceCommandExecution) {
 		if (currentlySettingValue)
 			return;
 		if (value != null)
@@ -149,24 +148,18 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 	@Override
 	protected void updateDisplay(final Object value) {
-		Display.getDefault().asyncExec(new Runnable() {
 
-			@Override
-			public void run() {
-				if (inner != null && inner.isDisposed()) {
-					return;
-				}
-				updateControl();
-				if (setButton == null || value != null) {
-					updateValueDisplay(value);
-				}
-				if (setButton != null && !setButton.isDisposed()) {
-					setButton.setSelection(valueIsSet());
-				}
-				setControlEnabled(inner, isEnabled() && (setButton == null || setButton.getSelection()));
-
-			}
-		});
+		if (inner != null && inner.isDisposed()) {
+			return;
+		}
+		updateControl();
+		if (setButton == null || value != null) {
+			updateValueDisplay(value);
+		}
+		if (setButton != null && !setButton.isDisposed()) {
+			setButton.setSelection(valueIsSet());
+		}
+		setControlEnabled(inner, isEnabled() && (setButton == null || setButton.getSelection()));
 	}
 
 	@Override
