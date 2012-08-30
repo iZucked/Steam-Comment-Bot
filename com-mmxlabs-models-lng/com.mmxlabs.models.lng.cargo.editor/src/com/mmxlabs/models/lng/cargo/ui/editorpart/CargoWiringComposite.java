@@ -1320,7 +1320,7 @@ public class CargoWiringComposite extends Composite {
 			validMarkets.addAll(pricingModel.getDesSalesSpotMarket().getMarkets());
 		} else if (spotType == SpotType.FOB_PURCHASE) {
 			menuName = "FOB Purchase";
-			validMarkets.addAll(pricingModel.getDesSalesSpotMarket().getMarkets());
+			validMarkets.addAll(pricingModel.getFobPurchasesSpotMarket().getMarkets());
 		} else if (spotType == SpotType.FOB_SALE) {
 			menuName = "FOB Sale";
 			final SpotMarketGroup group = pricingModel.getFobSalesSpotMarket();
