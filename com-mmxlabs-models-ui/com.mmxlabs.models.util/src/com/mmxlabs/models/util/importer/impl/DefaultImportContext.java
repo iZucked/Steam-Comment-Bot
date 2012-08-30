@@ -69,7 +69,11 @@ public class DefaultImportContext implements IImportContext {
 
 	@Override
 	public Collection<NamedObject> getNamedObjects(final String name) {
-		return Collections.unmodifiableCollection(namedObjects.get(name));
+		final List<NamedObject> c = namedObjects.get(name);
+		if (c == null) {
+			return Collections.emptySet();
+		}
+		return Collections.unmodifiableCollection(c);
 	}
 
 	@Override
