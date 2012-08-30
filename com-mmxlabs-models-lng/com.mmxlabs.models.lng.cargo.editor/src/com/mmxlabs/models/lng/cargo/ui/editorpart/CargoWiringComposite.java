@@ -384,7 +384,7 @@ public class CargoWiringComposite extends Composite {
 	 */
 	private final ArrayList<Integer> wiring = new ArrayList<Integer>();
 
-//	final List<NamedObjectNameComposite> idComposites = new ArrayList<NamedObjectNameComposite>(cargoes.size());
+	// final List<NamedObjectNameComposite> idComposites = new ArrayList<NamedObjectNameComposite>(cargoes.size());
 	final List<PortAndDateComposite> lhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
 	final List<PortAndDateComposite> rhsComposites = new ArrayList<PortAndDateComposite>(cargoes.size());
 
@@ -405,9 +405,9 @@ public class CargoWiringComposite extends Composite {
 			for (final PortAndDateComposite c : rhsComposites) {
 				c.displayValidationStatus(status);
 			}
-//			for (final NamedObjectNameComposite c : idComposites) {
-//				c.displayValidationStatus(status);
-//			}
+			// for (final NamedObjectNameComposite c : idComposites) {
+			// c.displayValidationStatus(status);
+			// }
 		}
 	};
 
@@ -596,9 +596,9 @@ public class CargoWiringComposite extends Composite {
 		for (final PortAndDateComposite c : rhsComposites) {
 			c.setEnabled(!locked);
 		}
-//		for (final NamedObjectNameComposite c : idComposites) {
-//			c.setEnabled(!locked);
-//		}
+		// for (final NamedObjectNameComposite c : idComposites) {
+		// c.setEnabled(!locked);
+		// }
 	}
 
 	/**
@@ -645,39 +645,39 @@ public class CargoWiringComposite extends Composite {
 		final Color WHITE = Display.getCurrent().getSystemColor(SWT.COLOR_WHITE);
 		for (int index = 0; index < numberOfRows; ++index) {
 
-//			final NamedObjectNameComposite idComposite;
-//			final boolean newIdComposite;
-//			if (index < idComposites.size()) {
-//				idComposite = idComposites.get(index);
-//				newIdComposite = false;
-//			} else {
-//				newIdComposite = true;
-//				idComposite = new NamedObjectNameComposite(this, SWT.NONE) {
-//					@Override
-//					public void addInlineEditor(final IInlineEditor editor) {
-//						editors.add(editor);
-//						editor.setCommandHandler(commandHandler);
-//						final Control control = editor.createControl(this);
-//						final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-//						gd.widthHint = 60;
-//						control.setLayoutData(gd);
-//						control.setBackground(WHITE);
-//					}
-//				};
-//				idComposite.setCommandHandler(commandHandler);
-//				idComposites.add(idComposite);
-//				final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
-//				// gd.widthHint = 70;
-//				// gd.grabExcessHorizontalSpace = true;
-//				// gd.grabExcessVerticalSpace = true;
-//				idComposite.setLayoutData(gd);
-//				idComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
-//				idComposite.setEnabled(!locked);
-//			}
-//
-//			if (alwaysUpdate || newIdComposite || idComposite.getObject() != cargoes.get(index)) {
-//				idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
-//			}
+			// final NamedObjectNameComposite idComposite;
+			// final boolean newIdComposite;
+			// if (index < idComposites.size()) {
+			// idComposite = idComposites.get(index);
+			// newIdComposite = false;
+			// } else {
+			// newIdComposite = true;
+			// idComposite = new NamedObjectNameComposite(this, SWT.NONE) {
+			// @Override
+			// public void addInlineEditor(final IInlineEditor editor) {
+			// editors.add(editor);
+			// editor.setCommandHandler(commandHandler);
+			// final Control control = editor.createControl(this);
+			// final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+			// gd.widthHint = 60;
+			// control.setLayoutData(gd);
+			// control.setBackground(WHITE);
+			// }
+			// };
+			// idComposite.setCommandHandler(commandHandler);
+			// idComposites.add(idComposite);
+			// final GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1);
+			// // gd.widthHint = 70;
+			// // gd.grabExcessHorizontalSpace = true;
+			// // gd.grabExcessVerticalSpace = true;
+			// idComposite.setLayoutData(gd);
+			// idComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
+			// idComposite.setEnabled(!locked);
+			// }
+			//
+			// if (alwaysUpdate || newIdComposite || idComposite.getObject() != cargoes.get(index)) {
+			// idComposite.display(location, location.getRootObject(), cargoes.get(index), Collections.<EObject> emptyList());
+			// }
 			boolean newLoadSide = false;
 			final PortAndDateComposite loadSide;
 			if (index < lhsComposites.size()) {
@@ -818,10 +818,10 @@ public class CargoWiringComposite extends Composite {
 			final Composite c = rhsComposites.remove(rhsComposites.size() - 1);
 			c.dispose();
 		}
-//		while (idComposites.size() > numberOfRows) {
-//			final Composite c = idComposites.remove(idComposites.size() - 1);
-//			c.dispose();
-//		}
+		// while (idComposites.size() > numberOfRows) {
+		// final Composite c = idComposites.remove(idComposites.size() - 1);
+		// c.dispose();
+		// }
 
 		wiringDiagram.setWiring(wiring);
 		wiringDiagram.setTerminalsValid(leftTerminalsValid, rightTerminalsValid);
@@ -1120,16 +1120,29 @@ public class CargoWiringComposite extends Composite {
 		targetGroupSlots.add(target);
 	}
 
-	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Map<String, Set<Slot>> targets,
-			final boolean includeContract, final boolean includePort) {
+	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Map<String, Set<Slot>> targets, final boolean includeContract,
+			final boolean includePort) {
 		final MenuManager subMenu = new MenuManager(name, null);
-		for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
-			final MenuManager subSubMenu = new MenuManager(e.getKey(), null);
-			for (final Slot target : e.getValue()) {
-				createWireAction(subSubMenu, source, target, sourceIsLoad, includeContract, includePort);
+
+		// For single item sub menus, skip the sub menu and add item directly
+		if (targets.size() == 1) {
+			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
+				for (final Slot target : e.getValue()) {
+					createWireAction(subMenu, source, target, sourceIsLoad, includeContract, includePort);
+				}
 			}
-			subMenu.add(subSubMenu);
+
+		} else {
+			for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
+				final MenuManager subSubMenu = new MenuManager(e.getKey(), null);
+				for (final Slot target : e.getValue()) {
+					createWireAction(subSubMenu, source, target, sourceIsLoad, includeContract, includePort);
+				}
+				subMenu.add(subSubMenu);
+			}
+
 		}
+
 		manager.add(subMenu);
 	}
 
