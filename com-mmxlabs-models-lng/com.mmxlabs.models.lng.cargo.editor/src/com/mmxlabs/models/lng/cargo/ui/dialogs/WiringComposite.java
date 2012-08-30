@@ -5,12 +5,12 @@
 package com.mmxlabs.models.lng.cargo.ui.dialogs;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.ecore.EObject;
@@ -28,39 +28,31 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.google.common.collect.Lists;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.cargo.presentation.composites.SlotInlineEditorWrapper;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
-import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.ICommandHandler;
-import com.mmxlabs.models.ui.editors.IDisplayComposite;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
-import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
-import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
-import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 /**
  * A composite for displaying a wiring editor. Contains a {@link WiringDiagram}, which lets the user view and edit a matching in a bipartite graph, and provides the interfacing logic to apply a new
@@ -72,18 +64,6 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  * 
  */
 public class WiringComposite extends Composite {
-	final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-
-	private IScenarioEditingLocation location;
-
-	public IScenarioEditingLocation getEditingLocation() {
-		return location;
-	}
-
-	public void setLocation(IScenarioEditingLocation location) {
-		this.location = location;
-	}
-
 	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
 	/**
 	 * The value of the ith element of wiring is the index of the other end of the wire; -1 indicates no wire is present.
@@ -210,17 +190,17 @@ public class WiringComposite extends Composite {
 
 		createChildren();
 
-		// // restore buffered values (yuck)
-		// for (int i = 0; i < lhsPorts.size(); i++) {
-		// lhsComposites.get(i).setContract(lhsContracts.get(i));
-		// rhsComposites.get(i).setContract(rhsContracts.get(i));
-		// lhsComposites.get(i).setPort(lhsPorts.get(i));
-		// rhsComposites.get(i).setPort(rhsPorts.get(i));
-		// lhsComposites.get(i).setDate(lhsDates.get(i));
-		// rhsComposites.get(i).setDate(rhsDates.get(i));
-		// lhsComposites.get(i).setFOBOrDES(lhsFOBORDES.get(i));
-		// rhsComposites.get(i).setFOBOrDES(rhsFOBORDES.get(i));
-		// }
+		// restore buffered values (yuck)
+		for (int i = 0; i < lhsPorts.size(); i++) {
+			lhsComposites.get(i).setContract(lhsContracts.get(i));
+			rhsComposites.get(i).setContract(rhsContracts.get(i));
+			lhsComposites.get(i).setPort(lhsPorts.get(i));
+			rhsComposites.get(i).setPort(rhsPorts.get(i));
+			lhsComposites.get(i).setDate(lhsDates.get(i));
+			rhsComposites.get(i).setDate(rhsDates.get(i));
+			lhsComposites.get(i).setFOBOrDES(lhsFOBORDES.get(i));
+			rhsComposites.get(i).setFOBOrDES(rhsFOBORDES.get(i));
+		}
 
 		layout();
 	}
@@ -234,22 +214,19 @@ public class WiringComposite extends Composite {
 		setLayout(layout);
 	}
 
-	private class PortAndDateComposite extends Composite implements SelectionListener, IDisplayComposite, IInlineEditorContainer {
-
-		private Slot slot;
-		protected final LinkedList<IInlineEditor> editors = new LinkedList<IInlineEditor>();
+	private class PortAndDateComposite extends Composite implements SelectionListener {
 		private static final int LONG_LENGTH = 20;
-		// public final DateTime dateTime;
-		// public final Combo contractCombo;
-		// public final Combo portCombo;
-		// private int hours;
+		public final DateTime dateTime;
+		public final Combo contractCombo;
+		public final Combo portCombo;
+		private int hours;
 
 		private boolean fobOrDES = false;
 
-		// List<Pair<String, EObject>> ports;
-		// // final List<Pair<String, EObject>> contracts;
-		// private final Label fobDESLabel;
-		// private final IReferenceValueProvider portValueProvider;
+		List<Pair<String, EObject>> ports;
+		final List<Pair<String, EObject>> contracts;
+		private final Label fobDESLabel;
+		private final IReferenceValueProvider portValueProvider;
 
 		private final boolean isLoad;
 
@@ -259,208 +236,149 @@ public class WiringComposite extends Composite {
 		 * @param parent
 		 * @param style
 		 */
-		public PortAndDateComposite(final Composite parent, final int style, final boolean isLoad, final IReferenceValueProvider portValueProvider,
-				final IReferenceValueProvider contractReferenceProvider, final Slot slot) {
+		public PortAndDateComposite(final Composite parent, final int style, final boolean isLoad, final IReferenceValueProvider portValueProvider, final IReferenceValueProvider contractReferenceProvider,
+				final Slot slot) {
 			super(parent, style);
 			this.isLoad = isLoad;
-			// this.portValueProvider = portValueProvider;
+			this.portValueProvider = portValueProvider;
 			setLayout(new GridLayout(4, false));
-			// fobDESLabel = new Label(this, SWT.NONE);
-			// contractCombo = new Combo(this, SWT.READ_ONLY);
-			// portCombo = new Combo(this, SWT.READ_ONLY);
-			// dateTime = new DateTime(this, SWT.MEDIUM | SWT.DATE);
-			// ports = portValueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Port());
-			// contracts = contractReferenceProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Contract());
-			//
-			// // trim port names
-			// for (final Pair<String, EObject> p : ports) {
-			// portCombo.add(shorten(p.getFirst()));
-			// }
-			//
-			// for (final Pair<String, EObject> p : contracts) {
-			// contractCombo.add(shorten(p.getFirst()));
-			// }
-			//
-			// setContract(slot.getContract());
-			// setPort(slot.getPort());
-			// setDate(slot.getWindowStart());
-			// if (slot instanceof LoadSlot && ((LoadSlot) slot).isDESPurchase()) {
-			// fobDESLabel.setText("DES Purchase");
-			// setFOBOrDES(true);
-			// } else if (slot instanceof DischargeSlot && ((DischargeSlot) slot).isFOBSale()) {
-			// fobDESLabel.setText("FOB Sale");
-			// setFOBOrDES(true);
-			// } else {
-			// fobDESLabel.setText("        ");
-			// setFOBOrDES(false);
-			// }
-			// portCombo.addSelectionListener(this);
-			// contractCombo.addSelectionListener(this);
-			// dateTime.addSelectionListener(this);
-			//
+			fobDESLabel = new Label(this, SWT.NONE);
+			contractCombo = new Combo(this, SWT.READ_ONLY);
+			portCombo = new Combo(this, SWT.READ_ONLY);
+			dateTime = new DateTime(this, SWT.MEDIUM | SWT.DATE);
+			ports = portValueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Port());
+			contracts = contractReferenceProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Contract());
 
-			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__CONTRACT)));
-			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
-			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__WINDOW_START)));
+			// trim port names
+			for (final Pair<String, EObject> p : ports) {
+				portCombo.add(shorten(p.getFirst()));
+			}
 
+			for (final Pair<String, EObject> p : contracts) {
+				contractCombo.add(shorten(p.getFirst()));
+			}
+
+			setContract(slot.getContract());
+			setPort(slot.getPort());
+			setDate(slot.getWindowStart());
+			if (slot instanceof LoadSlot && ((LoadSlot) slot).isDESPurchase()) {
+				fobDESLabel.setText("DES Purchase");
+				setFOBOrDES(true);
+			} else if (slot instanceof DischargeSlot && ((DischargeSlot) slot).isFOBSale()) {
+				fobDESLabel.setText("FOB Sale");
+				setFOBOrDES(true);
+			} else {
+				fobDESLabel.setText("        ");
+				setFOBOrDES(false);
+			}
+			portCombo.addSelectionListener(this);
+			contractCombo.addSelectionListener(this);
+			dateTime.addSelectionListener(this);
 		}
 
-		//
-		// private String shorten(final String longString) {
-		// if (longString.length() > LONG_LENGTH + 3) {
-		// return longString.substring(0, LONG_LENGTH) + "...";
-		// }
-		// return longString;
-		// }
-		//
-		// /**
-		// * @param date
-		// */
-		// public void setDate(final Date date) {
-		// final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(getPort().getTimeZone()));
-		// cal.clear();
-		// cal.setTime(date);
-		//
-		// dateTime.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-		//
-		// hours = cal.get(Calendar.HOUR_OF_DAY);
-		// }
-		//
-		// /**
-		// * @param port
-		// */
-		// public void setPort(final Port port) {
-		// portCombo.setText(shorten(port.getName()));
-		// }
-		//
-		// /**
-		// * @param contract
-		// */
-		// public void setContract(final Contract contract) {
-		// contractCombo.setText(shorten(contract.getName()));
-		//
-		// updatePorts(contract);
-		// }
-		//
-		// protected void updatePorts(final Contract contract) {
-		// // Create a fake slot to pass into the value provider
-		// final Slot slot = isLoad ? CargoFactory.eINSTANCE.createLoadSlot() : CargoFactory.eINSTANCE.createDischargeSlot();
-		// slot.setContract(contract);
-		// ports = portValueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Port());
-		//
-		// // Keep the old name in case we can reuse it
-		// final String oldName = portCombo.getText();
-		// // Clear existing names
-		//
-		// portCombo.removeAll();
-		// // Add updated ports list
-		// for (final Pair<String, EObject> p : ports) {
-		// portCombo.add(shorten(p.getFirst()));
-		// }
-		// // Set an initial value...
-		// portCombo.setText(shorten(ports.get(0).getFirst()));
-		// // ... then try and restore port name
-		// portCombo.setText(oldName);
-		// }
-		//
+		private String shorten(final String longString) {
+			if (longString.length() > LONG_LENGTH + 3) {
+				return longString.substring(0, LONG_LENGTH) + "...";
+			}
+			return longString;
+		}
+
+		/**
+		 * @param date
+		 */
+		public void setDate(final Date date) {
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(getPort().getTimeZone()));
+			cal.clear();
+			cal.setTime(date);
+
+			dateTime.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
+
+			hours = cal.get(Calendar.HOUR_OF_DAY);
+		}
+
+		/**
+		 * @param port
+		 */
+		public void setPort(final Port port) {
+			portCombo.setText(shorten(port.getName()));
+		}
+
+		/**
+		 * @param contract
+		 */
+		public void setContract(final Contract contract) {
+			contractCombo.setText(shorten(contract.getName()));
+			
+			updatePorts(contract);
+		}
+		
+		protected void updatePorts(final Contract contract) {
+			// Create a fake slot to pass into the value provider
+			final Slot slot = isLoad ? CargoFactory.eINSTANCE.createLoadSlot() : CargoFactory.eINSTANCE.createDischargeSlot();
+			slot.setContract(contract);
+			ports = portValueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Port());
+
+			// Keep the old name in case we can reuse it
+			final String oldName = portCombo.getText();
+			// Clear existing names
+
+			portCombo.removeAll();
+			// Add updated ports list
+			for (final Pair<String, EObject> p : ports) {
+				portCombo.add(shorten(p.getFirst()));
+			}
+			// Set an initial value...
+			portCombo.setText(shorten(ports.get(0).getFirst()));
+			// ... then try and restore port name
+			portCombo.setText(oldName);
+		}
+
 		public Date getDate() {
-			return slot.getWindowStart();
+			final Calendar cal = Calendar.getInstance(TimeZone.getTimeZone(getPort().getTimeZone()));
+			cal.clear();
+			cal.set(Calendar.YEAR, dateTime.getYear());
+			cal.set(Calendar.MONTH, dateTime.getMonth());
+			cal.set(Calendar.DAY_OF_MONTH, dateTime.getDay());
+			cal.set(Calendar.HOUR_OF_DAY, hours);
+			return cal.getTime();
 		}
 
-		//
 		public Port getPort() {
-			return slot.getPort();
+			int selectionIndex = portCombo.getSelectionIndex();
+			if (selectionIndex == -1) {
+				selectionIndex = 0;
+			}
+			return (Port) ports.get(selectionIndex).getSecond();
 		}
 
 		public Contract getContract() {
-			return slot.getContract();
-			// return (Contract) contracts.get(contractCombo.getSelectionIndex()).getSecond();
+			return (Contract) contracts.get(contractCombo.getSelectionIndex()).getSecond();
 		}
 
-		//
-		// @Override
-		// public void widgetSelected(final SelectionEvent e) {
-		// notifyListeners(SWT.Selection, new Event());
-		//
-		// if (e.widget == contractCombo) {
-		// updatePorts(getContract());
-		// }
-		// }
-		//
-		// @Override
-		// public void widgetDefaultSelected(final SelectionEvent e) {
-		// notifyListeners(SWT.DefaultSelection, new Event());
-		// }
+		@Override
+		public void widgetSelected(final SelectionEvent e) {
+			notifyListeners(SWT.Selection, new Event());
+			
+			if (e.widget == contractCombo) {
+				updatePorts(getContract());
+			}
+		}
+
+		@Override
+		public void widgetDefaultSelected(final SelectionEvent e) {
+			notifyListeners(SWT.DefaultSelection, new Event());
+		}
 
 		public boolean isFOBOrDES() {
 			return fobOrDES;
 		}
 
-		//
-		// public void setFOBOrDES(final boolean isFOBOrDes) {
-		// this.fobOrDES = isFOBOrDes;
-		// fobDESLabel.setVisible(isFOBOrDes);
-		// // contractCombo.setVisible(!isFOBOrDes);
-		// portCombo.setVisible(!isFOBOrDes);
-		// dateTime.setVisible(!isFOBOrDes);
-		// }
-		//
-		@Override
-		public void addInlineEditor(IInlineEditor editor) {
-			// TODO Auto-generated method stub
-			editors.add(editor);
-			editor.setCommandHandler(commandHandler);
-			editor.createControl(this);
-		}
-
-		@Override
-		public Composite getComposite() {
-			// TODO Auto-generated method stub
-			return this;
-		}
-
-		@Override
-		public void display(IScenarioEditingLocation location, MMXRootObject root, EObject value, Collection<EObject> range) {
-			// TODO Auto-generated method stub
-			if (value instanceof Slot) {
-				slot = (Slot) value;
-			} else {
-				slot = null;
-			}
-			for (IInlineEditor editor : editors) {
-				editor.display(location, root, value, range);
-			}
-
-		}
-
-		@Override
-		public void setCommandHandler(ICommandHandler commandHandler) {
-			// TODO Auto-generated method stub
-		}
-
-		@Override
-		public void setEditorWrapper(IInlineEditorWrapper wrapper) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void displayValidationStatus(IStatus status) {
-			for (final IInlineEditor editor : editors) {
-				editor.processValidation(status);
-			}
-		}
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			// TODO Auto-generated method stub
-
+		public void setFOBOrDES(final boolean isFOBOrDes) {
+			this.fobOrDES = isFOBOrDes;
+			fobDESLabel.setVisible(isFOBOrDes);
+			// contractCombo.setVisible(!isFOBOrDes);
+			portCombo.setVisible(!isFOBOrDes);
+			dateTime.setVisible(!isFOBOrDes);
 		}
 	}
 
@@ -536,8 +454,7 @@ public class WiringComposite extends Composite {
 			// });
 
 			final PortAndDateComposite loadSide = new PortAndDateComposite(this, SWT.BORDER, true, portProvider, contractProvider, cargo.getLoadSlot());
-			loadSide.setCommandHandler(commandHandler);
-			loadSide.display(location, location.getRootObject(), cargo.getLoadSlot(), Lists.<EObject>newArrayList(cargo, cargo.getLoadSlot(), cargo.getDischargeSlot()));
+
 			if (wiringDiagram == null) {
 				wiringDiagram = new WiringDiagram(this, getStyle() & ~SWT.BORDER) {
 					@Override
@@ -614,8 +531,7 @@ public class WiringComposite extends Composite {
 			}
 
 			final PortAndDateComposite dischargeSide = new PortAndDateComposite(this, SWT.BORDER, false, portProvider, contractProvider, cargo.getDischargeSlot());
-			dischargeSide.setCommandHandler(commandHandler);
-			dischargeSide.display(location, location.getRootObject(), cargo.getDischargeSlot(), Lists.<EObject>newArrayList(cargo, cargo.getLoadSlot(), cargo.getDischargeSlot()));
+
 			final String id = newNames.get(index);
 
 			lhsComposites.add(loadSide);
@@ -806,35 +722,4 @@ public class WiringComposite extends Composite {
 	public void setContractProvider(final IReferenceValueProvider contractProvider) {
 		this.contractProvider = contractProvider;
 	}
-
-	private IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
-	private ICommandHandler commandHandler = new ICommandHandler() {
-
-		@Override
-		public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
-			// TODO Auto-generated method stub
-			location.getEditingDomain().getCommandStack().execute(command);
-		}
-
-		@Override
-		public IReferenceValueProviderProvider getReferenceValueProviderProvider() {
-			// TODO Auto-generated method stub
-			return location.getReferenceValueProviderCache();
-		}
-
-		@Override
-		public EditingDomain getEditingDomain() {
-			// TODO Auto-generated method stub
-			return location.getEditingDomain();
-		}
-	};
-
-	// @Override
-	// public void addInlineEditor(IInlineEditor editor) {
-	// editor = wrapper.wrap(editor);
-	// if (editor != null) {
-	// editor.setCommandHandler(commandHandler);
-	// editors.add(editor);
-	// }
-	// }
 }
