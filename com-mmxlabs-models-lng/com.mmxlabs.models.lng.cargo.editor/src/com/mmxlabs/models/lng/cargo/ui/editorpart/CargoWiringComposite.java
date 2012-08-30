@@ -226,7 +226,18 @@ public class CargoWiringComposite extends Composite {
 						}
 					}
 				} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_LoadSlots()) {
-					if (notification.getEventType() == Notification.REMOVE) {
+					if (notification.getEventType() == Notification.ADD) {
+						final LoadSlot loadSlot = (LoadSlot) notification.getNewValue();
+						final Cargo cargo = loadSlot.getCargo();
+						final DischargeSlot dischargeSlot = cargo != null ? cargo.getDischargeSlot() : null;
+
+						final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
+						if (ret == 2) {
+							rowAdded = true;
+						} else if (ret == 1) {
+							performUpdate = true;
+						}
+					} else if (notification.getEventType() == Notification.REMOVE) {
 						final LoadSlot slot = (LoadSlot) notification.getOldValue();
 						if (loadSlots.contains(slot)) {
 							// Remove slot
@@ -240,7 +251,18 @@ public class CargoWiringComposite extends Composite {
 						}
 					}
 				} else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()) {
-					if (notification.getEventType() == Notification.REMOVE) {
+					if (notification.getEventType() == Notification.ADD) {
+						final DischargeSlot dischargeSlot = (DischargeSlot) notification.getNewValue();
+						final Cargo cargo = dischargeSlot.getCargo();
+						final LoadSlot loadSlot = cargo != null ? cargo.getLoadSlot() : null;
+
+						final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
+						if (ret == 2) {
+							rowAdded = true;
+						} else if (ret == 1) {
+							performUpdate = true;
+						}
+					} else if (notification.getEventType() == Notification.REMOVE) {
 						final DischargeSlot slot = (DischargeSlot) notification.getOldValue();
 						if (dischargeSlots.contains(slot)) {
 							// Remove slot
