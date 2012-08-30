@@ -80,7 +80,6 @@ import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
@@ -633,7 +632,7 @@ public class CargoWiringComposite extends Composite {
 	}
 
 	private void createChildren() {
-		boolean alwaysUpdate = false;
+		final boolean alwaysUpdate = false;
 		// lhsComposites.clear();
 		// rhsComposites.clear();
 		leftTerminalsValid.clear();
@@ -1045,9 +1044,9 @@ public class CargoWiringComposite extends Composite {
 
 	private void createMenus(final IMenuManager manager, final Slot source, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
 
-		final TreeMap<String, TreeSet<Slot>> slotsByDate = new TreeMap<String, TreeSet<Slot>>();
-		final TreeMap<String, TreeSet<Slot>> slotsByContract = new TreeMap<String, TreeSet<Slot>>();
-		final TreeMap<String, TreeSet<Slot>> slotsByPort = new TreeMap<String, TreeSet<Slot>>();
+		final Map<String, Set<Slot>> slotsByDate = new TreeMap<String, Set<Slot>>();
+		final Map<String, Set<Slot>> slotsByContract = new TreeMap<String, Set<Slot>>();
+		final Map<String, Set<Slot>> slotsByPort = new TreeMap<String, Set<Slot>>();
 
 		for (final Slot target : possibleTargets) {
 
@@ -1110,8 +1109,8 @@ public class CargoWiringComposite extends Composite {
 		}
 	}
 
-	private void addSlotToTargets(final Slot target, final String group, final TreeMap<String, TreeSet<Slot>> targets) {
-		TreeSet<Slot> targetGroupSlots;
+	private void addSlotToTargets(final Slot target, final String group, final Map<String, Set<Slot>> targets) {
+		Set<Slot> targetGroupSlots;
 		if (targets.containsKey(group)) {
 			targetGroupSlots = targets.get(group);
 		} else {
@@ -1121,10 +1120,10 @@ public class CargoWiringComposite extends Composite {
 		targetGroupSlots.add(target);
 	}
 
-	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final TreeMap<String, TreeSet<Slot>> targets,
+	private void buildSubMenu(final IMenuManager manager, final String name, final Slot source, final boolean sourceIsLoad, final Map<String, Set<Slot>> targets,
 			final boolean includeContract, final boolean includePort) {
 		final MenuManager subMenu = new MenuManager(name, null);
-		for (final Map.Entry<String, TreeSet<Slot>> e : targets.entrySet()) {
+		for (final Map.Entry<String, Set<Slot>> e : targets.entrySet()) {
 			final MenuManager subSubMenu = new MenuManager(e.getKey(), null);
 			for (final Slot target : e.getValue()) {
 				createWireAction(subSubMenu, source, target, sourceIsLoad, includeContract, includePort);
