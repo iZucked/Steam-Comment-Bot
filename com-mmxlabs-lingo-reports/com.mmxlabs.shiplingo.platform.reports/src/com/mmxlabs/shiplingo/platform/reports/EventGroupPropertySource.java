@@ -1,4 +1,4 @@
-package com.mmxlabs.shiplingo.platform.scheduleview.views;
+package com.mmxlabs.shiplingo.platform.reports;
 
 import java.util.ArrayList;
 import java.util.List;

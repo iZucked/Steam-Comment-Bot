@@ -73,6 +73,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.shiplingo.platform.scheduleview.internal.Activator;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
 

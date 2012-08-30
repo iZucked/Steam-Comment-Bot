@@ -43,6 +43,8 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
@@ -57,6 +59,7 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
+import com.mmxlabs.shiplingo.platform.reports.ScheduledEventPropertySourceProvider;
 
 /**
  * Base class for views which show things from the EMF output model.
@@ -537,5 +540,18 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
 
 		super.dispose();
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public Object getAdapter(final Class adapter) {
+
+		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
+			final PropertySheetPage propertySheetPage = new PropertySheetPage();
+
+			propertySheetPage.setPropertySourceProvider(new ScheduledEventPropertySourceProvider());
+			return propertySheetPage;
+		}
+		return super.getAdapter(adapter);
 	}
 }

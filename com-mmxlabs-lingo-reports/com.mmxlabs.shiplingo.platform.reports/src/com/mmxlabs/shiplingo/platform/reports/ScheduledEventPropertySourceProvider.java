@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.scheduleview.views;
+package com.mmxlabs.shiplingo.platform.reports;
 
 import java.text.DateFormat;
 import java.util.Calendar;
