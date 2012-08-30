@@ -159,9 +159,10 @@ public class AssignmentEditorHelper {
 	// }
 
 	public static ElementAssignment getElementAssignment(final InputModel modelObject, final UUIDObject task) {
+		// Need to clone and check for nulls to avoid concurrent modification issues.
 		final List<ElementAssignment> elementAssignments = new ArrayList<ElementAssignment>(modelObject.getElementAssignments());
 		for (final ElementAssignment ea : elementAssignments) {
-			if (ea.getAssignedObject() == task) {
+			if (ea != null && ea.getAssignedObject() == task) {
 				return ea;
 			}
 		}
