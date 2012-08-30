@@ -1,4 +1,4 @@
-package com.mmxlabs.shiplingo.platform.reports;
+package com.mmxlabs.shiplingo.platform.reports.properties;
 
 import java.util.ArrayList;
 import java.util.List;

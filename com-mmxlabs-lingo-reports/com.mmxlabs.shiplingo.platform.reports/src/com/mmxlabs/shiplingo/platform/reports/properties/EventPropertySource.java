@@ -1,4 +1,4 @@
-package com.mmxlabs.shiplingo.platform.reports;
+package com.mmxlabs.shiplingo.platform.reports.properties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,7 +25,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.util.emfpath.EMFPath;
-import com.mmxlabs.shiplingo.platform.reports.ScheduledEventPropertySourceProvider.SimpleLabelProvider;
+import com.mmxlabs.shiplingo.platform.reports.properties.ScheduledEventPropertySourceProvider.SimpleLabelProvider;
 
 public class EventPropertySource implements IPropertySource {
 

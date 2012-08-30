@@ -60,7 +60,7 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
-import com.mmxlabs.shiplingo.platform.reports.ScheduledEventPropertySourceProvider;
+import com.mmxlabs.shiplingo.platform.reports.properties.ScheduledEventPropertySourceProvider;
 
 /**
  * Base class for views which show things from the EMF output model.

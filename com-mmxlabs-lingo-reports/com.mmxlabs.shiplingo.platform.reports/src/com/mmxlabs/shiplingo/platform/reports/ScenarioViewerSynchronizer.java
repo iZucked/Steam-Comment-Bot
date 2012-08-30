@@ -30,6 +30,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
+import com.mmxlabs.shiplingo.platform.reports.internal.Activator;
 
 public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScenarioServiceSelectionChangedListener {
 	private static final Logger log = LoggerFactory.getLogger(ScenarioViewerSynchronizer.class);
