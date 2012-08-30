@@ -44,6 +44,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.common.Equality;
@@ -504,7 +505,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-		if (part == this) {
+		if (part == this || part instanceof PropertySheet) {
 			return;
 		}
 
@@ -541,7 +542,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 		super.dispose();
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Object getAdapter(final Class adapter) {
