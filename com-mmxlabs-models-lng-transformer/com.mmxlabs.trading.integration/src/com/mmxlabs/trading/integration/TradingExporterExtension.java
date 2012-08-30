@@ -14,6 +14,7 @@ import com.mmxlabs.common.detailtree.IDetailTreeElement;
 import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
 import com.mmxlabs.common.detailtree.impl.DurationDetailElement;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
@@ -29,16 +30,17 @@ import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.VesselEvent;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.trading.optimiser.TradingConstants;
 import com.mmxlabs.trading.optimiser.annotations.IProfitAndLossAnnotation;
@@ -107,15 +109,26 @@ public class TradingExporterExtension implements IExporterExtension {
 				} else if (slot instanceof StartPortSlot) {
 					StartEvent startEvent = null;
 					//
-					for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
+					LOOP_OUTER: for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
+
 						final ISequence seq = annotatedSolution.getSequences().getSequence(i);
+						final IResource res = annotatedSolution.getSequences().getResources().get(i);
 						if (seq.get(0) == element) {
-							final Sequence sequence = outputSchedule.getSequences().get(i);
-							if (sequence.getEvents().size() > 0) {
-								final Event evt = sequence.getEvents().get(0);
-								if (evt instanceof StartEvent) {
-									startEvent = (StartEvent) evt;
-									break;
+							for (final Sequence sequence : outputSchedule.getSequences()) {
+								final Vessel vessel = sequence.getVessel();
+								if (vessel == null) {
+									continue;
+								}
+
+								final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
+								if (iVessel == res) {
+									if (sequence.getEvents().size() > 0) {
+										final Event evt = sequence.getEvents().get(0);
+										if (evt instanceof StartEvent) {
+											startEvent = (StartEvent) evt;
+											break LOOP_OUTER;
+										}
+									}
 								}
 							}
 						}
@@ -129,13 +142,23 @@ public class TradingExporterExtension implements IExporterExtension {
 					//
 					for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
 						final ISequence seq = annotatedSolution.getSequences().getSequence(i);
+						final IResource res = annotatedSolution.getSequences().getResources().get(i);
 						if (seq.get(0) == element) {
-							final Sequence sequence = outputSchedule.getSequences().get(i);
-							if (sequence.getEvents().size() > 0) {
-								final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
-								if (evt instanceof EndEvent) {
-									endEvent = (EndEvent) evt;
-									break;
+							for (final Sequence sequence : outputSchedule.getSequences()) {
+								final Vessel vessel = sequence.getVessel();
+								if (vessel == null) {
+									continue;
+								}
+
+								final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
+								if (iVessel == res) {
+									if (sequence.getEvents().size() > 0) {
+										final Event evt = sequence.getEvents().get(sequence.getEvents().size() - 1);
+										if (evt instanceof EndEvent) {
+											endEvent = (EndEvent) evt;
+											break;
+										}
+									}
 								}
 							}
 						}
