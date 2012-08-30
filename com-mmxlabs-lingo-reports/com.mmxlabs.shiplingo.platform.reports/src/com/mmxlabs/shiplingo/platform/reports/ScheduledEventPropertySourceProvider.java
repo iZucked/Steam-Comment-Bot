@@ -15,6 +15,7 @@ import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 
 public class ScheduledEventPropertySourceProvider implements IPropertySourceProvider {
 
@@ -50,6 +51,9 @@ public class ScheduledEventPropertySourceProvider implements IPropertySourceProv
 		} else if (object instanceof CargoAllocation) {
 			final CargoAllocation alloc = (CargoAllocation) object;
 			return new EventGroupPropertySource(alloc.getLoadAllocation().getSlotVisit());
+		} else if (object instanceof SlotAllocation) {
+			final SlotAllocation alloc = (SlotAllocation) object;
+			return new EventGroupPropertySource(alloc.getSlotVisit());
 		} else if (object instanceof IPropertySource) {
 			return (IPropertySource) object;
 		}
