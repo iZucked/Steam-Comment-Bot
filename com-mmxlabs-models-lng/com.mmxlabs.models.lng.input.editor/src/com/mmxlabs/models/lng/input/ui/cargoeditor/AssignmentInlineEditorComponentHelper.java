@@ -429,8 +429,9 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 	@Override
 	public List<EObject> getExternalEditingRange(final MMXRootObject root, final EObject value) {
 		final EObject assignment = (EObject) AssignmentEditorHelper.getElementAssignment(root.getSubModel(InputModel.class), (UUIDObject) value);
-		if (assignment == null)
+		if (assignment == null) {
 			return super.getExternalEditingRange(root, value);
+		}
 		return Collections.singletonList(assignment);
 	}
 
