@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -179,10 +178,10 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 		final List<Float> terminalPositions = getTerminalPositions();
 		// Copy arrays in case of concurrent change during paint
-		List<Integer> wiring2 = new ArrayList<Integer>(wiring);
-		List<Boolean> leftTerminalValid2 = new ArrayList<Boolean>(leftTerminalValid);
-		List<Pair<Color, Color>> terminalColours2 = new ArrayList<Pair<Color, Color>>(terminalColours);
-		List<Boolean> rightTerminalValid2 = new ArrayList<Boolean>(rightTerminalValid);
+		final List<Integer> wiring2 = new ArrayList<Integer>(wiring);
+		final List<Boolean> leftTerminalValid2 = new ArrayList<Boolean>(leftTerminalValid);
+		final List<Pair<Color, Color>> terminalColours2 = new ArrayList<Pair<Color, Color>>(terminalColours);
+		final List<Boolean> rightTerminalValid2 = new ArrayList<Boolean>(rightTerminalValid);
 
 		final GC graphics = e.gc;
 		graphics.setAntialias(SWT.ON);
@@ -198,8 +197,12 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 		// draw paths
 		for (int i = 0; i < wiring2.size(); i++) {
-			final int destination = wiring2.get(i);
+			final Integer destinationInteger = wiring2.get(i);
 
+			if (destinationInteger == null) {
+				continue;
+			}
+			final int destination = destinationInteger.intValue();
 			if (destination < 0) {
 				continue; // no wire
 			}
@@ -444,10 +447,10 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	 */
 	protected abstract void wiringChanged(final List<Integer> newWiring);
 
-	protected void openContextMenu(boolean leftSide, int terminal, int mouseX, int mouseY) {
+	protected void openContextMenu(final boolean leftSide, final int terminal, final int mouseX, final int mouseY) {
 	}
 
-	public void setLocked(boolean locked) {
+	public void setLocked(final boolean locked) {
 		this.locked = locked;
 
 	}
