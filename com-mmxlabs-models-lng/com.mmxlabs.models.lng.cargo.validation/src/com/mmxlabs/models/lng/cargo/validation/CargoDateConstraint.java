@@ -46,7 +46,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	/**
 	 * This is the maximum sensible amount of travel time in a cargo, in days
 	 */
-	private static final int SENSIBLE_TRAVEL_TIME = 80;
+	private static final int SENSIBLE_TRAVEL_TIME = 160;
 
 	/**
 	 * Validate that the available time is not negative.
