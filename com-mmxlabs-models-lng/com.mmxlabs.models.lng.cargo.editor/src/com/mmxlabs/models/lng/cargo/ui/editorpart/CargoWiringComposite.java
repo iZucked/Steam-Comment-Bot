@@ -918,7 +918,9 @@ public class CargoWiringComposite extends Composite {
 
 	private void performControlUpdate(final boolean rowAdded) {
 		synchronized (updateLock) {
-
+			if (isDisposed()) {
+				return;
+			}
 			// if (rowAdded) {
 			createChildren();
 			layout();
