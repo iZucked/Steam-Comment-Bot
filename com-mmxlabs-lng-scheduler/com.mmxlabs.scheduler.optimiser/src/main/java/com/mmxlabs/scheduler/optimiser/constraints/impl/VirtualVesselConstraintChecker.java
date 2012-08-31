@@ -138,6 +138,10 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 
 		final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 		final ISequenceElement endElement = startEndProvider.getEndElement(resource);
+		
+		if (first == startElement && second == endElement) {
+			return true;
+		}
 
 		final ISequenceElement elementForVessel = virtualVesselSlotProvider.getElementForVessel(vessel);
 
