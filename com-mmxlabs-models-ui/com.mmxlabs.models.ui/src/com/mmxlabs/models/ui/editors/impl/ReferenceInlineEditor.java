@@ -9,6 +9,7 @@ package com.mmxlabs.models.ui.editors.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
@@ -94,7 +95,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		if (combo.isDisposed()) {
 			return;
 		}
-		final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(input, feature);
+		final List<Pair<String, EObject>> values = valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>>emptyList();
 		// update combo contents
 		combo.removeAll();
 		nameList.clear();
