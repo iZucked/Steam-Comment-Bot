@@ -205,7 +205,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			@Override
 			public void run() {
 				boolean validationLock = false;
-				boolean lockFound = false;
 				String title = getEditorInput().getName();
 				for (final ScenarioLock lock : getScenarioInstance().getLocks()) {
 					if (lock.isClaimed()) {
@@ -214,16 +213,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 							validationLock = true;
 						} else {
 							title += " (locked for " + lock.getKey() + ")";
-							// It is possible (due to asyncExec) that the lock has since been cleared, so see whether it is still live now
-							lockFound = true;
 						}
 					}
 				}
 				setPartName(title);
 				updateTitleImage(getEditorInput());
-
+				// It is possible (due to asyncExec) that the lock has since been cleared, so see whether it is still live now
 				// Use the detected lock status, rather than provided to get the new lock status - ignore validation locks
-				boolean newLock = !validationLock && lockFound;
+				boolean newLock = !validationLock && getScenarioInstance().isLocked();
 				// Only update state if it has changed.
 				if (JointModelEditorPart.this.locked == newLock) {
 					return;
