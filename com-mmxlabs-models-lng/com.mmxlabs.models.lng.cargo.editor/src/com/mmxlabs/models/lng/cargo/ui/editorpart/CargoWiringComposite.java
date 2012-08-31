@@ -1403,6 +1403,7 @@ public class CargoWiringComposite extends Composite {
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newLoad.setMarket(market);
 		newLoad.setContract((Contract) market.getContract());
+		newLoad.setOptional(true);
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 		return newLoad;
@@ -1439,6 +1440,7 @@ public class CargoWiringComposite extends Composite {
 			final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
 			newDischarge.setPort((Port) desSalesMarket.getNotionalPort());
 		}
+		newDischarge.setOptional(true);
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
 	}
