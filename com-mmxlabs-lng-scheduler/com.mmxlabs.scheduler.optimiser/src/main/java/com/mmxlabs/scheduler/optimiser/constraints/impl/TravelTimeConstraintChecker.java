@@ -22,8 +22,11 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A constraint checker which tests whether the ports in a sequence can be reached from one another presuming the vessel travels at its maximum speed all the way and spends a minimum amount of time at
@@ -43,6 +46,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	private final String name;
 	private IOptimisationData data;
 	private IPortSlotProvider portSlotProvider;
+	private IPortTypeProvider portTypeProvider;
 	private IVesselProvider vesselProvider;
 	private IElementDurationProvider elementDurationProvider;
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
@@ -95,6 +99,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	public void setOptimisationData(final IOptimisationData optimisationData) {
 		this.data = optimisationData;
 		this.portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		this.portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 		this.vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		this.elementDurationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProvider.class);
 		this.distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
@@ -120,6 +125,39 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
+
+		IVessel vessel = vesselProvider.getVessel(resource);
+		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+			final ITimeWindow tw1 = slot1.getTimeWindow();
+			final ITimeWindow tw2 = slot2.getTimeWindow();
+
+			if ((tw1 == null) || (tw2 == null)) {
+				return true; // if the time windows are null, there is no effective constraint
+			}
+
+			PortType firstType = portTypeProvider.getPortType(first);
+			if (firstType == PortType.Load) {
+				PortType secondType = portTypeProvider.getPortType(second);
+				if (secondType == PortType.Discharge) {
+
+					if (tw1.getStart() <= tw2.getStart() && tw1.getEnd() >= tw2.getStart()) {
+						return true;
+					}
+					if (tw1.getStart() <= tw2.getEnd() && tw1.getEnd() >= tw2.getEnd()) {
+						return true;
+					}
+
+					if (tw2.getStart() <= tw1.getStart() && tw2.getEnd() >= tw1.getStart()) {
+						return true;
+					}
+					if (tw2.getStart() <= tw1.getEnd() && tw2.getEnd() >= tw1.getEnd()) {
+						return true;
+					}
+					return false;
+				}
+			}
+			return true;
+		}
 
 		final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort());
 
