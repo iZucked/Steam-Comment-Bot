@@ -48,12 +48,6 @@ public class CargoModelCompositeFactory extends DefaultDisplayCompositeFactory {
 		if (value instanceof Cargo) {
 			final Cargo cargo = (Cargo) value;
 
-			for (final IComponentHelper helper : Activator.getDefault().getComponentHelperRegistry().getComponentHelpers(cargo.getLoadSlot().eClass())) {
-				external.addAll(helper.getExternalEditingRange(root, cargo.getLoadSlot()));
-			}
-			for (final IComponentHelper helper : Activator.getDefault().getComponentHelperRegistry().getComponentHelpers(cargo.getDischargeSlot().eClass())) {
-				external.addAll(helper.getExternalEditingRange(root, cargo.getDischargeSlot()));
-			}
 			external.add(cargo.getLoadSlot());
 			external.add(cargo.getDischargeSlot());
 		}
