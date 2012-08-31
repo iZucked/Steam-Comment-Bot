@@ -345,6 +345,14 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				}
 			}
 
+			// Did not find an option, so true to remove if optional (assumes the previous check resulted in false)
+			if (optionalElementsProvider.isElementOptional(target)) {
+				// Can stick on unused elements list
+				builder.addFrom(targetResource, targetPosition.getSecond(), target);
+				builder.addTo(null, 0, 1);
+				return true;
+			}
+			
 			return false;
 		} else {
 			// // Find a follower
@@ -384,6 +392,15 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				}
 			}
 
+			// Did not find an option, so true to remove if optional (assumes the previous check resulted in false)
+			if (optionalElementsProvider.isElementOptional(target)) {
+				// Can stick on unused elements list
+				builder.addFrom(targetResource, targetPosition.getSecond(), target);
+				builder.addTo(null, 0, 1);
+				return true;
+			}
+
+			
 			return false;
 		}
 	}
