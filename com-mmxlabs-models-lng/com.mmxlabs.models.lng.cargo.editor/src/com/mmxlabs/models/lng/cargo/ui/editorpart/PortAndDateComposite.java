@@ -50,12 +50,12 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		gridLayout.marginHeight = 0;
 		// gridLayout.marginBottom = 0;
 		// gridLayout.marginTop = 0;
-		gridLayout.horizontalSpacing = 5;
+		gridLayout.horizontalSpacing = 7;
 		gridLayout.verticalSpacing = 0;
 		if (isLoad) {
-			gridLayout.marginRight = 5;
+			gridLayout.marginRight = 0;
 		} else {
-			gridLayout.marginLeft = 5;
+			gridLayout.marginLeft = 0;
 		}
 		gridLayout.marginWidth = 0;
 		setLayout(gridLayout);
