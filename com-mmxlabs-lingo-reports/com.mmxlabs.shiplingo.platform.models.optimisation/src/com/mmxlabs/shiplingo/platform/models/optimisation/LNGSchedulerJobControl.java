@@ -330,11 +330,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					cmd.append(SetCommand.create(domain, c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), load));
 					loadCargo = c;
 					slotToCargoMap.put(load, c);
-					
-					// Create a element assignment
-					final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
-					ea.setAssignedObject((UUIDObject) c);
-					cmd.append(AddCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), ea));
 				} else {
 					loadCargo = load.getCargo();
 				}
