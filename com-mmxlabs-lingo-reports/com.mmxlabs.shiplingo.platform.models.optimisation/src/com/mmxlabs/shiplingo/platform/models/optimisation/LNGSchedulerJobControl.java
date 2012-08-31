@@ -389,9 +389,13 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				// Market slot, we can remove it.
 				if (spotSlot.getMarket() != null && eObj.eContainer() != null) {
 					// Remove rather than full delete as we may wish to re-use the object later
+					// Note ensure this is also removed from the unused elements list as Remove does not delete other references.
 					cmd.append(RemoveCommand.create(domain, eObj));
+
 				}
 			}
+			// Remove from the unused elements list
+			cmd.append(RemoveCommand.create(domain, schedule, SchedulePackage.eINSTANCE.getSchedule_UnusedElements(), eObj));
 		}
 
 		// TODO: We do not expect to get here!
