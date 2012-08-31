@@ -279,7 +279,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		});
 
 		// setup fake vessels for virtual elements.
-		virtualClass = createVesselClass("virtual", 0, 1000000000, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
+		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
 	}
 
 	@Override
@@ -812,6 +812,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// what's the slowest vessel class
 			int slowestMaxSpeed = Integer.MAX_VALUE;
 			for (final IVesselClass vesselClass : vesselClasses) {
+				if (vesselClass == virtualClass) {
+					continue;
+				}
 				slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
 			}
 
