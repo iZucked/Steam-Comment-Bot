@@ -156,6 +156,7 @@ public class LNGModelCorrector {
 				// Delete duplicates
 				if (!seenObjects.add(assignedObject)) {
 					cmd.append(DeleteCommand.create(ed, ea));
+					continue;
 				}
 				if (assignedObject instanceof Cargo) {
 					continue;
