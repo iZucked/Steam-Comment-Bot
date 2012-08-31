@@ -69,8 +69,8 @@ public class ReplaceMoveAndFill implements IMove {
 		final ISequenceElement unusedElement = spare.get(unusedElementIndex);
 
 		// Remove elements from current position
-		spare.remove(unusedElementIndex);
-		spare.remove(fillerElementIndex);
+		spare.remove(unusedElement);
+		spare.remove(fillerElement);
 
 		canditateR.set(candidateElementIndex, fillerElement);
 		// Insert them into the new root
