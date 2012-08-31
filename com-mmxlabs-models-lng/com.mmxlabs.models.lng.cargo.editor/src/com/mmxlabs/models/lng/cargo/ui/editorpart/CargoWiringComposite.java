@@ -936,6 +936,14 @@ public class CargoWiringComposite extends Composite {
 				if (c != null) {
 					if (c.getDischargeSlot() != otherDischarge) {
 						currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
+
+						// Optional market slots can be removed.
+						if (c.getDischargeSlot() != null) {
+							final DischargeSlot oldSlot = c.getDischargeSlot();
+							if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+								currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), oldSlot));
+							}
+						}
 					}
 				} else {
 					// create a new cargo
@@ -950,6 +958,21 @@ public class CargoWiringComposite extends Composite {
 				if (c != null) {
 					currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
 					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), c));
+					// Optional market slots can be removed.
+					if (c.getDischargeSlot() != null) {
+						final DischargeSlot oldSlot = c.getDischargeSlot();
+						if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+							currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), oldSlot));
+						}
+					}
+
+					// Optional market slots can be removed.
+					if (c.getLoadSlot() != null) {
+						final LoadSlot oldSlot = c.getLoadSlot();
+						if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+							currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), oldSlot));
+						}
+					}
 				} else {
 					// Error?
 				}
@@ -1143,12 +1166,26 @@ public class CargoWiringComposite extends Composite {
 		// Discharge has an existing slot, so remove the cargo & wiring
 		if (dischargeSlot.getCargo() != null) {
 			currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), dischargeSlot.getCargo()));
+
+			// Optional market slots can be removed.
+			final LoadSlot oldSlot = dischargeSlot.getCargo().getLoadSlot();
+			if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+				currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), oldSlot));
+			}
 		}
 
 		// Do we need to create a new cargo or re-wire and existing one.
 		Cargo cargo = loadSlot.getCargo();
 		if (cargo != null) {
 			currentWiringCommand.append(SetCommand.create(location.getEditingDomain(), cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
+
+			// Optional market slots can be removed.
+			if (cargo.getDischargeSlot() != null) {
+				final DischargeSlot oldSlot = cargo.getDischargeSlot();
+				if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), oldSlot));
+				}
+			}
 		} else {
 			cargo = createNewCargo(cargoModel);
 			cargo.setName(loadSlot.getName());
