@@ -923,7 +923,7 @@ public class CargoWiringComposite extends Composite {
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 		final InputModel inputModel = location.getRootObject().getSubModel(InputModel.class);
 
-		for (int i = 0; i < newWiring.size(); ++i) {
+		for (int i = 0; i < numberOfRows; ++i) {
 			if (wiring.get(i).equals(newWiring.get(i))) {
 				// No change
 				continue;
