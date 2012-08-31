@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +37,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
@@ -82,6 +84,7 @@ import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -107,32 +110,14 @@ public class CargoWiringComposite extends Composite {
 	private final Object updateLock = new Object();
 
 	private final MMXAdapterImpl cargoChangeAdapter = new MMXAdapterImpl() {
-		public void notifyChanged(final Notification notification) {
-
-			super.notifyChanged(notification);
-
-		};
-
-		public void enable(final boolean skip) {
-			// Normally this means we should ignore anything that has happened.
-			// However here we ignore this and process the data anyway.
-			// This is needed to process data during the optimisation set schedule undo() phase
-			// TODO: This needs testing!
-			super.enable(false);
-		};
 
 		protected void missedNotifications(final List<Notification> missed) {
-			final ArrayList<Notification> missedNotifications = new ArrayList<Notification>(missed);
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override
 				public void run() {
 					synchronized (updateLock) {
-						for (final Notification n : missedNotifications) {
-							localNotifyChanged(n);
-						}
-						performControlUpdate(false);
-
+						refreshContent();
 					}
 				}
 			});
@@ -168,6 +153,7 @@ public class CargoWiringComposite extends Composite {
 				if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_LoadSlot()) {
 					final Cargo c = (Cargo) notification.getNotifier();
 					final LoadSlot loadSlot = (LoadSlot) notification.getNewValue();
+
 					final DischargeSlot dischargeSlot = c.getDischargeSlot();
 
 					final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
@@ -1041,6 +1027,115 @@ public class CargoWiringComposite extends Composite {
 		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), 0));
 	}
 
+	private void refreshContent() {
+
+		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
+
+		// Get current data
+		final Set<Cargo> newCargoes = new HashSet<Cargo>(cargoModel.getCargoes());
+		final Set<LoadSlot> newLoadSlots = new HashSet<LoadSlot>(cargoModel.getLoadSlots());
+		final Set<DischargeSlot> newDischargeSlots = new HashSet<DischargeSlot>(cargoModel.getDischargeSlots());
+
+		// Get set of new items now known about
+		newCargoes.removeAll(cargoes);
+		newLoadSlots.removeAll(loadSlots);
+		newDischargeSlots.removeAll(dischargeSlots);
+
+		// New items need to be added to the list.. however we also need to remove other items. These should not have a eContainer at this point.
+
+		for (int i = 0; i < cargoes.size(); ++i) {
+			final EObject obj = cargoes.get(i);
+			if (obj != null && obj.eContainer() == null) {
+				cargoes.set(i, null);
+			}
+		}
+		for (int i = 0; i < loadSlots.size(); ++i) {
+			final EObject obj = loadSlots.get(i);
+			if (obj != null && obj.eContainer() == null) {
+				loadSlots.set(i, null);
+			}
+		}
+		for (int i = 0; i < dischargeSlots.size(); ++i) {
+			final EObject obj = dischargeSlots.get(i);
+			if (obj != null && obj.eContainer() == null) {
+				dischargeSlots.set(i, null);
+			}
+		}
+
+		// Internal list should be full of valid items, so now we can add in the new items. First, add by cargo, then add remaining slots.
+
+		for (final Cargo c : newCargoes) {
+			ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
+			boolean addedItem = false;
+			if (loadSlots.contains(c.getLoadSlot())) {
+				cargoes.set(loadSlots.indexOf(c.getLoadSlot()), c);
+			} else {
+				cargoes.set(numberOfRows, c);
+				loadSlots.set(numberOfRows, c.getLoadSlot());
+				newLoadSlots.remove(c.getLoadSlot());
+				addedItem = true;
+			}
+			if (dischargeSlots.contains(c.getDischargeSlot())) {
+				dischargeSlots.set(numberOfRows, null);
+			} else {
+				dischargeSlots.set(numberOfRows, c.getDischargeSlot());
+				newDischargeSlots.remove(c.getDischargeSlot());
+				addedItem = true;
+			}
+			if (addedItem) {
+				++numberOfRows;
+			}
+		}
+		for (final LoadSlot slot : newLoadSlots) {
+			ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
+			cargoes.set(numberOfRows, null);
+			loadSlots.set(numberOfRows, slot);
+			dischargeSlots.set(numberOfRows, null);
+
+			++numberOfRows;
+		}
+		for (final DischargeSlot slot : newDischargeSlots) {
+			ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
+			cargoes.set(numberOfRows, null);
+			loadSlots.set(numberOfRows, null);
+			dischargeSlots.set(numberOfRows, slot);
+
+			++numberOfRows;
+		}
+
+		// Now all the right data should be present. Lets update the wiring
+		for (int i = 0; i < numberOfRows; ++i) {
+			if (cargoes.get(i) != null) {
+				final int dischargeIndex = dischargeSlots.indexOf(cargoes.get(i).getDischargeSlot());
+				wiring.set(i, dischargeIndex);
+			} else {
+				wiring.set(i, -1);
+			}
+		}
+
+		// Perform a prune of empty rows
+		for (int i = numberOfRows - 1; i >= 0; --i) {
+			if (loadSlots.get(i) == null && dischargeSlots.get(i) == null) {
+				cargoes.remove(i);
+				loadSlots.remove(i);
+				dischargeSlots.remove(i);
+
+				// Re-index wiring
+				for (int j = 0; j < numberOfRows; ++j) {
+					final int idx = wiring.get(j);
+					if (idx > i) {
+						wiring.set(j, idx - 1);
+					}
+				}
+
+				wiring.remove(i);
+				numberOfRows--;
+			}
+		}
+
+		performControlUpdate(true);
+	}
+
 	private void runWiringUpdate(final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 		final InputModel inputModel = location.getRootObject().getSubModel(InputModel.class);
@@ -1328,6 +1423,7 @@ public class CargoWiringComposite extends Composite {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
 				}
+				createEditSlotMenu(manager, loadSlot);
 				createDeleteSlotMenu(manager, loadSlot);
 			}
 		};
@@ -1352,6 +1448,7 @@ public class CargoWiringComposite extends Composite {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 				}
+				createEditSlotMenu(manager, dischargeSlot);
 				createDeleteSlotMenu(manager, dischargeSlot);
 			}
 
@@ -1383,8 +1480,29 @@ public class CargoWiringComposite extends Composite {
 				currentWiringCommand = null;
 			}
 		};
+		newMenuManager.add(new Separator());
 		newMenuManager.add(deleteAction);
 
+	}
+
+	private void createEditSlotMenu(final IMenuManager newMenuManager, final Slot slot) {
+		final Action editAction = new Action("Edit") {
+			@Override
+			public void run() {
+
+				final DetailCompositeDialog dcd = new DetailCompositeDialog(CargoWiringComposite.this.getShell(), location.getDefaultCommandHandler());
+				try {
+					location.getEditorLock().claim();
+					location.setDisableUpdates(true);
+					dcd.open(location, location.getRootObject(), Collections.<EObject> singletonList(slot), locked);
+				} finally {
+					location.setDisableUpdates(false);
+					location.getEditorLock().release();
+				}
+			}
+		};
+		newMenuManager.add(new Separator());
+		newMenuManager.add(editAction);
 	}
 
 	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source, final boolean sourceIsLoad) {
