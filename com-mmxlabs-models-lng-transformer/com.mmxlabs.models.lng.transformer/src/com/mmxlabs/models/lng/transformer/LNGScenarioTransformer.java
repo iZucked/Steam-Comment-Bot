@@ -863,7 +863,7 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
-				// Roll forward
+				final String yearMonthString = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1); // Roll forward
 				cal.add(Calendar.MONTH, 1);
 				final Date endTime = cal.getTime();
 
@@ -903,7 +903,7 @@ public class LNGScenarioTransformer {
 
 								final int cargoCVValue = Calculator.scaleToInt(desPurchaseMarket.getCv());
 
-								final String idPrefix = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-";
+								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 
 								// Avoid ID clash
 								String id = idPrefix + (i + offset);
@@ -982,7 +982,7 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
-				// Roll forward
+				final String yearMonthString = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1); // Roll forward
 				cal.add(Calendar.MONTH, 1);
 				final Date endTime = cal.getTime();
 
@@ -1012,7 +1012,7 @@ public class LNGScenarioTransformer {
 
 								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
-								final String idPrefix = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-";
+								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 
 								String id = idPrefix + (i + offset);
 								while (usedIDStrings.contains(id)) {
@@ -1090,6 +1090,7 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
+				final String yearMonthString = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1);
 				// Roll forward
 				cal.add(Calendar.MONTH, 1);
 				final Date endTime = cal.getTime();
@@ -1120,7 +1121,7 @@ public class LNGScenarioTransformer {
 
 								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
-								final String idPrefix = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-";
+								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 
 								String id = idPrefix + (i + offset);
 								while (usedIDStrings.contains(id)) {
@@ -1195,6 +1196,7 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
+				final String yearMonthString = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1);
 				// Roll forward
 				cal.add(Calendar.MONTH, 1);
 				final Date endTime = cal.getTime();
@@ -1227,7 +1229,7 @@ public class LNGScenarioTransformer {
 
 								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
-								final String idPrefix = market.getName() + "-" + cal.get(Calendar.YEAR) + "-" + ((cal.get(Calendar.MONTH) - 1) % 12) + "-";
+								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 
 								String id = idPrefix + (i + offset);
 								while (usedIDStrings.contains(id)) {
