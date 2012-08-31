@@ -216,12 +216,13 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 		final long downstreamTotalPretaxProfit = downstreamRevenue - downstreamPaysShipping;
 
-		final long shippingPaysUpstream = Calculator.multiply(loadPricePerM3, loadVolume);
+		final int upstreamTransferPricePerM3 = upstreamEntity.getUpstreamTransferPrice(loadPricePerM3, cvValue);
+		final long shippingPaysUpstream = Calculator.multiply(upstreamTransferPricePerM3, loadVolume);
 		final long shippingGasBalance = downstreamPaysShipping - shippingPaysUpstream;
 		// now we need the total non-LNG shipping cost for the whole thing, which shipping pays.
 
-		final int upstreamTransferPricePerM3 = upstreamEntity.getUpstreamTransferPrice(loadPricePerM3, cvValue);
-		final long upstreamTotalPretaxProfit = Calculator.multiply(upstreamTransferPricePerM3, loadVolume);
+		final long upstreamRevenue = -Calculator.multiply(loadPricePerM3, loadVolume);
+		final long upstreamTotalPretaxProfit = upstreamRevenue + shippingPaysUpstream;
 
 		final long shippingCosts = getCosts(plan, vessel, false);
 
@@ -255,7 +256,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 			final DetailTree shippingDetails = new DetailTree();
 			final DetailTree downstreamDetails = new DetailTree();
 
-			upstreamDetails.addChild(new LNGTransferDetailTree("Upstream purchase", loadVolume, upstreamTransferPricePerM3, cvValue));
+			upstreamDetails.addChild(new LNGTransferDetailTree("Upstream purchase", loadVolume, loadPricePerM3, cvValue));
 			final IDetailTree upstreamToShipping = new LNGTransferDetailTree("Shipping to upstream", loadVolume, upstreamTransferPricePerM3, cvValue);
 			upstreamDetails.addChild(upstreamToShipping);
 			shippingDetails.addChild(upstreamToShipping);
