@@ -325,12 +325,19 @@ public class CargoWiringComposite extends Composite {
 			if (loadSlots.contains(loadSlot)) {
 				loadIdx = loadSlots.indexOf(loadSlot);
 			} else {
-				loadIdx = numberOfRows;
-				ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
-				wiring.set(numberOfRows, -1);
 
-				loadSlots.set(loadIdx, loadSlot);
-				rowAdded = true;
+				if (dischargeSlot != null && dischargeSlots.indexOf(dischargeSlot) != -1 && loadSlots.get(dischargeSlots.indexOf(dischargeSlot)) == null) {
+					loadIdx = dischargeSlots.indexOf(dischargeSlot);
+					loadSlots.set(loadIdx, loadSlot);
+					performUpdate = true;
+				} else {
+					loadIdx = numberOfRows;
+					ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
+					wiring.set(numberOfRows, -1);
+
+					loadSlots.set(loadIdx, loadSlot);
+					rowAdded = true;
+				}
 			}
 		} else if (cargo != null) {
 			final int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
@@ -1102,10 +1109,25 @@ public class CargoWiringComposite extends Composite {
 			if (loadSlots.contains(c.getLoadSlot())) {
 				cargoes.set(loadSlots.indexOf(c.getLoadSlot()), c);
 			} else {
-				cargoes.set(numberOfRows, c);
-				loadSlots.set(numberOfRows, c.getLoadSlot());
-				newLoadSlots.remove(c.getLoadSlot());
-				addedItem = true;
+				boolean reusedRow = false;
+
+				if (dischargeSlots.contains(c.getDischargeSlot())) {
+					int dischargeIdx = dischargeSlots.indexOf(c.getDischargeSlot());
+					if (cargoes.get(dischargeIdx) == null) {
+						cargoes.set(dischargeIdx, c);
+						loadSlots.set(dischargeIdx, c.getLoadSlot());
+						newLoadSlots.remove(c.getLoadSlot());
+						reusedRow = true;
+					}
+				}
+
+				if (!reusedRow) {
+
+					cargoes.set(numberOfRows, c);
+					loadSlots.set(numberOfRows, c.getLoadSlot());
+					newLoadSlots.remove(c.getLoadSlot());
+					addedItem = true;
+				}
 			}
 			if (dischargeSlots.contains(c.getDischargeSlot())) {
 				dischargeSlots.set(numberOfRows, null);
