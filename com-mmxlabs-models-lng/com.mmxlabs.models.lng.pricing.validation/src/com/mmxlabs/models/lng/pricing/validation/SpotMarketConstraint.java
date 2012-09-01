@@ -176,7 +176,7 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					if (allowedPorts != null && !allowedPorts.isEmpty()) {
 						if (!allowedPorts.contains(loadPort)) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Notional port is not a valid contract port."));
-							dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getFOBPurchasesMarket_NotionalPort());
+							dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getFOBSalesMarket_LoadPort());
 							failures.add(dsd);
 						}
 					}
