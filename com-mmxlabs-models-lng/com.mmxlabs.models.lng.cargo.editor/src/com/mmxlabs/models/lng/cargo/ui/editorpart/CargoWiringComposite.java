@@ -1462,7 +1462,7 @@ public class CargoWiringComposite extends Composite {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_SALE, loadSlot, true);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
 				}
-				createEditSlotMenu(manager, loadSlot);
+				createEditMenu(manager, loadSlot, loadSlot.getCargo());
 				createDeleteSlotMenu(manager, loadSlot);
 			}
 		};
@@ -1487,7 +1487,7 @@ public class CargoWiringComposite extends Composite {
 					createSpotMarketMenu(newMenuManager, SpotType.DES_PURCHASE, dischargeSlot, false);
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 				}
-				createEditSlotMenu(manager, dischargeSlot);
+				createEditMenu(manager, dischargeSlot, dischargeSlot.getCargo());
 				createDeleteSlotMenu(manager, dischargeSlot);
 			}
 
@@ -1524,24 +1524,12 @@ public class CargoWiringComposite extends Composite {
 
 	}
 
-	private void createEditSlotMenu(final IMenuManager newMenuManager, final Slot slot) {
-		final Action editAction = new Action("Edit") {
-			@Override
-			public void run() {
-
-				final DetailCompositeDialog dcd = new DetailCompositeDialog(CargoWiringComposite.this.getShell(), location.getDefaultCommandHandler());
-				try {
-					location.getEditorLock().claim();
-					location.setDisableUpdates(true);
-					dcd.open(location, location.getRootObject(), Collections.<EObject> singletonList(slot), locked);
-				} finally {
-					location.setDisableUpdates(false);
-					location.getEditorLock().release();
-				}
-			}
-		};
+	private void createEditMenu(final IMenuManager newMenuManager, final Slot slot, Cargo cargo) {
 		newMenuManager.add(new Separator());
-		newMenuManager.add(editAction);
+		newMenuManager.add(new EditAction("Edit Slot", slot));
+		if (cargo != null) {
+			newMenuManager.add(new EditAction("Edit Cargo", cargo));
+		}
 	}
 
 	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source, final boolean sourceIsLoad) {
@@ -1606,6 +1594,29 @@ public class CargoWiringComposite extends Composite {
 			} else {
 				menuManager.add(new CreateSlotAction("Load", source, null, sourceIsLoad, false));
 				menuManager.add(new CreateSlotAction("DES Purchase", source, null, sourceIsLoad, true));
+			}
+		}
+	}
+
+	private final class EditAction extends Action {
+		private final EObject target;
+
+		private EditAction(final String text, final EObject target) {
+			super(text);
+			this.target = target;
+		}
+
+		@Override
+		public void run() {
+
+			final DetailCompositeDialog dcd = new DetailCompositeDialog(CargoWiringComposite.this.getShell(), location.getDefaultCommandHandler());
+			try {
+				location.getEditorLock().claim();
+				location.setDisableUpdates(true);
+				dcd.open(location, location.getRootObject(), Collections.<EObject> singletonList(target), locked);
+			} finally {
+				location.setDisableUpdates(false);
+				location.getEditorLock().release();
 			}
 		}
 	}
