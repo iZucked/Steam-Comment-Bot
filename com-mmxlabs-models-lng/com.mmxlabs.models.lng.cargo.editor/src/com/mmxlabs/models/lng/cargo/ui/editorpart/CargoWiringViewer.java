@@ -12,10 +12,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.DragDetectEvent;
+import org.eclipse.swt.events.DragDetectListener;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
@@ -26,14 +35,12 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.rcp.common.actions.LockableAction;
 
 public class CargoWiringViewer extends Composite {
-	private final IScenarioEditingLocation location;
 	protected ToolBarManager toolBarManager;
-	private CargoWiringComposite wiringComposite;
-	private ToolBar actionBar;
+	private final CargoWiringComposite wiringComposite;
+	private final ToolBar actionBar;
 
 	public CargoWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(parent, SWT.NONE);
-		this.location = location;
 
 		actionBar = new ToolBar(this, SWT.FLAT | SWT.WRAP);
 
@@ -48,13 +55,60 @@ public class CargoWiringViewer extends Composite {
 		scrolledComposite.setExpandVertical(true);
 		scrolledComposite.setAlwaysShowScrollBars(true);
 
+		// Enabling the mouse wheel to scroll
+		// http://www.richclient2.de/2006_10_03/scrolledcomposite-and-the-mouse-wheel/
+		scrolledComposite.addListener(SWT.Activate, new Listener() {
+			public void handleEvent(final Event e) {
+				scrolledComposite.setFocus();
+			}
+		});
 		wiringComposite = new CargoWiringComposite(scrolledComposite, SWT.NONE, part.getSite()) {
 			@Override
 			public void layout() {
 				super.layout();
 				scrolledComposite.setMinSize(wiringComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 			}
+
+			/**
+			 * Handle new scroll positions while dragging. Coords are display coords
+			 */
+			@Override
+			protected void requestScrollTo(int newXpos, int newYPos) {
+
+				// Convert into scrolledComposite local co-ordinates
+				newYPos = scrolledComposite.toControl(newXpos, newYPos).y;
+
+				final ScrollBar vScroll = scrolledComposite.getVerticalBar();
+				final int increment = vScroll.getIncrement();
+				if (newYPos < 5) {
+
+					int newPos = vScroll.getSelection() - increment;
+					if (newPos < vScroll.getMinimum()) {
+						newPos = vScroll.getMinimum();
+					}
+					vScroll.setSelection(newPos);
+					for (final Listener l : vScroll.getListeners((SWT.Selection))) {
+						l.handleEvent(new Event());
+					}
+				} else {
+					final int height = scrolledComposite.getClientArea().height;
+
+					if (newYPos > height - 5) {
+						int newPos = vScroll.getSelection() + increment;
+						if (newPos > vScroll.getMaximum()) {
+							newPos = vScroll.getMaximum();
+						}
+						vScroll.setSelection(newPos);
+						for (final Listener l : vScroll.getListeners((SWT.Selection))) {
+							l.handleEvent(new Event());
+						}
+
+					}
+				}
+
+			}
 		};
+
 		scrolledComposite.setContent(wiringComposite);
 		scrolledComposite.setMinSize(wiringComposite.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		scrolledComposite.setLayout(new FillLayout());

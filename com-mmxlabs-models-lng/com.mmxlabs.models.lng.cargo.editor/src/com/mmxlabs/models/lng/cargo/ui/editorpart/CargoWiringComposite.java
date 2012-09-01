@@ -40,8 +40,12 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -784,6 +788,11 @@ public class CargoWiringComposite extends Composite {
 					}
 				};
 				wiringDiagram.setLocked(locked);
+
+				// Hook in a listener to notify mouse events
+				final WiringDiagramMouseListener listener = new WiringDiagramMouseListener();
+				wiringDiagram.addMouseMoveListener(listener);
+				wiringDiagram.addMouseListener(listener);
 			}
 			if (index == 0) {
 				// wiring diagram is tall
@@ -1524,7 +1533,7 @@ public class CargoWiringComposite extends Composite {
 
 	}
 
-	private void createEditMenu(final IMenuManager newMenuManager, final Slot slot, Cargo cargo) {
+	private void createEditMenu(final IMenuManager newMenuManager, final Slot slot, final Cargo cargo) {
 		newMenuManager.add(new Separator());
 		newMenuManager.add(new EditAction("Edit Slot", slot));
 		if (cargo != null) {
@@ -1690,5 +1699,50 @@ public class CargoWiringComposite extends Composite {
 		} else {
 			subMenu.add(new WireAction(name, (LoadSlot) target, (DischargeSlot) source));
 		}
+	}
+
+	/**
+	 * Sub-classes should override to handle mouse drag notifications
+	 * 
+	 * @param newXPos
+	 * @param newYPos
+	 */
+	protected void requestScrollTo(final int newXPos, final int newYPos) {
+
+	}
+
+	/**
+	 * A combined {@link MouseListener} and {@link MouseMoveListener} to call {@link CargoWiringComposite#requestScrollTo(int, int)} during mouse drag
+	 * 
+	 */
+	private class WiringDiagramMouseListener implements MouseListener, MouseMoveListener {
+
+		private boolean dragging = false;
+
+		@Override
+		public void mouseMove(final MouseEvent e) {
+			if (dragging) {
+
+				final Point p = wiringDiagram.toDisplay(e.x, e.y);
+				requestScrollTo(p.x, p.y);
+			}
+		}
+
+		@Override
+		public void mouseDoubleClick(final MouseEvent e) {
+
+		}
+
+		@Override
+		public void mouseDown(final MouseEvent e) {
+			dragging = true;
+
+		}
+
+		@Override
+		public void mouseUp(final MouseEvent e) {
+			dragging = false;
+		}
+
 	}
 }
