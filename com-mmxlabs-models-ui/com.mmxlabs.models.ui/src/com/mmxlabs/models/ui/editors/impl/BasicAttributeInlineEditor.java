@@ -333,7 +333,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 				// Is severity worse, then note it
 				if (severity > currentSeverity) {
-					currentSeverity = status.getSeverity();
+					currentSeverity = element.getSeverity();
 				}
 
 			}
@@ -350,7 +350,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 					// Is severity worse, then note it
 					if (element.getSeverity() > currentSeverity) {
-						currentSeverity = status.getSeverity();
+						currentSeverity = element.getSeverity();
 					}
 
 					return currentSeverity;
