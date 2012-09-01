@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -12,12 +13,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.DragDetectEvent;
-import org.eclipse.swt.events.DragDetectListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -29,6 +24,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
@@ -122,6 +118,17 @@ public class CargoWiringViewer extends Composite {
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 
 		wiringComposite.setCargoes(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots());
+
+		Action repackAction = new Action("Flatten Wiring") {
+			@Override
+			public void run() {
+				wiringComposite.setCargoes(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots());
+			}
+		};
+		repackAction.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "/icons/rewire_icon.png"));
+
+		getToolBarManager().add(repackAction);
+		getToolBarManager().update(true);
 	}
 
 	public void setLocked(final boolean locked) {

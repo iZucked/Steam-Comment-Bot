@@ -516,16 +516,20 @@ public class CargoWiringComposite extends Composite {
 		for (final Control c : getChildren()) {
 			c.dispose();
 		}
+		lhsComposites.clear();
+		rhsComposites.clear();
+		wiringDiagram = null;
 		wiring.clear();
 		this.loadSlots.clear();
 		this.dischargeSlots.clear();
 		this.cargoes.clear();
-		this.cargoes.addAll(newCargoes);
 		this.leftTerminalsValid.clear();
 		this.rightTerminalsValid.clear();
+		
 		for (int i = 0; i < newCargoes.size(); i++) {
 
 			this.wiring.add(i); // set default wiring
+			this.cargoes.add(newCargoes.get(i));
 			this.loadSlots.add(newCargoes.get(i).getLoadSlot());
 			this.dischargeSlots.add(newCargoes.get(i).getDischargeSlot());
 			this.leftTerminalsValid.add(true);
@@ -555,7 +559,7 @@ public class CargoWiringComposite extends Composite {
 
 		numberOfRows = wiring.size();
 
-		createChildren();
+		performControlUpdate(true);
 	}
 
 	public void setStatusProvider(final IStatusProvider statusProvider) {
@@ -1765,6 +1769,5 @@ public class CargoWiringComposite extends Composite {
 		public void mouseUp(final MouseEvent e) {
 			dragging = false;
 		}
-
 	}
 }
