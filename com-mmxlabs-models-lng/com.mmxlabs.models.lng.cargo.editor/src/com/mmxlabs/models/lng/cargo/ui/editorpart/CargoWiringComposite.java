@@ -92,6 +92,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
+import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.validation.IStatusProvider;
 import com.mmxlabs.models.ui.validation.IStatusProvider.IStatusChangedListener;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -413,11 +414,16 @@ public class CargoWiringComposite extends Composite {
 	private final IWorkbenchPartSite site;
 
 	// private final MenuManager menuManager;
+	private final Set<EObject> validationMap = new HashSet<EObject>();
 
 	protected IStatusChangedListener statusChangedListener = new IStatusChangedListener() {
 
 		@Override
 		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
+
+			validationMap.clear();
+
+			checkStatus(status);
 
 			for (final PortAndDateComposite c : lhsComposites) {
 				c.displayValidationStatus(status);
@@ -428,6 +434,29 @@ public class CargoWiringComposite extends Composite {
 			// for (final NamedObjectNameComposite c : idComposites) {
 			// c.displayValidationStatus(status);
 			// }
+
+			updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
+			CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
+
+		}
+
+		private void checkStatus(final IStatus status) {
+			if (status.isMultiStatus()) {
+				final IStatus[] children = status.getChildren();
+				for (final IStatus childStatus : children) {
+					checkStatus(childStatus);
+				}
+			}
+			if (status instanceof IDetailConstraintStatus && status.getSeverity() == IStatus.ERROR) {
+				final IDetailConstraintStatus element = (IDetailConstraintStatus) status;
+
+				final Collection<EObject> objects = element.getObjects();
+				for (final EObject object : objects) {
+					if (cargoes.contains(object) || loadSlots.contains(object) || dischargeSlots.contains(object)) {
+						validationMap.add(object);
+					}
+				}
+			}
 		}
 	};
 
@@ -525,7 +554,7 @@ public class CargoWiringComposite extends Composite {
 		this.cargoes.clear();
 		this.leftTerminalsValid.clear();
 		this.rightTerminalsValid.clear();
-		
+
 		for (int i = 0; i < newCargoes.size(); i++) {
 
 			this.wiring.add(i); // set default wiring
@@ -623,22 +652,6 @@ public class CargoWiringComposite extends Composite {
 		// for (final NamedObjectNameComposite c : idComposites) {
 		// c.setEnabled(!locked);
 		// }
-	}
-
-	/**
-	 * @return
-	 */
-	public boolean isWiringFeasible() {
-
-		for (int loadIdx = 0; loadIdx < wiring.size(); ++loadIdx) {
-			final int dischargeIdx = wiring.get(loadIdx);
-
-			if (dischargeIdx == -1) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	private void createLayout() {
@@ -893,22 +906,24 @@ public class CargoWiringComposite extends Composite {
 				continue;
 			}
 
-			// check dates
-			final Date loadDate = loads.get(i).getDate();
-			if (loadDate == null) {
+			final LoadSlot loadSlot = loadSlots.get(i);
+			final DischargeSlot dischargeSlot = dischargeSlots.get(j);
+
+			if (loadSlot == null) {
 				continue;
 			}
-			final Date dischargeDate = discharge.get(j).getDate();
-			if (dischargeDate == null) {
+			if (dischargeSlot == null) {
 				continue;
 			}
+
 			diagram.setLeftTerminalColor(i, green);
 			diagram.setRightTerminalColor(j, green);
+
 			// TODO this is not exactly proper validation.
-			if (dischargeDate.before(loadDate)) {
-				diagram.setWireColor(i, red);
-			} else {
+			if (isWiringValid(cargoes.get(i), loadSlot, dischargeSlot)) {
 				diagram.setWireColor(i, black);
+			} else {
+				diagram.setWireColor(i, red);
 			}
 		}
 		diagram.redraw();
@@ -1116,7 +1131,7 @@ public class CargoWiringComposite extends Composite {
 				boolean reusedRow = false;
 
 				if (dischargeSlots.contains(c.getDischargeSlot())) {
-					int dischargeIdx = dischargeSlots.indexOf(c.getDischargeSlot());
+					final int dischargeIdx = dischargeSlots.indexOf(c.getDischargeSlot());
 					if (cargoes.get(dischargeIdx) == null) {
 						cargoes.set(dischargeIdx, c);
 						loadSlots.set(dischargeIdx, c.getLoadSlot());
@@ -1769,5 +1784,13 @@ public class CargoWiringComposite extends Composite {
 		public void mouseUp(final MouseEvent e) {
 			dragging = false;
 		}
+	}
+
+	boolean isWiringValid(final Cargo cargo, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
+
+		if (validationMap.contains(loadSlot) || validationMap.contains(dischargeSlot) || validationMap.contains(cargo)) {
+			return false;
+		}
+		return true;
 	}
 }
