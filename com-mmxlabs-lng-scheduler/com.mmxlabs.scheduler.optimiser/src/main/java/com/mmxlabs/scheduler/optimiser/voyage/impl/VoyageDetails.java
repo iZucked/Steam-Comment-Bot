@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.impl.LongFastEnumEnumMap;
 import com.mmxlabs.common.impl.LongFastEnumMap;
@@ -173,7 +174,18 @@ public final class VoyageDetails implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyageDetails [options=" + options + ", fuelConsumption=" + fuelConsumption + ", routeAdditionalConsumption=" + routeAdditionalConsumption + ", fuelUnitPrices=" + fuelUnitPrices
-				+ ", idleTime=" + idleTime + ", travelTime=" + travelTime + ", speed=" + speed + ", startTime=" + startTime + ", route cost = " + routeCost + "]";
+		// @formatter:off
+		return Objects.toStringHelper(VoyageDetails.class)
+				.add("options", options)
+				.add("fuelConsumption", fuelConsumption)
+				.add("routeAdditionalConsumption", routeAdditionalConsumption)
+				.add("fuelUnitPrices", fuelUnitPrices)
+				.add("idleTime", idleTime)
+				.add("travelTime", travelTime)
+				.add("speed", speed)
+				.add("startTime", startTime)
+				.add("routeCost", routeCost)
+				.toString();
+		// @formatter:on
 	}
 }
