@@ -210,6 +210,21 @@
                      class="Cargo">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.MarketSlotContraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.MarketSlotContraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Market Slot Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="SpotSlot">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
