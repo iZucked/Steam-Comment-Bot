@@ -195,6 +195,21 @@
                      class="Slot">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.FOBDESCargoDatesContraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.FOBDESCargoDatesContraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="FOB/DES Cargo dates"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Cargo">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
