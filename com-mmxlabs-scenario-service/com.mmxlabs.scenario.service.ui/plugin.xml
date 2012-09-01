@@ -81,6 +81,23 @@
                   value="com.mmxlabs.scenario.service.model.Container">
             </instanceof>
          </possibleChildren>
+         <commonSorter
+               class="com.mmxlabs.scenario.service.ui.ScenarioServiceSorter"
+               id="com.mmxlabs.scenario.service.ui.ScenarioServiceSorter">
+            <parentExpression>
+               <or>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.Container">
+                  </instanceof>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioService">
+                  </instanceof>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioModel">
+                  </instanceof>
+               </or>
+            </parentExpression>
+         </commonSorter>
       </navigatorContent>
    </extension>
    <extension
