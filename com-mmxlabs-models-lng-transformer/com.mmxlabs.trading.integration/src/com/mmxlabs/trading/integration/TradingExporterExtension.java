@@ -42,6 +42,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.trading.optimiser.TradingConstants;
 import com.mmxlabs.trading.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.trading.optimiser.annotations.IProfitAndLossEntry;
@@ -71,6 +72,7 @@ public class TradingExporterExtension implements IExporterExtension {
 	public void finishExporting() {
 		// final EList<BookedRevenue> revenues = outputSchedule.getRevenue();
 		final IPortSlotProvider slotProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		final IVesselProvider vesselProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
 			final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, TradingConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
 			if (profitAndLoss != null) {
@@ -111,17 +113,22 @@ public class TradingExporterExtension implements IExporterExtension {
 					//
 					LOOP_OUTER: for (int i = 0; i < annotatedSolution.getSequences().size(); ++i) {
 
+						// Find the optimiser sequence for the start element
 						final ISequence seq = annotatedSolution.getSequences().getSequence(i);
-						final IResource res = annotatedSolution.getSequences().getResources().get(i);
 						if (seq.get(0) == element) {
+							// Found the sequence, so no find the matching EMF sequence
 							for (final Sequence sequence : outputSchedule.getSequences()) {
+								// Get the EMF Vessel
 								final Vessel vessel = sequence.getVessel();
 								if (vessel == null) {
 									continue;
 								}
-
+								// Find the matching
+								final IResource res = annotatedSolution.getSequences().getResources().get(i);
 								final IVessel iVessel = entities.getOptimiserObject(vessel, IVessel.class);
-								if (iVessel == res) {
+
+								// Look up correct instance (NOTE: Even though IVessel extends IResource, they seem to be different instances.
+								if (iVessel == vesselProvider.getVessel(res)) {
 									if (sequence.getEvents().size() > 0) {
 										final Event evt = sequence.getEvents().get(0);
 										if (evt instanceof StartEvent) {
