@@ -7,8 +7,8 @@ package com.mmxlabs.models.ui.tabular;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.util.emfpath.EMFPath;
@@ -20,9 +20,9 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 	private final EObjectTableViewer eObjectTableViewer;
 	private final ICellRenderer renderer;
 	private final EMFPath path;
-	private final Color errorColour = new Color(Display.getDefault(), new RGB(255, 100, 100));
-	private final Color warningColour = new Color(Display.getDefault(), new RGB(255, 242, 0));
-	private final Color lockedColour = new Color(Display.getDefault(), new RGB(100, 100, 100));
+	private final Color errorColour = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+	private final Color warningColour = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
+	private final Color lockedColour = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 	public EObjectTableViewerColumnProvider(EObjectTableViewer eObjectTableViewer, ICellRenderer renderer, EMFPath path) {
 		this.eObjectTableViewer = eObjectTableViewer;
@@ -105,9 +105,6 @@ public class EObjectTableViewerColumnProvider extends ColumnLabelProvider {
 
 	@Override
 	public void dispose() {
-		errorColour.dispose();
-		warningColour.dispose();
-		lockedColour.dispose();
 		super.dispose();
 	}
 }
