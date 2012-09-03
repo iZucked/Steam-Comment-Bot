@@ -1041,6 +1041,11 @@ public class CargoWiringComposite extends Composite {
 			}
 		}
 
+		executeCurrentWiringCommand();
+	}
+
+	private void executeCurrentWiringCommand() {
+		// Delete commands can be slow, so show the busy indicator while deleting.
 		final Runnable runnable = new Runnable() {
 
 			@Override
@@ -1277,15 +1282,7 @@ public class CargoWiringComposite extends Composite {
 
 		appendFOBDESCommands(currentWiringCommand, location.getEditingDomain(), inputModel, cargo, loadSlot, dischargeSlot);
 
-		final Runnable runnable = new Runnable() {
-
-			@Override
-			public void run() {
-				location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
-			}
-		};
-		BusyIndicator.showWhile(null, runnable);
-		currentWiringCommand = null;
+		executeCurrentWiringCommand();
 	}
 
 	private void createMenus(final IMenuManager manager, final Slot source, final List<? extends Slot> possibleTargets, final boolean sourceIsLoad) {
@@ -1604,15 +1601,7 @@ public class CargoWiringComposite extends Composite {
 				if (cargo != null) {
 					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), cargo));
 				}
-				final Runnable runnable = new Runnable() {
-
-					@Override
-					public void run() {
-						location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
-					}
-				};
-				BusyIndicator.showWhile(null, runnable);
-				currentWiringCommand = null;
+				executeCurrentWiringCommand();
 			}
 		};
 		newMenuManager.add(new Separator());
