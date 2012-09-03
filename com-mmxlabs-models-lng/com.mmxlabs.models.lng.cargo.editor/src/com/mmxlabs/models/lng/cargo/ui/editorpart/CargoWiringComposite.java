@@ -327,6 +327,7 @@ public class CargoWiringComposite extends Composite {
 				loadIdx = loadSlots.indexOf(loadSlot);
 			} else {
 
+				// If the load slot next to the discharge is empty, insert the load here rather than append to the end.
 				if (dischargeSlot != null && dischargeSlots.indexOf(dischargeSlot) != -1 && loadSlots.get(dischargeSlots.indexOf(dischargeSlot)) == null) {
 					loadIdx = dischargeSlots.indexOf(dischargeSlot);
 					loadSlots.set(loadIdx, loadSlot);
@@ -354,11 +355,20 @@ public class CargoWiringComposite extends Composite {
 			if (dischargeSlots.contains(dischargeSlot)) {
 				dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
 			} else {
-				dischargeIdx = numberOfRows;
-				ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
 
-				dischargeSlots.set(dischargeIdx, dischargeSlot);
-				rowAdded = true;
+				// If the discharge slot for an existing load is empty, then attempt to re-use it
+				if (!rowAdded && loadSlot != null && loadSlots.indexOf(loadSlot) != -1 && dischargeSlots.get(loadSlots.indexOf(loadSlot)) == null) {
+					dischargeIdx = loadSlots.indexOf(loadSlot);
+					dischargeSlots.set(dischargeIdx, dischargeSlot);
+					performUpdate = true;
+				} else {
+
+					dischargeIdx = numberOfRows;
+					ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
+
+					dischargeSlots.set(dischargeIdx, dischargeSlot);
+					rowAdded = true;
+				}
 			}
 		} else if (cargo != null) {
 			final int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
@@ -1151,9 +1161,23 @@ public class CargoWiringComposite extends Composite {
 			if (dischargeSlots.contains(c.getDischargeSlot())) {
 				dischargeSlots.set(numberOfRows, null);
 			} else {
-				dischargeSlots.set(numberOfRows, c.getDischargeSlot());
-				newDischargeSlots.remove(c.getDischargeSlot());
-				addedItem = true;
+
+				boolean reusedRow = false;
+
+				if (loadSlots.contains(c.getLoadSlot())) {
+					final int loadIdx = loadSlots.indexOf(c.getLoadSlot());
+					if (dischargeSlots.get(loadIdx) == null) {
+						dischargeSlots.set(loadIdx, c.getDischargeSlot());
+						newDischargeSlots.remove(c.getDischargeSlot());
+						reusedRow = true;
+					}
+				}
+
+				if (!reusedRow) {
+					dischargeSlots.set(numberOfRows, c.getDischargeSlot());
+					newDischargeSlots.remove(c.getDischargeSlot());
+					addedItem = true;
+				}
 			}
 			if (addedItem) {
 				++numberOfRows;
