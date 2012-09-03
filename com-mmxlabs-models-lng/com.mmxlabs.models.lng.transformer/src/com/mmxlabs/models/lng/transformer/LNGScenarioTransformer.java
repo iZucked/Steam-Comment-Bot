@@ -490,13 +490,15 @@ public class LNGScenarioTransformer {
 						vessel = null;
 					}
 
-				} else {
-					assert vesselSet instanceof Vessel;
+				} else if (vesselSet instanceof Vessel) {
 					vessel = entities.getOptimiserObject(vesselSet, IVessel.class);
+				} else {
+					vessel = null;
 				}
 
-				if (vessel == null)
+				if (vessel == null) {
 					continue;
+				}
 
 				if (o instanceof Cargo) {
 					final ICargo cargo = entities.getOptimiserObject(o, ICargo.class);
