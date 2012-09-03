@@ -9,6 +9,7 @@ import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
 import com.mmxlabs.shiplingo.platform.reports.views.BasicCargoReportView;
+import com.mmxlabs.shiplingo.platform.reports.views.CargoPnLReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CargoReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.CooldownReportView;
 import com.mmxlabs.shiplingo.platform.reports.views.FitnessReportView;
@@ -28,6 +29,7 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		final IFolderLayout reportsFolder = layout.createFolder("reportsFolder", IPageLayout.RIGHT, 0.5f, IPageLayout.ID_EDITOR_AREA);
 
 		reportsFolder.addView(KPIReportView.ID);
+		reportsFolder.addView(CargoPnLReportView.ID);
 		reportsFolder.addView(CargoReportView.ID);
 		reportsFolder.addPlaceholder(TotalsReportView.ID);
 		reportsFolder.addPlaceholder(TotalsHierarchyView.ID);
@@ -38,10 +40,11 @@ public class AnalysisPerspective implements IPerspectiveFactory {
 		reportsFolder.addPlaceholder(FitnessReportView.ID);
 
 		layout.addShowViewShortcut(KPIReportView.ID);
+		layout.addShowViewShortcut(CargoReportView.ID);
+		layout.addShowViewShortcut(CargoPnLReportView.ID);
 		layout.addShowViewShortcut(SchedulerView.ID);
 		layout.addShowViewShortcut(TotalsReportView.ID);
 		layout.addShowViewShortcut(TotalsHierarchyView.ID);
-		layout.addShowViewShortcut(CargoReportView.ID);
 		layout.addShowViewShortcut(BasicCargoReportView.ID);
 		layout.addShowViewShortcut(PortRotationReportView.ID);
 		layout.addShowViewShortcut(LatenessReportView.ID);
