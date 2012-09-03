@@ -14,9 +14,11 @@ import java.util.List;
 import javax.management.timer.Timer;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.IFilter;
 import org.eclipse.jface.window.Window;
@@ -33,6 +35,7 @@ import org.eclipse.swt.widgets.Text;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -365,7 +368,15 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 				// editorPart.getEditingDomain().getCommandStack().execute(
 				// AddCommand.create(ed, modelObject, InputPackage.eINSTANCE.getInputModel_LockedAssignedObjects(),
 				// task));
-				ed.getCommandStack().execute(AssignmentEditorHelper.lockElement(ed, modelObject, task));
+				
+				final CompoundCommand cmd = new CompoundCommand("Lock Vessel Assignment");
+				
+				cmd.append(AssignmentEditorHelper.lockElement(ed, modelObject, task));
+				if (task instanceof Cargo) {
+					cmd.append(SetCommand.create(ed, task, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), false));
+				}
+				
+				ed.getCommandStack().execute(cmd);
 				editor.redraw();
 			}
 
