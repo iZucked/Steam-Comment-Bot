@@ -5,8 +5,6 @@
 package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,8 +45,6 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 				final IScenarioService scenarioService = instance.getScenarioService();
 
 				try {
-					final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-
 					final Set<String> existingNames = new HashSet<String>();
 					for (final Container c : instance.getElements()) {
 						if (c instanceof Folder) {
@@ -58,7 +54,7 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 						}
 					}
 
-					final String namePrefix = "Fork " + df.format(new Date()) + " - " + instance.getName();
+					final String namePrefix = "[O] " + instance.getName();
 					String newName = namePrefix;
 					int counter = 1;
 					while (existingNames.contains(newName)) {
