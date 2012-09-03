@@ -652,6 +652,10 @@ public class CargoWiringComposite extends Composite {
 
 	public void setLocked(final boolean locked) {
 
+		if (isDisposed()) {
+			return;
+		}
+		
 		if (this.locked == locked) {
 			return;
 		}
