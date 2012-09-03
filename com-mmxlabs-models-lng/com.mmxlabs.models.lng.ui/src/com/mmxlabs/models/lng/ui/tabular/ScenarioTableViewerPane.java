@@ -36,6 +36,7 @@ import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
 import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.ViewForm;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -404,27 +405,37 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 			@Override
 			public void run() {
-				final ScenarioLock editorLock = jointModelEditorPart.getEditorLock();
-				editorLock.awaitClaim();
-				getJointModelEditorPart().setDisableUpdates(true);
-				try {
-					final ISelection sel = getLastSelection();
-					if (sel instanceof IStructuredSelection) {
-						final EditingDomain ed = jointModelEditorPart.getEditingDomain();
-						// Copy selection
-						final List<?> objects = new ArrayList<Object>(((IStructuredSelection) sel).toList());
 
-						// Clear current selection
-						selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
+				// Delete commands can be slow, so show the busy indicator while deleting.
+				final Runnable runnable = new Runnable() {
 
-						// Execute command
-						final Command deleteCommand = DeleteCommand.create(ed, objects);
-						ed.getCommandStack().execute(deleteCommand);
+					@Override
+					public void run() {
+
+						final ScenarioLock editorLock = jointModelEditorPart.getEditorLock();
+						editorLock.awaitClaim();
+						getJointModelEditorPart().setDisableUpdates(true);
+						try {
+							final ISelection sel = getLastSelection();
+							if (sel instanceof IStructuredSelection) {
+								final EditingDomain ed = jointModelEditorPart.getEditingDomain();
+								// Copy selection
+								final List<?> objects = new ArrayList<Object>(((IStructuredSelection) sel).toList());
+
+								// Clear current selection
+								selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
+
+								// Execute command
+								final Command deleteCommand = DeleteCommand.create(ed, objects);
+								ed.getCommandStack().execute(deleteCommand);
+							}
+						} finally {
+							editorLock.release();
+							getJointModelEditorPart().setDisableUpdates(false);
+						}
 					}
-				} finally {
-					editorLock.release();
-					getJointModelEditorPart().setDisableUpdates(false);
-				}
+				};
+				BusyIndicator.showWhile(null, runnable);
 			}
 
 			@Override
