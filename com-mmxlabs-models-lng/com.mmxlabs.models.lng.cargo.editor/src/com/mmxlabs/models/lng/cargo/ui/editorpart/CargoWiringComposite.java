@@ -908,8 +908,19 @@ public class CargoWiringComposite extends Composite {
 		final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 
 		for (int i = 0; i < numberOfRows; ++i) {
-			diagram.setLeftTerminalColor(i, red);
-			diagram.setRightTerminalColor(i, red);
+			final LoadSlot loadSlot = loadSlots.get(i);
+			final DischargeSlot dischargeSlot = dischargeSlots.get(i);
+			if (loadSlot != null && loadSlot.isOptional()) {
+				diagram.setLeftTerminalColor(i, green);
+			} else {
+				diagram.setLeftTerminalColor(i, red);
+
+			}
+			if (dischargeSlot != null && dischargeSlot.isOptional()) {
+				diagram.setRightTerminalColor(i, green);
+			} else {
+				diagram.setRightTerminalColor(i, red);
+			}
 		}
 		for (int i = 0; i < numberOfRows; i++) {
 			final int j = wiring.get(i);
