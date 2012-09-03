@@ -45,7 +45,7 @@ import org.eclipse.swt.widgets.Menu;
 
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 
-public class AssignmentEditor<R, T> extends Canvas {
+public class AssignmentEditor<R, T> extends Canvas implements ISelectionProvider {
 	private static final int EMPTY_ROW_HEIGHT = 64;
 	private static final int TASK_HEIGHT = 18;
 	private static final int VERTICAL_SPACE_BETWEEN_TASKS = 8;
@@ -121,7 +121,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 	private int selectedTaskInternalY = 0;
 
 	private int minWidth, minHeight;
-	
+
 	private IFilter taskFilter;
 	private IFilter resourceFilter;
 
@@ -182,7 +182,6 @@ public class AssignmentEditor<R, T> extends Canvas {
 					return;
 				}
 
-				
 				final Action open = new Action("Edit...") {
 					@Override
 					public void run() {
@@ -212,8 +211,8 @@ public class AssignmentEditor<R, T> extends Canvas {
 						}
 					};
 				}
-				
-				Action unassign = new Action("Unassign") {
+
+				final Action unassign = new Action("Unassign") {
 					@Override
 					public void run() {
 						setSelectedTask(task);
@@ -225,14 +224,14 @@ public class AssignmentEditor<R, T> extends Canvas {
 						setSelectedTask(null);
 					}
 				};
-				
-				
+
 				final AbstractMenuAction reassign = new AbstractMenuAction("Assign to") {
 					@Override
 					protected void populate(final Menu menu) {
 						final R currentResource = resourceByTask.get(task);
 						for (final R resource : resources) {
-							if (currentResource == resource) continue;
+							if (currentResource == resource)
+								continue;
 							final Action assignToResource = new Action(informationProvider.getResourceLabel(resource)) {
 								@Override
 								public void run() {
@@ -246,11 +245,11 @@ public class AssignmentEditor<R, T> extends Canvas {
 							addActionToMenu(assignToResource, menu);
 						}
 					}
-					
+
 				};
-				
+
 				final MenuManager manager = new MenuManager();
-				
+
 				manager.add(unassign);
 				manager.add(reassign);
 				manager.add(new Separator("modifiers"));
@@ -326,28 +325,28 @@ public class AssignmentEditor<R, T> extends Canvas {
 	}
 
 	protected void mouseDown(final MouseEvent e) {
-			final T task = findTaskAtCoordinates(e.x, e.y);
-			if (informationProvider.isLocked(task)) {
-				return;
-			}
-			if (task != null) {
-				switch (e.button) {
-				case 1:
-					if (assignmentProvider.canStartEdit()) {
-						findInsertionPoint(e.x, e.y, task); // so if we let go it
-															// doesn't get deallocated
-															// instantly, we get it as
-															// its own drag destination
-						setSelectedTask(task);
-						final Rectangle location = locationsByTask.get(task);
-						selectedTaskInternalY = e.y - location.y;
-						selectedTaskDragY = e.y;
-						redraw();
-					}
-					break;
-				default:
-					break;
+		final T task = findTaskAtCoordinates(e.x, e.y);
+		if (informationProvider.isLocked(task)) {
+			return;
+		}
+		if (task != null) {
+			switch (e.button) {
+			case 1:
+				if (assignmentProvider.canStartEdit()) {
+					findInsertionPoint(e.x, e.y, task); // so if we let go it
+														// doesn't get deallocated
+														// instantly, we get it as
+														// its own drag destination
+					setSelectedTask(task);
+					final Rectangle location = locationsByTask.get(task);
+					selectedTaskInternalY = e.y - location.y;
+					selectedTaskDragY = e.y;
+					redraw();
 				}
+				break;
+			default:
+				break;
+			}
 		}
 	}
 
@@ -465,7 +464,8 @@ public class AssignmentEditor<R, T> extends Canvas {
 	}
 
 	protected synchronized void paintControl(final PaintEvent e) {
-		if (isDisposed()) return;
+		if (isDisposed())
+			return;
 		prepare();
 
 		if (colors == null) {
@@ -497,32 +497,33 @@ public class AssignmentEditor<R, T> extends Canvas {
 		gc.fillRectangle(e.x, e.y, e.width, e.height);
 
 		final int[] depths = new int[tasks.size()];
-		
+
 		int topOfCurrentRow = VERTICAL_SPACE_BETWEEN_TASKS + paintTimeGrid(leftOffset, gc);
 
 		{
-			final int rowHeight = getRowHeight(unallocatedTasks, true, depths); 
+			final int rowHeight = getRowHeight(unallocatedTasks, true, depths);
 			paintRow(e, topOfCurrentRow, leftOffset, unallocatedTasks, depths);
 			topOfCurrentRow += rowHeight;
 		}
 		// now paint all allocated tasks
 
-//		gc.setForeground(colors.dividerColor);
-//		gc.drawLine(leftOffset - VERTICAL_SPACE_BETWEEN_TASKS, topOfCurrentRow, leftOffset - VERTICAL_SPACE_BETWEEN_TASKS, getSize().y);
-		
+		// gc.setForeground(colors.dividerColor);
+		// gc.drawLine(leftOffset - VERTICAL_SPACE_BETWEEN_TASKS, topOfCurrentRow, leftOffset - VERTICAL_SPACE_BETWEEN_TASKS, getSize().y);
+
 		int i = 0;
 		for (final R resource : resources) {
 			if (resourceFilter != null && !resourceFilter.select(resource)) {
 				i++;
 				continue;
 			}
-			
+
 			Date startDate = resourceStartDates.get(i);
-			if (startDate == null || startDate.before(minDate)) startDate = minDate;
+			if (startDate == null || startDate.before(minDate))
+				startDate = minDate;
 			final Date endDate = resourceEndDates.get(i);
-			
+
 			final List<T> assignment = assignmentProvider.getAssignedObjects(resource);
-			final int rowHeight = getRowHeight(assignment,false, depths);
+			final int rowHeight = getRowHeight(assignment, false, depths);
 
 			resourceByY.put(topOfCurrentRow, resource);
 			// draw a horizontal line
@@ -531,41 +532,41 @@ public class AssignmentEditor<R, T> extends Canvas {
 			} else {
 				gc.setBackground(colors.rowColorTwo);
 			}
-			
-			gc.fillRectangle(0, topOfCurrentRow+1, getSize().x, rowHeight-1);
-			final int rowLeft = leftOffset-VERTICAL_SPACE_BETWEEN_TASKS+ (minDate != null ? getX(minDate, startDate) : 0);
-			
-//			gc.setBackground(colors.limitColor);
-//			gc.setAlpha(100);
-//			
-//			gc.fillRectangle(0, topOfCurrentRow+1, rowLeft, rowHeight-1);
-//			gc.setAlpha(255);
-//			
+
+			gc.fillRectangle(0, topOfCurrentRow + 1, getSize().x, rowHeight - 1);
+			final int rowLeft = leftOffset - VERTICAL_SPACE_BETWEEN_TASKS + (minDate != null ? getX(minDate, startDate) : 0);
+
+			// gc.setBackground(colors.limitColor);
+			// gc.setAlpha(100);
+			//
+			// gc.fillRectangle(0, topOfCurrentRow+1, rowLeft, rowHeight-1);
+			// gc.setAlpha(255);
+			//
 			gc.setForeground(colors.resourceLabelTextColor);
 			gc.drawString(informationProvider.getResourceLabel(resource), VERTICAL_SPACE_BETWEEN_TASKS, topOfCurrentRow + VERTICAL_SPACE_BETWEEN_TASKS, true);
-			
+
 			gc.setForeground(colors.dividerColor);
 			gc.drawLine(0, topOfCurrentRow, getSize().x, topOfCurrentRow);
-			gc.drawLine(0, topOfCurrentRow+rowHeight, getSize().x, topOfCurrentRow+rowHeight);
-			
+			gc.drawLine(0, topOfCurrentRow + rowHeight, getSize().x, topOfCurrentRow + rowHeight);
+
 			paintRow(e, topOfCurrentRow, leftOffset, assignment, depths);
-			
+
 			// draw start and end dates
-			
+
 			if (startDate != null) {
 				gc.setForeground(colors.limitColor);
 				gc.setBackground(colors.limitColor2);
 				gc.setAlpha(100);
-				gc.fillGradientRectangle(rowLeft-LIMIT_WIDTH, topOfCurrentRow+1, LIMIT_WIDTH, rowHeight-1, false);
+				gc.fillGradientRectangle(rowLeft - LIMIT_WIDTH, topOfCurrentRow + 1, LIMIT_WIDTH, rowHeight - 1, false);
 				gc.setAlpha(255);
 			}
-			
+
 			if (endDate != null) {
 				gc.setForeground(colors.limitColor2);
 				gc.setBackground(colors.limitColor);
 				final int left = rowLeft + getX(startDate, endDate);
 				gc.setAlpha(100);
-				gc.fillGradientRectangle(left, topOfCurrentRow+1, LIMIT_WIDTH, rowHeight-1, false);
+				gc.fillGradientRectangle(left, topOfCurrentRow + 1, LIMIT_WIDTH, rowHeight - 1, false);
 				gc.setAlpha(255);
 			}
 			i++;
@@ -575,14 +576,15 @@ public class AssignmentEditor<R, T> extends Canvas {
 		if (getSelectedTask() != null) {
 			gc.setAlpha(100);
 
-			drawTask(getSelectedTask(), gc, leftOffset, selectedTaskDragY - selectedTaskInternalY, informationProvider.getStartDate(getSelectedTask()), informationProvider.getEndDate(getSelectedTask()));
+			drawTask(getSelectedTask(), gc, leftOffset, selectedTaskDragY - selectedTaskInternalY, informationProvider.getStartDate(getSelectedTask()),
+					informationProvider.getEndDate(getSelectedTask()));
 		}
 
 		paintTimeGrid(leftOffset, gc);
 
 		minWidth += VERTICAL_SPACE_BETWEEN_TASKS;
 		minHeight = Math.max(minHeight, topOfCurrentRow + VERTICAL_SPACE_BETWEEN_TASKS * 2 + TASK_HEIGHT);
-		
+
 		if (oldMinWidth != minWidth || oldMinHeight != minHeight) {
 			for (final ISizeListener l : sizeListeners.toArray(new ISizeListener[0])) {
 				l.requiredSizeUpdated(minWidth, minHeight);
@@ -590,13 +592,15 @@ public class AssignmentEditor<R, T> extends Canvas {
 		}
 	}
 
-	private int getRowHeight(final List<T> objects, boolean collapse, int[] depths) {
-		if (objects == null) return EMPTY_ROW_HEIGHT;
+	private int getRowHeight(final List<T> objects, final boolean collapse, final int[] depths) {
+		if (objects == null)
+			return EMPTY_ROW_HEIGHT;
 		int maxRowDepth = 0;
 		final DateRangeTracker rangeTracker = new DateRangeTracker(collapse);
 		int i = 0;
 		for (final T o : objects) {
-			if (taskFilter != null && !taskFilter.select(o)) continue;
+			if (taskFilter != null && !taskFilter.select(o))
+				continue;
 			final Date start = informationProvider.getStartDate(o);
 			final Date end = informationProvider.getEndDate(o);
 			final int depth = rangeTracker.addRange(start, end, o);
@@ -659,12 +663,12 @@ public class AssignmentEditor<R, T> extends Canvas {
 			}
 
 			calendar.setTime(minDate);
-			calendar.set(Calendar.MINUTE,0);
-			calendar.set(Calendar.HOUR,0);
-			calendar.set(Calendar.SECOND,0);
-			calendar.set(Calendar.MILLISECOND,0);
+			calendar.set(Calendar.MINUTE, 0);
+			calendar.set(Calendar.HOUR, 0);
+			calendar.set(Calendar.SECOND, 0);
+			calendar.set(Calendar.MILLISECOND, 0);
 			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			
+
 			while (calendar.getTime().before(maxDate)) {
 				final Date date = calendar.getTime();
 				final String monthName = symbols.getShortMonths()[calendar.get(Calendar.MONTH)];
@@ -758,8 +762,9 @@ public class AssignmentEditor<R, T> extends Canvas {
 		final GC gc = e.gc;
 		int index = 0;
 		for (final T o : objects) {
-			if (taskFilter != null && !taskFilter.select(o)) continue;
-			
+			if (taskFilter != null && !taskFilter.select(o))
+				continue;
+
 			final Date start = informationProvider.getStartDate(o);
 			final Date end = informationProvider.getEndDate(o);
 			final int depth = depths[index++];
@@ -775,19 +780,18 @@ public class AssignmentEditor<R, T> extends Canvas {
 	private final List<IAssignmentListener<R, T>> assignmentListeners = new ArrayList<IAssignmentListener<R, T>>();
 	private final List<ISizeListener> sizeListeners = new ArrayList<ISizeListener>();
 	private Date maxDate;
-	
-	private List<Date> resourceStartDates = new ArrayList<Date>();
-	private List<Date> resourceEndDates = new ArrayList<Date>();
-	private Map<T, Set<T>> feasibles = new HashMap<T, Set<T>>();
+
+	private final List<Date> resourceStartDates = new ArrayList<Date>();
+	private final List<Date> resourceEndDates = new ArrayList<Date>();
+	private final Map<T, Set<T>> feasibles = new HashMap<T, Set<T>>();
 	private Set<T> canFollowSelection;
-	
-	
+
 	private void prepare() {
 		if (prepared)
 			return;
 		resourceByTask.clear();
 		unallocatedTasks.clear();
-		
+
 		resourceStartDates.clear();
 		resourceEndDates.clear();
 		feasibles.clear();
@@ -803,7 +807,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 				minDate = tStart;
 			if (maxDate == null || maxDate.before(tEnd))
 				maxDate = tEnd;
-			
+
 			final HashSet<T> follows = new HashSet<T>();
 			feasibles.put(task, follows);
 			for (final T task2 : tasks) {
@@ -863,7 +867,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		return taskFilter;
 	}
 
-	public void setTaskFilter(IFilter taskFilter) {
+	public void setTaskFilter(final IFilter taskFilter) {
 		this.taskFilter = taskFilter;
 	}
 
@@ -871,7 +875,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		return resourceFilter;
 	}
 
-	public void setResourceFilter(IFilter resourceFilter) {
+	public void setResourceFilter(final IFilter resourceFilter) {
 		this.resourceFilter = resourceFilter;
 	}
 
@@ -879,7 +883,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 		return selectedTask;
 	}
 
-	private void setSelectedTask(T selectedTask) {
+	private void setSelectedTask(final T selectedTask) {
 		this.selectedTask = selectedTask;
 		canFollowSelection = feasibles.get(selectedTask);
 		if (selectedTask == null) assignmentProvider.finishEdit();
