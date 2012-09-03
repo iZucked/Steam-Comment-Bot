@@ -65,7 +65,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 
 	private final HashMap<Pair<Port, Port>, Integer> minTravelTimes = new HashMap<Pair<Port, Port>, Integer>();
 	private AssignmentEditor<CollectedAssignment, UUIDObject> editor;
-	private MMXContentAdapter adapter = new MMXContentAdapter() {
+	private final MMXContentAdapter adapter = new MMXContentAdapter() {
 		private boolean process(final Notification n) {
 			if (!n.isTouch()) {
 				updateEditorInput();
@@ -90,14 +90,14 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 	protected void updateEditorInput() {
 		updateMinTravelTimes();
 
-		CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-		FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 
-		List<CollectedAssignment> resources = AssignmentEditorHelper.collectAssignments(modelObject, fleetModel);
+		final List<CollectedAssignment> resources = AssignmentEditorHelper.collectAssignments(modelObject, fleetModel);
 
 		Collections.sort(resources, new Comparator<CollectedAssignment>() {
 			@Override
-			public int compare(CollectedAssignment o1, CollectedAssignment o2) {
+			public int compare(final CollectedAssignment o1, final CollectedAssignment o2) {
 				final int spotCompare = ((Boolean) o1.isSpotVessel()).compareTo(o2.isSpotVessel());
 				if (spotCompare == 0) {
 					return o1.getVesselOrClass().getName().compareTo(o2.getVesselOrClass().getName());
@@ -137,8 +137,8 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 			for (final Route route : pm.getRoutes()) {
 				for (final RouteLine line : route.getLines()) {
 					final Pair<Port, Port> p = new Pair<Port, Port>(line.getFrom(), line.getTo());
-					Integer i = minTravelTimes.get(p);
-					int t = (int) (line.getDistance() / maxSpeed);
+					final Integer i = minTravelTimes.get(p);
+					final int t = (int) (line.getDistance() / maxSpeed);
 					if (i == null || t < i) {
 						minTravelTimes.put(p, t);
 					}
@@ -148,7 +148,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 	}
 
 	@Override
-	public void addPages(Composite parent) {
+	public void addPages(final Composite parent) {
 		final Composite outer = new Composite(parent, SWT.NONE);
 		final GridLayout outerLayout = new GridLayout(4, false);
 		outerLayout.marginHeight = outerLayout.marginWidth = 4;
@@ -184,19 +184,19 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 
 		editor.addSizeListener(new ISizeListener() {
 			@Override
-			public void requiredSizeUpdated(int width, int height) {
+			public void requiredSizeUpdated(final int width, final int height) {
 				scroller.setMinSize(width, height);
 			}
 		});
 
 		final IAssignmentInformationProvider<CollectedAssignment, UUIDObject> timing = new IAssignmentInformationProvider<CollectedAssignment, UUIDObject>() {
 			@Override
-			public Date getStartDate(UUIDObject task) {
+			public Date getStartDate(final UUIDObject task) {
 				return AssignmentEditorHelper.getStartDate(task);
 			}
 
 			@Override
-			public Date getEndDate(UUIDObject task) {
+			public Date getEndDate(final UUIDObject task) {
 				return AssignmentEditorHelper.getEndDate(task);
 			}
 
@@ -210,7 +210,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 			}
 
 			@Override
-			public String getResourceLabel(CollectedAssignment resource) {
+			public String getResourceLabel(final CollectedAssignment resource) {
 				return resource.getVesselOrClass().getName();
 			}
 
@@ -237,7 +237,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 			}
 
 			@Override
-			public String getTooltip(UUIDObject task) {
+			public String getTooltip(final UUIDObject task) {
 				String secondLine = "";
 				if (task instanceof Cargo) {
 					secondLine = "\n" + ((Cargo) task).getLoadSlot().getPort().getName() + " to " + ((Cargo) task).getDischargeSlot().getPort().getName();
@@ -252,7 +252,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 			}
 
 			@Override
-			public boolean isLocked(UUIDObject task) {
+			public boolean isLocked(final UUIDObject task) {
 				final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(modelObject, task);
 				return elementAssignment == null ? false : elementAssignment.isLocked();
 			}
@@ -305,7 +305,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 
 		editor.setAssignmentProvider(new IAssignmentProvider<CollectedAssignment, UUIDObject>() {
 			@Override
-			public List<UUIDObject> getAssignedObjects(CollectedAssignment resource) {
+			public List<UUIDObject> getAssignedObjects(final CollectedAssignment resource) {
 				return resource.getAssignedObjects();
 			}
 
@@ -322,7 +322,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 
 		editor.addAssignmentListener(new IAssignmentListener<CollectedAssignment, UUIDObject>() {
 			@Override
-			public void taskReassigned(UUIDObject task, UUIDObject beforeTask, UUIDObject afterTask, CollectedAssignment oldResource, CollectedAssignment newResource) {
+			public void taskReassigned(final UUIDObject task, final UUIDObject beforeTask, final UUIDObject afterTask, final CollectedAssignment oldResource, final CollectedAssignment newResource) {
 				// final Command c = AssignmentEditorHelper.taskReassigned(editorPart.getEditingDomain(), modelObject, task, beforeTask, afterTask, oldResource, newResource);
 
 				// editorPart.getEditingDomain().getCommandStack().execute(c);
@@ -336,7 +336,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 			}
 
 			@Override
-			public void taskUnassigned(UUIDObject task, CollectedAssignment oldResource) {
+			public void taskUnassigned(final UUIDObject task, final CollectedAssignment oldResource) {
 				final EditingDomain ed = editorPart.getEditingDomain();
 
 				// final Command cc = AssignmentEditorHelper.totallyUnassign(ed, modelObject, task);
@@ -393,7 +393,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 
 		final IFilter resourceFilter = new IFilter() {
 			@Override
-			public boolean select(Object toTest) {
+			public boolean select(final Object toTest) {
 				final String name = timing.getResourceLabel((CollectedAssignment) toTest);
 				final String pattern = resourceFilterText.getText().trim();
 				return match(name, pattern);
@@ -402,7 +402,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 
 		final IFilter taskFilter = new IFilter() {
 			@Override
-			public boolean select(Object toTest) {
+			public boolean select(final Object toTest) {
 				final String name = timing.getLabel((UUIDObject) toTest);
 				final String pattern = taskFilterText.getText().trim();
 				return match(name, pattern);
@@ -411,7 +411,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 
 		final ModifyListener modifyListener = new ModifyListener() {
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void modifyText(final ModifyEvent e) {
 				editor.redraw();
 			}
 		};
@@ -451,7 +451,7 @@ public class InputJointModelEditorContribution extends BaseJointModelEditorContr
 	}
 
 	@Override
-	public void setLocked(boolean locked) {
+	public void setLocked(final boolean locked) {
 
 	}
 
