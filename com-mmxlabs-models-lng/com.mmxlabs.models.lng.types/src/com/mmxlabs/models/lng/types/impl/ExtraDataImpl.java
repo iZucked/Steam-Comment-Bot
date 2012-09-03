@@ -359,7 +359,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 				if (o instanceof Integer || o instanceof Long || o instanceof Short) {
 					return String.format("$%,d", o);
 				} else {
-					return String.format("$%0.3,f", o);
+					return String.format("$%.,03f", o);
 				}
 			case DATE:
 				DateFormat dateFormat;
