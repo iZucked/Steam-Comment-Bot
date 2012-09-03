@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,10 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -115,7 +120,7 @@ public class AnnotatedSolutionExporter {
 		final IOptimisationData data = annotatedSolution.getContext().getOptimisationData();
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
-
+		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 		final Schedule output = factory.createSchedule();
 
 		// go through the annotated solution and build stuff for the EMF;
@@ -139,6 +144,11 @@ public class AnnotatedSolutionExporter {
 		final List<IResource> resources = annotatedSolution.getSequences().getResources();
 		// Create sequences and run other exporters
 
+		final Sequence fobSequence = factory.createSequence();
+		final Sequence desSequence = factory.createSequence();
+		final Map<String, Long> desFitnessMap = new LinkedHashMap<String, Long>();
+		final Map<String, Long> fobFitnessMap = new LinkedHashMap<String, Long>();
+
 		final Map<IVesselClass, AtomicInteger> counter = new HashMap<IVesselClass, AtomicInteger>();
 		@SuppressWarnings("unchecked")
 		final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, Map.class);
@@ -148,6 +158,8 @@ public class AnnotatedSolutionExporter {
 			final Sequence eSequence = factory.createSequence();
 
 			boolean skipStartEndElements = false;
+			boolean isFOBSequence = false;
+			boolean isDESSequence = false;
 
 			// TODO use spot rates correctly.
 			final int hireRate;
@@ -178,6 +190,15 @@ public class AnnotatedSolutionExporter {
 				if (sequence.size() < 4) {
 					continue;
 				}
+
+				IPortSlot slotA = portSlotProvider.getPortSlot(sequence.get(1));
+				IPortSlot slotB = portSlotProvider.getPortSlot(sequence.get(2));
+				if (slotA instanceof ILoadOption && !(slotA instanceof ILoadSlot)) {
+					isDESSequence = true;
+				} else if (slotB instanceof IDischargeOption && !(slotB instanceof IDischargeSlot)) {
+					isFOBSequence = true;
+				}
+
 				skipStartEndElements = true;
 				break;
 			case SPOT_CHARTER:
@@ -207,22 +228,40 @@ public class AnnotatedSolutionExporter {
 				}
 			}
 
-			sequences.add(eSequence);
-
+			if (!(isDESSequence || isFOBSequence)) {
+				sequences.add(eSequence);
+			}
 			{
 				// set sequence fitness values
 				final EList<Fitness> eSequenceFitness = eSequence.getFitnesses();
 				final Map<String, Long> sequenceFitness = sequenceFitnesses.get(resource);
 				for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
-					final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-					sf.setName(e.getKey());
-					sf.setFitnessValue(e.getValue());
-					eSequenceFitness.add(sf);
+
+					if (isDESSequence || isFOBSequence) {
+						Map<String, Long> m = isFOBSequence ? fobFitnessMap : desFitnessMap;
+						long value = e.getValue();
+						if (m.containsKey(e.getKey())) {
+							value += m.get(e.getKey()).longValue();
+						}
+						m.put(e.getKey(), value);
+					} else {
+						final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
+						sf.setName(e.getKey());
+						sf.setFitnessValue(e.getValue());
+						eSequenceFitness.add(sf);
+					}
+
 				}
 			}
 
-			final EList<Event> events = eSequence.getEvents();
-
+			final EList<Event> events;
+			if (isDESSequence) {
+				events = desSequence.getEvents();
+			} else if (isFOBSequence) {
+				events = fobSequence.getEvents();
+			} else {
+				events = eSequence.getEvents();
+			}
 			final Comparator<Event> eventComparator = new Comparator<Event>() {
 				@Override
 				public int compare(final Event arg0, final Event arg1) {
@@ -284,6 +323,26 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
+		sequences.add(fobSequence);
+		sequences.add(desSequence);
+
+		final EList<Fitness> fobSequenceFitness = fobSequence.getFitnesses();
+		for (final Map.Entry<String, Long> e : fobFitnessMap.entrySet()) {
+
+			final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
+			sf.setName(e.getKey());
+			sf.setFitnessValue(e.getValue());
+			fobSequenceFitness.add(sf);
+		}
+		final EList<Fitness> desSequenceFitness = desSequence.getFitnesses();
+		for (final Map.Entry<String, Long> e : desFitnessMap.entrySet()) {
+
+			final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
+			sf.setName(e.getKey());
+			sf.setFitnessValue(e.getValue());
+			desSequenceFitness.add(sf);
+		}
+
 		// patch up idle events with no port
 		for (final Sequence eSequence : output.getSequences()) {
 			Idle firstIdle = null;
@@ -336,7 +395,6 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
-		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 		for (final ISequenceElement element : annotatedSolution.getSequences().getUnusedElements()) {
 			final IPortSlot slot = portSlotProvider.getPortSlot(element);
 			final Slot modelSlot = entities.getModelObject(slot, Slot.class);
