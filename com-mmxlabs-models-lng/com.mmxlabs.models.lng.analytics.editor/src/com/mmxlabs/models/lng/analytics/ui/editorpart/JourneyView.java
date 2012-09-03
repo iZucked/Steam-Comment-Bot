@@ -20,6 +20,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
@@ -65,7 +66,11 @@ public class JourneyView extends ScenarioInstanceView {
 
 	private void disposeContents() {
 		if (pane != null) {
-			pane.getControl().dispose();
+			final Control control = pane.getControl();
+			// This can be null if the pane has already been disposed.
+			if (control != null) {
+				control.dispose();
+			}
 			pane.dispose();
 			pane = null;
 		}
@@ -88,7 +93,7 @@ public class JourneyView extends ScenarioInstanceView {
 	private void createContents() {
 		final Composite inner = new Composite(top, SWT.NONE);
 		inner.setLayoutData(new GridData(GridData.FILL_BOTH));
-		GridLayout gridLayout = new GridLayout(1, false);
+		final GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = gridLayout.marginHeight = 0;
 		inner.setLayout(gridLayout);
 		final Composite upper = new Composite(inner, SWT.NONE);
@@ -98,7 +103,7 @@ public class JourneyView extends ScenarioInstanceView {
 
 		journeyChangedAdapter = new AdapterImpl() {
 			@Override
-			public void notifyChanged(Notification msg) {
+			public void notifyChanged(final Notification msg) {
 				if (!msg.isTouch()) {
 					if (pane != null && pane.getControl() != null && !pane.getControl().isDisposed()) {
 						pane.getViewer().refresh();
@@ -111,7 +116,7 @@ public class JourneyView extends ScenarioInstanceView {
 		};
 		journey.eAdapters().add(journeyChangedAdapter);
 
-		IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(journey.eClass());
+		final IDisplayCompositeFactory factory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(journey.eClass());
 		journeyComposite = factory.createToplevelComposite(upper, journey.eClass(), this);
 		journeyComposite.setCommandHandler(getDefaultCommandHandler());
 		journeyComposite.display(this, getRootObject(), journey, (Collection) Collections.emptyList());
@@ -161,7 +166,7 @@ public class JourneyView extends ScenarioInstanceView {
 	@Override
 	public void createPartControl(final Composite parent) {
 		top = parent;
-		GridLayout gridLayout = new GridLayout(1, false);
+		final GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = gridLayout.marginHeight = 0;
 		top.setLayout(gridLayout);
 		listenToScenarioSelection();
@@ -177,13 +182,13 @@ public class JourneyView extends ScenarioInstanceView {
 	}
 
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(final Class adapter) {
 		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
 			if (propertySheetPage == null && pane != null) {
 				propertySheetPage = new PropertySheetPage();
 				propertySheetPage.setPropertySourceProvider(new IPropertySourceProvider() {
 					@Override
-					public IPropertySource getPropertySource(Object object) {
+					public IPropertySource getPropertySource(final Object object) {
 						if (object instanceof UnitCostMatrix) {
 							if (journey == null) {
 								return null;
@@ -195,7 +200,7 @@ public class JourneyView extends ScenarioInstanceView {
 								if (line != null) {
 									return new UnitCostLinePropertySource(line);
 								}
-							} catch (Throwable th) {
+							} catch (final Throwable th) {
 								return null;
 							}
 						} else if (object instanceof IPropertySource) {
@@ -239,7 +244,7 @@ public class JourneyView extends ScenarioInstanceView {
 		}
 
 		@Override
-		public boolean canEdit(Object object) {
+		public boolean canEdit(final Object object) {
 			if (object instanceof UnitCostMatrix) {
 				if (((UnitCostMatrix) object).isSetSpeed()) {
 					return evaluate(object) != null;
@@ -249,7 +254,7 @@ public class JourneyView extends ScenarioInstanceView {
 		}
 
 		@Override
-		public void setValue(Object o, Object value) {
+		public void setValue(final Object o, final Object value) {
 			// reverse calculate
 
 			if (o instanceof UnitCostMatrix) {
@@ -270,13 +275,13 @@ public class JourneyView extends ScenarioInstanceView {
 							((UnitCostMatrix) o).setNotionalDayRate(dayRate);// TODO allow undo.
 						}
 					}
-				} catch (Throwable th) {
+				} catch (final Throwable th) {
 				}
 			}
 		}
 
 		@Override
-		public Object getValue(Object object) {
+		public Object getValue(final Object object) {
 			return evaluate(object);
 		}
 
@@ -294,7 +299,7 @@ public class JourneyView extends ScenarioInstanceView {
 					if (line != null) {
 						return line.getUnitCost();
 					}
-				} catch (Throwable th) {
+				} catch (final Throwable th) {
 				}
 			}
 			return null;
@@ -307,7 +312,6 @@ public class JourneyView extends ScenarioInstanceView {
 
 		super.dispose();
 	}
-	
 
 	@Override
 	public void setLocked(final boolean locked) {
