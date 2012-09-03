@@ -176,7 +176,7 @@ public class ValidationProblemsView extends ViewPart {
 					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
 
 					Object element = iStructuredSelection.getFirstElement();
-					while (!(element instanceof ScenarioInstance) && element != null) {
+					while (element != null && !(element instanceof ScenarioInstance)) {
 
 						element = contentProvider.getParent(element);
 						if (element instanceof Map.Entry) {
