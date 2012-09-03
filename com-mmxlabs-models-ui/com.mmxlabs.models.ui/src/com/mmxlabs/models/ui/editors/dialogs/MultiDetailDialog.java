@@ -188,7 +188,7 @@ public class MultiDetailDialog extends Dialog {
 				if (range.size() != proxies.size()) {
 					throw new UnsupportedOperationException("Selected object have differing numbers of related objects. Cannot edit.");
 				}
-				if (proxies.getClass() != range.get(i).getClass()) {
+				if (proxy.getClass() != range.get(i).getClass()) {
 					throw new UnsupportedOperationException("Selected object have differing types. Cannot edit.");
 				}
 				originals.add(range.get(i));
