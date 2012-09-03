@@ -46,8 +46,9 @@ import com.mmxlabs.trading.optimiser.TradingConstants;
  */
 public class KPIContentProvider implements IStructuredContentProvider {
 
-	private static final String TOTAL_COST = "Total Shipping Cost";
-	private static final String TOTAL_PNL = "Total P&L";
+	public static final String LATENESS = "Lateness";
+	private static final String TOTAL_COST = "Shipping Cost";
+	private static final String TOTAL_PNL = "P&L";
 
 	public static final String TYPE_COST = "Cost";
 	public static final String TYPE_TIME = "Days, hours";
@@ -182,11 +183,11 @@ public class KPIContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		output.add(new RowData(scenarioInstance.getName(), "Lateness", TYPE_TIME, lateness, LatenessReportView.ID, true));
 		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true));
 		if (totalPNL != 0) {
 			output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalPNL, TotalsHierarchyView.ID, false));
 		}
+		output.add(new RowData(scenarioInstance.getName(), LATENESS, TYPE_TIME, lateness, LatenessReportView.ID, true));
 	}
 
 	private long getCargoPNL(final ExtraDataContainer allocation, final Set<String> validEntities) {

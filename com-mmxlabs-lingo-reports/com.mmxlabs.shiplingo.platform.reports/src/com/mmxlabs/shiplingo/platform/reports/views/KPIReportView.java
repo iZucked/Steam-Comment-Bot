@@ -274,9 +274,9 @@ public class KPIReportView extends ViewPart {
 		viewer.getGrid().setHeaderVisible(true);
 
 		sortColumns.add(0);
+		sortColumns.add(1);
 		sortColumns.add(2);
 		sortColumns.add(3);
-		sortColumns.add(1);
 
 //		viewer.getGrid().setSortColumn(scheduleColumnViewer.getColumn());
 //		viewer.getGrid().setSortDirection(SWT.UP);
@@ -296,7 +296,15 @@ public class KPIReportView extends ViewPart {
 						sort = r1.scheduleName.compareTo(r2.scheduleName);
 						break;
 					case 1:
-						sort = r1.component.compareTo(r2.component);
+						if(r1.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
+							sort = 1;
+						}
+						else if(r2.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
+							sort = -1;
+						}
+						else{
+							sort = r1.component.compareTo(r2.component);
+						}
 						break;
 					case 2:
 						sort = ((Long) r1.value).compareTo(r2.value);
