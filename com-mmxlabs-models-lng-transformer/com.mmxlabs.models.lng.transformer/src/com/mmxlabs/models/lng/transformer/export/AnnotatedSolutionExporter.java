@@ -323,26 +323,29 @@ public class AnnotatedSolutionExporter {
 			}
 		}
 
-		sequences.add(fobSequence);
-		sequences.add(desSequence);
+		if (!fobSequence.getEvents().isEmpty()) {
+			sequences.add(fobSequence);
 
-		final EList<Fitness> fobSequenceFitness = fobSequence.getFitnesses();
-		for (final Map.Entry<String, Long> e : fobFitnessMap.entrySet()) {
+			final EList<Fitness> fobSequenceFitness = fobSequence.getFitnesses();
+			for (final Map.Entry<String, Long> e : fobFitnessMap.entrySet()) {
 
-			final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-			sf.setName(e.getKey());
-			sf.setFitnessValue(e.getValue());
-			fobSequenceFitness.add(sf);
+				final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
+				sf.setName(e.getKey());
+				sf.setFitnessValue(e.getValue());
+				fobSequenceFitness.add(sf);
+			}
 		}
-		final EList<Fitness> desSequenceFitness = desSequence.getFitnesses();
-		for (final Map.Entry<String, Long> e : desFitnessMap.entrySet()) {
+		if (!desSequence.getEvents().isEmpty()) {
+			sequences.add(desSequence);
+			final EList<Fitness> desSequenceFitness = desSequence.getFitnesses();
+			for (final Map.Entry<String, Long> e : desFitnessMap.entrySet()) {
 
-			final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-			sf.setName(e.getKey());
-			sf.setFitnessValue(e.getValue());
-			desSequenceFitness.add(sf);
+				final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
+				sf.setName(e.getKey());
+				sf.setFitnessValue(e.getValue());
+				desSequenceFitness.add(sf);
+			}
 		}
-
 		// patch up idle events with no port
 		for (final Sequence eSequence : output.getSequences()) {
 			Idle firstIdle = null;
