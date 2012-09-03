@@ -230,6 +230,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 
 			graphics.setForeground(wireColours.get(i));
 			graphics.drawPath(path);
+			path.dispose();
 		}
 
 		if (dragging) {
@@ -245,6 +246,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 			}
 			graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_DARK_RED));
 			graphics.drawPath(path);
+			path.dispose();
 		}
 
 		int i = 0;
