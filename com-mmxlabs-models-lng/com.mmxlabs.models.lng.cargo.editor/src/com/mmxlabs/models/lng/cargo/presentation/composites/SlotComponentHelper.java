@@ -12,11 +12,13 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for Slot instances
@@ -43,10 +45,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 *            TODO this could be an editor factory override instead.
 	 */
 	public SlotComponentHelper(final IAdapterManager adapterManager) {
-		// final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-		// final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ASLOT);
-		// if (helper != null) superClassesHelpers.add(helper);
-		// } {
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		{
+
+			for (final IComponentHelper helper : registry.getComponentHelpers(TypesPackage.Literals.ASLOT)) {
+				if (helper != null)
+					superClassesHelpers.add(helper);
+			}
+		}
+		// {
 		// final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ITIMEZONE_PROVIDER);
 		// if (helper != null) superClassesHelpers.add(helper);
 		// }
@@ -59,7 +66,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);	
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);
 	}
 
 	/**
@@ -69,7 +76,8 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers)
+			helper.addEditorsToComposite(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
 		add_fixedPriceEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
@@ -167,7 +175,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the optional feature on Slot
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_optionalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
