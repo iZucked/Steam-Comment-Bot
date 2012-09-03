@@ -40,6 +40,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -1040,7 +1041,14 @@ public class CargoWiringComposite extends Composite {
 			}
 		}
 
-		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+		final Runnable runnable = new Runnable() {
+
+			@Override
+			public void run() {
+				location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+			}
+		};
+		BusyIndicator.showWhile(null, runnable);
 		currentWiringCommand = null;
 	}
 
@@ -1269,7 +1277,14 @@ public class CargoWiringComposite extends Composite {
 
 		appendFOBDESCommands(currentWiringCommand, location.getEditingDomain(), inputModel, cargo, loadSlot, dischargeSlot);
 
-		location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+		final Runnable runnable = new Runnable() {
+
+			@Override
+			public void run() {
+				location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+			}
+		};
+		BusyIndicator.showWhile(null, runnable);
 		currentWiringCommand = null;
 	}
 
@@ -1589,7 +1604,14 @@ public class CargoWiringComposite extends Composite {
 				if (cargo != null) {
 					currentWiringCommand.append(DeleteCommand.create(location.getEditingDomain(), cargo));
 				}
-				location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+				final Runnable runnable = new Runnable() {
+
+					@Override
+					public void run() {
+						location.getEditingDomain().getCommandStack().execute(currentWiringCommand);
+					}
+				};
+				BusyIndicator.showWhile(null, runnable);
 				currentWiringCommand = null;
 			}
 		};
