@@ -432,7 +432,7 @@ public class CargoWiringComposite extends Composite {
 		@Override
 		public void onStatusChanged(final IStatusProvider provider, final IStatus status) {
 
-			if (isDisposed()) {
+			if (status == null || isDisposed()) {
 				return;
 			}
 			
