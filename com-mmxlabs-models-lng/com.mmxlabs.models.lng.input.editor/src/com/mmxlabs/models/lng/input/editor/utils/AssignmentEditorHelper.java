@@ -205,8 +205,9 @@ public class AssignmentEditorHelper {
 	}
 
 	public static Command lockElement(EditingDomain ed, ElementAssignment ea) {
-		if (ea == null)
+		if (ea == null) {
 			return IdentityCommand.INSTANCE;
+		}
 		return SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Locked(), true);
 	}
 
