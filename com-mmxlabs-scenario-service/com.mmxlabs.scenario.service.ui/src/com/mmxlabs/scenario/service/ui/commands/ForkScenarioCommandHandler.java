@@ -5,8 +5,6 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -49,8 +47,6 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 					final IScenarioService scenarioService = instance.getScenarioService();
 
 					try {
-						final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-
 						final Set<String> existingNames = new HashSet<String>();
 						for (final Container c : instance.getElements()) {
 							if (c instanceof Folder) {
@@ -60,7 +56,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 							}
 						}
 
-						final String namePrefix = "Fork " + df.format(new Date()) + " - " + instance.getName();
+						final String namePrefix = "[F] " + instance.getName();
 						String newName = namePrefix;
 						int counter = 1;
 						while (existingNames.contains(newName)) {
