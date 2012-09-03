@@ -76,6 +76,8 @@ public class PieChartRenderer {
 			}
 		}
 		
+		gc.dispose();
+		
 		final Image result = new Image(Display.getDefault(), data);
 		Activator.getDefault().getImageRegistry().put(imageName, result);
 		return result;
