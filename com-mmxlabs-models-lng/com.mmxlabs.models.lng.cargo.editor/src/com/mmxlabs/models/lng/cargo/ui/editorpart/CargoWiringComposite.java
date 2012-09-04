@@ -435,7 +435,7 @@ public class CargoWiringComposite extends Composite {
 			if (status == null || isDisposed()) {
 				return;
 			}
-			
+
 			validationMap.clear();
 
 			checkStatus(status);
@@ -655,7 +655,7 @@ public class CargoWiringComposite extends Composite {
 		if (isDisposed()) {
 			return;
 		}
-		
+
 		if (this.locked == locked) {
 			return;
 		}
@@ -914,6 +914,7 @@ public class CargoWiringComposite extends Composite {
 		final Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
 		final Color green = Display.getDefault().getSystemColor(SWT.COLOR_GREEN);
 		final Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+		final Color gray = Display.getDefault().getSystemColor(SWT.COLOR_GRAY);
 
 		for (int i = 0; i < numberOfRows; ++i) {
 			final LoadSlot loadSlot = loadSlots.get(i);
@@ -922,7 +923,6 @@ public class CargoWiringComposite extends Composite {
 				diagram.setLeftTerminalColor(i, green);
 			} else {
 				diagram.setLeftTerminalColor(i, red);
-
 			}
 			if (dischargeSlot != null && dischargeSlot.isOptional()) {
 				diagram.setRightTerminalColor(i, green);
@@ -951,7 +951,11 @@ public class CargoWiringComposite extends Composite {
 
 			// TODO this is not exactly proper validation.
 			if (isWiringValid(cargoes.get(i), loadSlot, dischargeSlot)) {
-				diagram.setWireColor(i, black);
+				if (cargoes.get(i).isAllowRewiring()) {
+					diagram.setWireColor(i, black);
+				} else {
+					diagram.setWireColor(i, gray);
+				}
 			} else {
 				diagram.setWireColor(i, red);
 			}
