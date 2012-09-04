@@ -162,7 +162,6 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 			if (preceders.size() == 0) {
 				return null;
 			}
-			// TODO: Randomise list
 			for (final ISequenceElement preceder : shuffleFollowers(preceders)) {
 				final Pair<Integer, Integer> precederPosition = owner.reverseLookup.get(preceder);
 				// Element is also not used!
