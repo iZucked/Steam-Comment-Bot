@@ -689,6 +689,9 @@ public class LNGScenarioTransformer {
 
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
+		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
+		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
+
 		// TODO: Refactor into Load and Discharge slot creation before cargo paring
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
@@ -700,11 +703,13 @@ public class LNGScenarioTransformer {
 			{
 
 				load = createLoadOption(builder, portAssociation, contractTransformers, entities, loadSlot);
+				usedLoadSlots.add(loadSlot);
 			}
 			final DischargeSlot dischargeSlot = eCargo.getDischargeSlot();
 			final IDischargeOption discharge;
 			{
 				discharge = createDischargeOption(builder, portAssociation, contractTransformers, entities, dischargeSlot);
+				usedDischargeSlots.add(dischargeSlot);
 			}
 			// Bind FOB/DES slots to resource
 			if (loadSlot.isDESPurchase()) {
@@ -751,6 +756,72 @@ public class LNGScenarioTransformer {
 					builder.setCargoVesselRestriction(cargo, vesselsForCargo);
 				}
 			}
+		}
+
+		for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
+			
+			// TODO: Filter on date
+			
+			// if (eCargo.getLoadSlot().getWindowStartWithSlotOrPortTime().after(latestDate)) {
+			// continue;
+			// }
+			if (usedLoadSlots.contains(loadSlot)) {
+				continue;
+			}
+
+			final ILoadOption load;
+			{
+
+				load = createLoadOption(builder, portAssociation, contractTransformers, entities, loadSlot);
+			}
+			// Bind FOB/DES slots to resource
+			if (loadSlot.isDESPurchase()) {
+				if (loadSlot instanceof SpotLoadSlot) {
+					final SpotLoadSlot spotLoadSlot = (SpotLoadSlot) loadSlot;
+					final Set<IPort> marketPorts = new HashSet<IPort>();
+					{
+						final ASpotMarket market = spotLoadSlot.getMarket();
+						if (market instanceof DESPurchaseMarket) {
+							final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
+							final Set<APort> portSet = SetUtils.getPorts(desPurchaseMarket.getDestinationPorts());
+							for (final APort ap : portSet) {
+								if (ap instanceof Port) {
+									final IPort ip = portAssociation.lookup((Port) ap);
+									if (ip != null) {
+										marketPorts.add(ip);
+									}
+								}
+							}
+						}
+
+					}
+					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
+				} else {
+					// Bind to this port -- TODO: Fix to discharge?
+					builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(load.getPort()));
+				}
+			}
+		}
+
+		for (final DischargeSlot dischargeSlot : cargoModel.getDischargeSlots()) {
+
+			// TODO: Filter on date
+			// if (eCargo.getLoadSlot().getWindowStartWithSlotOrPortTime().after(latestDate)) {
+			// continue;
+			// }
+			if (usedDischargeSlots.contains(dischargeSlot)) {
+				continue;
+			}
+
+			final IDischargeOption discharge;
+			{
+				discharge = createDischargeOption(builder, portAssociation, contractTransformers, entities, dischargeSlot);
+			}
+			// Bind FOB/DES slots to resource
+			if (dischargeSlot.isFOBSale()) {
+				builder.bindLoadSlotsToFOBSale(discharge, discharge.getPort());
+			}
+
 		}
 	}
 
@@ -1695,11 +1766,6 @@ public class LNGScenarioTransformer {
 			}
 			slots.add(slot);
 		}
-	}
-
-	private int getSpotSlotCount(final SpotType spotType, final String key) {
-
-		return getSpotSlots(spotType, key).size();
 	}
 
 	private Collection<Slot> getSpotSlots(final SpotType spotType, final String key) {
