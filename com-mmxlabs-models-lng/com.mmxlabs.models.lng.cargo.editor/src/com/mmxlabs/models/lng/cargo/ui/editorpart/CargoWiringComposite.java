@@ -748,7 +748,7 @@ public class CargoWiringComposite extends Composite {
 
 				loadSide.setCommandHandler(commandHandler);
 
-				loadSide.addMenuListener(createLoadSlotMenuListener(loadSlots.get(index)));
+				loadSide.addMenuListener(createLoadSlotMenuListener(index));
 				lhsComposites.add(loadSide);
 				loadSide.addListener(SWT.Selection, selectionListener);
 				loadSide.addListener(SWT.DefaultSelection, selectionListener);
@@ -857,7 +857,7 @@ public class CargoWiringComposite extends Composite {
 				dischargeSide = new PortAndDateComposite(this, SWT.NONE, site, false);
 				dischargeSide.setCommandHandler(commandHandler);
 				dischargeSide.setBackground(WHITE);
-				dischargeSide.addMenuListener(createDischargeSlotMenuListener(dischargeSlots.get(index)));
+				dischargeSide.addMenuListener(createDischargeSlotMenuListener(index));
 				rhsComposites.add(dischargeSide);
 				dischargeSide.addListener(SWT.Selection, selectionListener);
 				dischargeSide.addListener(SWT.DefaultSelection, selectionListener);
@@ -1554,12 +1554,14 @@ public class CargoWiringComposite extends Composite {
 		return newDischarge;
 	}
 
-	IMenuListener createLoadSlotMenuListener(final LoadSlot loadSlot) {
+	IMenuListener createLoadSlotMenuListener(final int index) {
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 		final IMenuListener l = new IMenuListener() {
 
+			
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
+				LoadSlot loadSlot = loadSlots.get(index); 
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
 				if (loadSlot.isDESPurchase()) {
@@ -1579,12 +1581,15 @@ public class CargoWiringComposite extends Composite {
 
 	}
 
-	IMenuListener createDischargeSlotMenuListener(final DischargeSlot dischargeSlot) {
+	IMenuListener createDischargeSlotMenuListener(final int index) {
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 		final IMenuListener l = new IMenuListener() {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
+				
+				final DischargeSlot dischargeSlot = dischargeSlots.get(index);
+				
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
 				if (dischargeSlot.isFOBSale()) {
