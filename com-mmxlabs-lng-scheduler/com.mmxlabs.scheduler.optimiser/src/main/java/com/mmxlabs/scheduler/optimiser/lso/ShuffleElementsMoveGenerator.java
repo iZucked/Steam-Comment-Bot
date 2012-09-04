@@ -239,6 +239,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				// Element is unused, no need to do more.
 				return builder.getMove();
 			}
+			assert elementSequence != null;
 			final ISequenceElement elementMinus1 = elementSequence.get(elementPosition.getSecond() - 1);
 			final ISequenceElement elementPlus1 = elementSequence.get(elementPosition.getSecond() + 1);
 
