@@ -6,24 +6,26 @@ package com.mmxlabs.models.lng.ui.actions;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+import com.mmxlabs.models.lng.ui.ImageConstants;
+import com.mmxlabs.models.lng.ui.LngUIActivator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class DuplicateAction extends ScenarioModifyingAction {
 	private IScenarioEditingLocation part;
 
 	public DuplicateAction(final IScenarioEditingLocation part) {
 		super("Duplicate selection");
-		setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/fastview_restore.gif"));
+		setImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE));
+		setDisabledImageDescriptor(LngUIActivator.getDefault().getImageRegistry().getDescriptor(ImageConstants.IMAGE_DUPLICATE_DISABLED));
 		this.part = part;
 	}
-	
+
 	@Override
 	public void run() {
 		final IStructuredSelection selection = (IStructuredSelection) getLastSelection();

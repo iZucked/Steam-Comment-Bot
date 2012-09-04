@@ -400,6 +400,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		return new ScenarioModifyingAction("Delete") {
 			{
 				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+				setDisabledImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 				viewer.addSelectionChangedListener(this);
 			}
 
