@@ -12,6 +12,7 @@ import org.eclipse.emf.validation.EMFEventType;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -51,7 +52,10 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 						if (!((LoadSlot) slot).isDESPurchase() && !capabilities.contains(PortCapability.LOAD)) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.LOAD.getName()));
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
-							dsd.addEObjectAndFeature(((LoadSlot) slot).getCargo(), CargoPackage.eINSTANCE.getCargo_LoadSlot());
+							final Cargo cargo = ((LoadSlot) slot).getCargo();
+							if (cargo != null) {
+								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_LoadSlot());
+							}
 							return dsd;
 						}
 					}
@@ -60,7 +64,10 @@ public class SlotPortCapabilityConstraint extends AbstractModelConstraint {
 						if (!((DischargeSlot) slot).isFOBSale() && !capabilities.contains(PortCapability.DISCHARGE)) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(PortCapability.DISCHARGE.getName()));
 							dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Port());
-							dsd.addEObjectAndFeature(((DischargeSlot) slot).getCargo(), CargoPackage.eINSTANCE.getCargo_DischargeSlot());
+							final Cargo cargo = ((DischargeSlot) slot).getCargo();
+							if (cargo != null) {
+								dsd.addEObjectAndFeature(cargo, CargoPackage.eINSTANCE.getCargo_DischargeSlot());
+							}
 							return dsd;
 						}
 					}
