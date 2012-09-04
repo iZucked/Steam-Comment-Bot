@@ -352,7 +352,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				builder.addTo(null, 0, 1);
 				return true;
 			}
-			
+
 			return false;
 		} else {
 			// // Find a follower
@@ -400,7 +400,6 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				return true;
 			}
 
-			
 			return false;
 		}
 	}
