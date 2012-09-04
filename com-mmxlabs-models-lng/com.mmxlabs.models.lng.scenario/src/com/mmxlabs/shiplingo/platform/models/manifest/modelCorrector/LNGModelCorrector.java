@@ -22,12 +22,16 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.SpotAvailability;
+import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
@@ -199,9 +203,37 @@ public class LNGModelCorrector {
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket(), group));
 			}
 
+			for (final SpotMarket market : pricingModel.getDesPurchaseSpotMarket().getMarkets()) {
+				fixSpotMarketAvailabilityName(cmd, market, ed);
+			}
+
+			for (final SpotMarket market : pricingModel.getDesSalesSpotMarket().getMarkets()) {
+				fixSpotMarketAvailabilityName(cmd, market, ed);
+			}
+
+			for (final SpotMarket market : pricingModel.getFobPurchasesSpotMarket().getMarkets()) {
+				fixSpotMarketAvailabilityName(cmd, market, ed);
+			}
+
+			for (final SpotMarket market : pricingModel.getFobSalesSpotMarket().getMarkets()) {
+				fixSpotMarketAvailabilityName(cmd, market, ed);
+			}
+
 		}
 		if (!cmd.isEmpty()) {
 			parent.append(cmd);
+		}
+	}
+
+	private void fixSpotMarketAvailabilityName(final CompoundCommand parent, final SpotMarket market, final EditingDomain ed) {
+		final SpotAvailability availability = market.getAvailability();
+		if (availability != null) {
+			final DataIndex<Integer> curve = availability.getCurve();
+			if (curve != null) {
+				if (curve.getName() == null || curve.getName().isEmpty()) {
+					parent.append(SetCommand.create(ed, curve, MMXCorePackage.eINSTANCE.getNamedObject_Name(), market.getName()));
+				}
+			}
 		}
 	}
 }
