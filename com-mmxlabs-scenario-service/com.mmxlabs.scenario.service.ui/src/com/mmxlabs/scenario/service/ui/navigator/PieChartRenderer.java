@@ -25,7 +25,8 @@ import com.mmxlabs.scenario.service.ui.internal.Activator;
  */
 public class PieChartRenderer {
 	public static Image renderPie(final Color minorColor, final Color majorColor, final double p) {
-		final int angle = (int) - (p * 360);
+		final int angle = (((int) - (p * 360)) / 10) % 36;
+		
 		final String imageName = "PIE-" + minorColor.getRGB() + "-" + majorColor.getRGB()+ "-" +angle;
 		final Image cache = Activator.getDefault().getImageRegistry().get(imageName);
 		if (cache != null) return cache;
@@ -48,7 +49,7 @@ public class PieChartRenderer {
 		gc.fillArc(1, 1, 15, 15, 0, 360);
 		
 		gc.setBackground(minorColor);
-		gc.fillArc(1, 1, 15, 15, 90, angle);
+		gc.fillArc(1, 1, 15, 15, 90, angle * 10);
 		
 		// clear middle of donut
 		gc.setBackground(maskColor);
