@@ -88,7 +88,7 @@ public class TestCalculations {
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = 400000;
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, 500, 0, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, 500, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, 600l);
@@ -107,7 +107,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, 0, startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false, false);
@@ -503,7 +503,7 @@ public class TestCalculations {
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = 400000;
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, 500, 0, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, 500, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, 600l);
@@ -522,7 +522,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, 0, startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false, false);
@@ -918,7 +918,7 @@ public class TestCalculations {
 		final int maxSpeed = 20000;
 		final int capacity = 150000000;
 		final int baseFuelUnitPrice = 1000;
-		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, 500, 0, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vessel-class-1", minSpeed, maxSpeed, capacity, 0, baseFuelUnitPrice, 500, 0, Integer.MAX_VALUE, 0, 0);
 
 		final TreeMap<Integer, Long> ladenKeypoints = new TreeMap<Integer, Long>();
 		ladenKeypoints.put(12000, 600l);
@@ -937,7 +937,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, 0, startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false, false);

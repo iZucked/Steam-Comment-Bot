@@ -162,7 +162,6 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 			if (preceders.size() == 0) {
 				return null;
 			}
-			// TODO: Randomise list
 			for (final ISequenceElement preceder : shuffleFollowers(preceders)) {
 				final Pair<Integer, Integer> precederPosition = owner.reverseLookup.get(preceder);
 				// Element is also not used!
@@ -240,6 +239,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				// Element is unused, no need to do more.
 				return builder.getMove();
 			}
+			assert elementSequence != null;
 			final ISequenceElement elementMinus1 = elementSequence.get(elementPosition.getSecond() - 1);
 			final ISequenceElement elementPlus1 = elementSequence.get(elementPosition.getSecond() + 1);
 
@@ -269,7 +269,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				}
 
 			}
-			if (elementPosition.getSecond() > 2) {
+			if (elementPosition.getSecond() >= 2) {
 				final ISequenceElement elementMinus2 = elementSequence.get(elementPosition.getSecond() - 2);
 				if (owner.validFollowers.get(elementMinus2).contains(elementPlus1)) {
 					// We can link the head and tail together directly - no need to do more.
@@ -345,6 +345,14 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				}
 			}
 
+			// Did not find an option, so true to remove if optional (assumes the previous check resulted in false)
+			if (optionalElementsProvider.isElementOptional(target)) {
+				// Can stick on unused elements list
+				builder.addFrom(targetResource, targetPosition.getSecond(), target);
+				builder.addTo(null, 0, 1);
+				return true;
+			}
+
 			return false;
 		} else {
 			// // Find a follower
@@ -382,6 +390,14 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 					return true;
 				}
+			}
+
+			// Did not find an option, so true to remove if optional (assumes the previous check resulted in false)
+			if (optionalElementsProvider.isElementOptional(target)) {
+				// Can stick on unused elements list
+				builder.addFrom(targetResource, targetPosition.getSecond(), target);
+				builder.addTo(null, 0, 1);
+				return true;
 			}
 
 			return false;

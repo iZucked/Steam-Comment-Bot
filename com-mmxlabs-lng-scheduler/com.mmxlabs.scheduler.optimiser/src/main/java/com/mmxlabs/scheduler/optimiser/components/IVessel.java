@@ -38,6 +38,13 @@ public interface IVessel extends IResource {
 	VesselInstanceType getVesselInstanceType();
 
 	/**
+	 * Returns the hourly rate at which this vessel can be chartered in .
+	 * 
+	 * @return hourly charter out price
+	 */
+	int getHourlyCharterInPrice();
+
+	/**
 	 * Returns the hourly rate at which this vessel can be chartered out.
 	 * 
 	 * @return hourly charter out price

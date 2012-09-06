@@ -8,6 +8,7 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.impl.PortCostAnnotation;
@@ -62,8 +63,9 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 	protected boolean reallyEvaluateObject(Object object, int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails details = (PortDetails) object;
-			sequenceAccumulator += portCostProvider.getPortCost(details.getPortSlot().getPort(), currentVessel, 
+			long portCost = portCostProvider.getPortCost(details.getPortSlot().getPort(), currentVessel, 
 					details.getPortSlot().getPortType());
+			sequenceAccumulator += portCost;
 		}
 		
 		return true;
@@ -87,7 +89,7 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 	@Override
 	protected long endSequenceAndGetCost() {
 		currentVessel = null;
-		return sequenceAccumulator;
+		return sequenceAccumulator / Calculator.ScaleFactor;
 	}
 
 	public IPortCostProvider getPortCostProvider() {

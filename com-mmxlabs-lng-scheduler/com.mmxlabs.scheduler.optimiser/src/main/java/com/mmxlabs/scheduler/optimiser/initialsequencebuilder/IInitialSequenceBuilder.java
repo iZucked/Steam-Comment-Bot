@@ -28,7 +28,10 @@ public interface IInitialSequenceBuilder {
 	 *            a suggested (possibly incomplete) start state. May be null
 	 * @param resourceSuggestion
 	 *            a suggested set of resources to put elements on; this is only considered for elements not in sequenceSuggestion.
+	 * @param pairingHints
+	 *            a pairing of {@link ISequenceElement} to use for the initial sequences but do not need enforced by a constraint checker.
 	 * @return
 	 */
-	public ISequences createInitialSequences(IOptimisationData data, ISequences sequenceSuggestion, Map<ISequenceElement, IResource> resourceSuggestion);
+	public ISequences createInitialSequences(IOptimisationData data, ISequences sequenceSuggestion, Map<ISequenceElement, IResource> resourceSuggestion,
+			Map<ISequenceElement, ISequenceElement> pairingHints);
 }

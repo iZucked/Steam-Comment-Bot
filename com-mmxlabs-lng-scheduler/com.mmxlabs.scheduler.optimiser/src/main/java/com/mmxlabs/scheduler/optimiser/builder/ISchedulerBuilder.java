@@ -74,12 +74,10 @@ public interface ISchedulerBuilder {
 	 *            Price of base fuel in scaled $/MT
 	 * @param baseFuelEquivalenceInM3TOMT
 	 *            Scaled Conversion factor to convert M3 LNG to equivalent MT base fuel
-	 * @param hourlyCharterPrice
-	 *            $/Hour rate to charter-in vessels of this class
 	 * @return
 	 */
 	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
-			int hourlyCharterPrice, int warmupTimeInHours, int cooldownTimeInHours, long cooldownVolumeInM3);
+			int warmupTimeInHours, int cooldownTimeInHours, long cooldownVolumeInM3);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
@@ -195,8 +193,8 @@ public interface ISchedulerBuilder {
 	 * @param vesselClass
 	 * @return
 	 */
-	IVessel createVessel(String name, IVesselClass vesselClass, int hourlyCharterOutRate, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint, final long heelLimit,
-			final int heelCVValue, final int heelUnitPrice);
+	IVessel createVessel(String name, IVesselClass vesselClass, int hourlyCharterInRate, int hourlyCharterOutRate, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint,
+			final long heelLimit, final int heelCVValue, final int heelUnitPrice);
 
 	/**
 	 * Create a fleet vessel with the given name, class and instance type.
@@ -208,8 +206,8 @@ public interface ISchedulerBuilder {
 	 * @param end
 	 * @return
 	 */
-	IVessel createVessel(String name, IVesselClass vesselClass, int hourlyCharterOutRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
-			final long heelLimit, final int heelCVValue, final int heelUnitPrice);
+	IVessel createVessel(String name, IVesselClass vesselClass, int hourlyCharterInRate, int hourlyCharterOutRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start,
+			IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice);
 
 	/**
 	 * Create a start/end requirement which constrains nothing
@@ -431,9 +429,11 @@ public interface ISchedulerBuilder {
 	 *            the class of spot charter to create
 	 * @param count
 	 *            the number of spot charters to create
+	 * @param hourlyCharterPrice
+	 *            $/Hour rate to charter-in vessels
 	 * @return
 	 */
-	List<IVessel> createSpotVessels(String namePrefix, IVesselClass vesselClass, int count);
+	List<IVessel> createSpotVessels(String namePrefix, IVesselClass vesselClass, int count, int hourlyCharterPrice);
 
 	/**
 	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
@@ -441,9 +441,10 @@ public interface ISchedulerBuilder {
 	 * 
 	 * @param name
 	 * @param vesselClass
+	 *            * @param hourlyCharterPrice $/Hour rate to charter-in vessel
 	 * @return
 	 */
-	IVessel createSpotVessel(String name, IVesselClass vesselClass);
+	IVessel createSpotVessel(String name, IVesselClass vesselClass, int hourlyCharterPrice);
 
 	void setVesselClassInaccessiblePorts(IVesselClass vc, Set<IPort> inaccessiblePorts);
 

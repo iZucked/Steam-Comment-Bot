@@ -60,7 +60,9 @@ public final class VoyagePlanIterator {
 
 	public final Object nextObject() {
 		currentTime += extraTime;
-		if (currentIndex >= currentSequence.length) {
+		
+		if((planIterator.hasNext() && currentIndex >= (currentSequence.length -1))|| currentIndex >= currentSequence.length )
+		{		
 			// advance by one voyageplan.
 			currentPlan = planIterator.next();
 			currentSequence = currentPlan.getSequence();

@@ -44,11 +44,6 @@ public final class VesselClass implements IVesselClass {
 	private final EnumMap<VesselState, IConsumptionRateCalculator> consumptionRate = new EnumMap<VesselState, IConsumptionRateCalculator>(VesselState.class);
 
 	/**
-	 * The price per hour to charter vessels of this class.
-	 */
-	private int hourlyCharterInPrice;
-
-	/**
 	 * The volume of LNG required to cool the tanks on vessels of this class.
 	 */
 	private long cooldownVolume;
@@ -179,15 +174,6 @@ public final class VesselClass implements IVesselClass {
 
 	public void setBaseFuelConversionFactor(final int baseFuelConversionFactor) {
 		this.baseFuelConversionFactor = baseFuelConversionFactor;
-	}
-
-	public void setHourlyCharterInPrice(final int hourlyCharterInPrice) {
-		this.hourlyCharterInPrice = hourlyCharterInPrice;
-	}
-
-	@Override
-	public int getHourlyCharterInPrice() {
-		return hourlyCharterInPrice;
 	}
 
 	@Override

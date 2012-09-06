@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -87,16 +88,16 @@ public class SimpleSchedulerTest {
 		keypoints.put(20000, 20000l);
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
-		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, 0, Integer.MAX_VALUE, 0, 0);
+		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0, 0);
 
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, 0, consumptionCalculator, 15000);
 		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, 0, consumptionCalculator,
 				15000);
 
 		// TODO: Setup start/end ports correctly
-		builder.createVessel("vessel-1", vesselClass1, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVessel("vessel-2", vesselClass1, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVessel("vessel-3", vesselClass1, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0);
+		builder.createVessel("vessel-1", vesselClass1, 0, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
+		builder.createVessel("vessel-2", vesselClass1, 0, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
+		builder.createVessel("vessel-3", vesselClass1, 0, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0);
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);
@@ -164,7 +165,7 @@ public class SimpleSchedulerTest {
 
 		// Generate initial state
 		final IInitialSequenceBuilder sequenceBuilder = new ConstrainedInitialSequenceBuilder(constraintRegistry.getConstraintCheckerFactories());
-		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null);
+		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement>emptyMap());
 
 		final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new ArrayList<String>(
 				constraintRegistry.getConstraintCheckerNames()), constraintRegistry, new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);

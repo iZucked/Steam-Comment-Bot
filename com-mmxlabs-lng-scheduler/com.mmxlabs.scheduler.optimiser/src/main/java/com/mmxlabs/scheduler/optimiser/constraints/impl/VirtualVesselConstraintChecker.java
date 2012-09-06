@@ -15,7 +15,6 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -139,6 +138,10 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 
 		final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 		final ISequenceElement endElement = startEndProvider.getEndElement(resource);
+		
+		if (first == startElement && second == endElement) {
+			return true;
+		}
 
 		final ISequenceElement elementForVessel = virtualVesselSlotProvider.getElementForVessel(vessel);
 

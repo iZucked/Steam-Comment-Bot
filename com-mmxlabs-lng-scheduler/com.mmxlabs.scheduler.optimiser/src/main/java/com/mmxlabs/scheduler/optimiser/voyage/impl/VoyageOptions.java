@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import com.google.common.base.Objects;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -267,9 +268,24 @@ public final class VoyageOptions implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "VoyageOptions [availableTime=" + availableTime + ", distance=" + distance + ", vessel=" + vessel + ", fromPortSlot=" + fromPortSlot + ", toPortSlot=" + toPortSlot + ", nboSpeed="
-				+ nboSpeed + ", useNBOForIdle=" + useNBOForIdle + ", useNBOForTravel=" + useNBOForTravel + ", useFBOForSupplement=" + useFBOForSupplement + ", availableLNG=" + availableLNG
-				+ ", cooldown=" + cooldown + ", shouldBeCold=" + shouldBeCold + ", startWarm=" + startWarm + ", route=" + route + ", vesselState=" + vesselState + "]";
+		// @formatter:off
+		return Objects.toStringHelper(VoyageOptions.class)
+				.add("distance", distance)
+				.add("vessel", vessel)
+				.add("fromPortSlot", fromPortSlot)
+				.add("toPortSlot", toPortSlot)
+				.add("nboSpeed", nboSpeed)
+				.add("useNBOForIdle", useNBOForIdle)
+				.add("useNBOForTravel", useNBOForTravel)
+				.add("useFBOForSupplement", useFBOForSupplement)
+				.add("availableLNG", availableLNG)
+				.add("cooldown", cooldown)
+				.add("shouldBeCold", shouldBeCold)
+				.add("startWarm", startWarm)
+				.add("route", route)
+				.add("vesselState", vesselState)
+				.toString();
+		// @formatter:on
 	}
 
 }

@@ -279,7 +279,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		});
 
 		// setup fake vessels for virtual elements.
-		virtualClass = createVesselClass("virtual", 0, 1000000000, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0, 0);
+		virtualClass = createVesselClass("virtual", 0, 0, Long.MAX_VALUE, 0, 0, 0, 0, 0, 0, 0);
 	}
 
 	@Override
@@ -562,9 +562,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IVessel createVessel(final String name, final IVesselClass vesselClass, final int hourlyCharterOutRate, final IStartEndRequirement start, final IStartEndRequirement end,
-			final long heelLimit, final int heelCVValue, final int heelUnitPrice) {
-		return this.createVessel(name, vesselClass, hourlyCharterOutRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice);
+	public IVessel createVessel(final String name, final IVesselClass vesselClass, final int hourlyCharterInRate, final int hourlyCharterOutRate, final IStartEndRequirement start,
+			final IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice) {
+		return this.createVessel(name, vesselClass, hourlyCharterInRate, hourlyCharterOutRate, VesselInstanceType.FLEET, start, end, heelLimit, heelCVValue, heelUnitPrice);
 	}
 
 	/**
@@ -576,10 +576,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @return
 	 */
 	@Override
-	public List<IVessel> createSpotVessels(final String namePrefix, final IVesselClass vesselClass, final int count) {
+	public List<IVessel> createSpotVessels(final String namePrefix, final IVesselClass vesselClass, final int count, final int hourlyCharterPrice) {
 		final List<IVessel> answer = new ArrayList<IVessel>(count);
 		for (int i = 0; i < count; i++) {
-			answer.add(createSpotVessel(namePrefix + "-" + (i + 1), vesselClass));
+			answer.add(createSpotVessel(namePrefix + "-" + (i + 1), vesselClass, hourlyCharterPrice));
 		}
 		return answer;
 	}
@@ -592,16 +592,16 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @return the spot vessel
 	 */
 	@Override
-	public IVessel createSpotVessel(final String name, final IVesselClass vesselClass) {
+	public IVessel createSpotVessel(final String name, final IVesselClass vesselClass, final int hourlyCharterInPrice) {
 		final IStartEndRequirement start = createStartEndRequirement();
 		final IStartEndRequirement end = createStartEndRequirement();
 
-		return createVessel(name, vesselClass, 0, VesselInstanceType.SPOT_CHARTER, start, end, 0, 0, 0);
+		return createVessel(name, vesselClass, hourlyCharterInPrice, 0, VesselInstanceType.SPOT_CHARTER, start, end, 0, 0, 0);
 	}
 
 	@Override
-	public IVessel createVessel(final String name, final IVesselClass vesselClass, final int hourlyCharterOutRate, final VesselInstanceType vesselInstanceType, final IStartEndRequirement start,
-			final IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice) {
+	public IVessel createVessel(final String name, final IVesselClass vesselClass, final int hourlyCharterInRate, final int hourlyCharterOutRate, final VesselInstanceType vesselInstanceType,
+			final IStartEndRequirement start, final IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -623,6 +623,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vessel.setVesselInstanceType(vesselInstanceType);
 
+		vessel.setHourlyCharterInPrice(hourlyCharterInRate);
 		vessel.setHourlyCharterOutPrice(hourlyCharterOutRate);
 
 		vessels.add(vessel);
@@ -811,6 +812,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 			// what's the slowest vessel class
 			int slowestMaxSpeed = Integer.MAX_VALUE;
 			for (final IVesselClass vesselClass : vesselClasses) {
+				if (vesselClass == virtualClass) {
+					continue;
+				}
 				slowestMaxSpeed = Math.min(slowestMaxSpeed, vesselClass.getMaxSpeed());
 			}
 
@@ -905,7 +909,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	private IVessel createVirtualVessel(final ISequenceElement element) {
 		// create a new resource for each of these guys, and bind them to their resources
-		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, 0, VesselInstanceType.VIRTUAL, createStartEndRequirement(), createStartEndRequirement(), 0, 0, 0);
+		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, 0, 0, VesselInstanceType.VIRTUAL, createStartEndRequirement(), createStartEndRequirement(), 0l, 0, 0);
 		// Bind every slot to its vessel
 		constrainSlotToVessels(portSlotsProvider.getPortSlot(element), Collections.singleton(virtualVessel));
 
@@ -955,7 +959,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final int minHeelInM3, final int baseFuelUnitPricePerMT,
-			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int hourlyCharterPrice, final int warmupTimeHours, final int cooldownTimeHours, final long cooldownVolumeM3) {
+			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final int cooldownTimeHours, final long cooldownVolumeM3) {
 
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setName(name);
@@ -968,8 +972,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		vesselClass.setBaseFuelUnitPrice(baseFuelUnitPricePerMT);
 		vesselClass.setBaseFuelConversionFactor(baseFuelEquivalenceInM3TOMT);
-
-		vesselClass.setHourlyCharterInPrice(hourlyCharterPrice);
 
 		vesselClass.setCooldownTime(cooldownTimeHours);
 		vesselClass.setWarmupTime(warmupTimeHours);
@@ -1389,7 +1391,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					// Get current allocation
 
 					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-					if (matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+					if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
 
 						Set<IVessel> set = slotVesselRestrictions.get(option);
 						if (set == null || set.isEmpty()) {
@@ -1425,7 +1427,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					// Get current allocation
 
 					final List<ITimeWindow> tw2 = timeWindowProvider.getTimeWindows(portSlotsProvider.getElement(option));
-					if (matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
+					if (true || matchingWindows(tw1, tw2) || matchingWindows(tw2, tw1)) {
 						Set<IVessel> set = slotVesselRestrictions.get(option);
 						if (set == null || set.isEmpty()) {
 							set = new HashSet<IVessel>(realVessels);

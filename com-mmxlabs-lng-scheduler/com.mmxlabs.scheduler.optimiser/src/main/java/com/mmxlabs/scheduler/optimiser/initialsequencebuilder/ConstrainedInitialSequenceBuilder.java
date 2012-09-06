@@ -129,7 +129,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 	}
 
 	@Override
-	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, Map<ISequenceElement, IResource> resourceSuggestion) {
+	public ISequences createInitialSequences(final IOptimisationData data, final ISequences suggestion, Map<ISequenceElement, IResource> resourceSuggestion,
+			final Map<ISequenceElement, ISequenceElement> pairingHints) {
 
 		if (resourceSuggestion == null) {
 			resourceSuggestion = Collections.emptyMap();
@@ -143,7 +144,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 
-		final IOptionalElementsProvider optionalElements = data.getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
+		final IOptionalElementsProvider optionalElementsProvider = data.getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
 
 		final LegalSequencingChecker checker = new LegalSequencingChecker(data, pairwiseCheckers);
 
@@ -156,36 +157,62 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		// stick together elements which must be stuck together
 		final Map<ISequenceElement, Set<ISequenceElement>> followerCache = new LinkedHashMap<ISequenceElement, Set<ISequenceElement>>();
 		final Set<ISequenceElement> heads = new LinkedHashSet<ISequenceElement>();
+		// Tails contains all elements in a chain which are not the head element
 		final Set<ISequenceElement> tails = new LinkedHashSet<ISequenceElement>();
 
+		// Get the set of all optional elements...
+		final Collection<ISequenceElement> optionalElements = new LinkedHashSet<ISequenceElement>(optionalElementsProvider.getOptionalElements());
+		// ...remove elements specified in the paringHints as these will be used and should not be considered optional for the builder
+		optionalElements.removeAll(pairingHints.keySet());
+		optionalElements.removeAll(pairingHints.values());
+
+		// Add all elements to the unsequenced set.
+		final Set<ISequenceElement> sequencedElements = new LinkedHashSet<ISequenceElement>();
 		final Set<ISequenceElement> unsequencedElements = new LinkedHashSet<ISequenceElement>();
 		unsequencedElements.addAll(data.getSequenceElements());
+
+		// Remove elements in the initial suggestion from the unsequenced set
 		if (suggestion != null) {
 			for (final ISequence seq : suggestion.getSequences().values()) {
 				for (final ISequenceElement element : seq) {
-					if (unsequencedElements.contains(element) == false)
+					if (unsequencedElements.contains(element) == false) {
 						log.warn("Element " + element + " is already sequenced");
+					}
 					unsequencedElements.remove(element);
 				}
 			}
 		}
 
+		// Determine the set of elements remaining that will not be sequenced.
 		final List<ISequenceElement> unusedElements = new ArrayList<ISequenceElement>();
-		unusedElements.addAll(optionalElements.getOptionalElements());
+		unusedElements.addAll(optionalElements);
 		unusedElements.retainAll(unsequencedElements);
-		unsequencedElements.removeAll(optionalElements.getOptionalElements());
+
+		// Remove the optional elements from further consideration by the builder
+		unsequencedElements.removeAll(optionalElements);
 
 		log.info("Elements remaining to be sequenced: " + unsequencedElements);
 
+		// Loop through the unsequenced elements and determine which elements can follow other elements.
+
 		for (final ISequenceElement element1 : unsequencedElements) {
+			// Init the follower cache
 			final Set<ISequenceElement> after1 = new LinkedHashSet<ISequenceElement>();
 			followerCache.put(element1, after1);
-			for (final ISequenceElement element2 : data.getSequenceElements()) {
-				if (element1 == element2) {
-					continue;
-				}
-				if (checker.allowSequence(element1, element2)) {
-					after1.add(element2);
+			// If there is a paring hint, then use this as the only possible follower information.
+			if (pairingHints.containsKey(element1)) {
+				after1.add(pairingHints.get(element1));
+			} else {
+				// No paring hint, so build up the follower cache
+				for (final ISequenceElement element2 : data.getSequenceElements()) {
+					// Ignore identity
+					if (element1 == element2) {
+						continue;
+					}
+					// Use constraint checkers to determine valid sequence
+					if (checker.allowSequence(element1, element2)) {
+						after1.add(element2);
+					}
 				}
 			}
 			// part of a chain
@@ -225,6 +252,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		final IResourceAllocationConstraintDataComponentProvider racdcp = data.getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider,
 				IResourceAllocationConstraintDataComponentProvider.class);
 
+		// Build up chunks for elements which only have one follower
 		final List<SequenceChunk> chunks = new LinkedList<SequenceChunk>();
 		for (ISequenceElement head : heads) {
 			final SequenceChunk chunk = new SequenceChunk();
@@ -237,7 +265,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					}
 				}
 			}
+
+			// Add first element
 			chunk.add(head);
+
+			// For "chains" add all elements into the chunk - as long as they are unsequenced.
 			while (followerCache.get(head).size() == 1) {
 				head = followerCache.get(head).iterator().next();
 				if (!unsequencedElements.contains(head)) {
@@ -273,15 +305,16 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			chunk.setResourceCount(rc);
 		}
 
-		// now add chunks for things with only one element
-
+		// now add chunks for things with only one element in the chain. These are elements which can follow or precede multiple elements.
 		for (final Map.Entry<ISequenceElement, Set<ISequenceElement>> entry : followerCache.entrySet()) {
 			final ISequenceElement place = entry.getKey();
 			final PortType portType = portTypeProvider.getPortType(place);
+			// Ignore start elements
 			if (portType.equals(PortType.Start)) {
 				continue;
 			}
 
+			// If this element is a tail, then is it part of a chain, so skip
 			if (tails.contains(place)) {
 				continue;
 			}
@@ -415,6 +448,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 							}
 						}
 						sequence.add(there);
+						for (ISequenceElement e : there) {
+							if (!sequencedElements.add(e)) {
+								log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+							}
+						}
 						log.info("Adding chunk " + there);
 						here = there;
 						iterator.remove();
@@ -428,13 +466,20 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				final List<SequenceChunk> sequence = new ArrayList<SequenceChunk>();
 				sequences.put(resource, sequence);
 
+				// Create a chunk for the given sequence suggestion.
 				final ISequence seq = suggestion.getSequence(resource);
 				for (final ISequenceElement element : seq) {
 					final SequenceChunk chunk = new SequenceChunk();
 					chunk.add(element);
 					sequence.add(chunk);
+					for (ISequenceElement e : chunk) {
+						if (!sequencedElements.add(e)) {
+							log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+						}
+					}
 				}
 
+				// Resource is unused, so lets try and add in some unused chunk using the resource suggestion.
 				if (sequence.isEmpty()) {
 					// insert a start element (otherwise start element came from
 					// elsewhere)
@@ -458,6 +503,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 						if (chunkChecker.canFollow(here, there, resource)) {
 							sequence.add(there);
+							for (ISequenceElement e : there) {
+								if (!sequencedElements.add(e)) {
+									log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+								}
+							}
 							here = there;
 							iterator.remove();
 							if (vesselProvider.getVessel(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
@@ -473,7 +523,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		// chunks have been scheduled sequentially as best we can, now try
 		// inserting any leftovers
 		log.info("Trying to insert " + chunks.size() + " unscheduled elements into solution (" + chunks + ")");
-		int numTries = 1000 + chunks.size();
+		int numTries = chunks.size();
 		while (!chunks.isEmpty() && numTries-- != 0) {
 			final Iterator<SequenceChunk> iterator = chunks.iterator();
 			while (iterator.hasNext()) {
@@ -496,7 +546,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 						log.info("Trying to insert on " + suggestedResource);
 						final List<SequenceChunk> sequence = sequences.get(suggestedResource);
 
-						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource)) {
+						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, suggestedResource, sequencedElements)) {
 							break top;
 						} else {
 							log.info("Could not insert at suggested location");
@@ -506,7 +556,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					for (final Map.Entry<IResource, List<SequenceChunk>> entry : sequences.entrySet()) {
 						final IResource res = entry.getKey();
 						final List<SequenceChunk> sequence = entry.getValue();
-						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, res)) {
+						if (tryInsertingChunk(chunkChecker, iterator, here, sequence, res, sequencedElements)) {
 							break top;
 						}
 					}
@@ -549,13 +599,53 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		result.getModifiableUnusedElements().clear();
 		result.getModifiableUnusedElements().addAll(unusedElements);
 
+		{
+			int actualSize = 0;
+			final Set<ISequenceElement> actualElements = new LinkedHashSet<ISequenceElement>();
+
+			for (final ISequence seq : result.getSequences().values()) {
+				for (final ISequenceElement e : seq) {
+					if (portTypeProvider.getPortType(e) == PortType.Start || portTypeProvider.getPortType(e) == PortType.End) {
+						continue;
+					}
+					if (!actualElements.add(e)) {
+						log.error(String.format("Sequence element (%s) has been used multiple times", e.getName()));
+					}
+					actualSize++;
+				}
+			}
+			actualElements.addAll(unusedElements);
+			actualSize += unusedElements.size();
+
+			int expectedSize = 0;
+			final Set<ISequenceElement> expectedElements = new LinkedHashSet<ISequenceElement>();
+			{
+				for (final ISequenceElement e : data.getSequenceElements()) {
+					if (portTypeProvider.getPortType(e) == PortType.Start || portTypeProvider.getPortType(e) == PortType.End) {
+						continue;
+					}
+					expectedElements.add(e);
+					expectedSize++;
+				}
+			}
+
+			assert actualSize == actualElements.size();
+			assert expectedSize == expectedElements.size();
+			assert expectedSize == actualSize;
+		}
+
 		return result;
 	}
 
-	private boolean tryInsertingChunk(final ChunkChecker chunkChecker, final Iterator<SequenceChunk> iterator, final SequenceChunk here, final List<SequenceChunk> sequence, final IResource res) {
+	private boolean tryInsertingChunk(final ChunkChecker chunkChecker, final Iterator<SequenceChunk> iterator, final SequenceChunk here, final List<SequenceChunk> sequence, final IResource res, 	final Set<ISequenceElement> sequencedElements) {
 		if (here.isEndElement()) {
 			if (chunkChecker.canFollow(sequence.get(sequence.size() - 1), here, res)) {
 				sequence.add(here);
+				for (ISequenceElement e : here) {
+					if (!sequencedElements.add(e)) {
+						log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+					}
+				}
 				iterator.remove();
 				return true;
 				// break top;
@@ -564,6 +654,11 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			for (int i = 0; i < (sequence.size() - 1); i++) {
 				if (chunkChecker.canInsert(sequence.get(i), here, sequence.get(i + 1), res)) {
 					sequence.add(i + 1, here);
+					for (ISequenceElement e : here) {
+						if (!sequencedElements.add(e)) {
+							log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
+						}
+					}
 					iterator.remove();
 					return true;
 					// break top;
