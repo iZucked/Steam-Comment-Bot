@@ -13,7 +13,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -36,12 +35,11 @@ import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 
 public class DefaultClassImporter implements IClassImporter {
-	private static final String KIND_KEY = "kind";
-	private static final String DOT = ".";
+	protected static final String KIND_KEY = "kind";
+	protected static final String DOT = ".";
 
 	@Override
-	public Collection<EObject> importObjects(EClass importClass,
-			CSVReader reader, IImportContext context) {
+	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
 		final LinkedList<EObject> results = new LinkedList<EObject>();
 		try {
 			try {
@@ -54,7 +52,7 @@ public class DefaultClassImporter implements IClassImporter {
 				reader.close();
 				context.popReader();
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 
 		}
 		for (final EObject o : results) {
@@ -65,8 +63,7 @@ public class DefaultClassImporter implements IClassImporter {
 		return results;
 	}
 
-	protected EClass getTrueOutputClass(final EClass outputEClass,
-			final String kind) {
+	protected EClass getTrueOutputClass(final EClass outputEClass, final String kind) {
 		if (kind == null)
 			return outputEClass;
 
@@ -75,9 +72,7 @@ public class DefaultClassImporter implements IClassImporter {
 		for (final EClassifier classifier : ePackage.getEClassifiers()) {
 			if (classifier instanceof EClass) {
 				final EClass possibleSubClass = (EClass) classifier;
-				if (outputEClass.isSuperTypeOf(possibleSubClass)
-						&& (possibleSubClass.isAbstract() == false)
-						&& possibleSubClass.getName().equalsIgnoreCase(kind)) {
+				if (outputEClass.isSuperTypeOf(possibleSubClass) && (possibleSubClass.isAbstract() == false) && possibleSubClass.getName().equalsIgnoreCase(kind)) {
 					return (EClass) classifier;
 				}
 			}
@@ -87,21 +82,17 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(final EClass eClass,
-			final Map<String, String> row, IImportContext context) {
+	public Collection<EObject> importObject(final EClass eClass, final Map<String, String> row, final IImportContext context) {
 		final EClass rowClass = getTrueOutputClass(eClass, row.get(KIND_KEY));
 		try {
-			final EObject instance = rowClass.getEPackage().getEFactoryInstance()
-					.create(rowClass);
+			final EObject instance = rowClass.getEPackage().getEFactoryInstance().create(rowClass);
 			final LinkedList<EObject> results = new LinkedList<EObject>();
 			results.add(instance);
 			importAttributes(row, context, rowClass, instance);
 			if (row instanceof IFieldMap) {
-				importReferences((IFieldMap) row, context, rowClass, instance,
-						results);
+				importReferences((IFieldMap) row, context, rowClass, instance, results);
 			} else {
-				importReferences(new FieldMap(row), context, rowClass, instance,
-						results);
+				importReferences(new FieldMap(row), context, rowClass, instance, results);
 			}
 			return results;
 		} catch (final IllegalArgumentException illegal) {
@@ -111,8 +102,7 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	/**
-	 * Opportunity to specialise a reference type which is too general in the
-	 * model. Contracts, etc.
+	 * Opportunity to specialise a reference type which is too general in the model. Contracts, etc.
 	 * 
 	 * @param reference
 	 * @return
@@ -121,21 +111,16 @@ public class DefaultClassImporter implements IClassImporter {
 		return reference.getEReferenceType();
 	}
 
-	
-	
-	protected void importReferences(final IFieldMap row,
-			IImportContext context, final EClass rowClass,
-			final EObject instance, final LinkedList<EObject> results) {
+	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance, final LinkedList<EObject> results) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
-			if (!shouldImportReference(reference)) continue;
+			if (!shouldImportReference(reference))
+				continue;
 			final String lcrn = reference.getName().toLowerCase();
 			if (row.containsKey(lcrn)) {
 				// The reference itself is present, so do a lookup later
 				final String referentName = row.get(lcrn).trim();
 				if (!referentName.isEmpty()) {
-					context.doLater(new SetReference(instance, reference,
-							getEReferenceLinkType(reference), row.get(lcrn),
-							context));
+					context.doLater(new SetReference(instance, reference, getEReferenceLinkType(reference), row.get(lcrn), context));
 				}
 			} else {
 				// The reference is missing entirely
@@ -147,25 +132,15 @@ public class DefaultClassImporter implements IClassImporter {
 				if (subKeys.isEmpty()) {
 					if (reference.isContainment()) {
 						populateWithBlank(instance, reference);
-						
-						notifyMissingFields((EObject) instance.eGet(reference), 
-								context.createProblem("Field not present", true, false, true),
-								context);
-						
-						
+
+						notifyMissingFields((EObject) instance.eGet(reference), context.createProblem("Field not present", true, false, true), context);
+
 					}
-					
-					context.addProblem(
-							context.createProblem(reference.getName() + " is missing from "
-									+ instance.eClass().getName()
-									, true, false, true));
+
+					context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
 				} else {
-					final IClassImporter classImporter = Activator.getDefault()
-							.getImporterRegistry()
-							.getClassImporter(reference.getEReferenceType());
-					final Collection<EObject> values = classImporter
-							.importObject(reference.getEReferenceType(),
-									subKeys, context);
+					final IClassImporter classImporter = Activator.getDefault().getImporterRegistry().getClassImporter(reference.getEReferenceType());
+					final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), subKeys, context);
 					final Iterator<EObject> iterator = values.iterator();
 					instance.eSet(reference, iterator.next());
 					if (reference.isContainment() == false)
@@ -176,92 +151,85 @@ public class DefaultClassImporter implements IClassImporter {
 			}
 		}
 	}
-	
+
 	protected boolean shouldImportReference(final EReference reference) {
 		return true;
 	}
 
-	private void notifyMissingFields(EObject blank, final IImportProblem delegate, IImportContext context) {
-		if (blank == null) return;
+	private void notifyMissingFields(final EObject blank, final IImportProblem delegate, final IImportContext context) {
+		if (blank == null)
+			return;
 		for (final EAttribute attribute : blank.eClass().getEAllAttributes()) {
-			context.addProblem(
-					new IImportProblem() {
-						@Override
-						public String getProblemDescription() {
-							return delegate.getProblemDescription();
-						}
-						
-						@Override
-						public Integer getLineNumber() {
-							return delegate.getLineNumber();
-						}
-						
-						@Override
-						public String getFilename() {
-							return delegate.getFilename();
-						}
-						
-						@Override
-						public String getField() {
-							return delegate.getField() + "." + attribute.getName();
-						}
+			context.addProblem(new IImportProblem() {
+				@Override
+				public String getProblemDescription() {
+					return delegate.getProblemDescription();
+				}
 
-						@Override
-						public boolean equals(Object obj) {
-							if (obj instanceof IImportProblem) {
-								final IImportProblem other = (IImportProblem) obj;
-								return
-									Equality.isEqual(getProblemDescription(), other.getProblemDescription()) &&
-									Equality.isEqual(getLineNumber(), other.getLineNumber()) &&
-									Equality.isEqual(getFilename(), other.getFilename()) &&
-									Equality.isEqual(getField(), other.getField());
-							} else {
-								return false;
-							}
-						}
+				@Override
+				public Integer getLineNumber() {
+					return delegate.getLineNumber();
+				}
 
-						@Override
-						public int hashCode() {
-							return 
-									(getProblemDescription() == null ? 0 : getProblemDescription().hashCode()) +
-									(getLineNumber() == null ? 0 : getLineNumber().hashCode()) +
-									(getFilename() == null ? 0 : getFilename().hashCode()) +
-									(getField() == null ? 0 : getField().hashCode());
-						}
-						
-						
-					});
+				@Override
+				public String getFilename() {
+					return delegate.getFilename();
+				}
+
+				@Override
+				public String getField() {
+					return delegate.getField() + "." + attribute.getName();
+				}
+
+				@Override
+				public boolean equals(final Object obj) {
+					if (obj instanceof IImportProblem) {
+						final IImportProblem other = (IImportProblem) obj;
+						return Equality.isEqual(getProblemDescription(), other.getProblemDescription()) && Equality.isEqual(getLineNumber(), other.getLineNumber())
+								&& Equality.isEqual(getFilename(), other.getFilename()) && Equality.isEqual(getField(), other.getField());
+					} else {
+						return false;
+					}
+				}
+
+				@Override
+				public int hashCode() {
+					return (getProblemDescription() == null ? 0 : getProblemDescription().hashCode()) + (getLineNumber() == null ? 0 : getLineNumber().hashCode())
+							+ (getFilename() == null ? 0 : getFilename().hashCode()) + (getField() == null ? 0 : getField().hashCode());
+				}
+
+			});
 		}
-		
+
 		for (final EObject content : blank.eContents()) {
-			notifyMissingFields(content, 
-					new IImportProblem() {
-						@Override
-						public String getProblemDescription() {
-							return delegate.getProblemDescription();
-						}
-						
-						@Override
-						public Integer getLineNumber() {
-							return delegate.getLineNumber();
-						}
-						
-						@Override
-						public String getFilename() {
-							return delegate.getFilename();
-						}
-						
-						@Override
-						public String getField() {
-							return delegate.getField() + "." + content.eContainingFeature().getName();
-						}
-					}, context);
+			notifyMissingFields(content, new IImportProblem() {
+				@Override
+				public String getProblemDescription() {
+					return delegate.getProblemDescription();
+				}
+
+				@Override
+				public Integer getLineNumber() {
+					return delegate.getLineNumber();
+				}
+
+				@Override
+				public String getFilename() {
+					return delegate.getFilename();
+				}
+
+				@Override
+				public String getField() {
+					return delegate.getField() + "." + content.eContainingFeature().getName();
+				}
+			}, context);
 		}
 	}
 
 	protected void populateWithBlank(final EObject target, final EReference reference) {
 		final EClass objectClass = reference.getEReferenceType();
-		if (objectClass.isAbstract()) return;
+		if (objectClass.isAbstract())
+			return;
 		final EObject content = objectClass.getEPackage().getEFactoryInstance().create(objectClass);
 		for (final EReference ref : content.eClass().getEAllReferences()) {
 			if (ref.isContainment() && ref.isMany() == false) {
@@ -270,32 +238,27 @@ public class DefaultClassImporter implements IClassImporter {
 		}
 		target.eSet(reference, content);
 	}
-	
-	protected void importAttributes(final Map<String, String> row,
-			IImportContext context, final EClass rowClass,
-			final EObject instance) {
+
+	protected void importAttributes(final Map<String, String> row, final IImportContext context, final EClass rowClass, final EObject instance) {
 		for (final EAttribute attribute : rowClass.getEAllAttributes()) {
-			if (row.containsKey(attribute.getName().toLowerCase())) {
-				final IAttributeImporter ai = Activator.getDefault()
-						.getImporterRegistry()
-						.getAttributeImporter(attribute.getEAttributeType());
+			final String lowerCase = attribute.getName().toLowerCase();
+			if (row.containsKey(lowerCase)) {
+				final IAttributeImporter ai = Activator.getDefault().getImporterRegistry().getAttributeImporter(attribute.getEAttributeType());
 				if (ai != null)
-					ai.setAttribute(instance, attribute,
-							row.get(attribute.getName().toLowerCase()), context);
+					ai.setAttribute(instance, attribute, row.get(lowerCase), context);
 			} else {
-				context.addProblem(context.createProblem("Field not present",
-						true, false, true));
+				context.addProblem(context.createProblem("Field not present", true, false, true));
 			}
 		}
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(
-			Collection<? extends EObject> objects, final MMXRootObject root) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
-		
-		if (objects.isEmpty()) return result;
-		
+
+		if (objects.isEmpty())
+			return result;
+
 		for (final EObject object : objects) {
 			final Map<String, String> flattened = exportObject(object, root);
 			flattened.put(KIND_KEY, object.eClass().getName());
@@ -306,51 +269,41 @@ public class DefaultClassImporter implements IClassImporter {
 
 	protected Map<String, String> exportObject(final EObject object, final MMXRootObject root) {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
-		
+
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
 			if (shouldExportFeature(attribute))
 				exportAttribute(object, attribute, result);
 		}
-		
+
 		for (final EReference reference : object.eClass().getEAllReferences()) {
 			if (shouldExportFeature(reference))
 				exportReference(object, reference, result, root);
 		}
-		
+
 		return result;
 	}
 
-	protected void exportAttribute(EObject object, EAttribute attribute,
-			Map<String, String> result) {
-		final IAttributeImporter ai = Activator.getDefault()
-				.getImporterRegistry()
-				.getAttributeImporter(attribute.getEAttributeType());
+	protected void exportAttribute(final EObject object, final EAttribute attribute, final Map<String, String> result) {
+		final IAttributeImporter ai = Activator.getDefault().getImporterRegistry().getAttributeImporter(attribute.getEAttributeType());
 		if (ai != null)
-			result.put(attribute.getName(), ai.writeAttribute(object,
-					attribute, object.eGet(attribute)));
+			result.put(attribute.getName(), ai.writeAttribute(object, attribute, object.eGet(attribute)));
 	}
 
-	protected void exportReference(EObject object, EReference reference,
-			Map<String, String> result, MMXRootObject root) {
+	protected void exportReference(final EObject object, final EReference reference, final Map<String, String> result, final MMXRootObject root) {
 		if (shouldFlattenReference(reference)) {
 			final EObject value = (EObject) object.eGet(reference);
 			if (value != null) {
-				final IClassImporter importer = Activator.getDefault()
-						.getImporterRegistry().getClassImporter(value.eClass());
+				final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(value.eClass());
 				if (importer != null) {
-					final Map<String, String> subMap = importer
-							.exportObjects(Collections.singleton(value), root)
-							.iterator().next();
+					final Map<String, String> subMap = importer.exportObjects(Collections.singleton(value), root).iterator().next();
 					for (final Map.Entry<String, String> e : subMap.entrySet()) {
-						result.put(reference.getName() + DOT + e.getKey(),
-								e.getValue());
+						result.put(reference.getName() + DOT + e.getKey(), e.getValue());
 					}
 				}
 			}
 		} else {
 			if (reference.isMany()) {
-				final List<? extends Object> values = (List<? extends Object>) object
-						.eGet(reference);
+				final List<? extends Object> values = (List<? extends Object>) object.eGet(reference);
 				final StringBuffer sb = new StringBuffer();
 				boolean comma = false;
 				for (final Object o : values) {

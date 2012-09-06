@@ -37,14 +37,15 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	/**
-	 * Subclasses must return a value which should be set when there was
-	 * no value set, and then the set box was ticked.
+	 * Subclasses must return a value which should be set when there was no value set, and then the set box was ticked.
+	 * 
 	 * @return A suitable value
 	 */
 	protected abstract Object getInitialUnsetValue();
 
 	private void setControlEnabled(final Control c, final boolean enabled) {
-		if (c == null) return;
+		if (c == null)
+			return;
 		c.setEnabled(enabled);
 		if (c instanceof Composite) {
 			for (final Control c2 : ((Composite) c).getChildren()) {
@@ -97,9 +98,8 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 				}
 			});
-			setButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false,
-					false));
-			
+			setButton.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+
 			inner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			c = sub;
 		} else {
@@ -114,7 +114,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 
 	@Override
 	protected Object getValue() {
-		if (!feature.isUnsettable() || input.eIsSet(feature)) {
+		if (input != null && (!feature.isUnsettable() || input.eIsSet(feature))) {
 			return super.getValue();
 		} else {
 			if (input instanceof MMXObject) {
@@ -126,9 +126,10 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	@Override
-	protected synchronized void doSetValue(final Object value, boolean forceCommandExecution) {
-		if (currentlySettingValue) return;
-		if (value != null) 
+	protected synchronized void doSetValue(final Object value, final boolean forceCommandExecution) {
+		if (currentlySettingValue)
+			return;
+		if (value != null)
 			lastSetValue = value; // hold for later checking and unchecking.
 		// maybe set button when value is changed
 		if (setButton != null && value != null && !setButton.isDisposed()) {
@@ -140,12 +141,17 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	}
 
 	protected boolean valueIsSet() {
-		if (input == null) return false;
+		if (input == null)
+			return false;
 		return input.eIsSet(getFeature());
 	}
 
 	@Override
 	protected void updateDisplay(final Object value) {
+
+		if (inner != null && inner.isDisposed()) {
+			return;
+		}
 		updateControl();
 		if (setButton == null || value != null) {
 			updateValueDisplay(value);

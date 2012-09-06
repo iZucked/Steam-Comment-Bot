@@ -31,6 +31,7 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -200,8 +201,16 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 		currentlySettingValue = true;
 
-		updateDisplay(getValue());
-		currentlySettingValue = false;
+		final Runnable runnable = new Runnable() {
+
+			@Override
+			public void run() {
+
+				updateDisplay(getValue());
+				currentlySettingValue = false;
+			}
+		};
+		Display.getDefault().asyncExec(runnable);
 	}
 
 	/**
@@ -226,6 +235,13 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		}
 	}
 
+	@Override
+	protected void missedNotifications(final List<Notification> missed) {
+		for (final Notification n : missed) {
+			reallyNotifyChanged(n);
+		}
+	}
+
 	/**
 	 * Subclasses should use this method to display a value
 	 */
@@ -237,6 +253,10 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * @param value
 	 */
 	protected synchronized void doSetValue(final Object value, final boolean forceCommandExecution) {
+
+		if (input == null) {
+			return;
+		}
 		// System.err.println("setvalue on " + feature.getName() + " to " +
 		// value + " (" + currentlySettingValue + ")");
 		if (currentlySettingValue) {
@@ -268,14 +288,17 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 			severity = checkStatus(status, IStatus.OK, sb);
 
-			if (sb.toString().isEmpty()) {
+			String description = sb.toString();
+			if (description.isEmpty()) {
 				// No problems, so hide decoration
 				validationDecoration.hide();
 				return;
 			}
 
 			// Update description text
-			validationDecoration.setDescriptionText(sb.toString());
+			if (!description.equals(validationDecoration.getDescriptionText())) {
+				validationDecoration.setDescriptionText(description);
+			}
 
 			// Update icon
 			switch (severity) {
@@ -310,7 +333,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 				// Is severity worse, then note it
 				if (severity > currentSeverity) {
-					currentSeverity = status.getSeverity();
+					currentSeverity = element.getSeverity();
 				}
 
 			}
@@ -327,7 +350,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 					// Is severity worse, then note it
 					if (element.getSeverity() > currentSeverity) {
-						currentSeverity = status.getSeverity();
+						currentSeverity = element.getSeverity();
 					}
 
 					return currentSeverity;

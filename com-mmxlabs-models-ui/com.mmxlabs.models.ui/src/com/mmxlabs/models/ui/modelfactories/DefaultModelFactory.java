@@ -56,6 +56,7 @@ public class DefaultModelFactory implements IModelFactory {
 		nowCal.clear(Calendar.MILLISECOND);
 		nowCal.clear(Calendar.SECOND);
 		nowCal.clear(Calendar.MINUTE);
+		nowCal.clear(Calendar.HOUR_OF_DAY);
 
 		now = nowCal.getTime();
 		postprocess(output);

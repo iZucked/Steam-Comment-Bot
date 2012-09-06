@@ -207,14 +207,20 @@ public class EObjectTableViewer extends GridTableViewer {
 				// redraw all objects listening to this notifier
 				final Set<EObject> changed = externalReferences.get(notifier);
 				if (changed != null) {
-					// wait to refresh if there is an import happening
-					// elsewhere. then refresh everything.
-					if (refreshOrGiveUp()) {
-						return;
-					}
-					for (final EObject e : changed) {
-						EObjectTableViewer.this.update(e, null);
-					}
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							// wait to refresh if there is an import happening
+							// elsewhere. then refresh everything.
+							if (refreshOrGiveUp()) {
+								return;
+							}
+
+							for (final EObject e : changed) {
+								EObjectTableViewer.this.update(e, null);
+							}
+
+						}
+					});
 				}
 			}
 		}

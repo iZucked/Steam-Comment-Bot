@@ -76,7 +76,7 @@ public class MultiDetailDialog extends Dialog {
 	 * The top composite in which we store our detail views
 	 */
 	private Composite dialogArea = null;
-	
+
 	private final MMXRootObject rootObject;
 	private final IInlineEditorWrapper wrapper = new EditorWrapper();
 	private final ICommandHandler commandHandler;
@@ -122,15 +122,14 @@ public class MultiDetailDialog extends Dialog {
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(editingClass);
 		createProxies();
 
-
 		if (displayComposite != null) {
 			displayComposite.getComposite().dispose();
 			displayComposite = null;
 		}
-		
+
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, editingClass, scenarioEditingLocation);
 		displayComposite.getComposite().setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		displayComposite.setEditorWrapper(wrapper);
 		final ICommandHandler immediate = new ICommandHandler() {
 			@Override
@@ -166,7 +165,12 @@ public class MultiDetailDialog extends Dialog {
 		final List<List<EObject>> ranges = new ArrayList<List<EObject>>(editedObjects.size());
 
 		for (final EObject object : editedObjects) {
+			// NOTE: it is important that each object produces the smae type of array. That is the same number of elements and each element at a given index is of the same type in all ranges.
 			final List<EObject> range = displayCompositeFactory.getExternalEditingRange(rootObject, object);
+			// Remove existing copies of the object
+			while (range.contains(object)) {
+				range.remove(object);
+			}
 			range.add(object);
 			ranges.add(range);
 		}
@@ -181,6 +185,12 @@ public class MultiDetailDialog extends Dialog {
 			final EObject proxy = proxies.get(i);
 			final ArrayList<EObject> originals = new ArrayList<EObject>(editedObjects.size());
 			for (final List<EObject> range : ranges) {
+				if (range.size() != proxies.size()) {
+					throw new UnsupportedOperationException("Selected object have differing numbers of related objects. Cannot edit.");
+				}
+				if (proxy.getClass() != range.get(i).getClass()) {
+					throw new UnsupportedOperationException("Selected object have differing types. Cannot edit.");
+				}
 				originals.add(range.get(i));
 			}
 			// final Pair<EObject, EReference> c = ValidationSupport.getInstance().getContainer(range0.get(i));
@@ -191,6 +201,9 @@ public class MultiDetailDialog extends Dialog {
 	}
 
 	private void setCounterparts(final EObject proxy, final List<EObject> originals) {
+		if (proxy == null) {
+			return;
+		}
 		proxyCounterparts.put(proxy, originals);
 		for (final EReference reference : proxy.eClass().getEAllContainments()) {
 			if (!reference.isMany()) {
@@ -265,6 +278,9 @@ public class MultiDetailDialog extends Dialog {
 	 * @param multiples
 	 */
 	void setSameValues(final EObject target, final List<EObject> multiples) {
+		if (target == null) {
+			return;
+		}
 		attribute_loop: for (final EStructuralFeature feature : target.eClass().getEAllStructuralFeatures()) {
 			boolean gotValue = false;
 			Object value = null;
@@ -414,7 +430,7 @@ public class MultiDetailDialog extends Dialog {
 
 				@Override
 				public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
-					proxy.display(location,scenario, object, range);
+					proxy.display(location, scenario, object, range);
 					key.setFirst(proxy.getEditorTarget());
 				}
 
