@@ -229,9 +229,9 @@ public class LNGModelCorrector {
 	}
 
 	private void fixSpotMarketAvailabilityName(final CompoundCommand parent, final SpotMarket market, final EditingDomain ed) {
-		final SpotAvailability availability = market.getAvailability();
+		SpotAvailability availability = market.getAvailability();
 		if (availability != null) {
-			final DataIndex<Integer> curve = availability.getCurve();
+			DataIndex<Integer> curve = availability.getCurve();
 			if (curve != null) {
 				if (curve.getName() == null || curve.getName().isEmpty()) {
 					parent.append(SetCommand.create(ed, curve, MMXCorePackage.eINSTANCE.getNamedObject_Name(), market.getName()));
