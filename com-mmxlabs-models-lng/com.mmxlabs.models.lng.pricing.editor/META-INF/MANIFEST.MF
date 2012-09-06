@@ -28,3 +28,4 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.rcp.common;bundle-version="1.0.0",
  com.mmxlabs.models.common;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/*.xml

@@ -5,27 +5,20 @@
 package com.mmxlabs.models.lng.cargo.presentation.composites;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
-import com.mmxlabs.models.ui.editors.IInlineEditor;
-import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
+import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for Slot instances
@@ -34,50 +27,6 @@ import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
  */
 public class SlotComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
-
-	/**
-	 * @generated NOT
-	 */
-	private class SlotInlineEditorWrapper extends IInlineEditorEnablementWrapper {
-
-		public SlotInlineEditorWrapper(final IInlineEditor wrapped) {
-			super(wrapped);
-		}
-
-		@Override
-		public void reallyNotifyChanged(final Notification notification) {
-			if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
-
-				if (input instanceof LoadSlot) {
-					setEnabled(!((LoadSlot) input).isDESPurchase());
-				}
-
-			}
-			if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
-				if (input instanceof DischargeSlot) {
-					setEnabled(!((DischargeSlot) input).isFOBSale());
-				}
-			}
-		}
-		
-		@Override
-		public void display(final IScenarioEditingLocation location, MMXRootObject scenario, EObject object, Collection<EObject> range) {
-
-			super.display(location, scenario, object, range);
-			
-			if (input instanceof LoadSlot) {
-				setEnabled(!((LoadSlot) input).isDESPurchase());
-			}
-			else if (input instanceof DischargeSlot) {
-				setEnabled(!((DischargeSlot) input).isFOBSale());
-			}
-		}
-
-		@Override
-		public EObject getEditorTarget() {
-			return wrapped.getEditorTarget();
-		}
-	};
 
 	/**
 	 * Construct a new instance, using the platform adapter manager
@@ -96,10 +45,15 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 *            TODO this could be an editor factory override instead.
 	 */
 	public SlotComponentHelper(final IAdapterManager adapterManager) {
-		// final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry(); {
-		// final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ASLOT);
-		// if (helper != null) superClassesHelpers.add(helper);
-		// } {
+		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
+		{
+
+			for (final IComponentHelper helper : registry.getComponentHelpers(TypesPackage.Literals.ASLOT)) {
+				if (helper != null)
+					superClassesHelpers.add(helper);
+			}
+		}
+		// {
 		// final IComponentHelper helper = registry.getComponentHelper(TypesPackage.Literals.ITIMEZONE_PROVIDER);
 		// if (helper != null) superClassesHelpers.add(helper);
 		// }
@@ -112,7 +66,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);	
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);
 	}
 
 	/**
@@ -122,7 +76,8 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers)
+			helper.addEditorsToComposite(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
 		add_fixedPriceEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
@@ -220,7 +175,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the optional feature on Slot
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_optionalEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {

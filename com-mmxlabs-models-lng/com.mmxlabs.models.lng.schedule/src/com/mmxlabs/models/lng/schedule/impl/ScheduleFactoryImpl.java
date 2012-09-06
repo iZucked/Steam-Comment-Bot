@@ -90,6 +90,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.PORT_VISIT: return createPortVisit();
 			case SchedulePackage.ADDITIONAL_DATA: return createAdditionalData();
 			case SchedulePackage.ADDITIONAL_DATA_HOLDER: return createAdditionalDataHolder();
+			case SchedulePackage.START_EVENT: return createStartEvent();
+			case SchedulePackage.END_EVENT: return createEndEvent();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -329,6 +331,26 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public AdditionalDataHolder createAdditionalDataHolder() {
 		AdditionalDataHolderImpl additionalDataHolder = new AdditionalDataHolderImpl();
 		return additionalDataHolder;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public StartEvent createStartEvent() {
+		StartEventImpl startEvent = new StartEventImpl();
+		return startEvent;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EndEvent createEndEvent() {
+		EndEventImpl endEvent = new EndEventImpl();
+		return endEvent;
 	}
 
 	/**

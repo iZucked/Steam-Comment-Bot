@@ -39,6 +39,9 @@
                <target
                      class="NotionalBallastParameters">
                </target>
+               <target
+                     class="CommercialModel">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.commercial.validation.NetbackPurchaseContractConstraint"

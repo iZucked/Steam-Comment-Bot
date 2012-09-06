@@ -65,7 +65,7 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 	protected boolean currentlySettingValue = false;
 
 	protected ICommandHandler commandHandler;
-	
+
 	protected IScenarioEditingLocation scenarioEditingLocation;
 
 	private final int style;
@@ -410,6 +410,9 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 		fobButton.addSelectionListener(selectionListener);
 		desButton.addSelectionListener(selectionListener);
 
+		shippedButton.setEnabled(false);
+		fobButton.setEnabled(false);
+		desButton.setEnabled(false);
 		return g;
 	}
 
@@ -425,11 +428,11 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 
 	@Override
 	public void setEnabled(boolean enabled) {
-		shippedButton.setEnabled(enabled);
-		fobButton.setEnabled(enabled);
-		desButton.setEnabled(enabled);
+		// shippedButton.setEnabled(enabled);
+		// fobButton.setEnabled(enabled);
+		// desButton.setEnabled(enabled);
 	}
-	
+
 	public EObject getEditorTarget() {
 		return input;
 	}

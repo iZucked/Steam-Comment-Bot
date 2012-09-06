@@ -19,6 +19,8 @@ import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstrain
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
@@ -81,21 +83,23 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(of, TravelTimeConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(of, PortExclusionConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(of, VirtualVesselConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(of, TimeSortConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(of, SlotGroupCountConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives
 		{
 			final EList<Objective> objectives = settings.getObjectives();
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME, 1));
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME, 1));
+//			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_COST_COMPONENT_NAME, 1));
+//			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_BASE_COMPONENT_NAME, 1));
+//
+//			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME, 1));
+//			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME, 1));
+//			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME, 1));
+//
+//			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, 1));
 
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_COOLDOWN_COMPONENT_NAME, 1));
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.COST_LNG_COMPONENT_NAME, 1));
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.ROUTE_PRICE_COMPONENT_NAME, 1));
-
-			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, 1));
-
-//			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, 1));
+			objectives.add(createObjective(of,"cargo-scheduler-group-profit", 1));
 			
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 100000));
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 100000));
@@ -103,7 +107,7 @@ public class ScenarioUtils {
 
 		final AnnealingSettings annealingSettings = of.createAnnealingSettings();
 //		annealingSettings.setIterations(200000);
-		annealingSettings.setIterations(1000);
+		annealingSettings.setIterations(10000);
 		annealingSettings.setCooling(0.85);
 		annealingSettings.setEpochLength(20000);
 		annealingSettings.setInitialTemperature(45000);

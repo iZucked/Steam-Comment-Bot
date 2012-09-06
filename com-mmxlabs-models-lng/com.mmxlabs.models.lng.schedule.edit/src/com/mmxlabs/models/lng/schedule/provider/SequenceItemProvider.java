@@ -208,12 +208,13 @@ public class SequenceItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		Sequence sequence = (Sequence)object;
-		return getString("_UI_Sequence_type") + " " + sequence.getDailyHireRate();
+		String text = getString("_UI_Sequence_type") + " " + sequence.getName();
+		return text;
 	}
 
 	/**
@@ -285,6 +286,16 @@ public class SequenceItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SEQUENCE__EVENTS,
 				 ScheduleFactory.eINSTANCE.createPortVisit()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createStartEvent()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(SchedulePackage.Literals.SEQUENCE__EVENTS,
+				 ScheduleFactory.eINSTANCE.createEndEvent()));
 
 		newChildDescriptors.add
 			(createChildParameter

@@ -19,7 +19,6 @@ import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.modelfactories.DefaultModelFactory;
-import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 
 /**
  * Extended {@link DefaultModelFactory} to copy the {@link SpotMarketGroup#getType()} onto child {@link SpotMarket}s

@@ -243,6 +243,20 @@
           </EClassExtends>
        </OwnerAnyOf>
     </editorFactory>
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.fleet.ui.inlineeditors.VesselEventVesselsInlineEditorFactory"
+          id="com.mmxlabs.models.lng.fleet.ui.inlineeditors.VesselEventVesselsInlineEditorFactory">
+       <FeatureAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.types.AVesselSet">
+          </EClassExtends>
+       </FeatureAnyOf>
+       <OwnerAnyOf>
+          <EClassExtends
+                EClass="com.mmxlabs.models.lng.fleet.VesselEvent">
+          </EClassExtends>
+       </OwnerAnyOf>
+    </editorFactory>
  </extension>
  <extension
        point="org.eclipse.ui.views">

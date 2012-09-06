@@ -8,6 +8,7 @@ import com.mmxlabs.models.lng.schedule.AdditionalData;
 import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Fuel;
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
@@ -184,6 +186,20 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass additionalDataHolderEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass startEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass endEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1225,6 +1241,42 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getStartEvent() {
+		return startEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getStartEvent_SlotAllocation() {
+		return (EReference)startEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getEndEvent() {
+		return endEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getEndEvent_SlotAllocation() {
+		return (EReference)endEventEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getFuelUnit() {
 		return fuelUnitEEnum;
 	}
@@ -1416,6 +1468,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING);
 		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE);
 
+		startEventEClass = createEClass(START_EVENT);
+		createEReference(startEventEClass, START_EVENT__SLOT_ALLOCATION);
+
+		endEventEClass = createEClass(END_EVENT);
+		createEReference(endEventEClass, END_EVENT__SLOT_ALLOCATION);
+
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
 		fuelEEnum = createEEnum(FUEL);
@@ -1469,6 +1527,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		slotVisitEClass.getESuperTypes().add(this.getPortVisit());
 		vesselEventVisitEClass.getESuperTypes().add(this.getEvent());
 		vesselEventVisitEClass.getESuperTypes().add(this.getPortVisit());
+		vesselEventVisitEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
 		journeyEClass.getESuperTypes().add(this.getEvent());
 		journeyEClass.getESuperTypes().add(this.getFuelUsage());
 		idleEClass.getESuperTypes().add(this.getEvent());
@@ -1484,6 +1543,14 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		portVisitEClass.getESuperTypes().add(this.getEvent());
 		additionalDataEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		additionalDataEClass.getESuperTypes().add(this.getAdditionalDataHolder());
+		startEventEClass.getESuperTypes().add(this.getEvent());
+		startEventEClass.getESuperTypes().add(this.getFuelUsage());
+		startEventEClass.getESuperTypes().add(this.getPortVisit());
+		startEventEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
+		endEventEClass.getESuperTypes().add(this.getEvent());
+		endEventEClass.getESuperTypes().add(this.getFuelUsage());
+		endEventEClass.getESuperTypes().add(this.getPortVisit());
+		endEventEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1636,6 +1703,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		EGenericType g2 = createEGenericType(ecorePackage.getEString());
 		g1.getETypeArguments().add(g2);
 		addEParameter(op, g1, "keys", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(startEventEClass, StartEvent.class, "StartEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getStartEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, StartEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(endEventEClass, EndEvent.class, "EndEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getEndEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, EndEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(fuelUnitEEnum, FuelUnit.class, "FuelUnit");

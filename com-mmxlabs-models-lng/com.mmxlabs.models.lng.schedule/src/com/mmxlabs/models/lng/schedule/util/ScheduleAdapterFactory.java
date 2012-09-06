@@ -152,6 +152,14 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createAdditionalDataHolderAdapter();
 			}
 			@Override
+			public Adapter caseStartEvent(StartEvent object) {
+				return createStartEventAdapter();
+			}
+			@Override
+			public Adapter caseEndEvent(EndEvent object) {
+				return createEndEventAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -454,6 +462,34 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createAdditionalDataHolderAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.StartEvent <em>Start Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.StartEvent
+	 * @generated
+	 */
+	public Adapter createStartEventAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.EndEvent <em>End Event</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.EndEvent
+	 * @generated
+	 */
+	public Adapter createEndEventAdapter() {
 		return null;
 	}
 

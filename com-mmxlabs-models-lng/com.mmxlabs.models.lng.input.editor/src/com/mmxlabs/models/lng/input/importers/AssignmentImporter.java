@@ -10,9 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -33,6 +35,7 @@ public class AssignmentImporter {
 	class SpotCounter {
 		public int spotCount = 0;
 	}
+
 	public void importAssignments(final CSVReader reader, final IImportContext context) {
 		IFieldMap row;
 		try {
@@ -46,29 +49,32 @@ public class AssignmentImporter {
 					final int seq = index++;
 					context.doLater(new IDeferment() {
 						@Override
-						public void run(IImportContext context) {
+						public void run(final IImportContext context) {
 							final MMXRootObject root = context.getRootObject();
 							final InputModel im = root.getSubModel(InputModel.class);
 							if (im != null) {
-								NamedObject o = context.getNamedObject(aon.trim(), MMXCorePackage.eINSTANCE.getUUIDObject());
-								if (o instanceof UUIDObject) {
-									final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
-									ea.setAssignedObject((UUIDObject) o);
-									ea.setSequence(seq);
-									
-									NamedObject v = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
-									if (v instanceof Vessel) {
-										ea.setAssignment((AVesselSet) v);
-									} else if (v instanceof VesselClass) {
-										ea.setSpotIndex(sc.spotCount++);
-										ea.setAssignedObject((UUIDObject) v);
+								// Loop over all named objects and find the first object which can be used.
+								for (final NamedObject o : context.getNamedObjects(aon.trim())) {
+									if (o instanceof Cargo || o instanceof VesselEvent) {
+										final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
+										ea.setAssignedObject((UUIDObject) o);
+										ea.setSequence(seq);
+
+										final NamedObject v = context.getNamedObject(vesselName.trim(), TypesPackage.eINSTANCE.getAVesselSet());
+										if (v instanceof Vessel) {
+											ea.setAssignment((AVesselSet) v);
+										} else if (v instanceof VesselClass) {
+											ea.setSpotIndex(sc.spotCount++);
+											ea.setAssignment((AVesselSet) v);
+										}
+
+										im.getElementAssignments().add(ea);
+										break;
 									}
-									
-									im.getElementAssignments().add(ea);
 								}
 							}
 						}
-						
+
 						@Override
 						public int getStage() {
 							return IImportContext.STAGE_MODIFY_SUBMODELS;
@@ -76,31 +82,33 @@ public class AssignmentImporter {
 					});
 				}
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 		}
 	}
-	
+
 	public List<Map<String, String>> exportAssignments(final InputModel im, final FleetModel fm) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 
 		final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(im, fm);
-		
+
 		for (final CollectedAssignment ca : assignments) {
 			final HashMap<String, String> row = new HashMap<String, String>();
 			result.add(row);
 			row.put("vessels", ca.getVesselOrClass().getName());
 			final StringBuilder sb = new StringBuilder();
-			
+
 			boolean comma = false;
 			for (final UUIDObject u : ca.getAssignedObjects()) {
-				if (comma) sb.append(", ");
-				else comma = true;
+				if (comma)
+					sb.append(", ");
+				else
+					comma = true;
 				sb.append(((NamedObject) u).getName());
 			}
-			
+
 			row.put("assignedObjects", sb.toString());
 		}
-		
+
 		return result;
 	}
 }

@@ -4,10 +4,7 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.BasicEList;
@@ -17,11 +14,7 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
-import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 
 /**
@@ -192,6 +185,15 @@ public class DerivedIndexImpl<Value> extends IndexImpl<Value> implements Derived
 		return new BasicEList<Date>(Collections.singleton(new Date(0)));
 	}
 	
+	@Override
+	public Value getBackwardsValueForMonth(Date date) {
+		return getValueForMonth(date);
+	}
+	
+	@Override
+	public Value getForwardValueForMonth(Date date) {
+		return getValueForMonth(date);
+	}
 	
 } // end of DerivedIndexImpl
 

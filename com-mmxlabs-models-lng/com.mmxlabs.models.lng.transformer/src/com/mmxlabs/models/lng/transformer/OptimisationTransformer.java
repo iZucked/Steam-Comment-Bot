@@ -192,8 +192,31 @@ public class OptimisationTransformer {
 			sequence.getValue().add(serp.getStartElement(sequence.getKey()));
 		}
 
-		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
 		final Collection<Slot> modelSlots = mem.getAllModelObjects(Slot.class);
+
+		Map<ISequenceElement, ISequenceElement> cargoSlotPairing = new HashMap<ISequenceElement, ISequenceElement>();
+		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
+		for (final Slot slot : modelSlots) {
+			if (slot instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) slot;
+				final Cargo cargo = loadSlot.getCargo();
+				if (cargo != null) {
+					final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+					if (dischargeSlot != null) {
+						
+						final IPortSlot loadObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
+						final ISequenceElement loadElement = psp.getElement(loadObject);
+						
+						final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
+						final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
+						
+						cargoSlotPairing.put(loadElement, dischargeElement);
+					}
+				}
+			}
+		}
+
+		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
 		for (final Slot slot : modelSlots) {
 			if (slot instanceof LoadSlot) {
 				final LoadSlot loadSlot = (LoadSlot) slot;
@@ -201,6 +224,7 @@ public class OptimisationTransformer {
 
 					final Cargo cargo = loadSlot.getCargo();
 					if (cargo != null) {
+
 						final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
 						if (dischargeSlot != null) {
 
@@ -228,7 +252,7 @@ public class OptimisationTransformer {
 						final LoadSlot loadSlot = cargo.getLoadSlot();
 						if (loadSlot != null) {
 
-							final IPortSlot dischargeObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
+							final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
 							final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
 							final IVessel vessel = virtualVesselSlotProvider.getVesselForElement(dischargeElement);
 							final IResource res = vp.getResource(vessel);
@@ -286,8 +310,9 @@ public class OptimisationTransformer {
 					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
 
 					for (final UUIDObject assignedObject : seq.getAssignedObjects()) {
-						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET)
+						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) {
 							continue;
+						}
 						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
 							sequence.add(element);
 						}
@@ -302,7 +327,7 @@ public class OptimisationTransformer {
 				if (assignment.getVessels().isEmpty())
 					continue assignments;
 				IVessel vessel = null;
-				;
+				
 				if (assignment.isAssignToSpot()) {
 					if (inputModel.getLockedAssignedObjects().containsAll(assignment.getAssignedObjects())) {
 						continue assignments; // these will get assigned by their constraints.
@@ -356,7 +381,7 @@ public class OptimisationTransformer {
 
 		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(constraintCheckerRegistry.getConstraintCheckerFactories(getEnabledConstraintNames()));
 
-		return builder.createInitialSequences(data, advice, resourceAdvice);
+		return builder.createInitialSequences(data, advice, resourceAdvice, cargoSlotPairing);
 	}
 
 	private ISequenceElement[] getElements(final UUIDObject modelObject, final IPortSlotProvider psp, final ModelEntityMap mem) {

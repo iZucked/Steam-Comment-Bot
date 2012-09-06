@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="schedule"
-    nsURI="http://www.mmxlabs.com/models/lng/schedule/1/" nsPrefix="lng.schedule">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="schedule" nsURI="http://www.mmxlabs.com/models/lng/schedule/1/"
+    nsPrefix="lng.schedule">
   <eClassifiers xsi:type="ecore:EClass" name="ScheduleModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="initialSchedule" lowerBound="1"
         eType="#//Schedule" containment="true"/>
@@ -67,7 +66,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation" eOpposite="#//SlotAllocation/slotVisit"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event #//PortVisit">
+  <eClassifiers xsi:type="ecore:EClass" name="VesselEventVisit" eSuperTypes="#//Event #//PortVisit platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ExtraDataContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselEvent" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselEvent"/>
   </eClassifiers>
@@ -225,4 +224,12 @@
     <eTypeParameters name="T"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Object" instanceClassName="java.lang.Object"/>
+  <eClassifiers xsi:type="ecore:EClass" name="StartEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ExtraDataContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
+        eType="#//SlotAllocation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ExtraDataContainer">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
+        eType="#//SlotAllocation"/>
+  </eClassifiers>
 </ecore:EPackage>

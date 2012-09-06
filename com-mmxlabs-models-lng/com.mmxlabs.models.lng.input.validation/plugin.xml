@@ -78,6 +78,60 @@
                      class="ElementAssignment">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.input.validation.ElementAssignmentConstraint"
+                  id="com.mmxlabs.models.lng.input.validation.ElementAssignmentConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Element Assignment Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  description body text
+               </description>
+               <target
+                     class="ElementAssignment">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.input.validation.UniqueElementAssignmentConstraint"
+                  id="com.mmxlabs.models.lng.input.validation.UniqueElementAssignmentConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Unique Element Assignment Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  description body text
+               </description>
+               <target
+                     class="InputModel">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.input.validation.AllowedVesselAssignmentConstraint"
+                  id="com.mmxlabs.models.lng.input.validation.AllowedVesselAssignmentConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Allowed Vessel Assignment Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ElementAssignment">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

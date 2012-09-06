@@ -8,16 +8,25 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.validation.model.IModelConstraint;
+import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
@@ -62,10 +71,51 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Port", new SingleReferenceManipulator(FleetPackage.eINSTANCE.getVesselEvent_Port(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Duration", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselEvent_DurationInDays(), jointModelEditor.getEditingDomain()));
 		addTypicalColumn("Vessels",
-				new MultipleReferenceManipulator(FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
-						MMXCorePackage.eINSTANCE.getNamedObject_Name()));
+				new VesselEventVesselsManipulator(FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels(), jointModelEditor.getReferenceValueProviderCache(), jointModelEditor.getEditingDomain(),
+						MMXCorePackage.eINSTANCE.getNamedObject_Name(),jointModelEditor.getRootObject().getSubModel(InputModel.class)));
 
 		setTitle("Vessel Events", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
+
+		// IElementComparer to handle selection objects from e.g. schedule
+		((GridTableViewer) viewer).setComparer(new IElementComparer() {
+
+			@Override
+			public int hashCode(final Object element) {
+				return element.hashCode();
+			}
+
+			@Override
+			public boolean equals(final Object a, final Object b) {
+
+				final VesselEvent c1 = getVesselEvent(a);
+				final VesselEvent c2 = getVesselEvent(b);
+
+				return Equality.isEqual(c1, c2);
+			}
+
+			private VesselEvent getVesselEvent(final Object o) {
+
+				if (o instanceof VesselEvent) {
+					return (VesselEvent) o;
+				}
+				if (o instanceof VesselEventVisit) {
+					VesselEventVisit vesselEventVisit = (VesselEventVisit) o;
+					return vesselEventVisit.getVesselEvent();
+				}
+				if (o instanceof Event) {
+					Event evt = (Event) o;
+					while (evt != null) {
+						if (evt instanceof VesselEventVisit) {
+							return getVesselEvent(evt);
+						} else if (evt instanceof SlotVisit) {
+							return null;
+						}
+						evt = evt.getPreviousEvent();
+					}
+				}
+				return null;
+			}
+		});
 	}
 
 }

@@ -125,6 +125,7 @@ public class SlotVisitItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.FUEL_USAGE__FUELS);
+			childrenFeatures.add(SchedulePackage.Literals.SLOT_VISIT__SLOT_ALLOCATION);
 		}
 		return childrenFeatures;
 	}

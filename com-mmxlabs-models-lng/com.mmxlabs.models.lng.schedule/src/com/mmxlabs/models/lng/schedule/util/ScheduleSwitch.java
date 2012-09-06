@@ -119,6 +119,7 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				VesselEventVisit vesselEventVisit = (VesselEventVisit)theEObject;
 				T result = caseVesselEventVisit(vesselEventVisit);
 				if (result == null) result = casePortVisit(vesselEventVisit);
+				if (result == null) result = caseExtraDataContainer(vesselEventVisit);
 				if (result == null) result = caseEvent(vesselEventVisit);
 				if (result == null) result = caseMMXObject(vesselEventVisit);
 				if (result == null) result = caseITimezoneProvider(vesselEventVisit);
@@ -225,6 +226,30 @@ public class ScheduleSwitch<T> extends Switch<T> {
 			case SchedulePackage.ADDITIONAL_DATA_HOLDER: {
 				AdditionalDataHolder additionalDataHolder = (AdditionalDataHolder)theEObject;
 				T result = caseAdditionalDataHolder(additionalDataHolder);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.START_EVENT: {
+				StartEvent startEvent = (StartEvent)theEObject;
+				T result = caseStartEvent(startEvent);
+				if (result == null) result = caseFuelUsage(startEvent);
+				if (result == null) result = casePortVisit(startEvent);
+				if (result == null) result = caseExtraDataContainer(startEvent);
+				if (result == null) result = caseEvent(startEvent);
+				if (result == null) result = caseMMXObject(startEvent);
+				if (result == null) result = caseITimezoneProvider(startEvent);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case SchedulePackage.END_EVENT: {
+				EndEvent endEvent = (EndEvent)theEObject;
+				T result = caseEndEvent(endEvent);
+				if (result == null) result = caseFuelUsage(endEvent);
+				if (result == null) result = casePortVisit(endEvent);
+				if (result == null) result = caseExtraDataContainer(endEvent);
+				if (result == null) result = caseEvent(endEvent);
+				if (result == null) result = caseMMXObject(endEvent);
+				if (result == null) result = caseITimezoneProvider(endEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -514,6 +539,36 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAdditionalDataHolder(AdditionalDataHolder object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Start Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Start Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStartEvent(StartEvent object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>End Event</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>End Event</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEndEvent(EndEvent object) {
 		return null;
 	}
 

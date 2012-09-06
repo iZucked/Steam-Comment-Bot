@@ -511,6 +511,52 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.StartEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected StartEventItemProvider startEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.StartEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createStartEventAdapter() {
+		if (startEventItemProvider == null) {
+			startEventItemProvider = new StartEventItemProvider(this);
+		}
+
+		return startEventItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.EndEvent} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected EndEventItemProvider endEventItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.EndEvent}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createEndEventAdapter() {
+		if (endEventItemProvider == null) {
+			endEventItemProvider = new EndEventItemProvider(this);
+		}
+
+		return endEventItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -628,6 +674,8 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
 		if (additionalDataItemProvider != null) additionalDataItemProvider.dispose();
 		if (additionalDataHolderItemProvider != null) additionalDataHolderItemProvider.dispose();
+		if (startEventItemProvider != null) startEventItemProvider.dispose();
+		if (endEventItemProvider != null) endEventItemProvider.dispose();
 	}
 
 }

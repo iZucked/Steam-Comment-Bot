@@ -23,6 +23,7 @@ public interface Index<Value> extends AIndex {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * Returns the value of the curve for this month, or null if there is no explicit value.
 	 * <!-- end-user-doc -->
 	 * @model required="true" dateRequired="true"
 	 * @generated
@@ -36,6 +37,24 @@ public interface Index<Value> extends AIndex {
 	 * @generated
 	 */
 	EList<Date> getDates();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Returns the value of the curve for this month, or look forward in the curve to find a value (or null if there is no more data)
+	 * <!-- end-user-doc -->
+	 * @model required="true" dateRequired="true"
+	 * @generated
+	 */
+	Value getForwardValueForMonth(Date date);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * Returns the value of the curve for this month, or look backward in the curve to find a value (or null if there is no more data)
+	 * <!-- end-user-doc -->
+	 * @model required="true" dateRequired="true"
+	 * @generated
+	 */
+	Value getBackwardsValueForMonth(Date date);
 } // end of  Index
 
 // finish type fixing

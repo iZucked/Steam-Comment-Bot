@@ -201,6 +201,30 @@
           outputEClass="com.mmxlabs.models.lng.cargo.CargoGroup"
           targetEClass="com.mmxlabs.models.lng.cargo.Cargo">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.loadSlotFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Load Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.LoadSlot">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.dischargeSlotFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Discharge Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.DischargeSlot">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.spotLoadSlotFactory"
+          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.SpotLoadSlotFactory"
+          label="Spot Load Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.SpotLoadSlot">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.cargo.editor.spotDischargeSlotFactory"
+          factory="com.mmxlabs.models.lng.cargo.ui.modelfactories.SpotDischargeSlotFactory"
+          label="Spot Discharge Slot"
+          targetEClass="com.mmxlabs.models.lng.cargo.SpotDischargeSlot">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">
@@ -222,6 +246,20 @@
           class="com.mmxlabs.models.lng.cargo.editor.views.CargoView"
           id="com.mmxlabs.models.lng.cargo.editor.CargoView"
           name="Cargoes"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.logical"
+          class="com.mmxlabs.models.lng.cargo.editor.views.DischargeSlotsView"
+          id="com.mmxlabs.models.lng.cargo.editor.DischargeSlotsView"
+          name="Discharge Slots"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.logical"
+          class="com.mmxlabs.models.lng.cargo.editor.views.LoadSlotsView"
+          id="com.mmxlabs.models.lng.cargo.editor.LoadSlotsView"
+          name="Load Slots"
           restorable="true">
     </view>
  </extension>

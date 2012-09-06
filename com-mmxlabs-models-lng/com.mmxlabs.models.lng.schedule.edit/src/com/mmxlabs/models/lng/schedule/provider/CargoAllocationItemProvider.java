@@ -5,22 +5,12 @@
 package com.mmxlabs.models.lng.schedule.provider;
 
 
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
-import com.mmxlabs.models.lng.schedule.ScheduleFactory;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-
-import com.mmxlabs.models.lng.types.TypesFactory;
-import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -31,6 +21,14 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.ScheduleFactory;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.types.TypesFactory;
+import com.mmxlabs.models.lng.types.TypesPackage;
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.schedule.CargoAllocation} object.
@@ -315,6 +313,9 @@ public class CargoAllocationItemProvider
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
 			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
+			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_ALLOCATION);
+			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_ALLOCATION);
+			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__INPUT_CARGO);
 		}
 		return childrenFeatures;
 	}
@@ -347,12 +348,17 @@ public class CargoAllocationItemProvider
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public String getText(Object object) {
 		CargoAllocation cargoAllocation = (CargoAllocation)object;
-		return getString("_UI_CargoAllocation_type") + " " + cargoAllocation.getLoadVolume();
+		String text = getString("_UI_CargoAllocation_type") + " " + cargoAllocation.getLoadVolume();
+		Cargo cargo = cargoAllocation.getInputCargo();
+		if (cargo != null) {
+			text += " " + cargo.getName();
+		}
+		return text;
 	}
 
 	/**

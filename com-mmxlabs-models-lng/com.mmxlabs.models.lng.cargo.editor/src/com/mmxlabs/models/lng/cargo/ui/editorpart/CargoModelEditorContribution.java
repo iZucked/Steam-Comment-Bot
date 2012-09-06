@@ -22,12 +22,14 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private int cargoPageNumber = -1;
 	private int loadSlotPageNumber = -1;
 	private int dischargeSlotPageNumber = -1;
+	private int wiringPageNumber = -1;;
 	private CargoModelViewer cargoViewerPane;
 	private LoadSlotViewer loadSlotViewerPane;
 	private DischargeSlotViewer dischargeSlotViewerPane;
+	private CargoWiringViewer wiringViewer;
 
 	// Temp flag to turn on/off load/discharge slots during development
-	private static final boolean showSlotTabs = true;
+	private static final boolean showSlotTabs = false;
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -55,6 +57,10 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			dischargeSlotPageNumber = editorPart.addPage(dischargeSlotViewerPane.getControl());
 			editorPart.setPageText(dischargeSlotPageNumber, "Discharge Slots");
 		}
+		
+		wiringViewer = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		wiringPageNumber = editorPart.addPage(wiringViewer);
+		editorPart.setPageText(wiringPageNumber, "Wiring");
 	}
 
 	@Override
@@ -64,6 +70,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			loadSlotViewerPane.setLocked(locked);
 			dischargeSlotViewerPane.setLocked(locked);
 		}
+		wiringViewer.setLocked(locked);
 	}
 
 	@Override
