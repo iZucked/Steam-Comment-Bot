@@ -60,7 +60,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		
 		wiringViewer = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		wiringPageNumber = editorPart.addPage(wiringViewer);
-		editorPart.setPageText(wiringPageNumber, "Wiring");
+		editorPart.setPageText(wiringPageNumber, "Trades");
 	}
 
 	@Override
