@@ -5,8 +5,6 @@
 package com.mmxlabs.scenario.service.ui.navigator;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.commands.Command;
@@ -38,6 +36,7 @@ import org.eclipse.ui.IPartListener;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.navigator.CommonNavigator;
@@ -82,13 +81,15 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	private final ServiceTracker<ScenarioServiceRegistry, ScenarioServiceRegistry> tracker;
 
 	private CommonViewer viewer = null;
-	
+
 	private ScenarioInstance lastAutoSelection = null;
+
+	private ScenarioServiceNavigatorLinkHelper linkHelper;
 	/**
 	 * Part listener to track editor activation
 	 */
 	private IPartListener partListener = new IPartListener() {
-		
+
 		@Override
 		public void partOpened(final IWorkbenchPart part) {
 
@@ -96,7 +97,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void partDeactivated(final IWorkbenchPart part) {
-			
+
 		}
 
 		@Override
@@ -141,7 +142,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 							}
 							lastAutoSelection = null;
 						}
-						if (!selectionProvider.isSelected(scenarioInstance)) {	
+						if (!selectionProvider.isSelected(scenarioInstance)) {
 							lastAutoSelection = scenarioInstance;
 							selectionProvider.select(scenarioInstance);
 						}
@@ -170,8 +171,10 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void pinned(final IScenarioServiceSelectionProvider provider, final ScenarioInstance oldPin, final ScenarioInstance newPin) {
-			if (oldPin != null) viewer.refresh(oldPin, true);
-			if (newPin != null) viewer.refresh(newPin, true);
+			if (oldPin != null)
+				viewer.refresh(oldPin, true);
+			if (newPin != null)
+				viewer.refresh(newPin, true);
 		}
 	};
 
@@ -234,6 +237,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		showColumnImage.dispose();
 		optImage.dispose();
+
+		linkHelper.dispose();
 
 		getSite().getPage().removePartListener(partListener);
 
@@ -300,21 +305,21 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 				}
 				if (selected != null) {
 					if (e.button == 1) {
-//						if (!selectionModeTrackEditor) {
-							final Rectangle imageBounds = selected.getImageBounds(COLUMN_SHOW_IDX);
-							if ((e.x > imageBounds.x) && (e.x < (imageBounds.x + selected.getImage().getBounds().width))) {
-								if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + selected.getImage().getBounds().height))) {
+						// if (!selectionModeTrackEditor) {
+						final Rectangle imageBounds = selected.getImageBounds(COLUMN_SHOW_IDX);
+						if ((e.x > imageBounds.x) && (e.x < (imageBounds.x + selected.getImage().getBounds().width))) {
+							if ((e.y > imageBounds.y) && (e.y < (imageBounds.y + selected.getImage().getBounds().height))) {
 
-									final Object data = selected.getData();
-									if (data instanceof ScenarioInstance) {
-										final ScenarioInstance instance = (ScenarioInstance) data;
-										if (!selectionModeTrackEditor || instance != lastAutoSelection) {
-											Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
-										}
+								final Object data = selected.getData();
+								if (data instanceof ScenarioInstance) {
+									final ScenarioInstance instance = (ScenarioInstance) data;
+									if (!selectionModeTrackEditor || instance != lastAutoSelection) {
+										Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
 									}
 								}
 							}
-//						}
+						}
+						// }
 					}
 				} else {
 					viewer.setSelection(StructuredSelection.EMPTY);
@@ -344,18 +349,18 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 			@Override
 			public void keyReleased(final KeyEvent e) {
 				if (e.character == SWT.SPACE) {
-//					if (!selectionModeTrackEditor) {
-						final TreeItem[] selection = tree.getSelection();
-						for (final TreeItem item : selection) {
-							final Object data = item.getData();
-							if (data instanceof ScenarioInstance) {
-								final ScenarioInstance instance = (ScenarioInstance) data;
-								if (!selectionModeTrackEditor || instance != lastAutoSelection) {
-									Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
-								}
+					// if (!selectionModeTrackEditor) {
+					final TreeItem[] selection = tree.getSelection();
+					for (final TreeItem item : selection) {
+						final Object data = item.getData();
+						if (data instanceof ScenarioInstance) {
+							final ScenarioInstance instance = (ScenarioInstance) data;
+							if (!selectionModeTrackEditor || instance != lastAutoSelection) {
+								Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
 							}
 						}
-//					}
+					}
+					// }
 				}
 			}
 
@@ -386,6 +391,14 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	}
 
 	@Override
+	protected ActionGroup createCommonActionGroup() {
+		// Initialise this here as normally the action in instantiated within th
+		linkHelper = new ScenarioServiceNavigatorLinkHelper(this, viewer, getLinkHelperService());
+		linkHelper.setChecked(true);
+		return super.createCommonActionGroup();
+	}
+
+	@Override
 	public void init(final IViewSite aSite, final IMemento aMemento) throws PartInitException {
 		super.init(aSite, aMemento);
 
@@ -393,7 +406,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		setLinkingEnabled(true);
 
 		aSite.getPage().addPartListener(partListener);
-		
+
 		partListener.partActivated(getSite().getPage().getActiveEditor());
 
 	}
@@ -457,37 +470,37 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		}
 
 	}
-//	
-//	@Override
-//	public void saveState(IMemento aMemento) {
-//		// TODO Auto-generated method stub
-//		super.saveState(aMemento);
-//		
-//		Object[] expandedElements = getCommonViewer().getExpandedElements();
-//		
-//		Properties props = new Properties();
-//		
-//		for (Object obj : expandedElements) {
-//			
-//			if (obj instanceof Container) {
-//				Container container = (Container) obj;
-//				IScenarioService scenarioService = container.getScenarioService();
-//				String name = scenarioService.getName();
-//				String uriFragment = container.eResource().getURIFragment(container);
-				// TODO need to make this unique, but easy to parse.
-				// Might be an issue with same path, but different services.
-//				props.put(uriFragment, name);
-//			}
-//			
-//		}
-//		
-//		StringWriter writer  = new StringWriter();
-//		try {
-//			props.store(writer, null);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		memento.putString("NAVIGATOR_STATE", writer.getBuffer().toString());
-//	}
+	//
+	// @Override
+	// public void saveState(IMemento aMemento) {
+	// // TODO Auto-generated method stub
+	// super.saveState(aMemento);
+	//
+	// Object[] expandedElements = getCommonViewer().getExpandedElements();
+	//
+	// Properties props = new Properties();
+	//
+	// for (Object obj : expandedElements) {
+	//
+	// if (obj instanceof Container) {
+	// Container container = (Container) obj;
+	// IScenarioService scenarioService = container.getScenarioService();
+	// String name = scenarioService.getName();
+	// String uriFragment = container.eResource().getURIFragment(container);
+	// TODO need to make this unique, but easy to parse.
+	// Might be an issue with same path, but different services.
+	// props.put(uriFragment, name);
+	// }
+	//
+	// }
+	//
+	// StringWriter writer = new StringWriter();
+	// try {
+	// props.store(writer, null);
+	// } catch (IOException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// memento.putString("NAVIGATOR_STATE", writer.getBuffer().toString());
+	// }
 }
