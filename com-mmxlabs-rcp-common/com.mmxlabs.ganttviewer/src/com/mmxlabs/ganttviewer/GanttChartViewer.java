@@ -28,8 +28,6 @@ import org.eclipse.nebula.widgets.ganttchart.GanttGroup;
 import org.eclipse.nebula.widgets.ganttchart.GanttSection;
 import org.eclipse.nebula.widgets.ganttchart.IColorManager;
 import org.eclipse.nebula.widgets.ganttchart.IGanttEventListener;
-import org.eclipse.nebula.widgets.ganttchart.ILanguageManager;
-import org.eclipse.nebula.widgets.ganttchart.IPaintManager;
 import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
@@ -53,7 +51,7 @@ public class GanttChartViewer extends StructuredViewer {
 
 	private static final Logger log = LoggerFactory.getLogger(GanttChartViewer.class);
 
-	private GanttChart ganttChart;
+	private final GanttChart ganttChart;
 
 	private final Map<Object, GanttEvent> internalMap = new HashMap<Object, GanttEvent>();
 	private final Map<GanttEvent, Object> internalReverseMap = new HashMap<GanttEvent, Object>();
@@ -75,7 +73,7 @@ public class GanttChartViewer extends StructuredViewer {
 	public GanttChartViewer(final Composite parent, final int style, final ISettings settings, final IColorManager colourManager) {
 		this(new GanttChart(parent, style, settings, colourManager));
 	}
-	
+
 	public GanttChartViewer(final GanttChart ganttChart) {
 		this.ganttChart = ganttChart;
 		hookControl(ganttChart);
@@ -204,8 +202,17 @@ public class GanttChartViewer extends StructuredViewer {
 			// Use the internalMap to obtain the list of events we are selecting
 			selectedEvents = new ArrayList<GanttEvent>(l.size());
 			for (final Object obj : l) {
-				if ((obj != null) && internalMap.containsKey(obj)) {
-					selectedEvents.add(internalMap.get(obj));
+				if (obj != null) {
+					if (internalMap.containsKey(obj)) {
+						selectedEvents.add(internalMap.get(obj));
+					} else if (getComparer() != null) {
+						for (final Map.Entry<Object, GanttEvent> e : internalMap.entrySet()) {
+							if (getComparer().equals(e.getKey(), obj)) {
+
+								selectedEvents.add(internalMap.get(e.getKey()));
+							}
+						}
+					}
 				}
 			}
 		} else {
@@ -294,12 +301,12 @@ public class GanttChartViewer extends StructuredViewer {
 							if (statusColour != null) {
 								event.setStatusColor(statusColour);
 							}
-							
+
 							final Color statusBorderColour = getLabelProviderBorderColor(labelProvider, c);
 							if (statusBorderColour != null) {
 								event.setStatusBorderColor(statusBorderColour);
 							}
-							
+
 							event.setStatusBorderWidth(getLabelProviderBorderWidth(labelProvider, c));
 							event.setStatusAlpha(getLabelProviderAlpha(labelProvider, c));
 
@@ -360,14 +367,13 @@ public class GanttChartViewer extends StructuredViewer {
 		return 1;
 	}
 
-	
 	private int getLabelProviderAlpha(final ILabelProvider labelProvider, final Object c) {
 		if (labelProvider instanceof IGanttChartColourProvider) {
 			return ((IGanttChartColourProvider) labelProvider).getAlpha(c);
 		}
 		return 255;
 	}
-	
+
 	private AdvancedTooltip getTooltip(final ILabelProvider labelProvider, final Object c) {
 
 		if (labelProvider instanceof IGanttChartToolTipProvider) {
@@ -445,35 +451,5 @@ public class GanttChartViewer extends StructuredViewer {
 			return gcProvider.getElementPlannedEndTime(element);
 		}
 		return null;
-	}
-
-	@SuppressWarnings("unused")
-	private void replaceGanttChart() {
-
-		// Create a new gantt chart
-		final Composite parent = ganttChart.getParent();
-		final int style = ganttChart.getStyle();
-		final ISettings settings = ganttChart.getSettings();
-		final IColorManager colorManager = ganttChart.getColorManager();
-		final IPaintManager paintManager = ganttChart.getPaintManager();
-		final ILanguageManager languageManager = ganttChart.getLanguageManger();
-
-		ganttChart.removeGanttEventListener(ganttEventListener);
-
-		final IContentProvider contentProvider = getContentProvider();
-		final ILabelProvider labelProvider = (ILabelProvider) getLabelProvider();
-
-		ganttChart.dispose();
-
-		// TODO: We may need to wrap up within another composite to ensure
-		// control is replaced in the same place as previous control within
-		// parent.
-		ganttChart = new GanttChart(parent, style, settings, colorManager, paintManager, languageManager);
-
-		// Restore content and label providers
-		setContentProvider(contentProvider);
-		setLabelProvider(labelProvider);
-
-		ganttChart.addGanttEventListener(ganttEventListener);
 	}
 }
