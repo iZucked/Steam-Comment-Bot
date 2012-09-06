@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
@@ -28,8 +29,10 @@ import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
@@ -43,8 +46,9 @@ import com.mmxlabs.trading.optimiser.TradingConstants;
  */
 public class KPIContentProvider implements IStructuredContentProvider {
 
-	private static final String TOTAL_COST = "Total Shipping Cost";
-	private static final String TOTAL_PNL = "Total P&L";
+	public static final String LATENESS = "Lateness";
+	private static final String TOTAL_COST = "Shipping Cost";
+	private static final String TOTAL_PNL = "P&L";
 
 	public static final String TYPE_COST = "Cost";
 	public static final String TYPE_TIME = "Days, hours";
@@ -97,6 +101,7 @@ public class KPIContentProvider implements IStructuredContentProvider {
 		long totalPNL = 0l;
 
 		for (final Sequence seq : schedule.getSequences()) {
+
 			for (final Event evt : seq.getEvents()) {
 				totalCost += evt.getHireCost();
 				if (evt instanceof FuelUsage) {
@@ -135,6 +140,13 @@ public class KPIContentProvider implements IStructuredContentProvider {
 						final long late = evt.getStart().getTime() - vev.getVesselEvent().getStartBy().getTime();
 						lateness += (late / 1000 / 60 / 60);
 					}
+					totalPNL += getCargoPNL(vev, validEntities);
+				} else if (evt instanceof StartEvent) {
+					final StartEvent startEvent = (StartEvent) evt;
+					totalPNL += getCargoPNL(startEvent, validEntities);
+				} else if (evt instanceof EndEvent) {
+					final EndEvent endEvent = (EndEvent) evt;
+					totalPNL += getCargoPNL(endEvent, validEntities);
 				} else if (evt instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) evt;
 					final Vessel vessel = seq.getVessel();
@@ -171,14 +183,14 @@ public class KPIContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		output.add(new RowData(scenarioInstance.getName(), "Lateness", TYPE_TIME, lateness, LatenessReportView.ID, true));
 		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true));
 		if (totalPNL != 0) {
 			output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalPNL, TotalsHierarchyView.ID, false));
 		}
+		output.add(new RowData(scenarioInstance.getName(), LATENESS, TYPE_TIME, lateness, LatenessReportView.ID, true));
 	}
 
-	private long getCargoPNL(final CargoAllocation allocation, final Set<String> validEntities) {
+	private long getCargoPNL(final ExtraDataContainer allocation, final Set<String> validEntities) {
 		long total = 0l;
 
 		total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_upstream));
@@ -187,6 +199,16 @@ public class KPIContentProvider implements IStructuredContentProvider {
 
 		return total;
 	}
+
+	// private long getOtherPNL(final Event event allocation, final Set<String> validEntities) {
+	// long total = 0l;
+	//
+	// total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_upstream));
+	// total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_shipped));
+	// total += getExtraDataTotalPNL(validEntities, allocation.getDataWithKey(TradingConstants.ExtraData_downstream));
+	//
+	// return total;
+	// }
 
 	public long getExtraDataTotalPNL(final Set<String> validEntities, final ExtraData extraData) {
 

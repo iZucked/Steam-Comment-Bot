@@ -9,9 +9,13 @@ import static com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerViewCon
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.SchedulerViewConstants.Show_Canals;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -23,9 +27,11 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.ganttchart.AbstractSettings;
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.nebula.widgets.ganttchart.DefaultColorManager;
@@ -46,31 +52,37 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.internal.util.ConfigurationElementMemento;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.PropertySheet;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
 import com.mmxlabs.ganttviewer.PackAction;
 import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.properties.ScheduledEventPropertySourceProvider;
 import com.mmxlabs.shiplingo.platform.scheduleview.internal.Activator;
 import com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ISchedulerViewColourSchemeExtension;
 
 public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	private static final String SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION = "SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION";
-	
-//	public static final String = "";
-	
+
+	// public static final String = "";
+
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -96,12 +108,11 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	private IMemento memento;
 	private IMemento highlightMemento;
-	
+
 	@Inject
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemes;
 
 	private HighlightAction highlightAction;
-
 
 	/**
 	 * The constructor.
@@ -110,41 +121,41 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	}
 
 	@Override
-	public void init(IViewSite site, IMemento memento) throws PartInitException {
+	public void init(final IViewSite site, IMemento memento) throws PartInitException {
 		if (memento == null) {
 			memento = XMLMemento.createWriteRoot("workbench");
 		}
 		this.memento = memento;
-		
+
 		// check that it's the right memento - and non-null?...
-		
+
 		// set defaults from preference store for missing settings...
-//		for (String key : memento.getAttributeKeys()) { // need list from Constants and then the right getString/Boolean call below...
-//			if(memento.getString(key) == null){
-//				memento.putString(key, Activator.getDefault().getPreferenceStore().getString(key));
-//			}					
-//		}
+		// for (String key : memento.getAttributeKeys()) { // need list from Constants and then the right getString/Boolean call below...
+		// if(memento.getString(key) == null){
+		// memento.putString(key, Activator.getDefault().getPreferenceStore().getString(key));
+		// }
+		// }
 		if (memento != null) {
-			if(memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null){
+			if (memento.getString(SCHEDULER_VIEW_COLOUR_SCHEME) == null) {
 				memento.putString(SCHEDULER_VIEW_COLOUR_SCHEME, Activator.getDefault().getPreferenceStore().getString(SCHEDULER_VIEW_COLOUR_SCHEME));
-			}		
-			if(memento.getBoolean(Show_Canals) == null){
+			}
+			if (memento.getBoolean(Show_Canals) == null) {
 				memento.putBoolean(Show_Canals, Activator.getDefault().getPreferenceStore().getBoolean(Show_Canals));
-			}	
-			if(memento.getChild(Highlight_) == null){
+			}
+			if (memento.getChild(Highlight_) == null) {
 				memento.createChild(Highlight_);
-			}	
+			}
 			highlightMemento = memento.getChild(Highlight_);
 		}
-		super.init(site, memento);		
+		super.init(site, memento);
 	}
 
 	@Override
-	public void saveState(IMemento memento) {
+	public void saveState(final IMemento memento) {
 		super.saveState(memento);
 		memento.putMemento(this.memento);
 	}
-	
+
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize it.
 	 */
@@ -156,40 +167,112 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		// Gantt Chart settings object
 		final ISettings settings = new AbstractSettings() {
-			@Override public boolean enableResizing() { return false; }
-			@Override public Color getDefaultEventColor() { return ColorCache.getColor(221, 220, 221); }
-			@Override public boolean showPlannedDates() { return false; }
-			@Override public String getTextDisplayFormat() { return "#name#";}
-			@Override public int getSectionTextSpacer() { return 0; }
-			@Override public int getMinimumSectionHeight() { return 5; }
-			@Override public int getNumberOfDaysToAppendForEndOfDay() { return 0; }
-			@Override public boolean allowBlankAreaVerticalDragAndDropToMoveChart() { return true; }
-			@Override public boolean lockHeaderOnVerticalScroll() { return true; }
-			@Override public boolean drawFillsToBottomWhenUsingGanttSections() { return true; }
-			@Override public int getSectionBarDividerHeight() { return 0; }
-			@Override public boolean showGradientEventBars() { return false; }
-			@Override public boolean drawSectionsWithGradients() { return false; }
-			@Override public boolean allowArrowKeysToScrollChart() {
-				return true;
-			}
-			@Override public boolean showBarsIn3D() {
+			@Override
+			public boolean enableResizing() {
 				return false;
 			}
-			public int getEventsTopSpacer() { return 5; }
-			public int getEventsBottomSpacer() { return 5;
+
+			@Override
+			public Color getDefaultEventColor() {
+				return ColorCache.getColor(221, 220, 221);
 			}
-			@Override public boolean showDeleteMenuOption() { return false; }
-			@Override public boolean showMenuItemsOnRightClick() { return false; }
-			@Override public int getSelectionLineWidth() { return 3; }
+
+			@Override
+			public boolean showPlannedDates() {
+				return false;
+			}
+
+			@Override
+			public String getTextDisplayFormat() {
+				return "#name#";
+			}
+
+			@Override
+			public int getSectionTextSpacer() {
+				return 0;
+			}
+
+			@Override
+			public int getMinimumSectionHeight() {
+				return 5;
+			}
+
+			@Override
+			public int getNumberOfDaysToAppendForEndOfDay() {
+				return 0;
+			}
+
+			@Override
+			public boolean allowBlankAreaVerticalDragAndDropToMoveChart() {
+				return true;
+			}
+
+			@Override
+			public boolean lockHeaderOnVerticalScroll() {
+				return true;
+			}
+
+			@Override
+			public boolean drawFillsToBottomWhenUsingGanttSections() {
+				return true;
+			}
+
+			@Override
+			public int getSectionBarDividerHeight() {
+				return 0;
+			}
+
+			@Override
+			public boolean showGradientEventBars() {
+				return false;
+			}
+
+			@Override
+			public boolean drawSectionsWithGradients() {
+				return false;
+			}
+
+			@Override
+			public boolean allowArrowKeysToScrollChart() {
+				return true;
+			}
+
+			@Override
+			public boolean showBarsIn3D() {
+				return false;
+			}
+
+			public int getEventsTopSpacer() {
+				return 5;
+			}
+
+			public int getEventsBottomSpacer() {
+				return 5;
+			}
+
+			@Override
+			public boolean showDeleteMenuOption() {
+				return false;
+			}
+
+			@Override
+			public boolean showMenuItemsOnRightClick() {
+				return false;
+			}
+
+			@Override
+			public int getSelectionLineWidth() {
+				return 3;
+			}
 		};
 
 		final IColorManager colourManager = new DefaultColorManager() {
-			
+
 			@Override
 			public boolean useAlphaDrawing() {
 				return true;
 			};
-			
+
 			@Override
 			public Color getTextColor() {
 				return ColorCache.getWhite();
@@ -212,19 +295,62 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 					}
 				}
 			}
+
 		};
 		// viewer.setContentProvider(new AnnotatedScheduleContentProvider());
 		// viewer.setLabelProvider(new AnnotatedSequenceLabelProvider());
 
-		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider();
+		final EMFScheduleContentProvider contentProvider = new EMFScheduleContentProvider() {
+
+			@Override
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+				super.inputChanged(viewer, oldInput, newInput);
+				clearInputEquivalents();
+			}
+
+			@Override
+			public Object[] getChildren(final Object parent) {
+
+				final Object[] result = super.getChildren(parent);
+				if (result != null) {
+					for (final Object event : result) {
+						if (event instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) event;
+							setInputEquivalents(
+									event,
+									Arrays.asList(new Object[] { slotVisit.getSlotAllocation(), slotVisit.getSlotAllocation().getSlot(), slotVisit.getSlotAllocation().getCargoAllocation(),
+											slotVisit.getSlotAllocation().getCargoAllocation().getInputCargo() }));
+
+							// } else if (event instanceof Idle) {
+							// setInputEquivalents(event, Arrays.asList(new Object[] { ((Idle) event).getSlotAllocation().getCargoAllocation() }));
+
+						} else if (event instanceof CargoAllocation) {
+							final CargoAllocation allocation = (CargoAllocation) event;
+
+							setInputEquivalents(
+									allocation,
+									Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
+											allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
+											allocation.getLadenIdle(), allocation.getLadenLeg(), allocation.getInputCargo() }));
+
+						} else if (event instanceof VesselEventVisit) {
+							setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
+						} else {
+							setInputEquivalents(event, Collections.emptyList());
+						}
+					}
+				}
+				return result;
+			}
+		};
 		viewer.setContentProvider(contentProvider);
 		final EMFScheduleLabelProvider labelProvider = new EMFScheduleLabelProvider(viewer, memento);
 
 		for (final ISchedulerViewColourSchemeExtension ext : this.colourSchemes) {
-			IScheduleViewColourScheme cs = ext.createInstance();
-			String ID = ext.getID();
+			final IScheduleViewColourScheme cs = ext.createInstance();
+			final String ID = ext.getID();
 			cs.setID(ID);
-			if(ext.isHighlighter().equalsIgnoreCase("true")){
+			if (ext.isHighlighter().equalsIgnoreCase("true")) {
 				labelProvider.addHighlighter(ID, cs);
 			} else {
 				labelProvider.addColourScheme(ID, cs);
@@ -238,6 +364,24 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		// Move into separate class
 		viewer.setComparator(viewerComparator);
 
+		viewer.setComparer(new IElementComparer() {
+			@Override
+			public int hashCode(final Object element) {
+				return element.hashCode();
+			}
+
+			@Override
+			public boolean equals(Object a, Object b) {
+				if (!contents.contains(a) && equivalents.containsKey(a)) {
+					a = equivalents.get(a);
+				}
+				if (!contents.contains(b) && equivalents.containsKey(b)) {
+					b = equivalents.get(b);
+				}
+				return Equality.isEqual(a, b);
+			}
+		});
+
 		viewer.setInput(getViewSite());
 
 		// Create the help context id for the viewer's control. This is in the
@@ -248,36 +392,6 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 		hookContextMenu();
 		contributeToActionBars();
 
-		// /*
-		// * Add selection listener. may need tidying up.
-		// */
-		//
-		// selectionListener = new ISelectionListener() {
-		//
-		// @Override
-		// public void selectionChanged(final IWorkbenchPart part,
-		// final ISelection selection) {
-		//
-		// final List<Schedule> schedules = ScheduleAdapter
-		// .getSchedules(selection);
-		// if (!schedules.isEmpty()) {
-		// final boolean needFit = viewer.getInput() == null;
-		// setInput(schedules);
-		// if (needFit) {
-		// Display.getDefault().asyncExec(new Runnable() {
-		//
-		// @Override
-		// public void run() {
-		// packAction.run();
-		// }
-		// });
-		// }
-		// } else {
-		// setInput(null);
-		// }
-		// }
-		// };
-
 		getSite().setSelectionProvider(viewer);
 		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
@@ -287,19 +401,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			}
 		});
 
-		// getSite().getPage().addSelectionListener("com.mmxlabs.rcp.navigator",
-		// selectionListener);
-
-		// // Update view from current selection
-		// final ISelection selection = getSite().getWorkbenchWindow()
-		// .getSelectionService()
-		// .getSelection("com.mmxlabs.rcp.navigator");
-		// selectionListener.selectionChanged(null, selection);
-
 		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
-//		if (colourScheme != null) {
-			labelProvider.setScheme(colourScheme);
-//		}
+		// if (colourScheme != null) {
+		labelProvider.setScheme(colourScheme);
+		// }
 	}
 
 	@Override
@@ -363,9 +468,9 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		zoomInAction = new ZoomInAction(viewer.getGanttChart());
 		zoomOutAction = new ZoomOutAction(viewer.getGanttChart());
-		
+
 		highlightAction = new HighlightAction(this, viewer, (EMFScheduleLabelProvider) (viewer.getLabelProvider()));
-		
+
 		if (!Activator.getDefault().getPreferenceStore().getBoolean(SCHEDULER_VIEW_HIDE_COLOUR_SCHEME_ACTION)) {
 
 			colourSchemeAction = new ColourSchemeAction(this, (EMFScheduleLabelProvider) (viewer.getLabelProvider()), viewer);
@@ -456,38 +561,12 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		return propertySheetPage;
 	}
-//
-//	public class HighlightAction extends SchedulerViewAction {
-//
-//		public HighlightAction(SchedulerView schedulerView, GanttChartViewer viewer, EMFScheduleLabelProvider emfScheduleLabelProvider) {
-//			super("Highlight", IAction.AS_RADIO_BUTTON, schedulerView, viewer, emfScheduleLabelProvider);
-//			setImageDescriptor(Activator.getImageDescriptor("/icons/highlight.gif"));			
-//		}
-//
-//		@Override
-//		protected void createMenuItems(Menu menu) {
-//			
-//			final Action highlightTightJourneysAction = new Action("Tight Journeys", IAction.AS_CHECK_BOX) {
-//				@Override
-//				public void run() {
-//					lp.toggleHighlightTightJourneys();
-//					setChecked(lp.showCanals());
-//					viewer.setInput(viewer.getInput());
-//					schedulerView.redraw();
-//				}
-//			};			
-//			highlightTightJourneysAction.setChecked(lp.setHighlighter());
-//			final ActionContributionItem aci = new ActionContributionItem(highlightTightJourneysAction);
-//			aci.fill(menu, -1);
-//		}
-//	}
 
-
-	class SortModeAction extends SchedulerViewAction {
+	private class SortModeAction extends SchedulerViewAction {
 
 		private final ScenarioViewerComparator comparator;
 
-		public SortModeAction(SchedulerView schedulerView, GanttChartViewer viewer, EMFScheduleLabelProvider lp, final ScenarioViewerComparator comparator) {
+		public SortModeAction(final SchedulerView schedulerView, final GanttChartViewer viewer, final EMFScheduleLabelProvider lp, final ScenarioViewerComparator comparator) {
 			super("Sort", IAction.AS_DROP_DOWN_MENU, schedulerView, viewer, lp);
 			this.comparator = comparator;
 			setImageDescriptor(Activator.getImageDescriptor("/icons/alphab_sort_co.gif"));
@@ -531,34 +610,91 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, ISelection selection) {
-		// TODO make selection more obvious - the gantt selection box is small
-		// TODO this seems hard, having taken a look.
 		if (part == this) {
 			return;
 		}
-		// Ignore property page activation - otherwise we loose the selecion
+		// Ignore property page activation - otherwise we loose the selection
 		if (part instanceof PropertySheet) {
 			return;
 		}
 
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection sel = (IStructuredSelection) selection;
-			final List<Object> objects = new ArrayList<Object>(sel.toList().size());
+			List<Object> objects = new ArrayList<Object>(sel.toList().size());
 			for (final Object o : sel.toList()) {
 				if (o instanceof CargoAllocation) {
 					final CargoAllocation allocation = (CargoAllocation) o;
+					objects.add(allocation.getInputCargo());
 					objects.add(allocation.getLoadAllocation().getSlotVisit());
 					objects.add(allocation.getLadenLeg());
 					objects.add(allocation.getLadenIdle());
 					objects.add(allocation.getDischargeAllocation().getSlotVisit());
 					objects.add(allocation.getBallastLeg());
 					objects.add(allocation.getBallastIdle());
+				} else if (o instanceof Cargo) {
+					final Cargo cargo = (Cargo) o;
+					objects.add(cargo);
+					objects.add(cargo.getLoadSlot());
+					objects.add(cargo.getDischargeSlot());
 				} else {
 					objects.add(o);
 				}
 			}
+			objects = expandSelection(objects);
 			selection = new StructuredSelection(objects);
 		}
 		viewer.setSelection(selection);
 	}
+
+	private final HashMap<Object, Object> equivalents = new HashMap<Object, Object>();
+	private final HashSet<Object> contents = new HashSet<Object>();
+
+	protected void setInputEquivalents(final Object input, final Collection<Object> objectEquivalents) {
+		for (final Object o : objectEquivalents) {
+			equivalents.put(o, input);
+		}
+		contents.add(input);
+	}
+
+	protected void clearInputEquivalents() {
+		equivalents.clear();
+		contents.clear();
+	}
+
+	/**
+	 * Helper method to expand cargo selections to include the whole set of events representing the cargo
+	 * 
+	 * @param selectedObjects
+	 * @return
+	 */
+	private List<Object> expandSelection(final List<Object> selectedObjects) {
+		final Set<Object> newSelection = new HashSet<Object>(selectedObjects.size());
+		for (final Object o : selectedObjects) {
+			newSelection.add(o);
+			if (o instanceof Slot) {
+				final Slot slot = (Slot) o;
+				final Object object = equivalents.get(slot);
+				if (object instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) object;
+					newSelection.add(slotVisit);
+					final SlotAllocation slotAllocation = slotVisit.getSlotAllocation();
+					newSelection.add(slotAllocation);
+					if (slotAllocation != null) {
+						final CargoAllocation cargoAllocation = slotAllocation.getCargoAllocation();
+						if (cargoAllocation != null) {
+							newSelection.add(cargoAllocation);
+							newSelection.add(cargoAllocation.getLadenLeg());
+							newSelection.add(cargoAllocation.getLadenIdle());
+							newSelection.add(cargoAllocation.getBallastLeg());
+							newSelection.add(cargoAllocation.getBallastIdle());
+						}
+					}
+				}
+			}
+		}
+		newSelection.retainAll(contents);
+		return new ArrayList<Object>(newSelection);
+
+	}
+
 }

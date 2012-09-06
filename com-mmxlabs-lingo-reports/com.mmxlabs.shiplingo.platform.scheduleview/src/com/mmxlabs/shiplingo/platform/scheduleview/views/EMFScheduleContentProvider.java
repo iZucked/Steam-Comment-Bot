@@ -65,7 +65,7 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			for (Sequence seq : sequences) {
 				// TODO: Need a proper flag
 				if (seq.getName().equals("<no vessel>")) {
-					if (seq.getEvents().size() > 2) {
+					if (seq.getEvents().size() > 0) {
 						seqs.add(seq);
 					}
 				} else {

@@ -388,9 +388,14 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				final SpotSlot spotSlot = (SpotSlot) eObj;
 				// Market slot, we can remove it.
 				if (spotSlot.getMarket() != null && eObj.eContainer() != null) {
+					// Remove rather than full delete as we may wish to re-use the object later
+					// Note ensure this is also removed from the unused elements list as Remove does not delete other references.
 					cmd.append(RemoveCommand.create(domain, eObj));
+
 				}
 			}
+			// Remove from the unused elements list
+			cmd.append(RemoveCommand.create(domain, schedule, SchedulePackage.eINSTANCE.getSchedule_UnusedElements(), eObj));
 		}
 
 		// TODO: We do not expect to get here!
@@ -416,10 +421,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 		int spotIndex = 0;
 		for (final Sequence sequence : schedule.getSequences()) {
-			if (sequence.getVessel() == null && !sequence.isSpotVessel()) {
-				continue;
-			}
-
 			int thisIndex = 0;
 			if (sequence.isSpotVessel()) {
 				thisIndex = spotIndex++;

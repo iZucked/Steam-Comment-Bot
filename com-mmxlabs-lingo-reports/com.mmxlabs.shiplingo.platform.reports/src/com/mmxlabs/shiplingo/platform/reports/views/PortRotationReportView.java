@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduledEventCollector;
@@ -44,7 +45,7 @@ public class PortRotationReportView extends EMFReportView {
 		super("com.mmxlabs.shiplingo.platform.reports.PortRotationReportView");
 
 		final SchedulePackage sp = SchedulePackage.eINSTANCE;
-		
+
 		// final CargoPackage cp = CargoPackage.eINSTANCE;
 		// final PortPackage pp = PortPackage.eINSTANCE;
 
@@ -52,9 +53,7 @@ public class PortRotationReportView extends EMFReportView {
 
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
-		vesselColumn = addColumn("Vessel", objectFormatter, 
-				MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(),
-				sp.getSequence__GetName());
+		vesselColumn = addColumn("Vessel", objectFormatter, MMXCorePackage.eINSTANCE.getMMXObject__EContainerOp(), sp.getSequence__GetName());
 
 		addColumn("Type", objectFormatter, sp.getEvent__Type());
 
@@ -94,9 +93,9 @@ public class PortRotationReportView extends EMFReportView {
 					if (ca == null) {
 						return null;
 					}
-//					if (ca.getLoadSlot().equals(sv.getSlot())) {
-//						return (int) ca.getLoadVolume();
-//					}
+					// if (ca.getLoadSlot().equals(sv.getSlot())) {
+					// return (int) ca.getLoadVolume();
+					// }
 					return ca.getLoadVolume();
 				}
 				return null;
@@ -142,8 +141,10 @@ public class PortRotationReportView extends EMFReportView {
 					if (object instanceof FuelUsage) {
 						for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
 							if (q.getFuel().equals(fuelName)) {
-								if (q.getCost() == 0) return 0;
-								if (q.getAmounts().get(0).getQuantity() == 0) return null;
+								if (q.getCost() == 0)
+									return 0;
+								if (q.getAmounts().get(0).getQuantity() == 0)
+									return null;
 								return q.getCost() / q.getAmounts().get(0).getQuantity();
 							}
 						}
@@ -155,12 +156,12 @@ public class PortRotationReportView extends EMFReportView {
 			addColumn(fuelName + " Cost", new IntegerFormatter() {
 				@Override
 				public Integer getIntValue(final Object object) {
-						if (object instanceof FuelUsage) {
-							for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
-								if (q.getFuel().equals(fuelName)) {
-									return q.getCost();
-								}
+					if (object instanceof FuelUsage) {
+						for (final FuelQuantity q : ((FuelUsage) object).getFuels()) {
+							if (q.getFuel().equals(fuelName)) {
+								return q.getCost();
 							}
+						}
 						return 0;
 					} else {
 						return null;
@@ -187,7 +188,7 @@ public class PortRotationReportView extends EMFReportView {
 		});
 
 		addColumn("Canal Cost", integerFormatter, sp.getJourney_Toll());
-		
+
 		addColumn("Port Costs", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
@@ -199,7 +200,6 @@ public class PortRotationReportView extends EMFReportView {
 			}
 		});
 
-		
 		addColumn("Total Cost", new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
@@ -219,7 +219,7 @@ public class PortRotationReportView extends EMFReportView {
 		});
 	}
 
-//	private final List<String> entityColumnNames = new ArrayList<String>();
+	// private final List<String> entityColumnNames = new ArrayList<String>();
 
 	@Override
 	public void createPartControl(final Composite parent) {
@@ -242,41 +242,41 @@ public class PortRotationReportView extends EMFReportView {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				superProvider.inputChanged(viewer, oldInput, newInput);
-//				Display.getCurrent().asyncExec(new Runnable() {
-//					@Override
-//					public void run() {
-//						if (viewer.getControl().isDisposed()) {
-//							return;
-//						}
-//						final Set<Scenario> scenarios = new HashSet<Scenario>();
-//						if (newInput instanceof Iterable) {
-//							for (final Object element : ((Iterable<?>) newInput)) {
-//								if (element instanceof Schedule) {
-//									// find all referenced entities
-//									for (final String s : entityColumnNames) {
-//										removeColumn(s);
-//									}
-//									entityColumnNames.clear();
-//
-//									EObject o = (EObject) element;
-//									while ((o != null) && !(o instanceof Scenario)) {
-//										o = o.eContainer();
-//									}
-//
-//									if (o != null) {
-//										scenarios.add((Scenario) o);
-//									}
-//								}
-//							}
-//
-//						}
-//						for (final Scenario scenario : scenarios) {
-//							addEntityColumns(scenario);
-//						}
-//						viewer.refresh();
-//					}
-//
-//				});
+				// Display.getCurrent().asyncExec(new Runnable() {
+				// @Override
+				// public void run() {
+				// if (viewer.getControl().isDisposed()) {
+				// return;
+				// }
+				// final Set<Scenario> scenarios = new HashSet<Scenario>();
+				// if (newInput instanceof Iterable) {
+				// for (final Object element : ((Iterable<?>) newInput)) {
+				// if (element instanceof Schedule) {
+				// // find all referenced entities
+				// for (final String s : entityColumnNames) {
+				// removeColumn(s);
+				// }
+				// entityColumnNames.clear();
+				//
+				// EObject o = (EObject) element;
+				// while ((o != null) && !(o instanceof Scenario)) {
+				// o = o.eContainer();
+				// }
+				//
+				// if (o != null) {
+				// scenarios.add((Scenario) o);
+				// }
+				// }
+				// }
+				//
+				// }
+				// for (final Scenario scenario : scenarios) {
+				// addEntityColumns(scenario);
+				// }
+				// viewer.refresh();
+				// }
+				//
+				// });
 
 			}
 
@@ -288,82 +288,83 @@ public class PortRotationReportView extends EMFReportView {
 			@Override
 			public Object[] getElements(final Object object) {
 				clearInputEquivalents();
-				Object[] result = superProvider.getElements(object);
-				
+				final Object[] result = superProvider.getElements(object);
+
 				for (final Object event : result) {
 					if (event instanceof SlotVisit) {
 						setInputEquivalents(event, Arrays.asList(new Object[] { ((SlotVisit) event).getSlotAllocation().getCargoAllocation() }));
+					} else if (event instanceof VesselEventVisit) {
+						setInputEquivalents(event, Arrays.asList(new Object[] { ((VesselEventVisit) event).getVesselEvent() }));
 					} else {
 						setInputEquivalents(event, Collections.emptyList());
 					}
 				}
-				
+
 				return result;
 			}
 		};
 	}
-
 
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduledEventCollector();
 	}
 
-//	protected void addEntityColumns(final Scenario o) {
-//		for (final Entity e : o.getContractModel().getEntities()) {
-//			addEntityColumn(e);
-//		}
-//		addEntityColumn(o.getContractModel().getShippingEntity());
-//	}
+	// protected void addEntityColumns(final Scenario o) {
+	// for (final Entity e : o.getContractModel().getEntities()) {
+	// addEntityColumn(e);
+	// }
+	// addEntityColumn(o.getContractModel().getShippingEntity());
+	// }
 
-//	private void addEntityColumn(final Entity entity) {
-//		if (!(entity instanceof GroupEntity)) {
-//			return;
-//		}
-//		final String title = "Profit to " + entity.getName();
-//		entityColumnNames.add(title);
-//		addColumn(title, new IntegerFormatter() {
-//			@Override
-//			public Integer getIntValue(final Object object) {
-//				if (object instanceof SlotVisit) {
-//					final SlotVisit slotVisit = (SlotVisit) object;
-//					if (slotVisit.getSlot() instanceof LoadSlot) {
-//						// display P&L
-//						int value = 0;
-//						final CargoAllocation allocation = slotVisit.getCargoAllocation();
-//
-//						if (allocation == null) {
-//							return null;
-//						}
-//
-//						if (allocation.getLoadRevenue() != null) {
-//							if (entity.equals(allocation.getLoadRevenue().getEntity())) {
-//								value += allocation.getLoadRevenue().getValue();
-//							}
-//						}
-//						if (allocation.getShippingRevenue() != null) {
-//							if (entity.equals(allocation.getShippingRevenue().getEntity())) {
-//								value += allocation.getShippingRevenue().getValue();
-//							}
-//						}
-//						if (allocation.getDischargeRevenue() != null) {
-//							if (entity.equals(allocation.getDischargeRevenue().getEntity())) {
-//								value += allocation.getDischargeRevenue().getValue();
-//							}
-//						}
-//						return value;
-//					}
-//				} else if (object instanceof VesselEventVisit) {
-//					final VesselEventVisit cov = (VesselEventVisit) object;
-//					if (cov.getRevenue() == null) {
-//						return null;
-//					}
-//					if (entity.equals(cov.getRevenue().getEntity())) {
-//						return cov.getRevenue().getValue();
-//					}
-//				}
-//				return null;
-//			}
-//		});
-//	}
+	// private void addEntityColumn(final Entity entity) {
+	// if (!(entity instanceof GroupEntity)) {
+	// return;
+	// }
+	// final String title = "Profit to " + entity.getName();
+	// entityColumnNames.add(title);
+	// addColumn(title, new IntegerFormatter() {
+	// @Override
+	// public Integer getIntValue(final Object object) {
+	// if (object instanceof SlotVisit) {
+	// final SlotVisit slotVisit = (SlotVisit) object;
+	// if (slotVisit.getSlot() instanceof LoadSlot) {
+	// // display P&L
+	// int value = 0;
+	// final CargoAllocation allocation = slotVisit.getCargoAllocation();
+	//
+	// if (allocation == null) {
+	// return null;
+	// }
+	//
+	// if (allocation.getLoadRevenue() != null) {
+	// if (entity.equals(allocation.getLoadRevenue().getEntity())) {
+	// value += allocation.getLoadRevenue().getValue();
+	// }
+	// }
+	// if (allocation.getShippingRevenue() != null) {
+	// if (entity.equals(allocation.getShippingRevenue().getEntity())) {
+	// value += allocation.getShippingRevenue().getValue();
+	// }
+	// }
+	// if (allocation.getDischargeRevenue() != null) {
+	// if (entity.equals(allocation.getDischargeRevenue().getEntity())) {
+	// value += allocation.getDischargeRevenue().getValue();
+	// }
+	// }
+	// return value;
+	// }
+	// } else if (object instanceof VesselEventVisit) {
+	// final VesselEventVisit cov = (VesselEventVisit) object;
+	// if (cov.getRevenue() == null) {
+	// return null;
+	// }
+	// if (entity.equals(cov.getRevenue().getEntity())) {
+	// return cov.getRevenue().getValue();
+	// }
+	// }
+	// return null;
+	// }
+	// });
+	// }
 }

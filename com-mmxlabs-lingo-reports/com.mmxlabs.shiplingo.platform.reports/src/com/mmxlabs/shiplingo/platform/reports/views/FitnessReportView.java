@@ -200,13 +200,6 @@ public class FitnessReportView extends ViewPart {
 						packColumnsAction.run();
 					}
 				}
-				
-				if (input instanceof IScenarioViewerSynchronizerOutput) {
-					final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) input;
-					if (scheduleColumnViewer != null) {
-						scheduleColumnViewer.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
-					}
-				}
 			};
 		};
 		this.contentProvider = new FitnessContentProvider();
@@ -283,19 +276,23 @@ public class FitnessReportView extends ViewPart {
 
 		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
 			private boolean hasPin = false;
+			private int numberOfSchedules;
+
 			@Override
 			public void beginCollecting() {
 				hasPin = false;
+				numberOfSchedules = 0;
 			}
 
 			@Override
 			public void endCollecting() {
-				setShowDeltaColumn(hasPin);
+				setShowColumns(hasPin, numberOfSchedules);
 			}
 
 			@Override
 			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean pinned) {
 				hasPin = hasPin || pinned;
+				++numberOfSchedules;
 				return Collections.singleton(schedule);
 			}
 
@@ -356,23 +353,6 @@ public class FitnessReportView extends ViewPart {
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
-	private void setShowDeltaColumn(final boolean showDeltaColumn) {
-		if (showDeltaColumn) {
-			if (delta == null) {
-				delta = new GridViewerColumn(viewer, SWT.NONE);
-				delta.getColumn().setText("Improvement");
-				delta.getColumn().pack();
-				addSortSelectionListener(delta.getColumn(), 4);
-				viewer.setLabelProvider(viewer.getLabelProvider());
-			}
-		} else {
-			if (delta != null) {
-				delta.getColumn().dispose();
-				delta = null;
-			}
-		}
-	}
-	
 	/**
 	 * Passing the focus request to the viewer's control.
 	 */
@@ -409,7 +389,25 @@ public class FitnessReportView extends ViewPart {
 	public void dispose() {
 
 		ScenarioViewerSynchronizer.deregisterView(jobManagerListener);
-
 		super.dispose();
+	}
+
+	private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
+		if (showDeltaColumn) {
+			if (delta == null) {
+				delta = new GridViewerColumn(viewer, SWT.NONE);
+				delta.getColumn().setText("Change");
+				delta.getColumn().pack();
+				addSortSelectionListener(delta.getColumn(), 4);
+				viewer.setLabelProvider(viewer.getLabelProvider());
+			}
+		} else {
+			if (delta != null) {
+				delta.getColumn().dispose();
+				delta = null;
+			}
+		}
+
+		scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > (showDeltaColumn ? 2 : 1));
 	}
 }
