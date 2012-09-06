@@ -186,37 +186,40 @@ public class LNGModelCorrector {
 				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.DES_PURCHASE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesPurchaseSpotMarket(), group));
+			} else {
+
+				for (SpotMarket market : pricingModel.getDesPurchaseSpotMarket().getMarkets()) {
+					fixSpotMarketAvailabilityName(cmd, market, ed);
+				}
 			}
 			if (pricingModel.getDesSalesSpotMarket() == null) {
 				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.DES_SALE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesSalesSpotMarket(), group));
+			} else {
+
+				for (SpotMarket market : pricingModel.getDesSalesSpotMarket().getMarkets()) {
+					fixSpotMarketAvailabilityName(cmd, market, ed);
+				}
 			}
 			if (pricingModel.getFobPurchasesSpotMarket() == null) {
 				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.FOB_PURCHASE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobPurchasesSpotMarket(), group));
+			} else {
+
+				for (SpotMarket market : pricingModel.getFobPurchasesSpotMarket().getMarkets()) {
+					fixSpotMarketAvailabilityName(cmd, market, ed);
+				}
 			}
 			if (pricingModel.getFobSalesSpotMarket() == null) {
 				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.FOB_SALE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket(), group));
-			}
-
-			for (final SpotMarket market : pricingModel.getDesPurchaseSpotMarket().getMarkets()) {
-				fixSpotMarketAvailabilityName(cmd, market, ed);
-			}
-
-			for (final SpotMarket market : pricingModel.getDesSalesSpotMarket().getMarkets()) {
-				fixSpotMarketAvailabilityName(cmd, market, ed);
-			}
-
-			for (final SpotMarket market : pricingModel.getFobPurchasesSpotMarket().getMarkets()) {
-				fixSpotMarketAvailabilityName(cmd, market, ed);
-			}
-
-			for (final SpotMarket market : pricingModel.getFobSalesSpotMarket().getMarkets()) {
-				fixSpotMarketAvailabilityName(cmd, market, ed);
+			} else {
+				for (SpotMarket market : pricingModel.getFobSalesSpotMarket().getMarkets()) {
+					fixSpotMarketAvailabilityName(cmd, market, ed);
+				}
 			}
 
 		}
