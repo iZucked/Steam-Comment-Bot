@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.jobmanager</groupId>
 	<artifactId>com.mmxlabs.jobmanager.parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0.RELEASE</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -27,6 +27,8 @@
 	</ciManagement>
 
 	<modules>
+		<module>target-definition</module>
+
 		<module>com.mmxlabs.jobmanager</module>
 		<module>com.mmxlabs.jobmanager.ui</module>
 		<module>com.mmxlabs.jobmanager.eclipse</module>
@@ -55,6 +57,17 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
+					<resolver>p2</resolver>
+
+					<target>
+						<artifact>
+							<groupId>com.mmxlabs.jobmanager</groupId>
+							<artifactId>target-definition</artifactId>
+							<version>1.0.0.RELEASE</version>
+							<classifier>indigo</classifier>
+						</artifact>
+					</target>
+					
 
 					<environments>
 
@@ -100,7 +113,7 @@
 
 		</plugins>
 	</build>
-
+	<!--
 	<repositories>
 
 		<repository>
@@ -128,11 +141,18 @@
 		</repository>
 
 		<repository>
-			<id>mmxlabs-p2-snapshots</id>
-			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/</url>
+			<id>orbit</id>
+			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/</url>
 			<layout>p2</layout>
 		</repository>
 
-	</repositories>
+		<repository>
+			<id>mmxlabs-p2-releases</id>
+			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/</url>
+			<layout>p2</layout>
+		</repository>
 
+
+	</repositories>
+-->
 </project>
