@@ -3,11 +3,11 @@
 	<parent>
 		<artifactId>common-util-parent</artifactId>
 		<groupId>com.mmxlabs.common</groupId>
-		<version>3-SNAPSHOT</version>
+		<version>3</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>common-recorder</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.2</version>
 	<packaging>bundle</packaging>
 
 	<build>
@@ -82,7 +82,7 @@
 		<dependency>
 			<groupId>com.mmxlabs.common</groupId>
 			<artifactId>common-util</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
+			<version>1.0.2</version>
 		</dependency>
 	</dependencies>
 </project>
