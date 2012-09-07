@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.mmxcore.sdk.feature"
       label="Models: MMXCore SDK Feature"
-      version="2.2.1.RELEASE"
+      version="2.3.0.RELEASE"
       provider-name="Minimax Labs">
 
    <description>
