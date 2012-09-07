@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.ui</groupId>
 	<artifactId>com.mmxlabs.models.ui.parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0.RELEASE</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -43,7 +43,7 @@
 		<!-- Required for some tycho workaround - may no longer be needed -->
 		<sourceDirectory>src</sourceDirectory>
 
-		<plugins>http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/
+		<plugins>
 
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -63,7 +63,7 @@
 						<artifact>
 							<groupId>com.mmxlabs.models.ui</groupId>
 							<artifactId>target-definition</artifactId>
-							<version>1.0.0-SNAPSHOT</version>
+							<version>1.0.0.RELEASE</version>
 							<classifier>indigo</classifier>
 						</artifact>
 					</target>
