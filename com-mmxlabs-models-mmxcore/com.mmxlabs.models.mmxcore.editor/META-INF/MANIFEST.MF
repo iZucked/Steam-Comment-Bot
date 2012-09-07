@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.mmxcore.editor;singleton:=true
-Bundle-Version: 2.0.1.RELEASE
+Bundle-Version: 2.3.1.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.mmxcore.presentation.MmxcoreEditorPlugin$Implementation
 Bundle-Vendor: %providerName
@@ -11,7 +11,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.models.mmxcore.presentation
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources;visibility:=reexport,
- com.mmxlabs.models.mmxcore.edit;bundle-version="[2.0.0,3.0.0)";visibility:=reexport,
+ com.mmxlabs.models.mmxcore.edit;bundle-version="[2.3.0,3.0.0)";visibility:=reexport,
  org.eclipse.emf.ecore.xmi;visibility:=reexport,
  org.eclipse.emf.edit.ui;visibility:=reexport,
  org.eclipse.ui.ide;visibility:=reexport
