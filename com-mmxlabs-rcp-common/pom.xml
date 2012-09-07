@@ -67,7 +67,7 @@
 						<artifact>
 							<groupId>com.mmxlabs.rcp.common</groupId>
 							<artifactId>target-definition</artifactId>
-							<version>1.0.0.RELEASE</version>
+							<version>1.0.1-SNAPSHOT</version>
 							<classifier>indigo</classifier>
 						</artifact>
 					</target>
