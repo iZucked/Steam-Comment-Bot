@@ -11,7 +11,6 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.emf.ecore;bundle-version="2.5.0",
  org.eclipse.emf.edit;bundle-version="2.5.0",
  org.eclipse.emf.edit.ui;bundle-version="2.5.0",
- com.mmxlabs.common.common-util;bundle-version="1.0.0",
  org.eclipse.nebula.widgets.grid;bundle-version="1.0.0",
  org.eclipse.emf.ecore.xmi;bundle-version="2.7.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -21,3 +20,4 @@ Export-Package: com.mmxlabs.rcp.common.actions,
  com.mmxlabs.rcp.common.controls,
  com.mmxlabs.rcp.common.dialogs,
  com.mmxlabs.rcp.common.ecore
+Import-Package: com.mmxlabs.common;version="1.0.1"
