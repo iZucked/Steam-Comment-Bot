@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>com.mmxlabs.models.mmxcore.p2</artifactId>
-	<version>2.2.1.RELEASE</version>
+	<version>2.3.0.RELEASE</version>
 	<packaging>eclipse-repository</packaging>
 	<name>Models: MMXCore: p2 Repository</name>
 
