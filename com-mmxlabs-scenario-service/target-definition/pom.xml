@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>com.mmxlabs.scenario.service</groupId>
 		<artifactId>com.mmxlabs.scenario.service.parent</artifactId>
-		<version>1.0.0.RELEASE</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>target-definition</artifactId>
 	<packaging>pom</packaging>
-	<version>1.0.0.RELEASE</version>
+	<version>1.0.1-SNAPSHOT</version>
 	
 	
 	<build>
