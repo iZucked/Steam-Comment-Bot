@@ -8,7 +8,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 
-import com.mmxlabs.rcp.common.Activator;
+import com.mmxlabs.rcp.common.internal.Activator;
 
 public class PackGridTableColumnsAction extends Action {
 

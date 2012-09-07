@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
-import com.mmxlabs.rcp.common.Activator;
+import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
  * Copies "rendered" tree contents to the clipboard. This will maintain the column order, sort order and label provider output. Child entries not yet visible (parent is not expanded) will not be

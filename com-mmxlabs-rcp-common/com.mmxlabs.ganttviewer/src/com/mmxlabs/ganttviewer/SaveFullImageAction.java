@@ -14,6 +14,8 @@ import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 
+import com.mmxlabs.ganttviewer.internal.Activator;
+
 public class SaveFullImageAction extends Action {
 	private final GanttChart ganttChart;
 
