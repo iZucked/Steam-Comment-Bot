@@ -14,4 +14,4 @@ Export-Package: com.mmxlabs.jobmanager.eclipse.jobs.impl,
 Service-Component: OSGI-INF/*.xml
 Bundle-Activator: com.mmxlabs.jobmanager.eclipse.Activator
 Bundle-ActivationPolicy: lazy
-Bundle-Vendor: Minimax Labs
+Bundle-Vendor: Minimax Labs Ltd.
