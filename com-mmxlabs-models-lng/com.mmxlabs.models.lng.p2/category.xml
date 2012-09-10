@@ -6,8 +6,11 @@
 
 -->
 <site>
-   <feature url="features/com.mmxlabs.models.lng.feature_1.0.0.qualifier.jar" id="com.mmxlabs.models.lng.feature" version="1.0.0.qualifier">
+   <feature id="com.mmxlabs.models.lng.feature" version="0.0.0">
       <category name="all"/>
    </feature>
-   <category-def name="all" label="Models: LNG: p2 Snapshots"/>
+   <feature id="com.mmxlabs.models.lng.feature.source" version="0.0.0">
+      <category name="all"/>
+   </feature>
+   <category-def name="all" label="Models: LNG: p2"/>
 </site>
