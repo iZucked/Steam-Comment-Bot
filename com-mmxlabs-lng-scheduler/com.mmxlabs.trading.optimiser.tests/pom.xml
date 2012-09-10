@@ -4,10 +4,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.trading.optimiser.parent</artifactId>
 		<groupId>com.mmxlabs.trading.optimiser</groupId>
-		<version>1.0.0.RELEASE</version>
+		<version>1.0.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>com.mmxlabs.trading.optimiser.tests</artifactId>
-	<version>1.0.0.RELEASE</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>eclipse-test-plugin</packaging>
 </project>
