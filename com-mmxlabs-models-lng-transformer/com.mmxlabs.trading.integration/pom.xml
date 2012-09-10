@@ -6,7 +6,7 @@
 	<parent>
 		<artifactId>com.mmxlabs.trading.optimiser.parent</artifactId>
 		<groupId>com.mmxlabs.trading.optimiser</groupId>
-		<version>1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.trading.integration</artifactId>
