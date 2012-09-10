@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Analytics Validation Constraints
 Bundle-SymbolicName: com.mmxlabs.models.lng.analytics.validation;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: Minimax Labs
+Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: com.mmxlabs.models.lng.analytics;bundle-version="1.0.0",
  com.mmxlabs.models.ui.validation;bundle-version="1.0.0",

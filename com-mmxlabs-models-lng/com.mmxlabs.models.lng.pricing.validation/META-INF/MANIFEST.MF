@@ -4,7 +4,7 @@ Bundle-Name: Validation
 Bundle-SymbolicName: com.mmxlabs.models.lng.pricing.validation;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.mmxlabs.models.lng.pricing.validation.Activator
-Bundle-Vendor: Minimax Labs
+Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.mmxlabs.models.lng.cargo;bundle-version="1.0.0",
