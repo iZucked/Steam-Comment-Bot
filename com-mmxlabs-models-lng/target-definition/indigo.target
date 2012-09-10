@@ -11,11 +11,11 @@
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.optimiser.optimiser-common" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="1.0.0.201209071058"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common" version="1.0.0.201209071044"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core" version="1.0.0.201209071044"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.0.0.201209071044"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.0.0.201209071044"/>
 <unit id="com.mmxlabs.rcp.common.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="1.0.0.RELEASE"/>
