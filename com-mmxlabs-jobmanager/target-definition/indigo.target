@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target name="Job manager Target (Indigo)" sequenceNumber="1">
+<locations>
+<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/technology/nebula/incubation/snapshot"/>
+</location>
+<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.common.common-util" version="1.0.1.201206181155"/>
+<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="2.0.1.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="2.0.1.RELEASE"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="2.3.0.RELEASE"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="2.3.0.RELEASE"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.7.2.v20120130-0943"/>
+<repository location="http://download.eclipse.org/releases/indigo"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.platform.sdk" version="3.7.2.M20120208-0800"/>
+<unit id="org.eclipse.sdk.ide" version="3.7.2.M20120208-0800"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.hamcrest.core" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.core.source" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.integration.source" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.generator" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.generator.source" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.integration" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.library" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.library.source" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.text" version="1.1.0.v20090501071000"/>
+<unit id="org.hamcrest.text.source" version="1.1.0.v20090501071000"/>
+<unit id="org.slf4j.api" version="1.6.4.v20120130-2120"/>
+<unit id="org.slf4j.api.source" version="1.6.4.v20120130-2120"/>
+<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
+</location>
+<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.edapt.runtime.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.emf.edapt.runtime.sdk.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/edapt/update-site"/>
+</location>
+</locations>
+</target>
