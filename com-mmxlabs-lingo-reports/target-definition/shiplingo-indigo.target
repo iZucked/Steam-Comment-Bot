@@ -9,13 +9,13 @@
 <repository location="http://download.eclipse.org/edapt/update-site"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.common.common-util" version="1.0.1.201206181155"/>
-<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="2.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="2.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="2.2.0.RELEASE"/>
-<unit id="com.mmxlabs.models.mmxcore.sdk.feature.source.feature.group" version="2.2.0.RELEASE"/>
-<unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="2.2.0.RELEASE"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="2.2.0.RELEASE"/>
+<unit id="com.mmxlabs.common.common-util" version="1.0.2.201209070858"/>
+<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="2.0.1.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="2.0.1.RELEASE"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="2.3.0.RELEASE"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.source.feature.group" version="2.3.0.RELEASE"/>
+<unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="2.3.0.RELEASE"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="2.3.0.RELEASE"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -61,15 +61,6 @@
 <unit id="org.ops4j.peaberry" version="1.2.0"/>
 <unit id="org.ops4j.peaberry.eclipse" version="1.2.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.mmxcore.sdk.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.mmxcore.sdk.feature.feature.group" version="0.0.0"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="jre.1.6.0_32.win32.win32.x86.feature.group" version="0.0.0"/>
