@@ -4,7 +4,7 @@ Bundle-Name: Optimisation
 Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.models.optimisation;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: com.mmxlabs.shiplingo.platform.models.optimisation.Activator
-Bundle-Vendor: Minimax Labs
+Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  com.mmxlabs.jobmanager;bundle-version="1.0.0",
