@@ -17,6 +17,8 @@ import org.eclipse.nebula.widgets.ganttchart.ISettings;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
 
+import com.mmxlabs.ganttviewer.internal.Activator;
+
 public class PackAction extends Action {
 	private final GanttChart ganttChart;
 

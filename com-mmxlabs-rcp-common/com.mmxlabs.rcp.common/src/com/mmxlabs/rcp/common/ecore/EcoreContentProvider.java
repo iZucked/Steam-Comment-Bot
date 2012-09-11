@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 
-import com.mmxlabs.rcp.common.Activator;
+import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
  * A subclass of {@link AdapterFactoryContentProvider} which caches EMF model instances. This class implements a {@link IResourceChangeListener} to automaticallty reload instances on filesystem

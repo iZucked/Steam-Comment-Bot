@@ -13,7 +13,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.rcp.common.Activator;
+import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
  * Copies "rendered" table contents to the clipboard. This will maintain the column order, sort order and label provider output.

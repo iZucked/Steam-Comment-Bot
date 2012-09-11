@@ -13,7 +13,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import com.mmxlabs.rcp.common.Activator;
+import com.mmxlabs.rcp.common.internal.Activator;
 
 /**
  * Copies "rendered" table contents to the clipboard. This will maintain the column order, sort order and label provider output.

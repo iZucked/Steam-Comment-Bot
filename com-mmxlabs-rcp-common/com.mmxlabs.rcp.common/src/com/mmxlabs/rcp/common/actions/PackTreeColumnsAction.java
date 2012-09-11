@@ -8,7 +8,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.TreeColumn;
 
-import com.mmxlabs.rcp.common.Activator;
+import com.mmxlabs.rcp.common.internal.Activator;
 
 public class PackTreeColumnsAction extends Action {
 

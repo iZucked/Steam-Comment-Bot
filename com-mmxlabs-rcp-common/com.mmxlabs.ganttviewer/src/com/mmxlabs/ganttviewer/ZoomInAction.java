@@ -7,6 +7,8 @@ package com.mmxlabs.ganttviewer;
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.ganttchart.GanttChart;
 
+import com.mmxlabs.ganttviewer.internal.Activator;
+
 public class ZoomInAction extends Action {
 
 	private GanttChart ganttChart;
