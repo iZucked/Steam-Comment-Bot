@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
 package com.mmxlabs.shiplingo.platform.models.manifest.modelCorrector;
 
 import java.util.HashSet;
@@ -186,37 +190,40 @@ public class LNGModelCorrector {
 				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.DES_PURCHASE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesPurchaseSpotMarket(), group));
+			} else {
+
+				for (SpotMarket market : pricingModel.getDesPurchaseSpotMarket().getMarkets()) {
+					fixSpotMarketAvailabilityName(cmd, market, ed);
+				}
 			}
 			if (pricingModel.getDesSalesSpotMarket() == null) {
 				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.DES_SALE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesSalesSpotMarket(), group));
+			} else {
+
+				for (SpotMarket market : pricingModel.getDesSalesSpotMarket().getMarkets()) {
+					fixSpotMarketAvailabilityName(cmd, market, ed);
+				}
 			}
 			if (pricingModel.getFobPurchasesSpotMarket() == null) {
 				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.FOB_PURCHASE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobPurchasesSpotMarket(), group));
+			} else {
+
+				for (SpotMarket market : pricingModel.getFobPurchasesSpotMarket().getMarkets()) {
+					fixSpotMarketAvailabilityName(cmd, market, ed);
+				}
 			}
 			if (pricingModel.getFobSalesSpotMarket() == null) {
 				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.FOB_SALE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket(), group));
-			}
-
-			for (final SpotMarket market : pricingModel.getDesPurchaseSpotMarket().getMarkets()) {
-				fixSpotMarketAvailabilityName(cmd, market, ed);
-			}
-
-			for (final SpotMarket market : pricingModel.getDesSalesSpotMarket().getMarkets()) {
-				fixSpotMarketAvailabilityName(cmd, market, ed);
-			}
-
-			for (final SpotMarket market : pricingModel.getFobPurchasesSpotMarket().getMarkets()) {
-				fixSpotMarketAvailabilityName(cmd, market, ed);
-			}
-
-			for (final SpotMarket market : pricingModel.getFobSalesSpotMarket().getMarkets()) {
-				fixSpotMarketAvailabilityName(cmd, market, ed);
+			} else {
+				for (SpotMarket market : pricingModel.getFobSalesSpotMarket().getMarkets()) {
+					fixSpotMarketAvailabilityName(cmd, market, ed);
+				}
 			}
 
 		}
@@ -226,9 +233,9 @@ public class LNGModelCorrector {
 	}
 
 	private void fixSpotMarketAvailabilityName(final CompoundCommand parent, final SpotMarket market, final EditingDomain ed) {
-		final SpotAvailability availability = market.getAvailability();
+		SpotAvailability availability = market.getAvailability();
 		if (availability != null) {
-			final DataIndex<Integer> curve = availability.getCurve();
+			DataIndex<Integer> curve = availability.getCurve();
 			if (curve != null) {
 				if (curve.getName() == null || curve.getName().isEmpty()) {
 					parent.append(SetCommand.create(ed, curve, MMXCorePackage.eINSTANCE.getNamedObject_Name(), market.getName()));

@@ -9,7 +9,7 @@
       id="com.mmxlabs.platform.feature"
       label="Eclipse Platform Feature"
       version="1.0.0.qualifier"
-      provider-name="MMXLABS">
+      provider-name="Minimax Labs Ltd.">
 
    <description>
       Feature containing Eclipse Platform plugins that form the basis of the MMX Labs RCP applications.
