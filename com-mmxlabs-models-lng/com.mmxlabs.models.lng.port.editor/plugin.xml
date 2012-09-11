@@ -112,9 +112,6 @@
     </jointModelEditor>
  </extension>
  <extension
-       point="com.mmxlabs.models.ui.jointmodeleditors">
- </extension>
- <extension
        point="com.mmxlabs.models.util.import.submodels">
     <submodelImporter
           ID="com.mmxlabs.models.lng.port.editor.portModelImporter"

@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Tests
 Bundle-SymbolicName: com.mmxlabs.models.lng.fleet.validation.tests
-Bundle-Version: 1.0.0.qualifier
-Bundle-Vendor: Minimax Labs
+Bundle-Version: 1.0.1.qualifier
+Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime,
  org.mockito;bundle-version="1.8.4",
  org.junit;bundle-version="4.8.2",

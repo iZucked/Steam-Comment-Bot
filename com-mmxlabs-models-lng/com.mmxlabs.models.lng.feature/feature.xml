@@ -8,8 +8,8 @@
 <feature
       id="com.mmxlabs.models.lng.feature"
       label="Models: LNG Feature"
-      version="1.0.0.qualifier"
-      provider-name="Minimax Labs">
+      version="1.0.1.qualifier"
+      provider-name="Minimax Labs Ltd.">
 
    <description>
       LNG Domain model and UI components.

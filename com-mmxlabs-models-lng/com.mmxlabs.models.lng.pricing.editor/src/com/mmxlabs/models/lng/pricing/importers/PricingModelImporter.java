@@ -6,7 +6,12 @@ package com.mmxlabs.models.lng.pricing.importers;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -16,6 +21,10 @@ import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
 import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
+import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
+import com.mmxlabs.models.lng.pricing.DESSalesMarket;
+import com.mmxlabs.models.lng.pricing.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PortCost;
@@ -23,6 +32,8 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.pricing.SpotMarket;
+import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.Activator;
@@ -39,24 +50,31 @@ public class PricingModelImporter implements ISubmodelImporter {
 	private static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
 	private static final String CHARTER_PRICING_KEY = "CHARTER_PRICING";
 	private static final String PORT_COSTS_KEY = "PORT_COSTS";
-	
+	private static final String SPOT_CARGO_MARKETS_KEY = "SPOT_CARGO_MARKETS";
+	private static final String SPOT_CARGO_MARKETS_AVAILABILITY_KEY = "SPOT_CARGO_MARKETS_AVAILABILITY";
+
 	static {
 		inputs.put(PRICE_CURVE_KEY, "Commodity Curves");
 		inputs.put(CHARTER_CURVE_KEY, "Charter Curves");
 		inputs.put(COOLDOWN_PRICING_KEY, "Cooldown Prices");
 		inputs.put(CHARTER_PRICING_KEY, "Charter Rates");
 		inputs.put(PORT_COSTS_KEY, "Port Costs");
+		inputs.put(SPOT_CARGO_MARKETS_KEY, "Spot Cargo Markets");
+		// inputs.put(SPOT_CARGO_MARKETS_AVAILABILITY_KEY, "Spot Cargo Markets Availability");
 	}
-	
-	final IClassImporter dataIndexImporter = 
-			Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getDataIndex());
-	
-	final IClassImporter cooldownPriceImporter = 
-			Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getCooldownPrice());
-	
+
+	final IClassImporter dataIndexImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getDataIndex());
+
+	final IClassImporter cooldownPriceImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getCooldownPrice());
+
 	final IClassImporter charterPriceImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getCharterCostModel());
-	
+
 	final IClassImporter portCostImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getPortCost());
+
+	final IClassImporter spotCargoMarketImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getSpotMarket());
+
+	final IClassImporter spotCargoMarketAvailabilityImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getSpotAvailability());
+
 	@Override
 	public Map<String, String> getRequiredInputs() {
 		return inputs;
@@ -65,25 +83,92 @@ public class PricingModelImporter implements ISubmodelImporter {
 	@Override
 	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
 		final PricingModel pricing = PricingFactory.eINSTANCE.createPricingModel();
-		if (inputs.containsKey(PRICE_CURVE_KEY)) importCommodityCurves(pricing, inputs.get(PRICE_CURVE_KEY), context);
-		if (inputs.containsKey(CHARTER_CURVE_KEY)) importCharterCurves(pricing, inputs.get(CHARTER_CURVE_KEY), context);
-		
-		if (inputs.containsKey(PORT_COSTS_KEY)) {
-			pricing.getPortCosts().addAll((Collection<? extends PortCost>) portCostImporter.importObjects(PricingPackage.eINSTANCE.getPortCost(),inputs.get(PORT_COSTS_KEY), context));
+		if (inputs.containsKey(PRICE_CURVE_KEY)) {
+			importCommodityCurves(pricing, inputs.get(PRICE_CURVE_KEY), context);
 		}
-		
+		if (inputs.containsKey(CHARTER_CURVE_KEY)) {
+			importCharterCurves(pricing, inputs.get(CHARTER_CURVE_KEY), context);
+		}
+		if (inputs.containsKey(PORT_COSTS_KEY)) {
+			pricing.getPortCosts().addAll((Collection<? extends PortCost>) portCostImporter.importObjects(PricingPackage.eINSTANCE.getPortCost(), inputs.get(PORT_COSTS_KEY), context));
+		}
+
 		final FleetCostModel fcm = PricingFactory.eINSTANCE.createFleetCostModel();
 		pricing.setFleetCost(fcm);
-		
+
 		if (inputs.containsKey(COOLDOWN_PRICING_KEY))
 			pricing.getCooldownPrices().addAll(
-			(Collection<? extends CooldownPrice>) cooldownPriceImporter.importObjects(PricingPackage.eINSTANCE.getCooldownPrice(), inputs.get(COOLDOWN_PRICING_KEY), context));
-		
-		if (inputs.containsKey(CHARTER_PRICING_KEY)) 
+					(Collection<? extends CooldownPrice>) cooldownPriceImporter.importObjects(PricingPackage.eINSTANCE.getCooldownPrice(), inputs.get(COOLDOWN_PRICING_KEY), context));
+
+		if (inputs.containsKey(CHARTER_PRICING_KEY))
 			fcm.getCharterCosts().addAll(
-					(Collection<? extends CharterCostModel>) charterPriceImporter.importObjects(PricingPackage.eINSTANCE.getCharterCostModel(), inputs.get(CHARTER_PRICING_KEY), context)
-					);
-		
+					(Collection<? extends CharterCostModel>) charterPriceImporter.importObjects(PricingPackage.eINSTANCE.getCharterCostModel(), inputs.get(CHARTER_PRICING_KEY), context));
+
+		if (inputs.containsKey(SPOT_CARGO_MARKETS_KEY)) {
+			final Collection<EObject> markets = (spotCargoMarketImporter.importObjects(PricingPackage.eINSTANCE.getSpotMarket(), inputs.get(SPOT_CARGO_MARKETS_KEY), context));
+
+			SpotMarketGroup desPurchaseGroup = null;
+			SpotMarketGroup desSaleGroup = null;
+			SpotMarketGroup fobPurchaseGroup = null;
+			SpotMarketGroup fobSaleGroup = null;
+
+			final List<SpotMarket> desPurchaseMarkets = new LinkedList<SpotMarket>();
+			final List<SpotMarket> desSaleMarkets = new LinkedList<SpotMarket>();
+			final List<SpotMarket> fobPurchaseMarkets = new LinkedList<SpotMarket>();
+			final List<SpotMarket> fobSaleMarkets = new LinkedList<SpotMarket>();
+			for (final EObject market : markets) {
+
+				if (market instanceof SpotMarketGroup) {
+					final SpotMarketGroup group = (SpotMarketGroup) market;
+					switch (group.getType()) {
+					case DES_PURCHASE:
+						desPurchaseGroup = group;
+						break;
+					case DES_SALE:
+						desSaleGroup = group;
+						break;
+					case FOB_PURCHASE:
+						fobPurchaseGroup = group;
+						break;
+					case FOB_SALE:
+						fobSaleGroup = group;
+						break;
+					default:
+						break;
+
+					}
+				} else if (market instanceof DESPurchaseMarket) {
+					desPurchaseMarkets.add((SpotMarket) market);
+				} else if (market instanceof DESSalesMarket) {
+					desSaleMarkets.add((SpotMarket) market);
+				} else if (market instanceof FOBPurchasesMarket) {
+					fobPurchaseMarkets.add((SpotMarket) market);
+				} else if (market instanceof FOBSalesMarket) {
+					fobSaleMarkets.add((SpotMarket) market);
+				}
+
+			}
+			// Set the groups
+			pricing.setDesPurchaseSpotMarket(desPurchaseGroup);
+			pricing.setDesSalesSpotMarket(desSaleGroup);
+			pricing.setFobPurchasesSpotMarket(fobPurchaseGroup);
+			pricing.setFobSalesSpotMarket(fobSaleGroup);
+
+			// set the markets
+			if (desPurchaseGroup != null) {
+				desPurchaseGroup.getMarkets().addAll(desPurchaseMarkets);
+			}
+			if (desSaleGroup != null) {
+				desSaleGroup.getMarkets().addAll(desSaleMarkets);
+			}
+			if (fobPurchaseGroup != null) {
+				fobPurchaseGroup.getMarkets().addAll(fobPurchaseMarkets);
+			}
+			if (fobSaleGroup != null) {
+				fobSaleGroup.getMarkets().addAll(fobSaleMarkets);
+			}
+		}
+
 		context.doLater(new IDeferment() {
 			@Override
 			public void run(final IImportContext context) {
@@ -119,7 +204,8 @@ public class PricingModelImporter implements ISubmodelImporter {
 							boolean found = false;
 							for (final BaseFuelCost cost : pricing.getFleetCost().getBaseFuelPrices()) {
 								found = cost.getFuel() == baseFuel;
-								if (found) break;
+								if (found)
+									break;
 							}
 							if (!found) {
 								final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
@@ -130,13 +216,13 @@ public class PricingModelImporter implements ISubmodelImporter {
 					}
 				}
 			}
-			
+
 			@Override
 			public int getStage() {
 				return IImportContext.STAGE_MODIFY_SUBMODELS;
 			}
 		});
-		
+
 		return pricing;
 	}
 
@@ -147,7 +233,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 		pricing.getCommodityIndices().addAll((Collection<? extends Index<Double>>) dataIndexImporter.importObjects(PricingPackage.eINSTANCE.getDataIndex(), csvReader, context));
 	}
 
-	private void importCharterCurves(final PricingModel pricing, final CSVReader csvReader, IImportContext context) {
+	private void importCharterCurves(final PricingModel pricing, final CSVReader csvReader, final IImportContext context) {
 		if (dataIndexImporter instanceof DataIndexImporter) {
 			((DataIndexImporter) dataIndexImporter).setParseAsInt(true);
 		}
@@ -155,13 +241,28 @@ public class PricingModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(MMXRootObject root,
-			final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
+	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
 		final PricingModel pricing = (PricingModel) model;
 		output.put(PRICE_CURVE_KEY, dataIndexImporter.exportObjects(pricing.getCommodityIndices(), root));
 		output.put(CHARTER_CURVE_KEY, dataIndexImporter.exportObjects(pricing.getCharterIndices(), root));
 		output.put(COOLDOWN_PRICING_KEY, cooldownPriceImporter.exportObjects(pricing.getCooldownPrices(), root));
 		output.put(CHARTER_PRICING_KEY, charterPriceImporter.exportObjects(pricing.getFleetCost().getCharterCosts(), root));
 		output.put(PORT_COSTS_KEY, portCostImporter.exportObjects(pricing.getPortCosts(), root));
+		{
+			// Group the SpotMarketGroup and SpotMarkets all into the same export file
+			final LinkedList<EObject> spotMarkets = new LinkedList<EObject>();
+			spotMarkets.add(pricing.getDesPurchaseSpotMarket());
+			spotMarkets.add(pricing.getDesSalesSpotMarket());
+			spotMarkets.add(pricing.getFobPurchasesSpotMarket());
+			spotMarkets.add(pricing.getFobSalesSpotMarket());
+
+			spotMarkets.addAll(pricing.getDesPurchaseSpotMarket().getMarkets());
+			spotMarkets.addAll(pricing.getDesSalesSpotMarket().getMarkets());
+			spotMarkets.addAll(pricing.getFobPurchasesSpotMarket().getMarkets());
+			spotMarkets.addAll(pricing.getFobSalesSpotMarket().getMarkets());
+
+			output.put(SPOT_CARGO_MARKETS_KEY, spotCargoMarketImporter.exportObjects(spotMarkets, root));
+		}
+
 	}
 }
