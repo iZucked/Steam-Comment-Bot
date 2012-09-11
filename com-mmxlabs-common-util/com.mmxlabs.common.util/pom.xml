@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>common-util</artifactId>
 	<packaging>bundle</packaging>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>common-util</name>
 
 	<parent>
 		<groupId>com.mmxlabs.common</groupId>
 		<artifactId>common-util-parent</artifactId>
-		<version>3-SNAPSHOT</version>
+		<version>4-SNAPSHOT</version>
 	</parent>
 
 	<build>
