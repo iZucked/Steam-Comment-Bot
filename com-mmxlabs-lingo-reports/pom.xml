@@ -70,20 +70,19 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
 
- 					<resolver>p2</resolver>
+					<resolver>p2</resolver>
 
-                                        <target>
-                                                <artifact>
-                                                        <groupId>com.mmxlabs.shiplingo.platform</groupId>
-                                                        <artifactId>target-definition</artifactId>
-                                                        <version>1.0.0-SNAPSHOT</version>
-                                                        <classifier>indigo</classifier>
-                                                </artifact>
-                                        </target>
+					<target>
+						<artifact>
+							<groupId>com.mmxlabs.shiplingo.platform</groupId>
+							<artifactId>target-definition</artifactId>
+							<version>1.0.0-SNAPSHOT</version>
+							<classifier>indigo</classifier>
+						</artifact>
+					</target>
 
 
 					<environments>
-<!--
 						<environment>
 							<os>linux</os>
 							<ws>gtk</ws>
@@ -94,7 +93,6 @@
 							<ws>gtk</ws>
 							<arch>x86</arch>
 						</environment>
--->
 						<environment>
 							<os>win32</os>
 							<ws>win32</ws>
