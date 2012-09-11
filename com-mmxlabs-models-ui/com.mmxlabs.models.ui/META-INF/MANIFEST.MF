@@ -2,21 +2,21 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Model UI
 Bundle-SymbolicName: com.mmxlabs.models.ui;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-Activator: com.mmxlabs.models.ui.Activator
-Bundle-Vendor: MMXLABS
+Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.mmxcore;bundle-version="[2.0.0,3.0.0)",
+ org.eclipse.emf.edit.ui;bundle-version="2.7.0",
+ org.slf4j.api;bundle-version="1.6.1",
  org.ops4j.peaberry;bundle-version="1.2.0",
  org.ops4j.peaberry.eclipse;bundle-version="1.1.1",
  com.google.inject;bundle-version="3.0.0",
+ org.eclipse.nebula.widgets.formattedtext;bundle-version="1.0.0",
  com.mmxlabs.rcp.common;bundle-version="[1.0.0,2.0.0)",
- org.slf4j.api;bundle-version="1.6.1",
  com.mmxlabs.models.util;bundle-version="[1.0.0,2.0.0)",
  com.mmxlabs.models.ui.validation;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
- org.eclipse.nebula.widgets.formattedtext;bundle-version="1.0.0",
+ com.mmxlabs.models.mmxcore;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.jobmanager.eclipse;bundle-version="[1.0.0,2.0.0)",
- org.eclipse.emf.edit.ui;bundle-version="2.7.0",
  com.mmxlabs.scenario.service.model;bundle-version="[1.0.0,2.0.0)",
  com.mmxlabs.scenario.service.ui;bundle-version="[1.0.0,2.0.0)",
  com.mmxlabs.models.common;bundle-version="[1.0.0,2.0.0)"

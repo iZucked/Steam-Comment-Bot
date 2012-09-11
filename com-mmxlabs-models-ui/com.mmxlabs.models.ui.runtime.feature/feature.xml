@@ -8,8 +8,8 @@
 <feature
       id="com.mmxlabs.models.ui.runtime.feature"
       label="Models: UI Runtime Feature"
-      version="1.0.0.qualifier"
-      provider-name="Minimax Labs">
+      version="1.0.1.qualifier"
+      provider-name="Minimax Labs Ltd.">
 
    <description>
       MMX Core UI Components
