@@ -19,7 +19,9 @@
 <unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.lng.ui.runtime.feature.source.feature.group" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.trading.optimiser.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.trading.optimiser.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.0.RELEASE"/>
