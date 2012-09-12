@@ -30,3 +30,4 @@ Require-Bundle: org.eclipse.core.runtime,
  com.mmxlabs.models.ui.validation;bundle-version="1.0.0",
  com.mmxlabs.models.common;bundle-version="1.0.0"
 Bundle-ActivationPolicy: lazy
+Import-Package: com.mmxlabs.common;version="1.0.2"
