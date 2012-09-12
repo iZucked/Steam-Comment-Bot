@@ -15,9 +15,9 @@ properties.1.value=false
 instructions.configure=\
 org.eclipse.equinox.p2.touchpoint.natives.remove(path:${installFolder}/eclipsec.exe);\
 org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#58}//s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/,name:MMXLabs Releases);\
-org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/,name:MMXLabs Releases);
-#org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#58}//s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.shiplingo.platform/nightly/,name:ShipLingo Nightly);
-#org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.shiplingo.platform/nightly/,name:ShipLingo Nightly);
+org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/,name:MMXLabs Releases);\
+org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:0,location:https${#58}//s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.shiplingo.platform/nightly/,name:ShipLingo Nightly);\
+org.eclipse.equinox.p2.touchpoint.eclipse.addRepository(type:1,location:https${#58}//s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.shiplingo.platform/nightly/,name:ShipLingo Nightly);
 
 
 

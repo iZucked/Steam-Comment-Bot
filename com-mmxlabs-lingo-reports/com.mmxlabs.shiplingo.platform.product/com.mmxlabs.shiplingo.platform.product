@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="ShipLiNGO" uid="com.mmxlabs.shiplingo.platform.app.product.id" id="com.mmxlabs.shiplingo.platform.app.product" application="com.mmxlabs.shiplingo.platform.app.application" version="1.0.0.RELEASE" useFeatures="true" includeLaunchers="true">
+<product name="ShipLiNGO" uid="com.mmxlabs.shiplingo.platform.app.product.id" id="com.mmxlabs.shiplingo.platform.app.product" application="com.mmxlabs.shiplingo.platform.app.application" version="1.0.1-SNAPSHOT" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/com.mmxlabs.shiplingo.platform.app/aboutImage.gif"/>

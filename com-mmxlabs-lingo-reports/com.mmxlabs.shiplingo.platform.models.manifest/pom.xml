@@ -6,10 +6,10 @@
 	<parent>
 		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
 		<groupId>com.mmxlabs.shiplingo.platform</groupId>
-		<version>1.0.0.RELEASE</version>
+		<version>1.0.1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.shiplingo.platform.models.manifest</artifactId>
-	<version>1.0.0.RELEASE</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 </project>
