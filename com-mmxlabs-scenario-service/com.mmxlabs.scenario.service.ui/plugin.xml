@@ -129,7 +129,7 @@
       </command>
       <command
             id="com.mmxlabs.scenario.service.ui.diffedit"
-            name="Diff/Edit">
+            name="Sandbox">
       </command>
    </extension>
    <extension
@@ -514,7 +514,7 @@
          </command>
          <command
                commandId="com.mmxlabs.scenario.service.ui.diffedit"
-               label="Diff/Edit"
+               label="Sandbox"
                style="push">
          </command>
       </menuContribution>

@@ -72,7 +72,7 @@ public class DiffEditScenarioCommandHandler extends AbstractHandler {
 							}
 						}
 
-						final String namePrefix = "DiffEdit Fork " + df.format(new Date()) + " - " + instance.getName();
+						final String namePrefix = "[S] " + instance.getName();
 						String newName = namePrefix;
 						int counter = 1;
 						while (existingNames.contains(newName)) {
