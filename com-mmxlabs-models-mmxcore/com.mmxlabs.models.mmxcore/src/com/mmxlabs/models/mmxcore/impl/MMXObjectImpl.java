@@ -124,7 +124,9 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 					final Iterator<? extends EObject> iter = value.iterator();
 					int index = 0;
 					while (iter.hasNext()) {
-						if (installProxy(ref, iter.next(), index++)) iter.remove();
+						if (installProxy(ref, iter.next(), index++)) {
+							iter.remove();
+						}
 					}
 				} else {
 					if (installProxy(ref, (EObject) eGet(ref), 0)) {
@@ -133,7 +135,7 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 				}
 			}
 		}
-		
+
 		for (final EObject o : eContents()) {
 			if (o instanceof MMXObject) {
 				((MMXObject) o).makeProxies();
@@ -194,7 +196,9 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 		final Iterator<MMXProxy> iterator = getProxies().iterator();
 		while (iterator.hasNext()) {
 			final MMXProxy p = iterator.next();
-			if (p.getResolvedReferent() == null) continue;
+			if (p.getResolvedReferent() == null) {
+				continue;
+			}
 			final UUIDObject referent = p.getResolvedReferent();
 			final EReference reference = p.getReference();
 			if (reference.isMany()) {
@@ -206,9 +210,11 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 			}
 			iterator.remove();
 		}
-		
+
 		for (final EObject o : eContents()) {
-			if (o instanceof MMXObject) ((MMXObject) o).restoreProxies();
+			if (o instanceof MMXObject) {
+				((MMXObject) o).restoreProxies();
+			}
 		}
 	}
 
