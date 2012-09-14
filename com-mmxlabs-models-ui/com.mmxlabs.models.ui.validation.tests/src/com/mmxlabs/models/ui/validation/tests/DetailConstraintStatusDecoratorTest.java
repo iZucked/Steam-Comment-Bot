@@ -23,6 +23,7 @@ public class DetailConstraintStatusDecoratorTest {
 
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.getConstraint();
 		Mockito.verify(status).getConstraint();
@@ -34,6 +35,7 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testGetTarget() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.getTarget();
 		Mockito.verify(status).getTarget();
@@ -45,6 +47,7 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testGetResultLocus() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.getResultLocus();
 		Mockito.verify(status).getResultLocus();
@@ -56,6 +59,7 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testGetChildren() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.getChildren();
 		Mockito.verify(status).getChildren();
@@ -67,6 +71,7 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testGetCode() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.getCode();
 		Mockito.verify(status).getCode();
@@ -78,6 +83,7 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testGetException() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.getException();
 		Mockito.verify(status).getException();
@@ -89,6 +95,7 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testGetMessage() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.getMessage();
 		Mockito.verify(status).getMessage();
@@ -100,6 +107,7 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testGetPlugin() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.getPlugin();
 		Mockito.verify(status).getPlugin();
@@ -111,8 +119,21 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testGetSeverity() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.getSeverity();
+		Mockito.verify(status).getSeverity();
+
+		Mockito.verifyNoMoreInteractions(status);
+	}
+	
+	@Test
+	public void testGetSeverity2() {
+		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
+		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status, 2);
+
+		Assert.assertEquals(0,  status.getSeverity());
+		Assert.assertEquals(2,  deco.getSeverity());
 		Mockito.verify(status).getSeverity();
 
 		Mockito.verifyNoMoreInteractions(status);
@@ -122,6 +143,7 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testIsMultiStatus() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.isMultiStatus();
 		Mockito.verify(status).isMultiStatus();
@@ -133,6 +155,7 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testIsOK() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.isOK();
 		Mockito.verify(status).isOK();
@@ -144,18 +167,29 @@ public class DetailConstraintStatusDecoratorTest {
 	public void testMatches() {
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		deco.matches(1);
-		Mockito.verify(status).matches(1);
 
 		Mockito.verifyNoMoreInteractions(status);
 	}
 
 	@Test
+	public void testMatches2() {
+		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
+		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status, 2);
+
+		deco.matches(2);
+
+		Mockito.verifyNoMoreInteractions(status);
+	}
+	
+	@Test
 	public void testAddGetFeaturesForEObject() {
 
 		final IConstraintStatus status = Mockito.mock(IConstraintStatus.class);
 		final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator(status);
+		Mockito.verify(status).getSeverity();
 
 		final EObject obj1 = Mockito.mock(EObject.class);
 		final EObject obj2 = Mockito.mock(EObject.class);
