@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.cargo.ui.util.SpotSlotHelper;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
@@ -73,7 +74,12 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 								final CompoundCommand cmd = new CompoundCommand("FOB Sale update");
 
 								if (dischargeSlot instanceof SpotSlot) {
-									SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, dischargeSlot, slot, (Date) parameter.getValue(), cmd);
+									final Port port = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) ? ((Port) parameter.getValue()) : slot.getPort();
+									final Date date = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) ? ((Date) parameter.getValue()) : slot.getWindowStart();
+									if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) {
+										cmd.append(SetCommand.create(editingDomain, dischargeSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+									}
+									SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, dischargeSlot, slot.getPort(), port, date, cmd);
 								} else {
 									cmd.append(SetCommand.create(editingDomain, dischargeSlot, parameter.getEStructuralFeature(), parameter.getValue()));
 								}
@@ -115,7 +121,14 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 								final CompoundCommand cmd = new CompoundCommand("DES Purchase update");
 
 								if (loadSlot instanceof SpotSlot) {
-									SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, loadSlot, slot, (Date) parameter.getValue(), cmd);
+									final Port port = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) ? ((Port) parameter.getValue()) : slot.getPort();
+									final Date date = (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) ? ((Date) parameter.getValue()) : slot.getWindowStart();
+
+									if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_Port()) {
+										cmd.append(SetCommand.create(editingDomain, loadSlot, parameter.getEStructuralFeature(), parameter.getValue()));
+									}
+									SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, loadSlot, slot.getPort(), port, date, cmd);
+
 								} else {
 									cmd.append(SetCommand.create(editingDomain, loadSlot, parameter.getEStructuralFeature(), parameter.getValue()));
 								}

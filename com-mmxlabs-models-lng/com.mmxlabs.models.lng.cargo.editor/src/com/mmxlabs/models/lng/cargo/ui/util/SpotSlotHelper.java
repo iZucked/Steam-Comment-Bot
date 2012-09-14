@@ -10,22 +10,32 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.ui.dates.LocalDateUtil;
+import com.mmxlabs.models.lng.port.Port;
 
 public class SpotSlotHelper {
 
 	public static void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, final Slot otherSlot, final CompoundCommand cmd) {
-		setSpotSlotTimeWindow(editingDomain, slot, otherSlot, otherSlot.getWindowStart(), cmd);
+		setSpotSlotTimeWindow(editingDomain, slot, otherSlot.getPort(), otherSlot.getPort(), otherSlot.getWindowStart(), cmd);
 	}
 
-	public static void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, final Slot otherSlot, final Date newDate, final CompoundCommand cmd) {
+	public static void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, final Port oldPort, Port newPort, final Date newDate, final CompoundCommand cmd) {
 		// Spot market - make a month range.
 		final Calendar cal = Calendar.getInstance();
 		// Get the timezone
-		final TimeZone zone = LocalDateUtil.getTimeZone(otherSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
+		final TimeZone zone = TimeZone.getTimeZone(newPort.getTimeZone());
 		cal.setTimeZone(zone);
-		// Prime with date
-		cal.setTime(newDate);
+		if (oldPort == newPort) {
+			// Prime with date
+			cal.setTime(newDate);
+		} else {
+			Calendar oldCal = Calendar.getInstance();
+			final TimeZone oldZone = TimeZone.getTimeZone(oldPort.getTimeZone());
+			oldCal.setTimeZone(oldZone);
+			oldCal.setTime(newDate);
+			
+			cal.set(Calendar.YEAR, oldCal.get(Calendar.YEAR));
+			cal.set(Calendar.MONTH, oldCal.get(Calendar.MONTH));
+		}
 		// Clear any existing time values
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.set(Calendar.SECOND, 0);
