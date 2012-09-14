@@ -202,12 +202,14 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 			}
 			final UUIDObject referent = p.getResolvedReferent();
 			final EReference reference = p.getReference();
-			if (reference.isMany()) {
-				@SuppressWarnings("unchecked")
-				final List<EObject> values = (List<EObject>) eGet(reference);
-				values.add(p.getIndex(), referent);
-			} else {
-				eSet(reference, referent);
+			if (reference.isTransient()) {
+				if (!reference.isMany()) {
+					@SuppressWarnings("unchecked")
+					final List<EObject> values = (List<EObject>) eGet(reference);
+					values.add(p.getIndex(), referent);
+				} else {
+					eSet(reference, referent);
+				}
 			}
 			iterator.remove();
 		}
