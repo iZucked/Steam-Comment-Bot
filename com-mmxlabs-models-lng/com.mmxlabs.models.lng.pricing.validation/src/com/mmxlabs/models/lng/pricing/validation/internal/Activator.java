@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.pricing.validation;
+package com.mmxlabs.models.lng.pricing.validation.internal;
 
 import org.osgi.framework.BundleContext;
 
