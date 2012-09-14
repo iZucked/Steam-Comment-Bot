@@ -153,6 +153,7 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 	private boolean installProxy(final EReference ref, final EObject referent, int index) {
 		if (!(referent instanceof UUIDObject)) return false;
 		if (referent.eResource() == eResource()) return false;
+		if (ref.isTransient()) return false;
 		
 		final UUIDObject u = (UUIDObject) referent;
 		
