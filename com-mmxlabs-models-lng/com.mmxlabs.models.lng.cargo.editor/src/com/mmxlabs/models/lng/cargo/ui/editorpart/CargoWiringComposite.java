@@ -1154,7 +1154,7 @@ public class CargoWiringComposite extends Composite {
 
 				if (dischargeSlots.contains(c.getDischargeSlot())) {
 					final int dischargeIdx = dischargeSlots.indexOf(c.getDischargeSlot());
-					if (cargoes.get(dischargeIdx) == null) {
+					if (loadSlots.get(dischargeIdx) == null) {
 						cargoes.set(dischargeIdx, c);
 						loadSlots.set(dischargeIdx, c.getLoadSlot());
 						newLoadSlots.remove(c.getLoadSlot());
