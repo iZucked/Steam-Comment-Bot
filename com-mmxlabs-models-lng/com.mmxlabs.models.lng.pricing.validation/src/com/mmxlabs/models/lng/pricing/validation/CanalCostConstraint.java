@@ -84,39 +84,46 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 		} else if (target instanceof RouteCost) {
 
 			final RouteCost vesselClassCost = (RouteCost) target;
-
-			if (vesselClassCost.getLadenCost() == 0 || vesselClassCost.getBallastCost() == 0) {
-				final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClassCost.getVesselClass().getName(), vesselClassCost.getRoute().getName());
+			if (vesselClassCost.getVesselClass() == null) {
+				final String message = "Route costs are missing a vessel class";
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-
-				if (vesselClassCost.getLadenCost() == 0) {
-					dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_LadenCost());
-				}
-				if (vesselClassCost.getBallastCost() == 0) {
-					dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_BallastCost());
-				}
+				dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_VesselClass());
 				return dcsd;
-			}
+			} else {
+				if (vesselClassCost.getLadenCost() == 0 || vesselClassCost.getBallastCost() == 0) {
+					final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClassCost.getVesselClass().getName(), vesselClassCost.getRoute()
+							.getName());
+					final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-			final EObject original = extraValidationContext.getOriginal(vesselClassCost);
-			final EObject replacement = extraValidationContext.getReplacement(vesselClassCost);
-
-			final List<EObject> objects = extraValidationContext.getSiblings(target);
-			for (final EObject obj : objects) {
-				if (obj instanceof RouteCost) {
-					final RouteCost routeCost = (RouteCost) obj;
-
-					if (routeCost == original || routeCost == replacement) {
-						continue;
+					if (vesselClassCost.getLadenCost() == 0) {
+						dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_LadenCost());
 					}
-					if (routeCost.getVesselClass() == vesselClassCost.getVesselClass()) {
-
-						final String message = String.format("Vessel class %s has multiple Route Costs", vesselClassCost.getVesselClass().getName());
-						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
-						dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_VesselClass());
-						return dcsd;
+					if (vesselClassCost.getBallastCost() == 0) {
+						dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_BallastCost());
 					}
+					return dcsd;
+				}
 
+				final EObject original = extraValidationContext.getOriginal(vesselClassCost);
+				final EObject replacement = extraValidationContext.getReplacement(vesselClassCost);
+
+				final List<EObject> objects = extraValidationContext.getSiblings(target);
+				for (final EObject obj : objects) {
+					if (obj instanceof RouteCost) {
+						final RouteCost routeCost = (RouteCost) obj;
+
+						if (routeCost == original || routeCost == replacement) {
+							continue;
+						}
+						if (routeCost.getVesselClass() == vesselClassCost.getVesselClass()) {
+
+							final String message = String.format("Vessel class %s has multiple Route Costs", vesselClassCost.getVesselClass().getName());
+							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+							dcsd.addEObjectAndFeature(vesselClassCost, PricingPackage.eINSTANCE.getRouteCost_VesselClass());
+							return dcsd;
+						}
+
+					}
 				}
 			}
 
