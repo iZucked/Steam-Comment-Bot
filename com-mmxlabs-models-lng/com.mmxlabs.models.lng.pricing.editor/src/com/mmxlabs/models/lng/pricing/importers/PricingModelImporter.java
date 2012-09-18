@@ -45,13 +45,14 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 public class PricingModelImporter implements ISubmodelImporter {
 	private static final HashMap<String, String> inputs = new HashMap<String, String>();
-	private static final String PRICE_CURVE_KEY = "PRICE_CURVES";
-	private static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
-	private static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
-	private static final String CHARTER_PRICING_KEY = "CHARTER_PRICING";
-	private static final String PORT_COSTS_KEY = "PORT_COSTS";
-	private static final String SPOT_CARGO_MARKETS_KEY = "SPOT_CARGO_MARKETS";
-	private static final String SPOT_CARGO_MARKETS_AVAILABILITY_KEY = "SPOT_CARGO_MARKETS_AVAILABILITY";
+	public static final String PRICE_CURVE_KEY = "PRICE_CURVES";
+	public static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
+	public static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
+	public static final String CHARTER_PRICING_KEY = "CHARTER_PRICING";
+	public static final String PORT_COSTS_KEY = "PORT_COSTS";
+	public static final String ROUTE_COSTS_KEY = "ROUTE_COSTS";
+	public static final String SPOT_CARGO_MARKETS_KEY = "SPOT_CARGO_MARKETS";
+	public static final String SPOT_CARGO_MARKETS_AVAILABILITY_KEY = "SPOT_CARGO_MARKETS_AVAILABILITY";
 
 	static {
 		inputs.put(PRICE_CURVE_KEY, "Commodity Curves");
@@ -60,6 +61,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 		inputs.put(CHARTER_PRICING_KEY, "Charter Rates");
 		inputs.put(PORT_COSTS_KEY, "Port Costs");
 		inputs.put(SPOT_CARGO_MARKETS_KEY, "Spot Cargo Markets");
+		inputs.put(ROUTE_COSTS_KEY, "Route Costs");
 		// inputs.put(SPOT_CARGO_MARKETS_AVAILABILITY_KEY, "Spot Cargo Markets Availability");
 	}
 
@@ -71,6 +73,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 
 	final IClassImporter portCostImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getPortCost());
 
+	final IClassImporter routeCostImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getRouteCost());
 	final IClassImporter spotCargoMarketImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getSpotMarket());
 
 	final IClassImporter spotCargoMarketAvailabilityImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getSpotAvailability());
@@ -99,11 +102,18 @@ public class PricingModelImporter implements ISubmodelImporter {
 		if (inputs.containsKey(COOLDOWN_PRICING_KEY))
 			pricing.getCooldownPrices().addAll(
 					(Collection<? extends CooldownPrice>) cooldownPriceImporter.importObjects(PricingPackage.eINSTANCE.getCooldownPrice(), inputs.get(COOLDOWN_PRICING_KEY), context));
+		}
 
 		if (inputs.containsKey(CHARTER_PRICING_KEY))
 			fcm.getCharterCosts().addAll(
 					(Collection<? extends CharterCostModel>) charterPriceImporter.importObjects(PricingPackage.eINSTANCE.getCharterCostModel(), inputs.get(CHARTER_PRICING_KEY), context));
 
+		}
+
+		if (inputs.containsKey(ROUTE_COSTS_KEY)) {
+			pricing.getRouteCosts().addAll((Collection<? extends RouteCost>) charterPriceImporter.importObjects(PricingPackage.eINSTANCE.getRouteCost(), inputs.get(ROUTE_COSTS_KEY), context));
+		}
+		
 		if (inputs.containsKey(SPOT_CARGO_MARKETS_KEY)) {
 			final Collection<EObject> markets = (spotCargoMarketImporter.importObjects(PricingPackage.eINSTANCE.getSpotMarket(), inputs.get(SPOT_CARGO_MARKETS_KEY), context));
 

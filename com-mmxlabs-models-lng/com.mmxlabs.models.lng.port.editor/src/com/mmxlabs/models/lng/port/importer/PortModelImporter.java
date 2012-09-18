@@ -45,11 +45,11 @@ public class PortModelImporter implements ISubmodelImporter {
 		inputs.put(DISTANCES_KEY, "Distance Matrix");
 		inputs.put(SUEZ_KEY, "Suez Distance Matrix");
 	}
-	
-	IClassImporter portImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPort());
-	IClassImporter portGroupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPortGroup());
-	RouteImporter routeImporter = new RouteImporter();
-	
+
+	private IClassImporter portImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPort());
+	private IClassImporter portGroupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPortGroup());
+	private RouteImporter routeImporter = new RouteImporter();
+
 	@Override
 	public Map<String, String> getRequiredInputs() {
 		return inputs;
