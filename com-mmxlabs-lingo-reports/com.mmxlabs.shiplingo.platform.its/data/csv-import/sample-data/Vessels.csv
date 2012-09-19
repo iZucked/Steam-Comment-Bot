@@ -1,0 +1,8 @@
+uuid,name,otherNames,timeCharterRate,vesselClass,inaccessiblePorts,availability.startAfter,availability.startBy,availability.endAfter,availability.endBy,availability.startAt,availability.endAt,availability.kind,startHeel.volumeAvailable,startHeel.cvValue,startHeel.pricePerMMBTU,startHeel.kind,kind
+_7Q0FMajGEeG3pZJ5vTn7rA,Bluesky,,100000,STEAM-145.8,,2011-01-02 00:00,2011-01-02 00:00,,,Point Fortin,,VesselAvailability,,0.0,0.0,HeelOptions,Vessel
+_7Q0sQajGEeG3pZJ5vTn7rA,Methane Becki Anne,,,TFDE-170,,,2010-12-20 05:00,,,,,VesselAvailability,,0.0,0.0,HeelOptions,Vessel
+_7Q0sQqjGEeG3pZJ5vTn7rA,Methane Heather Sally,,,STEAM-149.7,,,2010-11-29 05:00,,,,,VesselAvailability,,0.0,0.0,HeelOptions,Vessel
+_7Q0sRKjGEeG3pZJ5vTn7rA,Methane Julia Louise,,,TFDE-170,,,2010-12-30 05:00,,,,,VesselAvailability,,0.0,0.0,HeelOptions,Vessel
+_7Q0sRqjGEeG3pZJ5vTn7rA,Methane Lydon Volney,,,STEAM-149.7,,,2010-12-08 05:00,,,,,VesselAvailability,,0.0,0.0,HeelOptions,Vessel
+_7Q0sSqjGEeG3pZJ5vTn7rA,Methane Princess,,100000,STEAM-138,,2010-12-01 11:00,2010-12-01 11:00,,,Point Fortin,,VesselAvailability,,0.0,0.0,HeelOptions,Vessel
+_i0i3EOFPEeG3JK0-AQlDQw,Charter Ship,,150000,TFDE-170,,,2010-11-20 12:00,,,,,VesselAvailability,10000,22.5,0.0,HeelOptions,Vessel

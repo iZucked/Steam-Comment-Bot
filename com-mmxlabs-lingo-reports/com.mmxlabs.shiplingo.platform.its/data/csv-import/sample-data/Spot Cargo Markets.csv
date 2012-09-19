@@ -1,0 +1,5 @@
+type,markets,kind
+DES Purchase,,SpotMarketGroup
+DES Sale,,SpotMarketGroup
+FOB Purchase,,SpotMarketGroup
+FOB Sale,,SpotMarketGroup
