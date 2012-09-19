@@ -109,7 +109,20 @@ public class AbstractOptimisationResultTester {
 		ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), true);
 
 		final MMXRootObject originalScenario = (MMXRootObject) instance.getInstance();
+		
+		runScenario(originalScenario, url);
+	}
 
+	/**
+	 * If run on two separate occasions the fitnesses generated need to be identical. This method tests this by being run twice. The first execution prints out a map that maps the name of the fitness
+	 * to the value to the console. This is copied and pasted into the method. The second execution will test that map against a the fitnesses that have been generated again.
+	 * 
+	 * @throws IOException
+	 * @throws IncompleteScenarioException
+	 * @throws MigrationException
+	 * @throws InterruptedException
+	 */
+	public void runScenario(MMXRootObject originalScenario, final URL url) throws IOException, IncompleteScenarioException, MigrationException {
 		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
 		final MMXRootObject copy = duplicate(originalScenario);
 
