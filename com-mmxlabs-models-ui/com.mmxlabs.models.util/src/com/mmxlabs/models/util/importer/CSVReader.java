@@ -36,8 +36,8 @@ public class CSVReader implements Closeable {
 
 	private final Set<String> unusedHeaders = new HashSet<String>();
 
-	public CSVReader(final String path) throws IOException {
-		this(path.substring(0, path.lastIndexOf(System.getProperty("file.separator"))), path);
+	public CSVReader(final File file) throws IOException {
+		this(file.toURI().toString().substring(0, file.toURI().toString().lastIndexOf("/")), file.toURI().toString());
 	}
 
 	/**
