@@ -41,7 +41,7 @@ public class PortModelImporter implements ISubmodelImporter {
 	public static final HashMap<String, String> inputs = new LinkedHashMap<String, String>();
 	static {
 		inputs.put(PORT_KEY, "Ports");
-		inputs.put(PORT_GROUP_KEY, "Groups");
+		inputs.put(PORT_GROUP_KEY, "Port Groups");
 		inputs.put(DISTANCES_KEY, "Distance Matrix");
 		inputs.put(SUEZ_KEY, "Suez Distance Matrix");
 	}
