@@ -761,80 +761,7 @@ public class CargoWiringComposite extends Composite {
 			leftTerminalsValid.add(loadSlots.get(index) != null);
 
 			if (wiringDiagram == null) {
-				wiringDiagram = new WiringDiagram(this, SWT.NONE) {
-
-					@Override
-					public synchronized void paintControl(final PaintEvent e) {
-						synchronized (updateLock) {
-							super.paintControl(e);
-						}
-					}
-
-					@Override
-					protected synchronized List<Float> getTerminalPositions() {
-						final float littleOffset = getBounds().y;
-						final ArrayList<Float> vMidPoints = new ArrayList<Float>(numberOfRows);
-						// get vertical coordinates of labels
-
-						float lastMidpointButOne = 0;
-						float lastMidpoint = 0;
-
-						for (int i = 0; i < numberOfRows; ++i) {
-							if (i >= lhsComposites.size()) {
-								continue;
-							}
-							final Composite l = lhsComposites.get(i);
-							final Rectangle lbounds = l.getBounds();
-							lastMidpointButOne = lastMidpoint;
-							lastMidpoint = -littleOffset + lbounds.y + lbounds.height / 2.0f;
-							vMidPoints.add(lastMidpoint);
-						}
-
-						return vMidPoints;
-					}
-
-					@Override
-					protected synchronized void wiringChanged(final List<Integer> newWiring) {
-						doWiringChanged(newWiring);
-					}
-
-					@Override
-					protected void openContextMenu(final boolean leftSide, final int terminal, final int mouseX, final int mouseY) {
-						// if (terminal < numberOfRows) {
-						// final IMenuListener menuListener;
-						// if (leftSide) {
-						// menuListener = createLoadSlotMenuListener(loadSlots.get(terminal));
-						// } else {
-						// menuListener = createDischargeSlotMenuListener(dischargeSlots.get(terminal));
-						// }
-						// // menuManager.addMenuListener(menuListener);
-						//
-						// final Menu menu = menuManager.getMenu();
-						//
-						// menu.setLocation(toDisplay(mouseX, mouseY));
-						// System.out.println(mouseX + " -- " + mouseY);
-						// menuManager.removeAll();
-						// menuListener.menuAboutToShow(menuManager);
-						// menuManager.updateAll(true);
-						// ;
-						// // Event event = new Event();
-						// // event.type = SWT.Show;
-						// // event.button = 3;
-						// // menu.notifyListeners(SWT.Show, event);
-						// // menu.setLocation(this.toDisplay(0,0));
-						// menu.setVisible(true);
-						//
-						// // menuManager.removeMenuListener(menuListener);
-						// }
-						//
-					}
-				};
-				wiringDiagram.setLocked(locked);
-
-				// Hook in a listener to notify mouse events
-				final WiringDiagramMouseListener listener = new WiringDiagramMouseListener();
-				wiringDiagram.addMouseMoveListener(listener);
-				wiringDiagram.addMouseListener(listener);
+				createWiringDiagram();
 			}
 			if (index == 0) {
 				// wiring diagram is tall
@@ -881,7 +808,13 @@ public class CargoWiringComposite extends Composite {
 		// while (idComposites.size() > numberOfRows) {
 		// final Composite c = idComposites.remove(idComposites.size() - 1);
 		// c.dispose();
+
+		
 		// }
+		
+		if (wiringDiagram == null) {
+			createWiringDiagram();
+		}
 
 		wiringDiagram.setWiring(wiring);
 		wiringDiagram.setTerminalsValid(leftTerminalsValid, rightTerminalsValid);
@@ -903,6 +836,83 @@ public class CargoWiringComposite extends Composite {
 		wiringDiagram.setWireColors(wireColors);
 		wiringDiagram.setTerminalColors(terminalColors);
 		updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
+	}
+
+	private void createWiringDiagram() {
+		wiringDiagram = new WiringDiagram(this, SWT.NONE) {
+
+			@Override
+			public synchronized void paintControl(final PaintEvent e) {
+				synchronized (updateLock) {
+					super.paintControl(e);
+				}
+			}
+
+			@Override
+			protected synchronized List<Float> getTerminalPositions() {
+				final float littleOffset = getBounds().y;
+				final ArrayList<Float> vMidPoints = new ArrayList<Float>(numberOfRows);
+				// get vertical coordinates of labels
+
+				float lastMidpointButOne = 0;
+				float lastMidpoint = 0;
+
+				for (int i = 0; i < numberOfRows; ++i) {
+					if (i >= lhsComposites.size()) {
+						continue;
+					}
+					final Composite l = lhsComposites.get(i);
+					final Rectangle lbounds = l.getBounds();
+					lastMidpointButOne = lastMidpoint;
+					lastMidpoint = -littleOffset + lbounds.y + lbounds.height / 2.0f;
+					vMidPoints.add(lastMidpoint);
+				}
+
+				return vMidPoints;
+			}
+
+			@Override
+			protected synchronized void wiringChanged(final List<Integer> newWiring) {
+				doWiringChanged(newWiring);
+			}
+
+			@Override
+			protected void openContextMenu(final boolean leftSide, final int terminal, final int mouseX, final int mouseY) {
+				// if (terminal < numberOfRows) {
+				// final IMenuListener menuListener;
+				// if (leftSide) {
+				// menuListener = createLoadSlotMenuListener(loadSlots.get(terminal));
+				// } else {
+				// menuListener = createDischargeSlotMenuListener(dischargeSlots.get(terminal));
+				// }
+				// // menuManager.addMenuListener(menuListener);
+				//
+				// final Menu menu = menuManager.getMenu();
+				//
+				// menu.setLocation(toDisplay(mouseX, mouseY));
+				// System.out.println(mouseX + " -- " + mouseY);
+				// menuManager.removeAll();
+				// menuListener.menuAboutToShow(menuManager);
+				// menuManager.updateAll(true);
+				// ;
+				// // Event event = new Event();
+				// // event.type = SWT.Show;
+				// // event.button = 3;
+				// // menu.notifyListeners(SWT.Show, event);
+				// // menu.setLocation(this.toDisplay(0,0));
+				// menu.setVisible(true);
+				//
+				// // menuManager.removeMenuListener(menuListener);
+				// }
+				//
+			}
+		};
+		wiringDiagram.setLocked(locked);
+
+		// Hook in a listener to notify mouse events
+		final WiringDiagramMouseListener listener = new WiringDiagramMouseListener();
+		wiringDiagram.addMouseMoveListener(listener);
+		wiringDiagram.addMouseListener(listener);
 	}
 
 	/*
