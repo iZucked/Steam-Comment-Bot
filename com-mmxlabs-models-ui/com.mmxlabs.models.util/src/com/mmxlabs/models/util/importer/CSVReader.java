@@ -9,6 +9,8 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -28,20 +30,24 @@ public class CSVReader implements Closeable {
 
 	private BufferedReader reader;
 	private final String[] headerLine;
-	private final String directory;
+	private final String base;
 	private final String filename;
 	private final Map<String, String> originalHeaderLine = new HashMap<String, String>();
 
 	private final Set<String> unusedHeaders = new HashSet<String>();
 
+	public CSVReader(final String path) throws IOException {
+		this(path.substring(0, path.lastIndexOf(System.getProperty("file.separator"))), path);
+	}
+
 	/**
 	 * @param inputFileName
 	 * @throws IOException
 	 */
-	public CSVReader(final String inputFileName) throws IOException {
-		directory = new File(inputFileName).getParent();
-		filename = new File(inputFileName).getName();
-		reader = new BufferedReader(new FileReader(inputFileName));
+	public CSVReader(final String base, final String inputFileName) throws IOException {
+		this.base = base;
+		filename = inputFileName;
+		reader = new BufferedReader(new InputStreamReader(new URL(filename).openStream()));
 		headerLine = readLine();
 		if (headerLine == null) {
 			return;
@@ -55,7 +61,7 @@ public class CSVReader implements Closeable {
 	}
 
 	public CSVReader getAdjacentReader(final String pathFragment) throws IOException {
-		return new CSVReader(directory + File.separator + pathFragment);
+		return new CSVReader(base, base + File.separator + pathFragment);
 	}
 
 	public String getCasedColumnName(final String lowerCaseName) {
@@ -117,7 +123,7 @@ public class CSVReader implements Closeable {
 	}
 
 	private FieldMap currentLine;
-	
+
 	/**
 	 * @return
 	 * @throws IOException
@@ -157,7 +163,7 @@ public class CSVReader implements Closeable {
 	public int getLineNumber() {
 		return lineNumber;
 	}
-	
+
 	@Override
 	public void close() throws IOException {
 		if (reader != null) {
