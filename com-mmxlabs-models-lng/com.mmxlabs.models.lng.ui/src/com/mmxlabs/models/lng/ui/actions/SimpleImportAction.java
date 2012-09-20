@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.ui.actions;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,7 +55,7 @@ public class SimpleImportAction extends ImportAction {
 
 		CSVReader reader;
 		try {
-			reader = new CSVReader(path);
+			reader = new CSVReader(new File(path));
 			final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
 			context.run();
 			final Command cmd = mergeImports(container, containment, importedObjects);
