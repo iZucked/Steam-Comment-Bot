@@ -43,6 +43,9 @@ import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
+/**
+ * @since 2.0
+ */
 public class PricingModelImporter implements ISubmodelImporter {
 	private static final HashMap<String, String> inputs = new HashMap<String, String>();
 	public static final String PRICE_CURVE_KEY = "PRICE_CURVES";

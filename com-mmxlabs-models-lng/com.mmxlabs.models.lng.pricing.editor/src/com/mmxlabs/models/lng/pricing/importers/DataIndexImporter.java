@@ -35,6 +35,7 @@ import com.mmxlabs.models.util.importer.IImportContext;
  * Custom import logic for loading a data index.
  * 
  * @author hinton
+ * @since 2.0
  * 
  */
 public class DataIndexImporter implements IClassImporter {

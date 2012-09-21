@@ -28,6 +28,7 @@ import com.mmxlabs.models.util.importer.impl.SetReference;
  * A special-case importer for distance matrices.
  * 
  * @author hinton
+ * @since 2.0
  * 
  */
 public class RouteImporter {

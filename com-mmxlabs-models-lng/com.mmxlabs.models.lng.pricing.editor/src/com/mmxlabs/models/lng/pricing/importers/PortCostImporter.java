@@ -19,6 +19,9 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
+/**
+ * @since 2.0
+ */
 public class PortCostImporter extends DefaultClassImporter {
 	@Override
 	public Collection<EObject> importObject(EClass eClass,

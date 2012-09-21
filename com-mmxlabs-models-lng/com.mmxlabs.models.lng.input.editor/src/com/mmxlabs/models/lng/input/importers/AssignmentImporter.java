@@ -31,6 +31,9 @@ import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 
+/**
+ * @since 2.0
+ */
 public class AssignmentImporter {
 	class SpotCounter {
 		public int spotCount = 0;

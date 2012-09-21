@@ -28,6 +28,9 @@ import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
+/**
+ * @since 2.0
+ */
 public class FleetModelImporter implements ISubmodelImporter {
 	public static final String VESSELS_KEY = "VESSELS";
 	public static final String VESSEL_CLASSES_KEY = "VESSELCLASSES";

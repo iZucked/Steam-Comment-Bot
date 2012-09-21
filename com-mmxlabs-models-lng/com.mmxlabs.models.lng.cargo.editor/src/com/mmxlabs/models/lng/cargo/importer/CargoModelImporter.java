@@ -25,6 +25,9 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
+/**
+ * @since 2.0
+ */
 public class CargoModelImporter implements ISubmodelImporter {
 	public static final String CARGO_KEY = "CARGO";
 	public static final String CARGO_GROUP_KEY = "CARGO-GROUP";
