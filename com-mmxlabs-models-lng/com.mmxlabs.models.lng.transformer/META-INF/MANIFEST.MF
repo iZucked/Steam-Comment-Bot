@@ -22,7 +22,7 @@ Require-Bundle: com.google.inject;bundle-version="3.0.0";visibility:=reexport,
  com.mmxlabs.models.lng.pricing;bundle-version="[1.0.0,2.0.0)",
  com.mmxlabs.models.lng.schedule;bundle-version="[1.0.0,2.0.0)",
  com.mmxlabs.models.lng.optimiser;bundle-version="[1.0.0,2.0.0)",
- com.mmxlabs.models.util;bundle-version="[1.0.0,2.0.0)",
+ com.mmxlabs.models.util;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.input.editor;bundle-version="[1.0.0,2.0.0)"
 Export-Package: com.mmxlabs.models.lng.transformer,
  com.mmxlabs.models.lng.transformer.contracts,
