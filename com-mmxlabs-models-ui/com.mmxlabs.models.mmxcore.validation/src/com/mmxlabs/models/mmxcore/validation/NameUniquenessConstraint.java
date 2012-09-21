@@ -24,6 +24,7 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.validation.internal.Activator;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
