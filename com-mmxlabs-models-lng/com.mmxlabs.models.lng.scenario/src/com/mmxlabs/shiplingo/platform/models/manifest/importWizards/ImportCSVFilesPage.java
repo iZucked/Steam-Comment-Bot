@@ -200,7 +200,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
 			for (final String key : c.keys.keySet()) {
 				try {
-					final CSVReader r = new CSVReader(c.keys.get(key));
+					final CSVReader r = new CSVReader(new File(c.keys.get(key)));
 					readers.put(key, r);
 				} catch (final IOException e) {
 					e.printStackTrace();
