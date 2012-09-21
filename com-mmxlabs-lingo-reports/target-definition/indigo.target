@@ -12,8 +12,6 @@
 <unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.0.0.201209071044"/>
 <unit id="com.mmxlabs.rcp.common.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.datasources.feature.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.datasources.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.trading.optimiser.feature.feature.group" version="1.0.0.RELEASE"/>
@@ -35,6 +33,8 @@
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.datasources.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.datasources.feature.source.feature.group" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
