@@ -8,7 +8,8 @@ Bundle-Activator: com.mmxlabs.models.lng.commercial.presentation.CommercialEdito
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.models.lng.commercial.presentation
+Export-Package: com.mmxlabs.models.lng.commercial.importer,
+ com.mmxlabs.models.lng.commercial.presentation
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.core.resources;bundle-version="3.7.101";visibility:=reexport,
  org.eclipse.emf.ecore.xmi;bundle-version="2.7.0";visibility:=reexport,

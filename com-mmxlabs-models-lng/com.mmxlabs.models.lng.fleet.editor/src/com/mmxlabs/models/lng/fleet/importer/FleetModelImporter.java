@@ -33,8 +33,8 @@ public class FleetModelImporter implements ISubmodelImporter {
 	public static final String VESSEL_CLASSES_KEY = "VESSELCLASSES";
 	public static final String FUELS_KEY = "BASEFUELS";
 	public static final String EVENTS_KEY = "EVENTS";
-	private static final String CURVES_KEY = "CONSUMPTION_CURVES";
-	private static final String GROUPS_KEY = "VESSEL-GROUPS";
+	public static final String CURVES_KEY = "CONSUMPTION_CURVES";
+	public static final String GROUPS_KEY = "VESSEL-GROUPS";
 	
 	private IClassImporter vesselImporter = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getVessel());
 	private IClassImporter vesselClassImporter = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getVesselClass());

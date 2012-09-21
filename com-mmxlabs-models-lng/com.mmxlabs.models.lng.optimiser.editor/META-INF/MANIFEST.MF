@@ -8,7 +8,8 @@ Bundle-Activator: com.mmxlabs.models.lng.optimiser.presentation.OptimiserEditorP
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.models.lng.optimiser.presentation
+Export-Package: com.mmxlabs.models.lng.optimiser.importers,
+ com.mmxlabs.models.lng.optimiser.presentation
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.optimiser.edit;bundle-version="[1.0.0,2.0.0)";visibility:=reexport,
  com.mmxlabs.models.util;bundle-version="[1.0.0,2.0.0)",

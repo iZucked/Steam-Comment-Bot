@@ -45,13 +45,13 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 public class PricingModelImporter implements ISubmodelImporter {
 	private static final HashMap<String, String> inputs = new HashMap<String, String>();
-	private static final String PRICE_CURVE_KEY = "PRICE_CURVES";
-	private static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
-	private static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
-	private static final String CHARTER_PRICING_KEY = "CHARTER_PRICING";
-	private static final String PORT_COSTS_KEY = "PORT_COSTS";
-	private static final String SPOT_CARGO_MARKETS_KEY = "SPOT_CARGO_MARKETS";
-	private static final String SPOT_CARGO_MARKETS_AVAILABILITY_KEY = "SPOT_CARGO_MARKETS_AVAILABILITY";
+	public static final String PRICE_CURVE_KEY = "PRICE_CURVES";
+	public static final String CHARTER_CURVE_KEY = "CHARTER_CURVES";
+	public static final String COOLDOWN_PRICING_KEY = "COOLDOWN_PRICING";
+	public static final String CHARTER_PRICING_KEY = "CHARTER_PRICING";
+	public static final String PORT_COSTS_KEY = "PORT_COSTS";
+	public static final String SPOT_CARGO_MARKETS_KEY = "SPOT_CARGO_MARKETS";
+	public static final String SPOT_CARGO_MARKETS_AVAILABILITY_KEY = "SPOT_CARGO_MARKETS_AVAILABILITY";
 
 	static {
 		inputs.put(PRICE_CURVE_KEY, "Commodity Curves");

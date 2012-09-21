@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.port.ui.editorpart;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -130,7 +131,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 							CSVReader reader;
 							try {
-								reader = new CSVReader(path);
+								reader = new CSVReader(new File(path));
 								final Route importRoute = routeImporter.importRoute(reader, context);
 								context.run();
 								final CompoundCommand cc = new CompoundCommand();
@@ -184,7 +185,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 							CSVReader reader;
 							try {
-								reader = new CSVReader(path);
+								reader = new CSVReader(new File(path));
 
 								final Route importRoute = routeImporter.importRoute(reader, context);
 
@@ -232,7 +233,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 
 							CSVReader reader;
 							try {
-								reader = new CSVReader(path);
+								reader = new CSVReader(new File(path));
 
 								final Route importRoute = routeImporter.importRoute(reader, context);
 

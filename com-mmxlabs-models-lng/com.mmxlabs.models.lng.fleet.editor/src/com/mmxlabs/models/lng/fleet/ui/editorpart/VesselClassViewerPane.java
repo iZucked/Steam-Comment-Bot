@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.fleet.ui.editorpart;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -132,7 +133,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 
 						CSVReader reader;
 						try {
-							reader = new CSVReader(path);
+							reader = new CSVReader(new File(path));
 							final Collection<EObject> importedObjects = importer.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), reader, context);
 							context.run();
 							part.getEditingDomain().getCommandStack()
@@ -164,7 +165,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						try {
 							jointModelEditor.setDisableUpdates(true);
 							jointModelEditor.setDisableCommandProviders(true);
-							reader = new CSVReader(path);
+							reader = new CSVReader(new File(path));
 							final Map<String, Pair<IImportProblem, Pair<List<FuelConsumption>, List<FuelConsumption>>>> consumptions = importer.readConsumptions(reader, context);
 							final EditingDomain ed = jointModelEditor.getEditingDomain();
 							final CompoundCommand command = new CompoundCommand();
