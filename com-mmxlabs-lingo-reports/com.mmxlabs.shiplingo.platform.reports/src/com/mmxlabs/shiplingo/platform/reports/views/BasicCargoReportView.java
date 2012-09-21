@@ -6,6 +6,11 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -85,7 +90,41 @@ public class BasicCargoReportView extends EMFReportView {
 			@Override
 			public Object[] getElements(final Object object) {
 				clearInputEquivalents();
-				final Object[] result = superProvider.getElements(object);
+				final Object[] result;
+				if (currentlyPinned) {
+					final List<CargoAllocation> objects = new LinkedList<CargoAllocation>();
+					for (final Map.Entry<String, List<CargoAllocation>> e : namedObjects.entrySet()) {
+						boolean isFirst = true;
+						CargoAllocation ref = null;
+						final LinkedHashSet<CargoAllocation> objectsToAdd = new LinkedHashSet<CargoAllocation>();
+						for (final CargoAllocation ca : e.getValue()) {
+							if (isFirst) {
+								ref = ca;
+								isFirst = false;
+							} else if (ref != null) {
+								boolean different = false;
+								if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
+									different = true;
+								} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
+									different = true;
+								} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
+									different = true;
+								} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+									different = true;
+								}
+								if (different) {
+									objectsToAdd.add(ref);
+									objectsToAdd.add(ca);
+								}
+							}
+						}
+						objects.addAll(objectsToAdd);
+
+					}
+					result = objects.toArray();
+				} else {
+					result = superProvider.getElements(object);
+				}
 
 				for (final Object a : result) {
 					// map to events
@@ -105,12 +144,40 @@ public class BasicCargoReportView extends EMFReportView {
 		};
 	}
 
+	private boolean currentlyPinned = false;
+
+	private final Map<String, List<CargoAllocation>> namedObjects = new LinkedHashMap<String, List<CargoAllocation>>();
+
 	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduleElementCollector() {
+
 			@Override
-			protected Collection<? extends Object> collectElements(Schedule schedule) {
-				return schedule.getCargoAllocations();
+			public void beginCollecting() {
+				super.beginCollecting();
+				currentlyPinned = false;
+				namedObjects.clear();
+			}
+
+			@Override
+			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
+				currentlyPinned |= isPinned;
+
+				final List<CargoAllocation> cargoAllocations = schedule.getCargoAllocations();
+
+				for (final CargoAllocation ca : cargoAllocations) {
+					final List<CargoAllocation> l;
+					if (namedObjects.containsKey(ca.getName())) {
+						l = namedObjects.get(ca.getName());
+					} else {
+						l = new LinkedList<CargoAllocation>();
+						namedObjects.put(ca.getName(), l);
+					}
+
+					l.add(ca);
+				}
+
+				return cargoAllocations;
 			}
 		};
 	}
