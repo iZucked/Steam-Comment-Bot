@@ -7,7 +7,6 @@ package com.mmxlabs.models.util.importer;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -36,6 +35,9 @@ public class CSVReader implements Closeable {
 
 	private final Set<String> unusedHeaders = new HashSet<String>();
 
+	/**
+	 * @since 2.0
+	 */
 	public CSVReader(final File file) throws IOException {
 		this(file.toURI().toString().substring(0, file.toURI().toString().lastIndexOf("/")), file.toURI().toString());
 	}
@@ -43,6 +45,7 @@ public class CSVReader implements Closeable {
 	/**
 	 * @param inputFileName
 	 * @throws IOException
+	 * @since 2.0
 	 */
 	public CSVReader(final String base, final String inputFileName) throws IOException {
 		this.base = base;
