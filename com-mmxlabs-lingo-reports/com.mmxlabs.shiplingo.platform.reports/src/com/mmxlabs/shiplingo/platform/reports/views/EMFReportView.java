@@ -12,10 +12,16 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
@@ -49,6 +55,7 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -74,7 +81,14 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	private final List<ColumnHandler> handlers = new ArrayList<ColumnHandler>();
 	private final List<ColumnHandler> handlersInOrder = new ArrayList<ColumnHandler>();
 	private FilterField filterField;
-	boolean sortDescending = false;
+
+	private boolean currentlyPinned = false;
+
+	private int numberOfSchedules;
+
+	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<String, List<EObject>>();
+
+	private final Set<EObject> pinnedObjects = new LinkedHashSet<EObject>();
 
 	protected EMFReportView() {
 		this.helpContextId = null;
@@ -314,11 +328,58 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 			@Override
 			public Object[] getElements(final Object inputElement) {
-				if (inputElement instanceof IScenarioViewerSynchronizerOutput) {
-					final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) inputElement;
-					return output.getCollectedElements().toArray(new Object[output.getCollectedElements().size()]);
+
+				clearInputEquivalents();
+				final Object[] result;
+				if (numberOfSchedules > 1 && currentlyPinned) {
+					final List<EObject> objects = new LinkedList<EObject>();
+					for (final Map.Entry<String, List<EObject>> e : allObjectsByKey.entrySet()) {
+						EObject ref = null;
+						final LinkedHashSet<EObject> objectsToAdd = new LinkedHashSet<EObject>();
+
+						// Find ref...
+						for (final EObject ca : e.getValue()) {
+							if (pinnedObjects.contains(ca)) {
+								ref = ca;
+								break;
+							}
+						}
+
+						if (ref == null) {
+							// No ref found, so add all
+							objectsToAdd.addAll(e.getValue());
+						} else {
+							for (final EObject ca : e.getValue()) {
+								if (ca == ref) {
+									continue;
+								}
+								if (e.getValue().size() != numberOfSchedules) {
+									// Different number of elements, so add all!
+									// This means something has been removed/added
+									objectsToAdd.addAll(e.getValue());
+								} else if (isElementDifferent(ref, ca)) {
+									// There is a data difference, so add
+									objectsToAdd.addAll(e.getValue());
+								}
+							}
+						}
+						objects.addAll(objectsToAdd);
+
+					}
+					result = objects.toArray();
+
+				} else {
+					if (inputElement instanceof IScenarioViewerSynchronizerOutput) {
+						final IScenarioViewerSynchronizerOutput output = (IScenarioViewerSynchronizerOutput) inputElement;
+						result = output.getCollectedElements().toArray(new Object[output.getCollectedElements().size()]);
+					} else {
+						result = new Object[0];
+					}
 				}
-				return new Object[0];
+
+				processInputs(result);
+
+				return result;
 			}
 		};
 	}
@@ -543,6 +604,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		super.dispose();
 	}
 
+	/**
+	 * @since 1.0
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public Object getAdapter(final Class adapter) {
@@ -554,5 +618,80 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			return propertySheetPage;
 		}
 		return super.getAdapter(adapter);
+	}
+
+	/**
+	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
+	 * 
+	 * @since 1.1
+	 */
+	protected void clearPinModeData() {
+		clearInputEquivalents();
+		currentlyPinned = false;
+		allObjectsByKey.clear();
+		pinnedObjects.clear();
+		numberOfSchedules = 0;
+	}
+
+	/**
+	 * Call from {@link IScenarioInstanceElementCollector#collectElements(com.mmxlabs.models.mmxcore.MMXRootObject, boolean)} and pass in the list of collected objects rather than raw schedule.
+	 * 
+	 * @param objects
+	 * @param isPinned
+	 * @since 1.1
+	 */
+	protected void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
+		currentlyPinned |= isPinned;
+		++numberOfSchedules;
+
+		for (final EObject ca : objects) {
+			final List<EObject> l;
+			final String key = getElementKey(ca);
+			if (allObjectsByKey.containsKey(key)) {
+				l = allObjectsByKey.get(key);
+			} else {
+				l = new LinkedList<EObject>();
+				allObjectsByKey.put(key, l);
+			}
+
+			l.add(ca);
+
+			if (isPinned) {
+				pinnedObjects.add(ca);
+			}
+		}
+	}
+
+	/**
+	 * Compare an element to the pinned object and return true if different.
+	 * 
+	 * @since 1.1
+	 */
+	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
+		return true;
+	}
+
+	/**
+	 * Returns a key of some kind for the element
+	 * 
+	 * @param element
+	 * @return
+	 * @since 1.1
+	 */
+	protected String getElementKey(final EObject element) {
+		if (element instanceof NamedObject) {
+			return ((NamedObject) element).getName();
+		}
+		return element.toString();
+	}
+
+	/**
+	 * Process the array of elements before they are returned to e.g. map input equivalents
+	 * 
+	 * @since 1.1
+	 * @param result
+	 */
+	protected void processInputs(Object[] result) {
+
 	}
 }
