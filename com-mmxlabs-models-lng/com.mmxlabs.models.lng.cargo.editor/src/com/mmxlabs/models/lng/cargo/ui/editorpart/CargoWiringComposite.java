@@ -603,10 +603,12 @@ public class CargoWiringComposite extends Composite {
 		numberOfRows = wiring.size();
 
 		performControlUpdate(true);
-	}
 
-	public void setStatusProvider(final IStatusProvider statusProvider) {
-		statusProvider.addStatusChangedListener(statusChangedListener);
+		if (this.location != null && location.getStatusProvider() != null) {
+			// Perform initial validation
+			final IStatusProvider statusProvider = location.getStatusProvider();
+			statusChangedListener.onStatusChanged(statusProvider, statusProvider.getStatus());
+		}
 	}
 
 	public IScenarioEditingLocation getEditingLocation() {
@@ -809,9 +811,8 @@ public class CargoWiringComposite extends Composite {
 		// final Composite c = idComposites.remove(idComposites.size() - 1);
 		// c.dispose();
 
-		
 		// }
-		
+
 		if (wiringDiagram == null) {
 			createWiringDiagram();
 		}
@@ -1546,7 +1547,7 @@ public class CargoWiringComposite extends Composite {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
-				LoadSlot loadSlot = loadSlots.get(index);
+				final LoadSlot loadSlot = loadSlots.get(index);
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
 				if (loadSlot.isDESPurchase()) {
