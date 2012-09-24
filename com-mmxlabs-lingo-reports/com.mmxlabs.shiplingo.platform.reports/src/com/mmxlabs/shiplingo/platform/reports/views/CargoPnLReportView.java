@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
@@ -74,6 +75,7 @@ public class CargoPnLReportView extends EMFReportView {
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		final IStructuredContentProvider superProvider = super.getContentProvider();
+		
 		return new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
@@ -120,33 +122,7 @@ public class CargoPnLReportView extends EMFReportView {
 
 			@Override
 			public Object[] getElements(final Object object) {
-				clearInputEquivalents();
-				final Object[] result = superProvider.getElements(object);
-
-				for (final Object a : result) {
-					// map to events
-					if (a instanceof CargoAllocation) {
-						final CargoAllocation allocation = (CargoAllocation) a;
-
-						setInputEquivalents(
-								allocation,
-								Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
-										allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
-										allocation.getLadenIdle(), allocation.getLadenLeg(), allocation.getInputCargo() }));
-					}
-				}
-
-				return result;
-			}
-		};
-	}
-
-	@Override
-	protected IScenarioInstanceElementCollector getElementCollector() {
-		return new ScheduleElementCollector() {
-			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule) {
-				return schedule.getCargoAllocations();
+				return superProvider.getElements(object);
 			}
 		};
 	}
@@ -219,4 +195,109 @@ public class CargoPnLReportView extends EMFReportView {
 		});
 	}
 
+
+	@Override
+	protected void processInputs(final Object[] result) {
+		for (final Object a : result) {
+			// map to events
+			if (a instanceof CargoAllocation) {
+				final CargoAllocation allocation = (CargoAllocation) a;
+
+				setInputEquivalents(
+						allocation,
+						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
+								allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
+								allocation.getLadenIdle(), allocation.getLadenLeg(), allocation.getInputCargo() }));
+			}
+		}
+	}
+
+	@Override
+	protected boolean isElementDifferent(EObject pinnedObject, EObject otherObject) {
+		CargoAllocation ref = null;
+		if (pinnedObject instanceof CargoAllocation) {
+			ref = (CargoAllocation) pinnedObject;
+		}
+
+		CargoAllocation ca = null;
+		if (otherObject instanceof CargoAllocation) {
+			ca = (CargoAllocation) otherObject;
+		}
+
+		if (ca == null || ref == null) {
+			return true;
+		}
+
+		boolean different = false;
+
+		// Check vessel
+		if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
+			different = true;
+		} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
+			different = true;
+		} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
+			different = true;
+		} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+			different = true;
+		}
+
+		if (!different) {
+			if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
+				different = true;
+			}
+		}
+		if (!different) {
+			if (!ca.getLoadAllocation().getContract().getName().equals(ref.getLoadAllocation().getContract().getName())) {
+				different = true;
+			}
+		}
+		if (!different) {
+			if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
+				different = true;
+			}
+		}
+		if (!different) {
+			if (!ca.getDischargeAllocation().getContract().getName().equals(ref.getDischargeAllocation().getContract().getName())) {
+				different = true;
+			}
+		}
+
+		return different;
+	}
+
+	
+	protected IScenarioInstanceElementCollector getElementCollector() {
+		return new ScheduleElementCollector() {
+
+			@Override
+			public void beginCollecting() {
+				super.beginCollecting();
+				CargoPnLReportView.this.clearPinModeData();
+			}
+
+			@Override
+			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
+
+				final List<CargoAllocation> cargoAllocations = schedule.getCargoAllocations();
+
+				CargoPnLReportView.this.collectPinModeElements(cargoAllocations, isPinned);
+
+				return cargoAllocations;
+			}
+		};
+	}
+	
+	/**
+	 * Returns a key of some kind for the element
+	 * 
+	 * @param element
+	 * @return
+	 * @since 1.1
+	 */
+	protected String getElementKey(final EObject element) {
+		if (element instanceof CargoAllocation) {
+			return ((CargoAllocation) element).getName();
+		}
+		return super.getElementKey(element);
+	}
 }
