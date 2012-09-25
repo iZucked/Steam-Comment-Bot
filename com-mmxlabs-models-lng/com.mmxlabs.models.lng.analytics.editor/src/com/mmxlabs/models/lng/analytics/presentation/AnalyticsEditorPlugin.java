@@ -8,11 +8,8 @@ import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
-import com.mmxlabs.models.lng.analytics.ui.commands.UnitCostMatrixCommandProvider;
 import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
@@ -77,7 +74,6 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	 * @generated NO
 	 */
 	public static class Implementation extends EclipseUIPlugin {
-		private ServiceRegistration<IModelCommandProvider> commandService;
 
 		private ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator> evaluatorTracker;
 
@@ -102,8 +98,6 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		@Override
 		public void start(final BundleContext context) throws Exception {
 			super.start(context);
-			final IModelCommandProvider commandProvider = new UnitCostMatrixCommandProvider();
-			commandService = context.registerService(IModelCommandProvider.class, commandProvider, null);
 			evaluatorTracker = new ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator>(context, IScenarioInstanceEvaluator.class, null);
 			evaluatorTracker.open();
 		}
@@ -115,7 +109,6 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		 */
 		@Override
 		public void stop(final BundleContext context) throws Exception {
-			commandService.unregister();
 			evaluatorTracker.close();
 			super.stop(context);
 		}

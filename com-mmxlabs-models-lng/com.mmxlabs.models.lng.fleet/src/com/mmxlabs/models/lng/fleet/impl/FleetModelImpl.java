@@ -137,7 +137,31 @@ public class FleetModelImpl extends UUIDObjectImpl implements FleetModel {
 	 */
 	public EList<VesselClass> getVesselClasses() {
 		if (vesselClasses == null) {
-			vesselClasses = new EObjectContainmentEList<VesselClass>(VesselClass.class, this, FleetPackage.FLEET_MODEL__VESSEL_CLASSES);
+			vesselClasses = new EObjectContainmentEList<VesselClass>(VesselClass.class, this, FleetPackage.FLEET_MODEL__VESSEL_CLASSES) {
+				@Override
+				public void add(int index, VesselClass object) {
+					// TODO Auto-generated method stub
+					super.add(index, object);
+				}
+				
+				@Override
+				public boolean add(VesselClass object) {
+					// TODO Auto-generated method stub
+					return super.add(object);
+				}
+				
+				@Override
+				public boolean addAll(Collection<? extends VesselClass> collection) {
+					// TODO Auto-generated method stub
+					return super.addAll(collection);
+				}
+				
+				@Override
+				protected VesselClass assign(int index, VesselClass object) {
+					// TODO Auto-generated method stub
+					return super.assign(index, object);
+				}
+			};
 		}
 		return vesselClasses;
 	}

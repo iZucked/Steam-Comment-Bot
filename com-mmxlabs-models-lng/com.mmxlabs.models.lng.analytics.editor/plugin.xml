@@ -113,23 +113,6 @@
     </displayCompositeFactory>
  </extension>
  <extension
-       point="org.eclipse.ui.views">
-    <view
-          category="com.mmxlabs.models.lng.views.logical"
-          class="com.mmxlabs.models.lng.analytics.ui.views.CostMatrixView"
-          id="com.mmxlabs.models.lng.analytics.editor.views.CostMatrixView"
-          name="Cost Matrices"
-          restorable="true">
-    </view>
-    <view
-          category="com.mmxlabs.models.lng.views.logical"
-          class="com.mmxlabs.models.lng.analytics.ui.editorpart.JourneyView"
-          id="com.mmxlabs.models.lng.analytics.editor.journeyView"
-          name="Journey Costs"
-          restorable="true">
-    </view>
- </extension>
- <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
           factory="com.mmxlabs.models.lng.analytics.ui.valueproviders.JourneyPortReferenceValueProviderFactory"

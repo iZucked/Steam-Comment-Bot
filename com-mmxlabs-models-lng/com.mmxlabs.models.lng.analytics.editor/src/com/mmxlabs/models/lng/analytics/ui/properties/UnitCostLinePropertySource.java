@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.types.properties.ExtraDataContainerPropertySource;
  * Properties display for unit cost lines.
  * 
  * @author hinton
+ * @since 2.0
  *
  */
 public class UnitCostLinePropertySource extends ExtraDataContainerPropertySource {
