@@ -31,6 +31,8 @@
 <unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.transformer.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.transformer.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.datasources.feature.feature.group" version="0.0.0"/>
