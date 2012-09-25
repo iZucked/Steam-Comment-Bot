@@ -852,7 +852,7 @@ public class LNGScenarioTransformer {
 		}
 
 		if (dischargeSlot.isFOBSale()) {
-			discharge = builder.createVirtualDischargeSlot(dischargeSlot.getName(), portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow,
+			discharge = builder.createFOBSaleDischargeSlot(dischargeSlot.getName(), portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow,
 					Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator,
 					dischargeSlot.isOptional());
 		} else {
@@ -897,7 +897,7 @@ public class LNGScenarioTransformer {
 		}
 
 		if (loadSlot.isDESPurchase()) {
-			load = builder.createVirtualLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
+			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
 					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.isOptional());
 		} else {
 			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
@@ -1004,7 +1004,7 @@ public class LNGScenarioTransformer {
 
 								final ILoadPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ILoadPriceCalculator.class);
 
-								final ILoadOption desPurchaseSlot = builder.createVirtualLoadSlot(id, null, tw, Calculator.scale(market.getMinQuantity()), Calculator.scale(market.getMaxQuantity()),
+								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, tw, Calculator.scale(market.getMinQuantity()), Calculator.scale(market.getMaxQuantity()),
 										priceCalculator, cargoCVValue, true);
 
 								// Create a fake model object to add in here;
@@ -1112,7 +1112,7 @@ public class LNGScenarioTransformer {
 
 								final ISalesPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ISalesPriceCalculator.class);
 
-								final IDischargeOption fobSaleSlot = builder.createVirtualDischargeSlot(id, loadIPort, tw, Calculator.scale(market.getMinQuantity()),
+								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, loadIPort, tw, Calculator.scale(market.getMinQuantity()),
 										Calculator.scale(market.getMaxQuantity()), priceCalculator, true);
 
 								// Create a fake model object to add in here;
