@@ -301,7 +301,7 @@ public class TransformerUtils {
 				final EClass oClass = object.eClass();
 				if (!result.isSuperTypeOf(oClass)) {
 					// problem! find common supertype
-					while (!result.isSuperTypeOf(oClass)) {
+					while (result != null && !result.isSuperTypeOf(oClass)) {
 						final EList<EClass> supers = result.getESuperTypes();
 						if (supers == null || supers.isEmpty()) {
 							return null;

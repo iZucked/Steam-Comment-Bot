@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.transformer;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,8 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
@@ -36,8 +39,6 @@ import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
-import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -45,11 +46,9 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -60,16 +59,13 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 
 /**
  * Utility for taking an OptimisationSettings from the EMF and starting an optimiser accordingly. At the moment, it's pretty much just what was in TestUtils.
@@ -80,9 +76,9 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 public class OptimisationTransformer {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
 
-	private MMXRootObject rootObject;
+	private final MMXRootObject rootObject;
 
-	private OptimiserSettings settings;
+	private final OptimiserSettings settings;
 
 	@Inject
 	private IFitnessFunctionRegistry fitnessFunctionRegistry;
@@ -102,12 +98,12 @@ public class OptimisationTransformer {
 		this.rootObject = root;
 	}
 
-	public IOptimisationContext createOptimisationContext(final IOptimisationData data, final ModelEntityMap mem) {
+	public IOptimisationContext createOptimisationContext(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
 		final ISequences sequences = createInitialSequences(data, mem);
 
-//		createConstraintCheckerRegistry();
-//		createFitnessFunctionRegistry();
-//		createEvaluationProcessRegistry();
+		// createConstraintCheckerRegistry();
+		// createFitnessFunctionRegistry();
+		// createEvaluationProcessRegistry();
 
 		final List<String> components = getEnabledFitnessFunctionNames();
 		log.debug("Desired components: " + components);
@@ -127,7 +123,7 @@ public class OptimisationTransformer {
 		return new OptimisationContext(data, sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry);
 	}
 
-	public Pair<IOptimisationContext, LocalSearchOptimiser> createOptimiserAndContext(final IOptimisationData data, final ModelEntityMap mem) {
+	public Pair<IOptimisationContext, LocalSearchOptimiser> createOptimiserAndContext(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
 		final IOptimisationContext context = createOptimisationContext(data, mem);
 
 		final LSOConstructor lsoConstructor = new LSOConstructor(settings);
@@ -171,51 +167,136 @@ public class OptimisationTransformer {
 	 * @param data
 	 * @return
 	 */
-	public ISequences createInitialSequences(final IOptimisationData data, final ModelEntityMap mem) {
+	@SuppressWarnings("deprecation")
+	public ISequences createInitialSequences(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
 		/**
 		 * This sequences is passed into the initial sequence builder as a starting point. Extra elements may be added to the sequence in any position, but the existing elements will not be removed or
 		 * reordered
 		 */
-		final IModifiableSequences advice;
+		log.debug("Creating advice for sequence builder");
+		final IModifiableSequences advice = new ModifiableSequences(data.getResources());
+
 		/**
 		 * This map will be used to try and place elements which aren't in the advice above onto particular resources, if possible.
 		 */
 		final Map<ISequenceElement, IResource> resourceAdvice = new HashMap<ISequenceElement, IResource>();
 		final InputModel inputModel = rootObject.getSubModel(InputModel.class);
 
-		if (!inputModel.getElementAssignments().isEmpty()) {
-			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(inputModel, rootObject.getSubModel(FleetModel.class));
-			advice = new ModifiableSequences(data.getResources());
-			final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-			final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-			final IStartEndRequirementProvider serp = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
-			
-			for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
-				sequence.getValue().add(serp.getStartElement(sequence.getKey()));
-			}
+		final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+		final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		final IStartEndRequirementProvider serp = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
+		final IVirtualVesselSlotProvider virtualVesselSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_virtualVesselSlotProvider, IVirtualVesselSlotProvider.class);
 
-			final Map<IVesselClass, List<IVessel>> spotVesselsByClass = new HashMap<IVesselClass, List<IVessel>>();
-			for (final IResource resource : data.getResources()) {
-				final IVessel vessel = vp.getVessel(resource);
-				if (vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
-					final IVesselClass vesselClass = vessel.getVesselClass();
+		// Add in start elements
+		for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
+			sequence.getValue().add(serp.getStartElement(sequence.getKey()));
+		}
 
-					List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
-					if (vesselsOfClass == null) {
-						vesselsOfClass = new LinkedList<IVessel>();
-						spotVesselsByClass.put(vesselClass, vesselsOfClass);
+		final Collection<Slot> modelSlots = mem.getAllModelObjects(Slot.class);
+
+		Map<ISequenceElement, ISequenceElement> cargoSlotPairing = new HashMap<ISequenceElement, ISequenceElement>();
+		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
+		for (final Slot slot : modelSlots) {
+			if (slot instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) slot;
+				final Cargo cargo = loadSlot.getCargo();
+				if (cargo != null) {
+					final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+					if (dischargeSlot != null) {
+						
+						final IPortSlot loadObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
+						final ISequenceElement loadElement = psp.getElement(loadObject);
+						
+						final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
+						final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
+						
+						cargoSlotPairing.put(loadElement, dischargeElement);
 					}
-
-					vesselsOfClass.add(vessel);
 				}
 			}
-			
+		}
+
+		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
+		for (final Slot slot : modelSlots) {
+			if (slot instanceof LoadSlot) {
+				final LoadSlot loadSlot = (LoadSlot) slot;
+				if (loadSlot.isDESPurchase()) {
+
+					final Cargo cargo = loadSlot.getCargo();
+					if (cargo != null) {
+
+						final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
+						if (dischargeSlot != null) {
+
+							final IPortSlot loadObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
+							final ISequenceElement loadElement = psp.getElement(loadObject);
+							final IVessel vessel = virtualVesselSlotProvider.getVesselForElement(loadElement);
+							final IResource res = vp.getResource(vessel);
+							assert (res != null);
+
+							final IResource resource = vp.getResource(vessel);
+
+							final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
+							final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
+							advice.getModifiableSequence(resource).add(loadElement);
+							advice.getModifiableSequence(resource).add(dischargeElement);
+						}
+					}
+				}
+			} else if (slot instanceof DischargeSlot) {
+				final DischargeSlot dischargeSlot = (DischargeSlot) slot;
+				if (dischargeSlot.isFOBSale()) {
+
+					final Cargo cargo = dischargeSlot.getCargo();
+					if (cargo != null) {
+						final LoadSlot loadSlot = cargo.getLoadSlot();
+						if (loadSlot != null) {
+
+							final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
+							final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
+							final IVessel vessel = virtualVesselSlotProvider.getVesselForElement(dischargeElement);
+							final IResource res = vp.getResource(vessel);
+							assert (res != null);
+
+							final IResource resource = vp.getResource(vessel);
+
+							final IPortSlot loadObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
+							final ISequenceElement loadElement = psp.getElement(loadObject);
+							advice.getModifiableSequence(resource).add(loadElement);
+							advice.getModifiableSequence(resource).add(dischargeElement);
+						}
+					}
+				}
+			}
+		}
+
+		// Build up spot vessel maps
+		final Map<IVesselClass, List<IVessel>> spotVesselsByClass = new HashMap<IVesselClass, List<IVessel>>();
+		for (final IResource resource : data.getResources()) {
+			final IVessel vessel = vp.getVessel(resource);
+			if (!vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER))
+				continue;
+
+			final IVesselClass vesselClass = vessel.getVesselClass();
+
+			List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
+			if (vesselsOfClass == null) {
+				vesselsOfClass = new LinkedList<IVessel>();
+				spotVesselsByClass.put(vesselClass, vesselsOfClass);
+			}
+
+			vesselsOfClass.add(vessel);
+		}
+
+		// Process initial vessel assignments list
+		if (!inputModel.getElementAssignments().isEmpty()) {
+			final List<CollectedAssignment> assignments = AssignmentEditorHelper.collectAssignments(inputModel, rootObject.getSubModel(FleetModel.class));
 			for (final CollectedAssignment seq : assignments) {
 				IVessel vessel = null;
 				log.debug("Processing assignment " + seq.getVesselOrClass().getName());
 				if (seq.isSpotVessel()) {
 					final IVesselClass vesselClass = mem.getOptimiserObject(seq.getVesselOrClass(), IVesselClass.class);
-					
+
 					final List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
 					if (!(vesselsOfClass == null || vesselsOfClass.isEmpty())) {
 						vessel = vesselsOfClass.get(0);
@@ -227,9 +308,11 @@ public class OptimisationTransformer {
 				if (vessel != null) {
 					final IResource resource = vp.getResource(vessel);
 					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
-					
+
 					for (final UUIDObject assignedObject : seq.getAssignedObjects()) {
-						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) continue;
+						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) {
+							continue;
+						}
 						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
 							sequence.add(element);
 						}
@@ -238,42 +321,13 @@ public class OptimisationTransformer {
 					log.debug("Vessel is missing: " + seq.getVesselOrClass().getName());
 				}
 			}
-			
-			for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
-				sequence.getValue().add(serp.getEndElement(sequence.getKey()));
-			}
+
 		} else if (!inputModel.getAssignments().isEmpty()) {
-			log.debug("Creating advice for sequence builder");
-			advice = new ModifiableSequences(data.getResources());
-			final IVesselProvider vp = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-			final IPortSlotProvider psp = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-			final IStartEndRequirementProvider serp = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
-
-			for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
-				sequence.getValue().add(serp.getStartElement(sequence.getKey()));
-			}
-
-			final Map<IVesselClass, List<IVessel>> spotVesselsByClass = new HashMap<IVesselClass, List<IVessel>>();
-			for (final IResource resource : data.getResources()) {
-				final IVessel vessel = vp.getVessel(resource);
-				if (!vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER))
-					continue;
-
-				final IVesselClass vesselClass = vessel.getVesselClass();
-
-				List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
-				if (vesselsOfClass == null) {
-					vesselsOfClass = new LinkedList<IVessel>();
-					spotVesselsByClass.put(vesselClass, vesselsOfClass);
-				}
-
-				vesselsOfClass.add(vessel);
-			}
-
 			assignments: for (final Assignment assignment : inputModel.getAssignments()) {
-				if (assignment.getVessels().isEmpty()) continue assignments;
+				if (assignment.getVessels().isEmpty())
+					continue assignments;
 				IVessel vessel = null;
-				;
+				
 				if (assignment.isAssignToSpot()) {
 					if (inputModel.getLockedAssignedObjects().containsAll(assignment.getAssignedObjects())) {
 						continue assignments; // these will get assigned by their constraints.
@@ -310,26 +364,24 @@ public class OptimisationTransformer {
 				} else {
 					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
 					for (final UUIDObject assignedObject : assignment.getAssignedObjects()) {
-						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) continue;
+						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET)
+							continue;
 						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
 							sequence.add(element);
 						}
 					}
 				}
 			}
-
-			for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
-				sequence.getValue().add(serp.getEndElement(sequence.getKey()));
-			}
-		} else {
-			advice = null;
 		}
 
-		// final IConstraintCheckerRegistry registry = createConstraintCheckerRegistry();
+		// Add in end elements
+		for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
+			sequence.getValue().add(serp.getEndElement(sequence.getKey()));
+		}
 
 		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(constraintCheckerRegistry.getConstraintCheckerFactories(getEnabledConstraintNames()));
 
-		return builder.createInitialSequences(data, advice, resourceAdvice);
+		return builder.createInitialSequences(data, advice, resourceAdvice, cargoSlotPairing);
 	}
 
 	private ISequenceElement[] getElements(final UUIDObject modelObject, final IPortSlotProvider psp, final ModelEntityMap mem) {
