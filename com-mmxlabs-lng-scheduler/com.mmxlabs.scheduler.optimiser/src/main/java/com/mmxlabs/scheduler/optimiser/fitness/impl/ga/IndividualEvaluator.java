@@ -40,7 +40,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  * TODO: This implementation assumes that a {@link ITimeWindow} exists for each element in the schedule.
  * 
  * @author Simon Goodall
- * 
+ * @deprecated Needs updating for various API changes in past
  */
 public final class IndividualEvaluator implements IIndividualEvaluator<ByteArrayIndividual> {
 
