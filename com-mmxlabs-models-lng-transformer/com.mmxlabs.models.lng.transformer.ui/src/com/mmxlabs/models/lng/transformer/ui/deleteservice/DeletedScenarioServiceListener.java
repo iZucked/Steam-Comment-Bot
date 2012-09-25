@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.optimisation.deleteservice;
+package com.mmxlabs.models.lng.transformer.ui.deleteservice;
 
 import java.util.HashSet;
 import java.util.Set;

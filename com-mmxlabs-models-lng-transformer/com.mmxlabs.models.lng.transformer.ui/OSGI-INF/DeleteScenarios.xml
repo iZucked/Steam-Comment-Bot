@@ -5,8 +5,8 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.shiplingo.platform.models.optimisation.deleteservice.DeletedScenarioServiceListener">
-   <implementation class="com.mmxlabs.shiplingo.platform.models.optimisation.deleteservice.DeletedScenarioServiceListener"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.transformer.ui.deleteservice.DeletedScenarioServiceListener">
+   <implementation class="com.mmxlabs.models.lng.transformer.ui.deleteservice.DeletedScenarioServiceListener"/>
   
    <reference bind="bind" cardinality="0..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="unbind"/>
    <reference bind="bind" cardinality="1..1" interface="com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager" name="IEclipseJobManager" policy="dynamic" unbind="unbind"/>

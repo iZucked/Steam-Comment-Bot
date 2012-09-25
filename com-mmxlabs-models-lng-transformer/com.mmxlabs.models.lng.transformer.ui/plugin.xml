@@ -10,7 +10,7 @@
 	<extension
             point="org.eclipse.ui.handlers">
          <handler
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StartOptimisationHandler"
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.StartOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.play">
             <enabledWhen>
                   <with
@@ -44,7 +44,7 @@
             </activeWhen>
          </handler>
          <handler
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.ForkAndStartOptimisationHandler"
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.ForkAndStartOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.forkandplay">
             <enabledWhen>
                   <with
@@ -78,7 +78,7 @@
             </activeWhen>
          </handler>
          <handler
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.StopOptimisationHandler"
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.StopOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.terminate">
             <enabledWhen>
                <iterate
@@ -108,7 +108,7 @@
             </activeWhen>
          </handler>
          <handler
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.PauseOptimisationHandler"
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.PauseOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.pause">
             <enabledWhen>
                <iterate
@@ -138,7 +138,7 @@
             </activeWhen>
          </handler>
          <handler
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.EvaluateOptimisationHandler"
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.EvaluateOptimisationHandler"
                commandId="com.mmxlabs.commands.optimisation.evaluate">
             <enabledWhen>
                <iterate
@@ -207,15 +207,15 @@
          <extension
             point="org.eclipse.core.runtime.adapters">
          <factory
-               adaptableType="com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor"
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.adapterfactories.LNGJobControlAdapterFactory">
+               adaptableType="com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor"
+               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
             <adapter
                   type="com.mmxlabs.jobmanager.jobs.IJobControl">
             </adapter>
          </factory>
          <factory
                adaptableType="org.eclipse.core.resources.IResource"
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.adapterfactories.ScenarioValidationStatusAdapterFactory">
+               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.ScenarioValidationStatusAdapterFactory">
             <adapter
                   type="org.eclipse.core.runtime.IStatus">
             </adapter>
@@ -286,7 +286,7 @@
       <extension
             point="org.eclipse.core.expressions.propertyTesters">
          <propertyTester
-               class="com.mmxlabs.shiplingo.platform.models.optimisation.propertytesters.JobStatePropertyTester"
+               class="com.mmxlabs.models.lng.transformer.ui.propertytesters.JobStatePropertyTester"
                id="com.mmxlabs.shiplingo.platform.models.optimisation.propertyTester"
                namespace="com.mmxlabs.shiplingo.platform.models.optimisation.properties"
                properties="jobState,canPause,canPlay,canTerminate,hasActiveJob"
@@ -299,7 +299,7 @@
                id="com.mmxlabs.shiplingo.platform.models.optimisation.editorContributions"
                targetID="com.mmxlabs.models.lng.demo.scneditor">
             <action
-                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.EvaluateOptimisationEditorActionDelegate"
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.EvaluateOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.evaluate"
                   disabledIcon="icons/evaluate_schedule.gif"
                   icon="icons/evaluate_schedule.gif"
@@ -310,7 +310,7 @@
                   tooltip="Evaluate scenario">
             </action>
             <action
-                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.StopOptimisationEditorActionDelegate"
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StopOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.terminate"
                   disabledIcon="icons/dlcl16/terminate_co.gif"
                   icon="icons/elcl16/terminate_co.gif"
@@ -321,7 +321,7 @@
                   tooltip="Terminate optimisation">
             </action>
             <action
-                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.PauseOptimisationEditorActionDelegate"
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.PauseOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.pause"
                   disabledIcon="icons/dlcl16/suspend_co.gif"
                   icon="icons/elcl16/suspend_co.gif"
@@ -332,7 +332,7 @@
                   tooltip="Pause optimisation">
             </action>
             <action
-                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
                   definitionId="com.mmxlabs.commands.optimisation.play"
                   disabledIcon="icons/dlcl16/resume_co.gif"
                   icon="icons/elcl16/resume_co.gif"
@@ -343,7 +343,7 @@
                   tooltip="Start or Resume optimisation">
             </action>
             <action
-                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.ForkAndStartOptimisationActionHandler"
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkAndStartOptimisationActionHandler"
                   definitionId="com.mmxlabs.commands.optimisation.forkandplay"
                   icon="icons/forkandoptimise.gif"
                   id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
@@ -353,7 +353,7 @@
                   tooltip="Fork scenario and optimise the fork">
             </action>
             <action
-                  class="com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor.ForkScenarioEditorActionDelegate"
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkScenarioEditorActionDelegate"
                   definitionId="com.mmxlabs.scenario.service.ui.fork"
                   icon="icons/fork.gif"
                   id="com.mmxlabs.scenario.service.ui.fork"

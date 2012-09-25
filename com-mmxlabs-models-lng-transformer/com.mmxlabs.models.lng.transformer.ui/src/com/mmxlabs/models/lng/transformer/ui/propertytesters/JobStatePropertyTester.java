@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.optimisation.propertytesters;
+package com.mmxlabs.models.lng.transformer.ui.propertytesters;
 
 import org.eclipse.core.expressions.PropertyTester;
 
@@ -10,8 +10,8 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.Activator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 public class JobStatePropertyTester extends PropertyTester {
 	public JobStatePropertyTester() {

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers.editor;
+package com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IEditorPart;
@@ -11,10 +11,10 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
-import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 public class PauseOptimisationEditorActionDelegate extends AbstractOptimisationEditorActionDelegate {
 

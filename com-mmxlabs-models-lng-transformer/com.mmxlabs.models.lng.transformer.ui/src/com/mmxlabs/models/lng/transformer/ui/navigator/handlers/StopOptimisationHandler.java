@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers;
+package com.mmxlabs.models.lng.transformer.ui.navigator.handlers;
 
 import java.util.Iterator;
 
@@ -16,8 +16,8 @@ import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.Activator;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -25,13 +25,12 @@ import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
-public class PauseOptimisationHandler extends AbstractOptimisationHandler {
+public class StopOptimisationHandler extends AbstractOptimisationHandler {
 
 	/**
 	 * The constructor.
 	 */
-	public PauseOptimisationHandler() {
-
+	public StopOptimisationHandler() {
 	}
 
 	/**
@@ -50,14 +49,16 @@ public class PauseOptimisationHandler extends AbstractOptimisationHandler {
 				final Object obj = itr.next();
 				if (obj instanceof ScenarioInstance) {
 					final ScenarioInstance instance = (ScenarioInstance) obj;
-
 					final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 					final IJobDescriptor job = jobManager.findJobForResource(instance.getUuid());
 					final IJobControl control = jobManager.getControlForJob(job);
 
 					if (control != null) {
-						if (control.getJobState() == EJobState.RUNNING) {
-							control.pause();
+						final EJobState jobState = control.getJobState();
+
+						// Can job still be cancelled?
+						if (!((jobState == EJobState.CANCELLED) || (jobState == EJobState.CANCELLING) || (jobState == EJobState.COMPLETED))) {
+							control.cancel();
 						}
 					}
 				}

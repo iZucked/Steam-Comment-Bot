@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.optimisation.navigator.handlers;
+package com.mmxlabs.models.lng.transformer.ui.navigator.handlers;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -31,6 +31,8 @@ import com.mmxlabs.jobmanager.jobs.EJobState;
 import com.mmxlabs.jobmanager.jobs.IJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
+import com.mmxlabs.models.lng.transformer.ui.Activator;
+import com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
@@ -39,8 +41,6 @@ import com.mmxlabs.models.ui.validation.gui.ValidationStatusDialog;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
-import com.mmxlabs.shiplingo.platform.models.optimisation.Activator;
-import com.mmxlabs.shiplingo.platform.models.optimisation.LNGSchedulerJobDescriptor;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
