@@ -97,6 +97,8 @@ public final class EndLocationSequenceManipulator implements ISequencesManipulat
 		case RETURN_TO_CLOSEST_IN_SET:
 			returnToClosestInSet(resource, sequence);
 			break;
+		default:
+			break;
 		}
 	}
 
