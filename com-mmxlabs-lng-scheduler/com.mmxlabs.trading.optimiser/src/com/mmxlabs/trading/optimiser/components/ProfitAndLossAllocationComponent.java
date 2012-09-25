@@ -152,7 +152,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 						} else {
 							currentAllocation = null;
 						}
-					} else if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL && plan.getSequence().length == 4) {
+					} else if ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 4) {
 						firstDetails = (PortDetails) plan.getSequence()[1];
 						lastDetails = (PortDetails) plan.getSequence()[2];
 						if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeOption()))) {
