@@ -27,6 +27,9 @@
 	</ciManagement>
 
 	<modules>
+
+		<module>target-definition</module>
+
 		<module>com.mmxlabs.models.lng.transformer</module>
 
 		<module>com.mmxlabs.models.lng.transformer.feature</module>
@@ -48,6 +51,17 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>target-platform-configuration</artifactId>
 				<configuration>
+
+					<resolver>p2</resolver>
+
+					<target>
+						<artifact>
+							<groupId>com.mmxlabs.models.lng.transformer</groupId>
+							<artifactId>target-definition</artifactId>
+							<version>2.0.0-SNAPSHOT</version>
+							<classifier>indigo</classifier>
+						</artifact>
+					</target>
 
 					<environments>
 
@@ -99,52 +113,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<repositories>
-
-		<repository>
-			<id>indigo</id>
-			<url>http://download.eclipse.org/releases/indigo</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>eclipse-3.7</id>
-			<url>http://download.eclipse.org/eclipse/updates/3.7</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>nebula-main-snapshots</id>
-			<url>http://download.eclipse.org/technology/nebula/snapshot</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>nebula-incubation-snapshots</id>
-			<url>http://download.eclipse.org/technology/nebula/incubation/snapshot</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>orbit</id>
-			<url>http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository/</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>mmxlabs-p2-external</id>
-			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/</url>
-			<layout>p2</layout>
-		</repository>
-
-		<repository>
-			<id>mmxlabs-p2-snapshots</id>
-			<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/</url>
-			<layout>p2</layout>
-		</repository>
-
-	</repositories>
 
 </project>
 
