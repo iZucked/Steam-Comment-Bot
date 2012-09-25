@@ -33,7 +33,6 @@
 
 		<module>com.mmxlabs.shiplingo.platform.scheduleview</module>
 
-		<module>com.mmxlabs.shiplingo.platform.models.manifest</module>
 		<module>com.mmxlabs.shiplingo.platform.models.optimisation</module>
 
 		<module>com.mmxlabs.shiplingo.platform.reports</module>
