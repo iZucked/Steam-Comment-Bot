@@ -105,7 +105,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
 			final IVessel vessel = vesselProvider.getVessel(resource);
-			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+			if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 				assert sequence.size() == 4 : "A virtual sequence should always contain 4 elements (Start - Load - Discharge - End)";
 
 				result.addVirtualCargo((ILoadOption) portSlotProvider.getPortSlot(sequence.get(1)), (IDischargeOption) portSlotProvider.getPortSlot(sequence.get(2)), arrivalTimes[i][1],
@@ -135,7 +135,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	public ScheduledSequence schedule(final IResource resource, final ISequence sequence, final int[] arrivalTimes) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
-		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			// Virtual vessels are those operated by a third party, for FOB and DES situations.
 			// Should we compute a schedule for them anyway? The arrival times don't mean much,
 			// but contracts need this kind of information to make up numbers with.
@@ -148,7 +148,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 				final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
 
-				// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window 
+				// TODO: This might need updating when we complete FOB/DES work - the load slot may not have a real time window
 				if (!startSet && !(thisPortSlot instanceof StartPortSlot)) {
 					startTime = thisPortSlot.getTimeWindow().getStart();
 					startSet = true;

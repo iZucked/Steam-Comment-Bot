@@ -91,7 +91,8 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 			final ISequence sequence = sequences.getSequence(resource);
 			final IVessel vessel = vesselProvider.getVessel(resource);
 
-			final boolean checkSequence = (vessel.getVesselInstanceType() != VesselInstanceType.VIRTUAL) || (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL && sequence.size() > 1);
+			final boolean isVirtualVessel = vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+			final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
 			if (checkSequence) {
 				for (final ISequenceElement element : sequence) {
 					final Collection<SlotGroup> groups = slotGroupProvider.getGroupsForElement(element);
@@ -126,7 +127,8 @@ public class SlotGroupCountConstraintChecker implements IReducingContraintChecke
 			final IVessel vessel = vesselProvider.getVessel(resource);
 
 			// Virtual vessels need special treatment. If there is only one element on the route, then it is considered not to be used.
-			final boolean checkSequence = (vessel.getVesselInstanceType() != VesselInstanceType.VIRTUAL) || (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL && sequence.size() > 1);
+			final boolean isVirtualVessel = vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE;
+			final boolean checkSequence = (!isVirtualVessel) || (isVirtualVessel && sequence.size() > 1);
 			if (checkSequence) {
 				for (final ISequenceElement element : sequence) {
 					final Collection<SlotGroup> groups = slotGroupProvider.getGroupsForElement(element);

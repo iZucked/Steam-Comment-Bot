@@ -73,7 +73,7 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
 			final VesselInstanceType vesselInstanceType = vesselProvider.getVessel(entry.getKey()).getVesselInstanceType();
-			if (vesselInstanceType == VesselInstanceType.UNKNOWN || vesselInstanceType == VesselInstanceType.VIRTUAL) {
+			if (vesselInstanceType == VesselInstanceType.UNKNOWN || vesselInstanceType == VesselInstanceType.DES_PURCHASE || vesselInstanceType == VesselInstanceType.FOB_SALE) {
 				continue;
 			}
 			if (!checkSequence(entry.getValue(), messages, vesselInstanceType)) {

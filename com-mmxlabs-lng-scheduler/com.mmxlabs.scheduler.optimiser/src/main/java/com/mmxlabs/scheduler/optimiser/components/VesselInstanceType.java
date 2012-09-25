@@ -33,7 +33,14 @@ public enum VesselInstanceType {
 	SPOT_CHARTER,
 
 	/**
-	 * Not a real vessel, but one which handles logical cargoes.
+	 * Sequence represents a FOB Sale
+	 * @since 2.0
 	 */
-	VIRTUAL
+	FOB_SALE,
+
+	/**
+	 * Sequence represents a DES Purchase
+	 * @since 2.0
+	 */
+	DES_PURCHASE
 }

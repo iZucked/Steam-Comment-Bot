@@ -170,7 +170,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 					}
 				}
 			}
-			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL ) {
+			if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 				if (loadDetails != null && dischargeDetails != null) {
 					addVirtualCargo(loadDetails, dischargeDetails);
 				}

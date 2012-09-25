@@ -74,9 +74,10 @@ public class SequencesManipulatorUtil {
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 
 		for (final IResource resource : data.getResources()) {
-			if (vesselProvider.getVessel(resource).getVesselInstanceType().equals(VesselInstanceType.VIRTUAL)) {
+			final VesselInstanceType vesselInstanceType = vesselProvider.getVessel(resource).getVesselInstanceType();
+			if (vesselInstanceType == VesselInstanceType.DES_PURCHASE || vesselInstanceType == VesselInstanceType.FOB_SALE) {
 				endLocationManipulator.setEndLocationRule(resource, EndLocationRule.NONE);
-			} else if (vesselProvider.getVessel(resource).getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER)) {
+			} else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
 				startLocationRemover.setShouldRemoveStartLocation(resource, true);
 				endLocationManipulator.setEndLocationRule(resource, EndLocationRule.RETURN_TO_FIRST_LOAD);
 			} else {

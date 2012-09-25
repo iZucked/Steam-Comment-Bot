@@ -287,7 +287,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 
 		final IVesselProvider vesselProvider = super.getVesselProvider();
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
 			return;
 		}
 

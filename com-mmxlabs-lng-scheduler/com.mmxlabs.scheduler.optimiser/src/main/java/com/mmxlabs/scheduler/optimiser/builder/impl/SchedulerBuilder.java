@@ -305,7 +305,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public ILoadOption createVirtualLoadSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ILoadPriceCalculator priceCalculator,
+	public ILoadOption createDESPurchaseLoadSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ILoadPriceCalculator priceCalculator,
 			final int cargoCVValue, final boolean slotIsOptional) {
 
 		if (port == null) {
@@ -317,7 +317,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		unshippedElements.add(element);
 
-		createVirtualVessel(element);
+		createVirtualVessel(element, VesselInstanceType.DES_PURCHASE);
 
 		return slot;
 	}
@@ -360,7 +360,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IDischargeOption createVirtualDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ISalesPriceCalculator priceCalculator,
+	public IDischargeOption createFOBSaleDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ISalesPriceCalculator priceCalculator,
 			final boolean slotIsOptional) {
 
 		if (port == null) {
@@ -373,7 +373,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		unshippedElements.add(element);
 
-		createVirtualVessel(element);
+		createVirtualVessel(element, VesselInstanceType.FOB_SALE);
 
 		return slot;
 	}
@@ -627,7 +627,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vessel.setHourlyCharterOutPrice(hourlyCharterOutRate);
 
 		vessels.add(vessel);
-		if (vesselInstanceType != VesselInstanceType.VIRTUAL) {
+		if (vesselInstanceType != VesselInstanceType.DES_PURCHASE && vesselInstanceType != VesselInstanceType.FOB_SALE) {
 			realVessels.add(vessel);
 		}
 
@@ -907,9 +907,10 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return data;
 	}
 
-	private IVessel createVirtualVessel(final ISequenceElement element) {
+	private IVessel createVirtualVessel(final ISequenceElement element, final VesselInstanceType type) {
+		assert type  == VesselInstanceType.DES_PURCHASE || type == VesselInstanceType.FOB_SALE;
 		// create a new resource for each of these guys, and bind them to their resources
-		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, 0, 0, VesselInstanceType.VIRTUAL, createStartEndRequirement(), createStartEndRequirement(), 0l, 0, 0);
+		final IVessel virtualVessel = createVessel("virtual-" + element.getName(), virtualClass, 0, 0, type, createStartEndRequirement(), createStartEndRequirement(), 0l, 0, 0);
 		// Bind every slot to its vessel
 		constrainSlotToVessels(portSlotsProvider.getPortSlot(element), Collections.singleton(virtualVessel));
 

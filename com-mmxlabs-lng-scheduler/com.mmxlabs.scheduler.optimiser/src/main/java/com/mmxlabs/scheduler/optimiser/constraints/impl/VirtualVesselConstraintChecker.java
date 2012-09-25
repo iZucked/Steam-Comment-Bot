@@ -69,7 +69,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 		for (final IResource resource : sequences.getResources()) {
 			final IVessel vessel = vesselProvider.getVessel(resource);
-			if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+			if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 				if (isInvalid(resource, sequences.getSequence(resource))) {
 					return false;
 				}
@@ -121,7 +121,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		if (vessel.getVesselInstanceType() != VesselInstanceType.VIRTUAL) {
+		if (vessel.getVesselInstanceType() != VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 
 			if (virtualVesselSlotProvider.getVesselForElement(first) != null) {
 				return false;

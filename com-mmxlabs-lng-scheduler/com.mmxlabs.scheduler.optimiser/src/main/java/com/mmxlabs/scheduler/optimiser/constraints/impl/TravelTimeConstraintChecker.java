@@ -127,7 +127,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 
 		IVessel vessel = vesselProvider.getVessel(resource);
-		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 			final ITimeWindow tw1 = slot1.getTimeWindow();
 			final ITimeWindow tw2 = slot2.getTimeWindow();
 

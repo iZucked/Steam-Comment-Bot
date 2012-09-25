@@ -394,7 +394,10 @@ public interface ISchedulerBuilder {
 	ILoadSlot createLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, int durationHours, boolean cooldownSet,
 			boolean cooldownForbidden, boolean slotIsOptional);
 
-	ILoadOption createVirtualLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, boolean slotIsOptional);
+	/**
+	 * @since 2.0
+	 */
+	ILoadOption createDESPurchaseLoadSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ILoadPriceCalculator priceCalculator, int cargoCVValue, boolean slotIsOptional);
 
 	/**
 	 * Create a new {@link IDischargeSlot} instance. This is currently expected to be assigned to a cargo.
@@ -412,7 +415,19 @@ public interface ISchedulerBuilder {
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ISalesPriceCalculator priceCalculator, int durationHours, boolean slotIsOptional);
 
-	IDischargeOption createVirtualDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ISalesPriceCalculator priceCalculator, boolean slotIsOptional);
+	/**
+	 * 
+	 * @param id
+	 * @param port
+	 * @param window
+	 * @param minVolume
+	 * @param maxVolume
+	 * @param priceCalculator
+	 * @param slotIsOptional
+	 * @return
+	 * @since 2.0
+	 */
+	IDischargeOption createFOBSaleDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ISalesPriceCalculator priceCalculator, boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these

@@ -100,7 +100,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	 */
 	public final boolean checkSequence(final ISequence sequence, final List<String> messages, final VesselInstanceType instanceType) {
 
-		if (instanceType == VesselInstanceType.VIRTUAL) {
+		if (instanceType == VesselInstanceType.FOB_SALE || instanceType == VesselInstanceType.DES_PURCHASE) {
 			int size = sequence.size();
 			if (size == 2) {
 				PortType ptStart = portTypeProvider.getPortType(sequence.get(0));
@@ -267,7 +267,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 		// Check Virtual Routes
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
+		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 
 			if (firstType == PortType.Start && secondType == PortType.End) {
 				return true;
@@ -293,20 +293,6 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		if (secondType != PortType.Discharge && firstType == PortType.Load) {
 			return false;
 		}
-		// if (firstType.equals(PortType.Start) && secondType.equals(PortType.Discharge)) {
-		// return false; // first port should be a load slot (TODO is this
-		// // true?)
-		// }
-
-		// // load must precede discharge or waypoint, but nothing else
-		// if (firstType.equals(PortType.Load)) {
-		// return (secondType.equals(PortType.Discharge) || secondType.equals(PortType.Waypoint));
-		// }
-
-		//
-		// if (firstType != PortType.Start && (first.getName().equals("Test Market-2-Aliaga") || second.getName().equals("Test Market-2-Aliaga"))) {
-		// final int ii = 0;
-		// }
 		return true;
 	}
 
@@ -342,8 +328,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 		// Check Virtual Routes
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		if (vessel.getVesselInstanceType() == VesselInstanceType.VIRTUAL) {
-
+		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 			if (firstType.equals(PortType.Discharge)) {
 				return "Nothing can come after a discharge on a virtual vessel";
 			}
