@@ -75,6 +75,12 @@
 <unit id="org.aopalliance" version="1.0.0.v201105210816"/>	
 <unit id="org.slf4j.api" version="1.6.4.v20120130-2120"/>
 <unit id="org.slf4j.api.source" version="1.6.4.v20120130-2120"/>
+<unit id="ch.qos.logback.classic" version="1.0.0.v20111214-2030"/>
+<unit id="ch.qos.logback.classic.source" version="1.0.0.v20111214-2030"/>
+<unit id="ch.qos.logback.core" version="1.0.0.v20111214-2030"/>
+<unit id="ch.qos.logback.core.source" version="1.0.0.v20111214-2030"/>
+<unit id="ch.qos.logback.slf4j" version="1.0.0.v20120123-1500"/>
+<unit id="ch.qos.logback.slf4j.source" version="1.0.0.v20120123-1500"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
