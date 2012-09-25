@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <package
+            uri="http://www.mmxlabs.com/models/lng/demo-manifest/1/"
+            class="com.mmxlabs.shiplingo.platform.models.manifest.manifest.ManifestPackage"
+            genModel="model/manifest.genmodel"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="com.mmxlabs.models.lng.demo"
+            name="LNG Wizards">
+      </category>
+      <wizard
+            category="com.mmxlabs.models.lng.demo"
+            class="com.mmxlabs.shiplingo.platform.models.manifest.wizards.EmptyScenarioWizard"
+            icon="icons/sample.gif"
+            id="com.mmxlabs.models.lng.demo.wizards.EmptyScenarioWizard"
+            name="New Empty Scenario">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <content-type
+            file-extensions="scn"
+            id="com.mmxlabs.shiplingo.platform.models.manifest.scnfile"
+            name="SCN File"
+            priority="normal">
+      </content-type>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.mmxlabs.models.ui.editorpart.JointModelEditorPart"
+            contributorClass="com.mmxlabs.models.ui.editorpart.JointModelEditorContributor"
+            default="true"
+            extensions="scn,sc2"
+            id="com.mmxlabs.models.lng.demo.scneditor"
+            name="SCN Editor">
+         <contentTypeBinding
+               contentTypeId="com.mmxlabs.shiplingo.platform.models.manifest.scnfile">
+         </contentTypeBinding>
+      </editor>
+   </extension>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
+            name="LNG Scenario Import">
+      </category>
+      <wizard
+            category="com.mmxlabs.models.lng.demo.importWizards.sampleCategory"
+            class="com.mmxlabs.shiplingo.platform.models.manifest.importWizards.ImportCSVWizard"
+            icon="icons/sample.gif"
+            id="com.mmxlabs.models.lng.demo.importWizards.ImportCSVWizard"
+            name="Import CSV">
+         <description>
+            Import an LNG optimiser scenario from several CSV files.
+         </description>
+      </wizard>
+   </extension>
+     <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            class="com.mmxlabs.shiplingo.platform.models.manifest.wizards.RandomScenarioWizard"
+            id="com.mmxlabs.shiplingo.platform.models.manifest.wizards.RandomScenarioWizard"
+            name="New Random Scenario">
+      </wizard>
+   </extension>
+     <extension
+           point="org.eclipse.core.runtime.adapters">
+        <factory
+              adaptableType="org.eclipse.ui.IEditorInput"
+              class="com.mmxlabs.shiplingo.platform.models.manifest.adapters.JointModelAdapterFactory">
+           <adapter
+                 type="com.mmxlabs.models.mmxcore.jointmodel.JointModel">
+           </adapter>
+        </factory>
+     </extension>
+     <extension
+           point="org.eclipse.ui.exportWizards">
+        <wizard
+              category="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
+              class="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards.ExportCSVWizard"
+              id="com.mmxlabs.shiplingo.platform.models.manifest.csvExportWizard"
+              name="Export CSV">
+        </wizard>
+        <category
+              id="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards"
+              name="LNG Scenario Export">
+        </category>
+     </extension>
+     <extension
+           point="org.eclipse.ui.menus">
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=Imports">
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+                  style="push">
+               <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <and>
+                        <count
+                              value="1">
+                        </count>
+                        <iterate>
+                           <or>
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.Container">
+                              </instanceof>
+                           </or>
+                        </iterate>
+                     </and>
+                  </with>
+               </visibleWhen>
+            </command>
+                        <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
+                  style="push">
+                           <visibleWhen
+                                 checkEnabled="false">
+                              <with
+                                    variable="selection">
+                                 <iterate>
+                                    <or>
+                                       <instanceof
+                                             value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                                       </instanceof>
+                                    </or>
+                                 </iterate>
+                              </with>
+                           </visibleWhen>
+            </command>
+         </menuContribution>
+
+     </extension>
+      <extension
+            point="org.eclipse.ui.commands">
+         <command
+               defaultHandler="com.mmxlabs.shiplingo.platform.models.manifest.importWizards.ImportCSVWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+               name="Import Scenario from CSV">
+         </command>
+         <command
+               defaultHandler="com.mmxlabs.shiplingo.platform.models.manifest.exportWizards.ExportCSVWizardHandler"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
+               name="Export Scenario as CSV">
+         </command>
+      </extension>
+</plugin>
