@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.modelCorrector;
+package com.mmxlabs.models.lng.scenario.modelCorrector;
 
 import java.util.HashSet;
 import java.util.Set;

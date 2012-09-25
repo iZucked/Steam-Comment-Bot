@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.importWizards;
+package com.mmxlabs.models.lng.scenario.importWizards;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,6 +39,9 @@ import org.eclipse.swt.widgets.Group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.models.lng.scenario.ManifestJointModel;
+import com.mmxlabs.models.lng.scenario.internal.Activator;
+import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -51,9 +54,6 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
-import com.mmxlabs.shiplingo.platform.models.manifest.internal.Activator;
-import com.mmxlabs.shiplingo.platform.models.manifest.wizards.ScenarioServiceNewScenarioPage;
 
 public class ImportCSVFilesPage extends WizardPage {
 

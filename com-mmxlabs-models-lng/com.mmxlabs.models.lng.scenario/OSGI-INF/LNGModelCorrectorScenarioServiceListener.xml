@@ -5,7 +5,7 @@
     All rights reserved.
 
 -->
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" deactivate="dispose" name="com.mmxlabs.shiplingo.platform.models.manifest.modelCorrector.LNGModelCorrectorScenarioServiceListener">
-   <implementation class="com.mmxlabs.shiplingo.platform.models.manifest.modelCorrector.LNGModelCorrectorScenarioServiceListener"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" deactivate="dispose" name="com.mmxlabs.models.lng.scenario.modelCorrector.LNGModelCorrectorScenarioServiceListener">
+   <implementation class="com.mmxlabs.models.lng.scenario.modelCorrector.LNGModelCorrectorScenarioServiceListener"/>
    <reference bind="bind" cardinality="0..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="unbind"/>
 </scr:component>

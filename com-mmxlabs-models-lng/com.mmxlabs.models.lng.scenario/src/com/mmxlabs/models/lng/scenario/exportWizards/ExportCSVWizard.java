@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.exportWizards;
+package com.mmxlabs.models.lng.scenario.exportWizards;
 
 import java.io.BufferedWriter;
 import java.io.File;

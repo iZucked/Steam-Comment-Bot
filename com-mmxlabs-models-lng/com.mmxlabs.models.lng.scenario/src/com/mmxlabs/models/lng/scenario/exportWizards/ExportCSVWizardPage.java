@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.exportWizards;
+package com.mmxlabs.models.lng.scenario.exportWizards;
 
 import java.io.File;
 import java.util.Collection;
@@ -25,11 +25,11 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceSelectionGroup;
-import com.mmxlabs.shiplingo.platform.models.manifest.internal.Activator;
 
 /**
  * @author hinton

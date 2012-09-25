@@ -7,11 +7,11 @@ Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Export-Package: com.mmxlabs.shiplingo.platform.models.manifest,
- com.mmxlabs.shiplingo.platform.models.manifest.adapters,
- com.mmxlabs.shiplingo.platform.models.manifest.exportWizards,
- com.mmxlabs.shiplingo.platform.models.manifest.importWizards,
- com.mmxlabs.shiplingo.platform.models.manifest.wizards
+Export-Package: com.mmxlabs.models.lng.scenario,
+ com.mmxlabs.models.lng.scenario.adapters,
+ com.mmxlabs.models.lng.scenario.exportWizards,
+ com.mmxlabs.models.lng.scenario.importWizards,
+ com.mmxlabs.models.lng.scenario.wizards
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.slf4j.api;bundle-version="1.6.4",
  org.eclipse.ui.ide;bundle-version="3.7.0",
@@ -32,5 +32,5 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.scenario.service.model;bundle-version="[1.0.0,2.0.0)",
  com.mmxlabs.scenario.service.ui;bundle-version="[1.0.0,2.0.0)"
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: com.mmxlabs.shiplingo.platform.models.manifest.internal.Activator
+Bundle-Activator: com.mmxlabs.models.lng.scenario.internal.Activator
 Service-Component: OSGI-INF/*.xml

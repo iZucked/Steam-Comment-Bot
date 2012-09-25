@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.wizards;
+package com.mmxlabs.models.lng.scenario.wizards;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,12 +25,12 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioService;
 import com.mmxlabs.scenario.service.ui.ScenarioServiceSelectionGroup;
-import com.mmxlabs.shiplingo.platform.models.manifest.internal.Activator;
 
 /**
  * The "New" wizard page allows setting the container for the new file as well as the file name. The page will only accept file name without the extension OR with the extension that matches the

@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest;
+package com.mmxlabs.models.lng.scenario;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;

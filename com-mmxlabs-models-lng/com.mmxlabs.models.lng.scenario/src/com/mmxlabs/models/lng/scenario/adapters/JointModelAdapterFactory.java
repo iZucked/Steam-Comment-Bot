@@ -2,15 +2,15 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.models.manifest.adapters;
+package com.mmxlabs.models.lng.scenario.adapters;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.IEditorInput;
 
+import com.mmxlabs.models.lng.scenario.ManifestJointModel;
 import com.mmxlabs.models.mmxcore.jointmodel.JointModel;
-import com.mmxlabs.shiplingo.platform.models.manifest.ManifestJointModel;
 
 /**
  * Adapts IEditorInputs to DemoJointModels where possible.
