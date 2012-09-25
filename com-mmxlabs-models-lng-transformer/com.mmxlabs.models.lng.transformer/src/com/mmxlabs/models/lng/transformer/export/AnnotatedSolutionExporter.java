@@ -45,10 +45,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.OptimiserConstants;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
@@ -184,19 +180,20 @@ public class AnnotatedSolutionExporter {
 				eSequence.setVessel(entities.getModelObject(vessel, Vessel.class));
 				eSequence.unsetVesselClass();
 				break;
-			case VIRTUAL:
-				// oops should do something here
+			case FOB_SALE:
+				isFOBSequence = true;
 				// Skip and process differently
 				if (sequence.size() < 4) {
 					continue;
 				}
 
-				IPortSlot slotA = portSlotProvider.getPortSlot(sequence.get(1));
-				IPortSlot slotB = portSlotProvider.getPortSlot(sequence.get(2));
-				if (slotA instanceof ILoadOption && !(slotA instanceof ILoadSlot)) {
-					isDESSequence = true;
-				} else if (slotB instanceof IDischargeOption && !(slotB instanceof IDischargeSlot)) {
-					isFOBSequence = true;
+				skipStartEndElements = true;
+				break;
+			case DES_PURCHASE:
+				isDESSequence = true;
+				// Skip and process differently
+				if (sequence.size() < 4) {
+					continue;
 				}
 
 				skipStartEndElements = true;
@@ -222,7 +219,7 @@ public class AnnotatedSolutionExporter {
 				break;
 			}
 
-			if (vessel.getVesselInstanceType() != VesselInstanceType.VIRTUAL) {
+			if (vessel.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vessel.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 				if (eSequence.getName().equals("<no vessel>") || (eSequence.getVessel() == null && eSequence.getVesselClass() == null)) {
 					log.error("No vessel set on sequence!?");
 				}
