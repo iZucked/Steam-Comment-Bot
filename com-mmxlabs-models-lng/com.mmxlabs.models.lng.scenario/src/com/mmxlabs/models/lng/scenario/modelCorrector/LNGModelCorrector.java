@@ -9,6 +9,9 @@ import java.util.Set;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -37,6 +40,7 @@ import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
@@ -52,6 +56,7 @@ public class LNGModelCorrector {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix model issues");
 
+		fixDuplicateUUIDs(cmd, rootObject, ed);
 		fixMissingPortLocations(cmd, rootObject, ed);
 		fixMissingCargoElementAssignments(cmd, rootObject, ed);
 		fixMissingVesselEventElementAssignments(cmd, rootObject, ed);
@@ -61,6 +66,23 @@ public class LNGModelCorrector {
 			ed.getCommandStack().execute(cmd);
 		}
 
+	}
+
+	private void fixDuplicateUUIDs(final CompoundCommand cmd, final MMXRootObject rootObject, final EditingDomain ed) {
+		final Set<String> seenUUIDs = new HashSet<String>();
+		for (final MMXSubModel subModel : rootObject.getSubModels()) {
+
+			final TreeIterator<EObject> itr = subModel.getSubModelInstance().eAllContents();
+			while (itr.hasNext()) {
+				final EObject eObj = itr.next();
+				if (eObj instanceof UUIDObject) {
+					final UUIDObject uuidObject = (UUIDObject) eObj;
+					if (!seenUUIDs.add(uuidObject.getUuid())) {
+						cmd.append(SetCommand.create(ed, eObj, MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID()));
+					}
+				}
+			}
+		}
 	}
 
 	private void fixMissingPortLocations(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
@@ -192,7 +214,7 @@ public class LNGModelCorrector {
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesPurchaseSpotMarket(), group));
 			} else {
 
-				for (SpotMarket market : pricingModel.getDesPurchaseSpotMarket().getMarkets()) {
+				for (final SpotMarket market : pricingModel.getDesPurchaseSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
 				}
 			}
@@ -202,7 +224,7 @@ public class LNGModelCorrector {
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesSalesSpotMarket(), group));
 			} else {
 
-				for (SpotMarket market : pricingModel.getDesSalesSpotMarket().getMarkets()) {
+				for (final SpotMarket market : pricingModel.getDesSalesSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
 				}
 			}
@@ -212,7 +234,7 @@ public class LNGModelCorrector {
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobPurchasesSpotMarket(), group));
 			} else {
 
-				for (SpotMarket market : pricingModel.getFobPurchasesSpotMarket().getMarkets()) {
+				for (final SpotMarket market : pricingModel.getFobPurchasesSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
 				}
 			}
@@ -221,7 +243,7 @@ public class LNGModelCorrector {
 				group.setType(SpotType.FOB_SALE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket(), group));
 			} else {
-				for (SpotMarket market : pricingModel.getFobSalesSpotMarket().getMarkets()) {
+				for (final SpotMarket market : pricingModel.getFobSalesSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
 				}
 			}
@@ -233,9 +255,9 @@ public class LNGModelCorrector {
 	}
 
 	private void fixSpotMarketAvailabilityName(final CompoundCommand parent, final SpotMarket market, final EditingDomain ed) {
-		SpotAvailability availability = market.getAvailability();
+		final SpotAvailability availability = market.getAvailability();
 		if (availability != null) {
-			DataIndex<Integer> curve = availability.getCurve();
+			final DataIndex<Integer> curve = availability.getCurve();
 			if (curve != null) {
 				if (curve.getName() == null || curve.getName().isEmpty()) {
 					parent.append(SetCommand.create(ed, curve, MMXCorePackage.eINSTANCE.getNamedObject_Name(), market.getName()));
