@@ -16,6 +16,7 @@ import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUnit;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
@@ -109,6 +110,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass idleEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass generatedCharterOutEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -739,6 +747,26 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getIdle_Laden() {
 		return (EAttribute)idleEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getGeneratedCharterOut() {
+		return generatedCharterOutEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getGeneratedCharterOut_Revenue() {
+		return (EAttribute)generatedCharterOutEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1402,6 +1430,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		idleEClass = createEClass(IDLE);
 		createEAttribute(idleEClass, IDLE__LADEN);
 
+		generatedCharterOutEClass = createEClass(GENERATED_CHARTER_OUT);
+		createEAttribute(generatedCharterOutEClass, GENERATED_CHARTER_OUT__REVENUE);
+
 		unscheduledCargoEClass = createEClass(UNSCHEDULED_CARGO);
 		createEReference(unscheduledCargoEClass, UNSCHEDULED_CARGO__LOAD_ALLOCATION);
 		createEReference(unscheduledCargoEClass, UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION);
@@ -1532,6 +1563,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		journeyEClass.getESuperTypes().add(this.getFuelUsage());
 		idleEClass.getESuperTypes().add(this.getEvent());
 		idleEClass.getESuperTypes().add(this.getFuelUsage());
+		generatedCharterOutEClass.getESuperTypes().add(this.getEvent());
+		generatedCharterOutEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
 		unscheduledCargoEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cooldownEClass.getESuperTypes().add(this.getEvent());
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
@@ -1619,6 +1652,9 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(idleEClass, Idle.class, "Idle", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getIdle_Laden(), ecorePackage.getEBoolean(), "laden", null, 1, 1, Idle.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(generatedCharterOutEClass, GeneratedCharterOut.class, "GeneratedCharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getGeneratedCharterOut_Revenue(), ecorePackage.getEInt(), "revenue", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unscheduledCargoEClass, UnscheduledCargo.class, "UnscheduledCargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getUnscheduledCargo_LoadAllocation(), this.getSlotAllocation(), null, "loadAllocation", null, 1, 1, UnscheduledCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

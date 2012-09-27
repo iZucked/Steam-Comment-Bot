@@ -1988,6 +1988,304 @@ public interface SchedulePackage extends EPackage {
 	int IDLE_OPERATION_COUNT = EVENT_OPERATION_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterOut()
+	 * @generated
+	 */
+	int GENERATED_CHARTER_OUT = 8;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__EXTENSIONS = EVENT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__PROXIES = EVENT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Start</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__START = EVENT__START;
+
+	/**
+	 * The feature id for the '<em><b>End</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__END = EVENT__END;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__PORT = EVENT__PORT;
+
+	/**
+	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__PREVIOUS_EVENT = EVENT__PREVIOUS_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Next Event</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__NEXT_EVENT = EVENT__NEXT_EVENT;
+
+	/**
+	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__SEQUENCE = EVENT__SEQUENCE;
+
+	/**
+	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__EXTRA_DATA = EVENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT__REVENUE = EVENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT_FEATURE_COUNT = EVENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___MAKE_PROXIES = EVENT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___RESOLVE_PROXIES__MAP = EVENT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___RESTORE_PROXIES = EVENT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___COLLECT_UUID_OBJECTS__MAP = EVENT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___COLLECT_UUID_OBJECTS = EVENT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_UNSET_VALUE__ESTRUCTURALFEATURE = EVENT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = EVENT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___ECONTAINER_OP = EVENT___ECONTAINER_OP;
+
+	/**
+	 * The operation id for the '<em>Get Time Zone</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_TIME_ZONE__EATTRIBUTE = EVENT___GET_TIME_ZONE__EATTRIBUTE;
+
+	/**
+	 * The operation id for the '<em>Get Duration</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_DURATION = EVENT___GET_DURATION;
+
+	/**
+	 * The operation id for the '<em>Get Local Start</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_LOCAL_START = EVENT___GET_LOCAL_START;
+
+	/**
+	 * The operation id for the '<em>Get Local End</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_LOCAL_END = EVENT___GET_LOCAL_END;
+
+	/**
+	 * The operation id for the '<em>Type</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___TYPE = EVENT___TYPE;
+
+	/**
+	 * The operation id for the '<em>Name</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___NAME = EVENT___NAME;
+
+	/**
+	 * The operation id for the '<em>Get Hire Cost</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_HIRE_COST = EVENT___GET_HIRE_COST;
+
+	/**
+	 * The operation id for the '<em>Get Data With Path</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_DATA_WITH_PATH__ITERABLE = EVENT_OPERATION_COUNT + 0;
+
+	/**
+	 * The operation id for the '<em>Get Data With Key</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_DATA_WITH_KEY__STRING = EVENT_OPERATION_COUNT + 1;
+
+	/**
+	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___ADD_EXTRA_DATA__STRING_STRING = EVENT_OPERATION_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Add Extra Data</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = EVENT_OPERATION_COUNT + 3;
+
+	/**
+	 * The operation id for the '<em>Get Value With Path As</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = EVENT_OPERATION_COUNT + 4;
+
+	/**
+	 * The number of operations of the '<em>Generated Charter Out</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int GENERATED_CHARTER_OUT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 5;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl <em>Unscheduled Cargo</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1995,7 +2293,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getUnscheduledCargo()
 	 * @generated
 	 */
-	int UNSCHEDULED_CARGO = 8;
+	int UNSCHEDULED_CARGO = 9;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -2131,7 +2429,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUsage()
 	 * @generated
 	 */
-	int FUEL_USAGE = 9;
+	int FUEL_USAGE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2177,7 +2475,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelQuantity()
 	 * @generated
 	 */
-	int FUEL_QUANTITY = 10;
+	int FUEL_QUANTITY = 11;
 
 	/**
 	 * The feature id for the '<em><b>Fuel</b></em>' attribute.
@@ -2232,7 +2530,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCooldown()
 	 * @generated
 	 */
-	int COOLDOWN = 11;
+	int COOLDOWN = 12;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -2503,7 +2801,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCargoAllocation()
 	 * @generated
 	 */
-	int CARGO_ALLOCATION = 12;
+	int CARGO_ALLOCATION = 13;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -2810,7 +3108,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocation()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION = 13;
+	int SLOT_ALLOCATION = 14;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3018,7 +3316,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelAmount()
 	 * @generated
 	 */
-	int FUEL_AMOUNT = 14;
+	int FUEL_AMOUNT = 15;
 
 	/**
 	 * The feature id for the '<em><b>Unit</b></em>' attribute.
@@ -3064,7 +3362,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFitness()
 	 * @generated
 	 */
-	int FITNESS = 15;
+	int FITNESS = 16;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3209,7 +3507,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisit()
 	 * @generated
 	 */
-	int PORT_VISIT = 16;
+	int PORT_VISIT = 17;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3453,7 +3751,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getAdditionalData()
 	 * @generated
 	 */
-	int ADDITIONAL_DATA = 17;
+	int ADDITIONAL_DATA = 18;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3670,7 +3968,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getAdditionalDataHolder()
 	 * @generated
 	 */
-	int ADDITIONAL_DATA_HOLDER = 18;
+	int ADDITIONAL_DATA_HOLDER = 19;
 
 	/**
 	 * The feature id for the '<em><b>Additional Data</b></em>' containment reference list.
@@ -3725,7 +4023,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getStartEvent()
 	 * @generated
 	 */
-	int START_EVENT = 19;
+	int START_EVENT = 20;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -4050,7 +4348,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEndEvent()
 	 * @generated
 	 */
-	int END_EVENT = 20;
+	int END_EVENT = 21;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -4375,7 +4673,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 21;
+	int FUEL_UNIT = 22;
 
 
 	/**
@@ -4386,7 +4684,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 22;
+	int FUEL = 23;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4396,7 +4694,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 23;
+	int CALENDAR = 24;
 
 
 	/**
@@ -4407,7 +4705,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 24;
+	int ITERABLE = 25;
 
 
 	/**
@@ -4418,7 +4716,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 25;
+	int OBJECT = 26;
 
 
 	/**
@@ -4941,6 +5239,27 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getIdle_Laden();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut <em>Generated Charter Out</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Generated Charter Out</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterOut
+	 * @generated
+	 */
+	EClass getGeneratedCharterOut();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getRevenue <em>Revenue</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Revenue</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getRevenue()
+	 * @see #getGeneratedCharterOut()
+	 * @generated
+	 */
+	EAttribute getGeneratedCharterOut_Revenue();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.UnscheduledCargo <em>Unscheduled Cargo</em>}'.
@@ -6047,6 +6366,24 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute IDLE__LADEN = eINSTANCE.getIdle_Laden();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterOut()
+		 * @generated
+		 */
+		EClass GENERATED_CHARTER_OUT = eINSTANCE.getGeneratedCharterOut();
+
+		/**
+		 * The meta object literal for the '<em><b>Revenue</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute GENERATED_CHARTER_OUT__REVENUE = eINSTANCE.getGeneratedCharterOut_Revenue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl <em>Unscheduled Cargo</em>}' class.

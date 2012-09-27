@@ -258,6 +258,29 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected GeneratedCharterOutItemProvider generatedCharterOutItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createGeneratedCharterOutAdapter() {
+		if (generatedCharterOutItemProvider == null) {
+			generatedCharterOutItemProvider = new GeneratedCharterOutItemProvider(this);
+		}
+
+		return generatedCharterOutItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.UnscheduledCargo} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -663,6 +686,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (vesselEventVisitItemProvider != null) vesselEventVisitItemProvider.dispose();
 		if (journeyItemProvider != null) journeyItemProvider.dispose();
 		if (idleItemProvider != null) idleItemProvider.dispose();
+		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
 		if (unscheduledCargoItemProvider != null) unscheduledCargoItemProvider.dispose();
 		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
 		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();

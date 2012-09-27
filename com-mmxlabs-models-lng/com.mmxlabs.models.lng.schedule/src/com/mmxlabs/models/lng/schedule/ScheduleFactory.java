@@ -96,6 +96,15 @@ public interface ScheduleFactory extends EFactory {
 	Idle createIdle();
 
 	/**
+	 * Returns a new object of class '<em>Generated Charter Out</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Generated Charter Out</em>'.
+	 * @generated
+	 */
+	GeneratedCharterOut createGeneratedCharterOut();
+
+	/**
 	 * Returns a new object of class '<em>Unscheduled Cargo</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

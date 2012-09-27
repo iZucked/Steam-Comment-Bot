@@ -146,6 +146,16 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case SchedulePackage.GENERATED_CHARTER_OUT: {
+				GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut)theEObject;
+				T result = caseGeneratedCharterOut(generatedCharterOut);
+				if (result == null) result = caseEvent(generatedCharterOut);
+				if (result == null) result = caseExtraDataContainer(generatedCharterOut);
+				if (result == null) result = caseMMXObject(generatedCharterOut);
+				if (result == null) result = caseITimezoneProvider(generatedCharterOut);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case SchedulePackage.UNSCHEDULED_CARGO: {
 				UnscheduledCargo unscheduledCargo = (UnscheduledCargo)theEObject;
 				T result = caseUnscheduledCargo(unscheduledCargo);
@@ -374,6 +384,22 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIdle(Idle object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Generated Charter Out</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Generated Charter Out</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGeneratedCharterOut(GeneratedCharterOut object) {
 		return null;
 	}
 
