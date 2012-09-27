@@ -28,6 +28,7 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private static final long serialVersionUID = 1L;
 
 	private Collection<IAllocationAnnotation> allocations = null;
+	@Deprecated
 	private final List<VirtualCargo> virtualCargoes = new LinkedList<VirtualCargo>();
 
 	public final Collection<IAllocationAnnotation> getAllocations() {
@@ -41,11 +42,12 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	public void addScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans) {
 		add(new ScheduledSequence(resource, startTime, voyagePlans));
 	}
-
+	@Deprecated
 	public List<VirtualCargo> getVirtualCargoes() {
 		return Collections.unmodifiableList(virtualCargoes);
 	}
 
+	@Deprecated
 	public void addVirtualCargo(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime) {
 		virtualCargoes.add(new VirtualCargo(loadOption, dischargeOption, loadTime, dischargeTime));
 	}
