@@ -126,7 +126,9 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 		final IPortSlot slot1 = portSlotProvider.getPortSlot(first);
 		final IPortSlot slot2 = portSlotProvider.getPortSlot(second);
 
-		IVessel vessel = vesselProvider.getVessel(resource);
+		final IVessel vessel = vesselProvider.getVessel(resource);
+		final PortType firstType = portTypeProvider.getPortType(first);
+		final PortType secondType = portTypeProvider.getPortType(second);
 		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 			final ITimeWindow tw1 = slot1.getTimeWindow();
 			final ITimeWindow tw2 = slot2.getTimeWindow();
@@ -135,9 +137,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 				return true; // if the time windows are null, there is no effective constraint
 			}
 
-			PortType firstType = portTypeProvider.getPortType(first);
 			if (firstType == PortType.Load) {
-				PortType secondType = portTypeProvider.getPortType(second);
 				if (secondType == PortType.Discharge) {
 
 					if (tw1.getStart() <= tw2.getStart() && tw1.getEnd() >= tw2.getStart()) {
@@ -157,6 +157,16 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 				}
 			}
 			return true;
+		}
+
+		if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+			// Ignore problems with short cargoes between discharge and next load
+			if (firstType == PortType.Start && secondType == PortType.End) {
+				return true;
+			}
+			if (firstType == PortType.Discharge) {
+				return true;
+			}
 		}
 
 		final int distance = distanceProvider.getMinimumValue(slot1.getPort(), slot2.getPort());
