@@ -11,6 +11,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
@@ -50,11 +52,10 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	private final List<ICargoSchedulerFitnessComponent> schedulerComponents;
 	private final List<ICargoAllocationFitnessComponent> allocationComponents;
 	private final List<ICargoFitnessComponent> allComponents;
-
 	private ISequenceScheduler scheduler;
-
+	@Inject
 	private ICalculatorProvider calculatorProvider;
-
+	@Inject
 	private ISchedulerFactory schedulerFactory;
 
 	public CargoSchedulerFitnessCore() {
@@ -164,11 +165,12 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		return new ArrayList<IFitnessComponent>(allComponents);
 	}
 
+//	@Inject
 	@Override
 	public void init(final IOptimisationData data) {
 		scheduler = schedulerFactory.createScheduler(data, schedulerComponents, allocationComponents);
-
-		calculatorProvider = data.getDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, ICalculatorProvider.class);
+//
+//		calculatorProvider = data.getDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, ICalculatorProvider.class);
 
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoFitnessComponent c : allComponents) {
@@ -191,10 +193,10 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	public List<ICargoFitnessComponent> getCargoSchedulerFitnessComponent() {
 		return allComponents;
 	}
-
-	public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
-		this.schedulerFactory = schedulerFactory;
-	}
+//
+//	public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
+//		this.schedulerFactory = schedulerFactory;
+//	}
 
 	@Override
 	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {

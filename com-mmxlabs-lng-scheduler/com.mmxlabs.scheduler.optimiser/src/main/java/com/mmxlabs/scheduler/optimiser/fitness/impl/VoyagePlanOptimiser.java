@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +56,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private final ILNGVoyageCalculator voyageCalculator;
 
+	@Inject
 	public VoyagePlanOptimiser(final ILNGVoyageCalculator voyageCalculator) {
 		this.voyageCalculator = voyageCalculator;
 	}

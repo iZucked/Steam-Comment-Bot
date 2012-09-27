@@ -11,6 +11,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -39,6 +41,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public abstract class BaseCargoAllocator implements ICargoAllocator {
+	
+	@Inject
 	ITotalVolumeLimitProvider cargoAllocationProvider;
 	// TODO the following could all probably be replaced with something faster
 	/**
@@ -80,6 +84,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	private long[] allocation;
 
 	private long profit;
+	
+	@Inject
 	private IVesselProvider vesselProvider;
 
 	public BaseCargoAllocator() {

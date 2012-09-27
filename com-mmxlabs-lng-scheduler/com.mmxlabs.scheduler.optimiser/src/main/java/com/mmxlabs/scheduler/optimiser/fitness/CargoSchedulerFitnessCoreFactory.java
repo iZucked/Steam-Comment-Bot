@@ -46,17 +46,19 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 	@Inject(optional=true)
 	private Iterable<ICargoFitnessComponentProvider> externalComponentProviders;
 	
-	/* default scheduler factory creates default GA scheduler */
-	// TODO: Make static class
-	private ISchedulerFactory schedulerFactory = new ISchedulerFactory() {
-		@Override
-		public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents,
-				final Collection<ICargoAllocationFitnessComponent> allocationComponents) {
-			return SchedulerUtils.createDirectRandomSequenceScheduler(data, schedulerComponents, allocationComponents);
-			// return SchedulerUtils.createRelaxingSequenceScheduler(data,
-			// components);
-		}
-	};
+//	/* default scheduler factory creates default GA scheduler */
+//	// TODO: Make static class
+//	@Inject(optional = false)
+//	private ISchedulerFactory schedulerFactory;
+////	= new ISchedulerFactory() {
+////		@Override
+////		public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents,
+////				final Collection<ICargoAllocationFitnessComponent> allocationComponents) {
+////			return SchedulerUtils.createDirectRandomSequenceScheduler(data, schedulerComponents, allocationComponents);
+////			// return SchedulerUtils.createRelaxingSequenceScheduler(data,
+////			// components);
+////		}
+////	};
 
 	@Override
 	public Collection<String> getFitnessComponentNames() {
@@ -81,15 +83,15 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 	@Override
 	public CargoSchedulerFitnessCore instantiate() {
 		final CargoSchedulerFitnessCore core = new CargoSchedulerFitnessCore(externalComponentProviders);
-		core.setSchedulerFactory(schedulerFactory);
+//		core.setSchedulerFactory(schedulerFactory);
 		return core;
 	}
 
-	public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
-		this.schedulerFactory = schedulerFactory;
-	}
-
-	public ISchedulerFactory getSchedulerFactory() {
-		return schedulerFactory;
-	}
+//	public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
+//		this.schedulerFactory = schedulerFactory;
+//	}
+//
+//	public ISchedulerFactory getSchedulerFactory() {
+//		return schedulerFactory;
+//	}
 }

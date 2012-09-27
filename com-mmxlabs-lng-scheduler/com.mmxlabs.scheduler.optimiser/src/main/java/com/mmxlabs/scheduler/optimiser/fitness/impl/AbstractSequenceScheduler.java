@@ -27,6 +27,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -67,6 +68,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	@Inject
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
+	@Inject
+	private IElementDurationProvider durationProvider;
+	
 	@Inject
 	private IPortProvider portProvider;
 

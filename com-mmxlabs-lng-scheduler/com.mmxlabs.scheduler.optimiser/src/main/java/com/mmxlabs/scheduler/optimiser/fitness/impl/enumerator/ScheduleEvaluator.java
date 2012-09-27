@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 import java.util.Collection;
 import java.util.HashSet;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
@@ -30,6 +32,7 @@ public class ScheduleEvaluator {
 
 	private final VoyagePlanIterator vpIterator = new VoyagePlanIterator();
 
+	@Inject
 	private ICargoAllocator cargoAllocator;
 
 	private Collection<ILoadPriceCalculator> loadPriceCalculators;
@@ -37,7 +40,24 @@ public class ScheduleEvaluator {
 
 	private Collection<ICargoAllocationFitnessComponent> allocationComponents;
 
+	@Inject
+	private ILNGVoyageCalculator voyageCalculator;
+
+	@Inject
+	private IEntityValueCalculator entityValueCalculator;
+
+	@Inject
+	private ICalculatorProvider calculatorProvider;
+
 	private long[] fitnesses;
+
+	/**
+	 * @since 2.0
+	 */
+	@Inject
+	public void init() {
+		setLoadPriceCalculators(calculatorProvider.getLoadPriceCalculators());
+	}
 
 	public long evaluateSchedule(final ScheduledSequences scheduledSequences, final int[] changedSequences) {
 		// First, we evaluate all the scheduler components. These are fitness components dependent only on
