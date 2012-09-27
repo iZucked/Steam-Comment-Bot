@@ -13,6 +13,7 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
  * @author hinton
  * 
  */
+@Deprecated
 public class VirtualCargo {
 	final ILoadOption loadOption;
 	final IDischargeOption dischargeOption;
