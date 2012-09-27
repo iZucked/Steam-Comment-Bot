@@ -5,6 +5,7 @@
 package com.mmxlabs.trading.integration;
 
 import java.io.Serializable;
+import java.util.Collection;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -227,7 +228,13 @@ public class TradingExporterExtension implements IExporterExtension {
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ExtraDataContainer container) {
 		int idx = 0;
 		int totalGroupValue = 0;
-		for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
+		Collection<IProfitAndLossEntry> entries = profitAndLoss.getEntries();
+		if (entries.size() == 1) {
+			// For single entry, we look at shipping only.
+			// TODO: This is a mess!
+			idx = 1;
+		}
+		for (final IProfitAndLossEntry entry : entries) {
 
 			// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
 			final ExtraData streamData;
@@ -242,7 +249,7 @@ public class TradingExporterExtension implements IExporterExtension {
 				streamData = container.addExtraData(TradingConstants.ExtraData_downstream, "Downstream");
 				break;
 			default:
-				throw new IllegalStateException("Expected three item in the profit and loss list - got " + profitAndLoss.getEntries().size());
+				throw new IllegalStateException("Expected three item in the profit and loss list - got " + entries.size());
 			}
 
 			final ExtraData entityData = streamData.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
