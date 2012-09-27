@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -105,6 +106,8 @@ public class EventGroupPropertySource implements IPropertySource {
 			displayName += "Start";
 		} else if (evt instanceof EndEvent) {
 			displayName += "End";
+		} else if (evt instanceof GeneratedCharterOut) {
+			displayName += "Generated Charter Out";
 		} else {
 			displayName += "Event";
 		}
@@ -145,6 +148,8 @@ public class EventGroupPropertySource implements IPropertySource {
 		if (event instanceof StartEvent) {
 			return true;
 		} else if (event instanceof EndEvent) {
+			return true;
+		} else if (event instanceof GeneratedCharterOut) {
 			return true;
 		} else if (event instanceof SlotVisit && ((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
 			return true;
