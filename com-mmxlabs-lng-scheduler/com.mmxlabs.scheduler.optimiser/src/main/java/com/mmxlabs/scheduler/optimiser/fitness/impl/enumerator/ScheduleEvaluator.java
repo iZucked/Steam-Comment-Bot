@@ -89,18 +89,18 @@ public class ScheduleEvaluator {
 		}
 		if (entityValueCalculator != null) {
 			// Charter Out Optimisation... Detect potential charter out opportunities.
-			for (ScheduledSequence seq : scheduledSequences) {
+			for (final ScheduledSequence seq : scheduledSequences) {
 
 				int currentTime = seq.getStartTime();
-				for (VoyagePlan vp : seq.getVoyagePlans()) {
+				for (final VoyagePlan vp : seq.getVoyagePlans()) {
 
 					// Grab the current list of arrival times and update the rolling currentTime
 					// 5 as we know that is the max we need (currently - a single cargo)
-					int[] arrivalTimes = new int[5];
+					final int[] arrivalTimes = new int[5];
 					int idx = -1;
 					arrivalTimes[++idx] = currentTime;
-					Object[] currentSequence = vp.getSequence();
-					for (Object obj : currentSequence) {
+					final Object[] currentSequence = vp.getSequence();
+					for (final Object obj : currentSequence) {
 						if (obj instanceof PortDetails) {
 							final PortDetails details = (PortDetails) obj;
 							if (idx != (currentSequence.length - 1)) {
@@ -117,20 +117,20 @@ public class ScheduleEvaluator {
 					// 5 is a cargo (load, voyage, discharge, voyage, next port)
 					if (currentSequence.length == 5) {
 						// Take original ballast details, and recalculate with charter out idle set to true.
-						VoyageDetails ballastDetails = (VoyageDetails) currentSequence[3];
+						final VoyageDetails ballastDetails = (VoyageDetails) currentSequence[3];
 
 						// Preliminary check on voyage suitability.
 						{
 
 							// TODO: Grab as an input!
-							int threshold = 20;
+							final int threshold = 20;
 							// If we go full speed, is there still more than 20 of idle time?
 
-							int availableTime = ballastDetails.getOptions().getAvailableTime();
-							int distance = ballastDetails.getOptions().getDistance();
-							int maxSpeed = ballastDetails.getOptions().getVessel().getVesselClass().getMaxSpeed();
+							final int availableTime = ballastDetails.getOptions().getAvailableTime();
+							final int distance = ballastDetails.getOptions().getDistance();
+							final int maxSpeed = ballastDetails.getOptions().getVessel().getVesselClass().getMaxSpeed();
 
-							int travelTime = Calculator.getTimeFromSpeedDistance(maxSpeed, distance);
+							final int travelTime = Calculator.getTimeFromSpeedDistance(maxSpeed, distance);
 
 							if (((availableTime - travelTime) / 24) < threshold) {
 								continue;
@@ -142,28 +142,28 @@ public class ScheduleEvaluator {
 						VoyageOptions options;
 						try {
 							options = ballastDetails.getOptions().clone();
-						} catch (CloneNotSupportedException e) {
+						} catch (final CloneNotSupportedException e) {
 							// Do not expect this, VoyageOptions implements Cloneable
 							throw new RuntimeException(e);
 						}
 						options.setCharterOutIdleTime(true);
-						VoyageDetails newDetails = new VoyageDetails();
+						final VoyageDetails newDetails = new VoyageDetails();
 						voyageCalculator.calculateVoyageFuelRequirements(options, newDetails);
 
-						VoyagePlan newVoyagePlan = new VoyagePlan();
+						final VoyagePlan newVoyagePlan = new VoyagePlan();
 
-						Object[] newSequence = currentSequence.clone();
+						final Object[] newSequence = currentSequence.clone();
 						newSequence[3] = newDetails;
 
-						IVessel vessel = options.getVessel();
+						final IVessel vessel = options.getVessel();
 						voyageCalculator.calculateVoyagePlan(newVoyagePlan, vessel, arrivalTimes, newSequence);
 
 						// Get the new cargo allocation.
-						IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
-						IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
+						final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
+						final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
 
-						long originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, null);
-						long newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, null);
+						final long originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, null);
+						final long newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, null);
 
 						// TODO: This should be recorded based on market availability groups and then processed.
 						if (originalOption >= newOption) {
