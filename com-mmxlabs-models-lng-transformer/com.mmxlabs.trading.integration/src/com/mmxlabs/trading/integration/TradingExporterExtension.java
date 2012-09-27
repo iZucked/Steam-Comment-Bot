@@ -18,8 +18,10 @@ import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -185,6 +187,32 @@ public class TradingExporterExtension implements IExporterExtension {
 					// revenue.setDetails(DetailTreeExporter.exportDetail(entry.getDetails()));
 					// revenues.add(revenue);
 					// }
+				}
+			}
+			final IProfitAndLossAnnotation generatedCharterOutProfitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss,
+					IProfitAndLossAnnotation.class);
+			if (generatedCharterOutProfitAndLoss != null) {
+				// emit p&l entry - depends on the type of slot associated with the element.
+				final IPortSlot slot = slotProvider.getPortSlot(element);
+
+				if (slot instanceof ILoadOption) {
+					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
+					CargoAllocation cargoAllocation = null;
+					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
+						if (allocation.getLoadAllocation().getSlot() == modelSlot || allocation.getDischargeAllocation().getSlot() == slot) {
+							cargoAllocation = allocation;
+							break;
+						}
+					}
+					if (cargoAllocation != null) {
+
+						// TODO: Quick hack to find the charter event. Should do better search in case it is not here!
+						SlotVisit slotVisit = cargoAllocation.getDischargeAllocation().getSlotVisit();
+						Event nextEvent = slotVisit.getNextEvent().getNextEvent();
+						if (nextEvent instanceof GeneratedCharterOut) {
+							setPandLentries(generatedCharterOutProfitAndLoss, (ExtraDataContainer) nextEvent);
+						}
+					}
 				}
 			}
 		}
