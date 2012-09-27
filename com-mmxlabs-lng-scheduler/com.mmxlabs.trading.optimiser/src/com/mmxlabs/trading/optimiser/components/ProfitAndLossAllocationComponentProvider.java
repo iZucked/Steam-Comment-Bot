@@ -21,6 +21,6 @@ public class ProfitAndLossAllocationComponentProvider implements ICargoFitnessCo
 
 	@Override
 	public ICargoFitnessComponent createComponent(CargoSchedulerFitnessCore core) {
-		return new ProfitAndLossAllocationComponent(PROFIT_COMPONENT_NAME, TradingConstants.DCP_entityProvider, SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider, core);
+		return new ProfitAndLossAllocationComponent(PROFIT_COMPONENT_NAME, SchedulerConstants.DCP_entityProvider, SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider, core);
 	}
 }
