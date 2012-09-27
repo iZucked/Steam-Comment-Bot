@@ -50,6 +50,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 //	private IEntity shippingEntity;
 
 	private long lastEvaluation, lastAcceptance;
+	@Inject
 	private IVesselProvider vesselProvider;
 //	private IPortSlotProvider slotProvider;
 	@Inject
@@ -68,11 +69,11 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 	@Override
 	public void init(final IOptimisationData data) {
-		this.entityValueCalculator = new DefaultEntityValueCalculator(entityProviderKey, vesselProviderKey, slotProviderKey);
-		this.entityValueCalculator.init(data);
-		
-		this.entityProvider = data.getDataComponentProvider(entityProviderKey, IEntityProvider.class);
-		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
+//		this.entityValueCalculator = new DefaultEntityValueCalculator(entityProviderKey, vesselProviderKey, slotProviderKey);
+//		this.entityValueCalculator.init(data);
+//		
+//		this.entityProvider = data.getDataComponentProvider(entityProviderKey, IEntityProvider.class);
+//		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
 //		this.slotProvider = data.getDataComponentProvider(slotProviderKey, IPortSlotProvider.class);
 //		if (entityProvider != null) {
 //			this.shippingEntity = entityProvider.getShippingEntity();

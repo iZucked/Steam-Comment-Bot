@@ -38,9 +38,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @since 2.0
  */
 public class DefaultEntityValueCalculator implements IEntityValueCalculator {
-	private  String entityProviderKey;
-	private  String slotProviderKey;
-	private  String vesselProviderKey;
+	private String entityProviderKey;
+	private String slotProviderKey;
+	private String vesselProviderKey;
 	@Inject
 	private IEntityProvider entityProvider;
 
@@ -50,9 +50,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	private IPortSlotProvider slotProvider;
 
 	public DefaultEntityValueCalculator() {
-		
+
 	}
-	
+
 	public DefaultEntityValueCalculator(final String dcpEntityprovider, final String vesselProviderKey, final String slotProviderKey) {
 		this.entityProviderKey = dcpEntityprovider;
 		this.vesselProviderKey = vesselProviderKey;
@@ -79,7 +79,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final IAnnotatedSolution annotatedSolution) {
-		IEntity  shippingEntity = entityProvider.getShippingEntity();
+		IEntity shippingEntity = entityProvider.getShippingEntity();
 		// get each entity
 		IDischargeOption dischargeOption = currentAllocation.getDischargeOption();
 		final IEntity downstreamEntity = entityProvider.getEntityForSlot(dischargeOption);
@@ -118,59 +118,61 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
 		final long downstreamProfit = downstreamEntity.getTaxedProfit(downstreamTotalPretaxProfit, taxTime);
 
-		final long result = upstreamProfit + shippingProfit + downstreamProfit;
+		long charterRevenue = getCharterRevenue(plan, vessel);
+		final long taxedCharterRevenue = shippingEntity.getTaxedProfit(charterRevenue, taxTime);
 
-		// final String key = currentAllocation.getLoadSlot().getId() + "-" + currentAllocation.getDischargeSlot().getId();
-
-		// if (lastCargoValues.containsKey(key)) {
-		// final long lastResult = lastCargoValues.get(key);
-		// if (lastResult > 0 != result > 0) {
-		// System.err.println("Change in: " + key);
-		// System.err.println("   Before: " + lastResult + " " + lastCargoDetails.get(key));
-		// System.err.println("    After: " + result + " " + currentAllocation + ", ship cost = " + shippingCosts);
-		// }
-		// }
-		//
-		// lastCargoDetails.put(key, currentAllocation + ", ship cost = " + shippingCosts);
-		// lastCargoValues.put(key, result);
+		final long result = upstreamProfit + shippingProfit + downstreamProfit + taxedCharterRevenue;
 
 		if (annotatedSolution != null) {
-			final LinkedList<IProfitAndLossEntry> entries = new LinkedList<IProfitAndLossEntry>();
+			{
+				final LinkedList<IProfitAndLossEntry> entries = new LinkedList<IProfitAndLossEntry>();
 
-			final DetailTree upstreamDetails = new DetailTree();
-			final DetailTree shippingDetails = new DetailTree();
-			final DetailTree downstreamDetails = new DetailTree();
+				final DetailTree upstreamDetails = new DetailTree();
+				final DetailTree shippingDetails = new DetailTree();
+				final DetailTree downstreamDetails = new DetailTree();
 
-			upstreamDetails.addChild(new LNGTransferDetailTree("Upstream purchase", loadVolume, loadPricePerM3, cvValue));
-			final IDetailTree upstreamToShipping = new LNGTransferDetailTree("Shipping to upstream", loadVolume, upstreamTransferPricePerM3, cvValue);
-			upstreamDetails.addChild(upstreamToShipping);
-			shippingDetails.addChild(upstreamToShipping);
-			final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolume, shippingTransferPricePerM3, cvValue);
-			shippingDetails.addChild(shippingToDownstream);
+				upstreamDetails.addChild(new LNGTransferDetailTree("Upstream purchase", loadVolume, loadPricePerM3, cvValue));
+				final IDetailTree upstreamToShipping = new LNGTransferDetailTree("Shipping to upstream", loadVolume, upstreamTransferPricePerM3, cvValue);
+				upstreamDetails.addChild(upstreamToShipping);
+				shippingDetails.addChild(upstreamToShipping);
+				final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolume, shippingTransferPricePerM3, cvValue);
+				shippingDetails.addChild(shippingToDownstream);
 
-			shippingDetails.addChild("Shipping Cost", shippingCosts);
+				shippingDetails.addChild("Shipping Cost", shippingCosts);
 
-			downstreamDetails.addChild(shippingToDownstream);
-			downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolume, dischargePricePerM3, cvValue));
+				downstreamDetails.addChild(shippingToDownstream);
+				downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolume, dischargePricePerM3, cvValue));
 
-			entries.add(new ProfitAndLossEntry(upstreamEntity, upstreamProfit, upstreamDetails));
-			entries.add(new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingDetails));
-			entries.add(new ProfitAndLossEntry(downstreamEntity, downstreamProfit, downstreamDetails));
-			// add entry for each entity
+				entries.add(new ProfitAndLossEntry(upstreamEntity, upstreamProfit, upstreamDetails));
+				entries.add(new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingDetails));
+				entries.add(new ProfitAndLossEntry(downstreamEntity, downstreamProfit, downstreamDetails));
+				// add entry for each entity
 
-			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getDischargeTime(), entries);
-			final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
-			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getDischargeTime(), entries);
+				final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
 
-			final ILoadOption loadOption = currentAllocation.getLoadOption();
-			if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
-				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, currentAllocation.getLoadTime(),
-						currentAllocation.getDischargeTime(), currentAllocation.getDischargeM3Price(), (int) loadVolume, vessel, plan, shippingDetails);
-			} else {
-				loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getLoadTime(), currentAllocation.getDischargeTime(),
-						currentAllocation.getDischargeM3Price(), shippingDetails);
+				final ILoadOption loadOption = currentAllocation.getLoadOption();
+				if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
+					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, currentAllocation.getLoadTime(),
+							currentAllocation.getDischargeTime(), currentAllocation.getDischargeM3Price(), (int) loadVolume, vessel, plan, shippingDetails);
+				} else {
+					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getLoadTime(), currentAllocation.getDischargeTime(),
+							currentAllocation.getDischargeM3Price(), shippingDetails);
+				}
 			}
 
+			// Add in charter out revenue
+			if (charterRevenue != 0) {
+				final DetailTree details = new DetailTree();
+
+				details.addChild(new DetailTree("Charter Out", charterRevenue));
+
+				final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, taxedCharterRevenue, details);
+				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getLoadTime(), Collections.singleton(entry));
+				final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_charterOutProfitAndLoss, annotation);
+			}
 		}
 
 		return result;
@@ -185,7 +187,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @return
 	 */
 	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int time, final IAnnotatedSolution annotatedSolution) {
-		IEntity  shippingEntity = entityProvider.getShippingEntity();
+		IEntity shippingEntity = entityProvider.getShippingEntity();
 
 		final long shippingCost = getCosts(plan, vessel, true);
 		final long revenue;
@@ -258,7 +260,21 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		return shippingCosts + hireCosts;
 	}
-	
+
+	private long getCharterRevenue(final VoyagePlan plan, final IVessel vessel) {
+		long charterRevenue = 0;
+		for (Object obj : plan.getSequence()) {
+			if (obj instanceof VoyageDetails) {
+				VoyageDetails voyageDetails = (VoyageDetails) obj;
+				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
+					charterRevenue += vessel.getHourlyCharterOutPrice() * voyageDetails.getIdleTime();
+
+				}
+
+			}
+		}
+		return charterRevenue;
+	}
 
 	private int getPartialPlanDuration(final VoyagePlan plan, final int skip) {
 		// TODO: Duplicated in ProfitAndLossAllocationComponent
@@ -267,7 +283,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final int k = sequence.length - skip;
 		for (int i = 0; i < k; i++) {
 			final Object o = sequence[i];
-			planDuration += (o instanceof VoyageDetails) ? (((VoyageDetails) o).getIdleTime() + ((VoyageDetails) o).getTravelTime()) : ((PortDetails) o).getVisitDuration();
+			if (o instanceof VoyageDetails) {
+				VoyageDetails voyageDetails = (VoyageDetails) o;
+				planDuration += voyageDetails.getTravelTime();
+				if (!voyageDetails.getOptions().isCharterOutIdleTime()) {
+					planDuration += voyageDetails.getIdleTime();
+				}
+			} else {
+				planDuration += ((PortDetails) o).getVisitDuration();
+			}
 		}
 		return planDuration;
 	}
