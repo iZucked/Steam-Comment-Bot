@@ -165,6 +165,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// Add in charter out revenue
 			if (charterRevenue != 0) {
 				final DetailTree details = new DetailTree();
+				long charterRevenue2 = getCharterRevenue(plan, vessel);
 
 				details.addChild(new DetailTree("Charter Out", charterRevenue));
 
@@ -194,7 +195,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
 		if (portDetails.getPortSlot().getPortType() == PortType.CharterOut) {
 			// in the next line we're doing getPartialPlanDuration(., 2) because there might be a repositioning in the plan
-			revenue = vessel.getHourlyCharterOutPrice() * getPartialPlanDuration(plan, 2);
+			revenue = (long) vessel.getHourlyCharterOutPrice() * (long)getPartialPlanDuration(plan, 2);
 		} else {
 			revenue = 0;
 		}
@@ -267,7 +268,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (obj instanceof VoyageDetails) {
 				VoyageDetails voyageDetails = (VoyageDetails) obj;
 				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
-					charterRevenue += vessel.getHourlyCharterOutPrice() * voyageDetails.getIdleTime();
+					charterRevenue += (long)vessel.getHourlyCharterOutPrice() *(long) voyageDetails.getIdleTime();
 
 				}
 
