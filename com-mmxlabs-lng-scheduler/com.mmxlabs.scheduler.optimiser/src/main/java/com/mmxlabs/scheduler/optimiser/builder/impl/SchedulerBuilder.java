@@ -304,6 +304,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return slot;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public ILoadOption createDESPurchaseLoadSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ILoadPriceCalculator priceCalculator,
 			final int cargoCVValue, final boolean slotIsOptional) {
@@ -359,6 +362,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return element;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public IDischargeOption createFOBSaleDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ISalesPriceCalculator priceCalculator,
 			final boolean slotIsOptional) {
