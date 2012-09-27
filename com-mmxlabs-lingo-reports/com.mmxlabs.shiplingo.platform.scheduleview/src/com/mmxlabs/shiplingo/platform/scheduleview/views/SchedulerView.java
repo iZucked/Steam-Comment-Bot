@@ -690,6 +690,10 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 						}
 					}
 				}
+			} else {
+				if (equivalents.containsKey(o)) {
+					newSelection.add(equivalents.get(o));
+				}
 			}
 		}
 		newSelection.retainAll(contents);
