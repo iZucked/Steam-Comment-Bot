@@ -36,8 +36,10 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -132,7 +134,13 @@ public class LoadSlotViewer extends ScenarioTableViewerPane {
 				if (o instanceof Event) {
 					Event evt = (Event) o;
 					while (evt != null && !(evt instanceof SlotVisit)) {
-						evt = evt.getPreviousEvent();
+						if (evt instanceof VesselEventVisit) {
+							evt = null;
+						} else if (evt instanceof GeneratedCharterOut) {
+							evt = null;
+						} else {
+							evt = evt.getPreviousEvent();
+						}
 					}
 					if (evt != null) {
 						return getLoadSlot(evt);

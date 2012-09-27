@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -91,11 +92,11 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	@Override
 	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
 		super.init(path, adapterFactory);
-//		final RewireAction rewireAction = new RewireAction(getJointModelEditorPart());
+		// final RewireAction rewireAction = new RewireAction(getJointModelEditorPart());
 		final RotateSlotsAction rotate = new RotateSlotsAction(getJointModelEditorPart());
 		viewer.addSelectionChangedListener(rotate);
-//		viewer.addSelectionChangedListener(rewireAction);
-//		getToolBarManager().appendToGroup("edit", rewireAction);
+		// viewer.addSelectionChangedListener(rewireAction);
+		// getToolBarManager().appendToGroup("edit", rewireAction);
 		getToolBarManager().appendToGroup("edit", rotate);
 		getToolBarManager().update(true);
 		final MMXCorePackage mmx = MMXCorePackage.eINSTANCE;
@@ -212,6 +213,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 					Event evt = (Event) o;
 					while (evt != null) {
 						if (evt instanceof VesselEventVisit) {
+							return null;
+						} else if (evt instanceof GeneratedCharterOut) {
 							return null;
 						} else if (evt instanceof SlotVisit) {
 							return getCargo(evt);
