@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptions;
@@ -27,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
  */
 public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
+	@Inject
 	private IRouteCostProvider routeCostProvider;
 
 	@Override
