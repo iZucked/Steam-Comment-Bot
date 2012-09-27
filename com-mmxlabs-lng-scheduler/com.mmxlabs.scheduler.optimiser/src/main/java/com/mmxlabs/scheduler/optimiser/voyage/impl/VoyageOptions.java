@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import com.google.common.base.Objects;
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
@@ -27,6 +26,8 @@ public final class VoyageOptions implements Cloneable {
 	private boolean useNBOForIdle;
 	private boolean useNBOForTravel;
 	private boolean useFBOForSupplement;
+
+	private boolean charterOutIdleTime;
 
 	private long availableLNG;
 
@@ -202,60 +203,25 @@ public final class VoyageOptions implements Cloneable {
 		if (obj instanceof VoyageOptions) {
 			final VoyageOptions vo = (VoyageOptions) obj;
 
-			if (useNBOForIdle != vo.useNBOForIdle) {
-				return false;
-			}
-			if (useNBOForTravel != vo.useNBOForTravel) {
-				return false;
-			}
-			if (useFBOForSupplement != vo.useFBOForSupplement) {
-				return false;
-			}
-
-			if (availableTime != vo.availableTime) {
-				return false;
-			}
-			if (distance != vo.distance) {
-				return false;
-			}
-			if (nboSpeed != vo.nboSpeed) {
-				return false;
-			}
-
-			if (!Equality.isEqual(vesselState, vo.vesselState)) {
-				return false;
-			}
-
-			if (!Equality.isEqual(route, vo.route)) {
-				return false;
-			}
-			if (!Equality.isEqual(vessel, vo.vessel)) {
-				return false;
-			}
-			if (!Equality.isEqual(fromPortSlot, vo.fromPortSlot)) {
-				return false;
-			}
-			if (!Equality.isEqual(toPortSlot, vo.toPortSlot)) {
-				return false;
-			}
-
-			if (availableLNG != vo.availableLNG) {
-				return false;
-			}
-
-			if (cooldown != vo.cooldown) {
-				return false;
-			}
-
-			if (shouldBeCold != vo.shouldBeCold) {
-				return false;
-			}
-
-			if (startWarm != vo.startWarm) {
-				return false;
-			}
-
-			return true;
+			// @formatter:off
+			return Objects.equal(charterOutIdleTime, vo.charterOutIdleTime)
+				&& Objects.equal(useNBOForIdle, vo.useNBOForIdle)
+				&& Objects.equal(useNBOForTravel, vo.useNBOForTravel)
+				&& Objects.equal(useFBOForSupplement, vo.useFBOForSupplement)
+				&& Objects.equal(availableTime, vo.availableTime)
+				&& Objects.equal(distance, vo.distance)
+				&& Objects.equal(nboSpeed, vo.nboSpeed)
+				&& Objects.equal(vesselState, vo.vesselState)
+				&& Objects.equal(route, vo.route)
+				&& Objects.equal(vessel, vo.vessel)
+				&& Objects.equal(fromPortSlot, vo.fromPortSlot)
+				&& Objects.equal(toPortSlot, vo.toPortSlot)
+				&& Objects.equal(availableLNG, vo.availableLNG)
+				&& Objects.equal(cooldown, vo.cooldown)
+				&& Objects.equal(shouldBeCold, vo.shouldBeCold)
+				&& Objects.equal(startWarm, vo.startWarm)
+				;
+			// @formatter:on
 		}
 		return false;
 	}
@@ -270,6 +236,7 @@ public final class VoyageOptions implements Cloneable {
 	public String toString() {
 		// @formatter:off
 		return Objects.toStringHelper(VoyageOptions.class)
+				.add("charterOutIdleTime", charterOutIdleTime)
 				.add("distance", distance)
 				.add("vessel", vessel)
 				.add("fromPortSlot", fromPortSlot)
@@ -286,6 +253,22 @@ public final class VoyageOptions implements Cloneable {
 				.add("vesselState", vesselState)
 				.toString();
 		// @formatter:on
+	}
+
+	/**
+	 * @since 2.0
+	 * @return
+	 */
+	public boolean isCharterOutIdleTime() {
+		return charterOutIdleTime;
+	}
+
+	/**
+	 * @since 2.0
+	 * @param charterOutIdleTime
+	 */
+	public void setCharterOutIdleTime(boolean charterOutIdleTime) {
+		this.charterOutIdleTime = charterOutIdleTime;
 	}
 
 }

@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
 import com.google.common.base.Objects;
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.impl.LongFastEnumEnumMap;
 import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -36,6 +35,8 @@ public final class VoyageDetails implements Cloneable {
 	private int startTime;
 
 	private long routeCost = 0;
+
+	private boolean charterOutIdleTime;
 
 	public VoyageDetails() {
 		fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
@@ -135,39 +136,19 @@ public final class VoyageDetails implements Cloneable {
 			final VoyageDetails d = (VoyageDetails) obj;
 
 			// Ensure all fields are present here
-
-			if (speed != d.speed) {
-				return false;
-			}
-			if (idleTime != d.idleTime) {
-				return false;
-			}
-			if (travelTime != d.travelTime) {
-				return false;
-			}
-			if (startTime != d.startTime) {
-				return false;
-			}
-			if (routeCost != d.routeCost) {
-				return false;
-			}
-			if (!Equality.isEqual(options, d.options)) {
-				return false;
-			}
-
-			if (!Equality.isEqual(fuelConsumption, d.fuelConsumption)) {
-				return false;
-			}
-
-			if (!Equality.isEqual(routeAdditionalConsumption, d.routeAdditionalConsumption)) {
-				return false;
-			}
-
-			if (!Equality.isEqual(fuelUnitPrices, d.fuelUnitPrices)) {
-				return false;
-			}
-
-			return true;
+			// @formatter:off
+			return Objects.equal(speed,  d.speed)
+				&& Objects.equal(idleTime,  d.idleTime)
+				&& Objects.equal(travelTime,  d.travelTime)
+				&& Objects.equal(startTime,  d.startTime)
+				&& Objects.equal(charterOutIdleTime,  d.charterOutIdleTime)
+				&& Objects.equal(routeCost,  d.routeCost)
+				&& Objects.equal(options,  d.options)
+				&& Objects.equal(fuelConsumption,  d.fuelConsumption)
+				&& Objects.equal(routeAdditionalConsumption,  d.routeAdditionalConsumption)
+				&& Objects.equal(fuelUnitPrices,  d.fuelUnitPrices)
+				;
+				// @formatter:on
 		}
 		return false;
 	}

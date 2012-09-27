@@ -18,6 +18,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.events.impl.DischargeEventImpl;
+import com.mmxlabs.scheduler.optimiser.events.impl.GeneratedCharterOutEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.IdleEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.JourneyEventImpl;
 import com.mmxlabs.scheduler.optimiser.events.impl.LoadEventImpl;
@@ -47,7 +48,7 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 	private IPortSlotProvider portSlotProvider;
 	private IVesselProvider vesselProvider;
-	
+
 	private final FuelComponent[] idleFuelComponents = FuelComponent.getIdleFuelComponents();
 	private final FuelComponent[] travelFuelComponents = FuelComponent.getTravelFuelComponents();
 
@@ -213,37 +214,54 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 				// solution.getElementAnnotations().setAnnotation(element,
 				// SchedulerConstants.AI_journeyInfo, journey);
 				solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_journeyInfo, journey);
+
 				final int idleTime = details.getIdleTime();
+				if (details.getOptions().isCharterOutIdleTime()) {
+					final GeneratedCharterOutEventImpl charterOut = new GeneratedCharterOutEventImpl();
 
-				final IdleEventImpl idle = new IdleEventImpl();
-				idle.setName("idle");
-				idle.setPort(currentPortSlot.getPort());
+					charterOut.setName("Generated Charter Out");
+					charterOut.setPort(currentPortSlot.getPort());
 
-				idle.setStartTime(currentTime + travelTime);
-				idle.setDuration(idleTime);
-				idle.setEndTime(currentTime + travelTime + idleTime);
-				idle.setSequenceElement(element);
+					charterOut.setStartTime(currentTime + travelTime);
+					charterOut.setDuration(idleTime);
+					charterOut.setEndTime(currentTime + travelTime + idleTime);
+					charterOut.setSequenceElement(element);
 
-				for (final FuelComponent fuel : idleFuelComponents) {
-					for (final FuelUnit unit : FuelUnit.values()) {
-						final long consumption = details.getFuelConsumption(fuel, unit);
+					// TODO: Calculate revenue
+					
+					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_generatedCharterOutInfo, charterOut);
 
-						idle.setFuelConsumption(fuel, unit, consumption);
-						// Calculate cost on default unit
-						if (unit == fuel.getDefaultFuelUnit()) {
-							final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(fuel));
-							idle.setFuelCost(fuel, cost);
+				} else {
+
+					final IdleEventImpl idle = new IdleEventImpl();
+					idle.setName("idle");
+					idle.setPort(currentPortSlot.getPort());
+
+					idle.setStartTime(currentTime + travelTime);
+					idle.setDuration(idleTime);
+					idle.setEndTime(currentTime + travelTime + idleTime);
+					idle.setSequenceElement(element);
+
+					for (final FuelComponent fuel : idleFuelComponents) {
+						for (final FuelUnit unit : FuelUnit.values()) {
+							final long consumption = details.getFuelConsumption(fuel, unit);
+
+							idle.setFuelConsumption(fuel, unit, consumption);
+							// Calculate cost on default unit
+							if (unit == fuel.getDefaultFuelUnit()) {
+								final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(fuel));
+								idle.setFuelCost(fuel, cost);
+							}
 						}
 					}
-				}
-				idle.setVesselState(details.getOptions().getVesselState());
-				
-				if (idle.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
-					idle.setCooldownDuration(Math.min(idleTime, vessel.getVesselClass().getCooldownTime()));
-				}
-				
-				solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_idleInfo, idle);
+					idle.setVesselState(details.getOptions().getVesselState());
 
+					if (idle.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
+						idle.setCooldownDuration(Math.min(idleTime, vessel.getVesselClass().getCooldownTime()));
+					}
+
+					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_idleInfo, idle);
+				}
 			} else {
 				throw new IllegalStateException("Unexpected element " + e);
 			}
