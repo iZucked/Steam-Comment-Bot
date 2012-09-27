@@ -40,6 +40,10 @@ public final class SchedulerConstants {
 	public static final String AI_journeyInfo = "info-journey";
 	public static final String AI_visitInfo = "info-visit";
 	public static final String AI_volumeAllocationInfo = "info-volume-allocation";
+	/**
+	 * @since 2.0
+	 */
+	public static final String AI_generatedCharterOutInfo = "info-generated-charter-out";
 	
 	public static final String AI_capacityViolationInfo = "info-capacity-violation";
 	public static final String AI_portCostInfo = "info-port-cost";
@@ -49,6 +53,10 @@ public final class SchedulerConstants {
 	 * @since 2.0
 	 */
 	public static final String AI_profitAndLoss = "element-profit-and-loss";
+	/**
+	 * @since 2.0
+	 */
+	public static final String AI_charterOutProfitAndLoss = "generated-charter-out-profit-and-loss";
 	/**
 	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.
 	 */
