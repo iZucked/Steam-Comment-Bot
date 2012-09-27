@@ -81,6 +81,7 @@ public class AnnotatedSolutionExporter {
 		exporters.add(new IdleEventExporter(visitExporter));
 		exporters.add(new CooldownExporter(visitExporter));
 		exporters.add(new JourneyEventExporter());
+		exporters.add(new GeneratedCharterOutEventExporter(visitExporter));
 		exporters.add(visitExporter);
 	}
 
