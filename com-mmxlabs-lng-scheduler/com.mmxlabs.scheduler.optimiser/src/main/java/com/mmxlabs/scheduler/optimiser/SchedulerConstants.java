@@ -30,6 +30,10 @@ public final class SchedulerConstants {
 	public static final String DCP_totalVolumeLimitProvider = "provider-total-volume";
 	public static final String DCP_discountCurveProvider = "provider-discount-curve";
 	public static final String DCP_calculatorProvider = "provider-calculators";
+	/**
+	 * @since 2.0
+	 */
+	public static final String DCP_entityProvider = "entity-provider";
 
 	// Additional Info keys
 	public static final String AI_idleInfo = "info-idle";
@@ -41,6 +45,10 @@ public final class SchedulerConstants {
 	public static final String AI_portCostInfo = "info-port-cost";
 
 	public static final String G_AI_allocations = "general-info-all-allocations";
+	/**
+	 * @since 2.0
+	 */
+	public static final String AI_profitAndLoss = "element-profit-and-loss";
 	/**
 	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.
 	 */
