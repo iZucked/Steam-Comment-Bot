@@ -7,17 +7,18 @@ package com.mmxlabs.trading.optimiser.builder;
 import java.util.Collection;
 import java.util.Collections;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.trading.optimiser.IEntity;
-import com.mmxlabs.trading.optimiser.TradingConstants;
+import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.trading.optimiser.impl.OtherEntity;
 import com.mmxlabs.trading.optimiser.impl.SimpleEntity;
-import com.mmxlabs.trading.optimiser.providers.impl.HashMapEntityProviderEditor;
 
 /**
  * Creates the extra elements for the trading optimiser. Mainly these are just the various entities.
@@ -26,24 +27,34 @@ import com.mmxlabs.trading.optimiser.providers.impl.HashMapEntityProviderEditor;
  * 
  */
 public class TradingBuilderExtension implements IBuilderExtension {
-	HashMapEntityProviderEditor entityProvider = new HashMapEntityProviderEditor(TradingConstants.DCP_entityProvider);
 
-	public TradingBuilderExtension() {
+	@Inject
+	private  HashMapEntityProviderEditor entityProvider;
 
-	}
-
+	/**
+	 * @since 2.0
+	 */
 	public IEntity createExternalEntity(final String name) {
 		return new OtherEntity(name);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public IEntity createGroupEntity(final String name, final int ownership, final ICurve taxCurve, final int offset) {
 		return new SimpleEntity(name, ownership, taxCurve, offset);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public void setEntityForSlot(final IEntity entity, final IPortSlot slot) {
 		entityProvider.setEntityForSlot(entity, slot);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public void setShippingEntity(final IEntity shipping) {
 		entityProvider.setShippingEntity(shipping);
 	}
@@ -55,7 +66,6 @@ public class TradingBuilderExtension implements IBuilderExtension {
 
 	@Override
 	public void dispose() {
-		entityProvider = null;
 	}
 
 	@Override
