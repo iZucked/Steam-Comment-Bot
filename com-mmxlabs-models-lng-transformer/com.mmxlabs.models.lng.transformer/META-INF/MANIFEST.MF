@@ -37,5 +37,5 @@ Import-Package: javax.inject;version="1.0.0"
  com.mmxlabs.models.lng.transformer.inject,
  com.mmxlabs.models.lng.transformer.inject.extensions
 Bundle-ActivationPolicy: lazy
-Bundle-Activator: com.mmxlabs.models.lng.transformer.Activator
+Bundle-Activator: com.mmxlabs.models.lng.transformer.internal.Activator
 Import-Package: javax.inject;version="1.0.0"
