@@ -184,6 +184,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 		}
 
+		// TODO: Do we use this!
 		for (final VirtualCargo virtual : sequences.getVirtualCargoes()) {
 			// add virtual cargo, somehow; contracts need to know how to price this, because we need the load price.
 			addVirtualCargo(virtual);
@@ -196,6 +197,145 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 			result.add(aa);
 		}
 		return result;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public IAllocationAnnotation allocate(final IVessel vessel, final VoyagePlan plan, int[] arrivalTimes) {
+
+		PortDetails loadDetails = null;
+		PortDetails dischargeDetails = null;
+		VoyageDetails ladenVoyage = null;
+		VoyageDetails ballastVoyage = null;
+
+		ILoadOption loadSlot = null;
+		IDischargeOption dischargeSlot = null;
+
+		long forcedLoadVolume = plan.getLNGFuelVolume();
+		int loadTime = 0, dischargeTime = 0;
+
+		int dischargeM3Price = 0;
+		int loadM3Price = 0;
+		long maximumDischargeVolume = 0;
+		for (Object object : plan.getSequence()) {
+			if (object instanceof PortDetails) {
+				final PortDetails pd = (PortDetails) object;
+				if (pd.getPortSlot() instanceof ILoadOption) {
+					loadDetails = pd;
+					loadTime = arrivalTimes[0];
+				} else if (pd.getPortSlot() instanceof IDischargeOption) {
+					dischargeDetails = pd;
+					dischargeTime = arrivalTimes[3];
+				}
+			} else if (object instanceof VoyageDetails) {
+				if ((dischargeDetails == null) && (loadDetails != null)) {
+					ladenVoyage = (VoyageDetails) object;
+				} else if ((dischargeDetails != null) && (loadDetails != null)) {
+					ballastVoyage = (VoyageDetails) object;
+					assert plan != null;
+
+					{
+
+						IVesselClass vesselClass = vessel.getVesselClass();
+						final long vesselCapacity = vesselClass.getCargoCapacity();
+						loadSlot = (ILoadSlot) loadDetails.getPortSlot();
+						dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
+
+						// We have to load this much LNG no matter what
+
+						final int cargoCVValue = loadSlot.getCargoCVValue();
+
+						// compute purchase price from contract
+						// this is not ideal.
+						final int dischargeCVPrice = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, dischargeTime);
+						long maxLoadVolume = loadSlot.getMaxLoadVolume();
+						if (maxLoadVolume == 0) {
+							maxLoadVolume = vesselCapacity;
+						}
+						maximumDischargeVolume = Math.min(vesselCapacity - forcedLoadVolume, maxLoadVolume - forcedLoadVolume);
+
+						// TODO this value is incorrect for netback and profit sharing cases
+						// the load CV price is the notional maximum price
+						// if we load less, it might actually be worth less
+
+						final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadSlot, (IDischargeSlot) dischargeSlot, loadTime, dischargeTime,
+								dischargeCVPrice, (int) maximumDischargeVolume, vessel, plan, null);
+
+						dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
+						loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
+
+					}
+					addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
+					loadDetails = null;
+					dischargeDetails = null;
+
+				}
+			}
+		}
+
+		if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
+			if (loadDetails != null && dischargeDetails != null) {
+				boolean isFOB = false;
+				boolean isDES = false;
+
+				loadSlot = (ILoadOption) loadDetails.getPortSlot();
+				dischargeSlot = (IDischargeOption) dischargeDetails.getPortSlot();
+
+				if (loadSlot instanceof ILoadSlot) {
+					isFOB = true;
+				}
+				if (dischargeSlot instanceof IDischargeSlot) {
+					isDES = true;
+				}
+
+				assert isDES != isFOB;
+
+				final int time;
+
+				if (isFOB) {
+					// Pick start of window.
+					time = ((ILoadSlot) loadSlot).getTimeWindow().getStart();
+				} else {
+					time = ((IDischargeSlot) dischargeSlot).getTimeWindow().getStart();
+				}
+
+				forcedLoadVolume = 0;
+
+				final int cargoCVValue = loadSlot.getCargoCVValue();
+
+				// compute purchase price from contract
+				// this is not ideal.
+				final int dischargeCVPrice = dischargeSlot.getDischargePriceCalculator().calculateSalesUnitPrice(dischargeSlot, time);
+
+				// TODO this value is incorrect for netback and profit sharing cases
+				// the load CV price is the notional maximum price
+				// if we load less, it might actually be worth less
+
+				final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, time, dischargeCVPrice, null);
+				dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
+				loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
+
+				maximumDischargeVolume = Math.max(loadSlot.getMaxLoadVolume(), dischargeSlot.getMaxDischargeVolume());
+
+			}
+		}
+
+		final AllocationAnnotation annotation = new AllocationAnnotation();
+
+		annotation.setLoadSlot(loadSlot);
+		annotation.setDischargeSlot(dischargeSlot);
+		annotation.setFuelVolume(forcedLoadVolume);
+
+		// TODO recompute load price here; this is not necessarily right
+		annotation.setLoadM3Price(loadM3Price);
+		annotation.setDischargeM3Price(dischargeM3Price);
+		annotation.setLoadTime(loadTime);
+		annotation.setDischargeTime(dischargeTime);
+		annotation.setDischargeVolume(maximumDischargeVolume);
+
+		return annotation;
 	}
 
 	@Override

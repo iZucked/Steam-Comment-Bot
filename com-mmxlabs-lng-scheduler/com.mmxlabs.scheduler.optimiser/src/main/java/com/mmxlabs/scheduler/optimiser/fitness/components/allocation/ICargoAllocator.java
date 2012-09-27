@@ -6,8 +6,10 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation;
 
 import java.util.Collection;
 
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Interface for cargo allocation logic.
@@ -35,6 +37,15 @@ public interface ICargoAllocator {
 	 */
 	public Collection<IAllocationAnnotation> allocate(ScheduledSequences sequences);
 
+	/**
+	 * Given a single {@link VoyagePlan} calculate "best as" the cargo allocation. By "best as" this means allocation without the other cargo volumes. Typically this will mean maxing out the load.
+	 * 
+	 * @param voyagePlan
+	 * @return
+	 * @since 2.0
+	 */
+	public IAllocationAnnotation allocate(IVessel vessel, VoyagePlan plan, int[] arrivalTimes);
+
 	public void dispose();
 
 	/**
@@ -46,4 +57,5 @@ public interface ICargoAllocator {
 	 * @param dataComponentProvider
 	 */
 	public void setVesselProvider(IVesselProvider dataComponentProvider);
+
 }

@@ -6,11 +6,13 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.Collection;
 
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton
@@ -80,6 +82,15 @@ public class ComparingCargoAllocator implements ICargoAllocator {
 	public void setVesselProvider(final IVesselProvider dataComponentProvider) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public IAllocationAnnotation allocate(IVessel vessel, VoyagePlan plan, int[] arrivalTimes) {
+		// TODO Auto-generated method stub
+		return fastAllocator.allocate(vessel, plan, arrivalTimes);
 	}
 
 }
