@@ -35,6 +35,8 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
+import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -44,8 +46,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.trading.optimiser.TradingConstants;
-import com.mmxlabs.trading.optimiser.annotations.IProfitAndLossAnnotation;
-import com.mmxlabs.trading.optimiser.annotations.IProfitAndLossEntry;
 
 /**
  * EMF export side for trading optimiser information. Model may need reworking, so this isn't exactly final.
@@ -74,7 +74,7 @@ public class TradingExporterExtension implements IExporterExtension {
 		final IPortSlotProvider slotProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 		final IVesselProvider vesselProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
-			final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, TradingConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
+			final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
 			if (profitAndLoss != null) {
 				// emit p&l entry - depends on the type of slot associated with the element.
 				final IPortSlot slot = slotProvider.getPortSlot(element);
@@ -198,6 +198,7 @@ public class TradingExporterExtension implements IExporterExtension {
 
 	private void setPandLentries(final IProfitAndLossAnnotation profitAndLoss, final ExtraDataContainer container) {
 		int idx = 0;
+		int totalGroupValue = 0;
 		for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
 
 			// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
@@ -218,7 +219,9 @@ public class TradingExporterExtension implements IExporterExtension {
 
 			final ExtraData entityData = streamData.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
 
-			final ExtraData pnlData = entityData.addExtraData(TradingConstants.ExtraData_pnl, "P&L", (int) (entry.getFinalGroupValue() / Calculator.ScaleFactor), ExtraDataFormatType.CURRENCY);
+			int groupValue = (int) (entry.getFinalGroupValue() / Calculator.ScaleFactor);
+			totalGroupValue += groupValue;
+			final ExtraData pnlData = entityData.addExtraData(TradingConstants.ExtraData_pnl, "P&L", groupValue, ExtraDataFormatType.CURRENCY);
 
 			pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
 			final ExtraData detail = exportDetailTree(entry.getDetails());
@@ -227,6 +230,7 @@ public class TradingExporterExtension implements IExporterExtension {
 
 			++idx;
 		}
+		container.addExtraData(TradingConstants.ExtraData_GroupValue, "Group Value", totalGroupValue, ExtraDataFormatType.CURRENCY);
 	}
 
 	private ExtraData exportDetailTree(final IDetailTree details) {

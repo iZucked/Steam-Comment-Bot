@@ -13,6 +13,7 @@ import java.util.Set;
 
 import org.eclipse.emf.ecore.EClass;
 
+import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -46,6 +47,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
  */
 public class StandardContractTransformer implements IContractTransformer {
 	private ISchedulerBuilder builder;
+	@Inject
 	private StandardContractBuilder contractBuilder;
 	private ModelEntityMap map;
 	private MMXRootObject rootObject;

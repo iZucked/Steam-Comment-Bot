@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.inject.Inject;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
@@ -32,7 +33,11 @@ import com.mmxlabs.trading.optimiser.contracts.impl.ProfitSharingContract;
 
 public class StandardContractBuilder implements IBuilderExtension {
 	private final Map<NetbackContract, Map<AVesselClass, NotionalBallastParameters>> netbacks = new HashMap<NetbackContract, Map<AVesselClass, NotionalBallastParameters>>();
-	private final ModelEntityMap map;
+	@Inject
+	private ModelEntityMap map;
+
+	public StandardContractBuilder() {
+	}
 
 	public StandardContractBuilder(final ModelEntityMap map) {
 		this.map = map;

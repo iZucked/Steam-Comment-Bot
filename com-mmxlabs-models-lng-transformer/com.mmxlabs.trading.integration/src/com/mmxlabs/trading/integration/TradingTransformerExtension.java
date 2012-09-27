@@ -6,9 +6,9 @@ package com.mmxlabs.trading.integration;
 
 import java.util.Collection;
 
+import com.google.inject.Inject;
 import com.mmxlabs.common.curves.ConstantValueCurve;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
@@ -18,8 +18,10 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.trading.optimiser.IEntity;
-import com.mmxlabs.trading.optimiser.builder.TradingBuilderExtension;
+import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
+import com.mmxlabs.trading.optimiser.impl.OtherEntity;
+import com.mmxlabs.trading.optimiser.impl.SimpleEntity;
 
 /**
  * Trading transformer extension which sets up entity models.
@@ -30,29 +32,30 @@ import com.mmxlabs.trading.optimiser.builder.TradingBuilderExtension;
 public class TradingTransformerExtension implements ITransformerExtension {
 
 	private MMXRootObject rootObject;
+
 	private ResourcelessModelEntityMap entities;
-	private TradingBuilderExtension tradingBuilder;
+
+	@Inject
+	private HashMapEntityProviderEditor entityProvider;
 
 	@Override
-	public void startTransforming(MMXRootObject rootObject, ResourcelessModelEntityMap map, ISchedulerBuilder builder) {
+	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
 		this.rootObject = rootObject;
 		this.entities = map;
-		tradingBuilder = new TradingBuilderExtension();
-		builder.addBuilderExtension(tradingBuilder);
 	}
 
 	@Override
 	public void finishTransforming() {
-		CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 		for (final LegalEntity e : commercialModel.getEntities()) {
 			final IEntity e2;
 			// Tmp hack until model is updated
-			if (e.getName().equalsIgnoreCase("Third-parties")) {
-				e2 = tradingBuilder.createExternalEntity(e.getName());
-			} else {
-				e2 = tradingBuilder.createGroupEntity(e.getName(), Calculator.scaleToInt(1.0), new ConstantValueCurve(Calculator.scaleToInt(0.0)), // TODO fix tax rates.
-						Calculator.scaleToInt(0));
-			}
+			// if (e.getName().equalsIgnoreCase("Third-parties")) {
+			// e2 = createExternalEntity(e.getName());
+			// } else {
+			e2 = createGroupEntity(e.getName(), Calculator.scaleToInt(1.0), new ConstantValueCurve(Calculator.scaleToInt(0.0)), // TODO fix tax rates.
+					Calculator.scaleToInt(0));
+			// }
 
 			// if (e instanceof GroupEntity) {
 			// final GroupEntity ge = (GroupEntity) e;
@@ -65,22 +68,46 @@ public class TradingTransformerExtension implements ITransformerExtension {
 		}
 
 		final LegalEntity shipping = commercialModel.getShippingEntity();
-		// final IEntity shipping2 = tradingBuilder.createGroupEntity(shipping.getName(), Calculator.scaleToInt(shipping.getOwnership()),
-		// new ConstantValueCurve(Calculator.scaleToInt(shipping.getTaxRate())), // TODO fix tax rates.
-		// Calculator.scaleToInt(shipping.getTransferOffset()));
-		// entities.addModelObject(shipping, shipping2);
 
-		tradingBuilder.setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));
+		setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));
 
 		// set up contract association or slot association or whatever
 		final Collection<Slot> slots = entities.getAllModelObjects(Slot.class);
-		for (Slot slot : slots) {
+		for (final Slot slot : slots) {
 			final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
 			if (portSlot != null) {
 				final IEntity entity = entities.getOptimiserObject(slot.getContract().getEntity(), IEntity.class);
-				tradingBuilder.setEntityForSlot(entity, portSlot);
-				
+				setEntityForSlot(entity, portSlot);
+
 			}
 		}
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public IEntity createExternalEntity(final String name) {
+		return new OtherEntity(name);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public IEntity createGroupEntity(final String name, final int ownership, final ICurve taxCurve, final int offset) {
+		return new SimpleEntity(name, ownership, taxCurve, offset);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public void setEntityForSlot(final IEntity entity, final IPortSlot slot) {
+		entityProvider.setEntityForSlot(entity, slot);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public void setShippingEntity(final IEntity shipping) {
+		entityProvider.setShippingEntity(shipping);
 	}
 }
