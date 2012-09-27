@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.trading.optimiser.impl;
 
-import com.mmxlabs.trading.optimiser.IEntity;
+import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
 
 /**
  * Basic entity implementation.
