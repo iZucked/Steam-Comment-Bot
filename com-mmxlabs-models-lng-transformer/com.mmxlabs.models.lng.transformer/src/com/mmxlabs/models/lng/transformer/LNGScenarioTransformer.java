@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
@@ -150,6 +151,9 @@ public class LNGScenarioTransformer {
 	@Inject
 	private ISchedulerBuilder builder;
 
+	@Inject
+	private Injector injector;
+
 	/**
 	 * Contains the contract transformers for each known contract type, by the EClass of the contract they transform.
 	 */
@@ -248,6 +252,7 @@ public class LNGScenarioTransformer {
 
 	public void addTransformerExtension(final ITransformerExtension extension) {
 		log.debug(extension.getClass().getCanonicalName() + " added to transformer extensions");
+		injector.injectMembers(extension);
 		allTransformerExtensions.add(extension);
 	}
 
@@ -759,9 +764,9 @@ public class LNGScenarioTransformer {
 		}
 
 		for (final LoadSlot loadSlot : cargoModel.getLoadSlots()) {
-			
+
 			// TODO: Filter on date
-			
+
 			// if (eCargo.getLoadSlot().getWindowStartWithSlotOrPortTime().after(latestDate)) {
 			// continue;
 			// }
@@ -1004,8 +1009,8 @@ public class LNGScenarioTransformer {
 
 								final ILoadPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ILoadPriceCalculator.class);
 
-								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, tw, Calculator.scale(market.getMinQuantity()), Calculator.scale(market.getMaxQuantity()),
-										priceCalculator, cargoCVValue, true);
+								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, tw, Calculator.scale(market.getMinQuantity()),
+										Calculator.scale(market.getMaxQuantity()), priceCalculator, cargoCVValue, true);
 
 								// Create a fake model object to add in here;
 								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();

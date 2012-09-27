@@ -4,12 +4,18 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
+import com.google.inject.Guice;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -17,6 +23,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
+import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessComponentInstantiator;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessHelper;
@@ -33,6 +40,7 @@ import com.mmxlabs.optimiser.lso.movegenerators.impl.InstrumentingMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
@@ -45,8 +53,12 @@ public class LSOConstructor {
 	private final OptimiserSettings settings;
 	private final boolean instrumenting = true;
 
+	@Inject
+	private Injector injector = null;
+
 	public LSOConstructor(final OptimiserSettings settings) {
 		this.settings = settings;
+
 	}
 
 	/**
@@ -59,9 +71,23 @@ public class LSOConstructor {
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(),
 				context.getOptimisationData());
+		
+		for (IConstraintChecker checker : constraintCheckers ) {
+			injector.injectMembers(checker);
+		}
 
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
+		Set<IFitnessCore> cores = new HashSet<IFitnessCore>();
+		for (IFitnessComponent c : fitnessComponents) {
+			injector.injectMembers(c);
+			cores.add(c.getFitnessCore());
+		}
+		
+		for (IFitnessCore c : cores) {
+			injector.injectMembers(c);
+		}
+		
 
 		final IMoveGenerator normalMoveGenerator = createMoveGenerator(context);
 
@@ -108,25 +134,25 @@ public class LSOConstructor {
 	}
 
 	private IMoveGenerator createMoveGenerator(IOptimisationContext context) {
-//		final MoveGeneratorSettings generatorSettings = settings.getMoveGeneratorSettings();
-//		if (generatorSettings != null && generatorSettings instanceof RandomMoveGeneratorSettings) {
-//			// Ideally this code should go in the EMF classes, to be honest.
-//			final RandomMoveGeneratorSettings rmgs = (RandomMoveGeneratorSettings) generatorSettings;
-//			final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
-//
-//			moveGenerator.setRandom(getRandom());
-//
-//			moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit(), rmgs.getWeightFor2opt2());
-//			moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit(), rmgs.getWeightFor3opt2());
-//			moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit(), rmgs.getWeightFor4opt2());
-//			moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit(), rmgs.getWeightFor4opt1());
-//
-//			return moveGenerator;
-//		} else {
-			final ConstrainedMoveGenerator cmg = new ConstrainedMoveGenerator(context);
-			cmg.setRandom(getRandom());
-			return cmg;
-//		}
+		// final MoveGeneratorSettings generatorSettings = settings.getMoveGeneratorSettings();
+		// if (generatorSettings != null && generatorSettings instanceof RandomMoveGeneratorSettings) {
+		// // Ideally this code should go in the EMF classes, to be honest.
+		// final RandomMoveGeneratorSettings rmgs = (RandomMoveGeneratorSettings) generatorSettings;
+		// final RandomMoveGenerator moveGenerator = new RandomMoveGenerator();
+		//
+		// moveGenerator.setRandom(getRandom());
+		//
+		// moveGenerator.addMoveGeneratorUnit(new Move2over2GeneratorUnit(), rmgs.getWeightFor2opt2());
+		// moveGenerator.addMoveGeneratorUnit(new Move3over2GeneratorUnit(), rmgs.getWeightFor3opt2());
+		// moveGenerator.addMoveGeneratorUnit(new Move4over2GeneratorUnit(), rmgs.getWeightFor4opt2());
+		// moveGenerator.addMoveGeneratorUnit(new Move4over1GeneratorUnit(), rmgs.getWeightFor4opt1());
+		//
+		// return moveGenerator;
+		// } else {
+		final ConstrainedMoveGenerator cmg = new ConstrainedMoveGenerator(context);
+		cmg.setRandom(getRandom());
+		return cmg;
+		// }
 	}
 
 	private IFitnessEvaluator createFitnessEvaluator(List<IFitnessComponent> fitnessComponents, InstrumentingMoveGenerator img) {
@@ -160,8 +186,9 @@ public class LSOConstructor {
 
 	private IThresholder getThresholder() {
 		// For now we are just going to generate a self-calibrating thresholder
-		
-		return new GeometricThresholder(getRandom(), settings.getAnnealingSettings().getEpochLength(), settings.getAnnealingSettings().getInitialTemperature(), settings.getAnnealingSettings().getCooling());
+
+		return new GeometricThresholder(getRandom(), settings.getAnnealingSettings().getEpochLength(), settings.getAnnealingSettings().getInitialTemperature(), settings.getAnnealingSettings()
+				.getCooling());
 		// return new MovingAverageThresholder(getRandom(), ts.getInitialAcceptanceRate(), ts.getAlpha(), ts.getEpochLength(), 3000);
 		// return new CalibratingGeometricThresholder(getRandom(), ts.getEpochLength(), ts.getInitialAcceptanceRate(), ts.getAlpha());
 	}

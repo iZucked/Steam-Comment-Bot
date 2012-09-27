@@ -2,10 +2,12 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.contracts;
+package com.mmxlabs.models.lng.transformer.contracts.internal;
 
 import java.util.Arrays;
 import java.util.Collection;
+
+import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
 
@@ -19,12 +21,14 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 
 /**
@@ -34,8 +38,8 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
  * 
  */
 public class SimpleContractTransformer implements IContractTransformer {
+	@Inject
 	private ISchedulerBuilder builder;
-	private SimpleContractBuilder contractBuilder;
 	private ModelEntityMap map;
 	private MMXRootObject rootObject;
 	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceContract(), CommercialPackage.eINSTANCE.getIndexPriceContract());
@@ -45,8 +49,6 @@ public class SimpleContractTransformer implements IContractTransformer {
 		this.rootObject = rootObject;
 		this.map = map;
 		this.builder = builder;
-		this.contractBuilder = new SimpleContractBuilder();
-		builder.addBuilderExtension(contractBuilder);
 	}
 
 	@Override
@@ -54,14 +56,13 @@ public class SimpleContractTransformer implements IContractTransformer {
 		this.rootObject = null;
 		this.map = null;
 		this.builder = null;
-		this.contractBuilder = null;
 	}
 
 	private SimpleContract instantiate(final Contract c) {
 		if (c instanceof FixedPriceContract) {
-			return contractBuilder.createFixedPriceContract(Calculator.scaleToInt(((FixedPriceContract) c).getPricePerMMBTU()));
+			return createFixedPriceContract(Calculator.scaleToInt(((FixedPriceContract) c).getPricePerMMBTU()));
 		} else if (c instanceof IndexPriceContract) {
-			return contractBuilder.createMarketPriceContract(map.getOptimiserObject(((IndexPriceContract) c).getIndex(), ICurve.class), Calculator.scaleToInt(((IndexPriceContract) c).getConstant()),
+			return createMarketPriceContract(map.getOptimiserObject(((IndexPriceContract) c).getIndex(), ICurve.class), Calculator.scaleToInt(((IndexPriceContract) c).getConstant()),
 					Calculator.scaleToInt(((IndexPriceContract) c).getMultiplier()));
 		}
 		return null;
@@ -88,4 +89,13 @@ public class SimpleContractTransformer implements IContractTransformer {
 	public Collection<EClass> getContractEClasses() {
 		return handledClasses;
 	}
+	
+	 com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract createFixedPriceContract(final int pricePerMMBTU) {
+		return new com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract(pricePerMMBTU);
+	}
+
+	MarketPriceContract createMarketPriceContract(final ICurve index, final int offset, final int multiplier) {
+		return new MarketPriceContract(index, offset, multiplier);
+	}
+
 }

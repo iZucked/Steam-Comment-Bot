@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.contracts;
+package com.mmxlabs.models.lng.transformer.contracts.internal;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -23,13 +23,6 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
  */
 public class SimpleContractBuilder implements IBuilderExtension {
 
-	FixedPriceContract createFixedPriceContract(final int pricePerMMBTU) {
-		return new FixedPriceContract(pricePerMMBTU);
-	}
-
-	MarketPriceContract createMarketPriceContract(final ICurve index, final int offset, final int multiplier) {
-		return new MarketPriceContract(index, offset, multiplier);
-	}
 
 	@Override
 	public Collection<Pair<String, IDataComponentProvider>> createDataComponentProviders(IOptimisationData optimisationData) {

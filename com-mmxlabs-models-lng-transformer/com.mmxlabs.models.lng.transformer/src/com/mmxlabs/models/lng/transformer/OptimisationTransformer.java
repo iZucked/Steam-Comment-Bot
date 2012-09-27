@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
@@ -88,6 +89,9 @@ public class OptimisationTransformer {
 
 	@Inject
 	private IEvaluationProcessRegistry evaluationProcessRegistry;
+	
+	@Inject
+	private Injector injector;
 
 	public OptimisationTransformer(final MMXRootObject rootObject) {
 		this(rootObject, rootObject.getSubModel(OptimiserModel.class).getActiveSetting());
@@ -128,6 +132,7 @@ public class OptimisationTransformer {
 
 		final LSOConstructor lsoConstructor = new LSOConstructor(settings);
 
+		injector.injectMembers(lsoConstructor);
 		return new Pair<IOptimisationContext, LocalSearchOptimiser>(context, lsoConstructor.buildOptimiser(context, SequencesManipulatorUtil.createDefaultSequenceManipulators(data)));
 	}
 
@@ -153,12 +158,6 @@ public class OptimisationTransformer {
 		}
 
 		return result;
-	}
-
-	public IEvaluationProcessRegistry createEvaluationProcessRegistry() {
-		evaluationProcessRegistry = new EvaluationProcessRegistry();
-
-		return evaluationProcessRegistry;
 	}
 
 	/**

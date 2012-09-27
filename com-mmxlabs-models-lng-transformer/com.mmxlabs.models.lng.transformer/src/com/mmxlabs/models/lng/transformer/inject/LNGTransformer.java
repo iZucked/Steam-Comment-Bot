@@ -4,18 +4,28 @@
  */
 package com.mmxlabs.models.lng.transformer.inject;
 
-import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.ops4j.peaberry.Peaberry;
+import org.ops4j.peaberry.util.TypeLiterals;
+
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
+import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.models.lng.transformer.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
@@ -40,18 +50,48 @@ public class LNGTransformer {
 
 	private final OptimisationTransformer optimisationTransformer;
 
+	// @Inject(optional = true)
+	private Iterable<IOptimiserInjectorService> extraModules;
+
 	public LNGTransformer(final MMXRootObject scenario) {
 		this(scenario, null);
 	}
 
 	public LNGTransformer(final MMXRootObject scenario, final Module module) {
 		this.scenario = scenario;
+		{
+			// Create temp injector to grab extraModules
+			// TODO: DOuble injector is not great.... nor is internal temp class
+			Injector injector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()), new AbstractModule() {
 
-		if (module != null) {
-			injector = Guice.createInjector(module, new LNGTransformerModule(scenario), new DataComponentProviderModule());
-		} else {
-			injector = Guice.createInjector(new LNGTransformerModule(scenario), new DataComponentProviderModule());
+				@Override
+				protected void configure() {
+					bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
+				}
+			});
+			class Internal {
+				@Inject(optional = true)
+				public Iterable<IOptimiserInjectorService> extraModules;
+			}
+			Internal internal = new Internal();
+			injector.injectMembers(internal);
+			this.extraModules = internal.extraModules;
 		}
+
+		List<Module> modules = new ArrayList<Module>();
+		if (module != null) {
+			modules.add(module);
+		}
+		modules.add(new DataComponentProviderModule());
+		modules.add(new LNGTransformerModule(scenario));
+
+		// TODO: Add specific ones here....
+		if (extraModules != null) {
+			for (IOptimiserInjectorService service : extraModules) {
+				modules.add(service.requestModule());
+			}
+		}
+		this.injector = Guice.createInjector(modules);
 
 		injector.injectMembers(this);
 
