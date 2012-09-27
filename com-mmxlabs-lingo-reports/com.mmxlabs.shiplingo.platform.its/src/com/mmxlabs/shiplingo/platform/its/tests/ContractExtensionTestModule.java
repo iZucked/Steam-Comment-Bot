@@ -11,7 +11,7 @@ import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
-import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.internal.SimpleContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformerWrapper;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
