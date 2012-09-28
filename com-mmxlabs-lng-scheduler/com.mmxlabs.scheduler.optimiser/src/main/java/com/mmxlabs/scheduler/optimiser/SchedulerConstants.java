@@ -35,6 +35,16 @@ public final class SchedulerConstants {
 	 */
 	public static final String DCP_entityProvider = "entity-provider";
 
+	/**
+	 * @since 2.0
+	 */
+	public static final String DCP_dateKeyProvider = "date-key-provider";
+
+	/**
+	 * @since 2.0
+	 */
+	public static final String DCP_charterMarketProvider = "charter-market-provider";
+
 	// Additional Info keys
 	public static final String AI_idleInfo = "info-idle";
 	public static final String AI_journeyInfo = "info-journey";
@@ -44,7 +54,7 @@ public final class SchedulerConstants {
 	 * @since 2.0
 	 */
 	public static final String AI_generatedCharterOutInfo = "info-generated-charter-out";
-	
+
 	public static final String AI_capacityViolationInfo = "info-capacity-violation";
 	public static final String AI_portCostInfo = "info-port-cost";
 

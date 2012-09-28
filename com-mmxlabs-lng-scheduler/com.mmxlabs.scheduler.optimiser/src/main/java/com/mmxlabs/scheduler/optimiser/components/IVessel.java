@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IResource;
 
 /**
@@ -38,16 +39,10 @@ public interface IVessel extends IResource {
 	VesselInstanceType getVesselInstanceType();
 
 	/**
-	 * Returns the hourly rate at which this vessel can be chartered in .
+	 * Returns the hourly rate at which this vessel can be chartered in.
 	 * 
-	 * @return hourly charter out price
+	 * @return hourly charter in price
+	 * @since 2.0
 	 */
-	int getHourlyCharterInPrice();
-
-	/**
-	 * Returns the hourly rate at which this vessel can be chartered out.
-	 * 
-	 * @return hourly charter out price
-	 */
-	int getHourlyCharterOutPrice();
+	ICurve getHourlyCharterInPrice();
 }

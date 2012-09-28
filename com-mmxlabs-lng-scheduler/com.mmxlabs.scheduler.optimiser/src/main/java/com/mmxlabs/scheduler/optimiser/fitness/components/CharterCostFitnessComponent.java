@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -33,7 +34,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 
 	int firstLoadTime = -1;
 	int lastTime;
-	int charterPrice;
+	ICurve charterPrice;
 	PortType loadPortType;
 
 	/*
@@ -45,7 +46,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	protected boolean reallyStartSequence(final IResource resource) {
 		final IVessel vessel = vesselProvider.getVessel(resource);
 
-		final int hireRate;
+		final ICurve hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
 			hireRate = vessel.getHourlyCharterInPrice();
@@ -70,7 +71,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 		}
 
 		// we are interested
-		return true; 
+		return charterPrice != null; 
 	}
 
 	/*
@@ -102,6 +103,6 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 		// addDiscountedValue(firstLoadTime,
 		// Calculator.multiply(lastTime - firstLoadTime, charterPrice));
 
-		return ((firstLoadTime == -1) || (lastTime == -1)) ? 0 : getDiscountedValue(firstLoadTime, Calculator.multiply(lastTime - firstLoadTime, charterPrice));
+		return ((firstLoadTime == -1) || (lastTime == -1)) ? 0 : getDiscountedValue(firstLoadTime, Calculator.multiply(lastTime - firstLoadTime, (int)charterPrice.getValueAtPoint(firstLoadTime)));
 	}
 }

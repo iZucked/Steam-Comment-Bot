@@ -169,19 +169,29 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		}
 
+		boolean isShortsSequence = false;//vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+
 		// Get start time
 		final int startTime = arrivalTimes[0];
 
 		final List<VoyagePlan> voyagePlans = new LinkedList<VoyagePlan>();
 		final List<Object> currentSequence = new ArrayList<Object>(5);
 		final List<Integer> currentTimes = new ArrayList<Integer>(3);
+		
+		ISequenceElement prevElement = null;
 		IPort prevPort = null;
 		IPortSlot prevPortSlot = null;
 		PortType prevPortType = null;
+		
+		ISequenceElement prev2Element = null;
+		IPort prev2Port = null;
+		IPortSlot prev2PortSlot = null;
+		PortType prev2PortType = null;
+		
 		VesselState vesselState = VesselState.Ballast;
 		VoyageOptions previousOptions = null;
 
-		voyagePlanOptimiser.setVessel(vessel);
+		voyagePlanOptimiser.setVessel(vessel, startTime);
 
 		boolean useNBO = false;
 
@@ -195,18 +205,35 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
+			int shortCargoReturnArrivalTime = 0;
 			if (prevPort != null) {
 				if ((prevPortType == PortType.Load) || (prevPortType == PortType.CharterOut)) {
 					useNBO = true;
 				}
 
-				// Available time, as determined by inputs.
-				final int availableTime = arrivalTimes[idx] - arrivalTimes[idx - 1] - prevVisitDuration;
+				final int availableTime;
+				if (isShortsSequence && prevPortType == PortType.Discharge) {
+					int minTravelTime = Integer.MAX_VALUE;
+					for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, prev2Port)) {
+						final int distance = entry.getValue();
+						final int extraTime = routeCostProvider.getRouteTransitTime(entry.getKey(), vessel.getVesselClass());
+						final int minByRoute = Calculator.getTimeFromSpeedDistance(vessel.getVesselClass().getMaxSpeed(), distance) + extraTime;
+						minTravelTime = Math.min(minTravelTime, minByRoute);
+					}
+					availableTime = minTravelTime;
+
+					shortCargoReturnArrivalTime = arrivalTimes[idx - 1] + prevVisitDuration + availableTime;
+				} else {
+
+					// Available time, as determined by inputs.
+					availableTime = arrivalTimes[idx] - arrivalTimes[idx - 1] - prevVisitDuration;
+				}
 
 				// Get the min NBO travelling speed
 				final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(vesselState);
 
 				final VoyageOptions options = new VoyageOptions();
+				
 
 				options.setVessel(vessel);
 				options.setFromPortSlot(prevPortSlot);
@@ -307,7 +334,11 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			portDetails.setVisitDuration(visitDuration);
 			portDetails.setPortSlot(thisPortSlot);
 
-			currentTimes.add(arrivalTimes[idx]);
+			if (isShortsSequence && prevPortType == PortType.Discharge) {
+				currentTimes.add(shortCargoReturnArrivalTime);
+			} else {
+				currentTimes.add(arrivalTimes[idx]);
+			}
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
@@ -329,6 +360,12 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			}
 
 			// Setup for next iteration
+			prev2Element = prevElement;
+			prev2Port = prevPort ;
+			prev2PortSlot = prevPortSlot ;
+			prev2PortType = prevPortType ;
+			
+			prevElement = element;
 			prevPort = thisPort;
 			prevPortSlot = thisPortSlot;
 			prevPortType = portType;

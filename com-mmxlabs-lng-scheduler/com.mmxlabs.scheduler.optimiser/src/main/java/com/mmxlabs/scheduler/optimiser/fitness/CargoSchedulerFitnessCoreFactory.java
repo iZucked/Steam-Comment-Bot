@@ -37,7 +37,7 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 
 	// public static final String CARGO_ALLOCATION_COMPONENT_NAME = "cargo-scheduler-volume-allocation";
 
-	public static final String CHARTER_REVENUE_COMPONENT_NAME = "cargo-scheduler-charter-revenue";
+//	public static final String CHARTER_REVENUE_COMPONENT_NAME = "cargo-scheduler-charter-revenue";
 
 	public static final String COST_COOLDOWN_COMPONENT_NAME = "cargo-scheduler-cost-cooldown";
 
@@ -63,8 +63,10 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 	@Override
 	public Collection<String> getFitnessComponentNames() {
 		
-		final List<String> result = CollectionsUtil.makeArrayList(LATENESS_COMPONENT_NAME, CAPACITY_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME, CHARTER_COST_COMPONENT_NAME, ROUTE_PRICE_COMPONENT_NAME,
-				COST_COOLDOWN_COMPONENT_NAME, CHARTER_REVENUE_COMPONENT_NAME, PORT_COST_COMPONENT_NAME);
+		final List<String> result = CollectionsUtil.makeArrayList(LATENESS_COMPONENT_NAME, CAPACITY_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME,CHARTER_COST_COMPONENT_NAME,ROUTE_PRICE_COMPONENT_NAME,
+				COST_COOLDOWN_COMPONENT_NAME, 
+			//	CHARTER_REVENUE_COMPONENT_NAME,
+				PORT_COST_COMPONENT_NAME);
 	
 		if (externalComponentProviders != null) {
 			for (final ICargoFitnessComponentProvider provider : externalComponentProviders) {

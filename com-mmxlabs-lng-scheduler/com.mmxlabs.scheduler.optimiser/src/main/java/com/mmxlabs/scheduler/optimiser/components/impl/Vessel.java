@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.components.impl;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.IndexedObject;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -28,9 +29,7 @@ public final class Vessel extends IndexedObject implements IVessel {
 
 	private VesselInstanceType vesselInstanceType = VesselInstanceType.UNKNOWN;
 
-	private int hourlyCharterOutPrice;
-
-	private int hourlyCharterInPrice;
+	private ICurve hourlyCharterInPrice;
 
 	@Override
 	public String getName() {
@@ -64,21 +63,18 @@ public final class Vessel extends IndexedObject implements IVessel {
 		return getName();
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public int getHourlyCharterOutPrice() {
-		return hourlyCharterOutPrice;
-	}
-
-	public void setHourlyCharterOutPrice(final int hourlyCharterOutPrice) {
-		this.hourlyCharterOutPrice = hourlyCharterOutPrice;
-	}
-
-	@Override
-	public int getHourlyCharterInPrice() {
+	public ICurve getHourlyCharterInPrice() {
 		return hourlyCharterInPrice;
 	}
 
-	public void setHourlyCharterInPrice(final int hourlyCharterInPrice) {
+	/**
+	 * @since 2.0
+	 */
+	public void setHourlyCharterInPrice(final ICurve hourlyCharterInPrice) {
 		this.hourlyCharterInPrice = hourlyCharterInPrice;
 	}
 }

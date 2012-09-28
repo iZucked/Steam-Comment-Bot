@@ -75,10 +75,15 @@ public class CheckingVPO implements IVoyagePlanOptimiser {
 		return delegate.getVessel();
 	}
 
+	/**
+	 * @param vessel
+	 * @param vesselStartTime
+	 * @since 2.0
+	 */
 	@Override
-	public void setVessel(final IVessel vessel) {
-		delegate.setVessel(vessel);
-		reference.setVessel(vessel);
+	public void setVessel(final IVessel vessel, final int vesselStartTime) {
+		delegate.setVessel(vessel, vesselStartTime);
+		reference.setVessel(vessel, vesselStartTime);
 	}
 
 	@Override

@@ -15,6 +15,8 @@ public class VesselEvent implements IVesselEvent {
 	private long maxHeelOut;
 	private int heelCVValue;
 	private int heelUnitPrice;
+	private long hireCost;
+	private long repositioning;
 
 	public VesselEvent() {
 		super();
@@ -101,5 +103,37 @@ public class VesselEvent implements IVesselEvent {
 	@Override
 	public int getHeelUnitPrice() {
 		return heelUnitPrice;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public long getHireCost() {
+		return hireCost;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public long getRepositioning() {
+		return repositioning;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void setHireCost(final long hireCost) {
+		this.hireCost = hireCost;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void setRepositioning(final long repositioning) {
+		this.repositioning = repositioning;
 	}
 }

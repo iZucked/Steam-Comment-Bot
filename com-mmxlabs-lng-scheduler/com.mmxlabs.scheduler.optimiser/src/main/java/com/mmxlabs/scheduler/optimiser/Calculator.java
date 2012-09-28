@@ -86,6 +86,12 @@ public final class Calculator {
 	public static long scale(final int value) {
 		return ScaleFactor * value;
 	}
+	/**
+	 * @since 2.0
+	 */
+	public static long scale(final long value) {
+		return ScaleFactor * value;
+	}
 
 	public static long descale(final long value) {
 		return value / ScaleFactor;

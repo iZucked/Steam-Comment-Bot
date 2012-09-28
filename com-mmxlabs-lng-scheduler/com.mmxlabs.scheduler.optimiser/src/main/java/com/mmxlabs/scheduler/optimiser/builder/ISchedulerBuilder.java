@@ -1,10 +1,12 @@
 /**
+
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.scheduler.optimiser.builder;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -137,8 +139,9 @@ public interface ISchedulerBuilder {
 	 * @param heelCVValue
 	 *            the CV value of heel available for travel
 	 * @return
+	 * @since 2.0
 	 */
-	IVesselEventPortSlot createCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours, long maxHeelOut, int heelCVValue, int heelUnitPrice);
+	IVesselEventPortSlot createCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours, long maxHeelOut, int heelCVValue, int heelUnitPrice, final long hireCost, final long repositioning);
 
 	/**
 	 * Create a dry dock event
@@ -192,9 +195,10 @@ public interface ISchedulerBuilder {
 	 * @param name
 	 * @param vesselClass
 	 * @return
+	 * @since 2.0
 	 */
-	IVessel createVessel(String name, IVesselClass vesselClass, int hourlyCharterInRate, int hourlyCharterOutRate, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint,
-			final long heelLimit, final int heelCVValue, final int heelUnitPrice);
+	IVessel createVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInRate, IStartEndRequirement startConstraint, IStartEndRequirement endConstraint, final long heelLimit,
+			final int heelCVValue, final int heelUnitPrice);
 
 	/**
 	 * Create a fleet vessel with the given name, class and instance type.
@@ -205,9 +209,10 @@ public interface ISchedulerBuilder {
 	 * @param start
 	 * @param end
 	 * @return
+	 * @since 2.0
 	 */
-	IVessel createVessel(String name, IVesselClass vesselClass, int hourlyCharterInRate, int hourlyCharterOutRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start,
-			IStartEndRequirement end, final long heelLimit, final int heelCVValue, final int heelUnitPrice);
+	IVessel createVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInRate, VesselInstanceType vesselInstanceType, IStartEndRequirement start, IStartEndRequirement end,
+			final long heelLimit, final int heelCVValue, final int heelUnitPrice);
 
 	/**
 	 * Create a start/end requirement which constrains nothing
@@ -447,8 +452,9 @@ public interface ISchedulerBuilder {
 	 * @param hourlyCharterPrice
 	 *            $/Hour rate to charter-in vessels
 	 * @return
+	 * @since 2.0
 	 */
-	List<IVessel> createSpotVessels(String namePrefix, IVesselClass vesselClass, int count, int hourlyCharterPrice);
+	List<IVessel> createSpotVessels(String namePrefix, IVesselClass vesselClass, int count, ICurve hourlyCharterInPrice);
 
 	/**
 	 * Create a single spot vessel of the given class, with the given name. This is equivalent to
@@ -458,8 +464,9 @@ public interface ISchedulerBuilder {
 	 * @param vesselClass
 	 *            * @param hourlyCharterPrice $/Hour rate to charter-in vessel
 	 * @return
+	 * @since 2.0
 	 */
-	IVessel createSpotVessel(String name, IVesselClass vesselClass, int hourlyCharterPrice);
+	IVessel createSpotVessel(String name, IVesselClass vesselClass, ICurve hourlyCharterInPrice);
 
 	void setVesselClassInaccessiblePorts(IVesselClass vc, Set<IPort> inaccessiblePorts);
 
@@ -578,5 +585,17 @@ public interface ISchedulerBuilder {
 	 * @param count
 	 */
 	void createSlotGroupCount(Collection<IPortSlot> slots, int count);
+
+	/**
+	 * Set the earliest {@link Date} that will represent time zero.
+	 * 
+	 * @since 2.0
+	 */
+	void setEarliestDate(Date earliestTime);
+
+	/**
+	 * @since 2.0
+	 */
+	void createCharterOutCurve(IVesselClass vesselClass, ICurve charterOutCurve);
 
 }

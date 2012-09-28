@@ -14,6 +14,7 @@ import org.junit.Test;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
@@ -107,7 +108,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, 0, startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0.0), startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false, false);
@@ -522,7 +523,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, 0, startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0.0), startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false, false);
@@ -937,7 +938,7 @@ public class TestCalculations {
 		final IStartEndRequirement startRequirement = builder.createStartEndRequirement(port1, builder.createTimeWindow(0, 0));
 		final IStartEndRequirement endRequirement = builder.createStartEndRequirement(port4, builder.createTimeWindow(75, 75));
 
-		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, 0, 0, startRequirement, endRequirement, 0, 0, 0);
+		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0.0), startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(5000), 2000, 1, false, false, false);

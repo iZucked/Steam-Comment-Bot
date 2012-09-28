@@ -43,6 +43,10 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolum
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListCargoAllocationEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
@@ -68,6 +72,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
@@ -81,6 +86,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapStartEndRequirement
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVirtualVesselSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashSetCalculatorProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.LazyDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortCostEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.indexed.IndexedPortSlotEditor;
@@ -225,6 +231,14 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapEntityProviderEditor entityProviderEditor = new HashMapEntityProviderEditor(SchedulerConstants.DCP_entityProvider);
 		bind(IEntityProvider.class).toInstance(entityProviderEditor);
 		bind(HashMapEntityProviderEditor.class).toInstance(entityProviderEditor);
+
+		final LazyDateKeyProviderEditor dateKeyProviderEditor = new LazyDateKeyProviderEditor(SchedulerConstants.DCP_dateKeyProvider);
+		bind(IDateKeyProvider.class).toInstance(dateKeyProviderEditor);
+		bind(IDateKeyProviderEditor.class).toInstance(dateKeyProviderEditor);
+		
+		final HashMapCharterMarketProviderEditor charterMarketProviderEditor = new HashMapCharterMarketProviderEditor(SchedulerConstants.DCP_charterMarketProvider);
+		bind(ICharterMarketProvider.class).toInstance(charterMarketProviderEditor);
+		bind(ICharterMarketProviderEditor.class).toInstance(charterMarketProviderEditor);
 	}
 
 	/**

@@ -49,6 +49,8 @@ public final class VoyageOptions implements Cloneable {
 	private String route;
 
 	private VesselState vesselState;
+	
+	private int charterOutHourlyRate;
 
 	public VoyageOptions() {
 
@@ -69,6 +71,8 @@ public final class VoyageOptions implements Cloneable {
 		setAvailableLNG(options.getAvailableLNG());
 		setAllowCooldown(options.getAllowCooldown());
 		setShouldBeCold(options.shouldBeCold());
+		setCharterOutHourlyRate(options.getCharterOutHourlyRate());
+		setCharterOutIdleTime(options.isCharterOutIdleTime());
 	}
 
 	public final int getAvailableTime() {
@@ -237,6 +241,7 @@ public final class VoyageOptions implements Cloneable {
 		// @formatter:off
 		return Objects.toStringHelper(VoyageOptions.class)
 				.add("charterOutIdleTime", charterOutIdleTime)
+				.add("charterOutHourlyRate", charterOutHourlyRate)
 				.add("distance", distance)
 				.add("vessel", vessel)
 				.add("fromPortSlot", fromPortSlot)
@@ -267,8 +272,22 @@ public final class VoyageOptions implements Cloneable {
 	 * @since 2.0
 	 * @param charterOutIdleTime
 	 */
-	public void setCharterOutIdleTime(boolean charterOutIdleTime) {
+	public void setCharterOutIdleTime(final boolean charterOutIdleTime) {
 		this.charterOutIdleTime = charterOutIdleTime;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public int getCharterOutHourlyRate() {
+		return charterOutHourlyRate;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public void setCharterOutHourlyRate(final int charterOutHourlyRate) {
+		this.charterOutHourlyRate = charterOutHourlyRate;
 	}
 
 }

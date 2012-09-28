@@ -15,8 +15,8 @@ public interface IEntityValueCalculator {
 
 	void dispose();
 
-	long evaluate(VoyagePlan plan, IAllocationAnnotation currentAllocation, IVessel vessel, IAnnotatedSolution annotatedSolution);
+	long evaluate(VoyagePlan plan, IAllocationAnnotation currentAllocation, IVessel vessel, int vesselStartTime, IAnnotatedSolution annotatedSolution);
 
-	long evaluate(VoyagePlan plan, IVessel vessel, int time, IAnnotatedSolution annotatedSolution);
+	long evaluate(VoyagePlan plan, IVessel vessel, int planStartTime, int vesselStartTime, IAnnotatedSolution annotatedSolution);
 
 }

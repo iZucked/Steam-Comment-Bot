@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
@@ -95,9 +96,9 @@ public class SimpleSchedulerTest {
 				15000);
 
 		// TODO: Setup start/end ports correctly
-		builder.createVessel("vessel-1", vesselClass1, 0, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVessel("vessel-2", vesselClass1, 0, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
-		builder.createVessel("vessel-3", vesselClass1, 0, 0, builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0);
+		builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0.0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
+		builder.createVessel("vessel-2", vesselClass1, new ConstantValueCurve(0.0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
+		builder.createVessel("vessel-3", vesselClass1, new ConstantValueCurve(0.0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port6), 0, 0, 0);
 
 		final ITimeWindow tw1 = builder.createTimeWindow(5, 6);
 		final ITimeWindow tw2 = builder.createTimeWindow(10, 11);

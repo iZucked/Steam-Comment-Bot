@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
@@ -22,6 +23,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
+import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -39,15 +43,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ScheduleEvaluator {
 
-	private final VoyagePlanIterator vpIterator = new VoyagePlanIterator();
-
 	@Inject
 	private ICargoAllocator cargoAllocator;
-
-	private Collection<ILoadPriceCalculator> loadPriceCalculators;
-	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
-
-	private Collection<ICargoAllocationFitnessComponent> allocationComponents;
 
 	@Inject
 	private ILNGVoyageCalculator voyageCalculator;
@@ -57,6 +54,18 @@ public class ScheduleEvaluator {
 
 	@Inject
 	private ICalculatorProvider calculatorProvider;
+
+	@Inject
+	private ICharterMarketProvider charterMarketProvider;
+
+	@Inject
+	private IVesselProvider vesselProvider;
+	
+	private final VoyagePlanIterator vpIterator = new VoyagePlanIterator();
+
+	private Collection<ILoadPriceCalculator> loadPriceCalculators;
+	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
+	private Collection<ICargoAllocationFitnessComponent> allocationComponents;
 
 	private long[] fitnesses;
 
@@ -91,6 +100,11 @@ public class ScheduleEvaluator {
 			// Charter Out Optimisation... Detect potential charter out opportunities.
 			for (final ScheduledSequence seq : scheduledSequences) {
 
+				IVessel vessel = vesselProvider.getVessel(seq.getResource());
+				if (!(vessel.getVesselInstanceType() == VesselInstanceType.FLEET || vessel.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
+					continue;
+				}
+				
 				int currentTime = seq.getStartTime();
 				for (final VoyagePlan vp : seq.getVoyagePlans()) {
 
@@ -119,6 +133,20 @@ public class ScheduleEvaluator {
 						// Take original ballast details, and recalculate with charter out idle set to true.
 						final VoyageDetails ballastDetails = (VoyageDetails) currentSequence[3];
 
+						
+						boolean foundMarketPrice = false;
+						int bestPrice = 0;
+						int time = arrivalTimes[4] + ballastDetails.getTravelTime();
+						for (CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vessel.getVesselClass(), time)) {
+							if (option.getCharterPrice() > bestPrice) {
+								foundMarketPrice = true;
+								bestPrice = option.getCharterPrice();
+							}
+						}
+						if (!foundMarketPrice) {
+							continue;
+						}
+						
 						// Preliminary check on voyage suitability.
 						{
 
@@ -147,6 +175,7 @@ public class ScheduleEvaluator {
 							throw new RuntimeException(e);
 						}
 						options.setCharterOutIdleTime(true);
+						options.setCharterOutHourlyRate(bestPrice);
 						final VoyageDetails newDetails = new VoyageDetails();
 						voyageCalculator.calculateVoyageFuelRequirements(options, newDetails);
 
@@ -155,15 +184,14 @@ public class ScheduleEvaluator {
 						final Object[] newSequence = currentSequence.clone();
 						newSequence[3] = newDetails;
 
-						final IVessel vessel = options.getVessel();
 						voyageCalculator.calculateVoyagePlan(newVoyagePlan, vessel, arrivalTimes, newSequence);
 
 						// Get the new cargo allocation.
 						final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
 						final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
 
-						final long originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, null);
-						final long newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, null);
+						final long originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, seq.getStartTime(), null);
+						final long newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);
 
 						// TODO: This should be recorded based on market availability groups and then processed.
 						if (originalOption >= newOption) {

@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.CollectionsUtil;
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -42,6 +43,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private List<Object> basicSequence;
 
 	private IVessel vessel;
+
+	private int vesselStartTime;
 
 	private int bestProblemCount = Integer.MAX_VALUE;
 
@@ -130,15 +133,15 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		if (endDetails.getPortSlot() != null) {
 			if (endDetails.getPortSlot().getPortType() == PortType.End) {
 				final ITimeWindow window = endDetails.getPortSlot().getTimeWindow();
-				
-				final int lastArrivalTime = arrivalTimes.get(arrivalTimes.size()-1);
+
+				final int lastArrivalTime = arrivalTimes.get(arrivalTimes.size() - 1);
 				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getEnd() ? 0 : window.getEnd() - lastArrivalTime);
-				
+
 				evaluateVoyagePlan(extraExtent);
 				return;
 			}
 		}
-		
+
 		evaluateVoyagePlan(0);
 	}
 
@@ -178,8 +181,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		VoyageOptions optionsToRestore = null;
 		int availableTimeToRestore = 0;
 
-		if (timeExtent/RELAXATION_STEP > 0) {
-			
+		if (timeExtent / RELAXATION_STEP > 0) {
+
 			// There are some cases where we wish to evaluate the best time to
 			// end the sequence, rather than the specified value. Typically
 			// this will be because no end date has been set and the specified
@@ -199,27 +202,27 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			final int originalTime = options.getAvailableTime();
 			optionsToRestore = options;
 			availableTimeToRestore = originalTime;
-			
+
 			VoyagePlan bestLastLegPlan = null;
 			long bestLastLegCost = Long.MAX_VALUE;
 			int bestLastProblemCount = Short.MAX_VALUE;
 			int bestAvailableTime = options.getAvailableTime();
 
-			final int hireRate;
+			final ICurve hireRateCurve;
 			switch (vessel.getVesselInstanceType()) {
 			case SPOT_CHARTER:
-				hireRate = vessel.getHourlyCharterInPrice();
+				hireRateCurve = vessel.getHourlyCharterInPrice();
 				break;
 			case TIME_CHARTER:
-				hireRate = vessel.getHourlyCharterInPrice();
+				hireRateCurve = vessel.getHourlyCharterInPrice();
 				break;
 			default:
-				hireRate = 0;
+				hireRateCurve = null;
 				break;
 			}
 
 			// TODO: Turn into a parameter -- probably want this to be longer than slightly over one day - could also scale it to 6/12 hours etc.
-			for (int i = 0; i < timeExtent/RELAXATION_STEP; i++) {
+			for (int i = 0; i < timeExtent / RELAXATION_STEP; i++) {
 
 				currentPlan = calculateVoyagePlan();
 
@@ -232,8 +235,11 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 					// Hire cost will be properly calculated in a different step.
 
 					// This is not calculator.multiply, because hireRate is not scaled.
-					final long hireCost = (long) hireRate * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
-					currentCost += hireCost;
+					if (hireRateCurve != null) {
+						int hireRate = (int) hireRateCurve.getValueAtPoint(vesselStartTime);
+						final long hireCost = (long) hireRate * (long) (lastVoyageDetails.getIdleTime() + lastVoyageDetails.getTravelTime());
+						currentCost += hireCost;
+					}
 
 					// Check for capacity violations, prefer solutions with fewer violations
 					currentProblemCount = currentPlan.getCapacityViolations();
@@ -464,10 +470,12 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	 * Set the {@link IVessel} to evaluate voyages against.
 	 * 
 	 * @param vessel
+	 * @since 2.0
 	 */
 	@Override
-	public void setVessel(final IVessel vessel) {
+	public void setVessel(final IVessel vessel, final int vesselStartTime) {
 		this.vessel = vessel;
+		this.vesselStartTime = vesselStartTime;
 	}
 
 	/**

@@ -317,7 +317,7 @@ public final class AbstractSequenceSchedulerTest {
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		context.checking(new Expectations() {
 			{
-				one(voyagePlanOptimiser).setVessel(vessel);
+				one(voyagePlanOptimiser).setVessel(vessel, 5);
 
 				// Set expected list of VPO choices
 				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions1))));
@@ -552,7 +552,7 @@ public final class AbstractSequenceSchedulerTest {
 		// Rely upon objects equals() methods to aid JMock equal(..) case
 		context.checking(new Expectations() {
 			{
-				one(voyagePlanOptimiser).setVessel(vessel);
+				one(voyagePlanOptimiser).setVessel(vessel, 5);
 
 				// Set expected list of VPO choices
 				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions1))));
