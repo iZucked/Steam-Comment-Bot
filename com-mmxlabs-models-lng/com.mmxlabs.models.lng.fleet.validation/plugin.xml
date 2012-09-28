@@ -328,6 +328,24 @@
                      class="HeelOptions">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.CharterOutConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.CharterOutConstraint"
+                  lang="Java"
+                  mode="Batch"
+                  name="Charter Out Event Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <description>
+                  Dry dock and Maintenance events need a vessel assignment.
+               </description>
+               <target
+                     class="CharterOutEvent">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
