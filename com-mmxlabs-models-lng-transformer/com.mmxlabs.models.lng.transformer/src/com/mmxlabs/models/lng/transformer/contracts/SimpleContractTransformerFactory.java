@@ -1,8 +1,11 @@
-package com.mmxlabs.models.lng.transformer.contracts.internal;
+package com.mmxlabs.models.lng.transformer.contracts;
 
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 
+/**
+ * @since 2.0
+ */
 public class SimpleContractTransformerFactory implements ITransformerExtensionFactory {
 
 	@Override

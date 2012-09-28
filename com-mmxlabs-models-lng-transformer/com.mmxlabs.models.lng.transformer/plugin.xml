@@ -13,7 +13,7 @@
          id="com.mmxlabs.lngscheduler.emf-extras.contracts"
          point="com.mmxlabs.lngscheduler.transformer">
       <Transformer
-            transformer="com.mmxlabs.models.lng.transformer.contracts.internal.SimpleContractTransformer">
+            transformer="com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer">
          <modelclass
                class="com.mmxlabs.models.lng.commercial.FixedPriceContract">
          </modelclass>

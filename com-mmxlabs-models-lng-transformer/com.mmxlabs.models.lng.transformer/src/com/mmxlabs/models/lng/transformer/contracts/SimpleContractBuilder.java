@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.contracts.internal;
+package com.mmxlabs.models.lng.transformer.contracts;
 
 import java.util.Collection;
 import java.util.Collections;
