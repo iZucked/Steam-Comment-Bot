@@ -23,13 +23,13 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
  */
 public class CharterOutConstraint extends AbstractModelMultiConstraint {
 	@Override
-	protected String validate(final IValidationContext ctx, List<IStatus> statuses) {
+	protected String validate(final IValidationContext ctx, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		if (target instanceof CharterOutEvent) {
-			CharterOutEvent charterOutEvent = (CharterOutEvent) target;
+			final CharterOutEvent charterOutEvent = (CharterOutEvent) target;
 
-			if (charterOutEvent.getRepositioningFee() == 0) {
-				String message = String.format("Charter out event %s has no hire cost set", charterOutEvent.getName());
+			if (charterOutEvent.getHireRate() == 0) {
+				final String message = String.format("Charter out event %s has no hire cost set", charterOutEvent.getName());
 				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dcsd.addEObjectAndFeature(charterOutEvent, FleetPackage.eINSTANCE.getCharterOutEvent_HireRate());
 				statuses.add(dcsd);
