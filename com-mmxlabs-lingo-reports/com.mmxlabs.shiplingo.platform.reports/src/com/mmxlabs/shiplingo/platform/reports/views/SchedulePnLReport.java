@@ -4,23 +4,15 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
@@ -34,16 +26,15 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.trading.optimiser.TradingConstants;
 
 /**
- * @since 1.1
+ * @since 2.0
  */
 public class SchedulePnLReport extends EMFReportView {
 	/**
@@ -87,6 +78,7 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 		});
 
+		addPNLColumn();
 		// addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
 
 		// // addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
@@ -113,64 +105,9 @@ public class SchedulePnLReport extends EMFReportView {
 		return Event.class;
 	}
 
-	@Override
-	protected IStructuredContentProvider getContentProvider() {
-		final IStructuredContentProvider superProvider = super.getContentProvider();
+	private void addPNLColumn() {
 
-		return new IStructuredContentProvider() {
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				superProvider.inputChanged(viewer, oldInput, newInput);
-				Display.getCurrent().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if (viewer.getControl().isDisposed()) {
-							return;
-						}
-
-						if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-							final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
-							final Collection<MMXRootObject> rootObjects = synchronizerOutput.getRootObjects();
-							for (final String s : entityColumnNames) {
-								removeColumn(s);
-							}
-
-							entityColumnNames.clear();
-
-							final TreeSet<String> entities = new TreeSet<String>();
-							for (final MMXRootObject rootObject : rootObjects) {
-
-								final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-								for (final LegalEntity e : commercialModel.getEntities()) {
-									entities.add(e.getName());
-								}
-							}
-							addPNLColumn(entities);
-						}
-
-						viewer.refresh();
-					}
-				});
-			}
-
-			@Override
-			public void dispose() {
-				superProvider.dispose();
-			}
-
-			@Override
-			public Object[] getElements(final Object object) {
-				return superProvider.getElements(object);
-			}
-		};
-	}
-
-	private final List<String> entityColumnNames = new ArrayList<String>();
-
-	private void addPNLColumn(final Collection<String> entityNames) {
-
-		final String title = /* entity.getName() + */"P&L";
-		entityColumnNames.add(title);
+		final String title = "P&L";
 		addColumn(title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
@@ -195,55 +132,14 @@ public class SchedulePnLReport extends EMFReportView {
 					container = (GeneratedCharterOut) object;
 				}
 
-				Integer value = null;
 				if (container != null) {
-					// TODO: make key well known
-					for (final String entityName : entityNames) {
-						{
-							final Integer v = container.getValueWithPathAs(CollectionsUtil.makeArrayList(TradingConstants.ExtraData_upstream, entityName, TradingConstants.ExtraData_pnl),
-									Integer.class, null);
-							if (v != null) {
-								if (value == null) {
-									value = v;
-								} else {
-									value = value.intValue() + v.intValue();
-								}
-							}
+					final ExtraData dataWithKey = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+					if (dataWithKey != null) {
+						final Integer v = dataWithKey.getValueAs(Integer.class);
+						if (v != null) {
+							return v;
 						}
-						{
-							final Integer v = container.getValueWithPathAs(CollectionsUtil.makeArrayList(TradingConstants.ExtraData_shipped, entityName, TradingConstants.ExtraData_pnl),
-									Integer.class, null);
-							if (v != null) {
-								if (value == null) {
-									value = v;
-								} else {
-									value = value.intValue() + v.intValue();
-								}
-							}
-						}
-						{
-							final Integer v = container.getValueWithPathAs(CollectionsUtil.makeArrayList(TradingConstants.ExtraData_downstream, entityName, TradingConstants.ExtraData_pnl),
-									Integer.class, null);
-							if (v != null) {
-								if (value == null) {
-									value = v;
-								} else {
-									value = value.intValue() + v.intValue();
-								}
-							}
-						}
-
 					}
-					// if ((allocation.getLoadRevenue() != null) && entity.equals(allocation.getLoadRevenue().getEntity())) {
-					// value += allocation.getLoadRevenue().getValue();
-					// }
-					// if ((allocation.getShippingRevenue() != null) && entity.equals(allocation.getShippingRevenue().getEntity())) {
-					// value += allocation.getShippingRevenue().getValue();
-					// }
-					// if ((allocation.getDischargeRevenue() != null) && entity.equals(allocation.getDischargeRevenue().getEntity())) {
-					// value += allocation.getDischargeRevenue().getValue();
-					// }
-					return value;
 				}
 
 				return null;
