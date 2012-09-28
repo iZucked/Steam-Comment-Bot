@@ -210,6 +210,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (revenue > 0) {
 				// TODO take out strings.
 				details.addChild(new DetailTree("Revenue", revenue));
+				getCosts(plan, vessel, true, vesselStartTime);
 			}
 
 			details.addChild(new DetailTree("Shipping Cost", shippingCost));
@@ -244,9 +245,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		case SPOT_CHARTER:
 			hireRate = vessel.getHourlyCharterInPrice();
 			break;
-		case TIME_CHARTER:
-			hireRate = vessel.getHourlyCharterInPrice();
-			break;
+//		case TIME_CHARTER:
+//			hireRate = vessel.getHourlyCharterInPrice();
+//			break;
 		case CARGO_SHORTS:
 			hireRate = vessel.getHourlyCharterInPrice();
 			break;
