@@ -4,28 +4,19 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.widgets.Display;
 
-import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
-import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.trading.optimiser.TradingConstants;
 
@@ -46,19 +37,20 @@ public class CargoPnLReportView extends EMFReportView {
 
 		addColumn("ID", objectFormatter, s.getCargoAllocation__GetName());
 
-//		addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
+		// addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
+		addPNLColumn();
 
-//		addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
+		// addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
 		addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
 		addColumn("Purchase Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
 		addColumn("Purchase Price", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation_Price());
 
-//		addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
-//		addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
+		// addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
+		// addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
 		addColumn("Sales Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
 		addColumn("Sales Price", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation_Price());
 
-//		addColumn("Vessel", objectFormatter, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
+		// addColumn("Vessel", objectFormatter, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
 
 	}
 
@@ -72,129 +64,28 @@ public class CargoPnLReportView extends EMFReportView {
 		return CargoAllocation.class;
 	}
 
-	@Override
-	protected IStructuredContentProvider getContentProvider() {
-		final IStructuredContentProvider superProvider = super.getContentProvider();
-		
-		return new IStructuredContentProvider() {
-			@Override
-			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
-				superProvider.inputChanged(viewer, oldInput, newInput);
-				Display.getCurrent().asyncExec(new Runnable() {
-					@Override
-					public void run() {
-						if (viewer.getControl().isDisposed()) {
-							return;
-						}
+	private void addPNLColumn() {
 
-						if (newInput instanceof IScenarioViewerSynchronizerOutput) {
-							final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
-							final Collection<MMXRootObject> rootObjects = synchronizerOutput.getRootObjects();
-							for (final String s : entityColumnNames) {
-								removeColumn(s);
-							}
-
-							entityColumnNames.clear();
-
-							final TreeSet<String> entities = new TreeSet<String>();
-							for (final MMXRootObject rootObject : rootObjects) {
-
-								final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-								for (final LegalEntity e : commercialModel.getEntities()) {
-									if (TradingConstants.THIRD_PARTIES.equals(e.getName())) {
-										continue;
-									}
-									entities.add(e.getName());
-								}
-							}
-							addPNLColumn(entities);
-						}
-
-						viewer.refresh();
-					}
-				});
-			}
-
-			@Override
-			public void dispose() {
-				superProvider.dispose();
-			}
-
-			@Override
-			public Object[] getElements(final Object object) {
-				return superProvider.getElements(object);
-			}
-		};
-	}
-
-	private final List<String> entityColumnNames = new ArrayList<String>();
-
-	private void addPNLColumn(final Collection<String> entityNames) {
-
-		final String title = /* entity.getName() + */"P&L";
-		entityColumnNames.add(title);
+		final String title = "P&L";
 		addColumn(title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				if (object instanceof CargoAllocation) {
-					// display P&L
-					Integer value = null;
 
-					final CargoAllocation allocation = (CargoAllocation) object;
-					// TODO: make key well known
-					for (final String entityName : entityNames) {
-						{
-							final Integer v = allocation.getValueWithPathAs(CollectionsUtil.makeArrayList(TradingConstants.ExtraData_upstream, entityName, TradingConstants.ExtraData_pnl),
-									Integer.class, null);
-							if (v != null) {
-								if (value == null) {
-									value = v;
-								} else {
-									value = value.intValue() + v.intValue();
-								}
-							}
+					CargoAllocation cargoAllocation = (CargoAllocation) object;
+					final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+					if (dataWithKey != null) {
+						final Integer v = dataWithKey.getValueAs(Integer.class);
+						if (v != null) {
+							return v;
 						}
-						{
-							final Integer v = allocation.getValueWithPathAs(CollectionsUtil.makeArrayList(TradingConstants.ExtraData_shipped, entityName, TradingConstants.ExtraData_pnl),
-									Integer.class, null);
-							if (v != null) {
-								if (value == null) {
-									value = v;
-								} else {
-									value = value.intValue() + v.intValue();
-								}
-							}
-						}
-						{
-							final Integer v = allocation.getValueWithPathAs(CollectionsUtil.makeArrayList(TradingConstants.ExtraData_downstream, entityName, TradingConstants.ExtraData_pnl),
-									Integer.class, null);
-							if (v != null) {
-								if (value == null) {
-									value = v;
-								} else {
-									value = value.intValue() + v.intValue();
-								}
-							}
-						}
-
 					}
-					// if ((allocation.getLoadRevenue() != null) && entity.equals(allocation.getLoadRevenue().getEntity())) {
-					// value += allocation.getLoadRevenue().getValue();
-					// }
-					// if ((allocation.getShippingRevenue() != null) && entity.equals(allocation.getShippingRevenue().getEntity())) {
-					// value += allocation.getShippingRevenue().getValue();
-					// }
-					// if ((allocation.getDischargeRevenue() != null) && entity.equals(allocation.getDischargeRevenue().getEntity())) {
-					// value += allocation.getDischargeRevenue().getValue();
-					// }
-					return value;
 				}
 
 				return null;
 			}
 		});
 	}
-
 
 	@Override
 	protected void processInputs(final Object[] result) {
@@ -205,9 +96,9 @@ public class CargoPnLReportView extends EMFReportView {
 
 				setInputEquivalents(
 						allocation,
-						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(),
-								allocation.getDischargeAllocation().getSlotVisit(), allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(),
-								allocation.getLadenIdle(), allocation.getLadenLeg(), allocation.getInputCargo() }));
+						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
+								allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
+								allocation.getInputCargo() }));
 			}
 		}
 	}
@@ -265,7 +156,6 @@ public class CargoPnLReportView extends EMFReportView {
 		return different;
 	}
 
-	
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduleElementCollector() {
 
@@ -286,7 +176,7 @@ public class CargoPnLReportView extends EMFReportView {
 			}
 		};
 	}
-	
+
 	/**
 	 * Returns a key of some kind for the element
 	 * 
