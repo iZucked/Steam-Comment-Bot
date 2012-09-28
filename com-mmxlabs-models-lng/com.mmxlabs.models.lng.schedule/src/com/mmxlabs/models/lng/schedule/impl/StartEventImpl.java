@@ -511,6 +511,15 @@ public class StartEventImpl extends EventImpl implements StartEvent {
 		return result.toString();
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	public String name() {
+		return getSequence().getName();
+	}
+	
 } // end of StartEventImpl
 
 // finish type fixing
