@@ -12,7 +12,9 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Matchers;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
@@ -61,6 +63,8 @@ public class TestNetbackContract {
 		ladenLeg.setOptions(ladenOptions);
 		ballastLeg.setOptions(ballastOptions);
 
+		final ICurve priceCurve = mock(ICurve.class);
+		
 		final IVessel vessel = mock(IVessel.class);
 		final IVesselClass vesselClass = mock(IVesselClass.class);
 
@@ -82,7 +86,8 @@ public class TestNetbackContract {
 		when(vessel.getVesselClass()).thenReturn(vesselClass);
 		when(vessel.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
 
-		when(vessel.getHourlyCharterInPrice()).thenReturn(1000);
+		when(priceCurve.getValueAtPoint(Matchers.anyDouble())).thenReturn(1000.0);
+		when(vessel.getHourlyCharterInPrice()).thenReturn(priceCurve);
 
 		when(slotA.getPort()).thenReturn(A);
 		when(slotB.getPort()).thenReturn(B);
