@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -147,6 +148,9 @@ public class KPIContentProvider implements IStructuredContentProvider {
 				} else if (evt instanceof EndEvent) {
 					final EndEvent endEvent = (EndEvent) evt;
 					totalPNL += getCargoPNL(endEvent, validEntities);
+				} else if (evt instanceof GeneratedCharterOut) {
+					final GeneratedCharterOut generatedCharterOut = (GeneratedCharterOut) evt;
+					totalPNL += getCargoPNL(generatedCharterOut, validEntities);
 				} else if (evt instanceof PortVisit) {
 					final PortVisit visit = (PortVisit) evt;
 					final Vessel vessel = seq.getVessel();
