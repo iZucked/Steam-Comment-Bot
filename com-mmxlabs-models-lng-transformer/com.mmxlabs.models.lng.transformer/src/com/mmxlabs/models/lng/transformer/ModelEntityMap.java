@@ -64,6 +64,14 @@ public class ModelEntityMap {
 	}
 
 	/**
+	 * @since 2.0
+	 */
+	public int getHoursFromDate(final Date date) {
+		long diff =date.getTime()  - earliestDate.getTime();
+		long hours = diff / Timer.ONE_HOUR;
+		return (int) Math.max(hours, 0);
+	}
+	/**
 	 * @param vessel
 	 * @param class1
 	 * @return
