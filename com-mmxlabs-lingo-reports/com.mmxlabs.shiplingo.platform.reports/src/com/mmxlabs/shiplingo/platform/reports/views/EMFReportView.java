@@ -623,7 +623,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	/**
 	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	protected void clearPinModeData() {
 		clearInputEquivalents();
@@ -638,7 +638,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * 
 	 * @param objects
 	 * @param isPinned
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	protected void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
 		currentlyPinned |= isPinned;
@@ -665,7 +665,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	/**
 	 * Compare an element to the pinned object and return true if different.
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 		return true;
@@ -676,7 +676,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	 * 
 	 * @param element
 	 * @return
-	 * @since 1.1
+	 * @since 2.0
 	 */
 	protected String getElementKey(final EObject element) {
 		if (element instanceof NamedObject) {
@@ -688,7 +688,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	/**
 	 * Process the array of elements before they are returned to e.g. map input equivalents
 	 * 
-	 * @since 1.1
+	 * @since 2.0
 	 * @param result
 	 */
 	protected void processInputs(Object[] result) {
