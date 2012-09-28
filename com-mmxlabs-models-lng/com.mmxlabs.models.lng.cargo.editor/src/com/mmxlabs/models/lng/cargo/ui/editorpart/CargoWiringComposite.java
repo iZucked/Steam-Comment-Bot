@@ -1156,6 +1156,9 @@ public class CargoWiringComposite extends Composite {
 		// Internal list should be full of valid items, so now we can add in the new items. First, add by cargo, then add remaining slots.
 
 		for (final Cargo c : newCargoes) {
+			// Hook in adapter to catch changes.
+			c.eAdapters().add(cargoChangeAdapter);
+
 			ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
 			boolean addedItem = false;
 			if (loadSlots.contains(c.getLoadSlot())) {
