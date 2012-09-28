@@ -100,7 +100,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 			// result = prime * result + loadPrice;
 			result = (prime * result) + dischargePrice;
-			result = (prime * result) + vesselStartTime;
+			result = (prime * result) + (int)vessel.getHourlyCharterInPrice().getValueAtPoint(vesselStartTime);
 
 			result = (prime * result) + ((vessel == null) ? 0 : vessel.hashCode());
 
