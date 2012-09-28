@@ -35,6 +35,7 @@ import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.common.parser.series.ISeries;
@@ -441,6 +442,8 @@ public class LNGScenarioTransformer {
 			extension.finishTransforming();
 		}
 
+		builder.setEarliestDate(earliestTime);
+
 		return builder.getOptimisationData();
 	}
 
@@ -573,7 +576,7 @@ public class LNGScenarioTransformer {
 	// return realCurve;
 	// }
 
-	private StepwiseIntegerCurve createCurveForIndex(final Index<Double> index, final float scale) {
+	private StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final float scale) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
 		curve.setDefaultValue(0);
@@ -588,6 +591,27 @@ public class LNGScenarioTransformer {
 				gotOneEarlyDate = true;
 			}
 			curve.setValueAfter(hours, Calculator.scaleToInt(scale * value));
+		}
+
+		return curve;
+	}
+
+	private StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, float scale) {
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+
+		curve.setDefaultValue(0);
+
+		boolean gotOneEarlyDate = false;
+		for (final Date date : index.getDates()) {
+			final int value = index.getValueForMonth(date);
+			final int hours = convertTime(date);
+			if (hours < 0) {
+				if (gotOneEarlyDate) {
+					continue;
+				}
+				gotOneEarlyDate = true;
+			}
+			curve.setValueAfter(hours, Calculator.scaleToInt(value * scale));
 		}
 
 		return curve;
@@ -658,11 +682,12 @@ public class LNGScenarioTransformer {
 			if (event instanceof CharterOutEvent) {
 				final CharterOutEvent charterOut = (CharterOutEvent) event;
 				final IPort endPort = portAssociation.lookup(charterOut.isSetRelocateTo() ? charterOut.getRelocateTo() : charterOut.getPort());
-
 				final HeelOptions heelOptions = charterOut.getHeelOptions();
 				final long maxHeel = heelOptions.isSetVolumeAvailable() ? (heelOptions.getVolumeAvailable() * Calculator.ScaleFactor) : Long.MAX_VALUE;
+				long totalHireCost = Calculator.scale((long)charterOut.getHireRate() * (long)charterOut.getDurationInDays());
+				long repositioning = Calculator.scale(charterOut.getRepositioningFee());
 				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel, Calculator.scaleToInt(heelOptions.getCvValue()),
-						Calculator.scaleToInt(heelOptions.getPricePerMMBTU()));
+						Calculator.scaleToInt(heelOptions.getPricePerMMBTU()), totalHireCost, repositioning);
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
@@ -1555,13 +1580,12 @@ public class LNGScenarioTransformer {
 
 			// TODO: Hook up once charter out opt implemented
 			final int dailyCharterInPrice = eV.isSetTimeCharterRate() ? eV.getTimeCharterRate() : 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
-			final int dailyCharterOutPrice = 0;
 
 			final long heelLimit = eV.getStartHeel().isSetVolumeAvailable() ? Calculator.scale(eV.getStartHeel().getVolumeAvailable()) : 0;
 
-			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), (int) (Calculator.scale(dailyCharterInPrice) / 24),
-					(int) (Calculator.scale(dailyCharterOutPrice) / 24), eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement,
-					heelLimit, Calculator.scaleToInt(eV.getStartHeel().getCvValue()), Calculator.scaleToInt(eV.getStartHeel().getPricePerMMBTU()));
+			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), new ConstantValueCurve((int) (Calculator.scale(dailyCharterInPrice) / 24)),
+					eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
+					Calculator.scaleToInt(eV.getStartHeel().getCvValue()), Calculator.scaleToInt(eV.getStartHeel().getPricePerMMBTU()));
 			vesselAssociation.add(eV, vessel);
 
 			entities.addModelObject(eV, vessel);
@@ -1569,29 +1593,27 @@ public class LNGScenarioTransformer {
 		}
 
 		{
-
-			int charterInPrice = 0;
-
 			int charterCount = 0;
 			for (final CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
 
 				for (final VesselClass eVc : charterCost.getVesselClasses()) {
-					if (charterCost.getCharterInPrice() != null) {
-						final Integer value = charterCost.getCharterInPrice().getBackwardsValueForMonth(latestTime);
-						if (value != null) {
-							charterInPrice = value;
-						} else {
-							charterInPrice = 0;
-						}
+					final ICurve charterInCurve;
+					if (charterCost.getCharterInPrice() == null) {
+						charterInCurve = new ConstantValueCurve(0.0);
 					} else {
-						charterInPrice = 0;
+						charterInCurve = createCurveForIntegerIndex(charterCost.getCharterInPrice(), 1.0f / 24.0f);
 					}
-					// charterOutPrice = charterCost.getCharterOutPrice().getValueAfter(latestTime);
+
 					charterCount = charterCost.getSpotCharterCount();
 					if (charterCount > 0) {
-						final List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount, Calculator.scaleToInt(charterInPrice / 24.0));
+						final List<IVessel> spots = builder.createSpotVessels("SPOT-" + eVc.getName(), vesselClassAssociation.lookup(eVc), charterCount, charterInCurve);
 						spotVesselsByClass.put(eVc, spots);
 						allVessels.addAll(spots);
+					}
+
+					if (charterCost.getCharterOutPrice() != null) {
+						ICurve charterOutCurve = createCurveForIntegerIndex(charterCost.getCharterInPrice(), 1.0f / 24.0f);
+						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVc), charterOutCurve);
 					}
 				}
 			}
