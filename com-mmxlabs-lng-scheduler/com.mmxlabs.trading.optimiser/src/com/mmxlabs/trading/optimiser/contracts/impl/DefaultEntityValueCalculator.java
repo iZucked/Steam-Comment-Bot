@@ -277,7 +277,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			details.addChild("Idle Base", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleBase)));
 			details.addChild("Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.PilotLight)));
 			details.addChild("Idle Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdlePilotLight)));
-			details.addChild("NOB", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
+			details.addChild("NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
 			details.addChild("FBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.FBO)));
 			details.addChild("Idle NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleNBO)));
 			details.addChild("Hire Costs", new CurrencyDetailElement(hireCosts));
