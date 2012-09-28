@@ -39,9 +39,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public class ProfitAndLossAllocationComponent implements ICargoAllocationFitnessComponent {
 	private final CargoSchedulerFitnessCore core;
-	private final String entityProviderKey;
-	private final String slotProviderKey;
-	private final String vesselProviderKey;
 	private final String name;
 
 	@Inject
@@ -57,26 +54,17 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 	private long calibrationZeroLine = Long.MIN_VALUE;
 
-	public ProfitAndLossAllocationComponent(final String profitComponentName, final String entityProviderKey, final String vesselProviderKey, final String slotProviderKey,
-			final CargoSchedulerFitnessCore cargoSchedulerFitnessCore) {
+	/**
+	 * @since 2.0
+	 */
+	public ProfitAndLossAllocationComponent(final String profitComponentName, final CargoSchedulerFitnessCore cargoSchedulerFitnessCore) {
 		this.name = profitComponentName;
-		this.entityProviderKey = entityProviderKey;
-		this.vesselProviderKey = vesselProviderKey;
-		this.slotProviderKey = slotProviderKey;
 		this.core = cargoSchedulerFitnessCore;
 	}
 
 	@Override
 	public void init(final IOptimisationData data) {
-		// this.entityValueCalculator = new DefaultEntityValueCalculator(entityProviderKey, vesselProviderKey, slotProviderKey);
-		// this.entityValueCalculator.init(data);
-		//
-		// this.entityProvider = data.getDataComponentProvider(entityProviderKey, IEntityProvider.class);
-		// this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
-		// this.slotProvider = data.getDataComponentProvider(slotProviderKey, IPortSlotProvider.class);
-		// if (entityProvider != null) {
-		// this.shippingEntity = entityProvider.getShippingEntity();
-		// }
+
 	}
 
 	@Override
