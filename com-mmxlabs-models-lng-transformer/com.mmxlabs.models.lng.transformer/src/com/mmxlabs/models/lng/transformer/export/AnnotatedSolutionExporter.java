@@ -20,6 +20,7 @@ import org.eclipse.emf.common.util.EList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -159,7 +160,7 @@ public class AnnotatedSolutionExporter {
 			boolean isDESSequence = false;
 
 			// TODO use spot rates correctly.
-			final int hireRate;
+			final ICurve hireRate;
 			switch (vessel.getVesselInstanceType()) {
 			case SPOT_CHARTER:
 				hireRate = vessel.getHourlyCharterInPrice();
@@ -168,11 +169,9 @@ public class AnnotatedSolutionExporter {
 				hireRate = vessel.getHourlyCharterInPrice();
 				break;
 			default:
-				hireRate = 0;
+				hireRate = null;
 				break;
 			}
-
-			eSequence.setDailyHireRate((hireRate * 24) / 1000);
 
 			final ISequence sequence = annotatedSolution.getSequences().getSequence(resource);
 			switch (vessel.getVesselInstanceType()) {
@@ -301,6 +300,7 @@ public class AnnotatedSolutionExporter {
 					if (result != null) {
 						eventsForElement.add(result);
 					}
+					
 				}
 
 				// this is messy, but we want to be sure stuff is in the right
@@ -308,6 +308,14 @@ public class AnnotatedSolutionExporter {
 				Collections.sort(eventsForElement, eventComparator);
 				events.addAll(eventsForElement);
 				eventsForElement.clear();
+			}
+
+			/// todo this should be xported rateher than ralculated.
+			int startTime = entities.getHoursFromDate(events.get(0).getStart());
+
+			if (hireRate != null) {
+				int rate = (int) hireRate.getValueAtPoint(startTime);
+				eSequence.setDailyHireRate((rate * 24) / 1000);
 			}
 
 			// Setup next/prev events.
