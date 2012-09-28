@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
+import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -113,7 +114,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long upstreamRevenue = -Calculator.multiply(loadPricePerM3, loadVolume);
 		final long upstreamTotalPretaxProfit = upstreamRevenue + shippingPaysUpstream;
 
-		final long shippingCosts = getCosts(plan, vessel, false, vesselStartTime);
+		final long shippingCosts = getCosts(plan, vessel, false, vesselStartTime, null);
 
 		final long shippingTotalPretaxProfit = shippingGasBalance - shippingCosts;
 
@@ -142,7 +143,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolume, shippingTransferPricePerM3, cvValue);
 				shippingDetails.addChild(shippingToDownstream);
 
-				shippingDetails.addChild("Shipping Cost", shippingCosts);
+				final DetailTree addChild = shippingDetails.addChild("Shipping Cost", new CurrencyDetailElement(shippingCosts));
+
+				getCosts(plan, vessel, false, vesselStartTime, addChild);
 
 				downstreamDetails.addChild(shippingToDownstream);
 				downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolume, dischargePricePerM3, cvValue));
@@ -170,7 +173,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (charterRevenue != 0) {
 				final DetailTree details = new DetailTree();
 
-				details.addChild(new DetailTree("Charter Out", charterRevenue));
+				details.addChild(new DetailTree("Charter Out", new CurrencyDetailElement(charterRevenue)));
 
 				final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, taxedCharterRevenue, details);
 				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getLoadTime(), Collections.singleton(entry));
@@ -193,7 +196,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getShippingEntity();
 
-		final long shippingCost = getCosts(plan, vessel, true, vesselStartTime);
+		final long shippingCost = getCosts(plan, vessel, true, vesselStartTime, null);
 		final long revenue;
 		final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
 		if (portDetails.getPortSlot().getPortType() == PortType.CharterOut) {
@@ -209,11 +212,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			if (revenue > 0) {
 				// TODO take out strings.
-				details.addChild(new DetailTree("Revenue", revenue));
-				getCosts(plan, vessel, true, vesselStartTime);
+				details.addChild(new DetailTree("Revenue", new CurrencyDetailElement(revenue)));
 			}
 
-			details.addChild(new DetailTree("Shipping Cost", shippingCost));
+			final DetailTree shippingDetails = new DetailTree("Shipping Cost", new CurrencyDetailElement(shippingCost));
+			getCosts(plan, vessel, true, vesselStartTime, shippingDetails);
+			details.addChild(shippingDetails);
 
 			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, value, details);
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(planStartTime, Collections.singleton(entry));
@@ -224,7 +228,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return value;
 	}
 
-	private long getCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final int vesselStartTime) {
+	private long getCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final int vesselStartTime, final IDetailTree details) {
 		// @formatter:off
 		final long shippingCosts = plan.getTotalRouteCost()
 				+ plan.getTotalFuelCost(FuelComponent.Base) 
@@ -245,9 +249,9 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		case SPOT_CHARTER:
 			hireRate = vessel.getHourlyCharterInPrice();
 			break;
-//		case TIME_CHARTER:
-//			hireRate = vessel.getHourlyCharterInPrice();
-//			break;
+		// case TIME_CHARTER:
+		// hireRate = vessel.getHourlyCharterInPrice();
+		// break;
 		case CARGO_SHORTS:
 			hireRate = vessel.getHourlyCharterInPrice();
 			break;
@@ -262,6 +266,21 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final long planDuration = getPartialPlanDuration(plan, 1); // skip off the last port details, as we don't pay for that here.
 			final long hourlyCharterInPrice = (int) hireRate.getValueAtPoint(vesselStartTime);
 			hireCosts = hourlyCharterInPrice * (long) planDuration;
+		}
+
+		if (details != null) {
+
+			details.addChild("Total Cost", new CurrencyDetailElement(plan.getTotalRouteCost()));
+			details.addChild("Base Fuel", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base)));
+			details.addChild("Base Fuel Supplement", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base_Supplemental)));
+			details.addChild("Cooldown", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Cooldown)));
+			details.addChild("Idle Base", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleBase)));
+			details.addChild("Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.PilotLight)));
+			details.addChild("Idle Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdlePilotLight)));
+			details.addChild("NOB", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
+			details.addChild("FBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.FBO)));
+			details.addChild("Idle NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleNBO)));
+			details.addChild("Hire Costs", new CurrencyDetailElement(hireCosts));
 		}
 
 		return shippingCosts + hireCosts;
