@@ -6,6 +6,8 @@ package com.mmxlabs.trading.optimiser.contracts.impl;
 
 import java.util.Map;
 
+import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
 import com.mmxlabs.common.detailtree.impl.DurationDetailElement;
@@ -101,7 +103,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 		final BallastParameters notionalBallastParameters = ballastParameters.get(vesselClass);
 		// vessel cost (don't use calculator.multiply here; hours are not
 		// scaled, but price is)
-		final int hireRate;
+		final ICurve hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
 			hireRate = vessel.getHourlyCharterInPrice();
@@ -110,12 +112,13 @@ public class NetbackContract implements ILoadPriceCalculator {
 			hireRate = vessel.getHourlyCharterInPrice();
 			break;
 		default:
-			hireRate = notionalBallastParameters.getHireCost(dischargeTime);
+			hireRate = new ConstantValueCurve(notionalBallastParameters.getHireCost(dischargeTime));
 			break;
 		}
 
-		totalRealTransportCosts += (dischargeTime - loadTime) * hireRate;
-
+		if (hireRate != null) {
+			totalRealTransportCosts += (long) (dischargeTime - loadTime) * (long) hireRate.getValueAtPoint(dischargeTime);
+		}
 		final int notionalReturnSpeed = notionalBallastParameters.getSpeed();
 
 		long result = Long.MAX_VALUE;
@@ -144,7 +147,10 @@ public class NetbackContract implements ILoadPriceCalculator {
 				totalNBOCosts = Calculator.costFromConsumption(nboInMMBTu * notionalTransportTime, salesPrice);
 			}
 
-			final long notionalTransportCosts = (hireRate * notionalTransportTime) + Math.min(totalBaseFuelCosts, totalNBOCosts);
+			long notionalTransportCosts = Math.min(totalBaseFuelCosts, totalNBOCosts);
+			if (hireRate != null) {
+				notionalTransportCosts += (long) (notionalTransportTime) * (long) hireRate.getValueAtPoint(dischargeTime);
+			}
 
 			final long transportCostPerMMBTU = Calculator.divide(notionalTransportCosts + totalRealTransportCosts, Calculator.multiply(loadSlot.getCargoCVValue(), loadVolume));
 
@@ -154,9 +160,9 @@ public class NetbackContract implements ILoadPriceCalculator {
 
 			if (annotations != null) {
 				final IDetailTree tree = annotations.addChild("Netback - " + route, transportCostPerMMBTU);
-				tree.addChild("Transport Time",  new DurationDetailElement(notionalTransportTime));
+				tree.addChild("Transport Time", new DurationDetailElement(notionalTransportTime));
 				tree.addChild("Distance", distance);
-				tree.addChild("NBO Costs",  new CurrencyDetailElement(totalNBOCosts));
+				tree.addChild("NBO Costs", new CurrencyDetailElement(totalNBOCosts));
 				tree.addChild("Base Costs", new CurrencyDetailElement(totalBaseFuelCosts));
 			}
 		}

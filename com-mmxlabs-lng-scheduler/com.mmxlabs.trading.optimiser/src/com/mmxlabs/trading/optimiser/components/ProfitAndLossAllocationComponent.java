@@ -26,7 +26,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
-import com.mmxlabs.trading.optimiser.contracts.impl.DefaultEntityValueCalculator;
 
 /**
  * Basic group P&L calculator.
@@ -44,15 +43,15 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 	private final String slotProviderKey;
 	private final String vesselProviderKey;
 	private final String name;
-	
+
 	@Inject
 	private IEntityProvider entityProvider;
-//	private IEntity shippingEntity;
+	// private IEntity shippingEntity;
 
 	private long lastEvaluation, lastAcceptance;
 	@Inject
 	private IVesselProvider vesselProvider;
-//	private IPortSlotProvider slotProvider;
+	// private IPortSlotProvider slotProvider;
 	@Inject
 	private IEntityValueCalculator entityValueCalculator;
 
@@ -69,15 +68,15 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 	@Override
 	public void init(final IOptimisationData data) {
-//		this.entityValueCalculator = new DefaultEntityValueCalculator(entityProviderKey, vesselProviderKey, slotProviderKey);
-//		this.entityValueCalculator.init(data);
-//		
-//		this.entityProvider = data.getDataComponentProvider(entityProviderKey, IEntityProvider.class);
-//		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
-//		this.slotProvider = data.getDataComponentProvider(slotProviderKey, IPortSlotProvider.class);
-//		if (entityProvider != null) {
-//			this.shippingEntity = entityProvider.getShippingEntity();
-//		}
+		// this.entityValueCalculator = new DefaultEntityValueCalculator(entityProviderKey, vesselProviderKey, slotProviderKey);
+		// this.entityValueCalculator.init(data);
+		//
+		// this.entityProvider = data.getDataComponentProvider(entityProviderKey, IEntityProvider.class);
+		// this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
+		// this.slotProvider = data.getDataComponentProvider(slotProviderKey, IPortSlotProvider.class);
+		// if (entityProvider != null) {
+		// this.shippingEntity = entityProvider.getShippingEntity();
+		// }
 	}
 
 	@Override
@@ -138,7 +137,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 					PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
 					if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeOption()))) {
 						cargo = true;
-						final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, annotatedSolution);
+						final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
 						accumulator += cargoGroupValue;
 						if (allocationIterator.hasNext()) {
 							currentAllocation = allocationIterator.next();
@@ -150,7 +149,9 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 						lastDetails = (PortDetails) plan.getSequence()[2];
 						if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeOption()))) {
 							cargo = true;
-							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, annotatedSolution);
+							// TODO: Perhaps use the real slot time rather than always load?
+							// TODO: Does it matter really?
+							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getLoadTime(), annotatedSolution);
 							accumulator += cargoGroupValue;
 							if (allocationIterator.hasNext()) {
 								currentAllocation = allocationIterator.next();
@@ -162,7 +163,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 				}
 
 				if (!cargo) {
-					final long otherGroupValue = entityValueCalculator.evaluate(plan, vessel, time, annotatedSolution);
+					final long otherGroupValue = entityValueCalculator.evaluate(plan, vessel, time, sequence.getStartTime(), annotatedSolution);
 					accumulator += otherGroupValue;
 				}
 				time += getPlanDuration(plan);

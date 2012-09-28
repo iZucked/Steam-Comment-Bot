@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -22,6 +23,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -41,11 +43,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	private String entityProviderKey;
 	private String slotProviderKey;
 	private String vesselProviderKey;
+
 	@Inject
 	private IEntityProvider entityProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
 	@Inject
 	private IPortSlotProvider slotProvider;
 
@@ -78,10 +82,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param currentAllocation
 	 * @return
 	 */
-	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final IAnnotatedSolution annotatedSolution) {
-		IEntity shippingEntity = entityProvider.getShippingEntity();
+	public long evaluate(final VoyagePlan plan, final IAllocationAnnotation currentAllocation, final IVessel vessel, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
+		final IEntity shippingEntity = entityProvider.getShippingEntity();
 		// get each entity
-		IDischargeOption dischargeOption = currentAllocation.getDischargeOption();
+		final IDischargeOption dischargeOption = currentAllocation.getDischargeOption();
 		final IEntity downstreamEntity = entityProvider.getEntityForSlot(dischargeOption);
 		final IEntity upstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getLoadOption());
 
@@ -109,7 +113,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long upstreamRevenue = -Calculator.multiply(loadPricePerM3, loadVolume);
 		final long upstreamTotalPretaxProfit = upstreamRevenue + shippingPaysUpstream;
 
-		final long shippingCosts = getCosts(plan, vessel, false);
+		final long shippingCosts = getCosts(plan, vessel, false, vesselStartTime);
 
 		final long shippingTotalPretaxProfit = shippingGasBalance - shippingCosts;
 
@@ -118,7 +122,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long shippingProfit = shippingEntity.getTaxedProfit(shippingTotalPretaxProfit, taxTime);
 		final long downstreamProfit = downstreamEntity.getTaxedProfit(downstreamTotalPretaxProfit, taxTime);
 
-		long charterRevenue = getCharterRevenue(plan, vessel);
+		final long charterRevenue = getCharterRevenue(plan, vessel);
 		final long taxedCharterRevenue = shippingEntity.getTaxedProfit(charterRevenue, taxTime);
 
 		final long result = upstreamProfit + shippingProfit + downstreamProfit + taxedCharterRevenue;
@@ -165,7 +169,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			// Add in charter out revenue
 			if (charterRevenue != 0) {
 				final DetailTree details = new DetailTree();
-				long charterRevenue2 = getCharterRevenue(plan, vessel);
 
 				details.addChild(new DetailTree("Charter Out", charterRevenue));
 
@@ -187,20 +190,20 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	 * @param plan
 	 * @return
 	 */
-	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int time, final IAnnotatedSolution annotatedSolution) {
-		IEntity shippingEntity = entityProvider.getShippingEntity();
+	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
+		final IEntity shippingEntity = entityProvider.getShippingEntity();
 
-		final long shippingCost = getCosts(plan, vessel, true);
+		final long shippingCost = getCosts(plan, vessel, true, vesselStartTime);
 		final long revenue;
 		final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
 		if (portDetails.getPortSlot().getPortType() == PortType.CharterOut) {
-			// in the next line we're doing getPartialPlanDuration(., 2) because there might be a repositioning in the plan
-			revenue = (long) vessel.getHourlyCharterOutPrice() * (long)getPartialPlanDuration(plan, 2);
+			final VesselEventPortSlot vesselEventPortSlot = (VesselEventPortSlot) portDetails.getPortSlot();
+			revenue = vesselEventPortSlot.getVesselEvent().getHireCost() + vesselEventPortSlot.getVesselEvent().getRepositioning();
 		} else {
 			revenue = 0;
 		}
 
-		final long value = shippingEntity.getTaxedProfit(revenue - shippingCost, time);
+		final long value = shippingEntity.getTaxedProfit(revenue - shippingCost, planStartTime);
 		if (annotatedSolution != null) {
 			final DetailTree details = new DetailTree();
 
@@ -212,7 +215,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			details.addChild(new DetailTree("Shipping Cost", shippingCost));
 
 			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, value, details);
-			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(time, Collections.singleton(entry));
+			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(planStartTime, Collections.singleton(entry));
 			final ISequenceElement element = slotProvider.getElement(((PortDetails) plan.getSequence()[0]).getPortSlot());
 			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
 		}
@@ -220,7 +223,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return value;
 	}
 
-	private long getCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG) {
+	private long getCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final int vesselStartTime) {
 		// @formatter:off
 		final long shippingCosts = plan.getTotalRouteCost()
 				+ plan.getTotalFuelCost(FuelComponent.Base) 
@@ -236,7 +239,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						: 0);
 		// @formatter:on
 
-		final int hireRate;
+		final ICurve hireRate;
 		switch (vessel.getVesselInstanceType()) {
 		case SPOT_CHARTER:
 			hireRate = vessel.getHourlyCharterInPrice();
@@ -248,15 +251,16 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			hireRate = vessel.getHourlyCharterInPrice();
 			break;
 		default:
-			hireRate = 0;
+			hireRate = null;
 			break;
 		}
 		final long hireCosts;
-		if (hireRate == 0) {
+		if (hireRate == null) {
 			hireCosts = 0;
 		} else {
 			final long planDuration = getPartialPlanDuration(plan, 1); // skip off the last port details, as we don't pay for that here.
-			hireCosts = hireRate * planDuration;
+			final long hourlyCharterInPrice = (int) hireRate.getValueAtPoint(vesselStartTime);
+			hireCosts = hourlyCharterInPrice * (long) planDuration;
 		}
 
 		return shippingCosts + hireCosts;
@@ -264,14 +268,15 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	private long getCharterRevenue(final VoyagePlan plan, final IVessel vessel) {
 		long charterRevenue = 0;
-		for (Object obj : plan.getSequence()) {
+
+		for (final Object obj : plan.getSequence()) {
+
 			if (obj instanceof VoyageDetails) {
-				VoyageDetails voyageDetails = (VoyageDetails) obj;
+				final VoyageDetails voyageDetails = (VoyageDetails) obj;
 				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
-					charterRevenue += (long)vessel.getHourlyCharterOutPrice() *(long) voyageDetails.getIdleTime();
-
+					final long hourlyCharterOutPrice = voyageDetails.getOptions().getCharterOutHourlyRate();
+					charterRevenue += hourlyCharterOutPrice * (long) voyageDetails.getIdleTime();
 				}
-
 			}
 		}
 		return charterRevenue;
@@ -285,7 +290,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		for (int i = 0; i < k; i++) {
 			final Object o = sequence[i];
 			if (o instanceof VoyageDetails) {
-				VoyageDetails voyageDetails = (VoyageDetails) o;
+				final VoyageDetails voyageDetails = (VoyageDetails) o;
 				planDuration += voyageDetails.getTravelTime();
 				if (!voyageDetails.getOptions().isCharterOutIdleTime()) {
 					planDuration += voyageDetails.getIdleTime();
