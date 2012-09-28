@@ -607,7 +607,8 @@ public class LNGScenarioTransformer {
 			final int hours = convertTime(date);
 			if (hours < 0) {
 				if (gotOneEarlyDate) {
-					continue;
+					// TODO: While we should skip all the early stuff, we need to keep the latest, this currently however takes the earliest value!
+//					continue;
 				}
 				gotOneEarlyDate = true;
 			}
