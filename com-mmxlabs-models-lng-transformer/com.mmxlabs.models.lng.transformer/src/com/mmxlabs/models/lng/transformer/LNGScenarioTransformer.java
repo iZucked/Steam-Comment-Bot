@@ -1613,7 +1613,7 @@ public class LNGScenarioTransformer {
 					}
 
 					if (charterCost.getCharterOutPrice() != null) {
-						ICurve charterOutCurve = createCurveForIntegerIndex(charterCost.getCharterInPrice(), 1.0f / 24.0f);
+						ICurve charterOutCurve = createCurveForIntegerIndex(charterCost.getCharterOutPrice(), 1.0f / 24.0f);
 						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVc), charterOutCurve);
 					}
 				}
