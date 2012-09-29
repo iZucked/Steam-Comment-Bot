@@ -98,6 +98,7 @@ public interface ScheduleFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Generated Charter Out</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Generated Charter Out</em>'.
 	 * @generated
