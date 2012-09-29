@@ -260,6 +260,7 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

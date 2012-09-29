@@ -1990,6 +1990,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterOut()
@@ -2000,6 +2001,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2009,6 +2011,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2018,6 +2021,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2027,6 +2031,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>End</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2036,6 +2041,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
+ 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2045,6 +2051,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Previous Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2054,6 +2061,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Next Event</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2063,6 +2071,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' container reference.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2072,6 +2081,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2081,6 +2091,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Revenue</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2090,6 +2101,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Generated Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2099,6 +2111,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2108,6 +2121,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Resolve Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2117,6 +2131,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Restore Proxies</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2126,6 +2141,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2135,6 +2151,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2144,6 +2161,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Unset Value</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2153,6 +2171,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EGet With Default</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2162,6 +2181,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>EContainer Op</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2171,6 +2191,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Time Zone</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2180,6 +2201,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Duration</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2189,6 +2211,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Local Start</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2198,6 +2221,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Local End</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2207,6 +2231,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Type</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2216,6 +2241,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Name</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2225,6 +2251,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Hire Cost</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2234,6 +2261,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Data With Path</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2243,6 +2271,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Data With Key</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2252,6 +2281,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2261,6 +2291,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2270,6 +2301,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2279,6 +2311,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The number of operations of the '<em>Generated Charter Out</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -5243,6 +5276,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut <em>Generated Charter Out</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Generated Charter Out</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterOut
@@ -5253,6 +5287,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getRevenue <em>Revenue</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Revenue</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterOut#getRevenue()
@@ -6370,6 +6405,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl <em>Generated Charter Out</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.schedule.impl.GeneratedCharterOutImpl
 		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getGeneratedCharterOut()
@@ -6380,6 +6416,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Revenue</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
