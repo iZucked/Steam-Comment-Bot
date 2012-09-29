@@ -25,9 +25,12 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
+/**
+ * @since 2.0
+ */
 public class CargoModelImporter implements ISubmodelImporter {
-	private static final String CARGO_KEY = "CARGO";
-	private static final String CARGO_GROUP_KEY = "CARGO-GROUP";
+	public static final String CARGO_KEY = "CARGO";
+	public static final String CARGO_GROUP_KEY = "CARGO-GROUP";
 	private final CargoImporter cargoImporter = new CargoImporter();
 
 	private final IClassImporter cargoGroupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(CargoPackage.eINSTANCE.getCargoGroup());

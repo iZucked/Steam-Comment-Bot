@@ -25,6 +25,9 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
+/**
+ * @since 2.0
+ */
 public class PortModelImporter implements ISubmodelImporter {
 	/**
 	 * 
@@ -41,15 +44,15 @@ public class PortModelImporter implements ISubmodelImporter {
 	public static final HashMap<String, String> inputs = new LinkedHashMap<String, String>();
 	static {
 		inputs.put(PORT_KEY, "Ports");
-		inputs.put(PORT_GROUP_KEY, "Groups");
+		inputs.put(PORT_GROUP_KEY, "Port Groups");
 		inputs.put(DISTANCES_KEY, "Distance Matrix");
 		inputs.put(SUEZ_KEY, "Suez Distance Matrix");
 	}
-	
-	IClassImporter portImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPort());
-	IClassImporter portGroupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPortGroup());
-	RouteImporter routeImporter = new RouteImporter();
-	
+
+	private IClassImporter portImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPort());
+	private IClassImporter portGroupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPortGroup());
+	private RouteImporter routeImporter = new RouteImporter();
+
 	@Override
 	public Map<String, String> getRequiredInputs() {
 		return inputs;

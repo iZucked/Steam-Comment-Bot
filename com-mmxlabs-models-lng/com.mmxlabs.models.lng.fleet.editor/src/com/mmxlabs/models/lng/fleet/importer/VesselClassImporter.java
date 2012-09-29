@@ -31,6 +31,7 @@ import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
  * Vessel class importer; adds support for canal time fields.
  * 
  * @author hinton
+ * @since 2.0
  *
  */
 public class VesselClassImporter extends DefaultClassImporter {

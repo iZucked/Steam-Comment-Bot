@@ -21,10 +21,6 @@
 <unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.lng.ui.runtime.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.common.common-util" version="1.0.2.201209070858"/>
@@ -34,6 +30,13 @@
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="2.3.0.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="2.3.0.RELEASE"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.ui.runtime.feature.source.feature.group" version="0.0.0"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.7.2.v20120130-0943"/>
@@ -72,6 +75,12 @@
 <unit id="org.aopalliance" version="1.0.0.v201105210816"/>	
 <unit id="org.slf4j.api" version="1.6.4.v20120130-2120"/>
 <unit id="org.slf4j.api.source" version="1.6.4.v20120130-2120"/>
+<unit id="ch.qos.logback.classic" version="1.0.0.v20111214-2030"/>
+<unit id="ch.qos.logback.classic.source" version="1.0.0.v20111214-2030"/>
+<unit id="ch.qos.logback.core" version="1.0.0.v20111214-2030"/>
+<unit id="ch.qos.logback.core.source" version="1.0.0.v20111214-2030"/>
+<unit id="ch.qos.logback.slf4j" version="1.0.0.v20120123-1500"/>
+<unit id="ch.qos.logback.slf4j.source" version="1.0.0.v20120123-1500"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">

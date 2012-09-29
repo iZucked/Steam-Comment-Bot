@@ -79,6 +79,7 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.VESSEL_EVENT_VISIT: return createVesselEventVisit();
 			case SchedulePackage.JOURNEY: return createJourney();
 			case SchedulePackage.IDLE: return createIdle();
+			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
 			case SchedulePackage.UNSCHEDULED_CARGO: return createUnscheduledCargo();
 			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
 			case SchedulePackage.FUEL_QUANTITY: return createFuelQuantity();
@@ -221,6 +222,17 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public Idle createIdle() {
 		IdleImpl idle = new IdleImpl();
 		return idle;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public GeneratedCharterOut createGeneratedCharterOut() {
+		GeneratedCharterOutImpl generatedCharterOut = new GeneratedCharterOutImpl();
+		return generatedCharterOut;
 	}
 
 	/**

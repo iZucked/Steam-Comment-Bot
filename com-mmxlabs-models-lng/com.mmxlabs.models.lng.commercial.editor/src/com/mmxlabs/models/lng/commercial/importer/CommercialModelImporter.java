@@ -23,6 +23,9 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
+/**
+ * @since 2.0
+ */
 public class CommercialModelImporter implements ISubmodelImporter {
 	public static final String ENTITIES_KEY = "ENTITIES";
 	public static final String SALES_CON_KEY = "SALES";

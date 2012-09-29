@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.mmxlabs.models.lng</groupId>
 	<artifactId>com.mmxlabs.models.lng.parent</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>2.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -65,8 +65,7 @@
 		<module>com.mmxlabs.models.lng.analytics.editor</module>
 		<module>com.mmxlabs.models.lng.analytics.validation</module>
 
-		<module>com.mmxlabs.models.lng.transformer</module>
-		<module>com.mmxlabs.models.lng.analytics.transformer</module>
+		<module>com.mmxlabs.models.lng.scenario</module>
 
 		<module>com.mmxlabs.models.lng.feature</module>
 		<module>com.mmxlabs.models.lng.p2</module>
@@ -96,7 +95,7 @@
 						<artifact>
 							<groupId>com.mmxlabs.models.lng</groupId>
 							<artifactId>target-definition</artifactId>
-							<version>1.0.1-SNAPSHOT</version>
+							<version>2.0.0-SNAPSHOT</version>
 							<classifier>indigo</classifier>
 						</artifact>
 					</target>

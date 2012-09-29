@@ -18,6 +18,7 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
 /**
  * @author hinton
+ * @since 2.0
  *
  */
 public class OptimiserModelImporter implements ISubmodelImporter {

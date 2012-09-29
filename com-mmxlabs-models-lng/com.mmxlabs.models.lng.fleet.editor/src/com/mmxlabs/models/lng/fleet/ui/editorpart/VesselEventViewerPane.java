@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane;
@@ -109,6 +110,8 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 							return getVesselEvent(evt);
 						} else if (evt instanceof SlotVisit) {
 							return null;
+						} else if (evt instanceof GeneratedCharterOut) {
+							return null;
 						}
 						evt = evt.getPreviousEvent();
 					}
@@ -117,5 +120,4 @@ public class VesselEventViewerPane extends ScenarioTableViewerPane {
 			}
 		});
 	}
-
 }

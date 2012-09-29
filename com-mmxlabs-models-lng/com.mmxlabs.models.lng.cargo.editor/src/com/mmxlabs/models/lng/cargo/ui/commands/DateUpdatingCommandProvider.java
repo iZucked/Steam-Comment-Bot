@@ -49,8 +49,11 @@ public class DateUpdatingCommandProvider implements IModelCommandProvider {
 							final Calendar oldCalendar = Calendar.getInstance(getZone(oldZone));
 							final Calendar newCalendar = Calendar.getInstance(getZone(newZone));
 
+							// Prime with current date in old tz
 							oldCalendar.setTime(slot.getWindowStart());
+							//Clear all components (specifically time)
 							newCalendar.clear();
+							// Replicate the date components in new TZ
 							newCalendar.set(Calendar.YEAR, oldCalendar.get(Calendar.YEAR));
 							newCalendar.set(Calendar.MONTH, oldCalendar.get(Calendar.MONTH));
 							newCalendar.set(Calendar.DAY_OF_MONTH, oldCalendar.get(Calendar.DAY_OF_MONTH));

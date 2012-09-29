@@ -33,6 +33,9 @@ import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
+/**
+ * @since 2.0
+ */
 public class CargoImporter extends DefaultClassImporter {
 	private static final String ASSIGNMENT = "assignment";
 

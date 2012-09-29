@@ -17,9 +17,12 @@ import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
 
+/**
+ * @since 2.0
+ */
 public class InputModelImporter implements ISubmodelImporter {
 	
-	private static final String ASSIGNMENTS = "ASSIGNMENTS";
+	public  static final String ASSIGNMENTS = "ASSIGNMENTS";
 	
 //	private final IClassImporter importer = Activator.getDefault().getImporterRegistry().getClassImporter(InputPackage.eINSTANCE.getAssignment());
 	

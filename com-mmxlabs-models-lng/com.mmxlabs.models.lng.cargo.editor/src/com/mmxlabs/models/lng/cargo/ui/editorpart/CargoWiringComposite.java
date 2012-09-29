@@ -6,11 +6,9 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,6 +66,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDiagram;
+import com.mmxlabs.models.lng.cargo.ui.util.SpotSlotHelper;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
@@ -604,10 +603,12 @@ public class CargoWiringComposite extends Composite {
 		numberOfRows = wiring.size();
 
 		performControlUpdate(true);
-	}
 
-	public void setStatusProvider(final IStatusProvider statusProvider) {
-		statusProvider.addStatusChangedListener(statusChangedListener);
+		if (this.location != null && location.getStatusProvider() != null) {
+			// Perform initial validation
+			final IStatusProvider statusProvider = location.getStatusProvider();
+			statusChangedListener.onStatusChanged(statusProvider, statusProvider.getStatus());
+		}
 	}
 
 	public IScenarioEditingLocation getEditingLocation() {
@@ -762,80 +763,7 @@ public class CargoWiringComposite extends Composite {
 			leftTerminalsValid.add(loadSlots.get(index) != null);
 
 			if (wiringDiagram == null) {
-				wiringDiagram = new WiringDiagram(this, SWT.NONE) {
-
-					@Override
-					public synchronized void paintControl(final PaintEvent e) {
-						synchronized (updateLock) {
-							super.paintControl(e);
-						}
-					}
-
-					@Override
-					protected synchronized List<Float> getTerminalPositions() {
-						final float littleOffset = getBounds().y;
-						final ArrayList<Float> vMidPoints = new ArrayList<Float>(numberOfRows);
-						// get vertical coordinates of labels
-
-						float lastMidpointButOne = 0;
-						float lastMidpoint = 0;
-
-						for (int i = 0; i < numberOfRows; ++i) {
-							if (i >= lhsComposites.size()) {
-								continue;
-							}
-							final Composite l = lhsComposites.get(i);
-							final Rectangle lbounds = l.getBounds();
-							lastMidpointButOne = lastMidpoint;
-							lastMidpoint = -littleOffset + lbounds.y + lbounds.height / 2.0f;
-							vMidPoints.add(lastMidpoint);
-						}
-
-						return vMidPoints;
-					}
-
-					@Override
-					protected synchronized void wiringChanged(final List<Integer> newWiring) {
-						doWiringChanged(newWiring);
-					}
-
-					@Override
-					protected void openContextMenu(final boolean leftSide, final int terminal, final int mouseX, final int mouseY) {
-						// if (terminal < numberOfRows) {
-						// final IMenuListener menuListener;
-						// if (leftSide) {
-						// menuListener = createLoadSlotMenuListener(loadSlots.get(terminal));
-						// } else {
-						// menuListener = createDischargeSlotMenuListener(dischargeSlots.get(terminal));
-						// }
-						// // menuManager.addMenuListener(menuListener);
-						//
-						// final Menu menu = menuManager.getMenu();
-						//
-						// menu.setLocation(toDisplay(mouseX, mouseY));
-						// System.out.println(mouseX + " -- " + mouseY);
-						// menuManager.removeAll();
-						// menuListener.menuAboutToShow(menuManager);
-						// menuManager.updateAll(true);
-						// ;
-						// // Event event = new Event();
-						// // event.type = SWT.Show;
-						// // event.button = 3;
-						// // menu.notifyListeners(SWT.Show, event);
-						// // menu.setLocation(this.toDisplay(0,0));
-						// menu.setVisible(true);
-						//
-						// // menuManager.removeMenuListener(menuListener);
-						// }
-						//
-					}
-				};
-				wiringDiagram.setLocked(locked);
-
-				// Hook in a listener to notify mouse events
-				final WiringDiagramMouseListener listener = new WiringDiagramMouseListener();
-				wiringDiagram.addMouseMoveListener(listener);
-				wiringDiagram.addMouseListener(listener);
+				createWiringDiagram();
 			}
 			if (index == 0) {
 				// wiring diagram is tall
@@ -882,7 +810,12 @@ public class CargoWiringComposite extends Composite {
 		// while (idComposites.size() > numberOfRows) {
 		// final Composite c = idComposites.remove(idComposites.size() - 1);
 		// c.dispose();
+
 		// }
+
+		if (wiringDiagram == null) {
+			createWiringDiagram();
+		}
 
 		wiringDiagram.setWiring(wiring);
 		wiringDiagram.setTerminalsValid(leftTerminalsValid, rightTerminalsValid);
@@ -904,6 +837,83 @@ public class CargoWiringComposite extends Composite {
 		wiringDiagram.setWireColors(wireColors);
 		wiringDiagram.setTerminalColors(terminalColors);
 		updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
+	}
+
+	private void createWiringDiagram() {
+		wiringDiagram = new WiringDiagram(this, SWT.NONE) {
+
+			@Override
+			public synchronized void paintControl(final PaintEvent e) {
+				synchronized (updateLock) {
+					super.paintControl(e);
+				}
+			}
+
+			@Override
+			protected synchronized List<Float> getTerminalPositions() {
+				final float littleOffset = getBounds().y;
+				final ArrayList<Float> vMidPoints = new ArrayList<Float>(numberOfRows);
+				// get vertical coordinates of labels
+
+				float lastMidpointButOne = 0;
+				float lastMidpoint = 0;
+
+				for (int i = 0; i < numberOfRows; ++i) {
+					if (i >= lhsComposites.size()) {
+						continue;
+					}
+					final Composite l = lhsComposites.get(i);
+					final Rectangle lbounds = l.getBounds();
+					lastMidpointButOne = lastMidpoint;
+					lastMidpoint = -littleOffset + lbounds.y + lbounds.height / 2.0f;
+					vMidPoints.add(lastMidpoint);
+				}
+
+				return vMidPoints;
+			}
+
+			@Override
+			protected synchronized void wiringChanged(final List<Integer> newWiring) {
+				doWiringChanged(newWiring);
+			}
+
+			@Override
+			protected void openContextMenu(final boolean leftSide, final int terminal, final int mouseX, final int mouseY) {
+				// if (terminal < numberOfRows) {
+				// final IMenuListener menuListener;
+				// if (leftSide) {
+				// menuListener = createLoadSlotMenuListener(loadSlots.get(terminal));
+				// } else {
+				// menuListener = createDischargeSlotMenuListener(dischargeSlots.get(terminal));
+				// }
+				// // menuManager.addMenuListener(menuListener);
+				//
+				// final Menu menu = menuManager.getMenu();
+				//
+				// menu.setLocation(toDisplay(mouseX, mouseY));
+				// System.out.println(mouseX + " -- " + mouseY);
+				// menuManager.removeAll();
+				// menuListener.menuAboutToShow(menuManager);
+				// menuManager.updateAll(true);
+				// ;
+				// // Event event = new Event();
+				// // event.type = SWT.Show;
+				// // event.button = 3;
+				// // menu.notifyListeners(SWT.Show, event);
+				// // menu.setLocation(this.toDisplay(0,0));
+				// menu.setVisible(true);
+				//
+				// // menuManager.removeMenuListener(menuListener);
+				// }
+				//
+			}
+		};
+		wiringDiagram.setLocked(locked);
+
+		// Hook in a listener to notify mouse events
+		final WiringDiagramMouseListener listener = new WiringDiagramMouseListener();
+		wiringDiagram.addMouseMoveListener(listener);
+		wiringDiagram.addMouseListener(listener);
 	}
 
 	/*
@@ -1090,7 +1100,7 @@ public class CargoWiringComposite extends Composite {
 			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 			cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_Port(), dischargeSlot.getPort()));
 			if (loadSlot instanceof SpotSlot) {
-				setSpotSlotTimeWindow(editingDomain, loadSlot, dischargeSlot, cmd);
+				SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, loadSlot, dischargeSlot, cmd);
 			} else {
 				cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), dischargeSlot.getWindowStart()));
 				cmd.append(SetCommand.create(editingDomain, loadSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), dischargeSlot.getWindowStartTime()));
@@ -1100,35 +1110,12 @@ public class CargoWiringComposite extends Composite {
 			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Duration(), 0));
 			cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_Port(), loadSlot.getPort()));
 			if (dischargeSlot instanceof SpotSlot) {
-				setSpotSlotTimeWindow(editingDomain, dischargeSlot, loadSlot, cmd);
+				SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, dischargeSlot, loadSlot, cmd);
 			} else {
 				cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStart(), loadSlot.getWindowStart()));
 				cmd.append(SetCommand.create(editingDomain, dischargeSlot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), loadSlot.getWindowStartTime()));
 			}
 		}
-	}
-
-	private void setSpotSlotTimeWindow(final EditingDomain editingDomain, final Slot slot, final Slot otherSlot, final CompoundCommand cmd) {
-		// Spot market - make a month range.
-		final Calendar cal = Calendar.getInstance();
-		final TimeZone zone = LocalDateUtil.getTimeZone(otherSlot, CargoPackage.eINSTANCE.getSlot_WindowStart());
-
-		cal.setTimeZone(zone);
-		cal.setTime(otherSlot.getWindowStart());
-		cal.set(Calendar.MILLISECOND, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MINUTE, 0);
-		// cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.DAY_OF_MONTH, 1);
-		final Date start = cal.getTime();
-		final long startMillis = cal.getTimeInMillis();
-		cal.add(Calendar.MONTH, 1);
-		final long endMillis = cal.getTimeInMillis();
-		final int windowSize = (int) ((endMillis - startMillis) / 1000 / 60 / 60);
-
-		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));
-		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), start));
-		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), 0));
 	}
 
 	private void refreshContent() {
@@ -1169,6 +1156,9 @@ public class CargoWiringComposite extends Composite {
 		// Internal list should be full of valid items, so now we can add in the new items. First, add by cargo, then add remaining slots.
 
 		for (final Cargo c : newCargoes) {
+			// Hook in adapter to catch changes.
+			c.eAdapters().add(cargoChangeAdapter);
+
 			ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
 			boolean addedItem = false;
 			if (loadSlots.contains(c.getLoadSlot())) {
@@ -1178,7 +1168,7 @@ public class CargoWiringComposite extends Composite {
 
 				if (dischargeSlots.contains(c.getDischargeSlot())) {
 					final int dischargeIdx = dischargeSlots.indexOf(c.getDischargeSlot());
-					if (cargoes.get(dischargeIdx) == null) {
+					if (loadSlots.get(dischargeIdx) == null) {
 						cargoes.set(dischargeIdx, c);
 						loadSlots.set(dischargeIdx, c.getLoadSlot());
 						newLoadSlots.remove(c.getLoadSlot());
@@ -1558,10 +1548,9 @@ public class CargoWiringComposite extends Composite {
 		final CargoModel cargoModel = location.getRootObject().getSubModel(CargoModel.class);
 		final IMenuListener l = new IMenuListener() {
 
-			
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
-				LoadSlot loadSlot = loadSlots.get(index); 
+				final LoadSlot loadSlot = loadSlots.get(index);
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
 				if (loadSlot.isDESPurchase()) {
@@ -1587,9 +1576,9 @@ public class CargoWiringComposite extends Composite {
 
 			@Override
 			public void menuAboutToShow(final IMenuManager manager) {
-				
+
 				final DischargeSlot dischargeSlot = dischargeSlots.get(index);
-				
+
 				final MenuManager newMenuManager = new MenuManager("New...", null);
 				manager.add(newMenuManager);
 				if (dischargeSlot.isFOBSale()) {

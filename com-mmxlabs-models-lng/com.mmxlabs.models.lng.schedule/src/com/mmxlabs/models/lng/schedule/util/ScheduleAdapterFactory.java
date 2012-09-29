@@ -108,6 +108,10 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createIdleAdapter();
 			}
 			@Override
+			public Adapter caseGeneratedCharterOut(GeneratedCharterOut object) {
+				return createGeneratedCharterOutAdapter();
+			}
+			@Override
 			public Adapter caseUnscheduledCargo(UnscheduledCargo object) {
 				return createUnscheduledCargoAdapter();
 			}
@@ -308,6 +312,20 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createIdleAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.GeneratedCharterOut <em>Generated Charter Out</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.schedule.GeneratedCharterOut
+	 * @generated
+	 */
+	public Adapter createGeneratedCharterOutAdapter() {
 		return null;
 	}
 
