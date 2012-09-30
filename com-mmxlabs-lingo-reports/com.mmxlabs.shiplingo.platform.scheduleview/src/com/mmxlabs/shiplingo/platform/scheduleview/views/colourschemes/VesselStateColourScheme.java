@@ -4,24 +4,17 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Alert_Crimson;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Faded_Alpha;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Gas_Blue;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Green;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Light_Gas_Blue;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Light_Green;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Locked_White;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Slot_White;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.VesselEvent_Purple;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLate;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.*;
 
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
@@ -58,11 +51,13 @@ public class VesselStateColourScheme extends ColourScheme {
 		} else if (element instanceof VesselEventVisit) {
 			VesselEventVisit vev = (VesselEventVisit) element;
 			if(vev.getVesselEvent() instanceof DryDockEvent){
-				return ColorCache.getColor(VesselEvent_Purple);
+				return ColorCache.getColor(VesselEvent_Brown);
 			}
 			else if(vev.getVesselEvent() instanceof CharterOutEvent){
-				return ColorCache.getColor(90, 150, 0);
+				return ColorCache.getColor(VesselEvent_Purple);
 			}			
+		} else if (element instanceof GeneratedCharterOut) {
+			return ColorCache.getColor(VesselEvent_LightPurple);
 		}
 
 		// else if (mode == Mode.Lateness) {
@@ -71,9 +66,6 @@ public class VesselStateColourScheme extends ColourScheme {
 			if (isLate(visit)) {
 				return ColorCache.getColor(Alert_Crimson);
 			} 
-//			else if(isLocked(visit)) {
-//				return ColorCache.getColor(Locked_White);
-//			}
 			return ColorCache.getColor(Slot_White);
 		} else if (element instanceof VesselEventVisit) {
 			final VesselEventVisit vev = (VesselEventVisit) element;
@@ -87,11 +79,15 @@ public class VesselStateColourScheme extends ColourScheme {
 	@Override
 	public int getAlpha(final Object element) {
 		
+		int alpha = 255;
 		if(element instanceof Event) {
 			Event ev = (Event) (element);
-			if(isLocked(ev, viewer) && !isLate(ev)) return Faded_Alpha;
+			if(isLocked(ev, viewer) && !isLate(ev)) alpha = Faded_Alpha;
 		}
-		return 255;
+		else if (element instanceof GeneratedCharterOut) {
+			alpha -= 20;			
+		}
+		return alpha;
 	}
 
 	@Override
@@ -100,7 +96,29 @@ public class VesselStateColourScheme extends ColourScheme {
 		if (element instanceof Event) {
 			final Event event = (Event) element;
 			if(isLocked(event, viewer)) return ColorCache.getColor(Locked_White);
+			if(event instanceof SlotVisit){
+				SlotVisit sv = (SlotVisit) event;
+				if (ColourSchemeUtil.isFOBSaleCargo(sv) || ColourSchemeUtil.isDESPurchaseCargo(sv)){
+					return ColorCache.getColor(FOBDES_Grey);
+				}
+			}
 		}
+
 		return null;
+	}
+	
+	@Override
+	public int getBorderWidth(final Object element) {
+	
+		if (element instanceof Event) {
+			final Event event = (Event) element;
+			if(event instanceof SlotVisit){
+				SlotVisit sv = (SlotVisit) event;
+				if (ColourSchemeUtil.isFOBSaleCargo(sv) || ColourSchemeUtil.isDESPurchaseCargo(sv))
+					return 2;
+			}
+			else if(isLocked(event, viewer)) return 1;
+		}
+		return 1;
 	}
 }
