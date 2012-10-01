@@ -34,7 +34,7 @@ public class TestProfitSharingContract {
 
 		final Set<IPort> baseMarketPorts = new HashSet<IPort>();
 
-		final ProfitSharingContract psc = new ProfitSharingContract(market, refMarket, 100, 300, baseMarketPorts);
+		final ProfitSharingContract psc = new ProfitSharingContract(market, refMarket, 100, 300, baseMarketPorts, 1000);
 
 		// market purchase price - alpha - beta * (actual sales price) - gamma * (actual
 		// * sales price - reference sales price)
@@ -62,7 +62,7 @@ public class TestProfitSharingContract {
 
 		final Set<IPort> baseMarketPorts = new HashSet<IPort>();
 
-		final ProfitSharingContract psc = new ProfitSharingContract(market, refMarket, 100, 300, baseMarketPorts);
+		final ProfitSharingContract psc = new ProfitSharingContract(market, refMarket, 100, 300, baseMarketPorts, 1000);
 
 		// market purchase price - alpha - beta * (actual sales price) - gamma * (actual
 		// * sales price - reference sales price)
