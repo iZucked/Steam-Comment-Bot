@@ -216,27 +216,29 @@ public class DetailCompositeDialog extends Dialog {
 					validationContext.setApparentContainment(duplicateOne, originalOne.eContainer(), (EReference) originalOne.eContainingFeature());
 				}
 			}
-			if (!returnDuplicates) {
-				final Iterator<EObject> rangeIterator2 = range.iterator();
-				final Iterator<EObject> duplicateIterator = duplicateRange.iterator();
+			final Iterator<EObject> rangeIterator2 = range.iterator();
+			final Iterator<EObject> duplicateIterator = duplicateRange.iterator();
 
-				final CommandProviderAwareEditingDomain domain;
-				{
-					final EditingDomain ed = commandHandler.getEditingDomain();
-					if (ed instanceof CommandProviderAwareEditingDomain)
-						domain = (CommandProviderAwareEditingDomain) ed;
-					else
-						domain = null;
-				}
+			final CommandProviderAwareEditingDomain domain;
+			{
+				final EditingDomain ed = commandHandler.getEditingDomain();
+				if (ed instanceof CommandProviderAwareEditingDomain)
+					domain = (CommandProviderAwareEditingDomain) ed;
+				else
+					domain = null;
+			}
 
-				while (rangeIterator2.hasNext() && duplicateIterator.hasNext()) {
-					final EObject original2 = rangeIterator2.next();
-					final EObject duplicate = duplicateIterator.next();
+			while (rangeIterator2.hasNext() && duplicateIterator.hasNext()) {
+				final EObject original2 = rangeIterator2.next();
+				final EObject duplicate = duplicateIterator.next();
+				if (!returnDuplicates) {
 					validationContext.replace(original2, duplicate);
-
 					if (domain != null) {
 						domain.setOverride(original2, duplicate);
 					}
+				}
+				if (domain != null) {
+					domain.addEditObject(duplicate);
 				}
 			}
 		}
@@ -757,6 +759,7 @@ public class DetailCompositeDialog extends Dialog {
 			if (domain != null) {
 				for (final EObject original : originalToDuplicate.keySet()) {
 					domain.clearOverride(original);
+					domain.removeEditObject(originalToDuplicate.get(original));
 				}
 			}
 
@@ -843,6 +846,7 @@ public class DetailCompositeDialog extends Dialog {
 			if (domain != null) {
 				for (final EObject original : originalToDuplicate.keySet()) {
 					domain.clearOverride(original);
+					domain.removeEditObject(originalToDuplicate.get(original));
 				}
 			}
 
