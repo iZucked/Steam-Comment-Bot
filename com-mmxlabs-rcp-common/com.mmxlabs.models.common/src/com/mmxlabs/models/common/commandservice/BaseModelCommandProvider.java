@@ -36,6 +36,9 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public abstract class BaseModelCommandProvider implements IModelCommandProvider {
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
