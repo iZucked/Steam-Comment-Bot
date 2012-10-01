@@ -66,6 +66,14 @@ public final class SchedulerConstants {
 	/**
 	 * @since 2.0
 	 */
+	public static final String AI_shippingCost = "element-shipping-cost";
+	/**
+	 * @since 2.0
+	 */
+	public static final String AI_shippingCostWithBoilOff = "element-shipping-cost-inc-boil-off";
+	/**
+	 * @since 2.0
+	 */
 	public static final String AI_charterOutProfitAndLoss = "generated-charter-out-profit-and-loss";
 	/**
 	 * A key for a per-route fitness map, which should be of type {@code Map<IResource, Map<String, Long>}. Each element in the map should map fitness function names to fitness values.
