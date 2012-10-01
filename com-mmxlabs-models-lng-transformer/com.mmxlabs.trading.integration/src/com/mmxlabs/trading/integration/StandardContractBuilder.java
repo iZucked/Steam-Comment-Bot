@@ -43,8 +43,8 @@ public class StandardContractBuilder implements IBuilderExtension {
 		this.map = map;
 	}
 
-	public ProfitSharingContract createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int margin, final int share, final Set<IPort> baseMarketPorts) {
-		return new ProfitSharingContract(actualMarket, referenceMarket, margin, share, baseMarketPorts);
+	public ProfitSharingContract createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int margin, final int share, final Set<IPort> baseMarketPorts, int salesPriceMultiplier) {
+		return new ProfitSharingContract(actualMarket, referenceMarket, margin, share, baseMarketPorts, salesPriceMultiplier);
 	}
 
 	public NetbackContract createNetbackContract(final int buyersMargin, final int floorPrice, final Map<AVesselClass, NotionalBallastParameters> ballastParameters) {

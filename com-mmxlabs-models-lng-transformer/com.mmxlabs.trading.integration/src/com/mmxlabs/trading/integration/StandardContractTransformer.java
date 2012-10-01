@@ -85,7 +85,9 @@ public class StandardContractTransformer implements IContractTransformer {
 			final ICurve referenceMarket = new AXPlusBCurve(Calculator.scaleToInt(contract.getRefMarketMultiplier()), Calculator.scaleToInt(contract.getRefMarketConstant()), map.getOptimiserObject(
 					contract.getRefMarketIndex(), ICurve.class));
 
-			return contractBuilder.createProfitSharingContract(baseMarket, referenceMarket, Calculator.scaleToInt(contract.getMargin()), Calculator.scaleToInt(contract.getShare()), baseMarketPorts);
+			final int salesPriceMultiplier = (int)Calculator.scale((float)contract.getSalesMultiplier());
+			
+			return contractBuilder.createProfitSharingContract(baseMarket, referenceMarket, Calculator.scaleToInt(contract.getMargin()), Calculator.scaleToInt(contract.getShare()), baseMarketPorts, salesPriceMultiplier);
 		} else if (c instanceof NetbackPurchaseContract) {
 			final NetbackPurchaseContract netbackPurchaseContract = (NetbackPurchaseContract) c;
 			final Map<AVesselClass, NotionalBallastParameters> notionalBallastParameterMap = new HashMap<AVesselClass, NotionalBallastParameters>();
