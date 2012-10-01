@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.commands;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -36,8 +37,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 	@Override
-	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Class<? extends Command> commandClass,
-			final CommandParameter parameter, final Command input) {
+	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		if (commandClass == SetCommand.class) {
 
 			final InputModel inputModel = rootObject.getSubModel(InputModel.class);

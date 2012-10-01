@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.pricing.commands;
 
 import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.ecore.EObject;
@@ -22,8 +23,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 public class SpotAvailabilityNameUpdatingCommandProvider implements IModelCommandProvider {
 
 	@Override
-	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Class<? extends Command> commandClass,
-			final CommandParameter parameter, final Command input) {
+	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 
 		if (commandClass == SetCommand.class) {
 			if (parameter.getEStructuralFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {

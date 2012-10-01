@@ -34,8 +34,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 
 	@Override
-	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Class<? extends Command> commandClass,
-			final CommandParameter parameter, final Command input) {
+	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 
 		final Set<EObject> seenObjects = getSeenObjects();
 

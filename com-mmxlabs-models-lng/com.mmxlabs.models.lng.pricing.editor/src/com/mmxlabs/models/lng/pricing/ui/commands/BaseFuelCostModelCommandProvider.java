@@ -4,7 +4,11 @@
  */
 package com.mmxlabs.models.lng.pricing.ui.commands;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -19,26 +23,28 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
  * @author hinton
- *
+ * 
  */
 public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider {
 	@Override
-	protected boolean shouldHandleAddition(Object addedObject) {
+	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		return addedObject instanceof BaseFuel;
 	}
 
 	@Override
-	protected boolean shouldHandleDeletion(Object deletedObject) {
-		return shouldHandleAddition(deletedObject);
+	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
+		return shouldHandleAddition(deletedObject, overrides, editSet);
 	}
 
 	@Override
-	protected Command objectAdded(EditingDomain domain, MMXRootObject rootObject, Object added) {
+	protected Command objectAdded(final EditingDomain domain, final MMXRootObject rootObject, final Object added, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (added instanceof BaseFuel) {
 			final PricingModel pricing = rootObject.getSubModel(PricingModel.class);
-			if (pricing == null) return null;
+			if (pricing == null)
+				return null;
 			for (final BaseFuelCost existing : pricing.getFleetCost().getBaseFuelPrices()) {
-				if (existing.getFuel() == added) return null;
+				if (existing.getFuel() == added)
+					return null;
 			}
 			final BaseFuelCost cost = PricingFactory.eINSTANCE.createBaseFuelCost();
 			cost.setFuel((BaseFuel) added);
@@ -48,10 +54,11 @@ public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider {
 	}
 
 	@Override
-	protected Command objectDeleted(EditingDomain domain, MMXRootObject rootObject, Object deleted) {
+	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (deleted instanceof BaseFuel) {
 			final PricingModel pricing = rootObject.getSubModel(PricingModel.class);
-			if (pricing == null) return null;
+			if (pricing == null)
+				return null;
 			for (final BaseFuelCost cost : pricing.getFleetCost().getBaseFuelPrices()) {
 				if (cost.getFuel() == deleted) {
 					return DeleteCommand.create(domain, cost);

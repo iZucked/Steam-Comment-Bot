@@ -6,8 +6,11 @@ package com.mmxlabs.models.lng.port.ui.commands;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
@@ -26,20 +29,25 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  */
 public class RoutePortCommandProvider extends BaseModelCommandProvider {
 	@Override
-	protected Command handleDeletion(EditingDomain editingDomain, MMXRootObject rootObject, Collection<Object> deleted) {
+	protected Command handleDeletion(final EditingDomain editingDomain, final MMXRootObject rootObject, final Collection<Object> deleted, final Map<EObject, EObject> overrides,
+			final Set<EObject> editSet) {
 		final PortModel portModel = rootObject.getSubModel(PortModel.class);
-		if (portModel == null) return null;
+		if (portModel == null)
+			return null;
 		final HashSet<RouteLine> dead = new HashSet<RouteLine>();
 		for (final Object object : deleted) {
 			if (object instanceof Port) {
 				for (final Route route : portModel.getRoutes()) {
 					for (final RouteLine line : route.getLines()) {
-						if (line.getFrom() == object || line.getTo() == object) dead.add(line);
+						if (line.getFrom() == object || line.getTo() == object)
+							dead.add(line);
 					}
 				}
 			}
 		}
-		if (dead.isEmpty()) return null;
-		else return DeleteCommand.create(editingDomain, dead);
+		if (dead.isEmpty())
+			return null;
+		else
+			return DeleteCommand.create(editingDomain, dead);
 	}
 }

@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.fleet.editor.commands;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import org.eclipse.emf.common.command.Command;
@@ -32,8 +33,8 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 public class DateUpdatingCommandProvider implements IModelCommandProvider {
 
 	@Override
-	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Class<? extends Command> commandClass,
-			final CommandParameter parameter, final Command input) {
+	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
+			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		if (commandClass == SetCommand.class) {
 			if (parameter.getEOwner() instanceof VesselEvent) {
 				final CompoundCommand cmd = new CompoundCommand("Update VesselEvent Dates");

@@ -6,8 +6,11 @@ package com.mmxlabs.models.lng.pricing.ui.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -24,21 +27,20 @@ import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
- * Command provider which handles the addition and deletion of routes and vessel classes,
- * and maintains the route cost table accordingly.
+ * Command provider which handles the addition and deletion of routes and vessel classes, and maintains the route cost table accordingly.
  * 
  * @author hinton
- *
+ * 
  */
 public class RouteCostModelCommandProvider extends BaseModelCommandProvider {
 	@Override
-	protected boolean shouldHandleAddition(Object addedObject) {
+	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		return addedObject instanceof Route || addedObject instanceof VesselClass;
 	}
 
 	@Override
-	protected boolean shouldHandleDeletion(Object deletedObject) {
-		return shouldHandleAddition(deletedObject);
+	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
+		return shouldHandleAddition(deletedObject, overrides, editSet);
 	}
 
 	private RouteCost createRouteCost(final Route route, final VesselClass vesselClass) {
@@ -47,17 +49,18 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider {
 		result.setVesselClass(vesselClass);
 		return result;
 	}
-	
+
 	@Override
-	protected Command objectAdded(EditingDomain domain, MMXRootObject root, Object addedObject) {
+	protected Command objectAdded(final EditingDomain domain, final MMXRootObject root, final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		final PricingModel pricing = root.getSubModel(PricingModel.class);
-		if (pricing == null) return null;
+		if (pricing == null)
+			return null;
 		final List<RouteCost> extraCosts = new ArrayList<RouteCost>();
 		if (addedObject instanceof Route) {
-			if (((Route) addedObject).isCanal() == false) return null;
+			if (((Route) addedObject).isCanal() == false)
+				return null;
 			final FleetModel fleetModel = root.getSubModel(FleetModel.class);
-			add_costs_for_new_route:
-			for (final VesselClass vesselClass : fleetModel.getVesselClasses()) {
+			add_costs_for_new_route: for (final VesselClass vesselClass : fleetModel.getVesselClasses()) {
 				for (final RouteCost routeCost : pricing.getRouteCosts()) {
 					if (routeCost.getVesselClass() == vesselClass && routeCost.getRoute() == addedObject)
 						continue add_costs_for_new_route;
@@ -66,24 +69,24 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider {
 			}
 		} else if (addedObject instanceof VesselClass) {
 			final PortModel portModel = root.getSubModel(PortModel.class);
-			add_costs_for_new_vc:
-			for (final Route route : portModel.getRoutes()) {
+			add_costs_for_new_vc: for (final Route route : portModel.getRoutes()) {
 				for (final RouteCost routeCost : pricing.getRouteCosts()) {
 					if (routeCost.getVesselClass() == addedObject && routeCost.getRoute() == route)
 						continue add_costs_for_new_vc;
 				}
-				if (route.isCanal()) extraCosts.add(createRouteCost(route, (VesselClass) addedObject));
+				if (route.isCanal())
+					extraCosts.add(createRouteCost(route, (VesselClass) addedObject));
 			}
 		}
 		if (extraCosts.isEmpty()) {
 			return null;
 		} else {
-			return AddCommand.create(domain, pricing, PricingPackage.eINSTANCE.getPricingModel_RouteCosts(),extraCosts);
+			return AddCommand.create(domain, pricing, PricingPackage.eINSTANCE.getPricingModel_RouteCosts(), extraCosts);
 		}
 	}
 
 	@Override
-	protected Command objectDeleted(EditingDomain domain, MMXRootObject root, Object deletedObject) {
+	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject root, final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		final PricingModel pricing = root.getSubModel(PricingModel.class);
 		if (pricing == null)
 			return null;
@@ -100,5 +103,5 @@ public class RouteCostModelCommandProvider extends BaseModelCommandProvider {
 		else
 			return DeleteCommand.create(domain, deletedCosts);
 	}
-	
+
 }
