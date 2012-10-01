@@ -40,6 +40,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
+import com.mmxlabs.scheduler.optimiser.annotations.IShippingCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -78,6 +79,9 @@ public class TradingExporterExtension implements IExporterExtension {
 		final IVesselProvider vesselProvider = annotatedSolution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		for (final ISequenceElement element : annotatedSolution.getContext().getOptimisationData().getSequenceElements()) {
 			final IProfitAndLossAnnotation profitAndLoss = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_profitAndLoss, IProfitAndLossAnnotation.class);
+			final IShippingCostAnnotation shippingCost = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCost, IShippingCostAnnotation.class);
+			final IShippingCostAnnotation shippingCostWithBoilOff = annotatedSolution.getElementAnnotations().getAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
+					IShippingCostAnnotation.class);
 			if (profitAndLoss != null) {
 				// emit p&l entry - depends on the type of slot associated with the element.
 				final IPortSlot slot = slotProvider.getPortSlot(element);
@@ -93,6 +97,8 @@ public class TradingExporterExtension implements IExporterExtension {
 					}
 					if (cargoAllocation != null) {
 						setPandLentries(profitAndLoss, cargoAllocation);
+						setShippingCosts(shippingCost, cargoAllocation, false);
+						setShippingCosts(shippingCostWithBoilOff, cargoAllocation, true);
 					}
 				} else if (slot instanceof IVesselEventPortSlot) {
 					final com.mmxlabs.models.lng.fleet.VesselEvent modelEvent = entities.getModelObject(slot, com.mmxlabs.models.lng.fleet.VesselEvent.class);
@@ -109,6 +115,8 @@ public class TradingExporterExtension implements IExporterExtension {
 					}
 					if (visit != null) {
 						setPandLentries(profitAndLoss, visit);
+						setShippingCosts(shippingCost, visit, false);
+						setShippingCosts(shippingCostWithBoilOff, visit, true);
 					}
 					// }
 				} else if (slot instanceof StartPortSlot) {
@@ -146,6 +154,8 @@ public class TradingExporterExtension implements IExporterExtension {
 
 					if (startEvent != null) {
 						setPandLentries(profitAndLoss, startEvent);
+						setShippingCosts(shippingCost, startEvent, false);
+						setShippingCosts(shippingCostWithBoilOff, startEvent, true);
 					}
 				} else if (slot instanceof EndPortSlot) {
 					EndEvent endEvent = null;
@@ -176,6 +186,8 @@ public class TradingExporterExtension implements IExporterExtension {
 
 					if (endEvent != null) {
 						setPandLentries(profitAndLoss, endEvent);
+						setShippingCosts(shippingCost, endEvent, false);
+						setShippingCosts(shippingCostWithBoilOff, endEvent, true);
 					}
 				} else {
 					// for (final IProfitAndLossEntry entry : profitAndLoss.getEntries()) {
@@ -266,6 +278,19 @@ public class TradingExporterExtension implements IExporterExtension {
 			++idx;
 		}
 		container.addExtraData(TradingConstants.ExtraData_GroupValue, "Group Value", totalGroupValue, ExtraDataFormatType.CURRENCY);
+	}
+
+	private void setShippingCosts(final IShippingCostAnnotation profitAndLoss, final ExtraDataContainer container, boolean incBoilOff) {
+
+		// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
+		int groupValue = (int) (profitAndLoss.getShippingCost() / Calculator.ScaleFactor);
+		final ExtraData pnlData = (incBoilOff) ? container.addExtraData(TradingConstants.ExtraData_ShippingCostIncBoilOff, "Shipping Costs (With Boil-Off)", groupValue, ExtraDataFormatType.CURRENCY)
+				: container.addExtraData(TradingConstants.ExtraData_ShippingCost, "Shipping Costs", groupValue, ExtraDataFormatType.CURRENCY);
+
+		pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
+		final ExtraData detail = exportDetailTree(profitAndLoss.getDetails());
+		detail.setName("Details");
+		pnlData.getExtraData().add(detail);
 	}
 
 	private ExtraData exportDetailTree(final IDetailTree details) {
