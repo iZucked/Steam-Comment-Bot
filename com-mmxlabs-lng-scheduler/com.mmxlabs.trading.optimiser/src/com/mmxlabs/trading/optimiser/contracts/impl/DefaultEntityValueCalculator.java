@@ -19,16 +19,19 @@ import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.LNGTransferDetailTree;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossEntry;
+import com.mmxlabs.scheduler.optimiser.annotations.impl.ShippingCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -41,9 +44,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @since 2.0
  */
 public class DefaultEntityValueCalculator implements IEntityValueCalculator {
-	private String entityProviderKey;
-	private String slotProviderKey;
-	private String vesselProviderKey;
 
 	@Inject
 	private IEntityProvider entityProvider;
@@ -54,26 +54,22 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	@Inject
 	private IPortSlotProvider slotProvider;
 
+	@Inject
+	private IPortCostProvider portCostProvider;
+
 	public DefaultEntityValueCalculator() {
 
 	}
 
-	public DefaultEntityValueCalculator(final String dcpEntityprovider, final String vesselProviderKey, final String slotProviderKey) {
-		this.entityProviderKey = dcpEntityprovider;
-		this.vesselProviderKey = vesselProviderKey;
-		this.slotProviderKey = slotProviderKey;
+	public DefaultEntityValueCalculator(final String a, final String b, final String c) {
 	}
 
 	@Override
 	public void init(final IOptimisationData data) {
-		this.entityProvider = data.getDataComponentProvider(entityProviderKey, IEntityProvider.class);
-		this.vesselProvider = data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class);
-		this.slotProvider = data.getDataComponentProvider(slotProviderKey, IPortSlotProvider.class);
 	}
 
 	@Override
 	public void dispose() {
-		entityProvider = null;
 	}
 
 	/**
@@ -130,6 +126,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		if (annotatedSolution != null) {
 			{
+				final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
+
 				final LinkedList<IProfitAndLossEntry> entries = new LinkedList<IProfitAndLossEntry>();
 
 				final DetailTree upstreamDetails = new DetailTree();
@@ -143,9 +141,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolume, shippingTransferPricePerM3, cvValue);
 				shippingDetails.addChild(shippingToDownstream);
 
-				final DetailTree addChild = shippingDetails.addChild("Shipping Cost", new CurrencyDetailElement(shippingCosts));
-
-				getCosts(plan, vessel, false, vesselStartTime, addChild);
+				final IDetailTree[] detailsRef = new IDetailTree[1];
+				final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost,
+						new ShippingCostAnnotation(currentAllocation.getLoadTime(), costNoBoiloff, detailsRef[0]));
+				final long costIncBoiloff = getCosts(plan, vessel, true, vesselStartTime, detailsRef);
+				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
+						new ShippingCostAnnotation(currentAllocation.getLoadTime(), costIncBoiloff, detailsRef[0]));
 
 				downstreamDetails.addChild(shippingToDownstream);
 				downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolume, dischargePricePerM3, cvValue));
@@ -156,7 +158,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// add entry for each entity
 
 				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getDischargeTime(), entries);
-				final ISequenceElement element = slotProvider.getElement(currentAllocation.getLoadOption());
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
 
 				final ILoadOption loadOption = currentAllocation.getLoadOption();
@@ -208,6 +209,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		final long value = shippingEntity.getTaxedProfit(revenue - shippingCost, planStartTime);
 		if (annotatedSolution != null) {
+			final ISequenceElement element = slotProvider.getElement(((PortDetails) plan.getSequence()[0]).getPortSlot());
 			final DetailTree details = new DetailTree();
 
 			if (revenue > 0) {
@@ -215,20 +217,22 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				details.addChild(new DetailTree("Revenue", new CurrencyDetailElement(revenue)));
 			}
 
-			final DetailTree shippingDetails = new DetailTree("Shipping Cost", new CurrencyDetailElement(shippingCost));
-			getCosts(plan, vessel, true, vesselStartTime, shippingDetails);
-			details.addChild(shippingDetails);
+			final IDetailTree[] detailsRef = new IDetailTree[1];
+			final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
+			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost, new ShippingCostAnnotation(planStartTime, costNoBoiloff, detailsRef[0]));
+			final long costIncBoiloff = getCosts(plan, vessel, true, vesselStartTime, detailsRef);
+			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff, new ShippingCostAnnotation(planStartTime, costIncBoiloff, detailsRef[0]));
 
 			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, value, details);
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(planStartTime, Collections.singleton(entry));
-			final ISequenceElement element = slotProvider.getElement(((PortDetails) plan.getSequence()[0]).getPortSlot());
 			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_profitAndLoss, annotation);
+
 		}
 
 		return value;
 	}
 
-	private long getCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final int vesselStartTime, final IDetailTree details) {
+	private long getCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final int vesselStartTime, final IDetailTree[] detailsRef) {
 		// @formatter:off
 		final long shippingCosts = plan.getTotalRouteCost()
 				+ plan.getTotalFuelCost(FuelComponent.Base) 
@@ -243,6 +247,21 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						+ plan.getTotalFuelCost(FuelComponent.IdleNBO)
 						: 0);
 		// @formatter:on
+
+		long portCosts = 0;
+		final Object[] sequence = plan.getSequence();
+		for (int i = 0; i < sequence.length - 1; ++i) {
+			final Object obj = sequence[i];
+			if (obj instanceof PortDetails) {
+
+				final PortDetails portDetails = (PortDetails) obj;
+
+				final IPort port = portDetails.getPortSlot().getPort();
+				final PortType portType = portDetails.getPortSlot().getPortType();
+				portCosts += portCostProvider.getPortCost(port, vessel, portType);
+			}
+
+		}
 
 		final ICurve hireRate;
 		switch (vessel.getVesselInstanceType()) {
@@ -267,23 +286,29 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final long hourlyCharterInPrice = (int) hireRate.getValueAtPoint(vesselStartTime);
 			hireCosts = hourlyCharterInPrice * (long) planDuration;
 		}
+		if (detailsRef != null) {
 
-		if (details != null) {
+			final DetailTree details = new DetailTree("Shipping Costs", new CurrencyDetailElement(shippingCosts + hireCosts + portCosts));
 
-			details.addChild("Total Cost", new CurrencyDetailElement(plan.getTotalRouteCost()));
+			details.addChild("Route Cost", new CurrencyDetailElement(plan.getTotalRouteCost()));
 			details.addChild("Base Fuel", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base)));
 			details.addChild("Base Fuel Supplement", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base_Supplemental)));
 			details.addChild("Cooldown", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Cooldown)));
 			details.addChild("Idle Base", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleBase)));
 			details.addChild("Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.PilotLight)));
 			details.addChild("Idle Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdlePilotLight)));
-			details.addChild("NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
-			details.addChild("FBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.FBO)));
-			details.addChild("Idle NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleNBO)));
+			if (includeLNG) {
+				details.addChild("NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
+				details.addChild("FBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.FBO)));
+				details.addChild("Idle NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleNBO)));
+			}
 			details.addChild("Hire Costs", new CurrencyDetailElement(hireCosts));
+			details.addChild("Port Costs", new CurrencyDetailElement(portCosts));
+
+			detailsRef[0] = details;
 		}
 
-		return shippingCosts + hireCosts;
+		return shippingCosts + portCosts + hireCosts;
 	}
 
 	private long getCharterRevenue(final VoyagePlan plan, final IVessel vessel) {

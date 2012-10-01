@@ -43,12 +43,12 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 	@Inject
 	private IEntityProvider entityProvider;
-	// private IEntity shippingEntity;
 
 	private long lastEvaluation, lastAcceptance;
+
 	@Inject
 	private IVesselProvider vesselProvider;
-	// private IPortSlotProvider slotProvider;
+
 	@Inject
 	private IEntityValueCalculator entityValueCalculator;
 
