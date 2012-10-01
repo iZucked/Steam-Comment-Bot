@@ -6,8 +6,10 @@ package com.mmxlabs.models.common.commandservice;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 import org.eclipse.emf.common.command.Command;
@@ -171,7 +173,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 			}
 
 			for (final IModelCommandProvider provider : providers) {
-				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject, overrides, commandClass, commandParameter, normal);
+				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject, overrides, editSet, commandClass, commandParameter, normal);
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
 					if (addition.canExecute() == false) {
@@ -193,6 +195,10 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	}
 
 	private final WeakHashMap<EObject, EObject> overrides = new WeakHashMap<EObject, EObject>();
+	/**
+	 * The {@link Set} of objects currently being edited.
+	 */
+	private final Set<EObject> editSet = new HashSet<EObject>();
 
 	public void setOverride(final EObject real, final EObject override) {
 		overrides.put(real, override);
@@ -200,6 +206,26 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 
 	public void clearOverride(final EObject real) {
 		overrides.remove(real);
+	}
+
+	/**
+	 * Add an {@link EObject} to the current {@link Set} of edited objects.
+	 * 
+	 * @param object
+	 * @since 2.0
+	 */
+	public void addEditObject(final EObject object) {
+		editSet.add(object);
+	}
+
+	/**
+	 * Remove and {@link EObject} from the current {@link Set} of edited objects.
+	 * 
+	 * @param object
+	 * @since 2.0
+	 */
+	public void removeEditObject(final EObject object) {
+		editSet.remove(object);
 	}
 
 	public boolean isCommandProvidersDisabled() {
@@ -213,5 +239,4 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	public boolean isEnabled() {
 		return enabled;
 	}
-
 }
