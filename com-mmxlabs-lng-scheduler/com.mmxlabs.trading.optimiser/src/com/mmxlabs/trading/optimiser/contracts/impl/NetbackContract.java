@@ -86,97 +86,13 @@ public class NetbackContract implements ILoadPriceCalculator {
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int salesPrice, final int loadVolume,
 			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
 
-		final IVesselClass vesselClass = vessel.getVesselClass();
-
-		final VoyageDetails ladenLeg = (VoyageDetails) plan.getSequence()[1];
-		// final VoyageDetails ballastLeg = (VoyageDetails) plan.getSequence()[3];
-
-		// get transportation costs
-		// suez cost
-		long totalRealTransportCosts = ladenLeg.getRouteCost();
-		// fuel cost
-		for (final FuelComponent c : FuelComponent.values()) {
-			final long fuelConsumption = ladenLeg.getFuelConsumption(c, c.getDefaultFuelUnit()) + ladenLeg.getRouteAdditionalConsumption(c, c.getDefaultFuelUnit());
-			totalRealTransportCosts += Calculator.multiply(fuelConsumption, ladenLeg.getFuelUnitPrice(c));
-		}
-
-		final BallastParameters notionalBallastParameters = ballastParameters.get(vesselClass);
-		// vessel cost (don't use calculator.multiply here; hours are not
-		// scaled, but price is)
-		final ICurve hireRate;
-		switch (vessel.getVesselInstanceType()) {
-		case SPOT_CHARTER:
-			hireRate = vessel.getHourlyCharterInPrice();
-			break;
-		case TIME_CHARTER:
-			hireRate = vessel.getHourlyCharterInPrice();
-			break;
-		default:
-			hireRate = new ConstantValueCurve(notionalBallastParameters.getHireCost(dischargeTime));
-			break;
-		}
-
-		if (hireRate != null) {
-			totalRealTransportCosts += (long) (dischargeTime - loadTime) * (long) hireRate.getValueAtPoint(dischargeTime);
-		}
-		final int notionalReturnSpeed = notionalBallastParameters.getSpeed();
-
-		long result = Long.MAX_VALUE;
-		for (final String route : notionalBallastParameters.getRoutes()) {
-
-			final Integer distance = distanceProvider.get(route).get(ladenLeg.getOptions().getToPortSlot().getPort(), ladenLeg.getOptions().getFromPortSlot().getPort());
-			if (distance == null) {
-				continue;
-			}
-
-			final int notionalTransportTime = Calculator.getTimeFromSpeedDistance(notionalReturnSpeed, distance);
-
-			// TODO: Add in canal costs etc
-
-			// Base Fuel Costs
-			long totalBaseFuelCosts;
-			{
-				final long notionalFuelCost = vesselClass.getBaseFuelUnitPrice();
-				totalBaseFuelCosts = Calculator.costFromConsumption(notionalBallastParameters.getBaseFuelRate() * notionalTransportTime, notionalFuelCost);
-			}
-
-			// NBO Costs
-			long totalNBOCosts;
-			{
-				final long nboInMMBTu = Calculator.convertM3ToMMBTu(notionalBallastParameters.getNBORate(), loadSlot.getCargoCVValue());
-				totalNBOCosts = Calculator.costFromConsumption(nboInMMBTu * notionalTransportTime, salesPrice);
-			}
-
-			long notionalTransportCosts = Math.min(totalBaseFuelCosts, totalNBOCosts);
-			if (hireRate != null) {
-				notionalTransportCosts += (long) (notionalTransportTime) * (long) hireRate.getValueAtPoint(dischargeTime);
-			}
-
-			final long transportCostPerMMBTU = Calculator.divide(notionalTransportCosts + totalRealTransportCosts, Calculator.multiply(loadSlot.getCargoCVValue(), loadVolume));
-
-			if (transportCostPerMMBTU < result) {
-				result = transportCostPerMMBTU;
-			}
-
-			if (annotations != null) {
-				final IDetailTree tree = annotations.addChild("Netback - " + route, transportCostPerMMBTU);
-				tree.addChild("Transport Time", new DurationDetailElement(notionalTransportTime));
-				tree.addChild("Distance", distance);
-				tree.addChild("NBO Costs", new CurrencyDetailElement(totalNBOCosts));
-				tree.addChild("Base Costs", new CurrencyDetailElement(totalBaseFuelCosts));
-			}
-		}
-		int rawPrice = (int) (salesPrice - result - marginScaled);
-		if (rawPrice < floorPriceScaled) {
-			return floorPriceScaled;
-		}
-		return rawPrice;
+		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, salesPrice, loadVolume, vessel, plan, annotations, true);
 	}
 
 	@Override
 	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice, IDetailTree annotations) {
-		// TODO implement me
-		throw new RuntimeException("A netback requires shipping costs - not yet handled");
+
+		return calculateLoadUnitPrice(loadOption, dischargeOption, loadTime, dischargeTime, salesPrice, -1, null, null, annotations, false);
 	}
 
 	public Map<IVesselClass, BallastParameters> getBallastParameters() {
@@ -194,4 +110,101 @@ public class NetbackContract implements ILoadPriceCalculator {
 	public void setFloorPriceScaled(int floorPriceScaled) {
 		this.floorPriceScaled = floorPriceScaled;
 	}
+
+	private int calculateLoadUnitPrice(final ILoadOption loadSlot, final IDischargeOption dischargeSlot, final int loadTime, final int dischargeTime, final int salesPrice, final int loadVolume,
+			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations, boolean includeShipping) {
+
+		long result = Long.MAX_VALUE;
+
+		if (includeShipping) {
+			final IVesselClass vesselClass = vessel.getVesselClass();
+
+			final VoyageDetails ladenLeg = (VoyageDetails) plan.getSequence()[1];
+			// final VoyageDetails ballastLeg = (VoyageDetails) plan.getSequence()[3];
+
+			// get transportation costs
+			// suez cost
+			long totalRealTransportCosts = ladenLeg.getRouteCost();
+			// fuel cost
+			for (final FuelComponent c : FuelComponent.values()) {
+				final long fuelConsumption = ladenLeg.getFuelConsumption(c, c.getDefaultFuelUnit()) + ladenLeg.getRouteAdditionalConsumption(c, c.getDefaultFuelUnit());
+				totalRealTransportCosts += Calculator.multiply(fuelConsumption, ladenLeg.getFuelUnitPrice(c));
+			}
+
+			final BallastParameters notionalBallastParameters = ballastParameters.get(vesselClass);
+			// vessel cost (don't use calculator.multiply here; hours are not
+			// scaled, but price is)
+			final ICurve hireRate;
+			switch (vessel.getVesselInstanceType()) {
+			case SPOT_CHARTER:
+				hireRate = vessel.getHourlyCharterInPrice();
+				break;
+			case TIME_CHARTER:
+				hireRate = vessel.getHourlyCharterInPrice();
+				break;
+			default:
+				hireRate = new ConstantValueCurve(notionalBallastParameters.getHireCost(dischargeTime));
+				break;
+			}
+
+			if (hireRate != null) {
+				totalRealTransportCosts += (long) (dischargeTime - loadTime) * (long) hireRate.getValueAtPoint(dischargeTime);
+			}
+			final int notionalReturnSpeed = notionalBallastParameters.getSpeed();
+
+			for (final String route : notionalBallastParameters.getRoutes()) {
+
+				final Integer distance = distanceProvider.get(route).get(ladenLeg.getOptions().getToPortSlot().getPort(), ladenLeg.getOptions().getFromPortSlot().getPort());
+				if (distance == null) {
+					continue;
+				}
+
+				final int notionalTransportTime = Calculator.getTimeFromSpeedDistance(notionalReturnSpeed, distance);
+
+				// TODO: Add in canal costs etc
+
+				// Base Fuel Costs
+				long totalBaseFuelCosts;
+				{
+					final long notionalFuelCost = vesselClass.getBaseFuelUnitPrice();
+					totalBaseFuelCosts = Calculator.costFromConsumption(notionalBallastParameters.getBaseFuelRate() * notionalTransportTime, notionalFuelCost);
+				}
+
+				// NBO Costs
+				long totalNBOCosts;
+				{
+					final long nboInMMBTu = Calculator.convertM3ToMMBTu(notionalBallastParameters.getNBORate(), loadSlot.getCargoCVValue());
+					totalNBOCosts = Calculator.costFromConsumption(nboInMMBTu * notionalTransportTime, salesPrice);
+				}
+
+				long notionalTransportCosts = Math.min(totalBaseFuelCosts, totalNBOCosts);
+				if (hireRate != null) {
+					notionalTransportCosts += (long) (notionalTransportTime) * (long) hireRate.getValueAtPoint(dischargeTime);
+				}
+
+				final long transportCostPerMMBTU = Calculator.divide(notionalTransportCosts + totalRealTransportCosts, Calculator.multiply(loadSlot.getCargoCVValue(), loadVolume));
+
+				if (transportCostPerMMBTU < result) {
+					result = transportCostPerMMBTU;
+				}
+
+				if (annotations != null) {
+					final IDetailTree tree = annotations.addChild("Netback - " + route, transportCostPerMMBTU);
+					tree.addChild("Transport Time", new DurationDetailElement(notionalTransportTime));
+					tree.addChild("Distance", distance);
+					tree.addChild("NBO Costs", new CurrencyDetailElement(totalNBOCosts));
+					tree.addChild("Base Costs", new CurrencyDetailElement(totalBaseFuelCosts));
+				}
+			}
+
+		} else {
+			result = 0;
+		}
+		int rawPrice = (int) (salesPrice - result - marginScaled);
+		if (rawPrice < floorPriceScaled) {
+			return floorPriceScaled;
+		}
+		return rawPrice;
+	}
+
 }
