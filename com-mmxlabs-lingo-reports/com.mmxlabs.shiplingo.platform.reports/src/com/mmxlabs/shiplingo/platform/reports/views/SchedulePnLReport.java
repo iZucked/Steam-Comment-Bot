@@ -36,7 +36,7 @@ import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.trading.optimiser.TradingConstants;
 
 /**
- * @since 2.0
+ * @since 2.0 `
  */
 public class SchedulePnLReport extends EMFReportView {
 	/**
@@ -96,7 +96,7 @@ public class SchedulePnLReport extends EMFReportView {
 					final SlotVisit slotVisit = (SlotVisit) object;
 					return slotVisit.getSlotAllocation().getPrice();
 				}
-return 0.0;
+				return 0.0;
 			}
 		});
 		addColumn("Sales Price", new BaseFormatter() {
@@ -115,7 +115,7 @@ return 0.0;
 					final SlotVisit slotVisit = (SlotVisit) object;
 					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPrice();
 				}
-				return  0.0;//super.getComparable(object);
+				return 0.0;// super.getComparable(object);
 			}
 		});
 		addColumn("Shipping Cost", new BaseFormatter() {
@@ -126,36 +126,19 @@ return 0.0;
 				// TODO: Fixed (other) port costs?
 				// TODO: Boil-off included?
 
-				long totalShipping = 0;
-				final Journey ladenLeg = cargoAllocation.getLadenLeg();
-				if (ladenLeg != null) {
-					totalShipping += ladenLeg.getFuelCost();
-					totalShipping += ladenLeg.getHireCost();
-					totalShipping += ladenLeg.getToll();
+				final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
+				if (dataWithKey != null) {
+					final Integer v = dataWithKey.getValueAs(Integer.class);
+					if (v != null) {
+						double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
+						if (dischargeVolumeInMMBTu == 0.0) {
+							return 0.0;
+						}
+						final double shipping = (double) v.doubleValue() / dischargeVolumeInMMBTu;
+						return shipping;
+					}
 				}
-				final Idle ladenIdle = cargoAllocation.getLadenIdle();
-				if (ladenIdle != null) {
-					totalShipping += ladenIdle.getFuelCost();
-					totalShipping += ladenIdle.getHireCost();
-				}
-				final Journey ballastLeg = cargoAllocation.getBallastLeg();
-				if (ballastLeg != null) {
-					totalShipping += ballastLeg.getFuelCost();
-					totalShipping += ballastLeg.getHireCost();
-					totalShipping += ballastLeg.getToll();
-				}
-				final Idle ballastIdle = cargoAllocation.getBallastIdle();
-				if (ballastIdle != null) {
-					totalShipping += ballastIdle.getFuelCost();
-					totalShipping += ballastIdle.getHireCost();
-				}
-
-				double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
-				if (dischargeVolumeInMMBTu == 0.0) {
-					return 0.0;
-				}
-				final double shipping = (double) totalShipping / dischargeVolumeInMMBTu;
-				return shipping;
+				return 0.0;
 			}
 
 			@Override
