@@ -21,6 +21,8 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.CostComponent;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
@@ -324,8 +326,10 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 							final int timeAtReturn = timeAtDischarge + dischargePort.getDischargeDuration() + minTimeDL + ballastAllowance;
 							final ITimeWindow returnWindow = builder.createTimeWindow(timeAtReturn, timeAtReturn);
 
-							vessels.add(builder.createVessel("vessel-" + i++, vesselClass, 0, Calculator.scaleToInt(spec.getNotionalDayRate() / 24.0), VesselInstanceType.SPOT_CHARTER,
-									builder.createStartEndRequirement(), builder.createStartEndRequirement(returnWindow), 0, 0, 0));
+							final ICurve charterInRate = new ConstantValueCurve(Calculator.scaleToInt(spec.getNotionalDayRate() / 24.0));
+
+							vessels.add(builder.createVessel("vessel-" + i++, vesselClass, charterInRate, VesselInstanceType.SPOT_CHARTER, builder.createStartEndRequirement(),
+									builder.createStartEndRequirement(returnWindow), 0, 0, 0));
 						}
 					}
 				}
