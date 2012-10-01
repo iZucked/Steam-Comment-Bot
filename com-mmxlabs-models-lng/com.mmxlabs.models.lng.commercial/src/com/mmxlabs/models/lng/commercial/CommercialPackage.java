@@ -1106,13 +1106,22 @@ public interface CommercialPackage extends EPackage {
 	int PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN = PURCHASE_CONTRACT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Sales Multiplier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER = PURCHASE_CONTRACT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Profit Share Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 9;
+	int PROFIT_SHARE_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl <em>Notional Ballast Parameters</em>}' class.
@@ -1589,6 +1598,17 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getProfitSharePurchaseContract_Margin();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getSalesMultiplier <em>Sales Multiplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sales Multiplier</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getSalesMultiplier()
+	 * @see #getProfitSharePurchaseContract()
+	 * @generated
+	 */
+	EAttribute getProfitSharePurchaseContract_SalesMultiplier();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters <em>Notional Ballast Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1975,6 +1995,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN = eINSTANCE.getProfitSharePurchaseContract_Margin();
+
+		/**
+		 * The meta object literal for the '<em><b>Sales Multiplier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER = eINSTANCE.getProfitSharePurchaseContract_SalesMultiplier();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.NotionalBallastParametersImpl <em>Notional Ballast Parameters</em>}' class.

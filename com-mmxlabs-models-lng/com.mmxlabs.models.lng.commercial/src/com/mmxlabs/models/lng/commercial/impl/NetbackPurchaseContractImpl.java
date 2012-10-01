@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.NetbackPurchaseContract;
 import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
 import java.util.Collection;
-import com.mmxlabs.models.lng.types.AIndex;
 
 /**
  * <!-- begin-user-doc -->

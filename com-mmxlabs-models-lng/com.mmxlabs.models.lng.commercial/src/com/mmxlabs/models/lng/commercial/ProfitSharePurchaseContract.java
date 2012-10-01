@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.types.APortSet;
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketMultiplier <em>Ref Market Multiplier</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getShare <em>Share</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMargin <em>Margin</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getSalesMultiplier <em>Sales Multiplier</em>}</li>
  * </ul>
  * </p>
  *
@@ -261,6 +262,34 @@ public interface ProfitSharePurchaseContract extends PurchaseContract {
 	 * @generated
 	 */
 	void setMargin(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Sales Multiplier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sales Multiplier</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sales Multiplier</em>' attribute.
+	 * @see #setSalesMultiplier(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getProfitSharePurchaseContract_SalesMultiplier()
+	 * @model required="true"
+	 * @generated
+	 */
+	double getSalesMultiplier();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getSalesMultiplier <em>Sales Multiplier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sales Multiplier</em>' attribute.
+	 * @see #getSalesMultiplier()
+	 * @generated
+	 */
+	void setSalesMultiplier(double value);
 
 } // end of  ProfitSharePurchaseContract
 

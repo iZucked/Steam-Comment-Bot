@@ -9,9 +9,6 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.NamedObject;
-
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 import java.util.Collection;

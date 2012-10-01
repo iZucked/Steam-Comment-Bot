@@ -72,6 +72,7 @@ public class ProfitSharePurchaseContractComponentHelper extends BaseComponentHel
 		add_refMarketMultiplierEditor(detailComposite, topClass);
 		add_shareEditor(detailComposite, topClass);
 		add_marginEditor(detailComposite, topClass);
+		add_salesMultiplierEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseMarketPorts feature on ProfitSharePurchaseContract
@@ -152,5 +153,14 @@ public class ProfitSharePurchaseContractComponentHelper extends BaseComponentHel
 	 */
 	protected void add_marginEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN));
+	}
+
+	/**
+	 * Create the editor for the salesMultiplier feature on ProfitSharePurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_salesMultiplierEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER));
 	}
 }

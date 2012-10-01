@@ -33,6 +33,7 @@ import com.mmxlabs.models.lng.types.APortSet;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getRefMarketMultiplier <em>Ref Market Multiplier</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getShare <em>Share</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getMargin <em>Margin</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getSalesMultiplier <em>Sales Multiplier</em>}</li>
  * </ul>
  * </p>
  *
@@ -188,6 +189,28 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * @ordered
 	 */
 	protected double margin = MARGIN_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSalesMultiplier() <em>Sales Multiplier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getSalesMultiplier()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double SALES_MULTIPLIER_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getSalesMultiplier() <em>Sales Multiplier</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getSalesMultiplier()
+	 * @generated
+	 * @ordered
+	 */
+	protected double salesMultiplier = SALES_MULTIPLIER_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -424,6 +447,29 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public double getSalesMultiplier() {
+		return salesMultiplier;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSalesMultiplier(double newSalesMultiplier) {
+		double oldSalesMultiplier = salesMultiplier;
+		salesMultiplier = newSalesMultiplier;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER, oldSalesMultiplier, salesMultiplier));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -450,6 +496,8 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 				return getShare();
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
 				return getMargin();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER:
+				return getSalesMultiplier();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -491,6 +539,9 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
 				setMargin((Double)newValue);
 				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER:
+				setSalesMultiplier((Double)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -530,6 +581,9 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
 				setMargin(MARGIN_EDEFAULT);
 				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER:
+				setSalesMultiplier(SALES_MULTIPLIER_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -560,6 +614,8 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 				return share != SHARE_EDEFAULT;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
 				return margin != MARGIN_EDEFAULT;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER:
+				return salesMultiplier != SALES_MULTIPLIER_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -586,6 +642,8 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 		result.append(share);
 		result.append(", margin: ");
 		result.append(margin);
+		result.append(", salesMultiplier: ");
+		result.append(salesMultiplier);
 		result.append(')');
 		return result.toString();
 	}

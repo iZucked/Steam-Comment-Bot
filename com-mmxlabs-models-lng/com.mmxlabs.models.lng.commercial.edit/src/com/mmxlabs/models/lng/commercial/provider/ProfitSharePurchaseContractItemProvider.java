@@ -68,6 +68,7 @@ public class ProfitSharePurchaseContractItemProvider
 			addRefMarketMultiplierPropertyDescriptor(object);
 			addSharePropertyDescriptor(object);
 			addMarginPropertyDescriptor(object);
+			addSalesMultiplierPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -271,6 +272,29 @@ public class ProfitSharePurchaseContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Sales Multiplier feature.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSalesMultiplierPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ProfitSharePurchaseContract_salesMultiplier_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ProfitSharePurchaseContract_salesMultiplier_feature", "_UI_ProfitSharePurchaseContract_type"),
+				 CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns ProfitSharePurchaseContract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -313,6 +337,7 @@ public class ProfitSharePurchaseContractItemProvider
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
