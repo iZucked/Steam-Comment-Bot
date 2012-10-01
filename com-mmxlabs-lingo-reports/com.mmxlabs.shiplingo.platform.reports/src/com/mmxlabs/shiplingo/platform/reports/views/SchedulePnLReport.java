@@ -12,6 +12,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
@@ -20,8 +21,6 @@ import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
-import com.mmxlabs.models.lng.schedule.Idle;
-import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
@@ -130,7 +129,7 @@ public class SchedulePnLReport extends EMFReportView {
 				if (dataWithKey != null) {
 					final Integer v = dataWithKey.getValueAs(Integer.class);
 					if (v != null) {
-						double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
+						final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
 						if (dischargeVolumeInMMBTu == 0.0) {
 							return 0.0;
 						}
@@ -160,21 +159,6 @@ public class SchedulePnLReport extends EMFReportView {
 				return 0.0;
 			}
 		});
-
-		// addColumn("Type", objectFormatter, s.getCargoAllocation__GetType());
-
-		// // addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
-		// addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
-		// addColumn("Purchase Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
-		// addColumn("Purchase Price", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation_Price());
-		//
-		// // addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
-		// // addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
-		// addColumn("Sales Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
-		// addColumn("Sales Price", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation_Price());
-
-		// addColumn("Vessel", objectFormatter, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
-
 	}
 
 	@Override
@@ -241,6 +225,22 @@ public class SchedulePnLReport extends EMFReportView {
 						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
 								allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
 								allocation.getInputCargo() }));
+			} else if (a instanceof SlotVisit) {
+				final SlotVisit slotVisit = (SlotVisit) a;
+
+				final CargoAllocation allocation = slotVisit.getSlotAllocation().getCargoAllocation();
+
+				setInputEquivalents(
+						allocation,
+						Arrays.asList(new Object[] { allocation.getLoadAllocation().getSlotVisit(), allocation.getLoadAllocation().getSlot(), allocation.getDischargeAllocation().getSlotVisit(),
+								allocation.getDischargeAllocation().getSlot(), allocation.getBallastIdle(), allocation.getBallastLeg(), allocation.getLadenIdle(), allocation.getLadenLeg(),
+								allocation.getInputCargo() }));
+			} else if (a instanceof VesselEventVisit) {
+				final VesselEventVisit vesselEventVisit = (VesselEventVisit) a;
+				setInputEquivalents(vesselEventVisit, Lists.<Object> newArrayList(vesselEventVisit.getVesselEvent()));
+			} else if (a instanceof StartEvent) {
+				final StartEvent startEvent = (StartEvent) a;
+				setInputEquivalents(startEvent, Lists.<Object> newArrayList(startEvent.getSequence().getVessel()));
 			}
 		}
 	}
