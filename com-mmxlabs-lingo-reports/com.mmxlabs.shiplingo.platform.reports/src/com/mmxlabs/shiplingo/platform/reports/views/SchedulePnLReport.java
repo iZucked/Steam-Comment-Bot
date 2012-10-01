@@ -246,53 +246,63 @@ public class SchedulePnLReport extends EMFReportView {
 	}
 
 	@Override
-	protected boolean isElementDifferent(EObject pinnedObject, EObject otherObject) {
-		CargoAllocation ref = null;
-		if (pinnedObject instanceof CargoAllocation) {
-			ref = (CargoAllocation) pinnedObject;
-		}
+	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
 
-		CargoAllocation ca = null;
-		if (otherObject instanceof CargoAllocation) {
-			ca = (CargoAllocation) otherObject;
-		}
-
-		if (ca == null || ref == null) {
+		if (pinnedObject == null || otherObject == null) {
 			return true;
 		}
 
-		boolean different = false;
+		final boolean different = false;
+		if (pinnedObject instanceof CargoAllocation && otherObject instanceof CargoAllocation) {
+			CargoAllocation ref = null;
+			CargoAllocation ca = null;
+			ref = (CargoAllocation) pinnedObject;
 
-		// Check vessel
-		if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
-			different = true;
-		} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
-			different = true;
-		} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
-			different = true;
-		} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVesselClass().getName()))) {
-			different = true;
-		}
+			ca = (CargoAllocation) otherObject;
 
-		if (!different) {
-			if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
-				different = true;
+			// Check vessel
+			if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
+				return true;
+			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
+				return true;
+			} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
+				return true;
+			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+				return true;
 			}
-		}
-		if (!different) {
-			if (!ca.getLoadAllocation().getContract().getName().equals(ref.getLoadAllocation().getContract().getName())) {
-				different = true;
+
+			if (!different) {
+				if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
+					return true;
+				}
 			}
-		}
-		if (!different) {
-			if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
-				different = true;
+			if (!different) {
+				if (!ca.getLoadAllocation().getContract().getName().equals(ref.getLoadAllocation().getContract().getName())) {
+					return true;
+				}
 			}
-		}
-		if (!different) {
-			if (!ca.getDischargeAllocation().getContract().getName().equals(ref.getDischargeAllocation().getContract().getName())) {
-				different = true;
+			if (!different) {
+				if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
+					return true;
+				}
 			}
+			if (!different) {
+				if (!ca.getDischargeAllocation().getContract().getName().equals(ref.getDischargeAllocation().getContract().getName())) {
+					return true;
+				}
+			}
+		} else if (pinnedObject instanceof Event && otherObject instanceof Event) {
+			final Event vev = (Event) otherObject;
+			final Event ref = (Event) pinnedObject;
+
+			final int refTime = ref.getDuration() + (ref.getNextEvent() != null ? ref.getNextEvent().getDuration() : 0);
+			final int vevTime = vev.getDuration() + (vev.getNextEvent() != null ? vev.getNextEvent().getDuration() : 0);
+
+			// 3 Days
+			if (Math.abs(refTime - vevTime) > 3 * 24) {
+				return true;
+			}
+
 		}
 
 		return different;
@@ -345,6 +355,8 @@ public class SchedulePnLReport extends EMFReportView {
 	protected String getElementKey(final EObject element) {
 		if (element instanceof CargoAllocation) {
 			return ((CargoAllocation) element).getName();
+		} else if (element instanceof Event) {
+			return ((Event) element).name();
 		}
 		return super.getElementKey(element);
 	}
