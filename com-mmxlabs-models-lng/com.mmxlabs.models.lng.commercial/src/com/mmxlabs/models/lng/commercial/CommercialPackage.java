@@ -1108,6 +1108,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Sales Multiplier</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1600,6 +1601,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getSalesMultiplier <em>Sales Multiplier</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Sales Multiplier</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getSalesMultiplier()
@@ -1999,6 +2001,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Sales Multiplier</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
