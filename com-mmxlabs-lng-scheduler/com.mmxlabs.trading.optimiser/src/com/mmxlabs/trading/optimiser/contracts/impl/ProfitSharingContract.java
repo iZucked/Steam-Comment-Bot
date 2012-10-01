@@ -34,15 +34,20 @@ public class ProfitSharingContract implements ILoadPriceCalculator {
 	private final ICurve referenceMarket;
 	private final int marginScaled;
 	private final int profitShareScaled;
+	private final int salesMultiplier;
 	private final Set<IPort> baseMarketPorts;
 
-	public ProfitSharingContract(final ICurve market, final ICurve referenceMarket, final int marginScaled, final int profitShareScaled, final Set<IPort> baseMarketPorts) {
+	/**
+	 * @since 2.0
+	 */
+	public ProfitSharingContract(final ICurve market, final ICurve referenceMarket, final int marginScaled, final int profitShareScaled, final Set<IPort> baseMarketPorts, final int salesMultipler) {
 		super();
 		this.market = market;
 		this.referenceMarket = referenceMarket;
 		this.marginScaled = marginScaled;
 		this.profitShareScaled = profitShareScaled;
 		this.baseMarketPorts = baseMarketPorts;
+		this.salesMultiplier = salesMultipler;
 	}
 
 	@Override
@@ -51,15 +56,17 @@ public class ProfitSharingContract implements ILoadPriceCalculator {
 
 	@Override
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int actualSalesPrice, final int loadVolume,
-			final IVessel vessel, final VoyagePlan plan, IDetailTree annotation) {
+			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotation) {
 		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, actualSalesPrice, annotation);
 	}
 
 	@Override
-	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int actualSalesPrice, IDetailTree annotations) {
+	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int actualSalesPrice,
+			final IDetailTree annotations) {
 		final int marketPurchasePrice = (int) market.getValueAtPoint(loadTime);
 
-		int basePrice = marketPurchasePrice - marginScaled - actualSalesPrice;
+		final int actualSalesPriceFraction = (int) Calculator.multiply(actualSalesPrice, salesMultiplier);
+		final int basePrice = marketPurchasePrice - marginScaled - actualSalesPriceFraction;
 		if (baseMarketPorts.contains(dischargeOption.getPort())) {
 			return basePrice;
 		} else {
