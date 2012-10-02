@@ -60,7 +60,7 @@ public class ScheduleEvaluator {
 
 	@Inject
 	private IVesselProvider vesselProvider;
-	
+
 	private final VoyagePlanIterator vpIterator = new VoyagePlanIterator();
 
 	private Collection<ILoadPriceCalculator> loadPriceCalculators;
@@ -96,6 +96,8 @@ public class ScheduleEvaluator {
 			}
 			total += l;
 		}
+
+		// TODO: Extract out into injectable component.
 		if (entityValueCalculator != null) {
 			// Charter Out Optimisation... Detect potential charter out opportunities.
 			for (final ScheduledSequence seq : scheduledSequences) {
@@ -104,7 +106,7 @@ public class ScheduleEvaluator {
 				if (!(vessel.getVesselInstanceType() == VesselInstanceType.FLEET || vessel.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 					continue;
 				}
-				
+
 				int currentTime = seq.getStartTime();
 				for (final VoyagePlan vp : seq.getVoyagePlans()) {
 
@@ -128,78 +130,90 @@ public class ScheduleEvaluator {
 						}
 					}
 
+					final long originalOption;
+					final long newOption;
+
+					final Object[] newSequence = currentSequence.clone();
+					int ballastIdx;
 					// 5 is a cargo (load, voyage, discharge, voyage, next port)
 					if (currentSequence.length == 5) {
-						// Take original ballast details, and recalculate with charter out idle set to true.
-						final VoyageDetails ballastDetails = (VoyageDetails) currentSequence[3];
+						ballastIdx = 3;
+					} else {
+						ballastIdx = 1;
+					}
+					// Take original ballast details, and recalculate with charter out idle set to true.
+					final VoyageDetails ballastDetails = (VoyageDetails) currentSequence[ballastIdx];
 
-						
-						boolean foundMarketPrice = false;
-						int bestPrice = 0;
-						int time = arrivalTimes[4] + ballastDetails.getTravelTime();
-						for (CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vessel.getVesselClass(), time)) {
-							if (option.getCharterPrice() > bestPrice) {
-								foundMarketPrice = true;
-								bestPrice = option.getCharterPrice();
-							}
+					boolean foundMarketPrice = false;
+					int bestPrice = 0;
+					int time = arrivalTimes[ballastIdx] + ballastDetails.getTravelTime();
+					for (CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vessel.getVesselClass(), time)) {
+						if (option.getCharterPrice() > bestPrice) {
+							foundMarketPrice = true;
+							bestPrice = option.getCharterPrice();
 						}
-						if (!foundMarketPrice) {
+					}
+					if (!foundMarketPrice) {
+						continue;
+					}
+
+					// Preliminary check on voyage suitability.
+					{
+
+						// TODO: Grab as an input!
+						final int threshold = 30;
+						// If we go full speed, is there still more than 20 of idle time?
+
+						final int availableTime = ballastDetails.getOptions().getAvailableTime();
+						final int distance = ballastDetails.getOptions().getDistance();
+						final int maxSpeed = ballastDetails.getOptions().getVessel().getVesselClass().getMaxSpeed();
+
+						final int travelTime = Calculator.getTimeFromSpeedDistance(maxSpeed, distance);
+
+						if (((availableTime - travelTime) / 24) < threshold) {
 							continue;
 						}
-						
-						// Preliminary check on voyage suitability.
-						{
+					}
 
-							// TODO: Grab as an input!
-							final int threshold = 20;
-							// If we go full speed, is there still more than 20 of idle time?
+					// Need to reproduce P&L calculations here, switching the charter flag on/off on ballast idle.
+					// Duplicate all the relevant objects and replay calcs
+					VoyageOptions options;
+					try {
+						options = ballastDetails.getOptions().clone();
+					} catch (final CloneNotSupportedException e) {
+						// Do not expect this, VoyageOptions implements Cloneable
+						throw new RuntimeException(e);
+					}
+					options.setCharterOutIdleTime(true);
+					options.setCharterOutHourlyRate(bestPrice);
+					final VoyageDetails newDetails = new VoyageDetails();
+					voyageCalculator.calculateVoyageFuelRequirements(options, newDetails);
 
-							final int availableTime = ballastDetails.getOptions().getAvailableTime();
-							final int distance = ballastDetails.getOptions().getDistance();
-							final int maxSpeed = ballastDetails.getOptions().getVessel().getVesselClass().getMaxSpeed();
+					final VoyagePlan newVoyagePlan = new VoyagePlan();
 
-							final int travelTime = Calculator.getTimeFromSpeedDistance(maxSpeed, distance);
+					newSequence[ballastIdx] = newDetails;
 
-							if (((availableTime - travelTime) / 24) < threshold) {
-								continue;
-							}
-						}
+					voyageCalculator.calculateVoyagePlan(newVoyagePlan, vessel, arrivalTimes, newSequence);
 
-						// Need to reproduce P&L calculations here, switching the charter flag on/off on ballast idle.
-						// Duplicate all the relevant objects and replay calcs
-						VoyageOptions options;
-						try {
-							options = ballastDetails.getOptions().clone();
-						} catch (final CloneNotSupportedException e) {
-							// Do not expect this, VoyageOptions implements Cloneable
-							throw new RuntimeException(e);
-						}
-						options.setCharterOutIdleTime(true);
-						options.setCharterOutHourlyRate(bestPrice);
-						final VoyageDetails newDetails = new VoyageDetails();
-						voyageCalculator.calculateVoyageFuelRequirements(options, newDetails);
-
-						final VoyagePlan newVoyagePlan = new VoyagePlan();
-
-						final Object[] newSequence = currentSequence.clone();
-						newSequence[3] = newDetails;
-
-						voyageCalculator.calculateVoyagePlan(newVoyagePlan, vessel, arrivalTimes, newSequence);
-
+					if (ballastIdx == 3) {
 						// Get the new cargo allocation.
 						final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
 						final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
 
-						final long originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, seq.getStartTime(), null);
-						final long newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);
+						originalOption = entityValueCalculator.evaluate(vp, currentAllocation, vessel, seq.getStartTime(), null);
+						newOption = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);
 
-						// TODO: This should be recorded based on market availability groups and then processed.
-						if (originalOption >= newOption) {
-							// Keep
-						} else {
-							// Overwrite details
-							voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
-						}
+					} else {
+						originalOption = entityValueCalculator.evaluate(vp, vessel, arrivalTimes[0], seq.getStartTime(), null);
+						newOption = entityValueCalculator.evaluate(newVoyagePlan, vessel, arrivalTimes[0], seq.getStartTime(), null);
+
+					}
+					// TODO: This should be recorded based on market availability groups and then processed.
+					if (originalOption >= newOption) {
+						// Keep
+					} else {
+						// Overwrite details
+						voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
 					}
 				}
 			}
