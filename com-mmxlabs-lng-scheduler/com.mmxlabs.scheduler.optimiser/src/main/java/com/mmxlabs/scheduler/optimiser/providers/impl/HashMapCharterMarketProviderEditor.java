@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
@@ -26,14 +27,27 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 
 		private final int dateKey;
 
-		public DefaultCharterMarketOptions(final int dateKey, final int price) {
+		private final int minDuration;
+
+		public DefaultCharterMarketOptions(final int dateKey, final int price, final int minDuration) {
 			this.dateKey = dateKey;
 			this.price = price;
+			this.minDuration = minDuration;
 		}
 
 		@Override
 		public int getCharterPrice() {
 			return price;
+		}
+
+		@Override
+		public int getMinDuration() {
+			return minDuration;
+		}
+
+		@Override
+		public int getDateKey() {
+			return dateKey;
 		}
 
 	}
@@ -43,8 +57,8 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 
 	private final String name;
 
-	private final Map<IVesselClass, List<ICurve>> charterInOptions = new HashMap<IVesselClass, List<ICurve>>();
-	private final Map<IVesselClass, List<ICurve>> charterOutOptions = new HashMap<IVesselClass, List<ICurve>>();
+	private final Map<IVesselClass, List<Pair<ICurve, Integer>>> charterInOptions = new HashMap<IVesselClass, List<Pair<ICurve, Integer>>>();
+	private final Map<IVesselClass, List<Pair<ICurve, Integer>>> charterOutOptions = new HashMap<IVesselClass, List<Pair<ICurve, Integer>>>();
 
 	public HashMapCharterMarketProviderEditor(final String name) {
 		this.name = name;
@@ -64,12 +78,12 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 
 	@Override
 	public void addCharterInOption(final IVesselClass vesselClass, final ICurve curve) {
-		addOptions(charterInOptions, vesselClass, curve);
+		addOptions(charterInOptions, vesselClass, curve, 0);
 	}
 
 	@Override
-	public void addCharterOutOption(final IVesselClass vesselClass, final ICurve curve) {
-		addOptions(charterOutOptions, vesselClass, curve);
+	public void addCharterOutOption(final IVesselClass vesselClass, final ICurve curve, final int minDuration) {
+		addOptions(charterOutOptions, vesselClass, curve, minDuration);
 	}
 
 	@Override
@@ -83,13 +97,15 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 		charterOutOptions.clear();
 	}
 
-	private Collection<CharterMarketOptions> getOptions(final Map<IVesselClass, List<ICurve>> options, final IVesselClass vesselClass, final int dateKey) {
+	private Collection<CharterMarketOptions> getOptions(final Map<IVesselClass, List<Pair<ICurve, Integer>>> options, final IVesselClass vesselClass, final int dateKey) {
 
 		if (options.containsKey(vesselClass)) {
-			final List<ICurve> entry = options.get(vesselClass);
+			final List<Pair<ICurve, Integer>> entry = options.get(vesselClass);
 			final List<CharterMarketOptions> result = new ArrayList<CharterMarketOptions>(entry.size());
-			for (final ICurve curve : entry) {
-				result.add(new DefaultCharterMarketOptions(dateKey, (int) curve.getValueAtPoint(dateKey)));
+			for (final Pair<ICurve, Integer> p : entry) {
+				final ICurve curve = p.getFirst();
+				final int minDuration = p.getSecond();
+				result.add(new DefaultCharterMarketOptions(dateKey, (int) curve.getValueAtPoint(dateKey), minDuration));
 			}
 			return result;
 		}
@@ -97,15 +113,16 @@ public class HashMapCharterMarketProviderEditor implements ICharterMarketProvide
 		return Collections.emptySet();
 	}
 
-	private void addOptions(final Map<IVesselClass, List<ICurve>> options, final IVesselClass vesselClass, final ICurve curve) {
-		final List<ICurve> entry;
+	private void addOptions(final Map<IVesselClass, List<Pair<ICurve, Integer>>> options, final IVesselClass vesselClass, final ICurve curve, final int minDuration) {
+		final List<Pair<ICurve, Integer>> entry;
 		if (options.containsKey(vesselClass)) {
 			entry = options.get(vesselClass);
 		} else {
-			entry = new LinkedList<ICurve>();
+			entry = new LinkedList<Pair<ICurve, Integer>>();
 			options.put(vesselClass, entry);
 		}
 
-		entry.add(curve);
+		final Pair<ICurve, Integer> p = new Pair<ICurve, Integer>(curve, minDuration);
+		entry.add(p);
 	}
 }

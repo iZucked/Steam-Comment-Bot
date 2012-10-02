@@ -595,9 +595,15 @@ public interface ISchedulerBuilder {
 	void setEarliestDate(Date earliestTime);
 
 	/**
+	 * @param vesselClass
+	 *            The {@link IVesselClass} this data applies to
+	 * @param charterOutCurve
+	 *            The hourly charter out price curve
+	 * @param minDuration
+	 *            The minimum duration in hours a charter out can be.
 	 * @since 2.0
 	 */
-	void createCharterOutCurve(IVesselClass vesselClass, ICurve charterOutCurve);
+	void createCharterOutCurve(IVesselClass vesselClass, ICurve charterOutCurve, int minDuration);
 
 	/**
 	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as "soft required". That is generally optional, but not entirely. For example a fitness component may penalise such

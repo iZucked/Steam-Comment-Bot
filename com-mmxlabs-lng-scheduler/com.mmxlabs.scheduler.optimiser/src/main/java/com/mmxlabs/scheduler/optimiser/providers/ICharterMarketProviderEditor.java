@@ -10,6 +10,6 @@ public interface ICharterMarketProviderEditor extends ICharterMarketProvider {
 
 	void addCharterInOption(IVesselClass vesselClass, ICurve charterInCurve);
 
-	void addCharterOutOption(IVesselClass vesselClass, ICurve charterOutCurve);
+	void addCharterOutOption(IVesselClass vesselClass, ICurve charterOutCurve, int minDuration);
 
 }

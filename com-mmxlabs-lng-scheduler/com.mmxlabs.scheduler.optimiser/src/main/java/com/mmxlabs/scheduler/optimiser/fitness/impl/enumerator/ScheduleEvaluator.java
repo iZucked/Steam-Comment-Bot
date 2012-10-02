@@ -102,7 +102,7 @@ public class ScheduleEvaluator {
 			// Charter Out Optimisation... Detect potential charter out opportunities.
 			for (final ScheduledSequence seq : scheduledSequences) {
 
-				IVessel vessel = vesselProvider.getVessel(seq.getResource());
+				final IVessel vessel = vesselProvider.getVessel(seq.getResource());
 				if (!(vessel.getVesselInstanceType() == VesselInstanceType.FLEET || vessel.getVesselInstanceType() == VesselInstanceType.TIME_CHARTER)) {
 					continue;
 				}
@@ -146,33 +146,24 @@ public class ScheduleEvaluator {
 
 					boolean foundMarketPrice = false;
 					int bestPrice = 0;
-					int time = arrivalTimes[ballastIdx] + ballastDetails.getTravelTime();
-					for (CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vessel.getVesselClass(), time)) {
-						if (option.getCharterPrice() > bestPrice) {
+					final int time = arrivalTimes[ballastIdx] + ballastDetails.getTravelTime();
+
+					final int availableTime = ballastDetails.getOptions().getAvailableTime();
+					final int distance = ballastDetails.getOptions().getDistance();
+					final int maxSpeed = ballastDetails.getOptions().getVessel().getVesselClass().getMaxSpeed();
+
+					final int travelTime = Calculator.getTimeFromSpeedDistance(maxSpeed, distance);
+
+					final int availableCharteringTime = availableTime - travelTime;
+
+					for (final CharterMarketOptions option : charterMarketProvider.getCharterOutOptions(vessel.getVesselClass(), time)) {
+						if (availableCharteringTime >= option.getMinDuration() && option.getCharterPrice() > bestPrice) {
 							foundMarketPrice = true;
 							bestPrice = option.getCharterPrice();
 						}
 					}
 					if (!foundMarketPrice) {
 						continue;
-					}
-
-					// Preliminary check on voyage suitability.
-					{
-
-						// TODO: Grab as an input!
-						final int threshold = 30;
-						// If we go full speed, is there still more than 20 of idle time?
-
-						final int availableTime = ballastDetails.getOptions().getAvailableTime();
-						final int distance = ballastDetails.getOptions().getDistance();
-						final int maxSpeed = ballastDetails.getOptions().getVessel().getVesselClass().getMaxSpeed();
-
-						final int travelTime = Calculator.getTimeFromSpeedDistance(maxSpeed, distance);
-
-						if (((availableTime - travelTime) / 24) < threshold) {
-							continue;
-						}
 					}
 
 					// Need to reproduce P&L calculations here, switching the charter flag on/off on ballast idle.

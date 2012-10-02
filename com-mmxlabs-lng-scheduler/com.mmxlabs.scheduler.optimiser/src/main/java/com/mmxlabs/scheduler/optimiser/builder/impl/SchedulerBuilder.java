@@ -1542,8 +1542,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@Override
-	public void createCharterOutCurve(final IVesselClass vesselClass, final ICurve charterOutCurve) {
-		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve);
+	public void createCharterOutCurve(final IVesselClass vesselClass, final ICurve charterOutCurve, int minDuration) {
+		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve, minDuration);
 
 	}
 
