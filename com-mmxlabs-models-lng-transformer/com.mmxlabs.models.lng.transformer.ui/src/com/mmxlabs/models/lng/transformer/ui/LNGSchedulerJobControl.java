@@ -373,9 +373,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					final Cargo c = loadSlot.getCargo();
 					nullCargoes.remove(c);
 					// Sanity check
-					if (!loadSlot.isOptional()) {
-						throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
-					}
+					// Unused non-optional slots now handled by optimiser 
+//					if (!loadSlot.isOptional()) {
+//						throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
+//					}
 					cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
 					cmd.append(DeleteCommand.create(domain, c));
 				}
@@ -400,9 +401,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		if (!nullCargoes.isEmpty()) {
 			for (final Cargo c : nullCargoes) {
 				// Sanity check
-				if (!c.getLoadSlot().isOptional()) {
-					throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
-				}
+				// Unused non-optional slots now handled by optimiser
+//				if (!c.getLoadSlot().isOptional()) {
+//					throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
+//				}
 				cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
 				cmd.append(DeleteCommand.create(domain, c));
 			}

@@ -803,7 +803,9 @@ public class LNGScenarioTransformer {
 			final ILoadOption load;
 			{
 
+				// Make optional
 				load = createLoadOption(builder, portAssociation, contractTransformers, entities, loadSlot);
+				builder.setSoftRequired(load);
 			}
 			// Bind FOB/DES slots to resource
 			if (loadSlot.isDESPurchase()) {
@@ -847,6 +849,7 @@ public class LNGScenarioTransformer {
 			final IDischargeOption discharge;
 			{
 				discharge = createDischargeOption(builder, portAssociation, contractTransformers, entities, dischargeSlot);
+				builder.setSoftRequired(discharge);
 			}
 			// Bind FOB/DES slots to resource
 			if (dischargeSlot.isFOBSale()) {
