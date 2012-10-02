@@ -85,8 +85,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private final MMXRootObject scenario;
 
-	private Schedule intermediateSchedule = null;
-
 	private ResourcelessModelEntityMap entities;
 
 	private LocalSearchOptimiser optimiser;
@@ -215,7 +213,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		currentProgress += REPORT_PERCENTAGE;
 
 		if ((currentProgress % 5) == 0) {
-			intermediateSchedule = saveInitialSolution(optimiser.getBestSolution(false), currentProgress);
+			saveInitialSolution(optimiser.getBestSolution(false), currentProgress);
 		}
 
 		// System.err.println("current fitness " +
@@ -225,7 +223,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		super.setProgress(currentProgress);
 		if (optimiser.isFinished()) {
 			// export final state
-			intermediateSchedule = saveInitialSolution(optimiser.getBestSolution(true), 100);
+			saveInitialSolution(optimiser.getBestSolution(true), 100);
 			optimiser = null;
 			log.debug(String.format("Job finished in %.2f minutes", (System.currentTimeMillis() - startTimeMillis) / (double) Timer.ONE_MINUTE));
 			// scheduleModel.setDirty(false);
