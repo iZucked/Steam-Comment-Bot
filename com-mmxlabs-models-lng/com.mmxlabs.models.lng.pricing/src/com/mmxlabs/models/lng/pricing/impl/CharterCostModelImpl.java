@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl#getCharterInPrice <em>Charter In Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl#getCharterOutPrice <em>Charter Out Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl#getSpotCharterCount <em>Spot Charter Count</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.impl.CharterCostModelImpl#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
  * </ul>
  * </p>
  *
@@ -84,6 +85,28 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 	 * @ordered
 	 */
 	protected int spotCharterCount = SPOT_CHARTER_COUNT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getMinCharterOutDuration() <em>Min Charter Out Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getMinCharterOutDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int MIN_CHARTER_OUT_DURATION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getMinCharterOutDuration() <em>Min Charter Out Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getMinCharterOutDuration()
+	 * @generated
+	 * @ordered
+	 */
+	protected int minCharterOutDuration = MIN_CHARTER_OUT_DURATION_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -217,6 +240,29 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getMinCharterOutDuration() {
+		return minCharterOutDuration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setMinCharterOutDuration(int newMinCharterOutDuration) {
+		int oldMinCharterOutDuration = minCharterOutDuration;
+		minCharterOutDuration = newMinCharterOutDuration;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION, oldMinCharterOutDuration, minCharterOutDuration));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -233,6 +279,8 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 				return basicGetCharterOutPrice();
 			case PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
 				return getSpotCharterCount();
+			case PricingPackage.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION:
+				return getMinCharterOutDuration();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -259,6 +307,9 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 			case PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
 				setSpotCharterCount((Integer)newValue);
 				return;
+			case PricingPackage.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION:
+				setMinCharterOutDuration((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -283,6 +334,9 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 			case PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
 				setSpotCharterCount(SPOT_CHARTER_COUNT_EDEFAULT);
 				return;
+			case PricingPackage.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION:
+				setMinCharterOutDuration(MIN_CHARTER_OUT_DURATION_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -303,6 +357,8 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 				return charterOutPrice != null;
 			case PricingPackage.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT:
 				return spotCharterCount != SPOT_CHARTER_COUNT_EDEFAULT;
+			case PricingPackage.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION:
+				return minCharterOutDuration != MIN_CHARTER_OUT_DURATION_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -319,6 +375,8 @@ public class CharterCostModelImpl extends MMXObjectImpl implements CharterCostMo
 		StringBuffer result = new StringBuffer(super.toString());
 		result.append(" (spotCharterCount: ");
 		result.append(spotCharterCount);
+		result.append(", minCharterOutDuration: ");
+		result.append(minCharterOutDuration);
 		result.append(')');
 		return result.toString();
 	}

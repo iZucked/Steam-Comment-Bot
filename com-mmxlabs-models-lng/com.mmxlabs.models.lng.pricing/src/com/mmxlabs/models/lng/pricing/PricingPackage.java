@@ -637,13 +637,23 @@ public interface PricingPackage extends EPackage {
 	int CHARTER_COST_MODEL__SPOT_CHARTER_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Min Charter Out Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Charter Cost Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHARTER_COST_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CHARTER_COST_MODEL_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelCostImpl <em>Base Fuel Cost</em>}' class.
@@ -1840,6 +1850,18 @@ public interface PricingPackage extends EPackage {
 	EAttribute getCharterCostModel_SpotCharterCount();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getMinCharterOutDuration <em>Min Charter Out Duration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Charter Out Duration</em>'.
+	 * @see com.mmxlabs.models.lng.pricing.CharterCostModel#getMinCharterOutDuration()
+	 * @see #getCharterCostModel()
+	 * @generated
+	 */
+	EAttribute getCharterCostModel_MinCharterOutDuration();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.BaseFuelCost <em>Base Fuel Cost</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2549,6 +2571,15 @@ public interface PricingPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CHARTER_COST_MODEL__SPOT_CHARTER_COUNT = eINSTANCE.getCharterCostModel_SpotCharterCount();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Charter Out Duration</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION = eINSTANCE.getCharterCostModel_MinCharterOutDuration();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.BaseFuelCostImpl <em>Base Fuel Cost</em>}' class.

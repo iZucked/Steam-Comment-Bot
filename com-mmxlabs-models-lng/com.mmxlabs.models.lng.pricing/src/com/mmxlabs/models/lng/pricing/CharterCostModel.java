@@ -20,6 +20,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getCharterInPrice <em>Charter In Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getCharterOutPrice <em>Charter Out Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getSpotCharterCount <em>Spot Charter Count</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getMinCharterOutDuration <em>Min Charter Out Duration</em>}</li>
  * </ul>
  * </p>
  *
@@ -121,6 +122,34 @@ public interface CharterCostModel extends MMXObject {
 	 * @generated
 	 */
 	void setSpotCharterCount(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Min Charter Out Duration</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Min Charter Out Duration</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Min Charter Out Duration</em>' attribute.
+	 * @see #setMinCharterOutDuration(int)
+	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getCharterCostModel_MinCharterOutDuration()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getMinCharterOutDuration();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.CharterCostModel#getMinCharterOutDuration <em>Min Charter Out Duration</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Min Charter Out Duration</em>' attribute.
+	 * @see #getMinCharterOutDuration()
+	 * @generated
+	 */
+	void setMinCharterOutDuration(int value);
 
 } // end of  CharterCostModel
 

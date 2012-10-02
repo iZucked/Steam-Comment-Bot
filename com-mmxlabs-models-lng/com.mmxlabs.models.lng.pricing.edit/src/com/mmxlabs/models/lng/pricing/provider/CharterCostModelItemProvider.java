@@ -20,6 +20,7 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 
+import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
@@ -63,6 +64,7 @@ public class CharterCostModelItemProvider
 			addCharterInPricePropertyDescriptor(object);
 			addCharterOutPricePropertyDescriptor(object);
 			addSpotCharterCountPropertyDescriptor(object);
+			addMinCharterOutDurationPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -156,6 +158,29 @@ public class CharterCostModelItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Min Charter Out Duration feature.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMinCharterOutDurationPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CharterCostModel_minCharterOutDuration_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_CharterCostModel_minCharterOutDuration_feature", "_UI_CharterCostModel_type"),
+				 PricingPackage.Literals.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns CharterCostModel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -188,6 +213,12 @@ public class CharterCostModelItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(CharterCostModel.class)) {
+			case PricingPackage.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 

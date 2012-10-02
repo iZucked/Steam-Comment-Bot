@@ -68,6 +68,7 @@ public class CharterCostModelComponentHelper extends BaseComponentHelper {
 		add_charterInPriceEditor(detailComposite, topClass);
 		add_charterOutPriceEditor(detailComposite, topClass);
 		add_spotCharterCountEditor(detailComposite, topClass);
+		add_minCharterOutDurationEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the vesselClasses feature on CharterCostModel
@@ -101,5 +102,14 @@ public class CharterCostModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_spotCharterCountEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.CHARTER_COST_MODEL__SPOT_CHARTER_COUNT));
+	}
+
+	/**
+	 * Create the editor for the minCharterOutDuration feature on CharterCostModel
+	 *
+	 * @generated
+	 */
+	protected void add_minCharterOutDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION));
 	}
 }

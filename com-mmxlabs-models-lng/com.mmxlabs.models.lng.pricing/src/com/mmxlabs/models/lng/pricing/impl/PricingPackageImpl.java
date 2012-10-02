@@ -540,6 +540,16 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getCharterCostModel_MinCharterOutDuration() {
+		return (EAttribute)charterCostModelEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -956,6 +966,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEReference(charterCostModelEClass, CHARTER_COST_MODEL__CHARTER_IN_PRICE);
 		createEReference(charterCostModelEClass, CHARTER_COST_MODEL__CHARTER_OUT_PRICE);
 		createEAttribute(charterCostModelEClass, CHARTER_COST_MODEL__SPOT_CHARTER_COUNT);
+		createEAttribute(charterCostModelEClass, CHARTER_COST_MODEL__MIN_CHARTER_OUT_DURATION);
 
 		baseFuelCostEClass = createEClass(BASE_FUEL_COST);
 		createEReference(baseFuelCostEClass, BASE_FUEL_COST__FUEL);
@@ -1141,6 +1152,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g1.getETypeArguments().add(g2);
 		initEReference(getCharterCostModel_CharterOutPrice(), g1, null, "charterOutPrice", null, 1, 1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getCharterCostModel_SpotCharterCount(), ecorePackage.getEInt(), "spotCharterCount", null, 1, 1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getCharterCostModel_MinCharterOutDuration(), ecorePackage.getEInt(), "minCharterOutDuration", null, 1, 1, CharterCostModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(baseFuelCostEClass, BaseFuelCost.class, "BaseFuelCost", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBaseFuelCost_Fuel(), theTypesPackage.getABaseFuel(), null, "fuel", null, 1, 1, BaseFuelCost.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
