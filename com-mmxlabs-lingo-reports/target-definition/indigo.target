@@ -5,10 +5,6 @@
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.source" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.optimiser.optimiser-common" version="1.0.0.201209071044"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core" version="1.0.0.201209071044"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.0.0.201209071044"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.0.0.201209071044"/>
 <unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.common.common-util" version="1.0.2.201209070858"/>
@@ -20,6 +16,10 @@
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.optimiser.optimiser-common" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso" version="0.0.0"/>
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.rcp.common.feature.feature.group" version="0.0.0"/>
