@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -295,8 +296,8 @@ public class SchedulePnLReport extends EMFReportView {
 			final Event vev = (Event) otherObject;
 			final Event ref = (Event) pinnedObject;
 
-			final int refTime = ref.getDuration() + (ref.getNextEvent() != null ? ref.getNextEvent().getDuration() : 0);
-			final int vevTime = vev.getDuration() + (vev.getNextEvent() != null ? vev.getNextEvent().getDuration() : 0);
+			final int refTime = getEventDuration(ref);
+			final int vevTime = getEventDuration(vev);
 
 			// 3 Days
 			if (Math.abs(refTime - vevTime) > 3 * 24) {
@@ -361,4 +362,32 @@ public class SchedulePnLReport extends EMFReportView {
 		return super.getElementKey(element);
 	}
 
+	private int getEventDuration(final Event event) {
+
+		int duration = event.getDuration();
+		Event next = event.getNextEvent();
+		while (next != null && !isSegmentStart(next)) {
+			duration += next.getDuration();
+			next = next.getNextEvent();
+		}
+		return duration;
+
+	}
+
+	private boolean isSegmentStart(final Event event) {
+		if (event instanceof VesselEventVisit) {
+			return true;
+		} else if (event instanceof GeneratedCharterOut) {
+			return true;
+		} else if (event instanceof StartEvent) {
+			return true;
+		} else if (event instanceof EndEvent) {
+			return true;
+		} else if (event instanceof SlotVisit) {
+			if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
