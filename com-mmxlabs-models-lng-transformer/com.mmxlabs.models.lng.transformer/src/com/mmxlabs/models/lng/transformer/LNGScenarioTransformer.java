@@ -38,6 +38,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.options.Option;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -596,7 +597,7 @@ public class LNGScenarioTransformer {
 		return curve;
 	}
 
-	private StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, float scale) {
+	private StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final float scale) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
 		curve.setDefaultValue(0);
@@ -608,7 +609,7 @@ public class LNGScenarioTransformer {
 			if (hours < 0) {
 				if (gotOneEarlyDate) {
 					// TODO: While we should skip all the early stuff, we need to keep the latest, this currently however takes the earliest value!
-//					continue;
+					// continue;
 				}
 				gotOneEarlyDate = true;
 			}
@@ -685,8 +686,8 @@ public class LNGScenarioTransformer {
 				final IPort endPort = portAssociation.lookup(charterOut.isSetRelocateTo() ? charterOut.getRelocateTo() : charterOut.getPort());
 				final HeelOptions heelOptions = charterOut.getHeelOptions();
 				final long maxHeel = heelOptions.isSetVolumeAvailable() ? (heelOptions.getVolumeAvailable() * Calculator.ScaleFactor) : Long.MAX_VALUE;
-				long totalHireCost = Calculator.scale((long)charterOut.getHireRate() * (long)charterOut.getDurationInDays());
-				long repositioning = Calculator.scale(charterOut.getRepositioningFee());
+				final long totalHireCost = Calculator.scale((long) charterOut.getHireRate() * (long) charterOut.getDurationInDays());
+				final long repositioning = Calculator.scale(charterOut.getRepositioningFee());
 				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel, Calculator.scaleToInt(heelOptions.getCvValue()),
 						Calculator.scaleToInt(heelOptions.getPricePerMMBTU()), totalHireCost, repositioning);
 			} else if (event instanceof DryDockEvent) {
@@ -1616,8 +1617,9 @@ public class LNGScenarioTransformer {
 					}
 
 					if (charterCost.getCharterOutPrice() != null) {
-						ICurve charterOutCurve = createCurveForIntegerIndex(charterCost.getCharterOutPrice(), 1.0f / 24.0f);
-						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVc), charterOutCurve);
+						final ICurve charterOutCurve = createCurveForIntegerIndex(charterCost.getCharterOutPrice(), 1.0f / 24.0f);
+						final int minDuration = 24 * charterCost.getMinCharterOutDuration();
+						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVc), charterOutCurve, minDuration);
 					}
 				}
 			}
