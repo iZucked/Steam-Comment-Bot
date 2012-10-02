@@ -49,6 +49,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.editors.dialogs.MultiDetailDialog;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
+import com.mmxlabs.models.ui.tabular.BooleanAttributeManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 
 public class LoadSlotViewer extends ScenarioTableViewerPane {
@@ -81,7 +82,7 @@ public class LoadSlotViewer extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain));
 		addTypicalColumn("Cargo ID", new BasicAttributeManipulator(mmx.getNamedObject_Name(), editingDomain), pkg.getLoadSlot_Cargo());
-		addTypicalColumn("Optional", new BasicAttributeManipulator(pkg.getSlot_Optional(), editingDomain));
+		addTypicalColumn("Optional", new BooleanAttributeManipulator(pkg.getSlot_Optional(), editingDomain));
 
 		// final InputModel input = part.getRootObject().getSubModel(InputModel.class);
 
