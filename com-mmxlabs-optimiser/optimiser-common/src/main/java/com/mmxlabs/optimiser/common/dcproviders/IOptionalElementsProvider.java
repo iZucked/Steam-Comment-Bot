@@ -54,4 +54,13 @@ public interface IOptionalElementsProvider extends IDataComponentProvider {
 	 * @return
 	 */
 	List<ISequenceElement> getRequiredElements();
+
+	/**
+	 * Get all the elements which are treated as optional but are really non-optional. Such elements will typically have a penalty associated with them for non-use. These elements will be considered
+	 * as optional and be return in the {@link #getOptionalElements()} method and return true for {@link #isElementOptional(ISequenceElement)}.
+	 * 
+	 * @return
+	 * @since 2.0
+	 */
+	List<ISequenceElement> getSoftRequiredElements();
 }

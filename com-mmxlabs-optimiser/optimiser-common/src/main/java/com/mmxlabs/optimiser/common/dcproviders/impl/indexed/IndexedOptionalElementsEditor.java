@@ -23,6 +23,7 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 	private final String name;
 	private final ArrayList<ISequenceElement> optionalList = new ArrayList<ISequenceElement>();
 	private final ArrayList<ISequenceElement> requiredList = new ArrayList<ISequenceElement>();
+	private final ArrayList<ISequenceElement> softRequiredList = new ArrayList<ISequenceElement>();
 	IIndexBits<ISequenceElement> optionalElements = new ArrayIndexBits<ISequenceElement>();
 
 	public IndexedOptionalElementsEditor(final String name) {
@@ -62,6 +63,14 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 		return Collections.unmodifiableList(requiredList);
 	}
 
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public List<ISequenceElement> getSoftRequiredElements() {
+		return Collections.unmodifiableList(softRequiredList);
+	}
+
 	@Override
 	public void setOptional(final ISequenceElement element, final boolean isOptional) {
 		if (isOptional) {
@@ -76,8 +85,25 @@ public class IndexedOptionalElementsEditor implements IOptionalElementsProviderE
 		while (requiredList.remove(element)) {
 			;
 		}
+		while (softRequiredList.remove(element)) {
+			;
+		}
 		if (isOptional) {
 			optionalList.add(element);
+		} else {
+//			requiredList.add(element);
+		}
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void setSoftRequired(final ISequenceElement element, boolean isSoftRequired) {
+		setOptional(element, isSoftRequired);
+		// setOptional will clear the softRequiredList entry if present
+		if (isSoftRequired) {
+			softRequiredList.add(element);
 		}
 	}
 }

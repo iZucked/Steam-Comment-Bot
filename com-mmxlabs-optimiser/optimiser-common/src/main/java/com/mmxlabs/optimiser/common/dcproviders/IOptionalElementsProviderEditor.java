@@ -20,8 +20,20 @@ public interface IOptionalElementsProviderEditor extends IOptionalElementsProvid
 	 * 
 	 * HOWEVER that element will then be missing from the required list, so this isn't a great idea.
 	 * 
+	 * This will override any previous setting with {@link #setSoftRequired(ISequenceElement, boolean)}
+	 * 
 	 * @param element
 	 * @param isOptional
 	 */
 	void setOptional(ISequenceElement element, boolean isOptional);
+
+	/**
+	 * Set whether the given element is soft required - i.e. it is a required element, but should be treated as optional. This will override any previous setting with
+	 * {@link #setOptional(ISequenceElement, boolean)}
+	 * 
+	 * @param element
+	 * @param isSoftRequired
+	 * @since 2.0
+	 */
+	void setSoftRequired(ISequenceElement element, boolean isSoftRequired);
 }
