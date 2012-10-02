@@ -11,8 +11,8 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
-
 import com.google.common.collect.Lists;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
@@ -115,14 +115,16 @@ public class SchedulePnLReport extends EMFReportView {
 					final SlotVisit slotVisit = (SlotVisit) object;
 					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getPrice();
 				}
-				return 0.0;// super.getComparable(object);
+				return 0.0;
 			}
 		});
 		addColumn("Shipping Cost", new BaseFormatter() {
 
-			double getValue(final SlotVisit visit) {
+			Double getValue(final SlotVisit visit) {
 				final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-
+				if (cargoAllocation.getInputCargo().getCargoType() != CargoType.FLEET) {
+					return null;
+				}
 				// TODO: Fixed (other) port costs?
 				// TODO: Boil-off included?
 
@@ -145,7 +147,10 @@ public class SchedulePnLReport extends EMFReportView {
 			public String format(final Object object) {
 				if (object instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) object;
-					return String.format("%,.3f", getValue(slotVisit));
+					final Double value = getValue(slotVisit);
+					if (value != null) {
+						return String.format("%,.2f", value);
+					}
 
 				}
 				return null;
@@ -155,7 +160,10 @@ public class SchedulePnLReport extends EMFReportView {
 			public Comparable getComparable(final Object object) {
 				if (object instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) object;
-					return getValue(slotVisit);
+					final Double value = getValue(slotVisit);
+					if (value != null) {
+						return value;
+					}
 				}
 				return 0.0;
 			}
