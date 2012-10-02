@@ -8,12 +8,14 @@ import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
 import com.google.inject.name.Names;
+import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 
 /**
- * Guice module using Peaberry to register {@link IFitnessCoreFactory} instances as services.
+ * {@link Guice} module using {@link Peaberry} to register {@link IFitnessCoreFactory} instances as services.
  * 
  * @author Simon Goodall
  * 
@@ -24,5 +26,8 @@ public class FitnessCoreServiceModule extends AbstractModule {
 	protected void configure() {
 		bind(TypeLiterals.export(IFitnessCoreFactory.class)).annotatedWith(Names.named(CargoSchedulerFitnessCoreFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(CargoSchedulerFitnessCoreFactory.class).export());
+
+		bind(TypeLiterals.export(IFitnessCoreFactory.class)).annotatedWith(Names.named(NonOptionalSlotFitnessCoreFactory.class.getCanonicalName())).toProvider(
+				Peaberry.service(NonOptionalSlotFitnessCoreFactory.class).export());
 	}
 }

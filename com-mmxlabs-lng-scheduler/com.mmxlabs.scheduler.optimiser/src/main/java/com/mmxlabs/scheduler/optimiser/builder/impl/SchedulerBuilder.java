@@ -873,9 +873,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// if this seems a bit ridiculous, yes, it is.
 		// TODO think about how this connects with return elements - they aren't optional
 		// but they also aren't all required.
-		for (final ISequenceElement element : sequenceElements) {
-			optionalElements.setOptional(element, optionalElements.isElementOptional(element));
-		}
+//		for (final ISequenceElement element : sequenceElements) {
+//			boolean elementOptional = optionalElements.isElementOptional(element);
+//			if (!elementOptional) {
+//				optionalElements.setOptional(element, elementOptional);
+//			}
+//		}
 
 		final OptimisationData data = new OptimisationData();
 
@@ -1542,5 +1545,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public void createCharterOutCurve(final IVesselClass vesselClass, final ICurve charterOutCurve) {
 		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve);
 
+	}
+
+	/**
+	 * @param slot
+	 * @since 2.0
+	 */
+	@Override
+	public void setSoftRequired(final IPortSlot slot) {
+		final ISequenceElement element = portSlotsProvider.getElement(slot);
+		optionalElements.setSoftRequired(element, true);
 	}
 }

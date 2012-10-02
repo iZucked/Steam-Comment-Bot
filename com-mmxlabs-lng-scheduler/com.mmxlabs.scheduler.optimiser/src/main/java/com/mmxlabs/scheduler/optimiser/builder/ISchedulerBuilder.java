@@ -141,7 +141,8 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 2.0
 	 */
-	IVesselEventPortSlot createCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours, long maxHeelOut, int heelCVValue, int heelUnitPrice, final long hireCost, final long repositioning);
+	IVesselEventPortSlot createCharterOutEvent(String id, ITimeWindow arrivalTimeWindow, IPort startPort, IPort endPort, int durationHours, long maxHeelOut, int heelCVValue, int heelUnitPrice,
+			final long hireCost, final long repositioning);
 
 	/**
 	 * Create a dry dock event
@@ -597,5 +598,14 @@ public interface ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	void createCharterOutCurve(IVesselClass vesselClass, ICurve charterOutCurve);
+
+	/**
+	 * Set a flag to indicate that the given {@link IPortSlot} is to be treated as "soft required". That is generally optional, but not entirely. For example a fitness component may penalise such
+	 * slots for not being used.
+	 * 
+	 * @param slot
+	 * @since 2.0
+	 */
+	void setSoftRequired(IPortSlot slot);
 
 }
