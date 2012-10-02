@@ -32,7 +32,7 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider {
 
 			for (final EObject entry : editSet) {
 				if (entry instanceof ElementAssignment) {
-					ElementAssignment elementAssignment = (ElementAssignment) entry;
+					final ElementAssignment elementAssignment = (ElementAssignment) entry;
 					if (elementAssignment.getAssignedObject() == addedObject) {
 						// There is already an assignment under consideration.
 						return false;
@@ -46,13 +46,20 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider {
 		return false;
 	}
 
-	protected Command objectAdded(final EditingDomain domain, final MMXRootObject rootObject, final Object added, final Map<EObject, EObject> overrides) {
+	@Override
+	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
+		return (deletedObject instanceof Cargo || deletedObject instanceof VesselEvent);
+	}
+
+	@Override
+	protected Command objectAdded(final EditingDomain domain, final MMXRootObject rootObject, final Object added, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		final ElementAssignment ea = InputFactory.eINSTANCE.createElementAssignment();
 		ea.setAssignedObject((UUIDObject) added);
 		return AddCommand.create(domain, rootObject.getSubModel(InputModel.class), InputPackage.eINSTANCE.getInputModel_ElementAssignments(), ea);
 	}
 
-	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides) {
+	@Override
+	protected Command objectDeleted(final EditingDomain domain, final MMXRootObject rootObject, final Object deleted, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		final ElementAssignment ea = AssignmentEditorHelper.getElementAssignment(rootObject.getSubModel(InputModel.class), (UUIDObject) deleted);
 		if (ea != null) {
 			return DeleteCommand.create(domain, ea);
