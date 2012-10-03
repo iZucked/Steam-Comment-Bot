@@ -13,6 +13,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
@@ -26,6 +27,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider.CharterMarketOptions;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -108,39 +110,50 @@ public class ScheduleEvaluator {
 				}
 
 				int currentTime = seq.getStartTime();
+
 				for (final VoyagePlan vp : seq.getVoyagePlans()) {
 
+					boolean isCargoPlan = false;
 					// Grab the current list of arrival times and update the rolling currentTime
 					// 5 as we know that is the max we need (currently - a single cargo)
 					final int[] arrivalTimes = new int[5];
 					int idx = -1;
 					arrivalTimes[++idx] = currentTime;
 					final Object[] currentSequence = vp.getSequence();
+					int ballastIdx = -1;
 					for (final Object obj : currentSequence) {
 						if (obj instanceof PortDetails) {
 							final PortDetails details = (PortDetails) obj;
 							if (idx != (currentSequence.length - 1)) {
 								currentTime += details.getVisitDuration();
 								arrivalTimes[++idx] = currentTime;
+
+								if (details.getPortSlot().getPortType() == PortType.Load) {
+									isCargoPlan = true;
+								}
+
 							}
 						} else if (obj instanceof VoyageDetails) {
 							final VoyageDetails details = (VoyageDetails) obj;
 							currentTime += details.getOptions().getAvailableTime();
 							arrivalTimes[++idx] = currentTime;
+
+							// record last ballast leg
+							if (details.getOptions().getVesselState() == VesselState.Ballast) {
+								ballastIdx = idx;
+							}
 						}
+					}
+
+					if (ballastIdx == -1) {
+						// no ballast leg?
+						continue;
 					}
 
 					final long originalOption;
 					final long newOption;
 
 					final Object[] newSequence = currentSequence.clone();
-					int ballastIdx;
-					// 5 is a cargo (load, voyage, discharge, voyage, next port)
-					if (currentSequence.length == 5) {
-						ballastIdx = 3;
-					} else {
-						ballastIdx = 1;
-					}
 					// Take original ballast details, and recalculate with charter out idle set to true.
 					final VoyageDetails ballastDetails = (VoyageDetails) currentSequence[ballastIdx];
 
@@ -186,7 +199,7 @@ public class ScheduleEvaluator {
 
 					voyageCalculator.calculateVoyagePlan(newVoyagePlan, vessel, arrivalTimes, newSequence);
 
-					if (ballastIdx == 3) {
+					if (isCargoPlan) {
 						// Get the new cargo allocation.
 						final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
 						final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
