@@ -1079,6 +1079,10 @@ public class CargoWiringComposite extends Composite {
 
 	private void executeCurrentWiringCommand() {
 		// Delete commands can be slow, so show the busy indicator while deleting.
+		if (currentWiringCommand.isEmpty()) {
+			currentWiringCommand = null;
+			return;
+		}
 		final Runnable runnable = new Runnable() {
 
 			@Override
