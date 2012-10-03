@@ -138,7 +138,7 @@ public class DefaultExtraValidationContext implements IExtraValidationContext {
 		setApparentContainment(two, getContainer(one), getContainment(one));
 		ignore(one);
 		replacements.put(one, two);
-		replacements.put(two, one);
+		originals.put(two, one);
 	}
 
 	@Override
