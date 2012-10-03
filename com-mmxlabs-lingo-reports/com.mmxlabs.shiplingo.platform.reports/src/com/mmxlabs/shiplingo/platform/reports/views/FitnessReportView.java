@@ -63,8 +63,8 @@ public class FitnessReportView extends ViewPart {
 			sortColumns.add(0, value);
 		}
 
-//		viewer.getTable().setSortColumn(column);
-//		viewer.getTable().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
+		// viewer.getTable().setSortColumn(column);
+		// viewer.getTable().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
 
 		viewer.refresh();
 	}
@@ -117,21 +117,28 @@ public class FitnessReportView extends ViewPart {
 					return d.scenario;
 				} else if (index == 1) {
 					return d.component;
-				} else {
-					if (index == 3) {
-						final Long delta = getDelta(d);
-						if (delta != null) {
-							return String.format("%,d", delta);
-						}
-					} else {
+				} else if (index == 2) {
+					if (d.raw != null) {
+						return String.format("%,d", d.raw);
+					}
+				} else if (index == 3) {
+					if (d.weight != null) {
+						return String.format("%,.1f", d.weight);
+					}
+				} else if (index == 4) {
+					if (d.fitness != null) {
 						return String.format("%,d", d.fitness);
 					}
-					
+				} else if (index == 5) {
+					final Long delta = getDelta(d);
+					if (delta != null) {
+						return String.format("%,d", delta);
+					}
 				}
 			}
 			return "";
 		}
-		
+
 		private Long getDelta(final RowData d) {
 			final List<RowData> pinnedData = contentProvider.getPinnedData();
 			for (final RowData data : pinnedData) {
@@ -151,7 +158,7 @@ public class FitnessReportView extends ViewPart {
 		public void update(final ViewerCell cell) {
 
 		}
-		
+
 		@Override
 		public Color getForeground(final Object element, final int columnIndex) {
 			if (columnIndex == 3 && element instanceof RowData) {
@@ -217,9 +224,19 @@ public class FitnessReportView extends ViewPart {
 		addSortSelectionListener(tvc1.getColumn(), 1);
 
 		final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.NONE);
-		tvc2.getColumn().setText("Fitness");
+		tvc2.getColumn().setText("Raw");
 		tvc2.getColumn().pack();
 		addSortSelectionListener(tvc2.getColumn(), 2);
+
+		final GridViewerColumn tvc3 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc3.getColumn().setText("Weight");
+		tvc3.getColumn().pack();
+		addSortSelectionListener(tvc3.getColumn(), 3);
+
+		final GridViewerColumn tvc4 = new GridViewerColumn(viewer, SWT.NONE);
+		tvc4.getColumn().setText("Fitness");
+		tvc4.getColumn().pack();
+		addSortSelectionListener(tvc4.getColumn(), 4);
 
 		viewer.setLabelProvider(new ViewLabelProvider());
 
@@ -229,6 +246,8 @@ public class FitnessReportView extends ViewPart {
 		sortColumns.add(0);
 		sortColumns.add(1);
 		sortColumns.add(2);
+		sortColumns.add(3);
+		sortColumns.add(4);
 
 		viewer.setComparator(new ViewerComparator() {
 			@Override
@@ -248,7 +267,13 @@ public class FitnessReportView extends ViewPart {
 						sort = r1.component.compareTo(r2.component);
 						break;
 					case 2:
-						sort = ((Long) r1.fitness).compareTo(r2.fitness);
+						sort = compare(r1.raw, r2.raw);
+						break;
+					case 3:
+						sort = compare(r1.weight, r2.weight);
+						break;
+					case 4:
+						sort = compare(r1.fitness, r2.fitness);
 						break;
 					}
 				}
@@ -256,6 +281,17 @@ public class FitnessReportView extends ViewPart {
 				return d * sort;
 				// return super.compare(viewer, e1, e2);
 			}
+
+			private <T extends Comparable<T>> int compare(final T a, final T b) {
+				if (a == null) {
+					return -1;
+				} else if (b == null) {
+					return 1;
+				} else {
+					return a.compareTo(b);
+				}
+			}
+
 		});
 
 		// Create the help context id for the viewer's control
@@ -392,7 +428,7 @@ public class FitnessReportView extends ViewPart {
 		super.dispose();
 	}
 
-	private void setShowColumns(final boolean showDeltaColumn, int numberOfSchedules) {
+	private void setShowColumns(final boolean showDeltaColumn, final int numberOfSchedules) {
 		if (showDeltaColumn) {
 			if (delta == null) {
 				delta = new GridViewerColumn(viewer, SWT.NONE);
