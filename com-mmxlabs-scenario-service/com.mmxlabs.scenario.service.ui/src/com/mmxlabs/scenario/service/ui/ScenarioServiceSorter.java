@@ -30,12 +30,18 @@ public class ScenarioServiceSorter extends ViewerSorter {
 
 		if (e1Type == e2Type) {
 			if (e1Type != Types.UNKNOWN) {
-				final Container c1 = (Container)e1;
-				final Container c2 = (Container)e2;
-				
+				final Container c1 = (Container) e1;
+				final Container c2 = (Container) e2;
+
+				// todo need nul cjecks
+				if (c1.getName() == null) {
+					return -1;
+				} else if (c2.getName() == null) {
+					return 1;
+				}
 				return c1.getName().compareTo(c2.getName());
 			}
-			
+
 			return super.compare(viewer, e1Type, e2Type);
 		}
 
