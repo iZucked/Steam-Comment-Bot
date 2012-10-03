@@ -161,7 +161,7 @@ public class FitnessReportView extends ViewPart {
 
 		@Override
 		public Color getForeground(final Object element, final int columnIndex) {
-			if (columnIndex == 3 && element instanceof RowData) {
+			if (columnIndex == 5 && element instanceof RowData) {
 				final Long l = getDelta((RowData) element);
 				if (l == null || l.longValue() == 0l) {
 					return null;
@@ -176,7 +176,6 @@ public class FitnessReportView extends ViewPart {
 
 		@Override
 		public Color getBackground(final Object element, final int columnIndex) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 	}
