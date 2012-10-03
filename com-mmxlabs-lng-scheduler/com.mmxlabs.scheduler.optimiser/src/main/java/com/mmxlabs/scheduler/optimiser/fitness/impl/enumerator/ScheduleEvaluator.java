@@ -140,7 +140,7 @@ public class ScheduleEvaluator {
 
 							// record last ballast leg
 							if (details.getOptions().getVesselState() == VesselState.Ballast) {
-								ballastIdx = idx;
+								ballastIdx = idx - 1;
 							}
 						}
 					}
