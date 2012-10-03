@@ -44,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -92,6 +93,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	@Inject
 	protected IRouteCostProvider routeCostProvider;
 
+	@Inject
+	private IReturnElementProvider returnElementProvider;
+	
 	public IRouteCostProvider getRouteCostProvider() {
 		return routeCostProvider;
 	}
@@ -342,7 +346,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			currentSequence.add(portDetails);
 
 			final PortType portType = portTypeProvider.getPortType(element);
-			if (((currentSequence.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)) {
+			if (((currentSequence.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance) || (portType == PortType.Other)) {
 
 				if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
 					return null;
