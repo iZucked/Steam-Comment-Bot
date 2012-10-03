@@ -583,13 +583,16 @@ public class WiringComposite extends Composite {
 		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
 		new Label(this, SWT.NONE).setLayoutData(new GridData(GridData.FILL_VERTICAL));
 
+		// set base values for colours, optional and wiring
 		wiringDiagram.setWiring(wiring);
 		final ArrayList<Pair<Color, Color>> terminalColors = new ArrayList<Pair<Color, Color>>();
+		final ArrayList<Pair<Boolean,Boolean>> terminalOptionals = new ArrayList<Pair<Boolean, Boolean>>();
 		final ArrayList<Color> wireColors = new ArrayList<Color>();
 		final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 		final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
-		for (final Cargo cargo : cargoes) {
+		for (final Cargo c : cargoes) {
 			terminalColors.add(new Pair<Color, Color>(green, green));
+			terminalOptionals.add(new Pair<Boolean, Boolean>(false, false));
 			wireColors.add(black);
 		}
 
@@ -600,6 +603,7 @@ public class WiringComposite extends Composite {
 
 		wiringDiagram.setWireColors(wireColors);
 		wiringDiagram.setTerminalColors(terminalColors);
+		wiringDiagram.setTerminalOptionals(terminalOptionals);
 		updateWiringColours(wiringDiagram, wiring, lhsComposites, lhsComposites);
 	}
 

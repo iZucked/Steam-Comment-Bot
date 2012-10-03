@@ -48,8 +48,10 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	 * Contains pairs whose first element is left terminal colour and second is right terminal colour, for each element in {@link #wiring}
 	 */
 	private final List<Pair<Color, Color>> terminalColours = new ArrayList<Pair<Color, Color>>();
+	private final List<Pair<Boolean,Boolean>> terminalOptionals = new ArrayList<Pair<Boolean, Boolean>>();
 	private final List<Boolean> leftTerminalValid = new ArrayList<Boolean>();
 	private final List<Boolean> rightTerminalValid = new ArrayList<Boolean>();
+
 	/**
 	 * Contains the colour for each wire; the ith colour applies to the wire from the ith left hand terminal
 	 */
@@ -59,8 +61,9 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	 */
 	private final List<Integer> wiring = new ArrayList<Integer>();
 
-	private int terminalSize = 10;
+	private int terminalSize = 11;
 	private int pathWidth = 2;
+	private int borderWidth = 1;
 
 	private boolean dragging = false;
 	private int draggingFrom = -1;
@@ -102,6 +105,16 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		terminalColours.get(index).setSecond(color);
 	}
 
+	public void setLeftTerminalOptional(int i, boolean b) {
+		
+		terminalOptionals.get(i).setFirst(b);	
+	}
+	
+	public void setRightTerminalOptional(int i, boolean b) {
+		
+		terminalOptionals.get(i).setSecond(b);	
+	}
+
 	/**
 	 * Set all the terminal colours at once; the ith element is a pair, whose first member is the left hand colour.
 	 * 
@@ -112,6 +125,11 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 	public synchronized void setTerminalColors(final List<Pair<Color, Color>> colours) {
 		terminalColours.clear();
 		terminalColours.addAll(colours);
+	}
+
+	public synchronized void setTerminalOptionals(final List<Pair<Boolean, Boolean>> vals) {
+		terminalOptionals.clear();
+		terminalOptionals.addAll(vals);
 	}
 
 	public synchronized void setWireColor(final int index, final Color color) {
@@ -185,6 +203,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		final List<Integer> wiring2 = new ArrayList<Integer>(wiring);
 		final List<Boolean> leftTerminalValid2 = new ArrayList<Boolean>(leftTerminalValid);
 		final List<Pair<Color, Color>> terminalColours2 = new ArrayList<Pair<Color, Color>>(terminalColours);
+		final List<Pair<Boolean, Boolean>> terminalOptionals2 = new ArrayList<Pair<Boolean, Boolean>>(terminalOptionals);
 		final List<Boolean> rightTerminalValid2 = new ArrayList<Boolean>(rightTerminalValid);
 
 		final GC graphics = e.gc;
@@ -197,7 +216,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		graphics.fillRectangle(0, 0, ca.width, ca.height);
 
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-		graphics.setLineWidth(pathWidth);
+		graphics.setLineWidth(2);
 
 		// draw paths
 		for (int i = 0; i < wiring2.size(); i++) {
@@ -253,27 +272,33 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 			path.dispose();
 		}
 
+		// draw terminal blobs
 		int i = 0;
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-
+		graphics.setLineWidth(borderWidth);
 		for (final float midpoint : terminalPositions) {
-
-			// draw terminal blobs
+			graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 			// final int midpoint = vMidPoints.get(i);
 			if (leftTerminalValid2.get(i)) {
 				graphics.setBackground(terminalColours2.get(i).getFirst());
-
 				graphics.fillOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
 				graphics.drawOval(terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
+				if(terminalOptionals2.get(i).getFirst()){
+					graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+					graphics.fillOval(terminalSize + 4, (int) midpoint - (terminalSize / 2) + 4, 4, 4);
+				}
 			}
+			graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 			if (rightTerminalValid2.get(i)) {
 				graphics.setBackground(terminalColours2.get(i).getSecond());
-
 				graphics.fillOval(ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
 				graphics.drawOval(ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
+				if(terminalOptionals2.get(i).getSecond()){
+					graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
+					graphics.fillOval(ca.width - 2 * terminalSize + 4, (int) (midpoint - terminalSize / 2) + 4, 4, 4);
+				}
 			}
 			i++;
-
 		}
 	}
 

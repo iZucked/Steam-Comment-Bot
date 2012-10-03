@@ -406,8 +406,8 @@ public class CargoWiringComposite extends Composite {
 	private final ArrayList<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
 	private final ArrayList<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
 
-	private final ArrayList<Boolean> leftTerminalsValid = new ArrayList<Boolean>();
-	private final ArrayList<Boolean> rightTerminalsValid = new ArrayList<Boolean>();
+	private final ArrayList<Boolean> leftTerminalsExist = new ArrayList<Boolean>();
+	private final ArrayList<Boolean> rightTerminalsExist = new ArrayList<Boolean>();
 	/**
 	 * The value of the ith element of wiring is the index of the other end of the wire; -1 indicates no wire is present.
 	 * 
@@ -566,8 +566,8 @@ public class CargoWiringComposite extends Composite {
 		this.loadSlots.clear();
 		this.dischargeSlots.clear();
 		this.cargoes.clear();
-		this.leftTerminalsValid.clear();
-		this.rightTerminalsValid.clear();
+		this.leftTerminalsExist.clear();
+		this.rightTerminalsExist.clear();
 
 		for (int i = 0; i < newCargoes.size(); i++) {
 
@@ -575,8 +575,8 @@ public class CargoWiringComposite extends Composite {
 			this.cargoes.add(newCargoes.get(i));
 			this.loadSlots.add(newCargoes.get(i).getLoadSlot());
 			this.dischargeSlots.add(newCargoes.get(i).getDischargeSlot());
-			this.leftTerminalsValid.add(true);
-			this.rightTerminalsValid.add(true);
+			this.leftTerminalsExist.add(true);
+			this.rightTerminalsExist.add(true);
 		}
 
 		for (final LoadSlot slot : loadSlots) {
@@ -585,8 +585,8 @@ public class CargoWiringComposite extends Composite {
 				this.loadSlots.add(slot);
 				this.dischargeSlots.add(null);
 				this.wiring.add(-1);
-				this.leftTerminalsValid.add(false);
-				this.rightTerminalsValid.add(false);
+				this.leftTerminalsExist.add(false);
+				this.rightTerminalsExist.add(false);
 			}
 		}
 		for (final DischargeSlot slot : dischargeSlots) {
@@ -595,8 +595,8 @@ public class CargoWiringComposite extends Composite {
 				this.cargoes.add(null);
 				this.dischargeSlots.add(slot);
 				this.wiring.add(-1);
-				this.leftTerminalsValid.add(false);
-				this.rightTerminalsValid.add(false);
+				this.leftTerminalsExist.add(false);
+				this.rightTerminalsExist.add(false);
 			}
 		}
 
@@ -692,8 +692,8 @@ public class CargoWiringComposite extends Composite {
 		final boolean alwaysUpdate = false;
 		// lhsComposites.clear();
 		// rhsComposites.clear();
-		leftTerminalsValid.clear();
-		rightTerminalsValid.clear();
+		leftTerminalsExist.clear();
+		rightTerminalsExist.clear();
 		// idComposites.clear();
 		// if (wiringDiagram != null) {
 		// wiringDiagram.dispose();
@@ -760,7 +760,7 @@ public class CargoWiringComposite extends Composite {
 			if (alwaysUpdate || newLoadSide || loadSide.getSlot() != loadSlots.get(index)) {
 				loadSide.display(location, location.getRootObject(), loadSlots.get(index), Collections.<EObject> emptyList());
 			}
-			leftTerminalsValid.add(loadSlots.get(index) != null);
+			leftTerminalsExist.add(loadSlots.get(index) != null);
 
 			if (wiringDiagram == null) {
 				createWiringDiagram();
@@ -795,7 +795,7 @@ public class CargoWiringComposite extends Composite {
 			if (alwaysUpdate || newDischargeSide || dischargeSide.getSlot() != dischargeSlots.get(index)) {
 				dischargeSide.display(location, location.getRootObject(), dischargeSlots.get(index), Collections.<EObject> emptyList());
 			}
-			rightTerminalsValid.add(dischargeSlots.get(index) != null);
+			rightTerminalsExist.add(dischargeSlots.get(index) != null);
 		}
 
 		// Dispose extra controls
@@ -818,14 +818,16 @@ public class CargoWiringComposite extends Composite {
 		}
 
 		wiringDiagram.setWiring(wiring);
-		wiringDiagram.setTerminalsValid(leftTerminalsValid, rightTerminalsValid);
+		wiringDiagram.setTerminalsValid(leftTerminalsExist, rightTerminalsExist);
 		final ArrayList<Pair<Color, Color>> terminalColors = new ArrayList<Pair<Color, Color>>();
+		final ArrayList<Pair<Boolean,Boolean>> terminalOptionals = new ArrayList<Pair<Boolean, Boolean>>();
 		final ArrayList<Color> wireColors = new ArrayList<Color>();
 		final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 		final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);
 
 		for (int i = 0; i < numberOfRows; ++i) {
 			terminalColors.add(new Pair<Color, Color>(green, green));
+			terminalOptionals.add(new Pair<Boolean, Boolean>(false, false));
 			wireColors.add(black);
 		}
 
@@ -836,6 +838,7 @@ public class CargoWiringComposite extends Composite {
 
 		wiringDiagram.setWireColors(wireColors);
 		wiringDiagram.setTerminalColors(terminalColors);
+		wiringDiagram.setTerminalOptionals(terminalOptionals);
 		updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
 	}
 
@@ -931,13 +934,17 @@ public class CargoWiringComposite extends Composite {
 			final DischargeSlot dischargeSlot = dischargeSlots.get(i);
 			if (loadSlot != null && loadSlot.isOptional()) {
 				diagram.setLeftTerminalColor(i, green);
+				diagram.setLeftTerminalOptional(i, true);
 			} else {
 				diagram.setLeftTerminalColor(i, red);
+				diagram.setLeftTerminalOptional(i, false);
 			}
 			if (dischargeSlot != null && dischargeSlot.isOptional()) {
 				diagram.setRightTerminalColor(i, green);
+				diagram.setRightTerminalOptional(i, true);
 			} else {
 				diagram.setRightTerminalColor(i, red);
+				diagram.setRightTerminalOptional(i, false);
 			}
 		}
 		for (int i = 0; i < numberOfRows; i++) {
