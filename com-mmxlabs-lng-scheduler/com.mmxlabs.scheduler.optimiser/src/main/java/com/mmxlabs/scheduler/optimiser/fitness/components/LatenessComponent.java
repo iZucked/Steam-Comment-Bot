@@ -28,7 +28,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
  */
 public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
-	private static final int PENALTY = 1000000;
 	private long accumulator = 0;
 	private final String dcpStartendrequirementprovider;
 	@Inject
@@ -87,7 +86,7 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 
 			if ((tw != null) && (time > tw.getEnd())) {
 				// addDiscountedValue(time, 1000000*(time - tw.getEnd()));
-				accumulator += getDiscountedValue(time, (long) PENALTY * (time - tw.getEnd()));
+				accumulator += getDiscountedValue(time, (time - tw.getEnd()));
 			}
 		}
 		return true;
