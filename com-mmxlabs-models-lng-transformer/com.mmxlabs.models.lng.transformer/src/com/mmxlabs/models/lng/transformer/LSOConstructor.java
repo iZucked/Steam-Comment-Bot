@@ -16,6 +16,8 @@ import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import com.mmxlabs.models.lng.optimiser.Constraint;
+import com.mmxlabs.models.lng.optimiser.Objective;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
@@ -71,8 +73,8 @@ public class LSOConstructor {
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(),
 				context.getOptimisationData());
-		
-		for (IConstraintChecker checker : constraintCheckers ) {
+
+		for (IConstraintChecker checker : constraintCheckers) {
 			injector.injectMembers(checker);
 		}
 
@@ -83,11 +85,10 @@ public class LSOConstructor {
 			injector.injectMembers(c);
 			cores.add(c.getFitnessCore());
 		}
-		
+
 		for (IFitnessCore c : cores) {
 			injector.injectMembers(c);
 		}
-		
 
 		final IMoveGenerator normalMoveGenerator = createMoveGenerator(context);
 
@@ -165,9 +166,18 @@ public class LSOConstructor {
 		fitnessEvaluator.setFitnessComponents(fitnessComponents);
 		fitnessEvaluator.setFitnessHelper(fitnessHelper);
 
+		// Initialise to zero, then take optimiser settings
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
 		for (final IFitnessComponent component : fitnessComponents) {
-			weightsMap.put(component.getName(), 1.0);
+			weightsMap.put(component.getName(), 0.0);
+		}
+
+		for (final Objective objective : settings.getObjectives()) {
+			if (objective.isEnabled()) {
+				if (weightsMap.containsKey(objective.getName())) {
+					weightsMap.put(objective.getName(), objective.getWeight());
+				}
+			}
 		}
 
 		final LinearFitnessCombiner combiner = new LinearFitnessCombiner();
