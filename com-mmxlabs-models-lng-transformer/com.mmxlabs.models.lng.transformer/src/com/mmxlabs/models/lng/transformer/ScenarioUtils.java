@@ -105,7 +105,7 @@ public class ScenarioUtils {
 			
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, 100000));
 			objectives.add(createObjective(of, CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, 100000));
-			objectives.add(createObjective(of, NonOptionalSlotFitnessCoreFactory.NAME, 100000));
+			objectives.add(createObjective(of, NonOptionalSlotFitnessCoreFactory.NAME, 3000000));
 		}
 
 		final AnnealingSettings annealingSettings = of.createAnnealingSettings();
