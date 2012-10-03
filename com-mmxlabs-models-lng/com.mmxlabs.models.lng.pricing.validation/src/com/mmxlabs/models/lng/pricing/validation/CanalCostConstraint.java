@@ -12,7 +12,6 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -40,6 +39,8 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 
 		if (target instanceof VesselClass) {
 			final VesselClass vesselClass = (VesselClass) target;
+			final EObject original = extraValidationContext.getOriginal(vesselClass);
+			final EObject replacement = extraValidationContext.getReplacement(vesselClass);
 			final MMXRootObject scenario = extraValidationContext.getRootObject();
 
 			if (scenario != null) {
@@ -51,7 +52,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 					if (route.isCanal()) {
 						boolean seenCanalCost = false;
 						routeCosts: for (final RouteCost routeCost : pricingModel.getRouteCosts()) {
-							if (routeCost.getVesselClass() == vesselClass && routeCost.getRoute() == route) {
+							if ((routeCost.getVesselClass() == replacement || routeCost.getVesselClass() == original) && routeCost.getRoute() == route) {
 								seenCanalCost = true;
 								break routeCosts;
 							}
@@ -77,7 +78,7 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 					final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClass.getName(), missingCanalNames.toString());
 					final DetailConstraintStatusDecorator result = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-					result.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_RouteParameters());
+					result.addEObjectAndFeature(vesselClass, PricingPackage.eINSTANCE.getRouteCost_VesselClass());
 					return result;
 				}
 			}
