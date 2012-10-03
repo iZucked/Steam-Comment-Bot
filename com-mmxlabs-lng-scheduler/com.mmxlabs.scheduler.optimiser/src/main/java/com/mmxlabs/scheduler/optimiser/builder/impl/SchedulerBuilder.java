@@ -1153,7 +1153,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				final VesselEventPortSlot startSlot = new VesselEventPortSlot("start-" + slot.getId(), vesselEvent.getStartPort(), slot.getTimeWindow(), vesselEvent);
 				final VesselEventPortSlot redirectSlot = new VesselEventPortSlot("redirect-" + slot.getId(), ANYWHERE, slot.getTimeWindow(), vesselEvent);
 
-				startSlot.setPortType(PortType.Waypoint);
+				startSlot.setPortType(PortType.Other);
 				redirectSlot.setPortType(PortType.Virtual);
 
 				final SequenceElement startElement = new SequenceElement(indexingContext, startSlot.getId());
