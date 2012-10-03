@@ -52,29 +52,6 @@ public class SchedulePnLReport extends EMFReportView {
 
 		addColumn("ID", objectFormatter, s.getEvent__Name());
 
-		addColumn("Type", new BaseFormatter() {
-			@Override
-			public String format(final Object object) {
-				if (object instanceof SlotVisit) {
-					return "Cargo";
-				} else if (object instanceof StartEvent) {
-					return "Start";
-				} else if (object instanceof GeneratedCharterOut) {
-					return "Charter Out (virt)";
-				} else if (object instanceof VesselEventVisit) {
-					final VesselEvent vesselEvent = ((VesselEventVisit) object).getVesselEvent();
-					if (vesselEvent instanceof DryDockEvent) {
-						return "Dry Dock";
-					} else if (vesselEvent instanceof MaintenanceEvent) {
-						return "Maintenance";
-					} else if (vesselEvent instanceof CharterOutEvent) {
-						return "Charter Out";
-					}
-				}
-				return "Unknown";
-			}
-		});
-
 		addPNLColumn();
 
 		addColumn("Discharge Port", new BaseFormatter() {
@@ -96,7 +73,7 @@ public class SchedulePnLReport extends EMFReportView {
 				return "";
 			}
 		});
-		
+
 		addColumn("Purchase Price", new BaseFormatter() {
 			@Override
 			public String format(final Object object) {
@@ -185,6 +162,30 @@ public class SchedulePnLReport extends EMFReportView {
 				return 0.0;
 			}
 		});
+
+		addColumn("Type", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				if (object instanceof SlotVisit) {
+					return "Cargo";
+				} else if (object instanceof StartEvent) {
+					return "Start";
+				} else if (object instanceof GeneratedCharterOut) {
+					return "Charter Out (virt)";
+				} else if (object instanceof VesselEventVisit) {
+					final VesselEvent vesselEvent = ((VesselEventVisit) object).getVesselEvent();
+					if (vesselEvent instanceof DryDockEvent) {
+						return "Dry Dock";
+					} else if (vesselEvent instanceof MaintenanceEvent) {
+						return "Maintenance";
+					} else if (vesselEvent instanceof CharterOutEvent) {
+						return "Charter Out";
+					}
+				}
+				return "Unknown";
+			}
+		});
+
 	}
 
 	@Override
