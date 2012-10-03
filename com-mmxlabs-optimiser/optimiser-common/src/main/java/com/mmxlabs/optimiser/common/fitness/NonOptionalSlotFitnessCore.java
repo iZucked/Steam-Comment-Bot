@@ -91,8 +91,7 @@ public class NonOptionalSlotFitnessCore implements IFitnessCore, IFitnessCompone
 
 	@Override
 	public long getFitness() {
-		// Scale up until we have proper weights
-		return 100000l * (long)lastFitness;
+		return lastFitness;
 	}
 
 	@Override
