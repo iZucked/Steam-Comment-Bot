@@ -9,8 +9,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -30,7 +30,6 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.trading.optimiser.TradingConstants;
@@ -49,8 +48,6 @@ public class SchedulePnLReport extends EMFReportView {
 
 		final SchedulePackage s = SchedulePackage.eINSTANCE;
 
-		final EAttribute name = MMXCorePackage.eINSTANCE.getNamedObject_Name();
-
 		addScheduleColumn("Schedule", containingScheduleFormatter);
 
 		addColumn("ID", objectFormatter, s.getEvent__Name());
@@ -63,7 +60,7 @@ public class SchedulePnLReport extends EMFReportView {
 				} else if (object instanceof StartEvent) {
 					return "Start";
 				} else if (object instanceof GeneratedCharterOut) {
-					return "Generated Charter Out";
+					return "Charter Out (virt)";
 				} else if (object instanceof VesselEventVisit) {
 					final VesselEvent vesselEvent = ((VesselEventVisit) object).getVesselEvent();
 					if (vesselEvent instanceof DryDockEvent) {
