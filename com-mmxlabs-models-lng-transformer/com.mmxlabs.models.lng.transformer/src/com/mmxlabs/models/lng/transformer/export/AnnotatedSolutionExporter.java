@@ -310,7 +310,7 @@ public class AnnotatedSolutionExporter {
 				eventsForElement.clear();
 			}
 
-			/// todo this should be xported rateher than ralculated.
+			// TODO: this should be exported rather than recalculated.
 			int startTime = entities.getHoursFromDate(events.get(0).getStart());
 
 			if (hireRate != null) {
