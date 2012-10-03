@@ -14,11 +14,16 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.inject.Inject;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
@@ -64,12 +69,20 @@ import com.mmxlabs.ganttviewer.SaveFullImageAction;
 import com.mmxlabs.ganttviewer.ZoomInAction;
 import com.mmxlabs.ganttviewer.ZoomOutAction;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.EndEvent;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
@@ -113,6 +126,14 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	private Iterable<ISchedulerViewColourSchemeExtension> colourSchemes;
 
 	private HighlightAction highlightAction;
+
+	private boolean currentlyPinned = false;
+
+	private int numberOfSchedules;
+
+	private final Map<String, List<EObject>> allObjectsByKey = new LinkedHashMap<String, List<EObject>>();
+
+	private final Set<EObject> pinnedObjects = new LinkedHashSet<EObject>();
 
 	/**
 	 * The constructor.
@@ -309,9 +330,57 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 			}
 
 			@Override
+			public Object[] getElements(final Object inputElement) {
+				final Object[] result = super.getElements(inputElement);
+				return result;
+			}
+
+			@Override
 			public Object[] getChildren(final Object parent) {
 
-				final Object[] result = super.getChildren(parent);
+				Object[] result = super.getChildren(parent);
+				if (parent instanceof Sequence && numberOfSchedules > 1 && currentlyPinned) {
+					final List<EObject> objects = new LinkedList<EObject>();
+					for (final Map.Entry<String, List<EObject>> e : allObjectsByKey.entrySet()) {
+						EObject ref = null;
+						final LinkedHashSet<EObject> objectsToAdd = new LinkedHashSet<EObject>();
+
+						// Find ref...
+						for (final EObject ca : e.getValue()) {
+							if (pinnedObjects.contains(ca)) {
+								ref = ca;
+								break;
+							}
+						}
+
+						if (ref == null) {
+							// No ref found, so add all
+							objectsToAdd.addAll(e.getValue());
+						} else {
+							for (final EObject ca : e.getValue()) {
+								if (ca == ref) {
+									continue;
+								}
+								if (e.getValue().size() != numberOfSchedules) {
+									// Different number of elements, so add all!
+									// This means something has been removed/added
+									objectsToAdd.addAll(e.getValue());
+								} else if (isElementDifferent(ref, ca)) {
+									// There is a data difference, so add
+									objectsToAdd.addAll(e.getValue());
+								}
+							}
+						}
+						for (final EObject eObj : objectsToAdd) {
+							if (eObj.eContainer() == parent) {
+								objects.add(eObj);
+
+							}
+						}
+
+					}
+					result = objects.toArray();
+				}
 				if (result != null) {
 					for (final Object event : result) {
 						if (event instanceof SlotVisit) {
@@ -394,12 +463,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 		getSite().setSelectionProvider(viewer);
 		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(this);
-		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, new ScheduleElementCollector() {
-			@Override
-			protected Collection<? extends Object> collectElements(final Schedule schedule) {
-				return Collections.singleton(schedule);
-			}
-		});
+		jobManagerListener = ScenarioViewerSynchronizer.registerView(viewer, getElementCollector());
 
 		final String colourScheme = memento.getString(SchedulerViewConstants.SCHEDULER_VIEW_COLOUR_SCHEME);
 		// if (colourScheme != null) {
@@ -701,4 +765,171 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 
 	}
 
+	private boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
+
+		if (pinnedObject == null || otherObject == null) {
+			return true;
+		}
+		if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {
+			SlotVisit ref = null;
+			SlotVisit ca = null;
+			ref = (SlotVisit) pinnedObject;
+
+			ca = (SlotVisit) otherObject;
+
+			if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
+				return true;
+			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
+				return true;
+			} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
+				return true;
+			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+				return true;
+			}
+
+			if (!ca.getPort().getName().equals(ref.getPort().getName())) {
+				return true;
+			}
+			if (!ca.getSlotAllocation().getContract().getName().equals(ref.getSlotAllocation().getContract().getName())) {
+				return true;
+			}
+		} else if (pinnedObject instanceof Event && otherObject instanceof Event) {
+			final Event vev = (Event) otherObject;
+			final Event ref = (Event) pinnedObject;
+
+			final int refTime = getEventDuration(ref);
+			final int vevTime = getEventDuration(vev);
+
+			// 3 Days
+			if (Math.abs(refTime - vevTime) > 3 * 24) {
+				return true;
+			}
+
+		}
+
+		return false;
+	}
+
+	/**
+	 * Call from {@link IScenarioInstanceElementCollector#beginCollecting()} to reset pin mode data
+	 * 
+	 */
+	private void clearPinModeData() {
+		clearInputEquivalents();
+		currentlyPinned = false;
+		allObjectsByKey.clear();
+		pinnedObjects.clear();
+		numberOfSchedules = 0;
+	}
+
+	private IScenarioInstanceElementCollector getElementCollector() {
+		return new ScheduleElementCollector() {
+
+			@Override
+			protected Collection<? extends Object> collectElements(final Schedule schedule) {
+				return Collections.singleton(schedule);
+			}
+
+			@Override
+			public void beginCollecting() {
+				super.beginCollecting();
+				SchedulerView.this.clearPinModeData();
+			}
+
+			@Override
+			protected Collection<? extends Object> collectElements(final Schedule schedule, final boolean isPinned) {
+
+				final List<Event> interestingEvents = new LinkedList<Event>();
+				for (final Sequence sequence : schedule.getSequences()) {
+					for (final Event event : sequence.getEvents()) {
+						if (event instanceof StartEvent) {
+							interestingEvents.add(event);
+						} else if (event instanceof VesselEventVisit) {
+							interestingEvents.add(event);
+						} else if (event instanceof GeneratedCharterOut) {
+							interestingEvents.add(event);
+						} else if (event instanceof SlotVisit) {
+							final SlotVisit slotVisit = (SlotVisit) event;
+							// if (slotVisit.getSlotAllocation().getSlot() instanceof LoadSlot) {
+							interestingEvents.add(event);
+							// }
+						}
+					}
+				}
+
+				SchedulerView.this.collectPinModeElements(interestingEvents, isPinned);
+
+				return Collections.singleton(schedule);
+			}
+		};
+	}
+
+	private void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
+		currentlyPinned |= isPinned;
+		++numberOfSchedules;
+
+		for (final EObject ca : objects) {
+			final List<EObject> l;
+			final String key = getElementKey(ca);
+			if (allObjectsByKey.containsKey(key)) {
+				l = allObjectsByKey.get(key);
+			} else {
+				l = new LinkedList<EObject>();
+				allObjectsByKey.put(key, l);
+			}
+
+			l.add(ca);
+
+			if (isPinned) {
+				pinnedObjects.add(ca);
+			}
+		}
+	}
+
+	/**
+	 * Returns a key of some kind for the element
+	 * 
+	 * @param element
+	 * @return
+	 */
+	private String getElementKey(final EObject element) {
+		if (element instanceof SlotVisit) {
+			final SlotVisit slotVisit = (SlotVisit) element;
+			return slotVisit.getSlotAllocation().getSlot().getName();
+		} else if (element instanceof Event) {
+			return ((Event) element).name();
+		} else if (element instanceof NamedObject) {
+			return ((NamedObject) element).getName();
+		}
+		return element.toString();
+	}
+
+	private int getEventDuration(final Event event) {
+
+		int duration = event.getDuration();
+		Event next = event.getNextEvent();
+		while (next != null && !isSegmentStart(next)) {
+			duration += next.getDuration();
+			next = next.getNextEvent();
+		}
+		return duration;
+
+	}
+
+	private boolean isSegmentStart(final Event event) {
+		if (event instanceof VesselEventVisit) {
+			return true;
+		} else if (event instanceof GeneratedCharterOut) {
+			return true;
+		} else if (event instanceof StartEvent) {
+			return true;
+		} else if (event instanceof EndEvent) {
+			return true;
+		} else if (event instanceof SlotVisit) {
+			if (((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
