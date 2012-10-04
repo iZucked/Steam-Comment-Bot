@@ -12,7 +12,6 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 
 import com.google.common.collect.Lists;
-import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
@@ -131,56 +130,56 @@ public class SchedulePnLReport extends EMFReportView {
 				return 0.0;
 			}
 		});
-//		addColumn("Shipping Cost", new BaseFormatter() {
-//
-//			Double getValue(final SlotVisit visit) {
-//				final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-//				if (cargoAllocation.getInputCargo().getCargoType() != CargoType.FLEET) {
-//					return null;
-//				}
-//				// TODO: Fixed (other) port costs?
-//				// TODO: Boil-off included?
-//
-//				final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
-//				if (dataWithKey != null) {
-//					final Integer v = dataWithKey.getValueAs(Integer.class);
-//					if (v != null) {
-//						final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
-//						if (dischargeVolumeInMMBTu == 0.0) {
-//							return 0.0;
-//						}
-//						final double shipping = (double) v.doubleValue() / dischargeVolumeInMMBTu;
-//						return shipping;
-//					}
-//				}
-//				return 0.0;
-//			}
-//
-//			@Override
-//			public String format(final Object object) {
-//				if (object instanceof SlotVisit) {
-//					final SlotVisit slotVisit = (SlotVisit) object;
-//					final Double value = getValue(slotVisit);
-//					if (value != null) {
-//						return String.format("%,.2f", value);
-//					}
-//
-//				}
-//				return null;
-//			}
-//
-//			@Override
-//			public Comparable getComparable(final Object object) {
-//				if (object instanceof SlotVisit) {
-//					final SlotVisit slotVisit = (SlotVisit) object;
-//					final Double value = getValue(slotVisit);
-//					if (value != null) {
-//						return value;
-//					}
-//				}
-//				return 0.0;
-//			}
-//		});
+		// addColumn("Shipping Cost", new BaseFormatter() {
+		//
+		// Double getValue(final SlotVisit visit) {
+		// final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
+		// if (cargoAllocation.getInputCargo().getCargoType() != CargoType.FLEET) {
+		// return null;
+		// }
+		// // TODO: Fixed (other) port costs?
+		// // TODO: Boil-off included?
+		//
+		// final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
+		// if (dataWithKey != null) {
+		// final Integer v = dataWithKey.getValueAs(Integer.class);
+		// if (v != null) {
+		// final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
+		// if (dischargeVolumeInMMBTu == 0.0) {
+		// return 0.0;
+		// }
+		// final double shipping = (double) v.doubleValue() / dischargeVolumeInMMBTu;
+		// return shipping;
+		// }
+		// }
+		// return 0.0;
+		// }
+		//
+		// @Override
+		// public String format(final Object object) {
+		// if (object instanceof SlotVisit) {
+		// final SlotVisit slotVisit = (SlotVisit) object;
+		// final Double value = getValue(slotVisit);
+		// if (value != null) {
+		// return String.format("%,.2f", value);
+		// }
+		//
+		// }
+		// return null;
+		// }
+		//
+		// @Override
+		// public Comparable getComparable(final Object object) {
+		// if (object instanceof SlotVisit) {
+		// final SlotVisit slotVisit = (SlotVisit) object;
+		// final Double value = getValue(slotVisit);
+		// if (value != null) {
+		// return value;
+		// }
+		// }
+		// return 0.0;
+		// }
+		// });
 
 		addColumn("Type", new BaseFormatter() {
 			@Override
@@ -298,7 +297,6 @@ public class SchedulePnLReport extends EMFReportView {
 			return true;
 		}
 
-		final boolean different = false;
 		if (pinnedObject instanceof CargoAllocation && otherObject instanceof CargoAllocation) {
 			CargoAllocation ref = null;
 			CargoAllocation ca = null;
@@ -317,26 +315,42 @@ public class SchedulePnLReport extends EMFReportView {
 				return true;
 			}
 
-			if (!different) {
-				if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
-					return true;
-				}
+			if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
+				return true;
 			}
-			if (!different) {
-				if (!ca.getLoadAllocation().getContract().getName().equals(ref.getLoadAllocation().getContract().getName())) {
-					return true;
-				}
+			if (!ca.getLoadAllocation().getContract().getName().equals(ref.getLoadAllocation().getContract().getName())) {
+				return true;
 			}
-			if (!different) {
-				if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
-					return true;
-				}
+			if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
+				return true;
 			}
-			if (!different) {
-				if (!ca.getDischargeAllocation().getContract().getName().equals(ref.getDischargeAllocation().getContract().getName())) {
-					return true;
-				}
+			if (!ca.getDischargeAllocation().getContract().getName().equals(ref.getDischargeAllocation().getContract().getName())) {
+				return true;
 			}
+		} else if (pinnedObject instanceof SlotVisit && otherObject instanceof SlotVisit) {
+			SlotVisit ref = null;
+			SlotVisit ca = null;
+			ref = (SlotVisit) pinnedObject;
+
+			ca = (SlotVisit) otherObject;
+
+			if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
+				return true;
+			} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
+				return true;
+			} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
+				return true;
+			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+				return true;
+			}
+
+			if (!ca.getPort().getName().equals(ref.getPort().getName())) {
+				return true;
+			}
+			if (!ca.getSlotAllocation().getContract().getName().equals(ref.getSlotAllocation().getContract().getName())) {
+				return true;
+			}
+			return isElementDifferent(ref.getSlotAllocation().getCargoAllocation(), ca.getSlotAllocation().getCargoAllocation());
 		} else if (pinnedObject instanceof Event && otherObject instanceof Event) {
 			final Event vev = (Event) otherObject;
 			final Event ref = (Event) pinnedObject;
@@ -351,7 +365,7 @@ public class SchedulePnLReport extends EMFReportView {
 
 		}
 
-		return different;
+		return false;
 	}
 
 	protected IScenarioInstanceElementCollector getElementCollector() {
