@@ -857,7 +857,7 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 					}
 				}
 
-				SchedulerView.this.collectPinModeElements(interestingEvents, isPinned);
+//				SchedulerView.this.collectPinModeElements(interestingEvents, isPinned);
 
 				return Collections.singleton(schedule);
 			}
@@ -865,7 +865,8 @@ public class SchedulerView extends ViewPart implements ISelectionListener {
 	}
 
 	private void collectPinModeElements(final List<? extends EObject> objects, final boolean isPinned) {
-		currentlyPinned |= isPinned;
+		// Temp disable diff mode
+//		currentlyPinned |= isPinned;
 		++numberOfSchedules;
 
 		for (final EObject ca : objects) {
