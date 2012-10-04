@@ -282,15 +282,15 @@ public class TradingExporterExtension implements IExporterExtension {
 
 	private void setShippingCosts(final IShippingCostAnnotation profitAndLoss, final ExtraDataContainer container, boolean incBoilOff) {
 
-		// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
-		int groupValue = (int) (profitAndLoss.getShippingCost() / Calculator.ScaleFactor);
-		final ExtraData pnlData = (incBoilOff) ? container.addExtraData(TradingConstants.ExtraData_ShippingCostIncBoilOff, "Shipping Costs (With Boil-Off)", groupValue, ExtraDataFormatType.CURRENCY)
-				: container.addExtraData(TradingConstants.ExtraData_ShippingCost, "Shipping Costs", groupValue, ExtraDataFormatType.CURRENCY);
-
-		pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
-		final ExtraData detail = exportDetailTree(profitAndLoss.getDetails());
-		detail.setName("Details");
-		pnlData.getExtraData().add(detail);
+//		// TODO: Keep idx in sync with ProfitAndLossAllocationComponent
+//		int groupValue = (int) (profitAndLoss.getShippingCost() / Calculator.ScaleFactor);
+//		final ExtraData pnlData = (incBoilOff) ? container.addExtraData(TradingConstants.ExtraData_ShippingCostIncBoilOff, "Shipping Costs (With Boil-Off)", groupValue, ExtraDataFormatType.CURRENCY)
+//				: container.addExtraData(TradingConstants.ExtraData_ShippingCost, "Shipping Costs", groupValue, ExtraDataFormatType.CURRENCY);
+//
+//		pnlData.addExtraData("date", "Date", entities.getDateFromHours(profitAndLoss.getBookingTime()), ExtraDataFormatType.AUTO);
+//		final ExtraData detail = exportDetailTree(profitAndLoss.getDetails());
+//		detail.setName("Details");
+//		pnlData.getExtraData().add(detail);
 	}
 
 	private ExtraData exportDetailTree(final IDetailTree details) {
