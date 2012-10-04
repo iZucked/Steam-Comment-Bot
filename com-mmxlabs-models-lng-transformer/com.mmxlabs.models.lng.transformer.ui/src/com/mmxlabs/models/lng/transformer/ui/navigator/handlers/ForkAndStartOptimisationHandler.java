@@ -65,7 +65,6 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 					final IScenarioService scenarioService = instance.getScenarioService();
 
 					try {
-						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 
 						final Set<String> existingNames = new HashSet<String>();
 						for (final Container c : instance.getElements()) {
@@ -82,10 +81,13 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 						while (existingNames.contains(newName)) {
 							newName = namePrefix + " (" + counter++ + ")";
 						}
+						final String finalNewName = getNewName(instance.getName(), newName);
 
-						fork.setName(getNewName(instance.getName(), newName));
-
-						return evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
+						if (finalNewName != null) {
+							final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
+							fork.setName(finalNewName);
+							return evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
+						}
 					} catch (final IOException e) {
 						throw new ExecutionException("Unable to fork scenario", e);
 					}
