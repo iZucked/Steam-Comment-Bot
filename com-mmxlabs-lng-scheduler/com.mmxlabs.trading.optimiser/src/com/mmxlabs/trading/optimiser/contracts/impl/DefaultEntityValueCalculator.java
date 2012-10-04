@@ -141,13 +141,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolume, shippingTransferPricePerM3, cvValue);
 				shippingDetails.addChild(shippingToDownstream);
 
-				final IDetailTree[] detailsRef = new IDetailTree[1];
-				final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
-				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost,
-						new ShippingCostAnnotation(currentAllocation.getLoadTime(), costNoBoiloff, detailsRef[0]));
-				final long costIncBoiloff = getCosts(plan, vessel, true, vesselStartTime, detailsRef);
-				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
-						new ShippingCostAnnotation(currentAllocation.getLoadTime(), costIncBoiloff, detailsRef[0]));
+//				final IDetailTree[] detailsRef = new IDetailTree[1];
+//				final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
+//				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost,
+//						new ShippingCostAnnotation(currentAllocation.getLoadTime(), costNoBoiloff, detailsRef[0]));
+//				final long costIncBoiloff = getCosts(plan, vessel, true, vesselStartTime, detailsRef);
+//				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
+//						new ShippingCostAnnotation(currentAllocation.getLoadTime(), costIncBoiloff, detailsRef[0]));
 
 				downstreamDetails.addChild(shippingToDownstream);
 				downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolume, dischargePricePerM3, cvValue));
@@ -217,11 +217,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				details.addChild(new DetailTree("Revenue", new CurrencyDetailElement(revenue)));
 			}
 
-			final IDetailTree[] detailsRef = new IDetailTree[1];
-			final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
-			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost, new ShippingCostAnnotation(planStartTime, costNoBoiloff, detailsRef[0]));
-			final long costIncBoiloff = getCosts(plan, vessel, true, vesselStartTime, detailsRef);
-			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff, new ShippingCostAnnotation(planStartTime, costIncBoiloff, detailsRef[0]));
+//			final IDetailTree[] detailsRef = new IDetailTree[1];
+//			final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
+//			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost, new ShippingCostAnnotation(planStartTime, costNoBoiloff, detailsRef[0]));
+//			final long costIncBoiloff = getCosts(plan, vessel, true, vesselStartTime, detailsRef);
+//			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff, new ShippingCostAnnotation(planStartTime, costIncBoiloff, detailsRef[0]));
 
 			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, value, details);
 			final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(planStartTime, Collections.singleton(entry));
@@ -286,27 +286,27 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final long hourlyCharterInPrice = (int) hireRate.getValueAtPoint(vesselStartTime);
 			hireCosts = hourlyCharterInPrice * (long) planDuration;
 		}
-		if (detailsRef != null) {
-
-			final DetailTree details = new DetailTree("Shipping Costs", new CurrencyDetailElement(shippingCosts + hireCosts + portCosts));
-
-			details.addChild("Route Cost", new CurrencyDetailElement(plan.getTotalRouteCost()));
-			details.addChild("Base Fuel", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base)));
-			details.addChild("Base Fuel Supplement", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base_Supplemental)));
-			details.addChild("Cooldown", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Cooldown)));
-			details.addChild("Idle Base", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleBase)));
-			details.addChild("Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.PilotLight)));
-			details.addChild("Idle Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdlePilotLight)));
-			if (includeLNG) {
-				details.addChild("NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
-				details.addChild("FBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.FBO)));
-				details.addChild("Idle NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleNBO)));
-			}
-			details.addChild("Hire Costs", new CurrencyDetailElement(hireCosts));
-			details.addChild("Port Costs", new CurrencyDetailElement(portCosts));
-
-			detailsRef[0] = details;
-		}
+//		if (detailsRef != null) {
+//
+//			final DetailTree details = new DetailTree("Shipping Costs", new CurrencyDetailElement(shippingCosts + hireCosts + portCosts));
+//
+//			details.addChild("Route Cost", new CurrencyDetailElement(plan.getTotalRouteCost()));
+//			details.addChild("Base Fuel", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base)));
+//			details.addChild("Base Fuel Supplement", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base_Supplemental)));
+//			details.addChild("Cooldown", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Cooldown)));
+//			details.addChild("Idle Base", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleBase)));
+//			details.addChild("Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.PilotLight)));
+//			details.addChild("Idle Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdlePilotLight)));
+//			if (includeLNG) {
+//				details.addChild("NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
+//				details.addChild("FBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.FBO)));
+//				details.addChild("Idle NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleNBO)));
+//			}
+//			details.addChild("Hire Costs", new CurrencyDetailElement(hireCosts));
+//			details.addChild("Port Costs", new CurrencyDetailElement(portCosts));
+//
+//			detailsRef[0] = details;
+//		}
 
 		return shippingCosts + portCosts + hireCosts;
 	}
