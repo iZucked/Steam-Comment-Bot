@@ -131,56 +131,56 @@ public class SchedulePnLReport extends EMFReportView {
 				return 0.0;
 			}
 		});
-		addColumn("Shipping Cost", new BaseFormatter() {
-
-			Double getValue(final SlotVisit visit) {
-				final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-				if (cargoAllocation.getInputCargo().getCargoType() != CargoType.FLEET) {
-					return null;
-				}
-				// TODO: Fixed (other) port costs?
-				// TODO: Boil-off included?
-
-				final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
-				if (dataWithKey != null) {
-					final Integer v = dataWithKey.getValueAs(Integer.class);
-					if (v != null) {
-						final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
-						if (dischargeVolumeInMMBTu == 0.0) {
-							return 0.0;
-						}
-						final double shipping = (double) v.doubleValue() / dischargeVolumeInMMBTu;
-						return shipping;
-					}
-				}
-				return 0.0;
-			}
-
-			@Override
-			public String format(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					final Double value = getValue(slotVisit);
-					if (value != null) {
-						return String.format("%,.2f", value);
-					}
-
-				}
-				return null;
-			}
-
-			@Override
-			public Comparable getComparable(final Object object) {
-				if (object instanceof SlotVisit) {
-					final SlotVisit slotVisit = (SlotVisit) object;
-					final Double value = getValue(slotVisit);
-					if (value != null) {
-						return value;
-					}
-				}
-				return 0.0;
-			}
-		});
+//		addColumn("Shipping Cost", new BaseFormatter() {
+//
+//			Double getValue(final SlotVisit visit) {
+//				final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
+//				if (cargoAllocation.getInputCargo().getCargoType() != CargoType.FLEET) {
+//					return null;
+//				}
+//				// TODO: Fixed (other) port costs?
+//				// TODO: Boil-off included?
+//
+//				final ExtraData dataWithKey = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_ShippingCostIncBoilOff);
+//				if (dataWithKey != null) {
+//					final Integer v = dataWithKey.getValueAs(Integer.class);
+//					if (v != null) {
+//						final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
+//						if (dischargeVolumeInMMBTu == 0.0) {
+//							return 0.0;
+//						}
+//						final double shipping = (double) v.doubleValue() / dischargeVolumeInMMBTu;
+//						return shipping;
+//					}
+//				}
+//				return 0.0;
+//			}
+//
+//			@Override
+//			public String format(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					final Double value = getValue(slotVisit);
+//					if (value != null) {
+//						return String.format("%,.2f", value);
+//					}
+//
+//				}
+//				return null;
+//			}
+//
+//			@Override
+//			public Comparable getComparable(final Object object) {
+//				if (object instanceof SlotVisit) {
+//					final SlotVisit slotVisit = (SlotVisit) object;
+//					final Double value = getValue(slotVisit);
+//					if (value != null) {
+//						return value;
+//					}
+//				}
+//				return 0.0;
+//			}
+//		});
 
 		addColumn("Type", new BaseFormatter() {
 			@Override
