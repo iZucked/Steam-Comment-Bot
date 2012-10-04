@@ -1819,7 +1819,7 @@ public class LNGScenarioTransformer {
 	}
 
 	private String getKeyForDate(final Date date) {
-		final String key = new SimpleDateFormat("yyyy-mm").format(date);
+		final String key = new SimpleDateFormat("yyyy-MM").format(date);
 		return key;
 	}
 }
