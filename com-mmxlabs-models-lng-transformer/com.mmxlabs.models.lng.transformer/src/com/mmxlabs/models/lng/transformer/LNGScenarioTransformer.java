@@ -236,7 +236,7 @@ public class LNGScenarioTransformer {
 			}
 			modelClasses.retainAll(contracts.keySet());
 
-			final ITransformerExtension transformer = t.getTransformer();
+			final ITransformerExtension transformer = t.createTransformer();
 			addTransformerExtension(transformer);
 
 			if (transformer instanceof IContractTransformer) {

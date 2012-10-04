@@ -43,8 +43,11 @@ public class ContractTransformerWrapper implements ContractTransformer {
 		return modelClasses;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public ITransformerExtension getTransformer() {
+	public ITransformerExtension createTransformer() {
 		return contractTransformer;
 	}
 }

@@ -23,6 +23,10 @@ public interface ContractTransformer {
 	@MapName("modelclass")
 	public ModelClass[] getModelClass();
 
+	/**
+	 * Returns a new instance of the {@link ITransformerExtension}
+	 * @since 2.0
+	 */
 	@MapName("transformer")
-	public ITransformerExtension getTransformer();
+	public ITransformerExtension createTransformer();
 }
