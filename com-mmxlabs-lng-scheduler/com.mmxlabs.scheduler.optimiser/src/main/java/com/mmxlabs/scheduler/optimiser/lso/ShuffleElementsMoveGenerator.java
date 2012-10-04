@@ -80,6 +80,11 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		final ISequence elementSequence = owner.getSequences().getSequence(elementResource);
 		touchedElements.add(element);
 
+		if (element.toString().contains("201306")) {
+			int ii = 0;
+		}
+
+
 		boolean foundMove = false;
 		// Link to a follower or preceder
 		final boolean findFollower = owner.getRandom().nextBoolean();
@@ -119,7 +124,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				}
 				if (followerPosition.getSecond() > 2) {
 					final ISequenceElement followerMinus2 = followerSequence.get(followerPosition.getSecond() - 2);
-					if (owner.validFollowers.get(followerMinus2).contains(element)) {
+					if (owner.getRandom().nextBoolean() && owner.validFollowers.get(followerMinus2).contains(element)) {
 
 						if (removeOrBackfill(builder, followerMinus1, touchedElements)) {
 							builder.addFrom(elementResource, elementPosition.getSecond(), element);
@@ -189,7 +194,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 					break;
 				}
 
-				if (precederSequence.size() > precederPosition.getSecond() + 2) {
+				if (owner.getRandom().nextBoolean() && precederSequence.size() > precederPosition.getSecond() + 2) {
 					final ISequenceElement precederPlus2 = precederSequence.get(precederPosition.getSecond() + 2);
 					if (owner.validPreceeders.get(precederPlus2).contains(element)) {
 						if (removeOrBackfill(builder, precederPlus1, touchedElements)) {
@@ -203,7 +208,6 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 					}
 				}
 				{
-
 					final Set<ISequenceElement> candidates = findPossibleUnusedElement(precederResource, owner.validFollowers.get(element), owner.validPreceeders.get(precederPlus1));
 					candidates.removeAll(touchedElements);
 					if (candidates.isEmpty()) {
