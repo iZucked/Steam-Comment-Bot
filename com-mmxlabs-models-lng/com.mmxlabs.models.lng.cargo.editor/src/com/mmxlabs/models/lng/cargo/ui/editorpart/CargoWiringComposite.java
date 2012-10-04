@@ -87,7 +87,6 @@ import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.dates.LocalDateUtil;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
-import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
@@ -482,8 +481,6 @@ public class CargoWiringComposite extends Composite {
 			updateWiringColours(wiringDiagram, wiringDiagram.getWiring(), lhsComposites, rhsComposites);
 		}
 	};
-
-	private final IInlineEditorWrapper wrapper = IInlineEditorWrapper.IDENTITY;
 
 	private final ICommandHandler commandHandler = new ICommandHandler() {
 
@@ -1514,6 +1511,7 @@ public class CargoWiringComposite extends Composite {
 		newLoad.setMarket(market);
 		newLoad.setContract((Contract) market.getContract());
 		newLoad.setOptional(true);
+		newLoad.setName("");
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 		return newLoad;
@@ -1524,6 +1522,7 @@ public class CargoWiringComposite extends Composite {
 		final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
 		newLoad.setDESPurchase(isDESPurchase);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newLoad.setName("");
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 		return newLoad;
@@ -1534,6 +1533,7 @@ public class CargoWiringComposite extends Composite {
 		final DischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
 		newDischarge.setFOBSale(isFOBSale);
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+		newDischarge.setName("");
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 		return newDischarge;
 	}
@@ -1545,6 +1545,7 @@ public class CargoWiringComposite extends Composite {
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newDischarge.setMarket(market);
 		newDischarge.setContract((Contract) market.getContract());
+		newDischarge.setName("");
 		if (market instanceof DESSalesMarket) {
 
 			final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
