@@ -73,6 +73,25 @@ public class SchedulePnLReport extends EMFReportView {
 				return "";
 			}
 		});
+		addColumn("Sales Contract", new BaseFormatter() {
+			@Override
+			public String format(final Object object) {
+				if (object instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) object;
+					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getContract().getName();
+				}
+				return null;
+			}
+
+			@Override
+			public Comparable<?> getComparable(final Object object) {
+				if (object instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) object;
+					return slotVisit.getSlotAllocation().getCargoAllocation().getDischargeAllocation().getContract().getName();
+				}
+				return "";
+			}
+		});
 
 		addColumn("Purchase Price", new BaseFormatter() {
 			@Override
