@@ -206,7 +206,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			if (element instanceof Event) {
 
 				final String name = ((Event) element).name();
-				if (!name.isEmpty()) {
+				if (name != null && !name.isEmpty()) {
 					tt.append("ID: " + name + "\n");
 				}
 			}
