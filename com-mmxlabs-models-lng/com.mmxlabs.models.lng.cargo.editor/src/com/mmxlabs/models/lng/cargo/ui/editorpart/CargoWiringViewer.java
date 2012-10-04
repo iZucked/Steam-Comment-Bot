@@ -261,6 +261,7 @@ public class CargoWiringViewer extends Composite {
 						newLoad.setDESPurchase(true);
 						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newLoad.setOptional(true);
+						newLoad.setName("");
 						cmd.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 						location.getEditingDomain().getCommandStack().execute(cmd);
@@ -278,6 +279,7 @@ public class CargoWiringViewer extends Composite {
 						newLoad.setDESPurchase(false);
 						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newLoad.setOptional(true);
+						newLoad.setName("");
 						cmd.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
 
 						location.getEditingDomain().getCommandStack().execute(cmd);
@@ -295,6 +297,7 @@ public class CargoWiringViewer extends Composite {
 						newDischarge.setFOBSale(true);
 						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newDischarge.setOptional(true);
+						newDischarge.setName("");
 						cmd.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 
 						location.getEditingDomain().getCommandStack().execute(cmd);
@@ -313,6 +316,7 @@ public class CargoWiringViewer extends Composite {
 						newDischarge.setFOBSale(false);
 						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 						newDischarge.setOptional(true);
+						newDischarge.setName("");
 						cmd.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
 
 						location.getEditingDomain().getCommandStack().execute(cmd);
