@@ -283,4 +283,42 @@
        </dataType>
     </attributeImporter>
  </extension>
+ <extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.pricing.ui.views.CooldownCostsView"
+          id="com.mmxlabs.models.lng.pricing.editor.CooldownCostsView"
+          name="Cooldown Costs"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.pricing.ui.views.PortCostsView"
+          id="com.mmxlabs.models.lng.pricing.editor.PortCostsView"
+          name="Port Costs"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.pricing.ui.views.CanalCostsView"
+          id="com.mmxlabs.models.lng.pricing.editor.CanalCostsView"
+          name="Canal Costs"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.pricing.ui.views.FOBSalesSpotMarketView"
+          id="com.mmxlabs.models.lng.pricing.editor.FOBSalesSpotMarketView"
+          name="FOB Sales Spot Markets"
+          restorable="true">
+    </view>
+    <view
+          category="com.mmxlabs.models.lng.views.physical"
+          class="com.mmxlabs.models.lng.pricing.ui.views.DESPurchaseSpotMarketView"
+          id="com.mmxlabs.models.lng.pricing.editor.DESPurchaseSpotMarketView"
+          name="DES Purchase Spot Markets"
+          restorable="true">
+    </view>
+ </extension>
 </plugin>
