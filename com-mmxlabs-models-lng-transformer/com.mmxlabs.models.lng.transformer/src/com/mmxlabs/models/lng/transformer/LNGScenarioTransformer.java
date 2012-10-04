@@ -38,7 +38,6 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
-import com.mmxlabs.common.options.Option;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -992,7 +991,9 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
-				final String yearMonthString = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1); // Roll forward
+				final String yearMonthString = getKeyForDate(cal.getTime());
+
+				// Roll forward
 				cal.add(Calendar.MONTH, 1);
 				final Date endTime = cal.getTime();
 
@@ -1111,7 +1112,8 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
-				final String yearMonthString = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1); // Roll forward
+				final String yearMonthString = getKeyForDate(cal.getTime());
+				// Roll forward
 				cal.add(Calendar.MONTH, 1);
 				final Date endTime = cal.getTime();
 
@@ -1219,11 +1221,10 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
-				final String yearMonthString = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1);
+				final String yearMonthString = getKeyForDate(cal.getTime());
 				// Roll forward
 				cal.add(Calendar.MONTH, 1);
 				final Date endTime = cal.getTime();
-
 				final List<IPortSlot> marketGroupSlots = new ArrayList<IPortSlot>();
 
 				for (final SpotMarket market : desSalesSpotMarket.getMarkets()) {
@@ -1325,7 +1326,8 @@ public class LNGScenarioTransformer {
 			Date startTime = cal.getTime();
 			while (startTime.before(latestDate)) {
 
-				final String yearMonthString = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1);
+				final String yearMonthString = getKeyForDate(cal.getTime());
+
 				// Roll forward
 				cal.add(Calendar.MONTH, 1);
 				final Date endTime = cal.getTime();
