@@ -126,6 +126,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 					if (control.getJobState() == EJobState.CREATED) {
 						try {
 
+							final IJobDescriptor desc = job;
 							// Add listener to unlock scenario when it stops optimising
 							control.addListener(new IJobControlListener() {
 
@@ -135,6 +136,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
 										// instance.setLocked(false);
 										instance.getLock(k).release();
+										jobManager.removeJob(desc);
 										return false;
 									}
 									return true;
