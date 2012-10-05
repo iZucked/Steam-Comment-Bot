@@ -4,12 +4,11 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Alert_Crimson;
-
 import java.util.List;
 
-import org.eclipse.nebula.widgets.ganttchart.ColorCache;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.widgets.Display;
 
 import com.mmxlabs.models.lng.cargo.CargoGroup;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -30,7 +29,7 @@ public class StatoilColourScheme extends VesselStateColourScheme {
 	public Color getBorderColour(final Object element) {
 
 		if(isHammProgFOB(element)) {
-			return ColorCache.getColor(Alert_Crimson);			
+			return Display.getDefault().getSystemColor(SWT.COLOR_BLACK);			
 		}		
 		else{
 			return super.getBorderColour(element);
