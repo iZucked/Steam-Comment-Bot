@@ -32,9 +32,8 @@ public class ElementAssignmentCommandProvider extends BaseModelCommandProvider {
 	@Override
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
-
 		// Check for correct owner. For example we do not want to trigger this for cargoes being added to cargo groups.
-		if (parameter.getOwner() instanceof CargoModel || parameter.getOwner() instanceof FleetModel) {
+		if (parameter.getOwner()  == null || parameter.getOwner() instanceof CargoModel || parameter.getOwner() instanceof FleetModel) {
 			return super.provideAdditionalCommand(editingDomain, rootObject, overrides, editSet, commandClass, parameter, input);
 		}
 
