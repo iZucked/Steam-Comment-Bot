@@ -89,7 +89,8 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 						}
 					}
 
-					final List<RowData> destination = svso.isPinned(o) ? pinnedData : rowDataList;
+					boolean isPinned = svso.isPinned(o);
+					final List<RowData> destination = isPinned ? pinnedData : rowDataList;
 
 					final Schedule schedule = (Schedule) o;
 
@@ -106,6 +107,9 @@ public class FitnessContentProvider implements IStructuredContentProvider {
 					}
 					destination.add(new RowData(svso.getScenarioInstance(o).getName(), "Total", null, null, total));
 
+					if (isPinned) {
+						rowDataList.addAll(pinnedData);
+					}
 				}
 			}
 			rowData = rowDataList.toArray(rowData);

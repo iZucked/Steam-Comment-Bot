@@ -204,6 +204,7 @@ public class TotalsContentProvider implements IStructuredContentProvider {
 				if (o instanceof Schedule) {
 					if (synchOutput.isPinned(o)) {
 						createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), pinnedData);
+						rowDataList.addAll(pinnedData);
 					} else {
 						createRowData((Schedule) o, synchOutput.getScenarioInstance(o).getName(), rowDataList);
 					}

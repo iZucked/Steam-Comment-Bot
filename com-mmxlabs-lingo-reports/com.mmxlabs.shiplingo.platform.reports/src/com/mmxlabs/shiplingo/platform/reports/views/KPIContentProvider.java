@@ -198,7 +198,11 @@ public class KPIContentProvider implements IStructuredContentProvider {
 			for (final Object o : synchOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
 					final ScenarioInstance scenarioInstance = synchOutput.getScenarioInstance(o);
-					createRowData((Schedule) o, scenarioInstance, synchOutput.isPinned(o) ? pinnedData : rowDataList);
+					final boolean isPinned = synchOutput.isPinned(o);
+					createRowData((Schedule) o, scenarioInstance, isPinned ? pinnedData : rowDataList);
+					if (isPinned) {
+						rowDataList.addAll(pinnedData);
+					}
 				}
 			}
 			rowData = rowDataList.toArray(rowData);
