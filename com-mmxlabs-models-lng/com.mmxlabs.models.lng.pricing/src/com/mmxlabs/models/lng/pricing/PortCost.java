@@ -6,9 +6,7 @@ package com.mmxlabs.models.lng.pricing;
 import org.eclipse.emf.common.util.EList;
 
 import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXObject;
 

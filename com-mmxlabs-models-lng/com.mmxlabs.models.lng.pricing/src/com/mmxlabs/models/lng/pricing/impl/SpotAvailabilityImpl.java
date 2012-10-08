@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SpotAvailability;
 
