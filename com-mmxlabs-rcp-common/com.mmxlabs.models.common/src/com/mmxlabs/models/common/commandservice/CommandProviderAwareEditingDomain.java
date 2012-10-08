@@ -117,52 +117,55 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	@Override
 	public Command createCommand(final Class<? extends Command> commandClass, final CommandParameter commandParameter) {
 		final Command normal;
-		if (commandClass == DeleteCommand.class) {
-			normal = new DeleteCommand(this, commandParameter.getCollection()) {
-				protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(final Collection<EObject> eObjects) {
-
-					// Objects in the TypesPackage can be referenced between different sub-models. However if none-of the target objects inherit from a types package type, we can just consider
-					// elements within the same parent container.
-					boolean typesClass = false;
-					OUTER_LOOP: for (final EObject obj : eObjects) {
-						if (typesClass) {
-							break OUTER_LOOP;
-						}
-						if (TypesPackage.eINSTANCE.getEClassifiers().contains(obj.eClass())) {
-							typesClass = true;
-						} else {
-							for (final EClass c : obj.eClass().getEAllSuperTypes()) {
-								if (TypesPackage.eINSTANCE.getEClassifiers().contains(c)) {
-									typesClass = true;
-									break OUTER_LOOP;
-								}
-							}
-						}
-					}
-					if (typesClass) {
-						// Slow branch
-						final List<EObject> subModels = new ArrayList<EObject>(rootObject.getSubModels().size());
-						for (final MMXSubModel m : rootObject.getSubModels()) {
-							final UUIDObject subModelInstance = m.getSubModelInstance();
-							subModels.add(subModelInstance);
-						}
-						return EcoreUtil.UsageCrossReferencer.findAll(eObjects, subModels);
-					} else {
-						// Faster branch
-						final List<EObject> containers = new ArrayList<EObject>();
-						for (EObject obj : eObjects) {
-							while (obj.eContainer() != null) {
-								obj = obj.eContainer();
-							}
-							containers.add(obj);
-						}
-						return EcoreUtil.UsageCrossReferencer.findAll(eObjects, containers);
-					}
-				}
-			};
-		} else {
+		
+		// DOES NOT WORK - DELETEING A SALES CONTRACT DID NOT UPDATE REFERENCES.
+		
+//		if (commandClass == DeleteCommand.class) {
+//			normal = new DeleteCommand(this, commandParameter.getCollection()) {
+//				protected Map<EObject, Collection<EStructuralFeature.Setting>> findReferences(final Collection<EObject> eObjects) {
+//
+//					// Objects in the TypesPackage can be referenced between different sub-models. However if none-of the target objects inherit from a types package type, we can just consider
+//					// elements within the same parent container.
+//					boolean typesClass = false;
+//					OUTER_LOOP: for (final EObject obj : eObjects) {
+//						if (typesClass) {
+//							break OUTER_LOOP;
+//						}
+//						if (TypesPackage.eINSTANCE.getEClassifiers().contains(obj.eClass())) {
+//							typesClass = true;
+//						} else {
+//							for (final EClass c : obj.eClass().getEAllSuperTypes()) {
+//								if (TypesPackage.eINSTANCE.getEClassifiers().contains(c)) {
+//									typesClass = true;
+//									break OUTER_LOOP;
+//								}
+//							}
+//						}
+//					}
+//					if (typesClass) {
+//						// Slow branch
+//						final List<EObject> subModels = new ArrayList<EObject>(rootObject.getSubModels().size());
+//						for (final MMXSubModel m : rootObject.getSubModels()) {
+//							final UUIDObject subModelInstance = m.getSubModelInstance();
+//							subModels.add(subModelInstance);
+//						}
+//						return EcoreUtil.UsageCrossReferencer.findAll(eObjects, subModels);
+//					} else {
+//						// Faster branch
+//						final List<EObject> containers = new ArrayList<EObject>();
+//						for (EObject obj : eObjects) {
+//							while (obj.eContainer() != null) {
+//								obj = obj.eContainer();
+//							}
+//							containers.add(obj);
+//						}
+//						return EcoreUtil.UsageCrossReferencer.findAll(eObjects, containers);
+//					}
+//				}
+//			};
+//		} else {
 			normal = super.createCommand(commandClass, commandParameter);
-		}
+//		}
 
 		if (!isCommandProvidersDisabled()) {
 			final CompoundCommand wrapper = new CompoundCommand();
