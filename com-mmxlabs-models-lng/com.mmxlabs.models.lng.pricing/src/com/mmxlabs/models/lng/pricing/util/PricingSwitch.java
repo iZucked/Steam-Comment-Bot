@@ -163,6 +163,7 @@ public class PricingSwitch<T> extends Switch<T> {
 			case PricingPackage.SPOT_MARKET_GROUP: {
 				SpotMarketGroup spotMarketGroup = (SpotMarketGroup)theEObject;
 				T result = caseSpotMarketGroup(spotMarketGroup);
+				if (result == null) result = caseMMXObject(spotMarketGroup);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}

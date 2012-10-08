@@ -10,6 +10,7 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.lng.pricing.SpotType;
 
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,7 +39,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * @generated
  */
 public class SpotMarketGroupItemProvider
-	extends ItemProviderAdapter
+	extends MMXObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,

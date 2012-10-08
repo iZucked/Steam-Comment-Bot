@@ -3,10 +3,8 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.MMXObject;
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.emf.ecore.EObject;
 
 /**
  * <!-- begin-user-doc -->
@@ -26,7 +24,7 @@ import org.eclipse.emf.ecore.EObject;
  * @model
  * @generated
  */
-public interface SpotMarketGroup extends EObject {
+public interface SpotMarketGroup extends MMXObject {
 	/**
 	 * Returns the value of the '<em><b>Availability</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

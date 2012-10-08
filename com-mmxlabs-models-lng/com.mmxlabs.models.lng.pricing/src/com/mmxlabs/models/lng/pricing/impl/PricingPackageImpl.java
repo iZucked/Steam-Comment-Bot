@@ -1071,6 +1071,7 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		routeCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		charterCostModelEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		baseFuelCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		spotMarketGroupEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		spotMarketEClass.getESuperTypes().add(theTypesPackage.getASpotMarket());
 		portCostEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cooldownPriceEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
