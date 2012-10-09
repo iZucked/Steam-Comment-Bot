@@ -38,29 +38,24 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 
 	protected final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
 
-	private static final String BASE_FUEL_NAME = "Base Fuel";
-	private static final String NBO_FUEL_NAME = "NBO";
-	private static final String FBO_FUEL_NAME = "FBO";
- 
-	private static final Map<Fuel, FuelComponent[]> fuelComponentNames = 
-			new HashMap<Fuel, FuelComponent[]>();
-	
-	private static final Map<Fuel, FuelUnit[]> displayFuelUnits = 
-			new HashMap<Fuel, FuelUnit[]>();
-	
-	private static final Map<FuelUnit, com.mmxlabs.models.lng.schedule.FuelUnit> modelUnits =
-			new HashMap<FuelUnit, com.mmxlabs.models.lng.schedule.FuelUnit>();
-	
+	private static final Map<Fuel, FuelComponent[]> fuelComponentNames = new HashMap<Fuel, FuelComponent[]>();
+
+	private static final Map<Fuel, FuelUnit[]> displayFuelUnits = new HashMap<Fuel, FuelUnit[]>();
+
+	private static final Map<FuelUnit, com.mmxlabs.models.lng.schedule.FuelUnit> modelUnits = new HashMap<FuelUnit, com.mmxlabs.models.lng.schedule.FuelUnit>();
+
 	static {
-		fuelComponentNames.put(Fuel.BASE_FUEL, FuelComponent.getBaseFuelComponents());
+		fuelComponentNames.put(Fuel.BASE_FUEL, FuelComponent.getBaseFuelComponentsNoPilot());
+		fuelComponentNames.put(Fuel.PILOT_LIGHT, FuelComponent.getPilotLightFuelComponents());
 
 		fuelComponentNames.put(Fuel.NBO, new FuelComponent[] { FuelComponent.NBO, FuelComponent.IdleNBO });
 		fuelComponentNames.put(Fuel.FBO, new FuelComponent[] { FuelComponent.FBO });
 
-		displayFuelUnits.put(Fuel.BASE_FUEL, new FuelUnit[] {FuelUnit.MT});
-		displayFuelUnits.put(Fuel.NBO, new FuelUnit[] {FuelUnit.M3,FuelUnit.MMBTu});
-		displayFuelUnits.put(Fuel.FBO, new FuelUnit[] {FuelUnit.M3,FuelUnit.MMBTu});
-		
+		displayFuelUnits.put(Fuel.PILOT_LIGHT, new FuelUnit[] { FuelUnit.MT });
+		displayFuelUnits.put(Fuel.BASE_FUEL, new FuelUnit[] { FuelUnit.MT });
+		displayFuelUnits.put(Fuel.NBO, new FuelUnit[] { FuelUnit.M3, FuelUnit.MMBTu });
+		displayFuelUnits.put(Fuel.FBO, new FuelUnit[] { FuelUnit.M3, FuelUnit.MMBTu });
+
 		modelUnits.put(FuelUnit.M3, com.mmxlabs.models.lng.schedule.FuelUnit.M3);
 		modelUnits.put(FuelUnit.MT, com.mmxlabs.models.lng.schedule.FuelUnit.MT);
 		modelUnits.put(FuelUnit.MMBTu, com.mmxlabs.models.lng.schedule.FuelUnit.MMBTU);
@@ -88,20 +83,21 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 
 	protected List<FuelQuantity> createFuelQuantities(final IFuelUsingEvent event) {
 		final List<FuelQuantity> result = new LinkedList<FuelQuantity>();
-		
+
 		for (final Map.Entry<Fuel, FuelComponent[]> entry : fuelComponentNames.entrySet()) {
 			long totalCost = 0;
 			boolean matters = false;
-			
+
 			for (final FuelComponent component : entry.getValue()) {
 				totalCost += event.getFuelCost(component);
 			}
-			
+
 			final FuelQuantity quantity = ScheduleFactory.eINSTANCE.createFuelQuantity();
 			quantity.setFuel(entry.getKey());
 			quantity.setCost((int) (totalCost / Calculator.ScaleFactor));
-			if (totalCost > 0) matters = true;
-			
+			if (totalCost > 0)
+				matters = true;
+
 			for (final FuelUnit unit : displayFuelUnits.get(entry.getKey())) {
 				long totalUsage = 0;
 				for (final FuelComponent component : entry.getValue()) {
@@ -115,10 +111,11 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 					matters = true;
 				}
 			}
-			
-			if (matters) result.add(quantity);
+
+			if (matters)
+				result.add(quantity);
 		}
-		
+
 		return result;
 	}
 }
