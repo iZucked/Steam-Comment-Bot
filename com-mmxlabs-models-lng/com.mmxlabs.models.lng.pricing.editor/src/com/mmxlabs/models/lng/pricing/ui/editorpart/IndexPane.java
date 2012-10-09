@@ -291,7 +291,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 				};
 
 				col.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
-				final boolean isInt = false;
 				final ICellManipulator manipulator = new ICellManipulator() {
 
 					@SuppressWarnings("unchecked")
@@ -358,7 +357,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 						final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
 						final NumberFormatter formatter;
-						if (isInt) {
+						if (isIntegerBased) {
 							formatter = new IntegerFormatter();
 						} else {
 							formatter = new DoubleFormatter();
