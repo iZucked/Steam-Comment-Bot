@@ -10,8 +10,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
-import org.eclipse.core.runtime.Platform;
-
 import com.mmxlabs.license.ssl.internal.Activator;
 
 /**
@@ -41,9 +39,9 @@ public final class LicenseChecker {
 			// Load the license file
 			Certificate licenseCertificate = null;
 			{
-				licenseCertificate = getUserDataLicense();
+				licenseCertificate = getEclipseHomeLicense();
 				if (licenseCertificate == null) {
-					licenseCertificate = getWorkspaceLicense();
+					licenseCertificate = getUserDataLicense();
 				}
 			}
 
@@ -85,14 +83,18 @@ public final class LicenseChecker {
 		return null;
 	}
 
-	private static Certificate getWorkspaceLicense() throws CertificateException, FileNotFoundException {
+	private static Certificate getEclipseHomeLicense() throws CertificateException, FileNotFoundException {
 
 		try {
 			final Certificate licenseCertificate;
-			final File file = Platform.getLocation().append("license.pem").toFile();
-			final CertificateFactory cf = CertificateFactory.getInstance("X.509");
-			licenseCertificate = cf.generateCertificate(new FileInputStream(file));
-			return licenseCertificate;
+
+			final String userHome = System.getProperty("eclipse.home");
+			if (userHome != null) {
+				final File f = new File(userHome + "/license.pem");
+				final CertificateFactory cf = CertificateFactory.getInstance("X.509");
+				licenseCertificate = cf.generateCertificate(new FileInputStream(f));
+				return licenseCertificate;
+			}
 		} catch (final Exception e) {
 		}
 		return null;
