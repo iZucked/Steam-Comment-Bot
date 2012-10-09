@@ -34,6 +34,8 @@
 		<module>com.mmxlabs.ganttviewer</module>
 
 		<module>com.mmxlabs.models.common</module>
+		
+		<module>com.mmxlabs.license.ssl</module>
 
 		<module>com.mmxlabs.rcp.common.feature</module>
 
