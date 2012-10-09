@@ -737,6 +737,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	/**
 	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/ui/numberFormat</b>.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
