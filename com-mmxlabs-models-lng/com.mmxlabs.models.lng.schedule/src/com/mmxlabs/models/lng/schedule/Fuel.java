@@ -48,7 +48,16 @@ public enum Fuel implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	NBO(1, "NBO", "NBO");
+	NBO(2, "NBO", "NBO"), /**
+	 * The '<em><b>Pilot Light</b></em>' literal object.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #PILOT_LIGHT_VALUE
+	 * @generated
+	 * @ordered
+	 */
+	PILOT_LIGHT(3, "PilotLight", "PilotLight");
 
 	/**
 	 * The '<em><b>Base Fuel</b></em>' literal value.
@@ -93,7 +102,23 @@ public enum Fuel implements Enumerator {
 	 * @generated
 	 * @ordered
 	 */
-	public static final int NBO_VALUE = 1;
+	public static final int NBO_VALUE = 2;
+
+	/**
+	 * The '<em><b>Pilot Light</b></em>' literal value.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of '<em><b>Pilot Light</b></em>' literal object isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #PILOT_LIGHT
+	 * @model name="PilotLight"
+	 * @generated
+	 * @ordered
+	 */
+	public static final int PILOT_LIGHT_VALUE = 3;
 
 	/**
 	 * An array of all the '<em><b>Fuel</b></em>' enumerators.
@@ -106,6 +131,7 @@ public enum Fuel implements Enumerator {
 			BASE_FUEL,
 			FBO,
 			NBO,
+			PILOT_LIGHT,
 		};
 
 	/**
@@ -158,6 +184,8 @@ public enum Fuel implements Enumerator {
 		switch (value) {
 			case BASE_FUEL_VALUE: return BASE_FUEL;
 			case FBO_VALUE: return FBO;
+			case NBO_VALUE: return NBO;
+			case PILOT_LIGHT_VALUE: return PILOT_LIGHT;
 		}
 		return null;
 	}

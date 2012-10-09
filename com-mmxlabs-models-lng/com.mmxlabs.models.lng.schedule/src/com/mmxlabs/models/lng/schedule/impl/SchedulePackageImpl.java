@@ -1756,6 +1756,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		addEEnumLiteral(fuelEEnum, Fuel.BASE_FUEL);
 		addEEnumLiteral(fuelEEnum, Fuel.FBO);
 		addEEnumLiteral(fuelEEnum, Fuel.NBO);
+		addEEnumLiteral(fuelEEnum, Fuel.PILOT_LIGHT);
 
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
