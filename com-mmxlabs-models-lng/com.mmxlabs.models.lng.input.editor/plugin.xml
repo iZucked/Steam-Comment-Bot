@@ -80,10 +80,16 @@
        id="com.mmxlabs.models.lng.input.cargohelpers"
        point="com.mmxlabs.models.ui.componenthelpers">
     <componentHelper
-          helperClass="com.mmxlabs.models.lng.input.ui.cargoeditor.AssignmentInlineEditorComponentHelper"
+          helperClass="com.mmxlabs.models.lng.input.ui.inlineeditor.AssignmentInlineEditorComponentHelper"
           id="com.mmxlabs.models.lng.input.editor.cargoAssignmentHelper"
           inheritable="false"
           modelClass="com.mmxlabs.models.lng.cargo.Cargo">
+    </componentHelper>
+    <componentHelper
+          helperClass="com.mmxlabs.models.lng.input.ui.inlineeditor.AssignmentInlineEditorComponentHelper"
+          id="com.mmxlabs.models.lng.input.editor.vesselEventAssignmentHelper"
+          inheritable="false"
+          modelClass="com.mmxlabs.models.lng.fleet.VesselEvent">
     </componentHelper>
  </extension>
  <extension
