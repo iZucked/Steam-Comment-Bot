@@ -84,11 +84,11 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 		commodityPane.defaultSetTitle("Commodity Indices");
 
 		charterIndicesPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+		charterIndicesPane.setUseIntegers(true);
 		charterIndicesPane.createControl(sash2);
 		charterIndicesPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CharterIndices()), editorPart.getAdapterFactory());
 		charterIndicesPane.getViewer().setInput(modelObject);
 		charterIndicesPane.defaultSetTitle("Chartering Indices");
-		charterIndicesPane.setUseIntegers(true);
 
 		fleetCostPane = new CharterMarketPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		fleetCostPane.createControl(sash3);
