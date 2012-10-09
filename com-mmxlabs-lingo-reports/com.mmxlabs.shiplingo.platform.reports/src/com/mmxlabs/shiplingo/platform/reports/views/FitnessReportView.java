@@ -443,6 +443,6 @@ public class FitnessReportView extends ViewPart {
 			}
 		}
 
-		scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > (showDeltaColumn ? 2 : 1));
+		scheduleColumnViewer.getColumn().setVisible(numberOfSchedules > 1);
 	}
 }

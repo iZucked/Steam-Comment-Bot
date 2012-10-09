@@ -231,7 +231,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 				}
 				if (journey.getRoute().contains("canal")) {
 					eventText.append(" | " + journey.getRoute() + "\n");
-				}
+				}	
 
 			} else if (element instanceof SlotVisit) {
 				eventText.append("Time in port: " + durationTime + " \n");
@@ -248,7 +248,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 					eventText.append("LATE by " + getLatenessString(localStart, windowEndDate) + "\n");
 				}
 			} else if (element instanceof VesselEventVisit) {
-				eventText.append("Duration: " + durationTime);
+				eventText.append("Duration: " + durationTime + "\n");
 				final VesselEventVisit vev = (VesselEventVisit) element;
 				if (vev.getStart().after(vev.getVesselEvent().getStartBy())) {
 					// lateness;
@@ -269,7 +269,7 @@ public class EMFScheduleLabelProvider extends BaseLabelProvider implements IGant
 			{
 				Integer value = getPnL(element);
 				if (value != null) {
-					eventText.append("P&L: " + String.format("$%,d", value.intValue()));
+					eventText.append("\nP&L: " + String.format("$%,d", value.intValue()));
 				}
 			}
 
