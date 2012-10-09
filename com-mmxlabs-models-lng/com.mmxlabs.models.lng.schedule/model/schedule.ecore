@@ -173,7 +173,8 @@
   <eClassifiers xsi:type="ecore:EEnum" name="Fuel">
     <eLiterals name="BaseFuel"/>
     <eLiterals name="FBO" value="1" literal="FBO"/>
-    <eLiterals name="NBO" value="1" literal="NBO"/>
+    <eLiterals name="NBO" value="2" literal="NBO"/>
+    <eLiterals name="PilotLight" value="3" literal="PilotLight"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PortVisit" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCost" lowerBound="1"
