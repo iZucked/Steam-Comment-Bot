@@ -14,10 +14,22 @@ public class PackTableColumnsAction extends Action {
 
 	private final TableViewer viewer;
 
+	private final boolean onlyResizable;
+
 	public PackTableColumnsAction(final TableViewer viewer) {
+		this(viewer, false);
+	}
+
+	/**
+	 * Create the Action, specifying whether to pack() all {@link TableColumn}s or only those where {@link TableColumn#getResizable()} returns true.
+	 * 
+	 * @since 2.0
+	 */
+	public PackTableColumnsAction(final TableViewer viewer, final boolean onlyResizable) {
 		super("Pack Columns");
 		setImageDescriptor(Activator.getImageDescriptor("/icons/pack.gif"));
 		this.viewer = viewer;
+		this.onlyResizable = onlyResizable;
 	}
 
 	@Override
@@ -26,7 +38,9 @@ public class PackTableColumnsAction extends Action {
 		if (!viewer.getControl().isDisposed()) {
 			final TableColumn[] columns = viewer.getTable().getColumns();
 			for (final TableColumn c : columns) {
-				c.pack();
+				if (!onlyResizable || c.getResizable()) {
+					c.pack();
+				}
 			}
 		}
 	}
