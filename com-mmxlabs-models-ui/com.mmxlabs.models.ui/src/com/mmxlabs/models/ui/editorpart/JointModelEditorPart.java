@@ -101,7 +101,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	/**
 	 * Flag to enable the default EMF tree view editor
 	 */
-	private static final boolean DEBUG = false;
+	private static final boolean DEBUG = true;
 
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 
@@ -559,34 +559,58 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	public void dispose() {
 		if (referenceLock != null) {
 			referenceLock.release();
+			referenceLock = null;
 		}
 
 		unsetPinMode();
 
 		if (diffEditHandler != null) {
 			diffEditHandler.onEditorDisposed();
+			diffEditHandler = null;
 		}
 
 		if (referencePinPartListener != null) {
 			getSite().getPage().removePartListener(referencePinPartListener);
+			referencePinPartListener = null;
 		}
 		if (externalSelectionChangedListener != null) {
 			getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(externalSelectionChangedListener);
+			externalSelectionChangedListener = null;
 		}
 
 		if (editorLock != null) {
 			editorLock.eAdapters().remove(lockedAdapter);
+			this.editorLock = null;
 		}
 
 		for (final IJointModelEditorContribution contribution : contributions) {
 			contribution.dispose();
 		}
+		contributions.clear();
+
 		if (referenceValueProviderCache != null) {
 			referenceValueProviderCache.dispose();
+			referenceValueProviderCache = null;
 		}
+
 		if (editorTitleImage != null) {
 			editorTitleImage.dispose();
+			editorTitleImage = null;
 		}
+
+		this.adapterFactory = null;
+		this.commandStack = null;
+		this.currentViewer = null;
+		this.editingDomain = null;
+		this.editorSelection = null;
+		this.lockedAdapter = null;
+		this.validationContextStack.clear();
+		this.selectionViewer = null;
+		this.rootObject = null;
+		this.scenarioInstance = null;
+		this.scenarioInstanceStatusProvider = null;
+		this.scenarioService = null;
+		this.selectionChangedListeners.clear();
 
 		super.dispose();
 	}
