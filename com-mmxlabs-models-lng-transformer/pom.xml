@@ -32,6 +32,7 @@
 
 		<module>com.mmxlabs.models.lng.transformer</module>
 		<module>com.mmxlabs.models.lng.transformer.ui</module>
+		<module>com.mmxlabs.models.lng.liveevaluator</module>
 
 		<module>com.mmxlabs.models.lng.transformer.feature</module>
 
