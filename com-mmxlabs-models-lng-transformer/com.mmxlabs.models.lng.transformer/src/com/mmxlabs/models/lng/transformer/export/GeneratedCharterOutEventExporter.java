@@ -56,7 +56,6 @@ public class GeneratedCharterOutEventExporter extends BaseAnnotationExporter {
 		// return null;
 
 		final GeneratedCharterOut generatedCharterOutEvent = factory.createGeneratedCharterOut();
-
 		generatedCharterOutEvent.setPort(ePort);
 		generatedCharterOutEvent.setStart(entities.getDateFromHours(event.getStartTime()));
 		generatedCharterOutEvent.setEnd(entities.getDateFromHours(event.getEndTime()));
