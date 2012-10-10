@@ -544,6 +544,7 @@ public class CargoWiringComposite extends Composite {
 			}
 
 		}
+		validationMap.clear();
 	}
 
 	/**
