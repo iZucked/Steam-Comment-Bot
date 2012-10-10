@@ -542,9 +542,15 @@ public class CargoWiringComposite extends Composite {
 					}
 				}
 			}
+			
+			for (Cargo c : cargoes) {
+				c.eAdapters().remove(cargoChangeAdapter);
+			}
 
 		}
 		validationMap.clear();
+		
+		super.dispose();
 	}
 
 	/**
