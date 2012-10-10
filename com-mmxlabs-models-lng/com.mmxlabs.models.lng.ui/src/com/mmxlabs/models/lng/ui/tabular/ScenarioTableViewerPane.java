@@ -109,6 +109,9 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			externalToolbarManager.update(true);
 		}
 		externalToolbarManager = null;
+		
+		scenarioViewer = null;
+		
 		super.dispose();
 	}
 
