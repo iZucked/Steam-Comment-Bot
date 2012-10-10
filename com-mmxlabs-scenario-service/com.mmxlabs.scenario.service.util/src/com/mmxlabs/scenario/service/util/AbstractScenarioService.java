@@ -309,7 +309,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		// create MMXRootObject and connect submodel instances into it.
 		for (final String subModelURI : instance.getSubModelURIs()) {
 			// acquire sub models
-			log.debug("Unoading submodel from " + subModelURI);
+			log.debug("Unloading submodel from " + subModelURI);
 			try {
 				final IModelInstance modelInstance = modelService.getModel(resolveURI(subModelURI));
 				modelInstance.unload();
