@@ -162,6 +162,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	private ScenarioInstance scenarioInstance;
 
 	private AdapterImpl lockedAdapter;
+	private AdapterImpl scenarioNameAdapter;
 
 	private TreeViewer selectionViewer;
 
@@ -433,9 +434,17 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				}
 			}
 		};
-		// instance.eAdapters().add(lockedAdapter);
-
 		editorLock.eAdapters().add(lockedAdapter);
+
+		scenarioNameAdapter = new AdapterImpl() {
+			@Override
+			public void notifyChanged(final Notification msg) {
+				if (msg.isTouch() == false && msg.getFeature() == ScenarioServicePackage.eINSTANCE.getContainer_Name()) {
+					setPartName(msg.getNewStringValue());
+				}
+			}
+		};
+		instance.eAdapters().add(scenarioNameAdapter);
 
 		if (ro instanceof MMXRootObject) {
 			root = (MMXRootObject) ro;
@@ -585,6 +594,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		if (editorLock != null) {
 			editorLock.eAdapters().remove(lockedAdapter);
 			this.editorLock = null;
+		}
+		if (scenarioNameAdapter != null) {
+			scenarioInstance.eAdapters().remove(scenarioNameAdapter);
+			this.scenarioNameAdapter = null;
 		}
 
 		for (final IJointModelEditorContribution contribution : contributions) {
