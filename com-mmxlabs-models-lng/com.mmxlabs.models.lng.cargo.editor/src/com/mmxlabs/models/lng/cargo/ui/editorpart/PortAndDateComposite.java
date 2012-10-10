@@ -100,7 +100,9 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	public void dispose() {
 
 		slot = null;
+		commandHandler = null;
 
+		editors.clear();
 		super.dispose();
 	}
 
