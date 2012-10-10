@@ -54,4 +54,9 @@ public interface IModelInstance {
 	boolean isDirty();
 
 	URI getURI();
+
+	/**
+	 * @since 2.0
+	 */
+	void unload();
 }

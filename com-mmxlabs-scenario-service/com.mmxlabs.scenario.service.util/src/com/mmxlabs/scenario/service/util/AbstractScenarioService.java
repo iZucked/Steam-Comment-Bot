@@ -291,4 +291,36 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 		return dup;
 	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void unload(final ScenarioInstance instance) {
+		if (instance.getInstance() == null) {
+			return;
+		}
+
+		fireEvent(ScenarioServiceEvent.PRE_UNLOAD, instance);
+
+		instance.getAdapters().remove(EditingDomain.class);
+		instance.getAdapters().remove(BasicCommandStack.class);
+		
+		// create MMXRootObject and connect submodel instances into it.
+		for (final String subModelURI : instance.getSubModelURIs()) {
+			// acquire sub models
+			log.debug("Unoading submodel from " + subModelURI);
+			try {
+				final IModelInstance modelInstance = modelService.getModel(resolveURI(subModelURI));
+				modelInstance.unload();
+			} catch (IOException e) {
+				e.printStackTrace();
+				// ignore as we are unloading
+			}
+		}
+		instance.setInstance(null);
+
+		fireEvent(ScenarioServiceEvent.POST_UNLOAD, instance);
+	}
+
 }

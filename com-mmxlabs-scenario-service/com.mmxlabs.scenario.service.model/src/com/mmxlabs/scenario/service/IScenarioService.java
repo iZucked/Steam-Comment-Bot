@@ -109,4 +109,9 @@ public interface IScenarioService {
 	 * @param listener
 	 */
 	void removeScenarioServiceListener(IScenarioServiceListener listener);
+
+	/**
+	 * @since 2.0
+	 */
+	void unload(ScenarioInstance model);
 }

@@ -22,7 +22,14 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  */
 public abstract class AbstractScenarioServiceListenerHandler implements IScenarioService {
 	protected enum ScenarioServiceEvent {
-		PRE_LOAD, POST_LOAD, PRE_SAVE, POST_SAVE, PRE_DELETE, POST_DELETE
+		PRE_LOAD, POST_LOAD, PRE_SAVE, POST_SAVE, PRE_DELETE, POST_DELETE,
+		/**
+		 * @since 2.0
+		 */
+		PRE_UNLOAD, /**
+		 * @since 2.0
+		 */
+		POST_UNLOAD
 
 	}
 
@@ -59,6 +66,11 @@ public abstract class AbstractScenarioServiceListenerHandler implements IScenari
 				l.onPostScenarioInstanceLoad(this, scenarioInstance);
 			}
 			break;
+		case POST_UNLOAD:
+			for (final IScenarioServiceListener l : listeners) {
+				l.onPostScenarioInstanceUnload(this, scenarioInstance);
+			}
+			break;
 		case POST_SAVE:
 			for (final IScenarioServiceListener l : listeners) {
 				l.onPostScenarioInstanceSave(this, scenarioInstance);
@@ -72,6 +84,11 @@ public abstract class AbstractScenarioServiceListenerHandler implements IScenari
 		case PRE_LOAD:
 			for (final IScenarioServiceListener l : listeners) {
 				l.onPreScenarioInstanceLoad(this, scenarioInstance);
+			}
+			break;
+		case PRE_UNLOAD:
+			for (final IScenarioServiceListener l : listeners) {
+				l.onPreScenarioInstanceUnload(this, scenarioInstance);
 			}
 			break;
 		case PRE_SAVE:

@@ -171,6 +171,7 @@ public class ModelInstance implements IModelInstance {
 	@Override
 	public void delete() throws IOException {
 		removeUUIDAdapter();
+		modelObject = null;
 		resource.delete(null);
 	}
 
@@ -213,5 +214,12 @@ public class ModelInstance implements IModelInstance {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void unload() {
+		removeUUIDAdapter();
+		modelObject = null;
+		resource.unload();
 	}
 }
