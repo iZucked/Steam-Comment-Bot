@@ -54,7 +54,7 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		gridLayout.marginHeight = 0;
 		// gridLayout.marginBottom = 0;
 		// gridLayout.marginTop = 0;
-		
+
 		// 7 for validation markers
 		gridLayout.horizontalSpacing = 7;
 		gridLayout.verticalSpacing = 0;

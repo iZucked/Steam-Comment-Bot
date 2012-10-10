@@ -542,7 +542,7 @@ public class CargoWiringComposite extends Composite {
 					}
 				}
 			}
-			
+
 			for (Cargo c : cargoes) {
 				c.eAdapters().remove(cargoChangeAdapter);
 			}
