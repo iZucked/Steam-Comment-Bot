@@ -204,7 +204,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		Display.getDefault().asyncExec(new Runnable() {
 			@Override
 			public void run() {
-				ScenarioInstance scenarioInstance2 = getScenarioInstance();
+				final ScenarioInstance scenarioInstance2 = getScenarioInstance();
 				if (scenarioInstance2 == null) {
 					return;
 				}
@@ -224,7 +224,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 				updateTitleImage(getEditorInput());
 				// It is possible (due to asyncExec) that the lock has since been cleared, so see whether it is still live now
 				// Use the detected lock status, rather than provided to get the new lock status - ignore validation locks
-				boolean newLock = !validationLock && scenarioInstance2.isLocked();
+				final boolean newLock = !validationLock && scenarioInstance2.isLocked();
 				// Only update state if it has changed.
 				if (JointModelEditorPart.this.locked == newLock) {
 					return;
@@ -601,6 +601,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			editorTitleImage.dispose();
 			editorTitleImage = null;
 		}
+		if (scenarioInstanceStatusProvider != null) {
+			this.scenarioInstanceStatusProvider.dispose();
+			this.scenarioInstanceStatusProvider = null;
+		}
+		if (propertySheetPage != null) {
+			propertySheetPage.dispose();
+			propertySheetPage = null;
+		}
 
 		this.adapterFactory = null;
 		this.commandStack = null;
@@ -612,7 +620,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		this.selectionViewer = null;
 		this.rootObject = null;
 		this.scenarioInstance = null;
-		this.scenarioInstanceStatusProvider = null;
 		this.scenarioService = null;
 		this.selectionChangedListeners.clear();
 
