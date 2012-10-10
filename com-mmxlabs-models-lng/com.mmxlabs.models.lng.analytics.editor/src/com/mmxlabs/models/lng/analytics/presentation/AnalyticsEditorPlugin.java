@@ -8,9 +8,7 @@ import org.eclipse.emf.common.EMFPlugin;
 import org.eclipse.emf.common.ui.EclipseUIPlugin;
 import org.eclipse.emf.common.util.ResourceLocator;
 import org.osgi.framework.BundleContext;
-import org.osgi.util.tracker.ServiceTracker;
 
-import com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator;
 import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 
@@ -75,8 +73,6 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 	 */
 	public static class Implementation extends EclipseUIPlugin {
 
-		private ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator> evaluatorTracker;
-
 		/**
 		 * Creates an instance.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -98,8 +94,6 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		@Override
 		public void start(final BundleContext context) throws Exception {
 			super.start(context);
-			evaluatorTracker = new ServiceTracker<IScenarioInstanceEvaluator, IScenarioInstanceEvaluator>(context, IScenarioInstanceEvaluator.class, null);
-			evaluatorTracker.open();
 		}
 
 		/*
@@ -109,12 +103,7 @@ public final class AnalyticsEditorPlugin extends EMFPlugin {
 		 */
 		@Override
 		public void stop(final BundleContext context) throws Exception {
-			evaluatorTracker.close();
 			super.stop(context);
-		}
-
-		public IScenarioInstanceEvaluator getResourceEvaluator() {
-			return evaluatorTracker.getService();
 		}
 	}
 
