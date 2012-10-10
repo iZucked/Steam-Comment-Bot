@@ -502,6 +502,9 @@ public class EObjectTableViewer extends GridTableViewer {
 		removeAdapters();
 		cellRenderers.clear();
 
+		currentContainer = null;
+		externalReferences.clear();
+		externalNotifiersByObject.clear();
 		currentElements.clear();
 		columnSortOrder.clear();
 
