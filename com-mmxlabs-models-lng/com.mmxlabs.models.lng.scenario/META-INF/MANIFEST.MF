@@ -27,9 +27,9 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.util;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.optimiser;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.analytics;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.scenario.service.manifest;bundle-version="[1.0.0,2.0.0)",
- com.mmxlabs.scenario.service.model;bundle-version="[1.0.0,2.0.0)",
- com.mmxlabs.scenario.service.ui;bundle-version="[1.0.0,2.0.0)",
+ com.mmxlabs.scenario.service.manifest;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.scenario.service.model;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.scenario.service.ui;bundle-version="[2.0.0,3.0.0)",
  com.google.inject;bundle-version="3.0.0"
 Bundle-ActivationPolicy: lazy
 Bundle-Activator: com.mmxlabs.models.lng.scenario.internal.Activator
