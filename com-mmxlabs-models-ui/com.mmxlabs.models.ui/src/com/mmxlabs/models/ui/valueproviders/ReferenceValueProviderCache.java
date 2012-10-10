@@ -25,7 +25,7 @@ import com.mmxlabs.models.ui.registries.IReferenceValueProviderFactoryRegistry;
  */
 public class ReferenceValueProviderCache implements IReferenceValueProviderProvider {
 	private final IReferenceValueProviderFactoryRegistry registry;
-	private final MMXRootObject rootObject;
+	private MMXRootObject rootObject;
 	private final HashMap<Pair<EClass, EReference>, IReferenceValueProvider> cache = new HashMap<Pair<EClass, EReference>, IReferenceValueProvider>();
 
 	private static final Logger log = LoggerFactory.getLogger(ReferenceValueProviderCache.class);
@@ -67,5 +67,7 @@ public class ReferenceValueProviderCache implements IReferenceValueProviderProvi
 				valueProvider.dispose();
 			}
 		}
+		this.cache.clear();
+		this.rootObject = null;
 	}
 }
