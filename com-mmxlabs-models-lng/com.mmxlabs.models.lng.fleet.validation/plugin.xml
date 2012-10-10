@@ -190,7 +190,7 @@
                   severity="ERROR"
                   statusCode="1">
                <message>
-                  Vessel {0}'s {1} requirement is set for port {3}, but the vessel is of class {2} which cannot dock at {3}.
+                  {0}
                </message>
                <description>
                   The start or end port of a vessel must be compatible with that vessel's class
@@ -198,21 +198,6 @@
                <target
                      class="VesselAvailability">
                </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityPortConstraint"
-                  id="com.mmxlabs.models.lng.fleet.validation.VesselAvailabilityPortConstraint.port_access_2"
-                  lang="Java"
-                  mode="Batch"
-                  name="Start / End Port Accessibility"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  The vessels {0} have start / end requirements at the ports {1}, which are in the inaccessible port list.
-               </message>
-               <description>
-                  The start or end port of a vessel must be compatible with that vessel's class
-               </description>
                <target
                      class="VesselClass">
                </target>
@@ -344,6 +329,22 @@
                </description>
                <target
                      class="CharterOutEvent">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedCurveConstraint"
+                  id="com.mmxlabs.models.lng.fleet.validation.VesselClassSpeedCurveConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Vessel Class Speed Curve Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="VesselClass">
                </target>
             </constraint>
          </constraints>
