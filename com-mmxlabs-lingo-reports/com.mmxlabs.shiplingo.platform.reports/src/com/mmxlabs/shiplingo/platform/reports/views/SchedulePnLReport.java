@@ -297,6 +297,11 @@ public class SchedulePnLReport extends EMFReportView {
 			return true;
 		}
 
+		if (pinnedObject instanceof GeneratedCharterOut || otherObject instanceof GeneratedCharterOut) {
+			// Specific to each scenario/schedule so always mark as different.
+			return true;
+		}
+
 		if (pinnedObject instanceof CargoAllocation && otherObject instanceof CargoAllocation) {
 			CargoAllocation ref = null;
 			CargoAllocation ca = null;
