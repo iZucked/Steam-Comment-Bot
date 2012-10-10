@@ -305,7 +305,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 
 		instance.getAdapters().remove(EditingDomain.class);
 		instance.getAdapters().remove(BasicCommandStack.class);
-		
+
 		// create MMXRootObject and connect submodel instances into it.
 		for (final String subModelURI : instance.getSubModelURIs()) {
 			// acquire sub models
@@ -313,11 +313,16 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 			try {
 				final IModelInstance modelInstance = modelService.getModel(resolveURI(subModelURI));
 				modelInstance.unload();
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				e.printStackTrace();
 				// ignore as we are unloading
 			}
 		}
+
+		final MMXRootObject rootObject = (MMXRootObject) instance.getInstance();
+		rootObject.getSubModels().clear();
+		rootObject.getProxies().clear();
+
 		instance.setInstance(null);
 
 		fireEvent(ScenarioServiceEvent.POST_UNLOAD, instance);
