@@ -70,6 +70,12 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 	@Override
 	public IMove generateMove() {
 
+		// TODO: Disable move generator completely in such cases
+		if (targetElements.isEmpty()) {
+			return null;
+		}
+		
+		
 		final ShuffleElementsBuilder builder = new ShuffleElementsBuilder();
 
 		// Set of elements already considered in our move. They should no longer be considered available or in the follower or preceders lists
@@ -79,11 +85,6 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		final IResource elementResource = elementPosition.getFirst() == null ? null : owner.getSequences().getResources().get(elementPosition.getFirst());
 		final ISequence elementSequence = owner.getSequences().getSequence(elementResource);
 		touchedElements.add(element);
-
-		if (element.toString().contains("201306")) {
-			int ii = 0;
-		}
-
 
 		boolean foundMove = false;
 		// Link to a follower or preceder
