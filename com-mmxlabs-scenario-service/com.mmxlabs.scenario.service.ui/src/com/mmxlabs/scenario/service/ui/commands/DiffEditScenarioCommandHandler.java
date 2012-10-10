@@ -5,8 +5,7 @@
 package com.mmxlabs.scenario.service.ui.commands;
 
 import java.lang.reflect.InvocationTargetException;
-import java.text.DateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -17,6 +16,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.content.IContentType;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -58,10 +58,29 @@ public class DiffEditScenarioCommandHandler extends AbstractHandler {
 				if (element instanceof ScenarioInstance) {
 
 					ScenarioInstance instance = (ScenarioInstance) element;
+
+					// Check for existing sandbox scenario
+					for (Container c : new ArrayList<Container>(instance.getElements())) {
+						if (c instanceof ScenarioInstance && c.isHidden() && c.getName().startsWith("[Sandbox]")) {
+
+							ScenarioInstance subInstance = (ScenarioInstance) c;
+							EObject instance2 = subInstance.getInstance();
+							if (instance2 == null) {
+								// Assume not cleaned up!
+								String name = "[Sandbox-Recovered] " + subInstance.getName();
+								subInstance.setName(name);
+								subInstance.setHidden(false);
+								// subInstance.getScenarioService().delete(subInstance);
+							} else {
+								// Most likely already in sandbox, so ignore
+								return null;
+							}
+						}
+					}
+
 					final IScenarioService scenarioService = instance.getScenarioService();
 
 					try {
-						final DateFormat df = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 						final Set<String> existingNames = new HashSet<String>();
 						for (final Container c : instance.getElements()) {
