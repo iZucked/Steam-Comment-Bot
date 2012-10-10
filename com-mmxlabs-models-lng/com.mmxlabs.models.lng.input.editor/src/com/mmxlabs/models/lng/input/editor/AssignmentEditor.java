@@ -28,6 +28,8 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.IFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.DisposeEvent;
+import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.MenuDetectEvent;
 import org.eclipse.swt.events.MenuDetectListener;
 import org.eclipse.swt.events.MouseAdapter;
@@ -262,9 +264,18 @@ public class AssignmentEditor<R, T> extends Canvas {
 			}
 		});
 
+		
+		addDisposeListener(new DisposeListener() {
+			@Override
+			public void widgetDisposed(final DisposeEvent event) {
+				dispose();
+			}
+		});
 		final MenuManager manager = new MenuManager();
 
 		setMenu(manager.createContextMenu(AssignmentEditor.this));
+		
+		colors = new AssignmentEditorColors(getDisplay());
 	}
 
 	private void notifyEditEvent(final T task) {
@@ -467,10 +478,6 @@ public class AssignmentEditor<R, T> extends Canvas {
 		if (isDisposed())
 			return;
 		prepare();
-
-		if (colors == null) {
-			colors = new AssignmentEditorColors(getDisplay());
-		}
 
 		final int oldMinWidth = minWidth;
 		final int oldMinHeight = minHeight;
