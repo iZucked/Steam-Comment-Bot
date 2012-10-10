@@ -94,4 +94,23 @@ public enum FuelComponent {
 	public static FuelComponent[] getLNGFuelComponents() {
 		return lngFuelComponents;
 	}
+
+	private static final FuelComponent[] baseNoPilotFuelComponents = new FuelComponent[] { Base, Base_Supplemental, IdleBase };
+
+	/**
+	 * @since 2.0
+	 */
+	public static FuelComponent[] getBaseFuelComponentsNoPilot() {
+		return baseNoPilotFuelComponents;
+	}
+
+	private static final FuelComponent[] pilotLightFuelComponents = new FuelComponent[] { PilotLight, IdlePilotLight };
+
+	/**
+	 * @since 2.0
+	 */
+	public static FuelComponent[] getPilotLightFuelComponents() {
+		return pilotLightFuelComponents;
+	}
+
 }
