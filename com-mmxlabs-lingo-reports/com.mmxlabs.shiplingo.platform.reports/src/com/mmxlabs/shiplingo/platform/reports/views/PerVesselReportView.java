@@ -10,13 +10,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.actions.ActionFactory;
@@ -31,131 +32,132 @@ import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
+import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 
 public class PerVesselReportView extends ViewPart {
 
-	private GridTableViewer tableViewer;
+	private TableViewer tableViewer;
 	private ScenarioViewerSynchronizer synchronizer;
-	private PackGridTableColumnsAction packColumnsAction;
-	private CopyGridToClipboardAction copyTableAction;
+	private Action packColumnsAction;
+	private Action copyTableAction;
 
 	private IScenarioViewerSynchronizerOutput lastInput;
-	private GridViewerColumn scheduleColumnViewer;
-	
+	private TableViewerColumn scheduleColumnViewer;
+
 	@Override
 	public void createPartControl(final Composite parent) {
-		tableViewer = new GridTableViewer(parent);
-		
-		tableViewer.getGrid().setHeaderVisible(true);
-		tableViewer.getGrid().setLinesVisible(true);
-		
-		scheduleColumnViewer = new GridViewerColumn(tableViewer, SWT.NONE);
+		tableViewer = new TableViewer(parent);
+
+		tableViewer.getTable().setHeaderVisible(true);
+		tableViewer.getTable().setLinesVisible(true);
+
+		scheduleColumnViewer = new TableViewerColumn(tableViewer, SWT.NONE);
 		scheduleColumnViewer.getColumn().setText("Scenario");
 		scheduleColumnViewer.getColumn().pack();
-		scheduleColumnViewer.setLabelProvider(
-				new ColumnLabelProvider() {
-					@Override
-					public String getText(Object element) {
-						return lastInput.getScenarioInstance(element).getName();
-					}
-				});
-		
-		final GridViewerColumn name = new GridViewerColumn(tableViewer, SWT.NONE);
+		scheduleColumnViewer.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return lastInput.getScenarioInstance(element).getName();
+			}
+		});
+
+		final TableViewerColumn name = new TableViewerColumn(tableViewer, SWT.NONE);
 		name.getColumn().setText("Vessel");
 		name.getColumn().pack();
-		name.setLabelProvider(
-				new ColumnLabelProvider() {
-					@Override
-					public String getText(Object element) {
-						return ((VesselCosts)element).name;
-					}
-				});
-		
-		final GridViewerColumn hire = new GridViewerColumn(tableViewer, SWT.NONE);
+		name.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return ((VesselCosts) element).name;
+			}
+		});
+
+		final TableViewerColumn hire = new TableViewerColumn(tableViewer, SWT.NONE);
 		hire.getColumn().setText("Hire Cost");
 		hire.getColumn().pack();
-		hire.setLabelProvider(
-				new ColumnLabelProvider() {
-					@Override
-					public String getText(Object element) {
-						return String.format("%,d", ((VesselCosts)element).hireCost);
-					}
-				});
-		
-		final GridViewerColumn canal = new GridViewerColumn(tableViewer, SWT.NONE);
+		hire.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return String.format("%,d", ((VesselCosts) element).hireCost);
+			}
+		});
+
+		final TableViewerColumn canal = new TableViewerColumn(tableViewer, SWT.NONE);
 		canal.getColumn().setText("Canals");
 		canal.getColumn().pack();
-		canal.setLabelProvider(
-				new ColumnLabelProvider() {
-					@Override
-					public String getText(Object element) {
-						return String.format("%,d", ((VesselCosts)element).canalCost);
-					}
-				});
-		
-		final GridViewerColumn port = new GridViewerColumn(tableViewer, SWT.NONE);
+		canal.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return String.format("%,d", ((VesselCosts) element).canalCost);
+			}
+		});
+
+		final TableViewerColumn port = new TableViewerColumn(tableViewer, SWT.NONE);
 		port.getColumn().setText("Port Costs");
 		port.getColumn().pack();
-		port.setLabelProvider(
-				new ColumnLabelProvider() {
-					@Override
-					public String getText(Object element) {
-						return String.format("%,d", ((VesselCosts)element).portCost);
-					}
-				});
-		
+		port.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return String.format("%,d", ((VesselCosts) element).portCost);
+			}
+		});
+
 		for (final Fuel fuel : Fuel.values()) {
-			final GridViewerColumn f = new GridViewerColumn(tableViewer, SWT.NONE);
+			final TableViewerColumn f = new TableViewerColumn(tableViewer, SWT.NONE);
 			f.getColumn().setText(fuel.name());
 			f.getColumn().pack();
-			f.setLabelProvider(
-					new ColumnLabelProvider() {
-						@Override
-						public String getText(Object element) {
-							final Integer i = ((VesselCosts)element).fuelCosts.get(fuel);
-							if (i == null) return "";
-							return String.format("%,d", i);
-						}
-					});
+			f.setLabelProvider(new ColumnLabelProvider() {
+				@Override
+				public String getText(final Object element) {
+					final Integer i = ((VesselCosts) element).fuelCosts.get(fuel);
+					if (i == null)
+						return "";
+					return String.format("%,d", i);
+				}
+			});
 		}
-		
-		final GridViewerColumn utilisation = new GridViewerColumn(tableViewer, SWT.NONE);
+
+		final TableViewerColumn utilisation = new TableViewerColumn(tableViewer, SWT.NONE);
 		utilisation.getColumn().setText("Utilisation");
 		utilisation.getColumn().pack();
-		utilisation.setLabelProvider(
-				new ColumnLabelProvider() {
-					@Override
-					public String getText(Object element) {
-						return String.format("%.2f%%", ((VesselCosts)element).utilisation * 100);
-					}
-				});
-		
+		utilisation.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return String.format("%.2f%%", ((VesselCosts) element).utilisation * 100);
+			}
+		});
+
 		makeActions();
 		fillLocalToolBar(getViewSite().getActionBars().getToolBarManager());
-		
-		tableViewer.setContentProvider(new IStructuredContentProvider() {			
+
+		tableViewer.setContentProvider(new IStructuredContentProvider() {
 			@Override
-			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 				if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 					final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
 					if (scheduleColumnViewer != null) {
-						scheduleColumnViewer.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
+						if (synchronizerOutput.getRootObjects().size() > 1) {
+
+							scheduleColumnViewer.getColumn().setResizable(true);
+							scheduleColumnViewer.getColumn().pack();
+						} else {
+							scheduleColumnViewer.getColumn().setWidth(0);
+							scheduleColumnViewer.getColumn().setResizable(false);
+						}
 					}
 				}
 			}
-			
+
 			@Override
 			public void dispose() {
-				
+
 			}
-			
+
 			@Override
-			public Object[] getElements(Object inputElement) {
+			public Object[] getElements(final Object inputElement) {
 				lastInput = null;
 				if (inputElement instanceof IScenarioViewerSynchronizerOutput) {
 					lastInput = (IScenarioViewerSynchronizerOutput) inputElement;
@@ -164,21 +166,20 @@ public class PerVesselReportView extends ViewPart {
 				return new Object[0];
 			}
 		});
-		
-		synchronizer = ScenarioViewerSynchronizer.registerView(tableViewer, 
-				new ScheduleElementCollector() {
-					
-					@Override
-					protected Collection<? extends Object> collectElements(Schedule schedule) {
-						final List<VesselCosts> r = new ArrayList<VesselCosts>();
-						for (final Sequence seq : schedule.getSequences()) {
-							r.add(new VesselCosts(seq));
-						}
-						return r;
-					}
-				});
+
+		synchronizer = ScenarioViewerSynchronizer.registerView(tableViewer, new ScheduleElementCollector() {
+
+			@Override
+			protected Collection<? extends Object> collectElements(final Schedule schedule) {
+				final List<VesselCosts> r = new ArrayList<VesselCosts>();
+				for (final Sequence seq : schedule.getSequences()) {
+					r.add(new VesselCosts(seq));
+				}
+				return r;
+			}
+		});
 	}
-	
+
 	@Override
 	public void dispose() {
 		ScenarioViewerSynchronizer.deregisterView(synchronizer);
@@ -187,7 +188,7 @@ public class PerVesselReportView extends ViewPart {
 
 	@Override
 	public void setFocus() {
-		tableViewer.getGrid().setFocus();
+		tableViewer.getControl().setFocus();
 	}
 
 	private class VesselCosts {
@@ -197,6 +198,7 @@ public class PerVesselReportView extends ViewPart {
 		public int portCost;
 		public double utilisation;
 		public Map<Fuel, Integer> fuelCosts = new HashMap<Fuel, Integer>();
+
 		public VesselCosts(final Sequence sequence) {
 			name = sequence.getName();
 			int activeDuration = 0;
@@ -205,7 +207,7 @@ public class PerVesselReportView extends ViewPart {
 				hireCost += event.getHireCost();
 				if (event instanceof FuelUsage) {
 					for (final FuelQuantity quantity : ((FuelUsage) event).getFuels()) {
-						Integer i = fuelCosts.get(quantity.getFuel());
+						final Integer i = fuelCosts.get(quantity.getFuel());
 						fuelCosts.put(quantity.getFuel(), (i == null ? 0 : i.intValue()) + quantity.getCost());
 					}
 				}
@@ -215,7 +217,7 @@ public class PerVesselReportView extends ViewPart {
 				if (event instanceof PortVisit) {
 					portCost += ((PortVisit) event).getPortCost();
 				}
-				
+
 				if (event instanceof Idle) {
 					idleDuration += event.getDuration();
 				} else {
@@ -223,11 +225,10 @@ public class PerVesselReportView extends ViewPart {
 				}
 			}
 			final int totalDuration = idleDuration + activeDuration;
-			utilisation = totalDuration == 0 ? 0 :
-				((activeDuration) /  (double) totalDuration);
+			utilisation = totalDuration == 0 ? 0 : ((activeDuration) / (double) totalDuration);
 		}
 	}
-	
+
 	private void fillLocalToolBar(final IToolBarManager manager) {
 		manager.add(new GroupMarker("pack"));
 		// Other plug-ins can contribute there actions here
@@ -242,8 +243,8 @@ public class PerVesselReportView extends ViewPart {
 	}
 
 	private void makeActions() {
-		packColumnsAction = new PackGridTableColumnsAction(tableViewer);
-		copyTableAction = new CopyGridToClipboardAction(tableViewer.getGrid());
+		packColumnsAction = new PackTableColumnsAction(tableViewer, true);
+		copyTableAction = new CopyTableToClipboardAction(tableViewer.getTable());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 }
