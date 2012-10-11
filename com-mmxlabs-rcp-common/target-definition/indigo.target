@@ -15,8 +15,6 @@
 <unit id="com.mmxlabs.common.common-util.source" version="1.0.2.201209070858"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="2.3.0.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="2.3.0.RELEASE"/>
-<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.source" version="1.0.0.RELEASE"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
