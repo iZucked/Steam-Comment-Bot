@@ -8,8 +8,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -47,5 +50,10 @@ public class OptimiserModelImporter implements ISubmodelImporter {
 	public void exportModel(MMXRootObject root, UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
 		
 		
+	}
+	
+	@Override
+	public EClass getEClass() {
+		return OptimiserPackage.eINSTANCE.getOptimiserModel();
 	}
 }

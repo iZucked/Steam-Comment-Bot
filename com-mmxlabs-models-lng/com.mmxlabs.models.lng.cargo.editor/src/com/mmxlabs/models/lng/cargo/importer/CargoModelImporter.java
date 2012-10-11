@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -78,5 +79,10 @@ public class CargoModelImporter implements ISubmodelImporter {
 		CargoModel cargoModel = (CargoModel) model;
 		output.put(CARGO_KEY, cargoImporter.exportObjects(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), root));
 		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), root));
+	}
+	
+	@Override
+	public EClass getEClass() {
+		return CargoPackage.eINSTANCE.getCargoModel();
 	}
 }

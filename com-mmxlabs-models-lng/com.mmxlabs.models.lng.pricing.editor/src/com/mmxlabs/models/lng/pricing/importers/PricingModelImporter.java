@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EcorePackage;
 
@@ -267,5 +268,10 @@ public class PricingModelImporter implements ISubmodelImporter {
 			output.put(SPOT_CARGO_MARKETS_KEY, spotCargoMarketImporter.exportObjects(spotMarkets, root));
 		}
 
+	}
+	
+	@Override
+	public EClass getEClass() {
+		return PricingPackage.eINSTANCE.getPricingModel();
 	}
 }
