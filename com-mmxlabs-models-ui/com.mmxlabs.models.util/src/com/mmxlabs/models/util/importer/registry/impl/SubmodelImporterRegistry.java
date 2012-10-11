@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.util.importer.registry.impl;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
@@ -36,4 +40,21 @@ public class SubmodelImporterRegistry extends AbstractRegistry<EClass, ISubmodel
 		return null;
 	}
 
+	/**
+	 * Return all the submodel importer instances.
+	 * @since 2.0
+	 */
+	public Collection<ISubmodelImporter> getAllSubModelImporters() {
+		final List<ISubmodelImporter> l = new ArrayList<ISubmodelImporter>();
+		for (final ISubmodelImporterExtension extension : extensions) {
+			final String id = extension.getID();
+			if (factoryExistsForID(id)) {
+				l.add(getFactoryForID(id));
+			} else {
+				l.add(cacheFactoryForID(id, extension.createInstance()));
+			}
+		}
+
+		return l;
+	}
 }

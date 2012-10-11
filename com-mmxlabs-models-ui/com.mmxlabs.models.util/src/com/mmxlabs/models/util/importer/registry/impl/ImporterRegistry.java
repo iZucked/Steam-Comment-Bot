@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.util.importer.registry.impl;
 
+import java.util.Collection;
+
 import javax.inject.Inject;
 
 import org.eclipse.emf.ecore.EClass;
@@ -33,5 +35,12 @@ public class ImporterRegistry implements IImporterRegistry {
 	public IClassImporter getClassImporter(EClass eClass) {
 		return classRegistry.getClassImporter(eClass);
 	}
-
+	
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public Collection<ISubmodelImporter> getAllSubModelImporters() {
+		return submodelRegistry.getAllSubModelImporters();
+	}
 }

@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.util.importer.registry;
 
+import java.util.Collection;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EDataType;
 
@@ -15,4 +17,10 @@ public interface IImporterRegistry {
 	public IAttributeImporter getAttributeImporter(final EDataType dataType);
 	public ISubmodelImporter getSubmodelImporter(final EClass subModelClass);
 	public IClassImporter getClassImporter(final EClass eClass);
+	/**
+	 * 
+	 * @return
+	 * @since 2.0
+	 */
+	public Collection<ISubmodelImporter> getAllSubModelImporters();
 }
