@@ -904,4 +904,10 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	public void setActivePage(final int pageIndex) {
 		super.setActivePage(pageIndex);
 	}
+	
+	@Override
+	public boolean isSaveOnCloseNeeded() {
+		// Handled by ScenarioServiceSaveHook. Avoid double save prompt.
+		return false;
+	}
 }
