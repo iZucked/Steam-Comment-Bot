@@ -117,6 +117,26 @@ public class ModelInstance implements IModelInstance {
 	}
 
 	@Override
+	public EObject getModelSafe() {
+		try {
+			if (!resource.isLoaded()) {
+				resource.load(Collections.emptyMap());
+				if (resource.getContents().isEmpty()) {
+					log.error("Failed to get contents for " + resource.getURI() + ", as it is empty");
+					return null;
+				} else {
+					modelObject = resource.getContents().get(0);
+					modelObject.eAdapters().add(dirtyAdapter);
+				}
+			}
+			return modelObject;
+		} catch (final Exception e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
+	}
+
+	@Override
 	public void save() throws IOException {
 		if (!isDirty()) {
 			log.debug("Not saving " + resource.getURI() + ", as it's not modified");

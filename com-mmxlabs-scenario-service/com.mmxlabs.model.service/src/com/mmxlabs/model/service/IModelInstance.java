@@ -21,9 +21,16 @@ public interface IModelInstance {
 	 * Return the model instance.
 	 * 
 	 * @return
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	EObject getModel() throws IOException;
+
+	/**
+	 * Similar to {@link #getModel()} except exceptions are caught and logged and null is returned instead.
+	 * 
+	 * @since 2.0
+	 */
+	EObject getModelSafe();
 
 	/**
 	 * Request the current model state should be saved.
@@ -31,9 +38,9 @@ public interface IModelInstance {
 	 * @throws IOException
 	 */
 	void save() throws IOException;
-	
+
 	void saveWithMany() throws IOException;
-	
+
 	/**
 	 * Request the current model should be deleted.
 	 * 
@@ -47,7 +54,7 @@ public interface IModelInstance {
 	 * TODO: Should this be here or part of EditingDomain?
 	 */
 	void rollback();
-	
+
 	/**
 	 * @return true iff this model instance has been changed since last save.
 	 */
@@ -59,4 +66,5 @@ public interface IModelInstance {
 	 * @since 2.0
 	 */
 	void unload();
+
 }
