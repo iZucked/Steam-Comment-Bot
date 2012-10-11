@@ -101,6 +101,7 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 	@Override
 	public boolean preShutdown() {
 
+		// Hook into our save call back before passing on to the platform.
 		boolean ret = ScenarioServiceSaveHook.saveScenarioService();
 
 		return ret && super.preShutdown();
