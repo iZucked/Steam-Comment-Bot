@@ -27,8 +27,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLParserPoolImpl;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.model.service.IModelService;
@@ -42,7 +40,6 @@ import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
  * 
  */
 public class ModelService implements IModelService {
-	private static final Logger log = LoggerFactory.getLogger(ModelService.class);
 	/**
 	 * The cache of loaded instances TODO add weak references.
 	 */
