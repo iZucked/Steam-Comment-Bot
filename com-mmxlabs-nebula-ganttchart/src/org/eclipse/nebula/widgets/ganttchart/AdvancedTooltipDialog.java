@@ -252,6 +252,8 @@ public class AdvancedTooltipDialog {
 		        }
 		        
                 _shell.setLocation(location);
+                
+                region.dispose();
 		        
 			}
 
