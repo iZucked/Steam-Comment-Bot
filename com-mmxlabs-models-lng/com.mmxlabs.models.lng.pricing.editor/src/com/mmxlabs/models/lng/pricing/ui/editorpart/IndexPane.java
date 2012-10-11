@@ -20,8 +20,8 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
 import org.eclipse.nebula.widgets.formattedtext.IntegerFormatter;
@@ -254,7 +254,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 			private void addColumn(final Calendar cal, final boolean sortable, final boolean isIntegerBased) {
 
 				final String date = String.format("%4d-%02d", cal.get(Calendar.YEAR), (cal.get(Calendar.MONTH) + 1));
-				final GridViewerColumn col = addSimpleColumn(date, sortable);
+				final TableViewerColumn col = addSimpleColumn(date, sortable);
 				col.getColumn().setData("date", cal.getTime());
 
 				final ICellRenderer renderer = new ICellRenderer() {
@@ -391,7 +391,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 					@Override
 					protected CellEditor getCellEditor(final Object element) {
-						return manipulator.getCellEditor(((GridTableViewer) viewer).getGrid(), element);
+						return manipulator.getCellEditor(((TableViewer) viewer).getTable(), element);
 					}
 
 					@Override

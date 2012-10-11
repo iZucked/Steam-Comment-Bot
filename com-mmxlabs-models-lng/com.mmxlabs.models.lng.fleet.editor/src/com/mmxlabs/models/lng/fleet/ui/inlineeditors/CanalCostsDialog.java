@@ -16,12 +16,12 @@ import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.window.IShellProvider;
-import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -65,17 +65,17 @@ public class CanalCostsDialog extends Dialog {
 
 		tableViewer.init(adapterFactory, containment);
 
-		final Grid table = tableViewer.getGrid();
+		final Table table = tableViewer.getTable();
 
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		table.setRowHeaderVisible(true);
-		tableViewer.setRowHeaderLabelProvider(new CellLabelProvider() {
-			@Override
-			public void update(final ViewerCell cell) {
-				cell.setText(((VesselClassRouteParameters) cell.getElement()).getRoute().getName());
-			}
-		});
+//		table.setRowHeaderVisible(true);
+//		tableViewer.setRowHeaderLabelProvider(new CellLabelProvider() {
+//			@Override
+//			public void update(final ViewerCell cell) {
+//				cell.setText(((VesselClassRouteParameters) cell.getElement()).getRoute().getName());
+//			}
+//		});
 
 		tableViewer.addTypicalColumn("Transit Time", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_ExtraTransitTime(), editingDomain));
 		tableViewer.addTypicalColumn("Laden Consumption Rate", new NumericAttributeManipulator(FleetPackage.eINSTANCE.getVesselClassRouteParameters_LadenConsumptionRate(), editingDomain));

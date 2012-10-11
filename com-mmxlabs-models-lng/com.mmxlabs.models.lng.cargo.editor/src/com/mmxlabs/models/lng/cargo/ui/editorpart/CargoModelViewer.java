@@ -18,11 +18,13 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CellLabelProvider;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IElementComparer;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -104,7 +106,19 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		final IReferenceValueProviderProvider provider = part.getReferenceValueProviderCache();
 		final EditingDomain editingDomain = part.getEditingDomain();
 
-		final GridViewerColumn state = getScenarioViewer().addSimpleColumn("", false);
+		// Hidden column so background highlight extends the whole way across.
+		final TableViewerColumn hidden = getScenarioViewer().addSimpleColumn("", false);
+		hidden.getColumn().setResizable(false);
+		hidden.getColumn().setWidth(0);
+		hidden.setLabelProvider(new CellLabelProvider() {
+
+			@Override
+			public void update(ViewerCell cell) {
+
+			}
+		});
+
+		final TableViewerColumn state = getScenarioViewer().addSimpleColumn("", false);
 		state.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
 
 			@Override
@@ -171,7 +185,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		setTitle("Cargoes", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 
 		// IElementComparer to handle selection objects from e.g. schedule
-		((GridTableViewer) viewer).setComparer(new IElementComparer() {
+		((TableViewer) viewer).setComparer(new IElementComparer() {
 
 			@Override
 			public int hashCode(final Object element) {
