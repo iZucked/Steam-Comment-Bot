@@ -20,7 +20,6 @@ import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
 import org.eclipse.jface.viewers.IOpenListener;
@@ -30,11 +29,8 @@ import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.jface.gridviewer.GridViewerEditor;
-import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.custom.ViewForm;
@@ -44,6 +40,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -72,7 +69,7 @@ import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
-import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class ScenarioTableViewerPane extends ViewerPane {
@@ -213,7 +210,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 				}
 			});
 
-			scenarioViewer.getGrid().setCellSelectionEnabled(true);
+//			scenarioViewer.getTable().setCellSelectionEnabled(true);
 			filterField.setViewer(scenarioViewer);
 
 			final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
@@ -223,9 +220,9 @@ public class ScenarioTableViewerPane extends ViewerPane {
 				}
 			};
 
-			GridViewerEditor.create(scenarioViewer, actSupport, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR |
-			// ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
-					ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
+//			GridViewerEditor.create(scenarioViewer, actSupport, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR |
+//			// ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
+//					ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
 
 			return scenarioViewer;
 		} else {
@@ -238,11 +235,17 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		return new ScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
 	}
 
-	public <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
+	/**
+	 * @since 2.0
+	 */
+	public <T extends ICellManipulator & ICellRenderer> TableViewerColumn addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
 		return this.addColumn(columnName, manipulatorAndRenderer, manipulatorAndRenderer, path);
 	}
 
-	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
+	/**
+	 * @since 2.0
+	 */
+	public TableViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
 		return scenarioViewer.addColumn(columnName, renderer, manipulator, pathObjects);
 	}
 
@@ -275,7 +278,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 		scenarioViewer.setStatusProvider(getJointModelEditorPart().getStatusProvider());
 
-		final Grid table = scenarioViewer.getGrid();
+		final Table table = scenarioViewer.getTable();
 
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -285,7 +288,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		toolbar.add(new GroupMarker(EDIT_GROUP));
 		toolbar.add(new GroupMarker(ADD_REMOVE_GROUP));
 		toolbar.add(new GroupMarker(VIEW_GROUP));
-		toolbar.appendToGroup(VIEW_GROUP, new PackGridTableColumnsAction(scenarioViewer));
+		toolbar.appendToGroup(VIEW_GROUP, new PackTableColumnsAction(scenarioViewer, true));
 
 		final ActionContributionItem filter = filterField.getContribution();
 
@@ -369,8 +372,8 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			copyToClipboardAction = new CopyTableToClipboardAction(((TableViewer) viewer).getTable());
 		} else if (viewer instanceof TreeViewer) {
 			copyToClipboardAction = new CopyTreeToClipboardAction(((TreeViewer) viewer).getTree());
-		} else if (viewer instanceof GridTableViewer) {
-			copyToClipboardAction = new CopyGridToClipboardAction(((GridTableViewer) viewer).getGrid());
+//		} else if (viewer instanceof GridTableViewer) {
+//			copyToClipboardAction = new CopyGridToClipboardAction(((GridTableViewer) viewer).getGrid());
 		}
 
 		if (copyToClipboardAction != null) {
