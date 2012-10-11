@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.Group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mmxlabs.models.lng.scenario.ManifestJointModel;
 import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
@@ -152,11 +151,12 @@ public class ImportCSVFilesPage extends WizardPage {
 				}
 			}
 		});
-
-		for (final EClass subModelClass : ManifestJointModel.getSubmodelClasses()) {
-			final ISubmodelImporter importer = Activator.getDefault().getImporterRegistry().getSubmodelImporter(subModelClass);
-			if (importer == null)
+		//
+		for (final ISubmodelImporter importer : Activator.getDefault().getImporterRegistry().getAllSubModelImporters()) {
+			if (importer == null) {
 				continue;
+			}
+			EClass subModelClass = importer.getEClass();
 			final Chunk chunk = new Chunk(importer);
 			final Map<String, String> parts = importer.getRequiredInputs();
 			chunks.add(chunk);
