@@ -28,13 +28,11 @@ import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.Grid;
-import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -45,6 +43,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,9 +64,10 @@ import com.mmxlabs.models.util.emfpath.EMFPath;
  * without import/export buttons.
  * 
  * @author Tom Hinton
+ * @since 2.0
  * 
  */
-public class EObjectTableViewer extends GridTableViewer {
+public class EObjectTableViewer extends TableViewer {
 	private final static Logger log = LoggerFactory.getLogger(EObjectTableViewer.class);
 
 	protected static final String COLUMN_PATH = "COLUMN_PATH";
@@ -175,7 +176,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private final LinkedList<Pair<EMFPath, ICellRenderer>> cellRenderers = new LinkedList<Pair<EMFPath, ICellRenderer>>();
 
-	private final ArrayList<GridColumn> columnSortOrder = new ArrayList<GridColumn>();
+	private final ArrayList<TableColumn> columnSortOrder = new ArrayList<TableColumn>();
 
 	/**
 	 * A one-element list referring to the EObject which contains all the display elements. #adapter uses this to determine when a notification comes on the top-level object, and so all the contents
@@ -281,18 +282,24 @@ public class EObjectTableViewer extends GridTableViewer {
 		refresh(false);
 	}
 
-	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
+	/**
+	 * @since 2.0
+	 */
+	public TableViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final Object... pathObjects) {
 		// final EMFPath path = new CompiledEMFPath(getClass().getClassLoader(), true, pathObjects);
 		return addColumn(columnName, renderer, manipulator, new EMFPath(true, pathObjects));
 	}
 
-	public GridViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
+	/**
+	 * @since 2.0
+	 */
+	public TableViewerColumn addColumn(final String columnName, final ICellRenderer renderer, final ICellManipulator manipulator, final EMFPath path) {
 
 		// create a column
-		final GridTableViewer viewer = this;
+		final TableViewer viewer = this;
 
-		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-		final GridColumn tColumn = column.getColumn();
+		final TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
+		final TableColumn tColumn = column.getColumn();
 
 		{
 			final Pair<EMFPath, ICellRenderer> pathAndRenderer = new Pair<EMFPath, ICellRenderer>(path, renderer);
@@ -361,7 +368,7 @@ public class EObjectTableViewer extends GridTableViewer {
 
 			@Override
 			protected CellEditor getCellEditor(final Object element) {
-				return manipulator.getCellEditor(viewer.getGrid(), path.get((EObject) element));
+				return manipulator.getCellEditor(viewer.getTable(), path.get((EObject) element));
 			}
 
 			@Override
@@ -384,24 +391,27 @@ public class EObjectTableViewer extends GridTableViewer {
 		column.getColumn().addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
+				widgetSelected(e);
 			}
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				if (columnSortOrder.get(0) == tColumn) {
+
+				if (viewer.getTable().getSortColumn() == tColumn) {
 					sortDescending = !sortDescending;
 				} else {
 					sortDescending = false;
-					columnSortOrder.get(0).setSort(SWT.NONE);
+					// columnSortOrder.get(0).setSort(SWT.NONE);
 					columnSortOrder.remove(tColumn);
 					columnSortOrder.add(0, tColumn);
 				}
-				tColumn.setSort(sortDescending ? SWT.UP : SWT.DOWN);
+				viewer.getTable().setSortColumn(tColumn);
+				viewer.getTable().setSortDirection(sortDescending ? SWT.UP : SWT.DOWN);
 				viewer.refresh(false);
 			}
 		});
-
-		column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
+		//
+		// column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
 
 		return column;
 	}
@@ -412,14 +422,15 @@ public class EObjectTableViewer extends GridTableViewer {
 	 * 
 	 * @param columnName
 	 * @return
+	 * @since 2.0
 	 */
-	public GridViewerColumn addSimpleColumn(final String columnName, final boolean sortable) {
+	public TableViewerColumn addSimpleColumn(final String columnName, final boolean sortable) {
 
 		// create a column
-		final GridTableViewer viewer = this;
+		final TableViewer viewer = this;
 
-		final GridViewerColumn column = new GridViewerColumn(viewer, SWT.NONE);
-		final GridColumn tColumn = column.getColumn();
+		final TableViewerColumn column = new TableViewerColumn(viewer, SWT.NONE);
+		final TableColumn tColumn = column.getColumn();
 
 		tColumn.setMoveable(true);
 		tColumn.setText(columnName);
@@ -469,27 +480,27 @@ public class EObjectTableViewer extends GridTableViewer {
 		if (sortable) {
 			columnSortOrder.add(tColumn);
 
-			column.getColumn().addSelectionListener(new SelectionListener() {
-				@Override
-				public void widgetDefaultSelected(final SelectionEvent e) {
-				}
-
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					if (columnSortOrder.get(0) == tColumn) {
-						sortDescending = !sortDescending;
-					} else {
-						sortDescending = false;
-						columnSortOrder.get(0).setSort(SWT.NONE);
-						columnSortOrder.remove(tColumn);
-						columnSortOrder.add(0, tColumn);
-					}
-					tColumn.setSort(sortDescending ? SWT.UP : SWT.DOWN);
-					viewer.refresh(false);
-				}
-			});
+			// column.getColumn().addSelectionListener(new SelectionListener() {
+			// @Override
+			// public void widgetDefaultSelected(final SelectionEvent e) {
+			// }
+			//
+			// @Override
+			// public void widgetSelected(final SelectionEvent e) {
+			// if (columnSortOrder.get(0) == tColumn) {
+			// sortDescending = !sortDescending;
+			// } else {
+			// sortDescending = false;
+			// columnSortOrder.get(0).setSort(SWT.NONE);
+			// columnSortOrder.remove(tColumn);
+			// columnSortOrder.add(0, tColumn);
+			// }
+			// tColumn.setSort(sortDescending ? SWT.UP : SWT.DOWN);
+			// viewer.refresh(false);
+			// }
+			// });
 		}
-		column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
+		// column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
 
 		return column;
 	}
@@ -515,15 +526,15 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	@Override
 	public Control getControl() {
-		return getGrid();
+		return getTable();
 	}
 
 	public void init(final IStructuredContentProvider contentProvider) {
-		final GridTableViewer viewer = this;
-		final Grid table = viewer.getGrid();
+		final TableViewer viewer = this;
+		final Table table = viewer.getTable();
 
-		table.setRowHeaderVisible(true);
-		table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
+		// table.setRowHeaderVisible(true);
+		// table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
 
 		final Listener measureListener = new Listener() {
 			@Override
@@ -553,9 +564,11 @@ public class EObjectTableViewer extends GridTableViewer {
 					Display.getDefault().asyncExec(new Runnable() {
 						public void run() {
 							if (!viewer.getControl().isDisposed()) {
-								if (viewer instanceof GridTableViewer) {
-									for (final GridColumn tc : ((GridTableViewer) viewer).getGrid().getColumns()) {
-										tc.pack();
+								if (viewer instanceof TableViewer) {
+									for (final TableColumn tc : ((TableViewer) viewer).getTable().getColumns()) {
+										if (tc.getResizable()) {
+											tc.pack();
+										}
 									}
 								}
 							}
@@ -595,10 +608,10 @@ public class EObjectTableViewer extends GridTableViewer {
 		viewer.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
-				final Iterator<GridColumn> iterator = columnSortOrder.iterator();
+				final Iterator<TableColumn> iterator = columnSortOrder.iterator();
 				int comparison = 0;
 				while (iterator.hasNext() && (comparison == 0)) {
-					final GridColumn column = iterator.next();
+					final TableColumn column = iterator.next();
 					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
 					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
 
@@ -644,7 +657,7 @@ public class EObjectTableViewer extends GridTableViewer {
 				 */
 				final Map<String, Pair<?, ?>> attributes = new HashMap<String, Pair<?, ?>>();
 				// this could probably be much faster
-				for (final GridColumn column : getGrid().getColumns()) {
+				for (final TableColumn column : getTable().getColumns()) {
 					final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
 					final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
 					if (path == null)
@@ -804,7 +817,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	public Map<String, List<String>> getColumnMnemonics() {
 		final Map<String, List<String>> ms = new TreeMap<String, List<String>>();
 
-		for (final GridColumn column : getGrid().getColumns()) {
+		for (final TableColumn column : getTable().getColumns()) {
 			final List<String> mnemonics = (List<String>) column.getData(COLUMN_MNEMONICS);
 			ms.put(column.getText(), mnemonics);
 		}
@@ -821,7 +834,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	public Set<String> getDistinctValues(final String columnName) {
 		final TreeSet<String> result = new TreeSet<String>();
 
-		for (final GridColumn column : getGrid().getColumns()) {
+		for (final TableColumn column : getTable().getColumns()) {
 			if (column.getText().equals(columnName)) {
 				final ICellRenderer renderer = (ICellRenderer) column.getData(COLUMN_RENDERER);
 				final EMFPath path = (EMFPath) column.getData(COLUMN_PATH);
@@ -835,7 +848,10 @@ public class EObjectTableViewer extends GridTableViewer {
 		return result;
 	}
 
-	public void removeColumn(final GridViewerColumn column) {
+	/**
+	 * @since 2.0
+	 */
+	public void removeColumn(final TableViewerColumn column) {
 		columnSortOrder.remove(column.getColumn());
 		final Pair<EMFPath, ICellRenderer> pathAndRenderer = (Pair<EMFPath, ICellRenderer>) column.getColumn().getData(COLUMN_RENDERER_AND_PATH);
 		cellRenderers.remove(pathAndRenderer);
