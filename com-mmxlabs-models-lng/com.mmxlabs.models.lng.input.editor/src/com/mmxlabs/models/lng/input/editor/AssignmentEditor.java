@@ -824,6 +824,10 @@ public class AssignmentEditor<R, T> extends Canvas {
 			}
 		}
 
+		
+		if (minDate == null) {
+			minDate = new Date();
+		}
 		final HashSet<T> unallocated = new HashSet<T>();
 		unallocated.addAll(tasks);
 
