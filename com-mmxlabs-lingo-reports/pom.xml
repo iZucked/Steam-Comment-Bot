@@ -30,9 +30,8 @@
 
 		<!-- Proper plugin projects -->
 		<module>com.mmxlabs.shiplingo.platform.app</module>
-
+		<module>com.mmxlabs.shiplingo.platform.ui</module>
 		<module>com.mmxlabs.shiplingo.platform.scheduleview</module>
-
 		<module>com.mmxlabs.shiplingo.platform.reports</module>
 
 		<!-- Documentation -->
