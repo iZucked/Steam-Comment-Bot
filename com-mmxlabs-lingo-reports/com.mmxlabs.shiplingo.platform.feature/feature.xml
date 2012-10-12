@@ -43,14 +43,14 @@ All rights reserved.
 
    <requires>
       <import feature="com.mmxlabs.models.lng.types.feature" version="2.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="2.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="2.3.0" match="compatible"/>
       <import feature="com.mmxlabs.models.ui.runtime.feature" version="2.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="1.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.jobmanager.feature" version="1.0.0"/>
-      <import feature="com.mmxlabs.models.lng.feature" version="1.0.0"/>
-      <import feature="com.mmxlabs.rcp.common.feature" version="1.0.0"/>
-      <import feature="com.mmxlabs.scenario.service.feature" version="1.0.0"/>
-      <import feature="com.mmxlabs.trading.optimiser.feature" version="1.0.0"/>
+      <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="2.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.jobmanager.feature" version="1.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.models.lng.feature" version="2.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.rcp.common.feature" version="2.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.scenario.service.feature" version="2.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.trading.optimiser.feature" version="2.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.lng.transformer.feature" version="2.0.0" match="compatible"/>
    </requires>
 
