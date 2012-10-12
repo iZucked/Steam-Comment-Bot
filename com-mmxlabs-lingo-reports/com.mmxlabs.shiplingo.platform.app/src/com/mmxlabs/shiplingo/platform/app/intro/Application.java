@@ -16,7 +16,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.license.ssl.LicenseChecker;
-import com.mmxlabs.shiplingo.platform.app.DelayedOpenFileProcessor;
+import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 
 /**
  * This class controls all aspects of the application's execution

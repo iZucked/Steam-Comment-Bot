@@ -36,9 +36,9 @@ import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 import org.osgi.framework.Bundle;
 
+import com.mmxlabs.rcp.common.application.DelayedOpenFileProcessor;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceSaveHook;
 import com.mmxlabs.shiplingo.platform.app.Activator;
-import com.mmxlabs.shiplingo.platform.app.DelayedOpenFileProcessor;
 
 @SuppressWarnings("restriction")
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
@@ -47,6 +47,9 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	private static final String PERSPECTIVE_ID = "com.mmxlabs.shiplingo.platform.app.perspective.editing";
 
+	/**
+	 * @since 2.0
+	 */
 	public ApplicationWorkbenchAdvisor(final DelayedOpenFileProcessor processor) {
 		super();
 		this.delayedOpenFileProcessor = processor;
