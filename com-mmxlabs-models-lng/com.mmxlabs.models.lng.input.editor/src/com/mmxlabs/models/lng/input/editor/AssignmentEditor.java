@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 
+import com.mmxlabs.models.lng.input.presentation.InputEditorPlugin;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 
 public class AssignmentEditor<R, T> extends Canvas {
@@ -275,7 +276,7 @@ public class AssignmentEditor<R, T> extends Canvas {
 
 		setMenu(manager.createContextMenu(AssignmentEditor.this));
 		
-		colors = new AssignmentEditorColors(getDisplay());
+		colors = InputEditorPlugin.getPlugin().getAssignmentEditorColours();
 	}
 
 	private void notifyEditEvent(final T task) {
@@ -620,7 +621,6 @@ public class AssignmentEditor<R, T> extends Canvas {
 
 	@Override
 	public void dispose() {
-		colors.dispose();
 		colors = null;
 		super.dispose();
 	}

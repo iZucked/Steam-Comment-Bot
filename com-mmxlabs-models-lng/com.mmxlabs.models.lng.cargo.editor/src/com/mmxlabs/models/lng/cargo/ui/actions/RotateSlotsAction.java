@@ -4,14 +4,11 @@
  */
 package com.mmxlabs.models.lng.cargo.ui.actions;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
@@ -20,6 +17,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
+import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.util.SpotSlotHelper;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
@@ -36,10 +34,8 @@ public class RotateSlotsAction extends ScenarioModifyingAction {
 
 	public RotateSlotsAction(final IScenarioEditingLocation iScenarioEditingLocation) {
 		super("Swap Discharge Slots");
-		try {
-			setImageDescriptor(ImageDescriptor.createFromURL(new URL("platform:/plugin/com.mmxlabs.models.lng.cargo.editor/icons/swap.gif")));
-		} catch (final MalformedURLException e) {
-		}
+		setImageDescriptor(CargoEditorPlugin.getPlugin().getImageDescriptor(CargoEditorPlugin.IMAGE_CARGO_SWAP));
+		setDisabledImageDescriptor(CargoEditorPlugin.getPlugin().getImageDescriptor(CargoEditorPlugin.IMAGE_CARGO_SWAP_DISABLED));
 		this.location = iScenarioEditingLocation;
 	}
 

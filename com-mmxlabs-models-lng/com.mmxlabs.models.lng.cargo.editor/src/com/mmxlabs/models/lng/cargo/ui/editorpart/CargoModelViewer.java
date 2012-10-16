@@ -29,7 +29,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
@@ -44,6 +43,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
 import com.mmxlabs.models.lng.cargo.ui.actions.RotateSlotsAction;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -69,6 +69,7 @@ import com.mmxlabs.models.ui.tabular.BasicOperationRenderer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
+import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -77,8 +78,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	private final IScenarioEditingLocation part;
 
 	// TODO: Make these colours a preference so they can be consistently used across various UI parts
-	private final Color desCargo = new Color(Display.getDefault(), 150, 210, 230);
-	private final Color fobCargo = new Color(Display.getDefault(), 190, 220, 180);
+	private final Color desCargo = CargoEditorPlugin.getPlugin().getColor(CargoEditorPlugin.COLOR_CARGO_DES);
+	private final Color fobCargo = CargoEditorPlugin.getPlugin().getColor(CargoEditorPlugin.COLOR_CARGO_FOB);
 
 	private final Image wiredImage;
 	private final Image lockedImage;
@@ -87,8 +88,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		super(page, part, location, actionBars);
 		this.part = location;
 
-		wiredImage = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "/icons/wired.gif").createImage();
-		lockedImage = AbstractUIPlugin.imageDescriptorFromPlugin("com.mmxlabs.models.lng.cargo.editor", "/icons/assigned.gif").createImage();
+		wiredImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LINK);
+		lockedImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LOCK);
 	}
 
 	@Override
@@ -315,18 +316,6 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 		});
 		return scenarioTableViewer;
 
-	}
-
-	@Override
-	public void dispose() {
-
-		fobCargo.dispose();
-		desCargo.dispose();
-
-		wiredImage.dispose();
-		lockedImage.dispose();
-
-		super.dispose();
 	}
 
 	class AssignmentManipulator implements ICellRenderer, ICellManipulator {
