@@ -154,7 +154,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Load Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_LoadSlot());
 
-		addTypicalColumn("Load Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_LoadSlot());
+		addTypicalColumn("Load Contract", new ContractManipulator(provider, editingDomain), pkg.getCargo_LoadSlot());
 
 		addTypicalColumn("Purchase Price", new NumericAttributeManipulator(pkg.getSlot_FixedPrice(), editingDomain), pkg.getCargo_LoadSlot());
 
@@ -162,7 +162,7 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Discharge Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_DischargeSlot());
 
-		addTypicalColumn("Discharge Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_DischargeSlot());
+		addTypicalColumn("Discharge Contract", new ContractManipulator(provider, editingDomain), pkg.getCargo_DischargeSlot());
 
 		addTypicalColumn("Sales Price", new NumericAttributeManipulator(pkg.getSlot_FixedPrice(), editingDomain), pkg.getCargo_DischargeSlot());
 
