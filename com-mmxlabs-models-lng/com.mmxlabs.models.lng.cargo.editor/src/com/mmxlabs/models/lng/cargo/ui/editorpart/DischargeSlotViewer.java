@@ -18,7 +18,7 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -94,7 +94,7 @@ public class DischargeSlotViewer extends ScenarioTableViewerPane {
 		setTitle("Discharge Options", PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 
 		// IElementComparer to handle selection objects from e.g. schedule
-		((StructuredViewer) viewer).setComparer(new IElementComparer() {
+		((GridTableViewer) viewer).setComparer(new IElementComparer() {
 
 			@Override
 			public int hashCode(final Object element) {
@@ -157,7 +157,7 @@ public class DischargeSlotViewer extends ScenarioTableViewerPane {
 
 		super.part.getSite().registerContextMenu(menuManager, viewer);
 		// getSite().setSelectionProvider(viewer);
-		((StructuredViewer) viewer).getControl().setMenu(menuManager.createContextMenu(((StructuredViewer) viewer).getControl()));
+		((GridTableViewer) viewer).getGrid().setMenu(menuManager.createContextMenu(((GridTableViewer) viewer).getGrid()));
 
 		menuManager.add(new Action("Edit Cargo") {
 
