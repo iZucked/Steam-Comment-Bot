@@ -38,11 +38,10 @@ public class LngUIActivator extends AbstractUIPlugin {
 		getImageRegistry().put(ImageConstants.IMAGE_DUPLICATE, duplicateImageDescriptor);
 		getImageRegistry().put(ImageConstants.IMAGE_DUPLICATE_DISABLED, ImageDescriptor.createWithFlags(duplicateImageDescriptor, SWT.IMAGE_DISABLE));
 
-		ImageDescriptor importImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif");
+		final ImageDescriptor importImageDescriptor = AbstractUIPlugin.imageDescriptorFromPlugin("org.eclipse.ui", "$nl$/icons/full/etool16/import_wiz.gif");
 		getImageRegistry().put(ImageConstants.IMAGE_IMPORT, importImageDescriptor);
 		getImageRegistry().put(ImageConstants.IMAGE_IMPORT_DISABLED, ImageDescriptor.createWithFlags(importImageDescriptor, SWT.IMAGE_DISABLE));
 
-		
 		plugin = this;
 	}
 
