@@ -34,15 +34,14 @@ import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -63,8 +62,8 @@ import com.mmxlabs.models.ui.tabular.ICellRenderer;
 import com.mmxlabs.models.ui.tabular.filter.FilterField;
 import com.mmxlabs.models.util.emfpath.CompiledEMFPath;
 import com.mmxlabs.models.util.emfpath.EMFPath;
-import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
-import com.mmxlabs.rcp.common.actions.PackTableColumnsAction;
+import com.mmxlabs.rcp.common.actions.CopyGridToClipboardAction;
+import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScenarioViewerSynchronizer;
@@ -126,7 +125,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		private final IFormatter formatter;
 		private final EMFPath path;
 		private final String title;
-		public TableViewerColumn column;
+		public GridViewerColumn column;
 
 		public ColumnHandler(final IFormatter formatter, final Object[] features, final String title) {
 			super();
@@ -135,11 +134,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			this.title = title;
 		}
 
-		/**
-		 * @since 2.0
-		 */
-		public TableViewerColumn createColumn(final EObjectTableViewer viewer) {
-			final TableViewerColumn column = viewer.addColumn(title, new ICellRenderer() {
+		public GridViewerColumn createColumn(final EObjectTableViewer viewer) {
+			final GridViewerColumn column = viewer.addColumn(title, new ICellRenderer() {
 				@Override
 				public String render(final Object object) {
 					return formatter.format(object);
@@ -162,7 +158,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				}
 			}, noEditing, path);
 
-			final TableColumn tc = column.getColumn();
+			final GridColumn tc = column.getColumn();
 			tc.setData(COLUMN_HANDLER, this);
 			this.column = column;
 			return column;
@@ -317,16 +313,9 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 				if (newInput instanceof IScenarioViewerSynchronizerOutput) {
 					synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
 					if (scheduleColumnHandler != null) {
-						final TableViewerColumn c = scheduleColumnHandler.column;
+						final GridViewerColumn c = scheduleColumnHandler.column;
 						if (c != null) {
-							if (synchronizerOutput.getRootObjects().size() > 1) {
-								c.getColumn().setResizable(true);
-								c.getColumn().pack();
-							} else {
-								c.getColumn().setWidth(0);
-								c.getColumn().setResizable(false);
-							}
-//							 c.getColumn().setWidth(width)Visible(synchronizerOutput.getRootObjects().size() > 1);
+							c.getColumn().setVisible(synchronizerOutput.getRootObjects().size() > 1);
 						}
 					}
 				}
@@ -456,7 +445,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 		filterField.setViewer(viewer);
 
-		viewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		viewer.getGrid().setLayoutData(new GridData(GridData.FILL_BOTH));
 
 		// this is very slow on refresh
 		viewer.setDisplayValidationErrors(false);
@@ -481,8 +470,8 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 			});
 		}
 
-		viewer.getTable().setHeaderVisible(true);
-		viewer.getTable().setLinesVisible(true);
+		viewer.getGrid().setHeaderVisible(true);
+		viewer.getGrid().setLinesVisible(true);
 
 		for (final ColumnHandler handler : handlersInOrder) {
 			handler.createColumn(viewer).getColumn().pack();
@@ -551,15 +540,15 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 	}
 
 	private void makeActions() {
-		packColumnsAction = new PackTableColumnsAction(viewer, true);
-		copyTableAction = new CopyTableToClipboardAction(viewer.getTable());
+		packColumnsAction = new PackGridTableColumnsAction(viewer);
+		copyTableAction = new CopyGridToClipboardAction(viewer.getGrid());
 		getViewSite().getActionBars().setGlobalActionHandler(ActionFactory.COPY.getId(), copyTableAction);
 	}
 
 	@Override
 	public void setFocus() {
-		if (!viewer.getTable().isDisposed()) {
-			viewer.getTable().setFocus();
+		if (!viewer.getGrid().isDisposed()) {
+			viewer.getGrid().setFocus();
 		}
 	}
 
@@ -594,6 +583,18 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 
 	protected Class<?> getSelectionAdaptionClass() {
 		return null;
+	}
+
+	public void removeColumn(final String title) {
+		for (final ColumnHandler h : handlers) {
+			if (h.title.equals(title)) {
+				viewer.removeColumn(h.column);
+				handlers.remove(h);
+				handlersInOrder.remove(h);
+				break;
+			}
+		}
+
 	}
 
 	@Override
