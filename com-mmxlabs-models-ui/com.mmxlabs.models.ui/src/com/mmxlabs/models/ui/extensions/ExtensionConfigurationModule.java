@@ -10,6 +10,7 @@ import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
 import static org.ops4j.peaberry.util.TypeLiterals.iterable;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 import com.mmxlabs.models.ui.registries.IDisplayCompositeFactoryRegistry;
@@ -58,11 +59,11 @@ public class ExtensionConfigurationModule extends AbstractModule {
 		bind(iterable(IModelFactoryExtension.class)).toProvider(service(IModelFactoryExtension.class).multiple());
 		
 		//registry implementation bindings; they all have extensions injected by the above bindings.
-		bind(IDisplayCompositeFactoryRegistry.class).to(DisplayCompositeFactoryRegistry.class);
-		bind(IComponentHelperRegistry.class).to(ComponentHelperRegistry.class);
-		bind(IEditorFactoryRegistry.class).to(EditorFactoryRegistry.class);
-		bind(IReferenceValueProviderFactoryRegistry.class).to(ReferenceValueProviderFactoryRegistry.class);
-		bind(IJointModelEditorContributionRegistry.class).to(JointModelEditorContributionRegistry.class);
-		bind(IModelFactoryRegistry.class).to(ModelFactoryRegistry.class);
+		bind(IDisplayCompositeFactoryRegistry.class).to(DisplayCompositeFactoryRegistry.class).in(Singleton.class);
+		bind(IComponentHelperRegistry.class).to(ComponentHelperRegistry.class).in(Singleton.class);
+		bind(IEditorFactoryRegistry.class).to(EditorFactoryRegistry.class).in(Singleton.class);
+		bind(IReferenceValueProviderFactoryRegistry.class).to(ReferenceValueProviderFactoryRegistry.class).in(Singleton.class);
+		bind(IJointModelEditorContributionRegistry.class).to(JointModelEditorContributionRegistry.class).in(Singleton.class);
+		bind(IModelFactoryRegistry.class).to(ModelFactoryRegistry.class).in(Singleton.class);
 	}
 }
