@@ -41,7 +41,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * 
  */
 public abstract class BaseCargoAllocator implements ICargoAllocator {
-	
+
 	@Inject
 	ITotalVolumeLimitProvider cargoAllocationProvider;
 	// TODO the following could all probably be replaced with something faster
@@ -84,7 +84,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	private long[] allocation;
 
 	private long profit;
-	
+
 	@Inject
 	private IVesselProvider vesselProvider;
 
@@ -203,7 +203,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	 * @since 2.0
 	 */
 	@Override
-	public IAllocationAnnotation allocate(final IVessel vessel, final VoyagePlan plan, int[] arrivalTimes) {
+	public IAllocationAnnotation allocate(final IVessel vessel, final VoyagePlan plan, final int[] arrivalTimes) {
 
 		PortDetails loadDetails = null;
 		PortDetails dischargeDetails = null;
@@ -219,7 +219,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		int dischargeM3Price = 0;
 		int loadM3Price = 0;
 		long maximumDischargeVolume = 0;
-		for (Object object : plan.getSequence()) {
+		for (final Object object : plan.getSequence()) {
 			if (object instanceof PortDetails) {
 				final PortDetails pd = (PortDetails) object;
 				if (pd.getPortSlot() instanceof ILoadOption) {
@@ -238,7 +238,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 					{
 
-						IVesselClass vesselClass = vessel.getVesselClass();
+						final IVesselClass vesselClass = vessel.getVesselClass();
 						final long vesselCapacity = vesselClass.getCargoCapacity();
 						loadSlot = (ILoadSlot) loadDetails.getPortSlot();
 						dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
@@ -349,7 +349,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		// System.err.println("Using a whole lot of gas for fuel here");
 		// }
 
-		IVesselClass vesselClass = vessel.getVesselClass();
+		final IVesselClass vesselClass = vessel.getVesselClass();
 		final long vesselCapacity = vesselClass.getCargoCapacity();
 		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getPortSlot();
 		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
@@ -399,7 +399,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		cargoCount++;
 	}
 
-	public void addVirtualCargo(final PortDetails loadDetails, PortDetails dischargeDetails) {
+	public void addVirtualCargo(final PortDetails loadDetails, final PortDetails dischargeDetails) {
 
 		final ILoadOption loadSlot = (ILoadOption) loadDetails.getPortSlot();
 		final IDischargeOption dischargeSlot = (IDischargeOption) dischargeDetails.getPortSlot();
