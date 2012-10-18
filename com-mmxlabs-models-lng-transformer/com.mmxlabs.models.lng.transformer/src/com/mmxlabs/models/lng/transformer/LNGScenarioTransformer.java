@@ -38,6 +38,7 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Cargo;
@@ -105,7 +106,6 @@ import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
-import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
@@ -125,9 +125,11 @@ import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRat
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
-import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 
 /**
  * Wrapper for an EMF LNG Scheduling {@link MMXRootObject}, providing utility methods to convert it into an optimisation job. Typical usage is to construct an LNGScenarioTransformer with a given
@@ -873,18 +875,28 @@ public class LNGScenarioTransformer {
 
 		final ISalesPriceCalculator dischargePriceCalculator;
 
-		if (dischargeSlot.isSetFixedPrice()) {
-			final int fixedPrice = Calculator.scaleToInt(dischargeSlot.getFixedPrice());
-			dischargePriceCalculator = new ISalesPriceCalculator() {
-				@Override
-				public void prepareEvaluation(final ISequences sequences) {
-				}
+		if (dischargeSlot.isSetPriceExpression()) {
 
-				@Override
-				public int calculateSalesUnitPrice(final IDischargeOption slot, final int time) {
-					return fixedPrice;
+			final String priceExpression = dischargeSlot.getPriceExpression();
+			if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
+				dischargePriceCalculator = new BreakEvenSalesPriceCalculator();
+			} else {
+				final IExpression<ISeries> expression = indices.parse(priceExpression);
+				final ISeries parsed = expression.evaluate();
+
+				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+				if (parsed.getChangePoints().length == 0) {
+					curve.setDefaultValue(Calculator.scaleToInt(parsed.evaluate(0).doubleValue()));
+				} else {
+
+					curve.setDefaultValue(0);
+					for (final int i : parsed.getChangePoints()) {
+						curve.setValueAfter(i - 1, Calculator.scaleToInt(parsed.evaluate(i).doubleValue()));
+					}
 				}
-			};
+				dischargePriceCalculator = new MarketPriceContract(curve, 0, 1000);
+			}
+
 		} else {
 			dischargePriceCalculator = entities.getOptimiserObject(dischargeSlot.getContract(), ISalesPriceCalculator.class);
 		}
@@ -919,16 +931,28 @@ public class LNGScenarioTransformer {
 				convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTime()));
 
 		final ILoadPriceCalculator loadPriceCalculator;
-		if (loadSlot.isSetFixedPrice()) {
-			final int fixedPrice = Calculator.scaleToInt(loadSlot.getFixedPrice());
 
-			loadPriceCalculator = new SimpleContract() {
+		if (loadSlot.isSetPriceExpression()) {
 
-				@Override
-				public int calculateSimpleLoadUnitPrice(final int loadTime) {
-					return fixedPrice;
+			final String priceExpression = loadSlot.getPriceExpression();
+			if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
+				loadPriceCalculator = new BreakEvenLoadPriceCalculator();
+			} else {
+				final IExpression<ISeries> expression = indices.parse(priceExpression);
+				final ISeries parsed = expression.evaluate();
+
+				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+				if (parsed.getChangePoints().length == 0) {
+					curve.setDefaultValue(Calculator.scaleToInt(parsed.evaluate(0).doubleValue()));
+				} else {
+
+					curve.setDefaultValue(0);
+					for (final int i : parsed.getChangePoints()) {
+						curve.setValueAfter(i - 1, Calculator.scaleToInt(parsed.evaluate(i).doubleValue()));
+					}
 				}
-			};
+				loadPriceCalculator = new MarketPriceContract(curve, 0, 1000);
+			}
 		} else {
 			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot.getContract());
 			loadPriceCalculator = entities.getOptimiserObject(purchaseContract, ILoadPriceCalculator.class);
