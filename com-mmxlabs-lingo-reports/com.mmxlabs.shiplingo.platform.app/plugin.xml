@@ -138,6 +138,16 @@
             activityId="com.mmxlabs.shiplingo.platform.app.default.activity"
             pattern="org.eclipse.*p2.*">
       </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.shiplingo.platform.app.default.activity"
+            isEqualityPattern="true"
+            pattern="org.eclipse.ui.views/org.eclipse.ui.views.PropertySheet">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.shiplingo.platform.app.default.activity"
+            isEqualityPattern="false"
+            pattern=".*/org.eclipse.ui">
+      </activityPatternBinding>
    </extension>
    <extension
          point="org.eclipse.ui.activities">
