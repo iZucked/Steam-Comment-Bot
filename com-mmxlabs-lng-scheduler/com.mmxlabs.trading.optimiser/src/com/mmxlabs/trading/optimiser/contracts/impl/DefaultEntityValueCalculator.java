@@ -107,7 +107,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long upstreamRevenue = -Calculator.multiply(loadPricePerM3, loadVolume);
 		final long upstreamTotalPretaxProfit = upstreamRevenue + shippingPaysUpstream;
 
-		final long shippingCosts = getCosts(plan, vessel, false, vesselStartTime, null);
+		final long shippingCosts = getShippingCosts(plan, vessel, false, vesselStartTime, null);
 
 		final long shippingTotalPretaxProfit = shippingGasBalance - shippingCosts;
 
@@ -142,7 +142,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				// final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
 				// annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost,
 				// new ShippingCostAnnotation(currentAllocation.getLoadTime(), costNoBoiloff, detailsRef[0]));
-				final long costIncBoiloff = getCosts(plan, vessel, true, vesselStartTime, detailsRef);
+				final long costIncBoiloff = getShippingCosts(plan, vessel, true, vesselStartTime, detailsRef);
 				annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff,
 						new ShippingCostAnnotation(currentAllocation.getLoadTime(), costIncBoiloff, detailsRef[0]));
 
@@ -194,7 +194,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 	public long evaluate(final VoyagePlan plan, final IVessel vessel, final int planStartTime, final int vesselStartTime, final IAnnotatedSolution annotatedSolution) {
 		final IEntity shippingEntity = entityProvider.getShippingEntity();
 
-		final long shippingCost = getCosts(plan, vessel, true, vesselStartTime, null);
+		final long shippingCost = getShippingCosts(plan, vessel, true, vesselStartTime, null);
 		final long revenue;
 		final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
 		if (portDetails.getPortSlot().getPortType() == PortType.CharterOut) {
@@ -217,7 +217,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			final IDetailTree[] detailsRef = new IDetailTree[1];
 			// final long costNoBoiloff = getCosts(plan, vessel, false, vesselStartTime, detailsRef);
 			// annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCost, new ShippingCostAnnotation(planStartTime, costNoBoiloff, detailsRef[0]));
-			final long costIncBoiloff = getCosts(plan, vessel, true, vesselStartTime, detailsRef);
+			final long costIncBoiloff = getShippingCosts(plan, vessel, true, vesselStartTime, detailsRef);
 			annotatedSolution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_shippingCostWithBoilOff, new ShippingCostAnnotation(planStartTime, costIncBoiloff, detailsRef[0]));
 
 			final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, value, details);
@@ -229,7 +229,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		return value;
 	}
 
-	private long getCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final int vesselStartTime, final IDetailTree[] detailsRef) {
+	@Override
+	public long getShippingCosts(final VoyagePlan plan, final IVessel vessel, final boolean includeLNG, final int vesselStartTime, final IDetailTree[] detailsRef) {
 		// @formatter:off
 		final long shippingCosts = plan.getTotalRouteCost()
 				+ plan.getTotalFuelCost(FuelComponent.Base) 
