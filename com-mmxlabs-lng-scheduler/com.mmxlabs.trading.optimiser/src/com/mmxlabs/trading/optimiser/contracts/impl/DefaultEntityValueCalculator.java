@@ -61,9 +61,6 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	}
 
-	public DefaultEntityValueCalculator(final String a, final String b, final String c) {
-	}
-
 	@Override
 	public void init(final IOptimisationData data) {
 	}
