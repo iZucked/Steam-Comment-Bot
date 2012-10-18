@@ -320,6 +320,7 @@ public interface CargoPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @deprecated Use {@link #SLOT__PRICE_EXPRESSION}
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -399,13 +400,23 @@ public interface CargoPackage extends EPackage {
 	int SLOT__OPTIONAL = TypesPackage.ASLOT_FEATURE_COUNT + 9;
 
 	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SLOT__PRICE_EXPRESSION = TypesPackage.ASLOT_FEATURE_COUNT + 10;
+
+	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 10;
+	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -695,6 +706,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__OPTIONAL = SLOT__OPTIONAL;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LOAD_SLOT__PRICE_EXPRESSION = SLOT__PRICE_EXPRESSION;
 
 	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
@@ -1038,6 +1059,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__OPTIONAL = SLOT__OPTIONAL;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__PRICE_EXPRESSION = SLOT__PRICE_EXPRESSION;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -1646,6 +1677,16 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__OPTIONAL = LOAD_SLOT__OPTIONAL;
 
 	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_LOAD_SLOT__PRICE_EXPRESSION = LOAD_SLOT__PRICE_EXPRESSION;
+
+	/**
 	 * The feature id for the '<em><b>Cargo CV</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1996,6 +2037,16 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__OPTIONAL = DISCHARGE_SLOT__OPTIONAL;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__PRICE_EXPRESSION = DISCHARGE_SLOT__PRICE_EXPRESSION;
 
 	/**
 	 * The feature id for the '<em><b>Cargo</b></em>' reference.
@@ -2508,8 +2559,21 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_Optional();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getPriceExpression()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EAttribute getSlot_PriceExpression();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getFixedPrice <em>Fixed Price</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @deprecated Use {@link #getSlot_PriceExpression()}
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Fixed Price</em>'.
 	 * @see com.mmxlabs.models.lng.cargo.Slot#getFixedPrice()
@@ -2955,8 +3019,18 @@ public interface CargoPackage extends EPackage {
 		EAttribute SLOT__OPTIONAL = eINSTANCE.getSlot_Optional();
 
 		/**
+		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SLOT__PRICE_EXPRESSION = eINSTANCE.getSlot_PriceExpression();
+
+		/**
 		 * The meta object literal for the '<em><b>Fixed Price</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @deprecated Use {@link #SLOT__PRICE_EXPRESSION}
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

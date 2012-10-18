@@ -100,7 +100,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	}
 
 	public void doSetValue(final Object object, final Object value) {
-		if (value.equals(-1) || (value.equals(0) && ((EObject) object).eIsSet(CargoPackage.eINSTANCE.getSlot_FixedPrice()))) {
+		if (value.equals(-1) || (value.equals(0) && ((EObject) object).eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression()))) {
 			final CCombo cc = (CCombo) editor.getControl();
 			final String text = cc.getText();
 			runSetCommand(object, text);
@@ -122,7 +122,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 
 		final EObject eObject = (EObject) object;
 
-		if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_FixedPrice())) {
+		if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
 			return 0;
 		}
 
@@ -146,8 +146,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 			valueList.add(value.getSecond());
 		}
 
-		if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_FixedPrice())) {
-			final Object priceExpression = slot.eGet(CargoPackage.eINSTANCE.getSlot_FixedPrice());
+		if (slot.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
+			final Object priceExpression = slot.eGet(CargoPackage.eINSTANCE.getSlot_PriceExpression());
 			names.add(0, priceExpression.toString());
 			valueList.add(0, priceExpression);
 		}
@@ -207,10 +207,9 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		}
 		final Command command;
 		if (value != null && !value.isEmpty()) {
-			final Double d = Double.parseDouble(value);
-			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_FixedPrice(), d));
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_PriceExpression(), value));
 		} else {
-			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_FixedPrice(), SetCommand.UNSET_VALUE));
+			command = editingDomain.createCommand(SetCommand.class, new CommandParameter(object, CargoPackage.eINSTANCE.getSlot_PriceExpression(), SetCommand.UNSET_VALUE));
 
 		}
 		editingDomain.getCommandStack().execute(command);
@@ -232,8 +231,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		}
 
 		final EObject eObject = (EObject) object;
-		if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_FixedPrice())) {
-			return "" + eObject.eGet(CargoPackage.eINSTANCE.getSlot_FixedPrice());
+		if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
+			return "" + eObject.eGet(CargoPackage.eINSTANCE.getSlot_PriceExpression());
 		}
 
 		return eObject.eGet(CargoPackage.eINSTANCE.getSlot_Contract());

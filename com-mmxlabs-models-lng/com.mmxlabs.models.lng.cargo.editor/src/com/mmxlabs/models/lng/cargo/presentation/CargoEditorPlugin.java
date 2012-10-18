@@ -22,10 +22,9 @@ import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 
 /**
- * This is the central singleton for the Cargo editor plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
+ * This is the central singleton for the Cargo editor plugin.
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
  * @generated
- * @since 2.0
  */
 public final class CargoEditorPlugin extends EMFPlugin {
 
@@ -56,31 +55,35 @@ public final class CargoEditorPlugin extends EMFPlugin {
 	public static final String IMAGE_CARGO_SWAP_DISABLED = "cargo.swap.disabled";
 
 	/**
-	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Keep track of the singleton.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final CargoEditorPlugin INSTANCE = new CargoEditorPlugin();
 
 	/**
-	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Keep track of the singleton.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private static Implementation plugin;
 
 	/**
-	 * Create the instance. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Create the instance.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public CargoEditorPlugin() {
-		super(new ResourceLocator[] { LNGTypesEditPlugin.INSTANCE, MmxcoreEditPlugin.INSTANCE, });
+		super
+			(new ResourceLocator [] {
+				LNGTypesEditPlugin.INSTANCE,
+				MmxcoreEditPlugin.INSTANCE,
+			});
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the singleton instance of the Eclipse plugin.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the singleton instance.
 	 * @generated
 	 */
@@ -90,8 +93,8 @@ public final class CargoEditorPlugin extends EMFPlugin {
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the singleton instance of the Eclipse plugin.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the singleton instance.
 	 * @generated
 	 */
