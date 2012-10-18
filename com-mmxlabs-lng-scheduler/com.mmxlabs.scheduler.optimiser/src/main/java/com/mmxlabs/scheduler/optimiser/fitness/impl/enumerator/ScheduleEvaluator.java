@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
 
 /**
@@ -78,6 +79,10 @@ public class ScheduleEvaluator {
 				return Long.MAX_VALUE;
 			}
 			total += l;
+		}
+
+		if (breakEvenEvaluator != null) {
+			breakEvenEvaluator.processSchedule(scheduledSequences);
 		}
 
 		if (generatedCharterOutEvaluator != null) {
