@@ -66,6 +66,9 @@ public abstract class PortSlot implements IPortSlot {
 			if (!Equality.isEqual(id, slot.id)) {
 				return false;
 			}
+			if (!Equality.isEqual(portType, slot.portType)) {
+				return false;
+			}
 			if (!Equality.isEqual(port, slot.port)) {
 				return false;
 			}
