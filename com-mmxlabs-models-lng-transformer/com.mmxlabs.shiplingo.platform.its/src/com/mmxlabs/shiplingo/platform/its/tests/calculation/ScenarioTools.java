@@ -56,6 +56,7 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -371,8 +372,8 @@ public class ScenarioTools {
 		load.setName("load");
 		dis.setName("discharge");
 
-		dis.setFixedPrice(dischargePrice);
-		load.setFixedPrice(loadPrice);
+		dis.setPriceExpression(Float.toString(dischargePrice));
+		load.setPriceExpression(Float.toString(loadPrice));
 
 		load.setMaxQuantity(loadMaxQuantity);
 		dis.setMaxQuantity(dischargeMaxQuantity);
@@ -746,7 +747,11 @@ public class ScenarioTools {
 
 		for (final FuelQuantity fq : fuelQuantities) {
 			// FIXME: Update for API changes
-			// System.err.println("\t" + fq.getFuel() + " " + fq.getQuantity() + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
+			
+			for (FuelAmount fa : fq.getAmounts()) {
+			System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost());
+			}
+//			 System.err.println("\t" + fq.getFuel() + " " + fq.getAmounts(). + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 		}
 	}
 
