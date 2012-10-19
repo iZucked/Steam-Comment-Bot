@@ -86,7 +86,7 @@ public class TestNetbackContract {
 		when(vessel.getVesselClass()).thenReturn(vesselClass);
 		when(vessel.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
 
-		when(priceCurve.getValueAtPoint(Matchers.anyDouble())).thenReturn(1000.0);
+		when(priceCurve.getValueAtPoint(Matchers.anyInt())).thenReturn(1000);
 		when(vessel.getHourlyCharterInPrice()).thenReturn(priceCurve);
 
 		when(slotA.getPort()).thenReturn(A);

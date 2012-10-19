@@ -41,7 +41,7 @@ public class SimpleEntityTest {
 		final int time = 12345;
 
 		// 50 %
-		when(curve.getValueAtPoint(time)).thenReturn(500.0);
+		when(curve.getValueAtPoint(time)).thenReturn(500);
 
 		// 50% * 50% * 10000
 		Assert.assertEquals(2500, entity.getTaxedProfit(10000, time));
