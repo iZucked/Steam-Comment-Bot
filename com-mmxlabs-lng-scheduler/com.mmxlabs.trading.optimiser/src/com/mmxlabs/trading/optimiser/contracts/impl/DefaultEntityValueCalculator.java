@@ -94,17 +94,17 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// TODO inter-entity taxation will also come in here.
 
 		final int shippingTransferPricePerM3 = downstreamEntity.getDownstreamTransferPrice(dischargePricePerM3, cvValue);
-		final long downstreamPaysShipping = Calculator.multiply(shippingTransferPricePerM3, dischargeVolume);
-		final long downstreamRevenue = Calculator.multiply(dischargePricePerM3, dischargeVolume);
+		final long downstreamPaysShipping = Calculator.convertM3ToM3Price(dischargeVolume, shippingTransferPricePerM3);
+		final long downstreamRevenue = Calculator.convertM3ToM3Price(dischargeVolume, dischargePricePerM3);
 
 		final long downstreamTotalPretaxProfit = downstreamRevenue - downstreamPaysShipping;
 
 		final int upstreamTransferPricePerM3 = upstreamEntity.getUpstreamTransferPrice(loadPricePerM3, cvValue);
-		final long shippingPaysUpstream = Calculator.multiply(upstreamTransferPricePerM3, loadVolume);
+		final long shippingPaysUpstream = Calculator.convertM3ToM3Price(loadVolume, upstreamTransferPricePerM3);
 		final long shippingGasBalance = downstreamPaysShipping - shippingPaysUpstream;
 		// now we need the total non-LNG shipping cost for the whole thing, which shipping pays.
 
-		final long upstreamRevenue = -Calculator.multiply(loadPricePerM3, loadVolume);
+		final long upstreamRevenue = -Calculator.convertM3ToM3Price(loadVolume, loadPricePerM3);
 		final long upstreamTotalPretaxProfit = upstreamRevenue + shippingPaysUpstream;
 
 		final long shippingCosts = getShippingCosts(plan, vessel, false, vesselStartTime, null);

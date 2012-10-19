@@ -28,12 +28,12 @@ public class SimpleEntity extends Entity {
 
 	@Override
 	public int getDownstreamTransferPrice(final int dischargePricePerM3, final int cvValue) {
-		return (int) (dischargePricePerM3 - Calculator.multiply(cvValue, offsetPerMMBTU));
+		return dischargePricePerM3 - Calculator.costPerM3FromMMBTu(offsetPerMMBTU, cvValue);
 	}
 
 	@Override
 	public int getUpstreamTransferPrice(final int loadPricePerM3, final int cvValue) {
-		return (int) (loadPricePerM3 + Calculator.multiply(cvValue, offsetPerMMBTU));
+		return loadPricePerM3 + Calculator.costPerM3FromMMBTu(offsetPerMMBTU, cvValue);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class SimpleEntity extends Entity {
 	 */
 	@Override
 	public long getTaxedProfit(final long pretax, final int time) {
-		final int taxRate = (int) taxCurve.getValueAtPoint(time);
+		final int taxRate = taxCurve.getValueAtPoint(time);
 
 		final int flip = Calculator.ScaleFactor - taxRate;
 

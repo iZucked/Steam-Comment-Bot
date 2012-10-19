@@ -63,16 +63,16 @@ public class ProfitSharingContract implements ILoadPriceCalculator {
 	@Override
 	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int actualSalesPrice,
 			final IDetailTree annotations) {
-		final int marketPurchasePrice = (int) market.getValueAtPoint(loadTime);
+		final int marketPurchasePrice = market.getValueAtPoint(loadTime);
 
-		final int actualSalesPriceFraction = (int) Calculator.multiply(actualSalesPrice, salesMultiplier);
+		final int actualSalesPriceFraction = Calculator.getShareOfPrice(salesMultiplier, actualSalesPrice);
 		final int basePrice = marketPurchasePrice - marginScaled - actualSalesPriceFraction;
 		if (baseMarketPorts.contains(dischargeOption.getPort())) {
 			return basePrice;
 		} else {
 			// Profit Share
-			final int referenceSalesPrice = (int) referenceMarket.getValueAtPoint(dischargeTime);
-			return (int) (basePrice - Calculator.multiply(profitShareScaled, actualSalesPrice - referenceSalesPrice));
+			final int referenceSalesPrice = referenceMarket.getValueAtPoint(dischargeTime);
+			return (basePrice - Calculator.getShareOfPrice(profitShareScaled, actualSalesPrice - referenceSalesPrice));
 		}
 	}
 }

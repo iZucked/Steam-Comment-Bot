@@ -111,8 +111,8 @@ public class NetbackContract implements ILoadPriceCalculator {
 		this.floorPriceScaled = floorPriceScaled;
 	}
 
-	private int calculateLoadUnitPrice(final ILoadOption loadSlot, final IDischargeOption dischargeSlot, final int loadTime, final int dischargeTime, final int salesPrice, final int loadVolume,
-			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations, boolean includeShipping) {
+	private int calculateLoadUnitPrice(final ILoadOption loadSlot, final IDischargeOption dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerM3,
+			final int loadVolume, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations, boolean includeShipping) {
 
 		long result = Long.MAX_VALUE;
 
@@ -128,7 +128,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 			// fuel cost
 			for (final FuelComponent c : FuelComponent.values()) {
 				final long fuelConsumption = ladenLeg.getFuelConsumption(c, c.getDefaultFuelUnit()) + ladenLeg.getRouteAdditionalConsumption(c, c.getDefaultFuelUnit());
-				totalRealTransportCosts += Calculator.multiply(fuelConsumption, ladenLeg.getFuelUnitPrice(c));
+				totalRealTransportCosts += Calculator.costFromConsumption(fuelConsumption, ladenLeg.getFuelUnitPrice(c));
 			}
 
 			final BallastParameters notionalBallastParameters = ballastParameters.get(vesselClass);
@@ -148,7 +148,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 			}
 
 			if (hireRate != null) {
-				totalRealTransportCosts += (long) (dischargeTime - loadTime) * (long) hireRate.getValueAtPoint(dischargeTime);
+				totalRealTransportCosts += Calculator.quantityFromRateTime(hireRate.getValueAtPoint(dischargeTime), dischargeTime - loadTime);
 			}
 			final int notionalReturnSpeed = notionalBallastParameters.getSpeed();
 
@@ -167,22 +167,24 @@ public class NetbackContract implements ILoadPriceCalculator {
 				long totalBaseFuelCosts;
 				{
 					final long notionalFuelCost = vesselClass.getBaseFuelUnitPrice();
-					totalBaseFuelCosts = Calculator.costFromConsumption(notionalBallastParameters.getBaseFuelRate() * notionalTransportTime, notionalFuelCost);
+					final long totalFuelInMT = Calculator.quantityFromRateTime(notionalBallastParameters.getBaseFuelRate(), notionalTransportTime);
+					totalBaseFuelCosts = Calculator.costFromConsumption(totalFuelInMT, notionalFuelCost);
 				}
 
 				// NBO Costs
 				long totalNBOCosts;
 				{
-					final long nboInMMBTu = Calculator.convertM3ToMMBTu(notionalBallastParameters.getNBORate(), loadSlot.getCargoCVValue());
-					totalNBOCosts = Calculator.costFromConsumption(nboInMMBTu * notionalTransportTime, salesPrice);
+					final long nboInMMBTuPerDay = Calculator.convertM3ToMMBTu(notionalBallastParameters.getNBORate(), loadSlot.getCargoCVValue());
+					final long totalNBOInMMBtu = Calculator.quantityFromRateTime(nboInMMBTuPerDay, notionalTransportTime);
+					totalNBOCosts = Calculator.costFromConsumption(totalNBOInMMBtu, dischargePricePerM3);
 				}
 
 				long notionalTransportCosts = Math.min(totalBaseFuelCosts, totalNBOCosts);
 				if (hireRate != null) {
-					notionalTransportCosts += (long) (notionalTransportTime) * (long) hireRate.getValueAtPoint(dischargeTime);
+					notionalTransportCosts += Calculator.quantityFromRateTime(hireRate.getValueAtPoint(dischargeTime), notionalTransportTime);
 				}
 
-				final long transportCostPerMMBTU = Calculator.divide(notionalTransportCosts + totalRealTransportCosts, Calculator.multiply(loadSlot.getCargoCVValue(), loadVolume));
+				final long transportCostPerMMBTU = Calculator.getPerMMBTuFromTotalAndVolumeInM3(notionalTransportCosts + totalRealTransportCosts, loadVolume, loadSlot.getCargoCVValue());
 
 				if (transportCostPerMMBTU < result) {
 					result = transportCostPerMMBTU;
@@ -200,11 +202,10 @@ public class NetbackContract implements ILoadPriceCalculator {
 		} else {
 			result = 0;
 		}
-		int rawPrice = (int) (salesPrice - result - marginScaled);
+		int rawPrice = (int) (dischargePricePerM3 - result - marginScaled);
 		if (rawPrice < floorPriceScaled) {
 			return floorPriceScaled;
 		}
 		return rawPrice;
 	}
-
 }
