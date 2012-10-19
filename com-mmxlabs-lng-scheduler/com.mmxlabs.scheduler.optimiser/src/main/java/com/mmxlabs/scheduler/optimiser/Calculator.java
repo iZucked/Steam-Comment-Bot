@@ -49,7 +49,7 @@ public final class Calculator {
 
 	public static long quantityFromRateTime(final long rate, final int time) {
 
-		return (rate * time);
+		return (rate * (long) time);
 	}
 
 	public static int getTimeFromRateQuantity(final long rate, final long quantity) {
@@ -63,6 +63,13 @@ public final class Calculator {
 
 	public static long convertM3ToMMBTu(final long m3, final int factor) {
 		return (m3 * factor) / ScaleFactor;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public static long convertM3ToM3Price(final long m3, final int pricePerM3) {
+		return multiply(m3, pricePerM3);
 	}
 
 	public static long convertMMBTuToM3(final long mmbtu, final int factor) {
@@ -124,11 +131,61 @@ public final class Calculator {
 	}
 
 	/**
-	 * Convert a $/MMBTu price to a $/M3 price
+	 * Convert a $/MMBTu price to a $/m3 price
 	 * 
 	 * @since 2.0
 	 */
-	public static int costPerM3(final int costPerMMBTu, final int cvValue) {
+	public static int costPerM3FromMMBTu(final int costPerMMBTu, final int cvValue) {
 		return (int) multiply(costPerMMBTu, cvValue);
+	}
+
+	/**
+	 * Convert a $/m3 price to a $/MMBTu price
+	 * 
+	 * @since 2.0
+	 */
+	public static int costPerMMBTuFromM3(final int costPerM3, final int cvValue) {
+		return (int) divide(costPerM3, cvValue);
+	}
+
+	/**
+	 * 
+	 * @since 2.0
+	 */
+	public static int getPerMMBTuFromTotalAndVolumeInMMBTu(final long totalCost, final long volumeInMMBTu) {
+		return (int) divide(totalCost, volumeInMMBTu);
+	}
+
+	/**
+	 * 
+	 * @since 2.0
+	 */
+	public static int getPerMMBTuFromTotalAndVolumeInM3(final long totalCost, final long volumeInM3, final int cvValue) {
+		return (int) divide(totalCost, convertM3ToMMBTu(volumeInM3, cvValue));
+	}
+
+	/**
+	 * 
+	 * @since 2.0
+	 */
+	public static int getPerM3FromTotalAndVolumeInMMBTu(final long totalCost, final long volumeInMMBTu, final int cvValue) {
+		return (int) divide(divide(totalCost, volumeInMMBTu), cvValue);
+	}
+
+	/**
+	 * 
+	 * @since 2.0
+	 */
+	public static int getPerM3FromTotalAndVolumeInM3(final long totalCost, final long volumeInM3) {
+		return (int) divide(totalCost, volumeInM3);
+	}
+
+	/**
+	 * Convert a $/m3 price to a $/MMBTu price
+	 * 
+	 * @since 2.0
+	 */
+	public static int getShareOfPrice(final int share, final int price) {
+		return (int) multiply(price, share);
 	}
 }
