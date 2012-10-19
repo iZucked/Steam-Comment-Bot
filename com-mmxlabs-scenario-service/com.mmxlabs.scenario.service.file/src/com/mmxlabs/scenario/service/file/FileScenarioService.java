@@ -178,6 +178,8 @@ public class FileScenarioService extends AbstractScenarioService {
 		if (container instanceof ScenarioInstance) {
 			final ScenarioInstance instance = (ScenarioInstance) container;
 
+			unload(instance);
+
 			if (scenarioService != null) {
 				fireEvent(ScenarioServiceEvent.PRE_DELETE, instance);
 			}
@@ -234,7 +236,7 @@ public class FileScenarioService extends AbstractScenarioService {
 
 		int index = 0;
 		for (final EObject model : models) {
-//			URI rel = URI.createURI("./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
+			// URI rel = URI.createURI("./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
 			final String uriString = "./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi";
 			final URI resolved = resolveURI(uriString);
 			log.debug("Storing submodel into " + resolved);

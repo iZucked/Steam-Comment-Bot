@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -18,6 +19,8 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.models.mmxcore.IMMXAdapter;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 
 public class ModelInstance implements IModelInstance {
@@ -34,6 +37,22 @@ public class ModelInstance implements IModelInstance {
 				modelObject.eAdapters().remove(this);
 				log.debug("Marking " + resource.getURI() + " as dirty");
 			}
+			if (notification.getEventType() == Notification.ADD) {
+				if (notification.getNewValue() instanceof UUIDObject) {
+					final UUIDObject uuidObject = (UUIDObject) notification.getNewValue();
+					uuidObject.eAdapters().add(dirtyUUIDAdapter);
+				}
+			} else if (notification.getEventType() == Notification.REMOVE) {
+				if (notification.getNewValue() instanceof UUIDObject) {
+					final UUIDObject uuidObject = (UUIDObject) notification.getNewValue();
+					uuidObject.eAdapters().remove(dirtyUUIDAdapter);
+				}
+			}
+		}
+
+		@Override
+		public void enable(final boolean skip) {
+			super.enable(false);
 		}
 
 		@Override
@@ -47,13 +66,34 @@ public class ModelInstance implements IModelInstance {
 		}
 	};
 
-	public ModelInstance(final Resource resource, boolean dirty) {
+	private final MMXContentAdapter dirtyUUIDAdapter = new MMXContentAdapter() {
+		@Override
+		public void reallyNotifyChanged(final Notification notification) {
+			if (!notification.isTouch() && notification.getFeature() == MMXCorePackage.eINSTANCE.getUUIDObject_Uuid()) {
+				dirty = true;
+				log.debug("Marking " + resource.getURI() + " as dirty");
+			}
+		}
+
+		@Override
+		protected void missedNotifications(final List<Notification> missed) {
+			for (final Notification notification : missed.toArray(new Notification[missed.size()])) {
+				reallyNotifyChanged(notification);
+				if (dirty) {
+					break;
+				}
+			}
+		}
+	};
+
+	public ModelInstance(final Resource resource, final boolean dirty) {
 		this.resource = resource;
 		this.dirty = dirty;
 		if (!resource.getContents().isEmpty()) {
 			modelObject = resource.getContents().get(0);
 			if (!dirty) {
 				modelObject.eAdapters().add(dirtyAdapter);
+				addUUIDAdapter();
 			}
 		}
 	}
@@ -74,6 +114,26 @@ public class ModelInstance implements IModelInstance {
 			}
 		}
 		return modelObject;
+	}
+
+	@Override
+	public EObject getModelSafe() {
+		try {
+			if (!resource.isLoaded()) {
+				resource.load(Collections.emptyMap());
+				if (resource.getContents().isEmpty()) {
+					log.error("Failed to get contents for " + resource.getURI() + ", as it is empty");
+					return null;
+				} else {
+					modelObject = resource.getContents().get(0);
+					modelObject.eAdapters().add(dirtyAdapter);
+				}
+			}
+			return modelObject;
+		} catch (final Exception e) {
+			log.error(e.getMessage(), e);
+			return null;
+		}
 	}
 
 	@Override
@@ -130,6 +190,8 @@ public class ModelInstance implements IModelInstance {
 
 	@Override
 	public void delete() throws IOException {
+		removeUUIDAdapter();
+		modelObject = null;
 		resource.delete(null);
 	}
 
@@ -146,5 +208,38 @@ public class ModelInstance implements IModelInstance {
 	@Override
 	public boolean isDirty() {
 		return dirty;
+	}
+
+	private void addUUIDAdapter() {
+		if (modelObject != null) {
+			final TreeIterator<EObject> itr = modelObject.eAllContents();
+			while (itr.hasNext()) {
+				final EObject obj = itr.next();
+				if (obj instanceof UUIDObject) {
+					final UUIDObject uuidObject = (UUIDObject) obj;
+					uuidObject.eAdapters().add(dirtyUUIDAdapter);
+				}
+			}
+		}
+	}
+
+	private void removeUUIDAdapter() {
+		if (modelObject != null) {
+			final TreeIterator<EObject> itr = modelObject.eAllContents();
+			while (itr.hasNext()) {
+				final EObject obj = itr.next();
+				if (obj instanceof UUIDObject) {
+					final UUIDObject uuidObject = (UUIDObject) obj;
+					uuidObject.eAdapters().remove(dirtyUUIDAdapter);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void unload() {
+		removeUUIDAdapter();
+		modelObject = null;
+		resource.unload();
 	}
 }

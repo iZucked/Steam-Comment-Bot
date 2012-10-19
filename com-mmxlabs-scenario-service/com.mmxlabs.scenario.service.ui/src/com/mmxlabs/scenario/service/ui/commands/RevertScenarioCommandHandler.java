@@ -4,20 +4,25 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
+import java.io.IOException;
 import java.util.Iterator;
-import java.util.Map;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
+import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 /**
  * Command Handler to revert {@link ScenarioInstance} to last saved state.
@@ -26,6 +31,8 @@ import com.mmxlabs.scenario.service.model.ScenarioLock;
  * 
  */
 public class RevertScenarioCommandHandler extends AbstractHandler {
+
+	private static final Logger log = LoggerFactory.getLogger(RevertScenarioCommandHandler.class);
 
 	/**
 	 * the command has been executed, so extract extract the needed information from the application context.
@@ -41,19 +48,33 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 				final Object element = iterator.next();
 				if (element instanceof ScenarioInstance) {
-					final ScenarioInstance model = (ScenarioInstance) element;
-					final ScenarioLock lock = model.getLock(ScenarioLock.EDITORS);
+					final ScenarioInstance scenarioInstance = (ScenarioInstance) element;
+
+					final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.EDITORS);
 					if (lock.awaitClaim()) {
 						try {
-							final Map<Class<?>, Object> adapters = model
-									.getAdapters();
-							if (adapters != null) {
-								final BasicCommandStack stack = (BasicCommandStack) adapters
-										.get(BasicCommandStack.class);
-								while (stack.isSaveNeeded() && stack.canUndo()) {
-									stack.undo();
-								}
+
+							// Deselect from view
+							Activator.getDefault().getScenarioServiceSelectionProvider().deselect(scenarioInstance);
+
+							final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(scenarioInstance);
+							final IEditorReference[] editorReferences = activePage.findEditors(editorInput, null, IWorkbenchPage.MATCH_INPUT);
+
+							if (editorReferences != null && editorReferences.length > 0) {
+								activePage.closeEditors(editorReferences, false);
 							}
+
+							scenarioInstance.getScenarioService().unload(scenarioInstance);
+							scenarioInstance.setDirty(false);
+
+							if (editorReferences != null && editorReferences.length > 0) {
+//								scenarioInstance.getScenarioService().load(scenarioInstance);
+								OpenScenarioCommandHandler.openScenarioInstance(activePage, scenarioInstance);
+							}
+//						} catch (final IOException e) {
+//							log.error(e.getMessage(), e);
+						} catch (final PartInitException e) {
+							log.error(e.getMessage(), e);
 						} finally {
 							lock.release();
 						}
