@@ -214,7 +214,7 @@ public class MultipleCargoFuelConsumptionTest {
 		// and add a canal
 		final String canalName = "canal";
 		final int canalDistanceBetweenPorts = 90;
-		
+
 		final String vesselClassName = "vc";
 		final int numOfVesselsToCreate = 1;
 		final float baseFuelUnitPrice = 10.01f;
@@ -226,7 +226,6 @@ public class MultipleCargoFuelConsumptionTest {
 		final int minHeelVolume = 0;
 		csc.addVesselSimple(vesselClassName, numOfVesselsToCreate, baseFuelUnitPrice, speed, capacity, consumption, NBORate, pilotLightRate, minHeelVolume, false);
 
-		
 		// Set up start dates and durations.
 		final Date cargoAStart = new Date(System.currentTimeMillis());
 		final int cargoADuration = 10;
@@ -244,7 +243,8 @@ public class MultipleCargoFuelConsumptionTest {
 		csc.addDryDock(portA, dryDockStart, dryDockDurationDays);
 
 		final MMXRootObject scenario = csc.buildScenario();
-		CustomScenarioCreator.createCanalAndCost(scenario, canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, 0,0, 0);
+		CustomScenarioCreator
+				.createCanalAndCost(scenario, canalName, portA, portB, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, canalDistanceBetweenPorts, 0, 0, 0);
 
 		// evaluate and get a schedule
 		final Schedule result = ScenarioTools.evaluate(scenario);
