@@ -15,6 +15,6 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.models.lng.pricing;bundle-version="[2.0.0,3.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Import-Package: com.mmxlabs.common;version="1.0.0",
+Import-Package: com.mmxlabs.common;version="2.0.0",
  com.mmxlabs.scheduler.optimiser;version="1.0.0"
 Export-Package: com.mmxlabs.models.lng.cargo.validation
