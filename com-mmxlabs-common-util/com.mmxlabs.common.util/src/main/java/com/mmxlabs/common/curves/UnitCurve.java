@@ -12,7 +12,7 @@ public final class UnitCurve implements ICurve {
 	private static final UnitCurve INSTANCE = new UnitCurve();
 
 	@Override
-	public double getValueAtPoint(final double point) {
+	public int getValueAtPoint(final int point) {
 		return 1;
 	}
 

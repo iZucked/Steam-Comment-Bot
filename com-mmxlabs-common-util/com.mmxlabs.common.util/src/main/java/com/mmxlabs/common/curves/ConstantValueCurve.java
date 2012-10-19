@@ -12,14 +12,14 @@ package com.mmxlabs.common.curves;
  */
 public final class ConstantValueCurve implements ICurve {
 
-	private final double value;
+	private final int value;
 
-	public ConstantValueCurve(final double value) {
+	public ConstantValueCurve(final int value) {
 		this.value = value;
 	}
 
 	@Override
-	public final double getValueAtPoint(final double point) {
+	public final int getValueAtPoint(final int point) {
 		return value;
 	}
 }

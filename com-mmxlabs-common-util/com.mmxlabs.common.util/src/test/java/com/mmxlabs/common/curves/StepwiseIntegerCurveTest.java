@@ -19,13 +19,12 @@ public class StepwiseIntegerCurveTest {
 
 		Assert.assertEquals(12, c.getDefaultValue());
 
-		Assert.assertEquals(12, c.getValueAtPoint(123), 0);
+		Assert.assertEquals(12, c.getValueAtPoint(123));
 		c.setValueAfter(10, 44);
 
-		Assert.assertEquals(12, c.getValueAtPoint(9), 0);
-		Assert.assertEquals(12, c.getValueAtPoint(9.9), 0);
+		Assert.assertEquals(12, c.getValueAtPoint(9));
 
-		Assert.assertEquals(44, c.getValueAtPoint(10), 0);
+		Assert.assertEquals(44, c.getValueAtPoint(10));
 	}
 
 	@Test

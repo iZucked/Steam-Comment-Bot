@@ -5,11 +5,15 @@
 package com.mmxlabs.common.curves;
 
 /**
- * An interface for a curve, which uses double precision.
+ * An interface for a curve, which uses integer precision.
  * 
  * @author hinton
  * 
  */
 public interface ICurve {
-	double getValueAtPoint(final double point);
+
+	/**
+	 * @since 2.0
+	 */
+	int getValueAtPoint(final int point);
 }

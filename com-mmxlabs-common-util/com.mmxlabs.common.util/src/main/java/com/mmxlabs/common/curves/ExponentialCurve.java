@@ -55,7 +55,7 @@ public final class ExponentialCurve implements ICurve {
 	 * @see com.mmxlabs.common.curves.ICurve#getValueAtPoint(double)
 	 */
 	@Override
-	public double getValueAtPoint(final double point) {
-		return C + (A * Math.exp(k * point));
+	public int getValueAtPoint(final int point) {
+		return (int) (C + (A * Math.exp(k * point)));
 	}
 }

@@ -51,8 +51,7 @@ public class StepwiseIntegerCurve implements ICurve {
 	 * @see com.mmxlabs.common.curves.ICurve#getValueAtPoint(double)
 	 */
 	@Override
-	public double getValueAtPoint(final double point) {
-		final int pointInt = (int) point;
+	public int getValueAtPoint(final int pointInt) {
 		final Map.Entry<Integer, Integer> value = intervals.lowerEntry(pointInt + 1);
 		return value == null ? defaultValue : value.getValue().intValue();
 	}

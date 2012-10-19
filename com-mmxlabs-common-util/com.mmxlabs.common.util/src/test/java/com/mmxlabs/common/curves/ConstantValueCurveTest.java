@@ -11,10 +11,10 @@ public final class ConstantValueCurveTest {
 
 	@Test
 	public void testGetValueAtPoint() {
-		final double v = 1.2345;
+		final int v = 12345;
 		final ConstantValueCurve curve = new ConstantValueCurve(v);
-		Assert.assertEquals(v, curve.getValueAtPoint(-1000.0), 0);
-		Assert.assertEquals(v, curve.getValueAtPoint(1000.0), 0);
-		Assert.assertEquals(v, curve.getValueAtPoint(Double.MAX_VALUE), 0);
+		Assert.assertEquals(v, curve.getValueAtPoint(-1000));
+		Assert.assertEquals(v, curve.getValueAtPoint(1000));
+		Assert.assertEquals(v, curve.getValueAtPoint(Integer.MAX_VALUE));
 	}
 }
