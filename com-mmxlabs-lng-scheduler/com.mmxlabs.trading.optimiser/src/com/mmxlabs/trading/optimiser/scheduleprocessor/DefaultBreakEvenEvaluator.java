@@ -155,19 +155,18 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					final long breakEvenPurchasePricePerM3 = Calculator.divide(breakEvenPurchaseCost, loadVolume);
 					final long breakEvenPurchasePricePerMMBTu = Calculator.divide(breakEvenPurchasePricePerM3, cvValue);
 
-					
-					((IBreakEvenPriceCalculator)originalLoad.getLoadPriceCalculator()).setPrice((int)breakEvenPurchasePricePerMMBTu);
+					((IBreakEvenPriceCalculator) originalLoad.getLoadPriceCalculator()).setPrice((int) breakEvenPurchasePricePerMMBTu);
 
-//					final ILoadOption beSlot;
-//					if (originalLoad instanceof ILoadSlot) {
-//						beSlot = new BELoadSlot((ILoadSlot) originalLoad, (int) breakEvenPurchasePricePerMMBTu);
-//					} else {
-//						beSlot = new BELoadOption(originalLoad, (int) breakEvenPurchasePricePerMMBTu);
-//					}
-//					PortDetails detail = (PortDetails) (currentSequence[loadIdx]);
-//					detail = detail.clone();
-//					detail.setPortSlot(beSlot);
-//					newSequence[loadIdx] = detail;
+					// final ILoadOption beSlot;
+					// if (originalLoad instanceof ILoadSlot) {
+					// beSlot = new BELoadSlot((ILoadSlot) originalLoad, (int) breakEvenPurchasePricePerMMBTu);
+					// } else {
+					// beSlot = new BELoadOption(originalLoad, (int) breakEvenPurchasePricePerMMBTu);
+					// }
+					// PortDetails detail = (PortDetails) (currentSequence[loadIdx]);
+					// detail = detail.clone();
+					// detail.setPortSlot(beSlot);
+					// newSequence[loadIdx] = detail;
 
 					// Overwrite existing data
 					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
@@ -194,30 +193,30 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					final int breakEvenPricePerMMBtu = search(minPricePerMMBTu, minPrice_Value, maxPricePerMMBTu, maxPrice_Value, seq, vessel, arrivalTimes, dischargeIdx, currentSequence,
 							originalDischarge, newSequence);
 
-//					final IDischargeOption beSlot;
-					((IBreakEvenPriceCalculator)originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
-//					if (originalDischarge instanceof IDischargeSlot) {
-//						beSlot = new BEDischargeSlot((IDischargeSlot) originalDischarge, breakEvenPricePerMMBtu);
-//					} else {
-//						beSlot = new BEDischargeOption(originalDischarge, breakEvenPricePerMMBtu);
-//					}
-//					
-//if (beSlot.hashCode() != originalDischarge.hashCode()) {
-//	int ii = 0;
-//}
-//if (!beSlot.equals(originalDischarge)) {
-//	int ii = 0;
-//}
-//if (!originalDischarge.equals(beSlot)) {
-//	
-//	originalDischarge.equals(beSlot);
-//	int ii = 0;
-//}
+					// final IDischargeOption beSlot;
+					((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
+					// if (originalDischarge instanceof IDischargeSlot) {
+					// beSlot = new BEDischargeSlot((IDischargeSlot) originalDischarge, breakEvenPricePerMMBtu);
+					// } else {
+					// beSlot = new BEDischargeOption(originalDischarge, breakEvenPricePerMMBtu);
+					// }
+					//
+					// if (beSlot.hashCode() != originalDischarge.hashCode()) {
+					// int ii = 0;
+					// }
+					// if (!beSlot.equals(originalDischarge)) {
+					// int ii = 0;
+					// }
+					// if (!originalDischarge.equals(beSlot)) {
+					//
+					// originalDischarge.equals(beSlot);
+					// int ii = 0;
+					// }
 
-//					PortDetails detail = (PortDetails) (currentSequence[dischargeIdx]);
-//					detail = detail.clone();
-////					detail.setPortSlot(beSlot);
-//					newSequence[dischargeIdx] = detail;
+					// PortDetails detail = (PortDetails) (currentSequence[dischargeIdx]);
+					// detail = detail.clone();
+					// // detail.setPortSlot(beSlot);
+					// newSequence[dischargeIdx] = detail;
 
 					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
 				}
@@ -245,24 +244,23 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		}
 	}
 
-	private long evaluateSalesPrice(@NonNull final ScheduledSequence seq, @NonNull final IVessel vessel, final int[] arrivalTimes, final int dischargeIdx, @NonNull final Object[] currentSequence,
-			@NonNull final IDischargeOption originalDischarge, @NonNull final Object[] newSequence, final int currentPricePerMMBTu) {
+	private long evaluateSalesPrice(final ScheduledSequence seq, final IVessel vessel, final int[] arrivalTimes, final int dischargeIdx, final Object[] currentSequence,
+			final IDischargeOption originalDischarge, final Object[] newSequence, final int currentPricePerMMBTu) {
 		// Create new discharge slot with sales price option
-//		final IDischargeOption beSlot;
-//		if (originalDischarge instanceof IDischargeSlot) {
-//			beSlot = new BEDischargeSlot((IDischargeSlot) originalDischarge, currentPricePerMMBTu);
-//		} else {
-//			beSlot = new BEDischargeOption(originalDischarge, currentPricePerMMBTu);
-//		}
-//
-//		PortDetails detail = (PortDetails) (currentSequence[dischargeIdx]);
-//		detail = detail.clone();
-//		detail.setPortSlot(beSlot);
-//		newSequence[dischargeIdx] = detail;
-		
-		((IBreakEvenPriceCalculator)originalDischarge.getDischargePriceCalculator()).setPrice(currentPricePerMMBTu);
+		// final IDischargeOption beSlot;
+		// if (originalDischarge instanceof IDischargeSlot) {
+		// beSlot = new BEDischargeSlot((IDischargeSlot) originalDischarge, currentPricePerMMBTu);
+		// } else {
+		// beSlot = new BEDischargeOption(originalDischarge, currentPricePerMMBTu);
+		// }
+		//
+		// PortDetails detail = (PortDetails) (currentSequence[dischargeIdx]);
+		// detail = detail.clone();
+		// detail.setPortSlot(beSlot);
+		// newSequence[dischargeIdx] = detail;
 
-		
+		((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(currentPricePerMMBTu);
+
 		final VoyagePlan newVoyagePlan = new VoyagePlan();
 		voyageCalculator.calculateVoyagePlan(newVoyagePlan, vessel, arrivalTimes, newSequence);
 		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
@@ -270,8 +268,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 		return newPnLValue;
 	}
 
-	private int search(final int min, final long minValue, final int max, final long maxValue, @NonNull final ScheduledSequence seq, @NonNull final IVessel vessel, final int[] arrivalTimes,
-			final int dischargeIdx, @NonNull final Object[] currentSequence, @NonNull final IDischargeOption originalDischarge, @NonNull final Object[] newSequence) {
+	private int search(final int min, final long minValue, final int max, final long maxValue, final ScheduledSequence seq, final IVessel vessel, final int[] arrivalTimes, final int dischargeIdx,
+			final Object[] currentSequence, final IDischargeOption originalDischarge, final Object[] newSequence) {
 
 		final int mid = min + ((max - min) / 2);
 
