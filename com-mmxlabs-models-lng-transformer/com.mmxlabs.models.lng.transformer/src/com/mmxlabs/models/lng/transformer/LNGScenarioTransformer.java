@@ -1634,7 +1634,7 @@ public class LNGScenarioTransformer {
 				for (final VesselClass eVc : charterCost.getVesselClasses()) {
 					final ICurve charterInCurve;
 					if (charterCost.getCharterInPrice() == null) {
-						charterInCurve = new ConstantValueCurve(0.0);
+						charterInCurve = new ConstantValueCurve(0);
 					} else {
 						charterInCurve = createCurveForIntegerIndex(charterCost.getCharterInPrice(), 1.0f / 24.0f);
 					}
