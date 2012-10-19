@@ -16,11 +16,11 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  */
 public class LNGTransferDetailTree extends DetailTree {
 	public LNGTransferDetailTree(final String key, final long lngVolume, final int lngPricePerM3, final int cvValue) {
-		super(key, new CurrencyDetailElement(Calculator.multiply(lngVolume, lngPricePerM3)));
+		super(key, new CurrencyDetailElement(Calculator.convertM3ToM3Price(lngVolume, lngPricePerM3)));
 		addChild("Volume", lngVolume);
 		addChild("Price/m3", new CurrencyDetailElement(lngPricePerM3));
 		addChild("CV Value", cvValue);
-		addChild("MMBTu", Calculator.multiply(cvValue, lngVolume));
-		addChild("Price/MMBTu", new CurrencyDetailElement(Calculator.divide(lngPricePerM3, cvValue)));
+		addChild("MMBTu", Calculator.convertM3ToMMBTu(lngVolume, cvValue));
+		addChild("Price/MMBTu", new CurrencyDetailElement(Calculator.costPerMMBTuFromM3(lngPricePerM3, cvValue)));
 	}
 }

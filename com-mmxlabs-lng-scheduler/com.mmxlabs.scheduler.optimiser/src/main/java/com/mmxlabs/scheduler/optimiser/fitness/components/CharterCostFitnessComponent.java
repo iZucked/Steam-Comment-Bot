@@ -71,7 +71,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 		}
 
 		// we are interested
-		return charterPrice != null; 
+		return charterPrice != null;
 	}
 
 	/*
@@ -103,6 +103,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 		// addDiscountedValue(firstLoadTime,
 		// Calculator.multiply(lastTime - firstLoadTime, charterPrice));
 
-		return ((firstLoadTime == -1) || (lastTime == -1)) ? 0 : getDiscountedValue(firstLoadTime, Calculator.multiply(lastTime - firstLoadTime, (int)charterPrice.getValueAtPoint(firstLoadTime)));
+		return ((firstLoadTime == -1) || (lastTime == -1)) ? 0 : getDiscountedValue(firstLoadTime,
+				Calculator.quantityFromRateTime((int) charterPrice.getValueAtPoint(firstLoadTime), lastTime - firstLoadTime));
 	}
 }

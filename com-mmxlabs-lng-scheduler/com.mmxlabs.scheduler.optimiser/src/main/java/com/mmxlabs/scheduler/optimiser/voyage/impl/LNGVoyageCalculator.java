@@ -467,7 +467,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			// Store cargoCVValue
 			cargoCVValue = loadSlot.getCargoCVValue();
 
-			dischargeM3Price = (int) Calculator.costPerM3(dischargeUnitPrice, cargoCVValue);
+			dischargeM3Price = Calculator.costPerM3FromMMBTu(dischargeUnitPrice, cargoCVValue);
 
 			lngConsumedInM3 = fuelConsumptions[FuelComponent.NBO.ordinal()] + fuelConsumptions[FuelComponent.FBO.ordinal()] + fuelConsumptions[FuelComponent.IdleNBO.ordinal()];
 
@@ -542,7 +542,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				final IHeelOptions options = ((IHeelOptionsPortSlot) ((PortDetails) sequence[0]).getPortSlot()).getHeelOptions();
 				if (options.getHeelLimit() > 0) {
 					setLNGPrice = true;
-					dischargeM3Price = Calculator.costPerM3(options.getHeelUnitPrice(), options.getHeelCVValue());
+					dischargeM3Price = Calculator.costPerM3FromMMBTu(options.getHeelUnitPrice(), options.getHeelCVValue());
 				} else {
 					setLNGPrice = false;
 				}
@@ -584,7 +584,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						// TODO double check how/if this affects caching
 						// decisions
 						final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice((ILoadSlot) details.getOptions().getToPortSlot(), cooldownTime);
-						final int cooldownPricePerM3 = Calculator.costPerM3(cooldownPricePerMMBTU, ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue());
+						final int cooldownPricePerM3 = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue());
 
 						details.setFuelUnitPrice(FuelComponent.Cooldown, cooldownPricePerM3);
 						cooldownM3Price = cooldownPricePerM3;

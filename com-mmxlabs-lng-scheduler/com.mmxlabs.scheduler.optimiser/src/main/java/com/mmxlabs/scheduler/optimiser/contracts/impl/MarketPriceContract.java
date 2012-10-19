@@ -30,7 +30,6 @@ public class MarketPriceContract extends SimpleContract {
 	 */
 	@Override
 	public int calculateSimpleLoadUnitPrice(final int loadTime) {
-		return offset + (int) Calculator.multiply((int) market.getValueAtPoint(loadTime),
-				multiplier);
+		return offset + Calculator.getShareOfPrice(multiplier, market.getValueAtPoint(loadTime));
 	}
 }

@@ -1521,8 +1521,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		private static final ZeroCurve INSTANCE = new ZeroCurve();
 
 		@Override
-		public double getValueAtPoint(final double point) {
-			return 0.0;
+		public int getValueAtPoint(final int point) {
+			return 0;
 		}
 
 		public static ZeroCurve getInstance() {

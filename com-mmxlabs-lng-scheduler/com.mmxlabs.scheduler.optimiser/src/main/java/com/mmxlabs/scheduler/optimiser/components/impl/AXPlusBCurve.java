@@ -25,9 +25,12 @@ public class AXPlusBCurve implements ICurve {
 		this.ref = ref;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public double getValueAtPoint(final double point) {
+	public int getValueAtPoint(final int point) {
 
-		return b + (int) Calculator.multiply((int) ref.getValueAtPoint(point), a);
+		return b + Calculator.getShareOfPrice(a, ref.getValueAtPoint(point));
 	}
 }

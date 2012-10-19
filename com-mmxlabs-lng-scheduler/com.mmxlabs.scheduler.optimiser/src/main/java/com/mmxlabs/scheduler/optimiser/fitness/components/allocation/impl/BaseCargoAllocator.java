@@ -263,8 +263,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 						final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadSlot, (IDischargeSlot) dischargeSlot, loadTime, dischargeTime,
 								dischargeCVPrice, (int) maximumDischargeVolume, vessel, plan, null);
 
-						dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
-						loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
+						dischargeM3Price = Calculator.costPerM3FromMMBTu(dischargeCVPrice, cargoCVValue);
+						loadM3Price = Calculator.costPerM3FromMMBTu(loadCVPrice, cargoCVValue);
 
 					}
 					addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
@@ -314,8 +314,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 				// if we load less, it might actually be worth less
 
 				final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, time, dischargeCVPrice, null);
-				dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
-				loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
+				dischargeM3Price = Calculator.costPerM3FromMMBTu(dischargeCVPrice, cargoCVValue);
+				loadM3Price = Calculator.costPerM3FromMMBTu(loadCVPrice, cargoCVValue);
 
 				maximumDischargeVolume = Math.max(loadSlot.getMaxLoadVolume(), dischargeSlot.getMaxDischargeVolume());
 
@@ -388,8 +388,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, dischargeCVPrice, (int) maximumDischargeVolume, vessel,
 				plan, null);
 
-		final int dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
-		final int loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
+		final int dischargeM3Price = Calculator.costPerM3FromMMBTu(dischargeCVPrice, cargoCVValue);
+		final int loadM3Price = Calculator.costPerM3FromMMBTu(loadCVPrice, cargoCVValue);
 
 		loadPrices.add(loadM3Price);
 		dischargePrices.add(dischargeM3Price);
@@ -464,8 +464,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 		final int loadCVPrice = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, time, dischargeCVPrice, null);
 
-		final int dischargeM3Price = (int) Calculator.multiply(dischargeCVPrice, cargoCVValue);
-		final int loadM3Price = (int) Calculator.multiply(loadCVPrice, cargoCVValue);
+		final int dischargeM3Price = Calculator.costPerM3FromMMBTu(dischargeCVPrice, cargoCVValue);
+		final int loadM3Price = Calculator.costPerM3FromMMBTu(loadCVPrice, cargoCVValue);
 
 		loadPrices.add(loadM3Price);
 		dischargePrices.add(dischargeM3Price);
@@ -494,7 +494,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 		this.profit = 0;
 		for (int i = 0; i < allocation.length; i++) {
-			profit += Calculator.multiply(unitPrices.get(i), allocation[i]);
+			profit += Calculator.convertM3ToM3Price(allocation[i], unitPrices.get(i));
 		}
 	}
 
