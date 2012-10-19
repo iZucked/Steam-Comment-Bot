@@ -101,35 +101,21 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	 */
 	public final boolean checkSequence(final ISequence sequence, final List<String> messages, final VesselInstanceType instanceType) {
 
-		ITimeWindow loadTimeWindow = null;
+		ITimeWindow lastTimeWindow = null;
 
 		for (final ISequenceElement t : sequence) {
-			final PortType type = portTypeProvider.getPortType(t);
 
-			switch (type) {
-			case Load:
-
-				final IPortSlot loadSlot = portSlotProvider.getPortSlot(t);
-				loadTimeWindow = loadSlot.getTimeWindow();
-				break;
-			case Discharge:
-
-				final IPortSlot dischargeSlot = portSlotProvider.getPortSlot(t);
-				final ITimeWindow tw = dischargeSlot.getTimeWindow();
-				if (loadTimeWindow != null && tw != null) {
-					if (tw.getEnd() < loadTimeWindow.getStart()) {
-						if (messages != null) {
-							messages.add("Discharge window is before load window");
-						}
-						return false;
+			final IPortSlot currentSlot = portSlotProvider.getPortSlot(t);
+			final ITimeWindow tw = currentSlot.getTimeWindow();
+			if (lastTimeWindow != null && tw != null) {
+				if (tw.getEnd() < lastTimeWindow.getStart()) {
+					if (messages != null) {
+						messages.add("Current time window is before previous time window");
 					}
+					return false;
 				}
-				loadTimeWindow = null;
-				break;
-
-			default:
-				break;
 			}
+			lastTimeWindow = tw;
 
 		}
 
@@ -162,21 +148,15 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		final PortType firstType = portTypeProvider.getPortType(first);
-		final PortType secondType = portTypeProvider.getPortType(second);
 
-		if (firstType.equals(PortType.Load) && secondType.equals(PortType.Discharge)) {
-
-			final IPortSlot loadSlot = portSlotProvider.getPortSlot(first);
-			final IPortSlot dischargeSlot = portSlotProvider.getPortSlot(second);
-			final ITimeWindow loadTimeWindow = loadSlot.getTimeWindow();
-			final ITimeWindow dischargeTimeWindow = dischargeSlot.getTimeWindow();
-			if (loadTimeWindow != null && dischargeTimeWindow != null) {
-				if (dischargeTimeWindow.getEnd() < loadTimeWindow.getStart()) {
-					return false;
-				}
+		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
+		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
+		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();
+		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
+		if (firstTimeWindow != null && secondTimeWindow != null) {
+			if (secondTimeWindow.getEnd() < firstTimeWindow.getStart()) {
+				return false;
 			}
-
 		}
 
 		return true;
@@ -184,21 +164,14 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 	@Override
 	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		final PortType firstType = portTypeProvider.getPortType(first);
-		final PortType secondType = portTypeProvider.getPortType(second);
-
-		if (firstType.equals(PortType.Load) && secondType.equals(PortType.Discharge)) {
-
-			final IPortSlot loadSlot = portSlotProvider.getPortSlot(first);
-			final IPortSlot dischargeSlot = portSlotProvider.getPortSlot(second);
-			final ITimeWindow loadTimeWindow = loadSlot.getTimeWindow();
-			final ITimeWindow dischargeTimeWindow = dischargeSlot.getTimeWindow();
-			if (loadTimeWindow != null && dischargeTimeWindow != null) {
-				if (dischargeTimeWindow.getEnd() < loadTimeWindow.getStart()) {
-					return "Discharge window is before load window";
-				}
+		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
+		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
+		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();
+		final ITimeWindow secondTimeWindow = secondSlot.getTimeWindow();
+		if (firstTimeWindow != null && secondTimeWindow != null) {
+			if (secondTimeWindow.getEnd() < firstTimeWindow.getStart()) {
+				return "Current time window is before previous time window";
 			}
-
 		}
 
 		return null;
