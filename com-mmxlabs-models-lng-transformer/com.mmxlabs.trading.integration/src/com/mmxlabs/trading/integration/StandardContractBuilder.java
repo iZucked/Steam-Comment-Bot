@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
-import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -43,7 +43,8 @@ public class StandardContractBuilder implements IBuilderExtension {
 		this.map = map;
 	}
 
-	public ProfitSharingContract createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int margin, final int share, final Set<IPort> baseMarketPorts, int salesPriceMultiplier) {
+	public ProfitSharingContract createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int margin, final int share, final Set<IPort> baseMarketPorts,
+			int salesPriceMultiplier) {
 		return new ProfitSharingContract(actualMarket, referenceMarket, margin, share, baseMarketPorts, salesPriceMultiplier);
 	}
 
@@ -80,10 +81,10 @@ public class StandardContractBuilder implements IBuilderExtension {
 
 				final NotionalBallastParameters p = e2.getValue();
 
-				final Integer speed = p.isSetSpeed() ? Calculator.scaleToInt(p.getSpeed()) : null;
-				final Integer hireCost = p.isSetSpeed() ? Calculator.scaleToInt(p.getSpeed()) : null;
-				final Integer nboRate = p.isSetNboRate() ? Calculator.scaleToInt(p.getNboRate()) : null;
-				final Integer baseFuelRate = p.isSetBaseConsumption() ? Calculator.scaleToInt(p.getBaseConsumption()) : null;
+				final Integer speed = p.isSetSpeed() ? OptimiserUnitConvertor.convertToInternalSpeed(p.getSpeed()) : null;
+				final Integer hireCost = p.isSetHireCost() ? (int) OptimiserUnitConvertor.convertToInternalHourlyCost(p.getHireCost()) : null;
+				final Integer nboRate = p.isSetNboRate() ? OptimiserUnitConvertor.convertToInternalConversionFactor(p.getNboRate()) : null;
+				final Integer baseFuelRate = p.isSetBaseConsumption() ? OptimiserUnitConvertor.convertToInternalConversionFactor(p.getBaseConsumption()) : null;
 
 				final List<String> routes = new ArrayList<String>();
 				for (final Route route : p.getRoutes()) {

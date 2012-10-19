@@ -31,7 +31,7 @@ import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -80,14 +80,15 @@ public class StandardContractTransformer implements IContractTransformer {
 					baseMarketPorts.add(map.getOptimiserObject(p, IPort.class));
 				}
 			}
-			final ICurve baseMarket = new AXPlusBCurve(Calculator.scaleToInt(contract.getBaseMarketMultiplier()), Calculator.scaleToInt(contract.getBaseMarketConstant()), map.getOptimiserObject(
-					contract.getBaseMarketIndex(), ICurve.class));
-			final ICurve referenceMarket = new AXPlusBCurve(Calculator.scaleToInt(contract.getRefMarketMultiplier()), Calculator.scaleToInt(contract.getRefMarketConstant()), map.getOptimiserObject(
-					contract.getRefMarketIndex(), ICurve.class));
+			final ICurve baseMarket = new AXPlusBCurve(OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getBaseMarketMultiplier()),
+					OptimiserUnitConvertor.convertToInternalPrice(contract.getBaseMarketConstant()), map.getOptimiserObject(contract.getBaseMarketIndex(), ICurve.class));
+			final ICurve referenceMarket = new AXPlusBCurve(OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getRefMarketMultiplier()),
+					OptimiserUnitConvertor.convertToInternalPrice(contract.getRefMarketConstant()), map.getOptimiserObject(contract.getRefMarketIndex(), ICurve.class));
 
-			final int salesPriceMultiplier = (int)Calculator.scale((float)contract.getSalesMultiplier());
-			
-			return contractBuilder.createProfitSharingContract(baseMarket, referenceMarket, Calculator.scaleToInt(contract.getMargin()), Calculator.scaleToInt(contract.getShare()), baseMarketPorts, salesPriceMultiplier);
+			final int salesPriceMultiplier = OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getSalesMultiplier());
+
+			return contractBuilder.createProfitSharingContract(baseMarket, referenceMarket, OptimiserUnitConvertor.convertToInternalPrice(contract.getMargin()),
+					OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getShare()), baseMarketPorts, salesPriceMultiplier);
 		} else if (c instanceof NetbackPurchaseContract) {
 			final NetbackPurchaseContract netbackPurchaseContract = (NetbackPurchaseContract) c;
 			final Map<AVesselClass, NotionalBallastParameters> notionalBallastParameterMap = new HashMap<AVesselClass, NotionalBallastParameters>();
@@ -100,8 +101,8 @@ public class StandardContractTransformer implements IContractTransformer {
 				}
 			}
 
-			return contractBuilder.createNetbackContract(Calculator.scaleToInt(netbackPurchaseContract.getMargin()), Calculator.scaleToInt(netbackPurchaseContract.getFloorPrice()),
-					notionalBallastParameterMap);
+			return contractBuilder.createNetbackContract(OptimiserUnitConvertor.convertToInternalConversionFactor(netbackPurchaseContract.getMargin()),
+					OptimiserUnitConvertor.convertToInternalPrice(netbackPurchaseContract.getFloorPrice()), notionalBallastParameterMap);
 		}
 		return null;
 	}

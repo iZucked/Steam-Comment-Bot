@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
@@ -53,8 +53,8 @@ public class TradingTransformerExtension implements ITransformerExtension {
 			// if (e.getName().equalsIgnoreCase("Third-parties")) {
 			// e2 = createExternalEntity(e.getName());
 			// } else {
-			e2 = createGroupEntity(e.getName(), Calculator.scaleToInt(1.0), new ConstantValueCurve(Calculator.scaleToInt(0.0)), // TODO fix tax rates.
-					Calculator.scaleToInt(0));
+			e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), new ConstantValueCurve(0), // TODO fix tax rates.
+					OptimiserUnitConvertor.convertToInternalConversionFactor(0));
 			// }
 
 			// if (e instanceof GroupEntity) {

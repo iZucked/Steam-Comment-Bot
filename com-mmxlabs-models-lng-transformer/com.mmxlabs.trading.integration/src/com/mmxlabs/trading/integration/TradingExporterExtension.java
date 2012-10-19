@@ -37,6 +37,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
@@ -266,7 +267,7 @@ public class TradingExporterExtension implements IExporterExtension {
 
 			final ExtraData entityData = streamData.addExtraData(entry.getEntity().getName(), entry.getEntity().getName());
 
-			final int groupValue = (int) (entry.getFinalGroupValue() / Calculator.ScaleFactor);
+			final int groupValue = OptimiserUnitConvertor.convertToExternalFixedCost(entry.getFinalGroupValue());
 			totalGroupValue += groupValue;
 			final ExtraData pnlData = entityData.addExtraData(TradingConstants.ExtraData_pnl, "P&L", groupValue, ExtraDataFormatType.CURRENCY);
 
@@ -284,9 +285,9 @@ public class TradingExporterExtension implements IExporterExtension {
 		if (shippingCostAnnotation == null) {
 			return;
 		}
-		final int shippingCostValue = (int) (shippingCostAnnotation.getShippingCost() / Calculator.ScaleFactor);
-		final ExtraData shippingCostData = (incBoilOff) ? container.addExtraData(TradingConstants.ExtraData_ShippingCostIncBoilOff, "Shipping Costs (With Boil-Off)", shippingCostValue, ExtraDataFormatType.CURRENCY)
-				: container.addExtraData(TradingConstants.ExtraData_ShippingCost, "Shipping Costs", shippingCostValue, ExtraDataFormatType.CURRENCY);
+		final int shippingCostValue = OptimiserUnitConvertor.convertToExternalFixedCost(shippingCostAnnotation.getShippingCost());
+		final ExtraData shippingCostData = (incBoilOff) ? container.addExtraData(TradingConstants.ExtraData_ShippingCostIncBoilOff, "Shipping Costs (With Boil-Off)", shippingCostValue,
+				ExtraDataFormatType.CURRENCY) : container.addExtraData(TradingConstants.ExtraData_ShippingCost, "Shipping Costs", shippingCostValue, ExtraDataFormatType.CURRENCY);
 
 		shippingCostData.addExtraData("date", "Date", entities.getDateFromHours(shippingCostAnnotation.getBookingTime()), ExtraDataFormatType.AUTO);
 
