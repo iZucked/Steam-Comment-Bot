@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.events.IFuelUsingEvent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -94,7 +94,7 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 
 			final FuelQuantity quantity = ScheduleFactory.eINSTANCE.createFuelQuantity();
 			quantity.setFuel(entry.getKey());
-			quantity.setCost((int) (totalCost / Calculator.ScaleFactor));
+			quantity.setCost(OptimiserUnitConvertor.convertToExternalFixedCost(totalCost));
 			if (totalCost > 0)
 				matters = true;
 
@@ -105,7 +105,7 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 				}
 				if (totalUsage > 0) {
 					final FuelAmount amount = ScheduleFactory.eINSTANCE.createFuelAmount();
-					amount.setQuantity((int) (totalUsage / Calculator.ScaleFactor));
+					amount.setQuantity(OptimiserUnitConvertor.convertToExternalFixedCost(totalUsage));
 					amount.setUnit(modelUnits.get(unit));
 					quantity.getAmounts().add(amount);
 					matters = true;

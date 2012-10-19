@@ -9,7 +9,7 @@ import java.util.Map;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.optimiser.core.ISequenceElement;
-import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
@@ -49,14 +49,13 @@ public class JourneyEventExporter extends BaseAnnotationExporter {
 		journey.setPort(eFromPort);
 		journey.setDestination(eToPort);
 
-
 		journey.setDistance(event.getDistance());
 		journey.setRoute(event.getRoute());
-		journey.setToll((int) (event.getRouteCost() / Calculator.ScaleFactor));
+		journey.setToll(OptimiserUnitConvertor.convertToExternalFixedCost(event.getRouteCost()));
 
 		journey.setLaden(VesselState.Laden.equals(event.getVesselState()));
-		
-		journey.setSpeed(event.getSpeed() / (double) Calculator.ScaleFactor);
+
+		journey.setSpeed(OptimiserUnitConvertor.convertToExternalSpeed(event.getSpeed()));
 
 		journey.getFuels().addAll(super.createFuelQuantities(event));
 

@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -101,8 +102,8 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 				// eAllocation.setLoadPriceM3(allocation.getLoadM3Price());
 				// eAllocation.setDischargePriceM3(allocation.getDischargeM3Price());
 				// eAllocation.setFuelVolume(allocation.getFuelVolume() / Calculator.ScaleFactor); // yes? no?
-				eAllocation.setDischargeVolume((int) (allocation.getDischargeVolume() / Calculator.ScaleFactor));
-				eAllocation.setLoadVolume((int) (allocation.getLoadVolume() / Calculator.ScaleFactor));
+				eAllocation.setDischargeVolume(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolume()));
+				eAllocation.setLoadVolume(OptimiserUnitConvertor.convertToExternalVolume(allocation.getLoadVolume()));
 				// eAllocation.setSequence();
 
 				output.getCargoAllocations().add(eAllocation);
@@ -110,11 +111,11 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 			if (slot instanceof ILoadOption) {
 				eAllocation.setLoadAllocation(slotAllocation);
 				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getLoadM3Price(), allocation.getLoadOption().getCargoCVValue());
-				eAllocation.getLoadAllocation().setPrice((double) pricePerMMBTu / (double) Calculator.ScaleFactor);
+				eAllocation.getLoadAllocation().setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 			} else {
 				eAllocation.setDischargeAllocation(slotAllocation);
 				final int pricePerMMBTu = Calculator.costPerMMBTuFromM3(allocation.getDischargeM3Price(), allocation.getLoadOption().getCargoCVValue());
-				eAllocation.getDischargeAllocation().setPrice((double) pricePerMMBTu / (double) Calculator.ScaleFactor);
+				eAllocation.getDischargeAllocation().setPrice(OptimiserUnitConvertor.convertToExternalPrice(pricePerMMBTu));
 			}
 
 			sv.setSlotAllocation(slotAllocation);
@@ -193,7 +194,7 @@ public class VisitEventExporter extends BaseAnnotationExporter {
 
 		final IPortCostAnnotation cost = (IPortCostAnnotation) annotations.get(SchedulerConstants.AI_portCostInfo);
 		if (cost != null) {
-			portVisit.setPortCost((int) (cost.getPortCost() / Calculator.ScaleFactor));
+			portVisit.setPortCost(OptimiserUnitConvertor.convertToExternalFixedCost(cost.getPortCost()));
 		}
 
 		// Handle FOB/DES stuff

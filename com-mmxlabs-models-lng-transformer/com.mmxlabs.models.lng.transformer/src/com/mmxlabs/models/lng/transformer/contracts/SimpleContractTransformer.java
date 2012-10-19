@@ -23,6 +23,7 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
@@ -59,10 +60,11 @@ public class SimpleContractTransformer implements IContractTransformer {
 
 	private SimpleContract instantiate(final Contract c) {
 		if (c instanceof FixedPriceContract) {
-			return createFixedPriceContract(Calculator.scaleToInt(((FixedPriceContract) c).getPricePerMMBTU()));
+			return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(((FixedPriceContract) c).getPricePerMMBTU()));
 		} else if (c instanceof IndexPriceContract) {
-			return createMarketPriceContract(map.getOptimiserObject(((IndexPriceContract) c).getIndex(), ICurve.class), Calculator.scaleToInt(((IndexPriceContract) c).getConstant()),
-					Calculator.scaleToInt(((IndexPriceContract) c).getMultiplier()));
+			return createMarketPriceContract(map.getOptimiserObject(((IndexPriceContract) c).getIndex(), ICurve.class),
+					OptimiserUnitConvertor.convertToInternalConversionFactor(((IndexPriceContract) c).getConstant()),
+					OptimiserUnitConvertor.convertToInternalConversionFactor(((IndexPriceContract) c).getMultiplier()));
 		}
 		return null;
 	}
@@ -88,8 +90,8 @@ public class SimpleContractTransformer implements IContractTransformer {
 	public Collection<EClass> getContractEClasses() {
 		return handledClasses;
 	}
-	
-	 com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract createFixedPriceContract(final int pricePerMMBTU) {
+
+	com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract createFixedPriceContract(final int pricePerMMBTU) {
 		return new com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract(pricePerMMBTU);
 	}
 
