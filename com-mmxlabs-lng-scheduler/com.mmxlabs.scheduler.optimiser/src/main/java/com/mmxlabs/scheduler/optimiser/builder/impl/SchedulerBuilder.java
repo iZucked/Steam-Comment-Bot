@@ -776,12 +776,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setVesselClassRouteCost(final String route, final IVesselClass vesselClass, final VesselState state, final int tollPrice) {
+	public void setVesselClassRouteCost(final String route, final IVesselClass vesselClass, final VesselState state, final long tollPrice) {
 		routeCostProvider.setRouteCost(route, vesselClass, state, tollPrice);
 	}
 
 	@Override
-	public void setDefaultRouteCost(final String route, final int defaultPrice) {
+	public void setDefaultRouteCost(final String route, final long defaultPrice) {
 		routeCostProvider.setDefaultRouteCost(route, defaultPrice);
 	}
 
@@ -986,7 +986,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final int minHeelInM3, final int baseFuelUnitPricePerMT,
+	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long minHeelInM3, final int baseFuelUnitPricePerMT,
 			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final int cooldownTimeHours, final long cooldownVolumeM3) {
 
 		final VesselClass vesselClass = new VesselClass();

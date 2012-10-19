@@ -18,6 +18,7 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -64,15 +65,15 @@ public class CostComponentTest {
 
 		// define the fuel consumptions
 		// multiply by scale factor (i.e. convert to internal unit)
-		final long baseConsumption = 1000 * Calculator.ScaleFactor;
-		final long FBOConsumption = 0 * Calculator.ScaleFactor;
-		final long NBOConsumption = 500 * Calculator.ScaleFactor;
+		final long baseConsumption = OptimiserUnitConvertor.convertToInternalVolume(1000);
+		final long FBOConsumption = OptimiserUnitConvertor.convertToInternalVolume(0);
+		final long NBOConsumption = OptimiserUnitConvertor.convertToInternalVolume(500);
 
 		// define the fuel unit prices
 		// multiply by scale factor (i.e. convert to internal unit)
-		final long baseUnit = 13 * Calculator.ScaleFactor;
-		final long NBOUnit = 25 * Calculator.ScaleFactor;
-		final long FBOUnit = 7 * Calculator.ScaleFactor;
+		final int baseUnit = OptimiserUnitConvertor.convertToInternalPrice(13);
+		final int NBOUnit = OptimiserUnitConvertor.convertToInternalPrice(25);
+		final int FBOUnit = OptimiserUnitConvertor.convertToInternalPrice(7);
 
 		final String name = "name";
 		final CargoSchedulerFitnessCore core = null;
@@ -90,9 +91,9 @@ public class CostComponentTest {
 		voyage.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), NBOConsumption);
 		voyage.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), FBOConsumption);
 		// set unit prices
-		voyage.setFuelUnitPrice(FuelComponent.Base, (int) baseUnit);
-		voyage.setFuelUnitPrice(FuelComponent.NBO, (int) NBOUnit);
-		voyage.setFuelUnitPrice(FuelComponent.FBO, (int) FBOUnit);
+		voyage.setFuelUnitPrice(FuelComponent.Base, baseUnit);
+		voyage.setFuelUnitPrice(FuelComponent.NBO, NBOUnit);
+		voyage.setFuelUnitPrice(FuelComponent.FBO, FBOUnit);
 
 		final Object[] voyageSequence = new Object[] { voyage };
 		final VoyagePlan voyagePlan = new VoyagePlan();
@@ -109,11 +110,11 @@ public class CostComponentTest {
 		final long cost = c.endEvaluationAndGetCost();
 
 		// divide by scale factor to convert from internal unit to external (1000$ to $)
-		final long expectedBaseCost = (baseConsumption / Calculator.ScaleFactor) * (baseUnit / Calculator.ScaleFactor);
-		final long expectedNBOCost = (NBOConsumption / Calculator.ScaleFactor) * (NBOUnit / Calculator.ScaleFactor);
-		final long expectedFBOCost = (FBOConsumption / Calculator.ScaleFactor) * (FBOUnit / Calculator.ScaleFactor);
+		final long expectedBaseCost = Calculator.costFromConsumption(baseConsumption, baseUnit);
+		final long expectedNBOCost = Calculator.costFromConsumption(NBOConsumption, NBOUnit);
+		final long expectedFBOCost = Calculator.costFromConsumption(FBOConsumption, FBOUnit);
 
-		final long expectedTotalCost = expectedBaseCost + expectedFBOCost + expectedNBOCost;
+		final long expectedTotalCost = (expectedBaseCost + expectedFBOCost + expectedNBOCost) / Calculator.ScaleFactor;
 
 		Assert.assertEquals("Expected cost equals calculated cost.", expectedTotalCost, cost);
 

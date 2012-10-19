@@ -83,7 +83,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 	private long[] allocation;
 
-	private long profit;
+//	private long profit;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -492,15 +492,15 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		this.allocation = allocateSpareVolume();
 		// convolve for p&l
 
-		this.profit = 0;
-		for (int i = 0; i < allocation.length; i++) {
-			profit += Calculator.convertM3ToM3Price(allocation[i], unitPrices.get(i));
-		}
+//		this.profit = 0;
+//		for (int i = 0; i < allocation.length; i++) {
+//			profit += Calculator.convertM3ToM3Price(allocation[i], unitPrices.get(i));
+//		}
 	}
 
-	public long getProfit() {
-		return profit / Calculator.ScaleFactor; // why?
-	}
+//	public long getProfit() {
+//		return profit / Calculator.ScaleFactor; // why?
+//	}
 
 	public long getAllocation(final IPortSlot slot) {
 		final int index = variableForSlot(slot);

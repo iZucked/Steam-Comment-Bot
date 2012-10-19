@@ -36,7 +36,7 @@ import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.ILocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.LinearSimulatedAnnealingFitnessEvaluator;
-import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -91,9 +91,10 @@ public class SimpleSchedulerTest {
 
 		final IVesselClass vesselClass1 = builder.createVesselClass("vesselClass-1", 12000, 20000, 150000000, 0, 7000, 10000, 0, Integer.MAX_VALUE, 0, 0);
 
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, 0, consumptionCalculator, 15000);
-		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, 150 * Calculator.ScaleFactor, 100 * Calculator.ScaleFactor, 10 * Calculator.ScaleFactor, 0, consumptionCalculator,
-				15000);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), 0, consumptionCalculator, 15000);
+		builder.setVesselClassStateParamaters(vesselClass1, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150), OptimiserUnitConvertor.convertToInternalDailyRate(100),
+				OptimiserUnitConvertor.convertToInternalDailyRate(10), 0, consumptionCalculator, 15000);
 
 		// TODO: Setup start/end ports correctly
 		builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), builder.createStartEndRequirement(port1), builder.createStartEndRequirement(port2), 0, 0, 0);
@@ -114,21 +115,21 @@ public class SimpleSchedulerTest {
 		final ILoadPriceCalculator purchaseCurve = new FixedPriceContract(5);
 		final ISalesPriceCalculator salesCurve = new FixedPriceContract(200000);
 
-		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0, 150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false, false);
-		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0, 150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false, false);
-		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0, 150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false, false);
-		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0, 150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false, false);
-		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0, 150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false, false);
-		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0, 150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false, false);
-		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0, 150000 * Calculator.ScaleFactor, purchaseCurve, 22800, 24, false, false, false);
+		final ILoadSlot load1 = builder.createLoadSlot("load1", port1, tw1, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, false);
+		final ILoadSlot load2 = builder.createLoadSlot("load2", port1, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, false);
+		final ILoadSlot load3 = builder.createLoadSlot("load3", port1, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, false);
+		final ILoadSlot load4 = builder.createLoadSlot("load4", port1, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, false);
+		final ILoadSlot load5 = builder.createLoadSlot("load5", port3, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, false);
+		final ILoadSlot load6 = builder.createLoadSlot("load6", port3, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, false);
+		final ILoadSlot load7 = builder.createLoadSlot("load7", port5, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(150000), purchaseCurve, 22800, 24, false, false, false);
 
-		final IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1", port2, tw2, 0, 100000 * Calculator.ScaleFactor, salesCurve, 24, false);
-		final IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2", port2, tw4, 0, 100000 * Calculator.ScaleFactor, salesCurve, 24, false);
-		final IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3", port2, tw6, 0, 100000 * Calculator.ScaleFactor, salesCurve, 24, false);
-		final IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4", port6, tw6, 0, 100000 * Calculator.ScaleFactor, salesCurve, 24, false);
-		final IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5", port4, tw3, 0, 100000 * Calculator.ScaleFactor, salesCurve, 24, false);
-		final IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6", port4, tw5, 0, 100000 * Calculator.ScaleFactor, salesCurve, 24, false);
-		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7", port6, tw7, 0, 100000 * Calculator.ScaleFactor, salesCurve, 24, false);
+		final IDischargeSlot discharge1 = builder.createDischargeSlot("discharge1", port2, tw2, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), salesCurve, 24, false);
+		final IDischargeSlot discharge2 = builder.createDischargeSlot("discharge2", port2, tw4, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), salesCurve, 24, false);
+		final IDischargeSlot discharge3 = builder.createDischargeSlot("discharge3", port2, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), salesCurve, 24, false);
+		final IDischargeSlot discharge4 = builder.createDischargeSlot("discharge4", port6, tw6, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), salesCurve, 24, false);
+		final IDischargeSlot discharge5 = builder.createDischargeSlot("discharge5", port4, tw3, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), salesCurve, 24, false);
+		final IDischargeSlot discharge6 = builder.createDischargeSlot("discharge6", port4, tw5, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), salesCurve, 24, false);
+		final IDischargeSlot discharge7 = builder.createDischargeSlot("discharge7", port6, tw7, 0, OptimiserUnitConvertor.convertToInternalVolume(100000), salesCurve, 24, false);
 
 		builder.createCargo("cargo1", load1, discharge1, false);
 		builder.createCargo("cargo2", load2, discharge2, false);
@@ -166,7 +167,7 @@ public class SimpleSchedulerTest {
 
 		// Generate initial state
 		final IInitialSequenceBuilder sequenceBuilder = new ConstrainedInitialSequenceBuilder(constraintRegistry.getConstraintCheckerFactories());
-		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement>emptyMap());
+		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
 
 		final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new ArrayList<String>(
 				constraintRegistry.getConstraintCheckerNames()), constraintRegistry, new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);

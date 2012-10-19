@@ -21,22 +21,25 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 	}
 
 	final String name;
-	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Integer>>> pricesByRouteClassAndState = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Integer>>>();
+	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Long>>> pricesByRouteClassAndState = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Long>>>();
 
-	private final Map<String, Integer> defaultPrices = new HashMap<String, Integer>();
+	private final Map<String, Long> defaultPrices = new HashMap<String, Long>();
 	private final String defaultKey;
 
 	private final Map<String, Map<IVesselClass, Integer>> travelTimesByRouteAndClass = new HashMap<String, Map<IVesselClass, Integer>>();
 	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Long>>> baseFuelByRouteAndClass = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Long>>>();
 	private final Map<String, Map<IVesselClass, EnumMap<VesselState, Long>>> nboRateByRouteAndClass = new HashMap<String, Map<IVesselClass, EnumMap<VesselState, Long>>>();
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public int getRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState) {
+	public long getRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState) {
 
 		if (route.equals(defaultKey)) {
 			return 0;
 		}
-		Integer cost = get(pricesByRouteClassAndState, route, vesselClass, vesselState, null);
+		Long cost = get(pricesByRouteClassAndState, route, vesselClass, vesselState, null);
 
 		if (cost == null) {
 			cost = defaultPrices.get(route);
@@ -47,8 +50,11 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 		return 0;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public void setRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState, final int price) {
+	public void setRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState, final long price) {
 		set(pricesByRouteClassAndState, route, vesselClass, vesselState, price);
 	}
 
@@ -64,8 +70,11 @@ public class HashMapRouteCostProviderEditor implements IRouteCostProviderEditor 
 		travelTimesByRouteAndClass.clear();
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public void setDefaultRouteCost(final String route, final int price) {
+	public void setDefaultRouteCost(final String route, final long price) {
 		defaultPrices.put(route, price);
 	}
 

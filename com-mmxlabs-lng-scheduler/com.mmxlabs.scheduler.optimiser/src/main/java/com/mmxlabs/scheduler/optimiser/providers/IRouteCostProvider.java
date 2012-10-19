@@ -26,8 +26,9 @@ public interface IRouteCostProvider extends IDataComponentProvider {
 	 * @param vesselState
 	 *            vessel state during travel`
 	 * @return toll in dollars
+	 * @since 2.0
 	 */
-	public int getRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState);
+	public long getRouteCost(final String route, final IVesselClass vesselClass, final VesselState vesselState);
 
 	/**
 	 * Gets the extra fuel usage, in base-fuel-equivalent scaled MT per hour (see {@link Calculator#ScaleFactor}), required for vessels of class {@code vesselClass} to travel via {@code route} for the

@@ -21,8 +21,9 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 * @param vesselClass
 	 * @param vesselState
 	 * @param price
+	 * @since 2.0
 	 */
-	public void setRouteCost(String route, IVesselClass vesselClass, VesselState vesselState, int price);
+	public void setRouteCost(String route, IVesselClass vesselClass, VesselState vesselState, long price);
 
 	/**
 	 * Sets the default cost incurred when travelling via the route named {@code route} to {@code price}. This price is overridden for particular vessel classes by
@@ -32,8 +33,9 @@ public interface IRouteCostProviderEditor extends IRouteCostProvider {
 	 *            the route name
 	 * @param price
 	 *            price in dollars
+	 * @since 2.0
 	 */
-	public void setDefaultRouteCost(String route, int price);
+	public void setDefaultRouteCost(String route, long price);
 
 	/**
 	 * Sets the fuel consumption and NBO rate incurred by vessels of class {@code vc} when travelling via the route with name {@code routeName} with the {@link VesselState}

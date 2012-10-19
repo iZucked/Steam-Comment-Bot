@@ -77,8 +77,9 @@ public interface ISchedulerBuilder {
 	 * @param baseFuelEquivalenceInM3TOMT
 	 *            Scaled Conversion factor to convert M3 LNG to equivalent MT base fuel
 	 * @return
+	 * @since 2.0
 	 */
-	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, int minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
+	IVesselClass createVesselClass(String name, int minSpeed, int maxSpeed, long capacity, long minHeel, int baseFuelUnitPrice, int baseFuelEquivalenceInM3TOMT, int pilotLightRate,
 			int warmupTimeInHours, int cooldownTimeInHours, long cooldownVolumeInM3);
 
 	/**
@@ -331,8 +332,9 @@ public interface ISchedulerBuilder {
 	 * @param vesselClass
 	 * @param state
 	 * @param tollPrice
+	 * @since 2.0
 	 */
-	void setVesselClassRouteCost(final String route, final IVesselClass vesselClass, final VesselState state, final int tollPrice);
+	void setVesselClassRouteCost(final String route, final IVesselClass vesselClass, final VesselState state, final long tollPrice);
 
 	/**
 	 * Set the default toll associated with passing by a given route
@@ -341,8 +343,9 @@ public interface ISchedulerBuilder {
 	 *            the route name
 	 * @param defaultPrice
 	 *            the associated toll in dollars
+	 * @since 2.0
 	 */
-	void setDefaultRouteCost(String route, int defaultPrice);
+	void setDefaultRouteCost(String route, long defaultPrice);
 
 	/**
 	 * Set the extra time and fuel required for the given vessel class to travel by the given route

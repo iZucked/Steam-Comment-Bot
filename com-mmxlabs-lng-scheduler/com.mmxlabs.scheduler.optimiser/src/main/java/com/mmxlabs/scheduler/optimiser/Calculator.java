@@ -15,28 +15,6 @@ public final class Calculator {
 	// on AllocatedVessel in the ECore model.
 	public static final int ScaleFactor = 1000;
 
-	/**
-	 * Simple multiplication between scaled integer based values
-	 * 
-	 * @param a
-	 * @param b
-	 * @return
-	 */
-	public static long multiply(final long a, final long b) {
-		return (a * b) / ScaleFactor;
-	}
-
-	/**
-	 * Simple division between scaled integer based values
-	 * 
-	 * @param a
-	 * @param b
-	 * @return
-	 */
-	public static long divide(final long a, final long b) {
-		return (a * ScaleFactor) / b;
-	}
-
 	public static int speedFromDistanceTime(final long distance, final int time) {
 
 		return (int) ((distance * ScaleFactor) / time);
@@ -82,52 +60,6 @@ public final class Calculator {
 
 	public static long convertMTToM3(final long mt, final int factor) {
 		return (mt * ScaleFactor) / factor;
-	}
-
-	/**
-	 * Scale an integer value by the scaling factor
-	 * 
-	 * @param value
-	 * @return scaled version of value
-	 */
-	public static long scale(final int value) {
-		return ScaleFactor * value;
-	}
-
-	/**
-	 * @since 2.0
-	 */
-	public static long scale(final long value) {
-		return ScaleFactor * value;
-	}
-
-	public static long descale(final long value) {
-		return value / ScaleFactor;
-	}
-
-	/**
-	 * Scale a float
-	 * 
-	 * @param f
-	 * @return scaled float
-	 */
-	public static long scale(final float f) {
-		return (long) (ScaleFactor * f);
-	}
-
-	public static int scaleToInt(final double d) {
-		return (int) (ScaleFactor * d);
-	}
-
-	/**
-	 * Multiply a long by a double, returning the result as a long, rounded
-	 * 
-	 * @param multiply
-	 * @param d
-	 * @return
-	 */
-	public static long multiply(final long multiply, final double d) {
-		return Math.round(multiply * d);
 	}
 
 	/**
@@ -188,4 +120,73 @@ public final class Calculator {
 	public static int getShareOfPrice(final int share, final int price) {
 		return (int) multiply(price, share);
 	}
+
+	/**
+	 * Scale an integer value by the scaling factor
+	 * 
+	 * @param value
+	 * @return scaled version of value
+	 */
+	private static long scale(final int value) {
+		return ScaleFactor * value;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	private static long scale(final long value) {
+		return ScaleFactor * value;
+	}
+
+	private static long descale(final long value) {
+		return value / ScaleFactor;
+	}
+
+	/**
+	 * Scale a float
+	 * 
+	 * @param f
+	 * @return scaled float
+	 */
+	private static long scale(final float f) {
+		return (long) (ScaleFactor * f);
+	}
+
+	private static int scaleToInt(final double d) {
+		return (int) (ScaleFactor * d);
+	}
+
+	/**
+	 * Multiply a long by a double, returning the result as a long, rounded
+	 * 
+	 * @param multiply
+	 * @param d
+	 * @return
+	 */
+	public static long multiply(final long multiply, final double d) {
+		return Math.round(multiply * d);
+	}
+
+	/**
+	 * Simple multiplication between scaled integer based values
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static long multiply(final long a, final long b) {
+		return (a * b) / ScaleFactor;
+	}
+
+	/**
+	 * Simple division between scaled integer based values
+	 * 
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	private static long divide(final long a, final long b) {
+		return (a * ScaleFactor) / b;
+	}
+
 }
