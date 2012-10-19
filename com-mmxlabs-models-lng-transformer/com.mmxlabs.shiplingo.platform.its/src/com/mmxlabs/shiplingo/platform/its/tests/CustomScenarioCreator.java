@@ -385,11 +385,11 @@ public class CustomScenarioCreator {
 		dis.setPort(dischargePort);
 		load.setContract(pc);
 		dis.setContract(sc);
-		load.setName("load");
-		dis.setName("discharge");
+		load.setName("load" + cargoID);
+		dis.setName("discharge" + cargoID);
 
-		dis.setFixedPrice(dischargePrice);
-		load.setFixedPrice(loadPrice);
+		dis.setPriceExpression(Float.toString(dischargePrice));
+		load.setPriceExpression(Float.toString(loadPrice));
 
 		load.setMaxQuantity(loadMaxQuantity);
 		dis.setMaxQuantity(dischargeMaxQuantity);
