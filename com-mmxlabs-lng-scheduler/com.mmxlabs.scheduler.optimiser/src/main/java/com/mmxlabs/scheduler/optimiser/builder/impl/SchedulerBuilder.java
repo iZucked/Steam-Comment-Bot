@@ -775,11 +775,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		matrix.set(from, to, distance);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public void setVesselClassRouteCost(final String route, final IVesselClass vesselClass, final VesselState state, final long tollPrice) {
 		routeCostProvider.setRouteCost(route, vesselClass, state, tollPrice);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public void setDefaultRouteCost(final String route, final long defaultPrice) {
 		routeCostProvider.setDefaultRouteCost(route, defaultPrice);
@@ -985,6 +991,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// TODO: Null provider refs
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public IVesselClass createVesselClass(final String name, final int minSpeed, final int maxSpeed, final long capacityInM3, final long minHeelInM3, final int baseFuelUnitPricePerMT,
 			final int baseFuelEquivalenceInM3TOMT, final int pilotLightRate, final int warmupTimeHours, final int cooldownTimeHours, final long cooldownVolumeM3) {
