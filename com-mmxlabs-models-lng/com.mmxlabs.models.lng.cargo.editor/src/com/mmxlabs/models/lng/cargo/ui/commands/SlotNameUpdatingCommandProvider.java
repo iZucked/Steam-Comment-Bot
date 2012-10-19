@@ -59,8 +59,8 @@ public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 
 					if (discharge != null) {
 						// Only update if the previous value matched correctly - otherwise it could be user specified.
-						if (discharge.getName() == null || discharge.getName().isEmpty() || discharge.getName().equals("discharge-" + cargo.getName())) {
-							fixer.append(SetCommand.create(editingDomain, discharge, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "discharge-" + parameter.getValue()));
+						if (discharge.getName() == null || discharge.getName().isEmpty() || discharge.getName().equals("d-" + cargo.getName())) {
+							fixer.append(SetCommand.create(editingDomain, discharge, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "d-" + parameter.getValue()));
 							seenObjects.add(discharge);
 						}
 					}
@@ -111,7 +111,7 @@ public class SlotNameUpdatingCommandProvider implements IModelCommandProvider {
 
 					// Only update if the previous value matched correctly - otherwise it could be user specified.
 					if (dischargeSlot.getName() == null || dischargeSlot.getName().isEmpty()) {
-						fixer.append(SetCommand.create(editingDomain, dischargeSlot, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "discharge-" + cargo.getName()));
+						fixer.append(SetCommand.create(editingDomain, dischargeSlot, MMXCorePackage.eINSTANCE.getNamedObject_Name(), "d-" + cargo.getName()));
 						seenObjects.add(dischargeSlot);
 					}
 				}

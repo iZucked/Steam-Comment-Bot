@@ -139,18 +139,18 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Load Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_LoadSlot());
 
-		addTypicalColumn("Load Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_LoadSlot());
+		addTypicalColumn("Buy at", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_LoadSlot());
 
 		addTypicalColumn("Discharge Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_DischargeSlot());
 
 		addTypicalColumn("Discharge Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_DischargeSlot());
 
-		addTypicalColumn("Discharge Contract", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_DischargeSlot());
+		addTypicalColumn("Sell at", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_DischargeSlot());
 
 		final InputModel input = part.getRootObject().getSubModel(InputModel.class);
 
 		if (input != null) {
-			addTypicalColumn("Assignment", new AssignmentManipulator(part));
+			addTypicalColumn("Vessel", new AssignmentManipulator(part));
 		}
 
 		// Add action to create and edit cargo groups

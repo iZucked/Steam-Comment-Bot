@@ -136,7 +136,7 @@ public class CargoImporter extends DefaultClassImporter {
 				context.doLater(new IDeferment() {
 					@Override
 					public void run(final IImportContext context) {
-						discharge2.setName("discharge-" + cargoName);
+						discharge2.setName("d-" + cargoName);
 						context.registerNamedObject(discharge2);
 					}
 
