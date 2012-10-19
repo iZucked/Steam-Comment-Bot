@@ -111,7 +111,7 @@
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
-							<id>com.mmxlabs.optimiser.optimiser-commo</id>
+							<id>com.mmxlabs.optimiser.optimiser-common</id>
 							<level>4</level>
 							<autoStart>true</autoStart>
 						</bundle>
