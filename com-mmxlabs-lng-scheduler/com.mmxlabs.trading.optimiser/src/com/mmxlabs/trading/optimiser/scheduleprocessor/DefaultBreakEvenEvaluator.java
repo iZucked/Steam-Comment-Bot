@@ -2,8 +2,6 @@ package com.mmxlabs.trading.optimiser.scheduleprocessor;
 
 import javax.inject.Inject;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
