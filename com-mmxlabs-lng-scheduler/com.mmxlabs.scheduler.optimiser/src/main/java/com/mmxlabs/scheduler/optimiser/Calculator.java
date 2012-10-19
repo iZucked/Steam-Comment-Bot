@@ -86,6 +86,7 @@ public final class Calculator {
 	public static long scale(final int value) {
 		return ScaleFactor * value;
 	}
+
 	/**
 	 * @since 2.0
 	 */
@@ -120,5 +121,14 @@ public final class Calculator {
 	 */
 	public static long multiply(final long multiply, final double d) {
 		return Math.round(multiply * d);
+	}
+
+	/**
+	 * Convert a $/MMBTu price to a $/M3 price
+	 * 
+	 * @since 2.0
+	 */
+	public static int costPerM3(final int costPerMMBTu, final int cvValue) {
+		return (int) multiply(costPerMMBTu, cvValue);
 	}
 }
