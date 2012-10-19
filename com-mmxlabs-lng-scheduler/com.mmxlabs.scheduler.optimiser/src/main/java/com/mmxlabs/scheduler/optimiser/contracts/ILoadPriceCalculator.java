@@ -40,7 +40,8 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param dischargePrice
 	 * @return
 	 */
-	public int calculateLoadUnitPrice(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePrice, int loadVolume, IVessel vessel, VoyagePlan plan, IDetailTree annotations);
+	public int calculateLoadUnitPrice(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePricePerM3, int loadVolume, IVessel vessel, VoyagePlan plan,
+			IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when a third-party is handling shipping
@@ -51,5 +52,6 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param dischargeOption
 	 * @return
 	 */
-	public int calculateLoadUnitPrice(ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice, IDetailTree annotations);
+	public int calculateLoadUnitPrice(ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargePricePerM3, final int salesPricePerM3,
+			IDetailTree annotations);
 }
