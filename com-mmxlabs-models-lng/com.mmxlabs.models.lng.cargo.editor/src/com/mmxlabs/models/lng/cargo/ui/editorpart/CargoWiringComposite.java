@@ -543,7 +543,26 @@ public class CargoWiringComposite extends Composite {
 				}
 			}
 
+			for (Cargo c : cargoes) {
+				c.eAdapters().remove(cargoChangeAdapter);
+			}
+
 		}
+		validationMap.clear();
+
+		this.cargoes.clear();
+		this.loadSlots.clear();
+		this.dischargeSlots.clear();
+
+		this.lhsComposites.clear();
+		this.rhsComposites.clear();
+
+		this.currentWiringCommand = null;
+		this.rightTerminalsExist.clear();
+		this.leftTerminalsExist.clear();
+		this.wiring.clear();
+
+		super.dispose();
 	}
 
 	/**
@@ -817,7 +836,7 @@ public class CargoWiringComposite extends Composite {
 		wiringDiagram.setWiring(wiring);
 		wiringDiagram.setTerminalsValid(leftTerminalsExist, rightTerminalsExist);
 		final ArrayList<Pair<Color, Color>> terminalColors = new ArrayList<Pair<Color, Color>>();
-		final ArrayList<Pair<Boolean,Boolean>> terminalOptionals = new ArrayList<Pair<Boolean, Boolean>>();
+		final ArrayList<Pair<Boolean, Boolean>> terminalOptionals = new ArrayList<Pair<Boolean, Boolean>>();
 		final ArrayList<Color> wireColors = new ArrayList<Color>();
 		final Color green = Display.getCurrent().getSystemColor(SWT.COLOR_GREEN);
 		final Color black = Display.getCurrent().getSystemColor(SWT.COLOR_BLACK);

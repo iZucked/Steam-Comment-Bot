@@ -9,6 +9,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -87,5 +89,11 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		}
 		output.put(SALES_CON_KEY, salesImporter.exportObjects(sales, root));
 		output.put(PURCHASE_CON_KEY, purchaseImporter.exportObjects(purchase, root));
+	}
+	
+
+	@Override
+	public EClass getEClass() {
+		return CommercialPackage.eINSTANCE.getCommercialModel();
 	}
 }

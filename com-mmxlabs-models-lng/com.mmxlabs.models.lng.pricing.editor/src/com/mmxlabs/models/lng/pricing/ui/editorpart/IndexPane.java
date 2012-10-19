@@ -14,6 +14,7 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
@@ -218,7 +219,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 							if (!(idx instanceof DataIndex<?>)) {
 								continue;
 							}
-							
+
 							for (final Date d : idx.getDates()) {
 								if (minDate == null || minDate.after(d)) {
 									minDate = d;
@@ -291,7 +292,6 @@ public class IndexPane extends ScenarioTableViewerPane {
 				};
 
 				col.getColumn().setData(EObjectTableViewer.COLUMN_RENDERER, renderer);
-				final boolean isInt = false;
 				final ICellManipulator manipulator = new ICellManipulator() {
 
 					@SuppressWarnings("unchecked")
@@ -317,7 +317,12 @@ public class IndexPane extends ScenarioTableViewerPane {
 						for (final IndexPoint<T> p : di.getPoints()) {
 							if (p.getDate().getYear() == colDate.getYear() && p.getDate().getMonth() == colDate.getMonth()) {
 
-								final Command cmd = SetCommand.create(getEditingDomain(), p, PricingPackage.eINSTANCE.getIndexPoint_Value(), value);
+								final Command cmd;
+								if (value == null) {
+									cmd = RemoveCommand.create(getEditingDomain(), p);
+								} else {
+									cmd = SetCommand.create(getEditingDomain(), p, PricingPackage.eINSTANCE.getIndexPoint_Value(), value);
+								}
 								if (!cmd.canExecute()) {
 									throw new RuntimeException("Unable to execute index set command");
 								}
@@ -358,10 +363,10 @@ public class IndexPane extends ScenarioTableViewerPane {
 
 						final FormattedTextCellEditor result = new FormattedTextCellEditor(parent);
 						final NumberFormatter formatter;
-						if (isInt) {
-							formatter = new IntegerFormatter();
+						if (isIntegerBased) {
+							formatter = new IntegerFormatter("#,###.###");
 						} else {
-							formatter = new DoubleFormatter();
+							formatter = new DoubleFormatter("#,###.###");
 						}
 
 						formatter.setFixedLengths(false, false);

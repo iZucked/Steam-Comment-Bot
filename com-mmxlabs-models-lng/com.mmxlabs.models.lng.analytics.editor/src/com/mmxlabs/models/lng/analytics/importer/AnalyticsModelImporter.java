@@ -8,7 +8,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -47,4 +50,8 @@ public class AnalyticsModelImporter implements ISubmodelImporter {
 
 	}
 
+	@Override
+	public EClass getEClass() {
+		return AnalyticsPackage.eINSTANCE.getAnalyticsModel();
+	}
 }

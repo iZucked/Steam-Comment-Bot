@@ -56,7 +56,7 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		// gridLayout.marginBottom = 0;
 		// gridLayout.marginTop = 0;
 		this.isLoad = isLoad;
-		
+
 		// 7 for validation markers
 		gridLayout.horizontalSpacing = 7;
 		gridLayout.verticalSpacing = 0;
@@ -110,7 +110,9 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	public void dispose() {
 
 		slot = null;
+		commandHandler = null;
 
+		editors.clear();
 		super.dispose();
 	}
 

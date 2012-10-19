@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
@@ -129,4 +131,8 @@ public class PortModelImporter implements ISubmodelImporter {
 		output.put(PORT_GROUP_KEY, portGroupImporter.exportObjects(((PortModel)model).getPortGroups(), root));
 	}
 
+	@Override
+	public EClass getEClass() {
+		return PortPackage.eINSTANCE.getPortModel();
+	}
 }

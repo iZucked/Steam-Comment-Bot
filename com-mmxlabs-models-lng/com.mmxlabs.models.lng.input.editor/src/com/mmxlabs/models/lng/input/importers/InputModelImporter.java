@@ -7,10 +7,13 @@ package com.mmxlabs.models.lng.input.importers;
 import java.util.Collection;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.util.importer.CSVReader;
@@ -50,5 +53,10 @@ public class InputModelImporter implements ISubmodelImporter {
 	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
 //		output.put(ASSIGNMENTS, importer.exportObjects(((InputModel) model).getAssignments(), root));
 		output.put(ASSIGNMENTS, importer.exportAssignments(root.getSubModel(InputModel.class), root.getSubModel(FleetModel.class)));
+	}
+	
+	@Override
+	public EClass getEClass() {
+		return InputPackage.eINSTANCE.getInputModel();
 	}
 }

@@ -64,6 +64,7 @@ public interface IndexPriceContract extends SalesContract, PurchaseContract {
 	 * @see #setConstant(double)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getIndexPriceContract_Constant()
 	 * @model default="0" required="true"
+	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat formatString='-#,##0.##'"
 	 * @generated
 	 */
 	double getConstant();

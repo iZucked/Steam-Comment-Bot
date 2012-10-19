@@ -28,6 +28,7 @@ import java.util.Date;
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#isOptional <em>Optional</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
  * </p>
  *
@@ -204,9 +205,11 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Contract</em>' reference.
+	 * @see #isSetContract()
+	 * @see #unsetContract()
 	 * @see #setContract(Contract)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Contract()
-	 * @model required="true"
+	 * @model unsettable="true" required="true"
 	 * @generated
 	 */
 	Contract getContract();
@@ -214,12 +217,41 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Contract</em>' reference.
+	 * @see #isSetContract()
+	 * @see #unsetContract()
 	 * @see #getContract()
 	 * @generated
 	 */
 	void setContract(Contract value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #isSetContract()
+	 * @see #getContract()
+	 * @see #setContract(Contract)
+	 * @generated
+	 */
+	void unsetContract();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Contract</em>' reference is set.
+	 * @see #unsetContract()
+	 * @see #getContract()
+	 * @see #setContract(Contract)
+	 * @generated
+	 */
+	boolean isSetContract();
 
 	/**
 	 * Returns the value of the '<em><b>Duration</b></em>' attribute.
@@ -407,12 +439,70 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	void setOptional(boolean value);
 
 	/**
+	 * Returns the value of the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Price Expression</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price Expression</em>' attribute.
+	 * @see #isSetPriceExpression()
+	 * @see #unsetPriceExpression()
+	 * @see #setPriceExpression(String)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_PriceExpression()
+	 * @model unsettable="true"
+	 * @generated
+	 */
+	String getPriceExpression();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price Expression</em>' attribute.
+	 * @see #isSetPriceExpression()
+	 * @see #unsetPriceExpression()
+	 * @see #getPriceExpression()
+	 * @generated
+	 */
+	void setPriceExpression(String value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #isSetPriceExpression()
+	 * @see #getPriceExpression()
+	 * @see #setPriceExpression(String)
+	 * @generated
+	 */
+	void unsetPriceExpression();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getPriceExpression <em>Price Expression</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Price Expression</em>' attribute is set.
+	 * @see #unsetPriceExpression()
+	 * @see #getPriceExpression()
+	 * @see #setPriceExpression(String)
+	 * @generated
+	 */
+	boolean isSetPriceExpression();
+
+	/**
 	 * Returns the value of the '<em><b>Fixed Price</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Fixed Price</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @deprecated Use {@link #getPriceExpression()}
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Fixed Price</em>' attribute.
 	 * @see #isSetFixedPrice()
@@ -427,6 +517,7 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getFixedPrice <em>Fixed Price</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @deprecated Use {@link #setPriceExpression(String)}
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Fixed Price</em>' attribute.
 	 * @see #isSetFixedPrice()

@@ -11,7 +11,6 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
@@ -20,9 +19,11 @@ import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselAvailability;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
@@ -32,37 +33,46 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * @author hinton
  * 
  */
-public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse.emf.validation.IValidationContext)
+public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstraint {
+	/**
+	 * @since 2.0
 	 */
 	@Override
-	public IStatus validate(final IValidationContext ctx) {
+	public String validate(final IValidationContext ctx, final List<IStatus> statuses) {
 		final EObject target = ctx.getTarget();
 		final IExtraValidationContext extraContext = Activator.getDefault().getExtraValidationContext();
 		if (target instanceof VesselAvailability) {
 			final VesselAvailability availablility = (VesselAvailability) target;
-			
+
 			final EObject container = extraContext.getContainer(availablility);
 			if (container instanceof Vessel) {
 				final Vessel vessel = (Vessel) container;
 				final VesselClass vesselClass = (VesselClass) vessel.getVesselClass();
-				if (vesselClass == null) return ctx.createSuccessStatus();
+				if (vesselClass == null) {
+					return Activator.PLUGIN_ID;
+				}
 				final Set<APort> inaccessiblePortSet = SetUtils.getPorts(vesselClass.getInaccessiblePorts());
 				if (!availablility.getStartAt().isEmpty()) {
 
 					final Set<APort> availabilityPortSet = SetUtils.getPorts(availablility.getStartAt());
+
+					if (availabilityPortSet.size() > 1) {
+						final String message = String.format("Vessel %s's start requirement has multiple ports. Only one can be specified.", vessel.getName());
+						final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+
+						dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailability_StartAt());
+						statuses.add(dcsd);
+					}
+
 					for (final APort p : availabilityPortSet) {
 
 						if (inaccessiblePortSet.contains(p)) {
-
-							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName(), "start", vessel
-									.getVesselClass().getName(), p.getName()));
+							final String message = String.format("Vessel %s's %s requirement is set for port %s, but the vessel is of class %s which cannot dock at %s.", vessel.getName(), "start",
+									p.getName(), vessel.getVesselClass().getName(), p.getName());
+							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
 							dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailability_StartAt());
-							return dcsd;
+							statuses.add(dcsd);
 
 						}
 					}
@@ -72,12 +82,12 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 					for (final APort p : availabilityPortSet) {
 
 						if (inaccessiblePortSet.contains(p)) {
-
-							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(vessel.getName(), "end", vessel
-									.getVesselClass().getName(), p.getName()));
+							final String message = String.format("Vessel %s's %s requirement is set for port %s, but the vessel is of class %s which cannot dock at %s.", vessel.getName(), "end",
+									p.getName(), vessel.getVesselClass().getName(), p.getName());
+							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
 							dcsd.addEObjectAndFeature(availablility, FleetPackage.eINSTANCE.getVesselAvailability_EndAt());
-							return dcsd;
+							statuses.add(dcsd);
 
 						}
 					}
@@ -87,7 +97,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 			final VesselClass vesselClass = (VesselClass) target;
 			final MMXRootObject rootObject = extraContext.getRootObject();
 			if (rootObject == null) {
-				return ctx.createSuccessStatus();
+				return Activator.PLUGIN_ID;
 			}
 
 			final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
@@ -134,11 +144,12 @@ public class VesselAvailabilityPortConstraint extends AbstractModelConstraint {
 			}
 
 			if (badVessels.isEmpty() == false) {
-				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(badVessels, badPorts));
+				final String message = String.format("The vessels %s have start / end requirements at the ports %s, which are in the inaccessible port list.", badVessels, badPorts);
+				final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 				dcsd.addEObjectAndFeature(vesselClass, FleetPackage.eINSTANCE.getVesselClass_InaccessiblePorts());
-				return dcsd;
+				statuses.add(dcsd);
 			}
 		}
-		return ctx.createSuccessStatus();
+		return Activator.PLUGIN_ID;
 	}
 }

@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -30,6 +31,7 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 
 /**
  * Check that the end of any cargo's discharge window is not before the start of its load window.
@@ -154,7 +156,7 @@ public class CargoDateConstraint extends AbstractModelConstraint {
 	private void collectMinTimes(final Map<Pair<Port, Port>, Integer> minTimes, final Route d, final int extraTime, final double maxSpeed) {
 		for (final RouteLine dl : d.getLines()) {
 			final Pair<Port, Port> p = new Pair<Port, Port>(dl.getFrom(), dl.getTo());
-			final int time = Calculator.getTimeFromSpeedDistance(Calculator.scaleToInt(maxSpeed), dl.getDistance()) + extraTime;
+			final int time = Calculator.getTimeFromSpeedDistance(OptimiserUnitConvertor.convertToInternalSpeed(maxSpeed), dl.getDistance()) + extraTime;
 			if (!minTimes.containsKey(p) || (minTimes.get(p) > time)) {
 				minTimes.put(p, time);
 			}

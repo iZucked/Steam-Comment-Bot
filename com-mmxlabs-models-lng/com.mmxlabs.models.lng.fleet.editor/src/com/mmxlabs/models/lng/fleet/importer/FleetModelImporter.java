@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -124,5 +126,10 @@ public class FleetModelImporter implements ISubmodelImporter {
 		output.put(FUELS_KEY, baseFuelImporter.exportObjects(fleetModel.getBaseFuels(), root));
 		output.put(CURVES_KEY, fuelCurveImporter.exportCurves(fleetModel.getVesselClasses()));
 		output.put(GROUPS_KEY, groupImporter.exportObjects(fleetModel.getVesselGroups(), root));
+	}
+	
+	@Override
+	public EClass getEClass() {
+		return FleetPackage.eINSTANCE.getFleetModel();
 	}
 }

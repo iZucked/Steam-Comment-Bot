@@ -46,6 +46,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getMaxQuantity <em>Max Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#isOptional <em>Optional</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
  * </p>
  *
@@ -60,6 +61,16 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @ordered
 	 */
 	protected Contract contract;
+
+	/**
+	 * This is true if the Contract reference has been set.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean contractESet;
 
 	/**
 	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
@@ -265,6 +276,38 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	protected boolean optional = OPTIONAL_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getPriceExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String PRICE_EXPRESSION_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getPriceExpression()
+	 * @generated
+	 * @ordered
+	 */
+	protected String priceExpression = PRICE_EXPRESSION_EDEFAULT;
+
+	/**
+	 * This is true if the Price Expression attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean priceExpressionESet;
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -450,8 +493,35 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public void setContract(Contract newContract) {
 		Contract oldContract = contract;
 		contract = newContract;
+		boolean oldContractESet = contractESet;
+		contractESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract, !oldContractESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetContract() {
+		Contract oldContract = contract;
+		boolean oldContractESet = contractESet;
+		contract = null;
+		contractESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__CONTRACT, oldContract, null, oldContractESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetContract() {
+		return contractESet;
 	}
 
 	/**
@@ -602,7 +672,59 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getPriceExpression() {
+		return priceExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPriceExpression(String newPriceExpression) {
+		String oldPriceExpression = priceExpression;
+		priceExpression = newPriceExpression;
+		boolean oldPriceExpressionESet = priceExpressionESet;
+		priceExpressionESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__PRICE_EXPRESSION, oldPriceExpression, priceExpression, !oldPriceExpressionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPriceExpression() {
+		String oldPriceExpression = priceExpression;
+		boolean oldPriceExpressionESet = priceExpressionESet;
+		priceExpression = PRICE_EXPRESSION_EDEFAULT;
+		priceExpressionESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__PRICE_EXPRESSION, oldPriceExpression, PRICE_EXPRESSION_EDEFAULT, oldPriceExpressionESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPriceExpression() {
+		return priceExpressionESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> 
+	 * @deprecated Use {@link #getPriceExpression()}
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public double getFixedPrice() {
@@ -610,7 +732,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> 
+	 * @deprecated Use {@link #setPriceExpression(String)}
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void setFixedPrice(double newFixedPrice) {
@@ -636,7 +760,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> 
+	 * @deprecated Use {@link #isSetPriceExpression()}
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public boolean isSetFixedPrice() {
@@ -743,6 +869,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return getMaxQuantity();
 			case CargoPackage.SLOT__OPTIONAL:
 				return isOptional();
+			case CargoPackage.SLOT__PRICE_EXPRESSION:
+				return getPriceExpression();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -784,6 +912,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__OPTIONAL:
 				setOptional((Boolean)newValue);
 				return;
+			case CargoPackage.SLOT__PRICE_EXPRESSION:
+				setPriceExpression((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -796,7 +927,7 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)null);
+				unsetContract();
 				return;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				unsetFixedPrice();
@@ -825,6 +956,9 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__OPTIONAL:
 				setOptional(OPTIONAL_EDEFAULT);
 				return;
+			case CargoPackage.SLOT__PRICE_EXPRESSION:
+				unsetPriceExpression();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -837,7 +971,7 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case CargoPackage.SLOT__CONTRACT:
-				return contract != null;
+				return isSetContract();
 			case CargoPackage.SLOT__FIXED_PRICE:
 				return isSetFixedPrice();
 			case CargoPackage.SLOT__PORT:
@@ -856,6 +990,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 				return isSetMaxQuantity();
 			case CargoPackage.SLOT__OPTIONAL:
 				return optional != OPTIONAL_EDEFAULT;
+			case CargoPackage.SLOT__PRICE_EXPRESSION:
+				return isSetPriceExpression();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -927,6 +1063,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		if (maxQuantityESet) result.append(maxQuantity); else result.append("<unset>");
 		result.append(", optional: ");
 		result.append(optional);
+		result.append(", priceExpression: ");
+		if (priceExpressionESet) result.append(priceExpression); else result.append("<unset>");
 		result.append(')');
 		return result.toString();
 	}
@@ -946,6 +1084,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		} else if (CargoPackage.eINSTANCE.getSlot_MaxQuantity() == feature) {
 			if (getContract() == null) return 500000;
 			else return getContract().getMaxQuantity();
+		} else if (CargoPackage.eINSTANCE.getSlot_FixedPrice() == feature) {
+			return null;
 		}
 		
 		return super.getUnsetValue(feature);

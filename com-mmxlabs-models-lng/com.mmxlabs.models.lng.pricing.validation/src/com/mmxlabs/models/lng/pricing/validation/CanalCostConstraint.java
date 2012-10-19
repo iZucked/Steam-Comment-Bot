@@ -48,38 +48,40 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 
 				final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
 				final PortModel portModel = scenario.getSubModel(PortModel.class);
-				for (final Route route : portModel.getRoutes()) {
-					if (route.isCanal()) {
-						boolean seenCanalCost = false;
-						routeCosts: for (final RouteCost routeCost : pricingModel.getRouteCosts()) {
-							if ((routeCost.getVesselClass() == replacement || routeCost.getVesselClass() == original) && routeCost.getRoute() == route) {
-								seenCanalCost = true;
-								break routeCosts;
+				if (pricingModel != null && portModel != null) {
+					for (final Route route : portModel.getRoutes()) {
+						if (route.isCanal()) {
+							boolean seenCanalCost = false;
+							routeCosts: for (final RouteCost routeCost : pricingModel.getRouteCosts()) {
+								if ((routeCost.getVesselClass() == replacement || routeCost.getVesselClass() == original) && routeCost.getRoute() == route) {
+									seenCanalCost = true;
+									break routeCosts;
+								}
+
 							}
 
-						}
-
-						boolean seenCanalParameters = false;
-						canalParameters: for (final VesselClassRouteParameters routeParameters : vesselClass.getRouteParameters()) {
-							if (route == routeParameters.getRoute()) {
-								seenCanalParameters = true;
-								break canalParameters;
+							boolean seenCanalParameters = false;
+							canalParameters: for (final VesselClassRouteParameters routeParameters : vesselClass.getRouteParameters()) {
+								if (route == routeParameters.getRoute()) {
+									seenCanalParameters = true;
+									break canalParameters;
+								}
 							}
-						}
 
-						if (!(seenCanalParameters && seenCanalCost)) {
-							missingCanalNames.append(missingCanalNames.length() > 0 ? ", " : "");
-							missingCanalNames.append(route.getName());
+							if (!(seenCanalParameters && seenCanalCost)) {
+								missingCanalNames.append(missingCanalNames.length() > 0 ? ", " : "");
+								missingCanalNames.append(route.getName());
+							}
 						}
 					}
-				}
 
-				if (missingCanalNames.length() > 0) {
-					final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClass.getName(), missingCanalNames.toString());
-					final DetailConstraintStatusDecorator result = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+					if (missingCanalNames.length() > 0) {
+						final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClass.getName(), missingCanalNames.toString());
+						final DetailConstraintStatusDecorator result = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
-					result.addEObjectAndFeature(vesselClass, PricingPackage.eINSTANCE.getRouteCost_VesselClass());
-					return result;
+						result.addEObjectAndFeature(vesselClass, PricingPackage.eINSTANCE.getRouteCost_VesselClass());
+						return result;
+					}
 				}
 			}
 		} else if (target instanceof RouteCost) {

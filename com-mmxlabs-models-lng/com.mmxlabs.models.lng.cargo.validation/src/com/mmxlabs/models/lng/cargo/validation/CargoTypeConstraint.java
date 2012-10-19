@@ -14,6 +14,7 @@ import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.validation.internal.Activator;
 
 public class CargoTypeConstraint extends AbstractModelConstraint {
 	/*
