@@ -18,7 +18,7 @@ public class UnitCurveTest {
 		Assert.assertNotNull(c);
 
 		for (int i = 0; i < 100; ++i) {
-			Assert.assertEquals(1.0, c.getValueAtPoint(i));
+			Assert.assertEquals(1, c.getValueAtPoint(i));
 		}
 	}
 }
