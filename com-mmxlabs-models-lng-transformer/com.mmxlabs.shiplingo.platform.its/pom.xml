@@ -121,6 +121,11 @@
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
+							<id>com.mmxlabs.trading.integration</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
 							<id>com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser</id>
 							<level>4</level>
 							<autoStart>true</autoStart>
