@@ -107,7 +107,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -320,7 +320,7 @@ public class LNGScenarioTransformer {
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				curve.setDefaultValue(0);
 				for (final int i : parsed.getChangePoints()) {
-					curve.setValueAfter(i - 1, Calculator.scaleToInt(parsed.evaluate(i).doubleValue()));
+					curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 				}
 				entities.addModelObject(index, curve);
 				indexAssociation.add(index, curve);
@@ -368,7 +368,7 @@ public class LNGScenarioTransformer {
 
 		final Map<APort, ICooldownPriceCalculator> cooldownCalculators = new HashMap<APort, ICooldownPriceCalculator>();
 		for (final CooldownPrice price : pricingModel.getCooldownPrices()) {
-			final ICooldownPriceCalculator cooldownCalculator = new MarketPriceContract(indexAssociation.lookup(price.getIndex()), 0, Calculator.scaleToInt(1));
+			final ICooldownPriceCalculator cooldownCalculator = new MarketPriceContract(indexAssociation.lookup(price.getIndex()), 0, OptimiserUnitConvertor.convertToInternalConversionFactor(1));
 
 			for (final APort port : SetUtils.getPorts(price.getPorts())) {
 				cooldownCalculators.put(port, cooldownCalculator);
@@ -416,7 +416,8 @@ public class LNGScenarioTransformer {
 						if (type != null) {
 							for (final IVessel v : allVessels) {
 								// TODO should the builder handle the application of costs to vessel classes?
-								final long activityCost = Calculator.scale(cost.getPortCost(vesselAssociations.getFirst().reverseLookup(v.getVesselClass()), entry.getActivity()));
+								final long activityCost = OptimiserUnitConvertor.convertToInternalFixedCost(cost.getPortCost(vesselAssociations.getFirst().reverseLookup(v.getVesselClass()),
+										entry.getActivity()));
 								builder.setPortCost(portAssociation.lookup((Port) port), v, type, activityCost);
 							}
 						}
@@ -578,7 +579,7 @@ public class LNGScenarioTransformer {
 	// return realCurve;
 	// }
 
-	private StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final float scale) {
+	private StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
 		curve.setDefaultValue(0);
@@ -592,13 +593,13 @@ public class LNGScenarioTransformer {
 					continue;
 				gotOneEarlyDate = true;
 			}
-			curve.setValueAfter(hours, Calculator.scaleToInt(scale * value));
+			curve.setValueAfter(hours, OptimiserUnitConvertor.convertToInternalPrice(scale * value));
 		}
 
 		return curve;
 	}
 
-	private StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final float scale) {
+	private StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final double scale) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
 		curve.setDefaultValue(0);
@@ -614,7 +615,7 @@ public class LNGScenarioTransformer {
 				}
 				gotOneEarlyDate = true;
 			}
-			curve.setValueAfter(hours, Calculator.scaleToInt(value * scale));
+			curve.setValueAfter(hours, OptimiserUnitConvertor.convertToInternalPrice((double) value * scale));
 		}
 
 		return curve;
@@ -686,11 +687,12 @@ public class LNGScenarioTransformer {
 				final CharterOutEvent charterOut = (CharterOutEvent) event;
 				final IPort endPort = portAssociation.lookup(charterOut.isSetRelocateTo() ? charterOut.getRelocateTo() : charterOut.getPort());
 				final HeelOptions heelOptions = charterOut.getHeelOptions();
-				final long maxHeel = heelOptions.isSetVolumeAvailable() ? (heelOptions.getVolumeAvailable() * Calculator.ScaleFactor) : Long.MAX_VALUE;
-				final long totalHireCost = Calculator.scale((long) charterOut.getHireRate() * (long) charterOut.getDurationInDays());
-				final long repositioning = Calculator.scale(charterOut.getRepositioningFee());
-				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel, Calculator.scaleToInt(heelOptions.getCvValue()),
-						Calculator.scaleToInt(heelOptions.getPricePerMMBTU()), totalHireCost, repositioning);
+				final long maxHeel = heelOptions.isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(heelOptions.getVolumeAvailable()) : Long.MAX_VALUE;
+				final long totalHireCost = OptimiserUnitConvertor.convertToInternalDailyCost(charterOut.getHireRate()) * (long) charterOut.getDurationInDays();
+				final long repositioning = OptimiserUnitConvertor.convertToInternalFixedCost(charterOut.getRepositioningFee());
+				builderSlot = builder.createCharterOutEvent(event.getName(), window, port, endPort, durationHours, maxHeel,
+						OptimiserUnitConvertor.convertToInternalConversionFactor(heelOptions.getCvValue()), OptimiserUnitConvertor.convertToInternalPrice(heelOptions.getPricePerMMBTU()),
+						totalHireCost, repositioning);
 			} else if (event instanceof DryDockEvent) {
 				builderSlot = builder.createDrydockEvent(event.getName(), window, port, durationHours);
 			} else if (event instanceof MaintenanceEvent) {
@@ -886,12 +888,12 @@ public class LNGScenarioTransformer {
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				if (parsed.getChangePoints().length == 0) {
-					curve.setDefaultValue(Calculator.scaleToInt(parsed.evaluate(0).doubleValue()));
+					curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 				} else {
 
 					curve.setDefaultValue(0);
 					for (final int i : parsed.getChangePoints()) {
-						curve.setValueAfter(i - 1, Calculator.scaleToInt(parsed.evaluate(i).doubleValue()));
+						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
 				dischargePriceCalculator = new MarketPriceContract(curve, 0, 1000);
@@ -903,12 +905,13 @@ public class LNGScenarioTransformer {
 
 		if (dischargeSlot.isFOBSale()) {
 			discharge = builder.createFOBSaleDischargeSlot(dischargeSlot.getName(), portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow,
-					Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator,
-					dischargeSlot.isOptional());
+					OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity()),
+					OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator, dischargeSlot.isOptional());
 		} else {
 			discharge = builder.createDischargeSlot(dischargeSlot.getName(), portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow,
-					Calculator.scale(dischargeSlot.getSlotOrContractMinQuantity()), Calculator.scale(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator,
-					dischargeSlot.getSlotOrPortDuration(), dischargeSlot.isOptional());
+					OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity()),
+					OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
+					dischargeSlot.isOptional());
 		}
 		if (dischargeSlot instanceof SpotSlot) {
 			marketSlotsByID.put(dischargeSlot.getName(), dischargeSlot);
@@ -943,12 +946,12 @@ public class LNGScenarioTransformer {
 
 				final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 				if (parsed.getChangePoints().length == 0) {
-					curve.setDefaultValue(Calculator.scaleToInt(parsed.evaluate(0).doubleValue()));
+					curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
 				} else {
 
 					curve.setDefaultValue(0);
 					for (final int i : parsed.getChangePoints()) {
-						curve.setValueAfter(i - 1, Calculator.scaleToInt(parsed.evaluate(i).doubleValue()));
+						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
 				loadPriceCalculator = new MarketPriceContract(curve, 0, 1000);
@@ -959,12 +962,14 @@ public class LNGScenarioTransformer {
 		}
 
 		if (loadSlot.isDESPurchase()) {
-			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
-					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.isOptional());
+			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow,
+					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
+					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrPortCV()), loadSlot.isOptional());
 		} else {
-			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow, Calculator.scale(loadSlot.getSlotOrContractMinQuantity()),
-					Calculator.scale(loadSlot.getSlotOrContractMaxQuantity()), loadPriceCalculator, Calculator.scaleToInt(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(),
-					loadSlot.isSetArriveCold(), loadSlot.isArriveCold(), loadSlot.isOptional());
+			load = builder.createLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow,
+					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
+					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrPortCV()), loadSlot.getSlotOrPortDuration(), loadSlot.isSetArriveCold(),
+					loadSlot.isArriveCold(), loadSlot.isOptional());
 		}
 		// Store market slots for lookup when building spot markets.
 		entities.addModelObject(loadSlot, load);
@@ -1055,7 +1060,7 @@ public class LNGScenarioTransformer {
 
 								final ITimeWindow tw = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, endTime));
 
-								final int cargoCVValue = Calculator.scaleToInt(desPurchaseMarket.getCv());
+								final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(desPurchaseMarket.getCv());
 
 								final String idPrefix = market.getName() + "-" + yearMonthString + "-";
 
@@ -1068,8 +1073,8 @@ public class LNGScenarioTransformer {
 
 								final ILoadPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ILoadPriceCalculator.class);
 
-								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, tw, Calculator.scale(market.getMinQuantity()),
-										Calculator.scale(market.getMaxQuantity()), priceCalculator, cargoCVValue, true);
+								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, true);
 
 								// Create a fake model object to add in here;
 								final SpotLoadSlot desSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
@@ -1177,8 +1182,8 @@ public class LNGScenarioTransformer {
 
 								final ISalesPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ISalesPriceCalculator.class);
 
-								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, loadIPort, tw, Calculator.scale(market.getMinQuantity()),
-										Calculator.scale(market.getMaxQuantity()), priceCalculator, true);
+								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, loadIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, true);
 
 								// Create a fake model object to add in here;
 								final SpotDischargeSlot fobSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
@@ -1295,8 +1300,8 @@ public class LNGScenarioTransformer {
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l;
 								desSlot.setWindowSize((int) duration);
 
-								final IDischargeOption desSalesSlot = builder.createDischargeSlot(id, notionalIPort, tw, Calculator.scale(market.getMinQuantity()),
-										Calculator.scale(market.getMaxQuantity()), priceCalculator, desSlot.getSlotOrPortDuration(), true);
+								final IDischargeOption desSalesSlot = builder.createDischargeSlot(id, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, desSlot.getSlotOrPortDuration(), true);
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);
@@ -1365,7 +1370,7 @@ public class LNGScenarioTransformer {
 						final APort notionalAPort = fobPurchaseMarket.getNotionalPort();
 						final IPort notionalIPort = portAssociation.lookup((Port) notionalAPort);
 
-						final int cargoCVValue = Calculator.scaleToInt(fobPurchaseMarket.getCv());
+						final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(fobPurchaseMarket.getCv());
 
 						final Collection<Slot> existing = getSpotSlots(SpotType.FOB_PURCHASE, getKeyForDate(startTime));
 						final int count = getAvailabilityForDate(market.getAvailability(), startTime);
@@ -1407,8 +1412,8 @@ public class LNGScenarioTransformer {
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l;
 								fobSlot.setWindowSize((int) duration);
 
-								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(id, notionalIPort, tw, Calculator.scale(market.getMinQuantity()), Calculator.scale(market.getMaxQuantity()),
-										priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), true, true, true);
+								final ILoadOption fobPurchaseSlot = builder.createLoadSlot(id, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, fobSlot.getSlotOrPortDuration(), true, true, true);
 
 								// Key piece of information
 								fobSlot.setMarket(fobPurchaseMarket);
@@ -1523,10 +1528,13 @@ public class LNGScenarioTransformer {
 					builder.setVesselClassRouteTransitTime(routeParameters.getRoute().getName(), vesselAssociation.lookup(evc), routeParameters.getExtraTransitTime());
 
 					builder.setVesselClassRouteFuel(routeParameters.getRoute().getName(), vesselAssociation.lookup(evc), VesselState.Laden,
-							Calculator.scale(routeParameters.getLadenConsumptionRate()) / 24, Calculator.scale(routeParameters.getLadenNBORate()) / 24);
+							OptimiserUnitConvertor.convertToInternalHourlyRate(routeParameters.getLadenConsumptionRate()),
+							OptimiserUnitConvertor.convertToInternalHourlyRate(routeParameters.getLadenNBORate()));
 
 					builder.setVesselClassRouteFuel(routeParameters.getRoute().getName(), vesselAssociation.lookup(evc), VesselState.Ballast,
-							Calculator.scale(routeParameters.getBallastConsumptionRate()) / 24, Calculator.scale(routeParameters.getBallastNBORate()) / 24);
+							OptimiserUnitConvertor.convertToInternalHourlyRate(routeParameters.getBallastConsumptionRate()),
+							OptimiserUnitConvertor.convertToInternalHourlyRate(routeParameters.getBallastNBORate()));
+
 				}
 			}
 
@@ -1535,8 +1543,8 @@ public class LNGScenarioTransformer {
 			for (final RouteCost routeCost : pm.getRouteCosts()) {
 				final IVesselClass vesselClass = vesselAssociation.lookup(routeCost.getVesselClass());
 
-				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Laden, (int) Calculator.scale(routeCost.getLadenCost()));
-				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Ballast, (int) Calculator.scale(routeCost.getBallastCost()));
+				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getLadenCost()));
+				builder.setVesselClassRouteCost(routeCost.getRoute().getName(), vesselClass, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(routeCost.getBallastCost()));
 			}
 		}
 	}
@@ -1571,14 +1579,16 @@ public class LNGScenarioTransformer {
 			int baseFuelPrice = 0;
 			for (final BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 				if (baseFuelCost.getFuel() == eVc.getBaseFuel()) {
-					baseFuelPrice = Calculator.scaleToInt(baseFuelCost.getPrice());
+					baseFuelPrice = OptimiserUnitConvertor.convertToInternalPrice(baseFuelCost.getPrice());
+					break;
 				}
 			}
 
-			final IVesselClass vc = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(eVc.getMinSpeed()), Calculator.scaleToInt(eVc.getMaxSpeed()),
-					Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), Calculator.scaleToInt(eVc.getMinHeel()), baseFuelPrice,
-					Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()), Calculator.scaleToInt(eVc.getPilotLightRate()) / 24, eVc.getWarmingTime(), eVc.getCoolingTime(),
-					Calculator.scale(eVc.getCoolingVolume()));
+			final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
+					OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * (double) eVc.getCapacity())),
+					OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuelPrice,
+					OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()),
+					eVc.getWarmingTime(), eVc.getCoolingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()));
 
 			vesselClassAssociation.add(eVc, vc);
 
@@ -1616,11 +1626,15 @@ public class LNGScenarioTransformer {
 			// TODO: Hook up once charter out opt implemented
 			final int dailyCharterInPrice = eV.isSetTimeCharterRate() ? eV.getTimeCharterRate() : 0;// vesselAssociation.lookup(eV).getHourlyCharterInPrice() * 24;
 
-			final long heelLimit = eV.getStartHeel().isSetVolumeAvailable() ? Calculator.scale(eV.getStartHeel().getVolumeAvailable()) : 0;
+			final long heelLimit = eV.getStartHeel().isSetVolumeAvailable() ? OptimiserUnitConvertor.convertToInternalVolume(eV.getStartHeel().getVolumeAvailable()) : 0;
 
-			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), new ConstantValueCurve((int) (Calculator.scale(dailyCharterInPrice) / 24)),
-					eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
-					Calculator.scaleToInt(eV.getStartHeel().getCvValue()), Calculator.scaleToInt(eV.getStartHeel().getPricePerMMBTU()));
+			final int hourlyCharterInRate = (int) OptimiserUnitConvertor.convertToInternalHourlyCost(dailyCharterInPrice);
+			final ICurve hourlyCharterInCurve = new ConstantValueCurve(hourlyCharterInRate);
+
+			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), hourlyCharterInCurve,
+
+			eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
+					OptimiserUnitConvertor.convertToInternalConversionFactor(eV.getStartHeel().getCvValue()), OptimiserUnitConvertor.convertToInternalPrice(eV.getStartHeel().getPricePerMMBTU()));
 			vesselAssociation.add(eV, vessel);
 
 			entities.addModelObject(eV, vessel);
@@ -1755,15 +1769,16 @@ public class LNGScenarioTransformer {
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
 
 		for (final FuelConsumption line : attrs.getFuelConsumption()) {
-			keypoints.put(Calculator.scaleToInt(line.getSpeed()), Calculator.scale(line.getConsumption()) / 24);
+			keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed()), (long) OptimiserUnitConvertor.convertToInternalHourlyRate(line.getConsumption()));
 		}
 
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
 
-		builder.setVesselClassStateParamaters(vc, state, Calculator.scaleToInt(attrs.getNboRate()) / 24, Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
-				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24, Calculator.scaleToInt(attrs.getInPortBaseRate()) / 24, cc);
+		builder.setVesselClassStateParamaters(vc, state, OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getNboRate()),
+				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleBaseRate()),
+				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getInPortBaseRate()), cc);
 	}
 
 	/**
