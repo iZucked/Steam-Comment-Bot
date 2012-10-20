@@ -67,7 +67,6 @@ import com.mmxlabs.models.ui.tabular.BasicOperationRenderer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
-import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -140,13 +139,13 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 
 		addTypicalColumn("Load Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_LoadSlot());
 
-		addTypicalColumn("Buy at", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_LoadSlot());
+		addTypicalColumn("Buy at", new ContractManipulator(provider, editingDomain), pkg.getCargo_LoadSlot());
 
 		addTypicalColumn("Discharge Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), pkg.getCargo_DischargeSlot());
 
 		addTypicalColumn("Discharge Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), pkg.getCargo_DischargeSlot());
 
-		addTypicalColumn("Sell at", new SingleReferenceManipulator(pkg.getSlot_Contract(), provider, editingDomain), pkg.getCargo_DischargeSlot());
+		addTypicalColumn("Sell at",  new ContractManipulator(provider, editingDomain), pkg.getCargo_DischargeSlot());
 
 		final InputModel input = part.getRootObject().getSubModel(InputModel.class);
 
