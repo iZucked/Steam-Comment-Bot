@@ -4,12 +4,17 @@
  */
 package com.mmxlabs.trading.integration.internal;
 
-import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
-public class Activator implements BundleActivator {
+import com.mmxlabs.models.ui.validation.ValidationPlugin;
+
+public class Activator extends ValidationPlugin {
+
+	public static final String PLUGIN_ID = "com.mmxlabs.trading.integration";
 
 	private static BundleContext context;
+
+	private static Activator plugin = null;
 
 	static BundleContext getContext() {
 		return context;
@@ -17,18 +22,28 @@ public class Activator implements BundleActivator {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
-	public void start(BundleContext bundleContext) throws Exception {
+	public void start(final BundleContext bundleContext) throws Exception {
 		Activator.context = bundleContext;
+		Activator.plugin = this;
+		super.start(bundleContext);
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
-	public void stop(BundleContext bundleContext) throws Exception {
+	public void stop(final BundleContext bundleContext) throws Exception {
+		super.stop(bundleContext);
 		Activator.context = null;
+		Activator.plugin = null;
+	}
+
+	public static Activator getDefault() {
+		return plugin;
 	}
 
 }
