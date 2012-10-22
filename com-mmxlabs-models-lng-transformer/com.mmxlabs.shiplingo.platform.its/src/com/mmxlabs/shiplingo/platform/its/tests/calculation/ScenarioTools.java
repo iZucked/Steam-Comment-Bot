@@ -213,7 +213,7 @@ public class ScenarioTools {
 		final int spotCharterCount = 0;
 		final double fillCapacity = 1.0;
 		// load and discharge prices and quantities
-		final int loadPrice = 1000;
+		final int loadPrice = 20;
 		final int loadMaxQuantity = 100000;
 		final int dischargeMaxQuantity = 100000;
 
