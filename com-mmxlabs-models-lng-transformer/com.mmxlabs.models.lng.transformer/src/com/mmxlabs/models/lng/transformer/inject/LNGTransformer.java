@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.transformer.inject;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.ui.PlatformUI;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
 
@@ -60,25 +61,32 @@ public class LNGTransformer {
 	public LNGTransformer(final MMXRootObject scenario, final Module module) {
 		this.scenario = scenario;
 		{
-			// Create temp injector to grab extraModules
-			// TODO: DOuble injector is not great.... nor is internal temp class
-			Injector injector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()), new AbstractModule() {
+			final Injector injector;
+			if (PlatformUI.isWorkbenchRunning()) {
+				// Create temp injector to grab extraModules
+				// TODO: DOuble injector is not great.... nor is internal temp class
+				final AbstractModule abstractModule = new AbstractModule() {
 
-				@Override
-				protected void configure() {
-					bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
-				}
-			});
+					@Override
+					protected void configure() {
+						bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
+					}
+				};
+				injector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()), abstractModule);
+			} else {
+				injector = Guice.createInjector();
+
+			}
 			class Internal {
 				@Inject(optional = true)
 				public Iterable<IOptimiserInjectorService> extraModules;
 			}
-			Internal internal = new Internal();
+			final Internal internal = new Internal();
 			injector.injectMembers(internal);
 			this.extraModules = internal.extraModules;
 		}
 
-		List<Module> modules = new ArrayList<Module>();
+		final List<Module> modules = new ArrayList<Module>();
 		if (module != null) {
 			modules.add(module);
 		}
@@ -87,7 +95,7 @@ public class LNGTransformer {
 
 		// TODO: Add specific ones here....
 		if (extraModules != null) {
-			for (IOptimiserInjectorService service : extraModules) {
+			for (final IOptimiserInjectorService service : extraModules) {
 				modules.add(service.requestModule());
 			}
 		}
