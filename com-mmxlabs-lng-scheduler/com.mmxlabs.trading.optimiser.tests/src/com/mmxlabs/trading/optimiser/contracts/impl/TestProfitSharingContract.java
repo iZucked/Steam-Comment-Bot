@@ -17,6 +17,8 @@ import org.junit.Test;
 
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 
@@ -26,15 +28,15 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
  */
 public class TestProfitSharingContract {
 
-
 	@Test
 	public void testProfitSharingPrice() {
-		final ICurve market = new ConstantValueCurve(1234);
-		final ICurve refMarket = new ConstantValueCurve(4321);
+		final ICurve market = new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalPrice(1.234));
+		final ICurve refMarket = new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalPrice(4.321));
 
 		final Set<IPort> baseMarketPorts = new HashSet<IPort>();
 
-		final ProfitSharingContract psc = new ProfitSharingContract(market, refMarket, 100, 300, baseMarketPorts, 1000);
+		final ProfitSharingContract psc = new ProfitSharingContract(market, refMarket, OptimiserUnitConvertor.convertToInternalConversionFactor(.1),
+				OptimiserUnitConvertor.convertToInternalConversionFactor(.3), baseMarketPorts, OptimiserUnitConvertor.convertToInternalConversionFactor(1));
 
 		// market purchase price - alpha - beta * (actual sales price) - gamma * (actual
 		// * sales price - reference sales price)
@@ -43,26 +45,27 @@ public class TestProfitSharingContract {
 		final IPort portB = mock(IPort.class, "portB");
 
 		when(option.getPort()).thenReturn(portB);
-		
+
 		baseMarketPorts.add(portA);
 
 		final Random random = new Random();
 		for (int i = 0; i < 100; i++) {
 			final int p = random.nextInt(10000);
 			final int price = psc.calculateLoadUnitPrice(null, option, 0, 0, p, 0, null, null, null);
-			double asp = p / 1000.0;
-			Assert.assertEquals(1.234 - 0.1 - asp - (0.3 * (asp - 4.321)), price / 1000.0, 1);
+			double asp = p / Calculator.HighScaleFactor;
+			Assert.assertEquals(1.234 - 0.1 - asp - (0.3 * (asp - 4.321)), price / Calculator.HighScaleFactor, 1);
 		}
 	}
 
 	@Test
 	public void testProfitSharingPrice2() {
-		final ICurve market = new ConstantValueCurve(1234);
-		final ICurve refMarket = new ConstantValueCurve(4321);
+		final ICurve market = new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalPrice(1.234));
+		final ICurve refMarket = new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalPrice(4.321));
 
 		final Set<IPort> baseMarketPorts = new HashSet<IPort>();
 
-		final ProfitSharingContract psc = new ProfitSharingContract(market, refMarket, 100, 300, baseMarketPorts, 1000);
+		final ProfitSharingContract psc = new ProfitSharingContract(market, refMarket, OptimiserUnitConvertor.convertToInternalConversionFactor(.1),
+				OptimiserUnitConvertor.convertToInternalConversionFactor(.3), baseMarketPorts, OptimiserUnitConvertor.convertToInternalConversionFactor(1));
 
 		// market purchase price - alpha - beta * (actual sales price) - gamma * (actual
 		// * sales price - reference sales price)
@@ -70,7 +73,6 @@ public class TestProfitSharingContract {
 		final IPort portA = mock(IPort.class, "portA");
 		final IPort portB = mock(IPort.class, "portB");
 
-		
 		when(option.getPort()).thenReturn(portA);
 
 		baseMarketPorts.add(portA);
@@ -79,7 +81,7 @@ public class TestProfitSharingContract {
 		for (int i = 0; i < 100; i++) {
 			final int p = random.nextInt();
 			final int price = psc.calculateLoadUnitPrice(null, option, 0, 0, p, 0, null, null, null);
-			Assert.assertEquals(1.234 - 0.1 - ((p / 1000.0)), price / 1000.0, 1);
+			Assert.assertEquals(1.234 - 0.1 - ((p / Calculator.HighScaleFactor)), price / Calculator.HighScaleFactor, 1);
 		}
 	}
 }
