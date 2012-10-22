@@ -14,6 +14,10 @@ public final class Calculator {
 	// If you change this, you will need to change the getHourlyCharterPrice operator
 	// on AllocatedVessel in the ECore model.
 	public static final int ScaleFactor = 1000;
+	/**
+	 * @since 2.0
+	 */
+	public static final long HighScaleFactor = 1000000;
 
 	public static int speedFromDistanceTime(final long distance, final int time) {
 
@@ -36,30 +40,31 @@ public final class Calculator {
 	}
 
 	public static long costFromConsumption(final long consumption, final long notionalFuelCost) {
-		return (consumption * notionalFuelCost) / ScaleFactor;
+		return (consumption * notionalFuelCost) / HighScaleFactor;
 	}
 
 	public static long convertM3ToMMBTu(final long m3, final int factor) {
-		return (m3 * factor) / ScaleFactor;
+
+		return (m3 * (long) factor) / HighScaleFactor;
 	}
 
 	/**
 	 * @since 2.0
 	 */
 	public static long convertM3ToM3Price(final long m3, final int pricePerM3) {
-		return multiply(m3, pricePerM3);
+		return (m3 * (long) pricePerM3) / HighScaleFactor;
 	}
 
 	public static long convertMMBTuToM3(final long mmbtu, final int factor) {
-		return (mmbtu * ScaleFactor) / factor;
+		return (mmbtu * HighScaleFactor) / (long) factor;
 	}
 
 	public static long convertM3ToMT(final long m3, final int factor) {
-		return (m3 * factor) / ScaleFactor;
+		return (m3 * factor) / HighScaleFactor;
 	}
 
 	public static long convertMTToM3(final long mt, final int factor) {
-		return (mt * ScaleFactor) / factor;
+		return (mt * HighScaleFactor) / (long) factor;
 	}
 
 	/**
@@ -68,7 +73,7 @@ public final class Calculator {
 	 * @since 2.0
 	 */
 	public static int costPerM3FromMMBTu(final int costPerMMBTu, final int cvValue) {
-		return (int) multiply(costPerMMBTu, cvValue);
+		return (int) (((long) costPerMMBTu * (long) cvValue) / HighScaleFactor);
 	}
 
 	/**
@@ -77,7 +82,8 @@ public final class Calculator {
 	 * @since 2.0
 	 */
 	public static int costPerMMBTuFromM3(final int costPerM3, final int cvValue) {
-		return (int) divide(costPerM3, cvValue);
+
+		return (int) (((long) costPerM3 * HighScaleFactor) / (long) cvValue);
 	}
 
 	/**
@@ -85,7 +91,8 @@ public final class Calculator {
 	 * @since 2.0
 	 */
 	public static int getPerMMBTuFromTotalAndVolumeInMMBTu(final long totalCost, final long volumeInMMBTu) {
-		return (int) divide(totalCost, volumeInMMBTu);
+		// TODO: Be careful of overflows here
+		return (int) (((long) totalCost * HighScaleFactor) / (long) volumeInMMBTu);
 	}
 
 	/**
@@ -93,7 +100,9 @@ public final class Calculator {
 	 * @since 2.0
 	 */
 	public static int getPerMMBTuFromTotalAndVolumeInM3(final long totalCost, final long volumeInM3, final int cvValue) {
-		return (int) divide(totalCost, convertM3ToMMBTu(volumeInM3, cvValue));
+
+		// TODO: Be careful of overflows here
+		return (int) (((long) totalCost * HighScaleFactor) / (long) convertM3ToMMBTu(volumeInM3, cvValue));
 	}
 
 	/**
@@ -101,7 +110,9 @@ public final class Calculator {
 	 * @since 2.0
 	 */
 	public static int getPerM3FromTotalAndVolumeInMMBTu(final long totalCost, final long volumeInMMBTu, final int cvValue) {
-		return (int) divide(divide(totalCost, volumeInMMBTu), cvValue);
+		// TODO: Be careful of overflows here
+		return (int) (((long) totalCost * HighScaleFactor) / (long) volumeInMMBTu) * ScaleFactor / cvValue;
+
 	}
 
 	/**
@@ -109,7 +120,9 @@ public final class Calculator {
 	 * @since 2.0
 	 */
 	public static int getPerM3FromTotalAndVolumeInM3(final long totalCost, final long volumeInM3) {
-		return (int) divide(totalCost, volumeInM3);
+
+		// TODO: Be careful of overflows here
+		return (int) (((long) totalCost * HighScaleFactor) / (long) volumeInM3);
 	}
 
 	/**
@@ -118,7 +131,7 @@ public final class Calculator {
 	 * @since 2.0
 	 */
 	public static int getShareOfPrice(final int share, final int price) {
-		return (int) multiply(price, share);
+		return (int) (((long) share * (long) price) / ScaleFactor);
 	}
 
 	/**

@@ -26,11 +26,12 @@ public final class OptimiserUnitConvertor {
 	 * @return
 	 */
 	public static int convertToInternalPrice(double price) {
-		return (int) (Calculator.ScaleFactor * price);
+		long value = (long)(Calculator.HighScaleFactor * price);
+		return (int) value;
 	}
 
 	public static double convertToExternalPrice(int price) {
-		return (double) price / (double) Calculator.ScaleFactor;
+		return (double) price / (double) Calculator.HighScaleFactor;
 	}
 
 	/**
@@ -62,11 +63,11 @@ public final class OptimiserUnitConvertor {
 	 * @return
 	 */
 	public static int convertToInternalConversionFactor(double factor) {
-		return (int) (Calculator.ScaleFactor * factor);
+		return (int) (Calculator.HighScaleFactor * factor);
 	}
 
 	public static double convertToExternalConversionFactor(int factor) {
-		return (double) factor / (double) Calculator.ScaleFactor;
+		return (double) factor / (double) Calculator.HighScaleFactor;
 	}
 
 	/**
