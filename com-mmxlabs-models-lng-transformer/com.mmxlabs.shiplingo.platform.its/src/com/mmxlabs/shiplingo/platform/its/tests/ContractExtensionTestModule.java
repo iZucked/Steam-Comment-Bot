@@ -12,6 +12,7 @@ import org.ops4j.peaberry.util.TypeLiterals;
 import com.google.inject.AbstractModule;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer;
+import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformerWrapper;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
@@ -27,6 +28,9 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintC
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.trading.integration.StandardContractBuilderFactory;
+import com.mmxlabs.trading.integration.TradingOptimiserModuleService;
 
 public class ContractExtensionTestModule extends AbstractModule {
 
@@ -42,6 +46,9 @@ public class ContractExtensionTestModule extends AbstractModule {
 
 			final ContractTransformer transformer = new ContractTransformerWrapper(sct, sct.getContractEClasses());
 			bind(TypeLiterals.iterable(ContractTransformer.class)).toInstance(Collections.singleton(transformer));
+
+			bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toInstance(Collections.singleton(new TradingOptimiserModuleService()));
+			bind(TypeLiterals.iterable(IBuilderExtensionFactory.class)).toInstance(Collections.singleton(new StandardContractBuilderFactory()));
 		}
 	}
 
