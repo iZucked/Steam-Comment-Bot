@@ -17,6 +17,7 @@ import org.mockito.Matchers;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.optimiser.core.scenario.common.IMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.components.IConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -42,7 +43,7 @@ public class TestNetbackContract {
 		final IMultiMatrixProvider<IPort, Integer> distanceProvider = mock(IMultiMatrixProvider.class);
 		@SuppressWarnings("unchecked")
 		final IMatrixProvider<IPort, Integer> matrixProvider = mock(IMatrixProvider.class);
-		
+
 		final IPort A = mock(IPort.class, "Port A");
 		final IPort B = mock(IPort.class, "Port B");
 
@@ -64,50 +65,48 @@ public class TestNetbackContract {
 		ballastLeg.setOptions(ballastOptions);
 
 		final ICurve priceCurve = mock(ICurve.class);
-		
+
 		final IVessel vessel = mock(IVessel.class);
 		final IVesselClass vesselClass = mock(IVesselClass.class);
 
 		final IConsumptionRateCalculator curve = mock(IConsumptionRateCalculator.class);
 
-		when(slotA.getCargoCVValue()).thenReturn(24000);
+		when(slotA.getCargoCVValue()).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(24));
 
 		// 1000 nautical miles
 		when(matrixProvider.get(B, A)).thenReturn(1000);
-		
+
 		when(distanceProvider.get("Default")).thenReturn(matrixProvider);
 
 		// 10 knots => 100 hours
 		when(vesselClass.getMaxSpeed()).thenReturn(MAX_SPEED);
-		when(vesselClass.getBaseFuelUnitPrice()).thenReturn(1000);
-		when(vesselClass.getBaseFuelConversionFactor()).thenReturn(500);
+		when(vesselClass.getBaseFuelUnitPrice()).thenReturn(OptimiserUnitConvertor.convertToInternalPrice(1.0));
+		when(vesselClass.getBaseFuelConversionFactor()).thenReturn(OptimiserUnitConvertor.convertToInternalConversionFactor(0.5));
 		when(vesselClass.getConsumptionRate(VesselState.Ballast)).thenReturn(curve);
 
 		when(vessel.getVesselClass()).thenReturn(vesselClass);
 		when(vessel.getVesselInstanceType()).thenReturn(VesselInstanceType.SPOT_CHARTER);
 
-		when(priceCurve.getValueAtPoint(Matchers.anyInt())).thenReturn(1000);
+		when(priceCurve.getValueAtPoint(Matchers.anyInt())).thenReturn((int) OptimiserUnitConvertor.convertToInternalDailyCost(1));
 		when(vessel.getHourlyCharterInPrice()).thenReturn(priceCurve);
 
 		when(slotA.getPort()).thenReturn(A);
 		when(slotB.getPort()).thenReturn(B);
 
-		when(curve.getRate(MAX_SPEED)).thenReturn(500l);
+		when(curve.getRate(MAX_SPEED)).thenReturn((long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
 
-		
-		
 		Map<IVesselClass, BallastParameters> ballastParams = new HashMap<IVesselClass, BallastParameters>();
-		BallastParameters params = new BallastParameters(vesselClass, MAX_SPEED, 1000, 1000, 500, new String[] { "Default" });
-		
+		BallastParameters params = new BallastParameters(vesselClass, MAX_SPEED, 1000, OptimiserUnitConvertor.convertToInternalDailyRate(1.0), OptimiserUnitConvertor.convertToInternalDailyRate(0.5),
+				new String[] { "Default" });
+
 		ballastParams.put(vesselClass, params);
-		
-		
-		final NetbackContract nbc = new NetbackContract(1234, 5678, distanceProvider, ballastParams);
+
+		final NetbackContract nbc = new NetbackContract(OptimiserUnitConvertor.convertToInternalPrice(1.234), OptimiserUnitConvertor.convertToInternalPrice(5.678), distanceProvider, ballastParams);
 
 		final VoyagePlan plan = new VoyagePlan();
 		plan.setSequence(new Object[] { null, ladenLeg, null, ballastLeg, null });
-		final int loadPrice = nbc.calculateLoadUnitPrice(slotA, slotB, 0, 0, 7500, 2000000, vessel, plan, null);
+		final int loadPrice = nbc.calculateLoadUnitPrice(slotA, slotB, 0, 0, OptimiserUnitConvertor.convertToInternalPrice(7.5), 2000000, vessel, plan, null);
 
-		Assert.assertEquals(6263, loadPrice);
+		Assert.assertEquals(6262, loadPrice / 1000);
 	}
 }
