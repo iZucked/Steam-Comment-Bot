@@ -13,18 +13,17 @@ public class BreakEvenSalesPriceCalculator implements ISalesPriceCalculator, IBr
 	private int price;
 
 	@Override
-	public void prepareEvaluation(ISequences sequences) {
+	public void prepareEvaluation(final ISequences sequences) {
 		price = 0;
 	}
 
 	@Override
-	public int calculateSalesUnitPrice(IDischargeOption option, int time) {
+	public int calculateSalesUnitPrice(final IDischargeOption option, final int time) {
 		return price;
 	}
 
 	@Override
-	public void setPrice(int newPrice) {
-		// TODO Auto-generated method stub
+	public void setPrice(final int newPrice) {
 		this.price = newPrice;
 	}
 }

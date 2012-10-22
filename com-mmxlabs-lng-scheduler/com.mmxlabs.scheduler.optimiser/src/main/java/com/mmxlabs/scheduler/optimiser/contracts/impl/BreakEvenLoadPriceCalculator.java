@@ -36,8 +36,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	}
 
 	@Override
-	public void setPrice(int newPrice) {
-		// TODO Auto-generated method stub
+	public void setPrice(final int newPrice) {
 		this.price = newPrice;
 	}
 }
