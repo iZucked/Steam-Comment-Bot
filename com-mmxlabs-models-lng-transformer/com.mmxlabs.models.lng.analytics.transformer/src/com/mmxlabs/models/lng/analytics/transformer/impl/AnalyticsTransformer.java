@@ -57,6 +57,7 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
@@ -204,7 +205,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			final HashMap<Pair<Port, Port>, UnitCostLine> bestCostSoFar = new HashMap<Pair<Port, Port>, UnitCostLine>();
 
 			final ILoadPriceCalculator loadCalculator = new FixedPriceContract(0);
-			final ISalesPriceCalculator dischargeCalculator = new FixedPriceContract(Calculator.scaleToInt(spec.getCargoPrice()));
+			final ISalesPriceCalculator dischargeCalculator = new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(spec.getCargoPrice()));
 			int i = 0;
 
 			monitor.beginTask("Creating unit cost matrix", loadPorts.size());
@@ -232,14 +233,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				// if (spec.isSetSpeed()) {
 				// minSpeed = spec.getSpeed();
 				// }
-				final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), Calculator.scaleToInt(minSpeed), Calculator.scaleToInt(eVc.getMaxSpeed()),
-						Calculator.scale((int) (eVc.getFillCapacity() * eVc.getCapacity())), Calculator.scaleToInt(eVc.getMinHeel()),
-
-						Calculator.scaleToInt(spec.getBaseFuelPrice()),
-
-						Calculator.scaleToInt(eVc.getBaseFuel().getEquivalenceFactor()), Calculator.scaleToInt(eVc.getPilotLightRate()) / 24,
-
-						eVc.getWarmingTime(), eVc.getCoolingTime(), Calculator.scale(eVc.getCoolingVolume()));
+				final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(minSpeed),
+						OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
+						OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), OptimiserUnitConvertor.convertToInternalPrice(spec.getBaseFuelPrice()),
+						OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()),
+						OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()), eVc.getWarmingTime(), eVc.getCoolingTime(),
+						OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()));
 
 				buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
 				buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
@@ -263,14 +262,16 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 						builder.setPortToPortDistance(ports.lookup(line.getFrom()), ports.lookup(line.getTo()), route.getName(), line.getDistance());
 						if (parametersForRoute != null) {
 							builder.setVesselClassRouteTransitTime(route.getName(), vesselClass, parametersForRoute.getExtraTransitTime());
-							builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Laden, Calculator.scale(parametersForRoute.getLadenConsumptionRate()) / 24,
-									Calculator.scale(parametersForRoute.getLadenNBORate()) / 24);
-							builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Ballast, Calculator.scale(parametersForRoute.getBallastConsumptionRate()) / 24,
-									Calculator.scale(parametersForRoute.getBallastNBORate()) / 24);
+							builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Laden,
+									OptimiserUnitConvertor.convertToInternalHourlyRate(parametersForRoute.getLadenConsumptionRate()),
+									OptimiserUnitConvertor.convertToInternalHourlyRate(parametersForRoute.getLadenNBORate()));
+							builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Ballast,
+									OptimiserUnitConvertor.convertToInternalHourlyRate(parametersForRoute.getBallastConsumptionRate()),
+									OptimiserUnitConvertor.convertToInternalHourlyRate(parametersForRoute.getBallastNBORate()));
 						}
 						if (costForRoute != null) {
-							builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Laden, (int) Calculator.scale(costForRoute.getLadenCost()));
-							builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Ballast, (int) Calculator.scale(costForRoute.getBallastCost()));
+							builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(costForRoute.getLadenCost()));
+							builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(costForRoute.getBallastCost()));
 						}
 					}
 				}
@@ -306,9 +307,10 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 						for (final int minTimeDL : minTimesDL) {
 							// create round trip cargo
 							final String id = (counter++) + "-" + loadPort.getName() + "-to-" + dischargePort.getName();
-							final ILoadSlot loadSlot = builder.createLoadSlot("load-" + id, ports.lookup(loadPort), builder.createTimeWindow(0, 0), Calculator.scale(spec.getMinimumLoad()),
-									Calculator.scale(spec.getMaximumLoad()), loadCalculator, Calculator.scaleToInt(spec.isSetCvValue() ? spec.getCvValue() : loadPort.getCvValue()),
-									loadPort.getLoadDuration(), false, false, false);
+							final ILoadSlot loadSlot = builder.createLoadSlot("load-" + id, ports.lookup(loadPort), builder.createTimeWindow(0, 0),
+									OptimiserUnitConvertor.convertToInternalVolume(spec.getMinimumLoad()), OptimiserUnitConvertor.convertToInternalVolume(spec.getMaximumLoad()), loadCalculator,
+									OptimiserUnitConvertor.convertToInternalConversionFactor(spec.isSetCvValue() ? spec.getCvValue() : loadPort.getCvValue()), loadPort.getLoadDuration(), false,
+									false, false);
 
 							final int ballastAllowance = (int) Math.round((double) minTimeDL * spec.getBallastTimeAllowance());
 
@@ -316,7 +318,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 							final ITimeWindow dischargeWindow = builder.createTimeWindow(timeAtDischarge, timeAtDischarge);
 							;
 							final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-" + id, ports.lookup(dischargePort), dischargeWindow,
-									Calculator.scale(spec.getMinimumDischarge()), Calculator.scale(spec.getMaximumDischarge()), dischargeCalculator, dischargePort.getDischargeDuration(), false);
+									OptimiserUnitConvertor.convertToInternalVolume(spec.getMinimumDischarge()), OptimiserUnitConvertor.convertToInternalVolume(spec.getMaximumDischarge()),
+									dischargeCalculator, dischargePort.getDischargeDuration(), false);
 
 							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
 							cargoes.add(cargo);
@@ -326,7 +329,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 							final int timeAtReturn = timeAtDischarge + dischargePort.getDischargeDuration() + minTimeDL + ballastAllowance;
 							final ITimeWindow returnWindow = builder.createTimeWindow(timeAtReturn, timeAtReturn);
 
-							final ICurve charterInRate = new ConstantValueCurve(Calculator.scaleToInt(spec.getNotionalDayRate() / 24.0));
+							final ICurve charterInRate = new ConstantValueCurve((int) OptimiserUnitConvertor.convertToInternalHourlyCost(spec.getNotionalDayRate()));
 
 							vessels.add(builder.createVessel("vessel-" + i++, vesselClass, charterInRate, VesselInstanceType.SPOT_CHARTER, builder.createStartEndRequirement(),
 									builder.createStartEndRequirement(returnWindow), 0, 0, 0));
@@ -475,8 +478,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					line.setHireCost((spec.getNotionalDayRate() * totalDuration) / 24);
 					line.setPortCost(totalPortCost);
 
-					line.setVolumeLoaded((int) ((allocation.getDischargeVolume() + allocation.getFuelVolume()) / Calculator.ScaleFactor));
-					line.setVolumeDischarged((int) (allocation.getDischargeVolume() / Calculator.ScaleFactor) - spec.getRetainHeel());
+					line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolume() + allocation.getFuelVolume()));
+					line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolume()) - spec.getRetainHeel());
 
 					final double cv = spec.isSetCvValue() ? spec.getCvValue() : line.getFrom().getCvValue();
 
@@ -526,8 +529,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 		d.addExtraData("duration", "Duration", duration, ExtraDataFormatType.DURATION);
 		d.addExtraData("idletime", "Idle Time", voyageDetails.getIdleTime(), ExtraDataFormatType.DURATION);
 		d.addExtraData("traveltime", "Travel Time", voyageDetails.getTravelTime(), ExtraDataFormatType.DURATION);
-		d.addExtraData("speed", "Speed", voyageDetails.getSpeed() / (double) Calculator.ScaleFactor, ExtraDataFormatType.STRING_FORMAT).setFormat("%,f");
-		final int routeCost = (int) (voyageDetails.getRouteCost() / Calculator.ScaleFactor);
+		d.addExtraData("speed", "Speed", OptimiserUnitConvertor.convertToExternalSpeed(voyageDetails.getSpeed()), ExtraDataFormatType.STRING_FORMAT).setFormat("%,f");
+		final int routeCost = OptimiserUnitConvertor.convertToExternalFixedCost(voyageDetails.getRouteCost());
 		totalCost += routeCost;
 		d.addExtraData("routecost", "Route Cost", routeCost, ExtraDataFormatType.CURRENCY).addExtraData("route", "Route", voyageDetails.getOptions().getRoute(), ExtraDataFormatType.AUTO);
 
@@ -536,15 +539,17 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 		for (final FuelComponent component : FuelComponent.values()) {
 			final long consumption = voyageDetails.getFuelConsumption(component, component.getDefaultFuelUnit());
-			final long unitPrice = voyageDetails.getFuelUnitPrice(component);
+			final int unitPrice = voyageDetails.getFuelUnitPrice(component);
 
-			if (consumption == 0)
+			if (consumption == 0) {
 				continue;
-			final int componentCost = (int) (Calculator.multiply(consumption, unitPrice) / Calculator.ScaleFactor);
+			}
+			final int componentCost = (int) Calculator.costFromConsumption(consumption, unitPrice);
 			totalFuelCost += componentCost;
 			final ExtraData componentData = fuelData.addExtraData(component.name(), component.name(), componentCost, ExtraDataFormatType.CURRENCY);
-			componentData.addExtraData("quantity", "Usage (" + component.getDefaultFuelUnit().name() + ")", (int) (consumption / Calculator.ScaleFactor), ExtraDataFormatType.INTEGER);
-			componentData.addExtraData("unitprice", "Cost/" + component.getDefaultFuelUnit().name(), unitPrice / (double) Calculator.ScaleFactor, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,f");
+			componentData.addExtraData("quantity", "Usage (" + component.getDefaultFuelUnit().name() + ")", OptimiserUnitConvertor.convertToExternalVolume(consumption), ExtraDataFormatType.INTEGER);
+			componentData.addExtraData("unitprice", "Cost/" + component.getDefaultFuelUnit().name(), OptimiserUnitConvertor.convertToExternalPrice(unitPrice), ExtraDataFormatType.STRING_FORMAT)
+					.setFormat("$%,f");
 
 		}
 		totalCost += totalFuelCost;
@@ -599,14 +604,15 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
 
 		for (final FuelConsumption line : attrs.getFuelConsumption()) {
-			keypoints.put(Calculator.scaleToInt(line.getSpeed()), Calculator.scale(line.getConsumption()) / 24);
+			keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed()), (long) OptimiserUnitConvertor.convertToInternalHourlyRate(line.getConsumption()));
 		}
 
 		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
 
 		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
 
-		builder.setVesselClassStateParamaters(vc, state, Calculator.scaleToInt(attrs.getNboRate()) / 24, Calculator.scaleToInt(attrs.getIdleNBORate()) / 24,
-				Calculator.scaleToInt(attrs.getIdleBaseRate()) / 24, Calculator.scaleToInt(attrs.getInPortBaseRate()) / 24, cc);
+		builder.setVesselClassStateParamaters(vc, state, OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getNboRate()),
+				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleBaseRate()),
+				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getInPortBaseRate()), cc);
 	}
 }
