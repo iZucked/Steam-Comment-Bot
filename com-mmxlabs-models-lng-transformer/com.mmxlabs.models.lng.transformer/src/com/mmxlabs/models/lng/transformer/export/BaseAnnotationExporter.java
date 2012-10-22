@@ -105,7 +105,7 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 				}
 				if (totalUsage > 0) {
 					final FuelAmount amount = ScheduleFactory.eINSTANCE.createFuelAmount();
-					amount.setQuantity(OptimiserUnitConvertor.convertToExternalFixedCost(totalUsage));
+					amount.setQuantity(OptimiserUnitConvertor.convertToExternalVolume(totalUsage));
 					amount.setUnit(modelUnits.get(unit));
 					quantity.getAmounts().add(amount);
 					matters = true;
