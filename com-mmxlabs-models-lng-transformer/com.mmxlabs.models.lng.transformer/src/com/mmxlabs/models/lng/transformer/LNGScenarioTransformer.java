@@ -599,7 +599,7 @@ public class LNGScenarioTransformer {
 		return curve;
 	}
 
-	private StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final double scale) {
+	private StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final double scale, boolean smallNumber) {
 		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
 
 		curve.setDefaultValue(0);
@@ -615,7 +615,14 @@ public class LNGScenarioTransformer {
 				}
 				gotOneEarlyDate = true;
 			}
-			curve.setValueAfter(hours, OptimiserUnitConvertor.convertToInternalPrice((double) value * scale));
+			double scaledValue = (double) value * scale;
+			int internalValue;//
+			if (smallNumber) {
+				internalValue = OptimiserUnitConvertor.convertToInternalPrice(scaledValue);
+			} else {
+				internalValue = OptimiserUnitConvertor.convertToInternalDailyRate(scaledValue);
+			}
+			curve.setValueAfter(hours, internalValue);
 		}
 
 		return curve;
@@ -1650,7 +1657,7 @@ public class LNGScenarioTransformer {
 					if (charterCost.getCharterInPrice() == null) {
 						charterInCurve = new ConstantValueCurve(0);
 					} else {
-						charterInCurve = createCurveForIntegerIndex(charterCost.getCharterInPrice(), 1.0f / 24.0f);
+						charterInCurve = createCurveForIntegerIndex(charterCost.getCharterInPrice(), 1.0f / 24.0f, false);
 					}
 
 					charterCount = charterCost.getSpotCharterCount();
@@ -1661,7 +1668,7 @@ public class LNGScenarioTransformer {
 					}
 
 					if (charterCost.getCharterOutPrice() != null) {
-						final ICurve charterOutCurve = createCurveForIntegerIndex(charterCost.getCharterOutPrice(), 1.0f / 24.0f);
+						final ICurve charterOutCurve = createCurveForIntegerIndex(charterCost.getCharterOutPrice(), 1.0f / 24.0f, false);
 						final int minDuration = 24 * charterCost.getMinCharterOutDuration();
 						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVc), charterOutCurve, minDuration);
 					}
