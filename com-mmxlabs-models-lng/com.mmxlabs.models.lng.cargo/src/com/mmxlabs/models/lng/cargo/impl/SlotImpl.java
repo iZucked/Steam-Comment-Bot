@@ -63,16 +63,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	protected Contract contract;
 
 	/**
-	 * This is true if the Contract reference has been set.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean contractESet;
-
-	/**
 	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getFixedPrice()
@@ -493,35 +483,8 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public void setContract(Contract newContract) {
 		Contract oldContract = contract;
 		contract = newContract;
-		boolean oldContractESet = contractESet;
-		contractESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract, !oldContractESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetContract() {
-		Contract oldContract = contract;
-		boolean oldContractESet = contractESet;
-		contract = null;
-		contractESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__CONTRACT, oldContract, null, oldContractESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetContract() {
-		return contractESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract));
 	}
 
 	/**
@@ -927,7 +890,7 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case CargoPackage.SLOT__CONTRACT:
-				unsetContract();
+				setContract((Contract)null);
 				return;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				unsetFixedPrice();
@@ -971,7 +934,7 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case CargoPackage.SLOT__CONTRACT:
-				return isSetContract();
+				return contract != null;
 			case CargoPackage.SLOT__FIXED_PRICE:
 				return isSetFixedPrice();
 			case CargoPackage.SLOT__PORT:
