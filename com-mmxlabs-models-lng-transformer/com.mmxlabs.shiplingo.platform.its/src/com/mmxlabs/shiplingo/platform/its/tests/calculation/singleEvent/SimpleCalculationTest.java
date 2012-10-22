@@ -30,11 +30,11 @@ public class SimpleCalculationTest {
 	private static final float baseFuelPriceCheap = 0; // $/MT -- very cheap, normally around 700
 	private static final float baseFuelPriceNormal = 700; // $/MT -- normal
 	@SuppressWarnings("unused")
-	private static final float baseFuelPriceExpensive = 70000; // $/MT
+	private static final float baseFuelPriceExpensive = 1000; // $/MT
 	private static final float dischargePriceCheap = 1.0f; // $/mmbtu - cheap
 	@SuppressWarnings("unused")
 	private static final float dischargePriceNormal = 7.0f; // $/mmbtu // normal
-	private static final float dischargePriceExpensive = 7000.0f; // $/mmbtu // very expensive, normally around 7
+	private static final float dischargePriceExpensive = 70.0f; // $/mmbtu // very expensive, normally around 7
 
 	/**
 	 * Test that the ballast leg and idle never use base fuel.
