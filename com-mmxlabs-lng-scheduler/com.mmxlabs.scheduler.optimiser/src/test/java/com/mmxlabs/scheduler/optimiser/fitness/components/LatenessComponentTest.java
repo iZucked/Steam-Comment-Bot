@@ -66,7 +66,7 @@ public class LatenessComponentTest {
 	public void testEvaluateSequence() {
 
 		// the penalty per 1 unit (hour?) of late. As set in LatenessComponent.
-		final int penalty = 1000000;
+		final int penalty = 1;
 
 		// the expected times
 		final int voyageStartTime = 0;
