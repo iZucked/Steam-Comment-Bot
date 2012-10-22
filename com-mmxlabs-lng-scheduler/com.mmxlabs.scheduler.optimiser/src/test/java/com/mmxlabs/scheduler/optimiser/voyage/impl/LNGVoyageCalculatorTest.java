@@ -555,7 +555,7 @@ public class LNGVoyageCalculatorTest {
 
 		vesselClass.setName("class-1");
 
-		vesselClass.setBaseFuelConversionFactor(500);
+		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(0.5));
 
 		// 2 days of boil off
 		vesselClass.setMinHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
@@ -832,7 +832,7 @@ public class LNGVoyageCalculatorTest {
 
 		final IVessel vessel = context.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
-		vesselClass.setBaseFuelUnitPrice(2000);
+		vesselClass.setBaseFuelUnitPrice(OptimiserUnitConvertor.convertToInternalPrice(2));
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
@@ -849,9 +849,9 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setMaxLoadVolume(150000l);
 		dischargeSlot.setMaxDischargeVolume(30000l);
 
-		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
-		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(1000));
-		loadSlot.setCargoCVValue(2000);
+		loadSlot.setLoadPriceCalculator(new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(1)));
+		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(1)));
+		loadSlot.setCargoCVValue(OptimiserUnitConvertor.convertToInternalConversionFactor(2));
 
 		final VoyageDetails details = new VoyageDetails();
 		final VoyageOptions options = new VoyageOptions();
@@ -977,7 +977,7 @@ public class LNGVoyageCalculatorTest {
 		final VoyagePlan plan = new VoyagePlan();
 		final IVessel vessel = context.mock(IVessel.class);
 		final VesselClass vesselClass = new VesselClass();
-		vesselClass.setBaseFuelUnitPrice(2000);
+		vesselClass.setBaseFuelUnitPrice(OptimiserUnitConvertor.convertToInternalPrice(2));
 		vesselClass.setCargoCapacity(Long.MAX_VALUE);
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 
@@ -996,10 +996,10 @@ public class LNGVoyageCalculatorTest {
 		loadSlot.setMaxLoadVolume(150000000l);
 		dischargeSlot.setMaxDischargeVolume(3000000l);
 
-		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
-		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(1000));
+		loadSlot.setLoadPriceCalculator(new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(1)));
+		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(1)));
 
-		loadSlot.setCargoCVValue(2000);
+		loadSlot.setCargoCVValue(OptimiserUnitConvertor.convertToInternalConversionFactor(2));
 
 		final VoyageDetails details1 = new VoyageDetails();
 		final VoyageOptions options1 = new VoyageOptions();
