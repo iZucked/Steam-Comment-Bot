@@ -72,7 +72,7 @@ Version {0}
       <plugin id="com.mmxlabs.shiplingo.platform.models.manifest" autoStart="true" startLevel="0" />
       <plugin id="com.mmxlabs.trading.integration" autoStart="true" startLevel="0" />
       <plugin id="org.eclipse.core.runtime" autoStart="true" startLevel="0" />
-      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="0" />
+      <plugin id="org.eclipse.equinox.ds" autoStart="true" startLevel="3" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.ops4j.peaberry.activation" autoStart="true" startLevel="2" />
    </configurations>
