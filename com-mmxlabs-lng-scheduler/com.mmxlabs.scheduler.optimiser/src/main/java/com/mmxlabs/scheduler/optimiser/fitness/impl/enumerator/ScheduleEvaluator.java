@@ -80,7 +80,13 @@ public class ScheduleEvaluator {
 			}
 			total += l;
 		}
+		
+		// Prime the load price calculators with the scheduled result
+		for (final ILoadPriceCalculator calculator : loadPriceCalculators) {
+			calculator.prepareEvaluation(scheduledSequences);
+		}
 
+		// Execute custom logic to manipulate the schedule and choices
 		if (breakEvenEvaluator != null) {
 			breakEvenEvaluator.processSchedule(scheduledSequences);
 		}
@@ -92,10 +98,6 @@ public class ScheduleEvaluator {
 		// Next we do P&L related business; first we have to assign the load volumes,
 		// and then compute the resulting P&L fitness components.
 
-		// Prime the load price calculators with the scheduled result
-		for (final ILoadPriceCalculator calculator : loadPriceCalculators) {
-			calculator.prepareEvaluation(scheduledSequences);
-		}
 
 		// Compute load volumes and prices
 		final Collection<IAllocationAnnotation> allocations = cargoAllocator.allocate(scheduledSequences);
