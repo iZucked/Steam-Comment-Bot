@@ -205,11 +205,9 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Contract</em>' reference.
-	 * @see #isSetContract()
-	 * @see #unsetContract()
 	 * @see #setContract(Contract)
 	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Contract()
-	 * @model unsettable="true" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
 	Contract getContract();
@@ -220,38 +218,10 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Contract</em>' reference.
-	 * @see #isSetContract()
-	 * @see #unsetContract()
 	 * @see #getContract()
 	 * @generated
 	 */
 	void setContract(Contract value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see #isSetContract()
-	 * @see #getContract()
-	 * @see #setContract(Contract)
-	 * @generated
-	 */
-	void unsetContract();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference is set.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Contract</em>' reference is set.
-	 * @see #unsetContract()
-	 * @see #getContract()
-	 * @see #setContract(Contract)
-	 * @generated
-	 */
-	boolean isSetContract();
 
 	/**
 	 * Returns the value of the '<em><b>Duration</b></em>' attribute.
