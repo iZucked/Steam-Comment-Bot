@@ -903,7 +903,7 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				dischargePriceCalculator = new MarketPriceContract(curve, 0, 1000);
+				dischargePriceCalculator = new MarketPriceContract(curve, 0, OptimiserUnitConvertor.convertToInternalConversionFactor(1));
 			}
 
 		} else {
@@ -961,7 +961,7 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				loadPriceCalculator = new MarketPriceContract(curve, 0, 1000);
+				loadPriceCalculator = new MarketPriceContract(curve, 0, OptimiserUnitConvertor.convertToInternalConversionFactor(1));
 			}
 		} else {
 			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot.getContract());
