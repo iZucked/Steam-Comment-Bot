@@ -26,7 +26,7 @@ public final class OptimiserUnitConvertor {
 	 * @return
 	 */
 	public static int convertToInternalPrice(double price) {
-		long value = (long)(Calculator.HighScaleFactor * price);
+		long value = Math.round(price * (double)Calculator.HighScaleFactor );
 		return (int) value;
 	}
 

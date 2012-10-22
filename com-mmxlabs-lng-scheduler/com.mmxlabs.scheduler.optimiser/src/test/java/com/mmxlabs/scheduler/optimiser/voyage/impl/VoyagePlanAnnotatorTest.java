@@ -18,6 +18,7 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -98,12 +99,12 @@ public class VoyagePlanAnnotatorTest {
 		options1.setAvailableTime(90);
 		options1.setVesselState(VesselState.Laden);
 
-		voyageDetails1.setFuelUnitPrice(FuelComponent.Base, 1000);
-		voyageDetails1.setFuelUnitPrice(FuelComponent.Base_Supplemental, 2000);
-		voyageDetails1.setFuelUnitPrice(FuelComponent.NBO, 3000);
-		voyageDetails1.setFuelUnitPrice(FuelComponent.FBO, 4000);
-		voyageDetails1.setFuelUnitPrice(FuelComponent.IdleBase, 5000);
-		voyageDetails1.setFuelUnitPrice(FuelComponent.IdleNBO, 6000);
+		voyageDetails1.setFuelUnitPrice(FuelComponent.Base, OptimiserUnitConvertor.convertToInternalPrice(1.0));
+		voyageDetails1.setFuelUnitPrice(FuelComponent.Base_Supplemental, OptimiserUnitConvertor.convertToInternalPrice(2.0));
+		voyageDetails1.setFuelUnitPrice(FuelComponent.NBO, OptimiserUnitConvertor.convertToInternalPrice(3.0));
+		voyageDetails1.setFuelUnitPrice(FuelComponent.FBO, OptimiserUnitConvertor.convertToInternalPrice(4.0));
+		voyageDetails1.setFuelUnitPrice(FuelComponent.IdleBase, OptimiserUnitConvertor.convertToInternalPrice(5.0));
+		voyageDetails1.setFuelUnitPrice(FuelComponent.IdleNBO, OptimiserUnitConvertor.convertToInternalPrice(6.0));
 
 		voyageDetails1.setOptions(options1);
 
@@ -127,12 +128,12 @@ public class VoyagePlanAnnotatorTest {
 		options2.setAvailableTime(80);
 		options2.setVesselState(VesselState.Ballast);
 
-		voyageDetails2.setFuelUnitPrice(FuelComponent.Base, 1100);
-		voyageDetails2.setFuelUnitPrice(FuelComponent.Base_Supplemental, 2100);
-		voyageDetails2.setFuelUnitPrice(FuelComponent.NBO, 3100);
-		voyageDetails2.setFuelUnitPrice(FuelComponent.FBO, 4100);
-		voyageDetails2.setFuelUnitPrice(FuelComponent.IdleBase, 5100);
-		voyageDetails2.setFuelUnitPrice(FuelComponent.IdleNBO, 6100);
+		voyageDetails2.setFuelUnitPrice(FuelComponent.Base, OptimiserUnitConvertor.convertToInternalPrice(1.10));
+		voyageDetails2.setFuelUnitPrice(FuelComponent.Base_Supplemental, OptimiserUnitConvertor.convertToInternalPrice(2.1));
+		voyageDetails2.setFuelUnitPrice(FuelComponent.NBO, OptimiserUnitConvertor.convertToInternalPrice(3.1));
+		voyageDetails2.setFuelUnitPrice(FuelComponent.FBO, OptimiserUnitConvertor.convertToInternalPrice(4.1));
+		voyageDetails2.setFuelUnitPrice(FuelComponent.IdleBase, OptimiserUnitConvertor.convertToInternalPrice(5.1));
+		voyageDetails2.setFuelUnitPrice(FuelComponent.IdleNBO, OptimiserUnitConvertor.convertToInternalPrice(6.1));
 
 		voyageDetails2.setOptions(options2);
 
@@ -156,12 +157,12 @@ public class VoyagePlanAnnotatorTest {
 		options3.setAvailableTime(70);
 		options3.setVesselState(VesselState.Laden);
 
-		voyageDetails3.setFuelUnitPrice(FuelComponent.Base, 1200);
-		voyageDetails3.setFuelUnitPrice(FuelComponent.Base_Supplemental, 2200);
-		voyageDetails3.setFuelUnitPrice(FuelComponent.NBO, 3200);
-		voyageDetails3.setFuelUnitPrice(FuelComponent.FBO, 4200);
-		voyageDetails3.setFuelUnitPrice(FuelComponent.IdleBase, 5200);
-		voyageDetails3.setFuelUnitPrice(FuelComponent.IdleNBO, 6200);
+		voyageDetails3.setFuelUnitPrice(FuelComponent.Base, OptimiserUnitConvertor.convertToInternalPrice(1.2));
+		voyageDetails3.setFuelUnitPrice(FuelComponent.Base_Supplemental, OptimiserUnitConvertor.convertToInternalPrice(2.2));
+		voyageDetails3.setFuelUnitPrice(FuelComponent.NBO, OptimiserUnitConvertor.convertToInternalPrice(3.2));
+		voyageDetails3.setFuelUnitPrice(FuelComponent.FBO, OptimiserUnitConvertor.convertToInternalPrice(4.2));
+		voyageDetails3.setFuelUnitPrice(FuelComponent.IdleBase, OptimiserUnitConvertor.convertToInternalPrice(5.2));
+		voyageDetails3.setFuelUnitPrice(FuelComponent.IdleNBO, OptimiserUnitConvertor.convertToInternalPrice(6.2));
 
 		voyageDetails3.setOptions(options3);
 

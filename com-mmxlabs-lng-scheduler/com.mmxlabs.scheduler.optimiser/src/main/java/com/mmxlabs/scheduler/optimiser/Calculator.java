@@ -131,7 +131,7 @@ public final class Calculator {
 	 * @since 2.0
 	 */
 	public static int getShareOfPrice(final int share, final int price) {
-		return (int) (((long) share * (long) price) / ScaleFactor);
+		return (int) (((long) share * (long) price) / HighScaleFactor);
 	}
 
 	/**
