@@ -35,7 +35,7 @@ import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.trading.optimiser.TradingConstants;
 
 /**
- * @since 2.0 `
+ * @since 2.0
  */
 public class SchedulePnLReport extends EMFReportView {
 	/**
@@ -346,7 +346,7 @@ public class SchedulePnLReport extends EMFReportView {
 				return true;
 			} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
 				return true;
-			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVesselClass().getName()))) {
+			} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
 				return true;
 			}
 
