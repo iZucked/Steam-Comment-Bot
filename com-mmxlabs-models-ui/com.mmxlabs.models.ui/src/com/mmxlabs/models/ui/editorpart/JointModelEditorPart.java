@@ -101,7 +101,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	/**
 	 * Flag to enable the default EMF tree view editor
 	 */
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	private static final Logger log = LoggerFactory.getLogger(JointModelEditorPart.class);
 
