@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.input.editor.utils.CollectedAssignment;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -35,9 +34,6 @@ import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
  * @since 2.0
  */
 public class AssignmentImporter {
-	class SpotCounter {
-		public int spotCount = 0;
-	}
 
 	public void importAssignments(final CSVReader reader, final IImportContext context) {
 		IFieldMap row;
@@ -45,9 +41,10 @@ public class AssignmentImporter {
 			while ((row = reader.readRow()) != null) {
 				final String vesselName = row.get("vessels");
 				final String assignedObjects = row.get("assignedobjects");
+				final String spotIndexStr = row.get("spotindex");
+				final int spotIndex = Integer.parseInt(spotIndexStr);
 				final String[] assignedObjectNames = assignedObjects.split(",");
 				int index = 0;
-				final SpotCounter sc = new SpotCounter();
 				for (final String aon : assignedObjectNames) {
 					final int seq = index++;
 					context.doLater(new IDeferment() {
@@ -67,7 +64,8 @@ public class AssignmentImporter {
 										if (v instanceof Vessel) {
 											ea.setAssignment((AVesselSet) v);
 										} else if (v instanceof VesselClass) {
-											ea.setSpotIndex(sc.spotCount++);
+
+											ea.setSpotIndex(spotIndex);
 											ea.setAssignment((AVesselSet) v);
 										}
 
@@ -110,6 +108,7 @@ public class AssignmentImporter {
 			}
 
 			row.put("assignedObjects", sb.toString());
+			row.put("spotIndex", Integer.toString(ca.getSpotIndex()));
 		}
 
 		return result;
