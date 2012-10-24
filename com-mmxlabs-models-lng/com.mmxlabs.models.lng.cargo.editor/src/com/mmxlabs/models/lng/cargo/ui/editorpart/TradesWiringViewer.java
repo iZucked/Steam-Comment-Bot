@@ -136,25 +136,25 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
  */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
 
+	private final List<Integer> wiring = new ArrayList<Integer>();
+	private TradesWiringDiagram wiringDiagram;
+
+	private final ArrayList<Boolean> leftTerminalsExist = new ArrayList<Boolean>();
+	private final ArrayList<Boolean> rightTerminalsExist = new ArrayList<Boolean>();
+	protected List<RowData> rowData;
+
+	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
+	private final ArrayList<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
+	private final ArrayList<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
+
+	private Object[] sortedChildren;
+	private int[] sortedIndices;
+
+	protected int[] reverseSortedIndices;
+
+	private boolean locked;
+
 	private CompoundCommand currentWiringCommand = null;
-
-	// protected static final String VIEW_GROUP = "view";
-	// protected static final String ADD_REMOVE_GROUP = "addremove";
-	// protected static final String EDIT_GROUP = "edit";
-	//
-	// protected IScenarioEditingjointModelEditorPart jointModelEditorPart;
-
-	// protected ToolBarManager toolBarManager;
-	//
-	// private EObjectTableViewer scenarioViewer;
-	// // private final CargoWiringComposite wiringComposite;
-	// // private final ToolBar actionBar;
-	//
-	// private FilterField filterField;
-	// private ToolBarManager externalToolbarManager;
-	//
-	// private final IActionBars actionBars;
-	// private Action deleteAction;
 
 	private final Image wiredImage;
 	private final Image lockedImage;
@@ -195,266 +195,12 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			if (notification.getEventType() == Notification.REMOVING_ADAPTER) {
 				return;
 			}
-			//
-			// boolean rowAdded = false;
-			// boolean performUpdate = false;
-			//
-			// if (notification.getNotifier() instanceof Cargo) {
-			// final Cargo cargo = (Cargo) notification.getNotifier();
-			// // Check cargo wiring
-			// if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_LoadSlot()) {
-			// final Cargo c = (Cargo) notification.getNotifier();
-			// final LoadSlot loadSlot = (LoadSlot) notification.getNewValue();
-			//
-			// final DischargeSlot dischargeSlot = c.getDischargeSlot();
-			//
-			// final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
-			// if (ret == 2) {
-			// rowAdded = true;
-			// } else if (ret == 1) {
-			// performUpdate = true;
-			// }
-			//
-			// if (loadSlot == null) {
-			// final LoadSlot oldLoadSlot = (LoadSlot) notification.getOldValue();
-			// if (loadSlots.contains(oldLoadSlot)) {
-			// final int loadIdx = loadSlots.indexOf(oldLoadSlot);
-			// wiring.set(loadIdx, -1);
-			// cargoes.set(loadIdx, null);
-			// performUpdate = true;
-			// }
-			// }
-			//
-			// } else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargo_DischargeSlot()) {
-			// final Cargo c = (Cargo) notification.getNotifier();
-			// final LoadSlot loadSlot = c.getLoadSlot();
-			// final DischargeSlot dischargeSlot = (DischargeSlot) notification.getNewValue();
-			//
-			// final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
-			// if (ret == 2) {
-			// rowAdded = true;
-			// } else if (ret == 1) {
-			// performUpdate = true;
-			// }
-			// }
-			// } else if (notification.getNotifier() instanceof CargoModel) {
-			// if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_Cargoes()) {
-			// if (notification.getEventType() == Notification.ADD) {
-			// final Cargo cargo = (Cargo) notification.getNewValue();
-			// cargo.eAdapters().add(cargoChangeAdapter);
-			// final LoadSlot loadSlot = cargo.getLoadSlot();
-			// final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
-			//
-			// final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
-			// if (ret == 2) {
-			// rowAdded = true;
-			// } else if (ret == 1) {
-			// performUpdate = true;
-			// }
-			//
-			// } else if (notification.getEventType() == Notification.REMOVE) {
-			// final Cargo cargo = (Cargo) notification.getOldValue();
-			// final LoadSlot loadSlot = cargo.getLoadSlot();
-			// final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
-			//
-			// final int ret = performCargoUpdate(null, loadSlot, dischargeSlot);
-			// if (ret == 2) {
-			// rowAdded = true;
-			// } else if (ret == 1) {
-			// performUpdate = true;
-			// }
-			// }
-			// } else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_LoadSlots()) {
-			// if (notification.getEventType() == Notification.ADD) {
-			// final LoadSlot loadSlot = (LoadSlot) notification.getNewValue();
-			// final Cargo cargo = loadSlot.getCargo();
-			// final DischargeSlot dischargeSlot = cargo != null ? cargo.getDischargeSlot() : null;
-			//
-			// final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
-			// if (ret == 2) {
-			// rowAdded = true;
-			// } else if (ret == 1) {
-			// performUpdate = true;
-			// }
-			// } else if (notification.getEventType() == Notification.REMOVE) {
-			// final LoadSlot slot = (LoadSlot) notification.getOldValue();
-			// if (loadSlots.contains(slot)) {
-			// // Remove slot
-			// final int index = loadSlots.indexOf(slot);
-			// loadSlots.set(index, null);
-			// // Remove the wiring
-			// wiring.set(index, -1);
-			// // Probably be handled later - but to be safe...
-			// cargoes.set(index, null);
-			// performUpdate = true;
-			// }
-			// }
-			// } else if (notification.getFeature() == CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()) {
-			// if (notification.getEventType() == Notification.ADD) {
-			// final DischargeSlot dischargeSlot = (DischargeSlot) notification.getNewValue();
-			// final Cargo cargo = dischargeSlot.getCargo();
-			// final LoadSlot loadSlot = cargo != null ? cargo.getLoadSlot() : null;
-			//
-			// final int ret = performCargoUpdate(cargo, loadSlot, dischargeSlot);
-			// if (ret == 2) {
-			// rowAdded = true;
-			// } else if (ret == 1) {
-			// performUpdate = true;
-			// }
-			// } else if (notification.getEventType() == Notification.REMOVE) {
-			// final DischargeSlot slot = (DischargeSlot) notification.getOldValue();
-			// if (dischargeSlots.contains(slot)) {
-			// // Remove slot
-			// final int index = dischargeSlots.indexOf(slot);
-			// dischargeSlots.set(index, null);
-			// // Remove the wiring
-			// final int wiringIndex = wiring.indexOf(index);
-			// if (wiringIndex != -1) {
-			// wiring.set(wiringIndex, -1);
-			// // Probably be handled later - but to be safe...
-			// cargoes.set(wiringIndex, null);
-			// }
-			// performUpdate = true;
-			// }
-			// }
-			// }
-			// }
-			//
-			// // Perform a prune of empty rows
-			// boolean rowRemoved = false;
-			// for (int i = numberOfRows - 1; i >= 0; --i) {
-			// if (loadSlots.get(i) == null && dischargeSlots.get(i) == null) {
-			// cargoes.remove(i);
-			// loadSlots.remove(i);
-			// dischargeSlots.remove(i);
-			//
-			// // Re-index wiring
-			// for (int j = 0; j < numberOfRows; ++j) {
-			// final int idx = wiring.get(j);
-			// if (idx > i) {
-			// wiring.set(j, idx - 1);
-			// }
-			// }
-			//
-			// wiring.remove(i);
-			// numberOfRows--;
-			// performUpdate = true;
-			// rowRemoved = true;
-			// }
-			// }
-			//
-			// if (rowAdded) {
-			//
-			// if (wiring.get(numberOfRows) == null) {
-			// wiring.set(numberOfRows, -1);
-			// }
-			// numberOfRows++;
-			//
-			// // performControlUpdate(true);
-			// } else if (rowRemoved) {
-			//
-			// // performControlUpdate(true);
-			// } else if (performUpdate) {
-			// wiringDiagram.setWiring(wiring);
-			//
-			// // performControlUpdate(false);
-			// }
-
 			performControlUpdate(false);
 		}
 	};
 
-	//
-	// private int performCargoUpdate(final Cargo cargo, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
-	//
-	// int loadIdx = -1;
-	// int dischargeIdx = -1;
-	// boolean performUpdate = false;
-	// boolean rowAdded = false;
-	// if (loadSlot != null) {
-	// if (loadSlots.contains(loadSlot)) {
-	// loadIdx = loadSlots.indexOf(loadSlot);
-	// } else {
-	//
-	// // If the load slot next to the discharge is empty, insert the load here rather than append to the end.
-	// if (dischargeSlot != null && dischargeSlots.indexOf(dischargeSlot) != -1 && loadSlots.get(dischargeSlots.indexOf(dischargeSlot)) == null) {
-	// loadIdx = dischargeSlots.indexOf(dischargeSlot);
-	// loadSlots.set(loadIdx, loadSlot);
-	// performUpdate = true;
-	// } else {
-	// loadIdx = numberOfRows;
-	// ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
-	// wiring.set(numberOfRows, -1);
-	//
-	// loadSlots.set(loadIdx, loadSlot);
-	// rowAdded = true;
-	// }
-	// }
-	// } else if (cargo != null) {
-	// final int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
-	// if (oldIndex != -1) {
-	// wiring.set(oldIndex, -1);
-	// cargoes.set(oldIndex, null);
-	// performUpdate = true;
-	// }
-	// }
-	//
-	// if (dischargeSlot != null) {
-	//
-	// if (dischargeSlots.contains(dischargeSlot)) {
-	// dischargeIdx = dischargeSlots.indexOf(dischargeSlot);
-	// } else {
-	//
-	// // If the discharge slot for an existing load is empty, then attempt to re-use it
-	// if (!rowAdded && loadSlot != null && loadSlots.indexOf(loadSlot) != -1 && dischargeSlots.get(loadSlots.indexOf(loadSlot)) == null) {
-	// dischargeIdx = loadSlots.indexOf(loadSlot);
-	// dischargeSlots.set(dischargeIdx, dischargeSlot);
-	// performUpdate = true;
-	// } else {
-	//
-	// dischargeIdx = numberOfRows;
-	// ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
-	//
-	// dischargeSlots.set(dischargeIdx, dischargeSlot);
-	// rowAdded = true;
-	// }
-	// }
-	// } else if (cargo != null) {
-	// final int oldIndex = loadSlots.indexOf(cargo.getLoadSlot());
-	// if (oldIndex != -1) {
-	// wiring.set(oldIndex, -1);
-	// cargoes.set(oldIndex, null);
-	// performUpdate = true;
-	// }
-	// }
-	//
-	// if (loadIdx != -1 && dischargeIdx != -1 && cargo != null) {
-	// cargoes.set(loadIdx, cargo);
-	// wiring.set(loadIdx, dischargeIdx);
-	// performUpdate = true;
-	// }
-	//
-	// if (cargo == null) {
-	// if (loadIdx != -1) {
-	// cargoes.set(loadIdx, null);
-	// wiring.set(loadIdx, -1);
-	// performUpdate = true;
-	// }
-	// }
-	//
-	// if (rowAdded) {
-	// return 2;
-	// } else if (performUpdate) {
-	// return 1;
-	// } else {
-	// return 0;
-	// }
-	// }
-
 	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation jointModelEditorPart, final IActionBars actionBars) {
 		super(page, part, jointModelEditorPart, actionBars);
-		// this.jointModelEditorPart = jointModelEditorPart;
-		// this.actionBars = actionBars;
 
 		wiredImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LINK);
 		lockedImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LOCK);
@@ -463,157 +209,41 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	@Override
 	public void dispose() {
 
+		// this.location.getStatusProvider().removeStatusChangedListener(statusChangedListener);
+
+		if (this.jointModelEditorPart != null) {
+			final MMXRootObject rootObject = jointModelEditorPart.getRootObject();
+			if (rootObject != null) {
+				final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+				if (cargoModel != null) {
+					cargoModel.eAdapters().remove(cargoChangeAdapter);
+					for (final Cargo c : cargoModel.getCargoes()) {
+						c.eAdapters().remove(cargoChangeAdapter);
+					}
+				}
+			}
+
+			for (Cargo c : cargoes) {
+				if (c != null) {
+					c.eAdapters().remove(cargoChangeAdapter);
+				}
+			}
+
+		}
+
+		this.cargoes.clear();
+		this.loadSlots.clear();
+		this.dischargeSlots.clear();
+
+		this.currentWiringCommand = null;
+		this.rightTerminalsExist.clear();
+		this.leftTerminalsExist.clear();
+		this.wiring.clear();
+
+		this.rowData.clear();
+
 		super.dispose();
 	}
-
-	// public void setExternalToolBarManager(final ToolBarManager manager) {
-	// this.externalToolbarManager = manager;
-	// }
-	//
-	// @Override
-	// public ToolBarManager getToolBarManager() {
-	// if (externalToolbarManager != null) {
-	// return externalToolbarManager;
-	// } else {
-	// return super.getToolBarManager();
-	// }
-	// }
-	//
-	// @Override
-	// public EObjectTableViewer createViewer(final Composite parent) {
-	// if (scenarioViewer == null) {
-	// scenarioViewer = constructViewer(parent);
-	//
-	// scenarioViewer.addOpenListener(new IOpenListener() {
-	//
-	// @Override
-	// public void open(final OpenEvent event) {
-	// if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
-	// final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
-	// if (structuredSelection.isEmpty() == false) {
-	// if (structuredSelection.size() == 1) {
-	// final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
-	// try {
-	// jointModelEditorPart.getEditorLock().claim();
-	// jointModelEditorPart.setDisableUpdates(true);
-	// dcd.open(jointModelEditorPart, jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
-	// } finally {
-	// jointModelEditorPart.setDisableUpdates(false);
-	// jointModelEditorPart.getEditorLock().release();
-	// }
-	// } else {
-	// try {
-	// jointModelEditorPart.getEditorLock().claim();
-	// if (scenarioViewer.isLocked() == false) {
-	// final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart.getDefaultCommandHandler());
-	// mdd.open(jointModelEditorPart, structuredSelection.toList());
-	// }
-	// } finally {
-	// jointModelEditorPart.getEditorLock().release();
-	// }
-	// }
-	// }
-	// }
-	// }
-	// });
-	//
-	// scenarioViewer.getGrid().setCellSelectionEnabled(true);
-	// filterField.setViewer(scenarioViewer);
-	//
-	// final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
-	// protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
-	// return event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL || event.eventType == ColumnViewerEditorActivationEvent.MOUSE_CLICK_SELECTION
-	// || event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC;
-	// }
-	// };
-	//
-	// GridViewerEditor.create(scenarioViewer, actSupport, ColumnViewerEditor.KEYBOARD_ACTIVATION | GridViewerEditor.SELECTION_FOLLOWS_EDITOR |
-	// // ColumnViewerEditor.KEEP_EDITOR_ON_DOUBLE_CLICK |
-	// ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR | ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
-	//
-	// return scenarioViewer;
-	// } else {
-	// throw new RuntimeException("Did not expect two calls to createViewer()");
-	// }
-	//
-	// }
-
-	// @Override
-	// public void createControl(final Composite parent) {
-	// // interpose and create filter field
-	// if (getControl() == null) {
-	// container = parent;
-	//
-	// // Create view form.
-	// // control = new ViewForm(parent, getStyle());
-	// control = new ViewForm(parent, SWT.NONE);
-	// control.addDisposeListener(new DisposeListener() {
-	// @Override
-	// public void widgetDisposed(final DisposeEvent event) {
-	// dispose();
-	// }
-	// });
-	//
-	// control.marginWidth = 0;
-	// control.marginHeight = 0;
-	//
-	// // Create a title bar.
-	// if (externalToolbarManager == null)
-	// createTitleBar();
-	//
-	// final Composite inner = new Composite(control, SWT.NONE);
-	// filterField = new FilterField(inner);
-	//
-	// final GridLayout layout = new GridLayout(1, false);
-	// layout.marginHeight = 0;
-	// layout.marginWidth = 0;
-	// inner.setLayout(layout);
-	//
-	// viewer = createViewer(inner);
-	//
-	// viewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-	//
-	// control.setContent(inner);
-	//
-	// control.setTabList(new Control[] { inner });
-	//
-	// // When the pane or any child gains focus, notify the workbench.
-	// control.addListener(SWT.Activate, this);
-	// hookFocus(control);
-	// hookFocus(viewer.getControl());
-	// }
-	// }
-
-	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingjointModelEditorPart jointModelEditorPart, final IActionBars
-	// actionBars) {
-	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingjointModelEditorPart jointModelEditorPart, final IActionBars
-	// actionBars) {
-	// super(parent, SWT.NONE);
-	// this.jointModelEditorPart = jointModelEditorPart;
-	// actionBar = new ToolBar(this, SWT.FLAT | SWT.WRAP);
-	//
-	// final GridLayout gl_shell = new GridLayout(1, false);
-	// // gl_shell.verticalSpacing = 6;
-	// this.setLayout(gl_shell);
-	// }
-
-	private final List<Integer> wiring = new ArrayList<Integer>();
-	private TradesWiringDiagram wiringDiagram;
-
-	private final ArrayList<Boolean> leftTerminalsExist = new ArrayList<Boolean>();
-	private final ArrayList<Boolean> rightTerminalsExist = new ArrayList<Boolean>();
-	protected List<RowData> rowData;
-
-	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
-	private final ArrayList<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
-	private final ArrayList<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
-
-	private Object[] sortedChildren;
-	private int[] sortedIndices;
-
-	protected int[] reverseSortedIndices;
-
-	private boolean locked;
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 
@@ -851,67 +481,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 		toolbar.appendToGroup(VIEW_GROUP, filter);
 
-		// // final EReference containment = path.get(path.size() - 1);
-		// //
-		// // final Action addAction = AddModelAction.create(containment.getEReferenceType(), new IAddContext() {
-		// // @Override
-		// // public MMXRootObject getRootObject() {
-		// // return jointModelEditorPart.getRootObject();
-		// // }
-		// //
-		// // @Override
-		// // public EReference getContainment() {
-		// // return containment;
-		// // }
-		// //
-		// // @Override
-		// // public EObject getContainer() {
-		// // return scenarioViewer.getCurrentContainer();
-		// // }
-		// //
-		// // @Override
-		// // public ICommandHandler getCommandHandler() {
-		// // return jointModelEditorPart.getDefaultCommandHandler();
-		// // }
-		// //
-		// // @Override
-		// // public IScenarioEditingjointModelEditorPart getEditorPart() {
-		// // return jointModelEditorPart;
-		// // }
-		// //
-		// // @Override
-		// // public ISelection getCurrentSelection() {
-		// // return viewer.getSelection();
-		// // }
-		// // });
-		//
-
 		final Action addAction = new AddAction("Add");
 		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
-
-		// if (addAction != null) {
-		// // if we can't add one, we can't duplicate one either.
-		// final Action dupAction = createDuplicateAction();
-		//
-		// if (dupAction != null) {
-		// toolbar.appendToGroup(ADD_REMOVE_GROUP, dupAction);
-		// }
-		//
-		// toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
-		// }
-		// deleteAction = createDeleteAction();
-		// if (deleteAction != null) {
-		// toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
-		// }
-		// if (actionBars != null) {
-		// actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
-		// }
-
-		// final Action importAction = createImportAction();
-		// if (importAction != null) {
-		// toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
-		// }
 
 		// add extension points to toolbar
 		{
@@ -1000,7 +572,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			protected void wiringChanged(final List<Integer> newWiring) {
-				// TODO Auto-generated method stub
+				if (locked) {
+					return;
+				}
 				doWiringChanged(newWiring);
 			}
 
@@ -1167,20 +741,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		this.loadSlots.clear();
 		this.dischargeSlots.clear();
 
-		// // delete existing children
-		// for (final Control c : getChildren()) {
-		// c.dispose();
-		// }
-		// lhsComposites.clear();
-		// rhsComposites.clear();
-		// wiringDiagram = null;
-		// wiring.clear();
-		// this.loadSlots.clear();
-		// this.dischargeSlots.clear();
-		// this.cargoes.clear();
-		// this.leftTerminalsExist.clear();
-		// this.rightTerminalsExist.clear();
-
 		for (int i = 0; i < newCargoes.size(); i++) {
 			final Cargo cargo = newCargoes.get(i);
 
@@ -1189,13 +749,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			rd.loadSlot = cargo.getLoadSlot();
 			rd.dischargeSlot = cargo.getDischargeSlot();
 			rows.add(rd);
-			//
-			// this.wiring.add(i); // set default wiring
+
 			this.cargoes.add(rd.cargo);
 			this.loadSlots.add(rd.loadSlot);
 			this.dischargeSlots.add(rd.dischargeSlot);
-			// this.leftTerminalsExist.add(true);
-			// this.rightTerminalsExist.add(true);
 		}
 
 		for (final LoadSlot slot : loadSlots) {
@@ -1208,22 +765,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				this.cargoes.add(rd.cargo);
 				this.loadSlots.add(rd.loadSlot);
 				this.dischargeSlots.add(rd.dischargeSlot);
-				// this.cargoes.add(null);
-				// this.loadSlots.add(slot);
-				// this.dischargeSlots.add(null);
-				// this.wiring.add(-1);
-				// this.leftTerminalsExist.add(false);
-				// this.rightTerminalsExist.add(false);
 			}
 		}
 		for (final DischargeSlot slot : dischargeSlots) {
 			if (slot.getCargo() == null) {
-				// this.loadSlots.add(null);
-				// this.cargoes.add(null);
-				// this.dischargeSlots.add(slot);
-				// this.wiring.add(-1);
-				// this.leftTerminalsExist.add(false);
-				// this.rightTerminalsExist.add(false);
 				final RowData rd = new RowData();
 				rd.dischargeSlot = slot;
 				rows.add(rd);
@@ -1235,37 +780,18 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		}
 
+		// Sanity check!
 		assert rows.size() == this.cargoes.size();
 		assert rows.size() == this.loadSlots.size();
 		assert rows.size() == this.dischargeSlots.size();
 
-		// numberOfRows = wiring.size();
-		//
-		// performControlUpdate(true);
-		//
-		// if (this.jointModelEditorPart != null && jointModelEditorPart.getStatusProvider() != null) {
-		// // Perform initial validation
-		// final IStatusProvider statusProvider = jointModelEditorPart.getStatusProvider();
-		// statusChangedListener.onStatusChanged(statusProvider, statusProvider.getStatus());
-		// }
-
 		return rows;
 	}
 
-	// public Control getControl() {
-	// // TODO Auto-generated method stub
-	// return scenarioViewer == null ? null : scenarioViewer.getControl();
-	// }
-	//
 	public void init(final AdapterFactory adapterFactory) {
 		getScenarioViewer().init(adapterFactory);
 
 	}
-
-	//
-	// public void setInput(final Object input) {
-	// this.scenarioViewer.setInput(input);
-	// }
 
 	private enum Type {
 		CARGO, LOAD, DISCHARGE, ASSIGNMENT
@@ -1349,7 +875,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			diagram.setLeftTerminalColor(i, green);
 			diagram.setRightTerminalColor(j, green);
 
-			// // TODO this is not exactly proper validation.
 			if (isWiringValid(cargoes.get(i), loadSlot, dischargeSlot)) {
 				if (cargoes.get(i).isAllowRewiring()) {
 					diagram.setWireColor(i, black);
@@ -1365,23 +890,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private void performControlUpdate(final boolean rowAdded) {
 
-		System.out.println("Update");
-		final Object oldInput = getScenarioViewer().getInput();
-		getScenarioViewer().setInput(null);
-		getScenarioViewer().setInput(oldInput);
-		// synchronized (updateLock) {
-		// if (isDisposed()) {
+		// if (getScenarioViewer() == null || getScenarioViewer().getGrid().isDisposed()) {
 		// return;
 		// }
-		// // if (rowAdded) {
-		// createChildren();
-		// layout();
-		// CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
-		// // } else {
-		// // updateWiringColours(wiringDiagram, wiring, lhsComposites, rhsComposites);
-		// // CargoWiringComposite.this.notifyListeners(SWT.Modify, new Event());
-		// // }
-		// }
+		synchronized (updateLock) {
+			// Re-set the input to trigger full update as we push a load of stuff into the content provider which probably should not be there....
+			final Object oldInput = getScenarioViewer().getInput();
+			getScenarioViewer().setInput(null);
+			getScenarioViewer().setInput(oldInput);
+		}
 	}
 
 	protected void doWiringChanged(final List<Integer> newWiring) {
@@ -1400,13 +917,37 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			final Integer newIndex = newWiring.get(i);
 			final LoadSlot loadSlot = rowI.loadSlot;
-			if (newIndex >= 0 && newIndex < newWiring.size()) {
-				final DischargeSlot otherDischarge = rowData.get(newIndex).dischargeSlot;
-				Cargo c = rowI.cargo;
-				if (c != null) {
-					if (c.getDischargeSlot() != otherDischarge) {
-						currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
+			if (loadSlot != null) {
+				if (newIndex >= 0 && newIndex < newWiring.size()) {
+					final DischargeSlot otherDischarge = rowData.get(newIndex).dischargeSlot;
+					if (otherDischarge != null) {
+						Cargo c = rowI.cargo;
+						if (c != null) {
+							if (c.getDischargeSlot() != otherDischarge) {
+								currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
 
+								// Optional market slots can be removed.
+								if (c.getDischargeSlot() != null) {
+									final DischargeSlot oldSlot = c.getDischargeSlot();
+									if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+										currentWiringCommand.append(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), oldSlot));
+									}
+								}
+							}
+						} else {
+							// create a new cargo
+							c = createNewCargo(cargoModel);
+							c.setName(loadSlot.getName());
+							currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
+							currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
+						}
+						appendFOBDESCommands(currentWiringCommand, jointModelEditorPart.getEditingDomain(), inputModel, c, loadSlot, otherDischarge);
+					}
+				} else if (newIndex == -1) {
+					final Cargo c = rowI.cargo;
+					if (c != null) {
+						currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
+						currentWiringCommand.append(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), c));
 						// Optional market slots can be removed.
 						if (c.getDischargeSlot() != null) {
 							final DischargeSlot oldSlot = c.getDischargeSlot();
@@ -1414,54 +955,34 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 								currentWiringCommand.append(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), oldSlot));
 							}
 						}
-					}
-				} else {
-					// create a new cargo
-					c = createNewCargo(cargoModel);
-					c.setName(loadSlot.getName());
-					currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
-					currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), otherDischarge));
-				}
-				appendFOBDESCommands(currentWiringCommand, jointModelEditorPart.getEditingDomain(), inputModel, c, loadSlot, otherDischarge);
-			} else if (newIndex == -1) {
-				final Cargo c = rowI.cargo;
-				if (c != null) {
-					currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), null));
-					currentWiringCommand.append(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), c));
-					// Optional market slots can be removed.
-					if (c.getDischargeSlot() != null) {
-						final DischargeSlot oldSlot = c.getDischargeSlot();
-						if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
-							currentWiringCommand.append(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), oldSlot));
-						}
-					}
 
-					// Optional market slots can be removed.
-					if (c.getLoadSlot() != null) {
-						final LoadSlot oldSlot = c.getLoadSlot();
-						if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
-							currentWiringCommand.append(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), oldSlot));
+						// Optional market slots can be removed.
+						if (c.getLoadSlot() != null) {
+							final LoadSlot oldSlot = c.getLoadSlot();
+							if (oldSlot instanceof SpotSlot && oldSlot.isOptional()) {
+								currentWiringCommand.append(DeleteCommand.create(jointModelEditorPart.getEditingDomain(), oldSlot));
+							}
 						}
+					} else {
+						// Error?
 					}
 				} else {
-					// Error?
-				}
-			} else {
-				final DischargeSlot dischargeSlot = createNewDischarge(cargoModel, false);
-				// ensureCapacity(newIndex + 1, cargoes, loadSlots, dischargeSlots);
-				// dischargeSlots.set(newIndex, dischargeSlot);
-				Cargo c = rowI.cargo;
-				if (c == null) {
-					// create a cargo
-					c = createNewCargo(cargoModel);
-					c.setName(loadSlot.getName());
-					currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
-					currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
-				} else {
-					currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
-				}
-				appendFOBDESCommands(currentWiringCommand, jointModelEditorPart.getEditingDomain(), inputModel, c, loadSlot, dischargeSlot);
+					final DischargeSlot dischargeSlot = createNewDischarge(cargoModel, false);
+					// ensureCapacity(newIndex + 1, cargoes, loadSlots, dischargeSlots);
+					// dischargeSlots.set(newIndex, dischargeSlot);
+					Cargo c = rowI.cargo;
+					if (c == null) {
+						// create a cargo
+						c = createNewCargo(cargoModel);
+						c.setName(loadSlot.getName());
+						currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_LoadSlot(), loadSlot));
+						currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
+					} else {
+						currentWiringCommand.append(SetCommand.create(jointModelEditorPart.getEditingDomain(), c, CargoPackage.eINSTANCE.getCargo_DischargeSlot(), dischargeSlot));
+					}
+					appendFOBDESCommands(currentWiringCommand, jointModelEditorPart.getEditingDomain(), inputModel, c, loadSlot, dischargeSlot);
 
+				}
 			}
 		}
 
@@ -1514,142 +1035,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private void refreshContent() {
-
-		// final CargoModel cargoModel = jointModelEditorPart.getRootObject().getSubModel(CargoModel.class);
-		//
-		// // Get current data
-		// final Set<Cargo> newCargoes = new HashSet<Cargo>(cargoModel.getCargoes());
-		// final Set<LoadSlot> newLoadSlots = new HashSet<LoadSlot>(cargoModel.getLoadSlots());
-		// final Set<DischargeSlot> newDischargeSlots = new HashSet<DischargeSlot>(cargoModel.getDischargeSlots());
-		//
-		// // Get set of new items now known about
-		// newCargoes.removeAll(cargoes);
-		// newLoadSlots.removeAll(loadSlots);
-		// newDischargeSlots.removeAll(dischargeSlots);
-		//
-		// // New items need to be added to the list.. however we also need to remove other items. These should not have a eContainer at this point.
-		//
-		// for (int i = 0; i < cargoes.size(); ++i) {
-		// final EObject obj = cargoes.get(i);
-		// if (obj != null && obj.eContainer() == null) {
-		// cargoes.set(i, null);
-		// }
-		// }
-		// for (int i = 0; i < loadSlots.size(); ++i) {
-		// final EObject obj = loadSlots.get(i);
-		// if (obj != null && obj.eContainer() == null) {
-		// loadSlots.set(i, null);
-		// }
-		// }
-		// for (int i = 0; i < dischargeSlots.size(); ++i) {
-		// final EObject obj = dischargeSlots.get(i);
-		// if (obj != null && obj.eContainer() == null) {
-		// dischargeSlots.set(i, null);
-		// }
-		// }
-		//
-		// // Internal list should be full of valid items, so now we can add in the new items. First, add by cargo, then add remaining slots.
-		//
-		// for (final Cargo c : newCargoes) {
-		// // Hook in adapter to catch changes.
-		// c.eAdapters().add(cargoChangeAdapter);
-		//
-		// ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
-		// boolean addedItem = false;
-		// if (loadSlots.contains(c.getLoadSlot())) {
-		// cargoes.set(loadSlots.indexOf(c.getLoadSlot()), c);
-		// } else {
-		// boolean reusedRow = false;
-		//
-		// if (dischargeSlots.contains(c.getDischargeSlot())) {
-		// final int dischargeIdx = dischargeSlots.indexOf(c.getDischargeSlot());
-		// if (loadSlots.get(dischargeIdx) == null) {
-		// cargoes.set(dischargeIdx, c);
-		// loadSlots.set(dischargeIdx, c.getLoadSlot());
-		// newLoadSlots.remove(c.getLoadSlot());
-		// reusedRow = true;
-		// }
-		// }
-		//
-		// if (!reusedRow) {
-		//
-		// cargoes.set(numberOfRows, c);
-		// loadSlots.set(numberOfRows, c.getLoadSlot());
-		// newLoadSlots.remove(c.getLoadSlot());
-		// addedItem = true;
-		// }
-		// }
-		// if (dischargeSlots.contains(c.getDischargeSlot())) {
-		// dischargeSlots.set(numberOfRows, null);
-		// } else {
-		//
-		// boolean reusedRow = false;
-		//
-		// if (loadSlots.contains(c.getLoadSlot())) {
-		// final int loadIdx = loadSlots.indexOf(c.getLoadSlot());
-		// if (dischargeSlots.get(loadIdx) == null) {
-		// dischargeSlots.set(loadIdx, c.getDischargeSlot());
-		// newDischargeSlots.remove(c.getDischargeSlot());
-		// reusedRow = true;
-		// }
-		// }
-		//
-		// if (!reusedRow) {
-		// dischargeSlots.set(numberOfRows, c.getDischargeSlot());
-		// newDischargeSlots.remove(c.getDischargeSlot());
-		// addedItem = true;
-		// }
-		// }
-		// if (addedItem) {
-		// ++numberOfRows;
-		// }
-		// }
-		// for (final LoadSlot slot : newLoadSlots) {
-		// ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
-		// cargoes.set(numberOfRows, null);
-		// loadSlots.set(numberOfRows, slot);
-		// dischargeSlots.set(numberOfRows, null);
-		//
-		// ++numberOfRows;
-		// }
-		// for (final DischargeSlot slot : newDischargeSlots) {
-		// ensureCapacity(numberOfRows + 1, cargoes, loadSlots, dischargeSlots, wiring);
-		// cargoes.set(numberOfRows, null);
-		// loadSlots.set(numberOfRows, null);
-		// dischargeSlots.set(numberOfRows, slot);
-		//
-		// ++numberOfRows;
-		// }
-		//
-		// // Now all the right data should be present. Lets update the wiring
-		// for (int i = 0; i < numberOfRows; ++i) {
-		// if (cargoes.get(i) != null) {
-		// final int dischargeIndex = dischargeSlots.indexOf(cargoes.get(i).getDischargeSlot());
-		// wiring.set(i, dischargeIndex);
-		// } else {
-		// wiring.set(i, -1);
-		// }
-		// }
-		//
-		// // Perform a prune of empty rows
-		// for (int i = numberOfRows - 1; i >= 0; --i) {
-		// if (loadSlots.get(i) == null && dischargeSlots.get(i) == null) {
-		// cargoes.remove(i);
-		// loadSlots.remove(i);
-		// dischargeSlots.remove(i);
-		//
-		// // Re-index wiring
-		// for (int j = 0; j < numberOfRows; ++j) {
-		// final int idx = wiring.get(j);
-		// if (idx > i) {
-		// wiring.set(j, idx - 1);
-		// }
-		// }
-		//
-		// wiring.remove(i);
-		// numberOfRows--;
-		// }
-		// }
 
 		performControlUpdate(true);
 	}
@@ -2169,17 +1554,36 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	boolean isWiringValid(final Cargo cargo, final LoadSlot loadSlot, final DischargeSlot dischargeSlot) {
 
+		if (rowData == null) {
+			return true;
+		}
+
+		Map<Object, IStatus> validationMap = getScenarioViewer().getValidationErrors();
 		if (cargo == null) {
 			return false;
+		} else {
+			RowData rd = rowData.get(cargoes.indexOf(cargo));
+			if (validationMap.containsKey(rd)) {
+				return false;
+			}
 		}
-
-		if (loadSlot == null || dischargeSlot == null) {
+		if (loadSlot == null) {
 			return false;
+		} else {
+			RowData rd = rowData.get(loadSlots.indexOf(loadSlot));
+			if (validationMap.containsKey(rd)) {
+				return false;
+			}
+		}
+		if (dischargeSlot == null) {
+			return false;
+		} else {
+			RowData rd = rowData.get(dischargeSlots.indexOf(dischargeSlot));
+			if (validationMap.containsKey(rd)) {
+				return false;
+			}
 		}
 
-		// if (validationMap.contains(loadSlot) || validationMap.contains(dischargeSlot) || validationMap.contains(cargo)) {
-		// return false;
-		// }
 		return true;
 	}
 
