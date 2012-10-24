@@ -31,6 +31,9 @@ import com.mmxlabs.trading.optimiser.contracts.impl.BallastParameters;
 import com.mmxlabs.trading.optimiser.contracts.impl.NetbackContract;
 import com.mmxlabs.trading.optimiser.contracts.impl.ProfitSharingContract;
 
+/**
+ * @since 2.0
+ */
 public class StandardContractBuilder implements IBuilderExtension {
 	private final Map<NetbackContract, Map<AVesselClass, NotionalBallastParameters>> netbacks = new HashMap<NetbackContract, Map<AVesselClass, NotionalBallastParameters>>();
 	@Inject

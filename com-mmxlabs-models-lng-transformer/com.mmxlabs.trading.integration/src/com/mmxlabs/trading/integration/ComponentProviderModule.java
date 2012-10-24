@@ -8,6 +8,9 @@ import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.mmxlabs.trading.optimiser.components.ProfitAndLossAllocationComponentProvider;
 
+/**
+ * @since 2.0
+ */
 public class ComponentProviderModule extends PeaberryActivationModule {
 	@Override
 	protected void configure() {

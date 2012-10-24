@@ -14,7 +14,7 @@ import com.mmxlabs.trading.optimiser.scheduleprocessor.DefaultGeneratedCharterOu
 /**
  * Returns a Guice {@link Module} to provide additional components to add to the main optimisation {@link Injector}
  * 
- * @since 1.1
+ * @since 2.0
  */
 public class TradingOptimiserModuleService implements IOptimiserInjectorService {
 

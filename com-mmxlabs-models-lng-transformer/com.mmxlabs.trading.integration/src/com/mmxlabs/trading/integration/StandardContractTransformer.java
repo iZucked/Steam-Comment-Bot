@@ -44,6 +44,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
  * 
  * @author hinton
  * 
+ * @since 2.0
  */
 public class StandardContractTransformer implements IContractTransformer {
 	private ISchedulerBuilder builder;

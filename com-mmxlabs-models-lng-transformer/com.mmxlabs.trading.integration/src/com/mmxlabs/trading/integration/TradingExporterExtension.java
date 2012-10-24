@@ -57,6 +57,7 @@ import com.mmxlabs.trading.optimiser.TradingConstants;
  * 
  * @author hinton
  * 
+ * @since 2.0
  */
 public class TradingExporterExtension implements IExporterExtension {
 	private final static Logger log = LoggerFactory.getLogger(TradingExporterExtension.class);

@@ -28,6 +28,7 @@ import com.mmxlabs.trading.optimiser.impl.SimpleEntity;
  * 
  * @author hinton
  * 
+ * @since 2.0
  */
 public class TradingTransformerExtension implements ITransformerExtension {
 
