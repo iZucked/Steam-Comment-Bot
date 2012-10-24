@@ -863,7 +863,10 @@ public class EObjectTableViewer extends GridTableViewer {
 		statusProvider.addStatusChangedListener(statusChangedListener);
 	}
 
-	void processStatus(final IStatus status, final boolean update) {
+	/**
+	 * @since 2.0
+	 */
+	protected void processStatus(final IStatus status, final boolean update) {
 		if (status == null)
 			return;
 		if (status.isMultiStatus()) {
@@ -883,7 +886,10 @@ public class EObjectTableViewer extends GridTableViewer {
 		}
 	}
 
-	void updateObject(final EObject object, final IStatus status, final boolean update) {
+	/**
+	 * @since 2.0
+	 */
+	protected void updateObject(final EObject object, final IStatus status, final boolean update) {
 		if (object != null) {
 			setStatus(object, status);
 			if (update) {
@@ -892,7 +898,10 @@ public class EObjectTableViewer extends GridTableViewer {
 		}
 	}
 
-	void setStatus(final EObject e, final IStatus s) {
+	/**
+	 * @since 2.0
+	 */
+	protected void setStatus(final Object e, final IStatus s) {
 		final IStatus existing = validationErrors.get(e);
 		if (existing == null || s.getSeverity() > existing.getSeverity()) {
 			validationErrors.put(e, s);
