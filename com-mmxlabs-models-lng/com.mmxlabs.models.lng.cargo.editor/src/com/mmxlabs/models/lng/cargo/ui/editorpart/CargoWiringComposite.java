@@ -120,6 +120,9 @@ public class CargoWiringComposite extends Composite {
 
 				@Override
 				public void run() {
+					if (isDisposed()) {
+						return;
+					}
 					synchronized (updateLock) {
 						refreshContent();
 					}
