@@ -68,10 +68,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
 
 import com.mmxlabs.common.Pair;
@@ -85,7 +85,6 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.presentation.CargoEditorPlugin;
-import com.mmxlabs.models.lng.cargo.ui.dialogs.WiringDiagram;
 import com.mmxlabs.models.lng.cargo.ui.util.SpotSlotHelper;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.input.ElementAssignment;
@@ -133,7 +132,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	// protected static final String ADD_REMOVE_GROUP = "addremove";
 	// protected static final String EDIT_GROUP = "edit";
 	//
-	// protected IScenarioEditingLocation location;
+	// protected IScenarioEditingjointModelEditorPart jointModelEditorPart;
 
 	// protected ToolBarManager toolBarManager;
 	//
@@ -442,9 +441,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	// }
 	// }
 
-	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
-		super(page, part, location, actionBars);
-		// this.location = location;
+	public TradesWiringViewer(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation jointModelEditorPart, final IActionBars actionBars) {
+		super(page, part, jointModelEditorPart, actionBars);
+		// this.jointModelEditorPart = jointModelEditorPart;
 		// this.actionBars = actionBars;
 
 		wiredImage = CargoEditorPlugin.getPlugin().getImage(CargoEditorPlugin.IMAGE_CARGO_LINK);
@@ -487,7 +486,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	// try {
 	// jointModelEditorPart.getEditorLock().claim();
 	// jointModelEditorPart.setDisableUpdates(true);
-	// dcd.open(location, jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
+	// dcd.open(jointModelEditorPart, jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
 	// } finally {
 	// jointModelEditorPart.setDisableUpdates(false);
 	// jointModelEditorPart.getEditorLock().release();
@@ -497,7 +496,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	// jointModelEditorPart.getEditorLock().claim();
 	// if (scenarioViewer.isLocked() == false) {
 	// final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart.getDefaultCommandHandler());
-	// mdd.open(location, structuredSelection.toList());
+	// mdd.open(jointModelEditorPart, structuredSelection.toList());
 	// }
 	// } finally {
 	// jointModelEditorPart.getEditorLock().release();
@@ -575,10 +574,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	// }
 	// }
 
-	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
-	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
+	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingjointModelEditorPart jointModelEditorPart, final IActionBars actionBars) {
+	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingjointModelEditorPart jointModelEditorPart, final IActionBars actionBars) {
 	// super(parent, SWT.NONE);
-	// this.location = location;
+	// this.jointModelEditorPart = jointModelEditorPart;
 	// actionBar = new ToolBar(this, SWT.FLAT | SWT.WRAP);
 	//
 	// final GridLayout gl_shell = new GridLayout(1, false);
@@ -722,18 +721,18 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			}
 
-			
 			@Override
 			protected void processStatus(IStatus status, boolean update) {
 				// TODO Auto-generated method stub
 				super.processStatus(status, update);
 				refresh();
 			}
+
 			protected void updateObject(final EObject object, final IStatus status, final boolean update) {
 				if (object == null) {
 					return;
 				}
-				
+
 				RowData rd = null;
 				if (loadSlots.contains(object)) {
 					rd = rowData.get(loadSlots.indexOf(object));
@@ -746,7 +745,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				if (rd != null) {
 					setStatus(rd, status);
 					if (update) {
-//						updatse(rd, null);
+						// updatse(rd, null);
 					}
 				}
 			}
@@ -855,7 +854,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		// // }
 		// //
 		// // @Override
-		// // public IScenarioEditingLocation getEditorPart() {
+		// // public IScenarioEditingjointModelEditorPart getEditorPart() {
 		// // return jointModelEditorPart;
 		// // }
 		// //
@@ -865,6 +864,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		// // }
 		// // });
 		//
+
+		final Action addAction = new AddAction("Add");
+		addAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
+		toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
+
 		// if (addAction != null) {
 		// // if we can't add one, we can't duplicate one either.
 		// final Action dupAction = createDuplicateAction();
@@ -875,18 +879,18 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		//
 		// toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		// }
-		deleteAction = createDeleteAction();
-		if (deleteAction != null) {
-			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
-		}
-		if (actionBars != null) {
-			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
-		}
+//		deleteAction = createDeleteAction();
+//		if (deleteAction != null) {
+//			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
+//		}
+//		if (actionBars != null) {
+//			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+//		}
 
-		final Action importAction = createImportAction();
-		if (importAction != null) {
-			toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
-		}
+//		final Action importAction = createImportAction();
+//		if (importAction != null) {
+//			toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
+//		}
 
 		// add extension points to toolbar
 		{
@@ -1121,144 +1125,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		return null;
 	}
 
-	private class AddAction extends Action implements IMenuCreator {
-
-		private Menu lastMenu;
-
-		public AddAction(final String label) {
-			super(label, IAction.AS_DROP_DOWN_MENU);
-		}
-
-		@Override
-		public void dispose() {
-			if ((lastMenu != null) && (lastMenu.isDisposed() == false)) {
-				lastMenu.dispose();
-			}
-			lastMenu = null;
-		}
-
-		@Override
-		public IMenuCreator getMenuCreator() {
-			return this;
-		}
-
-		@Override
-		public Menu getMenu(final Control parent) {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-
-			populate(lastMenu);
-
-			return lastMenu;
-		}
-
-		protected void addActionToMenu(final Action a, final Menu m) {
-			final ActionContributionItem aci = new ActionContributionItem(a);
-			aci.fill(m, -1);
-		}
-
-		/**
-		 * Subclasses should fill their menu with actions here.
-		 * 
-		 * @param menu
-		 *            the menu which is about to be displayed
-		 */
-		protected void populate(final Menu menu) {
-			final CargoModel cargoModel = jointModelEditorPart.getRootObject().getSubModel(CargoModel.class);
-
-			{
-				final Action newDESPurchase = new Action("New DES Purchase") {
-					public void run() {
-
-						final CompoundCommand cmd = new CompoundCommand("New DES Purchase");
-
-						final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
-						newLoad.setDESPurchase(true);
-						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-						newLoad.setOptional(true);
-						newLoad.setName("");
-						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-
-						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cmd);
-					}
-				};
-				addActionToMenu(newDESPurchase, menu);
-			}
-			{
-				final Action newLoad = new Action("New Load Slot") {
-					public void run() {
-
-						final CompoundCommand cmd = new CompoundCommand("New Load Slot");
-
-						final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
-						newLoad.setDESPurchase(false);
-						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-						newLoad.setOptional(true);
-						newLoad.setName("");
-						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
-
-						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cmd);
-					}
-				};
-				addActionToMenu(newLoad, menu);
-			}
-			{
-				final Action newFOBSale = new Action("New FOB Sale") {
-					public void run() {
-
-						final CompoundCommand cmd = new CompoundCommand("New FOB Sale");
-
-						final DischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
-						newDischarge.setFOBSale(true);
-						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-						newDischarge.setOptional(true);
-						newDischarge.setName("");
-						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-
-						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cmd);
-					}
-				};
-				addActionToMenu(newFOBSale, menu);
-
-			}
-			{
-				final Action newDischarge = new Action("New Discharge") {
-					public void run() {
-
-						final CompoundCommand cmd = new CompoundCommand("New Discharge Slot");
-
-						final DischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
-						newDischarge.setFOBSale(false);
-						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
-						newDischarge.setOptional(true);
-						newDischarge.setName("");
-						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
-
-						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cmd);
-					}
-				};
-
-				addActionToMenu(newDischarge, menu);
-			}
-
-		}
-
-		@Override
-		public Menu getMenu(final Menu parent) {
-			if (lastMenu != null) {
-				lastMenu.dispose();
-			}
-			lastMenu = new Menu(parent);
-
-			populate(lastMenu);
-
-			return lastMenu;
-		}
-
-	}
-
 	private class RowData extends EObjectImpl {
 
 		Cargo cargo;
@@ -1347,7 +1213,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			}
 		}
-		
+
 		assert rows.size() == this.cargoes.size();
 		assert rows.size() == this.loadSlots.size();
 		assert rows.size() == this.dischargeSlots.size();
@@ -1356,7 +1222,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		//
 		// performControlUpdate(true);
 		//
-		// if (this.location != null && jointModelEditorPart.getStatusProvider() != null) {
+		// if (this.jointModelEditorPart != null && jointModelEditorPart.getStatusProvider() != null) {
 		// // Perform initial validation
 		// final IStatusProvider statusProvider = jointModelEditorPart.getStatusProvider();
 		// statusChangedListener.onStatusChanged(statusProvider, statusProvider.getStatus());
@@ -2325,5 +2191,141 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		super.setLocked(locked);
 		wiringDiagram.setLocked(locked);
 	}
+	private class AddAction extends Action implements IMenuCreator {
 
+		private Menu lastMenu;
+
+		public AddAction(final String label) {
+			super(label, IAction.AS_DROP_DOWN_MENU);
+		}
+
+		@Override
+		public void dispose() {
+			if ((lastMenu != null) && (lastMenu.isDisposed() == false)) {
+				lastMenu.dispose();
+			}
+			lastMenu = null;
+		}
+
+		@Override
+		public IMenuCreator getMenuCreator() {
+			return this;
+		}
+
+		@Override
+		public Menu getMenu(final Control parent) {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+
+			populate(lastMenu);
+
+			return lastMenu;
+		}
+
+		protected void addActionToMenu(final Action a, final Menu m) {
+			final ActionContributionItem aci = new ActionContributionItem(a);
+			aci.fill(m, -1);
+		}
+
+		/**
+		 * Subclasses should fill their menu with actions here.
+		 * 
+		 * @param menu
+		 *            the menu which is about to be displayed
+		 */
+		protected void populate(final Menu menu) {
+			final CargoModel cargoModel = jointModelEditorPart.getRootObject().getSubModel(CargoModel.class);
+
+			{
+				final Action newDESPurchase = new Action("New DES Purchase") {
+					public void run() {
+
+						final CompoundCommand cmd = new CompoundCommand("New DES Purchase");
+
+						final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+						newLoad.setDESPurchase(true);
+						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+						newLoad.setOptional(true);
+						newLoad.setName("");
+						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+
+						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cmd);
+					}
+				};
+				addActionToMenu(newDESPurchase, menu);
+			}
+			{
+				final Action newLoad = new Action("New Load Slot") {
+					public void run() {
+
+						final CompoundCommand cmd = new CompoundCommand("New Load Slot");
+
+						final LoadSlot newLoad = createObject(CargoPackage.eINSTANCE.getLoadSlot(), CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), cargoModel);
+						newLoad.setDESPurchase(false);
+						newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+						newLoad.setOptional(true);
+						newLoad.setName("");
+						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
+
+						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cmd);
+					}
+				};
+				addActionToMenu(newLoad, menu);
+			}
+			{
+				final Action newFOBSale = new Action("New FOB Sale") {
+					public void run() {
+
+						final CompoundCommand cmd = new CompoundCommand("New FOB Sale");
+
+						final DischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
+						newDischarge.setFOBSale(true);
+						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+						newDischarge.setOptional(true);
+						newDischarge.setName("");
+						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+
+						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cmd);
+					}
+				};
+				addActionToMenu(newFOBSale, menu);
+
+			}
+			{
+				final Action newDischarge = new Action("New Discharge") {
+					public void run() {
+
+						final CompoundCommand cmd = new CompoundCommand("New Discharge Slot");
+
+						final DischargeSlot newDischarge = createObject(CargoPackage.eINSTANCE.getDischargeSlot(), CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), cargoModel);
+						newDischarge.setFOBSale(false);
+						newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
+						newDischarge.setOptional(true);
+						newDischarge.setName("");
+						cmd.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_DischargeSlots(), newDischarge));
+
+						jointModelEditorPart.getEditingDomain().getCommandStack().execute(cmd);
+					}
+				};
+
+				addActionToMenu(newDischarge, menu);
+			}
+
+		}
+
+		@Override
+		public Menu getMenu(final Menu parent) {
+			if (lastMenu != null) {
+				lastMenu.dispose();
+			}
+			lastMenu = new Menu(parent);
+
+			populate(lastMenu);
+
+			return lastMenu;
+		}
+
+	}
 }
