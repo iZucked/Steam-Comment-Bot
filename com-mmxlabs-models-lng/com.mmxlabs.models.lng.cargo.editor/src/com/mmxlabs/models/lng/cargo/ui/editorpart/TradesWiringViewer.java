@@ -739,7 +739,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			protected void processStatus(IStatus status, boolean update) {
+			protected void processStatus(final IStatus status, final boolean update) {
 				// TODO Auto-generated method stub
 				super.processStatus(status, update);
 				refresh();
@@ -788,6 +788,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			public void menuDetected(final MenuDetectEvent e) {
+
+				if (locked) {
+					return;
+				}
 				final Point mousePoint = getScenarioViewer().getGrid().toControl(new Point(e.x, e.y));
 				final GridColumn column = getScenarioViewer().getGrid().getColumn(mousePoint);
 
