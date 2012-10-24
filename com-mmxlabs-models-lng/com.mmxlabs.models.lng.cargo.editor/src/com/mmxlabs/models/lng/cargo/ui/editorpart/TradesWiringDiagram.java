@@ -206,8 +206,9 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 	@Override
 	public synchronized void paintControl(final PaintEvent e) {
-		// System.out.println("Paint");
+		// Get a list of terminal positions from subclass
 		final List<Float> terminalPositions = getTerminalPositions();
+
 		// Copy arrays in case of concurrent change during paint
 		final List<Integer> wiring2 = new ArrayList<Integer>(wiring);
 		final List<Boolean> leftTerminalValid2 = new ArrayList<Boolean>(leftTerminalValid);
@@ -217,17 +218,14 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 		final GC graphics = e.gc;
 
-		// graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_RED));
-		// graphics.fillRectangle(e.x, e.y, e.width, e.height);
-		// if (true) return;
 		graphics.setAntialias(SWT.ON);
 
-		graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
-
 		final Rectangle ca = getCanvasClientArea();
+		// Clip to reported client area to avoid overdraw
 		graphics.setClipping(ca);
-		// System.out.println(ca);
 
+		graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
+		// Fill whole area - not for use in a table
 		// graphics.fillRectangle(0, 0, ca.width, ca.height);
 
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
@@ -236,12 +234,15 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		// draw paths
 		for (int rawI = 0; rawI < wiring2.size(); rawI++) {
 
+			// Map back between current row (sorted) and data (unsorted)
 			int i = reverseSortedIndices == null ? rawI : reverseSortedIndices[rawI];
 
+			// -1 indicates filtered row
 			if (i == -1) {
 				continue;
 			}
-			
+
+			// See if there is a valid wire
 			final Integer destinationInteger = wiring2.get(i);
 
 			if (destinationInteger == null) {
@@ -251,8 +252,10 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			if (destination < 0) {
 				continue; // no wire
 			}
+			// Map back between current row (sorted) and data (unsorted)
 			int rawDestination = sortedIndices == null ? destination : sortedIndices[destination];
 
+			// If this is the wire currently being dragged, skip and handle in next code block
 			if (dragging) {
 				if (draggingFromLeft && draggingFrom == rawI) {
 					continue;
@@ -264,14 +267,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			final float startMid = terminalPositions.get(rawI);
 			final float endMid = terminalPositions.get(rawDestination);
 
-			final float midMid = (startMid + endMid) / 2.0f;
-
-			// final Path path = new Path(e.display);
-			// path.moveTo((float) (1.5 * terminalSize), startMid);
-			// path.quadTo(ca.width / 4, startMid, ca.width / 2, midMid);
-			// path.quadTo(ca.width - ca.width / 4, endMid,
-			// (float) (ca.width - 1.5 * terminalSize), endMid);
-
+			// Draw wire - offset by ca.x to as x pos is relative to left hand side
 			final Path path = makeConnector(e.display, ca.x + 1.5f * terminalSize, startMid, ca.x + ca.width - 1.5f * terminalSize, endMid);
 
 			graphics.setForeground(wireColours.get(i));
@@ -294,18 +290,21 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			graphics.drawPath(path);
 			path.dispose();
 		}
-		// graphics.setClipping((Rectangle)null);
+
 		// draw terminal blobs
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 		graphics.setLineWidth(borderWidth);
 		int rawI = 0;
 		for (final float midpoint : terminalPositions) {
+			// Map back between current row (sorted) and data (unsorted)
 			int i = reverseSortedIndices == null ? rawI : reverseSortedIndices[rawI];
+			// -1 indicates filtered row
 			if (i == -1) {
 				continue;
 			}
+
+			// Draw left hand terminal
 			graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-			// final int midpoint = vMidPoints.get(i);
 			if (leftTerminalValid2.get(i)) {
 				graphics.setBackground(terminalColours2.get(i).getFirst());
 				graphics.fillOval(ca.x + terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
@@ -315,6 +314,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 					graphics.fillOval(ca.x + terminalSize + 4, (int) midpoint - (terminalSize / 2) + 4, 4, 4);
 				}
 			}
+
+			// Draw right hand terminal
 			graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 			if (rightTerminalValid2.get(i)) {
 				graphics.setBackground(terminalColours2.get(i).getSecond());
@@ -394,7 +395,6 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		if (dragging) {
 
 			// checkScroll(e);
-			Rectangle ca = getCanvasClientArea();
 			dragX = e.x;
 			dragY = e.y;
 			canvas.redraw();
