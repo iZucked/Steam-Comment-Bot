@@ -79,14 +79,32 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected static final String VIEW_GROUP = "view";
 	protected static final String ADD_REMOVE_GROUP = "addremove";
 	protected static final String EDIT_GROUP = "edit";
-	private ScenarioTableViewer scenarioViewer;
-	private final IScenarioEditingLocation jointModelEditorPart;
+	/**
+	 * @since 2.0
+	 */
+	protected ScenarioTableViewer scenarioViewer;
+	/**
+	 * @since 2.0
+	 */
+	protected final IScenarioEditingLocation jointModelEditorPart;
 
-	private FilterField filterField;
-	private ToolBarManager externalToolbarManager;
+	/**
+	 * @since 2.0
+	 */
+	protected FilterField filterField;
+	/**
+	 * @since 2.0
+	 */
+	protected ToolBarManager externalToolbarManager;
 
-	private final IActionBars actionBars;
-	private Action deleteAction;
+	/**
+	 * @since 2.0
+	 */
+	protected final IActionBars actionBars;
+	/**
+	 * @since 2.0
+	 */
+	protected Action deleteAction;
 
 	public ScenarioTableViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part);
@@ -179,39 +197,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		if (scenarioViewer == null) {
 			scenarioViewer = constructViewer(parent);
 
-			scenarioViewer.addOpenListener(new IOpenListener() {
-
-				@Override
-				public void open(final OpenEvent event) {
-					if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
-						final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
-						if (structuredSelection.isEmpty() == false) {
-							if (structuredSelection.size() == 1) {
-								final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
-								try {
-									jointModelEditorPart.getEditorLock().claim();
-									jointModelEditorPart.setDisableUpdates(true);
-									dcd.open(jointModelEditorPart, jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
-								} finally {
-									jointModelEditorPart.setDisableUpdates(false);
-									jointModelEditorPart.getEditorLock().release();
-								}
-							} else {
-								try {
-									jointModelEditorPart.getEditorLock().claim();
-									if (scenarioViewer.isLocked() == false) {
-										final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
-												.getDefaultCommandHandler());
-										mdd.open(jointModelEditorPart, structuredSelection.toList());
-									}
-								} finally {
-									jointModelEditorPart.getEditorLock().release();
-								}
-							}
-						}
-					}
-				}
-			});
+			enableOpenListener();
 
 			scenarioViewer.getGrid().setCellSelectionEnabled(true);
 			filterField.setViewer(scenarioViewer);
@@ -232,6 +218,45 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			throw new RuntimeException("Did not expect two calls to createViewer()");
 		}
 
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	protected void enableOpenListener() {
+		scenarioViewer.addOpenListener(new IOpenListener() {
+
+			@Override
+			public void open(final OpenEvent event) {
+				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
+					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
+					if (structuredSelection.isEmpty() == false) {
+						if (structuredSelection.size() == 1) {
+							final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
+							try {
+								jointModelEditorPart.getEditorLock().claim();
+								jointModelEditorPart.setDisableUpdates(true);
+								dcd.open(jointModelEditorPart, jointModelEditorPart.getRootObject(), structuredSelection.toList(), scenarioViewer.isLocked());
+							} finally {
+								jointModelEditorPart.setDisableUpdates(false);
+								jointModelEditorPart.getEditorLock().release();
+							}
+						} else {
+							try {
+								jointModelEditorPart.getEditorLock().claim();
+								if (scenarioViewer.isLocked() == false) {
+									final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
+											.getDefaultCommandHandler());
+									mdd.open(jointModelEditorPart, structuredSelection.toList());
+								}
+							} finally {
+								jointModelEditorPart.getEditorLock().release();
+							}
+						}
+					}
+				}
+			}
+		});
 	}
 
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
