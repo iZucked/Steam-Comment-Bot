@@ -581,9 +581,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			@Override
 			protected List<Float> getTerminalPositions() {
 
-				final int index = 0;
-				final int vPod = getScenarioViewer().getGrid().getVerticalBar().getSelection();
-				// +1 to to make loop simpler -
+				// Determine the mid-point in each row and generate an ordered list of heights.
+				
+				// +1 to to make loop simpler 
 				final int heights[] = new int[wiring.size() + 1];
 				int idx = 0;
 				heights[0] = getScenarioViewer().getGrid().getHeaderHeight();
@@ -593,19 +593,22 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					idx++;
 					heights[idx] = 1 + heights[idx - 1] + item.getHeight();
 				}
+				// Find the row at the top of the table and get it's "height" so we can adjust it later
+				final int vPod = getScenarioViewer().getGrid().getVerticalBar().getSelection();
 				final int hOffset = (heights[vPod]) - getScenarioViewer().getGrid().getHeaderHeight();
-				// Pass 2 get mids
+				// Pass 2 get mid-points
 				idx = -1;
 				for (final GridItem item : getScenarioViewer().getGrid().getItems()) {
 					heights[++idx] += item.getHeight() / 2;
 				}
 
-				// Pass 3, offset to vPod is the zero height
+				// Pass 3, offset to so top visible row in table is at height "0"
 				idx = -1;
 				for (final GridItem item : getScenarioViewer().getGrid().getItems()) {
 					heights[++idx] -= hOffset;
 				}
 
+				// Convert to 
 				final List<Float> data = new ArrayList<Float>(heights.length);
 				for (final int h : heights) {
 					data.add((float) h);
