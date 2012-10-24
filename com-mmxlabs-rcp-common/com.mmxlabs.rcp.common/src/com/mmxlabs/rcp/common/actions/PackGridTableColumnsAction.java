@@ -26,7 +26,9 @@ public class PackGridTableColumnsAction extends Action {
 		if (!viewer.getControl().isDisposed()) {
 			final GridColumn[] columns = viewer.getGrid().getColumns();
 			for (final GridColumn c : columns) {
-				c.pack();
+				if (c.getResizeable()) {
+					c.pack();
+				}
 			}
 		}
 	}
