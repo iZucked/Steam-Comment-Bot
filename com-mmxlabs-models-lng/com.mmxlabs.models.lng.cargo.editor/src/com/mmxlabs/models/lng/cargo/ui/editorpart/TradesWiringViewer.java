@@ -17,6 +17,7 @@ import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -721,6 +722,48 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			}
 
+			
+			@Override
+			protected void processStatus(IStatus status, boolean update) {
+				// TODO Auto-generated method stub
+				super.processStatus(status, update);
+				refresh();
+			}
+			protected void updateObject(final EObject object, final IStatus status, final boolean update) {
+				if (object == null) {
+					return;
+				}
+				
+				RowData rd = null;
+				if (loadSlots.contains(object)) {
+					rd = rowData.get(loadSlots.indexOf(object));
+				} else if (dischargeSlots.contains(object)) {
+					rd = rowData.get(dischargeSlots.indexOf(object));
+				} else if (cargoes.contains(object)) {
+					rd = rowData.get(cargoes.indexOf(object));
+				}
+
+				if (rd != null) {
+					setStatus(rd, status);
+					if (update) {
+//						updatse(rd, null);
+					}
+				}
+			}
+
+			@Override
+			public EObject getElementForNotificationTarget(final EObject source) {
+				if (source instanceof LoadSlot) {
+					return source;
+				} else if (source instanceof DischargeSlot) {
+					return source;
+				} else if (source instanceof Cargo) {
+					return source;
+				}
+
+				return super.getElementForNotificationTarget(source);
+			}
+
 		};
 		final MenuManager mgr = new MenuManager();
 		scenarioViewer.getGrid().addMenuDetectListener(new MenuDetectListener() {
@@ -1232,6 +1275,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	public List<RowData> setCargoes(final List<Cargo> newCargoes, final List<LoadSlot> loadSlots, final List<DischargeSlot> dischargeSlots) {
 
 		final List<RowData> rows = new ArrayList<RowData>();
+
+		this.cargoes.clear();
+		this.loadSlots.clear();
+		this.dischargeSlots.clear();
+
 		// // delete existing children
 		// for (final Control c : getChildren()) {
 		// c.dispose();
@@ -1299,6 +1347,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			}
 		}
+		
+		assert rows.size() == this.cargoes.size();
+		assert rows.size() == this.loadSlots.size();
+		assert rows.size() == this.dischargeSlots.size();
 
 		// numberOfRows = wiring.size();
 		//
