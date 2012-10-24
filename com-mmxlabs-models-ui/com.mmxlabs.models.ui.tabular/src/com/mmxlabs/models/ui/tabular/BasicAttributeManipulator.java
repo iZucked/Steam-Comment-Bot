@@ -40,6 +40,11 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	
 	@Override
 	public String render(final Object object) {
+		
+		if (object == null) {
+			return "";
+		}
+		
 		if ((object instanceof EObject) && (field.isUnsettable()) && !((EObject) object).eIsSet(field)) {
 			return renderUnsetValue(object, 
 					(object instanceof MMXObject) ? ((MMXObject) object).getUnsetValue(field) :
@@ -85,6 +90,10 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 	
 	@Override
 	public final CellEditor getCellEditor(final Composite c, final Object object) {
+		if (object == null) {
+			return null;
+		}
+		
 		if (field.isUnsettable()) {
 			final CellEditorWrapper wrapper = new CellEditorWrapper(c);
 			wrapper.setDelegate(createCellEditor(wrapper.getInnerComposite(), object));
@@ -99,6 +108,10 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 
 	@Override
 	public Object getValue(final Object object) {
+		if (object == null) {
+			return null;
+		}
+		
 		return reallyGetValue(object);
 	}
 
@@ -122,7 +135,7 @@ public class BasicAttributeManipulator implements ICellManipulator, ICellRendere
 
 	@Override
 	public boolean canEdit(final Object object) {
-		return true;
+		return object != null;
 	}
 
 	@SuppressWarnings("rawtypes")
