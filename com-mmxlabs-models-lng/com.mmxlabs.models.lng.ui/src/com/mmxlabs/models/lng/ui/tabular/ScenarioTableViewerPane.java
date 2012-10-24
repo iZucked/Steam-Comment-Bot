@@ -80,7 +80,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	protected static final String ADD_REMOVE_GROUP = "addremove";
 	protected static final String EDIT_GROUP = "edit";
 	private ScenarioTableViewer scenarioViewer;
-	private final IScenarioEditingLocation jointModelEditorPart;
+	protected final IScenarioEditingLocation jointModelEditorPart;
 
 	private FilterField filterField;
 	private ToolBarManager externalToolbarManager;
