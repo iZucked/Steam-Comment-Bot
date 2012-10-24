@@ -20,6 +20,7 @@ import org.eclipse.ui.PlatformUI;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.ui.actions.ScenarioModifyingAction;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.dialogs.MessageDialogWithCheckbox;
@@ -122,10 +123,10 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 							if (cargo instanceof Cargo) {
 								LoadSlot loadSlot = ((Cargo) cargo).getLoadSlot();
 								DischargeSlot dischargeSlot = ((Cargo) cargo).getDischargeSlot();
-								if (deleteLoad && (loadSlot != null)) {											
+								if (loadSlot != null && (deleteLoad || loadSlot instanceof SpotSlot))  {											
 									trash.add(loadSlot);
 								}
-								if (deleteDischarge && (dischargeSlot != null)) {
+								if (dischargeSlot != null && (deleteDischarge || dischargeSlot instanceof SpotSlot)) {
 									trash.add(((Cargo) cargo).getDischargeSlot());
 								}
 							}
