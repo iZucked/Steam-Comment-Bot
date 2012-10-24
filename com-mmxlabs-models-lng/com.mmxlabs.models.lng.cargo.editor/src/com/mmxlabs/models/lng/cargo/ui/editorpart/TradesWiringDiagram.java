@@ -238,6 +238,10 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 			int i = reverseSortedIndices == null ? rawI : reverseSortedIndices[rawI];
 
+			if (i == -1) {
+				continue;
+			}
+			
 			final Integer destinationInteger = wiring2.get(i);
 
 			if (destinationInteger == null) {
@@ -297,6 +301,9 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		int rawI = 0;
 		for (final float midpoint : terminalPositions) {
 			int i = reverseSortedIndices == null ? rawI : reverseSortedIndices[rawI];
+			if (i == -1) {
+				continue;
+			}
 			graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
 			// final int midpoint = vMidPoints.get(i);
 			if (leftTerminalValid2.get(i)) {

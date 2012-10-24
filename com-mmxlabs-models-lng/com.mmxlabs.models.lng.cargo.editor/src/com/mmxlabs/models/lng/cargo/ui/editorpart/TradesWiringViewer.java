@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -124,6 +125,15 @@ import com.mmxlabs.rcp.common.actions.CopyTableToClipboardAction;
 import com.mmxlabs.rcp.common.actions.CopyTreeToClipboardAction;
 import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 
+/**
+ * Tabular editor displaying cargoes and slots with a custom wiring editor. This implementation is "stupid" in that any changes to the data cause a full update. This has the disadvantage of loosing
+ * the current ordering of items. Each row is a cargo. Changing the wiring will re-order slots. The {@link CargoWiringComposite} based view only re-orders slots when requested permitting the original
+ * (or at least the wiring at time of opening the editor) wiring to be seem via rows and the current wiring via the wire lines.
+ * 
+ * 
+ * @author Simon Goodall
+ * 
+ */
 public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	private CompoundCommand currentWiringCommand = null;
@@ -574,8 +584,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	// }
 	// }
 
-	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingjointModelEditorPart jointModelEditorPart, final IActionBars actionBars) {
-	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingjointModelEditorPart jointModelEditorPart, final IActionBars actionBars) {
+	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingjointModelEditorPart jointModelEditorPart, final IActionBars
+	// actionBars) {
+	// public TradesWiringViewer(final Composite parent, final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingjointModelEditorPart jointModelEditorPart, final IActionBars
+	// actionBars) {
 	// super(parent, SWT.NONE);
 	// this.jointModelEditorPart = jointModelEditorPart;
 	// actionBar = new ToolBar(this, SWT.FLAT | SWT.WRAP);
@@ -609,10 +621,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			protected Object[] getSortedChildren(final Object parent) {
+				// This is the filtered and sorted children.
+				// This may be smaller than the original set.
 				sortedChildren = super.getSortedChildren(parent);
 
-				sortedIndices = new int[sortedChildren.length];
-				reverseSortedIndices = new int[sortedChildren.length];
+				sortedIndices = new int[rowData == null ? 0 : rowData.size()];
+				reverseSortedIndices = new int[rowData == null ? 0 : rowData.size()];
+
+				Arrays.fill(sortedIndices, -1);
+				Arrays.fill(reverseSortedIndices, -1);
 
 				for (int i = 0; i < sortedChildren.length; ++i) {
 					final int rawIndex = rowData.indexOf(sortedChildren[i]);
@@ -879,18 +896,18 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		//
 		// toolbar.appendToGroup(ADD_REMOVE_GROUP, addAction);
 		// }
-//		deleteAction = createDeleteAction();
-//		if (deleteAction != null) {
-//			toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
-//		}
-//		if (actionBars != null) {
-//			actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
-//		}
+		// deleteAction = createDeleteAction();
+		// if (deleteAction != null) {
+		// toolbar.appendToGroup(ADD_REMOVE_GROUP, deleteAction);
+		// }
+		// if (actionBars != null) {
+		// actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteAction);
+		// }
 
-//		final Action importAction = createImportAction();
-//		if (importAction != null) {
-//			toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
-//		}
+		// final Action importAction = createImportAction();
+		// if (importAction != null) {
+		// toolbar.appendToGroup(ADD_REMOVE_GROUP, importAction);
+		// }
 
 		// add extension points to toolbar
 		{
@@ -2191,6 +2208,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		super.setLocked(locked);
 		wiringDiagram.setLocked(locked);
 	}
+
 	private class AddAction extends Action implements IMenuCreator {
 
 		private Menu lastMenu;
