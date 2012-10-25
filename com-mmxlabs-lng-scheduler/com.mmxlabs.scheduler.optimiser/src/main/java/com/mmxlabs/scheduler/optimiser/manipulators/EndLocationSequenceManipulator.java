@@ -150,7 +150,7 @@ public class EndLocationSequenceManipulator implements ISequencesManipulator {
 			returnToClosestInSet(resource, sequence);
 			break;
 		case REMOVE:
-			sequence.remove(lastElementIndex = sequence.size() - 1);
+			sequence.remove(sequence.size() - 1);
 		default:
 			break;
 		}
