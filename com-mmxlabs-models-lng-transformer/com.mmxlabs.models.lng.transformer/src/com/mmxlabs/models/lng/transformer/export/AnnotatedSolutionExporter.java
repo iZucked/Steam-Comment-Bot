@@ -26,11 +26,13 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -50,8 +52,11 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A utility class for turning an annotated solution into some EMF representation, for the presentation layer.
@@ -119,6 +124,7 @@ public class AnnotatedSolutionExporter {
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
 		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+		final IPortTypeProvider portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 		final Schedule output = factory.createSchedule();
 
 		// go through the annotated solution and build stuff for the EMF;
@@ -158,6 +164,7 @@ public class AnnotatedSolutionExporter {
 			boolean skipStartEndElements = false;
 			boolean isFOBSequence = false;
 			boolean isDESSequence = false;
+			boolean isCargoShortsSequence = false;
 
 			// TODO use spot rates correctly.
 			final ICurve hireRate;
@@ -215,6 +222,14 @@ public class AnnotatedSolutionExporter {
 
 				eSequence.setSpotIndex(ix);
 				break;
+			case CARGO_SHORTS:
+				isCargoShortsSequence = true;
+				if (sequence.size() < 2) {
+					continue;
+				}
+
+				eSequence.unsetVessel();
+				break;
 			default:
 				break;
 			}
@@ -235,7 +250,7 @@ public class AnnotatedSolutionExporter {
 				for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
 
 					if (isDESSequence || isFOBSequence) {
-						Map<String, Long> m = isFOBSequence ? fobFitnessMap : desFitnessMap;
+						final Map<String, Long> m = isFOBSequence ? fobFitnessMap : desFitnessMap;
 						long value = e.getValue();
 						if (m.containsKey(e.getKey())) {
 							value += m.get(e.getKey()).longValue();
