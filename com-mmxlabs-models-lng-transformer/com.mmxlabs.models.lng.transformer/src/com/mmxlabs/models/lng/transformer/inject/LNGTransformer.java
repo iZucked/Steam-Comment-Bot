@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
@@ -91,6 +92,7 @@ public class LNGTransformer {
 			modules.add(module);
 		}
 		modules.add(new DataComponentProviderModule());
+		modules.add(new SequencesManipulatorModule());
 		modules.add(new LNGTransformerModule(scenario));
 
 		// TODO: Add specific ones here....
