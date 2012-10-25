@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.input.editor.utils.CollectedAssignment;
@@ -46,10 +47,11 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
+import com.mmxlabs.optimiser.core.impl.ChainedSequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -133,7 +135,10 @@ public class OptimisationTransformer {
 		final LSOConstructor lsoConstructor = new LSOConstructor(settings);
 
 		injector.injectMembers(lsoConstructor);
-		return new Pair<IOptimisationContext, LocalSearchOptimiser>(context, lsoConstructor.buildOptimiser(context, SequencesManipulatorUtil.createDefaultSequenceManipulators(data)));
+		final ChainedSequencesManipulator sequencesManipulator = injector.getInstance(ChainedSequencesManipulator.class);
+		sequencesManipulator.init(data);
+		
+		return new Pair<IOptimisationContext, LocalSearchOptimiser>(context, lsoConstructor.buildOptimiser(context, sequencesManipulator));
 	}
 
 	private List<String> getEnabledConstraintNames() {
@@ -193,7 +198,7 @@ public class OptimisationTransformer {
 
 		final Collection<Slot> modelSlots = mem.getAllModelObjects(Slot.class);
 
-		Map<ISequenceElement, ISequenceElement> cargoSlotPairing = new HashMap<ISequenceElement, ISequenceElement>();
+		final Map<ISequenceElement, ISequenceElement> cargoSlotPairing = new HashMap<ISequenceElement, ISequenceElement>();
 		// Process data to find pre-linked DES Purchases and FOB Sales and construct their sequences
 		for (final Slot slot : modelSlots) {
 			if (slot instanceof LoadSlot) {
@@ -202,13 +207,13 @@ public class OptimisationTransformer {
 				if (cargo != null) {
 					final DischargeSlot dischargeSlot = cargo.getDischargeSlot();
 					if (dischargeSlot != null) {
-						
+
 						final IPortSlot loadObject = mem.getOptimiserObject(loadSlot, IPortSlot.class);
 						final ISequenceElement loadElement = psp.getElement(loadObject);
-						
+
 						final IPortSlot dischargeObject = mem.getOptimiserObject(dischargeSlot, IPortSlot.class);
 						final ISequenceElement dischargeElement = psp.getElement(dischargeObject);
-						
+
 						cargoSlotPairing.put(loadElement, dischargeElement);
 					}
 				}
@@ -269,10 +274,18 @@ public class OptimisationTransformer {
 			}
 		}
 
+		IVessel shortCargoVessel = null;
+
 		// Build up spot vessel maps
 		final Map<IVesselClass, List<IVessel>> spotVesselsByClass = new HashMap<IVesselClass, List<IVessel>>();
 		for (final IResource resource : data.getResources()) {
 			final IVessel vessel = vp.getVessel(resource);
+
+			if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+				shortCargoVessel = vessel;
+				continue;
+			}
+
 			if (!vessel.getVesselInstanceType().equals(VesselInstanceType.SPOT_CHARTER))
 				continue;
 
@@ -321,12 +334,29 @@ public class OptimisationTransformer {
 				}
 			}
 
+			if (shortCargoVessel != null) {
+				final IResource resource = vp.getResource(shortCargoVessel);
+				final IModifiableSequence sequence = advice.getModifiableSequence(resource);
+				for (final ElementAssignment ea : inputModel.getElementAssignments()) {
+					if (ea.getAssignment() == null) {
+
+						final UUIDObject assignedObject = ea.getAssignedObject();
+						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET) {
+							continue;
+						}
+						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
+							sequence.add(element);
+						}
+					}
+				}
+			}
+
 		} else if (!inputModel.getAssignments().isEmpty()) {
 			assignments: for (final Assignment assignment : inputModel.getAssignments()) {
 				if (assignment.getVessels().isEmpty())
 					continue assignments;
 				IVessel vessel = null;
-				
+
 				if (assignment.isAssignToSpot()) {
 					if (inputModel.getLockedAssignedObjects().containsAll(assignment.getAssignedObjects())) {
 						continue assignments; // these will get assigned by their constraints.
