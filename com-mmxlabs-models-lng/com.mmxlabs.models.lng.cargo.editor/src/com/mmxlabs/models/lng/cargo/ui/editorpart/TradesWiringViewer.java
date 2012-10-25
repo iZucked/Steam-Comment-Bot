@@ -370,9 +370,10 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 			@Override
 			protected void processStatus(final IStatus status, final boolean update) {
-				// TODO Auto-generated method stub
 				super.processStatus(status, update);
-				refresh();
+				if (!isBusy()) {
+					refresh();
+				}
 			}
 
 			protected void updateObject(final EObject object, final IStatus status, final boolean update) {
@@ -391,9 +392,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				if (rd != null) {
 					setStatus(rd, status);
-					if (update) {
-						// updatse(rd, null);
-					}
 				}
 			}
 
@@ -582,8 +580,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			protected List<Float> getTerminalPositions() {
 
 				// Determine the mid-point in each row and generate an ordered list of heights.
-				
-				// +1 to to make loop simpler 
+
+				// +1 to to make loop simpler
 				final int heights[] = new int[wiring.size() + 1];
 				int idx = 0;
 				heights[0] = getScenarioViewer().getGrid().getHeaderHeight();
@@ -608,7 +606,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					heights[++idx] -= hOffset;
 				}
 
-				// Convert to 
+				// Convert to
 				final List<Float> data = new ArrayList<Float>(heights.length);
 				for (final int h : heights) {
 					data.add((float) h);
