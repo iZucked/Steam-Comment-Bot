@@ -22,6 +22,7 @@ import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.input.validation.internal.Activator;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
