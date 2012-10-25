@@ -54,6 +54,9 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 		case TIME_CHARTER:
 			hireRate = vessel.getHourlyCharterInPrice();
 			break;
+		case CARGO_SHORTS:
+			hireRate = vessel.getHourlyCharterInPrice();
+			break;
 		default:
 			// we are not interested in this sequence - we won't
 			// be bothered for the rest of it.
