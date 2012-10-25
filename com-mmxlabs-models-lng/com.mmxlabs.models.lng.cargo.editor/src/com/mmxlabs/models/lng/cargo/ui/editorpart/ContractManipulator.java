@@ -79,6 +79,8 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 			final Integer idx = (Integer) superValue;
 			if (idx.intValue() != -1) {
 				superValue = valueList.get(idx);
+			} else {
+				superValue = SetCommand.UNSET_VALUE;
 			}
 		}
 
@@ -123,7 +125,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (object == null) {
 			return "";
 		}
-		
+
 		final EObject eObject = (EObject) object;
 
 		if (eObject.eIsSet(CargoPackage.eINSTANCE.getSlot_PriceExpression())) {
@@ -139,11 +141,11 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 
 	@Override
 	public boolean canEdit(final Object object) {
-		
+
 		if (object == null) {
 			return false;
 		}
-		
+
 		// get legal item list
 		final EObject slot = (EObject) object;
 		final Iterable<Pair<String, EObject>> values = valueProvider.getAllowedValues(slot, CargoPackage.eINSTANCE.getSlot_Contract());
@@ -175,10 +177,10 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 	@Override
 	public Iterable<Pair<Notifier, List<Object>>> getExternalNotifiers(final Object object) {
 		if (object == null) {
-			
+
 			return Collections.emptySet();
 		}
-		
+
 		final Object value = getValue(object);
 		if (value instanceof EObject) {
 			return valueProvider.getNotifiers((EObject) object, CargoPackage.eINSTANCE.getSlot_Contract(), (EObject) value);
