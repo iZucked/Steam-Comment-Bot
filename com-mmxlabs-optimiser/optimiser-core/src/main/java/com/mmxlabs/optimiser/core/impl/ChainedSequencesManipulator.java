@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
  * A sequences manipulator which applies a sequence of other sequences manipulators. Use the {@code addDelegate(..)} method to add another manipulator to the list of delegates.
@@ -36,5 +37,15 @@ public class ChainedSequencesManipulator implements ISequencesManipulator {
 			manipulator.dispose();
 		}
 		delegates.clear();
+	}
+
+	/**
+	 * Init method. This will call {@link ISequencesManipulator#init(IOptimisationData)} on all delegates.
+	 */
+	@Override
+	public void init(final IOptimisationData data) {
+		for (final ISequencesManipulator manipulator : delegates) {
+			manipulator.init(data);
+		}
 	}
 }

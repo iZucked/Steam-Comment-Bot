@@ -6,6 +6,7 @@ package com.mmxlabs.optimiser.core.impl;
 
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 /**
  * The Null {@link ISequencesManipulator} implementation. This implementation does nothing.
@@ -22,6 +23,11 @@ public final class NullSequencesManipulator implements ISequencesManipulator {
 
 	@Override
 	public void dispose() {
+		// Do nothing
+	}
+
+	@Override
+	public void init(IOptimisationData data) {
 		// Do nothing
 	}
 }
