@@ -45,12 +45,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
+import org.eclipse.ui.views.properties.PropertySheet;
 
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
@@ -106,10 +108,32 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	 */
 	protected Action deleteAction;
 
+	private ISelectionListener selectionListener = new ISelectionListener() {
+
+		@Override
+		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+
+			if (part == ScenarioTableViewerPane.this.part) {
+				return;
+			}
+			if (part instanceof PropertySheet) {
+				return;
+			}
+			// Avoid cyclic selection changes
+			if (ScenarioTableViewerPane.this.page.getActivePart() == ScenarioTableViewerPane.this.part) {
+				return;
+			}
+			if (scenarioViewer != null) {
+				scenarioViewer.setSelection(selection, true);
+			}
+		}
+	};
+
 	public ScenarioTableViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
 		super(page, part);
 		this.jointModelEditorPart = location;
 		this.actionBars = actionBars;
+		page.addPostSelectionListener(selectionListener);
 	}
 
 	public ScenarioTableViewer getScenarioViewer() {
@@ -122,14 +146,16 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 	@Override
 	public void dispose() {
+		page.removePostSelectionListener(selectionListener);
+
 		if (externalToolbarManager != null) {
 			externalToolbarManager.removeAll();
 			externalToolbarManager.update(true);
 		}
 		externalToolbarManager = null;
-		
+
 		scenarioViewer = null;
-		
+
 		super.dispose();
 	}
 
