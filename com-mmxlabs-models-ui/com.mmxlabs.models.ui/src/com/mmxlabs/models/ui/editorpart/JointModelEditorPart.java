@@ -170,8 +170,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 
 	private ScenarioLock editorLock;
 
-	private ISelectionListener externalSelectionChangedListener;
-
 	private ScenarioInstance referenceInstance;
 
 	private ScenarioLock referenceLock;
@@ -480,21 +478,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		validationContextStack.clear();
 		validationContextStack.push(new DefaultExtraValidationContext(getRootObject()));
 
-		externalSelectionChangedListener = new ISelectionListener() {
-
-			@Override
-			public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
-
-				if (part == JointModelEditorPart.this) {
-					return;
-				}
-				if (currentViewer != null) {
-					currentViewer.setSelection(selection, true);
-				}
-			}
-		};
-		getSite().getWorkbenchWindow().getSelectionService().addPostSelectionListener(externalSelectionChangedListener);
-
 		setPinMode();
 		setLocked(!editorLock.isAvailable());
 	}
@@ -585,10 +568,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		if (referencePinPartListener != null) {
 			getSite().getPage().removePartListener(referencePinPartListener);
 			referencePinPartListener = null;
-		}
-		if (externalSelectionChangedListener != null) {
-			getSite().getWorkbenchWindow().getSelectionService().removePostSelectionListener(externalSelectionChangedListener);
-			externalSelectionChangedListener = null;
 		}
 
 		if (editorLock != null) {
@@ -816,7 +795,6 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	@Override
 	public void setCurrentViewer(final Viewer viewer) {
 		// If it is changing...
-		//
 		if (currentViewer != viewer) {
 			if (selectionChangedListener == null) {
 				// Create the listener on demand.
@@ -904,7 +882,7 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 	public void setActivePage(final int pageIndex) {
 		super.setActivePage(pageIndex);
 	}
-	
+
 	@Override
 	public boolean isSaveOnCloseNeeded() {
 		// Handled by ScenarioServiceSaveHook. Avoid double save prompt.
