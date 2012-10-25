@@ -26,6 +26,10 @@ public final class SchedulerConstants {
 	public static final String DCP_startEndRequirementProvider = "provider-start-end-requirement";
 	public static final String DCP_portExclusionProvider = "provider-port-exclusions";
 	public static final String DCP_returnElementProvider = "provider-return-elements";
+	/**
+	 * @since 2.0
+	 */
+	public static final String DCP_shortCargoReturnElementProvider = "provider-short-cargo-return-elements";
 	public static final String DCP_routePriceProvider = "provider-route-prices";
 	public static final String DCP_totalVolumeLimitProvider = "provider-total-volume";
 	public static final String DCP_discountCurveProvider = "provider-discount-curve";
