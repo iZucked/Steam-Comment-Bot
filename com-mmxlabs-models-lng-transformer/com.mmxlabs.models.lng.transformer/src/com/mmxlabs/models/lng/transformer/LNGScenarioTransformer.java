@@ -998,24 +998,25 @@ public class LNGScenarioTransformer {
 		if (pricingModel == null) {
 			return;
 		}
+		final Date earliestDate = getOptimisationSettings().getRange().isSetOptimiseAfter() ? getOptimisationSettings().getRange().getOptimiseAfter() : earliestTime;
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
-		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, latestDate, pricingModel.getDesPurchaseSpotMarket());
-		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, entities, latestDate, pricingModel.getDesSalesSpotMarket());
-		buildFOBPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, latestDate, pricingModel.getFobPurchasesSpotMarket());
-		buildFOBSalesSpotMarket(builder, portAssociation, contractTransformers, entities, latestDate, pricingModel.getFobSalesSpotMarket());
+		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, pricingModel.getDesPurchaseSpotMarket());
+		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, pricingModel.getDesSalesSpotMarket());
+		buildFOBPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, pricingModel.getFobPurchasesSpotMarket());
+		buildFOBSalesSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, pricingModel.getFobSalesSpotMarket());
 
 	}
 
 	private void buildDESPurchaseSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap entities, final Date latestDate, final SpotMarketGroup desPurchaseSpotMarket) {
+			final ModelEntityMap entities, final Date earliestDate, final Date latestDate, final SpotMarketGroup desPurchaseSpotMarket) {
 		if (desPurchaseSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = desPurchaseSpotMarket.getAvailability();
 
 			// Loop over the date range in the optimisation generating market slots
 			final Calendar cal = Calendar.getInstance();
-			cal.setTime(earliestTime);
+			cal.setTime(earliestDate);
 
 			// Set back to start of month
 			cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -1129,14 +1130,14 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildFOBSalesSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap entities, final Date latestDate, final SpotMarketGroup fobSalesSpotMarket) {
+			final ModelEntityMap entities, final Date earliestDate, final Date latestDate, final SpotMarketGroup fobSalesSpotMarket) {
 		if (fobSalesSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = fobSalesSpotMarket.getAvailability();
 
 			// Loop over the date range in the optimisation generating market slots
 			final Calendar cal = Calendar.getInstance();
-			cal.setTime(earliestTime);
+			cal.setTime(earliestDate);
 
 			// Set back to start of month
 			cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -1238,14 +1239,14 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildDESSalesSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap entities, final Date latestDate, final SpotMarketGroup desSalesSpotMarket) {
+			final ModelEntityMap entities, final Date earliestDate, final Date latestDate, final SpotMarketGroup desSalesSpotMarket) {
 		if (desSalesSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = desSalesSpotMarket.getAvailability();
 
 			// Loop over the date range in the optimisation generating market slots
 			final Calendar cal = Calendar.getInstance();
-			cal.setTime(earliestTime);
+			cal.setTime(earliestDate);
 
 			// Set back to start of month
 			cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -1343,14 +1344,14 @@ public class LNGScenarioTransformer {
 	}
 
 	private void buildFOBPurchaseSpotMarket(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Collection<IContractTransformer> contractTransformers,
-			final ModelEntityMap entities, final Date latestDate, final SpotMarketGroup fobPurchaseSpotMarket) {
+			final ModelEntityMap entities, final Date earliestDate, final Date latestDate, final SpotMarketGroup fobPurchaseSpotMarket) {
 		if (fobPurchaseSpotMarket != null) {
 
 			final SpotAvailability groupAvailability = fobPurchaseSpotMarket.getAvailability();
 
 			// Loop over the date range in the optimisation generating market slots
 			final Calendar cal = Calendar.getInstance();
-			cal.setTime(earliestTime);
+			cal.setTime(earliestDate);
 
 			// Set back to start of month
 			cal.set(Calendar.DAY_OF_MONTH, 1);
