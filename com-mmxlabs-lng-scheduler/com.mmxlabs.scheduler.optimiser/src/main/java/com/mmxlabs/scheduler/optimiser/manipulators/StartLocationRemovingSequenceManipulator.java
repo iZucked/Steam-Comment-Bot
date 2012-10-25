@@ -8,10 +8,18 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.manipulators.EndLocationSequenceManipulator.EndLocationRule;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
  * A sequence manipulator for removing the dummy start location from spot charter vessels. Needs to be told which resources should have their start locations removed.
@@ -21,6 +29,9 @@ import com.mmxlabs.optimiser.core.ISequencesManipulator;
  * @param
  */
 public class StartLocationRemovingSequenceManipulator implements ISequencesManipulator {
+
+	@Inject
+	private IVesselProvider vesselProvider;
 
 	private final Set<IResource> resourcesToManipulate = new HashSet<IResource>();
 
@@ -60,5 +71,21 @@ public class StartLocationRemovingSequenceManipulator implements ISequencesManip
 
 	public boolean getShouldRemoveStartLocation(final IResource resource) {
 		return resourcesToManipulate.contains(resource);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void init(final IOptimisationData data) {
+
+		for (final IResource resource : data.getResources()) {
+			final VesselInstanceType vesselInstanceType = vesselProvider.getVessel(resource).getVesselInstanceType();
+			if (vesselInstanceType == VesselInstanceType.CARGO_SHORTS) {
+				setShouldRemoveStartLocation(resource, true);
+			} else if (vesselInstanceType.equals(VesselInstanceType.SPOT_CHARTER)) {
+				setShouldRemoveStartLocation(resource, true);
+			}
+		}
 	}
 }
