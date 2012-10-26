@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.cargo.ui.editorpart;
 import java.util.Collections;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Composite;
 
@@ -22,11 +23,13 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 	private int cargoPageNumber = -1;
 	private int loadSlotPageNumber = -1;
 	private int dischargeSlotPageNumber = -1;
-	private int wiringPageNumber = -1;;
+	private int wiringPageNumber = -1;
+	private int tradesViewerPageNumber = -1;
 	private CargoModelViewer cargoViewerPane;
 	private LoadSlotViewer loadSlotViewerPane;
 	private DischargeSlotViewer dischargeSlotViewerPane;
 	private CargoWiringViewer wiringViewer;
+	private TradesWiringViewer tradesViewer;
 
 	// Temp flag to turn on/off load/discharge slots during development
 	private static final boolean showSlotTabs = false;
@@ -57,10 +60,19 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			dischargeSlotPageNumber = editorPart.addPage(dischargeSlotViewerPane.getControl());
 			editorPart.setPageText(dischargeSlotPageNumber, "Discharge Slots");
 		}
-		
+
 		wiringViewer = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		wiringPageNumber = editorPart.addPage(wiringViewer);
 		editorPart.setPageText(wiringPageNumber, "Trades");
+
+		if (false) {
+			this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			tradesViewer.createControl(parent);
+			tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory());
+			tradesViewer.getViewer().setInput(modelObject);
+			tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
+			editorPart.setPageText(tradesViewerPageNumber, "Trades 2");
+		}
 	}
 
 	@Override
@@ -71,6 +83,9 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			dischargeSlotViewerPane.setLocked(locked);
 		}
 		wiringViewer.setLocked(locked);
+		if (tradesViewer != null) {
+			tradesViewer.setLocked(locked);
+		}
 	}
 
 	@Override

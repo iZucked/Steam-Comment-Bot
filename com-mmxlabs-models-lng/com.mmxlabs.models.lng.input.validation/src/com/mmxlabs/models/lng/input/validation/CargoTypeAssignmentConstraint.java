@@ -20,6 +20,7 @@ import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.input.ElementAssignment;
+import com.mmxlabs.models.lng.input.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;

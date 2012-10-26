@@ -39,6 +39,13 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 
 		if (target instanceof VesselClass) {
 			final VesselClass vesselClass = (VesselClass) target;
+			
+			if (target.eContainer() == null) {
+				// Not contained - maybe because of duplication. Lets pass this constraint.
+				// TODO: Add better API for such cases.
+				return ctx.createSuccessStatus();
+			}
+			
 			final EObject original = extraValidationContext.getOriginal(vesselClass);
 			final EObject replacement = extraValidationContext.getReplacement(vesselClass);
 			final MMXRootObject scenario = extraValidationContext.getRootObject();

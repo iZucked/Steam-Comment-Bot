@@ -27,6 +27,7 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.input.ElementAssignment;
+import com.mmxlabs.models.lng.input.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.AVessel;

@@ -2,15 +2,17 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.input.validation;
+package com.mmxlabs.models.lng.input.validation.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
+import com.mmxlabs.models.ui.validation.ValidationPlugin;
+
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends ValidationPlugin {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "com.mmxlabs.models.lng.input.validation"; //$NON-NLS-1$

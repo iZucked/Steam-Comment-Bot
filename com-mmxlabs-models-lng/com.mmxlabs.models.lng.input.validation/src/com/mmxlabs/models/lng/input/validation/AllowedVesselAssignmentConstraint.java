@@ -6,27 +6,34 @@ package com.mmxlabs.models.lng.input.validation;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputPackage;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.lng.input.validation.internal.Activator;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
+
+	private static final Logger log = LoggerFactory.getLogger(AllowedVesselAssignmentConstraint.class);
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -43,27 +50,46 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 
 			final UUIDObject assignedObject = assignment.getAssignedObject();
 
-			if (assignment.getAssignment() == null) {
+			final AVesselSet vesselAssignment = assignment.getAssignment();
+			if (vesselAssignment == null) {
 				return ctx.createSuccessStatus();
 			}
 
-			final Set<AVessel> vessels = SetUtils.getVessels(assignment.getAssignment());
+			// This will be a single vessel or a vessel class
+			if (!(vesselAssignment instanceof Vessel || vesselAssignment instanceof VesselClass)) {
+				// Unsupported case - bail out!
+				log.error("ElementAssignment as non Vessel or VesselClass assignment - unable to validate");
+				return ctx.createSuccessStatus();
+			}
 
-			Set<AVessel> allowedVessels = null;
+			EList<AVesselSet> allowedVessels = null;
 			if (assignedObject instanceof Cargo) {
 				final Cargo cargo = (Cargo) assignedObject;
-				allowedVessels = SetUtils.getVessels(cargo.getAllowedVessels());
+				allowedVessels = cargo.getAllowedVessels();
 			} else if (assignedObject instanceof VesselEvent) {
 				final VesselEvent vesselEvent = (VesselEvent) assignedObject;
-				allowedVessels = SetUtils.getVessels(vesselEvent.getAllowedVessels());
+				allowedVessels = vesselEvent.getAllowedVessels();
 			}
 			if (allowedVessels == null || allowedVessels.isEmpty()) {
 				return ctx.createSuccessStatus();
 			}
 
-			allowedVessels.retainAll(vessels);
+			boolean permitted = false;
+			if (allowedVessels.contains(vesselAssignment)) {
+				permitted = true;
+			} else if (vesselAssignment instanceof Vessel) {
+				final Vessel vessel = (Vessel) vesselAssignment;
+				for (final AVesselSet vs : allowedVessels) {
+					if (vs instanceof VesselClass) {
+						if (vs == vessel.getVesselClass()) {
+							permitted = true;
+							break;
+						}
+					}
+				}
+			}
 
-			if (allowedVessels.isEmpty()) {
+			if (!permitted) {
 
 				final String message;
 				if (assignedObject instanceof Cargo) {

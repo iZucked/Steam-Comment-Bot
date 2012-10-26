@@ -5,10 +5,11 @@
 package com.mmxlabs.models.lng.input.editor.utils;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.management.timer.Timer;
 
@@ -18,7 +19,7 @@ import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
-import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.Triple;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -171,12 +172,12 @@ public class AssignmentEditorHelper {
 
 	// ELEMENT ASSIGNMENT STUFF
 
-	public static Command unassignElement(EditingDomain ed, InputModel modelObject, UUIDObject task) {
+	public static Command unassignElement(final EditingDomain ed, final InputModel modelObject, final UUIDObject task) {
 		final ElementAssignment ea = getElementAssignment(modelObject, task);
 		return unassignElement(ed, ea);
 	}
 
-	public static Command unassignElement(EditingDomain ed, final ElementAssignment ea) {
+	public static Command unassignElement(final EditingDomain ed, final ElementAssignment ea) {
 		if (ea == null)
 			return IdentityCommand.INSTANCE;
 		final CompoundCommand cc = new CompoundCommand();
@@ -187,31 +188,31 @@ public class AssignmentEditorHelper {
 		return cc;
 	}
 
-	public static Command reassignElement(EditingDomain ed, InputModel modelObject, UUIDObject task, final AVesselSet destination) {
+	public static Command reassignElement(final EditingDomain ed, final InputModel modelObject, final UUIDObject task, final AVesselSet destination) {
 		final ElementAssignment ea = getElementAssignment(modelObject, task);
 		return reassignElement(ed, destination, ea, destination instanceof VesselClass ? getMaxSpot(modelObject) : 0);
 	}
 
-	public static Command reassignElement(EditingDomain ed, final AVesselSet destination, final ElementAssignment ea) {
+	public static Command reassignElement(final EditingDomain ed, final AVesselSet destination, final ElementAssignment ea) {
 		return reassignElement(ed, destination, ea, 0);
 	}
 
-	public static Command lockElement(EditingDomain ed, InputModel modelObject, UUIDObject task) {
+	public static Command lockElement(final EditingDomain ed, final InputModel modelObject, final UUIDObject task) {
 		return lockElement(ed, getElementAssignment(modelObject, task));
 	}
 
-	public static Command unlockElement(EditingDomain ed, InputModel modelObject, UUIDObject task) {
+	public static Command unlockElement(final EditingDomain ed, final InputModel modelObject, final UUIDObject task) {
 		return unlockElement(ed, getElementAssignment(modelObject, task));
 	}
 
-	public static Command lockElement(EditingDomain ed, ElementAssignment ea) {
+	public static Command lockElement(final EditingDomain ed, final ElementAssignment ea) {
 		if (ea == null) {
 			return IdentityCommand.INSTANCE;
 		}
 		return SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Locked(), true);
 	}
 
-	public static Command unlockElement(EditingDomain ed, ElementAssignment ea) {
+	public static Command unlockElement(final EditingDomain ed, final ElementAssignment ea) {
 		if (ea == null)
 			return IdentityCommand.INSTANCE;
 		return SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Locked(), false);
@@ -219,17 +220,36 @@ public class AssignmentEditorHelper {
 
 	public static List<CollectedAssignment> collectAssignments(final InputModel im, final FleetModel fm) {
 		final List<CollectedAssignment> result = new ArrayList<CollectedAssignment>();
-		final Map<Pair<AVesselSet, Integer>, List<ElementAssignment>> grouping = new HashMap<Pair<AVesselSet, Integer>, List<ElementAssignment>>();
+		// Enforce consistent order
+		final Map<Triple<AVesselSet, Integer, Integer>, List<ElementAssignment>> grouping = new TreeMap<Triple<AVesselSet, Integer, Integer>, List<ElementAssignment>>(
+				new Comparator<Triple<AVesselSet, Integer, Integer>>() {
 
+					@Override
+					public int compare(final Triple<AVesselSet, Integer, Integer> o1, final Triple<AVesselSet, Integer, Integer> o2) {
+
+						int c = o1.getSecond() - o2.getSecond();
+						if (c == 0) {
+							c = o1.getThird() - o2.getThird();
+						}
+
+						return c;
+					}
+				});
+
+		int index = 0;
+		final List<Vessel> vesselOrder = new ArrayList<Vessel>();
 		for (final Vessel v : fm.getVessels()) {
-			grouping.put(new Pair<AVesselSet, Integer>(v, 0), new ArrayList<ElementAssignment>());
+			vesselOrder.add(v);
+			grouping.put(new Triple<AVesselSet, Integer, Integer>(v, 0, index++), new ArrayList<ElementAssignment>());
 		}
 
 		for (final ElementAssignment ea : im.getElementAssignments()) {
 			if (ea.getAssignment() == null) {
 				continue;
 			}
-			final Pair<AVesselSet, Integer> k = new Pair<AVesselSet, Integer>(ea.getAssignment(), ea.getSpotIndex());
+			// Use vessel index normally, but for spots include spot index
+			final int third = vesselOrder.contains(ea.getAssignment()) ? vesselOrder.indexOf(ea.getAssignment()) : index + ea.getSpotIndex();
+			final Triple<AVesselSet, Integer, Integer> k = new Triple<AVesselSet, Integer, Integer>(ea.getAssignment(), ea.getSpotIndex(), third);
 			List<ElementAssignment> l = grouping.get(k);
 			if (l == null) {
 				l = new ArrayList<ElementAssignment>();
@@ -238,14 +258,15 @@ public class AssignmentEditorHelper {
 			l.add(ea);
 		}
 
-		for (final Pair<AVesselSet, Integer> k : grouping.keySet()) {
+		for (final Triple<AVesselSet, Integer, Integer> k : grouping.keySet()) {
 			result.add(new CollectedAssignment(grouping.get(k), k.getFirst(), k.getSecond()));
 		}
 
 		return result;
 	}
 
-	public static Command reassignElement(EditingDomain ed, InputModel modelObject, UUIDObject beforeTask, UUIDObject task, UUIDObject afterTask, AVesselSet vesselOrClass, int spotIndex) {
+	public static Command reassignElement(final EditingDomain ed, final InputModel modelObject, final UUIDObject beforeTask, final UUIDObject task, final UUIDObject afterTask,
+			final AVesselSet vesselOrClass, final int spotIndex) {
 		final ElementAssignment ea = getElementAssignment(modelObject, task);
 		if (ea == null)
 			return IdentityCommand.INSTANCE;
@@ -255,7 +276,7 @@ public class AssignmentEditorHelper {
 		if (beforeTask != null) {
 			final ElementAssignment ea2 = getElementAssignment(modelObject, beforeTask);
 			if (ea2 != null) {
-				int newSeq = ea2.getSequence() + 1;
+				final int newSeq = ea2.getSequence() + 1;
 				System.err.println("Set seq of " + ea + " to " + newSeq);
 				cc.append(SetCommand.create(ed, ea, InputPackage.eINSTANCE.getElementAssignment_Sequence(), newSeq));
 			}
@@ -271,7 +292,7 @@ public class AssignmentEditorHelper {
 		return cc;
 	}
 
-	public static Command reassignElement(EditingDomain ed, AVesselSet destination, ElementAssignment ea, int maxSpot) {
+	public static Command reassignElement(final EditingDomain ed, final AVesselSet destination, final ElementAssignment ea, final int maxSpot) {
 		if (ea == null)
 			return IdentityCommand.INSTANCE;
 
