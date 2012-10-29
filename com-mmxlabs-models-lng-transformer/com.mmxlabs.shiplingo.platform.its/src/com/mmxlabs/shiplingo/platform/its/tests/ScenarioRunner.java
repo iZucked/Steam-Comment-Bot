@@ -7,10 +7,8 @@ package com.mmxlabs.shiplingo.platform.its.tests;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
-import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformer;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -61,19 +59,9 @@ public class ScenarioRunner {
 
 	public void init() throws IncompleteScenarioException {
 
-
 		final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
 
 		entities = transformer.getEntities();
-		LNGScenarioTransformer lst =  transformer.getLngScenarioTransformer();
-
-		{
-			// add extensions manually; TODO improve this later.
-			final SimpleContractTransformer sct = new SimpleContractTransformer();
-			lst.addTransformerExtension(sct);
-			lst.addContractTransformer(sct, sct.getContractEClasses());
-		}
-
 		final OptimisationTransformer ot = transformer.getOptimisationTransformer();
 
 		data = transformer.getOptimisationData();
