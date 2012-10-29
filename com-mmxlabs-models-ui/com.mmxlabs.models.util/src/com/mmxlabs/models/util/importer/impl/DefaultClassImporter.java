@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -33,10 +35,27 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
+import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 public class DefaultClassImporter implements IClassImporter {
 	protected static final String KIND_KEY = "kind";
 	protected static final String DOT = ".";
+	/**
+	 * @since 2.0
+	 */
+	@Inject
+	protected IImporterRegistry importerRegistry;
+
+	/**
+	 * @since 2.0
+	 */
+	public DefaultClassImporter() {
+		final Activator activator = Activator.getDefault();
+		if (activator != null) {
+
+			importerRegistry = activator.getImporterRegistry();
+		}
+	}
 
 	@Override
 	public Collection<EObject> importObjects(final EClass importClass, final CSVReader reader, final IImportContext context) {
@@ -139,7 +158,7 @@ public class DefaultClassImporter implements IClassImporter {
 
 					context.addProblem(context.createProblem(reference.getName() + " is missing from " + instance.eClass().getName(), true, false, true));
 				} else {
-					final IClassImporter classImporter = Activator.getDefault().getImporterRegistry().getClassImporter(reference.getEReferenceType());
+					final IClassImporter classImporter = importerRegistry.getClassImporter(reference.getEReferenceType());
 					final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), subKeys, context);
 					final Iterator<EObject> iterator = values.iterator();
 					instance.eSet(reference, iterator.next());
@@ -243,7 +262,7 @@ public class DefaultClassImporter implements IClassImporter {
 		for (final EAttribute attribute : rowClass.getEAllAttributes()) {
 			final String lowerCase = attribute.getName().toLowerCase();
 			if (row.containsKey(lowerCase)) {
-				final IAttributeImporter ai = Activator.getDefault().getImporterRegistry().getAttributeImporter(attribute.getEAttributeType());
+				final IAttributeImporter ai = importerRegistry.getAttributeImporter(attribute.getEAttributeType());
 				if (ai != null)
 					ai.setAttribute(instance, attribute, row.get(lowerCase), context);
 			} else {
@@ -335,4 +354,13 @@ public class DefaultClassImporter implements IClassImporter {
 	protected boolean shouldFlattenReference(final EReference reference) {
 		return reference.isMany() == false && reference.isContainment() == true;
 	}
+
+	/**
+	 * @since 2.0
+	 * @param importerRegistry
+	 */
+	public void setImporterRegistry(IImporterRegistry importerRegistry) {
+		this.importerRegistry = importerRegistry;
+	}
+
 }
