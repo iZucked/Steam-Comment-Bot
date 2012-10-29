@@ -72,4 +72,14 @@ public class SlotInlineEditorWrapper extends IInlineEditorEnablementWrapper {
 	public EObject getEditorTarget() {
 		return wrapped.getEditorTarget();
 	}
+
+	/**
+	 * Return the wrapped editor instance.
+	 * 
+	 * @since 2.0
+	 * @return
+	 */
+	public IInlineEditor getWrapped() {
+		return wrapped;
+	}
 }
