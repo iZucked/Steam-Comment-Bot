@@ -4,9 +4,12 @@
  */
 package com.mmxlabs.shiplingo.platform.its.tests;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EClass;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
@@ -35,7 +38,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoFitnessComponentProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.trading.integration.StandardContractBuilderFactory;
+import com.mmxlabs.trading.integration.StandardContractTransformer;
 import com.mmxlabs.trading.integration.TradingOptimiserModuleService;
+import com.mmxlabs.trading.integration.TradingTransformerExtension;
 import com.mmxlabs.trading.optimiser.components.ProfitAndLossAllocationComponentProvider;
 
 public class ContractExtensionTestModule extends AbstractModule {
@@ -52,13 +57,29 @@ public class ContractExtensionTestModule extends AbstractModule {
 			bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
 			bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
 
-			final SimpleContractTransformer sct = new SimpleContractTransformer();
-
-			final ContractTransformer transformer = new ContractTransformerWrapper(sct, sct.getContractEClasses());
-			bind(TypeLiterals.iterable(ContractTransformer.class)).toInstance(Collections.singleton(transformer));
+			final List<ContractTransformer> transformers = new ArrayList<ContractTransformer>();
+			final List<IBuilderExtensionFactory> buildFactories = new ArrayList<IBuilderExtensionFactory>();
+			{
+				final SimpleContractTransformer sct = new SimpleContractTransformer();
+				final ContractTransformer transformer = new ContractTransformerWrapper(sct, sct.getContractEClasses());
+				transformers.add(transformer);
+				buildFactories.add(new StandardContractBuilderFactory());
+			}
+			{
+				final StandardContractTransformer sct = new StandardContractTransformer();
+				final ContractTransformer transformer = new ContractTransformerWrapper(sct, sct.getContractEClasses());
+				transformers.add(transformer);
+				buildFactories.add(new StandardContractBuilderFactory());
+			}
+			{
+				final TradingTransformerExtension sct = new TradingTransformerExtension();
+				final ContractTransformer transformer = new ContractTransformerWrapper(sct, Collections.<EClass>emptyList());
+				transformers.add(transformer);
+			}
+			bind(TypeLiterals.iterable(ContractTransformer.class)).toInstance(transformers);
 
 			bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toInstance(Collections.singleton(new TradingOptimiserModuleService()));
-			bind(TypeLiterals.iterable(IBuilderExtensionFactory.class)).toInstance(Collections.singleton(new StandardContractBuilderFactory()));
+			bind(TypeLiterals.iterable(IBuilderExtensionFactory.class)).toInstance(buildFactories);
 			bind(TypeLiterals.iterable(ICargoFitnessComponentProvider.class)).toInstance(Collections.singleton(new ProfitAndLossAllocationComponentProvider()));
 
 		}
