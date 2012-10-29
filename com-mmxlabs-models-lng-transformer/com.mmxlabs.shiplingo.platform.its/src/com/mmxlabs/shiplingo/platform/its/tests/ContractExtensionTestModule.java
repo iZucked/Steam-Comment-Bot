@@ -32,9 +32,11 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintChecke
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.ICargoFitnessComponentProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.trading.integration.StandardContractBuilderFactory;
 import com.mmxlabs.trading.integration.TradingOptimiserModuleService;
+import com.mmxlabs.trading.optimiser.components.ProfitAndLossAllocationComponentProvider;
 
 public class ContractExtensionTestModule extends AbstractModule {
 
@@ -42,6 +44,10 @@ public class ContractExtensionTestModule extends AbstractModule {
 	protected void configure() {
 
 		if (!Platform.isRunning()) {
+
+			final TradingOptimiserModuleService mod = new TradingOptimiserModuleService();
+			install(mod.requestModule());
+
 			bind(IFitnessFunctionRegistry.class).toInstance(createFitnessFunctionRegistry());
 			bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
 			bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
@@ -53,6 +59,8 @@ public class ContractExtensionTestModule extends AbstractModule {
 
 			bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toInstance(Collections.singleton(new TradingOptimiserModuleService()));
 			bind(TypeLiterals.iterable(IBuilderExtensionFactory.class)).toInstance(Collections.singleton(new StandardContractBuilderFactory()));
+			bind(TypeLiterals.iterable(ICargoFitnessComponentProvider.class)).toInstance(Collections.singleton(new ProfitAndLossAllocationComponentProvider()));
+
 		}
 	}
 
@@ -67,9 +75,11 @@ public class ContractExtensionTestModule extends AbstractModule {
 	 * @return
 	 */
 	public IFitnessFunctionRegistry createFitnessFunctionRegistry() {
-		FitnessFunctionRegistry fitnessFunctionRegistry = new FitnessFunctionRegistry();
+		final FitnessFunctionRegistry fitnessFunctionRegistry = new FitnessFunctionRegistry();
 
-		fitnessFunctionRegistry.registerFitnessCoreFactory(new CargoSchedulerFitnessCoreFactory());
+		final CargoSchedulerFitnessCoreFactory factory = new CargoSchedulerFitnessCoreFactory();
+		factory.setExternalComponentProviders(Collections.<ICargoFitnessComponentProvider> singleton(new ProfitAndLossAllocationComponentProvider()));
+		fitnessFunctionRegistry.registerFitnessCoreFactory(factory);
 		fitnessFunctionRegistry.registerFitnessCoreFactory(new NonOptionalSlotFitnessCoreFactory());
 
 		return fitnessFunctionRegistry;
@@ -82,7 +92,7 @@ public class ContractExtensionTestModule extends AbstractModule {
 	 * @return
 	 */
 	public IConstraintCheckerRegistry createConstraintCheckerRegistry() {
-		ConstraintCheckerRegistry constraintCheckerRegistry = new ConstraintCheckerRegistry();
+		final ConstraintCheckerRegistry constraintCheckerRegistry = new ConstraintCheckerRegistry();
 		{
 			final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
 			constraintCheckerRegistry.registerConstraintCheckerFactory(constraintFactory);
