@@ -99,19 +99,33 @@
                         <command
                   commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
                   style="push">
-                           <visibleWhen
-                                 checkEnabled="false">
-                              <with
-                                    variable="selection">
-                                 <iterate>
-                                    <or>
-                                       <instanceof
-                                             value="com.mmxlabs.scenario.service.model.ScenarioInstance">
-                                       </instanceof>
-                                    </or>
-                                 </iterate>
-                              </with>
-                           </visibleWhen>
+                   <visibleWhen
+                     checkEnabled="false">
+                  <with
+                        variable="selection">
+                     <and>
+                        <count
+                              value="1">
+                        </count>
+                        <iterate>
+                           <or>
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                           </or>
+                        </iterate>
+                     </and>
+                  </with>
+               </visibleWhen>
+            </command>
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="menu:file?after=additions">
+            <command
+                  commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
+                  label="Import Scenario"
+                  style="push">
             </command>
          </menuContribution>
 
