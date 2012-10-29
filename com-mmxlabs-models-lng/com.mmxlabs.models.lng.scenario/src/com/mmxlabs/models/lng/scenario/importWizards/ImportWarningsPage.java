@@ -42,6 +42,10 @@ public class ImportWarningsPage extends WizardPage {
 			viewer.refresh();
 			int errors = viewer.getTable().getItemCount();
 			setMessage(errors == 0 ? null : errors + " problems during import");
+			// Pack columns, but skip filename
+			for (int i = 1; i < viewer.getTable().getColumnCount(); ++i) {
+				viewer.getTable().getColumn(i).pack();
+			}
 		}
 	}
 
