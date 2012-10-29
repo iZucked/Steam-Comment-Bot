@@ -417,6 +417,29 @@
                commandId="com.mmxlabs.scenario.service.ui.fork"
                label="Fork"
                style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                        <not>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                           </test>
+                        </not>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
          </command>
          <command
                commandId="org.eclipse.ui.edit.copy"
@@ -457,6 +480,29 @@
                commandId="com.mmxlabs.scenario.service.ui.revert"
                label="Revert"
                style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                        <not>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                           </test>
+                        </not>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
          </command>
          <command
                commandId="com.mmxlabs.scenario.service.ui.pin"
@@ -516,6 +562,29 @@
                commandId="com.mmxlabs.scenario.service.ui.diffedit"
                label="Sandbox"
                style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                        <not>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                           </test>
+                        </not>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
          </command>
       </menuContribution>
    </extension>
