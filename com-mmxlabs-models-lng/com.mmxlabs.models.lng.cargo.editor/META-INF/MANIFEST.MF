@@ -31,4 +31,5 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/*.xml
 Import-Package: com.mmxlabs.common;version="2.0.0",
+ javax.inject;version="1.0.0",
  org.slf4j;version="1.6.4"

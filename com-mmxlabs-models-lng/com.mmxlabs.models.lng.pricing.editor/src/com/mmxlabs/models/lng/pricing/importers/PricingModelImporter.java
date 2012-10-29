@@ -10,9 +10,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -43,6 +44,7 @@ import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
+import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
  * @since 2.0
@@ -67,17 +69,46 @@ public class PricingModelImporter implements ISubmodelImporter {
 		// inputs.put(SPOT_CARGO_MARKETS_AVAILABILITY_KEY, "Spot Cargo Markets Availability");
 	}
 
-	final IClassImporter dataIndexImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getDataIndex());
+	@Inject
+	private IImporterRegistry importerRegistry;
 
-	final IClassImporter cooldownPriceImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getCooldownPrice());
+	private IClassImporter dataIndexImporter;
 
-	final IClassImporter charterPriceImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getCharterCostModel());
+	private IClassImporter cooldownPriceImporter;
 
-	final IClassImporter portCostImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getPortCost());
+	private IClassImporter charterPriceImporter;
 
-	final IClassImporter spotCargoMarketImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getSpotMarket());
+	private IClassImporter portCostImporter;
 
-	final IClassImporter spotCargoMarketAvailabilityImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getSpotAvailability());
+	private IClassImporter spotCargoMarketImporter;
+
+	private IClassImporter spotCargoMarketAvailabilityImporter;
+
+	/**
+	 * @since 2.0
+	 */
+	public PricingModelImporter() {
+		final Activator activator = Activator.getDefault();
+		if (activator != null) {
+
+			importerRegistry = activator.getImporterRegistry();
+			registryInit();
+		}
+	}
+
+	@Inject
+	private void registryInit() {
+		if (importerRegistry != null) {
+
+			dataIndexImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getDataIndex());
+			cooldownPriceImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCooldownPrice());
+			charterPriceImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getCharterCostModel());
+			portCostImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getPortCost());
+			spotCargoMarketImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getSpotMarket());
+			spotCargoMarketAvailabilityImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getSpotAvailability());
+
+		}
+	}
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
@@ -269,7 +300,7 @@ public class PricingModelImporter implements ISubmodelImporter {
 		}
 
 	}
-	
+
 	@Override
 	public EClass getEClass() {
 		return PricingPackage.eINSTANCE.getPricingModel();

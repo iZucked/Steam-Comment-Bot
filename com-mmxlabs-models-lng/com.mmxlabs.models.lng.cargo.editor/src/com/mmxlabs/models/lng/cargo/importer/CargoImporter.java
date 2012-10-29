@@ -189,5 +189,4 @@ public class CargoImporter extends DefaultClassImporter {
 
 		return newResults;
 	}
-
 }

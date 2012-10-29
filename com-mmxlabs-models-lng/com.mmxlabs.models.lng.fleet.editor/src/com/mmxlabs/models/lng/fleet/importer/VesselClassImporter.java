@@ -9,6 +9,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
@@ -26,18 +28,43 @@ import com.mmxlabs.models.util.importer.IFieldMap;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
+import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
  * Vessel class importer; adds support for canal time fields.
  * 
  * @author hinton
  * @since 2.0
- *
+ * 
  */
 public class VesselClassImporter extends DefaultClassImporter {
-	final IClassImporter routeCostImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PricingPackage.eINSTANCE.getRouteCost());
-	final IClassImporter parameterImporter = Activator.getDefault().getImporterRegistry().getClassImporter(FleetPackage.eINSTANCE.getVesselClassRouteParameters());
-	
+
+	@Inject
+	private IImporterRegistry importerRegistry;
+
+	private IClassImporter routeCostImporter;
+	private IClassImporter parameterImporter;
+
+	/**
+	 * @since 2.0
+	 */
+	public VesselClassImporter() {
+		final Activator activator = Activator.getDefault();
+		if (activator != null) {
+
+			importerRegistry = activator.getImporterRegistry();
+			registryInit();
+		}
+	}
+
+	@Inject
+	private void registryInit() {
+		if (importerRegistry != null) {
+			routeCostImporter = importerRegistry.getClassImporter(PricingPackage.eINSTANCE.getRouteCost());
+			parameterImporter = importerRegistry.getClassImporter(FleetPackage.eINSTANCE.getVesselClassRouteParameters());
+		}
+	}
+
 	@Override
 	public Collection<EObject> importObject(EClass eClass, Map<String, String> row, IImportContext context) {
 		final Collection<EObject> result = super.importObject(eClass, row, context);
@@ -61,13 +88,13 @@ public class VesselClassImporter extends DefaultClassImporter {
 						} else {
 							rowMap = new FieldMap(row);
 						}
-						final IFieldMap subMap = rowMap.getSubMap(parts[0]+"."+parts[1]+".");
-						
+						final IFieldMap subMap = rowMap.getSubMap(parts[0] + "." + parts[1] + ".");
+
 						subMap.put("route", canalName);
-						if (row.containsKey("name")) 
+						if (row.containsKey("name"))
 							subMap.put("vesselclass", row.get("name"));
 						final RouteCost cost = (RouteCost) routeCostImporter.importObject(PricingPackage.eINSTANCE.getRouteCost(), subMap, context).iterator().next();
-						
+
 						context.doLater(new IDeferment() {
 							@Override
 							public void run(final IImportContext context) {
@@ -75,7 +102,7 @@ public class VesselClassImporter extends DefaultClassImporter {
 									context.getRootObject().getSubModel(PricingModel.class).getRouteCosts().add(cost);
 								}
 							}
-							
+
 							@Override
 							public int getStage() {
 								return IImportContext.STAGE_REFERENCES_RESOLVED;
@@ -85,12 +112,12 @@ public class VesselClassImporter extends DefaultClassImporter {
 				} else if (parts[1].equals("parameters")) {
 					final String original = context.peekReader().getCasedColumnName(key);
 					final String canalName = original.split("\\.")[0];
-					
+
 					if (parameterisedCanals.contains(canalName)) {
 						continue;
 					}
 					parameterisedCanals.add(canalName);
-					
+
 					if (parameterImporter != null) {
 						final IFieldMap rowMap;
 						if (row instanceof IFieldMap) {
@@ -98,20 +125,21 @@ public class VesselClassImporter extends DefaultClassImporter {
 						} else {
 							rowMap = new FieldMap(row);
 						}
-						final IFieldMap subMap = rowMap.getSubMap(parts[0]+"."+parts[1]+".");
-						
+						final IFieldMap subMap = rowMap.getSubMap(parts[0] + "." + parts[1] + ".");
+
 						subMap.put("route", canalName);
-						
-						final VesselClassRouteParameters parameters = (VesselClassRouteParameters) parameterImporter.importObject(FleetPackage.eINSTANCE.getVesselClassRouteParameters(), subMap, context).iterator().next();
-					
-						context.doLater(new IDeferment() {							
+
+						final VesselClassRouteParameters parameters = (VesselClassRouteParameters) parameterImporter
+								.importObject(FleetPackage.eINSTANCE.getVesselClassRouteParameters(), subMap, context).iterator().next();
+
+						context.doLater(new IDeferment() {
 							@Override
 							public void run(IImportContext context) {
 								if (parameters.getRoute() != null) {
 									vc.getRouteParameters().add(parameters);
 								}
 							}
-							
+
 							@Override
 							public int getStage() {
 								return IImportContext.STAGE_REFERENCES_RESOLVED;
@@ -121,19 +149,15 @@ public class VesselClassImporter extends DefaultClassImporter {
 				}
 			}
 		}
-		
-		
-		
+
 		return result;
 	}
 
-	
-	
 	@Override
 	protected Map<String, String> exportObject(EObject object, final MMXRootObject root) {
 		final VesselClass vc = (VesselClass) object;
 		final Map<String, String> result = super.exportObject(object, root);
-		
+
 		for (final VesselClassRouteParameters routeParameters : vc.getRouteParameters()) {
 			final Map<String, String> exportedParameters = parameterImporter.exportObjects(Collections.singleton(routeParameters), root).iterator().next();
 			final String route = exportedParameters.get("route");
@@ -143,28 +167,23 @@ public class VesselClassImporter extends DefaultClassImporter {
 				result.put(prefix + e.getKey(), e.getValue());
 			}
 		}
-		
 
 		final PricingModel pm = root.getSubModel(PricingModel.class);
 		if (pm != null) {
 			for (final RouteCost rc : pm.getRouteCosts()) {
 				if (rc.getVesselClass() == vc) {
-					final Map<String, String> exportedCost = routeCostImporter
-							.exportObjects(Collections.singleton(rc), root)
-							.iterator().next();
+					final Map<String, String> exportedCost = routeCostImporter.exportObjects(Collections.singleton(rc), root).iterator().next();
 					exportedCost.remove("vesselclass");
 					final String route = exportedCost.get("route");
 					exportedCost.remove("route");
 					final String prefix = route + ".pricing.";
-					for (final Map.Entry<String, String> e : exportedCost
-							.entrySet()) {
+					for (final Map.Entry<String, String> e : exportedCost.entrySet()) {
 						result.put(prefix + e.getKey(), e.getValue());
 					}
 				}
 			}
 		}
-		
-		
+
 		return result;
 	}
 }
