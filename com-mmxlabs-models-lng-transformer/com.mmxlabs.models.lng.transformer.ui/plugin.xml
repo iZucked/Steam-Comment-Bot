@@ -272,6 +272,29 @@
                      label="Optimise"
                      style="push"
                      tooltip="Start or resume optimisation">
+                  <visibleWhen
+                        checkEnabled="false">
+                     <and>
+                        <with
+                              variable="selection">
+                           <iterate
+                                 ifEmpty="false">
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                              <not>
+                                 <test
+                                       forcePluginActivation="true"
+                                       property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                                 </test>
+                              </not>
+                           </iterate>
+                        </with>
+                        <count
+                              value="1">
+                        </count>
+                     </and>
+                  </visibleWhen>
                </command>
                <command
                      commandId="com.mmxlabs.commands.optimisation.forkandplay"
@@ -280,6 +303,29 @@
                      label="Fork and Optimise"
                      style="push"
                      tooltip="Fork and Optimise">
+                  <visibleWhen
+                        checkEnabled="false">
+                     <and>
+                        <with
+                              variable="selection">
+                           <iterate
+                                 ifEmpty="false">
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                              <not>
+                                 <test
+                                       forcePluginActivation="true"
+                                       property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                                 </test>
+                              </not>
+                           </iterate>
+                        </with>
+                        <count
+                              value="1">
+                        </count>
+                     </and>
+                  </visibleWhen>
                </command>
          </menuContribution>
       </extension>
