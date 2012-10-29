@@ -21,7 +21,7 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	private FormattedText formattedText;
 	private DateTimeFormatter dateFormatter;
 
-	public DateInlineEditor(EStructuralFeature feature, final DateTimeFormatter formatter) {
+	public DateInlineEditor(final EStructuralFeature feature, final DateTimeFormatter formatter) {
 		super(feature);
 		this.dateFormatter = formatter;
 	}
@@ -31,7 +31,7 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	protected void updateValueDisplay(Object value) {
+	protected void updateValueDisplay(final Object value) {
 		if (formattedText.getControl() == null || formattedText.getControl().isDisposed()) {
 			return;
 		}
@@ -45,7 +45,7 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	protected Control createValueControl(Composite parent) {
+	protected Control createValueControl(final Composite parent) {
 		formattedText = new FormattedText(parent);
 
 		formattedText.setFormatter(dateFormatter);
@@ -69,5 +69,17 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 		formattedText.getControl().setEnabled(enabled);
 
 		super.setEnabled(enabled);
+	}
+
+	/**
+	 * Change the format string after creation. String will be passed into a {@link DateTimeFormatter}.
+	 * 
+	 * @param format
+	 * @since 2.0
+	 */
+	public void setDateFormat(final String format) {
+
+		dateFormatter = new DateTimeFormatter(format);
+		formattedText.setFormatter(dateFormatter);
 	}
 }
