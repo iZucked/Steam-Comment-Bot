@@ -30,7 +30,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @author hinton
  * 
  */
-public class ScheduleModelCommandProvider extends BaseModelCommandProvider {
+public class ScheduleModelCommandProvider extends BaseModelCommandProvider<Object> {
 	@Override
 	protected boolean shouldHandleDeletion(final Object deletedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		if (getContext() != null)

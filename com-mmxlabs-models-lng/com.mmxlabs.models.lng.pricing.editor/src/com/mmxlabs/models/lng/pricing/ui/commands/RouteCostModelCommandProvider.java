@@ -32,7 +32,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @author hinton
  * 
  */
-public class RouteCostModelCommandProvider extends BaseModelCommandProvider {
+public class RouteCostModelCommandProvider extends BaseModelCommandProvider<Object> {
 	@Override
 	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		return addedObject instanceof Route || addedObject instanceof VesselClass;

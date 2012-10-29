@@ -32,7 +32,7 @@ public class SpotSlotHelper {
 			final TimeZone oldZone = TimeZone.getTimeZone(oldPort.getTimeZone());
 			oldCal.setTimeZone(oldZone);
 			oldCal.setTime(newDate);
-			
+
 			cal.set(Calendar.YEAR, oldCal.get(Calendar.YEAR));
 			cal.set(Calendar.MONTH, oldCal.get(Calendar.MONTH));
 		}
@@ -54,9 +54,15 @@ public class SpotSlotHelper {
 		final long endMillis = cal.getTimeInMillis();
 		final int windowSize = (int) ((endMillis - startMillis) / 1000 / 60 / 60);
 
-		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));
-		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), start));
-		cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), 0));
+		if (slot.getWindowSize() != windowSize) {
+			cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowSize(), windowSize));
+		}
+		if (!slot.getWindowStart().equals(start)) {
+			cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStart(), start));
+		}
+		if (slot.getWindowStartTime() != 0) {
+			cmd.append(SetCommand.create(editingDomain, slot, CargoPackage.eINSTANCE.getSlot_WindowStartTime(), 0));
+		}
 	}
 
 }
