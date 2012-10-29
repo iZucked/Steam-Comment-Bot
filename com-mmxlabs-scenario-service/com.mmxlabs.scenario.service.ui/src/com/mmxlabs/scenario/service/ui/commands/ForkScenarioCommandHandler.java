@@ -18,7 +18,10 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
@@ -30,6 +33,9 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
  * 
  */
 public class ForkScenarioCommandHandler extends AbstractHandler {
+	
+	private static final Logger log = LoggerFactory.getLogger(ForkScenarioCommandHandler.class);
+	
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
@@ -67,6 +73,12 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 						if (finalNewName != null) {
 							final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 							fork.setName(finalNewName);
+
+							try {
+								OpenScenarioCommandHandler.openScenarioInstance(HandlerUtil.getActiveSite(event).getPage(), fork);
+							} catch (final PartInitException e) {
+								log.error(e.getMessage(), e);
+							}
 						}
 					} catch (final IOException e) {
 						throw new ExecutionException("Unable to fork scenario", e);
