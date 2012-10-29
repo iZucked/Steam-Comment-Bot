@@ -17,6 +17,7 @@ import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer;
 import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformerWrapper;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
+import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
@@ -26,7 +27,10 @@ import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.trading.integration.StandardContractBuilderFactory;
@@ -65,9 +69,9 @@ public class ContractExtensionTestModule extends AbstractModule {
 	public IFitnessFunctionRegistry createFitnessFunctionRegistry() {
 		FitnessFunctionRegistry fitnessFunctionRegistry = new FitnessFunctionRegistry();
 
-		final CargoSchedulerFitnessCoreFactory factory = new CargoSchedulerFitnessCoreFactory();
+		fitnessFunctionRegistry.registerFitnessCoreFactory(new CargoSchedulerFitnessCoreFactory());
+		fitnessFunctionRegistry.registerFitnessCoreFactory(new NonOptionalSlotFitnessCoreFactory());
 
-		fitnessFunctionRegistry.registerFitnessCoreFactory(factory);
 		return fitnessFunctionRegistry;
 	}
 
@@ -95,6 +99,13 @@ public class ContractExtensionTestModule extends AbstractModule {
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortExclusionConstraintCheckerFactory(SchedulerConstants.DCP_portExclusionProvider, SchedulerConstants.DCP_vesselProvider,
 				SchedulerConstants.DCP_portProvider));
+
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new VirtualVesselConstraintCheckerFactory(SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
+
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new SlotGroupCountConstraintCheckerFactory());
+
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new TimeSortConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider,
+				SchedulerConstants.DCP_vesselProvider));
 
 		return constraintCheckerRegistry;
 	}
