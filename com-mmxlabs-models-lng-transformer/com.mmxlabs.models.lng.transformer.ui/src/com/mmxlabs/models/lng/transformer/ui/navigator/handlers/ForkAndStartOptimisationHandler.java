@@ -16,6 +16,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -86,6 +88,13 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 						if (finalNewName != null) {
 							final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 							fork.setName(finalNewName);
+
+							try {
+								OpenScenarioCommandHandler.openScenarioInstance(HandlerUtil.getActiveSite(event).getPage(), fork);
+							} catch (final PartInitException e) {
+								log.error(e.getMessage(), e);
+							}
+
 							return evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
 						}
 					} catch (final IOException e) {
