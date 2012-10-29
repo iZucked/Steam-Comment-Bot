@@ -13,6 +13,9 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PartInitException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
 import com.mmxlabs.jobmanager.jobs.EJobState;
@@ -25,9 +28,12 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 public class ForkAndStartOptimisationActionHandler extends StartOptimisationEditorActionDelegate {
+
+	private static final Logger log = LoggerFactory.getLogger(ForkAndStartOptimisationActionHandler.class);
 
 	public ForkAndStartOptimisationActionHandler() {
 		super(true);
@@ -66,6 +72,12 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 
 						fork.setName(finalNewName);
+
+						try {
+							OpenScenarioCommandHandler.openScenarioInstance(editor.getSite().getPage(), fork);
+						} catch (final PartInitException e) {
+							log.error(e.getMessage(), e);
+						}
 
 						evaluateScenarioInstance(jobManager, fork, optimising, ScenarioLock.OPTIMISER);
 					}

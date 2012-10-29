@@ -17,11 +17,15 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IActionDelegate2;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PartInitException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
@@ -29,6 +33,8 @@ import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
  * 
  */
 public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, IActionDelegate2 {
+
+	private static final Logger log = LoggerFactory.getLogger(ForkScenarioEditorActionDelegate.class);
 
 	private IEditorPart editor;
 
@@ -64,6 +70,12 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 						final ScenarioInstance fork = scenarioService.duplicate(instance, instance);
 
 						fork.setName(finalNewName);
+
+						try {
+							OpenScenarioCommandHandler.openScenarioInstance(editor.getSite().getPage(), fork);
+						} catch (final PartInitException e) {
+							log.error(e.getMessage(), e);
+						}
 					}
 				} catch (final IOException e) {
 					throw new RuntimeException("Unable to fork scenario", e);
