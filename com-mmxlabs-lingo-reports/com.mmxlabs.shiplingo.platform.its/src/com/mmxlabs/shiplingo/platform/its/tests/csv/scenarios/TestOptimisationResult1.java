@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.its.tests.csv.scenarios;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -22,11 +21,10 @@ public class TestOptimisationResult1 extends AbstractOptimisationResultTester {
 	public void testOptimisationResult() throws IOException, InterruptedException, IncompleteScenarioException, MigrationException, URISyntaxException {
 
 		// Load the scenario to test
-		final URL url = getClass().getResource("/csv-import/samples-data/");
+		final URL url = getClass().getResource("/csv-import/sample-data/");
 
-		File f = new File(url.toURI());
-		MMXRootObject scenario = CSVImporter.importCSVScenario(f.toString());
-		
+		MMXRootObject scenario = CSVImporter.importCSVScenario(url.toString());
+
 		runScenario(scenario, new URL(url.toString() + "fitness"));
 	}
 
