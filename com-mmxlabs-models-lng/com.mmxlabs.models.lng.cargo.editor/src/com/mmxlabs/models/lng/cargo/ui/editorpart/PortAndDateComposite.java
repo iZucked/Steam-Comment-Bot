@@ -26,6 +26,7 @@ import org.eclipse.ui.IWorkbenchPartSite;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.presentation.composites.SlotInlineEditorWrapper;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
@@ -33,6 +34,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.dates.DateInlineEditor;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -46,9 +48,11 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 	private ICommandHandler commandHandler;
 	private final MenuManager menuManager;
 	private Button ctxButton;
+	private boolean isLoad;
 
 	public PortAndDateComposite(final Composite parent, final int style, final IWorkbenchPartSite site, final boolean isLoad) {
 		super(parent, style);
+		this.isLoad = isLoad;
 
 		final GridLayout gridLayout = new GridLayout(5, false);
 		gridLayout.marginHeight = 0;
@@ -141,7 +145,10 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		editor.setCommandHandler(commandHandler);
 		final Control control = editor.createControl(this);
 		final int column = editors.size();
-		final GridData gd = new GridData(SWT.FILL, SWT.FILL, false, false);
+		
+		int hAlignment = isLoad ? SWT.LEFT : SWT.RIGHT; 
+		
+		final GridData gd = new GridData(hAlignment, SWT.FILL, false, false);
 		gd.verticalIndent = 0;
 		switch (column) {
 		case 0:
@@ -175,8 +182,26 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 			slot = null;
 			this.setVisible(false);
 		}
+
 		for (final IInlineEditor editor : editors) {
 			editor.setCommandHandler(commandHandler);
+
+
+			// For spot slots, show a slightly different date format.
+			IInlineEditor instance = editor;
+			if (editor instanceof SlotInlineEditorWrapper) {
+				instance = ((SlotInlineEditorWrapper) editor).getWrapped();
+			}
+
+			if (instance instanceof DateInlineEditor) {
+				final DateInlineEditor inlineEditor = (DateInlineEditor) instance;
+				// FIXME: Locale!
+				if (slot instanceof SpotSlot) {
+					inlineEditor.setDateFormat("MM/yyyy");
+				} else {
+					inlineEditor.setDateFormat("dd/MM/yyyy");
+				}
+			}
 			editor.display(location, root, value, range);
 		}
 
