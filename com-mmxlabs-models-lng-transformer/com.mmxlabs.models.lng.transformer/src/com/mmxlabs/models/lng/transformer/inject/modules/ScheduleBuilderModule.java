@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.inject.modules;
 
-
 import static org.ops4j.peaberry.Peaberry.osgiModule;
 import static org.ops4j.peaberry.Peaberry.service;
 import static org.ops4j.peaberry.eclipse.EclipseRegistry.eclipseRegistry;
@@ -41,21 +40,16 @@ public class ScheduleBuilderModule extends AbstractModule {
 			bind(iterable(IBuilderExtensionFactory.class)).toProvider(service(IBuilderExtensionFactory.class).multiple());
 			bind(iterable(ITransformerExtensionFactory.class)).toProvider(service(ITransformerExtensionFactory.class).multiple());
 		}
-
-//		bind(ISchedulerBuilder.class).to(SchedulerBuilder.class);
 	}
-	
-	
+
 	@Provides
-	ISchedulerBuilder provideSchedulerBuilder(Injector injector, Iterable<IBuilderExtensionFactory> builderExtensionFactories) {
-		SchedulerBuilder builder = new SchedulerBuilder();
-		for (IBuilderExtensionFactory factory : builderExtensionFactories) {
-			IBuilderExtension instance = factory.createInstance();
+	ISchedulerBuilder provideSchedulerBuilder(final Injector injector, final Iterable<IBuilderExtensionFactory> builderExtensionFactories) {
+		final SchedulerBuilder builder = new SchedulerBuilder();
+		for (final IBuilderExtensionFactory factory : builderExtensionFactories) {
+			final IBuilderExtension instance = factory.createInstance();
 			injector.injectMembers(instance);
 			builder.addBuilderExtension(instance);
 		}
-		
-//		requestInjection(instance)
 		injector.injectMembers(builder);
 		return builder;
 	}
