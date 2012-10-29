@@ -9,7 +9,6 @@ import java.util.Collection;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
-import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 
 /**
  * Implementation of {@link ContractTransformer} for programmatic instantation and injection.
@@ -19,10 +18,13 @@ import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
  */
 public class ContractTransformerWrapper implements ContractTransformer {
 
-	private final IContractTransformer contractTransformer;
+	private final ITransformerExtension contractTransformer;
 	private final ModelClass modelClasses[];
 
-	public ContractTransformerWrapper(final IContractTransformer contractTransformer, final Collection<EClass> contractEClasses) {
+	/**
+	 * @since 2.0
+	 */
+	public ContractTransformerWrapper(final ITransformerExtension contractTransformer, final Collection<EClass> contractEClasses) {
 		this.contractTransformer = contractTransformer;
 		modelClasses = new ModelClass[contractEClasses.size()];
 		int idx = 0;
