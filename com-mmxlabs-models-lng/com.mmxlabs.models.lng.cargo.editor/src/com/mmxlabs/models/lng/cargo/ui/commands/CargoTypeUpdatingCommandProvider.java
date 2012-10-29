@@ -43,21 +43,22 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		if (commandClass == SetCommand.class) {
+			{
+				Set<EObject> seenObjects = getContext();
+				if (seenObjects == null) {
+					seenObjects = new HashSet<EObject>();
+					setContext(seenObjects);
+				}
 
-			Set<EObject> seenObjects = getContext();
-			if (seenObjects == null) {
-				seenObjects = new HashSet<EObject>();
-				setContext(seenObjects);
+				if (seenObjects.contains(parameter.getEOwner())) {
+					return null;
+				}
+				seenObjects.add(parameter.getEOwner());
 			}
-
 			final InputModel inputModel = rootObject.getSubModel(InputModel.class);
 
 			if (parameter.getEOwner() instanceof LoadSlot) {
 				final LoadSlot slot = (LoadSlot) parameter.getEOwner();
-				if (seenObjects.contains(slot)) {
-					return null;
-				}
-				seenObjects.add(slot);
 
 				if (slot.getCargo() != null) {
 					final Cargo cargo = slot.getCargo();
@@ -121,10 +122,6 @@ public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvid
 			}
 			if (parameter.getEOwner() instanceof DischargeSlot) {
 				final DischargeSlot slot = (DischargeSlot) parameter.getEOwner();
-				if (seenObjects.contains(slot)) {
-					return null;
-				}
-				seenObjects.add(slot);
 				if (slot.getCargo() != null) {
 					final Cargo cargo = slot.getCargo();
 
