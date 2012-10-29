@@ -33,14 +33,14 @@ public abstract class AbstractModelCommandProvider<T> implements IModelCommandPr
 		if (provisionStack.get() == null) {
 			provisionStack.set(new AtomicInteger(0));
 		}
-		if (provisionStack.get().getAndIncrement() == 0) {
+		if (provisionStack.get().getAndIncrement() == 1) {
 			provisionContext.set(null);
 		}
 	}
 
 	@Override
 	public void endCommandProvision() {
-		if (provisionStack.get().decrementAndGet() == 0) {
+		if (provisionStack.get().decrementAndGet() == 1) {
 			provisionContext.set(null);
 		}
 	}
