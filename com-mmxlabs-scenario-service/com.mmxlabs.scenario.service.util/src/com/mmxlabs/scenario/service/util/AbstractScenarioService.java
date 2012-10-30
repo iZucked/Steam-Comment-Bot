@@ -10,8 +10,10 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
@@ -262,12 +264,19 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		log.debug("Duplicating " + original.getUuid() + " into " + destination);
 		final IScenarioService originalService = original.getScenarioService();
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
+
+		// Remember instances which were not loaded originally and unload them after use.
+		final Set<IModelInstance> instancesToUnload = new HashSet<IModelInstance>();
+
 		for (final String subModelURI : original.getSubModelURIs()) {
 			log.debug("Loading submodel " + subModelURI);
 			try {
 				final URI realURI = originalService == null ? URI.createURI(subModelURI) : originalService.resolveURI(subModelURI);
 
 				final IModelInstance instance = modelService.getModel(realURI);
+				if (!instance.isLoaded()) {
+					instancesToUnload.add(instance);
+				}
 				originalSubModels.add(instance.getModel());
 			} catch (final IOException e1) {
 				log.error("IO Exception loading model from " + subModelURI, e1);
@@ -288,6 +297,12 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		dup.getMetadata().setCreated(original.getMetadata().getCreated());
 		dup.getMetadata().setLastModified(new Date());
 		dup.setName(original.getName());
+
+		// Clean up
+		for (final IModelInstance toUnload : instancesToUnload) {
+			toUnload.unload();
+			toUnload.dispose();
+		}
 
 		return dup;
 	}
