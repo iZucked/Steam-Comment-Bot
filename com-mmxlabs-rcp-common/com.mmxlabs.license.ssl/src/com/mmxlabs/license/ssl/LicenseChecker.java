@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.util.Properties;
 
 import com.mmxlabs.license.ssl.internal.Activator;
 
@@ -96,15 +98,16 @@ public final class LicenseChecker {
 
 	private static Certificate getEclipseHomeLicense() throws CertificateException, FileNotFoundException {
 
-		FileInputStream inStream = null;
+		InputStream inStream = null;
 		try {
 			final Certificate licenseCertificate;
-
-			final String userHome = System.getProperty("eclipse.home");
+			Properties properties = System.getProperties();
+			System.out.println(properties);
+			final String userHome = System.getProperty("eclipse.home.location");
 			if (userHome != null) {
-				final File f = new File(userHome + "/license.pem");
+				final URL url = new URL(userHome + "/license.pem");
 				final CertificateFactory cf = CertificateFactory.getInstance("X.509");
-				inStream = new FileInputStream(f);
+				inStream = url.openStream();
 				licenseCertificate = cf.generateCertificate(inStream);
 				return licenseCertificate;
 			}
