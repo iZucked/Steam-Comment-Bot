@@ -184,6 +184,11 @@ public class EObjectTableViewer extends GridTableViewer {
 	EObject currentContainer;
 
 	/**
+	 * Overridding sort order of objects. Any change in column sort order will set this back to null.
+	 */
+	private List<Object> fixedSortOrder = null;
+
+	/**
 	 * @return the currentContainer
 	 */
 	public EObject getCurrentContainer() {
@@ -388,6 +393,10 @@ public class EObjectTableViewer extends GridTableViewer {
 
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
+
+				// Sort order changed - clear fixed ordering
+				fixedSortOrder = null;
+
 				if (columnSortOrder.get(0) == tColumn) {
 					sortDescending = !sortDescending;
 				} else {
@@ -476,6 +485,10 @@ public class EObjectTableViewer extends GridTableViewer {
 
 				@Override
 				public void widgetSelected(final SelectionEvent e) {
+
+					// Sort order changed - clear fixed ordering
+					fixedSortOrder = null;
+
 					if (columnSortOrder.get(0) == tColumn) {
 						sortDescending = !sortDescending;
 					} else {
@@ -595,6 +608,14 @@ public class EObjectTableViewer extends GridTableViewer {
 		viewer.setComparator(new ViewerComparator() {
 			@Override
 			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+
+				// If there is a fixed sort order use that.
+				if (fixedSortOrder != null) {
+					final int idx1 = fixedSortOrder.indexOf(e1);
+					final int idx2 = fixedSortOrder.indexOf(e2);
+					return idx1 - idx2;
+				}
+
 				final Iterator<GridColumn> iterator = columnSortOrder.iterator();
 				int comparison = 0;
 				while (iterator.hasNext() && (comparison == 0)) {
@@ -906,5 +927,21 @@ public class EObjectTableViewer extends GridTableViewer {
 		if (existing == null || s.getSeverity() > existing.getSeverity()) {
 			validationErrors.put(e, s);
 		}
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public List<Object> getFixedSortOrder() {
+		return fixedSortOrder;
+	}
+
+	/**
+	 * Set a predefined sort order to override current column sort order. This will be overridden if the column sort order changes.
+	 * 
+	 * @since 2.0
+	 */
+	public void setFixedSortOrder(final List<Object> fixedSortOrder) {
+		this.fixedSortOrder = fixedSortOrder;
 	}
 }
