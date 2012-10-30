@@ -46,6 +46,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
@@ -75,6 +76,7 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.menus.IMenuService;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -114,6 +116,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.EObjectTableViewer;
 import com.mmxlabs.models.ui.tabular.EObjectTableViewerColumnProvider;
 import com.mmxlabs.models.ui.tabular.ICellManipulator;
 import com.mmxlabs.models.ui.tabular.ICellRenderer;
@@ -223,7 +226,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				}
 			}
 
-			for (Cargo c : cargoes) {
+			for (final Cargo c : cargoes) {
 				if (c != null) {
 					c.eAdapters().remove(cargoChangeAdapter);
 				}
@@ -727,6 +730,22 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		LoadSlot loadSlot;
 		DischargeSlot dischargeSlot;
 		ElementAssignment elementAssignment;
+
+		/**
+		 * This is used in the {@link EObjectTableViewer} implementation of {@link ViewerComparator} for the fixed sort order.
+		 */
+		@Override
+		public boolean equals(final Object obj) {
+
+			if (obj instanceof RowData) {
+				final RowData other = (RowData) obj;
+				return Equality.isEqual(cargo, other.cargo) && Equality.isEqual(loadSlot, other.loadSlot) && Equality.isEqual(dischargeSlot, other.dischargeSlot)
+						&& Equality.isEqual(elementAssignment, other.elementAssignment);
+			}
+
+			return false;
+		}
+
 	};
 
 	/**
@@ -896,7 +915,20 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		// }
 		synchronized (updateLock) {
 			// Re-set the input to trigger full update as we push a load of stuff into the content provider which probably should not be there....
+
 			final Object oldInput = getScenarioViewer().getInput();
+			// Attempt to grab the current sort order and pass into the viewer so input changes do not alter the default ordering.
+			final ViewerComparator comparator = getScenarioViewer().getComparator();
+			Object[] sortedElements = null;
+			if (comparator != null) {
+
+				final Object[] elements = ((IStructuredContentProvider) getScenarioViewer().getContentProvider()).getElements(oldInput);
+				comparator.sort(getScenarioViewer(), elements);
+				sortedElements = elements;
+
+				getScenarioViewer().setFixedSortOrder(Arrays.asList(sortedElements));
+			}
+
 			getScenarioViewer().setInput(null);
 			getScenarioViewer().setInput(oldInput);
 		}
@@ -1559,11 +1591,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			return true;
 		}
 
-		Map<Object, IStatus> validationMap = getScenarioViewer().getValidationErrors();
+		final Map<Object, IStatus> validationMap = getScenarioViewer().getValidationErrors();
 		if (cargo == null) {
 			return false;
 		} else {
-			RowData rd = rowData.get(cargoes.indexOf(cargo));
+			final RowData rd = rowData.get(cargoes.indexOf(cargo));
 			if (validationMap.containsKey(rd)) {
 				return false;
 			}
@@ -1571,7 +1603,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (loadSlot == null) {
 			return false;
 		} else {
-			RowData rd = rowData.get(loadSlots.indexOf(loadSlot));
+			final RowData rd = rowData.get(loadSlots.indexOf(loadSlot));
 			if (validationMap.containsKey(rd)) {
 				return false;
 			}
@@ -1579,7 +1611,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (dischargeSlot == null) {
 			return false;
 		} else {
-			RowData rd = rowData.get(dischargeSlots.indexOf(dischargeSlot));
+			final RowData rd = rowData.get(dischargeSlots.indexOf(dischargeSlot));
 			if (validationMap.containsKey(rd)) {
 				return false;
 			}
