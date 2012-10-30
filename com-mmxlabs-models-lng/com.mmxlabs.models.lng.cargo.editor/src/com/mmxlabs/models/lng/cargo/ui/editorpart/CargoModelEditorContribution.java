@@ -61,10 +61,11 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			editorPart.setPageText(dischargeSlotPageNumber, "Discharge Slots");
 		}
 
-		wiringViewer = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		wiringPageNumber = editorPart.addPage(wiringViewer);
-		editorPart.setPageText(wiringPageNumber, "Trades");
-
+		if (true) {
+			wiringViewer = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			wiringPageNumber = editorPart.addPage(wiringViewer);
+			editorPart.setPageText(wiringPageNumber, "Trades");
+		}
 		if (false) {
 			this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			tradesViewer.createControl(parent);
@@ -82,7 +83,9 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			loadSlotViewerPane.setLocked(locked);
 			dischargeSlotViewerPane.setLocked(locked);
 		}
-		wiringViewer.setLocked(locked);
+		if (wiringViewer != null) {
+			wiringViewer.setLocked(locked);
+		}
 		if (tradesViewer != null) {
 			tradesViewer.setLocked(locked);
 		}
