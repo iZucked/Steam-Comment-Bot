@@ -3,6 +3,7 @@ package com.mmxlabs.license.ssl;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
@@ -68,6 +69,7 @@ public final class LicenseChecker {
 	}
 
 	private static Certificate getUserDataLicense() {
+		FileInputStream inStream = null;
 		try {
 			final Certificate licenseCertificate;
 
@@ -75,16 +77,26 @@ public final class LicenseChecker {
 			if (userHome != null) {
 				final File f = new File(userHome + "/mmxlabs/license.pem");
 				final CertificateFactory cf = CertificateFactory.getInstance("X.509");
-				licenseCertificate = cf.generateCertificate(new FileInputStream(f));
+				inStream = new FileInputStream(f);
+				licenseCertificate = cf.generateCertificate(inStream);
 				return licenseCertificate;
 			}
 		} catch (final Exception e) {
+		} finally {
+			if (inStream != null) {
+				try {
+					inStream.close();
+				} catch (final IOException e) {
+					// Ignore
+				}
+			}
 		}
 		return null;
 	}
 
 	private static Certificate getEclipseHomeLicense() throws CertificateException, FileNotFoundException {
 
+		FileInputStream inStream = null;
 		try {
 			final Certificate licenseCertificate;
 
@@ -92,10 +104,19 @@ public final class LicenseChecker {
 			if (userHome != null) {
 				final File f = new File(userHome + "/license.pem");
 				final CertificateFactory cf = CertificateFactory.getInstance("X.509");
-				licenseCertificate = cf.generateCertificate(new FileInputStream(f));
+				inStream = new FileInputStream(f);
+				licenseCertificate = cf.generateCertificate(inStream);
 				return licenseCertificate;
 			}
 		} catch (final Exception e) {
+		} finally {
+			if (inStream != null) {
+				try {
+					inStream.close();
+				} catch (final IOException e) {
+					// Ignore
+				}
+			}
 		}
 		return null;
 
