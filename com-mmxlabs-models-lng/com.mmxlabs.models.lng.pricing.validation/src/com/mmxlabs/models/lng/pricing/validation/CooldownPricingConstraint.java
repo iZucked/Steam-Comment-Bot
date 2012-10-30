@@ -13,11 +13,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 
@@ -25,17 +27,19 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * A constraint for ensuring that all ports have a cooldown constraint in the given pricing model.
  * 
  * @author hinton
- *
+ * 
  */
 public class CooldownPricingConstraint extends AbstractModelConstraint {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse.emf.validation.IValidationContext)
 	 */
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		
+
 		if (target instanceof PricingModel) {
 			final PricingModel pm = (PricingModel) target;
 			final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
@@ -49,13 +53,20 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 					}
 					if (!unpricedPorts.isEmpty()) {
 						final SortedSet<String> names = new TreeSet<String>();
-						for (final APort p : unpricedPorts) names.add(""+p.getName());
-						return ctx.createFailureStatus(names.toString());
+						for (final APort p : unpricedPorts) {
+							// Only report on load ports
+							if (p instanceof Port && ((Port) p).getCapabilities().contains(PortCapability.LOAD)) {
+								names.add("" + p.getName());
+							}
+						}
+						if (!names.isEmpty()) {
+							return ctx.createFailureStatus(names.toString());
+						}
 					}
 				}
 			}
 		}
-		
+
 		return ctx.createSuccessStatus();
 	}
 }
