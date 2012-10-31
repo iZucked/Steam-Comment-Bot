@@ -544,7 +544,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 			if (consumption == 0) {
 				continue;
 			}
-			final int componentCost = (int) Calculator.costFromConsumption(consumption, unitPrice);
+			final int componentCost = OptimiserUnitConvertor.convertToExternalFixedCost((int) Calculator.costFromConsumption(consumption, unitPrice));
 			totalFuelCost += componentCost;
 			final ExtraData componentData = fuelData.addExtraData(component.name(), component.name(), componentCost, ExtraDataFormatType.CURRENCY);
 			componentData.addExtraData("quantity", "Usage (" + component.getDefaultFuelUnit().name() + ")", OptimiserUnitConvertor.convertToExternalVolume(consumption), ExtraDataFormatType.INTEGER);
