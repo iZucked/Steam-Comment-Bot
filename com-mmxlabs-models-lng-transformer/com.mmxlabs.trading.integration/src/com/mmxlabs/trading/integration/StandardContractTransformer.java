@@ -14,7 +14,12 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EClass;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.StepwiseIntegerCurve;
+import com.mmxlabs.common.parser.IExpression;
+import com.mmxlabs.common.parser.series.ISeries;
+import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -22,6 +27,7 @@ import com.mmxlabs.models.lng.commercial.NetbackPurchaseContract;
 import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
 import com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
@@ -40,39 +46,50 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 /**
- * 
+ * * Contract Transformer and Builder - this is the {@link IContractTransformer} portion of the extension. See {@link StandardContractBuilder} for the builder / internal model side. This class deals
+ * directly with the EMF model and uses the {@link StandardContractBuilder} to create internal instances.
  * 
  * @author hinton
  * 
  * @since 2.0
  */
 public class StandardContractTransformer implements IContractTransformer {
-	private ISchedulerBuilder builder;
 	@Inject
 	private StandardContractBuilder contractBuilder;
+
 	private ModelEntityMap map;
-	private MMXRootObject rootObject;
+
 	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getProfitSharePurchaseContract(), CommercialPackage.eINSTANCE.getNetbackPurchaseContract());
+
+	@Inject
+	private Injector injector;
+
+	@Inject
+	private SeriesParser indices;
 
 	@Override
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
-		this.rootObject = rootObject;
 		this.map = map;
-		this.builder = builder;
-		this.contractBuilder = new StandardContractBuilder(map);
 		builder.addBuilderExtension(contractBuilder);
 	}
 
 	@Override
 	public void finishTransforming() {
-		this.rootObject = null;
 		this.map = null;
-		this.builder = null;
 		this.contractBuilder = null;
 	}
 
 	private ILoadPriceCalculator instantiatePC(final Contract c) {
-		if (c instanceof ProfitSharePurchaseContract) {
+		if (c instanceof RedirectionPurchaseContract) {
+			final RedirectionPurchaseContract contract = (RedirectionPurchaseContract) c;
+			final APort port = contract.getBaseSalesMarketPort();
+
+			final IPort baseMarketPort = (map.getOptimiserObject(port, IPort.class));
+			final ICurve purchasePriceCurve = generateExpressionCurve(contract.getBasePurchasePriceExpression());
+			final ICurve salesPriceCurve = generateExpressionCurve(contract.getBaseSalesPriceExpression());
+
+			return contractBuilder.createRedirectionContract(baseMarketPort, purchasePriceCurve, salesPriceCurve, OptimiserUnitConvertor.convertToInternalSpeed(contract.getNotionalSpeed()));
+		} else if (c instanceof ProfitSharePurchaseContract) {
 			final ProfitSharePurchaseContract contract = (ProfitSharePurchaseContract) c;
 			final Set<IPort> baseMarketPorts = new HashSet<IPort>();
 			for (final APortSet portSet : contract.getBaseMarketPorts()) {
@@ -106,6 +123,23 @@ public class StandardContractTransformer implements IContractTransformer {
 					OptimiserUnitConvertor.convertToInternalPrice(netbackPurchaseContract.getFloorPrice()), notionalBallastParameterMap);
 		}
 		return null;
+	}
+
+	private StepwiseIntegerCurve generateExpressionCurve(String priceExpression) {
+		final IExpression<ISeries> expression = indices.parse(priceExpression);
+		final ISeries parsed = expression.evaluate();
+
+		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
+		if (parsed.getChangePoints().length == 0) {
+			curve.setDefaultValue(OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(0).doubleValue()));
+		} else {
+
+			curve.setDefaultValue(0);
+			for (final int i : parsed.getChangePoints()) {
+				curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
+			}
+		}
+		return curve;
 	}
 
 	@Override

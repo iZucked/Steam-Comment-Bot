@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
@@ -27,17 +28,27 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.trading.optimiser.contracts.impl.BallastParameters;
 import com.mmxlabs.trading.optimiser.contracts.impl.NetbackContract;
 import com.mmxlabs.trading.optimiser.contracts.impl.ProfitSharingContract;
+import com.mmxlabs.trading.optimiser.contracts.impl.RedirectionContract;
 
 /**
+ * Contract Transformer and Builder - this is the {@link IBuilderExtension} portion of the extension. See {@link StandardContractTransformer} for the transformer / model side. This class creates the
+ * internal optimiser contract implementations. Most of the work happens in the {@link #finishBuilding(IOptimisationData)} method where partially constructed objects can be completed as the
+ * {@link IOptimisationData} structure should be almost complete by this stage.
+ * 
  * @since 2.0
  */
 public class StandardContractBuilder implements IBuilderExtension {
 	private final Map<NetbackContract, Map<AVesselClass, NotionalBallastParameters>> netbacks = new HashMap<NetbackContract, Map<AVesselClass, NotionalBallastParameters>>();
+
 	@Inject
 	private ModelEntityMap map;
+
+	@Inject
+	private Injector injector;
 
 	public StandardContractBuilder() {
 	}
@@ -47,7 +58,7 @@ public class StandardContractBuilder implements IBuilderExtension {
 	}
 
 	public ProfitSharingContract createProfitSharingContract(final ICurve actualMarket, final ICurve referenceMarket, final int margin, final int share, final Set<IPort> baseMarketPorts,
-			int salesPriceMultiplier) {
+			final int salesPriceMultiplier) {
 		return new ProfitSharingContract(actualMarket, referenceMarket, margin, share, baseMarketPorts, salesPriceMultiplier);
 	}
 
@@ -100,5 +111,12 @@ public class StandardContractBuilder implements IBuilderExtension {
 			}
 			entry.getKey().setBallastParameters(m);
 		}
+	}
+
+	public ILoadPriceCalculator createRedirectionContract(final IPort baseMarketPort, final ICurve purchasePriceCurve, final ICurve salesPriceCurve, final int notionalSpeed) {
+
+		final RedirectionContract contract = new RedirectionContract(purchasePriceCurve, salesPriceCurve, notionalSpeed, baseMarketPort);
+		injector.injectMembers(contract);
+		return contract;
 	}
 }

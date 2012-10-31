@@ -20,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
-import com.mmxlabs.trading.optimiser.impl.OtherEntity;
 import com.mmxlabs.trading.optimiser.impl.SimpleEntity;
 
 /**
@@ -30,7 +29,7 @@ import com.mmxlabs.trading.optimiser.impl.SimpleEntity;
  * 
  * @since 2.0
  */
-public class TradingTransformerExtension implements ITransformerExtension {
+public class EntityTransformerExtension implements ITransformerExtension {
 
 	private MMXRootObject rootObject;
 
@@ -49,22 +48,9 @@ public class TradingTransformerExtension implements ITransformerExtension {
 	public void finishTransforming() {
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 		for (final LegalEntity e : commercialModel.getEntities()) {
-			final IEntity e2;
-			// Tmp hack until model is updated
-			// if (e.getName().equalsIgnoreCase("Third-parties")) {
-			// e2 = createExternalEntity(e.getName());
-			// } else {
-			e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), new ConstantValueCurve(0), // TODO fix tax rates.
+			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), new ConstantValueCurve(0), // TODO fix tax rates.
 					OptimiserUnitConvertor.convertToInternalConversionFactor(0));
-			// }
 
-			// if (e instanceof GroupEntity) {
-			// final GroupEntity ge = (GroupEntity) e;
-			// e2 = tradingBuilder.createGroupEntity(ge.getName(), Calculator.scaleToInt(ge.getOwnership()), new ConstantValueCurve(Calculator.scaleToInt(ge.getTaxRate())), // TODO fix tax rates.
-			// Calculator.scaleToInt(ge.getTransferOffset()));
-			// } else {
-			// e2 = tradingBuilder.createExternalEntity(e.getName());
-			// }
 			entities.addModelObject(e, e2);
 		}
 
@@ -82,13 +68,6 @@ public class TradingTransformerExtension implements ITransformerExtension {
 
 			}
 		}
-	}
-
-	/**
-	 * @since 2.0
-	 */
-	public IEntity createExternalEntity(final String name) {
-		return new OtherEntity(name);
 	}
 
 	/**

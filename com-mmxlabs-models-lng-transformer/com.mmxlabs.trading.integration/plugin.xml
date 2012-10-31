@@ -11,7 +11,7 @@
          id="com.mmxlabs.trading.integration.transformer"
          point="com.mmxlabs.lngscheduler.transformer">
       <Transformer
-            transformer="com.mmxlabs.trading.integration.TradingTransformerExtension">
+            transformer="com.mmxlabs.trading.integration.EntityTransformerExtension">
       </Transformer>
       <Transformer
             transformer="com.mmxlabs.trading.integration.StandardContractTransformer">
@@ -20,6 +20,9 @@
          </modelclass>
          <modelclass
                class="com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract">
+         </modelclass>
+         <modelclass
+               class="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract">
          </modelclass>
       </Transformer>
    </extension>
