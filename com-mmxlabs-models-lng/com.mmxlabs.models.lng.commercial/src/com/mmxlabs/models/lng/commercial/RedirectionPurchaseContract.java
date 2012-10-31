@@ -12,6 +12,7 @@ import com.mmxlabs.models.lng.port.Port;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Redirection Purchase Contract</b></em>'.
+ * @since 2.0
  * <!-- end-user-doc -->
  *
  * <p>

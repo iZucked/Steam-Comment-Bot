@@ -260,6 +260,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
