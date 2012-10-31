@@ -193,6 +193,19 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT: {
+				RedirectionPurchaseContract redirectionPurchaseContract = (RedirectionPurchaseContract)theEObject;
+				T result = caseRedirectionPurchaseContract(redirectionPurchaseContract);
+				if (result == null) result = casePurchaseContract(redirectionPurchaseContract);
+				if (result == null) result = caseContract(redirectionPurchaseContract);
+				if (result == null) result = caseAPurchaseContract(redirectionPurchaseContract);
+				if (result == null) result = caseAContract(redirectionPurchaseContract);
+				if (result == null) result = caseUUIDObject(redirectionPurchaseContract);
+				if (result == null) result = caseNamedObject(redirectionPurchaseContract);
+				if (result == null) result = caseMMXObject(redirectionPurchaseContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -344,6 +357,21 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseNotionalBallastParameters(NotionalBallastParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Redirection Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Redirection Purchase Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRedirectionPurchaseContract(RedirectionPurchaseContract object) {
 		return null;
 	}
 

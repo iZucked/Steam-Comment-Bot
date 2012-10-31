@@ -81,6 +81,12 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
+        id="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -169,6 +175,13 @@
           label="Notional Ballast Parameters"
           outputEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.RedirectionPurchaseContractFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Redirection Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
  </extension>
  <extension

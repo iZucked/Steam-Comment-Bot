@@ -218,6 +218,11 @@ public class CommercialModelItemProvider
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
 				 CommercialFactory.eINSTANCE.createProfitSharePurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
+				 CommercialFactory.eINSTANCE.createRedirectionPurchaseContract()));
 	}
 
 	/**

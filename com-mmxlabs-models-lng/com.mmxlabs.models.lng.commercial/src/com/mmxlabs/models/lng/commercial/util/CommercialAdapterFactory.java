@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial.util;
 
+import com.mmxlabs.models.lng.commercial.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -123,6 +124,10 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseNotionalBallastParameters(NotionalBallastParameters object) {
 				return createNotionalBallastParametersAdapter();
+			}
+			@Override
+			public Adapter caseRedirectionPurchaseContract(RedirectionPurchaseContract object) {
+				return createRedirectionPurchaseContractAdapter();
 			}
 			@Override
 			public Adapter caseMMXObject(MMXObject object) {
@@ -309,6 +314,20 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createNotionalBallastParametersAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract <em>Redirection Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract
+	 * @generated
+	 */
+	public Adapter createRedirectionPurchaseContractAdapter() {
 		return null;
 	}
 

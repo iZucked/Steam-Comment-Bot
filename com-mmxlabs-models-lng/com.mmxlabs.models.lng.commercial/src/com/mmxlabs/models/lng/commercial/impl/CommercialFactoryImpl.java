@@ -66,6 +66,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT: return createProfitSharePurchaseContract();
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS: return createNotionalBallastParameters();
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT: return createRedirectionPurchaseContract();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -149,6 +150,16 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public NotionalBallastParameters createNotionalBallastParameters() {
 		NotionalBallastParametersImpl notionalBallastParameters = new NotionalBallastParametersImpl();
 		return notionalBallastParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RedirectionPurchaseContract createRedirectionPurchaseContract() {
+		RedirectionPurchaseContractImpl redirectionPurchaseContract = new RedirectionPurchaseContractImpl();
+		return redirectionPurchaseContract;
 	}
 
 	/**

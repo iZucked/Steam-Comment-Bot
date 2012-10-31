@@ -18,11 +18,11 @@ import com.mmxlabs.models.lng.types.APortSet;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketPorts <em>Base Market Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketIndex <em>Base Market Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketConstant <em>Base Market Constant</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketMultiplier <em>Base Market Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketConstant <em>Base Market Constant</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketIndex <em>Ref Market Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketConstant <em>Ref Market Constant</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketMultiplier <em>Ref Market Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketConstant <em>Ref Market Constant</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getShare <em>Share</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMargin <em>Margin</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getSalesMultiplier <em>Sales Multiplier</em>}</li>
