@@ -40,7 +40,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.trading.integration.StandardContractBuilderFactory;
 import com.mmxlabs.trading.integration.StandardContractTransformer;
 import com.mmxlabs.trading.integration.TradingOptimiserModuleService;
-import com.mmxlabs.trading.integration.TradingTransformerExtension;
+import com.mmxlabs.trading.integration.EntityTransformerExtension;
 import com.mmxlabs.trading.optimiser.components.ProfitAndLossAllocationComponentProvider;
 
 public class ContractExtensionTestModule extends AbstractModule {
@@ -72,7 +72,7 @@ public class ContractExtensionTestModule extends AbstractModule {
 				buildFactories.add(new StandardContractBuilderFactory());
 			}
 			{
-				final TradingTransformerExtension sct = new TradingTransformerExtension();
+				final EntityTransformerExtension sct = new EntityTransformerExtension();
 				final ContractTransformer transformer = new ContractTransformerWrapper(sct, Collections.<EClass>emptyList());
 				transformers.add(transformer);
 			}
