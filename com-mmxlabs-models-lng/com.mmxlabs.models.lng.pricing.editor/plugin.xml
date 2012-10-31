@@ -16,31 +16,7 @@
 
 <plugin>
 
-   <extension point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.emf.ecore.Wizard.category.ID"
-            name="%_UI_Wizard_category"/>
-      <wizard
-            id="com.mmxlabs.models.lng.pricing.presentation.PricingModelWizardID"
-            name="%_UI_PricingModelWizard_label"
-            class="com.mmxlabs.models.lng.pricing.presentation.PricingModelWizard"
-            category="org.eclipse.emf.ecore.Wizard.category.ID"
-            icon="icons/full/obj16/PricingModelFile.gif">
-         <description>%_UI_PricingModelWizard_description</description>
-         <selection class="org.eclipse.core.resources.IResource"/>
-      </wizard>
-   </extension>
 
-   <extension point="org.eclipse.ui.editors">
-      <editor
-            id="com.mmxlabs.models.lng.pricing.presentation.PricingEditorID"
-            name="%_UI_PricingEditor_label"
-            icon="icons/full/obj16/PricingModelFile.gif"
-            extensions="pricing"
-            class="com.mmxlabs.models.lng.pricing.presentation.PricingEditor"
-            contributorClass="com.mmxlabs.models.lng.pricing.presentation.PricingActionBarContributor">
-      </editor>
-   </extension>
 
 	
 	<extension
@@ -188,7 +164,7 @@
     <jointModelEditor
           id="com.mmxlabs.models.lng.pricing.editor.pricingModelEditor"
           implementation="com.mmxlabs.models.lng.pricing.ui.editorpart.PricingModelEditorContribution"
-          priority="6"
+          priority="60"
           subModelClass="com.mmxlabs.models.lng.pricing.PricingModel">
     </jointModelEditor>
  </extension>

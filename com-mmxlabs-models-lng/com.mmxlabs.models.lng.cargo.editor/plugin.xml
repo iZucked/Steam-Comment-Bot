@@ -16,31 +16,7 @@
 
 <plugin>
 
-   <extension point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.emf.ecore.Wizard.category.ID"
-            name="%_UI_Wizard_category"/>
-      <wizard
-            id="com.mmxlabs.models.lng.cargo.presentation.CargoModelWizardID"
-            name="%_UI_CargoModelWizard_label"
-            class="com.mmxlabs.models.lng.cargo.presentation.CargoModelWizard"
-            category="org.eclipse.emf.ecore.Wizard.category.ID"
-            icon="icons/full/obj16/CargoModelFile.gif">
-         <description>%_UI_CargoModelWizard_description</description>
-         <selection class="org.eclipse.core.resources.IResource"/>
-      </wizard>
-   </extension>
 
-   <extension point="org.eclipse.ui.editors">
-      <editor
-            id="com.mmxlabs.models.lng.cargo.presentation.CargoEditorID"
-            name="%_UI_CargoEditor_label"
-            icon="icons/full/obj16/CargoModelFile.gif"
-            extensions="cargo"
-            class="com.mmxlabs.models.lng.cargo.presentation.CargoEditor"
-            contributorClass="com.mmxlabs.models.lng.cargo.presentation.CargoActionBarContributor">
-      </editor>
-   </extension>
 
 	
 	<extension
@@ -106,7 +82,7 @@
     <jointModelEditor
           id="com.mmxlabs.models.lng.cargo.editor.cargoeditor"
           implementation="com.mmxlabs.models.lng.cargo.ui.editorpart.CargoModelEditorContribution"
-          priority="0"
+          priority="10"
           subModelClass="com.mmxlabs.models.lng.cargo.CargoModel">
     </jointModelEditor>
  </extension>
