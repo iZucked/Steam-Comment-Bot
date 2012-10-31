@@ -427,6 +427,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final GridColumn column = getScenarioViewer().getGrid().getColumn(mousePoint);
 
 				final GridItem item = getScenarioViewer().getGrid().getItem(mousePoint);
+				if (item == null) {
+					return;
+				}
 				final Object data = item.getData();
 				if (data instanceof RowData) {
 
