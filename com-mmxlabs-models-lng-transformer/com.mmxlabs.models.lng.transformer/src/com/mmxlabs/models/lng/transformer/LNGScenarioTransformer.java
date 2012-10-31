@@ -146,7 +146,8 @@ public class LNGScenarioTransformer {
 	private Date earliestTime;
 	private Date latestTime;
 
-	private final SeriesParser indices = new SeriesParser();
+	@Inject
+	private SeriesParser indices;
 
 	@Inject(optional = true)
 	private Iterable<ContractTransformer> transformerExtensions;
