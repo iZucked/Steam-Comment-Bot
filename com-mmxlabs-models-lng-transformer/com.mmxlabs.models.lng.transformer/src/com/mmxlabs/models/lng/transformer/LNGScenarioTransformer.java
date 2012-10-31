@@ -334,21 +334,8 @@ public class LNGScenarioTransformer {
 		for (final ITransformerExtension extension : allTransformerExtensions) {
 			extension.startTransforming(rootObject, entities, builder);
 		}
-
-		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-
-		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
-			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
-			final ILoadPriceCalculator calculator = transformer.transformPurchaseContract(c);
-			entities.addModelObject(c, calculator);
-		}
-
-		for (final SalesContract c : commercialModel.getSalesContracts()) {
-			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
-			final ISalesPriceCalculator calculator = transformer.transformSalesContract(c);
-			entities.addModelObject(c, calculator);
-		}
-
+		
+		
 		/**
 		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */
@@ -389,6 +376,22 @@ public class LNGScenarioTransformer {
 			allPorts.add(port);
 			entities.addModelObject(ePort, port);
 		}
+
+		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+
+		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
+			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
+			final ILoadPriceCalculator calculator = transformer.transformPurchaseContract(c);
+			entities.addModelObject(c, calculator);
+		}
+
+		for (final SalesContract c : commercialModel.getSalesContracts()) {
+			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
+			final ISalesPriceCalculator calculator = transformer.transformSalesContract(c);
+			entities.addModelObject(c, calculator);
+		}
+
+
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, entities);
 
