@@ -477,11 +477,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					final RowData rowDataItem = (RowData) data;
 					final int idx = rowData.indexOf(rowDataItem);
 
-					System.out.println(idx);
-
-					System.out.println(rowDataItem.loadSlot);
-					System.out.println(loadSlots.get(idx));
-
 					if (menu == null) {
 						menu = mgr.createContextMenu(scenarioViewer.getGrid());
 					}
