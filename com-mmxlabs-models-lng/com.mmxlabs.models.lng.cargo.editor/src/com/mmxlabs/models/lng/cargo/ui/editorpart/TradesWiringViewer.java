@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.viewers.IElementComparer;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -101,6 +103,9 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.lng.pricing.SpotType;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -459,6 +464,54 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 					menu.setVisible(true);
 				}
+			}
+		});
+
+		scenarioViewer.setComparer(new IElementComparer() {
+			@Override
+			public int hashCode(final Object element) {
+				return element.hashCode();
+			}
+
+			@Override
+			public boolean equals(final Object a, final Object b) {
+
+				final Set<Object> aSet = getObjectSet(a);
+				final Set<Object> bSet = getObjectSet(b);
+
+				aSet.retainAll(bSet);
+				if (!aSet.isEmpty()) {
+					return true;
+				}
+
+				return Equality.isEqual(a, b);
+			}
+
+			private Set<Object> getObjectSet(final Object a) {
+				final Set<Object> aSet = new HashSet<Object>();
+				if (a instanceof RowData) {
+					final RowData rd = (RowData) a;
+					aSet.add(rd);
+					aSet.add(rd.cargo);
+					aSet.add(rd.loadSlot);
+					aSet.add(rd.dischargeSlot);
+					aSet.add(rd.elementAssignment);
+					aSet.remove(null);
+				} else if (a instanceof CargoAllocation) {
+					final CargoAllocation cargoAllocation = (CargoAllocation) a;
+					aSet.add(cargoAllocation.getInputCargo());
+					aSet.add(cargoAllocation.getLoadAllocation().getSlot());
+					aSet.add(cargoAllocation.getDischargeAllocation().getSlot());
+				} else if (a instanceof SlotAllocation) {
+					final SlotAllocation slotAllocation = (SlotAllocation) a;
+					aSet.add(slotAllocation.getSlot());
+				} else if (a instanceof SlotVisit) {
+					final SlotVisit slotVisit = (SlotVisit) a;
+					aSet.add(slotVisit.getSlotAllocation().getSlot());
+				} else {
+					aSet.add(a);
+				}
+				return aSet;
 			}
 		});
 		return scenarioViewer;
