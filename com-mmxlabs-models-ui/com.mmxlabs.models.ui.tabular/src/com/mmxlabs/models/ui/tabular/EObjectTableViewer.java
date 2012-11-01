@@ -538,6 +538,8 @@ public class EObjectTableViewer extends GridTableViewer {
 		table.setRowHeaderVisible(true);
 		table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
 
+		// This appears to do nothing in the Nebula Grid case.
+		// See Grid#setItemHeight() instead
 		final Listener measureListener = new Listener() {
 			@Override
 			public void handleEvent(final Event event) {
