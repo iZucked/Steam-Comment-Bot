@@ -73,7 +73,7 @@
            point="org.eclipse.ui.menus">
          <menuContribution
                allPopups="false"
-               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=Imports">
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=importers">
             <command
                   commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ImportCSVScenario"
                   style="push">
@@ -96,10 +96,14 @@
                   </with>
                </visibleWhen>
             </command>
-                        <command
+         </menuContribution>
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=exporters">
+            <command
                   commandId="com.mmxlabs.shiplingo.platform.models.optimisation.ExportCSVScenario"
                   style="push">
-                   <visibleWhen
+               <visibleWhen
                      checkEnabled="false">
                   <with
                         variable="selection">
