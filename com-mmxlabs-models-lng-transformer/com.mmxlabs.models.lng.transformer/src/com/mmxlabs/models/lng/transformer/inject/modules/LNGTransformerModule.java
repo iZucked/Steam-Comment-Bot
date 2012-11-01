@@ -15,20 +15,15 @@ import org.eclipse.core.runtime.Platform;
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
+import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
-import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
-import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.contracts.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
@@ -40,7 +35,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
-import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
@@ -65,6 +59,8 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(LNGScenarioTransformer.class).in(Singleton.class);
 
+		bind(SeriesParser.class).in(Singleton.class);
+		
 		bind(ModelEntityMap.class).to(ResourcelessModelEntityMap.class).in(Singleton.class);
 
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
