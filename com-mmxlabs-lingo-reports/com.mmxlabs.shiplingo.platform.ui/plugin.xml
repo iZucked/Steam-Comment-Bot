@@ -17,22 +17,6 @@
             name="Analysis">
       </perspective>
    </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="*">
-         <view
-               closeable="false"
-               id="com.mmxlabs.scenario.service.ui.navigator"
-               minimized="true"
-               relationship="left"
-               relative="org.eclipse.ui.editorss">
-         </view>
-         <viewShortcut
-               id="com.mmxlabs.scenario.service.ui.navigator">
-         </viewShortcut>
-      </perspectiveExtension>
-   </extension>
  
 
 
