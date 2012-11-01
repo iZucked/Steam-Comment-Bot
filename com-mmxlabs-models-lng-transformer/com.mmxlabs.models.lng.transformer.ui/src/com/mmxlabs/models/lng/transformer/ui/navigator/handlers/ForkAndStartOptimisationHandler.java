@@ -28,7 +28,7 @@ import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
-import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
+import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -90,7 +90,7 @@ public class ForkAndStartOptimisationHandler extends StartOptimisationHandler {
 							fork.setName(finalNewName);
 
 							try {
-								OpenScenarioCommandHandler.openScenarioInstance(HandlerUtil.getActiveSite(event).getPage(), fork);
+								OpenScenarioUtils.openScenarioInstance(HandlerUtil.getActiveSite(event).getPage(), fork);
 							} catch (final PartInitException e) {
 								log.error(e.getMessage(), e);
 							}

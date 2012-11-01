@@ -25,7 +25,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
+import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceEditorInput;
 
 /**
@@ -72,7 +72,7 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 						fork.setName(finalNewName);
 
 						try {
-							OpenScenarioCommandHandler.openScenarioInstance(editor.getSite().getPage(), fork);
+							OpenScenarioUtils.openScenarioInstance(editor.getSite().getPage(), fork);
 						} catch (final PartInitException e) {
 							log.error(e.getMessage(), e);
 						}
