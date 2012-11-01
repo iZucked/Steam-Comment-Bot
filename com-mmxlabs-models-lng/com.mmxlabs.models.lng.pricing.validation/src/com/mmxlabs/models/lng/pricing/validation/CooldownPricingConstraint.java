@@ -5,9 +5,11 @@
 package com.mmxlabs.models.lng.pricing.validation;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -20,6 +22,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.PortCapability;
@@ -51,29 +54,37 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 				final PortModel ports = rootObject.getSubModel(PortModel.class);
 				if (ports != null) {
 					// count the number of cooldown prices attached to each port
-					final HashMap<APort, Integer> pricingPerPort = new HashMap<APort, Integer>();					
-					for (final APort port: ports.getPorts()) pricingPerPort.put(port, 0);
-					
+					final HashMap<APort, Set<CooldownPrice>> pricingPerPort = new HashMap<APort, Set<CooldownPrice>>();
+					for (final APort port : ports.getPorts()) {
+						pricingPerPort.put(port, new HashSet<CooldownPrice>());
+					}
+						
 					for (final CooldownPrice c : pm.getCooldownPrices()) {
-						for (final APort port: SetUtils.getPorts(c.getPorts())) {
-							pricingPerPort.put(port, pricingPerPort.get(port) + 1);
+						for (final APort port : SetUtils.getPorts(c.getPorts())) {
+							pricingPerPort.get(port).add(c);
 						}
 					}
-					
+
 					// find all the ports with less than or more than 1 cooldown price
 					final List<IStatus> failures = new LinkedList<IStatus>();
-					
-					for (final Entry<APort, Integer> entry: pricingPerPort.entrySet()) {
+
+					for (final Entry<APort, Set<CooldownPrice>> entry : pricingPerPort.entrySet()) {
 						final APort port = entry.getKey();
-						final int count = entry.getValue();
-						
+						final int count = entry.getValue().size();
+
 						if (count != 1 && (port instanceof Port) && ((Port) port).getCapabilities().contains(PortCapability.LOAD)) {
 							final String message = String.format("Load port %s has %d cooldown prices specified.", port.getName(), count);
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+							dcsd.addEObjectAndFeature(port, null);
+							if (count > 0) {
+								for (final CooldownPrice c : entry.getValue()) {
+									dcsd.addEObjectAndFeature(c, PricingPackage.eINSTANCE.getCooldownPrice_Ports());
+								}
+							}
 							failures.add(dcsd);
 						}
 					}
-					
+
 					// return an appropriate validation status: success, 1 failure or compound failure
 					if (failures.isEmpty()) {
 						return ctx.createSuccessStatus();
@@ -81,9 +92,9 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 						return failures.get(0);
 					} else {
 						final String heading = String.format("%s ports have problems with their cooldown prices.", failures.size());
-						return new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, failures.toArray(new IStatus[]{}), heading, null);
+						return new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, failures.toArray(new IStatus[] {}), heading, null);
 					}
-					
+
 				}
 			}
 		}
