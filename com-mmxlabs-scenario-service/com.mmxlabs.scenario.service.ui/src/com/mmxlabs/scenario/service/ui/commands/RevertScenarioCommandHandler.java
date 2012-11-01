@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
+import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
@@ -69,7 +70,7 @@ public class RevertScenarioCommandHandler extends AbstractHandler {
 
 							if (editorReferences != null && editorReferences.length > 0) {
 //								scenarioInstance.getScenarioService().load(scenarioInstance);
-								OpenScenarioCommandHandler.openScenarioInstance(activePage, scenarioInstance);
+								OpenScenarioUtils.openScenarioInstance(activePage, scenarioInstance);
 							}
 //						} catch (final IOException e) {
 //							log.error(e.getMessage(), e);

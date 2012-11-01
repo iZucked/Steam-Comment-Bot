@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scenario.service.ui.editing;
+package com.mmxlabs.scenario.service.ui.editing.internal;
 
 import java.lang.ref.WeakReference;
 
@@ -14,6 +14,7 @@ import org.eclipse.ui.IMemento;
 
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 public class ScenarioServiceElementFactory implements IElementFactory {

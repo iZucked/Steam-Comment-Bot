@@ -36,7 +36,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceDiffingEditorInput;
+import com.mmxlabs.scenario.service.ui.editing.internal.ScenarioServiceDiffingEditorInput;
 
 public class DiffEditScenarioCommandHandler extends AbstractHandler {
 

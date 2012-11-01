@@ -27,6 +27,7 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 /**
  * @author Simon Goodall
@@ -75,7 +76,7 @@ public class ForkScenarioCommandHandler extends AbstractHandler {
 							fork.setName(finalNewName);
 
 							try {
-								OpenScenarioCommandHandler.openScenarioInstance(HandlerUtil.getActiveSite(event).getPage(), fork);
+								OpenScenarioUtils.openScenarioInstance(HandlerUtil.getActiveSite(event).getPage(), fork);
 							} catch (final PartInitException e) {
 								log.error(e.getMessage(), e);
 							}

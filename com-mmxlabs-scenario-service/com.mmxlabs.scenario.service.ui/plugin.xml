@@ -636,7 +636,7 @@
    <extension
          point="org.eclipse.ui.elementFactories">
       <factory
-            class="com.mmxlabs.scenario.service.ui.editing.ScenarioServiceElementFactory"
+            class="com.mmxlabs.scenario.service.ui.editing.internal.ScenarioServiceElementFactory"
             id="com.mmxlabs.scenario.service.ui.editing.ScenarioServiceElementFactory">
       </factory>
    </extension>
