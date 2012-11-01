@@ -6,6 +6,7 @@ package com.mmxlabs.rcp.common.dialogs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -65,8 +66,10 @@ public class ListSelectionDialog extends Dialog {
 	private final Object input;
 	private final List<Pair<String, CellLabelProvider>> columns = new LinkedList<Pair<String, CellLabelProvider>>();
 	private final LinkedList<ILabelProvider> groupStack = new LinkedList<ILabelProvider>();
+	private final HashSet<Object> allSelectedElements = new HashSet<Object>();
+	private final HashSet<Object> filteredElements = new HashSet<Object>();
 	private Object[] initialSelection = new Object[0];
-	private Object[] result;
+	private Object[] dialogResult;
 
 	private class GroupedElementProvider implements ITreeContentProvider {
 		private final IStructuredContentProvider delegate;
@@ -440,8 +443,6 @@ public class ListSelectionDialog extends Dialog {
 		
 		final List<String> filters = new ArrayList<String>();
 
-		final HashSet<Object> allSelectedElements = new HashSet<Object>();
-		final HashSet<Object> filteredElements = new HashSet<Object>();
 		tr.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		tr.addModifyListener(new ModifyListener() {
 			@Override
@@ -457,13 +458,17 @@ public class ListSelectionDialog extends Dialog {
 					}
 				}
 				
+				// remove from allSelectedElements everything which is still showing 
+				// in the viewer 
 				allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
+				// add to allSelectedElements everything showing and selected in the viewer
 				allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements())));
+				// re-filter the viewer
 				viewer.refresh();
+				// and select only those elements which are in allSelectedElements 
 				viewer.setCheckedElements(contentProvider.getViewerElements(allSelectedElements.toArray()));
 			}
 		});
-		
 		viewer = new CheckboxTreeViewer(inner, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK);
 		viewer.setContentProvider(contentProvider);
 		viewer.setLabelProvider(labelProvider);
@@ -516,7 +521,25 @@ public class ListSelectionDialog extends Dialog {
 
 	@Override
 	protected void okPressed() {
-		result = contentProvider.getInputElements(viewer.getCheckedElements());
+		// Remove everything shown in the viewer from allSelectedElements
+		allSelectedElements.retainAll(Arrays.asList(contentProvider.getInputElements(filteredElements.toArray())));
+		// Add everything selected in the viewer from allSelectedElements
+		allSelectedElements.addAll(Arrays.asList(contentProvider.getInputElements(viewer.getCheckedElements())));
+
+		// Return the contents of allSelectedElements, sorted alphabetically
+		dialogResult = allSelectedElements.toArray();
+		
+		Comparator<Object> c = new Comparator<Object>() {
+
+			@Override
+			public int compare(Object arg0, Object arg1) {
+				// No compare method for Pair objects (consider adding to base class?)
+				Pair p0 = (Pair<String, ?>) arg0;
+				Pair p1 = (Pair<String, ?>) arg1;
+				
+				return ((String) p0.getFirst()).compareTo((String) p1.getFirst());
+			}};
+		Arrays.sort(dialogResult, c);
 		super.okPressed();
 	}
 
@@ -572,7 +595,7 @@ public class ListSelectionDialog extends Dialog {
 	}
 
 	public Object[] getResult() {
-		return result;
+		return dialogResult;
 	}
 
 	@Override
