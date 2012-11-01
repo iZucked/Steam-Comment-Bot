@@ -667,5 +667,11 @@
          </action>
       </editorContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.scenario.service.ui.internal.ScenarioServiceStartupExtension">
+      </startup>
+   </extension>
 
 </plugin>
