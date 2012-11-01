@@ -263,7 +263,7 @@
             point="org.eclipse.ui.menus">
          <menuContribution
                allPopups="false"
-               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=additions">
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=optimisation">
                <command
                      commandId="com.mmxlabs.commands.optimisation.play"
                      disabledIcon="icons/dlcl16/resume_co.gif"
