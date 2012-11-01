@@ -23,7 +23,7 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 
 	private final Map<ScenarioInstance, LiveEvaluator> evaluatorMap = new WeakHashMap<ScenarioInstance, LiveEvaluator>();
 
-	private final boolean enabled;
+	private boolean enabled;
 
 	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
@@ -87,9 +87,9 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 	@Override
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 		final LiveEvaluator eval = evaluatorMap.get(scenarioInstance);
-		final EObject obj = scenarioInstance.getInstance();
 
 		if (scenarioInstance != null && eval != null) {
+			final EObject obj = scenarioInstance.getInstance();
 			scenarioInstance.eAdapters().remove(eval);
 			if (obj instanceof MMXRootObject) {
 				final MMXRootObject rootObject = (MMXRootObject) obj;
@@ -122,6 +122,7 @@ public class LiveEvaluatorScenarioServiceListener extends ScenarioServiceListene
 	}
 
 	public void setEnabled(final boolean enabled) {
+		this.enabled = enabled;
 		for (final LiveEvaluator evaluator : evaluatorMap.values()) {
 			evaluator.setEnabled(enabled);
 		}
