@@ -672,6 +672,20 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			@Override
+			public void onMouseDown() {
+				// Initiated a drag, Disable selection in table
+				getScenarioViewer().getGrid().setCellSelectionEnabled(false);
+				super.onMouseDown();
+			}
+
+			@Override
+			public void onMouseup() {
+				// Enable selection in table
+				getScenarioViewer().getGrid().setCellSelectionEnabled(true);
+				super.onMouseup();
+			}
+
+			@Override
 			protected List<Float> getTerminalPositions() {
 
 				// Determine the mid-point in each row and generate an ordered list of heights.
