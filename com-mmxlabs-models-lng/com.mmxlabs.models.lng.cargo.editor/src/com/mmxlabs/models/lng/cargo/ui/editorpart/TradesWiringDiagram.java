@@ -274,6 +274,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			graphics.drawPath(path);
 			path.dispose();
 		}
+		// Clear clip rect for dragged wire
+		graphics.setClipping((Rectangle) null);
 
 		if (dragging) {
 			// draw dragging path
@@ -290,6 +292,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			graphics.drawPath(path);
 			path.dispose();
 		}
+		// Re-apply clip rect
+		graphics.setClipping(ca);
 
 		// draw terminal blobs
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
