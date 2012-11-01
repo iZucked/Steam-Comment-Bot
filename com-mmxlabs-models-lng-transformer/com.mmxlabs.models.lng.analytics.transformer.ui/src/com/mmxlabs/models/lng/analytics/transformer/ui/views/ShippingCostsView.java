@@ -42,7 +42,7 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.tabular.NonEditableColumn;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
-public class JourneyView extends ScenarioInstanceView {
+public class ShippingCostsView extends ScenarioInstanceView {
 	private final IAnalyticsTransformer transformer = new AnalyticsTransformer();
 	private Composite top;
 	private Composite inner;

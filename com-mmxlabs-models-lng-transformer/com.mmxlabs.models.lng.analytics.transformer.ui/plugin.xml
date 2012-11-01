@@ -11,7 +11,7 @@
        point="org.eclipse.ui.views">
     <view
           category="com.mmxlabs.models.lng.views.logical"
-          class="com.mmxlabs.models.lng.analytics.transformer.ui.views.JourneyView"
+          class="com.mmxlabs.models.lng.analytics.transformer.ui.views.ShippingCostsView"
           id="com.mmxlabs.models.lng.analytics.transformer.ui.views.JourneyView"
           name="Shipping Costs"
           restorable="true">
