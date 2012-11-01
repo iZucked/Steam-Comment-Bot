@@ -44,9 +44,11 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -157,6 +159,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	private final ArrayList<Cargo> cargoes = new ArrayList<Cargo>();
 	private final ArrayList<LoadSlot> loadSlots = new ArrayList<LoadSlot>();
 	private final ArrayList<DischargeSlot> dischargeSlots = new ArrayList<DischargeSlot>();
+
+	private final Set<GridColumn> loadColumns = new HashSet<GridColumn>();
+	private final Set<GridColumn> dischargeColumns = new HashSet<GridColumn>();
 
 	private Object[] sortedChildren;
 	private int[] sortedIndices;
@@ -331,7 +336,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 						if (oldInput instanceof EObject) {
-
 							((EObject) oldInput).eAdapters().remove(cargoChangeAdapter);
 						}
 
@@ -481,13 +485,14 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						menu = mgr.createContextMenu(scenarioViewer.getGrid());
 					}
 					mgr.removeAll();
+
 					// TODO: Simple load/discharge filter. Really need to determine when we build the columns and save into a set somewhere
-					if (column.getText().contains("Load") && rowDataItem.loadSlot != null) {
+					if (loadColumns.contains(column) && rowDataItem.loadSlot != null) {
 
 						final IMenuListener listener = createLoadSlotMenuListener(idx);
 						listener.menuAboutToShow(mgr);
 					}
-					if (column.getText().contains("Discharge") && rowDataItem.dischargeSlot != null) {
+					if (dischargeColumns.contains(column) && rowDataItem.dischargeSlot != null) {
 
 						final IMenuListener listener = createDischargeSlotMenuListener(idx);
 						listener.menuAboutToShow(mgr);
@@ -642,17 +647,17 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 		});
 
-		addTradesColumn("Load ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
-		addTradesColumn("Load Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
-		addTradesColumn("Load Contract", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
-		addTradesColumn("Load Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
+		addTradesColumn(loadColumns, "Load ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
+		addTradesColumn(loadColumns, "Load Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
+		addTradesColumn(loadColumns, "Load Contract", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.LOAD, true));
+		addTradesColumn(loadColumns, "Load Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.LOAD, true));
 
 		final GridViewerColumn wiringColumn = addWiringColumn();
 
-		addTradesColumn("Discharge ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
-		addTradesColumn("Discharge Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
-		addTradesColumn("Discharge Contract", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
-		addTradesColumn("Discharge Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
+		addTradesColumn(dischargeColumns, "Discharge ID", new BasicAttributeManipulator(MMXCorePackage.eINSTANCE.getNamedObject_Name(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
+		addTradesColumn(dischargeColumns, "Discharge Port", new SingleReferenceManipulator(pkg.getSlot_Port(), provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
+		addTradesColumn(dischargeColumns, "Discharge Contract", new ContractManipulator(provider, editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
+		addTradesColumn(dischargeColumns, "Discharge Date", new DateAttributeManipulator(pkg.getSlot_WindowStart(), editingDomain), new RowDataEMFPath(Type.DISCHARGE, true));
 
 		addTradesColumn("Assignment", new AssignmentManipulator(jointModelEditorPart), new RowDataEMFPath(Type.CARGO, true));
 
@@ -940,7 +945,58 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 	@Override
 	protected void enableOpenListener() {
-		// Disable open handler
+		scenarioViewer.addOpenListener(new IOpenListener() {
+
+			@Override
+			public void open(final OpenEvent event) {
+				if (scenarioViewer.getSelection() instanceof IStructuredSelection) {
+					final IStructuredSelection structuredSelection = (IStructuredSelection) scenarioViewer.getSelection();
+					if (structuredSelection.isEmpty() == false) {
+						if (structuredSelection.size() == 1) {
+
+							EObject target = null;
+							final Object obj = structuredSelection.getFirstElement();
+							if (obj instanceof RowData) {
+								final RowData rd = (RowData) obj;
+								if (rd.cargo != null) {
+									target = rd.cargo;
+								} else if (rd.loadSlot != null) {
+									target = rd.loadSlot;
+								} else if (rd.dischargeSlot != null) {
+									target = rd.dischargeSlot;
+								}
+							}
+							if (target == null) {
+								return;
+							}
+							final DetailCompositeDialog dcd = new DetailCompositeDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getDefaultCommandHandler());
+							try {
+								jointModelEditorPart.getEditorLock().claim();
+								jointModelEditorPart.setDisableUpdates(true);
+
+								dcd.open(jointModelEditorPart, jointModelEditorPart.getRootObject(), Collections.singletonList(target), scenarioViewer.isLocked());
+							} finally {
+								jointModelEditorPart.setDisableUpdates(false);
+								jointModelEditorPart.getEditorLock().release();
+							}
+						} else {
+							// No support yet.
+
+							// try {
+							// jointModelEditorPart.getEditorLock().claim();
+							// if (scenarioViewer.isLocked() == false) {
+							// final MultiDetailDialog mdd = new MultiDetailDialog(event.getViewer().getControl().getShell(), jointModelEditorPart.getRootObject(), jointModelEditorPart
+							// .getDefaultCommandHandler());
+							// mdd.open(jointModelEditorPart, structuredSelection.toList());
+							// }
+							// } finally {
+							// jointModelEditorPart.getEditorLock().release();
+							// }
+						}
+					}
+				}
+			}
+		});
 	}
 
 	private synchronized void updateWiringColours(final TradesWiringDiagram diagram, final List<Integer> wiring, final List<RowData> rows) {
@@ -1715,7 +1771,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private GridViewerColumn addWiringColumn() {
-		// TODO Auto-generated method stub
 		final GridViewerColumn wiringColumn = getScenarioViewer().addSimpleColumn("", false);
 		wiringColumn.getColumn().setMinimumWidth(100);
 		wiringColumn.getColumn().setWidth(100);
@@ -1724,7 +1779,6 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		wiringColumn.setLabelProvider(new EObjectTableViewerColumnProvider(getScenarioViewer(), null, null) {
 			@Override
 			public String getText(final Object element) {
-				// TODO Auto-generated method stub
 				return null;
 			}
 		});
@@ -1732,7 +1786,15 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTradesColumn(final String columnName, final T manipulator, final EMFPath path) {
-		return getScenarioViewer().addColumn(columnName, manipulator, manipulator, path);
+		return this.addTradesColumn(null, columnName, manipulator, path);
+	}
+
+	private <T extends ICellManipulator & ICellRenderer> GridViewerColumn addTradesColumn(final Set<GridColumn> group, final String columnName, final T manipulator, final EMFPath path) {
+		final GridViewerColumn col = getScenarioViewer().addColumn(columnName, manipulator, manipulator, path);
+		if (group != null) {
+			group.add(col.getColumn());
+		}
+		return col;
 	}
 
 	public void setLocked(final boolean locked) {
