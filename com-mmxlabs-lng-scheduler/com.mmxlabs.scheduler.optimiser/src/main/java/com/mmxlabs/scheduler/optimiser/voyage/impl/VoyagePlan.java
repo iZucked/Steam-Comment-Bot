@@ -136,7 +136,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	/**
-	 * Set the total quantity of LNG used for fuel in this voyageplan
+	 * Set the total quantity in M3 of LNG used for fuel in this voyageplan
 	 * 
 	 * @param lngConsumed
 	 */
@@ -145,7 +145,7 @@ public final class VoyagePlan implements Cloneable {
 	}
 
 	/**
-	 * @return the total quantity of LNG used for fuel in this plan.
+	 * @return the total quantity in M3 of LNG used for fuel in this plan.
 	 */
 	public final long getLNGFuelVolume() {
 		return lngFuelVolume;
