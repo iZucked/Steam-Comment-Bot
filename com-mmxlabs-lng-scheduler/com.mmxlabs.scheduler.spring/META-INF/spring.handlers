@@ -1,5 +1,0 @@
-http\://www.osgi.org/xmlns/blueprint/v1.0.0=org.springframework.osgi.blueprint.config.BlueprintNamespaceHandler
-http\://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd=org.springframework.osgi.blueprint.config.BlueprintNamespaceHandler
-http\://www.springframework.org/schema/util=org.springframework.beans.factory.xml.UtilNamespaceHandler
-http\://www.springframework.org/schema/p=org.springframework.beans.factory.xml.SimplePropertyNamespaceHandler
-http\://www.springframework.org/schema/task=org.springframework.scheduling.config.TaskNamespaceHandler
