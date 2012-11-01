@@ -11,7 +11,9 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.nebula.widgets.formattedtext.DoubleFormatter;
@@ -261,7 +263,8 @@ public class ShippingCostsView extends ScenarioInstanceView {
 				if (journey.getFrom() == null || journey.getTo() == null)
 					return;
 				try {
-					final UnitCostLine line = transformer.createCostLine(getRootObject(), (UnitCostMatrix) o, journey.getFrom(), journey.getTo());
+					final UnitCostMatrix unitCostMatrix = (UnitCostMatrix) o;
+					final UnitCostLine line = transformer.createCostLine(getRootObject(), unitCostMatrix, journey.getFrom(), journey.getTo());
 					if (line != null) {
 						if (value instanceof Double) {
 							final Double d = (Double) value;
@@ -272,7 +275,8 @@ public class ShippingCostsView extends ScenarioInstanceView {
 							// ship day rate = mmbtu * unit - other / days
 							final double requiredShipCost = line.getMmbtuDelivered() * d - (line.getTotalCost() - line.getHireCost());
 							final int dayRate = (int) (24 * requiredShipCost / line.getDuration());
-							((UnitCostMatrix) o).setNotionalDayRate(dayRate);// TODO allow undo.
+							final EAttribute feature = AnalyticsPackage.eINSTANCE.getUnitCostMatrix_NotionalDayRate();
+							getDefaultCommandHandler().handleCommand(SetCommand.create(getEditingDomain(), unitCostMatrix, feature, dayRate), unitCostMatrix, feature);
 						}
 					}
 				} catch (final Throwable th) {
