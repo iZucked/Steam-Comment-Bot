@@ -11,12 +11,27 @@ import com.mmxlabs.models.ui.editorpart.IJointModelEditorContribution;
 
 @ExtensionBean("com.mmxlabs.models.ui.jointmodeleditors")
 public interface IJointModelEditorExtension {
-	@MapName("id") String getID();
-	@MapName("subModelClass") String getSubModelClassName();
+	@MapName("id")
+	String getID();
+
+	@MapName("subModelClass")
+	String getSubModelClassName();
+
 	/**
 	 * Create a new instance. Note method needs to start with "create" to avoid Peaberry caching the result
+	 * 
 	 * @return
 	 */
-	@MapName("implementation") IJointModelEditorContribution createInstance();
-	@MapName("priority") String getPriority();
+	@MapName("implementation")
+	IJointModelEditorContribution createInstance();
+
+	/**
+	 * Peaberry bug: Prority cannot be converted into an int directly;
+	 * 
+	 * @see http://code.google.com/p/peaberry/issues/detail?id=74
+	 * 
+	 * @return
+	 */
+	@MapName("priority")
+	String getPriority();
 }
