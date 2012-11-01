@@ -56,6 +56,11 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 			return;
 		}
 
+		// Permit break even marker
+		if ("?".equals(priceExpression)) {
+			return;
+		}
+		
 		if (parser != null) {
 			ISeries parsed = null;
 			String hints = "";
