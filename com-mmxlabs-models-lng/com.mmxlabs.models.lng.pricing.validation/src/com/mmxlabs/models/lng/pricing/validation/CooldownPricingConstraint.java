@@ -67,7 +67,6 @@ public class CooldownPricingConstraint extends AbstractModelConstraint {
 						final APort port = entry.getKey();
 						final int count = entry.getValue();
 						
-						System.out.println(port.getName() + ": " + count);
 						if (count != 1 && (port instanceof Port) && ((Port) port).getCapabilities().contains(PortCapability.LOAD)) {
 							final String message = String.format("Load port %s has %d cooldown prices specified.", port.getName(), count);
 							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
