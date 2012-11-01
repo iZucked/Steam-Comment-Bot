@@ -16,31 +16,7 @@
 
 <plugin>
 
-   <extension point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.emf.ecore.Wizard.category.ID"
-            name="%_UI_Wizard_category"/>
-      <wizard
-            id="com.mmxlabs.models.lng.input.presentation.InputModelWizardID"
-            name="%_UI_InputModelWizard_label"
-            class="com.mmxlabs.models.lng.input.presentation.InputModelWizard"
-            category="org.eclipse.emf.ecore.Wizard.category.ID"
-            icon="icons/full/obj16/InputModelFile.gif">
-         <description>%_UI_InputModelWizard_description</description>
-         <selection class="org.eclipse.core.resources.IResource"/>
-      </wizard>
-   </extension>
 
-   <extension point="org.eclipse.ui.editors">
-      <editor
-            id="com.mmxlabs.models.lng.input.presentation.InputEditorID"
-            name="%_UI_InputEditor_label"
-            icon="icons/full/obj16/InputModelFile.gif"
-            extensions="input"
-            class="com.mmxlabs.models.lng.input.presentation.InputEditor"
-            contributorClass="com.mmxlabs.models.lng.input.presentation.InputActionBarContributor">
-      </editor>
-   </extension>
 
 	
 	<extension
@@ -72,7 +48,7 @@
     <jointModelEditor
           id="com.mmxlabs.models.lng.input.editor.inputEditorContribution"
           implementation="com.mmxlabs.models.lng.input.editorpart.InputJointModelEditorContribution"
-          priority="0"
+          priority="20"
           subModelClass="com.mmxlabs.models.lng.input.InputModel">
     </jointModelEditor>
  </extension>

@@ -1043,22 +1043,22 @@ public interface CommercialPackage extends EPackage {
 	int PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Base Market Constant</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Base Market Multiplier</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
+	int PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Base Market Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Ref Market Index</b></em>' reference.
@@ -1070,22 +1070,22 @@ public interface CommercialPackage extends EPackage {
 	int PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX = PURCHASE_CONTRACT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Ref Market Constant</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT = PURCHASE_CONTRACT_FEATURE_COUNT + 5;
-
-	/**
 	 * The feature id for the '<em><b>Ref Market Multiplier</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER = PURCHASE_CONTRACT_FEATURE_COUNT + 6;
+	int PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER = PURCHASE_CONTRACT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Ref Market Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT = PURCHASE_CONTRACT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Share</b></em>' attribute.
@@ -1232,6 +1232,167 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int NOTIONAL_BALLAST_PARAMETERS_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl <em>Redirection Purchase Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT = 10;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__EXTENSIONS = PURCHASE_CONTRACT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__PROXIES = PURCHASE_CONTRACT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__UUID = PURCHASE_CONTRACT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__NAME = PURCHASE_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__OTHER_NAMES = PURCHASE_CONTRACT__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__ENTITY = PURCHASE_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__ALLOWED_PORTS = PURCHASE_CONTRACT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__PREFERRED_PORT = PURCHASE_CONTRACT__PREFERRED_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__MIN_QUANTITY = PURCHASE_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Base Sales Market Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__BASE_SALES_MARKET_PORT = PURCHASE_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Base Sales Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__BASE_SALES_PRICE_EXPRESSION = PURCHASE_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Base Purchase Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__BASE_PURCHASE_PRICE_EXPRESSION = PURCHASE_CONTRACT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Notional Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Redirection Purchase Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 4;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -1687,6 +1848,65 @@ public interface CommercialPackage extends EPackage {
 	EReference getNotionalBallastParameters_VesselClasses();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract <em>Redirection Purchase Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Redirection Purchase Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract
+	 * @generated
+	 */
+	EClass getRedirectionPurchaseContract();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBaseSalesMarketPort <em>Base Sales Market Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Base Sales Market Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBaseSalesMarketPort()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EReference getRedirectionPurchaseContract_BaseSalesMarketPort();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBaseSalesPriceExpression <em>Base Sales Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Sales Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBaseSalesPriceExpression()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getRedirectionPurchaseContract_BaseSalesPriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBasePurchasePriceExpression <em>Base Purchase Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Purchase Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBasePurchasePriceExpression()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getRedirectionPurchaseContract_BasePurchasePriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getNotionalSpeed <em>Notional Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notional Speed</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getNotionalSpeed()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getRedirectionPurchaseContract_NotionalSpeed();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2064,6 +2284,53 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES = eINSTANCE.getNotionalBallastParameters_VesselClasses();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl <em>Redirection Purchase Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRedirectionPurchaseContract()
+		 * @generated
+		 */
+		EClass REDIRECTION_PURCHASE_CONTRACT = eINSTANCE.getRedirectionPurchaseContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Sales Market Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REDIRECTION_PURCHASE_CONTRACT__BASE_SALES_MARKET_PORT = eINSTANCE.getRedirectionPurchaseContract_BaseSalesMarketPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Sales Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PURCHASE_CONTRACT__BASE_SALES_PRICE_EXPRESSION = eINSTANCE.getRedirectionPurchaseContract_BaseSalesPriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Purchase Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PURCHASE_CONTRACT__BASE_PURCHASE_PRICE_EXPRESSION = eINSTANCE.getRedirectionPurchaseContract_BasePurchasePriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Notional Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED = eINSTANCE.getRedirectionPurchaseContract_NotionalSpeed();
 
 	}
 

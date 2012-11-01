@@ -65,11 +65,11 @@ public class ProfitSharePurchaseContractComponentHelper extends BaseComponentHel
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_baseMarketPortsEditor(detailComposite, topClass);
 		add_baseMarketIndexEditor(detailComposite, topClass);
-		add_baseMarketConstantEditor(detailComposite, topClass);
 		add_baseMarketMultiplierEditor(detailComposite, topClass);
+		add_baseMarketConstantEditor(detailComposite, topClass);
 		add_refMarketIndexEditor(detailComposite, topClass);
-		add_refMarketConstantEditor(detailComposite, topClass);
 		add_refMarketMultiplierEditor(detailComposite, topClass);
+		add_refMarketConstantEditor(detailComposite, topClass);
 		add_shareEditor(detailComposite, topClass);
 		add_marginEditor(detailComposite, topClass);
 		add_salesMultiplierEditor(detailComposite, topClass);

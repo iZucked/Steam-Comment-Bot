@@ -32,6 +32,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 	private static final List<EReference> checkedReferences = CollectionsUtil.makeArrayList(
 			CommercialPackage.eINSTANCE.getCommercialModel_ShippingEntity(),
 			CommercialPackage.eINSTANCE.getContract_Entity(),
+			CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BaseSalesMarketPort(),
 			CommercialPackage.eINSTANCE.getProfitSharePurchaseContract_BaseMarketIndex(),
 			CommercialPackage.eINSTANCE.getProfitSharePurchaseContract_RefMarketIndex());
 

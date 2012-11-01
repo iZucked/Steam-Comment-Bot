@@ -16,31 +16,7 @@
 
 <plugin>
 
-   <extension point="org.eclipse.ui.newWizards">
-      <category
-            id="org.eclipse.emf.ecore.Wizard.category.ID"
-            name="%_UI_Wizard_category"/>
-      <wizard
-            id="com.mmxlabs.models.lng.commercial.presentation.CommercialModelWizardID"
-            name="%_UI_CommercialModelWizard_label"
-            class="com.mmxlabs.models.lng.commercial.presentation.CommercialModelWizard"
-            category="org.eclipse.emf.ecore.Wizard.category.ID"
-            icon="icons/full/obj16/CommercialModelFile.gif">
-         <description>%_UI_CommercialModelWizard_description</description>
-         <selection class="org.eclipse.core.resources.IResource"/>
-      </wizard>
-   </extension>
 
-   <extension point="org.eclipse.ui.editors">
-      <editor
-            id="com.mmxlabs.models.lng.commercial.presentation.CommercialEditorID"
-            name="%_UI_CommercialEditor_label"
-            icon="icons/full/obj16/CommercialModelFile.gif"
-            extensions="commercial"
-            class="com.mmxlabs.models.lng.commercial.presentation.CommercialEditor"
-            contributorClass="com.mmxlabs.models.lng.commercial.presentation.CommercialActionBarContributor">
-      </editor>
-   </extension>
 
 	
 	<extension
@@ -105,6 +81,12 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
+        id="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -133,7 +115,7 @@
     <jointModelEditor
           id="com.mmxlabs.models.lng.commercial.editor.jointModelEditorContribution"
           implementation="com.mmxlabs.models.lng.commercial.ui.editorpart.CommercialModelEditorContribution"
-          priority="5"
+          priority="50"
           subModelClass="com.mmxlabs.models.lng.commercial.CommercialModel">
     </jointModelEditor>
  </extension>
@@ -193,6 +175,13 @@
           label="Notional Ballast Parameters"
           outputEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.RedirectionPurchaseContractFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Redirection Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
  </extension>
  <extension

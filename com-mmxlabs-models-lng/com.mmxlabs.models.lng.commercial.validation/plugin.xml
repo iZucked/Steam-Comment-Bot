@@ -91,6 +91,22 @@
                      class="NotionalBallastParameters">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.RedirectionPurchaseContractConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.RedirectionPurchaseContractConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Redirection Purchase Contract Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="RedirectionPurchaseContract">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

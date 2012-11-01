@@ -26,11 +26,11 @@ import com.mmxlabs.models.lng.types.APortSet;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarketPorts <em>Base Market Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarketIndex <em>Base Market Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarketConstant <em>Base Market Constant</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarketMultiplier <em>Base Market Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getBaseMarketConstant <em>Base Market Constant</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getRefMarketIndex <em>Ref Market Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getRefMarketConstant <em>Ref Market Constant</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getRefMarketMultiplier <em>Ref Market Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getRefMarketConstant <em>Ref Market Constant</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getShare <em>Share</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getMargin <em>Margin</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePurchaseContractImpl#getSalesMultiplier <em>Sales Multiplier</em>}</li>
@@ -61,26 +61,6 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	protected AIndex baseMarketIndex;
 
 	/**
-	 * The default value of the '{@link #getBaseMarketConstant() <em>Base Market Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseMarketConstant()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double BASE_MARKET_CONSTANT_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getBaseMarketConstant() <em>Base Market Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getBaseMarketConstant()
-	 * @generated
-	 * @ordered
-	 */
-	protected double baseMarketConstant = BASE_MARKET_CONSTANT_EDEFAULT;
-
-	/**
 	 * The default value of the '{@link #getBaseMarketMultiplier() <em>Base Market Multiplier</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -101,6 +81,26 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	protected double baseMarketMultiplier = BASE_MARKET_MULTIPLIER_EDEFAULT;
 
 	/**
+	 * The default value of the '{@link #getBaseMarketConstant() <em>Base Market Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseMarketConstant()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double BASE_MARKET_CONSTANT_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getBaseMarketConstant() <em>Base Market Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getBaseMarketConstant()
+	 * @generated
+	 * @ordered
+	 */
+	protected double baseMarketConstant = BASE_MARKET_CONSTANT_EDEFAULT;
+
+	/**
 	 * The cached value of the '{@link #getRefMarketIndex() <em>Ref Market Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -109,26 +109,6 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * @ordered
 	 */
 	protected AIndex refMarketIndex;
-
-	/**
-	 * The default value of the '{@link #getRefMarketConstant() <em>Ref Market Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRefMarketConstant()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double REF_MARKET_CONSTANT_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getRefMarketConstant() <em>Ref Market Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getRefMarketConstant()
-	 * @generated
-	 * @ordered
-	 */
-	protected double refMarketConstant = REF_MARKET_CONSTANT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getRefMarketMultiplier() <em>Ref Market Multiplier</em>}' attribute.
@@ -149,6 +129,26 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 	 * @ordered
 	 */
 	protected double refMarketMultiplier = REF_MARKET_MULTIPLIER_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getRefMarketConstant() <em>Ref Market Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRefMarketConstant()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double REF_MARKET_CONSTANT_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getRefMarketConstant() <em>Ref Market Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getRefMarketConstant()
+	 * @generated
+	 * @ordered
+	 */
+	protected double refMarketConstant = REF_MARKET_CONSTANT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getShare() <em>Share</em>}' attribute.
@@ -481,17 +481,17 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX:
 				if (resolve) return getBaseMarketIndex();
 				return basicGetBaseMarketIndex();
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
-				return getBaseMarketConstant();
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
 				return getBaseMarketMultiplier();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
+				return getBaseMarketConstant();
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX:
 				if (resolve) return getRefMarketIndex();
 				return basicGetRefMarketIndex();
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
-				return getRefMarketConstant();
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
 				return getRefMarketMultiplier();
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+				return getRefMarketConstant();
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 				return getShare();
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
@@ -518,20 +518,20 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX:
 				setBaseMarketIndex((AIndex)newValue);
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
-				setBaseMarketConstant((Double)newValue);
-				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
 				setBaseMarketMultiplier((Double)newValue);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
+				setBaseMarketConstant((Double)newValue);
 				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX:
 				setRefMarketIndex((AIndex)newValue);
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
-				setRefMarketConstant((Double)newValue);
-				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
 				setRefMarketMultiplier((Double)newValue);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+				setRefMarketConstant((Double)newValue);
 				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 				setShare((Double)newValue);
@@ -560,20 +560,20 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX:
 				setBaseMarketIndex((AIndex)null);
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
-				setBaseMarketConstant(BASE_MARKET_CONSTANT_EDEFAULT);
-				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
 				setBaseMarketMultiplier(BASE_MARKET_MULTIPLIER_EDEFAULT);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
+				setBaseMarketConstant(BASE_MARKET_CONSTANT_EDEFAULT);
 				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX:
 				setRefMarketIndex((AIndex)null);
 				return;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
-				setRefMarketConstant(REF_MARKET_CONSTANT_EDEFAULT);
-				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
 				setRefMarketMultiplier(REF_MARKET_MULTIPLIER_EDEFAULT);
+				return;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+				setRefMarketConstant(REF_MARKET_CONSTANT_EDEFAULT);
 				return;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 				setShare(SHARE_EDEFAULT);
@@ -600,16 +600,16 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 				return baseMarketPorts != null && !baseMarketPorts.isEmpty();
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX:
 				return baseMarketIndex != null;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
-				return baseMarketConstant != BASE_MARKET_CONSTANT_EDEFAULT;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
 				return baseMarketMultiplier != BASE_MARKET_MULTIPLIER_EDEFAULT;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
+				return baseMarketConstant != BASE_MARKET_CONSTANT_EDEFAULT;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX:
 				return refMarketIndex != null;
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
-				return refMarketConstant != REF_MARKET_CONSTANT_EDEFAULT;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
 				return refMarketMultiplier != REF_MARKET_MULTIPLIER_EDEFAULT;
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+				return refMarketConstant != REF_MARKET_CONSTANT_EDEFAULT;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 				return share != SHARE_EDEFAULT;
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
@@ -630,14 +630,14 @@ public class ProfitSharePurchaseContractImpl extends PurchaseContractImpl implem
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (baseMarketConstant: ");
-		result.append(baseMarketConstant);
-		result.append(", baseMarketMultiplier: ");
+		result.append(" (baseMarketMultiplier: ");
 		result.append(baseMarketMultiplier);
-		result.append(", refMarketConstant: ");
-		result.append(refMarketConstant);
+		result.append(", baseMarketConstant: ");
+		result.append(baseMarketConstant);
 		result.append(", refMarketMultiplier: ");
 		result.append(refMarketMultiplier);
+		result.append(", refMarketConstant: ");
+		result.append(refMarketConstant);
 		result.append(", share: ");
 		result.append(share);
 		result.append(", margin: ");

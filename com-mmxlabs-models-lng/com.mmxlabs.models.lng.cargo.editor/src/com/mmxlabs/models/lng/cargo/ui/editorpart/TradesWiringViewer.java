@@ -427,6 +427,9 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 				final GridColumn column = getScenarioViewer().getGrid().getColumn(mousePoint);
 
 				final GridItem item = getScenarioViewer().getGrid().getItem(mousePoint);
+				if (item == null) {
+					return;
+				}
 				final Object data = item.getData();
 				if (data instanceof RowData) {
 
@@ -1310,6 +1313,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_SALE, loadSlot, true);
 				}
 				createEditMenu(manager, loadSlot, loadSlot.getCargo());
+				createEditContractMenu(manager, loadSlot, loadSlot.getContract());
 				createDeleteSlotMenu(manager, loadSlot);
 			}
 		};
@@ -1338,6 +1342,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					createSpotMarketMenu(newMenuManager, SpotType.FOB_PURCHASE, dischargeSlot, false);
 				}
 				createEditMenu(manager, dischargeSlot, dischargeSlot.getCargo());
+				createEditContractMenu(manager, dischargeSlot, dischargeSlot.getContract());
 				createDeleteSlotMenu(manager, dischargeSlot);
 			}
 
@@ -1379,6 +1384,11 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (cargo != null) {
 			newMenuManager.add(new EditAction("Edit Cargo", cargo));
 		}
+	}
+
+	private void createEditContractMenu(final IMenuManager newMenuManager, final Slot slot, final Contract contract) {
+		newMenuManager.add(new Separator());
+		newMenuManager.add(new EditAction("Edit Contract", contract));
 	}
 
 	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source, final boolean sourceIsLoad) {

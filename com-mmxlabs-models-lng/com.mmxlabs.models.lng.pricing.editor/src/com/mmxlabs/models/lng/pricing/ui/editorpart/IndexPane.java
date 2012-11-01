@@ -239,7 +239,7 @@ public class IndexPane extends ScenarioTableViewerPane {
 							c.set(Calendar.HOUR, 0);
 							c.set(Calendar.DAY_OF_MONTH, 1);
 
-							while (c.getTime().before(maxDate)) {
+							while (!c.getTime().after(maxDate)) {
 								addColumn(c, true, useIntegers);
 								c.add(Calendar.MONTH, 1);
 							}
