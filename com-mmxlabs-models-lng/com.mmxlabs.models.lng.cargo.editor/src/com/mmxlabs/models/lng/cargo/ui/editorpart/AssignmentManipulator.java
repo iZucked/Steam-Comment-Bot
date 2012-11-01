@@ -94,8 +94,13 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 	@Override
 	public String render(final Object object) {
 		final Integer value = getValue(object);
-		if (value == null || value == -1)
+		if (value == null || value == -1) {
 			return "";
+		}
+		if (object instanceof Cargo && (((Cargo) object).getCargoType() != CargoType.FLEET)) {
+			return "";
+		}
+
 		return allowedValues.get(value).getFirst();
 	}
 
