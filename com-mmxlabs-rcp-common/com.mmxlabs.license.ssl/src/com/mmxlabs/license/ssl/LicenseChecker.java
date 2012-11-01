@@ -101,8 +101,6 @@ public final class LicenseChecker {
 		InputStream inStream = null;
 		try {
 			final Certificate licenseCertificate;
-			Properties properties = System.getProperties();
-			System.out.println(properties);
 			final String userHome = System.getProperty("eclipse.home.location");
 			if (userHome != null) {
 				final URL url = new URL(userHome + "/license.pem");
