@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,9 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.IElementComparer;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -256,6 +259,39 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 
 		final ScenarioTableViewer scenarioViewer = new ScenarioTableViewer(parent, SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart) {
+
+			/**
+			 * Overridden method to convert internal RowData objects into a collection of EMF Objects
+			 */
+			protected void updateSelection(final ISelection selection) {
+
+				if (selection instanceof IStructuredSelection) {
+					final IStructuredSelection originalSelection = (IStructuredSelection) selection;
+
+					final List<Object> selectedObjects = new LinkedList<Object>();
+
+					final Iterator<?> itr = originalSelection.iterator();
+					while (itr.hasNext()) {
+						final Object obj = itr.next();
+						if (obj instanceof RowData) {
+							final RowData rd = (RowData) obj;
+							if (rd.cargo != null) {
+								selectedObjects.add(rd.cargo);
+							}
+							if (rd.loadSlot != null) {
+								selectedObjects.add(rd.loadSlot);
+							}
+							if (rd.dischargeSlot != null) {
+								selectedObjects.add(rd.dischargeSlot);
+							}
+						}
+					}
+
+					super.updateSelection(new StructuredSelection(selectedObjects));
+				} else {
+					super.updateSelection(selection);
+				}
+			}
 
 			@Override
 			protected Object[] getSortedChildren(final Object parent) {
