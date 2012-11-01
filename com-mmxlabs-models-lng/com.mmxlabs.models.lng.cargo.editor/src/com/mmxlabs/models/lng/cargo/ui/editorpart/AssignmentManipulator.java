@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
@@ -87,7 +88,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 
 	@Override
 	public boolean canEdit(final Object object) {
-		return object instanceof Cargo;
+		return object instanceof Cargo && (((Cargo) object).getCargoType() == CargoType.FLEET);
 	}
 
 	@Override
