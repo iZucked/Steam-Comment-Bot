@@ -65,7 +65,7 @@ public class DateUpdatingCommandProvider implements IModelCommandProvider {
 						}
 					}
 				}
-			}
+			} 
 		}
 		return null;
 	}

@@ -280,7 +280,12 @@ public class LNGModelCorrector {
 				}
 			}
 
+			fixSpotMarketGroupAvailabilityName(parent, pricingModel.getDesPurchaseSpotMarket(), ed);
+			fixSpotMarketGroupAvailabilityName(parent, pricingModel.getDesSalesSpotMarket(), ed);
+			fixSpotMarketGroupAvailabilityName(parent, pricingModel.getFobPurchasesSpotMarket(), ed);
+			fixSpotMarketGroupAvailabilityName(parent, pricingModel.getFobSalesSpotMarket(), ed);
 		}
+
 		if (!cmd.isEmpty()) {
 			parent.append(cmd);
 		}
@@ -293,6 +298,18 @@ public class LNGModelCorrector {
 			if (curve != null) {
 				if (curve.getName() == null || curve.getName().isEmpty()) {
 					parent.append(SetCommand.create(ed, curve, MMXCorePackage.eINSTANCE.getNamedObject_Name(), market.getName()));
+				}
+			}
+		}
+	}
+
+	private void fixSpotMarketGroupAvailabilityName(final CompoundCommand parent, final SpotMarketGroup market, final EditingDomain ed) {
+		final SpotAvailability availability = market.getAvailability();
+		if (availability != null) {
+			final DataIndex<Integer> curve = availability.getCurve();
+			if (curve != null) {
+				if (curve.getName() == null || curve.getName().isEmpty()) {
+					parent.append(SetCommand.create(ed, curve, MMXCorePackage.eINSTANCE.getNamedObject_Name(), market.getType().getName()));
 				}
 			}
 		}

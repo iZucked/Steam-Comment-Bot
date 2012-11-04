@@ -33,6 +33,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 	// Temp flag to turn on/off load/discharge slots during development
 	private static final boolean showSlotTabs = false;
+	private static final boolean useNewTradesEditor = false;
 
 	@Override
 	public void addPages(final Composite parent) {
@@ -61,17 +62,18 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			editorPart.setPageText(dischargeSlotPageNumber, "Discharge Slots");
 		}
 
-		wiringViewer = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
-		wiringPageNumber = editorPart.addPage(wiringViewer);
-		editorPart.setPageText(wiringPageNumber, "Trades");
-
-		if (false) {
+		if (!useNewTradesEditor) {
+			wiringViewer = new CargoWiringViewer(parent, editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
+			wiringPageNumber = editorPart.addPage(wiringViewer);
+			editorPart.setPageText(wiringPageNumber, "Trades");
+		}
+		if (useNewTradesEditor) {
 			this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			tradesViewer.createControl(parent);
 			tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory());
 			tradesViewer.getViewer().setInput(modelObject);
 			tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
-			editorPart.setPageText(tradesViewerPageNumber, "Trades 2");
+			editorPart.setPageText(tradesViewerPageNumber, "Trades");
 		}
 	}
 
@@ -82,7 +84,9 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 			loadSlotViewerPane.setLocked(locked);
 			dischargeSlotViewerPane.setLocked(locked);
 		}
-		wiringViewer.setLocked(locked);
+		if (wiringViewer != null) {
+			wiringViewer.setLocked(locked);
+		}
 		if (tradesViewer != null) {
 			tradesViewer.setLocked(locked);
 		}

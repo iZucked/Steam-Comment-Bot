@@ -4,58 +4,90 @@
  */
 package com.mmxlabs.models.lng.pricing.validation;
 
-import java.util.HashSet;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map.Entry;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
+import org.eclipse.emf.validation.model.IConstraintStatus;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.APort;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
  * A constraint for ensuring that all ports have a cooldown constraint in the given pricing model.
  * 
  * @author hinton
- *
+ * 
  */
 public class CooldownPricingConstraint extends AbstractModelConstraint {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.eclipse.emf.validation.AbstractModelConstraint#validate(org.eclipse.emf.validation.IValidationContext)
 	 */
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		
+
 		if (target instanceof PricingModel) {
 			final PricingModel pm = (PricingModel) target;
 			final MMXRootObject rootObject = Activator.getDefault().getExtraValidationContext().getRootObject();
 			if (rootObject != null) {
 				final PortModel ports = rootObject.getSubModel(PortModel.class);
 				if (ports != null) {
-					final HashSet<APort> unpricedPorts = new HashSet<APort>();
-					unpricedPorts.addAll(ports.getPorts());
+					// count the number of cooldown prices attached to each port
+					final HashMap<APort, Integer> pricingPerPort = new HashMap<APort, Integer>();					
+					for (final APort port: ports.getPorts()) pricingPerPort.put(port, 0);
+					
 					for (final CooldownPrice c : pm.getCooldownPrices()) {
-						unpricedPorts.removeAll(SetUtils.getPorts(c.getPorts()));
+						for (final APort port: SetUtils.getPorts(c.getPorts())) {
+							pricingPerPort.put(port, pricingPerPort.get(port) + 1);
+						}
 					}
-					if (!unpricedPorts.isEmpty()) {
-						final SortedSet<String> names = new TreeSet<String>();
-						for (final APort p : unpricedPorts) names.add(""+p.getName());
-						return ctx.createFailureStatus(names.toString());
+					
+					// find all the ports with less than or more than 1 cooldown price
+					final List<IStatus> failures = new LinkedList<IStatus>();
+					
+					for (final Entry<APort, Integer> entry: pricingPerPort.entrySet()) {
+						final APort port = entry.getKey();
+						final int count = entry.getValue();
+						
+						if (count != 1 && (port instanceof Port) && ((Port) port).getCapabilities().contains(PortCapability.LOAD)) {
+							final String message = String.format("Load port %s has %d cooldown prices specified.", port.getName(), count);
+							final DetailConstraintStatusDecorator dcsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
+							failures.add(dcsd);
+						}
 					}
+					
+					// return an appropriate validation status: success, 1 failure or compound failure
+					if (failures.isEmpty()) {
+						return ctx.createSuccessStatus();
+					} else if (failures.size() == 1) {
+						return failures.get(0);
+					} else {
+						final String heading = String.format("%s ports have problems with their cooldown prices.", failures.size());
+						return new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, failures.toArray(new IStatus[]{}), heading, null);
+					}
+					
 				}
 			}
 		}
-		
+
 		return ctx.createSuccessStatus();
 	}
 }

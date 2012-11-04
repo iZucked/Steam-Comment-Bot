@@ -42,7 +42,14 @@ public class AssignmentImporter {
 				final String vesselName = row.get("vessels");
 				final String assignedObjects = row.get("assignedobjects");
 				final String spotIndexStr = row.get("spotindex");
-				final int spotIndex = Integer.parseInt(spotIndexStr);
+
+				int spotIndexTmp = 0;
+				try {
+					spotIndexTmp = Integer.parseInt(spotIndexStr);
+				} catch (final NumberFormatException nfe) {
+					context.createProblem("Error parsing spot index", true, true, true);
+				}
+				final int spotIndex = spotIndexTmp;
 				final String[] assignedObjectNames = assignedObjects.split(",");
 				int index = 0;
 				for (final String aon : assignedObjectNames) {

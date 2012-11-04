@@ -8,7 +8,10 @@ import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardPage;
@@ -40,6 +43,9 @@ public class ExportCSVWizardPage extends WizardPage {
 	private ScenarioServiceSelectionGroup scenarioServiceSelectionGroup;
 
 	private final ISelection selection;
+
+	private static final String FILTER_KEY = "lastSelection";
+	private static final String SECTION_NAME = "ExportCSVWizardPage.section";
 
 	private DirectoryFieldEditor editor;
 
@@ -100,7 +106,14 @@ public class ExportCSVWizardPage extends WizardPage {
 				dialogChanged();
 			}
 		});
-
+		
+		// get the default export directory from the settings
+		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		final IDialogSettings section = dialogSettings.getSection(SECTION_NAME);		
+		final String filter = section == null ? null : section.get(FILTER_KEY);
+		// use it to populate the editor
+		editor.setStringValue(filter);
+		
 		initialize();
 		dialogChanged();
 		setControl(container);
@@ -153,6 +166,18 @@ public class ExportCSVWizardPage extends WizardPage {
 
 	public Collection<ScenarioInstance> getScenarioInstance() {
 		return Collections.singleton((ScenarioInstance) scenarioServiceSelectionGroup.getSelectedContainer());
+	}
+	
+	/**
+	 * Saves the value of the directory editor field to persistent storage
+	 */
+	public void saveDirectorySetting() {
+		final IDialogSettings dialogSettings = Activator.getDefault().getDialogSettings();
+		IDialogSettings section = dialogSettings.getSection(SECTION_NAME);
+		if (section == null) {
+			section = dialogSettings.addNewSection(SECTION_NAME);
+		}
+		section.put(FILTER_KEY, editor.getStringValue());		
 	}
 
 }

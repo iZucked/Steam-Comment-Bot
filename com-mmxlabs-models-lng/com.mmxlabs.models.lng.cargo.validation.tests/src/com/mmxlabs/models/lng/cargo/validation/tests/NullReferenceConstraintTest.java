@@ -14,11 +14,13 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
+import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.validation.NullReferenceConstraint;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.port.PortFactory;
 
 /**
@@ -49,6 +51,7 @@ public class NullReferenceConstraintTest {
 		final Slot slot = CargoFactory.eINSTANCE.createLoadSlot();
 		// port is initially null, so set it.
 		slot.setPort(PortFactory.eINSTANCE.createPort());
+		slot.setContract(CommercialFactory.eINSTANCE.createContract());
 		return slot;
 	}
 
@@ -152,7 +155,7 @@ public class NullReferenceConstraintTest {
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
 		} else {
-			when(validationContext.createFailureStatus()).thenReturn(resultStatus);
+			when(validationContext.createFailureStatus(Matchers.anyString())).thenReturn(resultStatus);
 		}
 
 		// run the thing
@@ -161,9 +164,8 @@ public class NullReferenceConstraintTest {
 		// verify mocked methods are called
 		verify(validationContext).getTarget();
 		verify(validationContext, atLeast(0)).createSuccessStatus();
-		verify(validationContext, atLeast(0)).createFailureStatus();
+		verify(validationContext, atLeast(0)).createFailureStatus(Matchers.anyString());
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(validationContext);
 	}
-
 }

@@ -274,6 +274,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			graphics.drawPath(path);
 			path.dispose();
 		}
+		// Clear clip rect for dragged wire
+		graphics.setClipping((Rectangle) null);
 
 		if (dragging) {
 			// draw dragging path
@@ -290,6 +292,8 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 			graphics.drawPath(path);
 			path.dispose();
 		}
+		// Re-apply clip rect
+		graphics.setClipping(ca);
 
 		// draw terminal blobs
 		graphics.setForeground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
@@ -364,6 +368,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 		if (terminal >= positions.size()) {
 			return;
 		}
+		onMouseDown();
 
 		// now find column
 		if ((e.x >= ca.x + terminalSize && e.x <= ca.x + 2 * terminalSize)) {
@@ -403,11 +408,11 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 
 	@Override
 	public void mouseUp(final MouseEvent e) {
-
 		if (locked) {
 			dragging = false;
 			return;
 		}
+		onMouseup();
 
 		if (e.button == 3) {
 			final List<Float> positions = getTerminalPositions();
@@ -529,5 +534,19 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	public void setSortOrder(int[] sortedIndices, int[] reverseSortedIndices) {
 		this.sortedIndices = sortedIndices;
 		this.reverseSortedIndices = reverseSortedIndices;
+	}
+
+	/**
+	 * Overridable method callback invoked during a mouse down event when a valid terminal has been selected.
+	 */
+	public void onMouseDown() {
+
+	}
+
+	/**
+	 * Overridable method callback notifying that a mouse up event has been received. Note, there may be more called to {@link #onMouseup()} than to {@link #onMouseDown()}
+	 */
+	public void onMouseup() {
+
 	}
 }

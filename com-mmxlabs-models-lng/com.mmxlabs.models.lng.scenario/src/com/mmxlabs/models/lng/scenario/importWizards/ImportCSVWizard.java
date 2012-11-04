@@ -14,7 +14,7 @@ import org.eclipse.ui.PlatformUI;
 
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.scenario.service.ui.commands.OpenScenarioCommandHandler;
+import com.mmxlabs.scenario.service.ui.OpenScenarioUtils;
 
 public class ImportCSVWizard extends Wizard implements IImportWizard {
 
@@ -38,7 +38,7 @@ public class ImportCSVWizard extends Wizard implements IImportWizard {
 		if (instance != null) {
 			try {
 				final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				OpenScenarioCommandHandler.openScenarioInstance(page, instance);
+				OpenScenarioUtils.openScenarioInstance(page, instance);
 			} catch (PartInitException e) {
 			}
 		}

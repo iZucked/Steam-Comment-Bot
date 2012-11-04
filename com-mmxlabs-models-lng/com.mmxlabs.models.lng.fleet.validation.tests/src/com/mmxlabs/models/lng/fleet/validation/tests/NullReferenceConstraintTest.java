@@ -15,6 +15,7 @@ import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Matchers;
 
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
@@ -252,7 +253,7 @@ public class NullReferenceConstraintTest {
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
 		} else {
-			when(validationContext.createFailureStatus()).thenReturn(resultStatus);
+			when(validationContext.createFailureStatus(Matchers.anyString())).thenReturn(resultStatus);
 		}
 
 		// run the thing
@@ -261,7 +262,7 @@ public class NullReferenceConstraintTest {
 		// verify mocked methods are called
 		verify(validationContext).getTarget();
 		verify(validationContext, atLeast(0)).createSuccessStatus();
-		verify(validationContext, atLeast(0)).createFailureStatus();
+		verify(validationContext, atLeast(0)).createFailureStatus(Matchers.anyString());
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(validationContext);
 	}

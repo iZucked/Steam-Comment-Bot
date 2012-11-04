@@ -25,7 +25,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @author hinton
  * 
  */
-public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider {
+public class BaseFuelCostModelCommandProvider extends BaseModelCommandProvider<Object> {
 	@Override
 	protected boolean shouldHandleAddition(final Object addedObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet) {
 		return addedObject instanceof BaseFuel;

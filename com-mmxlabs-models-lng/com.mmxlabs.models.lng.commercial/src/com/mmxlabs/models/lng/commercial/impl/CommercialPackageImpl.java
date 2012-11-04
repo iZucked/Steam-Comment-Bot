@@ -21,6 +21,7 @@ import com.mmxlabs.models.lng.commercial.NetbackPurchaseContract;
 import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
 import com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -101,6 +102,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass notionalBallastParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass redirectionPurchaseContractEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -415,7 +423,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	public EAttribute getProfitSharePurchaseContract_BaseMarketConstant() {
-		return (EAttribute)profitSharePurchaseContractEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)profitSharePurchaseContractEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -424,7 +432,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	public EAttribute getProfitSharePurchaseContract_BaseMarketMultiplier() {
-		return (EAttribute)profitSharePurchaseContractEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)profitSharePurchaseContractEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -442,7 +450,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	public EAttribute getProfitSharePurchaseContract_RefMarketConstant() {
-		return (EAttribute)profitSharePurchaseContractEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)profitSharePurchaseContractEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -451,7 +459,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	public EAttribute getProfitSharePurchaseContract_RefMarketMultiplier() {
-		return (EAttribute)profitSharePurchaseContractEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)profitSharePurchaseContractEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -547,6 +555,56 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getRedirectionPurchaseContract() {
+		return redirectionPurchaseContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRedirectionPurchaseContract_BaseSalesMarketPort() {
+		return (EReference)redirectionPurchaseContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRedirectionPurchaseContract_BaseSalesPriceExpression() {
+		return (EAttribute)redirectionPurchaseContractEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRedirectionPurchaseContract_BasePurchasePriceExpression() {
+		return (EAttribute)redirectionPurchaseContractEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRedirectionPurchaseContract_NotionalSpeed() {
+		return (EAttribute)redirectionPurchaseContractEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -608,11 +666,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		profitSharePurchaseContractEClass = createEClass(PROFIT_SHARE_PURCHASE_CONTRACT);
 		createEReference(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_PORTS);
 		createEReference(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_INDEX);
-		createEAttribute(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT);
 		createEAttribute(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER);
+		createEAttribute(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT);
 		createEReference(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_INDEX);
-		createEAttribute(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT);
 		createEAttribute(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER);
+		createEAttribute(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT);
 		createEAttribute(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__SHARE);
 		createEAttribute(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN);
 		createEAttribute(profitSharePurchaseContractEClass, PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER);
@@ -624,6 +682,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__NBO_RATE);
 		createEAttribute(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__BASE_CONSUMPTION);
 		createEReference(notionalBallastParametersEClass, NOTIONAL_BALLAST_PARAMETERS__VESSEL_CLASSES);
+
+		redirectionPurchaseContractEClass = createEClass(REDIRECTION_PURCHASE_CONTRACT);
+		createEReference(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__BASE_SALES_MARKET_PORT);
+		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__BASE_SALES_PRICE_EXPRESSION);
+		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__BASE_PURCHASE_PRICE_EXPRESSION);
+		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED);
 	}
 
 	/**
@@ -672,6 +736,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		netbackPurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
 		profitSharePurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
 		notionalBallastParametersEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		redirectionPurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -709,11 +774,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEClass(profitSharePurchaseContractEClass, ProfitSharePurchaseContract.class, "ProfitSharePurchaseContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getProfitSharePurchaseContract_BaseMarketPorts(), theTypesPackage.getAPortSet(), null, "baseMarketPorts", null, 0, -1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProfitSharePurchaseContract_BaseMarketIndex(), theTypesPackage.getAIndex(), null, "baseMarketIndex", null, 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getProfitSharePurchaseContract_BaseMarketConstant(), ecorePackage.getEDouble(), "baseMarketConstant", "0", 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getProfitSharePurchaseContract_BaseMarketMultiplier(), ecorePackage.getEDouble(), "baseMarketMultiplier", "1", 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProfitSharePurchaseContract_BaseMarketConstant(), ecorePackage.getEDouble(), "baseMarketConstant", "0", 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getProfitSharePurchaseContract_RefMarketIndex(), theTypesPackage.getAIndex(), null, "refMarketIndex", null, 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getProfitSharePurchaseContract_RefMarketConstant(), ecorePackage.getEDouble(), "refMarketConstant", "0", 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getProfitSharePurchaseContract_RefMarketMultiplier(), ecorePackage.getEDouble(), "refMarketMultiplier", "1", 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProfitSharePurchaseContract_RefMarketConstant(), ecorePackage.getEDouble(), "refMarketConstant", "0", 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getProfitSharePurchaseContract_Share(), ecorePackage.getEDouble(), "share", null, 0, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getProfitSharePurchaseContract_Margin(), ecorePackage.getEDouble(), "margin", "0", 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getProfitSharePurchaseContract_SalesMultiplier(), ecorePackage.getEDouble(), "salesMultiplier", null, 1, 1, ProfitSharePurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -725,6 +790,12 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getNotionalBallastParameters_NboRate(), ecorePackage.getEInt(), "nboRate", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getNotionalBallastParameters_BaseConsumption(), ecorePackage.getEInt(), "baseConsumption", null, 0, 1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getNotionalBallastParameters_VesselClasses(), theTypesPackage.getAVesselClass(), null, "vesselClasses", null, 1, -1, NotionalBallastParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(redirectionPurchaseContractEClass, RedirectionPurchaseContract.class, "RedirectionPurchaseContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRedirectionPurchaseContract_BaseSalesMarketPort(), theTypesPackage.getAPort(), null, "baseSalesMarketPort", null, 1, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPurchaseContract_BaseSalesPriceExpression(), ecorePackage.getEString(), "baseSalesPriceExpression", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPurchaseContract_BasePurchasePriceExpression(), ecorePackage.getEString(), "basePurchasePriceExpression", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPurchaseContract_NotionalSpeed(), ecorePackage.getEDouble(), "notionalSpeed", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

@@ -258,6 +258,30 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RedirectionPurchaseContractItemProvider redirectionPurchaseContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRedirectionPurchaseContractAdapter() {
+		if (redirectionPurchaseContractItemProvider == null) {
+			redirectionPurchaseContractItemProvider = new RedirectionPurchaseContractItemProvider(this);
+		}
+
+		return redirectionPurchaseContractItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -364,6 +388,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (netbackPurchaseContractItemProvider != null) netbackPurchaseContractItemProvider.dispose();
 		if (profitSharePurchaseContractItemProvider != null) profitSharePurchaseContractItemProvider.dispose();
 		if (notionalBallastParametersItemProvider != null) notionalBallastParametersItemProvider.dispose();
+		if (redirectionPurchaseContractItemProvider != null) redirectionPurchaseContractItemProvider.dispose();
 	}
 
 }

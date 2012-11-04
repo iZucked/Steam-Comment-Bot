@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.port.CapabilityGroup;
@@ -26,6 +28,7 @@ import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
+import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
  * @since 2.0
@@ -51,9 +54,32 @@ public class PortModelImporter implements ISubmodelImporter {
 		inputs.put(SUEZ_KEY, "Suez Distance Matrix");
 	}
 
-	private IClassImporter portImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPort());
-	private IClassImporter portGroupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(PortPackage.eINSTANCE.getPortGroup());
+	@Inject
+	private IImporterRegistry importerRegistry;
+
+	private IClassImporter portImporter;
+	private IClassImporter portGroupImporter;
 	private RouteImporter routeImporter = new RouteImporter();
+
+	/**
+	 * @since 2.0
+	 */
+	public PortModelImporter() {
+		final Activator activator = Activator.getDefault();
+		if (activator != null) {
+
+			importerRegistry = activator.getImporterRegistry();
+			registryInit();
+		}
+	}
+
+	@Inject
+	private void registryInit() {
+		if (importerRegistry != null) {
+			portImporter = importerRegistry.getClassImporter(PortPackage.eINSTANCE.getPort());
+			portGroupImporter = importerRegistry.getClassImporter(PortPackage.eINSTANCE.getPortGroup());
+		}
+	}
 
 	@Override
 	public Map<String, String> getRequiredInputs() {
@@ -61,10 +87,9 @@ public class PortModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public UUIDObject importModel(Map<String, CSVReader> inputs,
-			IImportContext context) {
+	public UUIDObject importModel(Map<String, CSVReader> inputs, IImportContext context) {
 		final PortModel result = PortFactory.eINSTANCE.createPortModel();
-		
+
 		final PortModel portModel = result;
 		if (portModel != null) {
 			for (final PortCapability capability : PortCapability.values()) {
@@ -84,7 +109,7 @@ public class PortModelImporter implements ISubmodelImporter {
 				}
 			}
 		}
-		
+
 		if (inputs.containsKey(PORT_KEY)) {
 			final CSVReader reader = inputs.get(PORT_KEY);
 			result.getPorts().addAll((Collection<? extends Port>) portImporter.importObjects(PortPackage.eINSTANCE.getPort(), reader, context));
@@ -114,12 +139,11 @@ public class PortModelImporter implements ISubmodelImporter {
 	}
 
 	@Override
-	public void exportModel(MMXRootObject root,
-			UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
-		for (final Route r : ((PortModel)model).getRoutes()) {
+	public void exportModel(MMXRootObject root, UUIDObject model, Map<String, Collection<Map<String, String>>> output) {
+		for (final Route r : ((PortModel) model).getRoutes()) {
 			Collection<Map<String, String>> result = routeImporter.exportRoute(r);
 			if (r.getName().equals(DIRECT_NAME)) {
-				output.put(DISTANCES_KEY, result );
+				output.put(DISTANCES_KEY, result);
 			} else if (r.getName().equals(SUEZ_CANAL_NAME)) {
 				output.put(SUEZ_KEY, result);
 			} else {
@@ -127,8 +151,8 @@ public class PortModelImporter implements ISubmodelImporter {
 				output.put(r.getName(), result);
 			}
 		}
-		output.put(PORT_KEY, portImporter.exportObjects(((PortModel)model).getPorts(), root));
-		output.put(PORT_GROUP_KEY, portGroupImporter.exportObjects(((PortModel)model).getPortGroups(), root));
+		output.put(PORT_KEY, portImporter.exportObjects(((PortModel) model).getPorts(), root));
+		output.put(PORT_GROUP_KEY, portGroupImporter.exportObjects(((PortModel) model).getPortGroups(), root));
 	}
 
 	@Override

@@ -61,11 +61,11 @@ public class ProfitSharePurchaseContractItemProvider
 
 			addBaseMarketPortsPropertyDescriptor(object);
 			addBaseMarketIndexPropertyDescriptor(object);
-			addBaseMarketConstantPropertyDescriptor(object);
 			addBaseMarketMultiplierPropertyDescriptor(object);
+			addBaseMarketConstantPropertyDescriptor(object);
 			addRefMarketIndexPropertyDescriptor(object);
-			addRefMarketConstantPropertyDescriptor(object);
 			addRefMarketMultiplierPropertyDescriptor(object);
+			addRefMarketConstantPropertyDescriptor(object);
 			addSharePropertyDescriptor(object);
 			addMarginPropertyDescriptor(object);
 			addSalesMultiplierPropertyDescriptor(object);
@@ -331,10 +331,10 @@ public class ProfitSharePurchaseContractItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ProfitSharePurchaseContract.class)) {
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:
+			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_CONSTANT:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SHARE:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__MARGIN:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__SALES_MULTIPLIER:

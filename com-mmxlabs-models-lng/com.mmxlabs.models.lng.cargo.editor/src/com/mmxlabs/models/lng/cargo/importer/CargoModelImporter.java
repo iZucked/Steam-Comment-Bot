@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 
@@ -25,6 +27,7 @@ import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.ISubmodelImporter;
+import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
 /**
  * @since 2.0
@@ -32,14 +35,38 @@ import com.mmxlabs.models.util.importer.ISubmodelImporter;
 public class CargoModelImporter implements ISubmodelImporter {
 	public static final String CARGO_KEY = "CARGO";
 	public static final String CARGO_GROUP_KEY = "CARGO-GROUP";
-	private final CargoImporter cargoImporter = new CargoImporter();
+	private CargoImporter cargoImporter ;
 
-	private final IClassImporter cargoGroupImporter = Activator.getDefault().getImporterRegistry().getClassImporter(CargoPackage.eINSTANCE.getCargoGroup());
+	@Inject
+	private IImporterRegistry importerRegistry;
+
+	private IClassImporter cargoGroupImporter;
 
 	private final HashMap<String, String> inputs = new HashMap<String, String>();
 	{
 		inputs.put(CARGO_KEY, "Cargoes");
 		inputs.put(CARGO_GROUP_KEY, "Cargo Groups");
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public CargoModelImporter() {
+		final Activator activator = Activator.getDefault();
+		if (activator != null) {
+
+			importerRegistry = activator.getImporterRegistry();
+			registryInit();
+		}
+	}
+
+	@Inject
+	private void registryInit() {
+		if (importerRegistry != null) {
+			cargoGroupImporter = importerRegistry.getClassImporter(CargoPackage.eINSTANCE.getCargoGroup());
+			cargoImporter = new CargoImporter();
+			cargoImporter.setImporterRegistry(importerRegistry);
+		}
 	}
 
 	@Override
@@ -76,11 +103,11 @@ public class CargoModelImporter implements ISubmodelImporter {
 
 	@Override
 	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
-		CargoModel cargoModel = (CargoModel) model;
+		final CargoModel cargoModel = (CargoModel) model;
 		output.put(CARGO_KEY, cargoImporter.exportObjects(cargoModel.getCargoes(), cargoModel.getLoadSlots(), cargoModel.getDischargeSlots(), root));
 		output.put(CARGO_GROUP_KEY, cargoGroupImporter.exportObjects(cargoModel.getCargoGroups(), root));
 	}
-	
+
 	@Override
 	public EClass getEClass() {
 		return CargoPackage.eINSTANCE.getCargoModel();

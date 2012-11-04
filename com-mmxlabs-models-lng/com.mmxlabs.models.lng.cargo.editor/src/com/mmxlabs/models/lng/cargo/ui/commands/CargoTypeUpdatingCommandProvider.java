@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.cargo.ui.commands;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,11 +16,13 @@ import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.models.common.commandservice.AbstractModelCommandProvider;
 import com.mmxlabs.models.common.commandservice.IModelCommandProvider;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.cargo.ui.util.SpotSlotHelper;
 import com.mmxlabs.models.lng.input.ElementAssignment;
@@ -35,12 +38,23 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @author Simon Goodall
  * 
  */
-public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
+public class CargoTypeUpdatingCommandProvider extends AbstractModelCommandProvider<Set<EObject>> {
 	@Override
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,
 			final Class<? extends Command> commandClass, final CommandParameter parameter, final Command input) {
 		if (commandClass == SetCommand.class) {
+			{
+				Set<EObject> seenObjects = getContext();
+				if (seenObjects == null) {
+					seenObjects = new HashSet<EObject>();
+					setContext(seenObjects);
+				}
 
+				if (seenObjects.contains(parameter.getEOwner())) {
+					return null;
+				}
+				seenObjects.add(parameter.getEOwner());
+			}
 			final InputModel inputModel = rootObject.getSubModel(InputModel.class);
 
 			if (parameter.getEOwner() instanceof LoadSlot) {
@@ -90,6 +104,21 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 						}
 					}
 				}
+				// Fall through to Spot Slots which are not DES Purchases / FOB Sales
+				if (parameter.getEOwner() instanceof SpotSlot) {
+					if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
+
+						final CompoundCommand cmd = new CompoundCommand("Update spot slot date range");
+						final Date newDate = (Date) parameter.getValue();
+						SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, slot.getPort(), slot.getPort(), newDate, cmd);
+						if (cmd.isEmpty()) {
+							return null;
+						}
+
+						return cmd.unwrap();
+					}
+				}
+
 			}
 			if (parameter.getEOwner() instanceof DischargeSlot) {
 				final DischargeSlot slot = (DischargeSlot) parameter.getEOwner();
@@ -140,6 +169,23 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 					}
 				}
 			}
+
+			// Fall through to Spot Slots which are not DES Purchases / FOB Sales
+			if (parameter.getEOwner() instanceof SpotSlot) {
+				Slot slot = (Slot) parameter.getEOwner();
+				if (parameter.getEStructuralFeature() == CargoPackage.eINSTANCE.getSlot_WindowStart()) {
+
+					final CompoundCommand cmd = new CompoundCommand("Update spot slot date range");
+					final Date newDate = (Date) parameter.getValue();
+					SpotSlotHelper.setSpotSlotTimeWindow(editingDomain, slot, slot.getPort(), slot.getPort(), newDate, cmd);
+					if (cmd.isEmpty()) {
+						return null;
+					}
+
+					return cmd.unwrap();
+				}
+			}
+
 		}
 		return null;
 	}
@@ -165,15 +211,5 @@ public class CargoTypeUpdatingCommandProvider implements IModelCommandProvider {
 			assignment = (ElementAssignment) overrides.get(assignment);
 		}
 		return assignment;
-	}
-
-	@Override
-	public void startCommandProvision() {
-
-	}
-
-	@Override
-	public void endCommandProvision() {
-
 	}
 }

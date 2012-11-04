@@ -27,7 +27,7 @@ import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
-public class ElementAssignmentCommandProvider extends BaseModelCommandProvider {
+public class ElementAssignmentCommandProvider extends BaseModelCommandProvider<Object> {
 
 	@Override
 	public Command provideAdditionalCommand(final EditingDomain editingDomain, final MMXRootObject rootObject, final Map<EObject, EObject> overrides, final Set<EObject> editSet,

@@ -90,6 +90,8 @@ public class ExportCSVWizard extends Wizard implements IExportWizard {
 				}
 			}
 		}
+		
+		exportPage.saveDirectorySetting();
 
 		return true;
 	}

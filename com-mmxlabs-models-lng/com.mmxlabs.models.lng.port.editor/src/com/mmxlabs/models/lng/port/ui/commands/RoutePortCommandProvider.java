@@ -27,7 +27,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
  * @author hinton
  * 
  */
-public class RoutePortCommandProvider extends BaseModelCommandProvider {
+public class RoutePortCommandProvider extends BaseModelCommandProvider<Object> {
 	@Override
 	protected Command handleDeletion(final EditingDomain editingDomain, final MMXRootObject rootObject, final Collection<Object> deleted, final Map<EObject, EObject> overrides,
 			final Set<EObject> editSet) {
