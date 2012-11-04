@@ -67,4 +67,18 @@ public interface IModelInstance {
 	 */
 	void unload();
 
+	/**
+	 * Returns true if the model has been successfully loaded.
+	 * 
+	 * @since 2.0
+	 */
+	boolean isLoaded();
+
+	/**
+	 * Unloads the model and removes this model and {@link URI} from the model service
+	 * 
+	 * @since 2.0
+	 */
+	void dispose();
+
 }

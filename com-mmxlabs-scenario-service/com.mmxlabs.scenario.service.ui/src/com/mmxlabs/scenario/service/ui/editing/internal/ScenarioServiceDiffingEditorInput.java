@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.scenario.service.ui.editing;
+package com.mmxlabs.scenario.service.ui.editing.internal;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -13,6 +13,8 @@ import org.eclipse.ui.IPersistableElement;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.provider.ScenarioServiceItemProviderAdapterFactory;
+import com.mmxlabs.scenario.service.ui.editing.IDiffEditHandler;
+import com.mmxlabs.scenario.service.ui.editing.IScenarioServiceDiffingEditorInput;
 import com.mmxlabs.scenario.service.ui.internal.DefaultDiffEditHandler;
 
 public class ScenarioServiceDiffingEditorInput implements IScenarioServiceDiffingEditorInput /* , IPersistableElement */{

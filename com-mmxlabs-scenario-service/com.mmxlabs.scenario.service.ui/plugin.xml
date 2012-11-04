@@ -414,11 +414,6 @@
                style="push">
          </command>
          <command
-               commandId="com.mmxlabs.scenario.service.ui.fork"
-               label="Fork"
-               style="push">
-         </command>
-         <command
                commandId="org.eclipse.ui.edit.copy"
                label="Copy"
                style="push">
@@ -450,14 +445,70 @@
                label="Delete"
                style="push">
          </command>
-         <separator
-               name="Imports">
-         </separator>
          <command
                commandId="com.mmxlabs.scenario.service.ui.revert"
                label="Revert"
                style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                        <not>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                           </test>
+                        </not>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
          </command>
+         <command
+               commandId="com.mmxlabs.scenario.service.ui.fork"
+               label="Fork"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                        <not>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                           </test>
+                        </not>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
+         </command>
+         <separator
+               name="edit"
+               visible="false">
+         </separator>
+         <separator
+               name="optimisation"
+               visible="false">
+         </separator>
          <command
                commandId="com.mmxlabs.scenario.service.ui.pin"
                label="Pin"
@@ -516,7 +567,36 @@
                commandId="com.mmxlabs.scenario.service.ui.diffedit"
                label="Sandbox"
                style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="selection">
+                     <iterate
+                           ifEmpty="false">
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                        <not>
+                           <test
+                                 forcePluginActivation="true"
+                                 property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                           </test>
+                        </not>
+                     </iterate>
+                  </with>
+                  <count
+                        value="1">
+                  </count>
+               </and>
+            </visibleWhen>
          </command>
+         <separator
+               name="importers">
+         </separator>
+         <separator
+               name="exporters">
+         </separator>
       </menuContribution>
    </extension>
    <extension
@@ -556,7 +636,7 @@
    <extension
          point="org.eclipse.ui.elementFactories">
       <factory
-            class="com.mmxlabs.scenario.service.ui.editing.ScenarioServiceElementFactory"
+            class="com.mmxlabs.scenario.service.ui.editing.internal.ScenarioServiceElementFactory"
             id="com.mmxlabs.scenario.service.ui.editing.ScenarioServiceElementFactory">
       </factory>
    </extension>
@@ -586,6 +666,12 @@
                tooltip="Use this scenario as the pin for comparison">
          </action>
       </editorContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="com.mmxlabs.scenario.service.ui.internal.ScenarioServiceStartupExtension">
+      </startup>
    </extension>
 
 </plugin>

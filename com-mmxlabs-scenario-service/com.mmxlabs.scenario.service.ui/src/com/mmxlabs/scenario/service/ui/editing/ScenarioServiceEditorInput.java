@@ -14,6 +14,7 @@ import org.eclipse.ui.IPersistableElement;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.provider.ScenarioServiceItemProviderAdapterFactory;
+import com.mmxlabs.scenario.service.ui.editing.internal.ScenarioServiceElementFactory;
 
 public class ScenarioServiceEditorInput implements IScenarioServiceEditorInput, IPersistableElement {
 

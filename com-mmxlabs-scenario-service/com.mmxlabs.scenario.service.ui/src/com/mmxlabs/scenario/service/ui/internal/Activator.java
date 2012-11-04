@@ -91,7 +91,7 @@ public class Activator extends AbstractUIPlugin {
 			serviceListener.serviceChanged(event);
 		}
 
-		// register selection provder
+		// register selection provider
 		selectionProviderRegistration = context.registerService(IScenarioServiceSelectionProvider.class, scenarioServiceSelectionProvider, null);
 	}
 

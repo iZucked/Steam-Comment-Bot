@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -238,8 +239,28 @@ public class ModelInstance implements IModelInstance {
 
 	@Override
 	public void unload() {
-		removeUUIDAdapter();
-		modelObject = null;
+		if (modelObject != null) {
+			removeUUIDAdapter();
+			modelObject.eAdapters().remove(dirtyAdapter);
+			modelObject = null;
+		}
 		resource.unload();
+	}
+
+	@Override
+	public boolean isLoaded() {
+		return modelObject != null;
+	}
+
+	@Override
+	public void dispose() {
+		// Unload model
+		unload();
+
+		// Remove from parent resource set
+		final ResourceSet resourceSet = resource.getResourceSet();
+		if (resourceSet != null) {
+			resourceSet.getResources().remove(resource);
+		}
 	}
 }

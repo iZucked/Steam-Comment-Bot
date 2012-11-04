@@ -105,7 +105,6 @@ public class ScenarioStorageUtil {
 
 		final URIConverter conv = resourceSet.getURIConverter();
 
-		int index = 0;
 		final byte[] buffer = new byte[10 * 4096];
 		// long l = System.currentTimeMillis();
 		//
@@ -128,7 +127,7 @@ public class ScenarioStorageUtil {
 		for (final String partURI : partURIs) {
 			final URI u = scenarioService.resolveURI(partURI);
 			final InputStream input = conv.createInputStream(u);
-			final URI relativeURI = URI.createURI("/" + index++ + "-" + u.segment(u.segmentCount() - 1));
+			final URI relativeURI = URI.createURI("/" + u.segment(u.segmentCount() - 1));
 			manifest.getModelURIs().add(relativeURI.toString());
 			final URI resolved = relativeURI.resolve(manifestURI);
 			final OutputStream output = conv.createOutputStream(resolved);
@@ -161,7 +160,7 @@ public class ScenarioStorageUtil {
 	 * @return
 	 */
 	public static ScenarioInstance loadInstanceFromFile(final String filePath) {
-		return loadInstanceFromURI(URI.createFileURI(filePath) , false);
+		return loadInstanceFromURI(URI.createFileURI(filePath), false);
 	}
 
 	/**
@@ -220,8 +219,7 @@ public class ScenarioStorageUtil {
 					if (preLoad) {
 						MMXCoreHandlerUtil.restoreProxiesForResources(resourceSet.getResources());
 					}
-					
-					
+
 					return result;
 				}
 			}

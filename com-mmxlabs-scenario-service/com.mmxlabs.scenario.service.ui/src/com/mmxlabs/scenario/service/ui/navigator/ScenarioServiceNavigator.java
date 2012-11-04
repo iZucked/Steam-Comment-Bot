@@ -12,8 +12,6 @@ import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.view.ExtendedPropertySheetPage;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
@@ -59,7 +57,6 @@ import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionChangedListener;
 import com.mmxlabs.scenario.service.ui.IScenarioServiceSelectionProvider;
 import com.mmxlabs.scenario.service.ui.internal.Activator;
-import com.mmxlabs.scenario.service.ui.internal.ScenarioServiceSelectionProvider;
 
 public class ScenarioServiceNavigator extends CommonNavigator {
 
@@ -72,7 +69,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 	private final Image showColumnImage;
 	private final Image optImage;
 
-	private boolean selectionModeTrackEditor = true;
+//	private boolean selectionModeTrackEditor = true;
 
 	protected AdapterFactoryEditingDomain editingDomain;
 
@@ -102,23 +99,23 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void partClosed(final IWorkbenchPart part) {
-			if (selectionModeTrackEditor) {
+//			if (selectionModeTrackEditor) {
 				// If the selection tracks editor, then get the scenario instance and make it the only selection.
 				if (part instanceof IEditorPart) {
 					final IEditorPart editorPart = (IEditorPart) part;
 					final IEditorInput editorInput = editorPart.getEditorInput();
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
 					if (scenarioInstance != null) {
-						ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+//						ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
 						if (lastAutoSelection == scenarioInstance) {
 							lastAutoSelection = null;
-							if (selectionProvider.isSelected(scenarioInstance) && scenarioInstance != selectionProvider.getPinnedInstance()) {
-								selectionProvider.deselect(scenarioInstance);
-							}
+//							if (selectionProvider.isSelected(scenarioInstance) && scenarioInstance != selectionProvider.getPinnedInstance()) {
+//								selectionProvider.deselect(scenarioInstance);
+//							}
 						}
 					}
 				}
-			}
+//			}
 		}
 
 		@Override
@@ -128,28 +125,28 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		@Override
 		public void partActivated(final IWorkbenchPart part) {
-			if (selectionModeTrackEditor) {
+//			if (selectionModeTrackEditor) {
 				// If the selection tracks editor, then get the scenario instance and make it the only selection.
 				if (part instanceof IEditorPart) {
 					final IEditorPart editorPart = (IEditorPart) part;
 					final IEditorInput editorInput = editorPart.getEditorInput();
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
 					if (scenarioInstance != null) {
-						ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
-						if (lastAutoSelection != null && lastAutoSelection != scenarioInstance) {
-							if (selectionProvider.isSelected(lastAutoSelection) && selectionProvider.getPinnedInstance() != lastAutoSelection) {
-								selectionProvider.deselect(lastAutoSelection);
-							}
-							lastAutoSelection = null;
-						}
-						if (!selectionProvider.isSelected(scenarioInstance)) {
+//						ScenarioServiceSelectionProvider selectionProvider = Activator.getDefault().getScenarioServiceSelectionProvider();
+//						if (lastAutoSelection != null && lastAutoSelection != scenarioInstance) {
+//							if (selectionProvider.isSelected(lastAutoSelection) && selectionProvider.getPinnedInstance() != lastAutoSelection) {
+//								selectionProvider.deselect(lastAutoSelection);
+//							}
+//							lastAutoSelection = null;
+//						}
+//						if (!selectionProvider.isSelected(scenarioInstance)) {
 							lastAutoSelection = scenarioInstance;
-							selectionProvider.select(scenarioInstance);
-						}
+//							selectionProvider.select(scenarioInstance);
+//						}
 					}
 				}
 			}
-		}
+//		}
 	};
 
 	private final IScenarioServiceSelectionChangedListener selectionChangedListener = new IScenarioServiceSelectionChangedListener() {
@@ -313,9 +310,9 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 								final Object data = selected.getData();
 								if (data instanceof ScenarioInstance) {
 									final ScenarioInstance instance = (ScenarioInstance) data;
-									if (!selectionModeTrackEditor || instance != lastAutoSelection) {
+//									if (!selectionModeTrackEditor || instance != lastAutoSelection) {
 										Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
-									}
+//									}
 								}
 							}
 						}
@@ -355,7 +352,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 						final Object data = item.getData();
 						if (data instanceof ScenarioInstance) {
 							final ScenarioInstance instance = (ScenarioInstance) data;
-							if (!selectionModeTrackEditor || instance != lastAutoSelection) {
+							if (/*!selectionModeTrackEditor ||*/ instance != lastAutoSelection) {
 								Activator.getDefault().getScenarioServiceSelectionProvider().toggleSelection(instance);
 							}
 						}
@@ -369,7 +366,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 			}
 		});
-
+/*
 		final Action a = new Action("Toggle Track Editor", IAction.AS_CHECK_BOX) {
 
 			public void run() {
@@ -385,6 +382,7 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 		a.setChecked(selectionModeTrackEditor);
 
 		getViewSite().getActionBars().getToolBarManager().add(a);
+		*/
 		getViewSite().getActionBars().getToolBarManager().update(true);
 
 		return viewer;
