@@ -34,6 +34,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridCellRenderer;
 import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
@@ -401,7 +402,7 @@ public class EObjectTableViewer extends GridTableViewer {
 			}
 		});
 
-		column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
+		column.getColumn().setCellRenderer(createCellRenderer());
 
 		return column;
 	}
@@ -489,9 +490,16 @@ public class EObjectTableViewer extends GridTableViewer {
 				}
 			});
 		}
-		column.getColumn().setCellRenderer(new AlternatingRowCellRenderer());
+		column.getColumn().setCellRenderer(createCellRenderer());
 
 		return column;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	protected GridCellRenderer createCellRenderer() {
+		return new AlternatingRowCellRenderer();
 	}
 
 	public <T extends ICellManipulator & ICellRenderer> void addTypicalColumn(final String columnName, final T manipulatorAndRenderer, final Object... path) {
