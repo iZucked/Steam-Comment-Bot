@@ -62,13 +62,22 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	public void setEnabled(final boolean enabled) {
+	protected void setControlsEnabled(final boolean enabled) {
 		if (formattedText.getControl().isDisposed()) {
 			return;
 		}
 		formattedText.getControl().setEnabled(enabled);
 
-		super.setEnabled(enabled);
+		super.setControlsEnabled(enabled);
+	}
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+		if (formattedText.getControl().isDisposed()) {
+			return;
+		}
+		formattedText.getControl().setVisible(visible);
+		
+		super.setControlsVisible(visible);
 	}
 
 	/**
