@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Label;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 
 /**
  * This is an interface for an inline editor. It is given an input, and should generate commands and send them to the appropriate command processor when stuff happens. It doesn't handle layout or
@@ -40,8 +41,53 @@ public interface IInlineEditor {
 	public EStructuralFeature getFeature();
 
 	public EObject getEditorTarget();
-	
+
 	void setLabel(Label label);
 
-	void setEnabled(boolean enabled);
+	/**
+	 * @return
+	 * @since 2.0
+	 */
+	Label getLabel();
+
+	/**
+	 * @since 2.0
+	 */
+	void setEditorLocked(boolean locked);
+
+	/**
+	 * @since 2.0
+	 */
+	boolean isEditorLocked();
+
+	/**
+	 * @since 2.0
+	 */
+	void setEditorEnabled(boolean enabled);
+
+	/**
+	 * @since 2.0
+	 */
+	boolean isEditorEnabled();
+
+	/**
+	 * @since 2.0
+	 */
+	void setEditorVisible(boolean visible);
+
+	/**
+	 * @since 2.0
+	 */
+	boolean isEditorVisible();
+
+	/**
+	 * @since 2.0
+	 */
+	void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener);
+
+	/**
+	 * @since 2.0
+	 */
+	void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener);
+
 }

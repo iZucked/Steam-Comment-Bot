@@ -28,8 +28,9 @@ import org.eclipse.swt.widgets.Text;
 
 /**
  * TODO look at nebula formattedtext
+ * 
  * @author hinton
- *
+ * 
  */
 public class NumberInlineEditor extends UnsettableInlineEditor implements ModifyListener, DisposeListener {
 	private EDataType type;
@@ -39,33 +40,33 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	private NumberFormatter formatter;
 	private int scale = 1;
 	private String unit = null;
-	
+
 	public NumberInlineEditor(final EStructuralFeature feature) {
 		super(feature);
 		type = (EDataType) feature.getEType();
-		
+
 		final EAnnotation annotation = feature.getEAnnotation("http://www.mmxlabs.com/models/ui/numberFormat");
 		String format = null;
 		String defaultValueString = "0";
-		
+
 		if (annotation != null) {
 			if (annotation.getDetails().containsKey("defaultValue")) {
 				defaultValueString = annotation.getDetails().get("defaultValue");
 			}
-			
+
 			if (annotation.getDetails().containsKey("formatString")) {
 				format = annotation.getDetails().get("formatString");
 			}
-			
+
 			if (annotation.getDetails().containsKey("scale")) {
 				scale = Integer.parseInt(annotation.getDetails().get("scale"));
 			}
-			
+
 			if (annotation.getDetails().containsKey("unit")) {
 				unit = annotation.getDetails().get("unit");
 			}
 		}
-		
+
 		if (type == EcorePackage.eINSTANCE.getELong()) {
 			defaultValue = Long.parseLong(defaultValueString);
 			formatter = format == null ? new LongFormatter() : new LongFormatter(format);
@@ -83,7 +84,6 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			formatter.setFixedLengths(false, false);
 	}
 
-
 	@Override
 	public Control createValueControl(Composite parent) {
 		if (unit != null) {
@@ -93,14 +93,14 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 			sub.setLayout(layout);
 			parent = sub;
 		}
-		
+
 		text = new FormattedText(parent, SWT.BORDER);
 		text.setFormatter(formatter);
 		text.setValue(defaultValue);
-		
+
 		text.getControl().addModifyListener(this);
 		text.getControl().addDisposeListener(this);
-		
+
 		if (unit != null) {
 			final Label unitLabel = new Label(parent, SWT.NONE);
 			unitLabel.setText(unit);
@@ -131,14 +131,13 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		text = null;
 	}
 
-
 	@Override
 	public void modifyText(final ModifyEvent e) {
 		if (text.isValid()) {
 			doSetValue(descale(text.getValue()), false);
 		}
 	}
-	
+
 	private Object scale(final Object internalValue) {
 		if (internalValue instanceof Integer) {
 			return (Integer) (((Integer) internalValue).intValue() * scale);
@@ -151,7 +150,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		}
 		return internalValue;
 	}
-	
+
 	private Object descale(final Object displayValue) {
 		if (displayValue instanceof Integer) {
 			return (Integer) (((Integer) displayValue).intValue() / scale);
@@ -164,13 +163,20 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 		}
 		return displayValue;
 	}
-	
 
 	@Override
-	public void setEnabled(final boolean enabled) {
+	protected void setControlsEnabled(final boolean enabled) {
 
 		text.getControl().setEnabled(enabled);
-		
-		super.setEnabled(enabled);
+
+		super.setControlsEnabled(enabled);
+	}
+
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+
+		text.getControl().setVisible(visible);
+
+		super.setControlsVisible(visible);
 	}
 }

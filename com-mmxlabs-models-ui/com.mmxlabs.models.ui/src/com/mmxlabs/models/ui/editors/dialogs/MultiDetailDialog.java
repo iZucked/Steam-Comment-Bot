@@ -52,6 +52,7 @@ import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.editors.util.ControlUtils;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
@@ -440,13 +441,56 @@ public class MultiDetailDialog extends Dialog {
 				}
 
 				@Override
-				public void setEnabled(final boolean enabled) {
-					proxy.setEnabled(enabled);
+				public void setEditorEnabled(final boolean enabled) {
+					proxy.setEditorEnabled(enabled);
 				}
 
 				@Override
 				public EObject getEditorTarget() {
 					return proxy.getEditorTarget();
+				}
+
+				@Override
+				public Label getLabel() {
+					return proxy.getLabel();
+				}
+
+				@Override
+				public void setEditorLocked(boolean locked) {
+					proxy.setEditorLocked(locked);
+
+				}
+
+				@Override
+				public boolean isEditorLocked() {
+					return proxy.isEditorLocked();
+				}
+
+				@Override
+				public boolean isEditorEnabled() {
+					return proxy.isEditorEnabled();
+				}
+
+				@Override
+				public void setEditorVisible(boolean visible) {
+					proxy.setEditorVisible(visible);
+				}
+
+				@Override
+				public boolean isEditorVisible() {
+					return proxy.isEditorVisible();
+				}
+
+				@Override
+				public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+					// TODO Auto-generated method stub
+					
 				}
 			};
 		}

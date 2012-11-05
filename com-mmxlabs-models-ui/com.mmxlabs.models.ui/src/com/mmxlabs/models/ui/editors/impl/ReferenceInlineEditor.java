@@ -95,7 +95,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		if (combo.isDisposed()) {
 			return;
 		}
-		final List<Pair<String, EObject>> values = valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>>emptyList();
+		final List<Pair<String, EObject>> values = valueProvider != null ? valueProvider.getAllowedValues(input, feature) : Collections.<Pair<String, EObject>> emptyList();
 		// update combo contents
 		combo.removeAll();
 		nameList.clear();
@@ -132,12 +132,19 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	public void setEnabled(final boolean enabled) {
-		if (combo.isDisposed()) {
-			return;
+	public void setControlsEnabled(final boolean enabled) {
+		if (!combo.isDisposed()) {
+			combo.setEnabled(enabled);
 		}
-		combo.setEnabled(enabled);
 
-		super.setEnabled(enabled);
+		super.setControlsEnabled(enabled);
+	}
+	@Override
+	public void setControlsVisible(final boolean visible) {
+		if (!combo.isDisposed()) {
+			combo.setVisible(visible);
+		}
+		
+		super.setControlsVisible(visible);
 	}
 }

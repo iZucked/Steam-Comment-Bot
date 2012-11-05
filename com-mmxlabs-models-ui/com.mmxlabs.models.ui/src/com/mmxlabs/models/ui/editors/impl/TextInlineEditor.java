@@ -72,13 +72,20 @@ public class TextInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	public void setEnabled(final boolean enabled) {
-		if (text.isDisposed()) {
-			return;
+	protected void setControlsEnabled(final boolean enabled) {
+		if (!text.isDisposed()) {
+			text.setEnabled(enabled);
 		}
-		text.setEnabled(enabled);
 
-		super.setEnabled(enabled);
+		super.setControlsEnabled(enabled);
+	}
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+		if (!text.isDisposed()) {
+			text.setVisible(visible);
+		}
+		
+		super.setControlsVisible(visible);
 	}
 
 	protected Text createText(final Composite parent) {

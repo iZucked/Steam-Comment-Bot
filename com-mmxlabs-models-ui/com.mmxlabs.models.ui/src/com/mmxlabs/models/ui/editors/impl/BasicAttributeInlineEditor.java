@@ -9,7 +9,9 @@ package com.mmxlabs.models.ui.editors.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
@@ -33,6 +35,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
@@ -51,6 +55,10 @@ import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
  * 
  */
 public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implements IInlineEditor {
+
+	private static final Logger log = LoggerFactory.getLogger(BasicAttributeInlineEditor.class);
+
+	private final Set<IInlineEditorExternalNotificationListener> listeners = new HashSet<IInlineEditorExternalNotificationListener>();
 
 	/**
 	 * Adapter factory instance. This contains all factories registered in the global registry.
@@ -114,7 +122,9 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	protected Label label;
 
-	protected boolean enabled = true;
+	private boolean editorEnabled = true;
+	private final boolean editorVisible = true;
+	private boolean editorLocked = false;
 
 	public BasicAttributeInlineEditor(final EStructuralFeature feature) {
 		this.feature = feature;
@@ -170,6 +180,8 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			if (label != null)
 				label.setText(labelText);
 		}
+
+		firePostDisplay(location, context, input, range);
 	}
 
 	/**
@@ -225,6 +237,9 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 	@Override
 	public void reallyNotifyChanged(final Notification msg) {
+
+		fireNotificationChanged(msg);
+
 		// check if msg is relevant
 		if (msg.getFeature() != null && updateOnChangeToFeature(msg.getFeature())) {
 			doUpdateDisplayWithValue(feature.equals(msg.getFeature()) == false);
@@ -233,6 +248,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 			// it is a change to our feature
 			doUpdateDisplayWithValue();
 		}
+
 	}
 
 	@Override
@@ -288,7 +304,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 
 			severity = checkStatus(status, IStatus.OK, sb);
 
-			String description = sb.toString();
+			final String description = sb.toString();
 			if (description.isEmpty()) {
 				// No problems, so hide decoration
 				validationDecoration.hide();
@@ -424,19 +440,118 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 		this.label = label;
 	}
 
-	public boolean isEnabled() {
-		return enabled;
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public Label getLabel() {
+		return label;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public void setEnabled(final boolean enabled) {
-		if (label != null) {
-			label.setEnabled(enabled);
-		}
-		this.enabled = enabled;
+	public void setEditorEnabled(final boolean enabled) {
+		this.editorEnabled = enabled;
+		setControlsEnabled(!editorLocked && editorEnabled);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public boolean isEditorEnabled() {
+		return editorEnabled;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void setEditorLocked(final boolean locked) {
+		this.editorLocked = locked;
+		setControlsEnabled(!editorLocked && editorEnabled);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public boolean isEditorLocked() {
+		return editorLocked;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void setEditorVisible(final boolean visible) {
+		this.editorEnabled = visible;
+		setControlsVisible(visible);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public boolean isEditorVisible() {
+		return editorVisible;
 	}
 
 	public EObject getEditorTarget() {
 		return input;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	protected void setControlsEnabled(final boolean enabled) {
+		if (label != null) {
+			label.setEnabled(enabled);
+		}
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	protected void setControlsVisible(final boolean visible) {
+		if (label != null) {
+			label.setVisible(visible);
+		}
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void addNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
+		this.listeners.add(listener);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void removeNotificationChangedListener(final IInlineEditorExternalNotificationListener listener) {
+		this.listeners.remove(listener);
+	}
+
+	private void fireNotificationChanged(final Notification notification) {
+		final Set<IInlineEditorExternalNotificationListener> copy = new HashSet<IInlineEditorExternalNotificationListener>(listeners);
+		for (final IInlineEditorExternalNotificationListener l : copy) {
+			l.notifyChanged(notification);
+		}
+	}
+
+	private void firePostDisplay(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
+		final Set<IInlineEditorExternalNotificationListener> copy = new HashSet<IInlineEditorExternalNotificationListener>(listeners);
+		for (final IInlineEditorExternalNotificationListener l : copy) {
+			try {
+				l.postDisplay(this, location, context, input, range);
+			} catch (final Exception e) {
+				log.error(e.getMessage(), e);
+			}
+		}
 	}
 }

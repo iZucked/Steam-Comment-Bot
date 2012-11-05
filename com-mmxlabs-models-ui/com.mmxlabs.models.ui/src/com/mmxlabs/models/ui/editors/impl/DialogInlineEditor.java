@@ -43,33 +43,31 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 		button.setText("Edit");
 		this.description = description;
 		this.button = button;
-		button.addSelectionListener(
-				new SelectionListener() {
-					{
-						final SelectionListener sl = this;
-						button.addDisposeListener(
-								new DisposeListener() {
-									@Override
-									public void widgetDisposed(final DisposeEvent e) {
-										button.removeSelectionListener(sl);
-									}
-								});
-					}
-					
+		button.addSelectionListener(new SelectionListener() {
+			{
+				final SelectionListener sl = this;
+				button.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetSelected(final SelectionEvent e) {
-						final Object o = displayDialog(getValue());
-						if (o != null) {
-							doSetValue(o, false);
-							updateDisplay(getValue());
-						}
+					public void widgetDisposed(final DisposeEvent e) {
+						button.removeSelectionListener(sl);
 					}
-					
-					@Override
-					public void widgetDefaultSelected(final SelectionEvent e) {}
+				});
+			}
+
+			@Override
+			public void widgetSelected(final SelectionEvent e) {
+				final Object o = displayDialog(getValue());
+				if (o != null) {
+					doSetValue(o, false);
+					updateDisplay(getValue());
 				}
-				);
-		
+			}
+
+			@Override
+			public void widgetDefaultSelected(final SelectionEvent e) {
+			}
+		});
+
 		return super.wrapControl(contents);
 	}
 
@@ -80,12 +78,19 @@ public abstract class DialogInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public void setEnabled(final boolean enabled) {
+	protected void setControlsEnabled(final boolean enabled) {
 
+		super.setControlsEnabled(enabled);
 		button.setEnabled(enabled);
 		description.setEnabled(enabled);
+	}
 
-		super.setEnabled(enabled);
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+
+		super.setControlsVisible(visible);
+		button.setVisible(visible);
+		description.setVisible(visible);
 	}
 
 	protected abstract Object displayDialog(final Object currentValue);

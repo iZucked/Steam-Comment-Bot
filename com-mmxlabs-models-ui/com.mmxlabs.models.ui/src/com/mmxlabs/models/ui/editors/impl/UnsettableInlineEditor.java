@@ -23,6 +23,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	private Button setButton;
 	private Object lastSetValue;
 	private Control inner;
+	private boolean controlEnabled;
 
 	public UnsettableInlineEditor(final EStructuralFeature feature) {
 		super(feature);
@@ -158,16 +159,36 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		}
 		if (setButton != null && !setButton.isDisposed()) {
 			setButton.setSelection(valueIsSet());
+			setButton.setEnabled(isEditorEnabled());
 		}
-		setControlEnabled(inner, isEnabled() && (setButton == null || setButton.getSelection()));
+
+		boolean innerEnabled = isEditorEnabled() && !isEditorLocked() && (setButton == null || setButton.getSelection());
+		setControlsEnabled(innerEnabled);
+		if (inner != null) {
+			inner.setEnabled(innerEnabled);
+		}
 	}
 
 	@Override
-	public void setEnabled(final boolean enabled) {
+	public void setEditorEnabled(boolean enabled) {
+		this.controlEnabled = enabled;
+		super.setEditorEnabled(enabled);
+	}
+
+	@Override
+	protected void setControlsEnabled(final boolean enabled) {
+		super.setControlsEnabled(enabled);
 		if (setButton != null) {
 			setButton.setEnabled(enabled);
 		}
+	}
 
-		super.setEnabled(enabled);
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+
+		super.setControlsVisible(visible);
+		if (setButton != null) {
+			setButton.setVisible(visible);
+		}
 	}
 }
