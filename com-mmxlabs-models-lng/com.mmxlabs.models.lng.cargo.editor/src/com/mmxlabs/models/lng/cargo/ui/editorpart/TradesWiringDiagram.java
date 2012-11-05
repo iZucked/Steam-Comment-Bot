@@ -64,7 +64,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 	 */
 	private final List<Integer> wiring = new ArrayList<Integer>();
 
-	private int terminalSize = 11;
+	private int terminalSize = 9;
 	private int pathWidth = 2;
 	private int borderWidth = 1;
 
@@ -315,7 +315,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				graphics.drawOval(ca.x + terminalSize, (int) (midpoint - (terminalSize / 2)), terminalSize, terminalSize);
 				if (terminalOptionals2.get(i).getFirst()) {
 					graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-					graphics.fillOval(ca.x + terminalSize + 4, (int) midpoint - (terminalSize / 2) + 4, 4, 4);
+					graphics.fillOval(ca.x + terminalSize + 3, (int) midpoint - (terminalSize / 2) + 3, 3, 3);
 				}
 			}
 
@@ -327,7 +327,7 @@ public abstract class TradesWiringDiagram implements PaintListener, MouseListene
 				graphics.drawOval(ca.x + ca.width - 2 * terminalSize, (int) (midpoint - terminalSize / 2), terminalSize, terminalSize);
 				if (terminalOptionals2.get(i).getSecond()) {
 					graphics.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_BLACK));
-					graphics.fillOval(ca.x + ca.width - 2 * terminalSize + 4, (int) (midpoint - terminalSize / 2) + 4, 4, 4);
+					graphics.fillOval(ca.x + ca.width - 2 * terminalSize + 3, (int) (midpoint - terminalSize / 2) + 3, 4, 4);
 				}
 			}
 			rawI++;

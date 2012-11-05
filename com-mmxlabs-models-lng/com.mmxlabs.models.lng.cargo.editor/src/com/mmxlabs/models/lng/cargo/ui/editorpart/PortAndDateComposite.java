@@ -54,10 +54,11 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		super(parent, style);
 		this.isLoad = isLoad;
 
-		final GridLayout gridLayout = new GridLayout(5, false);
+		final GridLayout gridLayout = new GridLayout(6, false);
 		gridLayout.marginHeight = 0;
 		// gridLayout.marginBottom = 0;
 		// gridLayout.marginTop = 0;
+		this.isLoad = isLoad;
 
 		// 7 for validation markers
 		gridLayout.horizontalSpacing = 7;
@@ -69,13 +70,21 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 			ctxButton = new Button(this, SWT.PUSH);
 			ctxButton.setText("<");
 		}
-		addInlineEditor(ComponentHelperUtils.createDefaultEditor(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.Literals.NAMED_OBJECT__NAME));
-		addInlineEditor(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__CONTRACT));
-		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
-		addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__WINDOW_START)));
 		if (isLoad) {
+			addInlineEditor(ComponentHelperUtils.createDefaultEditor(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.Literals.NAMED_OBJECT__NAME));
+			addInlineEditor(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__CONTRACT));
+//			addInlineEditor(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__MAX_QUANTITY));
+			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
+			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__WINDOW_START)));
 			ctxButton = new Button(this, SWT.PUSH);
 			ctxButton.setText(">");
+		}
+		else{
+			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__WINDOW_START)));			
+			addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__PORT)));
+//			addInlineEditor(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__MAX_QUANTITY));
+			addInlineEditor(ComponentHelperUtils.createDefaultEditor(CargoPackage.eINSTANCE.getSlot(), CargoPackage.Literals.SLOT__CONTRACT));
+			addInlineEditor(ComponentHelperUtils.createDefaultEditor(MMXCorePackage.eINSTANCE.getNamedObject(), MMXCorePackage.Literals.NAMED_OBJECT__NAME));
 		}
 
 		// Create a context menu for this control. Menu items will be populated using the IMenuListeners add using #addMenuListener
@@ -150,15 +159,33 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 
 		final GridData gd = new GridData(hAlignment, SWT.FILL, false, false);
 		gd.verticalIndent = 0;
-		switch (column) {
-		case 0:
-			gd.widthHint = 120; // ID
-		case 1:
-			gd.widthHint = 120; // contract
-		case 2:
-			gd.widthHint = 120; // port
-		case 3:
-			gd.widthHint = 120; // date
+		if(isLoad){
+			switch (column) {
+			case 0:
+				gd.widthHint = 60; // ID
+			case 1:
+				gd.widthHint = 60; // contract
+			case 2:
+				gd.widthHint = 60; // volume				
+			case 3:
+				gd.widthHint = 60; // port
+			case 4:
+				gd.widthHint = 60; // date
+				
+			}
+		} else {
+			switch (column) {
+			case 0:
+				gd.widthHint = 60; // date
+			case 1:
+				gd.widthHint = 60; // port
+			case 2:
+				gd.widthHint = 60; // volume
+			case 3:
+				gd.widthHint = 60; // contract
+			case 4:
+				gd.widthHint = 60; // ID
+			}			
 		}
 		control.setLayoutData(gd);
 		control.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WHITE));
