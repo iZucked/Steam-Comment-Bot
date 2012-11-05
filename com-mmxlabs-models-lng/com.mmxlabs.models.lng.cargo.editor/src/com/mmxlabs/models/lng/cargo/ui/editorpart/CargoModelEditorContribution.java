@@ -114,18 +114,40 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		if (status instanceof DetailConstraintStatusDecorator) {
 			final DetailConstraintStatusDecorator dcsd = (DetailConstraintStatusDecorator) status;
 			Cargo cargo = null;
+			LoadSlot loadSlot = null;
+			DischargeSlot dischargeSlot = null;
 			if (dcsd.getTarget() instanceof Cargo) {
 				cargo = (Cargo) dcsd.getTarget();
 			} else if (dcsd.getTarget() instanceof LoadSlot) {
-				final LoadSlot loadSlot = (LoadSlot) dcsd.getTarget();
+				loadSlot = (LoadSlot) dcsd.getTarget();
 				cargo = loadSlot.getCargo();
 			} else if (dcsd.getTarget() instanceof DischargeSlot) {
-				final DischargeSlot dischargeSlot = (DischargeSlot) dcsd.getTarget();
+				dischargeSlot = (DischargeSlot) dcsd.getTarget();
 				cargo = dischargeSlot.getCargo();
 			}
-			editorPart.setActivePage(cargoPageNumber);
+			if (tradesViewer != null) {
+				editorPart.setActivePage(tradesViewerPageNumber);
+			} else {
+				editorPart.setActivePage(cargoPageNumber);
+			}
 			if (cargo != null) {
-				cargoViewerPane.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
+				if (tradesViewer != null) {
+					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
+				} else {
+					cargoViewerPane.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
+				}
+			} else if (loadSlot != null) {
+				if (tradesViewer != null) {
+					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(loadSlot), true);
+				} else if (loadSlotViewerPane != null) {
+					loadSlotViewerPane.getScenarioViewer().setSelection(new StructuredSelection(loadSlot), true);
+				}
+			} else if (dischargeSlot != null) {
+				if (tradesViewer != null) {
+					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(dischargeSlot), true);
+				} else if (dischargeSlotViewerPane != null) {
+					dischargeSlotViewerPane.getScenarioViewer().setSelection(new StructuredSelection(dischargeSlot), true);
+				}
 			}
 			// TODO: Handle load/discharge slots better - e.g. if there is no cargo
 		}
