@@ -125,31 +125,31 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 				dischargeSlot = (DischargeSlot) dcsd.getTarget();
 				cargo = dischargeSlot.getCargo();
 			}
-			if (tradesViewer != null) {
-				editorPart.setActivePage(tradesViewerPageNumber);
-			} else {
-				editorPart.setActivePage(cargoPageNumber);
-			}
 			if (cargo != null) {
 				if (tradesViewer != null) {
+					editorPart.setActivePage(cargoPageNumber);
 					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
 				} else {
+					editorPart.setActivePage(tradesViewerPageNumber);
 					cargoViewerPane.getScenarioViewer().setSelection(new StructuredSelection(cargo), true);
 				}
 			} else if (loadSlot != null) {
 				if (tradesViewer != null) {
+					editorPart.setActivePage(tradesViewerPageNumber);
 					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(loadSlot), true);
 				} else if (loadSlotViewerPane != null) {
+					editorPart.setActivePage(loadSlotPageNumber);
 					loadSlotViewerPane.getScenarioViewer().setSelection(new StructuredSelection(loadSlot), true);
 				}
 			} else if (dischargeSlot != null) {
 				if (tradesViewer != null) {
+					editorPart.setActivePage(tradesViewerPageNumber);
 					tradesViewer.getScenarioViewer().setSelection(new StructuredSelection(dischargeSlot), true);
 				} else if (dischargeSlotViewerPane != null) {
+					editorPart.setActivePage(dischargeSlotPageNumber);
 					dischargeSlotViewerPane.getScenarioViewer().setSelection(new StructuredSelection(dischargeSlot), true);
 				}
 			}
-			// TODO: Handle load/discharge slots better - e.g. if there is no cargo
 		}
 	}
 }
