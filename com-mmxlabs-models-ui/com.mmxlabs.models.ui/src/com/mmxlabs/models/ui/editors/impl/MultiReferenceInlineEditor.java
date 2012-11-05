@@ -56,7 +56,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public void display(final IScenarioEditingLocation location, MMXRootObject context, EObject input, final Collection<EObject> range) {
+	public void display(final IScenarioEditingLocation location, final MMXRootObject context, final EObject input, final Collection<EObject> range) {
 		valueProvider = commandHandler.getReferenceValueProviderProvider().getReferenceValueProvider(input.eClass(), (EReference) feature);
 		super.display(location, context, input, range);
 	}
@@ -76,7 +76,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				final List<EObject> o = openDialogBox(parent);
 				if (o != null) {
 					doSetValue(o, false);
@@ -91,14 +91,14 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	protected Command createSetCommand(Object value) {
+	protected Command createSetCommand(final Object value) {
 		final CompoundCommand setter = CommandUtil.createMultipleAttributeSetter(commandHandler.getEditingDomain(), input, feature, (Collection<?>) value);
 		return setter;
 	}
 
 	@Override
-	protected void updateDisplay(Object value) {
-		List<? extends EObject> selectedValues = (List<? extends EObject>) value;
+	protected void updateDisplay(final Object value) {
+		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		if (selectedValues != null) {
 			final StringBuilder sb = new StringBuilder();
 			for (final EObject obj : selectedValues) {
@@ -111,16 +111,16 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected List<EObject> openDialogBox(Control cellEditorWindow) {
-		List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, feature);
+	protected List<EObject> openDialogBox(final Control cellEditorWindow) {
+		final List<Pair<String, EObject>> options = valueProvider.getAllowedValues(input, feature);
 
 		if (options.size() > 0 && options.get(0).getSecond() == null)
 			options.remove(0);
 
-		ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), options.toArray(), new ArrayContentProvider(), new LabelProvider() {
+		final ListSelectionDialog dlg = new ListSelectionDialog(cellEditorWindow.getShell(), options.toArray(), new ArrayContentProvider(), new LabelProvider() {
 
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				return ((Pair<String, ?>) element).getFirst();
 			}
 		});
@@ -137,7 +137,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 		dlg.setInitialSelections(selectedOptions.toArray());
 		dlg.addColumn("Name", new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				return ((Pair<String, ?>) element).getFirst();
 			}
 		});
@@ -163,7 +163,7 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 		dlg.groupBy(new ColumnLabelProvider() {
 			@Override
-			public String getText(Object element) {
+			public String getText(final Object element) {
 				return ((Pair<?, EObject>) element).getSecond().eClass().getName();
 			}
 		});
@@ -180,14 +180,20 @@ public class MultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 		return null;
 	}
-	
 
 	@Override
-	public void setEnabled(final boolean enabled) {
-
+	protected void setControlsEnabled(final boolean enabled) {
 		theLabel.setEnabled(enabled);
 		button.setEnabled(enabled);
-		
-		super.setEnabled(enabled);
+
+		super.setControlsEnabled(enabled);
+	}
+
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+		theLabel.setVisible(visible);
+		button.setVisible(visible);
+
+		super.setControlsEnabled(visible);
 	}
 }

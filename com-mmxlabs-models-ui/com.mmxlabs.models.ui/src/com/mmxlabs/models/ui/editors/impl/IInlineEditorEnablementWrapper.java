@@ -114,9 +114,68 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 		return c;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public void setEnabled(final boolean enabled) {
-		wrapped.setEnabled(enabled);
+	public void setEditorEnabled(final boolean enabled) {
+		wrapped.setEditorEnabled(enabled);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void setEditorVisible(final boolean visible) {
+		wrapped.setEditorVisible(visible);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void setEditorLocked(final boolean locked) {
+		wrapped.setEditorLocked(locked);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public boolean isEditorEnabled() {
+		return wrapped.isEditorEnabled();
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public boolean isEditorVisible() {
+		return wrapped.isEditorVisible();
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public boolean isEditorLocked() {
+		return wrapped.isEditorLocked();
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public EObject getEditorTarget() {
+		return wrapped.getEditorTarget();
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public Label getLabel() {
+		return wrapped.getLabel();
 	}
 
 };

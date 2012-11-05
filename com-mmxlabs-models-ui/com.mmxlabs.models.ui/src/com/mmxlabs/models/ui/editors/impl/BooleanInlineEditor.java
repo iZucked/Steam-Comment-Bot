@@ -24,29 +24,28 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	@Override
 	public Control createControl(final Composite parent) {
 		final Button button = new Button(parent, SWT.CHECK);
-		
-		button.addSelectionListener(
-				new SelectionListener() {
-					{
-						final SelectionListener sl = this;
-						button.addDisposeListener(
-								new DisposeListener() {
-									@Override
-									public void widgetDisposed(DisposeEvent e) {
-										button.removeSelectionListener(sl);
-									}
-								}
-								);
-					}
+
+		button.addSelectionListener(new SelectionListener() {
+			{
+				final SelectionListener sl = this;
+				button.addDisposeListener(new DisposeListener() {
 					@Override
-					public void widgetSelected(SelectionEvent e) {
-						doSetValue((Boolean) button.getSelection(), false);
+					public void widgetDisposed(DisposeEvent e) {
+						button.removeSelectionListener(sl);
 					}
-					
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {}
 				});
-		
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				doSetValue((Boolean) button.getSelection(), false);
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+			}
+		});
+
 		this.button = button;
 
 		return super.wrapControl(button);
@@ -54,7 +53,8 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void updateDisplay(final Object value) {
-		if (button.isDisposed()) return;
+		if (button.isDisposed())
+			return;
 		if (Boolean.TRUE.equals(value)) {
 			this.button.setSelection(true);
 		} else {
@@ -63,10 +63,16 @@ public class BooleanInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public void setEnabled(final boolean enabled) {
+	protected void setControlsEnabled(final boolean enabled) {
 
+		super.setControlsEnabled(enabled);
 		button.setEnabled(enabled);
+	}
 
-		super.setEnabled(enabled);
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+
+		super.setControlsVisible(visible);
+		button.setVisible(visible);
 	}
 }

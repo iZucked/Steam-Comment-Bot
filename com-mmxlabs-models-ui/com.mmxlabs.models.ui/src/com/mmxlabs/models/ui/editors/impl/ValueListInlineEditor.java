@@ -82,10 +82,17 @@ public class ValueListInlineEditor extends UnsettableInlineEditor {
 	}
 
 	@Override
-	public void setEnabled(final boolean enabled) {
+	protected void setControlsEnabled(final boolean enabled) {
 
 		combo.setEnabled(enabled);
 		
-		super.setEnabled(enabled);
+		super.setControlsEnabled(enabled);
+	}
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+		
+		combo.setVisible(visible);
+		
+		super.setControlsVisible(visible);
 	}
 }
