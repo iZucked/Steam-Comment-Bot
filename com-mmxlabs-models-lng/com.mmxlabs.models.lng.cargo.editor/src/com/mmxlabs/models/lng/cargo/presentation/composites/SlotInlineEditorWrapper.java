@@ -17,6 +17,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 
 /**
  * @generated NOT
@@ -45,13 +46,13 @@ public class SlotInlineEditorWrapper extends IInlineEditorEnablementWrapper {
 		if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
 
 			if (input instanceof LoadSlot) {
-				setEnabled(!((LoadSlot) input).isDESPurchase());
+				setEditorEnabled(!((LoadSlot) input).isDESPurchase());
 			}
 
 		}
 		if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot_FOBSale()) {
 			if (input instanceof DischargeSlot) {
-				setEnabled(!((DischargeSlot) input).isFOBSale());
+				setEditorEnabled(!((DischargeSlot) input).isFOBSale());
 			}
 		}
 	}
@@ -62,9 +63,9 @@ public class SlotInlineEditorWrapper extends IInlineEditorEnablementWrapper {
 		super.display(location, scenario, object, range);
 
 		if (input instanceof LoadSlot) {
-			setEnabled(!((LoadSlot) input).isDESPurchase());
+			setEditorEnabled(!((LoadSlot) input).isDESPurchase());
 		} else if (input instanceof DischargeSlot) {
-			setEnabled(!((DischargeSlot) input).isFOBSale());
+			setEditorEnabled(!((DischargeSlot) input).isFOBSale());
 		}
 	}
 
@@ -81,5 +82,16 @@ public class SlotInlineEditorWrapper extends IInlineEditorEnablementWrapper {
 	 */
 	public IInlineEditor getWrapped() {
 		return wrapped;
+	}
+
+	@Override
+	public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+		wrapped.addNotificationChangedListener(listener);
+
+	}
+
+	@Override
+	public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+		wrapped.removeNotificationChangedListener(listener);
 	}
 }

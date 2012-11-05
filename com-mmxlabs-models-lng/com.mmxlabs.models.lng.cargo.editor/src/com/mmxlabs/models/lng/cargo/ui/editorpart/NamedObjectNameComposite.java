@@ -79,7 +79,7 @@ public class NamedObjectNameComposite extends Composite implements IDisplayCompo
 
 	@Override
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range) {
-		
+
 		if (isDisposed()) {
 			return;
 		}
@@ -118,10 +118,15 @@ public class NamedObjectNameComposite extends Composite implements IDisplayCompo
 		}
 	}
 
-	@Override
-	public void setEnabled(final boolean enabled) {
+	public void setEditorEnabled(final boolean enabled) {
 		for (final IInlineEditor editor : editors) {
-			editor.setEnabled(enabled);
+			editor.setEditorEnabled(enabled);
+		}
+	}
+
+	public void setEditorLocked(final boolean enabled) {
+		for (final IInlineEditor editor : editors) {
+			editor.setEditorLocked(enabled);
 		}
 	}
 

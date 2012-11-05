@@ -201,11 +201,20 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 	}
 
 	@Override
-	public void setEnabled(final boolean enabled) {
+	protected void setControlsEnabled(final boolean enabled) {
 
 		theLabel.setEnabled(enabled);
 		button.setEnabled(enabled);
 
-		super.setEnabled(enabled);
+		super.setControlsEnabled(enabled);
+	}
+
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+
+		theLabel.setVisible(visible);
+		button.setVisible(visible);
+
+		super.setControlsVisible(visible);
 	}
 }

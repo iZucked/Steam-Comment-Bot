@@ -45,6 +45,7 @@ import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.editors.util.EditorUtils;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 
@@ -75,6 +76,10 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 	private Button fobButton;
 
 	private Button shippedButton;
+
+	private boolean editorEnabled = true;
+	private boolean editorLocked = false;
+	private boolean editorVisible = true;
 
 	/**
 	 * {@link ControlDecoration} used to show validation messages.
@@ -426,14 +431,54 @@ public class CargoTypeInlineEditor extends MMXAdapterImpl implements IInlineEdit
 
 	}
 
-	@Override
-	public void setEnabled(boolean enabled) {
-		// shippedButton.setEnabled(enabled);
-		// fobButton.setEnabled(enabled);
-		// desButton.setEnabled(enabled);
-	}
-
 	public EObject getEditorTarget() {
 		return input;
+	}
+
+	@Override
+	public Label getLabel() {
+		return label;
+	}
+
+	@Override
+	public void setEditorLocked(boolean locked) {
+		this.editorLocked = locked;
+	}
+
+	@Override
+	public boolean isEditorLocked() {
+		return editorLocked;
+	}
+
+	@Override
+	public void setEditorEnabled(boolean enabled) {
+		this.editorEnabled = enabled;
+	}
+
+	@Override
+	public boolean isEditorEnabled() {
+		return editorEnabled;
+	}
+
+	@Override
+	public void setEditorVisible(boolean visible) {
+		this.editorVisible = visible;
+	}
+
+	@Override
+	public boolean isEditorVisible() {
+		return editorVisible;
+	}
+
+	@Override
+	public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+		// TODO Auto-generated method stub
+		
 	}
 }

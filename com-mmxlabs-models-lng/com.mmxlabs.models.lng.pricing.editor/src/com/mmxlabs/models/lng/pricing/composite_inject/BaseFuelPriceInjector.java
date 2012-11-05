@@ -25,6 +25,7 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 
 public class BaseFuelPriceInjector extends BaseComponentHelper {
@@ -34,8 +35,7 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 	}
 
 	@Override
-	public List<EObject> getExternalEditingRange(MMXRootObject root,
-			EObject value) {
+	public List<EObject> getExternalEditingRange(MMXRootObject root, EObject value) {
 		final PricingModel pricingModel = root.getSubModel(PricingModel.class);
 		for (final BaseFuelCost cost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 			if (cost.getFuel() == value) {
@@ -53,22 +53,22 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 			public void setLabel(final Label label) {
 				numberEditor.setLabel(label);
 			}
-			
+
 			@Override
 			public void setCommandHandler(final ICommandHandler handler) {
 				numberEditor.setCommandHandler(handler);
 			}
-			
+
 			@Override
 			public void processValidation(final IStatus status) {
 				numberEditor.processValidation(status);
 			}
-			
+
 			@Override
 			public EStructuralFeature getFeature() {
 				return numberEditor.getFeature();
 			}
-			
+
 			@Override
 			public void display(final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 				for (final EObject r : range) {
@@ -78,20 +78,62 @@ public class BaseFuelPriceInjector extends BaseComponentHelper {
 					}
 				}
 			}
-			
+
 			@Override
 			public Control createControl(final Composite parent) {
 				return numberEditor.createControl(parent);
 			}
 
 			@Override
-			public void setEnabled(boolean enabled) {
-				numberEditor.setEnabled(enabled);
+			public EObject getEditorTarget() {
+				return numberEditor.getEditorTarget();
 			}
 
 			@Override
-			public EObject getEditorTarget() {
-				return numberEditor.getEditorTarget();
+			public Label getLabel() {
+				return numberEditor.getLabel();
+			}
+
+			@Override
+			public void setEditorLocked(boolean locked) {
+				numberEditor.setEditorLocked(locked);
+			}
+
+			@Override
+			public boolean isEditorLocked() {
+				return numberEditor.isEditorLocked();
+			}
+
+			@Override
+			public void setEditorEnabled(boolean enabled) {
+				numberEditor.setEditorEnabled(enabled);
+			}
+
+			@Override
+			public boolean isEditorEnabled() {
+				return numberEditor.isEditorEnabled();
+			}
+
+			@Override
+			public void setEditorVisible(boolean visible) {
+				numberEditor.setEditorVisible(visible);
+			}
+
+			@Override
+			public boolean isEditorVisible() {
+				return numberEditor.isEditorVisible();
+			}
+
+			@Override
+			public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 	}

@@ -49,6 +49,7 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.validation.IDetailConstraintStatus;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 
@@ -93,8 +94,10 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		 * Cached reference to the Error icon
 		 */
 		protected final FieldDecoration decorationError = FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_ERROR);
+		private boolean editorLocked = false;
+		private boolean editorEnabled = true;
+		private boolean editorVisible = true;
 
-		
 		public AssignmentInlineEditor() {
 			disposeListener = new DisposeListener() {
 				@Override
@@ -214,7 +217,6 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 			return false;
 		}
 
-
 		public Control wrapControl(final Control c) {
 			// Create decorator for validation items
 			{
@@ -282,10 +284,10 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 				final Cargo cargo = (Cargo) object;
 				if (cargo.getLoadSlot() != null && cargo.getLoadSlot().isDESPurchase()) {
-					setEnabled(false);
+					setEditorEnabled(false);
 				}
 				if (cargo.getDischargeSlot() != null && cargo.getDischargeSlot().isFOBSale()) {
-					setEnabled(false);
+					setEditorEnabled(false);
 				}
 			}
 		}
@@ -376,8 +378,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 			return wrapControl(sub);
 		}
 
-		@Override
-		public void setEnabled(final boolean enabled) {
+		private void setControlsEnabled(final boolean enabled) {
 			combo.setEnabled(enabled);
 			lock.setEnabled(enabled);
 		}
@@ -404,7 +405,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 				}
 			}
 
-			setEnabled(enabled);
+			setEditorEnabled(enabled);
 
 			if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
 				updateDisplay(inputObject);
@@ -412,6 +413,57 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 			if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot()) {
 				updateDisplay(inputObject);
 			}
+		}
+
+		@Override
+		public Label getLabel() {
+			return label;
+		}
+
+		@Override
+		public void setEditorLocked(boolean locked) {
+			this.editorLocked = locked;
+			setControlsEnabled(isEditorEnabled() && !isEditorLocked());
+		}
+
+		@Override
+		public boolean isEditorLocked() {
+			return editorLocked;
+		}
+
+		@Override
+		public void setEditorEnabled(final boolean enabled) {
+			this.editorEnabled = enabled;
+			setControlsEnabled(isEditorEnabled() && !isEditorLocked());
+		}
+
+		@Override
+		public boolean isEditorEnabled() {
+			return editorEnabled;
+		}
+
+		@Override
+		public void setEditorVisible(boolean visible) {
+			this.editorVisible = visible;
+			this.combo.setVisible(visible);
+			this.lock.setVisible(visible);
+		}
+
+		@Override
+		public boolean isEditorVisible() {
+			return editorVisible;
+		}
+
+		@Override
+		public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+			// TODO Auto-generated method stub
+			
 		}
 	}
 

@@ -28,7 +28,7 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
-import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -53,7 +53,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 * 
 	 * @generated
 	 */
-	public CargoComponentHelper(IAdapterManager adapterManager) {
+	public CargoComponentHelper(final IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ACARGO));
 	}
@@ -65,7 +65,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);	
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);
 	}
 
 	/**
@@ -120,50 +120,45 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_allowRewiringEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 
-		/**
-		 * @generated NOT
-		 */
-		class SlotInlineEditorWrapper extends IInlineEditorEnablementWrapper {
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOW_REWIRING);
+
+		editor.addNotificationChangedListener(new IInlineEditorExternalNotificationListener() {
+
 			private IScenarioEditingLocation location;
 
-			public SlotInlineEditorWrapper(final IInlineEditor wrapped) {
-				super(wrapped);
-			}
+			private EObject input;
 
 			@Override
-			public void display(IScenarioEditingLocation location, MMXRootObject scenario, EObject object, Collection<EObject> range) {
+			public void postDisplay(final IInlineEditor editor, final IScenarioEditingLocation location, final MMXRootObject scenario, final EObject object, final Collection<EObject> range) {
 				this.location = location;
-				super.display(location, scenario, object, range);
+				this.input = object;
 			}
 
 			@Override
-			public void reallyNotifyChanged(final Notification notification) {
+			public void notifyChanged(final Notification notification) {
 				if (notification.getFeature() == InputPackage.eINSTANCE.getElementAssignment_Locked()) {
-					setEnabled(!notification.getNewBooleanValue());
+					editor.setEditorEnabled(!notification.getNewBooleanValue());
 					if (notification.getNewBooleanValue()) {
-						ICommandHandler handler = location.getDefaultCommandHandler();
+						final ICommandHandler handler = location.getDefaultCommandHandler();
 						handler.handleCommand(SetCommand.create(location.getEditingDomain(), input, CargoPackage.eINSTANCE.getCargo_AllowRewiring(), false), input,
 								CargoPackage.eINSTANCE.getCargo_AllowRewiring());
 					}
 				}
-			}
 
-			@Override
-			public EObject getEditorTarget() {
-				return wrapped.getEditorTarget();
 			}
-		}
-		;
+		});
 
-		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOW_REWIRING)));
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
 	 * Create the editor for the allowedVessels feature on Cargo
 	 * 
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_allowedVesselsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOWED_VESSELS));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.CARGO__ALLOWED_VESSELS);
+		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 }

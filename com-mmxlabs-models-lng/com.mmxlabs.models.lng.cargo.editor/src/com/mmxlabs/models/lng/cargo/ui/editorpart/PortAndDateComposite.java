@@ -145,9 +145,9 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		editor.setCommandHandler(commandHandler);
 		final Control control = editor.createControl(this);
 		final int column = editors.size();
-		
-		int hAlignment = isLoad ? SWT.LEFT : SWT.RIGHT; 
-		
+
+		int hAlignment = isLoad ? SWT.LEFT : SWT.RIGHT;
+
 		final GridData gd = new GridData(hAlignment, SWT.FILL, false, false);
 		gd.verticalIndent = 0;
 		switch (column) {
@@ -185,7 +185,6 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 
 		for (final IInlineEditor editor : editors) {
 			editor.setCommandHandler(commandHandler);
-
 
 			// For spot slots, show a slightly different date format.
 			IInlineEditor instance = editor;
@@ -229,10 +228,15 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		}
 	}
 
-	@Override
-	public void setEnabled(final boolean enabled) {
+	public void setEditorEnabled(final boolean enabled) {
 		for (final IInlineEditor editor : editors) {
-			editor.setEnabled(enabled);
+			editor.setEditorEnabled(enabled);
+		}
+	}
+
+	public void setEditorLocked(final boolean enabled) {
+		for (final IInlineEditor editor : editors) {
+			editor.setEditorLocked(enabled);
 		}
 	}
 

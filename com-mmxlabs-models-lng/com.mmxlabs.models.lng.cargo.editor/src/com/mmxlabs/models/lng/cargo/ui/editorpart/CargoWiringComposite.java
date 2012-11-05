@@ -683,13 +683,13 @@ public class CargoWiringComposite extends Composite {
 		this.locked = locked;
 		wiringDiagram.setLocked(locked);
 		for (final PortAndDateComposite c : lhsComposites) {
-			c.setEnabled(!locked);
+			c.setEditorLocked(locked);
 		}
 		for (final PortAndDateComposite c : rhsComposites) {
-			c.setEnabled(!locked);
+			c.setEditorLocked(locked);
 		}
 		// for (final NamedObjectNameComposite c : idComposites) {
-		// c.setEnabled(!locked);
+		// c.setEditorLocked(locked);
 		// }
 	}
 

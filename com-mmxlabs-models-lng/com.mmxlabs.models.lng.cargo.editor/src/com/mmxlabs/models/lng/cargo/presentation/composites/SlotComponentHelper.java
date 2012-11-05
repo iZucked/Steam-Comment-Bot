@@ -19,6 +19,7 @@ import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.dates.DateInlineEditor;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -68,7 +69,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);	
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);
 	}
 
 	/**
@@ -78,7 +79,8 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers)
+			helper.addEditorsToComposite(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
 		add_fixedPriceEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
@@ -98,13 +100,16 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_windowStartEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		
+
+		final IInlineEditor editor;
 		if (topClass.getEAllSuperTypes().contains(CargoPackage.eINSTANCE.getSpotSlot())) {
 			// For spot slots, only allow month portion to be edited
-			detailComposite.addInlineEditor(new SlotInlineEditorWrapper(new DateInlineEditor(CargoPackage.eINSTANCE.getSlot_WindowStart(), new DateTimeFormatter("MM/yyyy"))));
+			editor = new DateInlineEditor(CargoPackage.eINSTANCE.getSlot_WindowStart(), new DateTimeFormatter("MM/yyyy"));
 		} else {
-			detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START)));
+			editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START);
 		}
+		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
@@ -113,7 +118,9 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_windowStartTimeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START_TIME)));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_START_TIME);
+		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
@@ -122,7 +129,9 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_windowSizeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE)));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__WINDOW_SIZE);
+		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
@@ -131,7 +140,9 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_portEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT)));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__PORT);
+		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
@@ -160,7 +171,8 @@ public class SlotComponentHelper extends BaseComponentHelper {
 			}
 
 		};
-		detailComposite.addInlineEditor(new SlotInlineEditorWrapper(editor));
+		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
@@ -192,7 +204,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the priceExpression feature on Slot
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_priceExpressionEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -205,6 +217,6 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_fixedPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__FIXED_PRICE));
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.SLOT__FIXED_PRICE));
 	}
 }

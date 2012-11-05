@@ -32,12 +32,13 @@ import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.ICommandHandler;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
 import com.mmxlabs.models.ui.editors.impl.NumberInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
  * A component helper for PortCost instances
- *
+ * 
  * @generated
  */
 public class PortCostComponentHelper extends BaseComponentHelper {
@@ -45,7 +46,7 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Construct a new instance, using the platform adapter manager
-	 *
+	 * 
 	 * @generated
 	 */
 	public PortCostComponentHelper() {
@@ -54,39 +55,41 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Construct a new instance of this helper
-	 *
+	 * 
 	 * @generated
 	 */
 	public PortCostComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(MMXCorePackage.Literals.MMX_OBJECT));
 	}
-	
+
 	/**
 	 * add editors to a composite, using PortCost as the supertype
-	 *
+	 * 
 	 * @generated
 	 */
-	 @Override
+	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.PORT_COST);	
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.PORT_COST);
 	}
-	
+
 	/**
 	 * Create the editors for features on this class directly, and superclass' features.
-	 *
+	 * 
 	 * @generated
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers)
+			helper.addEditorsToComposite(detailComposite, topClass);
 		add_portsEditor(detailComposite, topClass);
 		add_entriesEditor(detailComposite, topClass);
 		add_referenceCapacityEditor(detailComposite, topClass);
 	}
+
 	/**
 	 * Create the editor for the ports feature on PortCost
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_portsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
@@ -95,37 +98,37 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the entries feature on PortCost
-	 *
+	 * 
 	 * @generated NOT
 	 */
 	protected void add_entriesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__ENTRIES));
-		
+		// detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PORT_COST__ENTRIES));
+
 		// add an inline editor for each port capability
 		for (final PortCapability capability : PortCapability.values()) {
 			final NumberInlineEditor numberEditor = new NumberInlineEditor(PricingPackage.eINSTANCE.getPortCostEntry_Cost());
 			detailComposite.addInlineEditor(new IInlineEditor() {
-				
+
 				@Override
 				public void setLabel(Label label) {
 					label.setText(capability.getName() + " cost");
 				}
-				
+
 				@Override
 				public void setCommandHandler(ICommandHandler handler) {
 					numberEditor.setCommandHandler(handler);
 				}
-				
+
 				@Override
 				public void processValidation(IStatus status) {
 					numberEditor.processValidation(status);
 				}
-				
+
 				@Override
 				public EStructuralFeature getFeature() {
 					return numberEditor.getFeature();
 				}
-				
+
 				@Override
 				public void display(final IScenarioEditingLocation location, MMXRootObject scenario, EObject object, final Collection<EObject> range) {
 					// mangle
@@ -143,20 +146,62 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 						numberEditor.display(location, scenario, entry, range);
 					}
 				}
-				
+
 				@Override
 				public Control createControl(Composite parent) {
 					return numberEditor.createControl(parent);
 				}
 
 				@Override
-				public void setEnabled(boolean enabled) {
-					numberEditor.setEnabled(enabled);
+				public void setEditorLocked(boolean locked) {
+					numberEditor.setEditorLocked(locked);
+				}
+
+				@Override
+				public boolean isEditorLocked() {
+					return numberEditor.isEditorLocked();
+				}
+
+				@Override
+				public void setEditorEnabled(boolean enabled) {
+					numberEditor.setEditorEnabled(enabled);
+				}
+
+				@Override
+				public boolean isEditorEnabled() {
+					return numberEditor.isEditorEnabled();
+				}
+
+				@Override
+				public void setEditorVisible(boolean visible) {
+					numberEditor.setEditorVisible(visible);
+				}
+
+				@Override
+				public boolean isEditorVisible() {
+					return numberEditor.isEditorVisible();
 				}
 
 				@Override
 				public EObject getEditorTarget() {
 					return numberEditor.getEditorTarget();
+				}
+
+				@Override
+				public Label getLabel() {
+					return numberEditor.getLabel();
+				}
+
+				@Override
+				public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+					// TODO Auto-generated method stub
+					
 				}
 			});
 		}
@@ -164,7 +209,7 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 
 	/**
 	 * Create the editor for the referenceCapacity feature on PortCost
-	 *
+	 * 
 	 * @generated
 	 */
 	protected void add_referenceCapacityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
