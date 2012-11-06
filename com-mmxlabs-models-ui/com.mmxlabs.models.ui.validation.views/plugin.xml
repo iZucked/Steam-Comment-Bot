@@ -11,7 +11,7 @@
          point="org.eclipse.ui.views">
       <view
             allowMultiple="false"
-            category="com.mmxlabs.shiplingo.platform.reports"
+            category="org.eclipse.ui"
             class="com.mmxlabs.models.ui.validation.views.ValidationProblemsView"
             icon="icons/problems_view.gif"
             id="com.mmxlabs.models.ui.validation.views.ValidationProblemsView"
