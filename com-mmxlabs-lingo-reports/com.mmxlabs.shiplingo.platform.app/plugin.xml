@@ -148,6 +148,11 @@
             isEqualityPattern="false"
             pattern=".*/org.eclipse.ui">
       </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.shiplingo.platform.app.default.activity"
+            isEqualityPattern="true"
+            pattern="org.eclipse.ui.views.log/org.eclipse.pde.runtime.LogView">
+      </activityPatternBinding>
    </extension>
    <extension
          point="org.eclipse.ui.activities">
