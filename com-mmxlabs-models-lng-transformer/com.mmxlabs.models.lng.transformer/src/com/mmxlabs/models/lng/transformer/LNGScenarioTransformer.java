@@ -334,8 +334,7 @@ public class LNGScenarioTransformer {
 		for (final ITransformerExtension extension : allTransformerExtensions) {
 			extension.startTransforming(rootObject, entities, builder);
 		}
-		
-		
+
 		/**
 		 * Bidirectionally maps EMF {@link Port} Models to {@link IPort}s in the builder.
 		 */
@@ -375,6 +374,8 @@ public class LNGScenarioTransformer {
 			portIndices.put(port, allPorts.size());
 			allPorts.add(port);
 			entities.addModelObject(ePort, port);
+			
+			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
 		}
 
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
@@ -390,8 +391,6 @@ public class LNGScenarioTransformer {
 			final ISalesPriceCalculator calculator = transformer.transformSalesContract(c);
 			entities.addModelObject(c, calculator);
 		}
-
-
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, entities);
 
@@ -427,7 +426,6 @@ public class LNGScenarioTransformer {
 						}
 					}
 				}
-
 			}
 		}
 
@@ -1644,8 +1642,7 @@ public class LNGScenarioTransformer {
 			final ICurve hourlyCharterInCurve = new ConstantValueCurve(hourlyCharterInRate);
 
 			final IVessel vessel = builder.createVessel(eV.getName(), vesselClassAssociation.lookup(eV.getVesselClass()), hourlyCharterInCurve,
-
-			eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
+					eV.isSetTimeCharterRate() ? VesselInstanceType.TIME_CHARTER : VesselInstanceType.FLEET, startRequirement, endRequirement, heelLimit,
 					OptimiserUnitConvertor.convertToInternalConversionFactor(eV.getStartHeel().getCvValue()), OptimiserUnitConvertor.convertToInternalPrice(eV.getStartHeel().getPricePerMMBTU()));
 			vesselAssociation.add(eV, vessel);
 

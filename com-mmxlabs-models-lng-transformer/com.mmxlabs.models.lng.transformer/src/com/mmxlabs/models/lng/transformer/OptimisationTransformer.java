@@ -91,7 +91,7 @@ public class OptimisationTransformer {
 
 	@Inject
 	private IEvaluationProcessRegistry evaluationProcessRegistry;
-	
+
 	@Inject
 	private Injector injector;
 
@@ -137,7 +137,7 @@ public class OptimisationTransformer {
 		injector.injectMembers(lsoConstructor);
 		final ChainedSequencesManipulator sequencesManipulator = injector.getInstance(ChainedSequencesManipulator.class);
 		sequencesManipulator.init(data);
-		
+
 		return new Pair<IOptimisationContext, LocalSearchOptimiser>(context, lsoConstructor.buildOptimiser(context, sequencesManipulator));
 	}
 
@@ -311,8 +311,12 @@ public class OptimisationTransformer {
 
 					final List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
 					if (!(vesselsOfClass == null || vesselsOfClass.isEmpty())) {
-						vessel = vesselsOfClass.get(0);
-						vesselsOfClass.remove(0);
+						// Assign to same spot index if possible
+						int idx = 0;
+						if (vesselsOfClass.size() > seq.getSpotIndex()) {
+							idx = seq.getSpotIndex();
+						}
+						vessel = vesselsOfClass.get(idx);
 					}
 				} else {
 					vessel = mem.getOptimiserObject(seq.getVesselOrClass(), IVessel.class);
