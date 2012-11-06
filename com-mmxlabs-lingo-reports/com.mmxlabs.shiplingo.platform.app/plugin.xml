@@ -153,6 +153,16 @@
             isEqualityPattern="true"
             pattern="org.eclipse.ui.views.log/org.eclipse.pde.runtime.LogView">
       </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.shiplingo.platform.app.default.activity"
+            isEqualityPattern="false"
+            pattern="org.eclipse.ui.*/org.eclipse.ui.net.*">
+      </activityPatternBinding>
+      <activityPatternBinding
+            activityId="com.mmxlabs.shiplingo.platform.app.default.activity"
+            isEqualityPattern="true"
+            pattern="org.eclipse.ui.ide/org.eclipse.ui.preferencePages.Workbench">
+      </activityPatternBinding>
    </extension>
    <extension
          point="org.eclipse.ui.activities">
