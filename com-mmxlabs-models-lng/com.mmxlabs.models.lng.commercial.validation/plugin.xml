@@ -107,6 +107,19 @@
                      class="RedirectionPurchaseContract">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.ContractPortsConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.ContractPortsConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Contract Port Contrraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>
