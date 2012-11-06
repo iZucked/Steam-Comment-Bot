@@ -85,6 +85,7 @@ import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
@@ -230,6 +231,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IPortCostProviderEditor portCostProvider;
+	@Inject
+	private IPortCVProviderEditor portCVProvider;
 
 	/**
 	 * Keeps track of calculators
@@ -283,6 +286,11 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 			@Override
 			public int calculateCooldownUnitPrice(final ILoadSlot slot, final int time) {
+				return 0;
+			}
+
+			@Override
+			public int calculateCooldownUnitPrice(final int time) {
 				return 0;
 			}
 		});
@@ -879,12 +887,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		// if this seems a bit ridiculous, yes, it is.
 		// TODO think about how this connects with return elements - they aren't optional
 		// but they also aren't all required.
-//		for (final ISequenceElement element : sequenceElements) {
-//			boolean elementOptional = optionalElements.isElementOptional(element);
-//			if (!elementOptional) {
-//				optionalElements.setOptional(element, elementOptional);
-//			}
-//		}
+		// for (final ISequenceElement element : sequenceElements) {
+		// boolean elementOptional = optionalElements.isElementOptional(element);
+		// if (!elementOptional) {
+		// optionalElements.setOptional(element, elementOptional);
+		// }
+		// }
 
 		final OptimisationData data = new OptimisationData();
 
@@ -1551,7 +1559,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@Override
-	public void createCharterOutCurve(final IVesselClass vesselClass, final ICurve charterOutCurve, int minDuration) {
+	public void createCharterOutCurve(final IVesselClass vesselClass, final ICurve charterOutCurve, final int minDuration) {
 		charterMarketProviderEditor.addCharterOutOption(vesselClass, charterOutCurve, minDuration);
 
 	}
@@ -1564,5 +1572,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public void setSoftRequired(final IPortSlot slot) {
 		final ISequenceElement element = portSlotsProvider.getElement(slot);
 		optionalElements.setSoftRequired(element, true);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void setPortCV(final IPort port, final int cv) {
+		portCVProvider.setPortCV(port, cv);
 	}
 }

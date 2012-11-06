@@ -16,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
@@ -32,10 +33,16 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	@Inject
 	private IRouteCostProvider routeCostProvider;
 
+	@Inject
+	private IPortCVProvider portCVProvider;
+
 	@Override
 	public final void init() {
 		if (routeCostProvider == null) {
 			throw new IllegalStateException("Route Cost Provider is not set");
+		}
+		if (portCVProvider == null) {
+			throw new IllegalStateException("Port CV Provider is not set");
 		}
 	}
 
@@ -199,6 +206,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				// long idleConsumptionInMT = Calculator.quantityFromRateTime(idleRateInMTPerHour, idleTimeInHours);
 
+				long cooldownVolume = vesselClass.getCooldownVolume();
 				if (options.useNBOForTravel()) {
 					// Run down boil off after travel. On ballast voyages running on
 					// NBO, It is necessary to keep a minimum heel of LNG whilst
@@ -222,7 +230,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 						if (warmingTimeInHours > vesselClass.getWarmupTime()) {
 							if (options.getAllowCooldown() && (idleTimeInHours > (vesselClass.getWarmupTime() + vesselClass.getCooldownTime()))) {
-								output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, vesselClass.getCooldownVolume());
+								output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
 								// don't use any idle base during the cooldown
 								remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 							} else {
@@ -255,7 +263,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 						// this situation shouldn't get presented to us by the
 						// sequence scheduler unless it's unavoidable.
 						if (options.isWarm() || (options.getAvailableTime() > vesselClass.getWarmupTime())) {
-							output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, vesselClass.getCooldownVolume());
+							output.setFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3, cooldownVolume);
 							remainingIdleTimeInHours -= vesselClass.getCooldownTime();
 						}
 					}
@@ -566,6 +574,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					details.setFuelUnitPrice(FuelComponent.FBO, dischargeM3Price);
 					details.setFuelUnitPrice(FuelComponent.IdleNBO, dischargeM3Price);
 				}
+				if (details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
+					int ii = 0;
+				}
+
 				if (details.getOptions().shouldBeCold() && (details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0)) {
 					final IPort port = details.getOptions().getToPortSlot().getPort();
 
@@ -580,17 +592,19 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					final int cooldownTime = arrivalTimes[i / 2] - vesselClass.getCooldownTime();
 
 					// TODO is this how cooldown gas ought to be priced?
+					final int cooldownPricePerM3;
 					if (details.getOptions().getToPortSlot() instanceof ILoadSlot) {
 						// TODO double check how/if this affects caching
 						// decisions
 						final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice((ILoadSlot) details.getOptions().getToPortSlot(), cooldownTime);
-						final int cooldownPricePerM3 = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue());
-
-						details.setFuelUnitPrice(FuelComponent.Cooldown, cooldownPricePerM3);
-						cooldownM3Price = cooldownPricePerM3;
+						cooldownPricePerM3 = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, ((ILoadSlot) details.getOptions().getToPortSlot()).getCargoCVValue());
 					} else {
-						cooldownM3Price = 1000000;
+						final int cooldownPricePerMMBTU = port.getCooldownPriceCalculator().calculateCooldownUnitPrice(cooldownTime);
+						cooldownPricePerM3 = Calculator.costPerM3FromMMBTu(cooldownPricePerMMBTU, portCVProvider.getPortCV(port));
 					}
+
+					details.setFuelUnitPrice(FuelComponent.Cooldown, cooldownPricePerM3);
+					cooldownM3Price = cooldownPricePerM3;
 				}
 			} else {
 				assert sequence[i] instanceof PortDetails;

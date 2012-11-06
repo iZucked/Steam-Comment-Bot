@@ -50,6 +50,8 @@ import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
@@ -75,6 +77,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEdito
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortCVProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
@@ -239,6 +242,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapCharterMarketProviderEditor charterMarketProviderEditor = new HashMapCharterMarketProviderEditor(SchedulerConstants.DCP_charterMarketProvider);
 		bind(ICharterMarketProvider.class).toInstance(charterMarketProviderEditor);
 		bind(ICharterMarketProviderEditor.class).toInstance(charterMarketProviderEditor);
+		
+		final HashMapPortCVProviderEditor portCVProviderEditor = new HashMapPortCVProviderEditor(SchedulerConstants.DCP_portCVProvider);
+		bind(IPortCVProvider.class).toInstance(portCVProviderEditor);
+		bind(IPortCVProviderEditor.class).toInstance(portCVProviderEditor);
 	}
 
 	/**

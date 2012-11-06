@@ -22,10 +22,18 @@ public interface ICooldownPriceCalculator extends ICalculator {
 	public void prepareEvaluation(ISequences sequences);
 
 	/**
-	 * Find the unit price in dollars per mmbtu for gas at the given slot, at the given time.
+	 * Find the unit price in dollars per mmbtu for gas at the given {@link ILoadSlot}, at the given time.
 	 * 
 	 * @param slot
 	 * @param time
 	 */
 	public int calculateCooldownUnitPrice(ILoadSlot option, int time);
+
+	/**
+	 * Find the unit price in dollars per mmbtu for gas at the given time. To be used when an {@link ILoadSlot} is not available.
+	 * 
+	 * @param time
+	 * @since 2.0
+	 */
+	public int calculateCooldownUnitPrice(int time);
 }

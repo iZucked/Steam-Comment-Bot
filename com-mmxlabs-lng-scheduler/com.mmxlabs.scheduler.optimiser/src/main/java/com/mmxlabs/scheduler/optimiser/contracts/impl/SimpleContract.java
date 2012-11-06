@@ -49,6 +49,14 @@ public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoa
 		return calculateSimpleLoadUnitPrice(time);
 	}
 
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public int calculateCooldownUnitPrice(final int time) {
+		return calculateSimpleLoadUnitPrice(time);
+	}
+
 	@Override
 	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice, IDetailTree annotations) {
 		return calculateSimpleLoadUnitPrice(loadTime);

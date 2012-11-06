@@ -48,6 +48,10 @@ public final class SchedulerConstants {
 	 * @since 2.0
 	 */
 	public static final String DCP_charterMarketProvider = "charter-market-provider";
+	/**
+	 * @since 2.0
+	 */
+	public static final String DCP_portCVProvider = "port-cv-provider";
 
 	// Additional Info keys
 	public static final String AI_idleInfo = "info-idle";

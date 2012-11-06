@@ -617,4 +617,12 @@ public interface ISchedulerBuilder {
 	 */
 	void setSoftRequired(IPortSlot slot);
 
+	/**
+	 * Set the default CV value for a port.
+	 * @param port
+	 * @param cv value
+	 * @since 2.0
+	 */
+	void setPortCV(IPort port, int convertToInternalConversionFactor);
+
 }
