@@ -369,7 +369,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				final ISequencesManipulator manipulator = SequencesManipulatorUtil.createDefaultSequenceManipulators(data);
 				manipulator.manipulate(sequences); // this will set the return elements to the right places, and remove the start elements.
 				final LNGVoyageCalculator calculator = new LNGVoyageCalculator();
-				calculator.setRouteCostDataComponentProvider(data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class));
+				injector.injectMembers(calculator);
+
 				final VoyagePlanOptimiser optimiser = new VoyagePlanOptimiser(calculator) {
 					@Override
 					public void addChoice(final IVoyagePlanChoice choice) {
@@ -406,6 +407,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					}
 				};
 
+//				injector.injectMembers(scheduler);
 				SchedulerUtils.setDataComponentProviders(data, scheduler);
 				scheduler.setVoyagePlanOptimiser(optimiser);
 				scheduler.init();
