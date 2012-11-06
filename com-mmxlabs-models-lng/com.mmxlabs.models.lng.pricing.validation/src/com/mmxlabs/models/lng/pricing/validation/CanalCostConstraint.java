@@ -39,23 +39,27 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 
 		if (target instanceof VesselClass) {
 			final VesselClass vesselClass = (VesselClass) target;
-			
+
 			if (target.eContainer() == null) {
 				// Not contained - maybe because of duplication. Lets pass this constraint.
 				// TODO: Add better API for such cases.
 				return ctx.createSuccessStatus();
 			}
-			
+
 			final EObject original = extraValidationContext.getOriginal(vesselClass);
 			final EObject replacement = extraValidationContext.getReplacement(vesselClass);
 			final MMXRootObject scenario = extraValidationContext.getRootObject();
 
 			if (scenario != null) {
 				final StringBuffer missingCanalNames = new StringBuffer();
-
+				final int ii = 0;
 				final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
 				final PortModel portModel = scenario.getSubModel(PortModel.class);
 				if (pricingModel != null && portModel != null) {
+
+					boolean seenAnyCanalCosts = false;
+					boolean seenAnyCanalParameters = false;
+
 					for (final Route route : portModel.getRoutes()) {
 						if (route.isCanal()) {
 							boolean seenCanalCost = false;
@@ -79,11 +83,24 @@ public class CanalCostConstraint extends AbstractModelConstraint {
 								missingCanalNames.append(missingCanalNames.length() > 0 ? ", " : "");
 								missingCanalNames.append(route.getName());
 							}
+
+							seenAnyCanalCosts |= seenCanalCost;
+							seenAnyCanalParameters |= seenCanalParameters;
 						}
 					}
 
 					if (missingCanalNames.length() > 0) {
-						final String message = String.format("The vessel class %s has invalid canal costs set for canal %s", vesselClass.getName(), missingCanalNames.toString());
+						String detail = "";
+						if (!seenAnyCanalCosts) {
+							detail += "canal costs";
+						}
+						if (!seenAnyCanalCosts && !seenAnyCanalParameters) {
+							detail += " and";
+						}
+						if (!seenAnyCanalParameters) {
+							detail += " canal parameters";
+						}
+						final String message = String.format("The vessel class %s has invalid " + detail + " set for canal %s", vesselClass.getName(), missingCanalNames.toString());
 						final DetailConstraintStatusDecorator result = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(message));
 
 						result.addEObjectAndFeature(vesselClass, PricingPackage.eINSTANCE.getRouteCost_VesselClass());
