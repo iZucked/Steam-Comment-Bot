@@ -76,7 +76,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
  * @author hinton
  * 
  */
-public class OptimisationTransformer {
+public class OptimisationTransformer implements IOptimisationTransformer {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
 
 	private final MMXRootObject rootObject;
@@ -104,6 +104,10 @@ public class OptimisationTransformer {
 		this.rootObject = root;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.lng.transformer.IOptimisationTransformer#createOptimisationContext(com.mmxlabs.optimiser.core.scenario.IOptimisationData, com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
+	 */
+	@Override
 	public IOptimisationContext createOptimisationContext(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
 		final ISequences sequences = createInitialSequences(data, mem);
 
@@ -129,6 +133,10 @@ public class OptimisationTransformer {
 		return new OptimisationContext(data, sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.lng.transformer.IOptimisationTransformer#createOptimiserAndContext(com.mmxlabs.optimiser.core.scenario.IOptimisationData, com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
+	 */
+	@Override
 	public Pair<IOptimisationContext, LocalSearchOptimiser> createOptimiserAndContext(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
 		final IOptimisationContext context = createOptimisationContext(data, mem);
 
@@ -165,12 +173,10 @@ public class OptimisationTransformer {
 		return result;
 	}
 
-	/**
-	 * Create initial sequences; starts with the advice sequences (if there are any) and then uses the {@link ConstrainedInitialSequenceBuilder} to sort out any unsequenced elements.
-	 * 
-	 * @param data
-	 * @return
+	/* (non-Javadoc)
+	 * @see com.mmxlabs.models.lng.transformer.IOptimisationTransformer#createInitialSequences(com.mmxlabs.optimiser.core.scenario.IOptimisationData, com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
 	 */
+	@Override
 	@SuppressWarnings("deprecation")
 	public ISequences createInitialSequences(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
 		/**

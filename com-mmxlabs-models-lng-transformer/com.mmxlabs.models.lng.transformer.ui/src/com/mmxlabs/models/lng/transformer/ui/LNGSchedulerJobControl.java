@@ -56,7 +56,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
@@ -115,7 +115,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		final IOptimisationData data = transformer.getOptimisationData();
 		entities = transformer.getEntities();
 
-		final OptimisationTransformer ot = transformer.getOptimisationTransformer();
+		final IOptimisationTransformer ot = transformer.getOptimisationTransformer();
 		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
 
 		final IOptimisationContext context = optAndContext.getFirst();
