@@ -1,5 +1,8 @@
 package com.mmxlabs.trading.integration;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Module;
@@ -19,7 +22,7 @@ import com.mmxlabs.trading.optimiser.scheduleprocessor.DefaultGeneratedCharterOu
 public class TradingOptimiserModuleService implements IOptimiserInjectorService {
 
 	@Override
-	public Module requestModule() {
+	public Module requestModule(String... hints) {
 
 		return new AbstractModule() {
 
@@ -31,5 +34,10 @@ public class TradingOptimiserModuleService implements IOptimiserInjectorService 
 				bind(IBreakEvenEvaluator.class).to(DefaultBreakEvenEvaluator.class);
 			}
 		};
+	}
+
+	@Override
+	public Map<ModuleType, List<Module>> requestModuleOverrides(String... hints) {
+		return null;
 	}
 }
