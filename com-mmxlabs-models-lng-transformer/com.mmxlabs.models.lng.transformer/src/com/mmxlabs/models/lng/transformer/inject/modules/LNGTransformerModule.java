@@ -16,6 +16,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.transformer.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
@@ -64,13 +65,15 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(SeriesParser.class).in(Singleton.class);
 
+		bind(DateAndCurveHelper.class).in(Singleton.class);
+
 		bind(ResourcelessModelEntityMap.class).in(Singleton.class);
 		bind(ModelEntityMap.class).to(ResourcelessModelEntityMap.class).in(Singleton.class);
 
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
 
-		bind(ICargoAllocator.class).to(UnconstrainedCargoAllocator.class);
+		bind(ICargoAllocator.class).to(UnconstrainedCargoAllocator.class).in(Singleton.class);
 
 		bind(VoyagePlanOptimiser.class);
 

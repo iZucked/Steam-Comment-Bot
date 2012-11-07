@@ -21,11 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import javax.management.timer.Timer;
 
 import org.eclipse.emf.ecore.EClass;
 import org.slf4j.Logger;
@@ -142,9 +139,12 @@ public class LNGScenarioTransformer {
 	private static final Logger log = LoggerFactory.getLogger(LNGScenarioTransformer.class);
 
 	private MMXRootObject rootObject;
-	private TimeZone timezone;
+
 	private Date earliestTime;
 	private Date latestTime;
+
+	@Inject
+	private DateAndCurveHelper dateHelper;
 
 	@Inject
 	private SeriesParser indices;
@@ -205,7 +205,6 @@ public class LNGScenarioTransformer {
 	protected void init(final MMXRootObject rootObject) {
 
 		this.rootObject = rootObject;
-		this.timezone = TimeZone.getTimeZone("UTC");
 	}
 
 	/**
@@ -280,6 +279,7 @@ public class LNGScenarioTransformer {
 		 */
 		findEarliestAndLatestTimes();
 
+		dateHelper.setEarliestTime(earliestTime);
 		// set earliest and latest times into entities
 		entities.setEarliestDate(earliestTime);
 
@@ -374,7 +374,7 @@ public class LNGScenarioTransformer {
 			portIndices.put(port, allPorts.size());
 			allPorts.add(port);
 			entities.addModelObject(ePort, port);
-			
+
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
 		}
 
@@ -580,55 +580,6 @@ public class LNGScenarioTransformer {
 	// }
 	// return realCurve;
 	// }
-
-	private StepwiseIntegerCurve createCurveForDoubleIndex(final Index<Double> index, final double scale) {
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-
-		curve.setDefaultValue(0);
-
-		boolean gotOneEarlyDate = false;
-		for (final Date date : index.getDates()) {
-			final double value = index.getValueForMonth(date);
-			final int hours = convertTime(date);
-			if (hours < 0) {
-				if (gotOneEarlyDate)
-					continue;
-				gotOneEarlyDate = true;
-			}
-			curve.setValueAfter(hours, OptimiserUnitConvertor.convertToInternalPrice(scale * value));
-		}
-
-		return curve;
-	}
-
-	private StepwiseIntegerCurve createCurveForIntegerIndex(final Index<Integer> index, final double scale, boolean smallNumber) {
-		final StepwiseIntegerCurve curve = new StepwiseIntegerCurve();
-
-		curve.setDefaultValue(0);
-
-		boolean gotOneEarlyDate = false;
-		for (final Date date : index.getDates()) {
-			final int value = index.getValueForMonth(date);
-			final int hours = convertTime(date);
-			if (hours < 0) {
-				if (gotOneEarlyDate) {
-					// TODO: While we should skip all the early stuff, we need to keep the latest, this currently however takes the earliest value!
-					// continue;
-				}
-				gotOneEarlyDate = true;
-			}
-			double scaledValue = (double) value * scale;
-			int internalValue;//
-			if (smallNumber) {
-				internalValue = OptimiserUnitConvertor.convertToInternalPrice(scaledValue);
-			} else {
-				internalValue = OptimiserUnitConvertor.convertToInternalDailyRate(scaledValue);
-			}
-			curve.setValueAfter(hours, internalValue);
-		}
-
-		return curve;
-	}
 
 	/**
 	 * Find the earliest and latest times set by events in the model. This takes into account:
@@ -1481,25 +1432,6 @@ public class LNGScenarioTransformer {
 	}
 
 	/**
-	 * Convert a date into relative hours; returns the number of hours between windowStart and earliest.
-	 * 
-	 * @param earliest
-	 * @param windowStart
-	 * @return number of hours between earliest and windowStart
-	 */
-	private int convertTime(final Date earliest, final Date windowStart) {
-		// I am using two calendars, because the java date objects are all
-		// deprecated; however, timezones should not be a problem because
-		// every Date in the EMF representation is in UTC.
-		final Calendar a = Calendar.getInstance(timezone);
-		a.setTime(earliest);
-		final Calendar b = Calendar.getInstance(timezone);
-		b.setTime(windowStart);
-		final long difference = b.getTimeInMillis() - a.getTimeInMillis();
-		return (int) (difference / Timer.ONE_HOUR);
-	}
-
-	/**
 	 * Create the distance matrix for the given builder.
 	 * 
 	 * @param builder
@@ -1659,7 +1591,7 @@ public class LNGScenarioTransformer {
 					if (charterCost.getCharterInPrice() == null) {
 						charterInCurve = new ConstantValueCurve(0);
 					} else {
-						charterInCurve = createCurveForIntegerIndex(charterCost.getCharterInPrice(), 1.0f / 24.0f, false);
+						charterInCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterInPrice(), 1.0f / 24.0f, false);
 					}
 
 					charterCount = charterCost.getSpotCharterCount();
@@ -1670,7 +1602,7 @@ public class LNGScenarioTransformer {
 					}
 
 					if (charterCost.getCharterOutPrice() != null) {
-						final ICurve charterOutCurve = createCurveForIntegerIndex(charterCost.getCharterOutPrice(), 1.0f / 24.0f, false);
+						final ICurve charterOutCurve = dateHelper.createCurveForIntegerIndex(charterCost.getCharterOutPrice(), 1.0f / 24.0f, false);
 						final int minDuration = 24 * charterCost.getMinCharterOutDuration();
 						builder.createCharterOutCurve(vesselClassAssociation.lookup(eVc), charterOutCurve, minDuration);
 					}
@@ -1753,10 +1685,6 @@ public class LNGScenarioTransformer {
 		}
 
 		return builder.createStartEndRequirement();
-	}
-
-	private int convertTime(final Date startTime) {
-		return convertTime(earliestTime, startTime);
 	}
 
 	/**
@@ -1871,5 +1799,20 @@ public class LNGScenarioTransformer {
 	private String getKeyForDate(final Date date) {
 		final String key = new SimpleDateFormat("yyyy-MM").format(date);
 		return key;
+	}
+
+	/**
+	 * Convert a date into relative hours; returns the number of hours between windowStart and earliest.
+	 * 
+	 * @param earliest
+	 * @param windowStart
+	 * @return number of hours between earliest and windowStart
+	 */
+	private int convertTime(final Date earliest, final Date windowStart) {
+		return dateHelper.convertTime(earliest, windowStart);
+	}
+
+	private int convertTime(final Date startTime) {
+		return dateHelper.convertTime(earliestTime, startTime);
 	}
 }
