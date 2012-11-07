@@ -64,7 +64,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
@@ -659,7 +659,7 @@ public class ScenarioTools {
 		}
 
 		final ResourcelessModelEntityMap entities = transformer.getEntities();
-		final OptimisationTransformer ot = transformer.getOptimisationTransformer();
+		final IOptimisationTransformer ot = transformer.getOptimisationTransformer();
 
 		final IOptimisationData data = transformer.getOptimisationData();
 
