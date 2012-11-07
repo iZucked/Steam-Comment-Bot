@@ -17,6 +17,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
@@ -66,37 +67,25 @@ public class LNGTransformer {
 	public LNGTransformer(final MMXRootObject scenario, final Module module) {
 		this.scenario = scenario;
 		{
-			final Injector injector;
 			if (PlatformUI.isWorkbenchRunning()) {
-				// Create temp injector to grab extraModules
-				// TODO: DOuble injector is not great.... nor is internal temp class
-				final AbstractModule abstractModule = new AbstractModule() {
+				// Create temp injector to grab extraModules from OSGi services
+				final AbstractModule optimiserInjectorServiceModule = new AbstractModule() {
 
 					@Override
 					protected void configure() {
 						bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
 					}
 				};
-				injector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()), abstractModule);
-			} else {
-				injector = Guice.createInjector();
-
+				final Injector tmpInjector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()), optimiserInjectorServiceModule);
+				final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
+				this.extraModules = (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key);
 			}
-			class Internal {
-				@Inject(optional = true)
-				public Iterable<IOptimiserInjectorService> extraModules;
-			}
-			final Internal internal = new Internal();
-			injector.injectMembers(internal);
-			this.extraModules = internal.extraModules;
 		}
 
 		final List<Module> modules = new ArrayList<Module>();
 		if (module != null) {
 			modules.add(module);
 		}
-
-		// TODO: Add specific ones here....
 
 		final Map<IOptimiserInjectorService.ModuleType, List<Module>> moduleOverrides = new EnumMap<IOptimiserInjectorService.ModuleType, List<Module>>(IOptimiserInjectorService.ModuleType.class);
 
@@ -119,11 +108,12 @@ public class LNGTransformer {
 			}
 		}
 
+		// Install standard module with optional overrides
 		installModuleOverrides(modules, new DataComponentProviderModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule);
 		modules.add(new SequencesManipulatorModule());
 		installModuleOverrides(modules, new LNGTransformerModule(scenario), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule);
 
-		// TODO: Add specific ones here....
+		// Insert extra modules into modules list
 		if (extraModules != null) {
 			for (final IOptimiserInjectorService service : extraModules) {
 				final Module requestModule = service.requestModule();
@@ -132,9 +122,11 @@ public class LNGTransformer {
 				}
 			}
 		}
+		// Create the master injector
 		this.injector = Guice.createInjector(modules);
 
 		injector.injectMembers(this);
+		// Might no be required, could be done using @Inject on the method
 		entities.setScenario(scenario);
 	}
 
