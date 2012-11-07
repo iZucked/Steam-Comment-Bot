@@ -5,7 +5,9 @@
 package com.mmxlabs.models.lng.transformer.inject;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.ui.PlatformUI;
 import org.ops4j.peaberry.Peaberry;
@@ -15,9 +17,9 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
-import com.google.inject.Key;
 import com.google.inject.Module;
-import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.google.inject.util.Modules;
+import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
@@ -28,6 +30,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**
@@ -48,9 +51,10 @@ public class LNGTransformer {
 	@Inject
 	private LNGScenarioTransformer lngScenarioTransformer;
 
+	@Inject
 	private IOptimisationData optimisationData;
-
-	private final OptimisationTransformer optimisationTransformer;
+	@Inject
+	private IOptimisationTransformer optimisationTransformer;
 
 	// @Inject(optional = true)
 	private Iterable<IOptimiserInjectorService> extraModules;
@@ -91,36 +95,71 @@ public class LNGTransformer {
 		if (module != null) {
 			modules.add(module);
 		}
-		modules.add(new DataComponentProviderModule());
+
+		// TODO: Add specific ones here....
+
+		final Map<IOptimiserInjectorService.ModuleType, List<Module>> moduleOverrides = new EnumMap<IOptimiserInjectorService.ModuleType, List<Module>>(IOptimiserInjectorService.ModuleType.class);
+
+		// Grab any module overrides
+		if (extraModules != null) {
+			for (final IOptimiserInjectorService service : extraModules) {
+				final Map<ModuleType, List<Module>> m = service.requestModuleOverrides();
+				if (m != null) {
+					for (final Map.Entry<IOptimiserInjectorService.ModuleType, List<Module>> e : m.entrySet()) {
+						List<Module> overrides;
+						if (moduleOverrides.containsKey(e.getKey())) {
+							overrides = moduleOverrides.get(e.getKey());
+						} else {
+							overrides = new ArrayList<Module>();
+							moduleOverrides.put(e.getKey(), overrides);
+						}
+						overrides.addAll(e.getValue());
+					}
+				}
+			}
+		}
+
+		installModuleOverrides(modules, new DataComponentProviderModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule);
 		modules.add(new SequencesManipulatorModule());
-		modules.add(new LNGTransformerModule(scenario));
+		installModuleOverrides(modules, new LNGTransformerModule(scenario), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule);
 
 		// TODO: Add specific ones here....
 		if (extraModules != null) {
 			for (final IOptimiserInjectorService service : extraModules) {
-				modules.add(service.requestModule());
+				final Module requestModule = service.requestModule();
+				if (requestModule != null) {
+					modules.add(requestModule);
+				}
 			}
 		}
 		this.injector = Guice.createInjector(modules);
 
 		injector.injectMembers(this);
-
 		entities.setScenario(scenario);
+	}
 
-		try {
-			optimisationData = lngScenarioTransformer.createOptimisationData(entities);
-		} catch (final IncompleteScenarioException e) {
-			throw new RuntimeException(e);
+	private void installModuleOverrides(final List<Module> modules, final Module mainModule, final Map<IOptimiserInjectorService.ModuleType, List<Module>> moduleOverrides,
+			final IOptimiserInjectorService.ModuleType moduleType) {
+		if (moduleOverrides.containsKey(moduleType)) {
+			final List<Module> overrides = moduleOverrides.get(moduleType);
+			if (overrides != null && !overrides.isEmpty()) {
+				modules.add(Modules.override(mainModule).with(overrides));
+			} else {
+				modules.add(mainModule);
+			}
+		} else {
+			modules.add(mainModule);
 		}
-		optimisationTransformer = new OptimisationTransformer(scenario, lngScenarioTransformer.getOptimisationSettings());
-		injector.injectMembers(optimisationTransformer);
 	}
 
 	public synchronized LNGScenarioTransformer getLNGScenarioTransformer() {
 		return lngScenarioTransformer;
 	}
 
-	public OptimisationTransformer getOptimisationTransformer() {
+	/**
+	 * @since 2.0
+	 */
+	public IOptimisationTransformer getOptimisationTransformer() {
 		return optimisationTransformer;
 	}
 

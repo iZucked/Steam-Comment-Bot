@@ -16,8 +16,11 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
+import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
@@ -60,7 +63,8 @@ public class LNGTransformerModule extends AbstractModule {
 		bind(LNGScenarioTransformer.class).in(Singleton.class);
 
 		bind(SeriesParser.class).in(Singleton.class);
-		
+
+		bind(ResourcelessModelEntityMap.class).in(Singleton.class);
 		bind(ModelEntityMap.class).to(ResourcelessModelEntityMap.class).in(Singleton.class);
 
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
@@ -75,7 +79,6 @@ public class LNGTransformerModule extends AbstractModule {
 			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
 			bind(IEvaluationProcessRegistry.class).toProvider(service(IEvaluationProcessRegistry.class).single());
 		}
-
 	}
 
 	@Provides
@@ -105,5 +108,19 @@ public class LNGTransformerModule extends AbstractModule {
 			}
 		};
 		return factory;
+	}
+
+	@Provides
+	IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ResourcelessModelEntityMap entities) throws IncompleteScenarioException {
+		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(entities);
+
+		return optimisationData;
+	}
+
+	@Provides
+	IOptimisationTransformer provideOptimisationTransformer(final Injector injector, final LNGScenarioTransformer lngScenarioTransformer) {
+		final IOptimisationTransformer optimisationTransformer = new OptimisationTransformer(scenario, lngScenarioTransformer.getOptimisationSettings());
+		injector.injectMembers(optimisationTransformer);
+		return optimisationTransformer;
 	}
 }
