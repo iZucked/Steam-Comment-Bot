@@ -69,9 +69,9 @@
 						<include>**/Test*.*</include>
 						<include>**/*Test.*</include>
 					</includes>
-					<!-- Use our product/application -->
-					<product>com.mmxlabs.shiplingo.platform.app.product</product>
-					<application>com.mmxlabs.shiplingo.platform.app.application</application>
+
+					<product>org.eclipse.sdk.ide</product>
+					<application>org.eclipse.ui.ide.workbench</application>
 
 					<dependencies>
 						<dependency>
