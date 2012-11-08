@@ -2,12 +2,16 @@ package com.mmxlabs.scheduler.optimiser.manipulators;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.google.inject.util.Modules;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.ChainedSequencesManipulator;
 
 /**
+ * A {@link Module} implementation intended for use in a single optimisation/evaluation process. Data structures are singletons. A new {@link Module} instance should be created for each process.
+ * 
  * @since 2.0
  */
 public class SequencesManipulatorModule extends AbstractModule {
