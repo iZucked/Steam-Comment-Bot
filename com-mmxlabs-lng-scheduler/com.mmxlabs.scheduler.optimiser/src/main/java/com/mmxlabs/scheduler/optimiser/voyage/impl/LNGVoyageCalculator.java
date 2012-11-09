@@ -320,7 +320,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					if (options.useNBOForIdle()) {
 						routeDiffInMT = 0;
 						routeFboProvidedInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
-						routeFboProvidedInM3 = Calculator.convertMTToM3(routeDiffInMT, equivalenceFactorM3ToMT);
+						routeFboProvidedInM3 = Calculator.convertMTToM3(routeFboProvidedInMT, equivalenceFactorM3ToMT);
 
 						final long pilotLightRateINMTPerHour = vesselClass.getPilotLightRate();
 						pilotLightConsumptionInMT = Calculator.quantityFromRateTime(pilotLightRateINMTPerHour, additionalRouteTimeInHours);
