@@ -913,6 +913,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_portCostProvider, portCostProvider);
 
+		data.addDataComponentProvider(SchedulerConstants.DCP_portCVProvider, portCVProvider);
+
 		data.addDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, resourceAllocationProvider);
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, startEndRequirementProvider);
