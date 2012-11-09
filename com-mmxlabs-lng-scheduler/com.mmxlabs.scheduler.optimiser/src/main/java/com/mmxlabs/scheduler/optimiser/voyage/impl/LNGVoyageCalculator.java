@@ -642,8 +642,14 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return capacityViolations;
 	}
 
-	@Override
 	public void setRouteCostDataComponentProvider(final IRouteCostProvider provider) {
 		this.routeCostProvider = provider;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public void setPortCVProvider(final IPortCVProvider portCVProvider) {
+		this.portCVProvider = portCVProvider;
 	}
 }

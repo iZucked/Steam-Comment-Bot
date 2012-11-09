@@ -5,7 +5,6 @@
 package com.mmxlabs.scheduler.optimiser.voyage;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
-import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -52,11 +51,4 @@ public interface ILNGVoyageCalculator {
 	 * @return Returns zero for a feasible journey, or a positive integer indicating a relative ranking of problems due to e.g. capacity violations. Returns a negative for a infeasible journey.
 	 */
 	int calculateVoyagePlan(VoyagePlan voyagePlan, IVessel vessel, int[] arrivalTimes, Object... sequence);
-
-	/**
-	 * Set the route cost DCP ( {@link IRouteCostProvider} ) which is needed to determine the influence of canal costs on voyage plan decisions.
-	 * 
-	 * @param provider
-	 */
-	void setRouteCostDataComponentProvider(IRouteCostProvider provider);
 }
