@@ -29,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -59,6 +60,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -118,6 +121,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -177,6 +182,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -239,6 +246,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -300,6 +309,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -362,6 +373,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -421,6 +434,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -481,6 +496,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -596,6 +613,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -659,6 +678,8 @@ public class LNGVoyageCalculatorTest {
 
 		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("Name", "Default");
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -726,6 +747,8 @@ public class LNGVoyageCalculatorTest {
 
 		final HashMapRouteCostProviderEditor routeCostProvider = new HashMapRouteCostProviderEditor("Name", "Default");
 		calc.setRouteCostDataComponentProvider(routeCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -798,6 +821,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -871,6 +896,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -1033,6 +1060,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
@@ -1113,6 +1142,8 @@ public class LNGVoyageCalculatorTest {
 
 		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
 		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
 
 		calc.init();
 
