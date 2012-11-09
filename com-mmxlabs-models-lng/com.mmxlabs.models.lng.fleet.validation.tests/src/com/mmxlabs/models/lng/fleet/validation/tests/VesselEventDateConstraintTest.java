@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Date;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 import org.junit.Test;
@@ -105,9 +106,11 @@ public class VesselEventDateConstraintTest {
 		when(vesselEvent.getStartBy()).thenReturn(end);
 		if (expectSuccess) {
 			when(validationContext.createSuccessStatus()).thenReturn(resultStatus);
+			//when(resultStatus.getSeverity()).thenReturn(IStatus.OK);
 		} else {
 			when(vesselEvent.getName()).thenReturn(vesselEventID);
 			when(validationContext.createFailureStatus(vesselEventID)).thenReturn(resultStatus);
+			when(resultStatus.getSeverity()).thenReturn(IStatus.ERROR);
 		}
 
 		constraint.validate(validationContext);
@@ -120,6 +123,7 @@ public class VesselEventDateConstraintTest {
 		} else {
 			verify(vesselEvent).getName();
 			verify(validationContext).createFailureStatus(anyString());
+			verify(resultStatus).getSeverity();
 		}
 		// verify that only the methods above are called.
 		verifyNoMoreInteractions(vesselEvent);
