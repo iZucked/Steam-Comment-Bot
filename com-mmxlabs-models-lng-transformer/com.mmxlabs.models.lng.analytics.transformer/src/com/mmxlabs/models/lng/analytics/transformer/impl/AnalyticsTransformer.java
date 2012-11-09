@@ -42,6 +42,7 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataFormatType;
@@ -60,7 +61,6 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.builder.impl.SchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ICargo;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
@@ -83,7 +83,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
+import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -211,9 +211,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 			for (final Port loadPort : loadPorts) {
 				monitor.subTask("Evaluating costs for journeys from " + loadPort.getName());
-				final Injector injector = Guice.createInjector(new DataComponentProviderModule());
-				final ISchedulerBuilder builder = new SchedulerBuilder();
-				injector.injectMembers(builder);
+				final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule());
+				final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
 
 				final Association<Port, IPort> ports = new Association<Port, IPort>();
 				final ICooldownPriceCalculator nullCalculator = new FixedPriceContract(0);
@@ -365,7 +364,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				/*
 				 * Create a fitness core and evaluate+annotate the sequences
 				 */
-				final ISequencesManipulator manipulator = SequencesManipulatorUtil.createDefaultSequenceManipulators(data);
+				final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+				manipulator.init(data);
 				manipulator.manipulate(sequences); // this will set the return elements to the right places, and remove the start elements.
 				final LNGVoyageCalculator calculator = new LNGVoyageCalculator();
 				injector.injectMembers(calculator);

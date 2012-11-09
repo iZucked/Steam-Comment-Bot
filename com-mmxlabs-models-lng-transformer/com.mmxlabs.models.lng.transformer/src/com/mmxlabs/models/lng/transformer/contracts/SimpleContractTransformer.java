@@ -7,8 +7,6 @@ package com.mmxlabs.models.lng.transformer.contracts;
 import java.util.Arrays;
 import java.util.Collection;
 
-import javax.inject.Inject;
-
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.common.curves.ICurve;
@@ -22,7 +20,6 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -38,24 +35,19 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
  * 
  */
 public class SimpleContractTransformer implements IContractTransformer {
-	@Inject
-	private ISchedulerBuilder builder;
+
 	private ModelEntityMap map;
-	private MMXRootObject rootObject;
+
 	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceContract(), CommercialPackage.eINSTANCE.getIndexPriceContract());
 
 	@Override
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
-		this.rootObject = rootObject;
 		this.map = map;
-		this.builder = builder;
 	}
 
 	@Override
 	public void finishTransforming() {
-		this.rootObject = null;
 		this.map = null;
-		this.builder = null;
 	}
 
 	private SimpleContract instantiate(final Contract c) {

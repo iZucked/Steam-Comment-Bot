@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,8 +16,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Injector;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -31,10 +28,6 @@ import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.input.editor.utils.CollectedAssignment;
-import com.mmxlabs.models.lng.optimiser.Constraint;
-import com.mmxlabs.models.lng.optimiser.Objective;
-import com.mmxlabs.models.lng.optimiser.OptimiserModel;
-import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselClass;
 import com.mmxlabs.models.lng.types.AVesselSet;
@@ -43,28 +36,18 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
-import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.ISequencesManipulator;
-import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
-import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
-import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
-import com.mmxlabs.optimiser.core.impl.ChainedSequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
-import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
-import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorUtil;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -79,102 +62,17 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 public class OptimisationTransformer implements IOptimisationTransformer {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
 
-	private final MMXRootObject rootObject;
-
-	private final OptimiserSettings settings;
+	@Inject
+	private MMXRootObject rootObject;
 
 	@Inject
-	private IFitnessFunctionRegistry fitnessFunctionRegistry;
+	private IInitialSequenceBuilder builder;
 
-	@Inject
-	private IConstraintCheckerRegistry constraintCheckerRegistry;
-
-	@Inject
-	private IEvaluationProcessRegistry evaluationProcessRegistry;
-
-	@Inject
-	private Injector injector;
-
-	public OptimisationTransformer(final MMXRootObject rootObject) {
-		this(rootObject, rootObject.getSubModel(OptimiserModel.class).getActiveSetting());
-	}
-
-	public OptimisationTransformer(final MMXRootObject root, final OptimiserSettings settings) {
-		this.settings = settings;
-		this.rootObject = root;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.lng.transformer.IOptimisationTransformer#createOptimisationContext(com.mmxlabs.optimiser.core.scenario.IOptimisationData, com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
-	 */
-	@Override
-	public IOptimisationContext createOptimisationContext(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
-		final ISequences sequences = createInitialSequences(data, mem);
-
-		// createConstraintCheckerRegistry();
-		// createFitnessFunctionRegistry();
-		// createEvaluationProcessRegistry();
-
-		final List<String> components = getEnabledFitnessFunctionNames();
-		log.debug("Desired components: " + components);
-		components.retainAll(fitnessFunctionRegistry.getFitnessComponentNames());
-
-		final List<String> checkers = getEnabledConstraintNames();
-		log.debug("Available components: " + components);
-		checkers.retainAll(constraintCheckerRegistry.getConstraintCheckerNames());
-
-		// Enable all processes
-		// final List<String> evaluationProcesses = getEnabledEvaluationProcessNames();
-		// log.debug("Available evaluation processes: " + evaluationProcesses);
-		// evaluationProcesses.retainAll(evaluationProcessRegistry.getEvaluationProcessNames());
-
-		final List<String> evaluationProcesses = new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames());
-
-		return new OptimisationContext(data, sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry);
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.lng.transformer.IOptimisationTransformer#createOptimiserAndContext(com.mmxlabs.optimiser.core.scenario.IOptimisationData, com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
-	 */
-	@Override
-	public Pair<IOptimisationContext, LocalSearchOptimiser> createOptimiserAndContext(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
-		final IOptimisationContext context = createOptimisationContext(data, mem);
-
-		final LSOConstructor lsoConstructor = new LSOConstructor(settings);
-
-		injector.injectMembers(lsoConstructor);
-		final ChainedSequencesManipulator sequencesManipulator = injector.getInstance(ChainedSequencesManipulator.class);
-		sequencesManipulator.init(data);
-
-		return new Pair<IOptimisationContext, LocalSearchOptimiser>(context, lsoConstructor.buildOptimiser(context, sequencesManipulator));
-	}
-
-	private List<String> getEnabledConstraintNames() {
-		final List<String> result = new ArrayList<String>();
-
-		for (final Constraint c : settings.getConstraints()) {
-			if (c.isEnabled()) {
-				result.add(c.getName());
-			}
-		}
-
-		return result;
-	}
-
-	private List<String> getEnabledFitnessFunctionNames() {
-		final List<String> result = new ArrayList<String>();
-
-		for (final Objective o : settings.getObjectives()) {
-			if (o.isEnabled() && o.getWeight() > 0) {
-				result.add(o.getName());
-			}
-		}
-
-		return result;
-	}
-
-	/* (non-Javadoc)
-	 * @see com.mmxlabs.models.lng.transformer.IOptimisationTransformer#createInitialSequences(com.mmxlabs.optimiser.core.scenario.IOptimisationData, com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mmxlabs.models.lng.transformer.IOptimisationTransformer#createInitialSequences(com.mmxlabs.optimiser.core.scenario.IOptimisationData,
+	 * com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
 	 */
 	@Override
 	@SuppressWarnings("deprecation")
@@ -417,8 +315,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
 			sequence.getValue().add(serp.getEndElement(sequence.getKey()));
 		}
-
-		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(constraintCheckerRegistry.getConstraintCheckerFactories(getEnabledConstraintNames()));
 
 		return builder.createInitialSequences(data, advice, resourceAdvice, cargoSlotPairing);
 	}

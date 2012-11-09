@@ -4,6 +4,10 @@
  */
 package com.mmxlabs.models.lng.transformer.contracts;
 
+import java.util.Collection;
+
+import org.eclipse.emf.ecore.EClass;
+
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -44,4 +48,9 @@ public interface IContractTransformer extends ITransformerExtension {
 	 * @param optimiserSlot
 	 */
 	public void slotTransformed(Slot modelSlot, IPortSlot optimiserSlot);
+
+	/**
+	 * @since 2.0
+	 */
+	Collection<EClass> getContractEClasses();
 }

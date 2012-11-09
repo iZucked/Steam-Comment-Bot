@@ -16,6 +16,8 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.mmxlabs.common.parser.series.SeriesParser;
+import com.mmxlabs.models.lng.optimiser.OptimiserModel;
+import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
 import com.mmxlabs.models.lng.transformer.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
@@ -23,6 +25,7 @@ import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
@@ -44,6 +47,8 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 
 /**
  * Main entry point to create {@link LNGScenarioTransformer}. This uses injection to populate the data structures.
+ * 
+ * @since 2.0
  */
 public class LNGTransformerModule extends AbstractModule {
 
@@ -82,6 +87,8 @@ public class LNGTransformerModule extends AbstractModule {
 			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
 			bind(IEvaluationProcessRegistry.class).toProvider(service(IEvaluationProcessRegistry.class).single());
 		}
+
+		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
 	}
 
 	@Provides
@@ -91,6 +98,7 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
+	@Singleton
 	ISchedulerFactory provideSchedulerFactory(final Injector injector) {
 		final ISchedulerFactory factory = new ISchedulerFactory() {
 
@@ -114,6 +122,7 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
+	@Singleton
 	IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ResourcelessModelEntityMap entities) throws IncompleteScenarioException {
 		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(entities);
 
@@ -121,9 +130,28 @@ public class LNGTransformerModule extends AbstractModule {
 	}
 
 	@Provides
-	IOptimisationTransformer provideOptimisationTransformer(final Injector injector, final LNGScenarioTransformer lngScenarioTransformer) {
-		final IOptimisationTransformer optimisationTransformer = new OptimisationTransformer(scenario, lngScenarioTransformer.getOptimisationSettings());
-		injector.injectMembers(optimisationTransformer);
-		return optimisationTransformer;
+	@Singleton
+	/**
+	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
+	 * 
+	 * @return
+	 */
+	OptimiserSettings getOptimisationSettings(MMXRootObject rootObject) {
+		final OptimiserModel om = rootObject.getSubModel(OptimiserModel.class);
+		if (om != null) {
+			// select settings
+			final OptimiserSettings x = om.getActiveSetting();
+			if (x != null)
+				return x;
+		}
+		// if (defaultSettings == null) {
+		OptimiserSettings defaultSettings = ScenarioUtils.createDefaultSettings();
+		if (om != null) {
+			om.getSettings().add(defaultSettings);
+			om.setActiveSetting(defaultSettings);
+		}
+		// }
+		return defaultSettings;
 	}
+
 }

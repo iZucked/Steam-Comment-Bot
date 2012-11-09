@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
+import javax.inject.Inject;
+
 import org.eclipse.emf.common.util.EList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,13 +26,11 @@ import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
-import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Fitness;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -52,11 +50,9 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
  * A utility class for turning an annotated solution into some EMF representation, for the presentation layer.
@@ -69,8 +65,10 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class AnnotatedSolutionExporter {
 	private static final Logger log = LoggerFactory.getLogger(AnnotatedSolutionExporter.class);
 	private final List<IAnnotationExporter> exporters = new LinkedList<IAnnotationExporter>();
-	final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
-	final List<IExporterExtension> extensions = new LinkedList<IExporterExtension>();
+	private final ScheduleFactory factory = SchedulePackage.eINSTANCE.getScheduleFactory();
+
+	@Inject
+	private List<IExporterExtension> extensions = new LinkedList<IExporterExtension>();
 
 	private boolean exportRuntimeAndFitness = false;
 
@@ -89,30 +87,6 @@ public class AnnotatedSolutionExporter {
 		exporters.add(new JourneyEventExporter());
 		exporters.add(new GeneratedCharterOutEventExporter(visitExporter));
 		exporters.add(visitExporter);
-	}
-
-	public boolean addPlatformExporterExtensions() {
-
-		// TOOD: Peaberry
-
-		if (Platform.getExtensionRegistry() == null) {
-			log.warn("addPlatformExporterExtensions() called without a platform - skipping");
-			return false;
-		}
-		final String EXTENSION_ID = "com.mmxlabs.lngscheduler.exporter";
-		final IConfigurationElement[] config = Platform.getExtensionRegistry().getConfigurationElementsFor(EXTENSION_ID);
-
-		for (final IConfigurationElement e : config) {
-			try {
-				final Object object = e.createExecutableExtension("exporter");
-				if (object instanceof IExporterExtension) {
-					addExporterExtension((IExporterExtension) object);
-				}
-			} catch (final Exception ex) {
-				log.error("Exception caught when adding platform exporter extensions", ex);
-			}
-		}
-		return true;
 	}
 
 	public void addExporterExtension(final IExporterExtension extension) {
@@ -315,7 +289,7 @@ public class AnnotatedSolutionExporter {
 					if (result != null) {
 						eventsForElement.add(result);
 					}
-					
+
 				}
 
 				// this is messy, but we want to be sure stuff is in the right

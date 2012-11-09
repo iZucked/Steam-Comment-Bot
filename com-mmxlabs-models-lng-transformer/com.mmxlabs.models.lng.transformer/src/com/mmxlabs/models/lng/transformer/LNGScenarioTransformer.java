@@ -49,7 +49,6 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
@@ -93,8 +92,6 @@ import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer;
-import com.mmxlabs.models.lng.transformer.inject.extensions.ContractTransformer.ModelClass;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.lng.types.AVessel;
@@ -140,6 +137,9 @@ public class LNGScenarioTransformer {
 
 	private MMXRootObject rootObject;
 
+	@Inject
+	private OptimiserSettings optimiserSettings;
+
 	private Date earliestTime;
 	private Date latestTime;
 
@@ -150,7 +150,7 @@ public class LNGScenarioTransformer {
 	private SeriesParser indices;
 
 	@Inject(optional = true)
-	private Iterable<ContractTransformer> transformerExtensions;
+	private List<ITransformerExtension> transformerExtensions;
 
 	@Inject
 	private ISchedulerBuilder builder;
@@ -217,36 +217,13 @@ public class LNGScenarioTransformer {
 			return false;
 		}
 
-		final Map<String, EClass> contracts = new HashMap<String, EClass>();
+		for (final ITransformerExtension transformer : transformerExtensions) {
 
-		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-		for (final Contract c : commercialModel.getSalesContracts()) {
-			contracts.put(c.eClass().getInstanceClass().getCanonicalName(), c.eClass());
-		}
-
-		for (final Contract c : commercialModel.getPurchaseContracts()) {
-			contracts.put(c.eClass().getInstanceClass().getCanonicalName(), c.eClass());
-		}
-
-		for (final ContractTransformer t : transformerExtensions) {
-
-			final ModelClass[] modelClass = t.getModelClass();
-
-			final HashSet<String> modelClasses = new HashSet<String>();
-			for (final ModelClass mc : modelClass) {
-				modelClasses.add(mc.getTransformer());
-			}
-			modelClasses.retainAll(contracts.keySet());
-
-			final ITransformerExtension transformer = t.createTransformer();
 			addTransformerExtension(transformer);
 
 			if (transformer instanceof IContractTransformer) {
-				final List<EClass> classes = new LinkedList<EClass>();
-				for (final String mc : modelClasses) {
-					classes.add(contracts.get(mc));
-				}
-				addContractTransformer((IContractTransformer) transformer, classes);
+				final IContractTransformer contractTransformer = (IContractTransformer) transformer;
+				addContractTransformer(contractTransformer);
 			}
 		}
 
@@ -255,13 +232,15 @@ public class LNGScenarioTransformer {
 
 	public void addTransformerExtension(final ITransformerExtension extension) {
 		log.debug(extension.getClass().getCanonicalName() + " added to transformer extensions");
-		injector.injectMembers(extension);
 		allTransformerExtensions.add(extension);
 	}
 
-	public void addContractTransformer(final IContractTransformer transformer, final Collection<EClass> forContracts) {
+	/**
+	 * @since 2.0
+	 */
+	public void addContractTransformer(final IContractTransformer transformer) {
 		contractTransformers.add(transformer);
-		for (final EClass ec : forContracts) {
+		for (final EClass ec : transformer.getContractEClasses()) {
 			log.debug(transformer.getClass().getCanonicalName() + " handling contracts with eClass " + ec.getName());
 			contractTransformersByEClass.put(ec, transformer);
 		}

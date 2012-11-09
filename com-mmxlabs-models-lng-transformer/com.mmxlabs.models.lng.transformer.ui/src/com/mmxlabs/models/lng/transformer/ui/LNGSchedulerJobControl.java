@@ -29,6 +29,7 @@ import org.eclipse.ui.progress.IProgressConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
@@ -56,16 +57,15 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -96,6 +96,8 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private static final ImageDescriptor imgOpti = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/elcl16/resume_co.gif");
 	private static final ImageDescriptor imgEval = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
+	private Injector injector = null;
+	
 	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY,
 				(jobDescriptor.isOptimising() ? imgOpti : imgEval)));
@@ -111,12 +113,13 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		startTimeMillis = System.currentTimeMillis();
 
 		final LNGTransformer transformer = new LNGTransformer(scenario);
+		
+		injector = transformer.getInjector();
 
-		final IOptimisationData data = transformer.getOptimisationData();
+		// final IOptimisationData data = transformer.getOptimisationData();
 		entities = transformer.getEntities();
 
-		final IOptimisationTransformer ot = transformer.getOptimisationTransformer();
-		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
+		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = transformer.getOptimiserAndContext();
 
 		final IOptimisationContext context = optAndContext.getFirst();
 		optimiser = optAndContext.getSecond();
@@ -162,8 +165,11 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 				((CommandProviderAwareEditingDomain) domain).setAdaptersEnabled(true, true);
 			}
 		}
+
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		exporter.addPlatformExporterExtensions();
+		Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
+		childInjector.injectMembers(exporter);
+
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		final InputModel inputModel = scenario.getSubModel(InputModel.class);
@@ -373,10 +379,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					final Cargo c = loadSlot.getCargo();
 					nullCargoes.remove(c);
 					// Sanity check
-					// Unused non-optional slots now handled by optimiser 
-//					if (!loadSlot.isOptional()) {
-//						throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
-//					}
+					// Unused non-optional slots now handled by optimiser
+					// if (!loadSlot.isOptional()) {
+					// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
+					// }
 					cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
 					cmd.append(DeleteCommand.create(domain, c));
 				}
@@ -402,9 +408,9 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			for (final Cargo c : nullCargoes) {
 				// Sanity check
 				// Unused non-optional slots now handled by optimiser
-//				if (!c.getLoadSlot().isOptional()) {
-//					throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
-//				}
+				// if (!c.getLoadSlot().isOptional()) {
+				// throw new RuntimeException("Non-optional cargo/load is not linked to a cargo");
+				// }
 				cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
 				cmd.append(DeleteCommand.create(domain, c));
 			}

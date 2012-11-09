@@ -20,16 +20,19 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.LSOConstructorModule;
 import com.mmxlabs.models.lng.transformer.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
+import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -59,6 +62,9 @@ public class LNGTransformer {
 
 	// @Inject(optional = true)
 	private Iterable<IOptimiserInjectorService> extraModules;
+	
+	@Inject
+	private  Pair<IOptimisationContext, LocalSearchOptimiser> contextAndOptimiser;
 
 	public LNGTransformer(final MMXRootObject scenario) {
 		this(scenario, null);
@@ -110,8 +116,9 @@ public class LNGTransformer {
 
 		// Install standard module with optional overrides
 		installModuleOverrides(modules, new DataComponentProviderModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule);
-		modules.add(new SequencesManipulatorModule());
+//		modules.add(new SequencesManipulatorModule());
 		installModuleOverrides(modules, new LNGTransformerModule(scenario), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule);
+		modules.add(new LSOConstructorModule());
 
 		// Insert extra modules into modules list
 		if (extraModules != null) {
@@ -169,5 +176,20 @@ public class LNGTransformer {
 
 	public IOptimisationData getOptimisationData() {
 		return optimisationData;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public Pair<IOptimisationContext, LocalSearchOptimiser> getOptimiserAndContext() {
+		
+		return contextAndOptimiser;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public Injector getInjector() {
+		return injector;
 	}
 }
