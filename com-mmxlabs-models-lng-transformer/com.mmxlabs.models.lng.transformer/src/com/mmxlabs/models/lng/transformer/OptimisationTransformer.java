@@ -59,6 +59,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
  * @author hinton
  * 
  */
+@SuppressWarnings("deprecation")
 public class OptimisationTransformer implements IOptimisationTransformer {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
 
@@ -75,7 +76,6 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	 * com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
 	 */
 	@Override
-	@SuppressWarnings("deprecation")
 	public ISequences createInitialSequences(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
 		/**
 		 * This sequences is passed into the initial sequence builder as a starting point. Extra elements may be added to the sequence in any position, but the existing elements will not be removed or
@@ -319,7 +319,10 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 		return builder.createInitialSequences(data, advice, resourceAdvice, cargoSlotPairing);
 	}
 
-	private ISequenceElement[] getElements(final UUIDObject modelObject, final IPortSlotProvider psp, final ModelEntityMap mem) {
+	/**
+	 * @since 2.0
+	 */
+	protected ISequenceElement[] getElements(final UUIDObject modelObject, final IPortSlotProvider psp, final ModelEntityMap mem) {
 		if (modelObject instanceof VesselEvent) {
 			final VesselEvent event = (VesselEvent) modelObject;
 			final IVesselEventPortSlot eventSlot = mem.getOptimiserObject(event, IVesselEventPortSlot.class);
