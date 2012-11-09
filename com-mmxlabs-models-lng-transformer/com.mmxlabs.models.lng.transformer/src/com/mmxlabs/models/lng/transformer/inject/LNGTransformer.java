@@ -62,17 +62,19 @@ public class LNGTransformer {
 
 	// @Inject(optional = true)
 	private Iterable<IOptimiserInjectorService> extraModules;
-	
+
 	@Inject
-	private  Pair<IOptimisationContext, LocalSearchOptimiser> contextAndOptimiser;
+	private Pair<IOptimisationContext, LocalSearchOptimiser> contextAndOptimiser;
 
 	public LNGTransformer(final MMXRootObject scenario) {
 		this(scenario, null);
 	}
 
+	@SuppressWarnings("unchecked")
 	public LNGTransformer(final MMXRootObject scenario, final Module module) {
 		this.scenario = scenario;
 		{
+			final Injector tmpInjector;
 			if (PlatformUI.isWorkbenchRunning()) {
 				// Create temp injector to grab extraModules from OSGi services
 				final AbstractModule optimiserInjectorServiceModule = new AbstractModule() {
@@ -82,10 +84,15 @@ public class LNGTransformer {
 						bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
 					}
 				};
-				final Injector tmpInjector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()), optimiserInjectorServiceModule);
+				tmpInjector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()), optimiserInjectorServiceModule);
 				final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
 				this.extraModules = (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key);
+			} else {
+				tmpInjector = Guice.createInjector(module);
 			}
+
+			final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
+			this.extraModules = (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key);
 		}
 
 		final List<Module> modules = new ArrayList<Module>();
@@ -116,7 +123,7 @@ public class LNGTransformer {
 
 		// Install standard module with optional overrides
 		installModuleOverrides(modules, new DataComponentProviderModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule);
-//		modules.add(new SequencesManipulatorModule());
+		// modules.add(new SequencesManipulatorModule());
 		installModuleOverrides(modules, new LNGTransformerModule(scenario), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule);
 		modules.add(new LSOConstructorModule());
 
@@ -182,7 +189,7 @@ public class LNGTransformer {
 	 * @since 2.0
 	 */
 	public Pair<IOptimisationContext, LocalSearchOptimiser> getOptimiserAndContext() {
-		
+
 		return contextAndOptimiser;
 	}
 
