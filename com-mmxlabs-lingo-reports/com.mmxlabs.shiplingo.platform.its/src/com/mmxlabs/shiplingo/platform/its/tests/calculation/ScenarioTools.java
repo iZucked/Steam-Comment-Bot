@@ -663,7 +663,7 @@ public class ScenarioTools {
 
 		final IOptimisationData data = transformer.getOptimisationData();
 
-		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = ot.createOptimiserAndContext(data, entities);
+		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = transformer.getOptimiserAndContext();
 
 		final IOptimisationContext context = optAndContext.getFirst();
 		final LocalSearchOptimiser optimiser = optAndContext.getSecond();
