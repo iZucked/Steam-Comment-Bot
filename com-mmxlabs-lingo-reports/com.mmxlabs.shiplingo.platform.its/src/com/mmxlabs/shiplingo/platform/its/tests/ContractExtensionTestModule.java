@@ -12,7 +12,10 @@ import org.eclipse.core.runtime.Platform;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformerFactory;
+import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
@@ -53,8 +56,12 @@ public class ContractExtensionTestModule extends AbstractModule {
 			bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toInstance(Collections.singleton(new TradingOptimiserModuleService()));
 			bind(TypeLiterals.iterable(ICargoFitnessComponentProvider.class)).toInstance(Collections.singleton(new ProfitAndLossAllocationComponentProvider()));
 
+			final List<IBuilderExtensionFactory> builderExtensionFactories = new ArrayList<IBuilderExtensionFactory>();
+			bind(TypeLiterals.iterable(IBuilderExtensionFactory.class)).toInstance(builderExtensionFactories);
+
 			final List<ITransformerExtensionFactory> transformerExtensionFactories = new ArrayList<ITransformerExtensionFactory>();
 			transformerExtensionFactories.add(new EntityTransformerExtensionFactory());
+			transformerExtensionFactories.add(new SimpleContractTransformerFactory());
 			transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
 			bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
