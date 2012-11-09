@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.trading.integration;
+package com.mmxlabs.trading.integration.extensions;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -46,20 +46,21 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 
 /**
- * * Contract Transformer and Builder - this is the {@link IContractTransformer} portion of the extension. See {@link StandardContractBuilder} for the builder / internal model side. This class deals
- * directly with the EMF model and uses the {@link StandardContractBuilder} to create internal instances.
+ * * Contract Transformer and Builder - this is the {@link IContractTransformer} portion of the extension. See {@link StandardContractBuilderExtension} for the builder / internal model side. This
+ * class deals directly with the EMF model and uses the {@link StandardContractBuilderExtension} to create internal instances.
  * 
  * @author hinton
  * 
  * @since 2.0
  */
-public class StandardContractTransformer implements IContractTransformer {
-	@Inject
-	private StandardContractBuilder contractBuilder;
+public class StandardContractTransformerExtension implements IContractTransformer {
+
+	private StandardContractBuilderExtension contractBuilder;
 
 	private ModelEntityMap map;
 
-	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getProfitSharePurchaseContract(), CommercialPackage.eINSTANCE.getNetbackPurchaseContract());
+	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getProfitSharePurchaseContract(), CommercialPackage.eINSTANCE.getNetbackPurchaseContract(),
+			CommercialPackage.eINSTANCE.getRedirectionPurchaseContract());
 
 	@Inject
 	private Injector injector;
@@ -70,6 +71,8 @@ public class StandardContractTransformer implements IContractTransformer {
 	@Override
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
 		this.map = map;
+		contractBuilder = new StandardContractBuilderExtension();
+		injector.injectMembers(contractBuilder);
 		builder.addBuilderExtension(contractBuilder);
 	}
 

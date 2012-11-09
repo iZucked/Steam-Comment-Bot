@@ -25,5 +25,7 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.pricing;bundle-version="2.0.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
-Bundle-Module: com.mmxlabs.trading.integration.ComponentProviderModule
-Export-Package: com.mmxlabs.trading.integration
+Bundle-Module: com.mmxlabs.trading.integration.modules.TradingActivatorModule
+Export-Package: com.mmxlabs.trading.integration,
+ com.mmxlabs.trading.integration.extensions,
+ com.mmxlabs.trading.integration.factories

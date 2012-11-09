@@ -7,33 +7,6 @@
 -->
 <?eclipse version="3.4"?>
 <plugin>
-   <extension
-         id="com.mmxlabs.trading.integration.transformer"
-         point="com.mmxlabs.lngscheduler.transformer">
-      <Transformer
-            transformer="com.mmxlabs.trading.integration.EntityTransformerExtension">
-      </Transformer>
-      <Transformer
-            transformer="com.mmxlabs.trading.integration.StandardContractTransformer">
-         <modelclass
-               class=" com.mmxlabs.models.lng.commercial.NetbackPurchaseContract">
-         </modelclass>
-         <modelclass
-               class="com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract">
-         </modelclass>
-         <modelclass
-               class="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract">
-         </modelclass>
-      </Transformer>
-   </extension>
-   <extension
-         id="com.mmxlabs.trading.integration.exporter"
-         name="Trading Exporter"
-         point="com.mmxlabs.lngscheduler.exporter">
-      <ExportExtension
-            exporter="com.mmxlabs.trading.integration.TradingExporterExtension">
-      </ExportExtension>
-   </extension>
  <extension
          point="org.eclipse.emf.validation.constraintProviders">
       <category

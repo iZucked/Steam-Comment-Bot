@@ -12,13 +12,7 @@ public class Activator extends ValidationPlugin {
 
 	public static final String PLUGIN_ID = "com.mmxlabs.trading.integration";
 
-	private static BundleContext context;
-
 	private static Activator plugin = null;
-
-	static BundleContext getContext() {
-		return context;
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -26,7 +20,6 @@ public class Activator extends ValidationPlugin {
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(final BundleContext bundleContext) throws Exception {
-		Activator.context = bundleContext;
 		Activator.plugin = this;
 		super.start(bundleContext);
 	}
@@ -38,12 +31,10 @@ public class Activator extends ValidationPlugin {
 	 */
 	public void stop(final BundleContext bundleContext) throws Exception {
 		super.stop(bundleContext);
-		Activator.context = null;
 		Activator.plugin = null;
 	}
 
 	public static Activator getDefault() {
 		return plugin;
 	}
-
 }

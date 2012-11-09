@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.trading.integration;
+package com.mmxlabs.trading.integration.extensions;
 
 import java.util.Collection;
 

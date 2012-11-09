@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.trading.integration;
+package com.mmxlabs.trading.integration.extensions;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,13 +35,13 @@ import com.mmxlabs.trading.optimiser.contracts.impl.ProfitSharingContract;
 import com.mmxlabs.trading.optimiser.contracts.impl.RedirectionContract;
 
 /**
- * Contract Transformer and Builder - this is the {@link IBuilderExtension} portion of the extension. See {@link StandardContractTransformer} for the transformer / model side. This class creates the
+ * Contract Transformer and Builder - this is the {@link IBuilderExtension} portion of the extension. See {@link StandardContractTransformerExtension} for the transformer / model side. This class creates the
  * internal optimiser contract implementations. Most of the work happens in the {@link #finishBuilding(IOptimisationData)} method where partially constructed objects can be completed as the
  * {@link IOptimisationData} structure should be almost complete by this stage.
  * 
  * @since 2.0
  */
-public class StandardContractBuilder implements IBuilderExtension {
+public class StandardContractBuilderExtension implements IBuilderExtension {
 	private final Map<NetbackContract, Map<AVesselClass, NotionalBallastParameters>> netbacks = new HashMap<NetbackContract, Map<AVesselClass, NotionalBallastParameters>>();
 
 	@Inject
@@ -50,10 +50,10 @@ public class StandardContractBuilder implements IBuilderExtension {
 	@Inject
 	private Injector injector;
 
-	public StandardContractBuilder() {
+	public StandardContractBuilderExtension() {
 	}
 
-	public StandardContractBuilder(final ModelEntityMap map) {
+	public StandardContractBuilderExtension(final ModelEntityMap map) {
 		this.map = map;
 	}
 
