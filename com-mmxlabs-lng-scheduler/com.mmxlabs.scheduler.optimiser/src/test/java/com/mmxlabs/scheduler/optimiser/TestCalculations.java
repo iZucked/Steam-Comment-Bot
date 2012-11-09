@@ -48,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -155,6 +156,8 @@ public class TestCalculations {
 		final IRouteCostProvider routeCostProvider = data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class);
 		scheduler.setRouteCostProvider(routeCostProvider);
 		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
+		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
+		voyageCalculator.setPortCVProvider(portCVProvider);
 		voyageCalculator.init();
 
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
@@ -584,6 +587,10 @@ public class TestCalculations {
 		final IRouteCostProvider routeCostProvider = data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class);
 		scheduler.setRouteCostProvider(routeCostProvider);
 		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
+
+		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
+		voyageCalculator.setPortCVProvider(portCVProvider);
+
 		voyageCalculator.init();
 
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
@@ -1012,6 +1019,8 @@ public class TestCalculations {
 		final IRouteCostProvider routeCostProvider = data.getDataComponentProvider(SchedulerConstants.DCP_routePriceProvider, IRouteCostProvider.class);
 		scheduler.setRouteCostProvider(routeCostProvider);
 		voyageCalculator.setRouteCostDataComponentProvider(routeCostProvider);
+		final IPortCVProvider portCVProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portCVProvider, IPortCVProvider.class);
+		voyageCalculator.setPortCVProvider(portCVProvider);
 		voyageCalculator.init();
 
 		final VoyagePlanOptimiser voyagePlanOptimiser = new VoyagePlanOptimiser(voyageCalculator);
