@@ -84,7 +84,7 @@ public class SanityCheckTools {
 					inputCargoes[i++] = c;
 
 					duration += 25;
-					cargoStart.setTime(cargoStart.getTime() + TimeUnit.DAYS.toMillis(1));
+					cargoStart.setTime(cargoStart.getTime() + TimeUnit.DAYS.toMillis(10));
 
 				} else {
 
