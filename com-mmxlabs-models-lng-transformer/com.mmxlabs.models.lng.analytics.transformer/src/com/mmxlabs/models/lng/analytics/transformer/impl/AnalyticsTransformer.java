@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.analytics.transformer.impl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -406,7 +407,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 					}
 				};
 
-//				injector.injectMembers(scheduler);
+				// injector.injectMembers(scheduler);
 				SchedulerUtils.setDataComponentProviders(data, scheduler);
 				scheduler.setVoyagePlanOptimiser(optimiser);
 				scheduler.init();
@@ -435,11 +436,16 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 					final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
 
+					final Map<FuelComponent, Integer[]> voyageSums = new EnumMap<FuelComponent, Integer[]>(FuelComponent.class);
+
 					// unpack costs from plan
 					createPortCostComponent(line.addExtraData("loading", "1 Loading"), ports, pricing, spec, (PortDetails) plan.getSequence()[0]);
 					createVoyageCostComponent(line.addExtraData("laden", "2 Laden Journey"), spec, (VoyageDetails) plan.getSequence()[1]);
+					sumVoyageCostComponent(spec, (VoyageDetails) plan.getSequence()[1], voyageSums);
 					createPortCostComponent(line.addExtraData("discharging", "3 Discharging"), ports, pricing, spec, (PortDetails) plan.getSequence()[2]);
 					createVoyageCostComponent(line.addExtraData("ballast", "4 Ballast Journey"), spec, (VoyageDetails) plan.getSequence()[3]);
+					sumVoyageCostComponent(spec, (VoyageDetails) plan.getSequence()[3], voyageSums);
+
 					int totalDuration = 0;
 					int totalFuelCost = 0;
 					int totalRouteCost = 0;
@@ -491,7 +497,20 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 						final ExtraData summary = line.addExtraData("summary", "Summary", line.getTotalCost() / (double) line.getMmbtuDelivered(), ExtraDataFormatType.STRING_FORMAT);
 						summary.setFormat("$%,f");
 						summary.addExtraData("duration", "Duration", totalDuration, ExtraDataFormatType.DURATION);
-						summary.addExtraData("fuelcost", "Fuel Cost", totalFuelCost, ExtraDataFormatType.CURRENCY);
+						final ExtraData fuelCostData = summary.addExtraData("fuelcost", "Fuel Cost", totalFuelCost, ExtraDataFormatType.CURRENCY);
+
+						{
+							for (final FuelComponent component : FuelComponent.values()) {
+
+								if (voyageSums.containsKey(component)) {
+									final Integer[] sums = voyageSums.get(component);
+									// totalFuelCost += componentCost;
+									final ExtraData componentData = fuelCostData.addExtraData(component.name(), component.name(), sums[1], ExtraDataFormatType.CURRENCY);
+									componentData.addExtraData("quantity", "Usage (" + component.getDefaultFuelUnit().name() + ")", sums[0], ExtraDataFormatType.INTEGER);
+								}
+							}
+						}
+
 						summary.addExtraData("routecost", "Route Cost", totalRouteCost, ExtraDataFormatType.CURRENCY);
 						summary.addExtraData("portcost", "Port Cost", totalPortCost, ExtraDataFormatType.CURRENCY);
 						summary.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * totalDuration) / 24, ExtraDataFormatType.CURRENCY);
@@ -562,6 +581,30 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 		d.setValue(totalCost);
 		d.setFormatType(ExtraDataFormatType.CURRENCY);
 		d.addExtraData("hirecost", "Hire Cost", hireCost, ExtraDataFormatType.CURRENCY);
+	}
+
+	private void sumVoyageCostComponent(final UnitCostMatrix spec, final VoyageDetails voyageDetails, final Map<FuelComponent, Integer[]> sums) {
+
+		for (final FuelComponent component : FuelComponent.values()) {
+			final long consumption = voyageDetails.getFuelConsumption(component, component.getDefaultFuelUnit());
+			final int unitPrice = voyageDetails.getFuelUnitPrice(component);
+
+			if (consumption == 0) {
+				continue;
+			}
+			Integer[] data;
+			if (sums.containsKey(component)) {
+				data = sums.get(component);
+			} else {
+				data = new Integer[2];
+				data[0] = new Integer(0);
+				data[1] = new Integer(0);
+				sums.put(component, data);
+			}
+			data[0] = data[0].intValue() + OptimiserUnitConvertor.convertToExternalVolume(consumption);
+			final int componentCost = OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.costFromConsumption(consumption, unitPrice));
+			data[1] = data[1].intValue() + componentCost;
+		}
 	}
 
 	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final UnitCostMatrix spec, final PortDetails portDetails) {
