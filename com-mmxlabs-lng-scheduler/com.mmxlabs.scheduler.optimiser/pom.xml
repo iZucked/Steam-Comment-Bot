@@ -67,6 +67,7 @@
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
+			<version>${guava-osgi.version}</version>
 		</dependency>
 		
 		<dependency>
