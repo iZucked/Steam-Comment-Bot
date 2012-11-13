@@ -133,17 +133,17 @@
 <repository location="http://download.eclipse.org/eclipse/updates/3.8"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser.source" version="2.0.0.201211121458"/>
-<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="2.0.0.201211121458"/>
-<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.1.201211011232"/>
-<unit id="com.mmxlabs.optimiser.optimiser-common.source" version="1.1.1.201211121457"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core.source" version="1.1.1.201211121457"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga.source" version="1.1.1.201211121457"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso.source" version="1.1.1.201211121457"/>
-<unit id="com.mmxlabs.optimiser.optimiser-common" version="1.1.1.201211121457"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core" version="1.1.1.201211121457"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.1.1.201211121457"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.1.201211121457"/>
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser.source" version="0.0.0"/>
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="0.0.0"/>
+<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
 </locations>
