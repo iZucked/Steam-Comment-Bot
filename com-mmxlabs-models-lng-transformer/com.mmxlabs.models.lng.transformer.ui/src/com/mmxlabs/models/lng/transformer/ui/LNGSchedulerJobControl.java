@@ -29,9 +29,11 @@ import org.eclipse.ui.progress.IProgressConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.ConfigurationException;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 import com.mmxlabs.common.CollectionsUtil;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.jobmanager.eclipse.jobs.impl.AbstractEclipseJobControl;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
@@ -57,10 +59,12 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.PostExportProcessorModule;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -97,7 +101,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 	private static final ImageDescriptor imgEval = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "icons/evaluate_schedule.gif");
 
 	private Injector injector = null;
-	
+
 	public LNGSchedulerJobControl(final LNGSchedulerJobDescriptor jobDescriptor) {
 		super((jobDescriptor.isOptimising() ? "Optimise " : "Evaluate ") + jobDescriptor.getJobName(), CollectionsUtil.<QualifiedName, Object> makeHashMap(IProgressConstants.ICON_PROPERTY,
 				(jobDescriptor.isOptimising() ? imgOpti : imgEval)));
@@ -113,16 +117,14 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		startTimeMillis = System.currentTimeMillis();
 
 		final LNGTransformer transformer = new LNGTransformer(scenario);
-		
+
 		injector = transformer.getInjector();
 
 		// final IOptimisationData data = transformer.getOptimisationData();
 		entities = transformer.getEntities();
 
-		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = transformer.getOptimiserAndContext();
-
-		final IOptimisationContext context = optAndContext.getFirst();
-		optimiser = optAndContext.getSecond();
+		final IOptimisationContext context = transformer.getOptimisationContext();
+		optimiser = transformer.getOptimiser();
 
 		// because we are driving the optimiser ourself, so we can be paused, we
 		// don't actually get progress callbacks.
@@ -167,9 +169,10 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		}
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
-		childInjector.injectMembers(exporter);
-
+		{
+			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
+			childInjector.injectMembers(exporter);
+		}
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		final InputModel inputModel = scenario.getSubModel(InputModel.class);
@@ -185,7 +188,21 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			}
 			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
 			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
-			command.append(derive(editingDomain, schedule, inputModel, cargoModel));
+
+			final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
+
+			final Key<List<IPostExportProcessor>> key = Key.get(new TypeLiteral<List<IPostExportProcessor>>() {
+			});
+
+			Iterable<IPostExportProcessor> postExportProcessors;
+			try {
+				postExportProcessors = (Iterable<IPostExportProcessor>) childInjector.getInstance(key);
+				//
+			} catch (final ConfigurationException e) {
+				postExportProcessors = null;
+			}
+
+			command.append(derive(editingDomain, schedule, inputModel, cargoModel, postExportProcessors));
 			// command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Dirty(), false));
 		} finally {
 			if (domain instanceof CommandProviderAwareEditingDomain) {
@@ -286,7 +303,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		return true;
 	}
 
-	private Command derive(final EditingDomain domain, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel) {
+	private Command derive(final EditingDomain domain, final Schedule schedule, final InputModel inputModel, final CargoModel cargoModel, final Iterable<IPostExportProcessor> postExportProcessors) {
 		final CompoundCommand cmd = new CompoundCommand("Update Vessel Assignments");
 
 		final HashSet<UUIDObject> previouslyLocked = new HashSet<UUIDObject>();
@@ -386,9 +403,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 					cmd.append(AssignmentEditorHelper.unassignElement(domain, inputModel, c));
 					cmd.append(DeleteCommand.create(domain, c));
 				}
-
 			}
-
 			if (eObj instanceof SpotSlot) {
 				final SpotSlot spotSlot = (SpotSlot) eObj;
 				// Market slot, we can remove it.
@@ -401,6 +416,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			}
 			// Remove from the unused elements list
 			cmd.append(RemoveCommand.create(domain, schedule, SchedulePackage.eINSTANCE.getSchedule_UnusedElements(), eObj));
+
 		}
 
 		// TODO: We do not expect to get here!
@@ -475,6 +491,11 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
 		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), blank));
 
+		if (postExportProcessors != null) {
+			for (final IPostExportProcessor processor : postExportProcessors) {
+				processor.postProcess(domain, scenario, schedule, inputModel, cmd);
+			}
+		}
 		return cmd;
 
 	}
