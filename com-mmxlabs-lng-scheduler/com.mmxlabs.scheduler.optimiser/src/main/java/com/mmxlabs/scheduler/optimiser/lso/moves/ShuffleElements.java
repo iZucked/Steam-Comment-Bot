@@ -53,13 +53,24 @@ public class ShuffleElements implements IMove {
 
 		/**
 		 * Add a new {@link From} instruction. Use the {@link ISequenceElement} in the {@link ISequence} for the given {@link IResource} at the specified index position. This variant also stores the
-		 * expected {@link ISequenceElement} used for debugging.
+		 * expected {@link ISequenceElement} used for debugging. This variation takes an alternative element to use in the corresponding To.
 		 * 
 		 * @param resource
 		 * @param index
 		 */
 		public void addFrom(final IResource resource, final int index, final ISequenceElement element) {
 			froms.add(new From(resource, index, element));
+		}
+
+		/**
+		 * Add a new {@link From} instruction. Use the {@link ISequenceElement} in the {@link ISequence} for the given {@link IResource} at the specified index position. This variant also stores the
+		 * expected {@link ISequenceElement} used for debugging.
+		 * 
+		 * @param resource
+		 * @param index
+		 */
+		public void addFrom(final IResource resource, final int index, final ISequenceElement element, ISequenceElement alternative) {
+			froms.add(new From(resource, index, element, alternative));
 		}
 
 		/**
@@ -91,17 +102,27 @@ public class ShuffleElements implements IMove {
 		public final IResource resource;
 		public final int index;
 		public final ISequenceElement element;
+		public final ISequenceElement alternativeElement;
 
 		public From(final IResource resource, final int index) {
 			this.resource = resource;
 			this.index = index;
 			this.element = null;
+			this.alternativeElement = null;
 		}
 
 		public From(final IResource resource, final int index, final ISequenceElement element) {
 			this.resource = resource;
 			this.index = index;
 			this.element = element;
+			this.alternativeElement = null;
+		}
+
+		public From(final IResource resource, final int index, final ISequenceElement element, final ISequenceElement alternativeElement) {
+			this.resource = resource;
+			this.index = index;
+			this.element = element;
+			this.alternativeElement = alternativeElement;
 		}
 	}
 
@@ -182,14 +203,20 @@ public class ShuffleElements implements IMove {
 				}
 			}
 			final IModifiableSequence seq = from.resource == null ? null : sequences.getModifiableSequence(from.resource);
+
 			final ISequenceElement e = removeElement(seq, spare, from.index - offset);
 			if (from.element != null) {
 				if (from.element != e) {
-					throw new IllegalStateException("Removing unexpeced element");
+					throw new IllegalStateException("Removing unexpected element");
 				}
 
 			}
-			insertionElements.add(e);
+			// If we have an alternative element, instead of inserting the element we have just removed, we insert the alternative element.
+			if (from.alternativeElement != null) {
+				insertionElements.add(from.alternativeElement);
+			} else {
+				insertionElements.add(e);
+			}
 			seenFroms.add(from);
 		}
 		// Add the new elements
