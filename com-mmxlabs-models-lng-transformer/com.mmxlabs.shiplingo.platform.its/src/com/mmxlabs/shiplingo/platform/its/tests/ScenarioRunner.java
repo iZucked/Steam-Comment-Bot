@@ -4,16 +4,17 @@
  */
 package com.mmxlabs.shiplingo.platform.its.tests;
 
-import com.mmxlabs.common.Pair;
+import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
 
@@ -27,7 +28,6 @@ public class ScenarioRunner {
 
 	private final MMXRootObject scenario;
 
-	private IOptimisationData data;
 	private IOptimisationContext context;
 	private ResourcelessModelEntityMap entities;
 	private LocalSearchOptimiser optimiser;
@@ -35,6 +35,8 @@ public class ScenarioRunner {
 	private Schedule intialSchedule;
 
 	private Schedule finalSchedule;
+
+	private Injector injector;
 
 	public ScenarioRunner(final MMXRootObject scenario) {
 		this.scenario = scenario;
@@ -60,14 +62,12 @@ public class ScenarioRunner {
 
 		final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
 
+		injector = transformer.getInjector();
+
 		entities = transformer.getEntities();
 
-		data = transformer.getOptimisationData();
-
-		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = transformer.getOptimiserAndContext();
-
-		context = optAndContext.getFirst();
-		optimiser = optAndContext.getSecond();
+		context = transformer.getOptimisationContext();
+		optimiser = transformer.getOptimiser();
 
 		// because we are driving the optimiser ourself, so we can be paused, we
 		// don't actually get progress callbacks.
@@ -88,7 +88,9 @@ public class ScenarioRunner {
 
 	private Schedule exportSchedule(final IAnnotatedSolution solution) {
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		// TODO add trading exporter extension?
+		final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
+		childInjector.injectMembers(exporter);
+
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
 
 		return schedule;

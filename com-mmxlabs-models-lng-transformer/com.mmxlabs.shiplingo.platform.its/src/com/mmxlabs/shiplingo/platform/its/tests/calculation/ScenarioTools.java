@@ -17,11 +17,10 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
-import com.mmxlabs.common.Pair;
+import com.google.inject.Injector;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
@@ -64,16 +63,15 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
-import com.mmxlabs.models.lng.transformer.ScenarioUtils;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
+import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
+import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.optimiser.lso.impl.NullOptimiserProgressMonitor;
@@ -647,7 +645,7 @@ public class ScenarioTools {
 	public static Schedule evaluate(final MMXRootObject scenario) {
 
 		final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
-		
+
 		// Code to dump out the scenario to disk
 		if (false) {
 			try {
@@ -659,14 +657,9 @@ public class ScenarioTools {
 		}
 
 		final ResourcelessModelEntityMap entities = transformer.getEntities();
-		final IOptimisationTransformer ot = transformer.getOptimisationTransformer();
 
-		final IOptimisationData data = transformer.getOptimisationData();
-
-		final Pair<IOptimisationContext, LocalSearchOptimiser> optAndContext = transformer.getOptimiserAndContext();
-
-		final IOptimisationContext context = optAndContext.getFirst();
-		final LocalSearchOptimiser optimiser = optAndContext.getSecond();
+		final IOptimisationContext context = transformer.getOptimisationContext();
+		final LocalSearchOptimiser optimiser = transformer.getOptimiser();
 
 		optimiser.setProgressMonitor(new NullOptimiserProgressMonitor());
 
@@ -674,7 +667,9 @@ public class ScenarioTools {
 		final IAnnotatedSolution startSolution = optimiser.start(context);
 
 		final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		// TODO add trading extension?
+		final Injector childInjector = transformer.getInjector().createChildInjector(new ExporterExtensionsModule());
+		childInjector.injectMembers(exporter);
+
 		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
 
 		return schedule;
@@ -747,11 +742,11 @@ public class ScenarioTools {
 
 		for (final FuelQuantity fq : fuelQuantities) {
 			// FIXME: Update for API changes
-			
+
 			for (FuelAmount fa : fq.getAmounts()) {
-			System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost());
+				System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost());
 			}
-//			 System.err.println("\t" + fq.getFuel() + " " + fq.getAmounts(). + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
+			// System.err.println("\t" + fq.getFuel() + " " + fq.getAmounts(). + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
 		}
 	}
 
@@ -845,8 +840,6 @@ public class ScenarioTools {
 		final Resource manifestResource = resourceSet.createResource(manifestURI);
 
 		manifestResource.getContents().add(manifest);
-
-		final URIConverter conv = resourceSet.getURIConverter();
 
 		int index = 0;
 		// long l = System.currentTimeMillis();
