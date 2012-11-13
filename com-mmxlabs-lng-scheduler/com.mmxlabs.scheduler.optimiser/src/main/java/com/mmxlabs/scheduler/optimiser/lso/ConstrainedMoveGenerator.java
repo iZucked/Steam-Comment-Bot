@@ -15,16 +15,22 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import javax.inject.Inject;
+
+import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.impl.Resource;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
@@ -63,7 +69,9 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	protected final Map<ISequenceElement, Followers<ISequenceElement>> validPreceeders = new HashMap<ISequenceElement, Followers<ISequenceElement>>();
 
 	/**
-	 * A reverse lookup table from elements to positions
+	 * A reverse lookup table from elements to positions. The {@link Pair} is a item containing {@link Resource} index and position within the {@link ISequence}. There are some special cases here. A
+	 * null Resource index means the {@link ISequenceElement} is not part of the main set of sequences. A value of zero or more indicates the position within the {@link ISequences#getUnusedElements()}
+	 * list. A negative number means it is not for normal use. Currently -1 means the element is the unused pair of an alternative (@see {@link IAlternativeElementProvider}
 	 */
 	protected final Map<ISequenceElement, Pair<Integer, Integer>> reverseLookup = new HashMap<ISequenceElement, Pair<Integer, Integer>>();
 
@@ -125,16 +133,26 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		}
 	}
 
-	private final LegalSequencingChecker checker;
+	private LegalSequencingChecker checker;
 
-	private final SequencesConstrainedMoveGeneratorUnit sequencesMoveGenerator;
-	private final OptionalConstrainedMoveGeneratorUnit optionalMoveGenerator;
-	private final ShuffleElementsMoveGenerator shuffleMoveGenerator;
+	private SequencesConstrainedMoveGeneratorUnit sequencesMoveGenerator;
+	private OptionalConstrainedMoveGeneratorUnit optionalMoveGenerator;
+	private ShuffleElementsMoveGenerator shuffleMoveGenerator;
 
 	protected final IOptimisationContext context;
 
+	@Inject
+	private IAlternativeElementProvider alternativeElementProvider;
+
+	@Inject
+	private Injector injector;
+
 	public ConstrainedMoveGenerator(final IOptimisationContext context) {
 		this.context = context;
+	}
+
+	@Inject
+	public void init() {
 		this.checker = new LegalSequencingChecker(context);
 		checker.disallowLateness();
 		final IOptimisationData data = context.getOptimisationData();
@@ -180,17 +198,26 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		}
 
 		this.sequencesMoveGenerator = new SequencesConstrainedMoveGeneratorUnit(this);
+		injector.injectMembers(sequencesMoveGenerator);
+
 		this.shuffleMoveGenerator = new ShuffleElementsMoveGenerator(this);
+		injector.injectMembers(shuffleMoveGenerator);
+
 		if (context.getOptimisationData().getDataComponentProviders().contains(SchedulerConstants.DCP_optionalElementsProvider)) {
 			final IOptionalElementsProvider optionalElementsProvider = context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider,
 					IOptionalElementsProvider.class);
 			if (optionalElementsProvider.getOptionalElements().size() > 0) {
 				this.optionalMoveGenerator = new OptionalConstrainedMoveGeneratorUnit(this);
+				injector.injectMembers(optionalMoveGenerator);
 			} else {
 				this.optionalMoveGenerator = null;
 			}
 		} else {
 			this.optionalMoveGenerator = null;
+		}
+
+		if (random == null) {
+			throw new IllegalStateException("Random number generator has not been set");
 		}
 	}
 
@@ -218,7 +245,13 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		for (int i = 0; i < sequences.size(); i++) {
 			final ISequence sequence = sequences.getSequence(i);
 			for (int j = 0; j < sequence.size(); j++) {
-				reverseLookup.get(sequence.get(j)).setBoth(i, j);
+				ISequenceElement element = sequence.get(j);
+				reverseLookup.get(element).setBoth(i, j);
+				if (alternativeElementProvider.hasAlternativeElement(element)) {
+					final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
+					// Negative numbers now indicate alternative
+					reverseLookup.get(alt).setBoth(null, -1);
+				}
 			}
 		}
 
@@ -226,6 +259,10 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		int x = 0;
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			reverseLookup.get(element).setBoth(null, x);
+			if (alternativeElementProvider.hasAlternativeElement(element)) {
+				ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
+				reverseLookup.get(alt).setBoth(null, -1);
+			}
 			x++;
 		}
 
@@ -238,11 +275,5 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	public void setRandom(final Random random) {
 		this.random = random;
-	}
-
-	public void init() {
-		if (random == null) {
-			throw new IllegalStateException("Random number generator has not been set");
-		}
 	}
 }

@@ -12,6 +12,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import com.google.common.collect.Lists;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
@@ -27,6 +29,7 @@ import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator.Followers;
 import com.mmxlabs.scheduler.optimiser.lso.moves.ShuffleElements.ShuffleElementsBuilder;
+import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 
 /**
  * A module for the {@link ConstrainedMoveGenerator} handles moves on a per slot basis. This moved generator selects single slot and attempts to move it next to another preceder or follower in another
@@ -39,17 +42,27 @@ import com.mmxlabs.scheduler.optimiser.lso.moves.ShuffleElements.ShuffleElements
  */
 public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUnit {
 	private final ConstrainedMoveGenerator owner;
-	private final IOptionalElementsProvider optionalElementsProvider;
-	private final IResourceAllocationConstraintDataComponentProvider racDCP;
 
-	private final List<ISequenceElement> targetElements;
+	@Inject
+	private IOptionalElementsProvider optionalElementsProvider;
+
+	@Inject
+	private IResourceAllocationConstraintDataComponentProvider racDCP;
+
+	@Inject
+	private IAlternativeElementProvider alternativeElementProvider;
+
+	private List<ISequenceElement> targetElements;
 
 	public ShuffleElementsMoveGenerator(final ConstrainedMoveGenerator owner) {
 		super();
 		this.owner = owner;
 		this.optionalElementsProvider = owner.context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
 		this.racDCP = owner.context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, IResourceAllocationConstraintDataComponentProvider.class);
-
+	}
+	
+	@Inject
+	public void init() {
 		targetElements = new ArrayList<ISequenceElement>(owner.context.getOptimisationData().getSequenceElements().size());
 		// Determine possible slots which can be moved.
 		for (final ISequenceElement e : owner.context.getOptimisationData().getSequenceElements()) {
@@ -58,6 +71,9 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 			final Collection<IResource> resources = racDCP.getAllowedResources(e);
 			if ((resources != null && resources.size() > 1) || optionalElementsProvider.isElementOptional(e)) {
 				targetElements.add(e);
+			} else if (alternativeElementProvider.hasAlternativeElement(e)) {
+				targetElements.add(e);
+				targetElements.add(alternativeElementProvider.getAlternativeElement(e));
 			}
 		}
 	}
@@ -74,17 +90,30 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 		if (targetElements.isEmpty()) {
 			return null;
 		}
-		
-		
+
 		final ShuffleElementsBuilder builder = new ShuffleElementsBuilder();
 
 		// Set of elements already considered in our move. They should no longer be considered available or in the follower or preceders lists
 		final Set<ISequenceElement> touchedElements = new HashSet<ISequenceElement>();
-		final ISequenceElement element = RandomHelper.chooseElementFrom(owner.getRandom(), targetElements);
-		final Pair<Integer, Integer> elementPosition = owner.reverseLookup.get(element);
+		final ISequenceElement rawElement = RandomHelper.chooseElementFrom(owner.getRandom(), targetElements);
+		final Pair<Integer, Integer> elementPosition = owner.reverseLookup.get(rawElement);
 		final IResource elementResource = elementPosition.getFirst() == null ? null : owner.getSequences().getResources().get(elementPosition.getFirst());
 		final ISequence elementSequence = owner.getSequences().getSequence(elementResource);
-		touchedElements.add(element);
+		touchedElements.add(rawElement);
+		
+		if (elementPosition.getSecond() == -1) {
+			return null;
+		}
+
+		// If there is an alternative, randomly choose to use it.
+		// TODO: Work into the decisions more directly to be more effective.
+		final ISequenceElement alternativeElement;
+		if (alternativeElementProvider.hasAlternativeElement(rawElement) && owner.getRandom().nextBoolean()) {
+			alternativeElement = alternativeElementProvider.getAlternativeElement(rawElement);
+		} else {
+			alternativeElement = null;
+		}
+		final ISequenceElement element = alternativeElement == null ? rawElement : alternativeElement;
 
 		boolean foundMove = false;
 		// Link to a follower or preceder
@@ -118,7 +147,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 
 				if (owner.validFollowers.get(followerMinus1).contains(element)) {
 					// We can link the head and tail together directly - no need to do more.
-					builder.addFrom(elementResource, elementPosition.getSecond(), element);
+					builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 					builder.addTo(followerResource, followerPosition.getSecond(), 1);
 					foundMove = true;
 					break;
@@ -128,7 +157,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 					if (owner.getRandom().nextBoolean() && owner.validFollowers.get(followerMinus2).contains(element)) {
 
 						if (removeOrBackfill(builder, followerMinus1, touchedElements)) {
-							builder.addFrom(elementResource, elementPosition.getSecond(), element);
+							builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 							builder.addTo(followerResource, followerPosition.getSecond(), 1);
 							// Yey1
 							touchedElements.add(followerMinus1);
@@ -151,7 +180,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 						final Pair<Integer, Integer> candidatePosition = owner.reverseLookup.get(candidate);
 						// Finally! an element we can add to the sequence to make it valid.
 						builder.addFrom(null, candidatePosition.getSecond());
-						builder.addFrom(elementResource, elementPosition.getSecond(), element);
+						builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 						builder.addTo(followerResource, followerPosition.getSecond(), 2);
 
 						touchedElements.add(follower);
@@ -188,7 +217,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 				final ISequenceElement precederPlus1 = precederSequence.get(precederPosition.getSecond() + 1);
 
 				if (owner.validPreceeders.get(precederPlus1).contains(element)) {
-					builder.addFrom(elementResource, elementPosition.getSecond(), element);
+					builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 					builder.addTo(precederResource, precederPosition.getSecond() + 1, 1);
 					// We can link the head and tail together directly - no need to do more.
 					foundMove = true;
@@ -199,7 +228,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 					final ISequenceElement precederPlus2 = precederSequence.get(precederPosition.getSecond() + 2);
 					if (owner.validPreceeders.get(precederPlus2).contains(element)) {
 						if (removeOrBackfill(builder, precederPlus1, touchedElements)) {
-							builder.addFrom(elementResource, elementPosition.getSecond(), element);
+							builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 							builder.addTo(precederResource, precederPosition.getSecond() + 1, 1);
 
 							touchedElements.add(precederPlus1);
@@ -221,7 +250,7 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 						final ISequenceElement candidate = l.get(owner.getRandom().nextInt(l.size()));
 						final Pair<Integer, Integer> candidatePosition = owner.reverseLookup.get(candidate);
 						// Finally! an element we can add to the sequence to make it valid.
-						builder.addFrom(elementResource, elementPosition.getSecond(), element);
+						builder.addFrom(elementResource, elementPosition.getSecond(), rawElement, alternativeElement);
 						builder.addFrom(null, candidatePosition.getSecond(), candidate);
 						builder.addTo(precederResource, precederPosition.getSecond() + 1, 2);
 

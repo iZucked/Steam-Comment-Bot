@@ -149,6 +149,10 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 				final ISequenceElement follower = followers.get(RandomHelper.nextIntBetween(owner.random, 0, followers.size() - 1));
 				// check whether follower is already in the solution somewhere
 				final Pair<Integer, Integer> followerPosition = owner.reverseLookup.get(follower);
+				if (followerPosition.getSecond() == -1) {
+					continue;
+				}
+
 				if (followerPosition.getFirst() != null) {
 					// follower is not currently unused, so we need to find what's before it
 					final int sequence = followerPosition.getFirst();
@@ -201,6 +205,9 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 						LOOP_ELEMENTS: for (final ISequenceElement candidate : candidates) {
 							final Pair<Integer, Integer> candidatePosition = owner.reverseLookup.get(candidate);
+							if (candidatePosition.getSecond() == -1) {
+								continue;
+							}
 							if (owner.validFollowers.get(candidate).contains(unused)) {
 								if (candidatePosition.getFirst() == null) {
 									// candidate is currently spare, and can go between beforeFollower and unused, so we have
