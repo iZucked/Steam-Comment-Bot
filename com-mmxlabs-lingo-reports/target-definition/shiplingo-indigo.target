@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="MMXLabs Workspace Target" sequenceNumber="44">
+<?pde version="3.8"?><target name="MMXLabs Workspace Target" sequenceNumber="46">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="2.0.1.RELEASE"/>
 <unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="2.0.1.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="2.3.0.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="2.3.0.RELEASE"/>
-<unit id="com.mmxlabs.optimiser.optimiser-common" version="1.1.0.201210301503"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core" version="1.1.0.201210301503"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.1.0.201210301503"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.0.201210301503"/>
 <unit id="com.mmxlabs.common.common-util" version="2.0.2.201211061234"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="0.0.0"/>
-<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="0.0.0"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="0.0.0"/>
@@ -119,14 +110,16 @@
 <repository location="http://www.eclipse.org/swt/updates/3.8"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.google.guava" version="11.0.1"/>
-<unit id="com.google.guava.source" version="11.0.1"/>
-<unit id="org.ops4j.peaberry.activation.source" version="1.2.0"/>
-<unit id="org.ops4j.peaberry.eclipse.source" version="1.2.0"/>
-<unit id="org.ops4j.peaberry.source" version="1.2.0"/>
-<unit id="org.ops4j.peaberry.activation" version="1.2.0"/>
-<unit id="org.ops4j.peaberry" version="1.2.0"/>
-<unit id="org.ops4j.peaberry.eclipse" version="1.2.0"/>
+<unit id="json-simple.source.source" version="1.1.1"/>
+<unit id="org.ops4j.peaberry.activation.source" version="1.3.0"/>
+<unit id="org.ops4j.peaberry.eclipse.source" version="1.3.0"/>
+<unit id="org.ops4j.peaberry.source" version="1.3.0"/>
+<unit id="com.google.guava" version="13.0.1"/>
+<unit id="com.google.guava.source" version="13.0.1"/>
+<unit id="com.googlecode.json-simple" version="1.1.1"/>
+<unit id="org.ops4j.peaberry.activation" version="1.3.0"/>
+<unit id="org.ops4j.peaberry" version="1.3.0"/>
+<unit id="org.ops4j.peaberry.eclipse" version="1.3.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -138,6 +131,20 @@
 <unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
 <unit id="org.eclipse.jdt.annotation.source" version="0.0.0"/>
 <repository location="http://download.eclipse.org/eclipse/updates/3.8"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser.source" version="2.0.0.201211121458"/>
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="2.0.0.201211121458"/>
+<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.1.201211011232"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common.source" version="1.1.1.201211121457"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core.source" version="1.1.1.201211121457"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga.source" version="1.1.1.201211121457"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso.source" version="1.1.1.201211121457"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common" version="1.1.1.201211121457"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core" version="1.1.1.201211121457"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.1.1.201211121457"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.1.201211121457"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
 </locations>
 </target>
