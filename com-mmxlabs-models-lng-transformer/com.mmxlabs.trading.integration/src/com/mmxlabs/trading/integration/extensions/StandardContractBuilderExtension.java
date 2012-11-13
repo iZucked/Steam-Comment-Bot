@@ -28,11 +28,9 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.trading.optimiser.contracts.impl.BallastParameters;
 import com.mmxlabs.trading.optimiser.contracts.impl.NetbackContract;
 import com.mmxlabs.trading.optimiser.contracts.impl.ProfitSharingContract;
-import com.mmxlabs.trading.optimiser.contracts.impl.RedirectionContract;
 
 /**
  * Contract Transformer and Builder - this is the {@link IBuilderExtension} portion of the extension. See {@link StandardContractTransformerExtension} for the transformer / model side. This class creates the
@@ -113,10 +111,5 @@ public class StandardContractBuilderExtension implements IBuilderExtension {
 		}
 	}
 
-	public ILoadPriceCalculator createRedirectionContract(final IPort baseMarketPort, final ICurve purchasePriceCurve, final ICurve salesPriceCurve, final int notionalSpeed) {
 
-		final RedirectionContract contract = new RedirectionContract(purchasePriceCurve, salesPriceCurve, notionalSpeed, baseMarketPort);
-		injector.injectMembers(contract);
-		return contract;
-	}
 }
