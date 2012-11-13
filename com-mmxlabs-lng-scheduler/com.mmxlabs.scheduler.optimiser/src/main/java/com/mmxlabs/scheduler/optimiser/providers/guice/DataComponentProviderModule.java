@@ -41,6 +41,8 @@ import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.ArrayListCargoAllocationEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
@@ -74,6 +76,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapAlternativeElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapCharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapDiscountCurveEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
@@ -246,6 +249,10 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapPortCVProviderEditor portCVProviderEditor = new HashMapPortCVProviderEditor(SchedulerConstants.DCP_portCVProvider);
 		bind(IPortCVProvider.class).toInstance(portCVProviderEditor);
 		bind(IPortCVProviderEditor.class).toInstance(portCVProviderEditor);
+		
+		final HashMapAlternativeElementProviderEditor alternativeElementProviderEditor = new HashMapAlternativeElementProviderEditor(SchedulerConstants.DCP_alternativeElementProvider);
+		bind(IAlternativeElementProvider.class).toInstance(alternativeElementProviderEditor);
+		bind(IAlternativeElementProviderEditor.class).toInstance(alternativeElementProviderEditor);
 	}
 
 	/**

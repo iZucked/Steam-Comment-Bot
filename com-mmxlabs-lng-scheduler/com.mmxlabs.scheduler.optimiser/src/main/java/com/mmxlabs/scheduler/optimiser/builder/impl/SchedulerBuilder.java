@@ -81,6 +81,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IDateKeyProviderEditor;
@@ -258,6 +259,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Inject
 	private ICharterMarketProviderEditor charterMarketProviderEditor;
 
+	@Inject
+	private IAlternativeElementProvider alternativeElementProvider;
+	
 	/**
 	 * Fake vessel class for virtual elements.
 	 */
@@ -901,6 +905,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_discountCurveProvider, discountCurveProvider);
 
+		data.addDataComponentProvider(SchedulerConstants.DCP_alternativeElementProvider, alternativeElementProvider);
 		data.addDataComponentProvider(SchedulerConstants.DCP_vesselProvider, vesselProvider);
 		data.addDataComponentProvider(SchedulerConstants.DCP_timeWindowProvider, timeWindowProvider);
 		data.addDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, portDistanceProvider);

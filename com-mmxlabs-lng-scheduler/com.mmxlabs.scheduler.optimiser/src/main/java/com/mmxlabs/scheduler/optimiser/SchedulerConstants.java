@@ -90,4 +90,8 @@ public final class SchedulerConstants {
 	public static final String DCP_optionalElementsProvider = "provider-optional-elements";
 	public static final String DCP_slotGroupProvider = "provider-slot-group-count";
 	public static final String DCP_virtualVesselSlotProvider = "provider-virtual-vessel-slot-provider";
+	/**
+	 * @since 2.0
+	 */
+	public static final String DCP_alternativeElementProvider = "provider-alternative-element";
 }
