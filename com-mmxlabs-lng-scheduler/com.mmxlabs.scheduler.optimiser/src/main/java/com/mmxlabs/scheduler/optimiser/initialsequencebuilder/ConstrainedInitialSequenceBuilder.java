@@ -38,6 +38,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintChecker;
 import com.mmxlabs.scheduler.optimiser.lso.LegalSequencingChecker;
+import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
@@ -82,6 +83,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		}
 	}
 
+	@SuppressWarnings("serial")
 	class SequenceChunk extends ArrayList<ISequenceElement> {
 		int resourceCount;
 		private boolean endElement;
@@ -148,6 +150,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 		final LegalSequencingChecker checker = new LegalSequencingChecker(data, pairwiseCheckers);
 
+		final IAlternativeElementProvider alternativeElementProvider = data.getDataComponentProvider(SchedulerConstants.DCP_alternativeElementProvider, IAlternativeElementProvider.class);
+
 		final int initialMaxLateness = (travelTimeChecker == null) ? 0 : travelTimeChecker.getMaxLateness();
 
 		if (travelTimeChecker != null) {
@@ -171,6 +175,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		final Set<ISequenceElement> unsequencedElements = new LinkedHashSet<ISequenceElement>();
 		unsequencedElements.addAll(data.getSequenceElements());
 
+		unsequencedElements.removeAll(alternativeElementProvider.getAllAlternativeElements());
+		
 		// Remove elements in the initial suggestion from the unsequenced set
 		if (suggestion != null) {
 			for (final ISequence seq : suggestion.getSequences().values()) {
@@ -202,6 +208,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			// If there is a paring hint, then use this as the only possible follower information.
 			if (pairingHints.containsKey(element1)) {
 				after1.add(pairingHints.get(element1));
+				
 			} else {
 				// No paring hint, so build up the follower cache
 				for (final ISequenceElement element2 : data.getSequenceElements()) {
@@ -448,7 +455,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 							}
 						}
 						sequence.add(there);
-						for (ISequenceElement e : there) {
+						for (final ISequenceElement e : there) {
 							if (!sequencedElements.add(e)) {
 								log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
 							}
@@ -472,7 +479,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					final SequenceChunk chunk = new SequenceChunk();
 					chunk.add(element);
 					sequence.add(chunk);
-					for (ISequenceElement e : chunk) {
+					for (final ISequenceElement e : chunk) {
 						if (!sequencedElements.add(e)) {
 							log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
 						}
@@ -494,7 +501,8 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 					SECOND_INSERT_LOOP: while (iterator.hasNext()) {
 						final SequenceChunk there = iterator.next();
 
-						for (final ISequenceElement element : there) {
+						for (@SuppressWarnings("unused")
+						final ISequenceElement element : there) {
 							final IResource suggestedResource = resourceSuggestion.get(resource);
 							if ((suggestedResource != null) && (suggestedResource != resource)) {
 								continue SECOND_INSERT_LOOP;
@@ -503,7 +511,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 
 						if (chunkChecker.canFollow(here, there, resource)) {
 							sequence.add(there);
-							for (ISequenceElement e : there) {
+							for (final ISequenceElement e : there) {
 								if (!sequencedElements.add(e)) {
 									log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
 								}
@@ -629,6 +637,15 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 				}
 			}
 
+			final List<ISequenceElement> alternatives = new LinkedList<ISequenceElement>();
+			for (final ISequenceElement element : actualElements) {
+				if (alternativeElementProvider.hasAlternativeElement(element)) {
+					alternatives.add(alternativeElementProvider.getAlternativeElement(element));
+				}
+			}
+			actualElements.addAll(alternatives);
+			actualSize += alternatives.size();
+
 			assert actualSize == actualElements.size();
 			assert expectedSize == expectedElements.size();
 			assert expectedSize == actualSize;
@@ -637,11 +654,12 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		return result;
 	}
 
-	private boolean tryInsertingChunk(final ChunkChecker chunkChecker, final Iterator<SequenceChunk> iterator, final SequenceChunk here, final List<SequenceChunk> sequence, final IResource res, 	final Set<ISequenceElement> sequencedElements) {
+	private boolean tryInsertingChunk(final ChunkChecker chunkChecker, final Iterator<SequenceChunk> iterator, final SequenceChunk here, final List<SequenceChunk> sequence, final IResource res,
+			final Set<ISequenceElement> sequencedElements) {
 		if (here.isEndElement()) {
 			if (chunkChecker.canFollow(sequence.get(sequence.size() - 1), here, res)) {
 				sequence.add(here);
-				for (ISequenceElement e : here) {
+				for (final ISequenceElement e : here) {
 					if (!sequencedElements.add(e)) {
 						log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
 					}
@@ -654,7 +672,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			for (int i = 0; i < (sequence.size() - 1); i++) {
 				if (chunkChecker.canInsert(sequence.get(i), here, sequence.get(i + 1), res)) {
 					sequence.add(i + 1, here);
-					for (ISequenceElement e : here) {
+					for (final ISequenceElement e : here) {
 						if (!sequencedElements.add(e)) {
 							log.error(String.format("Sequence element %s has already been sequenced", e.getName()));
 						}
