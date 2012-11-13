@@ -1,5 +1,7 @@
 package com.mmxlabs.scheduler.optimiser.providers;
 
+import java.util.Collection;
+
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 
@@ -12,7 +14,42 @@ import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
  */
 public interface IAlternativeElementProvider extends IDataComponentProvider {
 
+	/**
+	 * Returns true if this element can be swapped for another alternative element. This could be the original or alternative
+	 * 
+	 * @param element
+	 * @return
+	 */
 	boolean hasAlternativeElement(ISequenceElement element);
 
+	/**
+	 * Returns the alternative (or the original) element to the given one.
+	 * 
+	 * @param element
+	 * @return
+	 */
 	ISequenceElement getAlternativeElement(ISequenceElement element);
+
+	/**
+	 * Returns true if this element is an alternative element - not an original.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	boolean isElementAlternative(ISequenceElement element);
+
+	/**
+	 * Returns true iff this element has been registered with the provider and is the original element.
+	 * 
+	 * @param element
+	 * @return
+	 */
+	boolean isElementOriginal(ISequenceElement element);
+
+	/**
+	 * Returns all the elements which are alternatives
+	 * 
+	 * @return
+	 */
+	Collection<ISequenceElement> getAllAlternativeElements();
 }
