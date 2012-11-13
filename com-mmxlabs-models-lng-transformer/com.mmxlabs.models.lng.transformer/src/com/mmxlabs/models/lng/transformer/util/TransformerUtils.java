@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer;
+package com.mmxlabs.models.lng.transformer.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,6 +39,7 @@ import com.mmxlabs.models.mmxcore.MMXSubModel;
  * Utility class for doing things to scenarios.
  * 
  * @author hinton
+ * @since 2.0
  * 
  */
 public class TransformerUtils {
@@ -97,20 +98,21 @@ public class TransformerUtils {
 		}
 		return (T) clazz.getInstanceClass().cast(resource.getContents().get(0));
 	}
-//
-//	public static <T> T readObjectFromFile(final String filepath, final Class<? extends T> clazz) {
-//		ResourceSet resourceSet = new ResourceSetImpl();
-//		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
-//		resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI, ScenarioPackage.eINSTANCE);
-//
-//		Resource resource = resourceSet.getResource(URI.createFileURI(filepath), true);
-//		for (EObject e : resource.getContents()) {
-//			if (clazz.isInstance(e)) {
-//				return clazz.cast(e);
-//			}
-//		}
-//		return null;
-//	}
+
+	//
+	// public static <T> T readObjectFromFile(final String filepath, final Class<? extends T> clazz) {
+	// ResourceSet resourceSet = new ResourceSetImpl();
+	// resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put(Resource.Factory.Registry.DEFAULT_EXTENSION, new XMIResourceFactoryImpl());
+	// resourceSet.getPackageRegistry().put(ScenarioPackage.eNS_URI, ScenarioPackage.eINSTANCE);
+	//
+	// Resource resource = resourceSet.getResource(URI.createFileURI(filepath), true);
+	// for (EObject e : resource.getContents()) {
+	// if (clazz.isInstance(e)) {
+	// return clazz.cast(e);
+	// }
+	// }
+	// return null;
+	// }
 
 	/**
 	 * Iterate through all the attributes of the given EObject and find the earliest and latest dates
@@ -282,7 +284,7 @@ public class TransformerUtils {
 		calendar.clear(Calendar.SECOND);
 		calendar.clear(Calendar.MILLISECOND);
 		final Date date = calendar.getTime();
-//		final DateAndOptionalTime daot = new DateAndOptionalTime(date, true);
+		// final DateAndOptionalTime daot = new DateAndOptionalTime(date, true);
 		return unsetOrSetNullValues(input, EcorePackage.eINSTANCE.getEDate(), date);
 	}
 

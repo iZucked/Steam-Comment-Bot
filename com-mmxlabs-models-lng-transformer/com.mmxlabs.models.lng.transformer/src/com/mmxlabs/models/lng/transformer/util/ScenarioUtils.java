@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer;
+package com.mmxlabs.models.lng.transformer.util;
 
 import org.eclipse.emf.common.util.EList;
 
@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
  * Utility class for handling scenarios.
  * 
  * @author hinton
+ * @since 2.0
  * 
  */
 public class ScenarioUtils {

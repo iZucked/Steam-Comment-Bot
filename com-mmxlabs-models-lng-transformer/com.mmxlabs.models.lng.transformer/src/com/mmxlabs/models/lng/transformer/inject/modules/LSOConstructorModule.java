@@ -114,6 +114,14 @@ public class LSOConstructorModule extends AbstractModule {
 		final int numberOfIterations = getNumberOfIterations(settings);
 
 		lso.setNumberOfIterations(numberOfIterations);
+		
+
+		// .. Should not be performed here, but needs to be somewhere.
+		// Need to co-ordinate with AnalyticsTransformer over the init method. Analytics Transformer creates the opt data manually.
+//		final ChainedSequencesManipulator sequencesManipulator = injector.getInstance(ChainedSequencesManipulator.class);
+		manipulator.init(context.getOptimisationData());
+
+		
 		lso.setSequenceManipulator(manipulator);
 
 		lso.setMoveGenerator(instrumenting ? instrumentingMoveGenerator : moveGenerator);
@@ -130,7 +138,7 @@ public class LSOConstructorModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private ConstrainedMoveGenerator provideConstrainedMoveGenerator(final IOptimisationContext context, final OptimiserSettings settings) {
+	private ConstrainedMoveGenerator provideConstrainedMoveGenerator(Injector injector, final IOptimisationContext context, final OptimiserSettings settings) {
 		// final MoveGeneratorSettings generatorSettings = settings.getMoveGeneratorSettings();
 		// if (generatorSettings != null && generatorSettings instanceof RandomMoveGeneratorSettings) {
 		// // Ideally this code should go in the EMF classes, to be honest.
@@ -148,6 +156,7 @@ public class LSOConstructorModule extends AbstractModule {
 		// } else {
 		final ConstrainedMoveGenerator cmg = new ConstrainedMoveGenerator(context);
 		cmg.setRandom(getRandom(settings));
+		injector.injectMembers(cmg);
 		cmg.init();
 		return cmg;
 		// }
@@ -295,11 +304,6 @@ public class LSOConstructorModule extends AbstractModule {
 	@Singleton
 	private Pair<IOptimisationContext, LocalSearchOptimiser> createOptimiserAndContext(final Injector injector, final IOptimisationContext context, final IOptimisationData data,
 			final LocalSearchOptimiser lso) {
-
-		// .. Should not be performed here, but needs to be somewhere.
-		// Need to co-ordinate with AnalyticsTransformer over the init method. Analytics Transformer creates the opt data manually.
-		final ChainedSequencesManipulator sequencesManipulator = injector.getInstance(ChainedSequencesManipulator.class);
-		sequencesManipulator.init(data);
 
 		return new Pair<IOptimisationContext, LocalSearchOptimiser>(context, lso);
 	}

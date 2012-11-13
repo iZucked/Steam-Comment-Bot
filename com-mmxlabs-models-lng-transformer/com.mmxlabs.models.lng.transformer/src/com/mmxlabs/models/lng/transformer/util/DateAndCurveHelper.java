@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.transformer;
+package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -9,6 +9,7 @@ import javax.management.timer.Timer;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
 

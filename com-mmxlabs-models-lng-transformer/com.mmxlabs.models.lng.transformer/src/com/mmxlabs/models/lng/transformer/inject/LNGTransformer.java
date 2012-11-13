@@ -20,7 +20,6 @@ import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
 import com.google.inject.util.Modules;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -64,7 +63,10 @@ public class LNGTransformer {
 	private Iterable<IOptimiserInjectorService> extraModules;
 
 	@Inject
-	private Pair<IOptimisationContext, LocalSearchOptimiser> contextAndOptimiser;
+	private IOptimisationContext context;
+
+	@Inject
+	private LocalSearchOptimiser optimiser;
 
 	public LNGTransformer(final MMXRootObject scenario) {
 		this(scenario, null);
@@ -188,9 +190,15 @@ public class LNGTransformer {
 	/**
 	 * @since 2.0
 	 */
-	public Pair<IOptimisationContext, LocalSearchOptimiser> getOptimiserAndContext() {
+	public IOptimisationContext getOptimisationContext() {
+		return context;
+	}
 
-		return contextAndOptimiser;
+	/**
+	 * @since 2.0
+	 */
+	public LocalSearchOptimiser getOptimiser() {
+		return optimiser;
 	}
 
 	/**

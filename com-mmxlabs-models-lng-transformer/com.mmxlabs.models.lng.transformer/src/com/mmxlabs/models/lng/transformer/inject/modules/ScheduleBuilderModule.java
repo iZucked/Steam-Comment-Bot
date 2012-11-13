@@ -18,9 +18,9 @@ import com.google.inject.Module;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
-import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
+import com.mmxlabs.models.lng.transformer.inject.IPostExportProcessorFactory;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 import com.mmxlabs.models.lng.transformer.internal.Activator;
 import com.mmxlabs.scheduler.optimiser.builder.IBuilderExtension;
@@ -45,6 +45,7 @@ public class ScheduleBuilderModule extends AbstractModule {
 			bind(iterable(IBuilderExtensionFactory.class)).toProvider(service(IBuilderExtensionFactory.class).multiple());
 			bind(iterable(ITransformerExtensionFactory.class)).toProvider(service(ITransformerExtensionFactory.class).multiple());
 			bind(iterable(IExporterExtensionFactory.class)).toProvider(service(IExporterExtensionFactory.class).multiple());
+			bind(iterable(IPostExportProcessorFactory.class)).toProvider(service(IPostExportProcessorFactory.class).multiple());
 		}
 	}
 
