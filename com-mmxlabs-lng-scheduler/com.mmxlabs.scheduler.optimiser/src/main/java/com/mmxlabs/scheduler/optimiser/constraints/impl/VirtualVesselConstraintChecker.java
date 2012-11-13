@@ -121,7 +121,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		if (vessel.getVesselInstanceType() != VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
+		if (vessel.getVesselInstanceType() != VesselInstanceType.FOB_SALE && vessel.getVesselInstanceType() != VesselInstanceType.DES_PURCHASE) {
 
 			if (virtualVesselSlotProvider.getVesselForElement(first) != null) {
 				return false;
