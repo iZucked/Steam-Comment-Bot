@@ -14,6 +14,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
 import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 
@@ -63,10 +64,11 @@ public class DateInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	protected void setControlsEnabled(final boolean enabled) {
-		if (formattedText.getControl().isDisposed()) {
+		Text control = formattedText.getControl();
+		if (control == null || control.isDisposed()) {
 			return;
 		}
-		formattedText.getControl().setEnabled(enabled);
+		control.setEnabled(enabled);
 
 		super.setControlsEnabled(enabled);
 	}
