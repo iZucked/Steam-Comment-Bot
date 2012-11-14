@@ -26,7 +26,7 @@ public class ValidationStatusComparator extends ViewerComparator {
 
 			int c = s2.getSeverity() - s1.getSeverity();
 			if (c == 0) {
-				c = s2.getMessage().compareTo(s1.getMessage());
+				c = s1.getMessage().compareTo(s2.getMessage());
 			}
 
 			if (c != 0) {
