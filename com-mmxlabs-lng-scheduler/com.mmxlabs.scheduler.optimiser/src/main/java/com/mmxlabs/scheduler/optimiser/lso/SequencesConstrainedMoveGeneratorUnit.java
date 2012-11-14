@@ -115,6 +115,10 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 		final int sequence2 = pos2.getFirst();
 		final int position1 = pos1.getSecond();
 		int position2 = pos2.getSecond();
+		
+		if (position1 == -1 || position2 == -1) {
+			return null;
+		}
 
 		// are both these elements currently in the same route
 		if (sequence1 == sequence2) {
@@ -207,7 +211,7 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 				result.setResource1Position(position1 + 1);
 				result.setResource2Position(position2);
 				return result;
-			} else {
+			} else if (position2 > 0) {
 				/*
 				 * We have this situation
 				 * 
@@ -318,6 +322,8 @@ public class SequencesConstrainedMoveGeneratorUnit implements IConstrainedMoveGe
 
 					return result;
 				}
+			} else {
+				return null;
 			}
 		}
 	}
