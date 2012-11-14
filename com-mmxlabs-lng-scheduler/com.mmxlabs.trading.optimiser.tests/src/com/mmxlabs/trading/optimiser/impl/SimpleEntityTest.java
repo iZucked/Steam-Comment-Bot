@@ -19,7 +19,7 @@ public class SimpleEntityTest {
 	@Test
 	public void testGetDownstreamTransferPrice() {
 
-		final SimpleEntity entity = new SimpleEntity("name", 500000, null, 2000000);
+		final SimpleEntity entity = new SimpleEntity("name", 500, null, 2000);
 		// 1234 - (scaled)500 * 2000
 		Assert.assertEquals(1234 - 10000, entity.getDownstreamTransferPrice(1234, 5000));
 	}
@@ -27,7 +27,7 @@ public class SimpleEntityTest {
 	@Test
 	public void testGetUpstreamTransferPrice() {
 
-		final SimpleEntity entity = new SimpleEntity("name", 500000, null, 2000000);
+		final SimpleEntity entity = new SimpleEntity("name", 500, null, 2000);
 		// 1234 + (scaled)500 * 2000
 		Assert.assertEquals(1234 + 10000, entity.getUpstreamTransferPrice(1234, 5000));
 	}
@@ -36,7 +36,7 @@ public class SimpleEntityTest {
 	public void testGetTaxedProfit() {
 		final ICurve curve = mock(ICurve.class);
 
-		final SimpleEntity entity = new SimpleEntity("name", 500000, curve, 2000000);
+		final SimpleEntity entity = new SimpleEntity("name", 500, curve, 2000);
 
 		final int time = 12345;
 
