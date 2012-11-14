@@ -432,13 +432,18 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 					return;
 				}
 
-				RowData rd = null;
+				int idx = -1;
 				if (loadSlots.contains(object)) {
-					rd = rowData.get(loadSlots.indexOf(object));
+					idx = loadSlots.indexOf(object);
 				} else if (dischargeSlots.contains(object)) {
-					rd = rowData.get(dischargeSlots.indexOf(object));
+					idx = dischargeSlots.indexOf(object);
 				} else if (cargoes.contains(object)) {
-					rd = rowData.get(cargoes.indexOf(object));
+					idx = cargoes.indexOf(object);
+				}
+
+				RowData rd = null;
+				if (idx >= 0) {
+					rd = rowData.get(idx);
 				}
 
 				if (rd != null) {
@@ -458,7 +463,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 
 				return super.getElementForNotificationTarget(source);
 			}
-			
+
 			@Override
 			@SuppressWarnings("restriction")
 			protected GridCellRenderer createCellRenderer() {
@@ -1768,25 +1773,34 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		if (cargo == null) {
 			return false;
 		} else {
-			final RowData rd = rowData.get(cargoes.indexOf(cargo));
-			if (validationMap.containsKey(rd)) {
-				return false;
+			final int indexOf = cargoes.indexOf(cargo);
+			if (indexOf >= 0 && indexOf < rowData.size()) {
+				final RowData rd = rowData.get(indexOf);
+				if (validationMap.containsKey(rd)) {
+					return false;
+				}
 			}
 		}
 		if (loadSlot == null) {
 			return false;
 		} else {
-			final RowData rd = rowData.get(loadSlots.indexOf(loadSlot));
-			if (validationMap.containsKey(rd)) {
-				return false;
+			final int indexOf = loadSlots.indexOf(loadSlot);
+			if (indexOf >= 0 && indexOf < rowData.size()) {
+				final RowData rd = rowData.get(indexOf);
+				if (validationMap.containsKey(rd)) {
+					return false;
+				}
 			}
 		}
 		if (dischargeSlot == null) {
 			return false;
 		} else {
-			final RowData rd = rowData.get(dischargeSlots.indexOf(dischargeSlot));
-			if (validationMap.containsKey(rd)) {
-				return false;
+			final int indexOf = dischargeSlots.indexOf(dischargeSlot);
+			if (indexOf >= 0 && indexOf < rowData.size()) {
+				final RowData rd = rowData.get(indexOf);
+				if (validationMap.containsKey(rd)) {
+					return false;
+				}
 			}
 		}
 
