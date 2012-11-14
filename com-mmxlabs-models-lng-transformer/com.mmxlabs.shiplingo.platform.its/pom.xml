@@ -62,6 +62,7 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<configuration>
+
 					<failIfNoTests>false</failIfNoTests>
 					<!-- Include non-standard test suffix -->
 					<includes>
@@ -73,10 +74,23 @@
 					<product>org.eclipse.sdk.ide</product>
 					<application>org.eclipse.ui.ide.workbench</application>
 
+					<useUIHarness>true</useUIHarness>
+					<useUIThread>true</useUIThread>
+
 					<dependencies>
 						<dependency>
 							<type>eclipse-plugin</type>
 							<artifactId>org.eclipse.equinox.ds</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>org.eclipse.sdk</artifactId>
+							<version>0.0.0</version>
+						</dependency>
+						<dependency>
+							<type>eclipse-plugin</type>
+							<artifactId>org.ops4j.peaberry.activation</artifactId>
 							<version>0.0.0</version>
 						</dependency>
 						<!-- Logging plug-ins -->
@@ -106,8 +120,18 @@
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
-							<id>org.ops4j.peaberry.activation</id>
+							<id>org.eclipse.equinox.common</id>
 							<level>2</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.eclipse.core.runtime</id>
+							<level>3</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>org.ops4j.peaberry.activation</id>
+							<level>1</level>
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
@@ -117,6 +141,17 @@
 						</bundle>
 						<bundle>
 							<id>com.mmxlabs.optimiser.optimiser-core</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+
+						<bundle>
+							<id>com.mmxlabs.optimiser.optimiser-lso</id>
+							<level>4</level>
+							<autoStart>true</autoStart>
+						</bundle>
+						<bundle>
+							<id>com.mmxlabs.models.lng.transformer</id>
 							<level>4</level>
 							<autoStart>true</autoStart>
 						</bundle>
