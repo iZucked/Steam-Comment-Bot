@@ -8,8 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
 
-import javax.naming.event.ObjectChangeListener;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -175,7 +173,7 @@ public class TestCalculations {
 
 		final ISequenceElement dischargeElement = portSlotProvider.getElement(dischargeSlot);
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadSlot);
-		final List sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
+		final List<ISequenceElement> sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
@@ -608,7 +606,7 @@ public class TestCalculations {
 
 		final ISequenceElement dischargeElement = portSlotProvider.getElement(dischargeSlot);
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadSlot);
-		final List sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
+		final List<ISequenceElement> sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
@@ -1038,7 +1036,7 @@ public class TestCalculations {
 
 		final ISequenceElement dischargeElement = portSlotProvider.getElement(dischargeSlot);
 		final ISequenceElement loadElement = portSlotProvider.getElement(loadSlot);
-		final List sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
+		final List<ISequenceElement> sequenceList = CollectionsUtil.makeArrayList(startElement, loadElement, dischargeElement, endElement);
 
 		final ISequence sequence = new ListSequence(sequenceList);
 

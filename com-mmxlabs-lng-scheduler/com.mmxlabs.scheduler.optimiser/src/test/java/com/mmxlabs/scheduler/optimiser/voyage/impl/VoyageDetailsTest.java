@@ -104,6 +104,7 @@ public class VoyageDetailsTest {
 		final VoyageDetails details3 = make(21, 2, 3, options1, fuel1, unit1, 5, 10);
 		final VoyageDetails details4 = make(1, 22, 3, options1, fuel1, unit1, 5, 10);
 		final VoyageDetails details5 = make(1, 2, 23, options1, fuel1, unit1, 5, 10);
+		// TODO: make use of details6 variable or remove it
 		final VoyageDetails details6 = make(1, 2, 3, options1, fuel1, unit1, 5, 10);
 		final VoyageDetails details7 = make(1, 2, 3, options2, fuel1, unit1, 5, 10);
 		final VoyageDetails details8 = make(1, 2, 3, options1, fuel2, unit1, 5, 10);

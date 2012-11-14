@@ -246,6 +246,7 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 
 												// we have a working filler element to do the move above.
 												final Pair<Integer, Integer> fillerPosition = owner.reverseLookup.get(spare);
+												// TODO these checks appear duplicated, and do not seem to be used
 												final boolean check = checkResource(candidate, resource);
 												checkResource(candidate, resource);
 
@@ -294,9 +295,9 @@ public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGen
 		return null;
 	}
 
-	private boolean checkResource(final ISequenceElement elmenet, final IResource resource) {
+	private boolean checkResource(final ISequenceElement element, final IResource resource) {
 
-		final Collection<IResource> allowedResources = racDCP.getAllowedResources(elmenet);
+		final Collection<IResource> allowedResources = racDCP.getAllowedResources(element);
 		if (allowedResources == null) {
 			return true;
 		}

@@ -575,7 +575,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					details.setFuelUnitPrice(FuelComponent.IdleNBO, dischargeM3Price);
 				}
 				if (details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0) {
-					int ii = 0;
+					// TODO: what is this case supposed to do? If nothing, remove it
 				}
 
 				if (details.getOptions().shouldBeCold() && (details.getFuelConsumption(FuelComponent.Cooldown, FuelUnit.M3) > 0)) {

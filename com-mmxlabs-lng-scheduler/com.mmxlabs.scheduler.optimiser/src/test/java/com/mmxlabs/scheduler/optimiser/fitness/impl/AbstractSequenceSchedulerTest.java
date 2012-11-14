@@ -194,7 +194,7 @@ public final class AbstractSequenceSchedulerTest {
 		vesselProvider.setVesselResource(resource, vessel);
 		scheduler.setVesselProvider(vesselProvider);
 
-		final List elements = CollectionsUtil.makeArrayList(element1, element2, element3, element4);
+		final List<ISequenceElement> elements = CollectionsUtil.makeArrayList(element1, element2, element3, element4);
 		final ISequence sequence = new ListSequence(elements);
 
 		final IVoyagePlanOptimiser voyagePlanOptimiser = context.mock(IVoyagePlanOptimiser.class);

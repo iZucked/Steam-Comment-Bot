@@ -182,15 +182,15 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		final List<Object> currentSequence = new ArrayList<Object>(5);
 		final List<Integer> currentTimes = new ArrayList<Integer>(3);
 		
-		ISequenceElement prevElement = null;
+		//ISequenceElement prevElement = null;
 		IPort prevPort = null;
 		IPortSlot prevPortSlot = null;
 		PortType prevPortType = null;
 		
-		ISequenceElement prev2Element = null;
+		//ISequenceElement prev2Element = null;
 		IPort prev2Port = null;
-		IPortSlot prev2PortSlot = null;
-		PortType prev2PortType = null;
+		//IPortSlot prev2PortSlot = null;
+		//PortType prev2PortType = null;
 		
 		VesselState vesselState = VesselState.Ballast;
 		VoyageOptions previousOptions = null;
@@ -364,12 +364,12 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			}
 
 			// Setup for next iteration
-			prev2Element = prevElement;
+			//prev2Element = prevElement;
 			prev2Port = prevPort ;
-			prev2PortSlot = prevPortSlot ;
-			prev2PortType = prevPortType ;
+			//prev2PortSlot = prevPortSlot ;
+			//prev2PortType = prevPortType ;
 			
-			prevElement = element;
+			//prevElement = element;
 			prevPort = thisPort;
 			prevPortSlot = thisPortSlot;
 			prevPortType = portType;
