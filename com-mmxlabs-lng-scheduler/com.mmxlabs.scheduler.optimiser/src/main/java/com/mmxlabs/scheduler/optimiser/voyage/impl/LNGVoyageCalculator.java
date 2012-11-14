@@ -4,6 +4,9 @@
  */
 package com.mmxlabs.scheduler.optimiser.voyage.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
@@ -642,6 +645,91 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		return capacityViolations;
 	}
 
+	/**
+	 * 
+	 */
+	
+	public final List<Object> generateFuelCostCalculatedSequence(final Object... baseSequence) {
+		List<Object> result = new ArrayList<Object>(baseSequence.length);
+		for (final Object element : baseSequence) {
+
+			// Loop through basic elements, calculating voyage requirements
+			// to build up basic voyage plan details.
+			if (element instanceof VoyageOptions) {
+				final VoyageOptions options = (VoyageOptions) element;
+
+				final VoyageDetails voyageDetails = new VoyageDetails();
+				voyageDetails.setOptions(options);
+				// Calculate voyage cost
+				calculateVoyageFuelRequirements(options, voyageDetails);
+				result.add(voyageDetails);
+			} else if (element instanceof PortOptions) {
+				final PortOptions options = ((PortOptions) element).clone();
+				final PortDetails details = new PortDetails();
+				details.setOptions(options);
+				calculatePortFuelRequirements(options, details);
+				result.add(details);
+			} else if (element instanceof PortDetails) {
+				// Clone as violations will modify this data structure
+				result.add(((PortDetails) element).clone());
+			} else {
+				result.add(element);
+			}
+		}
+		/*
+		for (final Object element : baseSequence) {
+
+			// Loop through basic elements, calculating voyage requirements
+			// to build up basic voyage plan details.
+			if (element instanceof VoyageOptions) {
+				final VoyageOptions options = (VoyageOptions) element;
+
+				final VoyageDetails voyageDetails = new VoyageDetails();
+				voyageDetails.setOptions(options);
+				// Calculate voyage cost
+				calculateVoyageFuelRequirements(options, voyageDetails);
+				result.add(voyageDetails);
+			} else if (element instanceof PortDetails) {
+				// Clone as violations will modify this data structure
+				result.add( ((PortDetails) element).clone());
+				//PortOptions options = ((PortOptions) element).clone();
+				//PortDetails details = new PortDetails();
+				//calculatePortFuelRequirements(options, details);
+				//result.add(details);
+			} else {
+				result.add(element);
+			}
+		} */
+		
+		return result;
+	}
+
+	private void calculatePortFuelRequirements(PortOptions options,
+			PortDetails details) {
+		details.setOptions(options);
+//
+//		TODO fix up port deails, call this methoid
+//		Add in prt costs?
+//		
+		final IVessel vessel = options.getVessel();
+		final IVesselClass vesselClass = vessel.getVesselClass();
+		final VesselState vesselState = options.getVesselState();
+
+		/**
+		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this port visit
+		 */
+		final long consumptionRateInMTPerHour = vesselClass.getInPortConsumptionRate(vesselState);
+
+		/**
+		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this journey, excluding any extra required for canals
+		 */
+		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerHour, options.getVisitDuration());
+		
+		//output.setFuelConsumption(FuelComponent.Base, requiredConsumptionInMT);
+		
+		
+	}
+
 	public void setRouteCostDataComponentProvider(final IRouteCostProvider provider) {
 		this.routeCostProvider = provider;
 	}
@@ -652,4 +740,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	public void setPortCVProvider(final IPortCVProvider portCVProvider) {
 		this.portCVProvider = portCVProvider;
 	}
+
+
 }

@@ -19,6 +19,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -62,8 +63,8 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 			int loadix = -1, dischargeix = -1;
 			for (final Object o : sequence) {
-				if (o instanceof PortDetails) {
-					slots[slotix] = ((PortDetails) o).getOptions().getPortSlot();
+				if (o instanceof PortOptions) {
+					slots[slotix] = ((PortOptions) o).getPortSlot();
 					if ((loadix == -1) && (slots[slotix] instanceof ILoadSlot)) {
 						loadix = slotix;
 					} else if ((dischargeix == -1) && (slots[slotix] instanceof IDischargeSlot)) {

@@ -159,12 +159,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 					startTime = thisPortSlot.getTimeWindow().getStart();
 					startSet = true;
 				}
-				//final PortDetails portDetails = new PortDetails();
 				final PortOptions portOptions = new PortOptions();
-				//portDetails.setOptions(new PortOptions());
 				portOptions.setVisitDuration(0);
 				portOptions.setPortSlot(thisPortSlot);
-				//currentSequence.add(portDetails);
 				currentSequence.add(portOptions);
 
 			}
@@ -335,17 +332,23 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 			final int visitDuration = durationsProvider.getElementDuration(element, resource);
 
+			/*
 			final PortDetails portDetails = new PortDetails();
 			portDetails.setOptions(new PortOptions());
-			portDetails.getOptions().setVisitDuration(visitDuration);
-			portDetails.getOptions().setPortSlot(thisPortSlot);
+			*/
+			final PortOptions portOptions = new PortOptions();
+			portOptions.setVisitDuration(visitDuration);
+			portOptions.setPortSlot(thisPortSlot);
+			portOptions.setVessel(vessel);
+			portOptions.setVesselState(vesselState);
 
 			if (isShortsSequence && prevPortType == PortType.Discharge) {
 				currentTimes.add(shortCargoReturnArrivalTime);
 			} else {
 				currentTimes.add(arrivalTimes[idx]);
 			}
-			currentSequence.add(portDetails);
+			//currentSequence.add(portDetails);
+			currentSequence.add(portOptions);
 
 			final PortType portType = portTypeProvider.getPortType(element);
 			if (((currentSequence.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance) || (portType == PortType.Other)) {
@@ -361,7 +364,8 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				currentSequence.clear();
 				currentTimes.clear();
 
-				currentSequence.add(portDetails);
+				//currentSequence.add(portDetails);
+				currentSequence.add(portOptions);
 				currentTimes.add(arrivalTimes[idx]);
 			}
 

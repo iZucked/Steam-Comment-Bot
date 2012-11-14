@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -128,8 +129,8 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	}
 
 	private void evaluateVoyagePlan() {
-		final PortDetails endDetails = (PortDetails) basicSequence.get(basicSequence.size() - 1);
-		final IPortSlot slot = endDetails.getOptions().getPortSlot();
+		final PortOptions endOptions = (PortOptions) basicSequence.get(basicSequence.size() - 1);
+		final IPortSlot slot = endOptions.getPortSlot();
 
 		if (slot != null) {
 			if (slot.getPortType() == PortType.End) {
@@ -397,26 +398,7 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 	private VoyagePlan calculateVoyagePlan() {
 		// For each voyage options, calculate new Details.
 
-		final List<Object> currentSequence = new ArrayList<Object>(basicSequence.size());
-		for (final Object element : basicSequence) {
-
-			// Loop through basic elements, calculating voyage requirements
-			// to build up basic voyage plan details.
-			if (element instanceof VoyageOptions) {
-				final VoyageOptions options = (VoyageOptions) element;
-
-				final VoyageDetails voyageDetails = new VoyageDetails();
-				voyageDetails.setOptions(options);
-				// Calculate voyage cost
-				voyageCalculator.calculateVoyageFuelRequirements(options, voyageDetails);
-				currentSequence.add(voyageDetails);
-			} else if (element instanceof PortDetails) {
-				// Clone as violations will modify this data structure
-				currentSequence.add(((PortDetails) element).clone());
-			} else {
-				currentSequence.add(element);
-			}
-		}
+		final List<Object> currentSequence = voyageCalculator.generateFuelCostCalculatedSequence(basicSequence.toArray());
 
 		final VoyagePlan currentPlan = new VoyagePlan();
 
