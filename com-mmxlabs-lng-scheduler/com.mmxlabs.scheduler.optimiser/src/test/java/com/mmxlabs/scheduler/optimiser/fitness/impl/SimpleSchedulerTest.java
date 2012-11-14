@@ -10,25 +10,31 @@ import java.util.Collections;
 import java.util.Random;
 import java.util.TreeMap;
 
+import javax.inject.Singleton;
+
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
+import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.IOptimiser;
 import com.mmxlabs.optimiser.core.IOptimiserProgressMonitor;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
+import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessEvaluator;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
@@ -50,6 +56,12 @@ import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
+import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBuilder;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
@@ -62,11 +74,9 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
  */
 public class SimpleSchedulerTest {
 
-	IOptimisationData createProblem() {
+	IOptimisationData createProblem(Injector injector) {
 
-		final SchedulerBuilder builder = new SchedulerBuilder();
-		final Injector injector = Guice.createInjector(new DataComponentProviderModule());
-		injector.injectMembers(builder);
+		final SchedulerBuilder builder = injector.getInstance(SchedulerBuilder.class);
 
 		// Build XY ports so distance is automatically populated`
 		// TODO: Add API to determine which distance provider to use
@@ -157,20 +167,23 @@ public class SimpleSchedulerTest {
 	public void testLSO() {
 
 		final long seed = 1;
+		final Injector parentInjector = Guice.createInjector(new DataComponentProviderModule());
 
+		final IOptimisationData data = createProblem(parentInjector);
 		// Build opt data
-		final IOptimisationData data = createProblem();
-
-		final IFitnessFunctionRegistry fitnessRegistry = createFitnessRegistry();
-		final IConstraintCheckerRegistry constraintRegistry = createConstraintRegistry();
-		final IEvaluationProcessRegistry evaluationProcessRegistry = createEvaluationProcessRegistry();
+		ScheduleTestModule m = new ScheduleTestModule(data);
+		Injector injector = parentInjector.createChildInjector(m);
 
 		// Generate initial state
-		final IInitialSequenceBuilder sequenceBuilder = new ConstrainedInitialSequenceBuilder(constraintRegistry.getConstraintCheckerFactories());
-		final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
+//		final IInitialSequenceBuilder sequenceBuilder = injector.getInstance(IInitialSequenceBuilder.class);
 
-		final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new ArrayList<String>(
-				constraintRegistry.getConstraintCheckerNames()), constraintRegistry, new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);
+		// final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
+
+		// final OptimisationContext context = new OptimisationContext(data, initialSequences, new ArrayList<String>(fitnessRegistry.getFitnessComponentNames()), fitnessRegistry, new
+		// ArrayList<String>(
+		// constraintRegistry.getConstraintCheckerNames()), constraintRegistry, new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames()), evaluationProcessRegistry);
+
+		IOptimisationContext context = injector.getInstance(IOptimisationContext.class);
 
 		final IOptimiserProgressMonitor monitor = new IOptimiserProgressMonitor() {
 
@@ -193,6 +206,15 @@ public class SimpleSchedulerTest {
 
 		final ILocalSearchOptimiser optimiser = GeneralTestUtils.buildOptimiser(context, new Random(seed), 1000, 5, monitor);
 
+		for (IConstraintChecker c : optimiser.getConstraintCheckers()) {
+			injector.injectMembers(c);
+		}
+		
+		for (IFitnessComponent c : optimiser.getFitnessEvaluator().getFitnessComponents()) {
+			injector.injectMembers(c);
+			injector.injectMembers(c.getFitnessCore());
+		}
+		
 		final IFitnessEvaluator fitnessEvaluator = optimiser.getFitnessEvaluator();
 
 		final LinearSimulatedAnnealingFitnessEvaluator linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator) fitnessEvaluator;
@@ -218,39 +240,6 @@ public class SimpleSchedulerTest {
 		// TODO: How to verify result?
 	}
 
-	private IConstraintCheckerRegistry createConstraintRegistry() {
-		final IConstraintCheckerRegistry constraintRegistry = new ConstraintCheckerRegistry();
-
-		final OrderedSequenceElementsConstraintCheckerFactory constraintFactory = new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider);
-		constraintRegistry.registerConstraintCheckerFactory(constraintFactory);
-
-		final ResourceAllocationConstraintCheckerFactory constraintFactory2 = new ResourceAllocationConstraintCheckerFactory(SchedulerConstants.DCP_resourceAllocationProvider);
-		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);
-
-		final PortTypeConstraintCheckerFactory constraintFactory3 = new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider,
-				SchedulerConstants.DCP_vesselProvider);
-		constraintRegistry.registerConstraintCheckerFactory(constraintFactory3);
-
-		return constraintRegistry;
-	}
-
-	private FitnessFunctionRegistry createFitnessRegistry() {
-		final FitnessFunctionRegistry fitnessRegistry = new FitnessFunctionRegistry();
-
-		final CargoSchedulerFitnessCoreFactory factory = new CargoSchedulerFitnessCoreFactory();
-
-		fitnessRegistry.registerFitnessCoreFactory(factory);
-		return fitnessRegistry;
-	}
-
-	private IEvaluationProcessRegistry createEvaluationProcessRegistry() {
-		final IEvaluationProcessRegistry evaluationProcessRegistry = new EvaluationProcessRegistry();
-
-		// TODO: Fill in
-
-		return evaluationProcessRegistry;
-	}
-
 	void printSequences(final Collection<ISequences> sequences) {
 		for (final ISequences s : sequences) {
 			printSequences(s);
@@ -266,5 +255,25 @@ public class SimpleSchedulerTest {
 			}
 			System.out.println("]");
 		}
+	}
+
+	private ISchedulerFactory provideSchedulerFactory() {
+		final ISchedulerFactory factory = new ISchedulerFactory() {
+
+			@Override
+			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents,
+					final Collection<ICargoAllocationFitnessComponent> allocationComponents) {
+
+				final ScheduleEvaluator scheduleEvaluator = new ScheduleEvaluator();
+				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
+				scheduleEvaluator.setFitnessComponents(schedulerComponents, allocationComponents);
+				scheduleEvaluator.init();
+
+				final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
+				scheduler.setScheduleEvaluator(scheduleEvaluator);
+				return scheduler;
+			}
+		};
+		return factory;
 	}
 }
