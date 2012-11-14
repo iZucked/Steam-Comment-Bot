@@ -123,7 +123,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 					PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
 					PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
-					if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeOption()))) {
+					if ((currentAllocation != null) && ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {
 						cargo = true;
 						final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
 						accumulator += cargoGroupValue;
@@ -135,7 +135,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 					} else if ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 4) {
 						firstDetails = (PortDetails) plan.getSequence()[1];
 						lastDetails = (PortDetails) plan.getSequence()[2];
-						if ((currentAllocation != null) && ((firstDetails.getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getPortSlot() == currentAllocation.getDischargeOption()))) {
+						if ((currentAllocation != null) && ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {
 							cargo = true;
 							// TODO: Perhaps use the real slot time rather than always load?
 							// TODO: Does it matter really?
@@ -184,7 +184,7 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 		final int k = sequence.length - skip;
 		for (int i = 0; i < k; i++) {
 			final Object o = sequence[i];
-			planDuration += (o instanceof VoyageDetails) ? (((VoyageDetails) o).getIdleTime() + ((VoyageDetails) o).getTravelTime()) : ((PortDetails) o).getVisitDuration();
+			planDuration += (o instanceof VoyageDetails) ? (((VoyageDetails) o).getIdleTime() + ((VoyageDetails) o).getTravelTime()) : ((PortDetails) o).getOptions().getVisitDuration();
 		}
 		return planDuration;
 	}

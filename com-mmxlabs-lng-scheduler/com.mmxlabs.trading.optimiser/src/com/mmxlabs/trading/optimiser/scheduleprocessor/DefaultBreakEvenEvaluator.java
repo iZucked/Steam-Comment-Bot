@@ -82,15 +82,15 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 					if (obj instanceof PortDetails) {
 						final PortDetails details = (PortDetails) obj;
 						if (idx != (currentSequence.length - 1)) {
-							currentTime += details.getVisitDuration();
+							currentTime += details.getOptions().getVisitDuration();
 							arrivalTimes[++idx] = currentTime;
 
-							if (details.getPortSlot().getPortType() == PortType.Load) {
+							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
-								originalLoad = (ILoadOption) details.getPortSlot();
+								originalLoad = (ILoadOption) details.getOptions().getPortSlot();
 								loadIdx = idx - 1;
-							} else if (details.getPortSlot().getPortType() == PortType.Discharge) {
-								originalDischarge = (IDischargeOption) details.getPortSlot();
+							} else if (details.getOptions().getPortSlot().getPortType() == PortType.Discharge) {
+								originalDischarge = (IDischargeOption) details.getOptions().getPortSlot();
 								dischargeIdx = idx - 1;
 							}
 						}

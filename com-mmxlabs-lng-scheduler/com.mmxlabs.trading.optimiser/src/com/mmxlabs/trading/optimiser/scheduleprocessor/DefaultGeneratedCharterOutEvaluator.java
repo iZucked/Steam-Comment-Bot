@@ -68,10 +68,10 @@ public class DefaultGeneratedCharterOutEvaluator implements IGeneratedCharterOut
 					if (obj instanceof PortDetails) {
 						final PortDetails details = (PortDetails) obj;
 						if (idx != (currentSequence.length - 1)) {
-							currentTime += details.getVisitDuration();
+							currentTime += details.getOptions().getVisitDuration();
 							arrivalTimes[++idx] = currentTime;
 
-							if (details.getPortSlot().getPortType() == PortType.Load) {
+							if (details.getOptions().getPortSlot().getPortType() == PortType.Load) {
 								isCargoPlan = true;
 							}
 

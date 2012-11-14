@@ -33,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -176,14 +177,19 @@ public class RedirectionContract implements ILoadPriceCalculator {
 						voyageCalculator.calculateVoyageFuelRequirements(ballastOptions, ballastDetails);
 					}
 					final PortDetails loadDetails = new PortDetails();
-					loadDetails.setPortSlot(loadSlot);
-					loadDetails.setVisitDuration(loadDuration);
+					loadDetails.setOptions(new PortOptions());
+					loadDetails.getOptions().setPortSlot(loadSlot);
+					loadDetails.getOptions().setVisitDuration(loadDuration);
+					
 					final PortDetails dischargeDetails = new PortDetails();
-					dischargeDetails.setPortSlot(notionalDischargeSlot);
-					dischargeDetails.setVisitDuration(notionalDischargeDuration);
+					dischargeDetails.setOptions(new PortOptions());
+					dischargeDetails.getOptions().setPortSlot(notionalDischargeSlot);
+					dischargeDetails.getOptions().setVisitDuration(notionalDischargeDuration);
+					
 					final PortDetails returnDetails = new PortDetails();
-					returnDetails.setPortSlot(notionalReturnSlot);
-					returnDetails.setVisitDuration(0);
+					returnDetails.setOptions(new PortOptions());
+					returnDetails.getOptions().setPortSlot(notionalReturnSlot);
+					returnDetails.getOptions().setVisitDuration(0);
 
 					final Object[] sequence = new Object[] { loadDetails, ladenDetails, dischargeDetails, ballastDetails, returnDetails };
 					notionalPlan.setSequence(sequence);

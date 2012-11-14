@@ -197,8 +197,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final long shippingCost = getShippingCosts(plan, vessel, true, vesselStartTime, null);
 		final long revenue;
 		final PortDetails portDetails = (PortDetails) plan.getSequence()[0];
-		if (portDetails.getPortSlot().getPortType() == PortType.CharterOut) {
-			final VesselEventPortSlot vesselEventPortSlot = (VesselEventPortSlot) portDetails.getPortSlot();
+		if (portDetails.getOptions().getPortSlot().getPortType() == PortType.CharterOut) {
+			final VesselEventPortSlot vesselEventPortSlot = (VesselEventPortSlot) portDetails.getOptions().getPortSlot();
 			revenue = vesselEventPortSlot.getVesselEvent().getHireCost() + vesselEventPortSlot.getVesselEvent().getRepositioning();
 		} else {
 			revenue = 0;
@@ -206,7 +206,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		final long value = shippingEntity.getTaxedProfit(revenue - shippingCost, planStartTime);
 		if (annotatedSolution != null) {
-			final ISequenceElement element = slotProvider.getElement(((PortDetails) plan.getSequence()[0]).getPortSlot());
+			final ISequenceElement element = slotProvider.getElement(((PortDetails) plan.getSequence()[0]).getOptions().getPortSlot());
 			final DetailTree details = new DetailTree();
 
 			if (revenue > 0) {
@@ -254,8 +254,8 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 				final PortDetails portDetails = (PortDetails) obj;
 
-				final IPort port = portDetails.getPortSlot().getPort();
-				final PortType portType = portDetails.getPortSlot().getPortType();
+				final IPort port = portDetails.getOptions().getPortSlot().getPort();
+				final PortType portType = portDetails.getOptions().getPortSlot().getPortType();
 				portCosts += portCostProvider.getPortCost(port, vessel, portType);
 			}
 
@@ -339,7 +339,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					planDuration += voyageDetails.getIdleTime();
 				}
 			} else {
-				planDuration += ((PortDetails) o).getVisitDuration();
+				planDuration += ((PortDetails) o).getOptions().getVisitDuration();
 			}
 		}
 		return planDuration;
