@@ -10,7 +10,9 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.impl.PortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.impl.PortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -63,8 +65,9 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 	protected boolean reallyEvaluateObject(Object object, int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails details = (PortDetails) object;
-			long portCost = portCostProvider.getPortCost(details.getPortSlot().getPort(), currentVessel, 
-					details.getPortSlot().getPortType());
+			final IPortSlot slot = details.getOptions().getPortSlot();
+			long portCost = portCostProvider.getPortCost(slot.getPort(), currentVessel, 
+					slot.getPortType());
 			sequenceAccumulator += portCost;
 		}
 		
@@ -75,10 +78,11 @@ public class PortCostFitnessComponent extends AbstractPerRouteSchedulerFitnessCo
 	protected boolean reallyAnnotateObject(Object object, int time,IAnnotatedSolution solution) {
 		if (object instanceof PortDetails) {
 			final PortDetails details = (PortDetails) object;
-			final long cost = portCostProvider.getPortCost(details.getPortSlot().getPort(), currentVessel, 
-					details.getPortSlot().getPortType());
+			final IPortSlot slot = details.getOptions().getPortSlot();
+			final long cost = portCostProvider.getPortCost(slot.getPort(), currentVessel, 
+					slot.getPortType());
 			
-			solution.getElementAnnotations().setAnnotation(portSlotProvider.getElement(details.getPortSlot()), SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
+			solution.getElementAnnotations().setAnnotation(portSlotProvider.getElement(slot), SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
 			
 			sequenceAccumulator += cost;
 		}

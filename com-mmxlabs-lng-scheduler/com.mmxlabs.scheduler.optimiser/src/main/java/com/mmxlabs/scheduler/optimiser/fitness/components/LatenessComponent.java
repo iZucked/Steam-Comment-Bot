@@ -71,7 +71,7 @@ public final class LatenessComponent extends AbstractPerRouteSchedulerFitnessCom
 	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
-			final IPortSlot portSlot = detail.getPortSlot();
+			final IPortSlot portSlot = detail.getOptions().getPortSlot();
 			final ITimeWindow tw;
 
 			if (portSlot instanceof StartPortSlot) {

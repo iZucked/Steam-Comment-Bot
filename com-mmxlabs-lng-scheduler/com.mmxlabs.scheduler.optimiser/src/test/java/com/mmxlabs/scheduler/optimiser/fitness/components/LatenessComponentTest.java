@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class LatenessComponentTest {
@@ -117,11 +118,13 @@ public class LatenessComponentTest {
 		final TimeWindow window2 = new TimeWindow(dischargeStartTime, dischargeEndTime);
 
 		final PortDetails startDetails = new PortDetails();
+		startDetails.setOptions(new PortOptions());
 		final StartPortSlot startSlot = new StartPortSlot(0, 0, 0);
-		startDetails.setPortSlot(startSlot);
+		startDetails.getOptions().setPortSlot(startSlot);
 		final PortDetails endDetails = new PortDetails();
+		endDetails.setOptions(new PortOptions());
 		final EndPortSlot endSlot = new EndPortSlot();
-		endDetails.setPortSlot(endSlot);
+		endDetails.getOptions().setPortSlot(endSlot);
 
 		
 		final LoadSlot loadSlot = new LoadSlot();
@@ -131,10 +134,12 @@ public class LatenessComponentTest {
 		dischargeSlot.setTimeWindow(window2);
 
 		final PortDetails loadDetails = new PortDetails();
-		loadDetails.setPortSlot(loadSlot);
+		loadDetails.setOptions(new PortOptions());
+		loadDetails.getOptions().setPortSlot(loadSlot);
 
 		final PortDetails dischargeDetails = new PortDetails();
-		dischargeDetails.setPortSlot(dischargeSlot);
+		dischargeDetails.setOptions(new PortOptions());
+		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
 
 		final Object[] routeSequence = new Object[] { startDetails, loadDetails, null, dischargeDetails, endDetails };
 		final VoyagePlan voyagePlan = new VoyagePlan();

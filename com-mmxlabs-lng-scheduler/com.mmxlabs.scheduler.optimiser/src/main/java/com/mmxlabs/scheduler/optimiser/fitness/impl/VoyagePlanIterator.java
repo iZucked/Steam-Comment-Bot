@@ -77,7 +77,7 @@ public final class VoyagePlanIterator {
 		if (obj instanceof PortDetails) {
 			final PortDetails details = (PortDetails) obj;
 			if (currentIndex != (currentSequence.length - 1)) {
-				extraTime = details.getVisitDuration();
+				extraTime = details.getOptions().getVisitDuration();
 			}
 		} else if (obj instanceof VoyageDetails) {
 			final VoyageDetails details = (VoyageDetails) obj;

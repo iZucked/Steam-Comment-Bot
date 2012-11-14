@@ -393,7 +393,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			if ((i % 2) == 0) {
 				// Port Slot
 				final PortDetails details = (PortDetails) sequence[i];
-				final IPortSlot slot = details.getPortSlot();
+				final IPortSlot slot = details.getOptions().getPortSlot();
 				if (slot instanceof ILoadSlot) {
 					if (i == (sequence.length - 1)) {
 						// End of run, so skip
@@ -464,9 +464,9 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		// Load/Discharge sequence
 		if ((loadIdx != -1) && (dischargeIdx != -1)) {
 			final PortDetails loadDetails = (PortDetails) sequence[loadIdx];
-			final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getPortSlot();
+			final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
 			final PortDetails dischargeDetails = (PortDetails) sequence[dischargeIdx];
-			final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
+			final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
 
 			// Store unit prices for later on
 			// loadUnitPrice = loadSlot
@@ -546,8 +546,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		if (dischargeIdx != -1) {
 			setLNGPrice = true;
 		} else {
-			if (((PortDetails) sequence[0]).getPortSlot() instanceof IHeelOptionsPortSlot) {
-				final IHeelOptions options = ((IHeelOptionsPortSlot) ((PortDetails) sequence[0]).getPortSlot()).getHeelOptions();
+			if (((PortDetails) sequence[0]).getOptions().getPortSlot() instanceof IHeelOptionsPortSlot) {
+				final IHeelOptions options = ((IHeelOptionsPortSlot) ((PortDetails) sequence[0]).getOptions().getPortSlot()).getHeelOptions();
 				if (options.getHeelLimit() > 0) {
 					setLNGPrice = true;
 					dischargeM3Price = Calculator.costPerM3FromMMBTu(options.getHeelUnitPrice(), options.getHeelCVValue());

@@ -30,30 +30,10 @@ public class PortDetailsTest {
 		Assert.assertEquals(value, details.getFuelConsumption(c));
 	}
 
-	@Test
-	public void testGetSetVisitDuration() {
-
-		final int value = 100;
-		final PortDetails details = new PortDetails();
-		Assert.assertEquals(0, details.getVisitDuration());
-		details.setVisitDuration(value);
-		Assert.assertEquals(value, details.getVisitDuration());
-	}
-
 	@Test(expected = UnsupportedOperationException.class)
 	public void testGetPortCost() {
 		final PortDetails details = new PortDetails();
 		details.getPortCost(null);
-	}
-
-	@Test
-	public void testGetSetPortSlot() {
-		final IPortSlot slot = context.mock(IPortSlot.class);
-
-		final PortDetails details = new PortDetails();
-		Assert.assertNull(details.getPortSlot());
-		details.setPortSlot(slot);
-		Assert.assertSame(slot, details.getPortSlot());
 	}
 
 	@Test
@@ -112,9 +92,10 @@ public class PortDetailsTest {
 	PortDetails make(final int duration, final IPortSlot portSlot, final FuelComponent fuel, final long consumption, CapacityViolationType cvt, final long cvtQty) {
 
 		final PortDetails d = new PortDetails();
-
-		d.setVisitDuration(duration);
-		d.setPortSlot(portSlot);
+		d.setOptions(new PortOptions());
+		
+		d.getOptions().setVisitDuration(duration);
+		d.getOptions().setPortSlot(portSlot);
 		d.setFuelConsumption(fuel, consumption);
 		d.setCapacityViolation(cvt, cvtQty);
 		return d;

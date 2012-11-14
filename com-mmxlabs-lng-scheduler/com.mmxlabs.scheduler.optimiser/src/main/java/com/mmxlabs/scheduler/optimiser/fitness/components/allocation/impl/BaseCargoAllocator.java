@@ -157,10 +157,11 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 				}
 				if (object instanceof PortDetails) {
 					final PortDetails pd = (PortDetails) object;
-					if (pd.getPortSlot() instanceof ILoadOption) {
+					final IPortSlot slot = pd.getOptions().getPortSlot();
+					if (slot instanceof ILoadOption) {
 						loadDetails = pd;
 						loadTime = planIterator.getCurrentTime();
-					} else if (pd.getPortSlot() instanceof IDischargeOption) {
+					} else if (slot instanceof IDischargeOption) {
 						dischargeDetails = pd;
 						dischargeTime = planIterator.getCurrentTime();
 					}
@@ -222,10 +223,11 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		for (final Object object : plan.getSequence()) {
 			if (object instanceof PortDetails) {
 				final PortDetails pd = (PortDetails) object;
-				if (pd.getPortSlot() instanceof ILoadOption) {
+				final IPortSlot slot = pd.getOptions().getPortSlot();
+				if (slot instanceof ILoadOption) {
 					loadDetails = pd;
 					loadTime = arrivalTimes[0];
-				} else if (pd.getPortSlot() instanceof IDischargeOption) {
+				} else if (slot instanceof IDischargeOption) {
 					dischargeDetails = pd;
 					dischargeTime = arrivalTimes[3];
 				}
@@ -240,8 +242,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 						final IVesselClass vesselClass = vessel.getVesselClass();
 						final long vesselCapacity = vesselClass.getCargoCapacity();
-						loadSlot = (ILoadSlot) loadDetails.getPortSlot();
-						dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
+						loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
+						dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
 
 						// We have to load this much LNG no matter what
 
@@ -280,8 +282,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 				boolean isFOB = false;
 				boolean isDES = false;
 
-				loadSlot = (ILoadOption) loadDetails.getPortSlot();
-				dischargeSlot = (IDischargeOption) dischargeDetails.getPortSlot();
+				loadSlot = (ILoadOption) loadDetails.getOptions().getPortSlot();
+				dischargeSlot = (IDischargeOption) dischargeDetails.getOptions().getPortSlot();
 
 				if (loadSlot instanceof ILoadSlot) {
 					isFOB = true;
@@ -351,8 +353,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 		final IVesselClass vesselClass = vessel.getVesselClass();
 		final long vesselCapacity = vesselClass.getCargoCapacity();
-		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getPortSlot();
-		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getPortSlot();
+		final ILoadSlot loadSlot = (ILoadSlot) loadDetails.getOptions().getPortSlot();
+		final IDischargeSlot dischargeSlot = (IDischargeSlot) dischargeDetails.getOptions().getPortSlot();
 
 		slotTimes.put(loadSlot, loadTime);
 		slotTimes.put(dischargeSlot, dischargeTime);
@@ -401,8 +403,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 	public void addVirtualCargo(final PortDetails loadDetails, final PortDetails dischargeDetails) {
 
-		final ILoadOption loadSlot = (ILoadOption) loadDetails.getPortSlot();
-		final IDischargeOption dischargeSlot = (IDischargeOption) dischargeDetails.getPortSlot();
+		final ILoadOption loadSlot = (ILoadOption) loadDetails.getOptions().getPortSlot();
+		final IDischargeOption dischargeSlot = (IDischargeOption) dischargeDetails.getOptions().getPortSlot();
 
 		addVirtualCargo(loadSlot, dischargeSlot);
 	}

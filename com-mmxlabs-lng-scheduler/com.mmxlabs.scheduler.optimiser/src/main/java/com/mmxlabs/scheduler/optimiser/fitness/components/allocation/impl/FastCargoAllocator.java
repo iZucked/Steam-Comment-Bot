@@ -53,7 +53,7 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 			final int dischargeTime, final long requiredLoadVolume, final IVessel vessel) {
 		super.addCargo(plan, loadDetails, ladenLeg, dischargeDetails, ballastLeg, loadTime, dischargeTime, requiredLoadVolume, vessel);
 
-		cargoConstraints.add(new Pair<Integer, Integer>(volumeConstraintMap.get(loadDetails.getPortSlot()), volumeConstraintMap.get(dischargeDetails.getPortSlot())));
+		cargoConstraints.add(new Pair<Integer, Integer>(volumeConstraintMap.get(loadDetails.getOptions().getPortSlot()), volumeConstraintMap.get(dischargeDetails.getOptions().getPortSlot())));
 	}
 
 	final ArrayList<Pair<Integer, Integer>> cargoConstraints = new ArrayList<Pair<Integer, Integer>>();

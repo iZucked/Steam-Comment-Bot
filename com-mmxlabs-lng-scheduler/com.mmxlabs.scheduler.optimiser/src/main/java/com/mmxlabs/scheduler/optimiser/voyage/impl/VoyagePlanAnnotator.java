@@ -84,12 +84,12 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
-				final IPortSlot currentPortSlot = details.getPortSlot();
+				final IPortSlot currentPortSlot = details.getOptions().getPortSlot();
 
 				// Get element from port slot provider
 				final ISequenceElement element = getPortSlotProvider().getElement(currentPortSlot);
 
-				final int visitDuration = details.getVisitDuration();
+				final int visitDuration = details.getOptions().getVisitDuration();
 
 				// Add port annotations
 				final PortVisitEventImpl visit;

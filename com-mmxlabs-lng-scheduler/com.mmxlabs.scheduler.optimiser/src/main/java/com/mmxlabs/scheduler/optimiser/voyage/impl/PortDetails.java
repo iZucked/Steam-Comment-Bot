@@ -21,21 +21,22 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 public final class PortDetails implements Cloneable {
 
+	private PortOptions options;
+
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(FuelComponent.class);
 
 	private final LongFastEnumMap<CapacityViolationType> capacityViolations = new LongFastEnumMap<CapacityViolationType>(CapacityViolationType.values().length);
 
-	private int visitDuration;
-
-	private IPortSlot portSlot;
-
 	public PortDetails() {
-
+	
 	}
 
-	private PortDetails(final int visitDuration, final IPortSlot portSlot, final EnumMap<FuelComponent, Long> fuelConsumption, LongFastEnumMap<CapacityViolationType> capacityViolations) {
-		this.visitDuration = visitDuration;
-		this.portSlot = portSlot;
+	// TODO: remove when finished recoding
+	//private PortDetails(final int visitDuration, final IPortSlot portSlot, final EnumMap<FuelComponent, Long> fuelConsumption, final LongFastEnumMap<CapacityViolationType> capacityViolations) {
+	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final LongFastEnumMap<CapacityViolationType> capacityViolations) {
+		//this.visitDuration = visitDuration;
+		//this.portSlot = portSlot;
+		this.options = options;
 		this.fuelConsumption.putAll(fuelConsumption);
 		this.capacityViolations.putAll(capacityViolations);
 	}
@@ -61,6 +62,8 @@ public final class PortDetails implements Cloneable {
 		capacityViolations.put(type, quantity);
 	}
 
+	// TODO: remove when finished recoding
+	/*
 	public final int getVisitDuration() {
 		return visitDuration;
 	}
@@ -68,17 +71,30 @@ public final class PortDetails implements Cloneable {
 	public final void setVisitDuration(final int visitDuration) {
 		this.visitDuration = visitDuration;
 	}
+	*/
+	
 
 	public final long getPortCost(final Object key) {
 		throw new UnsupportedOperationException("Undefined API");
 	}
 
+	// TODO: remove when finished recoding
+	/*
 	public final IPortSlot getPortSlot() {
 		return portSlot;
 	}
 
 	public final void setPortSlot(final IPortSlot portSlot) {
 		this.portSlot = portSlot;
+	}
+	*/
+
+	public PortOptions getOptions() {
+		return options;
+	}
+
+	public void setOptions(final PortOptions options) {
+		this.options = options;
 	}
 
 	@Override
@@ -88,9 +104,12 @@ public final class PortDetails implements Cloneable {
 			
 			final PortDetails d = (PortDetails) obj;
 
+			// TODO: remove when finished recoding
+			/*
 			if (visitDuration != d.visitDuration) {
 				return false;
 			}
+			*/
 
 			if (!Equality.isEqual(capacityViolations, d.capacityViolations)) {
 				return false;
@@ -99,10 +118,17 @@ public final class PortDetails implements Cloneable {
 			if (!Equality.isEqual(fuelConsumption, d.fuelConsumption)) {
 				return false;
 			}
+			
+			// TODO: remove when finished recoding
+			/*
 			if (!Equality.isEqual(portSlot, d.portSlot)) {
 				return false;
 			}
-
+			*/
+			
+			if (!Equality.isEqual(options, d.options)) {
+				return false;
+			}
 			return true;
 		}
 
@@ -112,7 +138,10 @@ public final class PortDetails implements Cloneable {
 	@Override
 	public final int hashCode() {
 
-		return Objects.hashCode(visitDuration, capacityViolations, fuelConsumption, portSlot);
+		// TODO: remove when finished recoding
+		//return Objects.hashCode(visitDuration, capacityViolations, fuelConsumption, portSlot);
+		return Objects.hashCode(options, capacityViolations, fuelConsumption);
+
 	}
 
 	@Override
@@ -120,8 +149,12 @@ public final class PortDetails implements Cloneable {
 		// @formatter:off
 		return Objects.toStringHelper(PortDetails.class)
 				.add("fuelConsumption", fuelConsumption)
+				.add("options", options)
+				// TODO: remove when finished recoding
+				/*
 				.add("visitDuration", visitDuration)
 				.add("portSlot", portSlot)
+				*/
 				.add("capacityViolations", capacityViolations)
 				.toString();
 		// @formatter:on
@@ -129,6 +162,6 @@ public final class PortDetails implements Cloneable {
 
 	@Override
 	public PortDetails clone() {
-		return new PortDetails(visitDuration, portSlot, fuelConsumption, capacityViolations);
+		return new PortDetails(new PortOptions(options), fuelConsumption, capacityViolations);
 	}
 }

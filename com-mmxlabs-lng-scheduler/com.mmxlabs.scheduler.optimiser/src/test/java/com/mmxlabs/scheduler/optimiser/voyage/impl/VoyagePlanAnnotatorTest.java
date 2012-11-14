@@ -75,21 +75,24 @@ public class VoyagePlanAnnotatorTest {
 		portSlotEditor.setPortSlot(element4, dischargeSlot2);
 
 		final PortDetails loadDetails1 = new PortDetails();
-		loadDetails1.setPortSlot(loadSlot1);
-
-		loadDetails1.setVisitDuration(10);
+		loadDetails1.setOptions(new PortOptions());
+		loadDetails1.getOptions().setPortSlot(loadSlot1);
+		loadDetails1.getOptions().setVisitDuration(10);
 
 		final PortDetails dischargeDetails1 = new PortDetails();
-		dischargeDetails1.setPortSlot(dischargeSlot1);
-		dischargeDetails1.setVisitDuration(20);
+		dischargeDetails1.setOptions(new PortOptions());
+		dischargeDetails1.getOptions().setPortSlot(dischargeSlot1);
+		dischargeDetails1.getOptions().setVisitDuration(20);
 
 		final PortDetails loadDetails2 = new PortDetails();
-		loadDetails2.setPortSlot(loadSlot2);
-		loadDetails2.setVisitDuration(30);
+		loadDetails2.setOptions(new PortOptions());
+		loadDetails2.getOptions().setPortSlot(loadSlot2);
+		loadDetails2.getOptions().setVisitDuration(30);
 
 		final PortDetails dischargeDetails2 = new PortDetails();
-		dischargeDetails2.setPortSlot(dischargeSlot2);
-		dischargeDetails2.setVisitDuration(40);
+		dischargeDetails2.setOptions(new PortOptions());
+		dischargeDetails2.getOptions().setPortSlot(dischargeSlot2);
+		dischargeDetails2.getOptions().setVisitDuration(40);
 
 		final VoyageDetails voyageDetails1 = new VoyageDetails();
 		final VoyageOptions options1 = new VoyageOptions();

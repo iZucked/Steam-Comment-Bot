@@ -801,13 +801,15 @@ public class LNGVoyageCalculatorTest {
 		final IVessel vessel = context.mock(IVessel.class);
 
 		final PortDetails loadDetails = new PortDetails();
+		loadDetails.setOptions(new PortOptions());
 		final PortDetails dischargeDetails = new PortDetails();
+		dischargeDetails.setOptions(new PortOptions());
 
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
-		loadDetails.setPortSlot(loadSlot);
-		dischargeDetails.setPortSlot(dischargeSlot);
+		loadDetails.getOptions().setPortSlot(loadSlot);
+		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
 
 		loadSlot.setLoadPriceCalculator(new FixedPriceContract(-1));
 		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(-1));
@@ -863,13 +865,15 @@ public class LNGVoyageCalculatorTest {
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
 		final PortDetails loadDetails = new PortDetails();
+		loadDetails.setOptions(new PortOptions());
 		final PortDetails dischargeDetails = new PortDetails();
+		dischargeDetails.setOptions(new PortOptions());
 
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
-		loadDetails.setPortSlot(loadSlot);
-		dischargeDetails.setPortSlot(dischargeSlot);
+		loadDetails.getOptions().setPortSlot(loadSlot);
+		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
 
 		loadSlot.setMaxLoadVolume(150000l);
 		dischargeSlot.setMaxDischargeVolume(30000l);
@@ -949,13 +953,15 @@ public class LNGVoyageCalculatorTest {
 		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
 
 		final PortDetails loadDetails = new PortDetails();
+		loadDetails.setOptions(new PortOptions());
 		final PortDetails dischargeDetails = new PortDetails();
+		dischargeDetails.setOptions(new PortOptions());
 
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
-		loadDetails.setPortSlot(loadSlot);
-		dischargeDetails.setPortSlot(dischargeSlot);
+		loadDetails.getOptions().setPortSlot(loadSlot);
+		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
 
 		loadSlot.setMaxLoadVolume(119l);
 		dischargeSlot.setMaxDischargeVolume(30l);
@@ -1009,16 +1015,19 @@ public class LNGVoyageCalculatorTest {
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 
 		final PortDetails loadDetails = new PortDetails();
+		loadDetails.setOptions(new PortOptions());
 		final PortDetails dischargeDetails = new PortDetails();
+		dischargeDetails.setOptions(new PortOptions());
 		final PortDetails otherDetails = new PortDetails();
-
+		otherDetails.setOptions(new PortOptions());
+		
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 		final IPortSlot otherSlot = new EndPortSlot();
 
-		loadDetails.setPortSlot(loadSlot);
-		dischargeDetails.setPortSlot(dischargeSlot);
-		otherDetails.setPortSlot(otherSlot);
+		loadDetails.getOptions().setPortSlot(loadSlot);
+		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
+		otherDetails.getOptions().setPortSlot(otherSlot);
 
 		loadSlot.setMaxLoadVolume(150000000l);
 		dischargeSlot.setMaxDischargeVolume(3000000l);
@@ -1111,16 +1120,19 @@ public class LNGVoyageCalculatorTest {
 		final IVessel vessel = context.mock(IVessel.class);
 
 		final PortDetails otherDetails = new PortDetails();
+		otherDetails.setOptions(new PortOptions());
 		final PortDetails loadDetails = new PortDetails();
+		loadDetails.setOptions(new PortOptions());
 		final PortDetails dischargeDetails = new PortDetails();
+		dischargeDetails.setOptions(new PortOptions());
 
 		final PortSlot otherSlot = new StartPortSlot(0, 0, 0);
 		final LoadSlot loadSlot = new LoadSlot();
 		final DischargeSlot dischargeSlot = new DischargeSlot();
 
-		otherDetails.setPortSlot(otherSlot);
-		loadDetails.setPortSlot(loadSlot);
-		dischargeDetails.setPortSlot(dischargeSlot);
+		otherDetails.getOptions().setPortSlot(otherSlot);
+		loadDetails.getOptions().setPortSlot(loadSlot);
+		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
 
 		loadSlot.setMaxLoadVolume(150l);
 		dischargeSlot.setMaxDischargeVolume(30l);

@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 
 public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnessComponent implements IFitnessComponent {
 
@@ -86,7 +87,8 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
-			if (detail.getPortSlot().getPortType().equals(loadPortType)) {
+			final PortOptions options = detail.getOptions();
+			if (options.getPortSlot().getPortType().equals(loadPortType)) {
 				if (firstLoadTime == -1) {
 					firstLoadTime = time;
 				}

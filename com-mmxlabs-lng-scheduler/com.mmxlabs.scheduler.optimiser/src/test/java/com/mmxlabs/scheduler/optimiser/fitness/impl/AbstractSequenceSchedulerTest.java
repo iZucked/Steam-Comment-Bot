@@ -65,6 +65,7 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapVesselEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -257,20 +258,24 @@ public final class AbstractSequenceSchedulerTest {
 		expectedOptions3a.setDistance(400);
 
 		final PortDetails expectedPortDetails1 = new PortDetails();
-		expectedPortDetails1.setPortSlot(loadSlot1);
-		expectedPortDetails1.setVisitDuration(1);
+		expectedPortDetails1.setOptions(new PortOptions());
+		expectedPortDetails1.getOptions().setPortSlot(loadSlot1);
+		expectedPortDetails1.getOptions().setVisitDuration(1);
 
 		final PortDetails expectedPortDetails2 = new PortDetails();
-		expectedPortDetails2.setPortSlot(dischargeSlot1);
-		expectedPortDetails2.setVisitDuration(1);
+		expectedPortDetails2.setOptions(new PortOptions());
+		expectedPortDetails2.getOptions().setPortSlot(dischargeSlot1);
+		expectedPortDetails2.getOptions().setVisitDuration(1);
 
 		final PortDetails expectedPortDetails3 = new PortDetails();
-		expectedPortDetails3.setPortSlot(loadSlot2);
-		expectedPortDetails3.setVisitDuration(1);
+		expectedPortDetails3.setOptions(new PortOptions());
+		expectedPortDetails3.getOptions().setPortSlot(loadSlot2);
+		expectedPortDetails3.getOptions().setVisitDuration(1);
 
 		final PortDetails expectedPortDetails4 = new PortDetails();
-		expectedPortDetails4.setPortSlot(dischargeSlot2);
-		expectedPortDetails4.setVisitDuration(1);
+		expectedPortDetails4.setOptions(new PortOptions());
+		expectedPortDetails4.getOptions().setPortSlot(dischargeSlot2);
+		expectedPortDetails4.getOptions().setVisitDuration(1);
 
 		final VoyageDetails expectedVoyageDetails1 = new VoyageDetails();
 		expectedVoyageDetails1.setOptions(expectedOptions1);
@@ -506,16 +511,19 @@ public final class AbstractSequenceSchedulerTest {
 		expectedOptions2a.setDistance(400);
 
 		final PortDetails expectedPortDetails1 = new PortDetails();
-		expectedPortDetails1.setPortSlot(loadSlot1);
-		expectedPortDetails1.setVisitDuration(1);
+		expectedPortDetails1.setOptions(new PortOptions());
+		expectedPortDetails1.getOptions().setPortSlot(loadSlot1);
+		expectedPortDetails1.getOptions().setVisitDuration(1);
 
 		final PortDetails expectedPortDetails2 = new PortDetails();
-		expectedPortDetails2.setPortSlot(dischargeSlot1);
-		expectedPortDetails2.setVisitDuration(1);
+		expectedPortDetails2.setOptions(new PortOptions());
+		expectedPortDetails2.getOptions().setPortSlot(dischargeSlot1);
+		expectedPortDetails2.getOptions().setVisitDuration(1);
 
 		final PortDetails expectedPortDetails3 = new PortDetails();
-		expectedPortDetails3.setPortSlot(loadSlot2);
-		expectedPortDetails3.setVisitDuration(1);
+		expectedPortDetails3.setOptions(new PortOptions());
+		expectedPortDetails3.getOptions().setPortSlot(loadSlot2);
+		expectedPortDetails3.getOptions().setVisitDuration(1);
 
 		final VoyageDetails expectedVoyageDetails1 = new VoyageDetails();
 		expectedVoyageDetails1.setOptions(expectedOptions1);
@@ -596,17 +604,17 @@ public final class AbstractSequenceSchedulerTest {
 
 		// Assert.assertEquals(5,
 		// ((PortDetails) outputSequence[0]).getStartTime());
-		Assert.assertEquals(1, ((PortDetails) outputSequence[0]).getVisitDuration());
+		Assert.assertEquals(1, ((PortDetails) outputSequence[0]).getOptions().getVisitDuration());
 		// Assert.assertEquals(6,
 		// ((VoyageDetails) outputSequence[1]).getStartTime());
 		// Assert.assertEquals(10,
 		// ((PortDetails) outputSequence[2]).getStartTime());
-		Assert.assertEquals(1, ((PortDetails) outputSequence[2]).getVisitDuration());
+		Assert.assertEquals(1, ((PortDetails) outputSequence[2]).getOptions().getVisitDuration());
 		// Assert.assertEquals(11,
 		// ((VoyageDetails) outputSequence[3]).getStartTime());
 		// Assert.assertEquals(15,
 		// ((PortDetails) outputSequence[4]).getStartTime());
-		Assert.assertEquals(1, ((PortDetails) outputSequence[4]).getVisitDuration());
+		Assert.assertEquals(1, ((PortDetails) outputSequence[4]).getOptions().getVisitDuration());
 
 		context.assertIsSatisfied();
 	}

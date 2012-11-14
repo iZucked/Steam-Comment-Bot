@@ -49,6 +49,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -69,9 +70,6 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	@Inject
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
-	@Inject
-	private IElementDurationProvider durationProvider;
-	
 	@Inject
 	private IPortProvider portProvider;
 
@@ -161,10 +159,13 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 					startTime = thisPortSlot.getTimeWindow().getStart();
 					startSet = true;
 				}
-				final PortDetails portDetails = new PortDetails();
-				portDetails.setVisitDuration(0);
-				portDetails.setPortSlot(thisPortSlot);
-				currentSequence.add(portDetails);
+				//final PortDetails portDetails = new PortDetails();
+				final PortOptions portOptions = new PortOptions();
+				//portDetails.setOptions(new PortOptions());
+				portOptions.setVisitDuration(0);
+				portOptions.setPortSlot(thisPortSlot);
+				//currentSequence.add(portDetails);
+				currentSequence.add(portOptions);
 
 			}
 
@@ -335,8 +336,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			final int visitDuration = durationsProvider.getElementDuration(element, resource);
 
 			final PortDetails portDetails = new PortDetails();
-			portDetails.setVisitDuration(visitDuration);
-			portDetails.setPortSlot(thisPortSlot);
+			portDetails.setOptions(new PortOptions());
+			portDetails.getOptions().setVisitDuration(visitDuration);
+			portDetails.getOptions().setPortSlot(thisPortSlot);
 
 			if (isShortsSequence && prevPortType == PortType.Discharge) {
 				currentTimes.add(shortCargoReturnArrivalTime);

@@ -63,7 +63,7 @@ public final class CachingVoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			int loadix = -1, dischargeix = -1;
 			for (final Object o : sequence) {
 				if (o instanceof PortDetails) {
-					slots[slotix] = ((PortDetails) o).getPortSlot();
+					slots[slotix] = ((PortDetails) o).getOptions().getPortSlot();
 					if ((loadix == -1) && (slots[slotix] instanceof ILoadSlot)) {
 						loadix = slotix;
 					} else if ((dischargeix == -1) && (slots[slotix] instanceof IDischargeSlot)) {

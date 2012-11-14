@@ -129,10 +129,11 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 
 	private void evaluateVoyagePlan() {
 		final PortDetails endDetails = (PortDetails) basicSequence.get(basicSequence.size() - 1);
+		final IPortSlot slot = endDetails.getOptions().getPortSlot();
 
-		if (endDetails.getPortSlot() != null) {
-			if (endDetails.getPortSlot().getPortType() == PortType.End) {
-				final ITimeWindow window = endDetails.getPortSlot().getTimeWindow();
+		if (slot != null) {
+			if (slot.getPortType() == PortType.End) {
+				final ITimeWindow window = slot.getTimeWindow();
 
 				final int lastArrivalTime = arrivalTimes.get(arrivalTimes.size() - 1);
 				final int extraExtent = window == null ? 30 * RELAXATION_STEP : (lastArrivalTime >= window.getEnd() ? 0 : window.getEnd() - lastArrivalTime);
