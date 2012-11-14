@@ -431,8 +431,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 					final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
 
-					line.setFrom(ports.reverseLookup(((PortDetails) plan.getSequence()[0]).getPortSlot().getPort()));
-					line.setTo(ports.reverseLookup(((PortDetails) plan.getSequence()[2]).getPortSlot().getPort()));
+					line.setFrom(ports.reverseLookup(((PortDetails) plan.getSequence()[0]).getOptions().getPortSlot().getPort()));
+					line.setTo(ports.reverseLookup(((PortDetails) plan.getSequence()[2]).getOptions().getPortSlot().getPort()));
 
 					final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
 
@@ -608,22 +608,22 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 	}
 
 	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final UnitCostMatrix spec, final PortDetails portDetails) {
-		result.addExtraData("duration", "Duration", portDetails.getVisitDuration(), ExtraDataFormatType.DURATION);
-		final Port port = ports.reverseLookup(portDetails.getPortSlot().getPort());
+		result.addExtraData("duration", "Duration", portDetails.getOptions().getVisitDuration(), ExtraDataFormatType.DURATION);
+		final Port port = ports.reverseLookup(portDetails.getOptions().getPortSlot().getPort());
 		result.addExtraData("location", "Location", port.getName(), ExtraDataFormatType.AUTO);
 		int total = 0;
 		for (final PortCost cost : pricing.getPortCosts()) {
 			if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
 				// this is the cost for the given port
-				total += cost.getPortCost(spec.getVessel().getVesselClass(), portDetails.getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
+				total += cost.getPortCost(spec.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
 				result.addExtraData("portcost", "Port Cost", total, ExtraDataFormatType.CURRENCY);
 
 				break;
 			}
 		}
 
-		total += (spec.getNotionalDayRate() * portDetails.getVisitDuration()) / 24;
-		result.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * portDetails.getVisitDuration()) / 24, ExtraDataFormatType.CURRENCY);
+		total += (spec.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24;
+		result.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24, ExtraDataFormatType.CURRENCY);
 
 		result.setValue(total);
 		result.setFormatType(ExtraDataFormatType.CURRENCY);
