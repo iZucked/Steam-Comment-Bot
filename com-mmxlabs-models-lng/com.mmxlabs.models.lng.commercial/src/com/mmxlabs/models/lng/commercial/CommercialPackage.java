@@ -762,22 +762,22 @@ public interface CommercialPackage extends EPackage {
 	int INDEX_PRICE_CONTRACT__INDEX = SALES_CONTRACT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Constant</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INDEX_PRICE_CONTRACT__CONSTANT = SALES_CONTRACT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Multiplier</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INDEX_PRICE_CONTRACT__MULTIPLIER = SALES_CONTRACT_FEATURE_COUNT + 2;
+	int INDEX_PRICE_CONTRACT__MULTIPLIER = SALES_CONTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__CONSTANT = SALES_CONTRACT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Index Price Contract</em>' class.
@@ -1378,11 +1378,32 @@ public interface CommercialPackage extends EPackage {
 	 * The feature id for the '<em><b>Notional Speed</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED = PURCHASE_CONTRACT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Des Purchase Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT = PURCHASE_CONTRACT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Source Purchase Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT = PURCHASE_CONTRACT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Redirection Purchase Contract</em>' class.
@@ -1392,7 +1413,138 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REDIRECTION_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 4;
+	int REDIRECTION_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 6;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl <em>Price Expression Contract</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPriceExpressionContract()
+	 * @generated
+	 */
+	int PRICE_EXPRESSION_CONTRACT = 11;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__EXTENSIONS = SALES_CONTRACT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__PROXIES = SALES_CONTRACT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__UUID = SALES_CONTRACT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__NAME = SALES_CONTRACT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__OTHER_NAMES = SALES_CONTRACT__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Entity</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__ENTITY = SALES_CONTRACT__ENTITY;
+
+	/**
+	 * The feature id for the '<em><b>Allowed Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__ALLOWED_PORTS = SALES_CONTRACT__ALLOWED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Preferred Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__PREFERRED_PORT = SALES_CONTRACT__PREFERRED_PORT;
+
+	/**
+	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__MIN_QUANTITY = SALES_CONTRACT__MIN_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__MAX_QUANTITY = SALES_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__PRICE_EXPRESSION = SALES_CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Price Expression Contract</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT_FEATURE_COUNT = SALES_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -1907,6 +2059,53 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getRedirectionPurchaseContract_NotionalSpeed();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDesPurchasePort <em>Des Purchase Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Des Purchase Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDesPurchasePort()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EReference getRedirectionPurchaseContract_DesPurchasePort();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getSourcePurchasePort <em>Source Purchase Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Source Purchase Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getSourcePurchasePort()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EReference getRedirectionPurchaseContract_SourcePurchasePort();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PriceExpressionContract <em>Price Expression Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Price Expression Contract</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PriceExpressionContract
+	 * @generated
+	 */
+	EClass getPriceExpressionContract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PriceExpressionContract#getPriceExpression <em>Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.PriceExpressionContract#getPriceExpression()
+	 * @see #getPriceExpressionContract()
+	 * @generated
+	 */
+	EAttribute getPriceExpressionContract_PriceExpression();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2331,6 +2530,44 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED = eINSTANCE.getRedirectionPurchaseContract_NotionalSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>Des Purchase Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT = eINSTANCE.getRedirectionPurchaseContract_DesPurchasePort();
+
+		/**
+		 * The meta object literal for the '<em><b>Source Purchase Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT = eINSTANCE.getRedirectionPurchaseContract_SourcePurchasePort();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl <em>Price Expression Contract</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getPriceExpressionContract()
+		 * @generated
+		 */
+		EClass PRICE_EXPRESSION_CONTRACT = eINSTANCE.getPriceExpressionContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PRICE_EXPRESSION_CONTRACT__PRICE_EXPRESSION = eINSTANCE.getPriceExpressionContract_PriceExpression();
 
 	}
 

@@ -70,6 +70,8 @@ public class RedirectionPurchaseContractComponentHelper extends BaseComponentHel
 		add_baseSalesPriceExpressionEditor(detailComposite, topClass);
 		add_basePurchasePriceExpressionEditor(detailComposite, topClass);
 		add_notionalSpeedEditor(detailComposite, topClass);
+		add_desPurchasePortEditor(detailComposite, topClass);
+		add_sourcePurchasePortEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseSalesMarketPort feature on RedirectionPurchaseContract
@@ -102,5 +104,23 @@ public class RedirectionPurchaseContractComponentHelper extends BaseComponentHel
 	 */
 	protected void add_notionalSpeedEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED));
+	}
+
+	/**
+	 * Create the editor for the desPurchasePort feature on RedirectionPurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_desPurchasePortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT));
+	}
+
+	/**
+	 * Create the editor for the sourcePurchasePort feature on RedirectionPurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_sourcePurchasePortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT));
 	}
 }
