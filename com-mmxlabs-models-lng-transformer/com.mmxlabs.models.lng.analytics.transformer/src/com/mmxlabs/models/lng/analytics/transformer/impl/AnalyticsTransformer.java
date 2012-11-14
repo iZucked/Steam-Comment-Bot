@@ -92,6 +92,7 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -431,8 +432,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 					final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
 
-					line.setFrom(ports.reverseLookup(((PortDetails) plan.getSequence()[0]).getOptions().getPortSlot().getPort()));
-					line.setTo(ports.reverseLookup(((PortDetails) plan.getSequence()[2]).getOptions().getPortSlot().getPort()));
+					line.setFrom(ports.reverseLookup(((PortOptions) plan.getSequence()[0]).getPortSlot().getPort()));
+					line.setTo(ports.reverseLookup(((PortOptions) plan.getSequence()[2]).getPortSlot().getPort()));
 
 					final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
 
