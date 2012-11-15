@@ -10,24 +10,14 @@ import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.Co
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLate;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 
-import java.util.Collection;
-
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
 import org.eclipse.swt.graphics.Color;
 
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.input.InputModel;
-import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.scenario.service.model.ScenarioInstance;
-import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 public class BlankColourScheme extends ColourScheme {
 	

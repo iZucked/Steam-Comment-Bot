@@ -4,11 +4,7 @@
  */
 package com.mmxlabs.shiplingo.platform.scheduleview.views;
 
-import java.util.List;
-
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;

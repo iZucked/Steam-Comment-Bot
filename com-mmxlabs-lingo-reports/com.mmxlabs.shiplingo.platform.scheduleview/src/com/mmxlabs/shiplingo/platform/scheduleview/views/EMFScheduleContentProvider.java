@@ -14,7 +14,6 @@ import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
