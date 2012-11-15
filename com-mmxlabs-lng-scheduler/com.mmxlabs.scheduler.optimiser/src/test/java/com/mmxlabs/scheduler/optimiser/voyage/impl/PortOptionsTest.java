@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 @RunWith(JMock.class)
 public class PortOptionsTest {

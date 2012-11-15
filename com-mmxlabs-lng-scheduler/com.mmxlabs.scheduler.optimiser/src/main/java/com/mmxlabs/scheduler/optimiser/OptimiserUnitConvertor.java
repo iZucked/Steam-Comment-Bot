@@ -1,6 +1,5 @@
 package com.mmxlabs.scheduler.optimiser;
 
-import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
  * A utility class to convert to/from internal/external optimiser units. The optimiser uses integer arithmetic internally and so external floating point numbers need to be scaled appropriately for use

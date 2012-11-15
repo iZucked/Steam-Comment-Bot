@@ -623,6 +623,16 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			voyagePlan.setFuelConsumption(fc, consumption);
 		}
 		// .. but costs need to be calculated differently
+		
+		for (final FuelComponent fc: FuelComponent.getBaseFuelComponents()) 
+			voyagePlan.setTotalFuelCost(fc, Calculator.costFromConsumption(fuelConsumptions[fc.ordinal()], baseFuelPricePerMT));
+			
+		for (final FuelComponent fc: FuelComponent.getLNGFuelComponents())
+			voyagePlan.setTotalFuelCost(fc, Calculator.costFromConsumption(fuelConsumptions[fc.ordinal()], dischargeM3Price));
+			
+		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Cooldown.ordinal()], cooldownM3Price));
+
+		/*
 		voyagePlan.setTotalFuelCost(FuelComponent.Base, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Base.ordinal()], baseFuelPricePerMT));
 		voyagePlan.setTotalFuelCost(FuelComponent.Base_Supplemental, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Base_Supplemental.ordinal()], baseFuelPricePerMT));
 		voyagePlan.setTotalFuelCost(FuelComponent.IdleBase, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdleBase.ordinal()], baseFuelPricePerMT));
@@ -635,6 +645,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		voyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdleNBO.ordinal()], dischargeM3Price));
 
 		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Cooldown.ordinal()], cooldownM3Price));
+		*/
 
 		voyagePlan.setLNGFuelVolume(lngConsumedInM3);
 
@@ -669,47 +680,29 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				details.setOptions(options);
 				calculatePortFuelRequirements(options, details);
 				result.add(details);
-			} else if (element instanceof PortDetails) {
-				// Clone as violations will modify this data structure
-				result.add(((PortDetails) element).clone());
 			} else {
+				System.err.println("Warning: non-Option type in option sequence: " + element);
 				result.add(element);
 			}
 		}
-		/*
-		for (final Object element : baseSequence) {
-
-			// Loop through basic elements, calculating voyage requirements
-			// to build up basic voyage plan details.
-			if (element instanceof VoyageOptions) {
-				final VoyageOptions options = (VoyageOptions) element;
-
-				final VoyageDetails voyageDetails = new VoyageDetails();
-				voyageDetails.setOptions(options);
-				// Calculate voyage cost
-				calculateVoyageFuelRequirements(options, voyageDetails);
-				result.add(voyageDetails);
-			} else if (element instanceof PortDetails) {
-				// Clone as violations will modify this data structure
-				result.add( ((PortDetails) element).clone());
-				//PortOptions options = ((PortOptions) element).clone();
-				//PortDetails details = new PortDetails();
-				//calculatePortFuelRequirements(options, details);
-				//result.add(details);
-			} else {
-				result.add(element);
-			}
-		} */
 		
 		return result;
 	}
 
-	private void calculatePortFuelRequirements(PortOptions options,
+	/**
+	 * @author Simon McGregor
+	 * 
+	 * Populate a PortDetails object with correct fuel costs based on a PortOptions object.
+	 * 
+	 * @param options The PortOptions to use, specifying vessel class, vessel state and port visit duration.
+	 * @param details The PortDetails to set the correct fuel consumption for.
+	 */
+	public final void calculatePortFuelRequirements(PortOptions options,
 			PortDetails details) {
 		details.setOptions(options);
 //
-//		TODO fix up port deails, call this methoid
-//		Add in prt costs?
+//		TODO fix up port details, call this method
+//		Add in port costs?
 //		
 		final IVessel vessel = options.getVessel();
 		final IVesselClass vesselClass = vessel.getVesselClass();
@@ -724,10 +717,8 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this journey, excluding any extra required for canals
 		 */
 		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerHour, options.getVisitDuration());
-		
-		//output.setFuelConsumption(FuelComponent.Base, requiredConsumptionInMT);
-		
-		
+
+		details.setFuelConsumption(FuelComponent.Base, requiredConsumptionInMT);
 	}
 
 	public void setRouteCostDataComponentProvider(final IRouteCostProvider provider) {

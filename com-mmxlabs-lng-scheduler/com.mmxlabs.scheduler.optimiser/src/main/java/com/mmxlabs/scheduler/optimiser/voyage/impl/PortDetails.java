@@ -9,7 +9,6 @@ import java.util.EnumMap;
 import com.google.common.base.Objects;
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.impl.LongFastEnumMap;
-import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**

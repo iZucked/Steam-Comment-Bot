@@ -44,7 +44,7 @@ public class LNGVoyageCalculatorTest {
 
 		// In this test, we check that we only use travel NBO.
 
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(true);
@@ -105,7 +105,7 @@ public class LNGVoyageCalculatorTest {
 
 		// In this test, we check that we only use travel Base.
 
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(false);
@@ -166,7 +166,7 @@ public class LNGVoyageCalculatorTest {
 
 		// In this test, we check that we use travel and idle NBO
 
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(true);
@@ -228,7 +228,7 @@ public class LNGVoyageCalculatorTest {
 
 		// In this test, we check that we use travel and idle base
 
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(false);
@@ -293,7 +293,7 @@ public class LNGVoyageCalculatorTest {
 		// In this test, we check that we use travel NBO and idle base
 		// This implies min heel run down
 
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(true);
@@ -357,7 +357,7 @@ public class LNGVoyageCalculatorTest {
 
 		// In this test, we check that we only use travel NBO - however due to
 		// decreased time, expect FBO
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(true);
@@ -418,7 +418,7 @@ public class LNGVoyageCalculatorTest {
 	public void testCalculateVoyageFuelRequirements7() {
 
 		// In this test, we check that we travel on NBO and base supplement
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(true);
@@ -480,7 +480,7 @@ public class LNGVoyageCalculatorTest {
 
 		// In this test, there is not enough travel time, expect us to travel as
 		// fast as possible to get to our destination.
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(true);
@@ -537,7 +537,7 @@ public class LNGVoyageCalculatorTest {
 		context.assertIsSatisfied();
 	}
 
-	VoyageOptions createSampleOptions() {
+	VoyageOptions createSampleVoyageOptions() {
 
 		final IPortSlot from = context.mock(IPortSlot.class, "from");
 		final IPortSlot to = context.mock(IPortSlot.class, "to");
@@ -549,36 +549,7 @@ public class LNGVoyageCalculatorTest {
 
 		options.setNBOSpeed(OptimiserUnitConvertor.convertToInternalSpeed(15));
 
-		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-		keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(10), (long) OptimiserUnitConvertor.convertToInternalDailyRate(50));
-		keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(20), (long) OptimiserUnitConvertor.convertToInternalDailyRate(100));
-
-		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
-
-		final VesselClass vesselClass = new VesselClass();
-		vesselClass.setConsumptionRate(VesselState.Laden, calc);
-		vesselClass.setConsumptionRate(VesselState.Ballast, calc);
-		vesselClass.setMinSpeed(OptimiserUnitConvertor.convertToInternalSpeed(10));
-		vesselClass.setMaxSpeed(OptimiserUnitConvertor.convertToInternalSpeed(20));
-
-		vesselClass.setNBORate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150));
-		vesselClass.setNBORate(VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150));
-
-		vesselClass.setIdleNBORate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150));
-		vesselClass.setIdleNBORate(VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150));
-
-		vesselClass.setIdleConsumptionRate(VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(10));
-		vesselClass.setIdleConsumptionRate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(10));
-
-		vesselClass.setName("class-1");
-
-		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(0.5));
-
-		// 2 days of boil off
-		vesselClass.setMinHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
-
-		// Currently not used by test
-		vesselClass.setCargoCapacity(0);
+		final VesselClass vesselClass = createSampleVesselClass();
 
 		context.setDefaultResultForType(IVesselClass.class, vesselClass);
 
@@ -597,7 +568,7 @@ public class LNGVoyageCalculatorTest {
 
 		// In this test, we check zero distance is handled correctly
 
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(true);
@@ -660,7 +631,7 @@ public class LNGVoyageCalculatorTest {
 		// In this test, we check that we only use travel NBO.
 		// A canal route has been added and should be costed
 
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(true);
@@ -729,7 +700,7 @@ public class LNGVoyageCalculatorTest {
 		// In this test, we check that we only use travel NBO.
 		// A canal route has been added and should be costed
 
-		final VoyageOptions options = createSampleOptions();
+		final VoyageOptions options = createSampleVoyageOptions();
 
 		// Populate options
 		options.setUseNBOForTravel(false);
@@ -1190,6 +1161,119 @@ public class LNGVoyageCalculatorTest {
 		context.assertIsSatisfied();
 	}
 
+	@Test
+	public void testCalculatePortFuelRequirements1() {
+		testCalculatePortFuelRequirements(VesselState.Laden, 13, 11, 143);
+	}
+	
+	@Test
+	public void testCalculatePortFuelRequirements2() {
+		testCalculatePortFuelRequirements(VesselState.Ballast, 22, 101, 2222);
+	}	
+	
+	public void testCalculatePortFuelRequirements(VesselState state, int visitDuration, int consumptionRate, long target) {
+
+		// In this test, we check that we only use travel NBO.
+
+		final PortOptions options = createSamplePortOptions();
+
+		options.setVesselState(state);
+		options.setVisitDuration(visitDuration);
+		
+		final PortDetails details = new PortDetails();
+
+		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+
+		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
+
+		calc.init();
+
+		// Need this additional bit to get vesselClass reference
+		context.checking(new Expectations() {
+			{
+				one(options.getVessel()).getVesselClass();
+			}
+		});
+		final VesselClass vesselClass = (VesselClass) options.getVessel().getVesselClass();
+
+		vesselClass.setInPortConsumptionRate(state, consumptionRate);
+		
+		context.checking(new Expectations() {
+			{
+				allowing(options.getVessel()).getVesselClass();
+			}
+		});
+
+		calc.calculatePortFuelRequirements(options, details);
+
+		// Check results
+		Assert.assertSame(options, details.getOptions());
+
+		Assert.assertEquals(target, details.getFuelConsumption(FuelComponent.Base));
+
+		context.assertIsSatisfied();
+	}
+	
+	public VesselClass createSampleVesselClass() {
+		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
+		keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(10), (long) OptimiserUnitConvertor.convertToInternalDailyRate(50));
+		keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(20), (long) OptimiserUnitConvertor.convertToInternalDailyRate(100));
+
+		final InterpolatingConsumptionRateCalculator calc = new InterpolatingConsumptionRateCalculator(keypoints);
+		final VesselClass vesselClass = new VesselClass();
+		vesselClass.setConsumptionRate(VesselState.Laden, calc);
+		vesselClass.setConsumptionRate(VesselState.Ballast, calc);
+		vesselClass.setMinSpeed(OptimiserUnitConvertor.convertToInternalSpeed(10));
+		vesselClass.setMaxSpeed(OptimiserUnitConvertor.convertToInternalSpeed(20));
+
+		vesselClass.setNBORate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150));
+		vesselClass.setNBORate(VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150));
+
+		vesselClass.setIdleNBORate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(150));
+		vesselClass.setIdleNBORate(VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(150));
+
+		vesselClass.setIdleConsumptionRate(VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(10));
+		vesselClass.setIdleConsumptionRate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(10));
+
+		vesselClass.setName("class-1");
+
+		vesselClass.setBaseFuelConversionFactor(OptimiserUnitConvertor.convertToInternalConversionFactor(0.5));
+
+		// 2 days of boil off
+		vesselClass.setMinHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
+
+		vesselClass.setInPortConsumptionRate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(35));
+		vesselClass.setInPortConsumptionRate(VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(45));
+		
+		// Currently not used by test
+		vesselClass.setCargoCapacity(0);
+
+		return vesselClass;
+	}
+	
+	public PortOptions createSamplePortOptions() {
+		
+		final IPortSlot slot = context.mock(IPortSlot.class, "slot");
+
+		final PortOptions options = new PortOptions();
+
+		options.setPortSlot(slot);
+		options.setVisitDuration(0);
+
+		final VesselClass vesselClass = createSampleVesselClass(); 
+
+		context.setDefaultResultForType(IVesselClass.class, vesselClass);
+
+		final IVessel vessel = context.mock(IVessel.class);
+
+		options.setVessel(vessel);
+		options.setVesselState(VesselState.Laden);
+
+		return options;
+	}
 	//
 	// TODO: Test load/discharge limits
 	//

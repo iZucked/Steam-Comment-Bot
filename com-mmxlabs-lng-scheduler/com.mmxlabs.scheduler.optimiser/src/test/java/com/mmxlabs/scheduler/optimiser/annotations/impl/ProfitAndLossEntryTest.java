@@ -10,7 +10,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
-import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
 
 public class ProfitAndLossEntryTest {

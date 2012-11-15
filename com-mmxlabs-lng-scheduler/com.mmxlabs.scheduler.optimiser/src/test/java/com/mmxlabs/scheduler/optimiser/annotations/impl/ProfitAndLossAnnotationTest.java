@@ -11,7 +11,6 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
-import com.mmxlabs.scheduler.optimiser.annotations.impl.ProfitAndLossAnnotation;
 
 public class ProfitAndLossAnnotationTest {
 
