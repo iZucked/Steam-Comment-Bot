@@ -48,6 +48,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortOptions;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageOptions;
@@ -159,9 +160,11 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 					startSet = true;
 				}
 				final PortOptions portOptions = new PortOptions();
+				final PortDetails portDetails = new PortDetails();
+				portDetails.setOptions(portOptions);
 				portOptions.setVisitDuration(0);
 				portOptions.setPortSlot(thisPortSlot);
-				currentSequence.add(portOptions);
+				currentSequence.add(portDetails);
 
 			}
 
