@@ -75,6 +75,7 @@ public final class AbstractSequenceSchedulerTest {
 
 	Mockery context = new JUnit4Mockery();
 
+	
 	/**
 	 * Test high level inputs for a a two {@link VoyagePlan} sequence. Outputs cannot easily be tested with e JMock'd {@link IVoyagePlanOptimiser} so we just expect something to come out.
 	 * 
@@ -99,6 +100,7 @@ public final class AbstractSequenceSchedulerTest {
 		final LoadSlot loadSlot1 = new LoadSlot();
 		loadSlot1.setPort(port1);
 		loadSlot1.setTimeWindow(timeWindow1);
+		
 		final DischargeSlot dischargeSlot1 = new DischargeSlot();
 		dischargeSlot1.setPort(port2);
 		dischargeSlot1.setTimeWindow(timeWindow2);
@@ -184,6 +186,7 @@ public final class AbstractSequenceSchedulerTest {
 
 		final IResource resource = new Resource(index);
 		final Vessel vessel = new Vessel(index);
+		vessel.setName("Schedule1Vessel");
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
 		vesselClass.setMinNBOSpeed(VesselState.Ballast, 15000);
@@ -207,102 +210,98 @@ public final class AbstractSequenceSchedulerTest {
 		// Init scheduler and ensure all required components are in place
 		scheduler.init();
 
-		final VoyageOptions expectedOptions1 = new VoyageOptions();
-		expectedOptions1.setAvailableTime(4);
-		expectedOptions1.setFromPortSlot(loadSlot1);
-		expectedOptions1.setToPortSlot(dischargeSlot1);
-		expectedOptions1.setUseNBOForTravel(true);
-		expectedOptions1.setUseNBOForIdle(false);
-		expectedOptions1.setUseFBOForSupplement(false);
-		expectedOptions1.setVessel(vessel);
-		expectedOptions1.setVesselState(VesselState.Laden);
-		expectedOptions1.setNBOSpeed(15000);
-		expectedOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
+		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
+		expectedVoyageOptions1.setAvailableTime(4);
+		expectedVoyageOptions1.setFromPortSlot(loadSlot1);
+		expectedVoyageOptions1.setToPortSlot(dischargeSlot1);
+		expectedVoyageOptions1.setUseNBOForTravel(true);
+		expectedVoyageOptions1.setUseNBOForIdle(false);
+		expectedVoyageOptions1.setUseFBOForSupplement(false);
+		expectedVoyageOptions1.setVessel(vessel);
+		expectedVoyageOptions1.setVesselState(VesselState.Laden);
+		expectedVoyageOptions1.setNBOSpeed(15000);
+		expectedVoyageOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
-		final VoyageOptions expectedOptions1a = expectedOptions1.clone();
-		expectedOptions1a.setRoute(IMultiMatrixProvider.Default_Key);
-		expectedOptions1a.setDistance(400);
+		final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.clone();
+		expectedVoyageOptions1a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions1a.setDistance(400);
 
-		final VoyageOptions expectedOptions2 = new VoyageOptions();
-		expectedOptions2.setAvailableTime(4);
-		expectedOptions2.setFromPortSlot(dischargeSlot1);
-		expectedOptions2.setToPortSlot(loadSlot2);
-		expectedOptions2.setUseFBOForSupplement(false);
-		expectedOptions2.setUseNBOForIdle(false);
-		expectedOptions2.setUseNBOForTravel(true);
-		expectedOptions2.setVessel(vessel);
-		expectedOptions2.setVesselState(VesselState.Ballast);
-		expectedOptions2.setNBOSpeed(15000);
-		expectedOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
-		expectedOptions2.setShouldBeCold(true);
-		final VoyageOptions expectedOptions2a = expectedOptions2.clone();
-		expectedOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
-		expectedOptions2a.setDistance(400);
+		final VoyageOptions expectedVoyageOptions2 = new VoyageOptions();
+		expectedVoyageOptions2.setAvailableTime(4);
+		expectedVoyageOptions2.setFromPortSlot(dischargeSlot1);
+		expectedVoyageOptions2.setToPortSlot(loadSlot2);
+		expectedVoyageOptions2.setUseFBOForSupplement(false);
+		expectedVoyageOptions2.setUseNBOForIdle(false);
+		expectedVoyageOptions2.setUseNBOForTravel(true);
+		expectedVoyageOptions2.setVessel(vessel);
+		expectedVoyageOptions2.setVesselState(VesselState.Ballast);
+		expectedVoyageOptions2.setNBOSpeed(15000);
+		expectedVoyageOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
+		expectedVoyageOptions2.setShouldBeCold(true);
+		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
+		expectedVoyageOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions2a.setDistance(400);
 
-		final VoyageOptions expectedOptions3 = new VoyageOptions();
-		expectedOptions3.setAvailableTime(4);
-		expectedOptions3.setFromPortSlot(loadSlot2);
-		expectedOptions3.setToPortSlot(dischargeSlot2);
-		expectedOptions3.setUseFBOForSupplement(false);
-		expectedOptions3.setUseNBOForIdle(false);
-		expectedOptions3.setUseNBOForTravel(true);
-		expectedOptions3.setVessel(vessel);
-		expectedOptions3.setVesselState(VesselState.Laden);
-		expectedOptions3.setNBOSpeed(15000);
-		expectedOptions3.setAvailableLNG(vesselClass.getCargoCapacity());
+		final VoyageOptions expectedVoyageOptions3 = new VoyageOptions();
+		expectedVoyageOptions3.setAvailableTime(4);
+		expectedVoyageOptions3.setFromPortSlot(loadSlot2);
+		expectedVoyageOptions3.setToPortSlot(dischargeSlot2);
+		expectedVoyageOptions3.setUseFBOForSupplement(false);
+		expectedVoyageOptions3.setUseNBOForIdle(false);
+		expectedVoyageOptions3.setUseNBOForTravel(true);
+		expectedVoyageOptions3.setVessel(vessel);
+		expectedVoyageOptions3.setVesselState(VesselState.Laden);
+		expectedVoyageOptions3.setNBOSpeed(15000);
+		expectedVoyageOptions3.setAvailableLNG(vesselClass.getCargoCapacity());
 
-		final VoyageOptions expectedOptions3a = expectedOptions3.clone();
-		expectedOptions3a.setRoute(IMultiMatrixProvider.Default_Key);
-		expectedOptions3a.setDistance(400);
+		final VoyageOptions expectedVoyageOptions3a = expectedVoyageOptions3.clone();
+		expectedVoyageOptions3a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions3a.setDistance(400);
 
 		final PortDetails expectedPortDetails1 = new PortDetails();
-		expectedPortDetails1.setOptions(new PortOptions());
-		expectedPortDetails1.getOptions().setPortSlot(loadSlot1);
-		expectedPortDetails1.getOptions().setVisitDuration(1);
+		final PortOptions expectedPortOptions1 = new PortOptions(1, vessel, loadSlot1, VesselState.Ballast);
+		expectedPortDetails1.setOptions(expectedPortOptions1);
 
 		final PortDetails expectedPortDetails2 = new PortDetails();
-		expectedPortDetails2.setOptions(new PortOptions());
-		expectedPortDetails2.getOptions().setPortSlot(dischargeSlot1);
-		expectedPortDetails2.getOptions().setVisitDuration(1);
+		final PortOptions expectedPortOptions2 = new PortOptions(1, vessel, dischargeSlot1, VesselState.Laden);	
+		expectedPortDetails2.setOptions(expectedPortOptions2);
 
 		final PortDetails expectedPortDetails3 = new PortDetails();
-		expectedPortDetails3.setOptions(new PortOptions());
-		expectedPortDetails3.getOptions().setPortSlot(loadSlot2);
-		expectedPortDetails3.getOptions().setVisitDuration(1);
+		final PortOptions expectedPortOptions3 = new PortOptions(1, vessel, loadSlot2, VesselState.Ballast);	
+		expectedPortDetails3.setOptions(expectedPortOptions3);
 
 		final PortDetails expectedPortDetails4 = new PortDetails();
-		expectedPortDetails4.setOptions(new PortOptions());
-		expectedPortDetails4.getOptions().setPortSlot(dischargeSlot2);
-		expectedPortDetails4.getOptions().setVisitDuration(1);
+		final PortOptions expectedPortOptions4 = new PortOptions(1, vessel, dischargeSlot2, VesselState.Laden);	
+		expectedPortDetails4.setOptions(expectedPortOptions4);
 
 		final VoyageDetails expectedVoyageDetails1 = new VoyageDetails();
-		expectedVoyageDetails1.setOptions(expectedOptions1);
+		expectedVoyageDetails1.setOptions(expectedVoyageOptions1);
 		// expectedVoyageDetails1.setStartTime(6);
 		expectedVoyageDetails1.setTravelTime(4);
 
 		final VoyageDetails expectedVoyageDetails2 = new VoyageDetails();
-		expectedVoyageDetails2.setOptions(expectedOptions2);
+		expectedVoyageDetails2.setOptions(expectedVoyageOptions2);
 		// expectedVoyageDetails2.setStartTime(11);
 		expectedVoyageDetails2.setTravelTime(4);
 
 		final VoyageDetails expectedVoyageDetails3 = new VoyageDetails();
-		expectedVoyageDetails3.setOptions(expectedOptions3);
+		expectedVoyageDetails3.setOptions(expectedVoyageOptions3);
 		// expectedVoyageDetails3.setStartTime(16);
 		expectedVoyageDetails3.setTravelTime(4);
 
 		final List<Object> expectedBasicSequence1 = new LinkedList<Object>();
-		expectedBasicSequence1.add(expectedPortDetails1);
-		expectedBasicSequence1.add(expectedOptions1a);
-		expectedBasicSequence1.add(expectedPortDetails2);
-		expectedBasicSequence1.add(expectedOptions2a);
-		expectedBasicSequence1.add(expectedPortDetails3);
+		expectedBasicSequence1.add(expectedPortOptions1);
+		expectedBasicSequence1.add(expectedVoyageOptions1a);
+		expectedBasicSequence1.add(expectedPortOptions2);
+		expectedBasicSequence1.add(expectedVoyageOptions2a);
+		expectedBasicSequence1.add(expectedPortOptions3);
 
 		final List<Object> expectedBasicSequence2 = new LinkedList<Object>();
-		expectedBasicSequence2.add(expectedPortDetails3);
-		expectedBasicSequence2.add(expectedOptions3a);
-		expectedBasicSequence2.add(expectedPortDetails4);
+		expectedBasicSequence2.add(expectedPortOptions3);
+		expectedBasicSequence2.add(expectedVoyageOptions3a);
+		expectedBasicSequence2.add(expectedPortOptions4);
 
 		// Return "empty" plan from optimiser
 		final VoyagePlan testVoyagePlan = new VoyagePlan();
@@ -325,18 +324,18 @@ public final class AbstractSequenceSchedulerTest {
 				one(voyagePlanOptimiser).setVessel(vessel, 5);
 
 				// Set expected list of VPO choices
-				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions1))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedVoyageOptions1))));
 
-				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions1))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1))));
 
-				one(voyagePlanOptimiser).addChoice(with(equal(new NBOTravelVoyagePlanChoice(expectedOptions1a, expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2))));
 
-				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedVoyageOptions2))));
 
-				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2))));
 
-				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions3))));
-				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions3))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedVoyageOptions3))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedVoyageOptions3))));
 
 				// Expect two runs of the VPO
 				one(voyagePlanOptimiser).setBasicSequence(with(equal(expectedBasicSequence1)));
@@ -454,6 +453,7 @@ public final class AbstractSequenceSchedulerTest {
 
 		final IResource resource = new Resource(index);
 		final Vessel vessel = new Vessel(index);
+		vessel.setName("Schedule2Vessel");
 		final VesselClass vesselClass = new VesselClass();
 		vesselClass.setMinNBOSpeed(VesselState.Laden, 15000);
 		vesselClass.setMinNBOSpeed(VesselState.Ballast, 15000);
@@ -476,71 +476,69 @@ public final class AbstractSequenceSchedulerTest {
 		// Init scheduler and ensure all required components are in place
 		scheduler.init();
 
-		final VoyageOptions expectedOptions1 = new VoyageOptions();
-		expectedOptions1.setAvailableTime(4);
-		expectedOptions1.setFromPortSlot(loadSlot1);
-		expectedOptions1.setToPortSlot(dischargeSlot1);
-		expectedOptions1.setUseNBOForTravel(true);
-		expectedOptions1.setUseNBOForIdle(false);
-		expectedOptions1.setUseFBOForSupplement(false);
-		expectedOptions1.setVessel(vessel);
-		expectedOptions1.setVesselState(VesselState.Laden);
-		expectedOptions1.setNBOSpeed(15000);
-		expectedOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
+		final VoyageOptions expectedVoyageOptions1 = new VoyageOptions();
+		expectedVoyageOptions1.setAvailableTime(4);
+		expectedVoyageOptions1.setFromPortSlot(loadSlot1);
+		expectedVoyageOptions1.setToPortSlot(dischargeSlot1);
+		expectedVoyageOptions1.setUseNBOForTravel(true);
+		expectedVoyageOptions1.setUseNBOForIdle(false);
+		expectedVoyageOptions1.setUseFBOForSupplement(false);
+		expectedVoyageOptions1.setVessel(vessel);
+		expectedVoyageOptions1.setVesselState(VesselState.Laden);
+		expectedVoyageOptions1.setNBOSpeed(15000);
+		expectedVoyageOptions1.setAvailableLNG(vesselClass.getCargoCapacity());
 
 		// The NBO travel options will have completed the setup of previous
 		// options (options1) filling in distance info.
-		final VoyageOptions expectedOptions1a = expectedOptions1.clone();
-		expectedOptions1a.setRoute(IMultiMatrixProvider.Default_Key);
-		expectedOptions1a.setDistance(400);
+		final VoyageOptions expectedVoyageOptions1a = expectedVoyageOptions1.clone();
+		expectedVoyageOptions1a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions1a.setDistance(400);
 
-		final VoyageOptions expectedOptions2 = new VoyageOptions();
-		expectedOptions2.setAvailableTime(4);
-		expectedOptions2.setFromPortSlot(dischargeSlot1);
-		expectedOptions2.setToPortSlot(loadSlot2);
-		expectedOptions2.setUseFBOForSupplement(false);
-		expectedOptions2.setUseNBOForIdle(false);
-		expectedOptions2.setUseNBOForTravel(true);
-		expectedOptions2.setVessel(vessel);
-		expectedOptions2.setVesselState(VesselState.Ballast);
-		expectedOptions2.setNBOSpeed(15000);
-		expectedOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
-		expectedOptions2.setShouldBeCold(true);
-		final VoyageOptions expectedOptions2a = expectedOptions2.clone();
-		expectedOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
-		expectedOptions2a.setDistance(400);
+		final VoyageOptions expectedVoyageOptions2 = new VoyageOptions();
+		expectedVoyageOptions2.setAvailableTime(4);
+		expectedVoyageOptions2.setFromPortSlot(dischargeSlot1);
+		expectedVoyageOptions2.setToPortSlot(loadSlot2);
+		expectedVoyageOptions2.setUseFBOForSupplement(false);
+		expectedVoyageOptions2.setUseNBOForIdle(false);
+		expectedVoyageOptions2.setUseNBOForTravel(true);
+		expectedVoyageOptions2.setVessel(vessel);
+		expectedVoyageOptions2.setVesselState(VesselState.Ballast);
+		expectedVoyageOptions2.setNBOSpeed(15000);
+		expectedVoyageOptions2.setAvailableLNG(vesselClass.getCargoCapacity());
+		expectedVoyageOptions2.setShouldBeCold(true);
+		final VoyageOptions expectedVoyageOptions2a = expectedVoyageOptions2.clone();
+		expectedVoyageOptions2a.setRoute(IMultiMatrixProvider.Default_Key);
+		expectedVoyageOptions2a.setDistance(400);
 
 		final PortDetails expectedPortDetails1 = new PortDetails();
-		expectedPortDetails1.setOptions(new PortOptions());
-		expectedPortDetails1.getOptions().setPortSlot(loadSlot1);
-		expectedPortDetails1.getOptions().setVisitDuration(1);
-
+		final PortOptions expectedPortOptions1 = new PortOptions(1, vessel, loadSlot1, VesselState.Ballast);
+		expectedPortDetails1.setOptions(expectedPortOptions1);
+		
 		final PortDetails expectedPortDetails2 = new PortDetails();
-		expectedPortDetails2.setOptions(new PortOptions());
-		expectedPortDetails2.getOptions().setPortSlot(dischargeSlot1);
-		expectedPortDetails2.getOptions().setVisitDuration(1);
+		final PortOptions expectedPortOptions2 = new PortOptions(1, vessel, dischargeSlot1, VesselState.Laden);
+		expectedPortDetails2.setOptions(expectedPortOptions2);
 
 		final PortDetails expectedPortDetails3 = new PortDetails();
-		expectedPortDetails3.setOptions(new PortOptions());
-		expectedPortDetails3.getOptions().setPortSlot(loadSlot2);
-		expectedPortDetails3.getOptions().setVisitDuration(1);
+		final PortOptions expectedPortOptions3 = new PortOptions(1, vessel, loadSlot2, VesselState.Ballast);
+		expectedPortDetails3.setOptions(expectedPortOptions3);
 
+		
 		final VoyageDetails expectedVoyageDetails1 = new VoyageDetails();
-		expectedVoyageDetails1.setOptions(expectedOptions1);
+		expectedVoyageDetails1.setOptions(expectedVoyageOptions1);
 		// expectedVoyageDetails1.setStartTime(6);
 		expectedVoyageDetails1.setTravelTime(4);
 
 		final VoyageDetails expectedVoyageDetails2 = new VoyageDetails();
-		expectedVoyageDetails2.setOptions(expectedOptions2);
+		expectedVoyageDetails2.setOptions(expectedVoyageOptions2);
 		// expectedVoyageDetails2.setStartTime(11);
 		expectedVoyageDetails2.setTravelTime(4);
 
 		final List<Object> expectedBasicSequence1 = new LinkedList<Object>();
-		expectedBasicSequence1.add(expectedPortDetails1);
-		expectedBasicSequence1.add(expectedOptions1a);
-		expectedBasicSequence1.add(expectedPortDetails2);
-		expectedBasicSequence1.add(expectedOptions2a);
-		expectedBasicSequence1.add(expectedPortDetails3);
+		expectedBasicSequence1.add(expectedPortOptions1);
+		expectedBasicSequence1.add(expectedVoyageOptions1a);
+		expectedBasicSequence1.add(expectedPortOptions2);
+		expectedBasicSequence1.add(expectedVoyageOptions2a);
+		expectedBasicSequence1.add(expectedPortOptions3);
 
 		final VoyagePlan testVoyagePlan = new VoyagePlan();
 		final Object[] testSequence = new Object[] { expectedPortDetails1, expectedVoyageDetails1, expectedPortDetails2, expectedVoyageDetails2, expectedPortDetails3 };
@@ -563,15 +561,15 @@ public final class AbstractSequenceSchedulerTest {
 				one(voyagePlanOptimiser).setVessel(vessel, 5);
 
 				// Set expected list of VPO choices
-				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions1))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedVoyageOptions1))));
 
-				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions1))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedVoyageOptions1))));
 
-				one(voyagePlanOptimiser).addChoice(with(equal(new NBOTravelVoyagePlanChoice(expectedOptions1a, expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new NBOTravelVoyagePlanChoice(expectedVoyageOptions1a, expectedVoyageOptions2))));
 
-				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new FBOVoyagePlanChoice(expectedVoyageOptions2))));
 
-				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedOptions2))));
+				one(voyagePlanOptimiser).addChoice(with(equal(new IdleNBOVoyagePlanChoice(expectedVoyageOptions2))));
 
 				// Expect two runs of the VPO
 				one(voyagePlanOptimiser).setBasicSequence(with(equal(expectedBasicSequence1)));
@@ -955,4 +953,6 @@ public final class AbstractSequenceSchedulerTest {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 	}
+	
+	
 }
