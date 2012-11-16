@@ -46,15 +46,17 @@ public class ModelEntityMap {
 	
 	/**
 	 * @return the earliestDate
+	 * @since 2.0
 	 */
-	protected Date getEarliestDate() {
+	public Date getEarliestDate() {
 		return earliestDate;
 	}
 
 	/**
 	 * @param earliestDate the earliestDate to set
+	 * @since 2.0
 	 */
-	protected void setEarliestDate(Date earliestDate) {
+	public void setEarliestDate(Date earliestDate) {
 		this.earliestDate = earliestDate;
 	}
 
