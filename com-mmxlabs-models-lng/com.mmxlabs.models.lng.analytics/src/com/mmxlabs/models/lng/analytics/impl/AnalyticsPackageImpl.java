@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
@@ -14,8 +15,11 @@ import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.CostComponent;
+import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.lng.analytics.FuelCost;
 import com.mmxlabs.models.lng.analytics.Journey;
+import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
+import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
@@ -85,6 +89,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass journeyEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass shippingCostPlanEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass shippingCostRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum destinationTypeEEnum = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -175,6 +200,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EReference getAnalyticsModel_SelectedMatrix() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAnalyticsModel_ShippingCostPlans() {
+		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -692,6 +727,126 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getShippingCostPlan() {
+		return shippingCostPlanEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getShippingCostPlan_Vessel() {
+		return (EReference)shippingCostPlanEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getShippingCostPlan_NotionalDayRate() {
+		return (EAttribute)shippingCostPlanEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getShippingCostPlan_BaseFuelPrice() {
+		return (EAttribute)shippingCostPlanEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getShippingCostPlan_Rows() {
+		return (EReference)shippingCostPlanEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getShippingCostRow() {
+		return shippingCostRowEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getShippingCostRow_Port() {
+		return (EReference)shippingCostRowEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getShippingCostRow_Date() {
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getShippingCostRow_CargoPrice() {
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getShippingCostRow_CvValue() {
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getShippingCostRow_DestinationType() {
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getDestinationType() {
+		return destinationTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -721,6 +876,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		analyticsModelEClass = createEClass(ANALYTICS_MODEL);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__ROUND_TRIP_MATRICES);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__SELECTED_MATRIX);
+		createEReference(analyticsModelEClass, ANALYTICS_MODEL__SHIPPING_COST_PLANS);
 
 		unitCostMatrixEClass = createEClass(UNIT_COST_MATRIX);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__PORTS);
@@ -785,6 +941,22 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		journeyEClass = createEClass(JOURNEY);
 		createEReference(journeyEClass, JOURNEY__FROM);
 		createEReference(journeyEClass, JOURNEY__TO);
+
+		shippingCostPlanEClass = createEClass(SHIPPING_COST_PLAN);
+		createEReference(shippingCostPlanEClass, SHIPPING_COST_PLAN__VESSEL);
+		createEAttribute(shippingCostPlanEClass, SHIPPING_COST_PLAN__NOTIONAL_DAY_RATE);
+		createEAttribute(shippingCostPlanEClass, SHIPPING_COST_PLAN__BASE_FUEL_PRICE);
+		createEReference(shippingCostPlanEClass, SHIPPING_COST_PLAN__ROWS);
+
+		shippingCostRowEClass = createEClass(SHIPPING_COST_ROW);
+		createEReference(shippingCostRowEClass, SHIPPING_COST_ROW__PORT);
+		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__DATE);
+		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__CARGO_PRICE);
+		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__CV_VALUE);
+		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__DESTINATION_TYPE);
+
+		// Create enums
+		destinationTypeEEnum = createEEnum(DESTINATION_TYPE);
 	}
 
 	/**
@@ -826,11 +998,14 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		unitCostLineEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
 		voyageEClass.getESuperTypes().add(this.getCostComponent());
 		visitEClass.getESuperTypes().add(this.getCostComponent());
+		shippingCostPlanEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		shippingCostRowEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAnalyticsModel_RoundTripMatrices(), this.getUnitCostMatrix(), null, "roundTripMatrices", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_SelectedMatrix(), this.getUnitCostMatrix(), null, "selectedMatrix", null, 1, 1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalyticsModel_ShippingCostPlans(), this.getShippingCostPlan(), null, "shippingCostPlans", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitCostMatrixEClass, UnitCostMatrix.class, "UnitCostMatrix", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getUnitCostMatrix_Ports(), theTypesPackage.getAPortSet(), null, "ports", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -899,6 +1074,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEClass(journeyEClass, Journey.class, "Journey", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getJourney_From(), theTypesPackage.getAPort(), null, "from", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getJourney_To(), theTypesPackage.getAPort(), null, "to", null, 1, 1, Journey.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(shippingCostPlanEClass, ShippingCostPlan.class, "ShippingCostPlan", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getShippingCostPlan_Vessel(), theTypesPackage.getAVessel(), null, "vessel", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getShippingCostPlan_NotionalDayRate(), ecorePackage.getEInt(), "notionalDayRate", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getShippingCostPlan_BaseFuelPrice(), ecorePackage.getEDouble(), "baseFuelPrice", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getShippingCostPlan_Rows(), this.getShippingCostRow(), null, "rows", null, 0, -1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(shippingCostRowEClass, ShippingCostRow.class, "ShippingCostRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getShippingCostRow_Port(), theTypesPackage.getAPort(), null, "port", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getShippingCostRow_Date(), ecorePackage.getEDate(), "date", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getShippingCostRow_CargoPrice(), ecorePackage.getEDouble(), "cargoPrice", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getShippingCostRow_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getShippingCostRow_DestinationType(), this.getDestinationType(), "destinationType", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		// Initialize enums and add enum literals
+		initEEnum(destinationTypeEEnum, DestinationType.class, "DestinationType");
+		addEEnumLiteral(destinationTypeEEnum, DestinationType.START);
+		addEEnumLiteral(destinationTypeEEnum, DestinationType.END);
+		addEEnumLiteral(destinationTypeEEnum, DestinationType.LOAD);
+		addEEnumLiteral(destinationTypeEEnum, DestinationType.DISCHARGE);
+		addEEnumLiteral(destinationTypeEEnum, DestinationType.OTHER);
 
 		// Create resource
 		createResource(eNS_URI);
@@ -999,7 +1195,25 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 			 "scale", "100",
 			 "formatString", "##0.#",
 			 "unit", "%"
+		   });				
+		addAnnotation
+		  (getShippingCostPlan_NotionalDayRate(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/day"
 		   });		
+		addAnnotation
+		  (getShippingCostPlan_BaseFuelPrice(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/MT"
+		   });		
+		addAnnotation
+		  (getShippingCostRow_CargoPrice(), 
+		   source, 
+		   new String[] {
+			 "unit", "$/mmbtu"
+		   });
 	}
 
 } //AnalyticsPackageImpl

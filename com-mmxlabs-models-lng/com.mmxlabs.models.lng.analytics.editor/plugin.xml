@@ -69,6 +69,18 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.analytics.Journey">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostPlanComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostPlanComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ShippingCostPlan">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostRowComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostRowComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ShippingCostRow">
+  </componentHelper>
 		
 	</extension>
  <extension

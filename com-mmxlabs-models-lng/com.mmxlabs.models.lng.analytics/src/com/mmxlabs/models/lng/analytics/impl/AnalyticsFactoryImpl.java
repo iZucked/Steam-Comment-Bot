@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics.impl;
 
 import com.mmxlabs.models.lng.analytics.*;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
@@ -73,8 +74,40 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.COST_COMPONENT: return createCostComponent();
 			case AnalyticsPackage.FUEL_COST: return createFuelCost();
 			case AnalyticsPackage.JOURNEY: return createJourney();
+			case AnalyticsPackage.SHIPPING_COST_PLAN: return createShippingCostPlan();
+			case AnalyticsPackage.SHIPPING_COST_ROW: return createShippingCostRow();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object createFromString(EDataType eDataType, String initialValue) {
+		switch (eDataType.getClassifierID()) {
+			case AnalyticsPackage.DESTINATION_TYPE:
+				return createDestinationTypeFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String convertToString(EDataType eDataType, Object instanceValue) {
+		switch (eDataType.getClassifierID()) {
+			case AnalyticsPackage.DESTINATION_TYPE:
+				return convertDestinationTypeToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -156,6 +189,50 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public Journey createJourney() {
 		JourneyImpl journey = new JourneyImpl();
 		return journey;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ShippingCostPlan createShippingCostPlan() {
+		ShippingCostPlanImpl shippingCostPlan = new ShippingCostPlanImpl();
+		return shippingCostPlan;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ShippingCostRow createShippingCostRow() {
+		ShippingCostRowImpl shippingCostRow = new ShippingCostRowImpl();
+		return shippingCostRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DestinationType createDestinationTypeFromString(EDataType eDataType, String initialValue) {
+		DestinationType result = DestinationType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertDestinationTypeToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

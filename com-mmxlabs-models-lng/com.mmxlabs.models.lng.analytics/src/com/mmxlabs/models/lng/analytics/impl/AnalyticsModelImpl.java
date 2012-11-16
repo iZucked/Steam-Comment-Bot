@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
@@ -28,6 +29,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getRoundTripMatrices <em>Round Trip Matrices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getSelectedMatrix <em>Selected Matrix</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.AnalyticsModelImpl#getShippingCostPlans <em>Shipping Cost Plans</em>}</li>
  * </ul>
  * </p>
  *
@@ -53,6 +55,17 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 	 * @ordered
 	 */
 	protected UnitCostMatrix selectedMatrix;
+
+	/**
+	 * The cached value of the '{@link #getShippingCostPlans() <em>Shipping Cost Plans</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getShippingCostPlans()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ShippingCostPlan> shippingCostPlans;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -125,6 +138,19 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<ShippingCostPlan> getShippingCostPlans() {
+		if (shippingCostPlans == null) {
+			shippingCostPlans = new EObjectContainmentEList<ShippingCostPlan>(ShippingCostPlan.class, this, AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS);
+		}
+		return shippingCostPlans;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -133,6 +159,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 		switch (featureID) {
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
 				return ((InternalEList<?>)getRoundTripMatrices()).basicRemove(otherEnd, msgs);
+			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
+				return ((InternalEList<?>)getShippingCostPlans()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -150,6 +178,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX:
 				if (resolve) return getSelectedMatrix();
 				return basicGetSelectedMatrix();
+			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
+				return getShippingCostPlans();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -170,6 +200,10 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX:
 				setSelectedMatrix((UnitCostMatrix)newValue);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
+				getShippingCostPlans().clear();
+				getShippingCostPlans().addAll((Collection<? extends ShippingCostPlan>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -188,6 +222,9 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 			case AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX:
 				setSelectedMatrix((UnitCostMatrix)null);
 				return;
+			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
+				getShippingCostPlans().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -204,6 +241,8 @@ public class AnalyticsModelImpl extends UUIDObjectImpl implements AnalyticsModel
 				return roundTripMatrices != null && !roundTripMatrices.isEmpty();
 			case AnalyticsPackage.ANALYTICS_MODEL__SELECTED_MATRIX:
 				return selectedMatrix != null;
+			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
+				return shippingCostPlans != null && !shippingCostPlans.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
