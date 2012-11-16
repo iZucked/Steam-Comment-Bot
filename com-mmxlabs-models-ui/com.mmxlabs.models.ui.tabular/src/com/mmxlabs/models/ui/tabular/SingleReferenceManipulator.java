@@ -34,6 +34,10 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
  */
 public class SingleReferenceManipulator extends BasicAttributeManipulator {
 	private static final Logger log = LoggerFactory.getLogger(SingleReferenceManipulator.class);
+
+	final ArrayList<EObject> valueList = new ArrayList<EObject>();
+	final ArrayList<String> names = new ArrayList<String>();
+
 	final IReferenceValueProvider valueProvider;
 	final EditingDomain editingDomain;
 
@@ -55,11 +59,10 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 		this.valueProvider = valueProvider;
 		this.editingDomain = editingDomain;
 	}
-	
+
 	public SingleReferenceManipulator(final EReference field, final IReferenceValueProviderProvider valueProviderProvider, final EditingDomain editingDomain) {
 		this(field, valueProviderProvider.getReferenceValueProvider(field.getEContainingClass(), field), editingDomain);
 	}
-
 
 	@Override
 	public String render(final Object object) {
@@ -77,14 +80,16 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 				return valueProvider.getName((EObject) object, (EReference) field, (EObject) value);
 			} else {
 				return "";
-			}	
+			}
 		}
 		return "";
 	}
 
 	@Override
 	public void doSetValue(final Object object, final Object value) {
-		if (value.equals(-1)) return;
+		if (value.equals(-1)) {
+			return;
+		}
 		final EObject newValue = valueList.get((Integer) value);
 		super.runSetCommand(object, newValue);
 	}
@@ -96,9 +101,6 @@ public class SingleReferenceManipulator extends BasicAttributeManipulator {
 		setEditorNames();
 		return editor;
 	}
-
-	final ArrayList<EObject> valueList = new ArrayList<EObject>();
-	final ArrayList<String> names = new ArrayList<String>();
 
 	@Override
 	public Object getValue(final Object object) {

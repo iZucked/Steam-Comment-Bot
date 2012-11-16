@@ -24,48 +24,56 @@ import com.mmxlabs.common.Pair;
  * 
  */
 public class ValueListAttributeManipulator extends BasicAttributeManipulator {
+	private final ArrayList<Object> valueList;
 	private final ArrayList<String> names;
-	private final ArrayList<Object> values;
 
 	public ValueListAttributeManipulator(final EAttribute field, final EditingDomain editingDomain, final List<Pair<String, Object>> values) {
 		super(field, editingDomain);
 		names = new ArrayList<String>(values.size());
-		this.values = new ArrayList<Object>(values.size());
+		this.valueList = new ArrayList<Object>(values.size());
 		for (final Pair<String, Object> pair : values) {
 			names.add(pair.getFirst());
-			this.values.add(pair.getSecond());
+			this.valueList.add(pair.getSecond());
 		}
 	}
 
 	@Override
-	public CellEditor createCellEditor(final Composite c, final Object object) {
-		return new ComboBoxCellEditor(c, names.toArray(new String[values.size()]));
-	}
-
-	@Override
-	public void doSetValue(final Object object, final Object value) {
-		// value is an Integer
-		final int intValue = ((Integer) value).intValue();
-
-		if (intValue == -1) {
-		} else {
-			super.runSetCommand(object, values.get(intValue));
-		}
-	}
-
-	@Override
-	public Object getValue(final Object object) {
-		return values.indexOf(super.getValue(object));
-	}
-
-	@Override
-	public String renderSetValue(final Object o, final Object object) {
-		final Object value = super.getValue(object);
-		final int index = values.indexOf(value);
+	public String render(final Object object) {
+		Object value = super.getValue(object);
+		final int index = valueList.indexOf(value);
 		if (index == -1) {
 			return value == null ? "" : value.toString();
 		}
 		return names.get(index);
+	}
+	
+//	@Override
+//	public String renderSetValue(final Object o, final Object object) {
+//		final Object value = super.getValue(object);
+//		final int index = valueList.indexOf(value);
+//		if (index == -1) {
+//			return value == null ? "" : value.toString();
+//		}
+//		return names.get(index);
+//	}
+
+	@Override
+	public void doSetValue(final Object object, final Object value) {
+		if (value.equals(-1)) {
+			return;
+		}
+		final Object newValue = valueList.get((Integer) value);
+		super.runSetCommand(object, newValue);
+	}
+
+	@Override
+	public CellEditor createCellEditor(final Composite c, final Object object) {
+		return new ComboBoxCellEditor(c, names.toArray(new String[valueList.size()]));
+	}
+
+	@Override
+	public Object getValue(final Object object) {
+		return valueList.indexOf(super.getValue(object));
 	}
 
 }
