@@ -22,6 +22,7 @@ import com.mmxlabs.common.Association;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.CostComponent;
+import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
@@ -66,11 +67,12 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
-import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -100,6 +102,11 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final PortModel portModel = root.getSubModel(PortModel.class);
 			final PricingModel pricing = root.getSubModel(PricingModel.class);
 
+			// Check for valid plan
+			if (plan == null || plan.getRows().size() < 3) {
+				monitor.setCanceled(true);
+				return Collections.emptyList();
+			}
 			// Check for a valid vessel.
 			final Vessel modelVessel = plan.getVessel();
 			if (modelVessel == null) {
@@ -107,11 +114,6 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				return Collections.emptyList();
 			}
 
-			if (plan == null || plan.getRows().size() < 3) {
-				monitor.setCanceled(true);
-				return Collections.emptyList();
-			}
-			
 			monitor.beginTask("Creating unit cost matrix", 1);
 
 			final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule());
@@ -200,36 +202,65 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			IStartEndRequirement endConstraint = null;
 			int idx = 0;
 			for (final ShippingCostRow row : plan.getRows()) {
-
+				
+				if (row.getDate() == null) {
+					monitor.setCanceled(true);
+					return Collections.emptyList();
+				}
+				
 				if (idx == 0) {
+
 					// Earliest date, record!
 					builder.setEarliestDate(row.getDate());
 					entities.setEarliestDate(row.getDate());
+
+				}
+
+				
+				final int time = entities.getHoursFromDate(row.getDate());
+				final IPort port = ports.lookup(row.getPort());
+				if (idx == 0) {
 					// Start event
-					final int time = entities.getHoursFromDate(row.getDate());
 
-					final ITimeWindow arrivalTimeWindow = builder.createTimeWindow(time, time);
-					final IPort port = ports.lookup(row.getPort());
-
-					startConstraint = builder.createStartEndRequirement(port, arrivalTimeWindow);
+					if (row.getDestinationType() != DestinationType.START) {
+						return Collections.emptyList();
+						// throw new IllegalStateException("First element must be a START element");
+					}
+					final ITimeWindow timeWindow = builder.createTimeWindow(time, time);
+					startConstraint = builder.createStartEndRequirement(port, timeWindow);
 				} else if (idx == plan.getRows().size() - 1) {
 					// End Event
-					final int time = entities.getHoursFromDate(row.getDate());
 
-					final ITimeWindow arrivalTimeWindow = builder.createTimeWindow(time, time + 24);
-					final IPort port = ports.lookup(row.getPort());
-
-					endConstraint = builder.createStartEndRequirement(port, arrivalTimeWindow);
+					if (row.getDestinationType() != DestinationType.END) {
+						return Collections.emptyList();
+						// throw new IllegalStateException("First element must be an END element");
+					}
+					final ITimeWindow timeWindow = builder.createTimeWindow(time, time);
+					endConstraint = builder.createStartEndRequirement(port, timeWindow);
 				} else {
-
-					// TODO: Need a state column - build up load/dishcarge pairs etc.
-					// TODO: Need general Waypoint event similar to charter out but not...
-					final int time = entities.getHoursFromDate(row.getDate());
-					final ITimeWindow arrivalTimeWindow = builder.createTimeWindow(time, time + 24);
+					if (row.getDestinationType() == DestinationType.START || row.getDestinationType() == DestinationType.END) {
+						return Collections.emptyList();
+						// throw new IllegalStateException("....");
+					}
 					final String id = "row-" + idx;
-					final IPort port = ports.lookup(row.getPort());
-					final IVesselEventPortSlot slot = builder.createCharterOutEvent(id, arrivalTimeWindow, port, port, 24, vesselClass.getCargoCapacity(),
-							OptimiserUnitConvertor.convertToInternalConversionFactor(row.getCvValue()), OptimiserUnitConvertor.convertToInternalPrice(row.getCargoPrice()), 0, 0);
+					final ITimeWindow timeWindow = builder.createTimeWindow(time, time + 24);
+
+					final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getCvValue());
+					final int gasPrice = OptimiserUnitConvertor.convertToInternalPrice(row.getCargoPrice());
+
+					final IPortSlot slot;
+					if (row.getDestinationType() == DestinationType.LOAD) {
+						final ILoadPriceCalculator priceCalculator = new FixedPriceContract(gasPrice);
+						slot = builder.createLoadSlot(id, port, timeWindow, 0, vesselClass.getCargoCapacity(), priceCalculator, cargoCVValue, 24, false, true, false);
+					} else {
+						if (row.getDestinationType() == DestinationType.DISCHARGE) {
+							final ISalesPriceCalculator priceCalculator = new FixedPriceContract(gasPrice);
+							slot = builder.createDischargeSlot(id, port, timeWindow, 0, vesselClass.getCargoCapacity(), priceCalculator, 24, false);
+						} else {
+							// TODO: Need general waypoint type
+							slot = builder.createCharterOutEvent(id, timeWindow, port, port, 24, vesselClass.getCargoCapacity(), cargoCVValue, gasPrice, 0, 0);
+						}
+					}
 					elements.add(slot);
 				}
 				++idx;
@@ -326,11 +357,15 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				// final VoyagePlan voyagePlan = sequence.getVoyagePlans().get(0);
 				final VoyagePlanIterator itr = new VoyagePlanIterator();
 				itr.setVoyagePlans(sequence.getVoyagePlans(), 0);
+				
 				while (itr.hasNextObject()) {
 					final Object obj = itr.nextObject();
 					if (obj instanceof VoyageDetails) {
 						idxX++;
-						createVoyageCostComponent(line.addExtraData("leg" + idxX, idxX + "-leg"), plan, (VoyageDetails) obj);
+						createVoyageCostComponent(line.addExtraData("leg" + idxX, " Leg"), plan, (VoyageDetails) obj);
+					} else if (obj instanceof PortDetails) {
+						idxX++;
+						createPortCostComponent(line.addExtraData("port" + idxX, " Loading"), ports, pricing, plan, (PortDetails) obj);
 					}
 				}
 				// line.setFrom(ports.reverseLookup(((PortOptions) voyagePlan.getSequence()[0]).getPortSlot().getPort()));
@@ -339,7 +374,6 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				// final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
 
 				// // unpack costs from plan
-				// createPortCostComponent(line.addExtraData("loading", "1 Loading"), ports, pricing, plan, (PortDetails) voyagePlan.getSequence()[0]);
 				// sumVoyageCostComponent(plan, (VoyageDetails) voyagePlan.getSequence()[1], voyageSums);
 				// createPortCostComponent(line.addExtraData("discharging", "3 Discharging"), ports, pricing, plan, (PortDetails) voyagePlan.getSequence()[2]);
 				// createVoyageCostComponent(line.addExtraData("ballast", "4 Ballast Journey"), plan, (VoyageDetails) voyagePlan.getSequence()[3]);
@@ -389,7 +423,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				//
 				{
 					final ExtraData summary = line.addExtraData("summary", "Summary", line.getTotalCost(), ExtraDataFormatType.STRING_FORMAT);
-					summary.setFormat("$%,f");
+					summary.setFormat("$%,d");
 					summary.addExtraData("duration", "Duration", totalDuration, ExtraDataFormatType.DURATION);
 					final ExtraData fuelCostData = summary.addExtraData("fuelcost", "Fuel Cost", totalFuelCost, ExtraDataFormatType.CURRENCY);
 
@@ -493,7 +527,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 		}
 	}
 
-	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final UnitCostMatrix spec, final PortDetails portDetails) {
+	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final ShippingCostPlan plan, final PortDetails portDetails) {
 		result.addExtraData("duration", "Duration", portDetails.getOptions().getVisitDuration(), ExtraDataFormatType.DURATION);
 		final Port port = ports.reverseLookup(portDetails.getOptions().getPortSlot().getPort());
 		result.addExtraData("location", "Location", port.getName(), ExtraDataFormatType.AUTO);
@@ -501,15 +535,15 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 		for (final PortCost cost : pricing.getPortCosts()) {
 			if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
 				// this is the cost for the given port
-				total += cost.getPortCost(spec.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
+				total += cost.getPortCost(plan.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
 				result.addExtraData("portcost", "Port Cost", total, ExtraDataFormatType.CURRENCY);
 
 				break;
 			}
 		}
 
-		total += (spec.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24;
-		result.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24, ExtraDataFormatType.CURRENCY);
+		total += (plan.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24;
+		result.addExtraData("hirecost", "Hire Cost", (plan.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24, ExtraDataFormatType.CURRENCY);
 
 		result.setValue(total);
 		result.setFormatType(ExtraDataFormatType.CURRENCY);

@@ -48,5 +48,8 @@ public class ShippingCostRowViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Gas Price", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice(), getEditingDomain()));
 		addTypicalColumn("Gas CV", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_CvValue(), getEditingDomain()));
 		addTypicalColumn("Type", new EnumAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_DestinationType(), getEditingDomain()));
+
+		// Disable sorting
+		getScenarioViewer().setComparator(null);
 	}
 }
