@@ -54,7 +54,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	private boolean locked;
 
-	private Adapter lockedAdapter = new AdapterImpl() {
+	private final Adapter lockedAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioLock_Available()) {
@@ -75,17 +75,17 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			IWorkbenchPart lastPart = null;
 
 			@Override
-			public void partOpened(IWorkbenchPart part) {
+			public void partOpened(final IWorkbenchPart part) {
 
 			}
 
 			@Override
-			public void partDeactivated(IWorkbenchPart part) {
+			public void partDeactivated(final IWorkbenchPart part) {
 
 			}
 
 			@Override
-			public void partClosed(IWorkbenchPart part) {
+			public void partClosed(final IWorkbenchPart part) {
 				if (part == lastPart) {
 					selectionChanged(part, StructuredSelection.EMPTY);
 					lastPart = null;
@@ -93,12 +93,12 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			}
 
 			@Override
-			public void partBroughtToTop(IWorkbenchPart part) {
+			public void partBroughtToTop(final IWorkbenchPart part) {
 
 			}
 
 			@Override
-			public void partActivated(IWorkbenchPart part) {
+			public void partActivated(final IWorkbenchPart part) {
 				if (part instanceof IEditorPart) {
 					final IEditorPart editorPart = (IEditorPart) part;
 					final IEditorInput editorInput = editorPart.getEditorInput();
@@ -116,7 +116,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(final Class adapter) {
 		if (adapter.isAssignableFrom(IValidationStatusGoto.class)) {
 			return this;
 		}
@@ -142,7 +142,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	}
 
 	@Override
-	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		if (editorLock != null) {
 			editorLock.eAdapters().remove(lockedAdapter);
 		}
@@ -150,7 +150,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 			final IStructuredSelection structured = (IStructuredSelection) selection;
 			if (structured.size() == 1) {
 				if (structured.getFirstElement() instanceof ScenarioInstance) {
-					ScenarioInstance instance = (ScenarioInstance) structured.getFirstElement();
+					final ScenarioInstance instance = (ScenarioInstance) structured.getFirstElement();
 					editorLock = instance.getLock(ScenarioLock.EDITORS);
 					editorLock.eAdapters().add(lockedAdapter);
 					setLocked(!editorLock.isAvailable());
@@ -191,11 +191,11 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	}
 
 	@Override
-	public void setLocked(boolean locked) {
+	public void setLocked(final boolean locked) {
 		this.locked = locked;
 	}
 
-	private Stack<IExtraValidationContext> extraValidationContext = new Stack<IExtraValidationContext>();
+	private final Stack<IExtraValidationContext> extraValidationContext = new Stack<IExtraValidationContext>();
 
 	@Override
 	public IExtraValidationContext getExtraValidationContext() {
@@ -203,7 +203,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	}
 
 	@Override
-	public void pushExtraValidationContext(IExtraValidationContext context) {
+	public void pushExtraValidationContext(final IExtraValidationContext context) {
 		extraValidationContext.push(context);
 	}
 
@@ -219,6 +219,13 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 
 	@Override
 	public AdapterFactory getAdapterFactory() {
+
+		final EditingDomain editingDomain = getEditingDomain();
+		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
+			final CommandProviderAwareEditingDomain commandProviderAwareEditingDomain = (CommandProviderAwareEditingDomain) editingDomain;
+			return commandProviderAwareEditingDomain.getAdapterFactory();
+		}
+
 		return null;
 	}
 
@@ -230,7 +237,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	final ICommandHandler commandHandler = new ICommandHandler() {
 
 		@Override
-		public void handleCommand(Command command, EObject target, EStructuralFeature feature) {
+		public void handleCommand(final Command command, final EObject target, final EStructuralFeature feature) {
 			getEditingDomain().getCommandStack().execute(command);
 		}
 
@@ -254,13 +261,13 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	public MMXRootObject getRootObject() {
 		try {
 			return (MMXRootObject) scenarioInstance.getScenarioService().load(scenarioInstance);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			return null;
 		}
 	}
 
 	@Override
-	public void setDisableCommandProviders(boolean disable) {
+	public void setDisableCommandProviders(final boolean disable) {
 		final EditingDomain editingDomain = getEditingDomain();
 		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
 			((CommandProviderAwareEditingDomain) editingDomain).setCommandProvidersDisabled(disable);
@@ -268,7 +275,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	}
 
 	@Override
-	public void setDisableUpdates(boolean disable) {
+	public void setDisableUpdates(final boolean disable) {
 		final EditingDomain editingDomain = getEditingDomain();
 		if (editingDomain instanceof CommandProviderAwareEditingDomain) {
 			((CommandProviderAwareEditingDomain) editingDomain).setAdaptersEnabled(!disable);
@@ -276,7 +283,7 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 	}
 
 	@Override
-	public void setCurrentViewer(Viewer viewer) {
+	public void setCurrentViewer(final Viewer viewer) {
 		getSite().setSelectionProvider(viewer);
 	}
 
