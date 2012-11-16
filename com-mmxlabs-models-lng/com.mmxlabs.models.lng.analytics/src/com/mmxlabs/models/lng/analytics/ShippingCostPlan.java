@@ -116,7 +116,7 @@ public interface ShippingCostPlan extends NamedObject {
 	void setBaseFuelPrice(double value);
 
 	/**
-	 * Returns the value of the '<em><b>Rows</b></em>' reference list.
+	 * Returns the value of the '<em><b>Rows</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.ShippingCostRow}.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -124,9 +124,9 @@ public interface ShippingCostPlan extends NamedObject {
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Rows</em>' reference list.
+	 * @return the value of the '<em>Rows</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getShippingCostPlan_Rows()
-	 * @model
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<ShippingCostRow> getRows();

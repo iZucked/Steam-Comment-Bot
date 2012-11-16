@@ -7,6 +7,7 @@
 package com.mmxlabs.models.lng.analytics.provider;
 
 
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 
@@ -19,6 +20,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -69,7 +71,6 @@ public class ShippingCostPlanItemProvider
 			addVesselPropertyDescriptor(object);
 			addNotionalDayRatePropertyDescriptor(object);
 			addBaseFuelPricePropertyDescriptor(object);
-			addRowsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -141,25 +142,33 @@ public class ShippingCostPlanItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Rows feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addRowsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ShippingCostPlan_rows_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ShippingCostPlan_rows_feature", "_UI_ShippingCostPlan_type"),
-				 AnalyticsPackage.Literals.SHIPPING_COST_PLAN__ROWS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(AnalyticsPackage.Literals.SHIPPING_COST_PLAN__ROWS);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -203,6 +212,9 @@ public class ShippingCostPlanItemProvider
 			case AnalyticsPackage.SHIPPING_COST_PLAN__BASE_FUEL_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case AnalyticsPackage.SHIPPING_COST_PLAN__ROWS:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
@@ -217,6 +229,11 @@ public class ShippingCostPlanItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.SHIPPING_COST_PLAN__ROWS,
+				 AnalyticsFactory.eINSTANCE.createShippingCostRow()));
 	}
 
 	/**

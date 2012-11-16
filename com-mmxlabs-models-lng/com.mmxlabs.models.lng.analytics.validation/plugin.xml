@@ -125,6 +125,38 @@
                   If set, CV must be greater than zero
                </message>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.ShippingCostRowConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.ShippingCostRowConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Shipping Cost Row Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ShippingCostRow">
+               </target>
+            </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.analytics.validation.ShippingCostPlanConstraint"
+                  id="com.mmxlabs.models.lng.analytics.validation.ShippingCostPlanConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Shipping Cost Plan Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="ShippingCostPlan">
+               </target>
+            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

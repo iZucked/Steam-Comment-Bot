@@ -18,12 +18,15 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
@@ -97,7 +100,7 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	protected double baseFuelPrice = BASE_FUEL_PRICE_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getRows() <em>Rows</em>}' reference list.
+	 * The cached value of the '{@link #getRows() <em>Rows</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getRows()
@@ -212,9 +215,23 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 */
 	public EList<ShippingCostRow> getRows() {
 		if (rows == null) {
-			rows = new EObjectResolvingEList<ShippingCostRow>(ShippingCostRow.class, this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS);
+			rows = new EObjectContainmentEList<ShippingCostRow>(ShippingCostRow.class, this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS);
 		}
 		return rows;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalyticsPackage.SHIPPING_COST_PLAN__ROWS:
+				return ((InternalEList<?>)getRows()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**

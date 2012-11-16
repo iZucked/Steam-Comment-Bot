@@ -928,7 +928,7 @@ public interface AnalyticsPackage extends EPackage {
 	int SHIPPING_COST_PLAN__BASE_FUEL_PRICE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
 
 	/**
-	 * The feature id for the '<em><b>Rows</b></em>' reference list.
+	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
@@ -1763,11 +1763,11 @@ public interface AnalyticsPackage extends EPackage {
 	EAttribute getShippingCostPlan_BaseFuelPrice();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows <em>Rows</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows <em>Rows</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Rows</em>'.
+	 * @return the meta object for the containment reference list '<em>Rows</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows()
 	 * @see #getShippingCostPlan()
 	 * @generated
@@ -2422,7 +2422,7 @@ public interface AnalyticsPackage extends EPackage {
 		EAttribute SHIPPING_COST_PLAN__BASE_FUEL_PRICE = eINSTANCE.getShippingCostPlan_BaseFuelPrice();
 
 		/**
-		 * The meta object literal for the '<em><b>Rows</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * @since 2.0
 		 * <!-- end-user-doc -->
