@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.viewActions">
+      <viewContribution
+            id="com.mmxlabs.rcp.common.viewContribution.CopyPropertySheetToClipboard"
+            targetID="org.eclipse.ui.views.PropertySheet">
+         <action
+               class="com.mmxlabs.rcp.common.actions.CopyPropertySheetToClipboardActionDelegate"
+               icon="icons/copy.gif"
+               id="com.mmxlabs.rcp.common.actions.CopyPropertySheetToClipboardActionDelegate"
+               label="Copy to Clipboard"
+               style="push"
+               toolbarPath="additions"
+               tooltip="Copy to Clipboard">
+         </action>
+      </viewContribution>
+   </extension>
+
+</plugin>
