@@ -17,4 +17,14 @@
           restorable="true">
     </view>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.modelfactories">
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.ShippingCostPlan"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Shipping Plan"
+          outputEClass="com.mmxlabs.models.lng.analytics.ShippingCostPlan"
+          targetEClass="com.mmxlabs.models.lng.analytics.ShippingCostPlan">
+    </factory>
+ </extension>
 </plugin>

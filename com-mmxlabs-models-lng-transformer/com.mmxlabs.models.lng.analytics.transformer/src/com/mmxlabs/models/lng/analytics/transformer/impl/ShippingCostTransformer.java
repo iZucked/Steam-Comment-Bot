@@ -1,0 +1,548 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * All rights reserved.
+ */
+package com.mmxlabs.models.lng.analytics.transformer.impl;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.mmxlabs.common.Association;
+import com.mmxlabs.common.curves.ConstantValueCurve;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.CostComponent;
+import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
+import com.mmxlabs.models.lng.analytics.ShippingCostRow;
+import com.mmxlabs.models.lng.analytics.UnitCostLine;
+import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
+import com.mmxlabs.models.lng.analytics.Visit;
+import com.mmxlabs.models.lng.analytics.Voyage;
+import com.mmxlabs.models.lng.analytics.transformer.IShippingCostTransformer;
+import com.mmxlabs.models.lng.fleet.FuelConsumption;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
+import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortModel;
+import com.mmxlabs.models.lng.port.Route;
+import com.mmxlabs.models.lng.port.RouteLine;
+import com.mmxlabs.models.lng.pricing.PortCost;
+import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
+import com.mmxlabs.models.lng.types.ExtraData;
+import com.mmxlabs.models.lng.types.ExtraDataFormatType;
+import com.mmxlabs.models.lng.types.PortCapability;
+import com.mmxlabs.models.lng.types.util.SetUtils;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IModifiableSequence;
+import com.mmxlabs.optimiser.core.IModifiableSequences;
+import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
+import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IPort;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
+import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
+import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
+import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
+import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+
+/**
+ * @since 2.0
+ */
+public class ShippingCostTransformer implements IShippingCostTransformer {
+	@Override
+	public List<UnitCostLine> evaulateShippingPlan(final MMXRootObject root, final ShippingCostPlan plan, final IProgressMonitor monitor) {
+		try {
+			final PortModel portModel = root.getSubModel(PortModel.class);
+			final PricingModel pricing = root.getSubModel(PricingModel.class);
+
+			// Check for a valid vessel.
+			final Vessel modelVessel = plan.getVessel();
+			if (modelVessel == null) {
+				monitor.setCanceled(true);
+				return Collections.emptyList();
+			}
+
+			if (plan == null || plan.getRows().size() < 3) {
+				monitor.setCanceled(true);
+				return Collections.emptyList();
+			}
+			
+			monitor.beginTask("Creating unit cost matrix", 1);
+
+			final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule());
+			final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
+
+			final ResourcelessModelEntityMap entities = injector.getInstance(ResourcelessModelEntityMap.class);
+
+			/*
+			 * Create ports and distances
+			 */
+			final Association<Port, IPort> ports = new Association<Port, IPort>();
+			final ICooldownPriceCalculator nullCalculator = new FixedPriceContract(0);
+			for (final Port port : portModel.getPorts()) {
+				final IPort optPort = builder.createPort(port.getName(), !port.isAllowCooldown(), nullCalculator);
+				ports.add(port, optPort);
+				entities.addModelObject(portModel, optPort);
+			}
+			for (final Route route : portModel.getRoutes()) {
+				for (final RouteLine line : route.getLines()) {
+					builder.setPortToPortDistance(ports.lookup(line.getFrom()), ports.lookup(line.getTo()), route.getName(), line.getDistance());
+				}
+			}
+
+			/*
+			 * Create vessel class
+			 */
+
+			final VesselClass eVc = modelVessel.getVesselClass();
+			// If the spec defines a speed, change the min speed of the vessel to suit.
+			final double minSpeed = eVc.getMinSpeed();
+			// if (spec.isSetSpeed()) {
+			// minSpeed = spec.getSpeed();
+			// }
+			final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(minSpeed),
+					OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
+					OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), OptimiserUnitConvertor.convertToInternalPrice(plan.getBaseFuelPrice()),
+					OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()),
+					eVc.getWarmingTime(), eVc.getCoolingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()));
+
+			buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
+			buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
+
+			/**
+			 * Set up vessel class route parameters
+			 */
+			for (final Route route : portModel.getRoutes()) {
+				VesselClassRouteParameters parametersForRoute = null;
+				RouteCost costForRoute = null;
+				for (final VesselClassRouteParameters parameters : modelVessel.getVesselClass().getRouteParameters()) {
+					if (parameters.getRoute() == route) {
+						parametersForRoute = parameters;
+						break;
+					}
+				}
+				for (final RouteCost routeCost : pricing.getRouteCosts()) {
+					if (routeCost.getRoute() == route && routeCost.getVesselClass() == modelVessel.getVesselClass()) {
+						costForRoute = routeCost;
+						break;
+					}
+				}
+				for (final RouteLine line : route.getLines()) {
+					builder.setPortToPortDistance(ports.lookup(line.getFrom()), ports.lookup(line.getTo()), route.getName(), line.getDistance());
+					if (parametersForRoute != null) {
+						builder.setVesselClassRouteTransitTime(route.getName(), vesselClass, parametersForRoute.getExtraTransitTime());
+						builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Laden,
+								OptimiserUnitConvertor.convertToInternalHourlyRate(parametersForRoute.getLadenConsumptionRate()),
+								OptimiserUnitConvertor.convertToInternalHourlyRate(parametersForRoute.getLadenNBORate()));
+						builder.setVesselClassRouteFuel(route.getName(), vesselClass, VesselState.Ballast,
+								OptimiserUnitConvertor.convertToInternalHourlyRate(parametersForRoute.getBallastConsumptionRate()),
+								OptimiserUnitConvertor.convertToInternalHourlyRate(parametersForRoute.getBallastNBORate()));
+					}
+					if (costForRoute != null) {
+						builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Laden, OptimiserUnitConvertor.convertToInternalFixedCost(costForRoute.getLadenCost()));
+						builder.setVesselClassRouteCost(route.getName(), vesselClass, VesselState.Ballast, OptimiserUnitConvertor.convertToInternalFixedCost(costForRoute.getBallastCost()));
+					}
+				}
+			}
+
+			/**
+			 * Start to build up the voyages
+			 */
+
+			// / Build up list of elements to schedule
+			final List<IPortSlot> elements = new LinkedList<IPortSlot>();
+			IStartEndRequirement startConstraint = null;
+			IStartEndRequirement endConstraint = null;
+			int idx = 0;
+			for (final ShippingCostRow row : plan.getRows()) {
+
+				if (idx == 0) {
+					// Earliest date, record!
+					builder.setEarliestDate(row.getDate());
+					entities.setEarliestDate(row.getDate());
+					// Start event
+					final int time = entities.getHoursFromDate(row.getDate());
+
+					final ITimeWindow arrivalTimeWindow = builder.createTimeWindow(time, time);
+					final IPort port = ports.lookup(row.getPort());
+
+					startConstraint = builder.createStartEndRequirement(port, arrivalTimeWindow);
+				} else if (idx == plan.getRows().size() - 1) {
+					// End Event
+					final int time = entities.getHoursFromDate(row.getDate());
+
+					final ITimeWindow arrivalTimeWindow = builder.createTimeWindow(time, time + 24);
+					final IPort port = ports.lookup(row.getPort());
+
+					endConstraint = builder.createStartEndRequirement(port, arrivalTimeWindow);
+				} else {
+
+					// TODO: Need a state column - build up load/dishcarge pairs etc.
+					// TODO: Need general Waypoint event similar to charter out but not...
+					final int time = entities.getHoursFromDate(row.getDate());
+					final ITimeWindow arrivalTimeWindow = builder.createTimeWindow(time, time + 24);
+					final String id = "row-" + idx;
+					final IPort port = ports.lookup(row.getPort());
+					final IVesselEventPortSlot slot = builder.createCharterOutEvent(id, arrivalTimeWindow, port, port, 24, vesselClass.getCargoCapacity(),
+							OptimiserUnitConvertor.convertToInternalConversionFactor(row.getCvValue()), OptimiserUnitConvertor.convertToInternalPrice(row.getCargoPrice()), 0, 0);
+					elements.add(slot);
+				}
+				++idx;
+			}
+
+			// Create the vessel now we have the start/end requirements
+			final IVessel vessel = builder.createVessel(modelVessel.getName(), vesselClass, new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalHourlyRate(plan.getNotionalDayRate())),
+					startConstraint, endConstraint, 0, 0, 0);
+
+			/*
+			 * Create the sequences object and generate the arrival times based on window start TODO: We could use the sequence scheduler to do this for us.
+			 */
+			final IOptimisationData data = builder.getOptimisationData();
+			final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+			final IModifiableSequences sequences = new ModifiableSequences(data.getResources());
+			final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
+			final IPortSlotProvider slotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
+
+			final int[][] arrivalTimes = new int[1][elements.size() + 2];
+			int index = 0;
+			final IResource resource = vesselProvider.getResource(vessel);
+			{
+				final IModifiableSequence sequence = sequences.getModifiableSequence(resource);
+				// set up sequence and arrival times
+				sequence.add(startEndProvider.getStartElement(resource));
+
+				arrivalTimes[0][index++] = startEndProvider.getStartRequirement(resource).getTimeWindow().getStart();
+				for (final IPortSlot slot : elements) {
+					sequence.add(slotProvider.getElement(slot));
+					arrivalTimes[0][index++] = slot.getTimeWindow().getStart();
+				}
+				sequence.add(startEndProvider.getEndElement(resource));
+
+				arrivalTimes[0][index++] = startEndProvider.getEndRequirement(resource).getTimeWindow().getStart();
+			}
+			/*
+			 * Create a fitness core and evaluate+annotate the sequences
+			 */
+			final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
+			manipulator.init(data);
+			manipulator.manipulate(sequences); // this will set the return elements to the right places, and remove the start elements.
+			final LNGVoyageCalculator calculator = new LNGVoyageCalculator();
+			injector.injectMembers(calculator);
+
+			final VoyagePlanOptimiser optimiser = new VoyagePlanOptimiser(calculator);
+
+			final AbstractSequenceScheduler scheduler = new AbstractSequenceScheduler() {
+				@Override
+				public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
+					return null;
+				}
+
+				@Override
+				public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+					return null;
+				}
+
+				@Override
+				public void acceptLastSchedule() {
+
+				}
+			};
+
+			// injector.injectMembers(scheduler);
+			SchedulerUtils.setDataComponentProviders(data, scheduler);
+			scheduler.setVoyagePlanOptimiser(optimiser);
+			scheduler.init();
+
+			// run the scheduler on the sequences
+			final ScheduledSequences result = scheduler.schedule(sequences, arrivalTimes);
+
+			final UnconstrainedCargoAllocator aca = new UnconstrainedCargoAllocator();
+			aca.setVesselProvider(vesselProvider);
+
+			final Collection<IAllocationAnnotation> allocations = aca.allocate(result);
+			final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
+
+			/*
+			 * Unpack the annotated solution and create output lines //
+			 */
+
+			final List<UnitCostLine> lines = new ArrayList<UnitCostLine>();
+			for (final ScheduledSequence sequence : result) {
+				// final IAllocationAnnotation allocation = allocationIterator.next();
+				// create line for plan
+
+				int totalDuration = 0;
+				int totalFuelCost = 0;
+				int totalRouteCost = 0;
+				int totalPortCost = 0;
+				final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
+				final Map<FuelComponent, Integer[]> voyageSums = new EnumMap<FuelComponent, Integer[]>(FuelComponent.class);
+				int idxX = 0;
+				// final VoyagePlan voyagePlan = sequence.getVoyagePlans().get(0);
+				final VoyagePlanIterator itr = new VoyagePlanIterator();
+				itr.setVoyagePlans(sequence.getVoyagePlans(), 0);
+				while (itr.hasNextObject()) {
+					final Object obj = itr.nextObject();
+					if (obj instanceof VoyageDetails) {
+						idxX++;
+						createVoyageCostComponent(line.addExtraData("leg" + idxX, idxX + "-leg"), plan, (VoyageDetails) obj);
+					}
+				}
+				// line.setFrom(ports.reverseLookup(((PortOptions) voyagePlan.getSequence()[0]).getPortSlot().getPort()));
+				// line.setTo(ports.reverseLookup(((PortOptions) voyagePlan.getSequence()[2]).getPortSlot().getPort()));
+
+				// final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
+
+				// // unpack costs from plan
+				// createPortCostComponent(line.addExtraData("loading", "1 Loading"), ports, pricing, plan, (PortDetails) voyagePlan.getSequence()[0]);
+				// sumVoyageCostComponent(plan, (VoyageDetails) voyagePlan.getSequence()[1], voyageSums);
+				// createPortCostComponent(line.addExtraData("discharging", "3 Discharging"), ports, pricing, plan, (PortDetails) voyagePlan.getSequence()[2]);
+				// createVoyageCostComponent(line.addExtraData("ballast", "4 Ballast Journey"), plan, (VoyageDetails) voyagePlan.getSequence()[3]);
+				// sumVoyageCostComponent(plan, (VoyageDetails) voyagePlan.getSequence()[3], voyageSums);
+
+				for (final ExtraData d : line.getExtraData()) {
+					final ExtraData duration = d.getDataWithKey("duration");
+					if (duration != null) {
+						totalDuration += duration.getValueAs(Integer.class);
+					}
+					final ExtraData fuelCost = d.getDataWithKey("fuelcost");
+					if (fuelCost != null) {
+						totalFuelCost += fuelCost.getValueAs(Integer.class);
+					}
+					final ExtraData routeCost = d.getDataWithKey("routecost");
+					if (routeCost != null) {
+						totalRouteCost += routeCost.getValueAs(Integer.class);
+					}
+					final ExtraData portcost = d.getDataWithKey("portcost");
+					if (portcost != null) {
+						totalPortCost += portcost.getValueAs(Integer.class);
+					}
+				}
+				//
+				for (final CostComponent cc : line.getCostComponents()) {
+					totalDuration += cc.getDuration();
+					totalFuelCost += cc.getFuelCost();
+					if (cc instanceof Voyage)
+						totalRouteCost += ((Voyage) cc).getRouteCost();
+					if (cc instanceof Visit)
+						totalPortCost += ((Visit) cc).getPortCost();
+				}
+
+				line.setDuration(totalDuration);
+				line.setFuelCost(totalFuelCost);
+				line.setCanalCost(totalRouteCost);
+				line.setHireCost((plan.getNotionalDayRate() * totalDuration) / 24);
+				line.setPortCost(totalPortCost);
+
+				// line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolume() + allocation.getFuelVolume()));
+				// line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolume()) );
+				//
+				// final double cv = spec.isSetCvValue() ? spec.getCvValue() : line.getFrom().getCvValue();
+				//
+				// line.setMmbtuDelivered((int) (line.getVolumeDischarged() * cv));
+				// line.setUnitCost(line.getTotalCost() / (double) line.getMmbtuDelivered());
+				//
+				{
+					final ExtraData summary = line.addExtraData("summary", "Summary", line.getTotalCost(), ExtraDataFormatType.STRING_FORMAT);
+					summary.setFormat("$%,f");
+					summary.addExtraData("duration", "Duration", totalDuration, ExtraDataFormatType.DURATION);
+					final ExtraData fuelCostData = summary.addExtraData("fuelcost", "Fuel Cost", totalFuelCost, ExtraDataFormatType.CURRENCY);
+
+					{
+						for (final FuelComponent component : FuelComponent.values()) {
+
+							if (voyageSums.containsKey(component)) {
+								final Integer[] sums = voyageSums.get(component);
+								// totalFuelCost += componentCost;
+								final ExtraData componentData = fuelCostData.addExtraData(component.name(), component.name(), sums[1], ExtraDataFormatType.CURRENCY);
+								componentData.addExtraData("quantity", "Usage (" + component.getDefaultFuelUnit().name() + ")", sums[0], ExtraDataFormatType.INTEGER);
+							}
+						}
+					}
+
+					summary.addExtraData("routecost", "Route Cost", totalRouteCost, ExtraDataFormatType.CURRENCY);
+					summary.addExtraData("portcost", "Port Cost", totalPortCost, ExtraDataFormatType.CURRENCY);
+					summary.addExtraData("hirecost", "Hire Cost", (plan.getNotionalDayRate() * totalDuration) / 24, ExtraDataFormatType.CURRENCY);
+
+					// final ExtraData dischargeData = summary.addExtraData("discharged", "MMBTU Discharged", (int) (line.getVolumeDischarged() * cv), ExtraDataFormatType.INTEGER);
+					// dischargeData.addExtraData("m3", "Volume", line.getVolumeDischarged(), ExtraDataFormatType.INTEGER);
+					//
+					// final ExtraData loadData = summary.addExtraData("loaded", "MMBTU Loaded", (int) (line.getVolumeLoaded() * cv), ExtraDataFormatType.INTEGER);
+					// loadData.addExtraData("m3", "Volume", line.getVolumeLoaded(), ExtraDataFormatType.INTEGER);
+
+				}
+				lines.add(line);
+			}
+			if (monitor.isCanceled()) {
+				return null;
+			}
+			monitor.worked(1);
+			return lines;
+		} finally {
+			monitor.done();
+		}
+	}
+
+	private void createVoyageCostComponent(final ExtraData d, final ShippingCostPlan spec, final VoyageDetails voyageDetails) {
+		final int duration = voyageDetails.getIdleTime() + voyageDetails.getTravelTime();
+		int totalCost = 0;
+		d.addExtraData("distance", "Distance", voyageDetails.getOptions().getDistance(), ExtraDataFormatType.INTEGER);
+		d.addExtraData("duration", "Duration", duration, ExtraDataFormatType.DURATION);
+		d.addExtraData("idletime", "Idle Time", voyageDetails.getIdleTime(), ExtraDataFormatType.DURATION);
+		d.addExtraData("traveltime", "Travel Time", voyageDetails.getTravelTime(), ExtraDataFormatType.DURATION);
+		d.addExtraData("speed", "Speed", OptimiserUnitConvertor.convertToExternalSpeed(voyageDetails.getSpeed()), ExtraDataFormatType.STRING_FORMAT).setFormat("%,f");
+		final int routeCost = OptimiserUnitConvertor.convertToExternalFixedCost(voyageDetails.getRouteCost());
+		totalCost += routeCost;
+		d.addExtraData("routecost", "Route Cost", routeCost, ExtraDataFormatType.CURRENCY).addExtraData("route", "Route", voyageDetails.getOptions().getRoute(), ExtraDataFormatType.AUTO);
+
+		final ExtraData fuelData = d.addExtraData("fuelcost", "Fuel Cost");
+		int totalFuelCost = 0;
+
+		for (final FuelComponent component : FuelComponent.values()) {
+			final long consumption = voyageDetails.getFuelConsumption(component, component.getDefaultFuelUnit());
+			final int unitPrice = voyageDetails.getFuelUnitPrice(component);
+
+			if (consumption == 0) {
+				continue;
+			}
+			final int componentCost = OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.costFromConsumption(consumption, unitPrice));
+			totalFuelCost += componentCost;
+			final ExtraData componentData = fuelData.addExtraData(component.name(), component.name(), componentCost, ExtraDataFormatType.CURRENCY);
+			componentData.addExtraData("quantity", "Usage (" + component.getDefaultFuelUnit().name() + ")", OptimiserUnitConvertor.convertToExternalVolume(consumption), ExtraDataFormatType.INTEGER);
+			componentData.addExtraData("unitprice", "Cost/" + component.getDefaultFuelUnit().name(), OptimiserUnitConvertor.convertToExternalPrice(unitPrice), ExtraDataFormatType.STRING_FORMAT)
+					.setFormat("$%,f");
+
+		}
+		totalCost += totalFuelCost;
+		fuelData.setValue(totalFuelCost);
+		fuelData.setFormatType(ExtraDataFormatType.CURRENCY);
+
+		final int hireCost = (spec.getNotionalDayRate() * duration) / 24;
+		totalCost += hireCost;
+		d.setValue(totalCost);
+		d.setFormatType(ExtraDataFormatType.CURRENCY);
+		d.addExtraData("hirecost", "Hire Cost", hireCost, ExtraDataFormatType.CURRENCY);
+	}
+
+	private void sumVoyageCostComponent(final UnitCostMatrix spec, final VoyageDetails voyageDetails, final Map<FuelComponent, Integer[]> sums) {
+
+		for (final FuelComponent component : FuelComponent.values()) {
+			final long consumption = voyageDetails.getFuelConsumption(component, component.getDefaultFuelUnit());
+			final int unitPrice = voyageDetails.getFuelUnitPrice(component);
+
+			if (consumption == 0) {
+				continue;
+			}
+			Integer[] data;
+			if (sums.containsKey(component)) {
+				data = sums.get(component);
+			} else {
+				data = new Integer[2];
+				data[0] = new Integer(0);
+				data[1] = new Integer(0);
+				sums.put(component, data);
+			}
+			data[0] = data[0].intValue() + OptimiserUnitConvertor.convertToExternalVolume(consumption);
+			final int componentCost = OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.costFromConsumption(consumption, unitPrice));
+			data[1] = data[1].intValue() + componentCost;
+		}
+	}
+
+	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final UnitCostMatrix spec, final PortDetails portDetails) {
+		result.addExtraData("duration", "Duration", portDetails.getOptions().getVisitDuration(), ExtraDataFormatType.DURATION);
+		final Port port = ports.reverseLookup(portDetails.getOptions().getPortSlot().getPort());
+		result.addExtraData("location", "Location", port.getName(), ExtraDataFormatType.AUTO);
+		int total = 0;
+		for (final PortCost cost : pricing.getPortCosts()) {
+			if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
+				// this is the cost for the given port
+				total += cost.getPortCost(spec.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
+				result.addExtraData("portcost", "Port Cost", total, ExtraDataFormatType.CURRENCY);
+
+				break;
+			}
+		}
+
+		total += (spec.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24;
+		result.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24, ExtraDataFormatType.CURRENCY);
+
+		result.setValue(total);
+		result.setFormatType(ExtraDataFormatType.CURRENCY);
+	}
+
+	/**
+	 * Tell the builder to set up the given vessel state from the EMF fleet model
+	 * 
+	 * @param builder
+	 *            the builder which is currently in use
+	 * @param vc
+	 *            the {@link IVesselClass} which the builder has constructed whose attributes we are setting
+	 * @param laden
+	 *            the {@link com.mmxlabs.scheduler.optimiser.components.VesselState} we are setting attributes for
+	 * @param ladenAttributes
+	 *            the {@link VesselStateAttributes} from the EMF model
+	 */
+	private void buildVesselStateAttributes(final ISchedulerBuilder builder, final IVesselClass vc, final com.mmxlabs.scheduler.optimiser.components.VesselState state,
+			final VesselStateAttributes attrs) {
+
+		// create consumption rate calculator for the curve
+		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
+
+		for (final FuelConsumption line : attrs.getFuelConsumption()) {
+			keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed()), (long) OptimiserUnitConvertor.convertToInternalHourlyRate(line.getConsumption()));
+		}
+
+		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
+
+		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
+
+		builder.setVesselClassStateParamaters(vc, state, OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getNboRate()),
+				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleBaseRate()),
+				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getInPortBaseRate()), cc);
+	}
+}
