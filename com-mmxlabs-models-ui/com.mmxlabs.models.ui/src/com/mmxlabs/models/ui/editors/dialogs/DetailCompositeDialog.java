@@ -55,6 +55,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,6 +160,8 @@ public class DetailCompositeDialog extends Dialog {
 	private List<EObject> addedInputs = new ArrayList<EObject>();
 
 	private Text errorText;
+
+	private CopyDialogToClipboard copyDialogToClipboardEditorWrapper;
 
 	/**
 	 * Get the duplicate object (for editing) corresponding to the given input object.
@@ -321,19 +324,20 @@ public class DetailCompositeDialog extends Dialog {
 		final IStatus status = validationHelper.runValidation(validator, validationContext, currentEditorTargets);
 
 		if (errorText != null) {
-		if (status.isOK()) {
-			errorText.setText("");
-			errorText.setVisible(false);
-			((GridData) errorText.getLayoutData()).heightHint = 0;
-			getContents().pack();
-			resizeAndCenter();
-		} else {
-			errorText.setText(status.getMessage());
-			errorText.setVisible(true);
-			((GridData) errorText.getLayoutData()).heightHint = 50;
-			getContents().pack();
-			resizeAndCenter();
-		}}
+			if (status.isOK()) {
+				errorText.setText("");
+				errorText.setVisible(false);
+				((GridData) errorText.getLayoutData()).heightHint = 0;
+				getContents().pack();
+				resizeAndCenter();
+			} else {
+				errorText.setText(status.getMessage());
+				errorText.setVisible(true);
+				((GridData) errorText.getLayoutData()).heightHint = 50;
+				getContents().pack();
+				resizeAndCenter();
+			}
+		}
 
 		final boolean problem = status.matches(IStatus.ERROR);
 		for (final EObject object : currentEditorTargets) {
@@ -384,6 +388,11 @@ public class DetailCompositeDialog extends Dialog {
 
 		displayCompositeFactory = Activator.getDefault().getDisplayCompositeFactoryRegistry().getDisplayCompositeFactory(selection.eClass());
 		displayComposite = displayCompositeFactory.createToplevelComposite(dialogArea, selection.eClass(), scenarioEditingLocation);
+		// Create a new instance with the current adapter factory.
+		// TODO: Dispose?
+		copyDialogToClipboardEditorWrapper = new CopyDialogToClipboard(scenarioEditingLocation.getAdapterFactory());
+		// Hook via editor wrappers
+		displayComposite.setEditorWrapper(copyDialogToClipboardEditorWrapper);
 
 		final EObject duplicate = getDuplicate(selection, displayComposite);
 
@@ -401,14 +410,14 @@ public class DetailCompositeDialog extends Dialog {
 		displayComposite.display(scenarioEditingLocation, rootObject, duplicate, ranges.get(selection));
 
 		if (false) {
-		errorText = new Text(dialogArea, SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
-		{
-			GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
-			gd.heightHint = 0;
-			errorText.setLayoutData(gd);
-		}
-		errorText.setEditable(false);
-		errorText.setVisible(false);
+			errorText = new Text(dialogArea, SWT.WRAP | SWT.BORDER | SWT.V_SCROLL);
+			{
+				GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
+				gd.heightHint = 0;
+				errorText.setLayoutData(gd);
+			}
+			errorText.setEditable(false);
+			errorText.setVisible(false);
 		}
 		getShell().layout(true, true); // argh
 
@@ -524,6 +533,23 @@ public class DetailCompositeDialog extends Dialog {
 			}
 			dialogArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		} else {
+			// Create a toolbar for the copy action.
+			final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.LEFT);
+
+			barManager.createControl(c).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+
+			Action copy = new Action("Copy") {
+				@Override
+				public void run() {
+					copyDialogToClipboardEditorWrapper.copyToClipboard();
+				}
+			};
+			
+			copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/copy.gif"));
+			
+			barManager.add(copy);
+			barManager.update(true);
+
 			dialogArea = c;
 		}
 
