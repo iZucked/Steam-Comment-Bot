@@ -108,6 +108,12 @@
           label="Unit Cost Matrix"
           targetEClass="com.mmxlabs.models.lng.analytics.UnitCostMatrix">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.modelfactories.ShippingCostPlanFactory"
+          factory="com.mmxlabs.models.lng.analytics.modelfactories.ShippingCostPlanFactory"
+          label="Shipping Cost Plan"
+          targetEClass="com.mmxlabs.models.lng.analytics.ShippingCostPlan">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
