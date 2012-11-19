@@ -21,9 +21,9 @@ import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 
 /**
- * A viewer pane for editing unit cost matrix definitions
+ * A viewer pane for editing shipping cost rows.
  * 
- * @author hinton
+ * @author Simon Goodall
  * 
  */
 public class ShippingCostRowViewerPane extends ScenarioTableViewerPane {
@@ -48,7 +48,6 @@ public class ShippingCostRowViewerPane extends ScenarioTableViewerPane {
 		addTypicalColumn("Gas Price", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice(), getEditingDomain()));
 		addTypicalColumn("Gas CV", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_CvValue(), getEditingDomain()));
 		addTypicalColumn("Type", new DestinationTypeAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_DestinationType(), getEditingDomain()));
-
 		// Disable sorting
 		getScenarioViewer().setComparator(null);
 	}
