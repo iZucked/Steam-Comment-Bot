@@ -202,12 +202,12 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			IStartEndRequirement endConstraint = null;
 			int idx = 0;
 			for (final ShippingCostRow row : plan.getRows()) {
-				
+
 				if (row.getDate() == null) {
 					monitor.setCanceled(true);
 					return Collections.emptyList();
 				}
-				
+
 				if (idx == 0) {
 
 					// Earliest date, record!
@@ -216,7 +216,6 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 				}
 
-				
 				final int time = entities.getHoursFromDate(row.getDate());
 				final IPort port = ports.lookup(row.getPort());
 				if (idx == 0) {
@@ -353,19 +352,22 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				int totalPortCost = 0;
 				final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
 				final Map<FuelComponent, Integer[]> voyageSums = new EnumMap<FuelComponent, Integer[]>(FuelComponent.class);
-				int idxX = 0;
+				int idxX = 1;
 				// final VoyagePlan voyagePlan = sequence.getVoyagePlans().get(0);
 				final VoyagePlanIterator itr = new VoyagePlanIterator();
 				itr.setVoyagePlans(sequence.getVoyagePlans(), 0);
-				
+
 				while (itr.hasNextObject()) {
 					final Object obj = itr.nextObject();
+					idxX++;
+					String idxStr = String.format("%02d", idxX);
 					if (obj instanceof VoyageDetails) {
-						idxX++;
-						createVoyageCostComponent(line.addExtraData("leg" + idxX, " Leg"), plan, (VoyageDetails) obj);
+						createVoyageCostComponent(line.addExtraData("leg" + idxStr, idxStr + " - Leg"), plan, (VoyageDetails) obj);
 					} else if (obj instanceof PortDetails) {
-						idxX++;
-						createPortCostComponent(line.addExtraData("port" + idxX, " Loading"), ports, pricing, plan, (PortDetails) obj);
+
+						PortDetails portDetails = (PortDetails) obj;
+
+						createPortCostComponent(line.addExtraData("port" + idxX, idxStr + " - " + portDetails.getOptions().getPortSlot().getPortType()), ports, pricing, plan, portDetails);
 					}
 				}
 				// line.setFrom(ports.reverseLookup(((PortOptions) voyagePlan.getSequence()[0]).getPortSlot().getPort()));
@@ -422,7 +424,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				// line.setUnitCost(line.getTotalCost() / (double) line.getMmbtuDelivered());
 				//
 				{
-					final ExtraData summary = line.addExtraData("summary", "Summary", line.getTotalCost(), ExtraDataFormatType.STRING_FORMAT);
+					final ExtraData summary = line.addExtraData("summary", "01 - Summary", line.getTotalCost(), ExtraDataFormatType.STRING_FORMAT);
 					summary.setFormat("$%,d");
 					summary.addExtraData("duration", "Duration", totalDuration, ExtraDataFormatType.DURATION);
 					final ExtraData fuelCostData = summary.addExtraData("fuelcost", "Fuel Cost", totalFuelCost, ExtraDataFormatType.CURRENCY);
