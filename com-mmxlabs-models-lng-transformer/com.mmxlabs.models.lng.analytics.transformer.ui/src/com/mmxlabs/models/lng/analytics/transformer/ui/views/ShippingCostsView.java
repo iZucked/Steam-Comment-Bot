@@ -192,7 +192,12 @@ public class ShippingCostsView extends ScenarioInstanceView {
 				propertySheetPage = new PropertySheetPage();
 				propertySheetPage.setPropertySourceProvider(new IPropertySourceProvider() {
 					@Override
-					public IPropertySource getPropertySource(final Object object) {
+					public IPropertySource getPropertySource(Object object) {
+
+						if (object instanceof ShippingCostRow) {
+							object = ((ShippingCostRow) object).eContainer();
+						}
+
 						if (object instanceof ShippingCostPlan) {
 							final List<UnitCostLine> lines = transformer.evaulateShippingPlan(getRootObject(), (ShippingCostPlan) object, new NullProgressMonitor());
 							try {
