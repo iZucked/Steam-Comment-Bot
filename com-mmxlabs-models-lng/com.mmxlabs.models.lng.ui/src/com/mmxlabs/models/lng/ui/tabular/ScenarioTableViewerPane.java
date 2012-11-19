@@ -53,6 +53,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.menus.IMenuService;
 import org.eclipse.ui.views.properties.PropertySheet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.ui.actions.AddModelAction;
 import com.mmxlabs.models.lng.ui.actions.AddModelAction.IAddContext;
@@ -78,6 +80,9 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class ScenarioTableViewerPane extends ViewerPane {
+	
+	private static final Logger log = LoggerFactory.getLogger(ScenarioTableViewerPane.class);
+	
 	protected static final String VIEW_GROUP = "view";
 	protected static final String ADD_REMOVE_GROUP = "addremove";
 	protected static final String EDIT_GROUP = "edit";
@@ -124,7 +129,11 @@ public class ScenarioTableViewerPane extends ViewerPane {
 				return;
 			}
 			if (scenarioViewer != null) {
+				try {
 				scenarioViewer.setSelection(selection, true);
+				} catch (final Exception e) {
+					log.error(e.getMessage(), e);
+				}
 			}
 		}
 	};
