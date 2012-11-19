@@ -78,6 +78,9 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 		addTypicalColumn(PortCapability.LOAD.getName(), new CapabilityManipulator(PortCapability.LOAD, getJointModelEditorPart().getEditingDomain()));
 		addTypicalColumn(PortCapability.DISCHARGE.getName(), new CapabilityManipulator(PortCapability.DISCHARGE, getJointModelEditorPart().getEditingDomain()));
 
+		// addTypicalColumn("Timezone", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_TimeZone(), getJointModelEditorPart().getEditingDomain()));
+		// addTypicalColumn("Port Code", new BasicAttributeManipulator(PortPackage.eINSTANCE.getPort_PortCode(), getJointModelEditorPart().getEditingDomain()));
+
 		final DistanceMatrixEditorAction dmaAction = new DistanceMatrixEditorAction();
 		getToolBarManager().appendToGroup(EDIT_GROUP, dmaAction);
 
@@ -93,7 +96,27 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 				dcd.open(getJointModelEditorPart(), getJointModelEditorPart().getRootObject(), (EObject) viewer.getInput(), PortPackage.eINSTANCE.getPortModel_PortGroups());
 			}
 		});
-
+		/*
+		 * Action tzAction = new Action("Update timezones") {
+		 * 
+		 * @Override public void run() {
+		 * 
+		 * ITimezoneProvider tzProvider = new GoogleTimezoneProvider();
+		 * 
+		 * EditingDomain ed = jointModelEditorPart.getEditingDomain(); ISelection selection = getScenarioViewer().getSelection(); if (selection instanceof IStructuredSelection) { CompoundCommand cc =
+		 * new CompoundCommand("Update Port Timezones"); IStructuredSelection ss = (IStructuredSelection) selection; Iterator<?> itr = ss.iterator(); while (itr.hasNext()) {
+		 * 
+		 * Object next = itr.next();
+		 * 
+		 * if (next instanceof Port) { Port p = (Port) next; if (p.getLocation() != null) { Location l = p.getLocation(); TimeZone tz = tzProvider.findTimeZone((float) l.getLat(), (float) l.getLon());
+		 * if (tz != null) { Command cmd = SetCommand.create(ed, p, PortPackage.eINSTANCE.getPort_TimeZone(), tz.getID()); cc.append(cmd); }
+		 * 
+		 * }
+		 * 
+		 * } } if (!cc.isEmpty()) { ed.getCommandStack().execute(cc); }
+		 * 
+		 * } // TODO Auto-generated method stub super.run(); } }; getToolBarManager().add(tzAction);
+		 */
 		getToolBarManager().update(true);
 		defaultSetTitle("Ports");
 	}
