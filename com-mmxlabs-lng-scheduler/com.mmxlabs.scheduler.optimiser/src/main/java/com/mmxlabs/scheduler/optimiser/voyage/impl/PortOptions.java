@@ -26,7 +26,15 @@ public final class PortOptions implements Cloneable {
 	public PortOptions() {
 
 	}
-
+	
+	public PortOptions(int visitDuration, IVessel vessel, IPortSlot portSlot, VesselState vesselState) {
+		setVisitDuration(visitDuration);
+		setVessel(vessel);
+		setPortSlot(portSlot);
+		setVesselState(vesselState);
+	}
+	
+	
 	public PortOptions(final PortOptions options) {
 		setVisitDuration(options.getVisitDuration());
 		setVessel(options.getVessel());

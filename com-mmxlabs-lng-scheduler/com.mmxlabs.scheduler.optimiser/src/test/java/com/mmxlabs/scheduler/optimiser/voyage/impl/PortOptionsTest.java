@@ -49,7 +49,7 @@ public class PortOptionsTest {
 
 	@Test
 	public void testGetSetVesselState() {
-		final VesselState state = context.mock(VesselState.class);
+		final VesselState state = VesselState.Ballast;
 
 		final PortOptions options = new PortOptions();
 		Assert.assertNull(options.getVesselState());
