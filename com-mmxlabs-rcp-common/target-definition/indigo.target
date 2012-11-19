@@ -44,13 +44,15 @@
 <repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.slf4j.api" version="1.6.4.v20120130-2120"/>
-<unit id="org.slf4j.api.source" version="1.6.4.v20120130-2120"/>
 <unit id="org.objenesis" version="1.0.0.v201105211943"/>
 <unit id="org.objenesis.source" version="1.0.0.v201105211943"/>
 <unit id="org.aopalliance" version="1.0.0.v201105210816"/>
 <unit id="com.google.inject.source" version="3.0.0.v201203062045"/>
 <unit id="com.google.inject" version="3.0.0.v201203062045"/>
+<unit id="javax.inject" version="1.0.0.v20091030"/>
+<unit id="javax.inject.source" version="1.0.0.v20091030"/>
+<unit id="org.slf4j.api" version="1.6.4.v20120130-2120"/>
+<unit id="org.slf4j.api.source" version="1.6.4.v20120130-2120"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 </locations>
