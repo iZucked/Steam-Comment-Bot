@@ -1,0 +1,22 @@
+package com.mmxlabs.rcp.common.loginject;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import javax.inject.Scope;
+
+/**
+ * An annotation to use in inject logger implementation.
+ * 
+ * @since 2.0
+ */
+@Scope
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface Log {
+
+}
