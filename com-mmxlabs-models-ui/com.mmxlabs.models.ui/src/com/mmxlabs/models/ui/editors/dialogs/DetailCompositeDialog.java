@@ -973,9 +973,6 @@ public class DetailCompositeDialog extends Dialog {
 	 * @param duplicate
 	 */
 	private void clearReferences(final EObject duplicate) {
-		for (final EObject o : duplicate.eContents()) {
-			clearReferences(o);
-		}
 		for (final EReference reference : duplicate.eClass().getEAllReferences()) {
 			if (reference.isMany()) {
 				final List l = (List) duplicate.eGet(reference);
@@ -983,6 +980,9 @@ public class DetailCompositeDialog extends Dialog {
 			} else {
 				duplicate.eSet(reference, null);
 			}
+		}
+		for (final EObject o : duplicate.eContents()) {
+			clearReferences(o);
 		}
 	}
 
