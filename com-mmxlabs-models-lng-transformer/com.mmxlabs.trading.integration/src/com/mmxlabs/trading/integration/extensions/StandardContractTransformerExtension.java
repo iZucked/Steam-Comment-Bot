@@ -62,6 +62,7 @@ public class StandardContractTransformerExtension implements IContractTransforme
 	@Override
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
 		this.map = map;
+		// We create the builder extension rather than register as a service as we need to have the same instance.
 		contractBuilder = new StandardContractBuilderExtension();
 		injector.injectMembers(contractBuilder);
 		builder.addBuilderExtension(contractBuilder);
