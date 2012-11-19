@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.analytics.transformer.ui.views;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -11,22 +12,31 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
@@ -42,19 +52,28 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.transformer.IShippingCostTransformer;
 import com.mmxlabs.models.lng.analytics.transformer.impl.ShippingCostTransformer;
 import com.mmxlabs.models.lng.analytics.ui.properties.UnitCostLinePropertySource;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
+import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
+import com.mmxlabs.models.ui.modelfactories.IModelFactory;
+import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ShippingCostsView extends ScenarioInstanceView {
 
 	private final IShippingCostTransformer transformer = new ShippingCostTransformer();
 
-	private ShippingCostPlanViewerPane plans;
 	private ShippingCostRowViewerPane rows;
 
 	private PropertySheetPage propertySheetPage;
 
 	private Composite parent;
+
+	private Composite sidebarSash;
+
+	private TableViewer selectionViewer;
 
 	@Override
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
@@ -78,54 +97,21 @@ public class ShippingCostsView extends ScenarioInstanceView {
 			rows.dispose();
 			rows = null;
 		}
-		if (plans != null) {
-			final Control control = plans.getControl();
-			if (control != null) {
-				control.dispose();
-			}
-			plans.dispose();
-			plans = null;
-		}
-
 	}
 
 	private void createContents() {
-		plans = new ShippingCostPlanViewerPane(getSite().getPage(), this, this, this.getViewSite().getActionBars());
+		selectionViewer.setInput(getRootObject().getSubModel(AnalyticsModel.class).getShippingCostPlans());
 
-		plans.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
-		plans.createControl(parent);
-		plans.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-		plans.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getAnalyticsModel_ShippingCostPlans()), getAdapterFactory());
-		plans.getViewer().setInput(getRootObject().getSubModel(AnalyticsModel.class));
-
-		rows = new ShippingCostRowViewerPane(getSite().getPage(), this, this, null);
+		rows = new ShippingCostRowViewerPane(getSite().getPage(), this, this, this.getViewSite().getActionBars());
 		// rows.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
-		rows.createControl(parent);
+		rows.createControl(sidebarSash);
 		rows.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		rows.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getShippingCostPlan_Rows()), getAdapterFactory());
 
 		createMenuManager(rows.getScenarioViewer().getGrid());
 		getViewSite().setSelectionProvider(rows.getViewer());
 
-		plans.getScenarioViewer().addSelectionChangedListener(new ISelectionChangedListener() {
-
-			@Override
-			public void selectionChanged(final SelectionChangedEvent event) {
-				// TODO Auto-generated method stub
-				final ISelection selection = event.getSelection();
-				if (selection instanceof IStructuredSelection) {
-					final IStructuredSelection iStructuredSelection = (IStructuredSelection) selection;
-					final Object element = iStructuredSelection.getFirstElement();
-					if (element instanceof ShippingCostPlan) {
-
-						rows.getViewer().setInput(element);
-					}
-				}
-			}
-		});
 		parent.layout(true);
-		// parent.layout(true);
-		// pack(true);
 	}
 
 	@Override
@@ -134,6 +120,56 @@ public class ShippingCostsView extends ScenarioInstanceView {
 		final GridLayout gridLayout = new GridLayout(1, false);
 		gridLayout.marginWidth = gridLayout.marginHeight = 0;
 		parent.setLayout(gridLayout);
+
+		// if (displaySidebarList) {
+		sidebarSash = new Composite(parent, SWT.NONE);
+		{
+			final GridLayout layout = new GridLayout(2, false);
+			layout.marginHeight = layout.marginWidth = 0;
+			sidebarSash.setLayout(layout);
+		}
+		sidebarSash.setLayoutData(new GridData(GridData.FILL_BOTH));
+		final Composite sidebarComposite = new Composite(sidebarSash, SWT.NONE);
+		sidebarComposite.setLayout(new GridLayout(1, true));
+		sidebarComposite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true));
+
+		final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.RIGHT);
+
+		// need to populate add action - it could do a duplicate and then a
+		// clear?
+		// delete action can just kill the primary, and remove from inputs
+
+		barManager.createControl(sidebarComposite).setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
+		selectionViewer = new TableViewer(sidebarComposite, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL);
+
+		createToolbarActions(barManager);
+		barManager.update(true);
+
+		selectionViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		selectionViewer.setLabelProvider(new LabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return ((NamedObject) element).getName();
+			}
+		});
+
+		selectionViewer.setContentProvider(new ArrayContentProvider());
+		selectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(final SelectionChangedEvent event) {
+				final ISelection selection = event.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final Object element = ((IStructuredSelection) selection).getFirstElement();
+
+					if (element instanceof ShippingCostPlan) {
+						rows.getViewer().setInput(element);
+					}
+				}
+			}
+		});
+
 		listenToScenarioSelection();
 	}
 
@@ -141,8 +177,8 @@ public class ShippingCostsView extends ScenarioInstanceView {
 	public void setFocus() {
 		if (rows != null && rows.getControl() != null && !rows.getControl().isDisposed()) {
 			rows.getControl().setFocus();
-		} else if (plans != null && plans.getControl() != null && !plans.getControl().isDisposed()) {
-			plans.getControl().setFocus();
+			// } else if (plans != null && plans.getControl() != null && !plans.getControl().isDisposed()) {
+			// plans.getControl().setFocus();
 			// } else if (top != null && !top.isDisposed()) {
 			// top.setFocus();
 			// }
@@ -152,7 +188,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 	@Override
 	public Object getAdapter(final Class adapter) {
 		if (adapter.isAssignableFrom(IPropertySheetPage.class)) {
-			if (propertySheetPage == null && plans != null) {
+			if (propertySheetPage == null && selectionViewer != null) {
 				propertySheetPage = new PropertySheetPage();
 				propertySheetPage.setPropertySourceProvider(new IPropertySourceProvider() {
 					@Override
@@ -189,9 +225,9 @@ public class ShippingCostsView extends ScenarioInstanceView {
 
 	@Override
 	public void setLocked(final boolean locked) {
-		if (plans != null) {
-			plans.setLocked(locked);
-		}
+		// if (plans != null) {
+		// plans.setLocked(locked);
+		// }
 		if (rows != null) {
 			rows.setLocked(locked);
 		}
@@ -283,5 +319,77 @@ public class ShippingCostsView extends ScenarioInstanceView {
 		});
 
 		return mgr;
+	}
+
+	/**
+	 * When the sidebar is displayed, this method is invoked to add actions to the toolbar above it.
+	 * 
+	 * @param barManager
+	 */
+	private void createToolbarActions(final ToolBarManager barManager) {
+		// create add actions
+		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(AnalyticsPackage.eINSTANCE.getShippingCostPlan());
+		if (factories.isEmpty() == false) {
+			if (factories.size() == 1) {
+				barManager.add(createAddAction(factories.get(0)));
+			} else {
+				// multi-adder //TODO
+			}
+		}
+
+		// create delete actions
+		final Action deleteAction = new Action() {
+			{
+				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+				selectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+					@Override
+					public void selectionChanged(final SelectionChangedEvent event) {
+						setEnabled(event.getSelection().isEmpty() == false);
+					}
+				});
+			}
+
+			@Override
+			public void run() {
+				final ISelection selection = selectionViewer.getSelection();
+				if (selection instanceof IStructuredSelection) {
+					final Object element = ((IStructuredSelection) selection).getFirstElement();
+					getEditingDomain().getCommandStack().execute(DeleteCommand.create(getEditingDomain(), element));
+					selectionViewer.refresh();
+				}
+			}
+		};
+
+		barManager.add(deleteAction);
+
+		// create duplicate actions
+
+	}
+
+	private Action createAddAction(final IModelFactory factory) {
+		return new Action("Create new " + factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD)) {
+			@Override
+			public void run() {
+				final MMXRootObject rootObject = getRootObject();
+				final AnalyticsModel analyticsModel = rootObject.getSubModel(AnalyticsModel.class);
+
+				final Collection<? extends ISetting> settings = factory.createInstance(rootObject, analyticsModel, AnalyticsPackage.eINSTANCE.getAnalyticsModel_ShippingCostPlans(), null);
+				if (settings.isEmpty()) {
+					return;
+				}
+				// now create an add command, which will include adding any
+				// other relevant objects
+				final CompoundCommand add = new CompoundCommand();
+				for (final ISetting setting : settings) {
+					final EObject instance = setting.getInstance();
+					final DetailCompositeDialog dialog = new DetailCompositeDialog(getSite().getShell(), getDefaultCommandHandler());
+					if (dialog.open(ShippingCostsView.this, rootObject, Collections.singletonList(instance)) == Window.OK) {
+						add.append(AddCommand.create(getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+					}
+				}
+				getEditingDomain().getCommandStack().execute(add);
+				selectionViewer.refresh();
+			}
+		};
 	}
 }
