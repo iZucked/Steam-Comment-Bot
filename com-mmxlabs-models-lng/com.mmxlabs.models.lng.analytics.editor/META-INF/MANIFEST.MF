@@ -9,6 +9,7 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.models.lng.analytics.importer,
+ com.mmxlabs.models.lng.analytics.manipulators,
  com.mmxlabs.models.lng.analytics.presentation,
  com.mmxlabs.models.lng.analytics.ui.properties
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
