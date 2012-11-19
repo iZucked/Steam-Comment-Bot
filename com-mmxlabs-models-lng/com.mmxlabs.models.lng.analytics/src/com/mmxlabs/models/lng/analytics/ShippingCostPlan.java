@@ -118,6 +118,7 @@ public interface ShippingCostPlan extends NamedObject {
 	/**
 	 * Returns the value of the '<em><b>Rows</b></em>' containment reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.ShippingCostRow}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPlan <em>Plan</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Rows</em>' reference list isn't clear,
@@ -126,7 +127,8 @@ public interface ShippingCostPlan extends NamedObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Rows</em>' containment reference list.
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getShippingCostPlan_Rows()
-	 * @model containment="true"
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getPlan
+	 * @model opposite="plan" containment="true"
 	 * @generated
 	 */
 	EList<ShippingCostRow> getRows();

@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
@@ -215,9 +216,24 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 */
 	public EList<ShippingCostRow> getRows() {
 		if (rows == null) {
-			rows = new EObjectContainmentEList<ShippingCostRow>(ShippingCostRow.class, this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS);
+			rows = new EObjectContainmentWithInverseEList<ShippingCostRow>(ShippingCostRow.class, this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS, AnalyticsPackage.SHIPPING_COST_ROW__PLAN);
 		}
 		return rows;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case AnalyticsPackage.SHIPPING_COST_PLAN__ROWS:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getRows()).basicAdd(otherEnd, msgs);
+		}
+		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**

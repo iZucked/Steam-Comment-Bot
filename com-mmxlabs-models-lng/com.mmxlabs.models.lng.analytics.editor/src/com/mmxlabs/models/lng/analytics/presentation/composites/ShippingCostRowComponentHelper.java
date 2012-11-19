@@ -67,12 +67,22 @@ public class ShippingCostRowComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_planEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
 		add_dateEditor(detailComposite, topClass);
 		add_cargoPriceEditor(detailComposite, topClass);
 		add_cvValueEditor(detailComposite, topClass);
 		add_destinationTypeEditor(detailComposite, topClass);
 	}
+	/**
+	 * Create the editor for the plan feature on ShippingCostRow
+	 *
+	 * @generated NOT
+	 */
+	protected void add_planEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SHIPPING_COST_ROW__PLAN));
+	}
+
 	/**
 	 * Create the editor for the port feature on ShippingCostRow
 	 *
