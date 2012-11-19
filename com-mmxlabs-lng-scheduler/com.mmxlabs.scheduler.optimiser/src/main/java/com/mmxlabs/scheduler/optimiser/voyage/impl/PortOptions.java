@@ -104,6 +104,6 @@ public final class PortOptions implements Cloneable {
 
 	@Override
 	public final int hashCode() {
-		return Objects.hashCode(visitDuration, portSlot);
+		return Objects.hashCode(visitDuration, portSlot, vessel, vesselState);
 	}
 }
