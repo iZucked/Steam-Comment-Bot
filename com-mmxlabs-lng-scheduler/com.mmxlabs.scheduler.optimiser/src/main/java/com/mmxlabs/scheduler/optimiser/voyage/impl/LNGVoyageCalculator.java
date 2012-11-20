@@ -367,6 +367,10 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * commitments etc. It is assumed that the first and last {@link IPortDetails} will be a Loading slot or other slot where the vessel state is set to a known state. Intermediate slots are any other
 	 * type of slot (e.g. one discharge, multiple waypoints, etc). If the first slot is a load slot, then this is the only reason we should see a discharge slot.
 	 * 
+	 * NOTE: this method intentionally ignores the last sequence element when calculating the total cost of a voyage plan, 
+	 * in order to avoid double-counting elements, since voyage plans are expected to come in A-B-C C-D-E E-F-G chains, 
+	 * where the last element of the chain does not get counted. 
+	 * 
 	 * @param sequence
 	 * @param dischargeTime
 	 * @param loadTime
@@ -409,10 +413,13 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 					availableHeelinM3 = ((IHeelOptionsPortSlot) slot).getHeelOptions().getHeelLimit();
 				}
 
-				for (final FuelComponent fc : FuelComponent.values()) {
-					fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc);
+				// DO NOT INCLUDE THE LAST SEQUENCE ELEMENT IN THE TOTAL COST FOR THE PLAN
+				if (i < sequence.length - 1) {
+					for (final FuelComponent fc : FuelComponent.values()) {
+						fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc);
+					}
+					details.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
 				}
-				details.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
 
 			} else {
 				// Voyage
