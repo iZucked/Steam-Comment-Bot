@@ -13,8 +13,11 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.IConstraintDescriptor;
+import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -145,7 +148,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 								public boolean jobStateChanged(final IJobControl control, final EJobState oldState, final EJobState newState) {
 
 									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-//										instance.setLocked(false);
+										// instance.setLocked(false);
 										instance.getLock(k).release();
 										jobManager.removeJob(desc);
 										return false;
@@ -159,20 +162,20 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 								}
 							});
 							// Set initial state.
-//							instance.setLocked(true);
+							// instance.setLocked(true);
 							instance.getLock(k).awaitClaim();
 							control.prepare();
 							control.start();
 						} catch (final Throwable ex) {
 							log.error(ex.getMessage(), ex);
 							control.cancel();
-//							instance.setLocked(false);
+							// instance.setLocked(false);
 							instance.getLock(k).release();
 
 							final Display display = Display.getDefault();
 							if (display != null) {
 								display.asyncExec(new Runnable() {
-									
+
 									@Override
 									public void run() {
 										MessageDialog.openError(display.getActiveShell(), "Error starting optimisation", ex.getMessage());
@@ -182,7 +185,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 						}
 						// Resume if paused
 					} else if (control.getJobState() == EJobState.PAUSED) {
-//						instance.setLocked(true);
+						// instance.setLocked(true);
 						instance.getLock(k).awaitClaim();
 						control.resume();
 					} else {
@@ -193,7 +196,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 							public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
 
 								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
-//									instance.setLocked(false);
+									// instance.setLocked(false);
 									instance.getLock(k).release();
 									return false;
 								}
@@ -205,7 +208,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 								return true;
 							}
 						});
-//						instance.setLocked(true);
+						// instance.setLocked(true);
 						instance.getLock(k).awaitClaim();
 						control.start();
 					}
@@ -222,6 +225,21 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 	public static boolean validateScenario(final MMXRootObject root) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		validator.addConstraintFilter(new IConstraintFilter() {
+
+			@Override
+			public boolean accept(final IConstraintDescriptor constraint, final EObject target) {
+
+				for (final Category cat : constraint.getCategories()) {
+					if (cat.getId().equals(".base")) {
+						return true;
+					}
+				}
+
+				return false;
+			}
+		});
 
 		final ValidationHelper helper = new ValidationHelper();
 		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root);

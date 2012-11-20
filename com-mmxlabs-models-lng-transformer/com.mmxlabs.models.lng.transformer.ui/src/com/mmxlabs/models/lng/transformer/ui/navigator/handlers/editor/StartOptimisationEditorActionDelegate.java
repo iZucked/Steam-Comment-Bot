@@ -10,8 +10,11 @@ import java.util.LinkedList;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
 import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.IConstraintDescriptor;
+import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
@@ -211,6 +214,21 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 	public static boolean validateScenario(final MMXRootObject root) {
 		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
 		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		validator.addConstraintFilter(new IConstraintFilter() {
+
+			@Override
+			public boolean accept(final IConstraintDescriptor constraint, final EObject target) {
+
+				for (final Category cat : constraint.getCategories()) {
+					if (cat.getId().equals(".base")) {
+						return true;
+					}
+				}
+
+				return false;
+			}
+		});
 
 		final ValidationHelper helper = new ValidationHelper();
 		final DefaultExtraValidationContext extraContext = new DefaultExtraValidationContext(root);
