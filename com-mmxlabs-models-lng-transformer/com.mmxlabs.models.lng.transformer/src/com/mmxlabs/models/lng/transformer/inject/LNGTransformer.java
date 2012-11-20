@@ -26,7 +26,6 @@ import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
-import com.mmxlabs.models.lng.transformer.inject.modules.LSOConstructorModule;
 import com.mmxlabs.models.lng.transformer.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
@@ -127,7 +126,6 @@ public class LNGTransformer {
 		installModuleOverrides(modules, new DataComponentProviderModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule);
 		// modules.add(new SequencesManipulatorModule());
 		installModuleOverrides(modules, new LNGTransformerModule(scenario), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule);
-		modules.add(new LSOConstructorModule());
 
 		// Insert extra modules into modules list
 		if (extraModules != null) {
