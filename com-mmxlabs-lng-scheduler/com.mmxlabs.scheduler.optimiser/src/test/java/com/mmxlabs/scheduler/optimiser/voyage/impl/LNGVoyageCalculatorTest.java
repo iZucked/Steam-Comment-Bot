@@ -1158,9 +1158,100 @@ public class LNGVoyageCalculatorTest {
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleNBO, 0);
 		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 0);
 
+		Assert.assertEquals(expectedPlan, plan);
+
 		context.assertIsSatisfied();
 	}
 
+	@Test
+	public void testCalculateVoyagePlan6() {
+
+		context.setDefaultResultForType(VesselState.class, VesselState.Laden);
+
+		final VoyagePlan plan = new VoyagePlan();
+		final IVessel vessel = context.mock(IVessel.class);
+		final VesselClass vesselClass = new VesselClass();
+		int baseFuelPrice = 2;
+		vesselClass.setBaseFuelUnitPrice(OptimiserUnitConvertor.convertToInternalPrice(baseFuelPrice));
+		context.setDefaultResultForType(IVesselClass.class, vesselClass);
+
+		final PortDetails otherDetails = new PortDetails();
+		otherDetails.setOptions(new PortOptions());
+		final PortDetails loadDetails = new PortDetails();
+		loadDetails.setOptions(new PortOptions());
+		loadDetails.getOptions().setVisitDuration(24);
+		loadDetails.setFuelConsumption(FuelComponent.Base, 13000);
+		
+		final PortDetails dischargeDetails = new PortDetails();
+		dischargeDetails.setOptions(new PortOptions());
+		dischargeDetails.setFuelConsumption(FuelComponent.Base, 5000);
+
+		final PortSlot otherSlot = new StartPortSlot(0, 0, 0);
+		final LoadSlot loadSlot = new LoadSlot();
+		final DischargeSlot dischargeSlot = new DischargeSlot();
+
+		otherDetails.getOptions().setPortSlot(otherSlot);
+		loadDetails.getOptions().setPortSlot(loadSlot);
+		dischargeDetails.getOptions().setPortSlot(dischargeSlot);
+
+		loadSlot.setMaxLoadVolume(150l);
+		dischargeSlot.setMaxDischargeVolume(30l);
+
+		loadSlot.setLoadPriceCalculator(new FixedPriceContract(1000));
+		dischargeSlot.setDischargePriceCalculator(new FixedPriceContract(1000));
+
+		final VoyageDetails details1 = new VoyageDetails();
+		final VoyageOptions options1 = new VoyageOptions();
+		options1.setVesselState(VesselState.Ballast);
+		details1.setOptions(options1);
+
+		final VoyageDetails details2 = new VoyageDetails();
+		final VoyageOptions options2 = new VoyageOptions();
+		options2.setVesselState(VesselState.Laden);
+		details2.setOptions(options2);
+
+		final LNGVoyageCalculator calc = new LNGVoyageCalculator();
+
+		final IRouteCostProvider mockRouteCostProvider = context.mock(IRouteCostProvider.class);
+		calc.setRouteCostDataComponentProvider(mockRouteCostProvider);
+		final IPortCVProvider mockPortCVProvider = context.mock(IPortCVProvider.class);
+		calc.setPortCVProvider(mockPortCVProvider);
+
+		calc.init();
+
+		final Object[] sequence = new Object[] { otherDetails, details1, loadDetails, details2, dischargeDetails };
+
+		context.checking(new Expectations() {
+			{
+				allowing(vessel).getVesselClass();
+			}
+		});
+
+		final int[] arrivalTimes = new int[1 + (sequence.length / 2)];
+		calc.calculateVoyagePlan(plan, vessel, arrivalTimes, sequence);
+
+		final VoyagePlan expectedPlan = new VoyagePlan();
+		expectedPlan.setSequence(sequence);
+
+		expectedPlan.setFuelConsumption(FuelComponent.Base, 18000);
+		expectedPlan.setFuelConsumption(FuelComponent.Base_Supplemental, 0);
+		expectedPlan.setFuelConsumption(FuelComponent.NBO, 0);
+		expectedPlan.setFuelConsumption(FuelComponent.FBO, 0);
+		expectedPlan.setFuelConsumption(FuelComponent.IdleNBO, 0);
+		expectedPlan.setFuelConsumption(FuelComponent.IdleBase, 0);
+
+		expectedPlan.setTotalFuelCost(FuelComponent.Base, 36000);
+		expectedPlan.setTotalFuelCost(FuelComponent.Base_Supplemental, 0);
+		expectedPlan.setTotalFuelCost(FuelComponent.NBO, 0);
+		expectedPlan.setTotalFuelCost(FuelComponent.FBO, 0);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdleNBO, 0);
+		expectedPlan.setTotalFuelCost(FuelComponent.IdleBase, 0);
+
+		Assert.assertEquals(expectedPlan, plan);
+		
+		context.assertIsSatisfied();
+	}
+	
 	@Test
 	public void testCalculatePortFuelRequirements1() {
 		testCalculatePortFuelRequirements(VesselState.Laden, 13, 11, 143);
