@@ -125,6 +125,20 @@
                   If set, CV must be greater than zero
                </message>
             </constraint>
+         </constraints>
+      </constraintProvider>
+      <category
+            id="com.mmxlabs.models.lng.analytics.validation.constraints.shippingcosts"
+            mandatory="false"
+            name="Shipping Costs Validation">
+      </category>
+      <constraintProvider
+            cache="true">
+         <package
+               namespaceUri="http://www.mmxlabs.com/models/lng/analytics/1/">
+         </package>
+         <constraints
+               categories="com.mmxlabs.models.lng.analytics.validation.constraints.shippingcosts">
             <constraint
                   class="com.mmxlabs.models.lng.analytics.validation.ShippingCostRowConstraint"
                   id="com.mmxlabs.models.lng.analytics.validation.ShippingCostRowConstraint"
