@@ -412,6 +412,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 				for (final FuelComponent fc : FuelComponent.values()) {
 					fuelConsumptions[fc.ordinal()] += details.getFuelConsumption(fc);
 				}
+				details.setFuelUnitPrice(FuelComponent.Base, baseFuelPricePerMT);
 
 			} else {
 				// Voyage
@@ -632,21 +633,6 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			
 		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Cooldown.ordinal()], cooldownM3Price));
 
-		/*
-		voyagePlan.setTotalFuelCost(FuelComponent.Base, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Base.ordinal()], baseFuelPricePerMT));
-		voyagePlan.setTotalFuelCost(FuelComponent.Base_Supplemental, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Base_Supplemental.ordinal()], baseFuelPricePerMT));
-		voyagePlan.setTotalFuelCost(FuelComponent.IdleBase, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdleBase.ordinal()], baseFuelPricePerMT));
-
-		voyagePlan.setTotalFuelCost(FuelComponent.PilotLight, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.PilotLight.ordinal()], baseFuelPricePerMT));
-		voyagePlan.setTotalFuelCost(FuelComponent.IdlePilotLight, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdlePilotLight.ordinal()], baseFuelPricePerMT));
-
-		voyagePlan.setTotalFuelCost(FuelComponent.NBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.NBO.ordinal()], dischargeM3Price));
-		voyagePlan.setTotalFuelCost(FuelComponent.FBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.FBO.ordinal()], dischargeM3Price));
-		voyagePlan.setTotalFuelCost(FuelComponent.IdleNBO, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.IdleNBO.ordinal()], dischargeM3Price));
-
-		voyagePlan.setTotalFuelCost(FuelComponent.Cooldown, Calculator.costFromConsumption(fuelConsumptions[FuelComponent.Cooldown.ordinal()], cooldownM3Price));
-		*/
-
 		voyagePlan.setLNGFuelVolume(lngConsumedInM3);
 
 		voyagePlan.setTotalRouteCost(routeCostAccumulator);
@@ -713,10 +699,15 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		 */
 		final long consumptionRateInMTPerHour = vesselClass.getInPortConsumptionRate(vesselState);
 
+		final int visitDuration = options.getVisitDuration();
+		if (visitDuration > 0) {
+			int i = 0;
+			assert true;
+		}
 		/**
 		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this journey, excluding any extra required for canals
 		 */
-		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerHour, options.getVisitDuration());
+		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerHour, visitDuration);
 
 		details.setFuelConsumption(FuelComponent.Base, requiredConsumptionInMT);
 	}
