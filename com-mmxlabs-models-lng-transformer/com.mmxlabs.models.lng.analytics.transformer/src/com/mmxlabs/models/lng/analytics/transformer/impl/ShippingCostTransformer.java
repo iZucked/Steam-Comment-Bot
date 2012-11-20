@@ -15,6 +15,15 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.validation.model.Category;
+import org.eclipse.emf.validation.model.EvaluationMode;
+import org.eclipse.emf.validation.service.IBatchValidator;
+import org.eclipse.emf.validation.service.IConstraintDescriptor;
+import org.eclipse.emf.validation.service.IConstraintFilter;
+import org.eclipse.emf.validation.service.ModelValidationService;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -49,6 +58,8 @@ import com.mmxlabs.models.lng.types.ExtraDataFormatType;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
+import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
@@ -96,8 +107,35 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
  * @since 2.0
  */
 public class ShippingCostTransformer implements IShippingCostTransformer {
+
 	@Override
 	public List<UnitCostLine> evaulateShippingPlan(final MMXRootObject root, final ShippingCostPlan plan, final IProgressMonitor monitor) {
+		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+
+		validator.addConstraintFilter(new IConstraintFilter() {
+
+			@Override
+			public boolean accept(final IConstraintDescriptor constraint, final EObject target) {
+
+				for (final Category cat : constraint.getCategories()) {
+					if (cat.getId().equals("com.mmxlabs.models.lng.analytics.validation.constraints.shippingcosts")) {
+						return true;
+					} else if (cat.getId().equals(".base")) {
+						return true;
+					}
+				}
+				return false;
+			}
+		});
+
+
+		final ValidationHelper helper = new ValidationHelper();
+		final IStatus validationStatus = helper.runValidation(validator, new DefaultExtraValidationContext(root), Collections.singleton(plan));
+		if (validationStatus != Status.OK_STATUS) {
+			return Collections.emptyList();
+		}
+
 		try {
 			final PortModel portModel = root.getSubModel(PortModel.class);
 			final PricingModel pricing = root.getSubModel(PricingModel.class);
@@ -360,12 +398,12 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				while (itr.hasNextObject()) {
 					final Object obj = itr.nextObject();
 					idxX++;
-					String idxStr = String.format("%02d", idxX);
+					final String idxStr = String.format("%02d", idxX);
 					if (obj instanceof VoyageDetails) {
 						createVoyageCostComponent(line.addExtraData("leg" + idxStr, idxStr + " - Leg"), plan, (VoyageDetails) obj);
 					} else if (obj instanceof PortDetails) {
 
-						PortDetails portDetails = (PortDetails) obj;
+						final PortDetails portDetails = (PortDetails) obj;
 
 						createPortCostComponent(line.addExtraData("port" + idxX, idxStr + " - " + portDetails.getOptions().getPortSlot().getPortType()), ports, pricing, plan, portDetails);
 					}
