@@ -22,6 +22,7 @@ import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.providers.IDiscountCurveProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -65,9 +66,10 @@ public class CostComponentTest {
 
 		// define the fuel consumptions
 		// multiply by scale factor (i.e. convert to internal unit)
-		final long baseConsumption = OptimiserUnitConvertor.convertToInternalVolume(1000);
-		final long FBOConsumption = OptimiserUnitConvertor.convertToInternalVolume(0);
-		final long NBOConsumption = OptimiserUnitConvertor.convertToInternalVolume(500);
+		final long voyageBaseConsumption = OptimiserUnitConvertor.convertToInternalVolume(1000);
+		final long voyageFBOConsumption = OptimiserUnitConvertor.convertToInternalVolume(0);
+		final long voyageNBOConsumption = OptimiserUnitConvertor.convertToInternalVolume(500);
+		final long portBaseConsumption = OptimiserUnitConvertor.convertToInternalVolume(200);
 
 		// define the fuel unit prices
 		// multiply by scale factor (i.e. convert to internal unit)
@@ -87,15 +89,21 @@ public class CostComponentTest {
 
 		final VoyageDetails voyage = new VoyageDetails();
 		// set consumptions
-		voyage.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), baseConsumption);
-		voyage.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), NBOConsumption);
-		voyage.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), FBOConsumption);
+		voyage.setFuelConsumption(FuelComponent.Base, FuelComponent.Base.getDefaultFuelUnit(), voyageBaseConsumption);
+		voyage.setFuelConsumption(FuelComponent.NBO, FuelComponent.NBO.getDefaultFuelUnit(), voyageNBOConsumption);
+		voyage.setFuelConsumption(FuelComponent.FBO, FuelComponent.FBO.getDefaultFuelUnit(), voyageFBOConsumption);
 		// set unit prices
 		voyage.setFuelUnitPrice(FuelComponent.Base, baseUnit);
 		voyage.setFuelUnitPrice(FuelComponent.NBO, NBOUnit);
 		voyage.setFuelUnitPrice(FuelComponent.FBO, FBOUnit);
 
-		final Object[] voyageSequence = new Object[] { voyage };
+		final PortDetails port = new PortDetails();
+		port.setFuelConsumption(FuelComponent.Base, portBaseConsumption);
+		port.setFuelUnitPrice(FuelComponent.Base, baseUnit);
+
+		// note: the value of this voyage sequence is ignored during this test
+		// any reason to have it here?
+		final Object[] voyageSequence = new Object[] { voyage, port };
 		final VoyagePlan voyagePlan = new VoyagePlan();
 		voyagePlan.setSequence(voyageSequence);
 
@@ -103,18 +111,21 @@ public class CostComponentTest {
 
 		c.startEvaluation();
 		c.startSequence(resource, true);
+		// note, no voyage plan needs to be passed to the CostComponent for this test
 		c.nextVoyagePlan(voyagePlan, 0);
 		c.nextObject(voyage, 5);
+		c.nextObject(port, 5);
 		c.endSequence();
 
 		final long cost = c.endEvaluationAndGetCost();
 
 		// divide by scale factor to convert from internal unit to external (1000$ to $)
-		final long expectedBaseCost = Calculator.costFromConsumption(baseConsumption, baseUnit);
-		final long expectedNBOCost = Calculator.costFromConsumption(NBOConsumption, NBOUnit);
-		final long expectedFBOCost = Calculator.costFromConsumption(FBOConsumption, FBOUnit);
+		final long expectedVoyageBaseCost = Calculator.costFromConsumption(voyageBaseConsumption, baseUnit);
+		final long expectedVoyageNBOCost = Calculator.costFromConsumption(voyageNBOConsumption, NBOUnit);
+		final long expectedVoyageFBOCost = Calculator.costFromConsumption(voyageFBOConsumption, FBOUnit);
+		final long expectedPortBaseCost = Calculator.costFromConsumption(portBaseConsumption, baseUnit);
 
-		final long expectedTotalCost = (expectedBaseCost + expectedFBOCost + expectedNBOCost) / Calculator.ScaleFactor;
+		final long expectedTotalCost = (expectedVoyageBaseCost + expectedVoyageFBOCost + expectedVoyageNBOCost + expectedPortBaseCost) / Calculator.ScaleFactor;
 
 		Assert.assertEquals("Expected cost equals calculated cost.", expectedTotalCost, cost);
 

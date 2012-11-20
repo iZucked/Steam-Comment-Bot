@@ -15,6 +15,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 
 /**
@@ -71,15 +72,32 @@ public final class CostComponent extends AbstractPerRouteSchedulerFitnessCompone
 		if (object instanceof VoyageDetails) {
 			final VoyageDetails detail = (VoyageDetails) object;
 
+			// add the (time-discounted) fuel costs for each fuel component 
 			for (int i = 0; i < fuelComponentCount; i++) {
 				final FuelComponent fuel = fuelComponents[i];
 				final FuelUnit defaultFuelUnit = defaultUnits[i];
 				final long consumption = detail.getFuelConsumption(fuel, defaultFuelUnit) + detail.getRouteAdditionalConsumption(fuel, defaultFuelUnit);
 				final long fuelCost = Calculator.costFromConsumption(consumption, detail.getFuelUnitPrice(fuel));
 
-				// addDiscountedValue(time, fuelCost);
+				// calculate the discounted value of the fuel based on the time
 				accumulator += getDiscountedValue(time, fuelCost);
 			}
+		}
+		if (object instanceof PortDetails) {
+			final PortDetails detail = (PortDetails) object;
+			// add the (time-discounted) fuel costs for the base fuel component 
+			// (if it's in the fuel components for this CostComponent object)  
+			for (int i = 0; i < fuelComponentCount; i++) {
+				final FuelComponent fuel = fuelComponents[i];
+				if (fuel == FuelComponent.Base) {
+					final long consumption = detail.getFuelConsumption(FuelComponent.Base);
+					final long fuelCost = Calculator.costFromConsumption(consumption, detail.getFuelUnitPrice(FuelComponent.Base));
+	
+					// calculate the discounted value of the fuel based on the time
+					accumulator += getDiscountedValue(time, fuelCost);
+				}
+			}
+
 		}
 		return true;
 	}
