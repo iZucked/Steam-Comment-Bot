@@ -59,8 +59,6 @@ public class ScenarioValidationStatusAdapterFactory implements IAdapterFactory {
 		
 		final ValidationHelper helper = new ValidationHelper();
 		
-		final DefaultExtraValidationContext context = new DefaultExtraValidationContext(scenario);
-		
 		final List<EObject> subModels = new ArrayList<EObject>();
 		
 		for (final MMXSubModel subModel : scenario.getSubModels()) {
