@@ -155,6 +155,11 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					visit = new PortVisitEventImpl();
 				}
 
+				final long consumption = details.getFuelConsumption(FuelComponent.Base);
+				visit.setFuelConsumption(FuelComponent.Base, FuelUnit.MT, consumption);
+				final long cost = Calculator.costFromConsumption(consumption, details.getFuelUnitPrice(FuelComponent.Base));
+				visit.setFuelCost(FuelComponent.Base, cost);
+
 				visit.setName("visit");
 				visit.setSequenceElement(element);
 				visit.setPortSlot(currentPortSlot);
