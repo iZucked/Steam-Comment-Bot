@@ -23,6 +23,7 @@ public final class PortDetails implements Cloneable {
 	private PortOptions options;
 
 	private final EnumMap<FuelComponent, Long> fuelConsumption = new EnumMap<FuelComponent, Long>(FuelComponent.class);
+	private final EnumMap<FuelComponent, Integer> fuelPrice = new EnumMap<FuelComponent, Integer>(FuelComponent.class);
 
 	private final LongFastEnumMap<CapacityViolationType> capacityViolations = new LongFastEnumMap<CapacityViolationType>(CapacityViolationType.values().length);
 
@@ -48,9 +49,18 @@ public final class PortDetails implements Cloneable {
 			return 0l;
 		}
 	}
+	
+	public final int getFuelUnitPrice(final FuelComponent fuel) {
+		return (int) fuelPrice.get(fuel);
+	}
+		
 
 	public final void setFuelConsumption(final FuelComponent fuel, final long consumption) {
 		fuelConsumption.put(fuel, consumption);
+	}
+
+	public final void setFuelUnitPrice(final FuelComponent fuel, final int price) {
+		fuelPrice.put(fuel, price);
 	}
 
 	public final long getCapacityViolation(final CapacityViolationType type) {
