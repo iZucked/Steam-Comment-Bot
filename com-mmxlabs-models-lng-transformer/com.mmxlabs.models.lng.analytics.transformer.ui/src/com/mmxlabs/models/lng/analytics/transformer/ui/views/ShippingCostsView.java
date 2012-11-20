@@ -22,10 +22,12 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -170,6 +172,25 @@ public class ShippingCostsView extends ScenarioInstanceView {
 			}
 		});
 
+		selectionViewer.addOpenListener(new IOpenListener() {
+
+			@Override
+			public void open(final OpenEvent event) {
+				final ISelection selection = selectionViewer.getSelection();
+				if (selection instanceof IStructuredSelection) {
+
+					final IStructuredSelection ss = (IStructuredSelection) selection;
+					final Object plan = ss.getFirstElement();
+					if (plan instanceof ShippingCostPlan) {
+
+						final DetailCompositeDialog dialog = new DetailCompositeDialog(getSite().getShell(), getDefaultCommandHandler());
+						dialog.open(ShippingCostsView.this, getRootObject(), Collections.singletonList((EObject) plan));
+					}
+				}
+				selectionViewer.refresh();
+			}
+		});
+
 		listenToScenarioSelection();
 	}
 
@@ -195,7 +216,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 					public IPropertySource getPropertySource(Object object) {
 
 						if (object instanceof ShippingCostRow) {
-							object = ((ShippingCostRow) object).eContainer();
+							object = ((ShippingCostRow) object).getPlan();
 						}
 
 						if (object instanceof ShippingCostPlan) {
