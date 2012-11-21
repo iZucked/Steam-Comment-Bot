@@ -21,6 +21,7 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -704,18 +705,32 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		/**
 		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this port visit
 		 */
-		final long consumptionRateInMTPerHour = vesselClass.getInPortConsumptionRate(vesselState);
-
+		final long consumptionRateInMTPerHour;
+		
+		final PortType portType = options.getPortSlot().getPortType();
+		
+		// temporary kludge: ignore non-load non-discharge ports for port consumption
+		if (portType == PortType.Load || portType == PortType.Discharge)
+			consumptionRateInMTPerHour = vesselClass.getInPortConsumptionRate(vesselState);
+		else
+			consumptionRateInMTPerHour = 0;
+		
 		final int visitDuration = options.getVisitDuration();
 		if (visitDuration > 0) {
 			int i = 0;
 			assert true;
 		}
+		
+		
 		/**
 		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this journey, excluding any extra required for canals
 		 */
 		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerHour, visitDuration);
 
+		if (requiredConsumptionInMT == 833) {
+			int i = 0;
+		}
+		
 		details.setFuelConsumption(FuelComponent.Base, requiredConsumptionInMT);
 	}
 

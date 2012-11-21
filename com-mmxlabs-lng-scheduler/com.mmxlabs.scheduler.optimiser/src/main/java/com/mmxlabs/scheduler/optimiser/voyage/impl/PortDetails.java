@@ -52,7 +52,6 @@ public final class PortDetails implements Cloneable {
 	
 	public final int getFuelUnitPrice(final FuelComponent fuel) {
 		if (!fuelPrice.containsKey(fuel)) {
-			//System.err.println("No fuel component " + fuel + " in " + fuelPrice);
 			return 0;
 		}
 		return (int) fuelPrice.get(fuel);
