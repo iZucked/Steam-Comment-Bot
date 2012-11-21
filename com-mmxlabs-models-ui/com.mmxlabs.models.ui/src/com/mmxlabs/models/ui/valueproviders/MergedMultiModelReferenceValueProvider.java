@@ -11,6 +11,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -22,6 +23,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
 
 /**
  * A {@link IReferenceValueProvider} implementation that combines references from all {@link MMXSubModel}s in a {@link MMXRootObject} implementation. Given a target {@link EClass} super type, examine
@@ -36,6 +38,28 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 
 	private List<Pair<String, EObject>> cachedValues;
 
+	private final MMXAdapterImpl adapter = new MMXAdapterImpl() {
+		@Override
+		protected void missedNotifications(final List<Notification> missed) {
+			for (final Notification n : missed) {
+				reallyNotifyChanged(n);
+			}
+			super.missedNotifications(missed);
+		}
+
+		@Override
+		public void reallyNotifyChanged(final Notification notification) {
+			final Object notifier = notification.getNotifier();
+
+			for (final Pair<EObject, EReference> p : validReferences) {
+				if (p.getFirst() == notifier && p.getSecond() == notification.getFeature()) {
+					cachedValues = null;
+					return;
+				}
+			}
+		}
+	};
+
 	public MergedMultiModelReferenceValueProvider(final MMXRootObject rootObject, final EClass targetType) {
 		super();
 
@@ -45,6 +69,7 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 				for (final EReference ref : subModelInstance.eClass().getEAllContainments()) {
 					if (ref.isMany() && targetType.isSuperTypeOf(ref.getEReferenceType())) {
 						validReferences.add(new Pair<EObject, EReference>(subModelInstance, ref));
+						subModelInstance.eAdapters().add(adapter);
 					}
 				}
 			}
@@ -71,6 +96,11 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 
 	@Override
 	public void dispose() {
+
+		for (final Pair<EObject, EReference> p : validReferences) {
+			p.getFirst().eAdapters().remove(adapter);
+		}
+
 		validReferences.clear();
 		cachedValues = null;
 	}
@@ -103,4 +133,5 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 			}
 		});
 	}
+
 }
