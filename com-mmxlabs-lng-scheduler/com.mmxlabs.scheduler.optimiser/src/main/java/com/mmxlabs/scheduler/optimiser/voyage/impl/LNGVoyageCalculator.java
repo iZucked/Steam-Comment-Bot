@@ -716,21 +716,12 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 			consumptionRateInMTPerHour = 0;
 		
 		final int visitDuration = options.getVisitDuration();
-		if (visitDuration > 0) {
-			int i = 0;
-			assert true;
-		}
-		
 		
 		/**
 		 * The total number of MT of base fuel OR MT-equivalent of LNG required for this journey, excluding any extra required for canals
 		 */
 		final long requiredConsumptionInMT = Calculator.quantityFromRateTime(consumptionRateInMTPerHour, visitDuration);
 
-		if (requiredConsumptionInMT == 833) {
-			int i = 0;
-		}
-		
 		details.setFuelConsumption(FuelComponent.Base, requiredConsumptionInMT);
 	}
 
