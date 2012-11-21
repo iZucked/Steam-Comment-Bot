@@ -31,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.components.impl.VesselClass;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
@@ -1179,9 +1180,12 @@ public class LNGVoyageCalculatorTest {
 		otherDetails.setOptions(new PortOptions());
 		final PortDetails loadDetails = new PortDetails();
 		loadDetails.setOptions(new PortOptions());
-		loadDetails.getOptions().setVisitDuration(24);
+		loadDetails.getOptions().setVisitDuration(48);
 		loadDetails.setFuelConsumption(FuelComponent.Base, 13000);
-		
+
+		// NOTE: this discharge slot is the tail of the sequence, and 
+		// should not be evaluated in the VoyagePlan (to avoid double-counting
+		// when it occurs as the head of the next sequence)
 		final PortDetails dischargeDetails = new PortDetails();
 		dischargeDetails.setOptions(new PortOptions());
 		dischargeDetails.setFuelConsumption(FuelComponent.Base, 5000);
@@ -1233,14 +1237,15 @@ public class LNGVoyageCalculatorTest {
 		final VoyagePlan expectedPlan = new VoyagePlan();
 		expectedPlan.setSequence(sequence);
 
-		expectedPlan.setFuelConsumption(FuelComponent.Base, 18000);
+		// Port fuel consumption should ignore discharge port
+		expectedPlan.setFuelConsumption(FuelComponent.Base, 13000);
 		expectedPlan.setFuelConsumption(FuelComponent.Base_Supplemental, 0);
 		expectedPlan.setFuelConsumption(FuelComponent.NBO, 0);
 		expectedPlan.setFuelConsumption(FuelComponent.FBO, 0);
 		expectedPlan.setFuelConsumption(FuelComponent.IdleNBO, 0);
 		expectedPlan.setFuelConsumption(FuelComponent.IdleBase, 0);
 
-		expectedPlan.setTotalFuelCost(FuelComponent.Base, 36000);
+		expectedPlan.setTotalFuelCost(FuelComponent.Base, 26000);
 		expectedPlan.setTotalFuelCost(FuelComponent.Base_Supplemental, 0);
 		expectedPlan.setTotalFuelCost(FuelComponent.NBO, 0);
 		expectedPlan.setTotalFuelCost(FuelComponent.FBO, 0);
@@ -1294,6 +1299,8 @@ public class LNGVoyageCalculatorTest {
 		
 		context.checking(new Expectations() {
 			{
+				one(options.getPortSlot()).getPortType();
+				will(returnValue(PortType.Load));
 				allowing(options.getVessel()).getVesselClass();
 			}
 		});
