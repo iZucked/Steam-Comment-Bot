@@ -14,7 +14,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.contracts.ISimpleLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
@@ -22,16 +21,18 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * @author hinton
  * 
  */
-public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
+public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
 
 	@Override
 	public void prepareEvaluation(final ScheduledSequences sequences) {
 	}
 
+	protected abstract int calculateSimpleUnitPrice(final int loadTime);
+	
 	@Override
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePrice, final int loadVolume,
 			final IVessel vessel, final VoyagePlan plan, IDetailTree annotations) {
-		return calculateSimpleLoadUnitPrice(loadTime);
+		return calculateSimpleUnitPrice(loadTime);
 	}
 
 	@Override
@@ -41,12 +42,12 @@ public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoa
 
 	@Override
 	public int calculateSalesUnitPrice(final IDischargeOption option, final int time) {
-		return calculateSimpleLoadUnitPrice(time);
+		return calculateSimpleUnitPrice(time);
 	}
 
 	@Override
 	public int calculateCooldownUnitPrice(final ILoadSlot slot, final int time) {
-		return calculateSimpleLoadUnitPrice(time);
+		return calculateSimpleUnitPrice(time);
 	}
 
 	/**
@@ -54,11 +55,11 @@ public abstract class SimpleContract implements ISimpleLoadPriceCalculator, ILoa
 	 */
 	@Override
 	public int calculateCooldownUnitPrice(final int time) {
-		return calculateSimpleLoadUnitPrice(time);
+		return calculateSimpleUnitPrice(time);
 	}
 
 	@Override
 	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice, IDetailTree annotations) {
-		return calculateSimpleLoadUnitPrice(loadTime);
+		return calculateSimpleUnitPrice(loadTime);
 	}
 }

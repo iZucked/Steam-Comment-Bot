@@ -16,7 +16,7 @@ public class FixedPriceContract extends SimpleContract {
 	}
 
 	@Override
-	public int calculateSimpleLoadUnitPrice(final int loadTime) {
+	public int calculateSimpleUnitPrice(final int loadTime) {
 		return pricePerMMBTU;
 	}
 }
