@@ -108,6 +108,22 @@
                </target>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.PriceExpressionContractConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.PriceExpressionContractConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Price Expression Contract Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="PriceExpressionContract">
+               </target>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.commercial.validation.ContractPortsConstraint"
                   id="com.mmxlabs.models.lng.commercial.validation.ContractPortsConstraint"
                   isEnabledByDefault="true"

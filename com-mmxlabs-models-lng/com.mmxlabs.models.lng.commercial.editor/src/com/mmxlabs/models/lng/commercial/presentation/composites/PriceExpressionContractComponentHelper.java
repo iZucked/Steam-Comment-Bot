@@ -41,12 +41,12 @@ public class PriceExpressionContractComponentHelper extends BaseComponentHelper 
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated
+	 * @generated NO- there is an issue with having Contract as the supertype two ways at the moment
 	 */
 	public PriceExpressionContractComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.SALES_CONTRACT));
-		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.PURCHASE_CONTRACT));
+		//superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.PURCHASE_CONTRACT));
 	}
 	
 	/**

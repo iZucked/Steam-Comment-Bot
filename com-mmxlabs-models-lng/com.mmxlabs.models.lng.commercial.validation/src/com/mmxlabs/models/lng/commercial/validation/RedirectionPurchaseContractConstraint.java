@@ -8,24 +8,15 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.common.parser.IExpression;
-import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
-import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 public class RedirectionPurchaseContractConstraint extends AbstractModelMultiConstraint {
 	@Override
@@ -33,12 +24,12 @@ public class RedirectionPurchaseContractConstraint extends AbstractModelMultiCon
 		final EObject target = ctx.getTarget();
 
 		if (target instanceof RedirectionPurchaseContract) {
-			final SeriesParser parser = getParser();
+			final SeriesParser parser = ContractConstraints.getParser();
 			final RedirectionPurchaseContract contract = (RedirectionPurchaseContract) target;
 
-			validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BasePurchasePriceExpression(), contract.getBasePurchasePriceExpression(), parser,
+			ContractConstraints.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BasePurchasePriceExpression(), contract.getBasePurchasePriceExpression(), parser,
 					failures);
-			validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BaseSalesPriceExpression(), contract.getBaseSalesPriceExpression(), parser, failures);
+			ContractConstraints.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BaseSalesPriceExpression(), contract.getBaseSalesPriceExpression(), parser, failures);
 
 			if (contract.getNotionalSpeed() < 10.0) {
 
@@ -51,6 +42,7 @@ public class RedirectionPurchaseContractConstraint extends AbstractModelMultiCon
 		return Activator.PLUGIN_ID;
 	}
 
+	/*
 	private void validatePriceExpression(final IValidationContext ctx, final RedirectionPurchaseContract contract, final EStructuralFeature feature, final String priceExpression,
 			final SeriesParser parser, final List<IStatus> failures) {
 
@@ -106,4 +98,5 @@ public class RedirectionPurchaseContractConstraint extends AbstractModelMultiCon
 		}
 		return null;
 	}
+	*/
 }
