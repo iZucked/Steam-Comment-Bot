@@ -33,6 +33,9 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPreferredPort <em>Preferred Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -107,6 +110,50 @@ public class ContractImpl extends AContractImpl implements Contract {
 	 * @ordered
 	 */
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedListsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isRestrictedListsArePermissive() <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #isRestrictedListsArePermissive()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean restrictedListsArePermissive = RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedContracts() <em>Restricted Contracts</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedContracts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Contract> restrictedContracts;
+
+	/**
+	 * The cached value of the '{@link #getRestrictedPorts() <em>Restricted Ports</em>}' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getRestrictedPorts()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<APortSet> restrictedPorts;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -259,6 +306,55 @@ public class ContractImpl extends AContractImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isRestrictedListsArePermissive() {
+		return restrictedListsArePermissive;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setRestrictedListsArePermissive(boolean newRestrictedListsArePermissive) {
+		boolean oldRestrictedListsArePermissive = restrictedListsArePermissive;
+		restrictedListsArePermissive = newRestrictedListsArePermissive;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE, oldRestrictedListsArePermissive, restrictedListsArePermissive));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<Contract> getRestrictedContracts() {
+		if (restrictedContracts == null) {
+			restrictedContracts = new EObjectResolvingEList<Contract>(Contract.class, this, CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS);
+		}
+		return restrictedContracts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<APortSet> getRestrictedPorts() {
+		if (restrictedPorts == null) {
+			restrictedPorts = new EObjectResolvingEList<APortSet>(APortSet.class, this, CommercialPackage.CONTRACT__RESTRICTED_PORTS);
+		}
+		return restrictedPorts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -277,6 +373,12 @@ public class ContractImpl extends AContractImpl implements Contract {
 				return getMinQuantity();
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 				return getMaxQuantity();
+			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				return isRestrictedListsArePermissive();
+			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
+				return getRestrictedContracts();
+			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
+				return getRestrictedPorts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -306,6 +408,17 @@ public class ContractImpl extends AContractImpl implements Contract {
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
 				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				setRestrictedListsArePermissive((Boolean)newValue);
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
+				getRestrictedContracts().clear();
+				getRestrictedContracts().addAll((Collection<? extends Contract>)newValue);
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
+				getRestrictedPorts().clear();
+				getRestrictedPorts().addAll((Collection<? extends APortSet>)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -333,6 +446,15 @@ public class ContractImpl extends AContractImpl implements Contract {
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
 				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				setRestrictedListsArePermissive(RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT);
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
+				getRestrictedContracts().clear();
+				return;
+			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
+				getRestrictedPorts().clear();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -355,6 +477,12 @@ public class ContractImpl extends AContractImpl implements Contract {
 				return minQuantity != MIN_QUANTITY_EDEFAULT;
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
+			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
+				return restrictedListsArePermissive != RESTRICTED_LISTS_ARE_PERMISSIVE_EDEFAULT;
+			case CommercialPackage.CONTRACT__RESTRICTED_CONTRACTS:
+				return restrictedContracts != null && !restrictedContracts.isEmpty();
+			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
+				return restrictedPorts != null && !restrictedPorts.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}
@@ -373,6 +501,8 @@ public class ContractImpl extends AContractImpl implements Contract {
 		result.append(minQuantity);
 		result.append(", maxQuantity: ");
 		result.append(maxQuantity);
+		result.append(", restrictedListsArePermissive: ");
+		result.append(restrictedListsArePermissive);
 		result.append(')');
 		return result.toString();
 	}

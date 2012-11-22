@@ -69,6 +69,9 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_preferredPortEditor(detailComposite, topClass);
 		add_minQuantityEditor(detailComposite, topClass);
 		add_maxQuantityEditor(detailComposite, topClass);
+		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
+		add_restrictedContractsEditor(detailComposite, topClass);
+		add_restrictedPortsEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the entity feature on Contract
@@ -113,5 +116,32 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxQuantityEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__MAX_QUANTITY));
+	}
+
+	/**
+	 * Create the editor for the restrictedListsArePermissive feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedListsArePermissiveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE));
+	}
+
+	/**
+	 * Create the editor for the restrictedContracts feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedContractsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS));
+	}
+
+	/**
+	 * Create the editor for the restrictedPorts feature on Contract
+	 *
+	 * @generated
+	 */
+	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS));
 	}
 }

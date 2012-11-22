@@ -24,6 +24,12 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxQuantity" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="restrictedListsArePermissive"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedContracts" upperBound="-1"
+        eType="#//Contract"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedPorts" upperBound="-1"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SalesContract" abstract="true" eSuperTypes="#//Contract platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASalesContract"/>
   <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" abstract="true" eSuperTypes="#//Contract platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APurchaseContract"/>

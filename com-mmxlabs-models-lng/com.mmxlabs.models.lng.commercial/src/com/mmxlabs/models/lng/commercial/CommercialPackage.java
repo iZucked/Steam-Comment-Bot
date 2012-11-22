@@ -308,13 +308,43 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__MAX_QUANTITY = TypesPackage.ACONTRACT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = TypesPackage.ACONTRACT_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__RESTRICTED_CONTRACTS = TypesPackage.ACONTRACT_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__RESTRICTED_PORTS = TypesPackage.ACONTRACT_FEATURE_COUNT + 7;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = TypesPackage.ACONTRACT_FEATURE_COUNT + 5;
+	int CONTRACT_FEATURE_COUNT = TypesPackage.ACONTRACT_FEATURE_COUNT + 8;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -415,6 +445,36 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__MAX_QUANTITY = CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__RESTRICTED_CONTRACTS = CONTRACT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__RESTRICTED_PORTS = CONTRACT__RESTRICTED_PORTS;
 
 	/**
 	 * The number of structural features of the '<em>Sales Contract</em>' class.
@@ -526,6 +586,36 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__MAX_QUANTITY = CONTRACT__MAX_QUANTITY;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__RESTRICTED_CONTRACTS = CONTRACT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__RESTRICTED_PORTS = CONTRACT__RESTRICTED_PORTS;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -633,6 +723,36 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int FIXED_PRICE_CONTRACT__MAX_QUANTITY = SALES_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = SALES_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__RESTRICTED_CONTRACTS = SALES_CONTRACT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__RESTRICTED_PORTS = SALES_CONTRACT__RESTRICTED_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
@@ -751,6 +871,36 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int INDEX_PRICE_CONTRACT__MAX_QUANTITY = SALES_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = SALES_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__RESTRICTED_CONTRACTS = SALES_CONTRACT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__RESTRICTED_PORTS = SALES_CONTRACT__RESTRICTED_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
@@ -889,6 +1039,36 @@ public interface CommercialPackage extends EPackage {
 	int NETBACK_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = PURCHASE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__RESTRICTED_CONTRACTS = PURCHASE_CONTRACT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__RESTRICTED_PORTS = PURCHASE_CONTRACT__RESTRICTED_PORTS;
+
+	/**
 	 * The feature id for the '<em><b>Notional Ballast Parameters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1023,6 +1203,36 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROFIT_SHARE_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = PURCHASE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__RESTRICTED_CONTRACTS = PURCHASE_CONTRACT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__RESTRICTED_PORTS = PURCHASE_CONTRACT__RESTRICTED_PORTS;
 
 	/**
 	 * The feature id for the '<em><b>Base Market Ports</b></em>' reference list.
@@ -1345,6 +1555,36 @@ public interface CommercialPackage extends EPackage {
 	int REDIRECTION_PURCHASE_CONTRACT__MAX_QUANTITY = PURCHASE_CONTRACT__MAX_QUANTITY;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = PURCHASE_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__RESTRICTED_CONTRACTS = PURCHASE_CONTRACT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__RESTRICTED_PORTS = PURCHASE_CONTRACT__RESTRICTED_PORTS;
+
+	/**
 	 * The feature id for the '<em><b>Base Sales Market Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1527,6 +1767,36 @@ public interface CommercialPackage extends EPackage {
 	int PRICE_EXPRESSION_CONTRACT__MAX_QUANTITY = SALES_CONTRACT__MAX_QUANTITY;
 
 	/**
+	 * The feature id for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = SALES_CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__RESTRICTED_CONTRACTS = SALES_CONTRACT__RESTRICTED_CONTRACTS;
+
+	/**
+	 * The feature id for the '<em><b>Restricted Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__RESTRICTED_PORTS = SALES_CONTRACT__RESTRICTED_PORTS;
+
+	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1674,6 +1944,42 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getContract_MaxQuantity();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Restricted Lists Are Permissive</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EAttribute getContract_RestrictedListsArePermissive();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts <em>Restricted Contracts</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Restricted Contracts</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_RestrictedContracts();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Restricted Ports</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_RestrictedPorts();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
@@ -2228,6 +2534,33 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute CONTRACT__MAX_QUANTITY = eINSTANCE.getContract_MaxQuantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Lists Are Permissive</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE = eINSTANCE.getContract_RestrictedListsArePermissive();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Contracts</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__RESTRICTED_CONTRACTS = eINSTANCE.getContract_RestrictedContracts();
+
+		/**
+		 * The meta object literal for the '<em><b>Restricted Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__RESTRICTED_PORTS = eINSTANCE.getContract_RestrictedPorts();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.

@@ -21,6 +21,9 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPreferredPort <em>Preferred Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts <em>Restricted Contracts</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}</li>
  * </ul>
  * </p>
  *
@@ -148,6 +151,68 @@ public interface Contract extends AContract {
 	 * @generated
 	 */
 	void setMaxQuantity(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Lists Are Permissive</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Lists Are Permissive</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Lists Are Permissive</em>' attribute.
+	 * @see #setRestrictedListsArePermissive(boolean)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedListsArePermissive()
+	 * @model
+	 * @generated
+	 */
+	boolean isRestrictedListsArePermissive();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Restricted Lists Are Permissive</em>' attribute.
+	 * @see #isRestrictedListsArePermissive()
+	 * @generated
+	 */
+	void setRestrictedListsArePermissive(boolean value);
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Contracts</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.commercial.Contract}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Contracts</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Contracts</em>' reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedContracts()
+	 * @model
+	 * @generated
+	 */
+	EList<Contract> getRestrictedContracts();
+
+	/**
+	 * Returns the value of the '<em><b>Restricted Ports</b></em>' reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Restricted Ports</em>' reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Restricted Ports</em>' reference list.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_RestrictedPorts()
+	 * @model
+	 * @generated
+	 */
+	EList<APortSet> getRestrictedPorts();
 
 } // end of  Contract
 
