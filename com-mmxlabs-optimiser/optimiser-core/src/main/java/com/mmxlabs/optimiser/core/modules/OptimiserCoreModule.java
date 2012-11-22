@@ -41,10 +41,14 @@ public class OptimiserCoreModule extends AbstractModule {
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
 		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(constraintCheckerRegistry, enabledConstraintNames, optimisationData);
 
+		final List<IConstraintChecker> result = new ArrayList<IConstraintChecker>(constraintCheckers.size());
 		for (final IConstraintChecker checker : constraintCheckers) {
-			injector.injectMembers(checker);
+			if (checker != null) {
+				result.add(checker);
+				injector.injectMembers(checker);
+			}
 		}
-		return constraintCheckers;
+		return result;
 	}
 
 	@Provides
@@ -67,16 +71,21 @@ public class OptimiserCoreModule extends AbstractModule {
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
 		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(fitnessFunctionRegistry, enabledFitnessNames);
 		final Set<IFitnessCore> cores = new HashSet<IFitnessCore>();
+
+		final List<IFitnessComponent> result = new ArrayList<IFitnessComponent>(fitnessComponents.size());
 		for (final IFitnessComponent c : fitnessComponents) {
-			injector.injectMembers(c);
-			cores.add(c.getFitnessCore());
+			if (c != null) {
+				result.add(c);
+				injector.injectMembers(c);
+				cores.add(c.getFitnessCore());
+			}
 		}
 
 		for (final IFitnessCore c : cores) {
 			injector.injectMembers(c);
 		}
 
-		return fitnessComponents;
+		return result;
 	}
 
 	@Provides
