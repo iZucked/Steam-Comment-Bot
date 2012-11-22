@@ -16,9 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Injector;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.common.dcproviders.IResourceAllocationConstraintDataComponentProvider;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -27,8 +30,6 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
-import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -62,9 +63,13 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 	 */
 	private static final int INITIAL_MAX_LATENESS = 48;
 
-	private final List<IPairwiseConstraintChecker> pairwiseCheckers;
 	private TravelTimeConstraintChecker travelTimeChecker;
 
+	@Inject
+	private Injector injector;
+
+	private List<IPairwiseConstraintChecker> pairwiseCheckers;
+	
 	class ChunkChecker {
 		private final LegalSequencingChecker checker;
 
@@ -113,21 +118,14 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		}
 	}
 
-	public ConstrainedInitialSequenceBuilder(final Collection<IConstraintCheckerFactory> factories) {
-		this.pairwiseCheckers = new ArrayList<IPairwiseConstraintChecker>();
-		for (final IConstraintCheckerFactory factory : factories) {
-			final IConstraintChecker checker = factory.instantiate();
-			if (checker instanceof IPairwiseConstraintChecker) {
-				pairwiseCheckers.add((IPairwiseConstraintChecker) checker);
-			}
+
+	public ConstrainedInitialSequenceBuilder(final List<IPairwiseConstraintChecker> pairwiseCheckers) {
+		this.pairwiseCheckers = pairwiseCheckers;
+		for (final IPairwiseConstraintChecker checker : pairwiseCheckers) {
 			if (checker instanceof TravelTimeConstraintChecker) {
 				this.travelTimeChecker = (TravelTimeConstraintChecker) checker;
 			}
 		}
-	}
-
-	public ConstrainedInitialSequenceBuilder(final List<IPairwiseConstraintChecker> pairwiseCheckers) {
-		this.pairwiseCheckers = pairwiseCheckers;
 	}
 
 	@Override
@@ -176,7 +174,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 		unsequencedElements.addAll(data.getSequenceElements());
 
 		unsequencedElements.removeAll(alternativeElementProvider.getAllAlternativeElements());
-		
+
 		// Remove elements in the initial suggestion from the unsequenced set
 		if (suggestion != null) {
 			for (final ISequence seq : suggestion.getSequences().values()) {
@@ -208,7 +206,7 @@ public class ConstrainedInitialSequenceBuilder implements IInitialSequenceBuilde
 			// If there is a paring hint, then use this as the only possible follower information.
 			if (pairingHints.containsKey(element1)) {
 				after1.add(pairingHints.get(element1));
-				
+
 			} else {
 				// No paring hint, so build up the follower cache
 				for (final ISequenceElement element2 : data.getSequenceElements()) {

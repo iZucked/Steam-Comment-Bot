@@ -132,6 +132,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		}
 	}
 
+	@Inject
 	private LegalSequencingChecker checker;
 
 	private SequencesConstrainedMoveGeneratorUnit sequencesMoveGenerator;
@@ -152,7 +153,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Inject
 	public void init() {
-		this.checker = new LegalSequencingChecker(context);
+//		this.checker = injector.getInstance(LegalSequencingChecker.class);
+//		LegalSequencingChecker checker2 = new LegalSequencingChecker(context);
 		checker.disallowLateness();
 		final IOptimisationData data = context.getOptimisationData();
 
