@@ -94,4 +94,8 @@ public final class SchedulerConstants {
 	 * @since 2.0
 	 */
 	public static final String DCP_alternativeElementProvider = "provider-alternative-element";
+	/**
+	 * @since 2.0
+	 */
+	public static final String DCP_restrictedElementProvider = "provider-restricted-elements";
 }
