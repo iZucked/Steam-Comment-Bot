@@ -12,8 +12,8 @@ import org.eclipse.core.runtime.Platform;
 import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.TypeLiteral;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
+import com.mmxlabs.models.lng.transformer.contracts.RestrictedElementsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.contracts.SimpleContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
@@ -30,6 +30,7 @@ import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
@@ -63,6 +64,7 @@ public class ContractExtensionTestModule extends AbstractModule {
 			transformerExtensionFactories.add(new EntityTransformerExtensionFactory());
 			transformerExtensionFactories.add(new SimpleContractTransformerFactory());
 			transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
+			transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 			bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
 			final List<IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<IExporterExtensionFactory>();
@@ -123,6 +125,8 @@ public class ContractExtensionTestModule extends AbstractModule {
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new TimeSortConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider,
 				SchedulerConstants.DCP_vesselProvider));
+
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new RestrictedElementsConstraintCheckerFactory());
 
 		return constraintCheckerRegistry;
 	}
