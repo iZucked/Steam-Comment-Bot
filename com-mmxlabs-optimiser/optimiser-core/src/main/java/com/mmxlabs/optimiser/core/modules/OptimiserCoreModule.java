@@ -15,6 +15,7 @@ import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerInstantiator;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
@@ -35,11 +36,10 @@ public class OptimiserCoreModule extends AbstractModule {
 	}
 
 	@Provides
-	@Singleton
-	private List<IConstraintChecker> provideConstraintCheckers(final Injector injector, final IOptimisationContext context) {
+	private List<IConstraintChecker> provideConstraintCheckers(final Injector injector, final IConstraintCheckerRegistry constraintCheckerRegistry,
+			@Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames, IOptimisationData optimisationData) {
 		final ConstraintCheckerInstantiator constraintCheckerInstantiator = new ConstraintCheckerInstantiator();
-		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(context.getConstraintCheckerRegistry(), context.getConstraintCheckers(),
-				context.getOptimisationData());
+		final List<IConstraintChecker> constraintCheckers = constraintCheckerInstantiator.instantiateConstraintCheckers(constraintCheckerRegistry, enabledConstraintNames, optimisationData);
 
 		for (final IConstraintChecker checker : constraintCheckers) {
 			injector.injectMembers(checker);
@@ -48,11 +48,24 @@ public class OptimiserCoreModule extends AbstractModule {
 	}
 
 	@Provides
+	private List<IPairwiseConstraintChecker> providePairwiseConstraintCheckers(final List<IConstraintChecker> contraintCheckers) {
+		final ArrayList<IPairwiseConstraintChecker> pairwiseCheckers = new ArrayList<IPairwiseConstraintChecker>();
+		for (final IConstraintChecker checker : contraintCheckers) {
+			if (checker instanceof IPairwiseConstraintChecker) {
+				pairwiseCheckers.add((IPairwiseConstraintChecker) checker);
+			}
+		}
+
+		return pairwiseCheckers;
+	}
+
+	@Provides
 	@Singleton
-	private List<IFitnessComponent> provideFitnessComponents(final Injector injector, final IOptimisationContext context) {
+	private List<IFitnessComponent> provideFitnessComponents(final Injector injector, final IFitnessFunctionRegistry fitnessFunctionRegistry,
+			@Named(ENABLED_FITNESS_NAMES) final List<String> enabledFitnessNames) {
 
 		final FitnessComponentInstantiator fitnessComponentInstantiator = new FitnessComponentInstantiator();
-		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(context.getFitnessFunctionRegistry(), context.getFitnessComponents());
+		final List<IFitnessComponent> fitnessComponents = fitnessComponentInstantiator.instantiateFitnesses(fitnessFunctionRegistry, enabledFitnessNames);
 		final Set<IFitnessCore> cores = new HashSet<IFitnessCore>();
 		for (final IFitnessComponent c : fitnessComponents) {
 			injector.injectMembers(c);
@@ -87,4 +100,5 @@ public class OptimiserCoreModule extends AbstractModule {
 
 		return new OptimisationContext(data, sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry);
 	}
+
 }
