@@ -91,7 +91,9 @@ public class OptimiserSettingsModule extends AbstractModule {
 		// Initialise to zero, then take optimiser settings
 		final Map<String, Double> weightsMap = new HashMap<String, Double>();
 		for (final IFitnessComponent component : fitnessComponents) {
-			weightsMap.put(component.getName(), 0.0);
+			if (component != null) {
+				weightsMap.put(component.getName(), 0.0);
+			}
 		}
 
 		for (final Objective objective : settings.getObjectives()) {
