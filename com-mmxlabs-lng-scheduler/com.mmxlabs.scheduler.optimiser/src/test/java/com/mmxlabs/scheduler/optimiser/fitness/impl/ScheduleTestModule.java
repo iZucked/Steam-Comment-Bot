@@ -20,13 +20,16 @@ import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintChec
 import com.mmxlabs.optimiser.core.IOptimisationContext;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerRegistry;
+import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.impl.ConstraintCheckerRegistry;
 import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.evaluation.impl.EvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.fitness.impl.FitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.impl.OptimisationContext;
+import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
@@ -59,7 +62,7 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		// install(new ScheduleBuilderModule());
+		install(new OptimiserCoreModule());
 
 		bind(IOptimisationData.class).toInstance(data);
 
@@ -174,27 +177,27 @@ public class ScheduleTestModule extends AbstractModule {
 		return evaluationProcessRegistry;
 	}
 
-	@Provides
-	@Singleton
-	private IOptimisationContext createOptimisationContext(final IOptimisationData data, @Named("Initial") final ISequences sequences, final IFitnessFunctionRegistry fitnessFunctionRegistry,
-			final IConstraintCheckerRegistry constraintCheckerRegistry, final IEvaluationProcessRegistry evaluationProcessRegistry,
-			@Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames, @Named(ENABLED_FITNESS_NAMES) final List<String> enabledFitnessNames) {
-
-		final List<String> components = new ArrayList<String>(enabledFitnessNames);
-		components.retainAll(fitnessFunctionRegistry.getFitnessComponentNames());
-
-		final List<String> checkers = new ArrayList<String>(enabledConstraintNames);
-		checkers.retainAll(constraintCheckerRegistry.getConstraintCheckerNames());
-
-		// Enable all processes
-		// final List<String> evaluationProcesses = getEnabledEvaluationProcessNames();
-		// log.debug("Available evaluation processes: " + evaluationProcesses);
-		// evaluationProcesses.retainAll(evaluationProcessRegistry.getEvaluationProcessNames());
-
-		final List<String> evaluationProcesses = new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames());
-
-		return new OptimisationContext(data, sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry);
-	}
+	// @Provides
+	// @Singleton
+	// private IOptimisationContext createOptimisationContext(final IOptimisationData data, @Named("Initial") final ISequences sequences, final IFitnessFunctionRegistry fitnessFunctionRegistry,
+	// final IConstraintCheckerRegistry constraintCheckerRegistry, final IEvaluationProcessRegistry evaluationProcessRegistry,
+	// @Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames, @Named(ENABLED_FITNESS_NAMES) final List<String> enabledFitnessNames) {
+	//
+	// final List<String> components = new ArrayList<String>(enabledFitnessNames);
+	// components.retainAll(fitnessFunctionRegistry.getFitnessComponentNames());
+	//
+	// final List<String> checkers = new ArrayList<String>(enabledConstraintNames);
+	// checkers.retainAll(constraintCheckerRegistry.getConstraintCheckerNames());
+	//
+	// // Enable all processes
+	// // final List<String> evaluationProcesses = getEnabledEvaluationProcessNames();
+	// // log.debug("Available evaluation processes: " + evaluationProcesses);
+	// // evaluationProcesses.retainAll(evaluationProcessRegistry.getEvaluationProcessNames());
+	//
+	// final List<String> evaluationProcesses = new ArrayList<String>(evaluationProcessRegistry.getEvaluationProcessNames());
+	//
+	// return new OptimisationContext(data, sequences, components, fitnessFunctionRegistry, checkers, constraintCheckerRegistry, evaluationProcesses, evaluationProcessRegistry);
+	// }
 
 	@Provides
 	@Singleton
@@ -214,9 +217,8 @@ public class ScheduleTestModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	private IInitialSequenceBuilder provideIInitialSequenceBuilder(@Named(ENABLED_CONSTRAINT_NAMES) final List<String> enabledConstraintNames,
-			final IConstraintCheckerRegistry constraintCheckerRegistry) {
-		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(constraintCheckerRegistry.getConstraintCheckerFactories(enabledConstraintNames));
+	private IInitialSequenceBuilder provideIInitialSequenceBuilder(final List<IPairwiseConstraintChecker> pairwiseCheckers) {
+		final IInitialSequenceBuilder builder = new ConstrainedInitialSequenceBuilder(pairwiseCheckers);
 
 		return builder;
 	}
