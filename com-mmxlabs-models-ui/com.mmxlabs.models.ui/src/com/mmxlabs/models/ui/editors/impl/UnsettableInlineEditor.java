@@ -163,7 +163,6 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		}
 
 		boolean innerEnabled = isEditorEnabled() && !isEditorLocked() && (setButton == null || setButton.getSelection());
-		setControlsEnabled(innerEnabled);
 		if (inner != null) {
 			inner.setEnabled(innerEnabled);
 		}
@@ -180,7 +179,14 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		super.setControlsEnabled(enabled);
 		if (setButton != null) {
 			setButton.setEnabled(enabled);
+			if (inner != null) {
+				inner.setEnabled(setButton.getSelection());
+			}
 		}
+		else if (inner != null) {
+			inner.setEnabled(enabled);
+		}
+		
 	}
 
 	@Override

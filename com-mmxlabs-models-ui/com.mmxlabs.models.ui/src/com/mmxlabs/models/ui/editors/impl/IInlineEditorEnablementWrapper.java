@@ -5,8 +5,10 @@
 package com.mmxlabs.models.ui.editors.impl;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.events.DisposeEvent;
@@ -26,6 +28,7 @@ import com.mmxlabs.models.ui.editors.IInlineEditor;
  * {@link MMXAdapterImpl#reallyNotifyChanged(org.eclipse.emf.common.notify.Notification)} and call {@link #setEnabled(boolean)}
  * 
  * @author Simon Goodall
+ * @since 2.0
  * 
  */
 public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl implements IInlineEditor {
@@ -34,6 +37,15 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 	protected Collection<EObject> ranges;
 
 	protected final IInlineEditor wrapped;
+
+	/**
+	 * @since 2.0
+	 */
+	protected abstract boolean respondToNotification(final Notification notification);
+	/**
+	 * @since 2.0
+	 */
+	protected abstract boolean isEnabled();
 
 	private final DisposeListener disposeListener = new DisposeListener() {
 		@Override
@@ -103,6 +115,8 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 				eObj.eAdapters().add(this);
 			}
 		}
+		
+		setEditorEnabled(isEnabled());		
 	}
 
 	@Override
@@ -178,4 +192,51 @@ public abstract class IInlineEditorEnablementWrapper extends MMXAdapterImpl impl
 		return wrapped.getLabel();
 	}
 
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void addNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+		wrapped.addNotificationChangedListener(listener);
+
+	}	
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public void removeNotificationChangedListener(IInlineEditorExternalNotificationListener listener) {
+		wrapped.removeNotificationChangedListener(listener);
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	protected void missedNotifications(final List<Notification> missed) {
+		for (final Notification n : missed) {
+			reallyNotifyChanged(n);
+		}
+		super.missedNotifications(missed);
+	}
+	
+	/**
+	 * Return the wrapped editor instance.
+	 * 
+	 * @since 2.0
+	 * @return
+	 */
+	public IInlineEditor getWrapped() {
+		return wrapped;
+	}
+
+	
+	@Override
+	public void reallyNotifyChanged(final Notification notification) {
+		if (respondToNotification(notification)) {
+			setEditorEnabled(isEnabled());
+		}
+	}	
+
+	
 };
