@@ -53,7 +53,6 @@ import com.mmxlabs.models.ui.editors.IDisplayCompositeFactory;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.IInlineEditorWrapper;
 import com.mmxlabs.models.ui.editors.impl.IInlineEditorExternalNotificationListener;
-import com.mmxlabs.models.ui.editors.util.ControlUtils;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.util.emfpath.EMFUtils;
@@ -87,7 +86,7 @@ public class MultiDetailDialog extends Dialog {
 	/**
 	 * Track all the controls that have been created, so we can disable them after setInput(), which will re-enable them otherwise.
 	 */
-	private final List<Control> controlsToDisable = new LinkedList<Control>();
+	private final List<IInlineEditor> controlsToDisable = new LinkedList<IInlineEditor>();
 
 	/**
 	 * This list of EObjects contains the proxy structure being edited in place of the real input
@@ -111,8 +110,8 @@ public class MultiDetailDialog extends Dialog {
 	}
 
 	private void disableControls() {
-		for (final Control c : controlsToDisable) {
-			ControlUtils.setControlEnabled(c, false);
+		for (final IInlineEditor c : controlsToDisable) {
+			c.setEditorEnabled(false);
 		}
 		controlsToDisable.clear();
 	}
@@ -387,7 +386,7 @@ public class MultiDetailDialog extends Dialog {
 					sub.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
 					// we can't disable here any more, as the later setInput() call will re-enable
-					controlsToDisable.add(sub);
+					controlsToDisable.add(proxy);
 
 					final ToolBarManager manager = new ToolBarManager(SWT.NONE);
 					final Pair<EObject, EStructuralFeature> pair = new Pair<EObject, EStructuralFeature>(null, getFeature());
@@ -395,7 +394,8 @@ public class MultiDetailDialog extends Dialog {
 					manager.add(new Action("Set", IAction.AS_CHECK_BOX) {
 						@Override
 						public void run() {
-							ControlUtils.setControlEnabled(sub, isChecked());
+//							ControlUtils.setControlEnabled(sub, isChecked());
+							proxy.setEditorEnabled(isChecked());
 							if (isChecked()) {
 								featuresToSet.put(pair, SetMode.REPLACE);
 							} else {
