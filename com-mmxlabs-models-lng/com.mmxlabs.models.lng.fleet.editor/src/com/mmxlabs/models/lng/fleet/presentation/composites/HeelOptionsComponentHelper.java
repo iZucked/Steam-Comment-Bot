@@ -9,14 +9,18 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
-import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -79,10 +83,11 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the cvValue feature on HeelOptions
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_cvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__CV_VALUE));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__CV_VALUE);
+		detailComposite.addInlineEditor(new HeelOptionsInlineEditorWrapper(editor));
 	}
 	/**
 	 * Create the editor for the pricePerMMBTU feature on HeelOptions
@@ -90,6 +95,7 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_pricePerMMBTUEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__PRICE_PER_MMBTU));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__PRICE_PER_MMBTU);
+		detailComposite.addInlineEditor(new HeelOptionsInlineEditorWrapper(editor));
 	}
 }
