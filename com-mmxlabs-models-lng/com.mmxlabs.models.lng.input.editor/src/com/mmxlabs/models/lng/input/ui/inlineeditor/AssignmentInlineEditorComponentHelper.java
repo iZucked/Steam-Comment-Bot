@@ -293,7 +293,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		}
 
 		public void updateDisplay(final EObject object) {
-			final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(null, InputPackage.eINSTANCE.getAssignment_Vessels());
+			final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(object, InputPackage.eINSTANCE.getAssignment_Vessels());
 
 			combo.removeAll();
 			nameList.clear();
@@ -407,10 +407,14 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 
 			setEditorEnabled(enabled);
 
-			if (notification.getFeature() == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
+			Object feature = notification.getFeature(); 
+			if (valueProvider.updateOnChangeToFeature(feature))
+				updateDisplay(inputObject);
+
+			if (feature == CargoPackage.eINSTANCE.getLoadSlot_DESPurchase()) {
 				updateDisplay(inputObject);
 			}
-			if (notification.getFeature() == CargoPackage.eINSTANCE.getDischargeSlot()) {
+			if (feature == CargoPackage.eINSTANCE.getDischargeSlot()) {
 				updateDisplay(inputObject);
 			}
 		}

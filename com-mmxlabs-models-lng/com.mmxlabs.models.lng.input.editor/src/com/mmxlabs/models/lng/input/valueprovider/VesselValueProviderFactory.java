@@ -4,19 +4,32 @@
  */
 package com.mmxlabs.models.lng.input.valueprovider;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 
+import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.impl.CargoImpl;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.input.ElementAssignment;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
+import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.models.ui.valueproviders.MergedReferenceValueProvider;
@@ -24,7 +37,8 @@ import com.mmxlabs.models.ui.valueproviders.MergedReferenceValueProvider;
 public class VesselValueProviderFactory implements IReferenceValueProviderFactory {
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner,
-			final EReference reference, final MMXRootObject rootObject) {
+			final EReference reference, final MMXRootObject theRootObject) {
+		final MMXRootObject rootObject = theRootObject;
 		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 		final EClass referenceClass = reference.getEReferenceType();
 		final TypesPackage types = TypesPackage.eINSTANCE;
@@ -32,6 +46,62 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 		
 		if (referenceClass == types.getAVesselSet()) {
 			return new MergedReferenceValueProvider(fleetModel, fleet.getFleetModel_VesselClasses(), fleet.getFleetModel_Vessels()) {
+				//@Override
+				public List<Pair<String, EObject>> getAllowedValues(EObject target, EStructuralFeature field) {
+					// get a list of globally permissible values   
+					List<Pair<String, EObject>> baseResult = super.getAllowedValues(target, field);
+					
+					final EList<AVesselSet> allowedVessels;
+					
+					// populate the list of allowed vessels for the target object 
+					if (target instanceof CargoImpl) {
+						final CargoImpl cargo = (CargoImpl) target;
+						allowedVessels = cargo.getAllowedVessels();
+					}
+					else if (target instanceof VesselEvent) {
+						final VesselEvent event = (VesselEvent) target;
+						allowedVessels = event.getAllowedVessels();
+					}
+					else {
+						allowedVessels = null;
+					}
+					
+					// filter the global list by the object's allowed values 
+					if (allowedVessels != null) {
+						InputModel inputModel = rootObject.getSubModel(InputModel.class);
+						// find the current value set, if any
+						AVesselSet currentValue = null;
+						if (inputModel != null) {
+							ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, (UUIDObject) target);
+							if (assignment != null)
+								currentValue = (AVesselSet) assignment.getAssignment();
+						}						
+
+						// create list to populate
+						ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();						
+						
+						// filter the globally permissible values by the settings for this cargo
+						for (Pair<String, EObject> pair: baseResult) {
+							EObject vessel = pair.getSecond();
+							final boolean display = 
+									// show the option if the cargo allows this vessel-set
+									// (an empty list of allowed vessels means "all vessels") 
+									allowedVessels.isEmpty() || allowedVessels.contains(vessel)
+									// show the option if the option is the null option
+									// or the current value for the cargo is set to this vessel-set
+									|| Equality.isEqual(vessel, currentValue) || vessel == null;
+							
+							if (display) {
+								result.add(pair);
+							}
+						}
+
+						return result;
+					}
+					else
+						return baseResult;
+				}
+				
 				@Override
 				protected Pair<String, EObject> getEmptyObject() {
 					return new Pair<String, EObject>("<Unassigned>", null);
@@ -68,6 +138,20 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 						
 					};
 				}
+
+				@Override
+				public boolean updateOnChangeToFeature(Object changedFeature) {
+					if (changedFeature == CargoPackage.eINSTANCE.getCargo_AllowedVessels()) {
+						return true;
+					}
+					
+					if (changedFeature == FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels()) {
+						return true;
+					}
+
+					return super.updateOnChangeToFeature(changedFeature);
+				}
+
 			};
 		}
 		
