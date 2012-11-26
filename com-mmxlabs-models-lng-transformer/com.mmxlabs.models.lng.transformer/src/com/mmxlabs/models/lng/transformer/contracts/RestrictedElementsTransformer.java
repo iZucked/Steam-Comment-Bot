@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -42,6 +43,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	private MMXRootObject rootObject;
 	private final Map<Contract, Collection<ISequenceElement>> contractMap = new HashMap<Contract, Collection<ISequenceElement>>();
 	private final Map<Port, Collection<ISequenceElement>> portMap = new HashMap<Port, Collection<ISequenceElement>>();
+	private final Set<ISequenceElement> allElements = new HashSet<ISequenceElement>();
 
 	@Override
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
@@ -58,7 +60,12 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 					final Collection<ISequenceElement> sourceElements = contractMap.get(pc);
 					for (final Contract c : pc.getRestrictedContracts()) {
 						if (contractMap.containsKey(c)) {
-							final Collection<ISequenceElement> destinationElements = contractMap.get(c);
+							Collection<ISequenceElement> destinationElements = contractMap.get(c);
+							if (pc.isRestrictedListsArePermissive()) {
+								final Set<ISequenceElement> permissive = new HashSet<ISequenceElement>(allElements);
+								permissive.removeAll(destinationElements);
+								destinationElements = permissive;
+							}
 							for (final ISequenceElement source : sourceElements) {
 								restrictedElementsProviderEditor.setRestrictedElements(source, null, destinationElements);
 							}
@@ -67,7 +74,12 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 
 					for (final APort p : SetUtils.getPorts(pc.getRestrictedPorts())) {
 						if (portMap.containsKey(p)) {
-							final Collection<ISequenceElement> destinationElements = portMap.get(p);
+							Collection<ISequenceElement> destinationElements = portMap.get(p);
+							if (pc.isRestrictedListsArePermissive()) {
+								final Set<ISequenceElement> permissive = new HashSet<ISequenceElement>(allElements);
+								permissive.removeAll(destinationElements);
+								destinationElements = permissive;
+							}
 							for (final ISequenceElement source : sourceElements) {
 								restrictedElementsProviderEditor.setRestrictedElements(source, null, destinationElements);
 							}
@@ -82,7 +94,12 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 					final Collection<ISequenceElement> sourceElements = contractMap.get(sc);
 					for (final Contract c : sc.getRestrictedContracts()) {
 						if (contractMap.containsKey(c)) {
-							final Collection<ISequenceElement> destinationElements = contractMap.get(c);
+							Collection<ISequenceElement> destinationElements = contractMap.get(c);
+							if (sc.isRestrictedListsArePermissive()) {
+								final Set<ISequenceElement> permissive = new HashSet<ISequenceElement>(allElements);
+								permissive.removeAll(destinationElements);
+								destinationElements = permissive;
+							}
 							for (final ISequenceElement source : sourceElements) {
 								restrictedElementsProviderEditor.setRestrictedElements(source, null, destinationElements);
 							}
@@ -91,7 +108,12 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 
 					for (final APort p : SetUtils.getPorts(sc.getRestrictedPorts())) {
 						if (portMap.containsKey(p)) {
-							final Collection<ISequenceElement> destinationElements = portMap.get(p);
+							Collection<ISequenceElement> destinationElements = portMap.get(p);
+							if (sc.isRestrictedListsArePermissive()) {
+								final Set<ISequenceElement> permissive = new HashSet<ISequenceElement>(allElements);
+								permissive.removeAll(destinationElements);
+								destinationElements = permissive;
+							}
 							for (final ISequenceElement source : sourceElements) {
 								restrictedElementsProviderEditor.setRestrictedElements(source, null, destinationElements);
 							}
@@ -99,11 +121,12 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 					}
 				}
 			}
-
 		}
+
 		rootObject = null;
 		contractMap.clear();
 		portMap.clear();
+		allElements.clear();
 	}
 
 	@Override
@@ -119,6 +142,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 	@Override
 	public void slotTransformed(final Slot modelSlot, final IPortSlot optimiserSlot) {
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
+		allElements.add(sequenceElement);
 		{
 			final Port port = modelSlot.getPort();
 			Collection<ISequenceElement> portElements;
