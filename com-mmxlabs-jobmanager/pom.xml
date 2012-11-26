@@ -11,7 +11,7 @@
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<version>15</version>
+		<version>17</version>
 		<relativePath />
 	</parent>
 
@@ -63,7 +63,7 @@
 							<version>1.0.1-SNAPSHOT</version>
 						</artifact>
 					</target>
-					
+
 
 					<environments>
 
@@ -108,5 +108,6 @@
 			</plugin>
 
 		</plugins>
+
 	</build>
 </project>
