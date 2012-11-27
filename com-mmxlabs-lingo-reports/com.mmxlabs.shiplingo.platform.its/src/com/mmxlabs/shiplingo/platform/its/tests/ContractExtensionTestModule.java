@@ -11,6 +11,7 @@ import java.util.List;
 import org.eclipse.core.runtime.Platform;
 import org.ops4j.peaberry.util.TypeLiterals;
 
+import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.contracts.RestrictedElementsTransformerFactory;
@@ -38,6 +39,7 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintC
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoFitnessComponentProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
+import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerComponentsInjectorService;
 import com.mmxlabs.trading.integration.TradingOptimiserModuleService;
 import com.mmxlabs.trading.integration.factories.EntityTransformerExtensionFactory;
 import com.mmxlabs.trading.integration.factories.StandardContractTransformerExtensionFactory;
@@ -54,7 +56,10 @@ public class ContractExtensionTestModule extends AbstractModule {
 			bind(IFitnessFunctionRegistry.class).toInstance(createFitnessFunctionRegistry());
 			bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
 			bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
-			bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toInstance(Collections.singleton(new TradingOptimiserModuleService()));
+
+			final List<IOptimiserInjectorService> injectorServices = Lists.newArrayList(new SchedulerComponentsInjectorService(), new TradingOptimiserModuleService());
+
+			bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toInstance(injectorServices);
 			bind(TypeLiterals.iterable(ICargoFitnessComponentProvider.class)).toInstance(Collections.singleton(new ProfitAndLossAllocationComponentProvider()));
 
 			final List<IBuilderExtensionFactory> builderExtensionFactories = new ArrayList<IBuilderExtensionFactory>();
