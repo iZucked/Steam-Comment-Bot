@@ -342,7 +342,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			manipulator.init(data);
 			manipulator.manipulate(sequences); // this will set the return elements to the right places, and remove the start elements.
 
-			final VoyagePlanOptimiser optimiser = injector.getInstance(VoyagePlanOptimiser.class);
+//			final VoyagePlanOptimiser optimiser = injector.getInstance(VoyagePlanOptimiser.class);
 
 			final AbstractSequenceScheduler scheduler = new AbstractSequenceScheduler() {
 				@Override
@@ -363,9 +363,9 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 			injector.injectMembers(scheduler);
 			// injector.injectMembers(scheduler);
-			SchedulerUtils.setDataComponentProviders(data, scheduler);
-			scheduler.setVoyagePlanOptimiser(optimiser);
-			scheduler.init();
+//			SchedulerUtils.setDataComponentProviders(data, scheduler);
+//			scheduler.setVoyagePlanOptimiser(optimiser);
+//			scheduler.init();
 
 			// run the scheduler on the sequences
 			final ScheduledSequences result = scheduler.schedule(sequences, arrivalTimes);
