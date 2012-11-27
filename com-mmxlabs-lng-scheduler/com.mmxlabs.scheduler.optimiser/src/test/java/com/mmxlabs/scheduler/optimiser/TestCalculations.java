@@ -11,6 +11,7 @@ import java.util.TreeMap;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.mmxlabs.common.CollectionsUtil;
@@ -45,6 +46,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
@@ -177,9 +179,7 @@ public class TestCalculations {
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
-		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
-		annotator.setPortSlotProvider(portSlotProvider);
-		annotator.setVesselProvider(vesselProvider);
+		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, vesselProvider);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -610,9 +610,7 @@ public class TestCalculations {
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
-		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
-		annotator.setPortSlotProvider(portSlotProvider);
-		annotator.setVesselProvider(vesselProvider);
+		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, vesselProvider);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -1040,9 +1038,7 @@ public class TestCalculations {
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
-		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
-		annotator.setPortSlotProvider(portSlotProvider);
-		annotator.setVesselProvider(vesselProvider);
+		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, vesselProvider);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -1399,5 +1395,18 @@ public class TestCalculations {
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule());
 		injector.injectMembers(builder);
 		return builder;
+	}
+
+	private VoyagePlanAnnotator createVoyagePlanAnnotator(final IPortSlotProvider portSlotProvider, final IVesselProvider vesselProvider) {
+
+		return Guice.createInjector(new AbstractModule() {
+			@Override
+			protected void configure() {
+				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
+				bind(IVesselProvider.class).toInstance(vesselProvider);
+				bind(VoyagePlanIterator.class);
+				bind(VoyagePlanAnnotator.class);
+			}
+		}).getInstance(VoyagePlanAnnotator.class);
 	}
 }
