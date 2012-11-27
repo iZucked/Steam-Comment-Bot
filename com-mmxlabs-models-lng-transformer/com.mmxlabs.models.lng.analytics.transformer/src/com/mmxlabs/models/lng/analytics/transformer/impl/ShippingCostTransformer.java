@@ -131,7 +131,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 		final ValidationHelper helper = new ValidationHelper();
 		final IStatus validationStatus = helper.runValidation(validator, new DefaultExtraValidationContext(root), Collections.singleton(plan));
-		if (validationStatus != Status.OK_STATUS) {
+		if (!validationStatus.isOK()) {
 			return Collections.emptyList();
 		}
 
