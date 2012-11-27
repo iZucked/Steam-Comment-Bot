@@ -54,24 +54,24 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 
 		prepare(resourceIndices);
 
-//		if (forExport) {
-//			final int sampleCount = EXPORT_INTENSITY * samplingUpperBound;
-//			for (int i = 0; i < sampleCount; i++) {
-//				for (int seq = 0; seq < arrivalTimes.length; seq++) {
-//					randomise(seq);
-//				}
-//				evaluate(resourceIndices);
-//			}
-//		} else {
-			final int sampleCount = samplingUpperBound;
-			for (int i = 0; i < sampleCount; i++) {
-				for (final int index : resourceIndices) {
-					random.setSeed(seed);
-					randomise(index);
-				}
-				evaluate(resourceIndices);
+		// if (forExport) {
+		// final int sampleCount = EXPORT_INTENSITY * samplingUpperBound;
+		// for (int i = 0; i < sampleCount; i++) {
+		// for (int seq = 0; seq < arrivalTimes.length; seq++) {
+		// randomise(seq);
+		// }
+		// evaluate(resourceIndices);
+		// }
+		// } else {
+		final int sampleCount = samplingUpperBound;
+		for (int i = 0; i < sampleCount; i++) {
+			for (final int index : resourceIndices) {
+				random.setSeed(seed);
+				randomise(index);
 			}
-//		}
+			evaluate(resourceIndices);
+		}
+		// }
 
 		return reEvaluateAndGetBestResult();
 	}
@@ -80,18 +80,20 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		if (arrivalTimes[seq] == null) {
 			return;
 		}
-		
-		final int lastIndex = sizes[seq] -1;
-		for (int pos = 0; pos < lastIndex; pos++) {
-			final int min = getMinArrivalTime(seq, pos);
-			final int max = getMaxArrivalTime(seq, pos);
-			arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
-		}
 
-		// Set the arrival time at the last bit to be as early as possible; VPO will relax it if necessary.
-		arrivalTimes[seq][lastIndex] = getMinArrivalTime(seq, lastIndex);
-		
-		arrivalTimes[seq][0] = getMaxArrivalTimeForNextArrival(seq, 0);
+		if (sizes[seq] > 0) {
+			final int lastIndex = sizes[seq] - 1;
+			for (int pos = 0; pos < lastIndex; pos++) {
+				final int min = getMinArrivalTime(seq, pos);
+				final int max = getMaxArrivalTime(seq, pos);
+				arrivalTimes[seq][pos] = RandomHelper.nextIntBetween(random, min, max);
+			}
+
+			// Set the arrival time at the last bit to be as early as possible; VPO will relax it if necessary.
+			arrivalTimes[seq][lastIndex] = getMinArrivalTime(seq, lastIndex);
+
+			arrivalTimes[seq][0] = getMaxArrivalTimeForNextArrival(seq, 0);
+		}
 	}
 
 	public int getSamplingUpperBound() {
