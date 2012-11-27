@@ -10,6 +10,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 import com.mmxlabs.common.timezone.ITimezoneProvider;
+import com.mmxlabs.common.timezone.TimezoneProviderException;
 
 /**
  * 
@@ -18,8 +19,9 @@ import com.mmxlabs.common.timezone.ITimezoneProvider;
  * @see https://developers.google.com/maps/documentation/timezone/
  * 
  * @author Simon Goodall
- * 
+ * @since 2.1
  */
+@SuppressWarnings("unused")
 public class GoogleTimezoneProvider implements ITimezoneProvider {
 
 	private static final String dstOffset = "dstOffset";
@@ -75,8 +77,7 @@ public class GoogleTimezoneProvider implements ITimezoneProvider {
 							return TimeZone.getTimeZone(timeZoneID);
 						}
 					} else {
-						// TODO: Make this more informative
-						throw new RuntimeException(statusString);
+						throw new TimezoneProviderException(statusString);
 					}
 				}
 			}
