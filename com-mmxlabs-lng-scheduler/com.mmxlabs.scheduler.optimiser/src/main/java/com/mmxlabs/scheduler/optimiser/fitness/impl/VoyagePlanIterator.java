@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.impl.CargoShortEnd;
@@ -67,6 +68,7 @@ public class VoyagePlanIterator {
 
 	public final Object nextObject() {
 		currentTime += extraTime;
+		boolean replaceCurrentTime = false;
 		// Special case cargo shorts rotues. The Load is always independent of the previous cargo.
 		if (currentIndex > 0 && vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
 			// Get previous object
@@ -74,9 +76,8 @@ public class VoyagePlanIterator {
 			if (obj instanceof PortDetails) {
 				final PortDetails portDetails = (PortDetails) obj;
 				if (portDetails.getOptions().getPortSlot() instanceof CargoShortEnd) {
-					final CargoShortEnd cargoShortEnd = (CargoShortEnd) portDetails.getOptions().getPortSlot();
-					// FIXME: Not strictly correct - the sequence scheduler could have picked any time within the window!
-					currentTime = cargoShortEnd.getTimeWindow().getStart();
+					// Replace the current time, but wait until after the sequence, index update
+					replaceCurrentTime = true;
 				}
 			}
 		}
@@ -88,6 +89,13 @@ public class VoyagePlanIterator {
 			currentIndex = 0; // should I skip the extra port visit on the end
 								// of
 								// each plan?
+		}
+		if (replaceCurrentTime) {
+			// A CargoShortEnd is either the last element or followed by a load
+			final PortDetails currentLoad = (PortDetails) currentSequence[currentIndex];
+			final IPortSlot currentSlot = currentLoad.getOptions().getPortSlot();
+			// FIXME: Not strictly correct - the sequence scheduler could have picked any time within the window!
+			currentTime = currentSlot.getTimeWindow().getStart();
 		}
 
 		// set extra time
