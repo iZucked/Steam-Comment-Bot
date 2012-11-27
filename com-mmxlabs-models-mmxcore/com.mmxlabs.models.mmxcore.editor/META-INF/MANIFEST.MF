@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.mmxcore.editor;singleton:=true
-Bundle-Version: 2.3.1.RELEASE
+Bundle-Version: 2.3.2.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.mmxcore.presentation.MmxcoreEditorPlugin$Implementation
 Bundle-Vendor: %providerName
