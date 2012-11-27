@@ -60,8 +60,8 @@ public class IndexPriceContractItemProvider
 			super.getPropertyDescriptors(object);
 
 			addIndexPropertyDescriptor(object);
-			addConstantPropertyDescriptor(object);
 			addMultiplierPropertyDescriptor(object);
+			addConstantPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -169,8 +169,8 @@ public class IndexPriceContractItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(IndexPriceContract.class)) {
-			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
 			case CommercialPackage.INDEX_PRICE_CONTRACT__MULTIPLIER:
+			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

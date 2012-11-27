@@ -258,6 +258,55 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ShippingCostPlan} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ShippingCostPlanItemProvider shippingCostPlanItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ShippingCostPlan}.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createShippingCostPlanAdapter() {
+		if (shippingCostPlanItemProvider == null) {
+			shippingCostPlanItemProvider = new ShippingCostPlanItemProvider(this);
+		}
+
+		return shippingCostPlanItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ShippingCostRow} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ShippingCostRowItemProvider shippingCostRowItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ShippingCostRow}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createShippingCostRowAdapter() {
+		if (shippingCostRowItemProvider == null) {
+			shippingCostRowItemProvider = new ShippingCostRowItemProvider(this);
+		}
+
+		return shippingCostRowItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -364,6 +413,8 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (costComponentItemProvider != null) costComponentItemProvider.dispose();
 		if (fuelCostItemProvider != null) fuelCostItemProvider.dispose();
 		if (journeyItemProvider != null) journeyItemProvider.dispose();
+		if (shippingCostPlanItemProvider != null) shippingCostPlanItemProvider.dispose();
+		if (shippingCostRowItemProvider != null) shippingCostRowItemProvider.dispose();
 	}
 
 }

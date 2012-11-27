@@ -112,6 +112,14 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createJourneyAdapter();
 			}
 			@Override
+			public Adapter caseShippingCostPlan(ShippingCostPlan object) {
+				return createShippingCostPlanAdapter();
+			}
+			@Override
+			public Adapter caseShippingCostRow(ShippingCostRow object) {
+				return createShippingCostRowAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -256,6 +264,36 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createJourneyAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan <em>Shipping Cost Plan</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan
+	 * @generated
+	 */
+	public Adapter createShippingCostPlanAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow <em>Shipping Cost Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow
+	 * @generated
+	 */
+	public Adapter createShippingCostRowAdapter() {
 		return null;
 	}
 

@@ -22,6 +22,8 @@ import com.mmxlabs.models.lng.port.Port;
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBaseSalesPriceExpression <em>Base Sales Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBasePurchasePriceExpression <em>Base Purchase Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getNotionalSpeed <em>Notional Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDesPurchasePort <em>Des Purchase Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getSourcePurchasePort <em>Source Purchase Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -133,6 +135,58 @@ public interface RedirectionPurchaseContract extends PurchaseContract {
 	 * @generated
 	 */
 	void setNotionalSpeed(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Des Purchase Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Des Purchase Port</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Des Purchase Port</em>' reference.
+	 * @see #setDesPurchasePort(Port)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRedirectionPurchaseContract_DesPurchasePort()
+	 * @model required="true"
+	 * @generated
+	 */
+	Port getDesPurchasePort();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDesPurchasePort <em>Des Purchase Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Des Purchase Port</em>' reference.
+	 * @see #getDesPurchasePort()
+	 * @generated
+	 */
+	void setDesPurchasePort(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Source Purchase Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Source Purchase Port</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Source Purchase Port</em>' reference.
+	 * @see #setSourcePurchasePort(Port)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRedirectionPurchaseContract_SourcePurchasePort()
+	 * @model required="true"
+	 * @generated
+	 */
+	Port getSourcePurchasePort();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getSourcePurchasePort <em>Source Purchase Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Source Purchase Port</em>' reference.
+	 * @see #getSourcePurchasePort()
+	 * @generated
+	 */
+	void setSourcePurchasePort(Port value);
 
 } // end of  RedirectionPurchaseContract
 

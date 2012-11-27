@@ -68,6 +68,9 @@ public class ContractItemProvider
 			addPreferredPortPropertyDescriptor(object);
 			addMinQuantityPropertyDescriptor(object);
 			addMaxQuantityPropertyDescriptor(object);
+			addRestrictedListsArePermissivePropertyDescriptor(object);
+			addRestrictedContractsPropertyDescriptor(object);
+			addRestrictedPortsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -183,6 +186,75 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Restricted Lists Are Permissive feature.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedListsArePermissivePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_restrictedListsArePermissive_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_restrictedListsArePermissive_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Contracts feature.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedContractsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_restrictedContracts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_restrictedContracts_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__RESTRICTED_CONTRACTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Restricted Ports feature.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addRestrictedPortsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Contract_restrictedPorts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Contract_restrictedPorts_feature", "_UI_Contract_type"),
+				 CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Contract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -221,6 +293,7 @@ public class ContractItemProvider
 		switch (notification.getFeatureID(Contract.class)) {
 			case CommercialPackage.CONTRACT__MIN_QUANTITY:
 			case CommercialPackage.CONTRACT__MAX_QUANTITY:
+			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

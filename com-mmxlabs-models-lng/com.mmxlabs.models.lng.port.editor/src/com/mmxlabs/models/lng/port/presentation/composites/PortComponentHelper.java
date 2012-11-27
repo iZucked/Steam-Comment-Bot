@@ -9,8 +9,10 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 
+import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesPackage;
@@ -18,7 +20,9 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.EnumCheckboxEditor;
+import com.mmxlabs.models.ui.editors.impl.IInlineEditorEnablementWrapper;
 import com.mmxlabs.models.ui.editors.impl.TimezoneInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -102,18 +106,49 @@ public class PortComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the loadDuration feature on Port
 	 *
-	 * @generated
+	 * @generated NO
+	 * Load duration is disabled if the port does not have load capability
 	 */
 	protected void add_loadDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LOAD_DURATION));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LOAD_DURATION);
+		final IInlineEditorEnablementWrapper wrapper = new IInlineEditorEnablementWrapper(editor) {
+			
+			@Override
+			public boolean respondToNotification(Notification notification) {
+				// TODO Auto-generated method stub
+				return notification.getFeature() == PortPackage.eINSTANCE.getPort_Capabilities();
+			}
+			
+			@Override
+			public boolean isEnabled() {
+				// TODO Auto-generated method stub
+				return ((Port) input).getCapabilities().contains(PortCapability.LOAD);
+			}
+		};
+		detailComposite.addInlineEditor(wrapper);
 	}
 	/**
 	 * Create the editor for the dischargeDuration feature on Port
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_dischargeDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DISCHARGE_DURATION));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DISCHARGE_DURATION);
+		final IInlineEditorEnablementWrapper wrapper = new IInlineEditorEnablementWrapper(editor) {
+			
+			@Override
+			public boolean respondToNotification(Notification notification) {
+				// TODO Auto-generated method stub
+				return notification.getFeature() == PortPackage.eINSTANCE.getPort_Capabilities();
+			}
+			
+			@Override
+			public boolean isEnabled() {
+				// TODO Auto-generated method stub
+				return ((Port) input).getCapabilities().contains(PortCapability.DISCHARGE);
+			}
+		};
+		detailComposite.addInlineEditor(wrapper);
 	}
 	/**
 	 * Create the editor for the cvValue feature on Port
@@ -166,4 +201,5 @@ public class PortComponentHelper extends BaseComponentHelper {
 	protected void add_locationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LOCATION));
 	}
+	
 }

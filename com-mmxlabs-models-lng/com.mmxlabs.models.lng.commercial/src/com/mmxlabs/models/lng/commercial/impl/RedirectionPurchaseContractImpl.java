@@ -31,6 +31,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getBaseSalesPriceExpression <em>Base Sales Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getBasePurchasePriceExpression <em>Base Purchase Price Expression</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getNotionalSpeed <em>Notional Speed</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getDesPurchasePort <em>Des Purchase Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getSourcePurchasePort <em>Source Purchase Port</em>}</li>
  * </ul>
  * </p>
  *
@@ -106,6 +108,26 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 	 * @ordered
 	 */
 	protected double notionalSpeed = NOTIONAL_SPEED_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getDesPurchasePort() <em>Des Purchase Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDesPurchasePort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port desPurchasePort;
+
+	/**
+	 * The cached value of the '{@link #getSourcePurchasePort() <em>Source Purchase Port</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSourcePurchasePort()
+	 * @generated
+	 * @ordered
+	 */
+	protected Port sourcePurchasePort;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -232,6 +254,82 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public Port getDesPurchasePort() {
+		if (desPurchasePort != null && desPurchasePort.eIsProxy()) {
+			InternalEObject oldDesPurchasePort = (InternalEObject)desPurchasePort;
+			desPurchasePort = (Port)eResolveProxy(oldDesPurchasePort);
+			if (desPurchasePort != oldDesPurchasePort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT, oldDesPurchasePort, desPurchasePort));
+			}
+		}
+		return desPurchasePort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetDesPurchasePort() {
+		return desPurchasePort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDesPurchasePort(Port newDesPurchasePort) {
+		Port oldDesPurchasePort = desPurchasePort;
+		desPurchasePort = newDesPurchasePort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT, oldDesPurchasePort, desPurchasePort));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port getSourcePurchasePort() {
+		if (sourcePurchasePort != null && sourcePurchasePort.eIsProxy()) {
+			InternalEObject oldSourcePurchasePort = (InternalEObject)sourcePurchasePort;
+			sourcePurchasePort = (Port)eResolveProxy(oldSourcePurchasePort);
+			if (sourcePurchasePort != oldSourcePurchasePort) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT, oldSourcePurchasePort, sourcePurchasePort));
+			}
+		}
+		return sourcePurchasePort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public Port basicGetSourcePurchasePort() {
+		return sourcePurchasePort;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSourcePurchasePort(Port newSourcePurchasePort) {
+		Port oldSourcePurchasePort = sourcePurchasePort;
+		sourcePurchasePort = newSourcePurchasePort;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT, oldSourcePurchasePort, sourcePurchasePort));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -244,6 +342,12 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return getBasePurchasePriceExpression();
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED:
 				return getNotionalSpeed();
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT:
+				if (resolve) return getDesPurchasePort();
+				return basicGetDesPurchasePort();
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT:
+				if (resolve) return getSourcePurchasePort();
+				return basicGetSourcePurchasePort();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -267,6 +371,12 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return;
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED:
 				setNotionalSpeed((Double)newValue);
+				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT:
+				setDesPurchasePort((Port)newValue);
+				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT:
+				setSourcePurchasePort((Port)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -292,6 +402,12 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED:
 				setNotionalSpeed(NOTIONAL_SPEED_EDEFAULT);
 				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT:
+				setDesPurchasePort((Port)null);
+				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT:
+				setSourcePurchasePort((Port)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -312,6 +428,10 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return BASE_PURCHASE_PRICE_EXPRESSION_EDEFAULT == null ? basePurchasePriceExpression != null : !BASE_PURCHASE_PRICE_EXPRESSION_EDEFAULT.equals(basePurchasePriceExpression);
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED:
 				return notionalSpeed != NOTIONAL_SPEED_EDEFAULT;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT:
+				return desPurchasePort != null;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT:
+				return sourcePurchasePort != null;
 		}
 		return super.eIsSet(featureID);
 	}

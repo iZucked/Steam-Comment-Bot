@@ -96,6 +96,26 @@ public interface AnalyticsFactory extends EFactory {
 	Journey createJourney();
 
 	/**
+	 * Returns a new object of class '<em>Shipping Cost Plan</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Shipping Cost Plan</em>'.
+	 * @generated
+	 */
+	ShippingCostPlan createShippingCostPlan();
+
+	/**
+	 * Returns a new object of class '<em>Shipping Cost Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Shipping Cost Row</em>'.
+	 * @generated
+	 */
+	ShippingCostRow createShippingCostRow();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

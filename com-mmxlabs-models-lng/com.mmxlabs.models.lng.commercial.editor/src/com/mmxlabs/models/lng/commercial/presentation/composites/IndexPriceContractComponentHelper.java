@@ -70,8 +70,8 @@ public class IndexPriceContractComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_indexEditor(detailComposite, topClass);
-		add_constantEditor(detailComposite, topClass);
 		add_multiplierEditor(detailComposite, topClass);
+		add_constantEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the index feature on IndexPriceContract

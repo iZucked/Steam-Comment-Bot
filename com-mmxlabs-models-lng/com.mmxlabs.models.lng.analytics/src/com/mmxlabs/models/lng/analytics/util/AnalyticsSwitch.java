@@ -136,6 +136,21 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.SHIPPING_COST_PLAN: {
+				ShippingCostPlan shippingCostPlan = (ShippingCostPlan)theEObject;
+				T result = caseShippingCostPlan(shippingCostPlan);
+				if (result == null) result = caseNamedObject(shippingCostPlan);
+				if (result == null) result = caseMMXObject(shippingCostPlan);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SHIPPING_COST_ROW: {
+				ShippingCostRow shippingCostRow = (ShippingCostRow)theEObject;
+				T result = caseShippingCostRow(shippingCostRow);
+				if (result == null) result = caseMMXObject(shippingCostRow);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -257,6 +272,38 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseJourney(Journey object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Shipping Cost Plan</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Shipping Cost Plan</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseShippingCostPlan(ShippingCostPlan object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Shipping Cost Row</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Shipping Cost Row</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseShippingCostRow(ShippingCostRow object) {
 		return null;
 	}
 

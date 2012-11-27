@@ -87,6 +87,12 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.PriceExpressionContractComponentHelper"
+        id="com.mmxlabs.models.lng.commercial.composites.PriceExpressionContract"
+        inheritable="false"
+        modelClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -182,6 +188,20 @@
           label="Redirection Purchase Contract"
           outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract"
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.priceExpressionPurchaseFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Price Expression Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.priceExpressionSalesFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Price Expression Sales Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract"
+          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
  </extension>
  <extension

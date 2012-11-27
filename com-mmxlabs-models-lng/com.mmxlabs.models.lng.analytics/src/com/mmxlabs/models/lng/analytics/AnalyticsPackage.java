@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.analytics;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -115,13 +116,23 @@ public interface AnalyticsPackage extends EPackage {
 	int ANALYTICS_MODEL__SELECTED_MATRIX = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Shipping Cost Plans</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANALYTICS_MODEL__SHIPPING_COST_PLANS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int ANALYTICS_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl <em>Unit Cost Matrix</em>}' class.
@@ -836,6 +847,221 @@ public interface AnalyticsPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl <em>Shipping Cost Plan</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostPlan()
+	 * @generated
+	 */
+	int SHIPPING_COST_PLAN = 8;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_PLAN__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_PLAN__PROXIES = MMXCorePackage.NAMED_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_PLAN__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_PLAN__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Vessel</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_PLAN__VESSEL = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Notional Day Rate</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_PLAN__NOTIONAL_DAY_RATE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Base Fuel Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_PLAN__BASE_FUEL_PRICE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Rows</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_PLAN__ROWS = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>Shipping Cost Plan</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_PLAN_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl <em>Shipping Cost Row</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostRow()
+	 * @generated
+	 */
+	int SHIPPING_COST_ROW = 9;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Plan</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__PLAN = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Cargo Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__CARGO_PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Destination Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__DESTINATION_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
+	 * The number of structural features of the '<em>Shipping Cost Row</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.analytics.DestinationType
+	 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
+	 * @generated
+	 */
+	int DESTINATION_TYPE = 10;
+
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -866,6 +1092,18 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getAnalyticsModel_SelectedMatrix();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getShippingCostPlans <em>Shipping Cost Plans</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Shipping Cost Plans</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsModel#getShippingCostPlans()
+	 * @see #getAnalyticsModel()
+	 * @generated
+	 */
+	EReference getAnalyticsModel_ShippingCostPlans();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix <em>Unit Cost Matrix</em>}'.
@@ -1488,6 +1726,159 @@ public interface AnalyticsPackage extends EPackage {
 	EReference getJourney_To();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan <em>Shipping Cost Plan</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Shipping Cost Plan</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan
+	 * @generated
+	 */
+	EClass getShippingCostPlan();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getVessel <em>Vessel</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getVessel()
+	 * @see #getShippingCostPlan()
+	 * @generated
+	 */
+	EReference getShippingCostPlan_Vessel();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getNotionalDayRate <em>Notional Day Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notional Day Rate</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getNotionalDayRate()
+	 * @see #getShippingCostPlan()
+	 * @generated
+	 */
+	EAttribute getShippingCostPlan_NotionalDayRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getBaseFuelPrice <em>Base Fuel Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Fuel Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getBaseFuelPrice()
+	 * @see #getShippingCostPlan()
+	 * @generated
+	 */
+	EAttribute getShippingCostPlan_BaseFuelPrice();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows <em>Rows</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Rows</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows()
+	 * @see #getShippingCostPlan()
+	 * @generated
+	 */
+	EReference getShippingCostPlan_Rows();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow <em>Shipping Cost Row</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Shipping Cost Row</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow
+	 * @generated
+	 */
+	EClass getShippingCostRow();
+
+	/**
+	 * Returns the meta object for the container reference '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPlan <em>Plan</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Plan</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getPlan()
+	 * @see #getShippingCostRow()
+	 * @generated
+	 */
+	EReference getShippingCostRow_Plan();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPort <em>Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Port</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getPort()
+	 * @see #getShippingCostRow()
+	 * @generated
+	 */
+	EReference getShippingCostRow_Port();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getDate()
+	 * @see #getShippingCostRow()
+	 * @generated
+	 */
+	EAttribute getShippingCostRow_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCargoPrice <em>Cargo Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cargo Price</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getCargoPrice()
+	 * @see #getShippingCostRow()
+	 * @generated
+	 */
+	EAttribute getShippingCostRow_CargoPrice();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue <em>Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue()
+	 * @see #getShippingCostRow()
+	 * @generated
+	 */
+	EAttribute getShippingCostRow_CvValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDestinationType <em>Destination Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Destination Type</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getDestinationType()
+	 * @see #getShippingCostRow()
+	 * @generated
+	 */
+	EAttribute getShippingCostRow_DestinationType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Destination Type</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.DestinationType
+	 * @generated
+	 */
+	EEnum getDestinationType();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1534,6 +1925,15 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ANALYTICS_MODEL__SELECTED_MATRIX = eINSTANCE.getAnalyticsModel_SelectedMatrix();
+
+		/**
+		 * The meta object literal for the '<em><b>Shipping Cost Plans</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ANALYTICS_MODEL__SHIPPING_COST_PLANS = eINSTANCE.getAnalyticsModel_ShippingCostPlans();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl <em>Unit Cost Matrix</em>}' class.
@@ -2004,6 +2404,129 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference JOURNEY__TO = eINSTANCE.getJourney_To();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl <em>Shipping Cost Plan</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostPlanImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostPlan()
+		 * @generated
+		 */
+		EClass SHIPPING_COST_PLAN = eINSTANCE.getShippingCostPlan();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SHIPPING_COST_PLAN__VESSEL = eINSTANCE.getShippingCostPlan_Vessel();
+
+		/**
+		 * The meta object literal for the '<em><b>Notional Day Rate</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SHIPPING_COST_PLAN__NOTIONAL_DAY_RATE = eINSTANCE.getShippingCostPlan_NotionalDayRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Fuel Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SHIPPING_COST_PLAN__BASE_FUEL_PRICE = eINSTANCE.getShippingCostPlan_BaseFuelPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Rows</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SHIPPING_COST_PLAN__ROWS = eINSTANCE.getShippingCostPlan_Rows();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl <em>Shipping Cost Row</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getShippingCostRow()
+		 * @generated
+		 */
+		EClass SHIPPING_COST_ROW = eINSTANCE.getShippingCostRow();
+
+		/**
+		 * The meta object literal for the '<em><b>Plan</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SHIPPING_COST_ROW__PLAN = eINSTANCE.getShippingCostRow_Plan();
+
+		/**
+		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SHIPPING_COST_ROW__PORT = eINSTANCE.getShippingCostRow_Port();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SHIPPING_COST_ROW__DATE = eINSTANCE.getShippingCostRow_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Cargo Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SHIPPING_COST_ROW__CARGO_PRICE = eINSTANCE.getShippingCostRow_CargoPrice();
+
+		/**
+		 * The meta object literal for the '<em><b>Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SHIPPING_COST_ROW__CV_VALUE = eINSTANCE.getShippingCostRow_CvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Destination Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SHIPPING_COST_ROW__DESTINATION_TYPE = eINSTANCE.getShippingCostRow_DestinationType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.analytics.DestinationType
+		 * @see com.mmxlabs.models.lng.analytics.impl.AnalyticsPackageImpl#getDestinationType()
+		 * @generated
+		 */
+		EEnum DESTINATION_TYPE = eINSTANCE.getDestinationType();
 
 	}
 

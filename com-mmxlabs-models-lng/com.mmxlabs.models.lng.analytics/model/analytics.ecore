@@ -7,6 +7,8 @@
         eType="#//UnitCostMatrix" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="selectedMatrix" lowerBound="1"
         eType="#//UnitCostMatrix"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="shippingCostPlans" upperBound="-1"
+        eType="#//ShippingCostPlan" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UnitCostMatrix" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eStructuralFeatures xsi:type="ecore:EReference" name="ports" upperBound="-1"
@@ -180,5 +182,45 @@
   <eClassifiers xsi:type="ecore:EClass" name="Journey">
     <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ShippingCostPlan" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="vessel" lowerBound="1"
+        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notionalDayRate" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/day"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseFuelPrice" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/MT"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="rows" upperBound="-1" eType="#//ShippingCostRow"
+        containment="true" eOpposite="#//ShippingCostRow/plan"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ShippingCostRow" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plan" eType="#//ShippingCostPlan"
+        eOpposite="#//ShippingCostPlan/rows"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="port" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cargoPrice" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble">
+      <eAnnotations source="http://www.mmxlabs.com/models/ui/numberFormat">
+        <details key="unit" value="$/mmbtu"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="cvValue" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="destinationType" eType="#//DestinationType"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="DestinationType">
+    <eLiterals name="START"/>
+    <eLiterals name="END" value="1"/>
+    <eLiterals name="LOAD" value="2" literal="LOAD"/>
+    <eLiterals name="DISCHARGE" value="3"/>
+    <eLiterals name="OTHER" value="4"/>
   </eClassifiers>
 </ecore:EPackage>

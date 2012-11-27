@@ -66,6 +66,8 @@ public class RedirectionPurchaseContractItemProvider
 			addBaseSalesPriceExpressionPropertyDescriptor(object);
 			addBasePurchasePriceExpressionPropertyDescriptor(object);
 			addNotionalSpeedPropertyDescriptor(object);
+			addDesPurchasePortPropertyDescriptor(object);
+			addSourcePurchasePortPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -154,6 +156,50 @@ public class RedirectionPurchaseContractItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Des Purchase Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDesPurchasePortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RedirectionPurchaseContract_desPurchasePort_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RedirectionPurchaseContract_desPurchasePort_feature", "_UI_RedirectionPurchaseContract_type"),
+				 CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Source Purchase Port feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSourcePurchasePortPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RedirectionPurchaseContract_sourcePurchasePort_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RedirectionPurchaseContract_sourcePurchasePort_feature", "_UI_RedirectionPurchaseContract_type"),
+				 CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT,
+				 true,
+				 false,
+				 true,
+				 null,
 				 null,
 				 null));
 	}

@@ -69,6 +69,18 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.analytics.Journey">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostPlanComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostPlanComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ShippingCostPlan">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostRowComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ShippingCostRowComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ShippingCostRow">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -96,6 +108,12 @@
           label="Unit Cost Matrix"
           targetEClass="com.mmxlabs.models.lng.analytics.UnitCostMatrix">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.modelfactories.ShippingCostPlanFactory"
+          factory="com.mmxlabs.models.lng.analytics.modelfactories.ShippingCostPlanFactory"
+          label="Shipping Cost Plan"
+          targetEClass="com.mmxlabs.models.lng.analytics.ShippingCostPlan">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
@@ -120,5 +138,18 @@
           ownerEClass="com.mmxlabs.models.lng.analytics.Journey"
           referenceEClass="com.mmxlabs.models.lng.types.APort">
     </valueProvider>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.analytics.editorfactories.DestinationTypeValueListInlineEditorFactory"
+          id="DestinationTypeValueListInlineEditor">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="DestinationType"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/analytics/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
  </extension>
 </plugin>

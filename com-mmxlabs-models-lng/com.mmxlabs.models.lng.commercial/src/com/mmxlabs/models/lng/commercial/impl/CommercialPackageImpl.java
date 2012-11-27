@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.commercial.IndexPriceContract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.NetbackPurchaseContract;
 import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
+import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
 import com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
@@ -109,6 +110,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass redirectionPurchaseContractEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass priceExpressionContractEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -284,6 +292,36 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getContract_RestrictedListsArePermissive() {
+		return (EAttribute)contractEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getContract_RestrictedContracts() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getContract_RestrictedPorts() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -342,7 +380,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	public EAttribute getIndexPriceContract_Constant() {
-		return (EAttribute)indexPriceContractEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)indexPriceContractEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -351,7 +389,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	public EAttribute getIndexPriceContract_Multiplier() {
-		return (EAttribute)indexPriceContractEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)indexPriceContractEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -605,6 +643,46 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRedirectionPurchaseContract_DesPurchasePort() {
+		return (EReference)redirectionPurchaseContractEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRedirectionPurchaseContract_SourcePurchasePort() {
+		return (EReference)redirectionPurchaseContractEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getPriceExpressionContract() {
+		return priceExpressionContractEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getPriceExpressionContract_PriceExpression() {
+		return (EAttribute)priceExpressionContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -645,6 +723,9 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEReference(contractEClass, CONTRACT__PREFERRED_PORT);
 		createEAttribute(contractEClass, CONTRACT__MIN_QUANTITY);
 		createEAttribute(contractEClass, CONTRACT__MAX_QUANTITY);
+		createEAttribute(contractEClass, CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE);
+		createEReference(contractEClass, CONTRACT__RESTRICTED_CONTRACTS);
+		createEReference(contractEClass, CONTRACT__RESTRICTED_PORTS);
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
 
@@ -655,8 +736,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		indexPriceContractEClass = createEClass(INDEX_PRICE_CONTRACT);
 		createEReference(indexPriceContractEClass, INDEX_PRICE_CONTRACT__INDEX);
-		createEAttribute(indexPriceContractEClass, INDEX_PRICE_CONTRACT__CONSTANT);
 		createEAttribute(indexPriceContractEClass, INDEX_PRICE_CONTRACT__MULTIPLIER);
+		createEAttribute(indexPriceContractEClass, INDEX_PRICE_CONTRACT__CONSTANT);
 
 		netbackPurchaseContractEClass = createEClass(NETBACK_PURCHASE_CONTRACT);
 		createEReference(netbackPurchaseContractEClass, NETBACK_PURCHASE_CONTRACT__NOTIONAL_BALLAST_PARAMETERS);
@@ -688,6 +769,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__BASE_SALES_PRICE_EXPRESSION);
 		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__BASE_PURCHASE_PRICE_EXPRESSION);
 		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED);
+		createEReference(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT);
+		createEReference(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT);
+
+		priceExpressionContractEClass = createEClass(PRICE_EXPRESSION_CONTRACT);
+		createEAttribute(priceExpressionContractEClass, PRICE_EXPRESSION_CONTRACT__PRICE_EXPRESSION);
 	}
 
 	/**
@@ -737,6 +823,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		profitSharePurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
 		notionalBallastParametersEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		redirectionPurchaseContractEClass.getESuperTypes().add(this.getPurchaseContract());
+		priceExpressionContractEClass.getESuperTypes().add(this.getSalesContract());
+		priceExpressionContractEClass.getESuperTypes().add(this.getPurchaseContract());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -753,6 +841,9 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEReference(getContract_PreferredPort(), theTypesPackage.getAPort(), null, "preferredPort", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_MinQuantity(), ecorePackage.getEInt(), "minQuantity", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getContract_MaxQuantity(), ecorePackage.getEInt(), "maxQuantity", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getContract_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContract_RestrictedContracts(), this.getContract(), null, "restrictedContracts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContract_RestrictedPorts(), theTypesPackage.getAPortSet(), null, "restrictedPorts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -763,8 +854,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(indexPriceContractEClass, IndexPriceContract.class, "IndexPriceContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getIndexPriceContract_Index(), theTypesPackage.getAIndex(), null, "index", null, 1, 1, IndexPriceContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getIndexPriceContract_Constant(), ecorePackage.getEDouble(), "constant", "0", 1, 1, IndexPriceContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getIndexPriceContract_Multiplier(), ecorePackage.getEDouble(), "multiplier", "1", 1, 1, IndexPriceContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIndexPriceContract_Constant(), ecorePackage.getEDouble(), "constant", "0", 1, 1, IndexPriceContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(netbackPurchaseContractEClass, NetbackPurchaseContract.class, "NetbackPurchaseContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getNetbackPurchaseContract_NotionalBallastParameters(), this.getNotionalBallastParameters(), null, "notionalBallastParameters", null, 1, -1, NetbackPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -796,6 +887,11 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getRedirectionPurchaseContract_BaseSalesPriceExpression(), ecorePackage.getEString(), "baseSalesPriceExpression", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRedirectionPurchaseContract_BasePurchasePriceExpression(), ecorePackage.getEString(), "basePurchasePriceExpression", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRedirectionPurchaseContract_NotionalSpeed(), ecorePackage.getEDouble(), "notionalSpeed", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRedirectionPurchaseContract_DesPurchasePort(), theTypesPackage.getAPort(), null, "desPurchasePort", null, 1, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRedirectionPurchaseContract_SourcePurchasePort(), theTypesPackage.getAPort(), null, "sourcePurchasePort", null, 1, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(priceExpressionContractEClass, PriceExpressionContract.class, "PriceExpressionContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getPriceExpressionContract_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 0, 1, PriceExpressionContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

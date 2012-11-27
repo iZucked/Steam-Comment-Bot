@@ -206,6 +206,21 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.PRICE_EXPRESSION_CONTRACT: {
+				PriceExpressionContract priceExpressionContract = (PriceExpressionContract)theEObject;
+				T result = casePriceExpressionContract(priceExpressionContract);
+				if (result == null) result = caseSalesContract(priceExpressionContract);
+				if (result == null) result = casePurchaseContract(priceExpressionContract);
+				if (result == null) result = caseContract(priceExpressionContract);
+				if (result == null) result = caseASalesContract(priceExpressionContract);
+				if (result == null) result = caseAPurchaseContract(priceExpressionContract);
+				if (result == null) result = caseAContract(priceExpressionContract);
+				if (result == null) result = caseUUIDObject(priceExpressionContract);
+				if (result == null) result = caseNamedObject(priceExpressionContract);
+				if (result == null) result = caseMMXObject(priceExpressionContract);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -373,6 +388,22 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRedirectionPurchaseContract(RedirectionPurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Price Expression Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Price Expression Contract</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePriceExpressionContract(PriceExpressionContract object) {
 		return null;
 	}
 

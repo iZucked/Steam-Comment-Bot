@@ -108,6 +108,7 @@ public class AnalyticsModelItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES);
+			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS);
 		}
 		return childrenFeatures;
 	}
@@ -163,6 +164,7 @@ public class AnalyticsModelItemProvider
 
 		switch (notification.getFeatureID(AnalyticsModel.class)) {
 			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
+			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -184,6 +186,11 @@ public class AnalyticsModelItemProvider
 			(createChildParameter
 				(AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES,
 				 AnalyticsFactory.eINSTANCE.createUnitCostMatrix()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS,
+				 AnalyticsFactory.eINSTANCE.createShippingCostPlan()));
 	}
 
 	/**
