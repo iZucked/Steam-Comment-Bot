@@ -21,6 +21,7 @@ import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCore;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
@@ -88,6 +89,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(of, VirtualVesselConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(of, TimeSortConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(of, SlotGroupCountConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(of, RestrictedElementsConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives
