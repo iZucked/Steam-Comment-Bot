@@ -16,7 +16,6 @@ import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.model.Category;
 import org.eclipse.emf.validation.model.EvaluationMode;
@@ -25,8 +24,10 @@ import org.eclipse.emf.validation.service.IConstraintDescriptor;
 import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
@@ -90,6 +91,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
@@ -99,6 +101,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -153,7 +156,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 			monitor.beginTask("Creating unit cost matrix", 1);
 
-			final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule());
+			final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule(), createShippingCostModule());
 			final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
 
 			final ResourcelessModelEntityMap entities = injector.getInstance(ResourcelessModelEntityMap.class);
@@ -338,10 +341,8 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final ISequencesManipulator manipulator = injector.getInstance(ISequencesManipulator.class);
 			manipulator.init(data);
 			manipulator.manipulate(sequences); // this will set the return elements to the right places, and remove the start elements.
-			final LNGVoyageCalculator calculator = new LNGVoyageCalculator();
-			injector.injectMembers(calculator);
 
-			final VoyagePlanOptimiser optimiser = new VoyagePlanOptimiser(calculator);
+			final VoyagePlanOptimiser optimiser = injector.getInstance(VoyagePlanOptimiser.class);
 
 			final AbstractSequenceScheduler scheduler = new AbstractSequenceScheduler() {
 				@Override
@@ -360,6 +361,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				}
 			};
 
+			injector.injectMembers(scheduler);
 			// injector.injectMembers(scheduler);
 			SchedulerUtils.setDataComponentProviders(data, scheduler);
 			scheduler.setVoyagePlanOptimiser(optimiser);
@@ -368,7 +370,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			// run the scheduler on the sequences
 			final ScheduledSequences result = scheduler.schedule(sequences, arrivalTimes);
 
-			final UnconstrainedCargoAllocator aca = new UnconstrainedCargoAllocator();
+			final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
 			aca.setVesselProvider(vesselProvider);
 
 			final Collection<IAllocationAnnotation> allocations = aca.allocate(result);
@@ -499,6 +501,17 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 		} finally {
 			monitor.done();
 		}
+	}
+
+	private Module createShippingCostModule() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
+				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
+			}
+		};
 	}
 
 	private void createVoyageCostComponent(final ExtraData d, final ShippingCostPlan spec, final VoyageDetails voyageDetails) {
