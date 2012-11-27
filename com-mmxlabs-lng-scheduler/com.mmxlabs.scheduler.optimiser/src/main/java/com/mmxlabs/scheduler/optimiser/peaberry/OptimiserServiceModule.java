@@ -19,6 +19,9 @@ public class OptimiserServiceModule extends PeaberryActivationModule {
 	@Override
 	protected void configure() {
 		bindService(ICargoFitnessComponentProvider.class).multiple();
+
+		bindService(SchedulerComponentsInjectorService.class).export();
+
 		install(new FitnessCoreServiceModule());
 		install(new ConstraintCheckerServiceModule());
 	}

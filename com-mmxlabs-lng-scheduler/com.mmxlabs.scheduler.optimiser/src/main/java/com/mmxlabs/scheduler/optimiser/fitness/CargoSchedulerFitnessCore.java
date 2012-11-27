@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -57,6 +58,12 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	@Inject
 	private ISchedulerFactory schedulerFactory;
 
+	@Inject
+	private Provider<VoyagePlanAnnotator> voyagePlanAnnotatorProvider;
+
+	@Inject
+	private VoyagePlanIterator planIterator;
+
 	public CargoSchedulerFitnessCore() {
 		allComponents = new ArrayList<ICargoFitnessComponent>();
 		allocationComponents = new ArrayList<ICargoAllocationFitnessComponent>();
@@ -84,7 +91,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		// schedulerComponents.add(new CargoAllocatingSchedulerComponent(CargoSchedulerFitnessCoreFactory.CARGO_ALLOCATION_COMPONENT_NAME, SchedulerConstants.DCP_vesselProvider,
 		// SchedulerConstants.DCP_totalVolumeLimitProvider, SchedulerConstants.DCP_portSlotsProvider, this));
 
-//		schedulerComponents.add(new CharterOutFitnessComponent(CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, SchedulerConstants.DCP_vesselProvider, this));
+		// schedulerComponents.add(new CharterOutFitnessComponent(CargoSchedulerFitnessCoreFactory.CHARTER_REVENUE_COMPONENT_NAME, SchedulerConstants.DCP_vesselProvider, this));
 
 		schedulerComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this, SchedulerConstants.DCP_portCostProvider,
 				SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
@@ -119,8 +126,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		}
 		scheduler.acceptLastSchedule();
 	}
-
-	final VoyagePlanIterator planIterator = new VoyagePlanIterator();
 
 	@Override
 	public boolean evaluate(final ISequences sequences) {
@@ -164,12 +169,12 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		return new ArrayList<IFitnessComponent>(allComponents);
 	}
 
-//	@Inject
+	// @Inject
 	@Override
 	public void init(final IOptimisationData data) {
 		scheduler = schedulerFactory.createScheduler(data, schedulerComponents, allocationComponents);
-//
-//		calculatorProvider = data.getDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, ICalculatorProvider.class);
+		//
+		// calculatorProvider = data.getDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, ICalculatorProvider.class);
 
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoFitnessComponent c : allComponents) {
@@ -192,10 +197,11 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	public List<ICargoFitnessComponent> getCargoSchedulerFitnessComponent() {
 		return allComponents;
 	}
-//
-//	public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
-//		this.schedulerFactory = schedulerFactory;
-//	}
+
+	//
+	// public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
+	// this.schedulerFactory = schedulerFactory;
+	// }
 
 	@Override
 	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
@@ -221,13 +227,12 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		for (final IAllocationAnnotation annotation : schedule.getAllocations()) {
 			final ISequenceElement loadElement = portSlotProvider.getElement(annotation.getLoadOption());
 			final ISequenceElement dischargeElement = portSlotProvider.getElement(annotation.getDischargeOption());
-
 			elementAnnotations.setAnnotation(loadElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
 			elementAnnotations.setAnnotation(dischargeElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
 		}
 
 		// Do basic voyageplan annotation
-		final VoyagePlanAnnotator annotator = new VoyagePlanAnnotator();
+		final VoyagePlanAnnotator annotator = voyagePlanAnnotatorProvider.get();
 
 		annotator.setPortSlotProvider(portSlotProvider);
 		annotator.setVesselProvider(vesselProvider);

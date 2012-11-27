@@ -126,13 +126,12 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 		boolean seenLoad = false;
 		boolean seenDischarge = false;
-
 		ISequenceElement previous = null;
 		PortType previousType = null;
 		for (final ISequenceElement t : sequence) {
 			final PortType type = portTypeProvider.getPortType(t);
 			if (previous == null) {
-				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.SPOT_CHARTER) && ((type == PortType.Load) || (type == PortType.End))))) {
+				if (!(((type == PortType.Start) && (instanceType != VesselInstanceType.SPOT_CHARTER)) || ((instanceType == VesselInstanceType.CARGO_SHORTS) && (type == PortType.Load)) || ((instanceType == VesselInstanceType.SPOT_CHARTER) && ((type == PortType.Load) || (type == PortType.End))))) {
 					// must either start with Start and be not a spot charter,
 					// or must start with a load or an End and be a spot charter
 
@@ -193,6 +192,7 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			case Waypoint:
 				break;
 			case CharterOut:
+			case Short_Cargo_End:
 			case DryDock:
 			case Maintenance:
 			case Other:
@@ -227,7 +227,8 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 			previousType = type;
 		}
 
-		if (previousType != PortType.End) {
+		if ((instanceType == VesselInstanceType.CARGO_SHORTS && !(previousType == null || previousType == PortType.Short_Cargo_End))
+				|| (instanceType != VesselInstanceType.CARGO_SHORTS && previousType != PortType.End)) {
 			// Must end with an End type.
 			if (messages != null) {
 				messages.add("Sequence must end with PortType.End");

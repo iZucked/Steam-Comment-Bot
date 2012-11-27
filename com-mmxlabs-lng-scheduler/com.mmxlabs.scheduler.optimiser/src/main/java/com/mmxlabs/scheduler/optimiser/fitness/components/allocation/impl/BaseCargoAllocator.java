@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Provider;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
@@ -83,10 +84,13 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 	private long[] allocation;
 
-//	private long profit;
+	// private long profit;
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private Provider<VoyagePlanIterator> voyagePlanIteratorProvider;
 
 	public BaseCargoAllocator() {
 		super();
@@ -134,9 +138,9 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	public Collection<IAllocationAnnotation> allocate(final ScheduledSequences sequences) {
 		reset();
 
-		final VoyagePlanIterator planIterator = new VoyagePlanIterator();
+		final VoyagePlanIterator planIterator = voyagePlanIteratorProvider.get();
 		for (final ScheduledSequence sequence : sequences) {
-			planIterator.setVoyagePlans(sequence.getVoyagePlans(), sequence.getStartTime());
+			planIterator.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getStartTime());
 			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
 
 			PortDetails loadDetails = null;
@@ -494,15 +498,15 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		this.allocation = allocateSpareVolume();
 		// convolve for p&l
 
-//		this.profit = 0;
-//		for (int i = 0; i < allocation.length; i++) {
-//			profit += Calculator.convertM3ToM3Price(allocation[i], unitPrices.get(i));
-//		}
+		// this.profit = 0;
+		// for (int i = 0; i < allocation.length; i++) {
+		// profit += Calculator.convertM3ToM3Price(allocation[i], unitPrices.get(i));
+		// }
 	}
 
-//	public long getProfit() {
-//		return profit / Calculator.ScaleFactor; // why?
-//	}
+	// public long getProfit() {
+	// return profit / Calculator.ScaleFactor; // why?
+	// }
 
 	public long getAllocation(final IPortSlot slot) {
 		final int index = variableForSlot(slot);

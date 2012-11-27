@@ -9,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
@@ -84,7 +86,8 @@ public final class IndividualEvaluator implements IIndividualEvaluator<ByteArray
 	 */
 	private int[] windowStarts;
 
-	private final VoyagePlanIterator voyagePlanIterator = new VoyagePlanIterator();
+	@Inject
+	private VoyagePlanIterator voyagePlanIterator;
 	private ICargoSchedulerFitnessComponent[] iteratingComponents;
 
 	// private List<ICargoSchedulerFitnessComponent> iteratingComponents =

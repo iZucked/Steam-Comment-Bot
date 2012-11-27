@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.indexedobjects.IIndexingContext;
 import com.mmxlabs.common.indexedobjects.impl.CheckingIndexingContext;
@@ -61,6 +62,7 @@ import com.mmxlabs.scheduler.optimiser.components.IXYPort;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.components.impl.Cargo;
+import com.mmxlabs.scheduler.optimiser.components.impl.CargoShortEnd;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
@@ -94,6 +96,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IShortCargoReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.ISlotGroupCountProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
@@ -232,6 +235,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IPortCostProviderEditor portCostProvider;
+
 	@Inject
 	private IPortCVProviderEditor portCVProvider;
 
@@ -261,11 +265,20 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Inject
 	private IAlternativeElementProvider alternativeElementProvider;
-	
+
+	@Inject
+	private IShortCargoReturnElementProviderEditor shortCargoReturnElementProviderEditor;
+
 	/**
 	 * Fake vessel class for virtual elements.
 	 */
 	private IVesselClass virtualClass;
+	/**
+	 * Fake vessel class for cargo shorts.
+	 */
+	// private IVesselClass cargoShortsClass;
+	// private IVessel cargoShortsVessel;
+	private IVessel shortCargoVessel;
 
 	/**
 	 * Map between a virtual sequence element and the virtual {@link IVesselEvent} instance representing it.
@@ -821,9 +834,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IOptimisationData getOptimisationData() {
 
+		// TODO: Look up appropriate definition
+		// final IVesselClass cargoShortsClass = vesselClasses.get(1);// createVesselClass("short-class", OptimiserUnitConvertor.convertToInternalSpeed(18.0),
+		// shortCargoVessel = createVessel("short-vessel", cargoShortsClass, new ConstantValueCurve(200000), VesselInstanceType.CARGO_SHORTS, createStartEndRequirement(), createStartEndRequirement(),
+		// 0,
+		// 0, 0);
+
 		// create return elements before fixing time windows,
 		// because the next bit will have to patch up their time windows
 		createReturnElements();
+
+		createChargoShortReturnElements();
 
 		portDistanceProvider.cacheExtremalValues(ports);
 
@@ -942,6 +963,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		data.addDataComponentProvider(SchedulerConstants.DCP_dateKeyProvider, dateKeyProviderEditor);
 
+		data.addDataComponentProvider(SchedulerConstants.DCP_shortCargoReturnElementProvider, shortCargoReturnElementProviderEditor);
+
 		for (final IBuilderExtension extension : extensions) {
 			for (final Pair<String, IDataComponentProvider> provider : extension.createDataComponentProviders(data)) {
 				data.addDataComponentProvider(provider.getFirst(), provider.getSecond());
@@ -953,6 +976,30 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		return data;
+	}
+
+	/**
+	 * Generate a new return option for each load port in the solution.
+	 */
+	private void createChargoShortReturnElements() {
+		for (final ILoadOption loadOption : loadSlots) {
+			final ISequenceElement loadElement = portSlotsProvider.getElement(loadOption);
+
+			final String name = "short-return-to-" + loadElement.getName();
+			final IPort port = loadOption.getPort();
+			final CargoShortEnd returnPortSlot = new CargoShortEnd(name, port);
+
+			final SequenceElement returnElement = new SequenceElement(indexingContext, name);
+			timeWindowProvider.setTimeWindows(returnElement, Collections.<ITimeWindow> emptyList());
+
+			elementDurationsProvider.setElementDuration(returnElement, 0);
+
+			portProvider.setPortForElement(port, returnElement);
+			portSlotsProvider.setPortSlot(returnElement, returnPortSlot);
+			portTypeProvider.setPortType(returnElement, returnPortSlot.getPortType());
+
+			shortCargoReturnElementProviderEditor.setReturnElement(loadElement, loadOption, returnElement);
+		}
 	}
 
 	private IVessel createVirtualVessel(final ISequenceElement element, final VesselInstanceType type) {
@@ -1356,6 +1403,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 						continue;
 					}
 					allowedResources.add(vesselProvider.getResource(vessel));
+				}
+				if (shortCargoVessel != null) {
+					allowedResources.add(vesselProvider.getResource(shortCargoVessel));
 				}
 			}
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);

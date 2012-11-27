@@ -8,11 +8,17 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.components.impl.CargoShortEnd;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
@@ -21,11 +27,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  * A class to help you iterate through a list of voyage plans, adding up the time as you go
  * 
  * @author hinton
- * 
+ * @noextend This class is not intended to be subclassed by clients.
  */
-public final class VoyagePlanIterator {
+public class VoyagePlanIterator {
 	private static final Object[] EMPTY_SEQUENCE = new Object[] {};
 	private int startTime;
+	private IVessel vessel;
 	private List<VoyagePlan> plans;
 	private Iterator<VoyagePlan> planIterator;
 	private VoyagePlan currentPlan;
@@ -35,11 +42,11 @@ public final class VoyagePlanIterator {
 	private int currentTime;
 	private int extraTime;
 
-	public VoyagePlanIterator() {
+	@Inject
+	private IVesselProvider vesselProvider;
 
-	}
-
-	public final void setVoyagePlans(final List<VoyagePlan> plans, final int startTime) {
+	public final void setVoyagePlans(final IResource resource, final List<VoyagePlan> plans, final int startTime) {
+		this.vessel = vesselProvider.getVessel(resource);
 		this.plans = plans;
 		this.startTime = startTime;
 		reset();
@@ -60,9 +67,21 @@ public final class VoyagePlanIterator {
 
 	public final Object nextObject() {
 		currentTime += extraTime;
-		
-		if((planIterator.hasNext() && currentIndex >= (currentSequence.length -1))|| currentIndex >= currentSequence.length )
-		{		
+		// Special case cargo shorts rotues. The Load is always independent of the previous cargo.
+		if (currentIndex > 0 && vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+			// Get previous object
+			final Object obj = currentSequence[currentIndex - 1];
+			if (obj instanceof PortDetails) {
+				final PortDetails portDetails = (PortDetails) obj;
+				if (portDetails.getOptions().getPortSlot() instanceof CargoShortEnd) {
+					final CargoShortEnd cargoShortEnd = (CargoShortEnd) portDetails.getOptions().getPortSlot();
+					// FIXME: Not strictly correct - the sequence scheduler could have picked any time within the window!
+					currentTime = cargoShortEnd.getTimeWindow().getStart();
+				}
+			}
+		}
+
+		if ((planIterator.hasNext() && currentIndex >= (currentSequence.length - 1)) || currentIndex >= currentSequence.length) {
 			// advance by one voyageplan.
 			currentPlan = planIterator.next();
 			currentSequence = currentPlan.getSequence();
@@ -180,7 +199,7 @@ public final class VoyagePlanIterator {
 			component.startSequence(sequence.getResource(), sequenceHasChanged);
 		}
 
-		setVoyagePlans(sequence.getVoyagePlans(), sequence.getStartTime());
+		setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getStartTime());
 
 		while (hasNextObject()) {
 			if (nextObjectIsStartOfPlan()) {
@@ -249,7 +268,7 @@ public final class VoyagePlanIterator {
 			component.startSequence(sequence.getResource(), true);
 		}
 
-		setVoyagePlans(sequence.getVoyagePlans(), sequence.getStartTime());
+		setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getStartTime());
 
 		while (hasNextObject()) {
 			if (nextObjectIsStartOfPlan()) {

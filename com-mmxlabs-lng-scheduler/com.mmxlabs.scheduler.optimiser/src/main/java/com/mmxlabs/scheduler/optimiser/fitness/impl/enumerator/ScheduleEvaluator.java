@@ -45,7 +45,8 @@ public class ScheduleEvaluator {
 	@com.google.inject.Inject(optional = true)
 	private IBreakEvenEvaluator breakEvenEvaluator;
 
-	private final VoyagePlanIterator vpIterator = new VoyagePlanIterator();
+	@Inject
+	private VoyagePlanIterator vpIterator;
 
 	private Collection<ILoadPriceCalculator> loadPriceCalculators;
 	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
@@ -80,7 +81,7 @@ public class ScheduleEvaluator {
 			}
 			total += l;
 		}
-		
+
 		// Prime the load price calculators with the scheduled result
 		for (final ILoadPriceCalculator calculator : loadPriceCalculators) {
 			calculator.prepareEvaluation(scheduledSequences);
@@ -97,7 +98,6 @@ public class ScheduleEvaluator {
 
 		// Next we do P&L related business; first we have to assign the load volumes,
 		// and then compute the resulting P&L fitness components.
-
 
 		// Compute load volumes and prices
 		final Collection<IAllocationAnnotation> allocations = cargoAllocator.allocate(scheduledSequences);

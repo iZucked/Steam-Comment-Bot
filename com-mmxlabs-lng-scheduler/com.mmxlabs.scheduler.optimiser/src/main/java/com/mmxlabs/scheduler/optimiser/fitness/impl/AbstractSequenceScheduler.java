@@ -71,6 +71,9 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 	private ITimeWindowDataComponentProvider timeWindowProvider;
 
 	@Inject
+	private IElementDurationProvider durationProvider;
+
+	@Inject
 	private IPortProvider portProvider;
 
 	@Inject
@@ -93,7 +96,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 	@Inject
 	private IReturnElementProvider returnElementProvider;
-	
+
 	public IRouteCostProvider getRouteCostProvider() {
 		return routeCostProvider;
 	}
@@ -173,7 +176,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		}
 
-		boolean isShortsSequence = false;//vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
+		boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 
 		// Get start time
 		final int startTime = arrivalTimes[0];
@@ -181,17 +184,17 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		final List<VoyagePlan> voyagePlans = new LinkedList<VoyagePlan>();
 		final List<Object> currentSequence = new ArrayList<Object>(5);
 		final List<Integer> currentTimes = new ArrayList<Integer>(3);
-		
-		//ISequenceElement prevElement = null;
+
+		ISequenceElement prevElement = null;
 		IPort prevPort = null;
 		IPortSlot prevPortSlot = null;
 		PortType prevPortType = null;
-		
-		//ISequenceElement prev2Element = null;
+
+		ISequenceElement prev2Element = null;
 		IPort prev2Port = null;
-		//IPortSlot prev2PortSlot = null;
-		//PortType prev2PortType = null;
-		
+		IPortSlot prev2PortSlot = null;
+		PortType prev2PortType = null;
+
 		VesselState vesselState = VesselState.Ballast;
 		VoyageOptions previousOptions = null;
 
@@ -206,6 +209,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 			final IPort thisPort = portProvider.getPortForElement(element);
 			final IPortSlot thisPortSlot = portSlotProvider.getPortSlot(element);
+			final PortType portType = portTypeProvider.getPortType(element);
 
 			// If this is the first port, then this will be null and there will
 			// be no voyage to plan.
@@ -216,7 +220,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				}
 
 				final int availableTime;
-				if (isShortsSequence && prevPortType == PortType.Discharge) {
+				if (isShortsSequence && portType == PortType.Short_Cargo_End) {
 					int minTravelTime = Integer.MAX_VALUE;
 					for (final MatrixEntry<IPort, Integer> entry : distanceProvider.getValues(prevPort, prev2Port)) {
 						final int distance = entry.getValue();
@@ -237,7 +241,6 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				final int nboSpeed = vessel.getVesselClass().getMinNBOSpeed(vesselState);
 
 				final VoyageOptions options = new VoyageOptions();
-				
 
 				options.setVessel(vessel);
 				options.setFromPortSlot(prevPortSlot);
@@ -335,28 +338,35 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			final int visitDuration = durationsProvider.getElementDuration(element, resource);
 
 			/*
-			final PortDetails portDetails = new PortDetails();
-			portDetails.setOptions(new PortOptions());
-			*/
+			 * final PortDetails portDetails = new PortDetails(); portDetails.setOptions(new PortOptions());
+			 */
 			final PortOptions portOptions = new PortOptions();
 			portOptions.setVisitDuration(visitDuration);
 			portOptions.setPortSlot(thisPortSlot);
 			portOptions.setVessel(vessel);
 			portOptions.setVesselState(vesselState);
 
-			if (isShortsSequence && prevPortType == PortType.Discharge) {
+			if (isShortsSequence && portType == PortType.Short_Cargo_End) {
 				currentTimes.add(shortCargoReturnArrivalTime);
 			} else {
 				currentTimes.add(arrivalTimes[idx]);
 			}
-			//currentSequence.add(portDetails);
+			// currentSequence.add(portDetails);
 			currentSequence.add(portOptions);
 
-			final PortType portType = portTypeProvider.getPortType(element);
-			if (((currentSequence.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance) || (portType == PortType.Other)) {
+			if (((currentSequence.size() > 1) && (portType == PortType.Load)) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)
+					|| (portType == PortType.Other) || (portType == PortType.Short_Cargo_End)) {
 
-				if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
-					return null;
+				// Special case for cargo shorts routes. There is no voyage between a Short_Cargo_End and the next load - which this current sequence will represent. However we do need to model the
+				// Short_Cargo_End for the VoyagePlanIterator to work correctly. Here we strip the voyage and make this a single element sequence.
+				if (((PortOptions) currentSequence.get(0)).getPortSlot().getPortType() != PortType.Short_Cargo_End) {
+					if (!optimiseSequence(voyagePlans, currentSequence, currentTimes, voyagePlanOptimiser)) {
+						return null;
+					}
+				} else {
+					if (!optimiseSequence(voyagePlans, Collections.singletonList(currentSequence.get(0)), currentTimes, voyagePlanOptimiser)) {
+						return null;
+					}
 				}
 
 				// Reset useNBO flag
@@ -366,27 +376,38 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				currentSequence.clear();
 				currentTimes.clear();
 
-				//currentSequence.add(portDetails);
+				// if (!isShortsSequence) {
 				currentSequence.add(portOptions);
 				currentTimes.add(arrivalTimes[idx]);
+				// } else {
+				// final int visitDuration = durationsProvider.getElementDuration(element, resource);
+				//
+				// final PortDetails portDetails2 = new PortDetails();
+				// portDetails2.setVisitDuration(visitDuration);
+				// portDetails2.setPortSlot(thisPortSlot);
+				//
+				// currentTimes.add(arrivalTimes[idx]);
+				// currentSequence.add(portDetails2);
+
+				// }
 			}
 
 			// Setup for next iteration
-			//prev2Element = prevElement;
-			prev2Port = prevPort ;
-			//prev2PortSlot = prevPortSlot ;
-			//prev2PortType = prevPortType ;
-			
-			//prevElement = element;
+			prev2Element = prevElement;
+			prev2Port = prevPort;
+			prev2PortSlot = prevPortSlot;
+			prev2PortType = prevPortType;
+
+			prevElement = element;
 			prevPort = thisPort;
 			prevPortSlot = thisPortSlot;
 			prevPortType = portType;
 			prevVisitDuration = visitDuration;
-
 			// Update vessel state
 			if (portType == PortType.Load) {
 				vesselState = VesselState.Laden;
-			} else if ((portType == PortType.Discharge) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)) {
+			} else if ((portType == PortType.Discharge) || (portType == PortType.CharterOut) || (portType == PortType.DryDock) || (portType == PortType.Maintenance)
+					|| (portType == PortType.Short_Cargo_End)) {
 				vesselState = VesselState.Ballast;
 			} else {
 				// No change in state

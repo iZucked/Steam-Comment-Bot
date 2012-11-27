@@ -91,6 +91,12 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	private boolean[][] isVirtual;
 
 	/**
+	 * A flag to indicate that we should just use the timewindow rather than include the previous journey time. Intended for use with the cargo shorts where each cargo is indepenedent of the others on
+	 * the route.
+	 */
+	private boolean[][] useTimeWindow;
+
+	/**
 	 * Holds a list of points at which the cost function can be separated. This occurs when a given journey leg <em>always</em> involves some idle time, so there can be no knock-on effects on the
 	 * segment following the point from the times chosen up to the point.
 	 * 
@@ -137,6 +143,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		resize(maxTimeToNextElement, sequenceIndex, size);
 
 		resize(isVirtual, sequenceIndex, size);
+		resize(useTimeWindow, sequenceIndex, size);
 
 		sizes[sequenceIndex] = size;
 	}
@@ -265,6 +272,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			minTimeToNextElement = new int[size][];
 			maxTimeToNextElement = new int[size][];
 			isVirtual = new boolean[size][];
+			useTimeWindow = new boolean[size][];
 			sizes = new int[size];
 		}
 
@@ -300,6 +308,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		final int[] minTimeToNextElement = this.minTimeToNextElement[sequenceIndex];
 		final int[] maxTimeToNextElement = this.maxTimeToNextElement[sequenceIndex];
 		final boolean[] isVirtual = this.isVirtual[sequenceIndex];
+		final boolean[] useTimeWindow = this.useTimeWindow[sequenceIndex];
 
 		final IPortTypeProvider portTypeProvider = super.getPortTypeProvider();
 
@@ -320,6 +329,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			final List<ITimeWindow> windows = timeWindowProvider.getTimeWindows(element);
 
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
+			useTimeWindow[index] = portTypeProvider.getPortType(element) == PortType.Short_Cargo_End;
 
 			// Calculate minimum inter-element durations
 			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider.getElementDuration(element, resource);
@@ -527,6 +537,8 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			// getMaxArrivalTime().
 
 			return arrivalTimes[seq][index - 1];
+		} else if (useTimeWindow[seq][index]) {
+			return windowStartTime[seq][index];
 		} else {
 			// whichever is later: previous arrival time + travel, or
 			// window start.
@@ -562,8 +574,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	}
 
 	protected final int getMaxArrivalTimeForNextArrival(final int seq, final int pos) {
-		if (sizes[seq] < 2) return windowStartTime[seq][pos];
-		final int ideal = arrivalTimes[seq][pos+1] - minTimeToNextElement[seq][pos];
+		if (sizes[seq] < 2)
+			return windowStartTime[seq][pos];
+		final int ideal = arrivalTimes[seq][pos + 1] - minTimeToNextElement[seq][pos];
 		if (ideal < windowStartTime[seq][pos]) {
 			return windowStartTime[seq][pos];
 		} else if (ideal > windowEndTime[seq][pos]) {
@@ -571,9 +584,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		} else {
 			return ideal;
 		}
-		
+
 	}
-	
+
 	public ScheduleEvaluator getScheduleEvaluator() {
 		return evaluator;
 	}

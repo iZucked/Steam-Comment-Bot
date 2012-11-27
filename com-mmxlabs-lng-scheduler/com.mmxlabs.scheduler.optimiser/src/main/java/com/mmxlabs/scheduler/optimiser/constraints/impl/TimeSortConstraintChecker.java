@@ -101,6 +101,8 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	 */
 	public final boolean checkSequence(final ISequence sequence, final List<String> messages, final VesselInstanceType instanceType) {
 
+		// TODO: Special case for shorts route  - cargoes could well overlap
+		
 		ITimeWindow lastTimeWindow = null;
 
 		for (final ISequenceElement t : sequence) {

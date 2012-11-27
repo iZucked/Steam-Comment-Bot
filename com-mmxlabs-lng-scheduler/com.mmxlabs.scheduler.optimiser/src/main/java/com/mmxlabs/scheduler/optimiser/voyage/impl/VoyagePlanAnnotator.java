@@ -7,6 +7,9 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
+
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -44,10 +47,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.IVoyagePlanAnnotator;
  * @param Sequence
  *            element type.
  */
-public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
+public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
+	@Inject
 	private IPortSlotProvider portSlotProvider;
+
+	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private Provider<VoyagePlanIterator> voyagePlanIteratorProvider;
 
 	private final FuelComponent[] idleFuelComponents = FuelComponent.getIdleFuelComponents();
 	private final FuelComponent[] travelFuelComponents = FuelComponent.getTravelFuelComponents();
@@ -65,9 +74,9 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 	@Override
 	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans, final int startTime, final IAnnotatedSolution solution) {
-		final VoyagePlanIterator vpi = new VoyagePlanIterator();
+		final VoyagePlanIterator vpi = voyagePlanIteratorProvider.get();
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		vpi.setVoyagePlans(plans, startTime);
+		vpi.setVoyagePlans(resource, plans, startTime);
 
 		vpi.reset();
 
@@ -79,7 +88,7 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 			final int currentTime = vpi.getCurrentTime();
 
-			assert currentTime >= lastTime;
+//			assert currentTime >= lastTime;
 			lastTime = currentTime;
 
 			if (e instanceof PortDetails) {
@@ -233,7 +242,7 @@ public final class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					charterOut.setSequenceElement(element);
 
 					// TODO: Calculate revenue
-					
+
 					solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_generatedCharterOutInfo, charterOut);
 
 				} else {
