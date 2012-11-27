@@ -129,7 +129,6 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			}
 		});
 
-
 		final ValidationHelper helper = new ValidationHelper();
 		final IStatus validationStatus = helper.runValidation(validator, new DefaultExtraValidationContext(root), Collections.singleton(plan));
 		if (validationStatus != Status.OK_STATUS) {
@@ -392,8 +391,8 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				final Map<FuelComponent, Integer[]> voyageSums = new EnumMap<FuelComponent, Integer[]>(FuelComponent.class);
 				int idxX = 1;
 				// final VoyagePlan voyagePlan = sequence.getVoyagePlans().get(0);
-				final VoyagePlanIterator itr = new VoyagePlanIterator();
-				itr.setVoyagePlans(sequence.getVoyagePlans(), 0);
+				final VoyagePlanIterator itr = injector.getInstance(VoyagePlanIterator.class);
+				itr.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), 0);
 
 				while (itr.hasNextObject()) {
 					final Object obj = itr.nextObject();
