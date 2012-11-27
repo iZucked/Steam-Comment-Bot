@@ -834,17 +834,17 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	@Override
 	public IOptimisationData getOptimisationData() {
 
-		// TODO: Look up appropriate definition
-		// final IVesselClass cargoShortsClass = vesselClasses.get(1);// createVesselClass("short-class", OptimiserUnitConvertor.convertToInternalSpeed(18.0),
-		// shortCargoVessel = createVessel("short-vessel", cargoShortsClass, new ConstantValueCurve(200000), VesselInstanceType.CARGO_SHORTS, createStartEndRequirement(), createStartEndRequirement(),
-		// 0,
-		// 0, 0);
+//		// TODO: Look up appropriate definition
+//		 final IVesselClass cargoShortsClass = vesselClasses.get(1);// createVesselClass("short-class", OptimiserUnitConvertor.convertToInternalSpeed(18.0),
+//		 shortCargoVessel = createVessel("short-vessel", cargoShortsClass, new ConstantValueCurve(200000), VesselInstanceType.CARGO_SHORTS, createStartEndRequirement(), createStartEndRequirement(),
+//		 0,
+//		 0, 0);
 
 		// create return elements before fixing time windows,
 		// because the next bit will have to patch up their time windows
 		createReturnElements();
 
-		createChargoShortReturnElements();
+	//	createChargoShortReturnElements();
 
 		portDistanceProvider.cacheExtremalValues(ports);
 
