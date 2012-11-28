@@ -117,15 +117,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	protected double cvValue = CV_VALUE_EDEFAULT;
 
 	/**
-	 * This is true if the Cv Value attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean cvValueESet;
-
-	/**
 	 * The default value of the '{@link #getDestinationType() <em>Destination Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -261,33 +252,8 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	public void setCvValue(double newCvValue) {
 		double oldCvValue = cvValue;
 		cvValue = newCvValue;
-		boolean oldCvValueESet = cvValueESet;
-		cvValueESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE, oldCvValue, cvValue, !oldCvValueESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetCvValue() {
-		double oldCvValue = cvValue;
-		boolean oldCvValueESet = cvValueESet;
-		cvValue = CV_VALUE_EDEFAULT;
-		cvValueESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE, oldCvValue, CV_VALUE_EDEFAULT, oldCvValueESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetCvValue() {
-		return cvValueESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE, oldCvValue, cvValue));
 	}
 
 	/**
@@ -379,7 +345,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 				setCargoPrice(CARGO_PRICE_EDEFAULT);
 				return;
 			case AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE:
-				unsetCvValue();
+				setCvValue(CV_VALUE_EDEFAULT);
 				return;
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
 				setDestinationType(DESTINATION_TYPE_EDEFAULT);
@@ -403,7 +369,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 			case AnalyticsPackage.SHIPPING_COST_ROW__CARGO_PRICE:
 				return cargoPrice != CARGO_PRICE_EDEFAULT;
 			case AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE:
-				return isSetCvValue();
+				return cvValue != CV_VALUE_EDEFAULT;
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
 				return destinationType != DESTINATION_TYPE_EDEFAULT;
 		}
@@ -425,7 +391,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 		result.append(", cargoPrice: ");
 		result.append(cargoPrice);
 		result.append(", cvValue: ");
-		if (cvValueESet) result.append(cvValue); else result.append("<unset>");
+		result.append(cvValue);
 		result.append(", destinationType: ");
 		result.append(destinationType);
 		result.append(')');

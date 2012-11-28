@@ -124,11 +124,9 @@ public interface ShippingCostRow extends MMXObject {
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cv Value</em>' attribute.
-	 * @see #isSetCvValue()
-	 * @see #unsetCvValue()
 	 * @see #setCvValue(double)
 	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getShippingCostRow_CvValue()
-	 * @model unsettable="true" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
 	double getCvValue();
@@ -138,35 +136,10 @@ public interface ShippingCostRow extends MMXObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Cv Value</em>' attribute.
-	 * @see #isSetCvValue()
-	 * @see #unsetCvValue()
 	 * @see #getCvValue()
 	 * @generated
 	 */
 	void setCvValue(double value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue <em>Cv Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetCvValue()
-	 * @see #getCvValue()
-	 * @see #setCvValue(double)
-	 * @generated
-	 */
-	void unsetCvValue();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue <em>Cv Value</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Cv Value</em>' attribute is set.
-	 * @see #unsetCvValue()
-	 * @see #getCvValue()
-	 * @see #setCvValue(double)
-	 * @generated
-	 */
-	boolean isSetCvValue();
 
 	/**
 	 * Returns the value of the '<em><b>Destination Type</b></em>' attribute.

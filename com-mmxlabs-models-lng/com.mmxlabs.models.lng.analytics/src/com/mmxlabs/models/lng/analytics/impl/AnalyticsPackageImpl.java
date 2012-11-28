@@ -1085,7 +1085,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getShippingCostRow_Port(), theTypesPackage.getAPort(), null, "port", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_Date(), ecorePackage.getEDate(), "date", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_CargoPrice(), ecorePackage.getEDouble(), "cargoPrice", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getShippingCostRow_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getShippingCostRow_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_DestinationType(), this.getDestinationType(), "destinationType", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
