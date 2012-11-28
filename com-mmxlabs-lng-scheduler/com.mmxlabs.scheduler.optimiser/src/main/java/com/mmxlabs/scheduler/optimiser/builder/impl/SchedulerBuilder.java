@@ -1084,7 +1084,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	@Override
-	public void setVesselClassStateParamaters(final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
+	public void setVesselClassStateParameters(final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
 			final int idleConsumptionRateInMTPerHour, final int inPortConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed) {
 
 		if (!vesselClasses.contains(vesselClass)) {
@@ -1125,7 +1125,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param consumptionCalculatorInMTPerHour
 	 */
 	@Override
-	public void setVesselClassStateParamaters(final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour, final int idleConsumptionRateInMTPerHour,
+	public void setVesselClassStateParameters(final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour, final int idleConsumptionRateInMTPerHour,
 			final int inPortConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
 
 		// Convert rate to MT equivalent per hour
@@ -1133,7 +1133,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final int nboSpeed = consumptionCalculatorInMTPerHour.getSpeed(nboRateInMTPerHour);
 
-		this.setVesselClassStateParamaters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, inPortConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour,
+		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, inPortConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour,
 				nboSpeed);
 	}
 

@@ -100,7 +100,7 @@ public interface ISchedulerBuilder {
 	 * @param nboSpeed
 	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling.
 	 */
-	void setVesselClassStateParamaters(IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
+	void setVesselClassStateParameters(IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
 			int inPortConsumptionRateInMTPerHour, IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
 
 	/**
@@ -119,7 +119,7 @@ public interface ISchedulerBuilder {
 	 * @param consumptionRateCalculatorInMTPerHour
 	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
 	 */
-	void setVesselClassStateParamaters(IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
+	void setVesselClassStateParameters(IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
 			int inPortConsumptionRateInMTPerHour, IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
 
 	/**
