@@ -126,6 +126,11 @@ public class GanttViewerTest {
 		public Calendar getElementPlannedEndTime(final Object element) {
 			return null;
 		}
+
+		@Override
+		public String getGroupIdentifier(final Object element) {
+			return null;
+		}
 	}
 
 	public static void main(final String[] args) {

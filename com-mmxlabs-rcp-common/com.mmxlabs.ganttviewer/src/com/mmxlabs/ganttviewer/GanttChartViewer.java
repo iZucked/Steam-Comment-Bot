@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -265,9 +266,11 @@ public class GanttChartViewer extends StructuredViewer {
 					final String rName = getLabelProviderText(labelProvider, r);
 					final GanttSection section = new GanttSection(ganttChart, rName);
 
+					final Map<String, GanttGroup> ganttGroups = new LinkedHashMap<String, GanttGroup>();
+
 					if (treeContentProvider.hasChildren(r)) {
-						final GanttGroup group = new GanttGroup(ganttChart);
-						group.setVerticalEventAlignment(SWT.CENTER);
+						final GanttGroup defaultGroup = new GanttGroup(ganttChart);
+						defaultGroup.setVerticalEventAlignment(SWT.CENTER);
 
 						final Object[] children = treeContentProvider.getChildren(r);
 						for (final Object c : children) {
@@ -275,6 +278,8 @@ public class GanttChartViewer extends StructuredViewer {
 							final String cName = getLabelProviderText(labelProvider, c);
 
 							final Image image = getLabelProviderImage(labelProvider, c);
+
+							final String ganttGroup = getGanttGroup(treeContentProvider, c);
 
 							// Get date/time information from content provider
 							final Calendar startDate = getEventStartDate(treeContentProvider, c);
@@ -324,7 +329,19 @@ public class GanttChartViewer extends StructuredViewer {
 
 							event.setLayer(layer);
 
-							group.addEvent(event);
+							if (ganttGroup == null) {
+								defaultGroup.addEvent(event);
+							} else {
+								GanttGroup g;
+								if (ganttGroups.containsKey(ganttGroup)) {
+									g = ganttGroups.get(ganttGroup);
+								} else {
+									g = new GanttGroup(ganttChart);
+									g.setVerticalEventAlignment(SWT.CENTER);
+									ganttGroups.put(ganttGroup, g);
+								}
+								g.addEvent(event);
+							}
 
 							internalMap.put(c, event);
 							internalReverseMap.put(event, c);
@@ -333,7 +350,14 @@ public class GanttChartViewer extends StructuredViewer {
 						// expect only a single line of entries due to the group
 						section.setTextOrientation(SWT.HORIZONTAL);
 
-						section.addGanttEvent(group);
+						// Include the default group if there are no special groups or if it has some content.
+						if (ganttGroups.isEmpty() || defaultGroup.getEventMembers().size() > 0) {
+							section.addGanttEvent(defaultGroup);
+						}
+						// Add in the special groups
+						for (final GanttGroup g : ganttGroups.values()) {
+							section.addGanttEvent(g);
+						}
 					}
 
 					layer++;
@@ -344,6 +368,13 @@ public class GanttChartViewer extends StructuredViewer {
 		} else {
 			throw new IllegalArgumentException("ContentProvider should be an instance of " + ITreeContentProvider.class.getCanonicalName());
 		}
+	}
+
+	private String getGanttGroup(IContentProvider provider, Object c) {
+		if (provider instanceof IGanttChartContentProvider) {
+			return ((IGanttChartContentProvider) provider).getGroupIdentifier(c);
+		}
+		return null;
 	}
 
 	private Color getLabelProviderColor(final ILabelProvider labelProvider, final Object c) {

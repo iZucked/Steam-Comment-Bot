@@ -24,4 +24,9 @@ public interface IGanttChartContentProvider extends ITreeContentProvider {
 	Calendar getElementPlannedStartTime(Object element);
 
 	Calendar getElementPlannedEndTime(Object element);
+	
+	/**
+	 * @since 2.0
+	 */
+	String getGroupIdentifier(Object element);
 }
