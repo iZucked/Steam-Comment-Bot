@@ -232,7 +232,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 			public boolean accept(final IConstraintDescriptor constraint, final EObject target) {
 
 				for (final Category cat : constraint.getCategories()) {
-					if (cat.getId().equals(".base")) {
+					if (cat.getId().endsWith(".base")) {
 						return true;
 					}
 				}
