@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
-import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
+import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
@@ -171,7 +171,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			if (charterRevenue != 0) {
 				final DetailTree details = new DetailTree();
 
-				details.addChild(new DetailTree("Charter Out", new CurrencyDetailElement(charterRevenue)));
+				details.addChild(new DetailTree("Charter Out", new TotalCostDetailElement(charterRevenue)));
 
 				final IProfitAndLossEntry entry = new ProfitAndLossEntry(shippingEntity, taxedCharterRevenue, details);
 				final IProfitAndLossAnnotation annotation = new ProfitAndLossAnnotation(currentAllocation.getLoadTime(), Collections.singleton(entry));
@@ -211,7 +211,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 			if (revenue > 0) {
 				// TODO take out strings.
-				details.addChild(new DetailTree("Revenue", new CurrencyDetailElement(revenue)));
+				details.addChild(new DetailTree("Revenue", new TotalCostDetailElement(revenue)));
 			}
 
 			final IDetailTree[] detailsRef = new IDetailTree[1];
@@ -286,7 +286,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		}
 		if (detailsRef != null) {
 			//
-			final DetailTree details = new DetailTree("Shipping Costs", new CurrencyDetailElement(shippingCosts + hireCosts + portCosts));
+			final DetailTree details = new DetailTree("Shipping Costs", new TotalCostDetailElement(shippingCosts + hireCosts + portCosts));
 			//
 			// details.addChild("Route Cost", new CurrencyDetailElement(plan.getTotalRouteCost()));
 			// details.addChild("Base Fuel", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base)));
