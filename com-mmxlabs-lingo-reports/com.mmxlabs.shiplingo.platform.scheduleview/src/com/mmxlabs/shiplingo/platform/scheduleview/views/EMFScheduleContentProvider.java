@@ -13,11 +13,16 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.Viewer;
 
 import com.mmxlabs.ganttviewer.IGanttChartContentProvider;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.schedule.EndEvent;
 import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.schedule.StartEvent;
+import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 
 /**
@@ -41,9 +46,9 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 			final List<Object> result = new ArrayList<Object>();
 			for (final Object o : synchronizerOutput.getCollectedElements()) {
 				if (o instanceof Schedule) {
-					EList<Sequence> sequences = ((Schedule) o).getSequences();
-					
-					for (Sequence seq : sequences) {
+					final EList<Sequence> sequences = ((Schedule) o).getSequences();
+
+					for (final Sequence seq : sequences) {
 						// TODO: Need a proper flag
 						if (seq.getName().equals("<no vessel>")) {
 							if (seq.getEvents().size() > 0) {
@@ -53,15 +58,15 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 							result.add(seq);
 						}
 					}
-//					return seqs.toArray();
-//					result.addAll(sequences);
+					// return seqs.toArray();
+					// result.addAll(sequences);
 				}
 			}
 			return result.toArray();
 		} else if (parent instanceof Schedule) {
-			EList<Sequence> sequences = ((Schedule) parent).getSequences();
-			List<Sequence> seqs = new ArrayList<Sequence>(sequences.size());
-			for (Sequence seq : sequences) {
+			final EList<Sequence> sequences = ((Schedule) parent).getSequences();
+			final List<Sequence> seqs = new ArrayList<Sequence>(sequences.size());
+			for (final Sequence seq : sequences) {
 				// TODO: Need a proper flag
 				if (seq.getName().equals("<no vessel>")) {
 					if (seq.getEvents().size() > 0) {
@@ -164,5 +169,53 @@ public class EMFScheduleContentProvider implements IGanttChartContentProvider {
 		}
 
 		return null;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	public String getGroupIdentifier(final Object element) {
+
+		if (element instanceof Event) {
+			final Event event = (Event) element;
+			// Special case for cargo shorts - group items separately
+			if (event.getSequence().getName().equals("<no vessel>")) {
+				Event start = event;
+
+				// Find segment start
+				while (start != null && !isSegmentStart(start)) {
+					start = start.getPreviousEvent();
+				}
+
+				if (start != null) {
+					return start.name();
+				}
+
+			}
+
+		}
+		return null;
+	}
+
+	/**
+	 * Returns true if the event is of a type to indicate the start of a segment of related events.
+	 * 
+	 * @param event
+	 * @return
+	 */
+	private boolean isSegmentStart(final Event event) {
+		if (event instanceof StartEvent) {
+			return true;
+		} else if (event instanceof EndEvent) {
+			return true;
+		} else if (event instanceof GeneratedCharterOut) {
+			return true;
+		} else if (event instanceof SlotVisit && ((SlotVisit) event).getSlotAllocation().getSlot() instanceof LoadSlot) {
+			return true;
+		} else if (event instanceof VesselEventVisit) {
+			return true;
+		}
+		return false;
 	}
 }
