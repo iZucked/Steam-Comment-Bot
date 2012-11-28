@@ -101,7 +101,7 @@ public interface ISchedulerBuilder {
 	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling.
 	 */
 	void setVesselClassStateParameters(IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
-			int inPortConsumptionRateInMTPerHour, IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
+			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
 
 	/**
 	 * Set {@link IVesselClass} parameters that depend upon the {@link VesselState}.
@@ -120,7 +120,17 @@ public interface ISchedulerBuilder {
 	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
 	 */
 	void setVesselClassStateParameters(IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
-			int inPortConsumptionRateInMTPerHour, IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
+			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
+
+	/**
+	 * Set {@link IVesselClass} parameters that depend upon the {@link PortType}.
+	 * 
+	 * @param vesselClass
+	 * @param portType
+	 * @param inPortConsumptionRateInMTPerHour
+	 *            Hourly scale MT of base fuel consumption when in port.
+	 */
+	void setVesselClassPortTypeParameters(IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerHour);
 
 	/**
 	 * Create a charter out event

@@ -1089,7 +1089,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public void setVesselClassStateParameters(final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
-			final int idleConsumptionRateInMTPerHour, final int inPortConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed) {
+			final int idleConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed) {
 
 		if (!vesselClasses.contains(vesselClass)) {
 			throw new IllegalArgumentException("IVesselClass was not created using this builder");
@@ -1109,13 +1109,6 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
 		vc.setMinNBOSpeed(state, nboSpeed);
 		
-		/*
-		 * TODO: move this kludge into an orthogonal method, setVesselClassPortTypeParameters
-		 */
-		
-		final PortType pt = (state == VesselState.Laden ? PortType.Load : (state == VesselState.Ballast ? PortType.Discharge : null)); 
-		vc.setInPortConsumptionRate(pt, inPortConsumptionRateInMTPerHour);
-	
 	}
 
 	/**
@@ -1128,19 +1121,29 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param idleConsumptionRateInMTPerHour
 	 * @param consumptionCalculatorInMTPerHour
 	 */
+	
 	@Override
 	public void setVesselClassStateParameters(final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour, final int idleConsumptionRateInMTPerHour,
-			final int inPortConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
+			final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
 
 		// Convert rate to MT equivalent per hour
 		final int nboRateInMTPerHour = (int) Calculator.convertM3ToMT(nboRateInM3PerHour, vc.getBaseFuelConversionFactor());
 
 		final int nboSpeed = consumptionCalculatorInMTPerHour.getSpeed(nboRateInMTPerHour);
 
-		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, inPortConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour,
+		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour,
 				nboSpeed);
 	}
 
+	@Override
+	public void setVesselClassPortTypeParameters(IVesselClass vc,
+			PortType portType, int inPortConsumptionRateInMTPerHour) {
+		
+		
+		((VesselClass) vc).setInPortConsumptionRate(portType, inPortConsumptionRateInMTPerHour);		
+	}
+	
+	
 	@Override
 	public void setVesselClassInaccessiblePorts(final IVesselClass vc, final Set<IPort> inaccessiblePorts) {
 		this.portExclusionProvider.setExcludedPorts(vc, inaccessiblePorts);
@@ -1650,4 +1653,5 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	public void setPortCV(final IPort port, final int cv) {
 		portCVProvider.setPortCV(port, cv);
 	}
+
 }
