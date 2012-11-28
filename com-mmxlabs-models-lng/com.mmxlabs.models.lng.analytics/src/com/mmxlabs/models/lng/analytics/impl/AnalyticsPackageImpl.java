@@ -791,7 +791,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getShippingCostRow_Plan() {
+	public EReference getShippingCostRow_Port() {
 		return (EReference)shippingCostRowEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -801,18 +801,8 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getShippingCostRow_Port() {
-		return (EReference)shippingCostRowEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getShippingCostRow_Date() {
-		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -822,7 +812,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EAttribute getShippingCostRow_CargoPrice() {
-		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -832,7 +822,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EAttribute getShippingCostRow_CvValue() {
-		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -842,7 +832,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	public EAttribute getShippingCostRow_DestinationType() {
-		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -959,7 +949,6 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(shippingCostPlanEClass, SHIPPING_COST_PLAN__ROWS);
 
 		shippingCostRowEClass = createEClass(SHIPPING_COST_ROW);
-		createEReference(shippingCostRowEClass, SHIPPING_COST_ROW__PLAN);
 		createEReference(shippingCostRowEClass, SHIPPING_COST_ROW__PORT);
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__DATE);
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__CARGO_PRICE);
@@ -1090,10 +1079,9 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEReference(getShippingCostPlan_Vessel(), theTypesPackage.getAVessel(), null, "vessel", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostPlan_NotionalDayRate(), ecorePackage.getEInt(), "notionalDayRate", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostPlan_BaseFuelPrice(), ecorePackage.getEDouble(), "baseFuelPrice", null, 1, 1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getShippingCostPlan_Rows(), this.getShippingCostRow(), this.getShippingCostRow_Plan(), "rows", null, 0, -1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getShippingCostPlan_Rows(), this.getShippingCostRow(), null, "rows", null, 0, -1, ShippingCostPlan.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(shippingCostRowEClass, ShippingCostRow.class, "ShippingCostRow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getShippingCostRow_Plan(), this.getShippingCostPlan(), this.getShippingCostPlan_Rows(), "plan", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getShippingCostRow_Port(), theTypesPackage.getAPort(), null, "port", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_Date(), ecorePackage.getEDate(), "date", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_CargoPrice(), ecorePackage.getEDouble(), "cargoPrice", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -67,7 +67,6 @@ public class ShippingCostRowComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_planEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
 		add_dateEditor(detailComposite, topClass);
 		add_cargoPriceEditor(detailComposite, topClass);

@@ -23,7 +23,6 @@ import org.eclipse.emf.ecore.EObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPlan <em>Plan</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCargoPrice <em>Cargo Price</em>}</li>
@@ -37,34 +36,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface ShippingCostRow extends MMXObject {
-	/**
-	 * Returns the value of the '<em><b>Plan</b></em>' container reference.
-	 * It is bidirectional and its opposite is '{@link com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows <em>Rows</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Plan</em>' container reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Plan</em>' container reference.
-	 * @see #setPlan(ShippingCostPlan)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getShippingCostRow_Plan()
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostPlan#getRows
-	 * @model opposite="rows" transient="false"
-	 * @generated
-	 */
-	ShippingCostPlan getPlan();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPlan <em>Plan</em>}' container reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Plan</em>' container reference.
-	 * @see #getPlan()
-	 * @generated
-	 */
-	void setPlan(ShippingCostPlan value);
-
 	/**
 	 * Returns the value of the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
