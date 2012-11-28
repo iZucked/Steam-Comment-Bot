@@ -49,7 +49,7 @@ public class VesselEventVesselsInlineEditor extends MultiReferenceInlineEditor {
 				elementAssignment = (ElementAssignment) r;
 			}
 		}
-		// .. otherwise lookup the assignment
+		// .. otherwise lookup the assignment.
 		if (elementAssignment == null) {
 			final InputModel inputModel = location.getRootObject().getSubModel(InputModel.class);
 			elementAssignment = AssignmentEditorHelper.getElementAssignment(inputModel, (UUIDObject) input);

@@ -52,13 +52,7 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 
 			final AVesselSet vesselAssignment = assignment.getAssignment();
 			if (vesselAssignment == null) {
-				if (assignedObject instanceof VesselEvent) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel events must have a vessel assigned to them."));
-					status.addEObjectAndFeature(assignment, InputPackage.eINSTANCE.getElementAssignment_Assignment());
-					return status;										
-				}
-				else
-					return ctx.createSuccessStatus();
+				return ctx.createSuccessStatus();
 			}
 
 			// This will be a single vessel or a vessel class

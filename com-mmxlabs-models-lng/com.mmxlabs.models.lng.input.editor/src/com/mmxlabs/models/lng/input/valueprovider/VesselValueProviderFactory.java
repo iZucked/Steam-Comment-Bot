@@ -51,35 +51,7 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 					// get a list of globally permissible values   
 					List<Pair<String, EObject>> baseResult = super.getAllowedValues(target, field);
 					
-					// determine the current value for the target object
-					final AVesselSet currentValue;					
-					{
-						final ElementAssignment assignment;
-						
-						// if we were passed in an ElementAssignment, the target object is actually the
-						// element assignment's owner, and we use the parameter to determine the current value
-						if (target instanceof ElementAssignment) {
-							assignment = (ElementAssignment) target;
-							target = assignment.getAssignedObject();
-						}
-						// otherwise, use a default ElementAssignment to determine the current value 
-						else {
-							InputModel inputModel = rootObject.getSubModel(InputModel.class);
-							if (inputModel != null)
-								assignment = AssignmentEditorHelper.getElementAssignment(inputModel, (UUIDObject) target);
-							else
-								assignment = null;
-						}
-						
-						if (assignment == null)
-							currentValue = null;
-						else
-							currentValue = assignment.getAssignment();
-					}
-					
-					String info = (currentValue == null ? "Null Value" : currentValue.getName());
-
-					final EList<AVesselSet> allowedVessels;					
+					final EList<AVesselSet> allowedVessels;
 					
 					// populate the list of allowed vessels for the target object 
 					if (target instanceof CargoImpl) {
@@ -96,28 +68,28 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 					
 					// filter the global list by the object's allowed values 
 					if (allowedVessels != null) {
+						InputModel inputModel = rootObject.getSubModel(InputModel.class);
+						// find the current value set, if any
+						AVesselSet currentValue = null;
+						if (inputModel != null) {
+							ElementAssignment assignment = AssignmentEditorHelper.getElementAssignment(inputModel, (UUIDObject) target);
+							if (assignment != null)
+								currentValue = (AVesselSet) assignment.getAssignment();
+						}						
+
 						// create list to populate
 						ArrayList<Pair<String, EObject>> result = new ArrayList<Pair<String, EObject>>();						
 						
 						// filter the globally permissible values by the settings for this cargo
 						for (Pair<String, EObject> pair: baseResult) {
 							EObject vessel = pair.getSecond();
-							
-							// determine the vessel class (if any) for this option
-							VesselClass vc = null;
-							if (vessel instanceof Vessel) {
-								vc = ((Vessel) vessel).getVesselClass();
-							}
-							
-							boolean display = 
+							final boolean display = 
 									// show the option if the cargo allows this vessel-set
 									// (an empty list of allowed vessels means "all vessels") 
 									allowedVessels.isEmpty() || allowedVessels.contains(vessel)
-									// show the option if the cargo allows vessels of this class
-									|| (vc != null && allowedVessels.contains(vc))
 									// show the option if the option is the null option
 									// or the current value for the cargo is set to this vessel-set
-									|| Equality.isEqual(vessel, currentValue) || vessel == null;							
+									|| Equality.isEqual(vessel, currentValue) || vessel == null;
 							
 							if (display) {
 								result.add(pair);

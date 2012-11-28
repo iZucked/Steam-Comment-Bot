@@ -979,16 +979,6 @@ public interface AnalyticsPackage extends EPackage {
 	int SHIPPING_COST_ROW__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
-	 * The feature id for the '<em><b>Plan</b></em>' container reference.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SHIPPING_COST_ROW__PLAN = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -996,7 +986,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SHIPPING_COST_ROW__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int SHIPPING_COST_ROW__PORT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Date</b></em>' attribute.
@@ -1006,7 +996,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SHIPPING_COST_ROW__DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int SHIPPING_COST_ROW__DATE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Price</b></em>' attribute.
@@ -1016,7 +1006,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SHIPPING_COST_ROW__CARGO_PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int SHIPPING_COST_ROW__CARGO_PRICE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
@@ -1026,7 +1016,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SHIPPING_COST_ROW__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int SHIPPING_COST_ROW__CV_VALUE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Destination Type</b></em>' attribute.
@@ -1036,7 +1026,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SHIPPING_COST_ROW__DESTINATION_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SHIPPING_COST_ROW__DESTINATION_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Shipping Cost Row</em>' class.
@@ -1046,7 +1036,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SHIPPING_COST_ROW_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int SHIPPING_COST_ROW_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 
 	/**
@@ -1796,18 +1786,6 @@ public interface AnalyticsPackage extends EPackage {
 	EClass getShippingCostRow();
 
 	/**
-	 * Returns the meta object for the container reference '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPlan <em>Plan</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the container reference '<em>Plan</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getPlan()
-	 * @see #getShippingCostRow()
-	 * @generated
-	 */
-	EReference getShippingCostRow_Plan();
-
-	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getPort <em>Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -2462,15 +2440,6 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SHIPPING_COST_ROW = eINSTANCE.getShippingCostRow();
-
-		/**
-		 * The meta object literal for the '<em><b>Plan</b></em>' container reference feature.
-		 * <!-- begin-user-doc -->
-		 * @since 2.0
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SHIPPING_COST_ROW__PLAN = eINSTANCE.getShippingCostRow_Plan();
 
 		/**
 		 * The meta object literal for the '<em><b>Port</b></em>' reference feature.

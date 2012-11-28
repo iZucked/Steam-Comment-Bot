@@ -35,7 +35,6 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getPlan <em>Plan</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getDate <em>Date</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getCargoPrice <em>Cargo Price</em>}</li>
@@ -118,15 +117,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	protected double cvValue = CV_VALUE_EDEFAULT;
 
 	/**
-	 * This is true if the Cv Value attribute has been set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean cvValueESet;
-
-	/**
 	 * The default value of the '{@link #getDestinationType() <em>Destination Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -163,47 +153,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	@Override
 	protected EClass eStaticClass() {
 		return AnalyticsPackage.Literals.SHIPPING_COST_ROW;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ShippingCostPlan getPlan() {
-		if (eContainerFeatureID() != AnalyticsPackage.SHIPPING_COST_ROW__PLAN) return null;
-		return (ShippingCostPlan)eContainer();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetPlan(ShippingCostPlan newPlan, NotificationChain msgs) {
-		msgs = eBasicSetContainer((InternalEObject)newPlan, AnalyticsPackage.SHIPPING_COST_ROW__PLAN, msgs);
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setPlan(ShippingCostPlan newPlan) {
-		if (newPlan != eInternalContainer() || (eContainerFeatureID() != AnalyticsPackage.SHIPPING_COST_ROW__PLAN && newPlan != null)) {
-			if (EcoreUtil.isAncestor(this, newPlan))
-				throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
-			NotificationChain msgs = null;
-			if (eInternalContainer() != null)
-				msgs = eBasicRemoveFromContainer(msgs);
-			if (newPlan != null)
-				msgs = ((InternalEObject)newPlan).eInverseAdd(this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS, ShippingCostPlan.class, msgs);
-			msgs = basicSetPlan(newPlan, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SHIPPING_COST_ROW__PLAN, newPlan, newPlan));
 	}
 
 	/**
@@ -303,33 +252,8 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	public void setCvValue(double newCvValue) {
 		double oldCvValue = cvValue;
 		cvValue = newCvValue;
-		boolean oldCvValueESet = cvValueESet;
-		cvValueESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE, oldCvValue, cvValue, !oldCvValueESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetCvValue() {
-		double oldCvValue = cvValue;
-		boolean oldCvValueESet = cvValueESet;
-		cvValue = CV_VALUE_EDEFAULT;
-		cvValueESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE, oldCvValue, CV_VALUE_EDEFAULT, oldCvValueESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetCvValue() {
-		return cvValueESet;
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE, oldCvValue, cvValue));
 	}
 
 	/**
@@ -359,54 +283,8 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case AnalyticsPackage.SHIPPING_COST_ROW__PLAN:
-				if (eInternalContainer() != null)
-					msgs = eBasicRemoveFromContainer(msgs);
-				return basicSetPlan((ShippingCostPlan)otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case AnalyticsPackage.SHIPPING_COST_ROW__PLAN:
-				return basicSetPlan(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs) {
-		switch (eContainerFeatureID()) {
-			case AnalyticsPackage.SHIPPING_COST_ROW__PLAN:
-				return eInternalContainer().eInverseRemove(this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS, ShippingCostPlan.class, msgs);
-		}
-		return super.eBasicRemoveFromContainerFeature(msgs);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case AnalyticsPackage.SHIPPING_COST_ROW__PLAN:
-				return getPlan();
 			case AnalyticsPackage.SHIPPING_COST_ROW__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
@@ -430,9 +308,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case AnalyticsPackage.SHIPPING_COST_ROW__PLAN:
-				setPlan((ShippingCostPlan)newValue);
-				return;
 			case AnalyticsPackage.SHIPPING_COST_ROW__PORT:
 				setPort((Port)newValue);
 				return;
@@ -460,9 +335,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.SHIPPING_COST_ROW__PLAN:
-				setPlan((ShippingCostPlan)null);
-				return;
 			case AnalyticsPackage.SHIPPING_COST_ROW__PORT:
 				setPort((Port)null);
 				return;
@@ -473,7 +345,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 				setCargoPrice(CARGO_PRICE_EDEFAULT);
 				return;
 			case AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE:
-				unsetCvValue();
+				setCvValue(CV_VALUE_EDEFAULT);
 				return;
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
 				setDestinationType(DESTINATION_TYPE_EDEFAULT);
@@ -490,8 +362,6 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case AnalyticsPackage.SHIPPING_COST_ROW__PLAN:
-				return getPlan() != null;
 			case AnalyticsPackage.SHIPPING_COST_ROW__PORT:
 				return port != null;
 			case AnalyticsPackage.SHIPPING_COST_ROW__DATE:
@@ -499,7 +369,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 			case AnalyticsPackage.SHIPPING_COST_ROW__CARGO_PRICE:
 				return cargoPrice != CARGO_PRICE_EDEFAULT;
 			case AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE:
-				return isSetCvValue();
+				return cvValue != CV_VALUE_EDEFAULT;
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
 				return destinationType != DESTINATION_TYPE_EDEFAULT;
 		}
@@ -521,7 +391,7 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 		result.append(", cargoPrice: ");
 		result.append(cargoPrice);
 		result.append(", cvValue: ");
-		if (cvValueESet) result.append(cvValue); else result.append("<unset>");
+		result.append(cvValue);
 		result.append(", destinationType: ");
 		result.append(destinationType);
 		result.append(')');
