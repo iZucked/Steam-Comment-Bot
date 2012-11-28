@@ -3,33 +3,27 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule.impl;
-import com.mmxlabs.models.lng.schedule.Event;
-import com.mmxlabs.models.lng.schedule.Fitness;
-import com.mmxlabs.models.lng.schedule.SchedulePackage;
-import com.mmxlabs.models.lng.schedule.Sequence;
-import com.mmxlabs.models.lng.schedule.SlotVisit;
-
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-import com.mmxlabs.models.lng.cargo.LoadSlot;
-import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.fleet.Vessel;
-import com.mmxlabs.models.lng.fleet.VesselClass;
-
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
+
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselClass;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.Fitness;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -44,6 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getDailyHireRate <em>Daily Hire Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getSpotIndex <em>Spot Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.SequenceImpl#getSequenceType <em>Sequence Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -156,6 +151,28 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 	 * @ordered
 	 */
 	protected boolean spotIndexESet;
+
+	/**
+	 * The default value of the '{@link #getSequenceType() <em>Sequence Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getSequenceType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final SequenceType SEQUENCE_TYPE_EDEFAULT = SequenceType.VESSEL;
+
+	/**
+	 * The cached value of the '{@link #getSequenceType() <em>Sequence Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see #getSequenceType()
+	 * @generated
+	 * @ordered
+	 */
+	protected SequenceType sequenceType = SEQUENCE_TYPE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -395,34 +412,46 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SequenceType getSequenceType() {
+		return sequenceType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setSequenceType(SequenceType newSequenceType) {
+		SequenceType oldSequenceType = sequenceType;
+		sequenceType = newSequenceType == null ? SEQUENCE_TYPE_EDEFAULT : newSequenceType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SEQUENCE__SEQUENCE_TYPE, oldSequenceType, sequenceType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
 	public String getName() {
-		if (isSetVessel()) {
+
+		if (getSequenceType() == SequenceType.DES_PURCHASE) {
+			return "DES Purchase";
+		} else if (getSequenceType() == SequenceType.FOB_SALE) {
+			return "FOB Sale";
+		} else if (getSequenceType() == SequenceType.CARGO_SHORTS) {
+			return "Short Cargoes";
+		} else if (isSetVessel()) {
 			return getVessel().getName();
 		} else if (isSetVesselClass()) {
 			return getVesselClass().getName();
-		} else {
-			for (final Event e : getEvents()) {
-				if (e instanceof SlotVisit) {
-					Slot slot = ((SlotVisit) e).getSlotAllocation().getSlot();
-					if (slot != null) {
-						if (slot instanceof LoadSlot) {
-							if (((LoadSlot) slot).isDESPurchase()) {
-								return "DES Purchase";
-							}
-						}
-						if (slot instanceof DischargeSlot) {
-							if (((DischargeSlot) slot).isFOBSale()) {
-								return "FOB Sale";
-							}
-						}
-					}
-				}
-			}
 		}
-		
+
 		return "<no vessel>";
 	}
 
@@ -506,6 +535,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				return getDailyHireRate();
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
 				return getSpotIndex();
+			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
+				return getSequenceType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -539,6 +570,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
 				setSpotIndex((Integer)newValue);
 				return;
+			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
+				setSequenceType((SequenceType)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -569,6 +603,9 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
 				unsetSpotIndex();
 				return;
+			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
+				setSequenceType(SEQUENCE_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -593,6 +630,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 				return dailyHireRate != DAILY_HIRE_RATE_EDEFAULT;
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
 				return isSetSpotIndex();
+			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
+				return sequenceType != SEQUENCE_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -631,6 +670,8 @@ public class SequenceImpl extends MMXObjectImpl implements Sequence {
 		result.append(dailyHireRate);
 		result.append(", spotIndex: ");
 		if (spotIndexESet) result.append(spotIndex); else result.append("<unset>");
+		result.append(", sequenceType: ");
+		result.append(sequenceType);
 		result.append(')');
 		return result.toString();
 	}

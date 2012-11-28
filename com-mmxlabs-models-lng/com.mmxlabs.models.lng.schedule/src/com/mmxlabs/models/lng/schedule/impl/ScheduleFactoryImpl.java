@@ -110,6 +110,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return createFuelUnitFromString(eDataType, initialValue);
 			case SchedulePackage.FUEL:
 				return createFuelFromString(eDataType, initialValue);
+			case SchedulePackage.SEQUENCE_TYPE:
+				return createSequenceTypeFromString(eDataType, initialValue);
 			case SchedulePackage.CALENDAR:
 				return createCalendarFromString(eDataType, initialValue);
 			case SchedulePackage.ITERABLE:
@@ -133,6 +135,8 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 				return convertFuelUnitToString(eDataType, instanceValue);
 			case SchedulePackage.FUEL:
 				return convertFuelToString(eDataType, instanceValue);
+			case SchedulePackage.SEQUENCE_TYPE:
+				return convertSequenceTypeToString(eDataType, instanceValue);
 			case SchedulePackage.CALENDAR:
 				return convertCalendarToString(eDataType, instanceValue);
 			case SchedulePackage.ITERABLE:
@@ -402,6 +406,28 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * @generated
 	 */
 	public String convertFuelToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SequenceType createSequenceTypeFromString(EDataType eDataType, String initialValue) {
+		SequenceType result = SequenceType.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSequenceTypeToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
