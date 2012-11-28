@@ -14,6 +14,8 @@ import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.common.detailtree.IDetailTreeElement;
 import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
 import com.mmxlabs.common.detailtree.impl.DurationDetailElement;
+import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
+import com.mmxlabs.common.detailtree.impl.UnitPriceDetailElement;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -310,6 +312,10 @@ public class TradingExporterExtension implements IExporterExtension {
 			final IDetailTreeElement element = (IDetailTreeElement) value;
 			value = element.getObject();
 			if (element instanceof CurrencyDetailElement) {
+				ad.setFormatType(ExtraDataFormatType.CURRENCY);
+			} else if (element instanceof TotalCostDetailElement) {
+				ad.setFormatType(ExtraDataFormatType.CURRENCY);
+			} else if (element instanceof UnitPriceDetailElement) {
 				ad.setFormatType(ExtraDataFormatType.CURRENCY);
 			} else if (element instanceof DurationDetailElement) {
 				ad.setFormatType(ExtraDataFormatType.DURATION);
