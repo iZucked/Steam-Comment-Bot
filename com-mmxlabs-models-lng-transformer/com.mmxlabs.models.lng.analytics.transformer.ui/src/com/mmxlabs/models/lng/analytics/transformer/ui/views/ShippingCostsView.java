@@ -216,7 +216,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 					public IPropertySource getPropertySource(Object object) {
 
 						if (object instanceof ShippingCostRow) {
-							object = ((ShippingCostRow) object).getPlan();
+							object = ((ShippingCostRow) object).eContainer();
 						}
 
 						if (object instanceof ShippingCostPlan) {
