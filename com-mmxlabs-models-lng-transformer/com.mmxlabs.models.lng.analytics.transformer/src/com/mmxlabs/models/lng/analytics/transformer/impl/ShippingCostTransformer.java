@@ -119,7 +119,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				for (final Category cat : constraint.getCategories()) {
 					if (cat.getId().equals("com.mmxlabs.models.lng.analytics.validation.constraints.shippingcosts")) {
 						return true;
-					} else if (cat.getId().equals(".base")) {
+					} else if (cat.getId().endsWith(".base")) {
 						return true;
 					}
 				}
