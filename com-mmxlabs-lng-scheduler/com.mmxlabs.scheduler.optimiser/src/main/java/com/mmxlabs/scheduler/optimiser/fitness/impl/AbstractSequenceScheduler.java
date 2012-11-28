@@ -343,7 +343,6 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			portOptions.setVisitDuration(visitDuration);
 			portOptions.setPortSlot(thisPortSlot);
 			portOptions.setVessel(vessel);
-			portOptions.setVesselState(vesselState);
 
 			if (isShortsSequence && portType == PortType.Short_Cargo_End) {
 				currentTimes.add(shortCargoReturnArrivalTime);

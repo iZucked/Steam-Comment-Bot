@@ -1097,13 +1097,21 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		final VesselClass vc = (VesselClass) vesselClass;
+		
 
 		vc.setNBORate(state, nboRateInM3PerHour);
 		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
 		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
-		vc.setInPortConsumptionRate(state, inPortConsumptionRateInMTPerHour);
 		vc.setMinNBOSpeed(state, nboSpeed);
+		
+		/*
+		 * TODO: move this kludge into an orthogonal method, setVesselClassPortTypeParameters
+		 */
+		
+		final PortType pt = (state == VesselState.Laden ? PortType.Load : (state == VesselState.Ballast ? PortType.Discharge : null)); 
+		vc.setInPortConsumptionRate(pt, inPortConsumptionRateInMTPerHour);
+	
 	}
 
 	/**

@@ -21,8 +21,7 @@ public final class PortOptions implements Cloneable {
 	private IVessel vessel;
 	private IPortSlot portSlot;
 
-	private VesselState vesselState;
-
+	
 	public PortOptions() {
 
 	}
@@ -31,7 +30,6 @@ public final class PortOptions implements Cloneable {
 		setVisitDuration(visitDuration);
 		setVessel(vessel);
 		setPortSlot(portSlot);
-		setVesselState(vesselState);
 	}
 	
 	
@@ -39,7 +37,6 @@ public final class PortOptions implements Cloneable {
 		setVisitDuration(options.getVisitDuration());
 		setVessel(options.getVessel());
 		setPortSlot(options.getPortSlot());
-		setVesselState(options.getVesselState());
 	}
 
 	public final int getVisitDuration() {
@@ -54,10 +51,6 @@ public final class PortOptions implements Cloneable {
 		return vessel;
 	}
 
-	public final VesselState getVesselState() {
-		return vesselState;
-	}
-
 	public final void setVisitDuration(final int t) {
 		this.visitDuration = t;
 	}
@@ -70,10 +63,6 @@ public final class PortOptions implements Cloneable {
 		this.portSlot = portSlot;
 	}
 
-	public final void setVesselState(final VesselState vesselState) {
-		this.vesselState = vesselState;
-	}
-
 	@Override
 	public final boolean equals(final Object obj) {
 
@@ -81,9 +70,6 @@ public final class PortOptions implements Cloneable {
 			final PortOptions vo = (PortOptions) obj;
 
 			if (visitDuration != vo.visitDuration) {
-				return false;
-			}
-			if (!Equality.isEqual(vesselState, vo.vesselState)) {
 				return false;
 			}
 
@@ -107,11 +93,11 @@ public final class PortOptions implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "PortOptions [availableTime=" + visitDuration + ", vessel=" + vessel + ", portSlot=" + portSlot + ", vesselState=" + vesselState + "]";
+		return "PortOptions [availableTime=" + visitDuration + ", vessel=" + vessel + ", portSlot=" + portSlot + "]";
 	}
 
 	@Override
 	public final int hashCode() {
-		return Objects.hashCode(visitDuration, portSlot, vessel, vesselState);
+		return Objects.hashCode(visitDuration, portSlot, vessel);
 	}
 }

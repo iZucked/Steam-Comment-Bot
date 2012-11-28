@@ -591,6 +591,7 @@ public class LNGVoyageCalculatorTest {
 		calc.init();
 
 		// Need this additional bit to get vesselClass reference
+
 		context.checking(new Expectations() {
 			{
 				one(options.getVessel()).getVesselClass();
@@ -1259,21 +1260,20 @@ public class LNGVoyageCalculatorTest {
 	
 	@Test
 	public void testCalculatePortFuelRequirements1() {
-		testCalculatePortFuelRequirements(VesselState.Laden, 13, 11, 143);
+		testCalculatePortFuelRequirements(PortType.Load, 13, 11, 143);
 	}
 	
 	@Test
 	public void testCalculatePortFuelRequirements2() {
-		testCalculatePortFuelRequirements(VesselState.Ballast, 22, 101, 2222);
+		testCalculatePortFuelRequirements(PortType.Discharge, 22, 101, 2222);
 	}	
 	
-	public void testCalculatePortFuelRequirements(VesselState state, int visitDuration, int consumptionRate, long target) {
+	public void testCalculatePortFuelRequirements(final PortType portType, final int visitDuration, final int consumptionRate, final long target) {
 
 		// In this test, we check that we only use travel NBO.
 
 		final PortOptions options = createSamplePortOptions();
 
-		options.setVesselState(state);
 		options.setVisitDuration(visitDuration);
 		
 		final PortDetails details = new PortDetails();
@@ -1295,12 +1295,12 @@ public class LNGVoyageCalculatorTest {
 		});
 		final VesselClass vesselClass = (VesselClass) options.getVessel().getVesselClass();
 
-		vesselClass.setInPortConsumptionRate(state, consumptionRate);
+		vesselClass.setInPortConsumptionRate(portType, consumptionRate);
 		
 		context.checking(new Expectations() {
 			{
 				one(options.getPortSlot()).getPortType();
-				will(returnValue(PortType.Load));
+				will(returnValue(portType));
 				allowing(options.getVessel()).getVesselClass();
 			}
 		});
@@ -1343,8 +1343,8 @@ public class LNGVoyageCalculatorTest {
 		// 2 days of boil off
 		vesselClass.setMinHeel(OptimiserUnitConvertor.convertToInternalVolume(300 * 24));
 
-		vesselClass.setInPortConsumptionRate(VesselState.Laden, OptimiserUnitConvertor.convertToInternalDailyRate(35));
-		vesselClass.setInPortConsumptionRate(VesselState.Ballast, OptimiserUnitConvertor.convertToInternalDailyRate(45));
+		vesselClass.setInPortConsumptionRate(PortType.Load, OptimiserUnitConvertor.convertToInternalDailyRate(35));
+		vesselClass.setInPortConsumptionRate(PortType.Discharge, OptimiserUnitConvertor.convertToInternalDailyRate(45));
 		
 		// Currently not used by test
 		vesselClass.setCargoCapacity(0);
@@ -1368,7 +1368,6 @@ public class LNGVoyageCalculatorTest {
 		final IVessel vessel = context.mock(IVessel.class);
 
 		options.setVessel(vessel);
-		options.setVesselState(VesselState.Laden);
 
 		return options;
 	}

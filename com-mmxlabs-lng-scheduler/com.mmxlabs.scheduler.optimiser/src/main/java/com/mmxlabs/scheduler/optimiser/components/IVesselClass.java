@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.components;
 
 import com.mmxlabs.scheduler.optimiser.Calculator;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
 
@@ -50,11 +51,11 @@ public interface IVesselClass {
 	/**
 	 * Returns the fuel consumption requirements when the vessel is in port. Units are MT Per Hour
 	 * 
-	 * @param vesselState
+	 * @param portType
 	 * @return
 	 */
 
-	long getInPortConsumptionRate(VesselState vesselState);
+	long getInPortConsumptionRate(PortType portType);
 
 	/**
 	 * Returns the rate of NBO when the vessel is idle. Units are M3 Per Hour

@@ -700,7 +700,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 //		
 		final IVessel vessel = options.getVessel();
 		final IVesselClass vesselClass = vessel.getVesselClass();
-		final VesselState vesselState = options.getVesselState();
+		//final VesselState vesselState = options.getVesselState();
 
 		/**
 		 * The number of MT of base fuel or MT-equivalent of LNG required per hour during this port visit
@@ -711,7 +711,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 		
 		// temporary kludge: ignore non-load non-discharge ports for port consumption
 		if (portType == PortType.Load || portType == PortType.Discharge)
-			consumptionRateInMTPerHour = vesselClass.getInPortConsumptionRate(vesselState);
+			consumptionRateInMTPerHour = vesselClass.getInPortConsumptionRate(portType);
 		else
 			consumptionRateInMTPerHour = 0;
 		
