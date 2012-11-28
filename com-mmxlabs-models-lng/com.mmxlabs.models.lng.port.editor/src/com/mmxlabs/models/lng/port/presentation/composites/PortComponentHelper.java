@@ -111,21 +111,7 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_loadDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LOAD_DURATION);
-		final IInlineEditorEnablementWrapper wrapper = new IInlineEditorEnablementWrapper(editor) {
-			
-			@Override
-			public boolean respondToNotification(Notification notification) {
-				// TODO Auto-generated method stub
-				return notification.getFeature() == PortPackage.eINSTANCE.getPort_Capabilities();
-			}
-			
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return ((Port) input).getCapabilities().contains(PortCapability.LOAD);
-			}
-		};
-		detailComposite.addInlineEditor(wrapper);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
 	}
 	/**
 	 * Create the editor for the dischargeDuration feature on Port
@@ -134,29 +120,16 @@ public class PortComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_dischargeDurationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__DISCHARGE_DURATION);
-		final IInlineEditorEnablementWrapper wrapper = new IInlineEditorEnablementWrapper(editor) {
-			
-			@Override
-			public boolean respondToNotification(Notification notification) {
-				// TODO Auto-generated method stub
-				return notification.getFeature() == PortPackage.eINSTANCE.getPort_Capabilities();
-			}
-			
-			@Override
-			public boolean isEnabled() {
-				// TODO Auto-generated method stub
-				return ((Port) input).getCapabilities().contains(PortCapability.DISCHARGE);
-			}
-		};
-		detailComposite.addInlineEditor(wrapper);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.DISCHARGE, editor));
 	}
 	/**
 	 * Create the editor for the cvValue feature on Port
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_cvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__CV_VALUE));
+		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__CV_VALUE);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
 	}
 	/**
 	 * Create the editor for the defaultStartTime feature on Port
@@ -169,10 +142,11 @@ public class PortComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the allowCooldown feature on Port
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_allowCooldownEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__ALLOW_COOLDOWN));
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__ALLOW_COOLDOWN);
+		detailComposite.addInlineEditor(new PortCapabilityEditorWrapper(PortCapability.LOAD, editor));
 	}
 
 	/**
@@ -202,4 +176,34 @@ public class PortComponentHelper extends BaseComponentHelper {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PortPackage.Literals.PORT__LOCATION));
 	}
 	
+	/**
+	 * Simple class to enable an editor field only when a port has a particular capability.
+	 * 
+	 * @generated NOT
+	 */
+	private class PortCapabilityEditorWrapper extends IInlineEditorEnablementWrapper {
+		private final PortCapability capability;
+		
+		/**
+		 * Return an inline editor which is enabled only when the linked port has a particular capability.
+		 * 
+		 * @param capability The capability required to enable this GUI editor field. 
+		 * @param wrapped The editor field to enable / disable.
+		 */
+		public PortCapabilityEditorWrapper(PortCapability capability, IInlineEditor wrapped) {
+			super(wrapped);
+			this.capability = capability;
+		}
+
+		@Override
+		protected boolean respondToNotification(Notification notification) {
+			return notification.getFeature() == PortPackage.eINSTANCE.getPort_Capabilities();
+		}
+
+		@Override
+		protected boolean isEnabled() {
+			return ((Port) input).getCapabilities().contains(capability);
+		}
+		
+	}
 }
