@@ -54,14 +54,12 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetModel;
-import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.HeelOptions;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.optimiser.OptimisationRange;
@@ -116,8 +114,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.IVesselEventPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
-import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -273,7 +269,7 @@ public class LNGScenarioTransformer {
 		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
 		for (final Index<Double> index : pricingModel.getCommodityIndices()) {
 			if (index instanceof DataIndex) {
-				final DataIndex<Double> di = (DataIndex) index;
+				final DataIndex<Double> di = (DataIndex<Double>) index;
 				final SortedSet<Pair<Date, Number>> vals = new TreeSet<Pair<Date, Number>>(new Comparator<Pair<Date, ?>>() {
 					@Override
 					public int compare(final Pair<Date, ?> o1, final Pair<Date, ?> o2) {
@@ -1499,27 +1495,17 @@ public class LNGScenarioTransformer {
 		// look up prices
 
 		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
-			int baseFuelPrice = 0;
+			double baseFuelPrice = 0;
 			for (final BaseFuelCost baseFuelCost : pricingModel.getFleetCost().getBaseFuelPrices()) {
 				if (baseFuelCost.getFuel() == eVc.getBaseFuel()) {
-					baseFuelPrice = OptimiserUnitConvertor.convertToInternalPrice(baseFuelCost.getPrice());
+					baseFuelPrice = baseFuelCost.getPrice();
 					break;
 				}
 			}
 
-			final IVesselClass vc = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMinSpeed()),
-					OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * (double) eVc.getCapacity())),
-					OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), baseFuelPrice,
-					OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()),
-					eVc.getWarmingTime(), eVc.getCoolingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()));
-
+			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPrice);			
+			
 			vesselClassAssociation.add(eVc, vc);
-
-			/*
-			 * Set state-specific attributes
-			 */
-			buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
-			buildVesselStateAttributes(builder, vc, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
 
 			/*
 			 * set up inaccessible ports by applying resource allocation constraints
@@ -1668,36 +1654,6 @@ public class LNGScenarioTransformer {
 		return builder.createStartEndRequirement();
 	}
 
-	/**
-	 * Tell the builder to set up the given vessel state from the EMF fleet model
-	 * 
-	 * @param builder
-	 *            the builder which is currently in use
-	 * @param vc
-	 *            the {@link IVesselClass} which the builder has constructed whose attributes we are setting
-	 * @param laden
-	 *            the {@link com.mmxlabs.scheduler.optimiser.components.VesselState} we are setting attributes for
-	 * @param ladenAttributes
-	 *            the {@link VesselStateAttributes} from the EMF model
-	 */
-	private void buildVesselStateAttributes(final ISchedulerBuilder builder, final IVesselClass vc, final com.mmxlabs.scheduler.optimiser.components.VesselState state,
-			final VesselStateAttributes attrs) {
-
-		// create consumption rate calculator for the curve
-		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-
-		for (final FuelConsumption line : attrs.getFuelConsumption()) {
-			keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed()), (long) OptimiserUnitConvertor.convertToInternalHourlyRate(line.getConsumption()));
-		}
-
-		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
-
-		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
-
-		builder.setVesselClassStateParamaters(vc, state, OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getNboRate()),
-				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleBaseRate()),
-				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getInPortBaseRate()), cc);
-	}
 
 	/**
 	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.

@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -40,11 +39,9 @@ import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
 import com.mmxlabs.models.lng.analytics.transformer.IShippingCostTransformer;
-import com.mmxlabs.models.lng.fleet.FuelConsumption;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
-import com.mmxlabs.models.lng.fleet.VesselStateAttributes;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
@@ -53,6 +50,7 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.TransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataFormatType;
@@ -80,8 +78,6 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
-import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionRateCalculator;
-import com.mmxlabs.scheduler.optimiser.components.impl.LookupTableConsumptionRateCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -92,7 +88,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
@@ -182,19 +177,8 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			 */
 
 			final VesselClass eVc = modelVessel.getVesselClass();
-			// If the spec defines a speed, change the min speed of the vessel to suit.
-			final double minSpeed = eVc.getMinSpeed();
-			// if (spec.isSetSpeed()) {
-			// minSpeed = spec.getSpeed();
-			// }
-			final IVesselClass vesselClass = builder.createVesselClass(eVc.getName(), OptimiserUnitConvertor.convertToInternalSpeed(minSpeed),
-					OptimiserUnitConvertor.convertToInternalSpeed(eVc.getMaxSpeed()), OptimiserUnitConvertor.convertToInternalVolume((int) (eVc.getFillCapacity() * eVc.getCapacity())),
-					OptimiserUnitConvertor.convertToInternalVolume(eVc.getMinHeel()), OptimiserUnitConvertor.convertToInternalPrice(plan.getBaseFuelPrice()),
-					OptimiserUnitConvertor.convertToInternalConversionFactor(eVc.getBaseFuel().getEquivalenceFactor()), OptimiserUnitConvertor.convertToInternalHourlyRate(eVc.getPilotLightRate()),
-					eVc.getWarmingTime(), eVc.getCoolingTime(), OptimiserUnitConvertor.convertToInternalVolume(eVc.getCoolingVolume()));
-
-			buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Laden, eVc.getLadenAttributes());
-			buildVesselStateAttributes(builder, vesselClass, com.mmxlabs.scheduler.optimiser.components.VesselState.Ballast, eVc.getBallastAttributes());
+			
+			final IVesselClass vesselClass = TransformerHelper.buildIVesselClass(builder, eVc, plan.getBaseFuelPrice());			
 
 			/**
 			 * Set up vessel class route parameters
@@ -601,34 +585,4 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 		result.setFormatType(ExtraDataFormatType.CURRENCY);
 	}
 
-	/**
-	 * Tell the builder to set up the given vessel state from the EMF fleet model
-	 * 
-	 * @param builder
-	 *            the builder which is currently in use
-	 * @param vc
-	 *            the {@link IVesselClass} which the builder has constructed whose attributes we are setting
-	 * @param laden
-	 *            the {@link com.mmxlabs.scheduler.optimiser.components.VesselState} we are setting attributes for
-	 * @param ladenAttributes
-	 *            the {@link VesselStateAttributes} from the EMF model
-	 */
-	private void buildVesselStateAttributes(final ISchedulerBuilder builder, final IVesselClass vc, final com.mmxlabs.scheduler.optimiser.components.VesselState state,
-			final VesselStateAttributes attrs) {
-
-		// create consumption rate calculator for the curve
-		final TreeMap<Integer, Long> keypoints = new TreeMap<Integer, Long>();
-
-		for (final FuelConsumption line : attrs.getFuelConsumption()) {
-			keypoints.put(OptimiserUnitConvertor.convertToInternalSpeed(line.getSpeed()), (long) OptimiserUnitConvertor.convertToInternalHourlyRate(line.getConsumption()));
-		}
-
-		final InterpolatingConsumptionRateCalculator consumptionCalculator = new InterpolatingConsumptionRateCalculator(keypoints);
-
-		final LookupTableConsumptionRateCalculator cc = new LookupTableConsumptionRateCalculator(vc.getMinSpeed(), vc.getMaxSpeed(), consumptionCalculator);
-
-		builder.setVesselClassStateParamaters(vc, state, OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getNboRate()),
-				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleNBORate()), OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getIdleBaseRate()),
-				OptimiserUnitConvertor.convertToInternalHourlyRate(attrs.getInPortBaseRate()), cc);
-	}
 }
