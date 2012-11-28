@@ -70,7 +70,6 @@ public class SequenceComponentHelper extends BaseComponentHelper {
 		add_fitnessesEditor(detailComposite, topClass);
 		add_dailyHireRateEditor(detailComposite, topClass);
 		add_spotIndexEditor(detailComposite, topClass);
-		add_sequenceTypeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the events feature on Sequence
@@ -122,14 +121,5 @@ public class SequenceComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_spotIndexEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__SPOT_INDEX));
-	}
-
-	/**
-	 * Create the editor for the sequenceType feature on Sequence
-	 *
-	 * @generated
-	 */
-	protected void add_sequenceTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SEQUENCE__SEQUENCE_TYPE));
 	}
 }
