@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.ganttviewer;
+package com.mmxlabs.ganttviewer.actions;
 
 import java.util.Calendar;
 import java.util.List;
@@ -19,6 +19,9 @@ import org.eclipse.swt.graphics.Rectangle;
 
 import com.mmxlabs.ganttviewer.internal.Activator;
 
+/**
+ * @since 2.0
+ */
 public class PackAction extends Action {
 	private final GanttChart ganttChart;
 

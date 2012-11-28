@@ -2,13 +2,16 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.ganttviewer;
+package com.mmxlabs.ganttviewer.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.ganttchart.GanttChart;
 
 import com.mmxlabs.ganttviewer.internal.Activator;
 
+/**
+ * @since 2.0
+ */
 public class ZoomInAction extends Action {
 
 	private GanttChart ganttChart;

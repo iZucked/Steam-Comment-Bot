@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.ganttviewer;
+package com.mmxlabs.ganttviewer.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.nebula.widgets.ganttchart.GanttChart;
@@ -16,6 +16,9 @@ import org.eclipse.swt.widgets.FileDialog;
 
 import com.mmxlabs.ganttviewer.internal.Activator;
 
+/**
+ * @since 2.0
+ */
 public class SaveFullImageAction extends Action {
 	private final GanttChart ganttChart;
 
