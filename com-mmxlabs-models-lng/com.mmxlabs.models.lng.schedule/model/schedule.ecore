@@ -44,6 +44,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="spotIndex" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sequenceType" eType="#//SequenceType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Event" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ITimezoneProvider">
     <eOperations name="getDuration" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
@@ -236,5 +237,12 @@
   <eClassifiers xsi:type="ecore:EClass" name="EndEvent" eSuperTypes="#//Event #//FuelUsage #//PortVisit platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ExtraDataContainer">
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocation" lowerBound="1"
         eType="#//SlotAllocation"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="SequenceType">
+    <eLiterals name="VESSEL"/>
+    <eLiterals name="SPOT_VESSEL" value="1" literal="SPOT_VESSEL"/>
+    <eLiterals name="DES_PURCHASE" value="2"/>
+    <eLiterals name="FOB_SALE" value="3"/>
+    <eLiterals name="CARGO_SHORTS" value="4"/>
   </eClassifiers>
 </ecore:EPackage>

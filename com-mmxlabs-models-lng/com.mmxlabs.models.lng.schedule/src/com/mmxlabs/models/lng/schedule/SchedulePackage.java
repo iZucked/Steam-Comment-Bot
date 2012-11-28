@@ -480,13 +480,23 @@ public interface SchedulePackage extends EPackage {
 	int SEQUENCE__SPOT_INDEX = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Sequence Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEQUENCE__SEQUENCE_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Sequence</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int SEQUENCE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -4720,6 +4730,17 @@ public interface SchedulePackage extends EPackage {
 	int FUEL = 23;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.schedule.SequenceType
+	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
+	 * @generated
+	 */
+	int SEQUENCE_TYPE = 24;
+
+	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4727,7 +4748,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 24;
+	int CALENDAR = 25;
 
 
 	/**
@@ -4738,7 +4759,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 25;
+	int ITERABLE = 26;
 
 
 	/**
@@ -4749,7 +4770,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 26;
+	int OBJECT = 27;
 
 
 	/**
@@ -4957,6 +4978,18 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSequence_SpotIndex();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.Sequence#getSequenceType <em>Sequence Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sequence Type</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.Sequence#getSequenceType()
+	 * @see #getSequence()
+	 * @generated
+	 */
+	EAttribute getSequence_SequenceType();
 
 	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.Sequence#getName() <em>Get Name</em>}' operation.
@@ -5940,6 +5973,17 @@ public interface SchedulePackage extends EPackage {
 	EEnum getFuel();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Sequence Type</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.SequenceType
+	 * @generated
+	 */
+	EEnum getSequenceType();
+
+	/**
 	 * Returns the meta object for data type '{@link java.util.Calendar <em>Calendar</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6151,6 +6195,15 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SEQUENCE__SPOT_INDEX = eINSTANCE.getSequence_SpotIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Sequence Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SEQUENCE__SEQUENCE_TYPE = eINSTANCE.getSequence_SequenceType();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Name</b></em>' operation.
@@ -6939,6 +6992,17 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EEnum FUEL = eINSTANCE.getFuel();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.schedule.SequenceType
+		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
+		 * @generated
+		 */
+		EEnum SEQUENCE_TYPE = eINSTANCE.getSequenceType();
 
 		/**
 		 * The meta object literal for the '<em>Calendar</em>' data type.

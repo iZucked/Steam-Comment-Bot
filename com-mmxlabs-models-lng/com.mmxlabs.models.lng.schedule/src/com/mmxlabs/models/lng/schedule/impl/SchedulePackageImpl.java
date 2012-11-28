@@ -4,6 +4,18 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import java.util.Calendar;
+
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EEnum;
+import org.eclipse.emf.ecore.EGenericType;
+import org.eclipse.emf.ecore.EOperation;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import com.mmxlabs.models.lng.schedule.AdditionalData;
 import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
@@ -25,28 +37,14 @@ import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
-
 import com.mmxlabs.models.lng.types.TypesPackage;
-
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
-import java.lang.Iterable;
-import java.util.Calendar;
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
-import org.eclipse.emf.ecore.EEnum;
-import org.eclipse.emf.ecore.EGenericType;
-import org.eclipse.emf.ecore.EOperation;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -222,6 +220,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EEnum fuelEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum sequenceTypeEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -477,6 +482,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getSequence_SpotIndex() {
 		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSequence_SequenceType() {
+		return (EAttribute)sequenceEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -1320,6 +1335,16 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EEnum getSequenceType() {
+		return sequenceTypeEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1394,6 +1419,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		createEReference(sequenceEClass, SEQUENCE__FITNESSES);
 		createEAttribute(sequenceEClass, SEQUENCE__DAILY_HIRE_RATE);
 		createEAttribute(sequenceEClass, SEQUENCE__SPOT_INDEX);
+		createEAttribute(sequenceEClass, SEQUENCE__SEQUENCE_TYPE);
 		createEOperation(sequenceEClass, SEQUENCE___GET_NAME);
 		createEOperation(sequenceEClass, SEQUENCE___IS_SPOT_VESSEL);
 		createEOperation(sequenceEClass, SEQUENCE___IS_FLEET_VESSEL);
@@ -1508,6 +1534,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		// Create enums
 		fuelUnitEEnum = createEEnum(FUEL_UNIT);
 		fuelEEnum = createEEnum(FUEL);
+		sequenceTypeEEnum = createEEnum(SEQUENCE_TYPE);
 
 		// Create data types
 		calendarEDataType = createEDataType(CALENDAR);
@@ -1607,6 +1634,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEReference(getSequence_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSequence_DailyHireRate(), ecorePackage.getEInt(), "dailyHireRate", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSequence_SpotIndex(), ecorePackage.getEInt(), "spotIndex", null, 1, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSequence_SequenceType(), this.getSequenceType(), "sequenceType", null, 0, 1, Sequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEOperation(getSequence__GetName(), ecorePackage.getEString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -1757,6 +1785,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		addEEnumLiteral(fuelEEnum, Fuel.FBO);
 		addEEnumLiteral(fuelEEnum, Fuel.NBO);
 		addEEnumLiteral(fuelEEnum, Fuel.PILOT_LIGHT);
+
+		initEEnum(sequenceTypeEEnum, SequenceType.class, "SequenceType");
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.VESSEL);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.SPOT_VESSEL);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.DES_PURCHASE);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.FOB_SALE);
+		addEEnumLiteral(sequenceTypeEEnum, SequenceType.CARGO_SHORTS);
 
 		// Initialize data types
 		initEDataType(calendarEDataType, Calendar.class, "Calendar", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);
