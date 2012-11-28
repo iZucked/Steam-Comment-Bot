@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IColorProvider;
@@ -266,7 +266,7 @@ public class GanttChartViewer extends StructuredViewer {
 					final String rName = getLabelProviderText(labelProvider, r);
 					final GanttSection section = new GanttSection(ganttChart, rName);
 
-					final Map<String, GanttGroup> ganttGroups = new LinkedHashMap<String, GanttGroup>();
+					final Map<String, GanttGroup> ganttGroups = new TreeMap<String, GanttGroup>();
 
 					if (treeContentProvider.hasChildren(r)) {
 						final GanttGroup defaultGroup = new GanttGroup(ganttChart);
