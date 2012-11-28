@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -158,10 +159,12 @@ public class AnnotatedSolutionExporter {
 			switch (vessel.getVesselInstanceType()) {
 			case TIME_CHARTER:
 			case FLEET:
+				eSequence.setSequenceType(SequenceType.VESSEL);
 				eSequence.setVessel(entities.getModelObject(vessel, Vessel.class));
 				eSequence.unsetVesselClass();
 				break;
 			case FOB_SALE:
+				fobSequence.setSequenceType(SequenceType.FOB_SALE);
 				isFOBSequence = true;
 				// Skip and process differently
 				if (sequence.size() < 4) {
@@ -171,6 +174,7 @@ public class AnnotatedSolutionExporter {
 				skipStartEndElements = true;
 				break;
 			case DES_PURCHASE:
+				desSequence.setSequenceType(SequenceType.DES_PURCHASE);
 				isDESSequence = true;
 				// Skip and process differently
 				if (sequence.size() < 4) {
@@ -180,6 +184,7 @@ public class AnnotatedSolutionExporter {
 				skipStartEndElements = true;
 				break;
 			case SPOT_CHARTER:
+				eSequence.setSequenceType(SequenceType.SPOT_VESSEL);
 				if (sequence.size() < 2)
 					continue;
 
@@ -197,6 +202,7 @@ public class AnnotatedSolutionExporter {
 				eSequence.setSpotIndex(ix);
 				break;
 			case CARGO_SHORTS:
+				eSequence.setSequenceType(SequenceType.CARGO_SHORTS);
 				isCargoShortsSequence = true;
 				if (sequence.size() < 2) {
 					continue;
