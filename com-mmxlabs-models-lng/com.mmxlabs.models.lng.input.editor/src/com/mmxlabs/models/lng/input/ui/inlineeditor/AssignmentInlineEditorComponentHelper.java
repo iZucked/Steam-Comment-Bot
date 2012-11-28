@@ -293,7 +293,16 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 		}
 
 		public void updateDisplay(final EObject object) {
-			final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(object, InputPackage.eINSTANCE.getAssignment_Vessels());
+			ElementAssignment assignment = null;
+			for (final EObject r: range) {
+				if (r instanceof ElementAssignment) 
+					assignment = (ElementAssignment) r;
+				
+			}
+				
+			final EObject target = (assignment == null ? object : assignment);
+			
+			final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(target, InputPackage.eINSTANCE.getAssignment_Vessels());			
 
 			combo.removeAll();
 			nameList.clear();
@@ -305,12 +314,13 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 				combo.add(v.getFirst());
 			}
 
-			for (final EObject r : range) {
-				if (r instanceof ElementAssignment) {
-					this.elementAssignment = (ElementAssignment) r;
-					combo.setText(nameList.get(valueList.indexOf(elementAssignment.getAssignment())));
-					lock.setSelection(this.elementAssignment.isLocked());
-				}
+			if (assignment != null) {
+				this.elementAssignment = assignment;
+				Object theAssignment = assignment.getAssignment();
+				final int index = valueList.indexOf(theAssignment);
+				combo.setText(nameList.get(index));
+				combo.select(index);
+				lock.setSelection(this.elementAssignment.isLocked());
 			}
 		}
 
