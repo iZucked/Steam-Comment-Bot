@@ -64,10 +64,10 @@ import org.eclipse.ui.views.properties.PropertySheetPage;
 
 import com.mmxlabs.common.Equality;
 import com.mmxlabs.ganttviewer.GanttChartViewer;
-import com.mmxlabs.ganttviewer.PackAction;
-import com.mmxlabs.ganttviewer.SaveFullImageAction;
-import com.mmxlabs.ganttviewer.ZoomInAction;
-import com.mmxlabs.ganttviewer.ZoomOutAction;
+import com.mmxlabs.ganttviewer.actions.PackAction;
+import com.mmxlabs.ganttviewer.actions.SaveFullImageAction;
+import com.mmxlabs.ganttviewer.actions.ZoomInAction;
+import com.mmxlabs.ganttviewer.actions.ZoomOutAction;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
