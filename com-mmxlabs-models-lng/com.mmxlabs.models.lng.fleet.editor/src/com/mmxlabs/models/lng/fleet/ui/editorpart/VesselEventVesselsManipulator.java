@@ -56,7 +56,7 @@ public class VesselEventVesselsManipulator extends MultipleReferenceManipulator 
 			cmd.append(AssignmentEditorHelper.reassignElement(editingDomain, inputModel, (UUIDObject) object, (AVesselSet) newAssignment));
 		} else {
 			final ElementAssignment elementAssignment = AssignmentEditorHelper.getElementAssignment(inputModel, (UUIDObject) object);
-			if (!collection.contains(elementAssignment.getAssignedObject())) {
+			if (!collection.contains(elementAssignment.getAssignment())) {
 				cmd.append(AssignmentEditorHelper.unassignElement(editingDomain, inputModel, (UUIDObject) object));
 			}
 		}
