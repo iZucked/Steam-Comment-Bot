@@ -9,7 +9,11 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IRestrictedElementsProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 public class RestrictedElementsConstraintChecker implements IPairwiseConstraintChecker {
 
@@ -18,10 +22,16 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 	@Inject
 	private IRestrictedElementsProvider restrictedElementsProvider;
 
-	
+	@Inject
+	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IPortTypeProvider portTypeProvider;
+
 	public RestrictedElementsConstraintChecker(final String name) {
 		this.name = name;
 	}
+
 	@Override
 	public String getName() {
 		return name;
@@ -59,7 +69,18 @@ public class RestrictedElementsConstraintChecker implements IPairwiseConstraintC
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
 
-		boolean result = !restrictedElementsProvider.getRestrictedFollowerElements(first).contains(second) && !restrictedElementsProvider.getRestrictedPrecedingElements(second).contains(first);
+		final VesselInstanceType instanceType = vesselProvider.getVessel(resource).getVesselInstanceType();
+		if (instanceType == VesselInstanceType.CARGO_SHORTS) {
+			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
+			final PortType t1 = portTypeProvider.getPortType(first);
+			final PortType t2 = portTypeProvider.getPortType(second);
+			// Accept, or fall through
+			if (!(t1 == PortType.Load && t2 == PortType.Discharge)) {
+				return true;
+			}
+		}
+
+		final boolean result = !restrictedElementsProvider.getRestrictedFollowerElements(first).contains(second) && !restrictedElementsProvider.getRestrictedPrecedingElements(second).contains(first);
 		return result;
 	}
 
