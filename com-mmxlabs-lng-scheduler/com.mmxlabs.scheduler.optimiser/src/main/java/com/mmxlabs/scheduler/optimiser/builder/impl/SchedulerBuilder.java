@@ -1101,14 +1101,13 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		}
 
 		final VesselClass vc = (VesselClass) vesselClass;
-		
 
 		vc.setNBORate(state, nboRateInM3PerHour);
 		vc.setIdleNBORate(state, idleNBORateInM3PerHour);
 		vc.setIdleConsumptionRate(state, idleConsumptionRateInMTPerHour);
 		vc.setConsumptionRate(state, consumptionRateCalculatorInMTPerHour);
 		vc.setMinNBOSpeed(state, nboSpeed);
-		
+
 	}
 
 	/**
@@ -1121,7 +1120,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param idleConsumptionRateInMTPerHour
 	 * @param consumptionCalculatorInMTPerHour
 	 */
-	
+
 	@Override
 	public void setVesselClassStateParameters(final IVesselClass vc, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour, final int idleConsumptionRateInMTPerHour,
 			final IConsumptionRateCalculator consumptionCalculatorInMTPerHour) {
@@ -1131,19 +1130,15 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final int nboSpeed = consumptionCalculatorInMTPerHour.getSpeed(nboRateInMTPerHour);
 
-		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour,
-				nboSpeed);
+		this.setVesselClassStateParameters(vc, state, nboRateInM3PerHour, idleNBORateInM3PerHour, idleConsumptionRateInMTPerHour, consumptionCalculatorInMTPerHour, nboSpeed);
 	}
 
 	@Override
-	public void setVesselClassPortTypeParameters(IVesselClass vc,
-			PortType portType, int inPortConsumptionRateInMTPerHour) {
-		
-		
-		((VesselClass) vc).setInPortConsumptionRate(portType, inPortConsumptionRateInMTPerHour);		
+	public void setVesselClassPortTypeParameters(final IVesselClass vc, final PortType portType, final int inPortConsumptionRateInMTPerHour) {
+
+		((VesselClass) vc).setInPortConsumptionRate(portType, inPortConsumptionRateInMTPerHour);
 	}
-	
-	
+
 	@Override
 	public void setVesselClassInaccessiblePorts(final IVesselClass vc, final Set<IPort> inaccessiblePorts) {
 		this.portExclusionProvider.setExcludedPorts(vc, inaccessiblePorts);
@@ -1419,8 +1414,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					}
 					allowedResources.add(vesselProvider.getResource(vessel));
 				}
+
 				if (shortCargoVessel != null) {
-					allowedResources.add(vesselProvider.getResource(shortCargoVessel));
+					// Cargo shorts only applies to load and discharge slots
+					if (loadSlots.contains(slot) || dischargeSlots.contains(slot)) {
+						allowedResources.add(vesselProvider.getResource(shortCargoVessel));
+					}
 				}
 			}
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);
