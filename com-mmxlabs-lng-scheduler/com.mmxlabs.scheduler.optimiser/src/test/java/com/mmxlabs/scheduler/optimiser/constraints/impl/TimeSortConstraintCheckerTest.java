@@ -116,6 +116,55 @@ public class TimeSortConstraintCheckerTest {
 	}
 
 	/**
+	 * Overlapping windows
+	 */
+	@Test
+	public void test3() {
+
+		final String name = "name";
+		final IPortSlotProvider portSlotProvider = Mockito.mock(IPortSlotProvider.class);
+		final IVesselProvider vesselProvider = Mockito.mock(IVesselProvider.class);
+		final IPortTypeProvider portTypeProvider = Mockito.mock(IPortTypeProvider.class);
+		final TimeSortConstraintChecker checker = createChecker(name, portSlotProvider, vesselProvider, portTypeProvider);
+
+		final IResource resource1 = Mockito.mock(IResource.class);
+		final IVessel vessel1 = Mockito.mock(IVessel.class);
+
+		final ISequenceElement element1 = Mockito.mock(ISequenceElement.class);
+		final ISequenceElement element2 = Mockito.mock(ISequenceElement.class);
+
+		Mockito.when(vesselProvider.getVessel(resource1)).thenReturn(vessel1);
+		Mockito.when(vessel1.getVesselInstanceType()).thenReturn(VesselInstanceType.FLEET);
+
+		final IPortSlot slot1 = Mockito.mock(IPortSlot.class);
+		final IPortSlot slot2 = Mockito.mock(IPortSlot.class);
+
+		Mockito.when(portSlotProvider.getPortSlot(element1)).thenReturn(slot1);
+		Mockito.when(portSlotProvider.getPortSlot(element2)).thenReturn(slot2);
+
+		final ITimeWindow tw1 = Mockito.mock(ITimeWindow.class);
+		final ITimeWindow tw2 = Mockito.mock(ITimeWindow.class);
+
+		Mockito.when(slot1.getTimeWindow()).thenReturn(tw1);
+		Mockito.when(slot2.getTimeWindow()).thenReturn(tw2);
+
+		Mockito.when(tw1.getStart()).thenReturn(0);
+		Mockito.when(tw1.getEnd()).thenReturn(3);
+		Mockito.when(tw2.getStart()).thenReturn(1);
+		Mockito.when(tw2.getEnd()).thenReturn(2);
+
+		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+
+		Mockito.when(tw2.getStart()).thenReturn(0);
+		Mockito.when(tw2.getEnd()).thenReturn(3);
+
+		Mockito.when(tw1.getStart()).thenReturn(1);
+		Mockito.when(tw1.getEnd()).thenReturn(2);
+
+		Assert.assertTrue(checker.checkPairwiseConstraint(element1, element2, resource1));
+	}
+
+	/**
 	 * Check difference between cargo shorts and normal routes
 	 */
 	@Test
