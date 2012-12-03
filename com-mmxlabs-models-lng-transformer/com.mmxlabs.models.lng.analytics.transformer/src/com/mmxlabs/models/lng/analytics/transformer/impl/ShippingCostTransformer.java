@@ -378,7 +378,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				int idxX = 1;
 				// final VoyagePlan voyagePlan = sequence.getVoyagePlans().get(0);
 				final VoyagePlanIterator itr = injector.getInstance(VoyagePlanIterator.class);
-				itr.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), 0);
+				itr.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), arrivalTimes[0]);
 
 				while (itr.hasNextObject()) {
 					final Object obj = itr.nextObject();
