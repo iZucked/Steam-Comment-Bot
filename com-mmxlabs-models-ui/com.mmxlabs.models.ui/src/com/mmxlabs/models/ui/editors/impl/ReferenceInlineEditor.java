@@ -37,11 +37,23 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
  */
 public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	private static final Logger log = LoggerFactory.getLogger(ReferenceInlineEditor.class);
-	private Combo combo;
-	private IReferenceValueProvider valueProvider;
+	/**
+	 * @since 2.0
+	 */
+	protected Combo combo;
+	/**
+	 * @since 2.0
+	 */
+	protected IReferenceValueProvider valueProvider;
 
-	private final ArrayList<String> nameList = new ArrayList<String>();
-	private final ArrayList<EObject> valueList = new ArrayList<EObject>();
+	/**
+	 * @since 2.0
+	 */
+	protected final ArrayList<String> nameList = new ArrayList<String>();
+	/**
+	 * @since 2.0
+	 */
+	protected final ArrayList<EObject> valueList = new ArrayList<EObject>();
 
 	public ReferenceInlineEditor(final EStructuralFeature feature) {
 		super(feature);
@@ -108,6 +120,16 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		}
 	}
 
+	/**
+	 * @since 2.0
+	 */
+	@Override
+	protected void updateDisplay(final Object target) {
+		final Object value = getValue();
+		updateControl();
+		updateValueDisplay(value);
+	}
+	
 	@Override
 	protected void updateValueDisplay(final Object value) {
 		if (combo.isDisposed()) {
