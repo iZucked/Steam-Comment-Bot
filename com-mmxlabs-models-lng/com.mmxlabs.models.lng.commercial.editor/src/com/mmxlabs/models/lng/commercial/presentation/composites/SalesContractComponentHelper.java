@@ -65,5 +65,25 @@ public class SalesContractComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_minCvValueEditor(detailComposite, topClass);
+		add_maxCvValueEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the minCvValue feature on SalesContract
+	 *
+	 * @generated
+	 */
+	protected void add_minCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__MIN_CV_VALUE));
+	}
+
+	/**
+	 * Create the editor for the maxCvValue feature on SalesContract
+	 *
+	 * @generated
+	 */
+	protected void add_maxCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__MAX_CV_VALUE));
 	}
 }

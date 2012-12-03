@@ -331,6 +331,26 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSalesContract_MinCvValue() {
+		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSalesContract_MaxCvValue() {
+		return (EAttribute)salesContractEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -667,6 +687,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getRedirectionPurchaseContract_ProfitShare() {
+		return (EAttribute)redirectionPurchaseContractEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPriceExpressionContract() {
 		return priceExpressionContractEClass;
 	}
@@ -728,6 +758,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEReference(contractEClass, CONTRACT__RESTRICTED_PORTS);
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
+		createEAttribute(salesContractEClass, SALES_CONTRACT__MIN_CV_VALUE);
+		createEAttribute(salesContractEClass, SALES_CONTRACT__MAX_CV_VALUE);
 
 		purchaseContractEClass = createEClass(PURCHASE_CONTRACT);
 
@@ -771,6 +803,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED);
 		createEReference(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT);
 		createEReference(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT);
+		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE);
 
 		priceExpressionContractEClass = createEClass(PRICE_EXPRESSION_CONTRACT);
 		createEAttribute(priceExpressionContractEClass, PRICE_EXPRESSION_CONTRACT__PRICE_EXPRESSION);
@@ -846,6 +879,8 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEReference(getContract_RestrictedPorts(), theTypesPackage.getAPortSet(), null, "restrictedPorts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(salesContractEClass, SalesContract.class, "SalesContract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getSalesContract_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSalesContract_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(purchaseContractEClass, PurchaseContract.class, "PurchaseContract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
@@ -889,6 +924,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getRedirectionPurchaseContract_NotionalSpeed(), ecorePackage.getEDouble(), "notionalSpeed", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRedirectionPurchaseContract_DesPurchasePort(), theTypesPackage.getAPort(), null, "desPurchasePort", null, 1, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRedirectionPurchaseContract_SourcePurchasePort(), theTypesPackage.getAPort(), null, "sourcePurchasePort", null, 1, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPurchaseContract_ProfitShare(), ecorePackage.getEDouble(), "profitShare", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(priceExpressionContractEClass, PriceExpressionContract.class, "PriceExpressionContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPriceExpressionContract_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 0, 1, PriceExpressionContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

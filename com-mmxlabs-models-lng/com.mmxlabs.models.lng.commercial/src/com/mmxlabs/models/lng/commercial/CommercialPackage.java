@@ -477,13 +477,33 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__RESTRICTED_PORTS = CONTRACT__RESTRICTED_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__MIN_CV_VALUE = CONTRACT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__MAX_CV_VALUE = CONTRACT_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Sales Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 0;
+	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
@@ -755,6 +775,26 @@ public interface CommercialPackage extends EPackage {
 	int FIXED_PRICE_CONTRACT__RESTRICTED_PORTS = SALES_CONTRACT__RESTRICTED_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__MIN_CV_VALUE = SALES_CONTRACT__MIN_CV_VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__MAX_CV_VALUE = SALES_CONTRACT__MAX_CV_VALUE;
+
+	/**
 	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -901,6 +941,26 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int INDEX_PRICE_CONTRACT__RESTRICTED_PORTS = SALES_CONTRACT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__MIN_CV_VALUE = SALES_CONTRACT__MIN_CV_VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__MAX_CV_VALUE = SALES_CONTRACT__MAX_CV_VALUE;
 
 	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
@@ -1646,6 +1706,16 @@ public interface CommercialPackage extends EPackage {
 	int REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT = PURCHASE_CONTRACT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Profit Share</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE = PURCHASE_CONTRACT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Redirection Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1653,7 +1723,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REDIRECTION_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 6;
+	int REDIRECTION_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl <em>Price Expression Contract</em>}' class.
@@ -1795,6 +1865,26 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PRICE_EXPRESSION_CONTRACT__RESTRICTED_PORTS = SALES_CONTRACT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__MIN_CV_VALUE = SALES_CONTRACT__MIN_CV_VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Max Cv Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__MAX_CV_VALUE = SALES_CONTRACT__MAX_CV_VALUE;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -1990,6 +2080,30 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSalesContract();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getMinCvValue <em>Min Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Min Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getMinCvValue()
+	 * @see #getSalesContract()
+	 * @generated
+	 */
+	EAttribute getSalesContract_MinCvValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getMaxCvValue <em>Max Cv Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Cv Value</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getMaxCvValue()
+	 * @see #getSalesContract()
+	 * @generated
+	 */
+	EAttribute getSalesContract_MaxCvValue();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Purchase Contract</em>}'.
@@ -2389,6 +2503,18 @@ public interface CommercialPackage extends EPackage {
 	EReference getRedirectionPurchaseContract_SourcePurchasePort();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getProfitShare <em>Profit Share</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit Share</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getProfitShare()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getRedirectionPurchaseContract_ProfitShare();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PriceExpressionContract <em>Price Expression Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -2571,6 +2697,24 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass SALES_CONTRACT = eINSTANCE.getSalesContract();
+
+		/**
+		 * The meta object literal for the '<em><b>Min Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SALES_CONTRACT__MIN_CV_VALUE = eINSTANCE.getSalesContract_MinCvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Cv Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SALES_CONTRACT__MAX_CV_VALUE = eINSTANCE.getSalesContract_MaxCvValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
@@ -2881,6 +3025,15 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT = eINSTANCE.getRedirectionPurchaseContract_SourcePurchasePort();
+
+		/**
+		 * The meta object literal for the '<em><b>Profit Share</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE = eINSTANCE.getRedirectionPurchaseContract_ProfitShare();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl <em>Price Expression Contract</em>}' class.

@@ -240,7 +240,23 @@
                      class="Slot">
                </target>
             </constraint>
-         </constraints>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.ContractCvValueConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.ContractCvValueConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Contract CV Value Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Cargo">
+               </target>
+            </constraint>
+        </constraints>
       </constraintProvider>
    </extension>
 

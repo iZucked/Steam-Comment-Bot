@@ -24,6 +24,7 @@ import com.mmxlabs.models.lng.port.Port;
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getNotionalSpeed <em>Notional Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDesPurchasePort <em>Des Purchase Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getSourcePurchasePort <em>Source Purchase Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getProfitShare <em>Profit Share</em>}</li>
  * </ul>
  * </p>
  *
@@ -187,6 +188,32 @@ public interface RedirectionPurchaseContract extends PurchaseContract {
 	 * @generated
 	 */
 	void setSourcePurchasePort(Port value);
+
+	/**
+	 * Returns the value of the '<em><b>Profit Share</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Profit Share</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Profit Share</em>' attribute.
+	 * @see #setProfitShare(double)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRedirectionPurchaseContract_ProfitShare()
+	 * @model
+	 * @generated
+	 */
+	double getProfitShare();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getProfitShare <em>Profit Share</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Profit Share</em>' attribute.
+	 * @see #getProfitShare()
+	 * @generated
+	 */
+	void setProfitShare(double value);
 
 } // end of  RedirectionPurchaseContract
 

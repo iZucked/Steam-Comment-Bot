@@ -68,6 +68,7 @@ public class RedirectionPurchaseContractItemProvider
 			addNotionalSpeedPropertyDescriptor(object);
 			addDesPurchasePortPropertyDescriptor(object);
 			addSourcePurchasePortPropertyDescriptor(object);
+			addProfitSharePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -205,6 +206,28 @@ public class RedirectionPurchaseContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Profit Share feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addProfitSharePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RedirectionPurchaseContract_profitShare_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RedirectionPurchaseContract_profitShare_feature", "_UI_RedirectionPurchaseContract_type"),
+				 CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns RedirectionPurchaseContract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -244,6 +267,7 @@ public class RedirectionPurchaseContractItemProvider
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__BASE_SALES_PRICE_EXPRESSION:
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__BASE_PURCHASE_PRICE_EXPRESSION:
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED:
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
