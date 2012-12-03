@@ -77,8 +77,6 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 							currentValue = assignment.getAssignment();
 					}
 					
-					String info = (currentValue == null ? "Null Value" : currentValue.getName());
-
 					final EList<AVesselSet> allowedVessels;					
 					
 					// populate the list of allowed vessels for the target object 
