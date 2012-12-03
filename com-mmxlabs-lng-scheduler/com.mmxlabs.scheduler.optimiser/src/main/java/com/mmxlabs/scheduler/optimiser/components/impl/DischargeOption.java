@@ -19,6 +19,10 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 	private long minDischargeVolume;
 
 	private long maxDischargeVolume;
+	
+	private long minCvValue;
+	
+	private long maxCvValue;
 
 	private ISalesPriceCalculator priceCalculator;
 
@@ -26,11 +30,13 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		setPortType(PortType.Discharge);
 	}
 
-	public DischargeOption(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume, final ISalesPriceCalculator priceCalculator) {
+	public DischargeOption(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume, final ISalesPriceCalculator priceCalculator, final long minCvValue, final long maxCvValue) {
 		super(id, port, timwWindow);
 		this.minDischargeVolume = minDischargeVolume;
 		this.maxDischargeVolume = maxDischargeVolume;
 		this.priceCalculator = priceCalculator;
+		this.minCvValue = minCvValue;
+		this.maxCvValue = maxCvValue;
 	}
 
 	@Override
@@ -83,4 +89,22 @@ public class DischargeOption extends PortSlot implements IDischargeOption {
 		return priceCalculator;
 	}
 
+	@Override
+	public long getMinCvValue() {
+		return minCvValue;
+	}
+
+	public void setMinCvValue(int value) {
+		minCvValue = value;
+	}
+	
+	@Override
+	public long getMaxCvValue() {
+		return maxCvValue;
+	}
+
+	public void setMaxCvValue(int value) {
+		maxCvValue = value;
+	}
+	
 }

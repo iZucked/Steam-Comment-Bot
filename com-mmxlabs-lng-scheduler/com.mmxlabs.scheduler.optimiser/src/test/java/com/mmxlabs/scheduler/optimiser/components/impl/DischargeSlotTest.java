@@ -28,9 +28,12 @@ public class DischargeSlotTest {
 		final ITimeWindow tw = context.mock(ITimeWindow.class);
 		final long minDischargeVolume = 10l;
 		final long maxDischargeVolume = 20l;
+
+		final long minCvValue = 30l;
+		final long maxCvValue = 40l;
 		final ISalesPriceCalculator calculator = context.mock(ISalesPriceCalculator.class);
 
-		final DischargeSlot slot = new DischargeSlot(id, port, tw, minDischargeVolume, maxDischargeVolume, calculator);
+		final DischargeSlot slot = new DischargeSlot(id, port, tw, minDischargeVolume, maxDischargeVolume, calculator, minCvValue, maxCvValue);
 		Assert.assertSame(id, slot.getId());
 		Assert.assertSame(port, slot.getPort());
 		Assert.assertSame(tw, slot.getTimeWindow());
@@ -100,15 +103,15 @@ public class DischargeSlotTest {
 		final ISalesPriceCalculator curve1 = context.mock(ISalesPriceCalculator.class, "curve1");
 		final ISalesPriceCalculator curve2 = context.mock(ISalesPriceCalculator.class, "curve2");
 
-		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve1);
-		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve1);
+		final DischargeSlot slot1 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve1, 30l, 40l);
+		final DischargeSlot slot2 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve1, 30l, 40l);
 
-		final DischargeSlot slot3 = new DischargeSlot(id2, port1, tw1, 10l, 20l, curve1);
-		final DischargeSlot slot4 = new DischargeSlot(id1, port2, tw1, 10l, 20l, curve1);
-		final DischargeSlot slot5 = new DischargeSlot(id1, port1, tw2, 10l, 20l, curve1);
-		final DischargeSlot slot6 = new DischargeSlot(id1, port1, tw1, 210l, 20l, curve1);
-		final DischargeSlot slot7 = new DischargeSlot(id1, port1, tw1, 10l, 220l, curve1);
-		final DischargeSlot slot8 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve2);
+		final DischargeSlot slot3 = new DischargeSlot(id2, port1, tw1, 10l, 20l, curve1, 30l, 40l);
+		final DischargeSlot slot4 = new DischargeSlot(id1, port2, tw1, 10l, 20l, curve1, 30l, 40l);
+		final DischargeSlot slot5 = new DischargeSlot(id1, port1, tw2, 10l, 20l, curve1, 30l, 40l);
+		final DischargeSlot slot6 = new DischargeSlot(id1, port1, tw1, 210l, 20l, curve1, 30l, 40l);
+		final DischargeSlot slot7 = new DischargeSlot(id1, port1, tw1, 10l, 220l, curve1, 30l, 40l);
+		final DischargeSlot slot8 = new DischargeSlot(id1, port1, tw1, 10l, 20l, curve2, 30l, 40l);
 
 		Assert.assertTrue(slot1.equals(slot1));
 		Assert.assertTrue(slot1.equals(slot2));

@@ -20,7 +20,7 @@ public final class DischargeSlot extends DischargeOption implements IDischargeSl
 		super();
 	}
 
-	public DischargeSlot(final String id, final IPort port, final ITimeWindow timwWindow, final long minDischargeVolume, final long maxDischargeVolume, final ISalesPriceCalculator priceCalculator) {
-		super(id, port, timwWindow, minDischargeVolume, maxDischargeVolume, priceCalculator);
+	public DischargeSlot(final String id, final IPort port, final ITimeWindow timeWindow, final long minDischargeVolume, final long maxDischargeVolume, final ISalesPriceCalculator priceCalculator, final long minCvValue, final long maxCvValue) {
+		super(id, port, timeWindow, minDischargeVolume, maxDischargeVolume, priceCalculator, minCvValue, maxCvValue);
 	}
 }
