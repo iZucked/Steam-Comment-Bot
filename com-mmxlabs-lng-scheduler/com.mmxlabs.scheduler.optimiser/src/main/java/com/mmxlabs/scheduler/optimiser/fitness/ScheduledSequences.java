@@ -39,8 +39,16 @@ public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 		this.allocations = allocations;
 	}
 
-	public void addScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans) {
-		add(new ScheduledSequence(resource, startTime, voyagePlans));
+	/**
+	 * 
+	 * @param resource
+	 * @param startTime
+	 * @param voyagePlans
+	 * @param arrivalTimes
+	 * @since 2.0
+	 */
+	public void addScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans, int[] arrivalTimes) {
+		add(new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes));
 	}
 	@Deprecated
 	public List<VirtualCargo> getVirtualCargoes() {

@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -170,15 +171,16 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 				currentSequence.add(portDetails);
 
 			}
-
+			int times[] = new int[sequence.size()];
+			Arrays.fill(times, startTime);
 			currentPlan.setSequence(currentSequence.toArray());
-			return new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan));
+			return new ScheduledSequence(resource, startTime, Collections.singletonList(currentPlan), times);
 
 		}
 
 		boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 		if (isShortsSequence && arrivalTimes.length == 0) {
-			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan>emptyList());
+			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan>emptyList(), new int[0]);
 		}
 
 		// Get start time
@@ -418,7 +420,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			}
 		}
 
-		return new ScheduledSequence(resource, startTime, voyagePlans);
+		return new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes);
 	}
 
 	public final boolean optimiseSequence(final List<VoyagePlan> voyagePlans, final List<Object> currentSequence, final List<Integer> currentTimes, final IVoyagePlanOptimiser optimiser) {

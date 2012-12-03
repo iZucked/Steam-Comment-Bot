@@ -25,6 +25,6 @@ public interface IVoyagePlanAnnotator {
 	 * @param plans
 	 * @param annotatedSequence
 	 */
-	void annotateFromVoyagePlan(IResource resource, List<VoyagePlan> plans, int startTime, IAnnotatedSolution annotatedSolution);
+	void annotateFromVoyagePlan(IResource resource, List<VoyagePlan> plans, IAnnotatedSolution annotatedSolution, int[] arrivalTimes);
 
 }

@@ -10,15 +10,17 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public final class ScheduledSequence {
-	final int startTime;
-	final List<VoyagePlan> voyagePlans;
+	private final int startTime;
+	private final List<VoyagePlan> voyagePlans;
 	private final IResource resource;
+	private final int[] arrivalTimes;
 
-	public ScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans) {
+	public ScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans, int[] arrivalTimes) {
 		super();
 		this.startTime = startTime;
 		this.voyagePlans = voyagePlans;
 		this.resource = resource;
+		this.arrivalTimes = arrivalTimes;
 	}
 
 	public IResource getResource() {
@@ -31,5 +33,13 @@ public final class ScheduledSequence {
 
 	public List<VoyagePlan> getVoyagePlans() {
 		return voyagePlans;
+	}
+
+	/**
+	 * @return
+	 * @since 2.0
+	 */
+	public int[] getArrivalTimes() {
+		return arrivalTimes;
 	}
 }

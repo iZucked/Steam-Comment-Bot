@@ -102,8 +102,7 @@ public class TestCalculations {
 		final int laden_nboRateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.2);
 		final int laden_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 		final int laden_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.5);
-		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour,
-				ladenConsumptionCalculator);
+		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour, ladenConsumptionCalculator);
 		final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 		ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
 		ballastKeypoints.put(20000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(1.3));
@@ -183,12 +182,12 @@ public class TestCalculations {
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final ScheduledSequence plansAndStartTime = scheduler.schedule(resource, sequence, expectedArrivalTimes);
+		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
 
-		Assert.assertNotNull(plansAndStartTime);
+		Assert.assertNotNull(scheduledSequence);
 
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
-		annotator.annotateFromVoyagePlan(plansAndStartTime.getResource(), plansAndStartTime.getVoyagePlans(), plansAndStartTime.getStartTime(), annotatedSolution);
+		annotator.annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), annotatedSolution, expectedArrivalTimes);
 
 		// TODO: Start checking results
 		{
@@ -528,8 +527,7 @@ public class TestCalculations {
 		final int laden_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 		final int laden_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.5);
 
-		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour,
-				ladenConsumptionCalculator);
+		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour, ladenConsumptionCalculator);
 
 		final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 		ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
@@ -614,12 +612,12 @@ public class TestCalculations {
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final ScheduledSequence plansAndStartTime = scheduler.schedule(resource, sequence, expectedArrivalTimes);
+		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
 
-		Assert.assertNotNull(plansAndStartTime);
+		Assert.assertNotNull(scheduledSequence);
 
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
-		annotator.annotateFromVoyagePlan(plansAndStartTime.getResource(), plansAndStartTime.getVoyagePlans(), plansAndStartTime.getStartTime(), annotatedSolution);
+		annotator.annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), annotatedSolution, expectedArrivalTimes);
 
 		// TODO: Start checking results
 		{
@@ -959,8 +957,7 @@ public class TestCalculations {
 		final int laden_idleNBORateInM3PerHour = OptimiserUnitConvertor.convertToInternalDailyRate(1.0);
 		final int laden_idleConsumptionRateInMTPerHour = OptimiserUnitConvertor.convertToInternalDailyRate(0.5);
 
-		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour,
-				ladenConsumptionCalculator);
+		builder.setVesselClassStateParameters(vesselClass1, VesselState.Laden, laden_nboRateInM3PerHour, laden_idleNBORateInM3PerHour, laden_idleConsumptionRateInMTPerHour, ladenConsumptionCalculator);
 
 		final TreeMap<Integer, Long> ballastKeypoints = new TreeMap<Integer, Long>();
 		ballastKeypoints.put(12000, (long) OptimiserUnitConvertor.convertToInternalDailyRate(0.5));
@@ -1042,12 +1039,12 @@ public class TestCalculations {
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
-		final ScheduledSequence plansAndStartTime = scheduler.schedule(resource, sequence, expectedArrivalTimes);
+		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
 
-		Assert.assertNotNull(plansAndStartTime);
+		Assert.assertNotNull(scheduledSequence);
 
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
-		annotator.annotateFromVoyagePlan(plansAndStartTime.getResource(), plansAndStartTime.getVoyagePlans(), plansAndStartTime.getStartTime(), annotatedSolution);
+		annotator.annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), annotatedSolution, expectedArrivalTimes);
 
 		// TODO: Start checking results
 		{

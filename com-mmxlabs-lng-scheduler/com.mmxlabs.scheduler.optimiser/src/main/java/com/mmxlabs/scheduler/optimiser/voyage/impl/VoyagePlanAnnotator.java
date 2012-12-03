@@ -69,20 +69,20 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	}
 
 	public void annotateFromScheduledSequence(final ScheduledSequence scheduledSequence, final IAnnotatedSolution solution) {
-		annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), scheduledSequence.getStartTime(), solution);
+		annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), solution, scheduledSequence.getArrivalTimes());
 	}
 
 	@Override
-	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans, final int startTime, final IAnnotatedSolution solution) {
+	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans,  final IAnnotatedSolution solution, final int[] arrivalTimes) {
 		final VoyagePlanIterator vpi = voyagePlanIteratorProvider.get();
 		final IVessel vessel = vesselProvider.getVessel(resource);
-		vpi.setVoyagePlans(resource, plans, startTime);
+		vpi.setVoyagePlans(resource, plans, arrivalTimes);
 
 		vpi.reset();
 
 		// for (final VoyagePlan plan : plans) {
 		// for (final Object e : plan.getSequence()) {
-		int lastTime = startTime;
+		int lastTime = arrivalTimes[0];
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();
 
@@ -110,7 +110,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 					visit = load;
 
-					List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
+					final List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
 					recordCapacityViolation(details, entries, CapacityViolationType.MIN_LOAD);
 					recordCapacityViolation(details, entries, CapacityViolationType.MAX_LOAD);
 					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
@@ -128,7 +128,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					// TODO: Check unit vs. actual
 					// discharge.setSalesPrice(plan.getSalesRevenue());
 
-					List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
+					final List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
 					recordCapacityViolation(details, entries, CapacityViolationType.MIN_DISCHARGE);
 					recordCapacityViolation(details, entries, CapacityViolationType.MAX_DISCHARGE);
 
@@ -141,7 +141,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 				} else if (currentPortSlot instanceof IVesselEventPortSlot) {
 
-					List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
+					final List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
 					recordCapacityViolation(details, entries, CapacityViolationType.MAX_HEEL);
 					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
 
@@ -152,7 +152,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 					visit = new PortVisitEventImpl();
 				} else {
-					List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
+					final List<ICapacityEntry> entries = new LinkedList<ICapacityEntry>();
 					recordCapacityViolation(details, entries, CapacityViolationType.MAX_HEEL);
 					recordCapacityViolation(details, entries, CapacityViolationType.FORCED_COOLDOWN);
 
@@ -283,9 +283,9 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 	}
 
-	public void recordCapacityViolation(PortDetails plan, List<ICapacityEntry> entries, CapacityViolationType cvt) {
+	public void recordCapacityViolation(final PortDetails plan, final List<ICapacityEntry> entries, final CapacityViolationType cvt) {
 		{
-			long quantity = plan.getCapacityViolation(cvt);
+			final long quantity = plan.getCapacityViolation(cvt);
 			if (quantity > 0) {
 				final ICapacityEntry e = new CapacityEntry(cvt.getDisplayName(), quantity);
 				entries.add(e);
@@ -305,7 +305,7 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 		return vesselProvider;
 	}
 
-	public void setVesselProvider(IVesselProvider vesselProvider) {
+	public void setVesselProvider(final IVesselProvider vesselProvider) {
 		this.vesselProvider = vesselProvider;
 	}
 }

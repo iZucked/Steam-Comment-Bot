@@ -140,7 +140,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 		final VoyagePlanIterator planIterator = voyagePlanIteratorProvider.get();
 		for (final ScheduledSequence sequence : sequences) {
-			planIterator.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getStartTime());
+			planIterator.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getArrivalTimes());
 			final IVessel vessel = vesselProvider.getVessel(sequence.getResource());
 
 			PortDetails loadDetails = null;

@@ -18,8 +18,6 @@ import org.junit.runner.RunWith;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
@@ -185,7 +183,8 @@ public class VoyagePlanAnnotatorTest {
 		});
 
 		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
-		annotator.annotateFromVoyagePlan(resource, plans, 0, annotatedSolution);
+		final int[] expectedArrivalTimes = new int[] { 0, 100, 200, 310 };
+		annotator.annotateFromVoyagePlan(resource, plans, annotatedSolution, expectedArrivalTimes);
 
 		{
 			final IJourneyEvent journey = annotatedSolution.getElementAnnotations().getAnnotation(element1, SchedulerConstants.AI_journeyInfo, IJourneyEvent.class);

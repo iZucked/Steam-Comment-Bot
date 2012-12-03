@@ -620,4 +620,8 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	public long getLastValue() {
 		return lastValue;
 	}
+
+	public int[][] getArrivalTimes() {
+		return arrivalTimes;
+	}
 }
