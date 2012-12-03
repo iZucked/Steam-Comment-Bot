@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -16,7 +18,6 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -41,17 +42,14 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 	private final String name;
 
-	private final String portTypeKey, portSlotKey, vesselKey;
-
+	@Inject
 	private IPortTypeProvider portTypeProvider;
-	private IPortSlotProvider portSlotProvider;
+
+	@Inject
 	private IVesselProvider vesselProvider;
 
-	public PortTypeConstraintChecker(final String name, final String portTypeKey, final String vesselKey, final String portSlotKey) {
+	public PortTypeConstraintChecker(final String name) {
 		this.name = name;
-		this.portTypeKey = portTypeKey;
-		this.portSlotKey = portSlotKey;
-		this.vesselKey = vesselKey;
 	}
 
 	@Override
@@ -84,11 +82,6 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 
 	@Override
 	public void setOptimisationData(final IOptimisationData optimisationData) {
-
-		setPortTypeProvider(optimisationData.getDataComponentProvider(portTypeKey, IPortTypeProvider.class));
-		setPortSlotProvider(optimisationData.getDataComponentProvider(portSlotKey, IPortSlotProvider.class));
-
-		setVesselProvider(optimisationData.getDataComponentProvider(vesselKey, IVesselProvider.class));
 	}
 
 	/**
@@ -339,13 +332,5 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 		}
 
 		return null;
-	}
-
-	public IPortSlotProvider getPortSlotProvider() {
-		return portSlotProvider;
-	}
-
-	public void setPortSlotProvider(final IPortSlotProvider portSlotProvider) {
-		this.portSlotProvider = portSlotProvider;
 	}
 }

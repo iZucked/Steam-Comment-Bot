@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -29,21 +31,18 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
  */
 public class PortExclusionConstraintChecker implements IPairwiseConstraintChecker {
 
+	@Inject
 	private IPortExclusionProvider portExclusionProvider;
+	@Inject
 	private IVesselProvider vesselProvider;
+	@Inject
 	private IPortProvider portProvider;
 
 	private final String name;
-	private final String exclusionProviderKey;
-	private final String vesselProviderKey;
-	private final String portProviderKey;
 
-	public PortExclusionConstraintChecker(final String name, final String exclusionProviderKey, final String vesselProviderKey, final String portProviderKey) {
+	public PortExclusionConstraintChecker(final String name) {
 		super();
 		this.name = name;
-		this.exclusionProviderKey = exclusionProviderKey;
-		this.vesselProviderKey = vesselProviderKey;
-		this.portProviderKey = portProviderKey;
 	}
 
 	@Override
@@ -111,33 +110,6 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 	@Override
 	public void setOptimisationData(final IOptimisationData data) {
-		setPortExclusionProvider(data.getDataComponentProvider(exclusionProviderKey, IPortExclusionProvider.class));
-		setVesselProvider(data.getDataComponentProvider(vesselProviderKey, IVesselProvider.class));
-		setPortProvider(data.getDataComponentProvider(portProviderKey, IPortProvider.class));
-	}
-
-	public IPortExclusionProvider getPortExclusionProvider() {
-		return portExclusionProvider;
-	}
-
-	public void setPortExclusionProvider(final IPortExclusionProvider portExclusionProvider) {
-		this.portExclusionProvider = portExclusionProvider;
-	}
-
-	public IVesselProvider getVesselProvider() {
-		return vesselProvider;
-	}
-
-	public void setVesselProvider(final IVesselProvider vesselProvider) {
-		this.vesselProvider = vesselProvider;
-	}
-
-	public IPortProvider getPortProvider() {
-		return portProvider;
-	}
-
-	public void setPortProvider(final IPortProvider portProvider) {
-		this.portProvider = portProvider;
 	}
 
 	@Override

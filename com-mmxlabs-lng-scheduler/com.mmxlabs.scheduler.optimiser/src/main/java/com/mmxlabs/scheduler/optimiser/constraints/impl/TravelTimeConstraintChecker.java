@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.core.IResource;
@@ -18,7 +20,6 @@ import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
@@ -44,11 +45,16 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 	 */
 	private int maxLateness = 1000 * 24;
 	private final String name;
-	private IOptimisationData data;
+
+	@Inject
 	private IPortSlotProvider portSlotProvider;
+	@Inject
 	private IPortTypeProvider portTypeProvider;
+	@Inject
 	private IVesselProvider vesselProvider;
+	@Inject
 	private IElementDurationProvider elementDurationProvider;
+	@Inject
 	private IMultiMatrixProvider<IPort, Integer> distanceProvider;
 
 	public TravelTimeConstraintChecker(final String name) {
@@ -97,12 +103,7 @@ public class TravelTimeConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Override
 	public void setOptimisationData(final IOptimisationData optimisationData) {
-		this.data = optimisationData;
-		this.portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		this.portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
-		this.vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		this.elementDurationProvider = data.getDataComponentProvider(SchedulerConstants.DCP_elementDurationsProvider, IElementDurationProvider.class);
-		this.distanceProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portDistanceProvider, IMultiMatrixProvider.class);
+
 	}
 
 	@Override

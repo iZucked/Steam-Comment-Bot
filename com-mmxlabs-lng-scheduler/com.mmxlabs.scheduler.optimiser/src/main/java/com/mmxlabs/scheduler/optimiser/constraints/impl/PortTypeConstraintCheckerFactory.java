@@ -20,21 +20,6 @@ public final class PortTypeConstraintCheckerFactory implements IConstraintChecke
 
 	public static final String NAME = "PortTypeConstraintChecker";
 
-	private final String portTypeKey;
-	private final String portSlotKey;
-
-	private final String vesselKey;
-
-	/**
-	 * Constructor taking the keys to use in {@link IOptimisationData} to find the {@link IPortTypeProvider} and {@link IVesselProvider}.
-	 * 
-	 * @param key
-	 */
-	public PortTypeConstraintCheckerFactory(final String portTypeKey, final String portSlotKey, final String vesselKey) {
-		this.portSlotKey = portSlotKey;
-		this.portTypeKey = portTypeKey;
-		this.vesselKey = vesselKey;
-	}
 
 	@Override
 	public String getName() {
@@ -43,6 +28,6 @@ public final class PortTypeConstraintCheckerFactory implements IConstraintChecke
 
 	@Override
 	public IConstraintChecker instantiate() {
-		return new PortTypeConstraintChecker(NAME, portTypeKey, vesselKey, portSlotKey);
+		return new PortTypeConstraintChecker(NAME);
 	}
 }

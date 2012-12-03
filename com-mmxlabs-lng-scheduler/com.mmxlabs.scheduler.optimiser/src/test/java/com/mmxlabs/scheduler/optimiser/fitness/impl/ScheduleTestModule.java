@@ -147,8 +147,7 @@ public class ScheduleTestModule extends AbstractModule {
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory2);
 		injector.injectMembers(constraintFactory2);
 
-		final PortTypeConstraintCheckerFactory constraintFactory3 = new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider,
-				SchedulerConstants.DCP_vesselProvider);
+		final PortTypeConstraintCheckerFactory constraintFactory3 = new PortTypeConstraintCheckerFactory();
 		constraintRegistry.registerConstraintCheckerFactory(constraintFactory3);
 		injector.injectMembers(constraintFactory3);
 

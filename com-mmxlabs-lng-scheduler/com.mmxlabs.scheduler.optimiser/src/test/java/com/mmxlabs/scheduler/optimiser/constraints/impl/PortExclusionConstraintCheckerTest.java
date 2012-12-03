@@ -12,6 +12,10 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -20,8 +24,11 @@ import com.mmxlabs.optimiser.core.impl.ListSequence;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
+import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProviderEditor;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
@@ -35,29 +42,19 @@ public class PortExclusionConstraintCheckerTest {
 	@Test
 	public void testName() {
 		final String name = "checker";
-		final String empty = "empty";
-		final PortExclusionConstraintChecker checker = new PortExclusionConstraintChecker(name, empty, empty, empty);
+		final PortExclusionConstraintChecker checker = new PortExclusionConstraintChecker(name);
 
 		Assert.assertSame(name, checker.getName());
 	}
 
 	@Test
 	public void testConstraint() {
-		final PortExclusionConstraintChecker checker = new PortExclusionConstraintChecker("name", "exclusions", "vessels", "ports");
-
+		//
 		final IPortExclusionProviderEditor exclusionProvider = new HashMapPortExclusionProvider("exclusions");
-
-		checker.setPortExclusionProvider(exclusionProvider);
-		Assert.assertSame(exclusionProvider, checker.getPortExclusionProvider());
-
 		final IPortProviderEditor portProvider = new HashMapPortEditor("ports");
-
-		checker.setPortProvider(portProvider);
-		Assert.assertSame(portProvider, checker.getPortProvider());
-
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vessels");
-		checker.setVesselProvider(vesselProvider);
-		Assert.assertSame(vesselProvider, checker.getVesselProvider());
+
+		final PortExclusionConstraintChecker checker = createChecker("name", vesselProvider, portProvider, exclusionProvider);
 
 		// check empty behaviour
 		Assert.assertTrue(exclusionProvider.hasNoExclusions());
@@ -105,5 +102,26 @@ public class PortExclusionConstraintCheckerTest {
 		Assert.assertFalse(checker.checkPairwiseConstraint(o1, o3, resource));
 
 		context.assertIsSatisfied();
+	}
+
+	private PortExclusionConstraintChecker createChecker(final String name, final IVesselProvider vesselProvider, final IPortProvider portProvider, final IPortExclusionProvider portExclusionProvider) {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(IVesselProvider.class).toInstance(vesselProvider);
+				bind(IPortProvider.class).toInstance(portProvider);
+				bind(IPortExclusionProvider.class).toInstance(portExclusionProvider);
+			}
+
+			@Provides
+			PortExclusionConstraintChecker create(final Injector injector) {
+				final PortExclusionConstraintChecker checker = new PortExclusionConstraintChecker(name);
+				injector.injectMembers(checker);
+				return checker;
+			}
+
+		});
+		return injector.getInstance(PortExclusionConstraintChecker.class);
 	}
 }

@@ -15,7 +15,12 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -25,6 +30,9 @@ import com.mmxlabs.optimiser.core.impl.Sequences;
 import com.mmxlabs.optimiser.core.scenario.impl.OptimisationData;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
+import com.mmxlabs.scheduler.optimiser.providers.IPortExclusionProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -42,10 +50,7 @@ public class PortTypeConstraintCheckerTest {
 	public void testPortTypeConstraintChecker() {
 
 		final String name = "checker";
-		final String key = "key";
-		final String vkey = "vkey";
-		final String pskey = "pskey";
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker(name, key, vkey, pskey);
+		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker(name);
 
 		Assert.assertSame(name, checker.getName());
 	}
@@ -53,14 +58,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT1() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
-
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -100,14 +100,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfT2() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
-
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -147,14 +142,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString1() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
-
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -193,15 +183,9 @@ public class PortTypeConstraintCheckerTest {
 
 	@Test
 	public void testCheckConstraintsISequencesOfTListOfString2() {
-
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
-
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -238,39 +222,14 @@ public class PortTypeConstraintCheckerTest {
 		Assert.assertEquals(1, messages.size());
 	}
 
-	@Test
-	public void testSetOptimisationData() {
-
-		final String name = "checker";
-		final String key = "key";
-		final String vkey = "vkey";
-		final String pskey = "pskey";
-
-		final IPortTypeProvider portTypeProvider = context.mock(IPortTypeProvider.class);
-		final OptimisationData data = new OptimisationData();
-		data.addDataComponentProvider(key, portTypeProvider);
-
-		final IVesselProvider vesselProvider = context.mock(IVesselProvider.class);
-		data.addDataComponentProvider(vkey, vesselProvider);
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker(name, key, vkey, pskey);
-		checker.setOptimisationData(data);
-
-		Assert.assertSame(portTypeProvider, checker.getPortTypeProvider());
-		Assert.assertSame(vesselProvider, checker.getVesselProvider());
-	}
-
 	/**
 	 * Test simple sequence
 	 */
 	@Test
 	public void testCheckSequence1() {
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -299,13 +258,9 @@ public class PortTypeConstraintCheckerTest {
 	 */
 	@Test
 	public void testCheckSequence2() {
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 
@@ -325,13 +280,9 @@ public class PortTypeConstraintCheckerTest {
 
 	@Test
 	public void testCheckSequence3() {
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 
@@ -351,13 +302,9 @@ public class PortTypeConstraintCheckerTest {
 
 	@Test
 	public void testCheckSequence4() {
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -383,13 +330,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence5() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -421,13 +364,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence6() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -457,13 +396,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence7() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -493,13 +428,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence8() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -527,13 +458,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence9() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -561,13 +488,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence10() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -597,13 +520,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence11() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -633,13 +552,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence12() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -669,13 +584,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence13() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -705,13 +616,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence14() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -739,13 +646,9 @@ public class PortTypeConstraintCheckerTest {
 	@Test
 	public void testCheckSequence15() {
 
-		final PortTypeConstraintChecker checker = new PortTypeConstraintChecker("checker", "key", "vkey", "pskey");
-
 		final IPortTypeProviderEditor portTypeProvider = new HashMapPortTypeEditor("key");
-		checker.setPortTypeProvider(portTypeProvider);
 		final IVesselProviderEditor vesselProvider = new HashMapVesselEditor("vkey");
-
-		checker.setVesselProvider(vesselProvider);
+		final PortTypeConstraintChecker checker = createChecker("checker", vesselProvider, portTypeProvider);
 
 		final ISequenceElement o1 = context.mock(ISequenceElement.class, "1");
 		final ISequenceElement o2 = context.mock(ISequenceElement.class, "2");
@@ -769,4 +672,23 @@ public class PortTypeConstraintCheckerTest {
 		Assert.assertEquals(0, messages.size());
 	}
 
+	private PortTypeConstraintChecker createChecker(final String name, final IVesselProvider vesselProvider, final IPortTypeProvider portTypeProvider) {
+		final Injector injector = Guice.createInjector(new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(IVesselProvider.class).toInstance(vesselProvider);
+				bind(IPortTypeProvider.class).toInstance(portTypeProvider);
+			}
+
+			@Provides
+			PortTypeConstraintChecker create(final Injector injector) {
+				final PortTypeConstraintChecker checker = new PortTypeConstraintChecker(name);
+				injector.injectMembers(checker);
+				return checker;
+			}
+
+		});
+		return injector.getInstance(PortTypeConstraintChecker.class);
+	}
 }

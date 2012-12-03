@@ -39,26 +39,23 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 				Peaberry.service(new OrderedSequenceElementsConstraintCheckerFactory(SchedulerConstants.DCP_orderedElementsProvider)).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PortExclusionConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new PortExclusionConstraintCheckerFactory(SchedulerConstants.DCP_portExclusionProvider, SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portProvider))
-						.export());
+				Peaberry.service(new PortExclusionConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(PortTypeConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider, SchedulerConstants.DCP_vesselProvider))
-						.export());
+				Peaberry.service(new PortTypeConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(TimeSortConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new TimeSortConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider, SchedulerConstants.DCP_vesselProvider))
-						.export());
+				Peaberry.service(new TimeSortConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(TravelTimeConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new TravelTimeConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(VirtualVesselConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new VirtualVesselConstraintCheckerFactory(SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider)).export());
+				Peaberry.service(new VirtualVesselConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(SlotGroupCountConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new SlotGroupCountConstraintCheckerFactory()).export());
-		
+
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(RestrictedElementsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new RestrictedElementsConstraintCheckerFactory()).export());
 

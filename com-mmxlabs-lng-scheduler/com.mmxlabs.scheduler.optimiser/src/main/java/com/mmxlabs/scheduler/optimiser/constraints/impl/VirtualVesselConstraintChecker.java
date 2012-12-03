@@ -14,7 +14,6 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
@@ -50,7 +49,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
-	public VirtualVesselConstraintChecker(final String name, final String vesselProviderKey, final String portSlotProviderKey) {
+	public VirtualVesselConstraintChecker(final String name) {
 		super();
 		this.name = name;
 	}
@@ -110,11 +109,6 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 
 	@Override
 	public void setOptimisationData(final IOptimisationData optimisationData) {
-		vesselProvider = optimisationData.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-		portSlotProvider = optimisationData.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		portTypeProvider = optimisationData.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
-		virtualVesselSlotProvider = optimisationData.getDataComponentProvider(SchedulerConstants.DCP_virtualVesselSlotProvider, IVirtualVesselSlotProvider.class);
-		startEndProvider = optimisationData.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
 	}
 
 	@Override
@@ -138,7 +132,7 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 
 		final ISequenceElement startElement = startEndProvider.getStartElement(resource);
 		final ISequenceElement endElement = startEndProvider.getEndElement(resource);
-		
+
 		if (first == startElement && second == endElement) {
 			return true;
 		}

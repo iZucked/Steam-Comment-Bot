@@ -10,16 +10,6 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 public class PortExclusionConstraintCheckerFactory implements IConstraintCheckerFactory {
 
 	public static final String NAME = "PortExclusionConstraintChecker";
-	private final String exclusionProviderKey;
-	private final String vesselProviderKey;
-	private final String portProviderKey;
-
-	public PortExclusionConstraintCheckerFactory(final String exclusionProviderKey, final String vesselProviderKey, final String portProviderKey) {
-		super();
-		this.exclusionProviderKey = exclusionProviderKey;
-		this.vesselProviderKey = vesselProviderKey;
-		this.portProviderKey = portProviderKey;
-	}
 
 	@Override
 	public String getName() {
@@ -28,6 +18,6 @@ public class PortExclusionConstraintCheckerFactory implements IConstraintChecker
 
 	@Override
 	public IConstraintChecker instantiate() {
-		return new PortExclusionConstraintChecker(NAME, exclusionProviderKey, vesselProviderKey, portProviderKey);
+		return new PortExclusionConstraintChecker(NAME);
 	}
 }
