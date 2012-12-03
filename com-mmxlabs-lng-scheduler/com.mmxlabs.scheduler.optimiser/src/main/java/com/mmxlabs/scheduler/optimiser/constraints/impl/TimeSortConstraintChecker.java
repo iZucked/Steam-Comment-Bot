@@ -7,6 +7,8 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
@@ -33,18 +35,17 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 	private final String name;
 
-	private final String portTypeKey, portSlotKey, vesselKey;
-
+	@Inject
 	private IPortTypeProvider portTypeProvider;
+
+	@Inject
 	private IPortSlotProvider portSlotProvider;
 
+	@Inject
 	private IVesselProvider vesselProvider;
 
-	public TimeSortConstraintChecker(final String name, final String portTypeKey, final String portSlotKey, final String vesselKey) {
+	public TimeSortConstraintChecker(final String name) {
 		this.name = name;
-		this.portTypeKey = portTypeKey;
-		this.portSlotKey = portSlotKey;
-		this.vesselKey = vesselKey;
 	}
 
 	@Override
@@ -60,16 +61,6 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 
 	@Override
 	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
-
-		if (portTypeProvider == null) {
-			return true;
-		}
-		if (portSlotProvider == null) {
-			return true;
-		}
-		if (vesselProvider == null) {
-			return true;
-		}
 
 		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
 			final VesselInstanceType vesselInstanceType = vesselProvider.getVessel(entry.getKey()).getVesselInstanceType();
@@ -87,9 +78,6 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	@Override
 	public void setOptimisationData(final IOptimisationData optimisationData) {
 
-		setPortTypeProvider(optimisationData.getDataComponentProvider(portTypeKey, IPortTypeProvider.class));
-		setPortSlotProvider(optimisationData.getDataComponentProvider(portSlotKey, IPortSlotProvider.class));
-		setVesselProvider(optimisationData.getDataComponentProvider(vesselKey, IVesselProvider.class));
 	}
 
 	/**
@@ -101,56 +89,45 @@ public final class TimeSortConstraintChecker implements IPairwiseConstraintCheck
 	 */
 	public final boolean checkSequence(final ISequence sequence, final List<String> messages, final VesselInstanceType instanceType) {
 
-		// TODO: Special case for shorts route  - cargoes could well overlap
-		
 		ITimeWindow lastTimeWindow = null;
+		PortType lastType = null;
 
 		for (final ISequenceElement t : sequence) {
+			final PortType currentType = portTypeProvider.getPortType(t);
 
 			final IPortSlot currentSlot = portSlotProvider.getPortSlot(t);
 			final ITimeWindow tw = currentSlot.getTimeWindow();
-			if (lastTimeWindow != null && tw != null) {
-				if (tw.getEnd() < lastTimeWindow.getStart()) {
-					if (messages != null) {
-						messages.add("Current time window is before previous time window");
+			if (instanceType != VesselInstanceType.CARGO_SHORTS || (lastType == PortType.Load && currentType == PortType.Discharge)) {
+
+				if (lastTimeWindow != null && tw != null) {
+					if (tw.getEnd() < lastTimeWindow.getStart()) {
+						if (messages != null) {
+							messages.add("Current time window is before previous time window");
+						}
+						return false;
 					}
-					return false;
 				}
 			}
 			lastTimeWindow = tw;
+			lastType = currentType;
 
 		}
 
 		return true;
 	}
 
-	public IPortTypeProvider getPortTypeProvider() {
-		return portTypeProvider;
-	}
-
-	public void setPortTypeProvider(final IPortTypeProvider portTypeProvider) {
-		this.portTypeProvider = portTypeProvider;
-	}
-
-	public IPortSlotProvider getPortSlotProvider() {
-		return portSlotProvider;
-	}
-
-	public void setPortSlotProvider(final IPortSlotProvider portSlotProvider) {
-		this.portSlotProvider = portSlotProvider;
-	}
-
-	public IVesselProvider getVesselProvider() {
-		return vesselProvider;
-	}
-
-	public void setVesselProvider(final IVesselProvider vesselProvider) {
-		this.vesselProvider = vesselProvider;
-	}
-
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-
+		final VesselInstanceType instanceType = vesselProvider.getVessel(resource).getVesselInstanceType();
+		if (instanceType == VesselInstanceType.CARGO_SHORTS) {
+			// Cargo pairs are independent of each other, so only check real load->discharge state and ignore rest
+			final PortType t1 = portTypeProvider.getPortType(first);
+			final PortType t2 = portTypeProvider.getPortType(second);
+			// Accept, or fall through
+			if (!(t1 == PortType.Load && t2 == PortType.Discharge)) {
+				return true;
+			}
+		}
 		final IPortSlot firstSlot = portSlotProvider.getPortSlot(first);
 		final IPortSlot secondSlot = portSlotProvider.getPortSlot(second);
 		final ITimeWindow firstTimeWindow = firstSlot.getTimeWindow();
