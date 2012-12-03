@@ -116,20 +116,17 @@ public class ContractExtensionTestModule extends AbstractModule {
 			constraintCheckerRegistry.registerConstraintCheckerFactory(constraintFactory);
 		}
 
-		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortTypeConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider,
-				SchedulerConstants.DCP_vesselProvider));
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortTypeConstraintCheckerFactory());
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new TravelTimeConstraintCheckerFactory());
 
-		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortExclusionConstraintCheckerFactory(SchedulerConstants.DCP_portExclusionProvider, SchedulerConstants.DCP_vesselProvider,
-				SchedulerConstants.DCP_portProvider));
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new PortExclusionConstraintCheckerFactory());
 
-		constraintCheckerRegistry.registerConstraintCheckerFactory(new VirtualVesselConstraintCheckerFactory(SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new VirtualVesselConstraintCheckerFactory());
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new SlotGroupCountConstraintCheckerFactory());
 
-		constraintCheckerRegistry.registerConstraintCheckerFactory(new TimeSortConstraintCheckerFactory(SchedulerConstants.DCP_portTypeProvider, SchedulerConstants.DCP_portSlotsProvider,
-				SchedulerConstants.DCP_vesselProvider));
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new TimeSortConstraintCheckerFactory());
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new RestrictedElementsConstraintCheckerFactory());
 
