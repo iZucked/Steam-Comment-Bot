@@ -13,16 +13,16 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.compare.diff.metamodel.DiffElement;
-import org.eclipse.emf.compare.diff.metamodel.DiffModel;
-import org.eclipse.emf.compare.diff.service.DiffService;
-import org.eclipse.emf.compare.match.metamodel.MatchModel;
-import org.eclipse.emf.compare.match.service.MatchService;
+import org.eclipse.emf.compare.Comparison;
+import org.eclipse.emf.compare.Diff;
+import org.eclipse.emf.compare.EMFCompare;
+import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edapt.migration.MigrationException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -100,11 +100,12 @@ public class OptimisationRepeatabilityTest {
 
 			if (i > 0) {
 				// Ensure same initial schedules
-				final MatchModel match = MatchService.doMatch(scenarioRunners[i].getIntialSchedule(), scenarioRunners[0].getIntialSchedule(), null);
-				final DiffModel diff = DiffService.doDiff(match);
-				final EList<DiffElement> differences = diff.getDifferences();
-				// Dump any differences to std.err before asserting
-				for (final DiffElement d : differences) {
+				final IComparisonScope scope = EMFCompare.createDefaultScope(scenarioRunners[i].getIntialSchedule(), scenarioRunners[0].getIntialSchedule());
+				final Comparison comparison = EMFCompare.newComparator(scope).compare();
+
+				final EList<Diff> differences = comparison.getDifferences();
+				for (final Diff d : differences) {
+
 					System.err.println(d.toString());
 				}
 
@@ -117,12 +118,13 @@ public class OptimisationRepeatabilityTest {
 			scenarioRunners[i].run();
 			if (i > 0) {
 				// Ensure same final schedules
-				final MatchModel match = MatchService.doMatch(scenarioRunners[i].getFinalSchedule(), scenarioRunners[0].getFinalSchedule(), null);
-				final DiffModel diff = DiffService.doDiff(match);
-				final EList<DiffElement> differences = diff.getDifferences();
+
+				final IComparisonScope scope = EMFCompare.createDefaultScope(scenarioRunners[i].getFinalSchedule(), scenarioRunners[0].getFinalSchedule());
+				final Comparison comparison = EMFCompare.newComparator(scope).compare();
 
 				// Dump any differences to std.err before asserting
-				for (final DiffElement d : differences) {
+				final EList<Diff> differences = comparison.getDifferences();
+				for (final Diff d : differences) {
 					System.err.println(d.toString());
 				}
 
@@ -132,11 +134,13 @@ public class OptimisationRepeatabilityTest {
 
 		// Ensure source model is unchanged
 		for (int i = 0; i < numTries; ++i) {
-			final MatchModel match = MatchService.doMatch(scenarioRunners[i].getScenario(), originalScenario, null);
-			final DiffModel diff = DiffService.doDiff(match);
-			final EList<DiffElement> differences = diff.getDifferences();
+
+			final IComparisonScope scope = EMFCompare.createDefaultScope(scenarioRunners[i].getScenario(), originalScenario);
+			final Comparison comparison = EMFCompare.newComparator(scope).compare();
+
+			final EList<Diff> differences = comparison.getDifferences();
 			// Dump any differences to std.err before asserting
-			for (final DiffElement d : differences) {
+			for (final Diff d : differences) {
 				System.err.println(d.toString());
 			}
 

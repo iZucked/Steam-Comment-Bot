@@ -4,14 +4,15 @@
  */
 package com.mmxlabs.shiplingo.platform.its.tests.sanityChecks;
 
+import java.io.IOException;
+
 import junit.framework.Assert;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.compare.diff.metamodel.DiffElement;
-import org.eclipse.emf.compare.diff.metamodel.DiffModel;
-import org.eclipse.emf.compare.diff.service.DiffService;
-import org.eclipse.emf.compare.match.metamodel.MatchModel;
-import org.eclipse.emf.compare.match.service.MatchService;
+import org.eclipse.emf.compare.Comparison;
+import org.eclipse.emf.compare.Diff;
+import org.eclipse.emf.compare.EMFCompare;
+import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.junit.Test;
 
@@ -91,11 +92,12 @@ public class InputAttributesCheckTest {
 	 */
 	private void assertScenariosEqual(final String assertionMessage, final MMXRootObject originalScenario, final MMXRootObject otherScenario) throws InterruptedException {
 
-		final MatchModel match = MatchService.doMatch(originalScenario, otherScenario, null);
-		final DiffModel diff = DiffService.doDiff(match);
-		final EList<DiffElement> differences = diff.getDifferences();
+		final IComparisonScope scope = EMFCompare.createDefaultScope(originalScenario, otherScenario);
+		final Comparison comparison = EMFCompare.newComparator(scope).compare();
+
+		final EList<Diff> differences = comparison.getDifferences();
 		// Dump any differences to std.err before asserting
-		for (final DiffElement d : differences) {
+		for (final Diff d : differences) {
 			System.err.println(d.toString());
 		}
 

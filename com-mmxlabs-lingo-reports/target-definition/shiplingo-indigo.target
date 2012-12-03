@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="MMXLabs Workspace Target" sequenceNumber="46">
+<?pde version="3.8"?><target name="MMXLabs Workspace Target" sequenceNumber="49">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="2.0.2.RELEASE"/>
@@ -24,7 +24,6 @@
 <unit id="org.eclipse.equinox.sdk.feature.group" version="3.7.1.R37x_v20110907-7M7W8i8eNV4WsRkue-4Vq4J6pCyW"/>
 <unit id="org.eclipse.pde.api.tools.ee.fragments.feature.group" version="1.0.200.r37x_v20110803-7D-FHkFAFkNZZO9PfBZStN"/>
 <unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="1.0.0.v20110608-1633"/>
-<unit id="org.eclipse.emf.compare.sdk.feature.group" version="1.2.2.v20120214-0915"/>
 <unit id="org.eclipse.emf.query.sdk.feature.group" version="1.5.0.v20110502-1600-67O-95GFz03DQEiNLXRMK_NPj507"/>
 <unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.5.0.v20110502-1600-67O-96SGR55YJeZPedcQnghI6uFA"/>
 <unit id="org.eclipse.jet.sdk.feature.group" version="1.1.1.v201101271243-42186A5NsKEQPHRQeFaJS4A35"/>
@@ -141,6 +140,12 @@
 <unit id="com.mmxlabs.optimiser.optimiser-common" version="0.0.0"/>
 <unit id="com.mmxlabs.optimiser.optimiser-common.source" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.compare.feature.group" version="2.0.0.201209121410"/>
+<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="2.0.0.201209121410"/>
+<unit id="org.eclipse.emf.compare.rcp.ui.feature.group" version="2.0.0.201209121410"/>
+<repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/2.0"/>
 </location>
 </locations>
 </target>

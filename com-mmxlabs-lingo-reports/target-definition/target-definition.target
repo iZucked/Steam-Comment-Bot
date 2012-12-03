@@ -56,7 +56,6 @@
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.7.2.v20120130-0943"/>
 <unit id="org.eclipse.equinox.sdk.feature.group" version="3.7.1.R37x_v20110907-7M7W8i8eNV4WsRkue-4Vq4J6pCyW"/>
 <unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="1.0.0.v20110608-1633"/>
-<unit id="org.eclipse.emf.compare.sdk.feature.group" version="1.2.2.v20120214-0915"/>
 <unit id="org.eclipse.emf.query.sdk.feature.group" version="1.5.0.v20110502-1600-67O-95GFz03DQEiNLXRMK_NPj507"/>
 <unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.5.0.v20110502-1600-67O-96SGR55YJeZPedcQnghI6uFA"/>
 <unit id="org.eclipse.ocl.all.sdk.feature.group" version="3.1.2.v20120206-0606"/>
@@ -152,6 +151,12 @@
 <unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
 <unit id="org.eclipse.jdt.annotation.source" version="0.0.0"/>
 <repository location="http://download.eclipse.org/eclipse/updates/3.8"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.compare.feature.group" version="2.0.0.201209121410"/>
+<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="2.0.0.201209121410"/>
+<unit id="org.eclipse.emf.compare.rcp.ui.feature.group" version="2.0.0.201209121410"/>
+<repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/2.0"/>
 </location>
 </locations>
 </target>
