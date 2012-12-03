@@ -32,6 +32,11 @@ public abstract class AllowedFieldFilteredReferenceValueProvider<FieldType> exte
 		
 		FieldType queryValue = (FieldType) value.getSecond();
 		
+		// allow a blank value
+		if (queryValue == null) {
+			return true;
+		}
+		
 		// if a value is currently set on this object, permit it as a value
 		// even if it is prohibited by the "allowed values" list
 		if (queryValue == getCurrentValue(target, field)) {
