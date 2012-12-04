@@ -180,7 +180,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 		if (isShortsSequence && arrivalTimes.length == 0) {
-			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan>emptyList(), new int[0]);
+			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan> emptyList(), new int[] { 0 });
 		}
 
 		// Get start time
