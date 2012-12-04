@@ -153,8 +153,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Inject
 	public void init() {
-//		this.checker = injector.getInstance(LegalSequencingChecker.class);
-//		LegalSequencingChecker checker2 = new LegalSequencingChecker(context);
+		// this.checker = injector.getInstance(LegalSequencingChecker.class);
+		// LegalSequencingChecker checker2 = new LegalSequencingChecker(context);
 		checker.disallowLateness();
 		final IOptimisationData data = context.getOptimisationData();
 
@@ -276,5 +276,26 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	public void setRandom(final Random random) {
 		this.random = random;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public Map<ISequenceElement, Followers<ISequenceElement>> getValidFollowers() {
+		return validFollowers;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public Map<ISequenceElement, Followers<ISequenceElement>> getValidPreceeders() {
+		return validPreceeders;
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public Map<ISequenceElement, Pair<Integer, Integer>> getReverseLookup() {
+		return reverseLookup;
 	}
 }
