@@ -11,6 +11,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.inject.Inject;
+
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.RandomHelper;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
@@ -20,7 +22,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.lso.moves.InsertOptionalElements;
 import com.mmxlabs.scheduler.optimiser.lso.moves.MoveAndFill;
 import com.mmxlabs.scheduler.optimiser.lso.moves.RemoveAndFill;
@@ -36,14 +37,16 @@ import com.mmxlabs.scheduler.optimiser.lso.moves.SwapOptionalElements;
  */
 public class OptionalConstrainedMoveGeneratorUnit implements IConstrainedMoveGeneratorUnit {
 	private final ConstrainedMoveGenerator owner;
-	private final IOptionalElementsProvider optionalElementsProvider;
-	private final IResourceAllocationConstraintDataComponentProvider racDCP;
+	
+	@Inject
+	private IOptionalElementsProvider optionalElementsProvider;
+	
+	@Inject
+	private IResourceAllocationConstraintDataComponentProvider racDCP;
 
 	public OptionalConstrainedMoveGeneratorUnit(final ConstrainedMoveGenerator owner) {
 		super();
 		this.owner = owner;
-		this.optionalElementsProvider = owner.context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
-		this.racDCP = owner.context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, IResourceAllocationConstraintDataComponentProvider.class);
 	}
 
 	@Override
