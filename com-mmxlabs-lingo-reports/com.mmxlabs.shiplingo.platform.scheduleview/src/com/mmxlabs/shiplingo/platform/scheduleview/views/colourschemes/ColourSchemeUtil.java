@@ -56,7 +56,7 @@ public class ColourSchemeUtil {
 	static final int Faded_Alpha = 200;
 
 	
-	public static boolean isLate(Event ev) {
+	public static boolean isOutsideTimeWindow(Event ev) {
 		Date start = ev.getStart();
 		if((ev instanceof VesselEventVisit) && start.after(((VesselEventVisit) ev).getVesselEvent().getStartBy())){
 			return true;
@@ -65,6 +65,9 @@ public class ColourSchemeUtil {
 		if(ev instanceof SlotVisit){
 			final SlotVisit visit = (SlotVisit) ev;
 			if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
+				return true;
+			}
+			if (visit.getStart().before(visit.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime())) {
 				return true;
 			}
 		}

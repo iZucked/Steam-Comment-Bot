@@ -16,7 +16,7 @@ import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.Co
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.VesselEvent_Brown;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.VesselEvent_LightPurple;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.VesselEvent_Purple;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLate;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isOutsideTimeWindow;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
@@ -74,13 +74,13 @@ public class VesselStateColourScheme extends ColourScheme {
 		// else if (mode == Mode.Lateness) {
 		if (element instanceof SlotVisit) {
 			final SlotVisit visit = (SlotVisit) element;
-			if (isLate(visit)) {
+			if (isOutsideTimeWindow(visit)) {
 				return ColorCache.getColor(Alert_Crimson);
 			} 
 			return ColorCache.getColor(Slot_White);
 		} else if (element instanceof VesselEventVisit) {
 			final VesselEventVisit vev = (VesselEventVisit) element;
-			if (isLate(vev)) {
+			if (isOutsideTimeWindow(vev)) {
 				return ColorCache.getColor(Alert_Crimson);
 			}
 		}
@@ -93,7 +93,7 @@ public class VesselStateColourScheme extends ColourScheme {
 		int alpha = 255;
 		if(element instanceof Event) {
 			Event ev = (Event) (element);
-			if(isLocked(ev, viewer) && !isLate(ev)) alpha = Faded_Alpha;
+			if(isLocked(ev, viewer) && !isOutsideTimeWindow(ev)) alpha = Faded_Alpha;
 		}
 		else if (element instanceof GeneratedCharterOut) {
 			alpha -= 20;			

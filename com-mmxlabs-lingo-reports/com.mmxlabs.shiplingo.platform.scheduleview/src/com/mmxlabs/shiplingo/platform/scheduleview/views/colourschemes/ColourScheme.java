@@ -6,7 +6,7 @@ package com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes;
 
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Faded_Alpha;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.Locked_White;
-import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLate;
+import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isOutsideTimeWindow;
 import static com.mmxlabs.shiplingo.platform.scheduleview.views.colourschemes.ColourSchemeUtil.isLocked;
 
 import org.eclipse.nebula.widgets.ganttchart.ColorCache;
@@ -64,7 +64,7 @@ public abstract class ColourScheme implements IScheduleViewColourScheme {
 		
 		if(element instanceof Event) {
 			Event ev = (Event) (element);
-			if(isLocked(ev, viewer) && !isLate(ev)) return Faded_Alpha;
+			if(isLocked(ev, viewer) && !isOutsideTimeWindow(ev)) return Faded_Alpha;
 		}
 		return 255;
 	}
