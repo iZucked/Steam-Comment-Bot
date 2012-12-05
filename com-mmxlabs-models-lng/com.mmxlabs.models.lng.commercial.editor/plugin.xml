@@ -98,6 +98,12 @@
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
+          factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.PreferredPortProviderFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.valueproviders.PreferredPortProviderFactory"
+          ownerEClass="com.mmxlabs.models.lng.types.AContract"
+          referenceEClass="com.mmxlabs.models.lng.types.APort">
+    </valueProvider>
+    <valueProvider
           factory="com.mmxlabs.models.lng.commercial.ui.valueproviders.CommercialProviderFactory"
           id="com.mmxlabs.models.lng.commercial.editor.contractProvider"
           referenceEClass="com.mmxlabs.models.lng.types.AContract">

@@ -6,21 +6,21 @@
  */
 package com.mmxlabs.models.lng.analytics.presentation.composites;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
+
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
-
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 
 /**
  * A component helper for ShippingCostRow instances
@@ -67,7 +67,6 @@ public class ShippingCostRowComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_planEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
 		add_dateEditor(detailComposite, topClass);
 		add_cargoPriceEditor(detailComposite, topClass);
@@ -102,18 +101,22 @@ public class ShippingCostRowComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the cargoPrice feature on ShippingCostRow
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_cargoPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SHIPPING_COST_ROW__CARGO_PRICE));
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SHIPPING_COST_ROW__CARGO_PRICE);
+		editor.addNotificationChangedListener(new ShippingCostRowEditorListener());
+		detailComposite.addInlineEditor(editor);
 	}
 	/**
 	 * Create the editor for the cvValue feature on ShippingCostRow
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_cvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SHIPPING_COST_ROW__CV_VALUE));
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SHIPPING_COST_ROW__CV_VALUE);
+		editor.addNotificationChangedListener(new ShippingCostRowEditorListener());
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**

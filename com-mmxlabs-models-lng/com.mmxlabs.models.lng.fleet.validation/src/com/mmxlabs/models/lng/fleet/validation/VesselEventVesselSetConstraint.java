@@ -17,13 +17,16 @@ import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
 /**
- * Checks that {@link MaintenanceEvent} and {@link DryDockEvent} have a {@link Vessel} specified.
+ * Validates the "allowed vessels" setting on {@link VesselEvent} objects. There must be at least one matching {@link Vessel}
+ * in the fleet, and exactly one {@link Vessel} for {@link MaintenanceEvent} and {@link DryDockEvent} objects. 
+ * 
  * 
  * @author Simon Goodall
  * 
@@ -32,30 +35,31 @@ public class VesselEventVesselSetConstraint extends AbstractModelConstraint {
 	@Override
 	public IStatus validate(final IValidationContext ctx) {
 		final EObject target = ctx.getTarget();
-		if (target instanceof MaintenanceEvent) {
-			final MaintenanceEvent maintenanceEvent = (MaintenanceEvent) target;
 
-			final EList<AVesselSet> allowedVessels = maintenanceEvent.getAllowedVessels();
-			final Set<AVessel> vessels = SetUtils.getVessels(allowedVessels);
-			if (vessels.size() != 1) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Maintenance events need a single vessel assignemnt"));
-				status.addEObjectAndFeature(maintenanceEvent, FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels());
-				return status;
+		if (target instanceof VesselEvent) {
+			final VesselEvent ve = (VesselEvent) target;
+			
+			final Set<AVessel> vessels = SetUtils.getVessels(ve.getAllowedVessels());			
+			int possibleVesselCount = vessels.size();
+			
+			if (target instanceof MaintenanceEvent || target instanceof DryDockEvent) {
+				if (possibleVesselCount != 1) {
+					final String eventTypeString = (target instanceof MaintenanceEvent) ? "Maintenance" : "Drydock";
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(eventTypeString + " events must have exactly one allowed vessel. The current allowed vessel settings allow for " + possibleVesselCount + " fleet vessels."));
+					status.addEObjectAndFeature(ve, FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels());
+					return status;
+				}
 			}
-
+			else {
+				if (possibleVesselCount == 0) {
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel events must have at least one allowed vessel. The current allowed vessel settings exclude all fleet vessels."));
+					status.addEObjectAndFeature(ve, FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels());
+					return status;
+				}				
+			}
+			
 		}
 
-		else if (target instanceof DryDockEvent) {
-			final DryDockEvent dryDockEvent = (DryDockEvent) target;
-
-			final EList<AVesselSet> allowedVessels = dryDockEvent.getAllowedVessels();
-			final Set<AVessel> vessels = SetUtils.getVessels(allowedVessels);
-			if (vessels.isEmpty()) {
-				final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Drydock events need a vessel specified"));
-				status.addEObjectAndFeature(dryDockEvent, FleetPackage.eINSTANCE.getVesselEvent_AllowedVessels());
-				return status;
-			}
-		}
 		return ctx.createSuccessStatus();
 	}
 }

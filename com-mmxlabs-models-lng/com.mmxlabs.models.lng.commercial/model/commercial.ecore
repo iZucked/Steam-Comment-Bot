@@ -31,7 +31,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="restrictedPorts" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="SalesContract" abstract="true" eSuperTypes="#//Contract platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASalesContract"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SalesContract" abstract="true" eSuperTypes="#//Contract platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASalesContract">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="minCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
+        unsettable="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" abstract="true" eSuperTypes="#//Contract platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APurchaseContract"/>
   <eClassifiers xsi:type="ecore:EClass" name="FixedPriceContract" eSuperTypes="#//SalesContract #//PurchaseContract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricePerMMBTU" lowerBound="1"
@@ -102,6 +107,7 @@
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sourcePurchasePort" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="profitShare" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PriceExpressionContract" eSuperTypes="#//SalesContract #//PurchaseContract">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"

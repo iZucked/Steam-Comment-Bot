@@ -20,6 +20,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
@@ -39,6 +41,12 @@ import com.mmxlabs.models.lng.pricing.SpotAvailability;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.lng.pricing.SpotType;
+import com.mmxlabs.models.lng.schedule.Event;
+import com.mmxlabs.models.lng.schedule.ScheduleModel;
+import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SequenceType;
+import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -65,8 +73,56 @@ public class LNGModelCorrector {
 		removeBadElementAssignments(cmd, rootObject, ed);
 		fixMissingSpotCargoMarkets(cmd, rootObject, ed);
 		fixFixedPriceOverrides(cmd, rootObject, ed);
+		fixSequenceTypes(cmd, rootObject, ed);
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
+		}
+
+	}
+
+	private void fixSequenceTypes(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
+		final CompoundCommand cmd = new CompoundCommand("Fix sequence types");
+		final ScheduleModel scheduleModel = rootObject.getSubModel(ScheduleModel.class);
+		if (scheduleModel != null) {
+
+			if (scheduleModel.getInitialSchedule() != null) {
+				LOOP_SEQUENCES: for (Sequence seq : scheduleModel.getInitialSchedule().getSequences()) {
+					if (seq.getSequenceType() == null) {
+						if (seq.isSetVessel()) {
+							cmd.append(SetCommand.create(ed, seq, SchedulePackage.eINSTANCE.getSequence_SequenceType(), SequenceType.VESSEL));
+							continue LOOP_SEQUENCES;
+						} else if (seq.isSetVesselClass()) {
+							cmd.append(SetCommand.create(ed, seq, SchedulePackage.eINSTANCE.getSequence_SequenceType(), SequenceType.SPOT_VESSEL));
+							continue LOOP_SEQUENCES;
+						} else {
+							for (final Event e : seq.getEvents()) {
+								if (e instanceof SlotVisit) {
+									Slot slot = ((SlotVisit) e).getSlotAllocation().getSlot();
+									if (slot != null) {
+										if (slot instanceof LoadSlot) {
+											if (((LoadSlot) slot).isDESPurchase()) {
+												cmd.append(SetCommand.create(ed, seq, SchedulePackage.eINSTANCE.getSequence_SequenceType(), SequenceType.DES_PURCHASE));
+												continue LOOP_SEQUENCES;
+											}
+										}
+										if (slot instanceof DischargeSlot) {
+											if (((DischargeSlot) slot).isFOBSale()) {
+												cmd.append(SetCommand.create(ed, seq, SchedulePackage.eINSTANCE.getSequence_SequenceType(), SequenceType.FOB_SALE));
+												continue LOOP_SEQUENCES;
+
+											}
+										}
+									}
+								}
+							}
+						}
+						cmd.append(SetCommand.create(ed, seq, SchedulePackage.eINSTANCE.getSequence_SequenceType(), SequenceType.CARGO_SHORTS));
+					}
+				}
+			}
+		}
+		if (!cmd.isEmpty()) {
+			parent.append(cmd);
 		}
 
 	}

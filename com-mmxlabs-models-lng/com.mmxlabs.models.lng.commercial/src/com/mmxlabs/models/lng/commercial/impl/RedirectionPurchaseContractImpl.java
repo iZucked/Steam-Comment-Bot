@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getNotionalSpeed <em>Notional Speed</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getDesPurchasePort <em>Des Purchase Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getSourcePurchasePort <em>Source Purchase Port</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getProfitShare <em>Profit Share</em>}</li>
  * </ul>
  * </p>
  *
@@ -128,6 +129,26 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 	 * @ordered
 	 */
 	protected Port sourcePurchasePort;
+
+	/**
+	 * The default value of the '{@link #getProfitShare() <em>Profit Share</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProfitShare()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double PROFIT_SHARE_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getProfitShare() <em>Profit Share</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProfitShare()
+	 * @generated
+	 * @ordered
+	 */
+	protected double profitShare = PROFIT_SHARE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -330,6 +351,27 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public double getProfitShare() {
+		return profitShare;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setProfitShare(double newProfitShare) {
+		double oldProfitShare = profitShare;
+		profitShare = newProfitShare;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE, oldProfitShare, profitShare));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -348,6 +390,8 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT:
 				if (resolve) return getSourcePurchasePort();
 				return basicGetSourcePurchasePort();
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
+				return getProfitShare();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -377,6 +421,9 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return;
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT:
 				setSourcePurchasePort((Port)newValue);
+				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
+				setProfitShare((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -408,6 +455,9 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT:
 				setSourcePurchasePort((Port)null);
 				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
+				setProfitShare(PROFIT_SHARE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -432,6 +482,8 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return desPurchasePort != null;
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT:
 				return sourcePurchasePort != null;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
+				return profitShare != PROFIT_SHARE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -452,6 +504,8 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 		result.append(basePurchasePriceExpression);
 		result.append(", notionalSpeed: ");
 		result.append(notionalSpeed);
+		result.append(", profitShare: ");
+		result.append(profitShare);
 		result.append(')');
 		return result.toString();
 	}

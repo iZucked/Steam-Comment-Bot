@@ -23,6 +23,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getFitnesses <em>Fitnesses</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getDailyHireRate <em>Daily Hire Rate</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSpotIndex <em>Spot Index</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.Sequence#getSequenceType <em>Sequence Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -249,6 +250,37 @@ public interface Sequence extends MMXObject {
 	 * @generated
 	 */
 	boolean isSetSpotIndex();
+
+	/**
+	 * Returns the value of the '<em><b>Sequence Type</b></em>' attribute.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.schedule.SequenceType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Sequence Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Sequence Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.schedule.SequenceType
+	 * @see #setSequenceType(SequenceType)
+	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSequence_SequenceType()
+	 * @model
+	 * @generated
+	 */
+	SequenceType getSequenceType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.schedule.Sequence#getSequenceType <em>Sequence Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Sequence Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.schedule.SequenceType
+	 * @see #getSequenceType()
+	 * @generated
+	 */
+	void setSequenceType(SequenceType value);
 
 	/**
 	 * <!-- begin-user-doc -->

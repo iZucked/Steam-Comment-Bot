@@ -55,10 +55,20 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
 						statuses.add(deco);
 					}
+					if (shippingCostRow.getCargoPrice() > 70.0) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo price is too high."));
+						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
+						statuses.add(deco);
+					}
 				}
 				if (destinationType == DestinationType.START || destinationType == DestinationType.LOAD || destinationType == DestinationType.OTHER) {
 					if (shippingCostRow.getCvValue() < 0.0001) {
 						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No cargo CV specified - must be non-zero"));
+						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
+						statuses.add(deco);
+					}
+					if (shippingCostRow.getCvValue() > 50.0) {
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo CV is too high"));
 						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
 						statuses.add(deco);
 					}

@@ -72,6 +72,7 @@ public class RedirectionPurchaseContractComponentHelper extends BaseComponentHel
 		add_notionalSpeedEditor(detailComposite, topClass);
 		add_desPurchasePortEditor(detailComposite, topClass);
 		add_sourcePurchasePortEditor(detailComposite, topClass);
+		add_profitShareEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseSalesMarketPort feature on RedirectionPurchaseContract
@@ -122,5 +123,14 @@ public class RedirectionPurchaseContractComponentHelper extends BaseComponentHel
 	 */
 	protected void add_sourcePurchasePortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__SOURCE_PURCHASE_PORT));
+	}
+
+	/**
+	 * Create the editor for the profitShare feature on RedirectionPurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_profitShareEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE));
 	}
 }

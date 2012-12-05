@@ -70,6 +70,7 @@ public class SequenceItemProvider
 			addVesselClassPropertyDescriptor(object);
 			addDailyHireRatePropertyDescriptor(object);
 			addSpotIndexPropertyDescriptor(object);
+			addSequenceTypePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -163,6 +164,29 @@ public class SequenceItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Sequence Type feature.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addSequenceTypePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Sequence_sequenceType_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Sequence_sequenceType_feature", "_UI_Sequence_type"),
+				 SchedulePackage.Literals.SEQUENCE__SEQUENCE_TYPE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -231,6 +255,7 @@ public class SequenceItemProvider
 		switch (notification.getFeatureID(Sequence.class)) {
 			case SchedulePackage.SEQUENCE__DAILY_HIRE_RATE:
 			case SchedulePackage.SEQUENCE__SPOT_INDEX:
+			case SchedulePackage.SEQUENCE__SEQUENCE_TYPE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.SEQUENCE__EVENTS:

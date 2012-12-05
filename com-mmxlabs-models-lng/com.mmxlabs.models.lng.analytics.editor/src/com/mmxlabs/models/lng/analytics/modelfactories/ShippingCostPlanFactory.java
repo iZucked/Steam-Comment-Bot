@@ -18,10 +18,12 @@ public class ShippingCostPlanFactory extends DefaultModelFactory {
 			final ShippingCostPlan shippingCostPlan = (ShippingCostPlan) top;
 
 			final ShippingCostRow startRow = (ShippingCostRow) constructInstance(AnalyticsPackage.eINSTANCE.getShippingCostRow());
+			postprocess(startRow);
 			startRow.setDestinationType(DestinationType.START);
 			shippingCostPlan.getRows().add(startRow);
 
 			final ShippingCostRow endRow = (ShippingCostRow) constructInstance(AnalyticsPackage.eINSTANCE.getShippingCostRow());
+			postprocess(endRow);
 			endRow.setDestinationType(DestinationType.END);
 			shippingCostPlan.getRows().add(endRow);
 		}

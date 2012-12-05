@@ -216,24 +216,9 @@ public class ShippingCostPlanImpl extends NamedObjectImpl implements ShippingCos
 	 */
 	public EList<ShippingCostRow> getRows() {
 		if (rows == null) {
-			rows = new EObjectContainmentWithInverseEList<ShippingCostRow>(ShippingCostRow.class, this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS, AnalyticsPackage.SHIPPING_COST_ROW__PLAN);
+			rows = new EObjectContainmentEList<ShippingCostRow>(ShippingCostRow.class, this, AnalyticsPackage.SHIPPING_COST_PLAN__ROWS);
 		}
 		return rows;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case AnalyticsPackage.SHIPPING_COST_PLAN__ROWS:
-				return ((InternalEList<InternalEObject>)(InternalEList<?>)getRows()).basicAdd(otherEnd, msgs);
-		}
-		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
 
 	/**
