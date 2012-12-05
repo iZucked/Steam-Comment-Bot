@@ -11,7 +11,10 @@ import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
- * Implementation of {@link VoyagePlan}.
+ * Implementation of {@link VoyagePlan}. A {@link VoyagePlan} is a collections of elements - {@link PortDetails} and {@link VoyageDetails} representing a related set of voyages. For example a
+ * {@link VoyagePlan} may represent a single Cargo - A load, voyage, discharge, voyage, next destination sequence. Typically the last element of a {@link VoyagePlan} will be the start of the next
+ * {@link VoyagePlan}. In such cases the last element is used to provide information, but costings etc are to be applied to the next {@link VoyagePlan}. However in some cases we will wish to include
+ * the element. In such cases {@link #isIgnoreEnd()} will return false.
  * 
  * @author Simon Goodall
  * 
@@ -24,15 +27,17 @@ public final class VoyagePlan implements Cloneable {
 	private final LongFastEnumMap<FuelComponent> fuelCosts;
 	private long lngFuelVolume;
 	private int capacityViolations;
+	private boolean ignoreEnd;
 
 	public VoyagePlan() {
 		fuelConsumptions = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 		routeAdditionalConsumption = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
 		fuelCosts = new LongFastEnumMap<FuelComponent>(FuelComponent.values().length);
+		ignoreEnd = true;
 	}
 
 	protected VoyagePlan(final Object[] sequence, final long fuelVolume, final LongFastEnumMap<FuelComponent> fuelConsumptions, final LongFastEnumMap<FuelComponent> routeAdditionalConsumption,
-			final LongFastEnumMap<FuelComponent> fuelCosts, final int capacityViolations) {
+			final LongFastEnumMap<FuelComponent> fuelCosts, final int capacityViolations, final boolean ignoreEnd) {
 		super();
 		this.sequence = sequence;
 		this.fuelConsumptions = fuelConsumptions;
@@ -40,6 +45,7 @@ public final class VoyagePlan implements Cloneable {
 		this.fuelCosts = fuelCosts;
 		this.lngFuelVolume = fuelVolume;
 		this.capacityViolations = capacityViolations;
+		this.ignoreEnd = ignoreEnd;
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
@@ -132,7 +138,7 @@ public final class VoyagePlan implements Cloneable {
 				clonedSequence[k++] = o;
 			}
 		}
-		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, capacityViolations);
+		return new VoyagePlan(clonedSequence, lngFuelVolume, fuelConsumptions, routeAdditionalConsumption, fuelCosts, capacityViolations, ignoreEnd);
 	}
 
 	/**
@@ -159,5 +165,19 @@ public final class VoyagePlan implements Cloneable {
 
 	public int getTotalRouteCost() {
 		return totalRouteCost;
+	}
+
+	/**
+	 * Returns true if the last element is a marker element and should be ignored in terms of it's time, fuel consumption, costs etc.
+	 * 
+	 * @return
+	 * @since 2.0
+	 */
+	public boolean isIgnoreEnd() {
+		return ignoreEnd;
+	}
+
+	public void setIgnoreEnd(final boolean ignoreEnd) {
+		this.ignoreEnd = ignoreEnd;
 	}
 }
