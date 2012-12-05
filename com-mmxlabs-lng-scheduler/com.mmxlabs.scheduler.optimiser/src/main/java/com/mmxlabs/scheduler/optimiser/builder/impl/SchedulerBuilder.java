@@ -400,8 +400,8 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @since 2.0
 	 */
 	@Override
-	public IDischargeOption createFOBSaleDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume, final ISalesPriceCalculator priceCalculator,
-			final boolean slotIsOptional) {
+	public IDischargeOption createFOBSaleDischargeSlot(final String id, IPort port, final ITimeWindow window, final long minVolume, final long maxVolume,
+			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final boolean slotIsOptional) {
 
 		if (port == null) {
 			port = ANYWHERE;
@@ -409,7 +409,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final DischargeOption slot = new DischargeOption();
 
-		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolume, maxVolume, priceCalculator, slotIsOptional);
+		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolume, maxVolume, minCvValue, maxCvValue, priceCalculator, slotIsOptional);
 
 		unshippedElements.add(element);
 
@@ -419,12 +419,14 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	}
 
 	private ISequenceElement configureDischargeOption(final DischargeOption slot, final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
-			final ISalesPriceCalculator priceCalculator, final boolean optional) {
+			final long minCvValue, final long maxCvValue, final ISalesPriceCalculator priceCalculator, final boolean optional) {
 		slot.setId(id);
 		slot.setPort(port);
 		slot.setTimeWindow(window);
 		slot.setMinDischargeVolume(minVolumeInM3);
 		slot.setMaxDischargeVolume(maxVolumeInM3);
+		slot.setMinCvValue(minCvValue);
+		slot.setMaxCvValue(maxCvValue);
 		slot.setDischargePriceCalculator(priceCalculator);
 
 		dischargeSlots.add(slot);
@@ -454,6 +456,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
+			final long minCvValue, final long maxCvValue,
 			final ISalesPriceCalculator pricePerMMBTu, final int durationHours, final boolean optional) {
 
 		if (!ports.contains(port)) {
@@ -465,7 +468,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 
 		final DischargeSlot slot = new DischargeSlot();
 
-		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolumeInM3, maxVolumeInM3, pricePerMMBTu, optional);
+		final ISequenceElement element = configureDischargeOption(slot, id, port, window, minVolumeInM3, maxVolumeInM3, minCvValue, maxCvValue, pricePerMMBTu, optional);
 
 		elementDurationsProvider.setElementDuration(element, durationHours);
 
@@ -1419,8 +1422,12 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 					}
 					allowedResources.add(vesselProvider.getResource(vessel));
 				}
+
 				if (shortCargoVessel != null) {
-					allowedResources.add(vesselProvider.getResource(shortCargoVessel));
+					// Cargo shorts only applies to load and discharge slots
+					if (loadSlots.contains(slot) || dischargeSlots.contains(slot)) {
+						allowedResources.add(vesselProvider.getResource(shortCargoVessel));
+					}
 				}
 			}
 			resourceAllocationProvider.setAllowedResources(portSlotsProvider.getElement(slot), allowedResources);

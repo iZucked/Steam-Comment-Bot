@@ -89,7 +89,7 @@ public class SchedulerBuilderTest {
 
 		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
+		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, false);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
@@ -102,7 +102,7 @@ public class SchedulerBuilderTest {
 
 		final ISalesPriceCalculator curve = context.mock(ISalesPriceCalculator.class);
 
-		builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
+		builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, false);
 	}
 
 	@Ignore
@@ -123,7 +123,7 @@ public class SchedulerBuilderTest {
 
 		final ILoadSlot loadSlot = context.mock(ILoadSlot.class);
 
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port, window, 0, 0, curve, 0, false);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("id", port, window, 0, 0, 0, Long.MAX_VALUE, curve, 0, false);
 
 		builder.createCargo("id", loadSlot, dischargeSlot, false);
 	}

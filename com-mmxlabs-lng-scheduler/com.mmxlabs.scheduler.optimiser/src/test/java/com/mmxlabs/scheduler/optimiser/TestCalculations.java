@@ -124,7 +124,7 @@ public class TestCalculations {
 				false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)),
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)),
 				1, false);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
@@ -552,7 +552,7 @@ public class TestCalculations {
 				false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)),
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)),
 				1, false);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
@@ -981,7 +981,7 @@ public class TestCalculations {
 				false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000,
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE, 
 				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1, false);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);

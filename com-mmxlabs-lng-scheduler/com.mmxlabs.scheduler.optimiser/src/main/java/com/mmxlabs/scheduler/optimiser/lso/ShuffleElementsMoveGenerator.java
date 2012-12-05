@@ -24,7 +24,6 @@ import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.lso.IMove;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator.Followers;
@@ -57,8 +56,6 @@ public class ShuffleElementsMoveGenerator implements IConstrainedMoveGeneratorUn
 	public ShuffleElementsMoveGenerator(final ConstrainedMoveGenerator owner) {
 		super();
 		this.owner = owner;
-		this.optionalElementsProvider = owner.context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_optionalElementsProvider, IOptionalElementsProvider.class);
-		this.racDCP = owner.context.getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_resourceAllocationProvider, IResourceAllocationConstraintDataComponentProvider.class);
 	}
 	
 	@Inject

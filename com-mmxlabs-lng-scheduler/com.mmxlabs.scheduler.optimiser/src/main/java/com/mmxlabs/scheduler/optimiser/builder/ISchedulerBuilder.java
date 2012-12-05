@@ -432,7 +432,11 @@ public interface ISchedulerBuilder {
 	 *            Scaled sales price in $/MMBTu
 	 * @return
 	 */
-	IDischargeSlot createDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ISalesPriceCalculator priceCalculator, int durationHours, boolean slotIsOptional);
+	IDischargeSlot createDischargeSlot(String id, IPort port,
+			ITimeWindow window, long minVolumeInM3, long maxVolumeInM3,
+			long minCvValue, long maxCvValue,
+			ISalesPriceCalculator pricePerMMBTu, int durationHours,
+			boolean optional);
 
 	/**
 	 * 
@@ -446,7 +450,10 @@ public interface ISchedulerBuilder {
 	 * @return
 	 * @since 2.0
 	 */
-	IDischargeOption createFOBSaleDischargeSlot(String id, IPort port, ITimeWindow window, long minVolume, long maxVolume, ISalesPriceCalculator priceCalculator, boolean slotIsOptional);
+	IDischargeOption createFOBSaleDischargeSlot(String id, IPort port,
+			ITimeWindow window, long minVolume, long maxVolume,
+			long minCvValue, long maxCvValue,
+			ISalesPriceCalculator priceCalculator, boolean slotIsOptional);
 
 	/**
 	 * Clean up builder resources. TODO: We assume the opt-data object owns the data providers. However, the builder will own them until then. Dispose should selectively clean these
