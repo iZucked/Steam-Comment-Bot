@@ -329,7 +329,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			final List<ITimeWindow> windows = timeWindowProvider.getTimeWindows(element);
 
 			isVirtual[index] = portTypeProvider.getPortType(element) == PortType.Virtual;
-			useTimeWindow[index] = portTypeProvider.getPortType(element) == PortType.Short_Cargo_End;
+			useTimeWindow[index] = lastElement == null ? false : portTypeProvider.getPortType(lastElement) == PortType.Short_Cargo_End;
 
 			// Calculate minimum inter-element durations
 			maxTimeToNextElement[index] = minTimeToNextElement[index] = durationProvider.getElementDuration(element, resource);
@@ -376,7 +376,12 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 					// they don't start any earlier
 					// than you could get to them without being late.
 					windowEndTime[index] = window.getEnd();
-					windowStartTime[index] = Math.min(windowEndTime[index], Math.max(window.getStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]));
+					if (useTimeWindow[index]) {
+						// Cargo shorts - pretend this is a start element
+						windowStartTime[index] = window.getStart();
+					} else {
+						windowStartTime[index] = Math.min(windowEndTime[index], Math.max(window.getStart(), windowStartTime[index - 1] + minTimeToNextElement[index - 1]));
+					}
 				}
 			}
 
@@ -390,7 +395,9 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			// trim the end of this time window so that the next element is
 			// reachable without lateness
 			// (but never so that the end time is before the start time)
-			windowEndTime[index] = Math.max(windowStartTime[index], Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]));
+			if (!useTimeWindow[index+1]) {
+				windowEndTime[index] = Math.max(windowStartTime[index], Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]));
+			}
 		}
 
 		// Compute separation points
@@ -559,6 +566,8 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			// if this is a virtual element, or the previous element was
 			// virtual, enforce zero travel time
 			return arrivalTimes[seq][index - 1];
+		} else if (useTimeWindow[seq][index]) {
+			return windowStartTime[seq][index];
 		} else {
 			return Math.max(getMinArrivalTime(seq, index), // the latest we can
 															// arrive
