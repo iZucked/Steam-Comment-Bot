@@ -73,23 +73,17 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 	}
 
 	@Override
-	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans,  final IAnnotatedSolution solution, final int[] arrivalTimes) {
+	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans, final IAnnotatedSolution solution, final int[] arrivalTimes) {
 		final VoyagePlanIterator vpi = voyagePlanIteratorProvider.get();
 		final IVessel vessel = vesselProvider.getVessel(resource);
 		vpi.setVoyagePlans(resource, plans, arrivalTimes);
 
 		vpi.reset();
 
-		// for (final VoyagePlan plan : plans) {
-		// for (final Object e : plan.getSequence()) {
-		int lastTime = arrivalTimes[0];
 		while (vpi.hasNextObject()) {
 			final Object e = vpi.nextObject();
 
 			final int currentTime = vpi.getCurrentTime();
-
-//			assert currentTime >= lastTime;
-			lastTime = currentTime;
 
 			if (e instanceof PortDetails) {
 				final PortDetails details = (PortDetails) e;
