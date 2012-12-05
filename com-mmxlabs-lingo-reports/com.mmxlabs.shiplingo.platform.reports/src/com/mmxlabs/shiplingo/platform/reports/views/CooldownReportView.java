@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
-import java.util.ArrayList;
-
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -116,7 +114,6 @@ public class CooldownReportView extends EMFReportView {
 
 			@Override
 			public Object[] getElements(final Object inputElement) {
-				final ArrayList<Event> events = new ArrayList<Event>();
 				clearInputEquivalents();
 				return superProvider.getElements(inputElement);
 			}
