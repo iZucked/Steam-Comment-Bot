@@ -62,8 +62,32 @@ public class ShippingCostRowViewerPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory);
 		addTypicalColumn("Port", new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_Port(), getReferenceValueProviderCache(), getEditingDomain()));
 		addTypicalColumn("Date", new DateAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_Date(), getEditingDomain()));
-		addTypicalColumn("Gas Price", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice(), getEditingDomain()));
-		addTypicalColumn("Gas CV", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_CvValue(), getEditingDomain()));
+		addTypicalColumn("Gas Price", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice(), getEditingDomain()) {
+			@Override
+			public boolean canEdit(final Object object) {
+
+				if (object instanceof ShippingCostRow) {
+					if (((ShippingCostRow) object).getDestinationType() == DestinationType.END) {
+						return false;
+					}
+				}
+
+				return super.canEdit(object);
+			}
+		});
+		addTypicalColumn("Gas CV", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_CvValue(), getEditingDomain()) {
+			@Override
+			public boolean canEdit(final Object object) {
+
+				if (object instanceof ShippingCostRow) {
+					if (((ShippingCostRow) object).getDestinationType() == DestinationType.END) {
+						return false;
+					}
+				}
+
+				return super.canEdit(object);
+			}
+		});
 		addTypicalColumn("Type", new DestinationTypeAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_DestinationType(), getEditingDomain()));
 		// Disable sorting
 		getScenarioViewer().setComparator(null);
