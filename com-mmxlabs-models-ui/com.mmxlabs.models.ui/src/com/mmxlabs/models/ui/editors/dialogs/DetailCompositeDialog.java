@@ -331,7 +331,11 @@ public class DetailCompositeDialog extends Dialog {
 				getContents().pack();
 				resizeAndCenter();
 			} else {
-				errorText.setText(status.getMessage());
+
+				StringBuilder sb = new StringBuilder();
+				processMessages(sb, status);
+
+				errorText.setText(sb.toString());
 				errorText.setVisible(true);
 				((GridData) errorText.getLayoutData()).heightHint = 50;
 				getContents().pack();
@@ -348,6 +352,17 @@ public class DetailCompositeDialog extends Dialog {
 			displayComposite.displayValidationStatus(status);
 
 		checkButtonEnablement();
+	}
+
+	private void processMessages(StringBuilder sb, IStatus status) {
+		if (status.isMultiStatus()) {
+			for (IStatus s : status.getChildren()) {
+				processMessages(sb, s);
+			}
+		} else {
+			sb.append(status.getMessage());
+			sb.append("\n");
+		}
 	}
 
 	private void checkButtonEnablement() {
