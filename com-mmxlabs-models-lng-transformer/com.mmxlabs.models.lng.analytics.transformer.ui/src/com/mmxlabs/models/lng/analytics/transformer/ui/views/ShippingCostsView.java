@@ -12,7 +12,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -29,6 +31,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -44,7 +47,6 @@ import org.eclipse.ui.views.properties.IPropertySource;
 import org.eclipse.ui.views.properties.IPropertySourceProvider;
 import org.eclipse.ui.views.properties.PropertySheetPage;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.DestinationType;
@@ -289,7 +291,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 
 						if (input instanceof ShippingCostPlan) {
 
-							final ShippingCostRow row = AnalyticsFactory.eINSTANCE.createShippingCostRow();
+							final ShippingCostRow row = createObject(AnalyticsPackage.eINSTANCE.getShippingCostRow(), AnalyticsPackage.eINSTANCE.getShippingCostPlan_Rows(), plan);
 							row.setDestinationType(DestinationType.OTHER);
 							// No insertion before first element!
 							final int insertionIndex = Math.max(planRows.size() == 0 ? 0 : 1, selectionIndex);
@@ -417,5 +419,24 @@ public class ShippingCostsView extends ScenarioInstanceView {
 				selectionViewer.refresh();
 			}
 		};
+	}
+	
+
+	private <T> T createObject(final EClass clz, final EReference reference, final EObject container) {
+		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(clz);
+
+		// TODO: Pre-generate and link to UI
+		// TODO: Add FOB/DES etc as explicit slot types.
+		final IModelFactory factory = factories.get(0);
+
+		final Collection<? extends ISetting> settings = factory.createInstance(getRootObject(), container, reference, StructuredSelection.EMPTY);
+		if (settings.isEmpty() == false) {
+
+			for (final ISetting setting : settings) {
+
+				return (T) setting.getInstance();
+			}
+		}
+		return null;
 	}
 }
