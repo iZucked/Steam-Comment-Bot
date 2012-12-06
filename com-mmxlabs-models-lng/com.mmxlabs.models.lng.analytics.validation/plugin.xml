@@ -124,6 +124,9 @@
                <message>
                   If set, CV must be greater than zero
                </message>
+               <target
+                     class="UnitCostMatrix">
+               </target>
             </constraint>
          </constraints>
       </constraintProvider>
