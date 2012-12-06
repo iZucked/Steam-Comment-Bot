@@ -224,6 +224,8 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final List<IPortSlot> elements = new LinkedList<IPortSlot>();
 			IStartEndRequirement startConstraint = null;
 			IStartEndRequirement endConstraint = null;
+			int startHeelPrice = 0;
+			int startHeelCV = 0;
 			int idx = 0;
 			for (final ShippingCostRow row : plan.getRows()) {
 
@@ -242,6 +244,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 				final int time = entities.getHoursFromDate(row.getDate());
 				final IPort port = ports.lookup(row.getPort());
+			
 				if (idx == 0) {
 					// Start event
 
@@ -251,6 +254,8 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 					}
 					final ITimeWindow timeWindow = builder.createTimeWindow(time, time);
 					startConstraint = builder.createStartEndRequirement(port, timeWindow);
+					startHeelCV = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getCvValue());
+					startHeelPrice = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getCargoPrice());
 				} else if (idx == plan.getRows().size() - 1) {
 					// End Event
 
@@ -291,7 +296,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 			// Create the vessel now we have the start/end requirements
 			final IVessel vessel = builder.createVessel(modelVessel.getName(), vesselClass, new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalHourlyRate(plan.getNotionalDayRate())),
-					startConstraint, endConstraint, 0, 0, 0);
+					startConstraint, endConstraint, vesselClass.getCargoCapacity(), startHeelCV, startHeelPrice);
 
 			/*
 			 * Create the sequences object and generate the arrival times based on window start TODO: We could use the sequence scheduler to do this for us.
