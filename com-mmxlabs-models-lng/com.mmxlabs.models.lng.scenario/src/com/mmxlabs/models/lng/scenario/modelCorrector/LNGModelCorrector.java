@@ -23,6 +23,11 @@ import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate;
+import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.input.ElementAssignment;
@@ -74,19 +79,48 @@ public class LNGModelCorrector {
 		fixMissingSpotCargoMarkets(cmd, rootObject, ed);
 		fixFixedPriceOverrides(cmd, rootObject, ed);
 		fixSequenceTypes(cmd, rootObject, ed);
+		fixRedirectionContracts(cmd, rootObject, ed);
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
 		}
 
 	}
 
-	private void fixSequenceTypes(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
+	private void fixRedirectionContracts(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
+		final CompoundCommand cmd = new CompoundCommand("Fix redirection contracts");
+
+		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+		if (cargoModel != null && commercialModel != null) {
+			LOOP_SLOTS: for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+				if (slot.getContract() instanceof RedirectionPurchaseContract) {
+					for (final UUIDObject ext : slot.getExtensions()) {
+						if (ext instanceof RedirectionContractOriginalDate) {
+							// We're ok, next slot
+							continue LOOP_SLOTS;
+						}
+					}
+					// Nothing found, create extension
+					final RedirectionContractOriginalDate ext = CommercialFactory.eINSTANCE.createRedirectionContractOriginalDate();
+					ext.setDate(slot.getWindowStart());
+
+					cmd.append(AddCommand.create(ed, slot, MMXCorePackage.eINSTANCE.getMMXObject_Extensions(), ext));
+					cmd.append(AddCommand.create(ed, commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_ContractSlotExtensions(), ext));
+				}
+			}
+		}
+		if (!cmd.isEmpty()) {
+			parent.append(cmd);
+		}
+	}
+
+	private void fixSequenceTypes(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 		final CompoundCommand cmd = new CompoundCommand("Fix sequence types");
 		final ScheduleModel scheduleModel = rootObject.getSubModel(ScheduleModel.class);
 		if (scheduleModel != null) {
 
 			if (scheduleModel.getInitialSchedule() != null) {
-				LOOP_SEQUENCES: for (Sequence seq : scheduleModel.getInitialSchedule().getSequences()) {
+				LOOP_SEQUENCES: for (final Sequence seq : scheduleModel.getInitialSchedule().getSequences()) {
 					if (seq.getSequenceType() == null) {
 						if (seq.isSetVessel()) {
 							cmd.append(SetCommand.create(ed, seq, SchedulePackage.eINSTANCE.getSequence_SequenceType(), SequenceType.VESSEL));
@@ -97,7 +131,7 @@ public class LNGModelCorrector {
 						} else {
 							for (final Event e : seq.getEvents()) {
 								if (e instanceof SlotVisit) {
-									Slot slot = ((SlotVisit) e).getSlotAllocation().getSlot();
+									final Slot slot = ((SlotVisit) e).getSlotAllocation().getSlot();
 									if (slot != null) {
 										if (slot instanceof LoadSlot) {
 											if (((LoadSlot) slot).isDESPurchase()) {
