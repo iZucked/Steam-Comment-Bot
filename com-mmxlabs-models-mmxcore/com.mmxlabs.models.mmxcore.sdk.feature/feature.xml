@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.mmxcore.sdk.feature"
       label="Models: MMXCore SDK Feature"
-      version="2.3.2.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Minimax Labs">
 
    <description>
@@ -25,7 +25,7 @@ All rights reserved.
    </license>
 
    <requires>
-      <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="2.2.0" match="compatible"/>
+      <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="3.0.0" match="compatible"/>
    </requires>
 
    <plugin

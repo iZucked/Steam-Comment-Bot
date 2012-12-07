@@ -2,22 +2,19 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.mmxcore;singleton:=true
-Bundle-Version: 2.3.2.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Export-Package: com.mmxlabs.models.mmxcore,
  com.mmxlabs.models.mmxcore.impl,
- com.mmxlabs.models.mmxcore.jointmodel,
  com.mmxlabs.models.mmxcore.util
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore;bundle-version="2.7.0";visibility:=reexport,
  org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
- org.eclipse.emf.edapt.migration;bundle-version="0.3.0";visibility:=reexport,
- org.eclipse.emf.edapt.history;bundle-version="0.3.0",
- org.eclipse.emf.validation;bundle-version="1.4.0";visibility:=reexport,
- org.slf4j.api;bundle-version="1.6.1"
+ org.eclipse.emf.validation;bundle-version="1.4.0";visibility:=reexport
 Eclipse-LazyStart: true
 Bundle-ActivationPolicy: lazy
-Import-Package: com.mmxlabs.common;version="1.0.0"
+Import-Package: com.mmxlabs.common;version="1.0.0",
+ org.slf4j;version="1.6.4"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6

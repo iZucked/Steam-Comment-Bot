@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.models.mmxcore.runtime.feature"
       label="Models: MMXCore Runtime Feature"
-      version="2.3.2.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Minimax Labs">
 
    <description>
@@ -33,13 +33,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.mmxcore.edit"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.models.mmxcore.editor"
          download-size="0"
          install-size="0"
          version="0.0.0"
