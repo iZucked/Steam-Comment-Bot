@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.shiplingo.platform.its.tests;
 
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;

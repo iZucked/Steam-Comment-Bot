@@ -24,7 +24,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edapt.migration.MigrationException;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
@@ -103,11 +102,11 @@ public class AbstractOptimisationResultTester {
 	 * @throws MigrationException
 	 * @throws InterruptedException
 	 */
-	public void runScenario(final URL url) throws IOException, IncompleteScenarioException, MigrationException {
+	public void runScenario(final URL url) throws IOException, IncompleteScenarioException {
 		ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), true);
 
 		final MMXRootObject originalScenario = (MMXRootObject) instance.getInstance();
-		
+
 		runScenario(originalScenario, url);
 	}
 
@@ -120,7 +119,7 @@ public class AbstractOptimisationResultTester {
 	 * @throws MigrationException
 	 * @throws InterruptedException
 	 */
-	public void runScenario(MMXRootObject originalScenario, final URL url) throws IOException, IncompleteScenarioException, MigrationException {
+	public void runScenario(MMXRootObject originalScenario, final URL url) throws IOException, IncompleteScenarioException {
 		// TODO: Does EcoreUtil.copy work -- do we need to do it here?
 		final MMXRootObject copy = duplicate(originalScenario);
 
