@@ -1031,6 +1031,7 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Heel Volume</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1857,6 +1858,7 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume <em>Heel Volume</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Heel Volume</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume()
@@ -2509,6 +2511,7 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Heel Volume</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
