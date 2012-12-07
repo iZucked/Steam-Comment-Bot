@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.eclipse.emf.edapt.migration.MigrationException;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
@@ -18,7 +17,7 @@ import com.mmxlabs.shiplingo.platform.its.tests.scenarios.AbstractOptimisationRe
 public class TestOptimisationResult1 extends AbstractOptimisationResultTester {
 
 	@Test
-	public void testOptimisationResult() throws IOException, InterruptedException, IncompleteScenarioException, MigrationException, URISyntaxException {
+	public void testOptimisationResult() throws IOException, InterruptedException, IncompleteScenarioException, URISyntaxException {
 
 		// Load the scenario to test
 		final URL url = getClass().getResource("/csv-import/sample-data/");

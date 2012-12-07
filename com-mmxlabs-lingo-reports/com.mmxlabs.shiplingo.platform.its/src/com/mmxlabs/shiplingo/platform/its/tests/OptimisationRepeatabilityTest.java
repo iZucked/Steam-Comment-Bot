@@ -19,10 +19,8 @@ import org.eclipse.emf.compare.EMFCompare;
 import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.edapt.migration.MigrationException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
@@ -76,14 +74,14 @@ public class OptimisationRepeatabilityTest {
 	}
 
 	@Test
-	public void testScenario() throws IOException, InterruptedException, MigrationException, IncompleteScenarioException {
+	public void testScenario() throws IOException, InterruptedException, IncompleteScenarioException {
 
 		final URL url = getClass().getResource("/OptimisationRepeatabilityTest.scenario");
 
 		testScenario(url, 5);
 	}
 
-	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException, MigrationException, IncompleteScenarioException {
+	private void testScenario(final URL url, final int numTries) throws IOException, InterruptedException, IncompleteScenarioException {
 		final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromURI(URI.createURI(url.toString()), true);
 
 		// Initial duplicate to remove e.g. eResource references.
