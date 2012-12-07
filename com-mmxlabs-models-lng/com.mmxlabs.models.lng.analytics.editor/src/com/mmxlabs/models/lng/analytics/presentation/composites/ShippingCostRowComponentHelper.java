@@ -72,6 +72,7 @@ public class ShippingCostRowComponentHelper extends BaseComponentHelper {
 		add_cargoPriceEditor(detailComposite, topClass);
 		add_cvValueEditor(detailComposite, topClass);
 		add_destinationTypeEditor(detailComposite, topClass);
+		add_heelVolumeEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the plan feature on ShippingCostRow
@@ -126,5 +127,14 @@ public class ShippingCostRowComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_destinationTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SHIPPING_COST_ROW__DESTINATION_TYPE));
+	}
+
+	/**
+	 * Create the editor for the heelVolume feature on ShippingCostRow
+	 *
+	 * @generated
+	 */
+	protected void add_heelVolumeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.SHIPPING_COST_ROW__HEEL_VOLUME));
 	}
 }

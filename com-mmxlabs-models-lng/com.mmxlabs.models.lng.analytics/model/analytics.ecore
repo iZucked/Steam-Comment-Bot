@@ -213,6 +213,7 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cvValue" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="destinationType" eType="#//DestinationType"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="DestinationType">
     <eLiterals name="START"/>

@@ -72,6 +72,7 @@ public class ShippingCostRowItemProvider
 			addCargoPricePropertyDescriptor(object);
 			addCvValuePropertyDescriptor(object);
 			addDestinationTypePropertyDescriptor(object);
+			addHeelVolumePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -187,6 +188,28 @@ public class ShippingCostRowItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Heel Volume feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addHeelVolumePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ShippingCostRow_heelVolume_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ShippingCostRow_heelVolume_feature", "_UI_ShippingCostRow_type"),
+				 AnalyticsPackage.Literals.SHIPPING_COST_ROW__HEEL_VOLUME,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns ShippingCostRow.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -228,6 +251,7 @@ public class ShippingCostRowItemProvider
 			case AnalyticsPackage.SHIPPING_COST_ROW__CARGO_PRICE:
 			case AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE:
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
+			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
