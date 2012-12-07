@@ -33,7 +33,7 @@ public class NullReferenceConstraint extends AbstractModelConstraint {
 			CommercialPackage.eINSTANCE.getContract_Entity(), CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BaseSalesMarketPort(),
 			CommercialPackage.eINSTANCE.getProfitSharePurchaseContract_BaseMarketIndex(), CommercialPackage.eINSTANCE.getProfitSharePurchaseContract_RefMarketIndex(),
 			CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BaseSalesMarketPort(), CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_DesPurchasePort(),
-			CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_SourcePurchasePort());
+			CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_SourcePurchasePort(), CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_VesselClass());
 
 	private static final HashMap<EClass, Set<EReference>> cacheByClass = new HashMap<EClass, Set<EReference>>();
 
