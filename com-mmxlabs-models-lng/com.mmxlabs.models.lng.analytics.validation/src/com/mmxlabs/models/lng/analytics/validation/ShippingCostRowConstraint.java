@@ -64,7 +64,7 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 				if (destinationType == DestinationType.START || destinationType == DestinationType.LOAD || destinationType == DestinationType.OTHER) {
 					if (shippingCostRow.getCvValue() < 0.0001) {
 						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No cargo CV specified - must be non-zero"));
-						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
+						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CvValue());
 						statuses.add(deco);
 					}
 					if (shippingCostRow.getCvValue() > 50.0) {
