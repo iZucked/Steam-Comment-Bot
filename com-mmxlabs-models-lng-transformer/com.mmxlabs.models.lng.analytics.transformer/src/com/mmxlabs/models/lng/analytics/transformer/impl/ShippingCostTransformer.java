@@ -226,6 +226,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			IStartEndRequirement endConstraint = null;
 			int startHeelPrice = 0;
 			int startHeelCV = 0;
+			int startHeelVolume = 0;
 			int idx = 0;
 			for (final ShippingCostRow row : plan.getRows()) {
 
@@ -256,6 +257,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 					startConstraint = builder.createStartEndRequirement(port, timeWindow);
 					startHeelCV = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getCvValue());
 					startHeelPrice = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getCargoPrice());
+					startHeelVolume = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getHeelVolume());
 				} else if (idx == plan.getRows().size() - 1) {
 					// End Event
 
@@ -275,15 +277,15 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 					final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getCvValue());
 					final int gasPrice = OptimiserUnitConvertor.convertToInternalPrice(row.getCargoPrice());
-
+					int gasVolume = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getHeelVolume());
 					final IPortSlot slot;
 					if (row.getDestinationType() == DestinationType.LOAD) {
 						final ILoadPriceCalculator priceCalculator = new FixedPriceContract(gasPrice);
-						slot = builder.createLoadSlot(id, port, timeWindow, 0, vesselClass.getCargoCapacity(), priceCalculator, cargoCVValue, 24, false, true, false);
+						slot = builder.createLoadSlot(id, port, timeWindow, 0, gasVolume, priceCalculator, cargoCVValue, 24, false, true, false);
 					} else {
 						if (row.getDestinationType() == DestinationType.DISCHARGE) {
 							final ISalesPriceCalculator priceCalculator = new FixedPriceContract(gasPrice);
-							slot = builder.createDischargeSlot(id, port, timeWindow, 0, vesselClass.getCargoCapacity(), priceCalculator, 24, false);
+							slot = builder.createDischargeSlot(id, port, timeWindow, 0, gasVolume, priceCalculator, 24, false);
 						} else {
 							// TODO: Need general waypoint type
 							slot = builder.createCharterOutEvent(id, timeWindow, port, port, 24, vesselClass.getCargoCapacity(), cargoCVValue, gasPrice, 0, 0);
@@ -296,7 +298,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 			// Create the vessel now we have the start/end requirements
 			final IVessel vessel = builder.createVessel(modelVessel.getName(), vesselClass, new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalHourlyRate(plan.getNotionalDayRate())),
-					startConstraint, endConstraint, vesselClass.getCargoCapacity(), startHeelCV, startHeelPrice);
+					startConstraint, endConstraint, startHeelVolume, startHeelCV, startHeelPrice);
 
 			/*
 			 * Create the sequences object and generate the arrival times based on window start TODO: We could use the sequence scheduler to do this for us.

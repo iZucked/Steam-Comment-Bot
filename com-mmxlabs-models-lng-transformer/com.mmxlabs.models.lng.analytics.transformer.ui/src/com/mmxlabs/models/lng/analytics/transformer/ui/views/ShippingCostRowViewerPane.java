@@ -88,6 +88,19 @@ public class ShippingCostRowViewerPane extends ScenarioTableViewerPane {
 				return super.canEdit(object);
 			}
 		});
+		addTypicalColumn("Gas Volume", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_HeelVolume(), getEditingDomain()) {
+			@Override
+			public boolean canEdit(final Object object) {
+
+				if (object instanceof ShippingCostRow) {
+					if (((ShippingCostRow) object).getDestinationType() == DestinationType.END) {
+						return false;
+					}
+				}
+
+				return super.canEdit(object);
+			}
+		});
 		addTypicalColumn("Type", new DestinationTypeAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_DestinationType(), getEditingDomain()));
 		// Disable sorting
 		getScenarioViewer().setComparator(null);
