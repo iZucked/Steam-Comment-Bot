@@ -393,6 +393,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 					final String idxStr = String.format("%02d", idxX);
 					if (obj instanceof VoyageDetails) {
 						createVoyageCostComponent(line.addExtraData("leg" + idxStr, idxStr + " - Leg"), plan, (VoyageDetails) obj);
+						sumVoyageCostComponent(plan, (VoyageDetails)obj, voyageSums);
 					} else if (obj instanceof PortDetails) {
 
 						final PortDetails portDetails = (PortDetails) obj;
@@ -409,7 +410,6 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				// sumVoyageCostComponent(plan, (VoyageDetails) voyagePlan.getSequence()[1], voyageSums);
 				// createPortCostComponent(line.addExtraData("discharging", "3 Discharging"), ports, pricing, plan, (PortDetails) voyagePlan.getSequence()[2]);
 				// createVoyageCostComponent(line.addExtraData("ballast", "4 Ballast Journey"), plan, (VoyageDetails) voyagePlan.getSequence()[3]);
-				// sumVoyageCostComponent(plan, (VoyageDetails) voyagePlan.getSequence()[3], voyageSums);
 
 				for (final ExtraData d : line.getExtraData()) {
 					final ExtraData duration = d.getDataWithKey("duration");
@@ -546,7 +546,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 		d.addExtraData("hirecost", "Hire Cost", hireCost, ExtraDataFormatType.CURRENCY);
 	}
 
-	private void sumVoyageCostComponent(final UnitCostMatrix spec, final VoyageDetails voyageDetails, final Map<FuelComponent, Integer[]> sums) {
+	private void sumVoyageCostComponent(final ShippingCostPlan spec, final VoyageDetails voyageDetails, final Map<FuelComponent, Integer[]> sums) {
 
 		for (final FuelComponent component : FuelComponent.values()) {
 			final long consumption = voyageDetails.getFuelConsumption(component, component.getDefaultFuelUnit());
