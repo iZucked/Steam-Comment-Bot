@@ -71,13 +71,6 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.edapt.recorder.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.edapt.recorder.sdk.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.edapt.runtime.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.edapt.runtime.sdk.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/edapt/update-site"/>
-</location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="com.googlecode.json-simple" version="1.1.1"/>
 <unit id="org.ops4j.peaberry.activation.source" version="1.3.0"/>
 <unit id="org.ops4j.peaberry.eclipse.source" version="1.3.0"/>
