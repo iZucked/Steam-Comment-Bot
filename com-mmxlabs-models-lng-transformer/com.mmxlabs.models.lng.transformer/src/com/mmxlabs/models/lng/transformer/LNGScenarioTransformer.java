@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -41,6 +42,7 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
@@ -50,6 +52,8 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate;
+import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
@@ -96,6 +100,7 @@ import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.ASpotMarket;
 import com.mmxlabs.models.lng.types.AVessel;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -356,7 +361,7 @@ public class LNGScenarioTransformer {
 		}
 
 		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, entities);
-		
+
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
@@ -370,7 +375,6 @@ public class LNGScenarioTransformer {
 			final ISalesPriceCalculator calculator = transformer.transformSalesContract(c);
 			entities.addModelObject(c, calculator);
 		}
-
 
 		// process port costs
 		final PricingModel pricing = rootObject.getSubModel(PricingModel.class);
@@ -665,6 +669,13 @@ public class LNGScenarioTransformer {
 		final Set<LoadSlot> usedLoadSlots = new HashSet<LoadSlot>();
 		final Set<DischargeSlot> usedDischargeSlots = new HashSet<DischargeSlot>();
 
+		final Collection<IPort> dischargePorts = new ArrayList<IPort>();
+		for (final Port o : entities.getAllModelObjects(Port.class)) {
+			if (o.getCapabilities().contains(PortCapability.DISCHARGE)) {
+				dischargePorts.add(entities.getOptimiserObject(o, IPort.class));
+			}
+		}
+
 		// TODO: Refactor into Load and Discharge slot creation before cargo paring
 		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
 		for (final Cargo eCargo : cargoModel.getCargoes()) {
@@ -707,13 +718,13 @@ public class LNGScenarioTransformer {
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
-					Collection<IPort> ports = new ArrayList<IPort>();
-					for (Port o : entities.getAllModelObjects(Port.class)) {
-						ports.add(entities.getOptimiserObject(o, IPort.class));
+					if (loadSlot.getContract() instanceof RedirectionPurchaseContract) {
+						// Redirection contracts can go to anywhere
+						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
+					} else {
+						// Bind to this port -- TODO: Fix to discharge?
+						builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(discharge.getPort()));
 					}
- 					
-					// Bind to this port -- TODO: Fix to discharge?
-					builder.bindDischargeSlotsToDESPurchase(load, ports);
 				}
 			}
 			if (dischargeSlot.isFOBSale()) {
@@ -779,8 +790,13 @@ public class LNGScenarioTransformer {
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
-					// Bind to this port -- TODO: Fix to discharge?
-//					builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(load.getPort()));
+					if (loadSlot.getContract() instanceof RedirectionPurchaseContract) {
+						// Redirection contracts can go to anywhere
+						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
+					} else {
+						// Bind to this port -- TODO: Fix to discharge?
+						builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(load.getPort()));
+					}
 				}
 			}
 		}
@@ -904,10 +920,28 @@ public class LNGScenarioTransformer {
 			loadPriceCalculator = entities.getOptimiserObject(purchaseContract, ILoadPriceCalculator.class);
 		}
 		if (loadSlot.isDESPurchase()) {
-			
-			final ITimeWindow loadWindow2 = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTime()),
-					convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTime()) + 2000 );
-			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow2,
+
+			final ITimeWindow localTimeWindow;
+			// FIXME: This should not really be in the builder, but need better API to permit this kind of transformation.
+			if (loadSlot.getContract() instanceof RedirectionPurchaseContract) {
+				// Redirection contracts can go to anywhere, so need larger window for compatibility
+				final int extraTime = 24 * 60; // approx 2 months
+				Date originalDate = null;
+				for (final UUIDObject ext : loadSlot.getExtensions()) {
+					if (ext instanceof RedirectionContractOriginalDate) {
+						final RedirectionContractOriginalDate originalDateExt = (RedirectionContractOriginalDate) ext;
+						final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(loadSlot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
+						calendar.setTime(originalDateExt.getDate());
+						originalDate = calendar.getTime();
+					}
+				}
+				final Date startTime = originalDate == null ? loadSlot.getWindowStart() : originalDate;
+
+				localTimeWindow = builder.createTimeWindow(convertTime(earliestTime, startTime), convertTime(earliestTime, startTime) + extraTime);
+			} else {
+				localTimeWindow = loadWindow;
+			}
+			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), localTimeWindow,
 					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
 					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrPortCV()), loadSlot.isOptional());
 		} else {
@@ -1511,8 +1545,8 @@ public class LNGScenarioTransformer {
 				}
 			}
 
-			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPrice);			
-			
+			final IVesselClass vc = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPrice);
+
 			vesselClassAssociation.add(eVc, vc);
 
 			/*
@@ -1661,7 +1695,6 @@ public class LNGScenarioTransformer {
 
 		return builder.createStartEndRequirement();
 	}
-
 
 	/**
 	 * Utility method for getting the current optimisation settings from this scenario. TODO maybe put this in another file/model somewhere else.
