@@ -17,8 +17,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
+import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.mmxlabs.common.Association;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.common.curves.ConstantValueCurve;
@@ -78,6 +80,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanChoice;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.SchedulerUtils;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
@@ -86,6 +89,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
@@ -208,7 +212,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 			for (final Port loadPort : loadPorts) {
 				monitor.subTask("Evaluating costs for journeys from " + loadPort.getName());
-				final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule());
+				final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule(), createShippingCostModule());
 				final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
 
 				final Association<Port, IPort> ports = new Association<Port, IPort>();
@@ -399,7 +403,7 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				// run the scheduler on the sequences
 				final ScheduledSequences result = scheduler.schedule(sequences, arrivalTimes);
 
-				final UnconstrainedCargoAllocator aca = new UnconstrainedCargoAllocator();
+				final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
 				aca.setVesselProvider(vesselProvider);
 
 				final Collection<IAllocationAnnotation> allocations = aca.allocate(result);
@@ -611,6 +615,17 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 		result.setValue(total);
 		result.setFormatType(ExtraDataFormatType.CURRENCY);
+	}
+
+	private Module createShippingCostModule() {
+		return new AbstractModule() {
+
+			@Override
+			protected void configure() {
+				bind(IVoyagePlanOptimiser.class).to(VoyagePlanOptimiser.class);
+				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
+			}
+		};
 	}
 
 }
