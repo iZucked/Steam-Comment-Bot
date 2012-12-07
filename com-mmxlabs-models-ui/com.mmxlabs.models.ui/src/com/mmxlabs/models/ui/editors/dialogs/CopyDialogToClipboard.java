@@ -72,6 +72,24 @@ public class CopyDialogToClipboard implements IInlineEditorWrapper {
 					final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) adapterFactory.adapt(value, IItemLabelProvider.class);
 					final String str = itemLabelProvider != null ? itemLabelProvider.getText(value) : value == null ? "" : value.toString();
 					sb.append(str);
+				} else if (value instanceof List) {
+					final List<?> l = (List<?>) value;
+					boolean first = true;
+					sb.append("[");
+					for (final Object o : l) {
+						if (!first) {
+							sb.append(", ");
+						}
+						first = false;
+						if (o instanceof EObject) {
+							final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) adapterFactory.adapt(o, IItemLabelProvider.class);
+							final String str = itemLabelProvider != null ? itemLabelProvider.getText(o) : o == null ? "" : o.toString();
+							sb.append(str);
+						} else {
+							sb.append(o.toString());
+						}
+					}
+					sb.append("]");
 				} else {
 					sb.append(value.toString());
 				}
