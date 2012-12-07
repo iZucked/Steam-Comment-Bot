@@ -35,6 +35,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -75,9 +76,14 @@ public class ShippingCostsView extends ScenarioInstanceView {
 
 	private Composite parent;
 
-	private Composite sidebarSash;
+	private SashForm sidebarSash;
+	private Composite sidebarComposite;
 
 	private TableViewer selectionViewer;
+
+	private Action addAction;
+
+	private Action deleteAction;
 
 	@Override
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
@@ -87,7 +93,15 @@ public class ShippingCostsView extends ScenarioInstanceView {
 			super.displayScenarioInstance(instance);
 			if (instance != null) {
 				createContents();
+			} else {
+				selectionViewer.setInput(new Object[0]);
 			}
+		}
+		if (addAction != null) {
+			addAction.setEnabled(instance != null);
+		}
+		if (deleteAction != null && instance == null) {
+			deleteAction.setEnabled(false);
 		}
 	}
 
@@ -115,6 +129,8 @@ public class ShippingCostsView extends ScenarioInstanceView {
 		createMenuManager(rows.getScenarioViewer().getGrid());
 		getViewSite().setSelectionProvider(rows.getViewer());
 
+		sidebarSash.setWeights(new int[] { 20, 80 });
+
 		parent.layout(true);
 	}
 
@@ -126,14 +142,14 @@ public class ShippingCostsView extends ScenarioInstanceView {
 		parent.setLayout(gridLayout);
 
 		// if (displaySidebarList) {
-		sidebarSash = new Composite(parent, SWT.NONE);
+		sidebarSash = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
 		{
 			final GridLayout layout = new GridLayout(2, false);
 			layout.marginHeight = layout.marginWidth = 0;
 			sidebarSash.setLayout(layout);
 		}
 		sidebarSash.setLayoutData(new GridData(GridData.FILL_BOTH));
-		final Composite sidebarComposite = new Composite(sidebarSash, SWT.NONE);
+		sidebarComposite = new Composite(sidebarSash, SWT.NONE);
 		sidebarComposite.setLayout(new GridLayout(1, true));
 		sidebarComposite.setLayoutData(new GridData(SWT.LEFT, SWT.FILL, false, true));
 
@@ -359,14 +375,15 @@ public class ShippingCostsView extends ScenarioInstanceView {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(AnalyticsPackage.eINSTANCE.getShippingCostPlan());
 		if (factories.isEmpty() == false) {
 			if (factories.size() == 1) {
-				barManager.add(createAddAction(factories.get(0)));
+				addAction = createAddAction(factories.get(0));
+				addAction.setEnabled(false);
+				barManager.add(addAction);
 			} else {
 				// multi-adder //TODO
 			}
 		}
 
-		// create delete actions
-		final Action deleteAction = new Action() {
+		deleteAction = new Action() {
 			{
 				setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
 				selectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -387,7 +404,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 				}
 			}
 		};
-
+		deleteAction.setEnabled(false);
 		barManager.add(deleteAction);
 
 		// create duplicate actions
@@ -396,6 +413,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 
 	private Action createAddAction(final IModelFactory factory) {
 		return new Action("Create new " + factory.getLabel(), PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD)) {
+
 			@Override
 			public void run() {
 				final MMXRootObject rootObject = getRootObject();
@@ -420,7 +438,6 @@ public class ShippingCostsView extends ScenarioInstanceView {
 			}
 		};
 	}
-	
 
 	private <T> T createObject(final EClass clz, final EReference reference, final EObject container) {
 		final List<IModelFactory> factories = Activator.getDefault().getModelFactoryRegistry().getModelFactories(clz);
