@@ -355,6 +355,8 @@ public class LNGScenarioTransformer {
 			builder.setPortCV(port, OptimiserUnitConvertor.convertToInternalConversionFactor(ePort.getCvValue()));
 		}
 
+		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, entities);
+		
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
@@ -369,7 +371,6 @@ public class LNGScenarioTransformer {
 			entities.addModelObject(c, calculator);
 		}
 
-		final Pair<Association<VesselClass, IVesselClass>, Association<Vessel, IVessel>> vesselAssociations = buildFleet(builder, portAssociation, entities);
 
 		// process port costs
 		final PricingModel pricing = rootObject.getSubModel(PricingModel.class);
@@ -657,7 +658,7 @@ public class LNGScenarioTransformer {
 	 * @param defaultRewiring
 	 */
 	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Index<?>, ICurve> indexAssociation,
-			final Association<Vessel, IVessel> vesselAssociation, final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean defaultRewiring) {
+			final Association<Vessel, IVessel> vesselAssociation, final Collection<IContractTransformer> contractTransformers, final ResourcelessModelEntityMap entities, final boolean defaultRewiring) {
 
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
@@ -706,8 +707,13 @@ public class LNGScenarioTransformer {
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
+					Collection<IPort> ports = new ArrayList<IPort>();
+					for (Port o : entities.getAllModelObjects(Port.class)) {
+						ports.add(entities.getOptimiserObject(o, IPort.class));
+					}
+ 					
 					// Bind to this port -- TODO: Fix to discharge?
-					builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(discharge.getPort()));
+					builder.bindDischargeSlotsToDESPurchase(load, ports);
 				}
 			}
 			if (dischargeSlot.isFOBSale()) {
@@ -774,7 +780,7 @@ public class LNGScenarioTransformer {
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
 					// Bind to this port -- TODO: Fix to discharge?
-					builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(load.getPort()));
+//					builder.bindDischargeSlotsToDESPurchase(load, Collections.singleton(load.getPort()));
 				}
 			}
 		}
@@ -897,9 +903,11 @@ public class LNGScenarioTransformer {
 			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot.getContract());
 			loadPriceCalculator = entities.getOptimiserObject(purchaseContract, ILoadPriceCalculator.class);
 		}
-
 		if (loadSlot.isDESPurchase()) {
-			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow,
+			
+			final ITimeWindow loadWindow2 = builder.createTimeWindow(convertTime(earliestTime, loadSlot.getWindowStartWithSlotOrPortTime()),
+					convertTime(earliestTime, loadSlot.getWindowEndWithSlotOrPortTime()) + 2000 );
+			load = builder.createDESPurchaseLoadSlot(loadSlot.getName(), portAssociation.lookup(loadSlot.getPort()), loadWindow2,
 					OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMinQuantity()), OptimiserUnitConvertor.convertToInternalVolume(loadSlot.getSlotOrContractMaxQuantity()),
 					loadPriceCalculator, OptimiserUnitConvertor.convertToInternalConversionFactor(loadSlot.getSlotOrPortCV()), loadSlot.isOptional());
 		} else {
