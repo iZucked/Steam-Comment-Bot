@@ -559,9 +559,9 @@ public class DetailCompositeDialog extends Dialog {
 					copyDialogToClipboardEditorWrapper.copyToClipboard();
 				}
 			};
-			
+
 			copy.setImageDescriptor(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/copy.gif"));
-			
+
 			barManager.add(copy);
 			barManager.update(true);
 
