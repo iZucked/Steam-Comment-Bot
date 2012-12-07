@@ -135,13 +135,23 @@ public interface CommercialPackage extends EPackage {
 	int COMMERCIAL_MODEL__PURCHASE_CONTRACTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Contract Slot Extensions</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int COMMERCIAL_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -1716,6 +1726,26 @@ public interface CommercialPackage extends EPackage {
 	int REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE = PURCHASE_CONTRACT_FEATURE_COUNT + 6;
 
 	/**
+	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS = PURCHASE_CONTRACT_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__HIRE_COST = PURCHASE_CONTRACT_FEATURE_COUNT + 8;
+
+	/**
 	 * The number of structural features of the '<em>Redirection Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1723,7 +1753,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REDIRECTION_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 7;
+	int REDIRECTION_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl <em>Price Expression Contract</em>}' class.
@@ -1907,6 +1937,67 @@ public interface CommercialPackage extends EPackage {
 	int PRICE_EXPRESSION_CONTRACT_FEATURE_COUNT = SALES_CONTRACT_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.RedirectionContractOriginalDateImpl <em>Redirection Contract Original Date</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.RedirectionContractOriginalDateImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRedirectionContractOriginalDate()
+	 * @generated
+	 */
+	int REDIRECTION_CONTRACT_ORIGINAL_DATE = 12;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_CONTRACT_ORIGINAL_DATE__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_CONTRACT_ORIGINAL_DATE__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_CONTRACT_ORIGINAL_DATE__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_CONTRACT_ORIGINAL_DATE__DATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Redirection Contract Original Date</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_CONTRACT_ORIGINAL_DATE_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1959,6 +2050,18 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getCommercialModel_PurchaseContracts();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.CommercialModel#getContractSlotExtensions <em>Contract Slot Extensions</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Contract Slot Extensions</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.CommercialModel#getContractSlotExtensions()
+	 * @see #getCommercialModel()
+	 * @generated
+	 */
+	EReference getCommercialModel_ContractSlotExtensions();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LegalEntity <em>Legal Entity</em>}'.
@@ -2515,6 +2618,30 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getRedirectionPurchaseContract_ProfitShare();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getVesselClass <em>Vessel Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Class</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getVesselClass()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EReference getRedirectionPurchaseContract_VesselClass();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getHireCost <em>Hire Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getHireCost()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getRedirectionPurchaseContract_HireCost();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PriceExpressionContract <em>Price Expression Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -2536,6 +2663,29 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getPriceExpressionContract_PriceExpression();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate <em>Redirection Contract Original Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Redirection Contract Original Date</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate
+	 * @generated
+	 */
+	EClass getRedirectionContractOriginalDate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate#getDate()
+	 * @see #getRedirectionContractOriginalDate()
+	 * @generated
+	 */
+	EAttribute getRedirectionContractOriginalDate_Date();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -2600,6 +2750,15 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference COMMERCIAL_MODEL__PURCHASE_CONTRACTS = eINSTANCE.getCommercialModel_PurchaseContracts();
+
+		/**
+		 * The meta object literal for the '<em><b>Contract Slot Extensions</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS = eINSTANCE.getCommercialModel_ContractSlotExtensions();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl <em>Legal Entity</em>}' class.
@@ -3036,6 +3195,24 @@ public interface CommercialPackage extends EPackage {
 		EAttribute REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE = eINSTANCE.getRedirectionPurchaseContract_ProfitShare();
 
 		/**
+		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS = eINSTANCE.getRedirectionPurchaseContract_VesselClass();
+
+		/**
+		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PURCHASE_CONTRACT__HIRE_COST = eINSTANCE.getRedirectionPurchaseContract_HireCost();
+
+		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl <em>Price Expression Contract</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * @since 2.0
@@ -3054,6 +3231,26 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PRICE_EXPRESSION_CONTRACT__PRICE_EXPRESSION = eINSTANCE.getPriceExpressionContract_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.RedirectionContractOriginalDateImpl <em>Redirection Contract Original Date</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.RedirectionContractOriginalDateImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRedirectionContractOriginalDate()
+		 * @generated
+		 */
+		EClass REDIRECTION_CONTRACT_ORIGINAL_DATE = eINSTANCE.getRedirectionContractOriginalDate();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_CONTRACT_ORIGINAL_DATE__DATE = eINSTANCE.getRedirectionContractOriginalDate_Date();
 
 	}
 

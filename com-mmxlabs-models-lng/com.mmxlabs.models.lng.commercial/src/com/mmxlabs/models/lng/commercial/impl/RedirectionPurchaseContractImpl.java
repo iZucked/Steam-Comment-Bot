@@ -7,17 +7,15 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.commercial.impl;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
-
-import com.mmxlabs.models.lng.port.Port;
-
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AVesselClass;
 
 /**
  * <!-- begin-user-doc -->
@@ -34,6 +32,8 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getDesPurchasePort <em>Des Purchase Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getSourcePurchasePort <em>Source Purchase Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getProfitShare <em>Profit Share</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getHireCost <em>Hire Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -149,6 +149,36 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 	 * @ordered
 	 */
 	protected double profitShare = PROFIT_SHARE_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getVesselClass() <em>Vessel Class</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVesselClass()
+	 * @generated
+	 * @ordered
+	 */
+	protected AVesselClass vesselClass;
+
+	/**
+	 * The default value of the '{@link #getHireCost() <em>Hire Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HIRE_COST_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHireCost() <em>Hire Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHireCost()
+	 * @generated
+	 * @ordered
+	 */
+	protected int hireCost = HIRE_COST_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -372,6 +402,65 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public AVesselClass getVesselClass() {
+		if (vesselClass != null && vesselClass.eIsProxy()) {
+			InternalEObject oldVesselClass = (InternalEObject)vesselClass;
+			vesselClass = (AVesselClass)eResolveProxy(oldVesselClass);
+			if (vesselClass != oldVesselClass) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS, oldVesselClass, vesselClass));
+			}
+		}
+		return vesselClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AVesselClass basicGetVesselClass() {
+		return vesselClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVesselClass(AVesselClass newVesselClass) {
+		AVesselClass oldVesselClass = vesselClass;
+		vesselClass = newVesselClass;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS, oldVesselClass, vesselClass));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getHireCost() {
+		return hireCost;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHireCost(int newHireCost) {
+		int oldHireCost = hireCost;
+		hireCost = newHireCost;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST, oldHireCost, hireCost));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -392,6 +481,11 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return basicGetSourcePurchasePort();
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
 				return getProfitShare();
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS:
+				if (resolve) return getVesselClass();
+				return basicGetVesselClass();
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST:
+				return getHireCost();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -424,6 +518,12 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return;
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
 				setProfitShare((Double)newValue);
+				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS:
+				setVesselClass((AVesselClass)newValue);
+				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST:
+				setHireCost((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -458,6 +558,12 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
 				setProfitShare(PROFIT_SHARE_EDEFAULT);
 				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS:
+				setVesselClass((AVesselClass)null);
+				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST:
+				setHireCost(HIRE_COST_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -484,6 +590,10 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return sourcePurchasePort != null;
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
 				return profitShare != PROFIT_SHARE_EDEFAULT;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS:
+				return vesselClass != null;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST:
+				return hireCost != HIRE_COST_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -506,6 +616,8 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 		result.append(notionalSpeed);
 		result.append(", profitShare: ");
 		result.append(profitShare);
+		result.append(", hireCost: ");
+		result.append(hireCost);
 		result.append(')');
 		return result.toString();
 	}

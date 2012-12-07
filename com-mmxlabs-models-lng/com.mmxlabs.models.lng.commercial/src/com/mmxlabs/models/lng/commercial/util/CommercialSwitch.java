@@ -221,6 +221,14 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.REDIRECTION_CONTRACT_ORIGINAL_DATE: {
+				RedirectionContractOriginalDate redirectionContractOriginalDate = (RedirectionContractOriginalDate)theEObject;
+				T result = caseRedirectionContractOriginalDate(redirectionContractOriginalDate);
+				if (result == null) result = caseUUIDObject(redirectionContractOriginalDate);
+				if (result == null) result = caseMMXObject(redirectionContractOriginalDate);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -404,6 +412,22 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePriceExpressionContract(PriceExpressionContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Redirection Contract Original Date</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Redirection Contract Original Date</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRedirectionContractOriginalDate(RedirectionContractOriginalDate object) {
 		return null;
 	}
 
