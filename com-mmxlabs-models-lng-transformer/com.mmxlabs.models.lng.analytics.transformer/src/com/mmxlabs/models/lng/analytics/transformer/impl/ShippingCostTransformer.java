@@ -407,15 +407,21 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 						final PortType portType = portDetails.getOptions().getPortSlot().getPortType();
 						// Charter out is currently our OTHER destination
 						final String typeString = portType == PortType.CharterOut ? "Other" : portType.name();
-						createPortCostComponent(line.addExtraData("port" + idxX, idxStr + " - " + portDetails.getOptions().getPortSlot().getPort().getName() + " - (" + typeString + ")"), ports,
-								pricing, plan, portDetails);
+						final ExtraData extraData = line.addExtraData("port" + idxX, idxStr + " - " + portDetails.getOptions().getPortSlot().getPort().getName() + " - (" + typeString + ")");
+						createPortCostComponent(extraData, ports, pricing, plan, portDetails);
 
 						if (portDetails.getOptions().getPortSlot() instanceof ILoadOption) {
 							currentAllocationAnnotation = allocationIterator.next();
-
 							// Add in LOAD VOLUME
+							final int loadVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getLoadVolume());
+							extraData.addExtraData("volume", "Load Volume", loadVolume, ExtraDataFormatType.INTEGER);
 						} else if (portDetails.getOptions().getPortSlot() instanceof IDischargeOption) {
 							// Add in DISCHARGE VOLUME
+							if (currentAllocationAnnotation != null) {
+								final int dischargeVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getDischargeVolume());
+								extraData.addExtraData("volume", "Discharge Volume", dischargeVolume, ExtraDataFormatType.INTEGER);
+								currentAllocationAnnotation = null;
+							}
 						} else {
 							// Ignore
 						}
