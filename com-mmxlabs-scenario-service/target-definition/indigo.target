@@ -16,7 +16,7 @@
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.source" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="3.0.0RELEASE"/>
+<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="3.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="3.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="3.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="3.0.0.RELEASE"/>
