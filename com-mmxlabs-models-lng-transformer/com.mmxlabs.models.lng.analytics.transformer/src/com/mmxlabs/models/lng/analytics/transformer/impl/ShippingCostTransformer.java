@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
-import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
 import com.mmxlabs.models.lng.analytics.transformer.IShippingCostTransformer;
@@ -71,6 +70,8 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -94,6 +95,7 @@ import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -138,7 +140,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final PricingModel pricing = root.getSubModel(PricingModel.class);
 
 			// Check for valid plan
-			if (plan == null || plan.getRows().size() < 3) {
+			if (plan == null || plan.getRows().size() < 2) {
 				monitor.setCanceled(true);
 				return Collections.emptyList();
 			}
@@ -245,7 +247,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 				final int time = entities.getHoursFromDate(row.getDate());
 				final IPort port = ports.lookup(row.getPort());
-			
+
 				if (idx == 0) {
 					// Start event
 
@@ -277,7 +279,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 					final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getCvValue());
 					final int gasPrice = OptimiserUnitConvertor.convertToInternalPrice(row.getCargoPrice());
-					int gasVolume = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getHeelVolume());
+					final int gasVolume = OptimiserUnitConvertor.convertToInternalConversionFactor(row.getHeelVolume());
 					final IPortSlot slot;
 					if (row.getDestinationType() == DestinationType.LOAD) {
 						final ILoadPriceCalculator priceCalculator = new FixedPriceContract(gasPrice);
@@ -371,6 +373,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			 * Unpack the annotated solution and create output lines //
 			 */
 
+			IAllocationAnnotation currentAllocationAnnotation = null;
 			final List<UnitCostLine> lines = new ArrayList<UnitCostLine>();
 			for (final ScheduledSequence sequence : result) {
 				// final IAllocationAnnotation allocation = allocationIterator.next();
@@ -392,13 +395,30 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 					idxX++;
 					final String idxStr = String.format("%02d", idxX);
 					if (obj instanceof VoyageDetails) {
-						createVoyageCostComponent(line.addExtraData("leg" + idxStr, idxStr + " - Leg"), plan, (VoyageDetails) obj);
-						sumVoyageCostComponent(plan, (VoyageDetails)obj, voyageSums);
+						final VoyageDetails voyageDetails = (VoyageDetails) obj;
+						createVoyageCostComponent(
+								line.addExtraData("leg" + idxStr, idxStr + " - " + voyageDetails.getOptions().getFromPortSlot().getPort().getName() + " to "
+										+ voyageDetails.getOptions().getToPortSlot().getPort().getName()), plan, voyageDetails);
+						sumVoyageCostComponent(plan, voyageDetails, voyageSums);
 					} else if (obj instanceof PortDetails) {
 
 						final PortDetails portDetails = (PortDetails) obj;
 
-						createPortCostComponent(line.addExtraData("port" + idxX, idxStr + " - " + portDetails.getOptions().getPortSlot().getPortType()), ports, pricing, plan, portDetails);
+						final PortType portType = portDetails.getOptions().getPortSlot().getPortType();
+						// Charter out is currently our OTHER destination
+						final String typeString = portType == PortType.CharterOut ? "Other" : portType.name();
+						createPortCostComponent(line.addExtraData("port" + idxX, idxStr + " - " + portDetails.getOptions().getPortSlot().getPort().getName() + " - (" + typeString + ")"), ports,
+								pricing, plan, portDetails);
+
+						if (portDetails.getOptions().getPortSlot() instanceof ILoadOption) {
+							currentAllocationAnnotation = allocationIterator.next();
+
+							// Add in LOAD VOLUME
+						} else if (portDetails.getOptions().getPortSlot() instanceof IDischargeOption) {
+							// Add in DISCHARGE VOLUME
+						} else {
+							// Ignore
+						}
 					}
 				}
 				// line.setFrom(ports.reverseLookup(((PortOptions) voyagePlan.getSequence()[0]).getPortSlot().getPort()));
