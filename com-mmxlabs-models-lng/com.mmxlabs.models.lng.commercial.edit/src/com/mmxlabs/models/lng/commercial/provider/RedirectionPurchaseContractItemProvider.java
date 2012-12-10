@@ -71,6 +71,7 @@ public class RedirectionPurchaseContractItemProvider
 			addProfitSharePropertyDescriptor(object);
 			addVesselClassPropertyDescriptor(object);
 			addHireCostPropertyDescriptor(object);
+			addDaysFromSourcePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -274,6 +275,28 @@ public class RedirectionPurchaseContractItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Days From Source feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addDaysFromSourcePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_RedirectionPurchaseContract_daysFromSource_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_RedirectionPurchaseContract_daysFromSource_feature", "_UI_RedirectionPurchaseContract_type"),
+				 CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns RedirectionPurchaseContract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -315,6 +338,7 @@ public class RedirectionPurchaseContractItemProvider
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__NOTIONAL_SPEED:
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE:
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST:
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

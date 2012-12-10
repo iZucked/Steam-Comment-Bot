@@ -735,6 +735,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getRedirectionPurchaseContract_DaysFromSource() {
+		return (EAttribute)redirectionPurchaseContractEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getPriceExpressionContract() {
 		return priceExpressionContractEClass;
 	}
@@ -865,6 +875,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE);
 		createEReference(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS);
 		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__HIRE_COST);
+		createEAttribute(redirectionPurchaseContractEClass, REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE);
 
 		priceExpressionContractEClass = createEClass(PRICE_EXPRESSION_CONTRACT);
 		createEAttribute(priceExpressionContractEClass, PRICE_EXPRESSION_CONTRACT__PRICE_EXPRESSION);
@@ -993,6 +1004,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getRedirectionPurchaseContract_ProfitShare(), ecorePackage.getEDouble(), "profitShare", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getRedirectionPurchaseContract_VesselClass(), theTypesPackage.getAVesselClass(), null, "vesselClass", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getRedirectionPurchaseContract_HireCost(), ecorePackage.getEInt(), "hireCost", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPurchaseContract_DaysFromSource(), ecorePackage.getEInt(), "daysFromSource", null, 0, 1, RedirectionPurchaseContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(priceExpressionContractEClass, PriceExpressionContract.class, "PriceExpressionContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPriceExpressionContract_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 0, 1, PriceExpressionContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

@@ -34,6 +34,7 @@ import com.mmxlabs.models.lng.types.AVesselClass;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getProfitShare <em>Profit Share</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getHireCost <em>Hire Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPurchaseContractImpl#getDaysFromSource <em>Days From Source</em>}</li>
  * </ul>
  * </p>
  *
@@ -179,6 +180,26 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 	 * @ordered
 	 */
 	protected int hireCost = HIRE_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getDaysFromSource() <em>Days From Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDaysFromSource()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int DAYS_FROM_SOURCE_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getDaysFromSource() <em>Days From Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getDaysFromSource()
+	 * @generated
+	 * @ordered
+	 */
+	protected int daysFromSource = DAYS_FROM_SOURCE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -461,6 +482,27 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getDaysFromSource() {
+		return daysFromSource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setDaysFromSource(int newDaysFromSource) {
+		int oldDaysFromSource = daysFromSource;
+		daysFromSource = newDaysFromSource;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE, oldDaysFromSource, daysFromSource));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -486,6 +528,8 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return basicGetVesselClass();
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST:
 				return getHireCost();
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE:
+				return getDaysFromSource();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -524,6 +568,9 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return;
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST:
 				setHireCost((Integer)newValue);
+				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE:
+				setDaysFromSource((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -564,6 +611,9 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST:
 				setHireCost(HIRE_COST_EDEFAULT);
 				return;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE:
+				setDaysFromSource(DAYS_FROM_SOURCE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -594,6 +644,8 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 				return vesselClass != null;
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST:
 				return hireCost != HIRE_COST_EDEFAULT;
+			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE:
+				return daysFromSource != DAYS_FROM_SOURCE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -618,6 +670,8 @@ public class RedirectionPurchaseContractImpl extends PurchaseContractImpl implem
 		result.append(profitShare);
 		result.append(", hireCost: ");
 		result.append(hireCost);
+		result.append(", daysFromSource: ");
+		result.append(daysFromSource);
 		result.append(')');
 		return result.toString();
 	}

@@ -28,6 +28,7 @@ import com.mmxlabs.models.lng.types.AVesselClass;
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getProfitShare <em>Profit Share</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getVesselClass <em>Vessel Class</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getHireCost <em>Hire Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDaysFromSource <em>Days From Source</em>}</li>
  * </ul>
  * </p>
  *
@@ -269,6 +270,32 @@ public interface RedirectionPurchaseContract extends PurchaseContract {
 	 * @generated
 	 */
 	void setHireCost(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Days From Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Days From Source</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Days From Source</em>' attribute.
+	 * @see #setDaysFromSource(int)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRedirectionPurchaseContract_DaysFromSource()
+	 * @model
+	 * @generated
+	 */
+	int getDaysFromSource();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDaysFromSource <em>Days From Source</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Days From Source</em>' attribute.
+	 * @see #getDaysFromSource()
+	 * @generated
+	 */
+	void setDaysFromSource(int value);
 
 } // end of  RedirectionPurchaseContract
 

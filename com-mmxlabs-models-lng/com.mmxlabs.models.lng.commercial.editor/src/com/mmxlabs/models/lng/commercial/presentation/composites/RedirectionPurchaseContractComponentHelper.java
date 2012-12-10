@@ -75,6 +75,7 @@ public class RedirectionPurchaseContractComponentHelper extends BaseComponentHel
 		add_profitShareEditor(detailComposite, topClass);
 		add_vesselClassEditor(detailComposite, topClass);
 		add_hireCostEditor(detailComposite, topClass);
+		add_daysFromSourceEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseSalesMarketPort feature on RedirectionPurchaseContract
@@ -152,5 +153,14 @@ public class RedirectionPurchaseContractComponentHelper extends BaseComponentHel
 	 */
 	protected void add_hireCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST));
+	}
+
+	/**
+	 * Create the editor for the daysFromSource feature on RedirectionPurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_daysFromSourceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE));
 	}
 }
