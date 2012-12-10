@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.common.constraints.OrderedSequenceElementsConstrain
 import com.mmxlabs.optimiser.common.constraints.ResourceAllocationConstraintCheckerFactory;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCore;
 import com.mmxlabs.optimiser.common.fitness.NonOptionalSlotFitnessCoreFactory;
+import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.RestrictedElementsConstraintCheckerFactory;
@@ -90,6 +91,7 @@ public class ScenarioUtils {
 			constraints.add(createConstraint(of, TimeSortConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(of, SlotGroupCountConstraintCheckerFactory.NAME, true));
 			constraints.add(createConstraint(of, RestrictedElementsConstraintCheckerFactory.NAME, true));
+			constraints.add(createConstraint(of, ContractCvConstraintCheckerFactory.NAME, true));
 		}
 
 		// create objectives
