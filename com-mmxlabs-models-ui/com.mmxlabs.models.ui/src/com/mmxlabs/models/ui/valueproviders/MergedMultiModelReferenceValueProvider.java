@@ -129,7 +129,16 @@ public class MergedMultiModelReferenceValueProvider extends BaseReferenceValuePr
 
 			@Override
 			public int compare(final Pair<String, EObject> o1, final Pair<String, EObject> o2) {
-				return o1.getFirst().compareTo(o2.getFirst());
+				final String first1 = o1.getFirst();
+				final String first2 = o2.getFirst();
+
+				if (first1 == null) {
+					return 1;
+				}
+				if (first2 == null) {
+					return -1;
+				}
+				return first1.compareTo(first2);
 			}
 		});
 	}
