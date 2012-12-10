@@ -6,6 +6,7 @@ package com.mmxlabs.scenario.service.ui.editing;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,8 +18,17 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.application.WorkbenchAdvisor;
+import org.eclipse.ui.dialogs.ListSelectionDialog;
+import org.eclipse.ui.dialogs.SelectionDialog;
+import org.eclipse.ui.model.BaseWorkbenchContentProvider;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,17 +83,102 @@ public class ScenarioServiceSaveHook {
 			return true;
 		}
 
-		final MessageDialog d = new MessageDialog(Display.getDefault().getActiveShell(), "Save Scenarios", null, String.format("There are %d unsaved scenarios - do you wish to save them?",
-				dirtyScenarios.size()), MessageDialog.QUESTION, new String[] { "&Save All", "&Discard All", "&Cancel" }, 0);
-		final int ret = d.open();
+		final ITreeContentProvider contentProvider = new ITreeContentProvider() {
+			
+			@Override
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void dispose() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public boolean hasChildren(Object element) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public Object getParent(Object element) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public Object[] getElements(Object inputElement) {
+				// TODO Auto-generated method stub
+				return dirtyScenarios.toArray();
+			}
+			
+			@Override
+			public Object[] getChildren(Object parentElement) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		
+		final ILabelProvider labelProvider = new ILabelProvider() {
+			
+			@Override
+			public void removeListener(ILabelProviderListener listener) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public boolean isLabelProperty(Object element, String property) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public void dispose() {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void addListener(ILabelProviderListener listener) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public String getText(Object element) {
+				ScenarioInstance scenario = (ScenarioInstance) element;
+				return scenario.getName();
+			}
+			
+			@Override
+			public Image getImage(Object element) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		};
+		
+		final SelectionDialog sd = new ListSelectionDialog(Display.getDefault().getActiveShell(), dirtyScenarios, contentProvider, labelProvider, "Save unsaved scenarios?");
+		sd.setInitialSelections(dirtyScenarios.toArray());
+		final int ret = sd.open();
+		
+		final Object [] scenariosToSave = sd.getResult(); 
+		
 		if (ret == 2  || ret == -1) {
 			// Cancel
 			return false;
-		} else if (ret == 1) {
+		} 
+		
+		/*else if (ret == 1) {
 			// Discard
 			return true;
 		}
 		// Save All
+		 * 
+		 */
 
 		final boolean[] success = new boolean[1];
 		try {
@@ -93,12 +188,13 @@ public class ScenarioServiceSaveHook {
 				@Override
 				public void run(final IProgressMonitor monitor) {
 
-					monitor.beginTask("Saving dirty scenarios", dirtyScenarios.size());
+					monitor.beginTask("Saving dirty scenarios", scenariosToSave.length);
 					try {
 
-						for (final ScenarioInstance instance : dirtyScenarios) {
-							monitor.setTaskName("Saving: " + instance.getName());
-							instance.getScenarioService().save(instance);
+						for (final Object instance : scenariosToSave) {
+							ScenarioInstance scenario = (ScenarioInstance) instance;
+							monitor.setTaskName("Saving: " + scenario.getName());
+							scenario.getScenarioService().save(scenario);
 							monitor.worked(1);
 						}
 						success[0] = true;
