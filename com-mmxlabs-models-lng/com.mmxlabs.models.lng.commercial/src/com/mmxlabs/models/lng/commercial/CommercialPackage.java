@@ -1746,6 +1746,16 @@ public interface CommercialPackage extends EPackage {
 	int REDIRECTION_PURCHASE_CONTRACT__HIRE_COST = PURCHASE_CONTRACT_FEATURE_COUNT + 8;
 
 	/**
+	 * The feature id for the '<em><b>Days From Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE = PURCHASE_CONTRACT_FEATURE_COUNT + 9;
+
+	/**
 	 * The number of structural features of the '<em>Redirection Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1753,7 +1763,7 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int REDIRECTION_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 9;
+	int REDIRECTION_PURCHASE_CONTRACT_FEATURE_COUNT = PURCHASE_CONTRACT_FEATURE_COUNT + 10;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl <em>Price Expression Contract</em>}' class.
@@ -2642,6 +2652,18 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getRedirectionPurchaseContract_HireCost();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDaysFromSource <em>Days From Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Days From Source</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDaysFromSource()
+	 * @see #getRedirectionPurchaseContract()
+	 * @generated
+	 */
+	EAttribute getRedirectionPurchaseContract_DaysFromSource();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PriceExpressionContract <em>Price Expression Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -3211,6 +3233,15 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute REDIRECTION_PURCHASE_CONTRACT__HIRE_COST = eINSTANCE.getRedirectionPurchaseContract_HireCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Days From Source</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PURCHASE_CONTRACT__DAYS_FROM_SOURCE = eINSTANCE.getRedirectionPurchaseContract_DaysFromSource();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PriceExpressionContractImpl <em>Price Expression Contract</em>}' class.

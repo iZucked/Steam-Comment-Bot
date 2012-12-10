@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.scenario.modelCorrector;
 
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -94,18 +95,31 @@ public class LNGModelCorrector {
 		if (cargoModel != null && commercialModel != null) {
 			LOOP_SLOTS: for (final LoadSlot slot : cargoModel.getLoadSlots()) {
 				if (slot.getContract() instanceof RedirectionPurchaseContract) {
+					final RedirectionPurchaseContract redirectionPurchaseContract = (RedirectionPurchaseContract) slot.getContract();
+					final Calendar cal = Calendar.getInstance();
+					cal.setTime(slot.getWindowStartWithSlotOrPortTime());
+					cal.add(Calendar.DAY_OF_YEAR, -redirectionPurchaseContract.getDaysFromSource());
+
+					RedirectionContractOriginalDate redirectionContractOriginalDate = null;
 					for (final UUIDObject ext : slot.getExtensions()) {
 						if (ext instanceof RedirectionContractOriginalDate) {
-							// We're ok, next slot
-							continue LOOP_SLOTS;
+							redirectionContractOriginalDate = (RedirectionContractOriginalDate) ext;
+							// Check valid
+							if (cal.getTime() == redirectionContractOriginalDate.getDate()) {
+
+								// We're ok, next slot
+								continue LOOP_SLOTS;
+							}
 						}
 					}
 					// Nothing found, create extension
-					final RedirectionContractOriginalDate ext = CommercialFactory.eINSTANCE.createRedirectionContractOriginalDate();
-					ext.setDate(slot.getWindowStart());
+					if (redirectionContractOriginalDate == null) {
+						redirectionContractOriginalDate = CommercialFactory.eINSTANCE.createRedirectionContractOriginalDate();
 
-					cmd.append(AddCommand.create(ed, slot, MMXCorePackage.eINSTANCE.getMMXObject_Extensions(), ext));
-					cmd.append(AddCommand.create(ed, commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_ContractSlotExtensions(), ext));
+						cmd.append(AddCommand.create(ed, slot, MMXCorePackage.eINSTANCE.getMMXObject_Extensions(), redirectionContractOriginalDate));
+						cmd.append(AddCommand.create(ed, commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_ContractSlotExtensions(), redirectionContractOriginalDate));
+					}
+					cmd.append(SetCommand.create(ed, redirectionContractOriginalDate, CommercialPackage.eINSTANCE.getRedirectionContractOriginalDate_Date(), cal.getTime()));
 				}
 			}
 		}
