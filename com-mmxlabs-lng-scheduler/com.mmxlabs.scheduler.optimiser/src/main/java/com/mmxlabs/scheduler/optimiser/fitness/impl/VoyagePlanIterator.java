@@ -59,7 +59,7 @@ public class VoyagePlanIterator {
 	public final Object nextObject() {
 		currentTime += extraTime;
 
-		if ((planIterator.hasNext() && currentPlanIndex >= (currentSequence.length - 1)) || currentPlanIndex >= currentSequence.length) {
+		if (planIterator.hasNext() && ((currentPlanIndex >= (currentSequence.length - 1) && currentPlan.isIgnoreEnd()) || currentPlanIndex >= currentSequence.length)) {
 			// advance by one voyageplan.
 			currentPlan = planIterator.next();
 			currentSequence = currentPlan.getSequence();
@@ -73,8 +73,8 @@ public class VoyagePlanIterator {
 		extraTime = 0;
 		if (obj instanceof PortDetails) {
 			final PortDetails details = (PortDetails) obj;
-			if (currentPlanIndex != (currentSequence.length - 1)) {
-				assert currentTime == arrivalTimes[currentTimeIndex++];
+			if (!currentPlan.isIgnoreEnd() || currentPlanIndex != (currentSequence.length - 1)) {
+				currentTime = arrivalTimes[currentTimeIndex++];
 				extraTime = details.getOptions().getVisitDuration();
 			}
 		} else if (obj instanceof VoyageDetails) {

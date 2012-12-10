@@ -180,7 +180,7 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 
 		boolean isShortsSequence = vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS;
 		if (isShortsSequence && arrivalTimes.length == 0) {
-			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan>emptyList(), new int[0]);
+			return new ScheduledSequence(resource, 0, Collections.<VoyagePlan> emptyList(), new int[] { 0 });
 		}
 
 		// Get start time
@@ -364,11 +364,16 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 						return null;
 					}
 				} else {
-					if (!optimiseSequence(voyagePlans, Collections.singletonList(currentSequence.get(0)), currentTimes, voyagePlanOptimiser)) {
-						return null;
-					}
+//					if (!optimiseSequence(voyagePlans, Collections.singletonList(currentSequence.get(0)), currentTimes, voyagePlanOptimiser)) {
+//						return null;
+//					}
 				}
 
+				
+				if (isShortsSequence) {
+					voyagePlans.get(voyagePlans.size() - 1).setIgnoreEnd(false);
+				}
+				
 				// Reset useNBO flag
 				useNBO = false;
 				previousOptions = null;
@@ -420,6 +425,10 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 			}
 		}
 
+		if (!voyagePlans.isEmpty()) {
+		// Include very last element in a sequence
+//		voyagePlans.get(voyagePlans.size() - 1).setIgnoreEnd(false);
+		}
 		return new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes);
 	}
 

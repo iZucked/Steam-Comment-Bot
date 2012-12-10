@@ -21,6 +21,7 @@ import com.google.inject.Injector;
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.optimiser.common.dcproviders.IOptionalElementsProvider;
 import com.mmxlabs.optimiser.core.IOptimisationContext;
+import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -29,8 +30,11 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.IMove;
 import com.mmxlabs.optimiser.lso.IMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 
 /**
@@ -60,6 +64,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	 */
 	private static final double optionalMoveFrequency = 0.10;
 	private static final double shuffleMoveFrequency = 0.20;
+	private static final double swapMoveFrequency = 0.01;
 
 	/**
 	 * A structure caching the output of the {@link LegalSequencingChecker}. If an element x is in the set mapped to by key y, x can legally follow y under some circumstance
@@ -138,6 +143,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 	private SequencesConstrainedMoveGeneratorUnit sequencesMoveGenerator;
 	private OptionalConstrainedMoveGeneratorUnit optionalMoveGenerator;
 	private ShuffleElementsMoveGenerator shuffleMoveGenerator;
+	private SwapElementsInSequenceMoveGeneratorUnit swapElementsMoveGenerator;
 
 	protected final IOptimisationContext context;
 
@@ -153,6 +159,9 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 
 	@Inject
 	public void init() {
+		if (random == null) {
+			throw new IllegalStateException("Random number generator has not been set");
+		}
 		// this.checker = injector.getInstance(LegalSequencingChecker.class);
 		// LegalSequencingChecker checker2 = new LegalSequencingChecker(context);
 		checker.disallowLateness();
@@ -216,10 +225,16 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		} else {
 			this.optionalMoveGenerator = null;
 		}
-
-		if (random == null) {
-			throw new IllegalStateException("Random number generator has not been set");
+		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
+		for (final IResource resource : data.getResources()) {
+			final IVessel vessel = vesselProvider.getVessel(resource);
+			if (vessel.getVesselInstanceType() == VesselInstanceType.CARGO_SHORTS) {
+				this.swapElementsMoveGenerator = new SwapElementsInSequenceMoveGeneratorUnit(this);
+				injector.injectMembers(swapElementsMoveGenerator);
+				break;
+			}
 		}
+
 	}
 
 	@Override
@@ -228,6 +243,8 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 			return optionalMoveGenerator.generateMove();
 		} else if ((shuffleMoveGenerator != null) && (random.nextDouble() < shuffleMoveFrequency)) {
 			return shuffleMoveGenerator.generateMove();
+		} else if ((swapElementsMoveGenerator != null) && (random.nextDouble() < swapMoveFrequency)) {
+			return swapElementsMoveGenerator.generateMove();
 		} else {
 			return sequencesMoveGenerator.generateMove();
 		}
@@ -246,7 +263,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		for (int i = 0; i < sequences.size(); i++) {
 			final ISequence sequence = sequences.getSequence(i);
 			for (int j = 0; j < sequence.size(); j++) {
-				ISequenceElement element = sequence.get(j);
+				final ISequenceElement element = sequence.get(j);
 				reverseLookup.get(element).setBoth(i, j);
 				if (alternativeElementProvider.hasAlternativeElement(element)) {
 					final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
@@ -261,7 +278,7 @@ public class ConstrainedMoveGenerator implements IMoveGenerator {
 		for (final ISequenceElement element : sequences.getUnusedElements()) {
 			reverseLookup.get(element).setBoth(null, x);
 			if (alternativeElementProvider.hasAlternativeElement(element)) {
-				ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
+				final ISequenceElement alt = alternativeElementProvider.getAlternativeElement(element);
 				reverseLookup.get(alt).setBoth(null, -1);
 			}
 			x++;
