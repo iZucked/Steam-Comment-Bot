@@ -862,16 +862,41 @@ public class LNGScenarioTransformer {
 			dischargePriceCalculator = entities.getOptimiserObject(dischargeSlot.getContract(), ISalesPriceCalculator.class);
 		}
 
-		if (dischargeSlot.isFOBSale()) {
-			discharge = builder.createFOBSaleDischargeSlot(dischargeSlot.getName(), portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow,
-					OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity()),
-					OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator, dischargeSlot.isOptional());
-		} else {
-			discharge = builder.createDischargeSlot(dischargeSlot.getName(), portAssociation.lookup(dischargeSlot.getPort()), dischargeWindow,
-					OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity()),
-					OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity()), dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
-					dischargeSlot.isOptional());
+		// local scope for slot creation convenience variables
+		{
+			// convenience variables
+			final String name = dischargeSlot.getName();
+			IPort port = portAssociation.lookup(dischargeSlot.getPort());
+			final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity());
+			final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
+			final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
+			final long minCv;
+			final long maxCv;
+			
+			if (salesContract.isSetMinCvValue()) {
+				minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue());
+			}
+			else {
+				minCv = 0;
+			}
+			
+			if (salesContract.isSetMaxCvValue()) {
+				maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue());
+			}
+			else {
+				maxCv = Long.MAX_VALUE;
+			}
+			
+			if (dischargeSlot.isFOBSale()) {
+				discharge = builder.createFOBSaleDischargeSlot(name, port, dischargeWindow,
+						minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.isOptional());
+			} else {
+				discharge = builder.createDischargeSlot(name, port, dischargeWindow,
+						minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
+						dischargeSlot.isOptional());
+			}
 		}
+		
 		if (dischargeSlot instanceof SpotSlot) {
 			marketSlotsByID.put(dischargeSlot.getName(), dischargeSlot);
 			addSpotSlotToCount((SpotSlot) dischargeSlot);
@@ -1160,10 +1185,13 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(id);
 
+								final long minCv = 0;
+								final long maxCv = Long.MAX_VALUE; 
+								
 								final ISalesPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ISalesPriceCalculator.class);
 
 								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, loadIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, true);
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv, priceCalculator, true);
 
 								// Create a fake model object to add in here;
 								final SpotDischargeSlot fobSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
@@ -1281,7 +1309,7 @@ public class LNGScenarioTransformer {
 								desSlot.setWindowSize((int) duration);
 
 								final IDischargeOption desSalesSlot = builder.createDischargeSlot(id, notionalIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
-										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, desSlot.getSlotOrPortDuration(), true);
+										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), 0, Long.MAX_VALUE, priceCalculator, desSlot.getSlotOrPortDuration(), true);
 
 								// Key piece of information
 								desSlot.setMarket(desSalesMarket);

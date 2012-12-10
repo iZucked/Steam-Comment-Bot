@@ -303,10 +303,14 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 							final int timeAtDischarge = loadPort.getLoadDuration() + minTimeLD + ladenAllowance;
 							final ITimeWindow dischargeWindow = builder.createTimeWindow(timeAtDischarge, timeAtDischarge);
-							;
+							
+							final long minCv = 0;
+							final long maxCv = Long.MAX_VALUE;
+							
+							
 							final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-" + id, ports.lookup(dischargePort), dischargeWindow,
 									OptimiserUnitConvertor.convertToInternalVolume(spec.getMinimumDischarge()), OptimiserUnitConvertor.convertToInternalVolume(spec.getMaximumDischarge()),
-									dischargeCalculator, dischargePort.getDischargeDuration(), false);
+									minCv, maxCv, dischargeCalculator, dischargePort.getDischargeDuration(), false);
 
 							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
 							cargoes.add(cargo);
