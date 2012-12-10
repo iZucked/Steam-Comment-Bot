@@ -3,25 +3,19 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.input.impl;
-import com.mmxlabs.models.lng.input.Assignment;
-import com.mmxlabs.models.lng.input.InputPackage;
-
-import com.mmxlabs.models.lng.types.AVesselSet;
-
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
-import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
-
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
  * <!-- begin-user-doc -->

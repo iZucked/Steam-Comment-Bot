@@ -4,10 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.lng.cargo.Cargo;
-
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.mmxcore.MMXObject;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

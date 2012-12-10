@@ -17,8 +17,6 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
 import com.mmxlabs.models.lng.optimiser.OptimiserSettings;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
-import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**

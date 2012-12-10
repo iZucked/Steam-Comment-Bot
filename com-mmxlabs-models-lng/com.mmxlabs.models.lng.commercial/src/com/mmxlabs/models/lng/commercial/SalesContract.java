@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.lng.types.ASalesContract;
-import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->

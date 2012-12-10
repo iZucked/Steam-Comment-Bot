@@ -3,7 +3,6 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.schedule;
-import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**

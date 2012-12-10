@@ -4,16 +4,16 @@
  */
 package com.mmxlabs.models.lng.input.util;
 
-import com.mmxlabs.models.lng.input.*;
-
-import com.mmxlabs.models.mmxcore.MMXObject;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.util.Switch;
+
+import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

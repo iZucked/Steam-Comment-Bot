@@ -4,18 +4,17 @@
  */
 package com.mmxlabs.models.lng.input.util;
 
-import com.mmxlabs.models.lng.input.*;
-
-import com.mmxlabs.models.mmxcore.MMXObject;
-import com.mmxlabs.models.mmxcore.NamedObject;
-import com.mmxlabs.models.mmxcore.UUIDObject;
-
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
-
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
-
 import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

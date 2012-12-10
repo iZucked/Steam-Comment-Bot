@@ -7,12 +7,10 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.analytics;
-import com.mmxlabs.models.lng.port.Port;
-
-import com.mmxlabs.models.mmxcore.MMXObject;
 import java.util.Date;
 
-import org.eclipse.emf.ecore.EObject;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.mmxcore.MMXObject;
 
 /**
  * <!-- begin-user-doc -->

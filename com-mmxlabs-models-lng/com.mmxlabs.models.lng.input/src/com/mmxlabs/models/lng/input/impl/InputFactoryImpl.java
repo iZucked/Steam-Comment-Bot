@@ -4,15 +4,17 @@
  */
 package com.mmxlabs.models.lng.input.impl;
 
-import com.mmxlabs.models.lng.input.*;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+
+import com.mmxlabs.models.lng.input.Assignment;
+import com.mmxlabs.models.lng.input.ElementAssignment;
+import com.mmxlabs.models.lng.input.InputFactory;
+import com.mmxlabs.models.lng.input.InputModel;
+import com.mmxlabs.models.lng.input.InputPackage;
 
 /**
  * <!-- begin-user-doc -->

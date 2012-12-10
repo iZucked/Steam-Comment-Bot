@@ -7,7 +7,6 @@ package com.mmxlabs.models.lng.fleet.validation;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
@@ -19,7 +18,6 @@ import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 

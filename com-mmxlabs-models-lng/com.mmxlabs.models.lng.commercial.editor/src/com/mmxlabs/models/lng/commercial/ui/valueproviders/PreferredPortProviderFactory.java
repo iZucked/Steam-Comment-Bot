@@ -8,8 +8,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 
-import com.mmxlabs.common.Equality;
-import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.types.APortSet;
@@ -17,7 +15,6 @@ import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.valueproviders.AllowedFieldFilteredReferenceValueProvider;
-import com.mmxlabs.models.ui.valueproviders.FilteredReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 

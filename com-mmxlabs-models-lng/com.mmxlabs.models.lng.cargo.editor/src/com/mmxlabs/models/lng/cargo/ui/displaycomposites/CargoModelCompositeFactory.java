@@ -13,8 +13,6 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.ui.Activator;
-import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
 import com.mmxlabs.models.ui.impl.DefaultDisplayCompositeFactory;

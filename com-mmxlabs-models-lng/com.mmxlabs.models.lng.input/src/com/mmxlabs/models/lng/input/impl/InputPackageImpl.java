@@ -4,22 +4,19 @@
  */
 package com.mmxlabs.models.lng.input.impl;
 
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.impl.EPackageImpl;
+
 import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
-
 import com.mmxlabs.models.lng.types.TypesPackage;
-
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
-
-import org.eclipse.emf.ecore.EAttribute;
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EPackage;
-import org.eclipse.emf.ecore.EReference;
-
-import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 /**
  * <!-- begin-user-doc -->

@@ -7,12 +7,10 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.analytics;
-import com.mmxlabs.models.lng.fleet.Vessel;
-
-import com.mmxlabs.models.mmxcore.NamedObject;
 import org.eclipse.emf.common.util.EList;
 
-import org.eclipse.emf.ecore.EObject;
+import com.mmxlabs.models.lng.fleet.Vessel;
+import com.mmxlabs.models.mmxcore.NamedObject;
 
 /**
  * <!-- begin-user-doc -->

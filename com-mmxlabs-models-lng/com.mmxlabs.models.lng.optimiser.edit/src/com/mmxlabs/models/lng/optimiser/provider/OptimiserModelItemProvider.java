@@ -19,13 +19,11 @@ import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
-import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.optimiser.OptimiserFactory;
 import com.mmxlabs.models.lng.optimiser.OptimiserModel;
 import com.mmxlabs.models.lng.optimiser.OptimiserPackage;
-import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
 /**

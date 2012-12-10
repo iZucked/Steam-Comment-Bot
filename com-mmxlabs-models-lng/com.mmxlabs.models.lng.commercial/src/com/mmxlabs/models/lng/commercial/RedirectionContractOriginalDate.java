@@ -7,10 +7,9 @@
  * $Id$
  */
 package com.mmxlabs.models.lng.commercial;
-import com.mmxlabs.models.mmxcore.UUIDObject;
 import java.util.Date;
 
-import org.eclipse.emf.ecore.EObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * <!-- begin-user-doc -->

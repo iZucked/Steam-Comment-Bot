@@ -5,8 +5,6 @@
 package com.mmxlabs.models.lng.schedule;
 import com.mmxlabs.models.mmxcore.NamedObject;
 
-import org.eclipse.emf.common.util.EList;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Additional Data</b></em>'.
