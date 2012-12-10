@@ -162,6 +162,7 @@ public class ScenarioServiceSaveHook {
 		};
 		
 		final SelectionDialog sd = new ListSelectionDialog(Display.getDefault().getActiveShell(), dirtyScenarios, contentProvider, labelProvider, "Save unsaved scenarios?");
+		sd.setInitialSelections(dirtyScenarios.toArray());
 		final int ret = sd.open();
 		
 		final Object [] scenariosToSave = sd.getResult(); 
