@@ -366,6 +366,10 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			// run the scheduler on the sequences
 			final ScheduledSequences result = scheduler.schedule(sequences, arrivalTimes);
 
+			if (result == null) {
+				return Collections.emptyList();
+			}
+			
 			final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
 			aca.setVesselProvider(vesselProvider);
 
