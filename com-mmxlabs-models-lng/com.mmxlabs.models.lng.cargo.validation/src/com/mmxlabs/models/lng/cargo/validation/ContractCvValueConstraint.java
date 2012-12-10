@@ -47,9 +47,11 @@ public class ContractCvValueConstraint extends AbstractModelConstraint  {
 						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
 						failures.add(dsd);
 					}
-					double maxCvValue = salesContract.getMinCvValue(); 
+				}
+				if (salesContract.isSetMaxCvValue()) {
+					double maxCvValue = salesContract.getMaxCvValue(); 
 					if (cv > maxCvValue) {
-						final String failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", minCvValue, contract.getName());
+						final String failureMessage = String.format(format, cargo.getName(), cv, "more", "maximum", maxCvValue, contract.getName());
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage));
 						dsd.addEObjectAndFeature(dischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
 						dsd.addEObjectAndFeature(loadSlot, CargoPackage.eINSTANCE.getLoadSlot_CargoCV());
