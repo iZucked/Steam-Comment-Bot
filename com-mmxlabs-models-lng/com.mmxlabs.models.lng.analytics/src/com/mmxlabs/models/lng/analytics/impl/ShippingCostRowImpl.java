@@ -40,6 +40,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getCargoPrice <em>Cargo Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getDestinationType <em>Destination Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getHeelVolume <em>Heel Volume</em>}</li>
  * </ul>
  * </p>
  *
@@ -135,6 +136,26 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * @ordered
 	 */
 	protected DestinationType destinationType = DESTINATION_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getHeelVolume() <em>Heel Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int HEEL_VOLUME_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getHeelVolume() <em>Heel Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getHeelVolume()
+	 * @generated
+	 * @ordered
+	 */
+	protected int heelVolume = HEEL_VOLUME_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -282,6 +303,27 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getHeelVolume() {
+		return heelVolume;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setHeelVolume(int newHeelVolume) {
+		int oldHeelVolume = heelVolume;
+		heelVolume = newHeelVolume;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME, oldHeelVolume, heelVolume));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -296,6 +338,8 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 				return getCvValue();
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
 				return getDestinationType();
+			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
+				return getHeelVolume();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -322,6 +366,9 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 				return;
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
 				setDestinationType((DestinationType)newValue);
+				return;
+			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
+				setHeelVolume((Integer)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -350,6 +397,9 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
 				setDestinationType(DESTINATION_TYPE_EDEFAULT);
 				return;
+			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
+				setHeelVolume(HEEL_VOLUME_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -372,6 +422,8 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 				return cvValue != CV_VALUE_EDEFAULT;
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
 				return destinationType != DESTINATION_TYPE_EDEFAULT;
+			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
+				return heelVolume != HEEL_VOLUME_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -394,6 +446,8 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 		result.append(cvValue);
 		result.append(", destinationType: ");
 		result.append(destinationType);
+		result.append(", heelVolume: ");
+		result.append(heelVolume);
 		result.append(')');
 		return result.toString();
 	}

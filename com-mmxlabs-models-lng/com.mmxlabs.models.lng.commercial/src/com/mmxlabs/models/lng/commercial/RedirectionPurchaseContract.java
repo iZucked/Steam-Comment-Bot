@@ -8,6 +8,7 @@
  */
 package com.mmxlabs.models.lng.commercial;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AVesselClass;
 
 /**
  * <!-- begin-user-doc -->
@@ -25,6 +26,8 @@ import com.mmxlabs.models.lng.port.Port;
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDesPurchasePort <em>Des Purchase Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getSourcePurchasePort <em>Source Purchase Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getProfitShare <em>Profit Share</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getVesselClass <em>Vessel Class</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getHireCost <em>Hire Cost</em>}</li>
  * </ul>
  * </p>
  *
@@ -214,6 +217,58 @@ public interface RedirectionPurchaseContract extends PurchaseContract {
 	 * @generated
 	 */
 	void setProfitShare(double value);
+
+	/**
+	 * Returns the value of the '<em><b>Vessel Class</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Vessel Class</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Vessel Class</em>' reference.
+	 * @see #setVesselClass(VesselClass)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRedirectionPurchaseContract_VesselClass()
+	 * @model
+	 * @generated
+	 */
+	AVesselClass getVesselClass();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getVesselClass <em>Vessel Class</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Vessel Class</em>' reference.
+	 * @see #getVesselClass()
+	 * @generated
+	 */
+	void setVesselClass(AVesselClass value);
+
+	/**
+	 * Returns the value of the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Hire Cost</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Hire Cost</em>' attribute.
+	 * @see #setHireCost(int)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRedirectionPurchaseContract_HireCost()
+	 * @model
+	 * @generated
+	 */
+	int getHireCost();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getHireCost <em>Hire Cost</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Hire Cost</em>' attribute.
+	 * @see #getHireCost()
+	 * @generated
+	 */
+	void setHireCost(int value);
 
 } // end of  RedirectionPurchaseContract
 

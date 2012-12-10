@@ -9,8 +9,10 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.analytics.DestinationType;
+import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.lng.analytics.validation.internal.Activator;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
@@ -51,24 +53,49 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 			} else {
 				if (destinationType == DestinationType.START || destinationType == DestinationType.DISCHARGE || destinationType == DestinationType.OTHER) {
 					if (shippingCostRow.getCargoPrice() < 0.0001) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No cargo price specified -  must be non-zero"));
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No gas price specified -  must be non-zero"));
 						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
 						statuses.add(deco);
 					}
 					if (shippingCostRow.getCargoPrice() > 70.0) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo price is too high."));
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Gas price is too high."));
 						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
 						statuses.add(deco);
+					}
+					if (shippingCostRow.getHeelVolume() > 0) {
+						EObject container = shippingCostRow.eContainer();
+						if (container == null) {
+
+							final EObject original = extraValidationContext.getOriginal(shippingCostRow);
+							if (original != null) {
+								container = original.eContainer();
+							}
+						}
+
+						if (container instanceof ShippingCostPlan) {
+
+							final ShippingCostPlan shippingCostPlan = (ShippingCostPlan) container;
+							if (shippingCostPlan.getVessel() != null) {
+								final VesselClass vesselClass = shippingCostPlan.getVessel().getVesselClass();
+								final double capacity = (double) vesselClass.getCapacity() * vesselClass.getFillCapacity();
+								if (shippingCostRow.getHeelVolume() > capacity) {
+									final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(String.format(
+											"Heel volume is greater than vessel capacity of %.0f (%d) ", capacity, vesselClass.getCapacity())));
+									deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_HeelVolume());
+									statuses.add(deco);
+								}
+							}
+						}
 					}
 				}
 				if (destinationType == DestinationType.START || destinationType == DestinationType.LOAD || destinationType == DestinationType.OTHER) {
 					if (shippingCostRow.getCvValue() < 0.0001) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No cargo CV specified - must be non-zero"));
-						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No gas CV specified - must be non-zero"));
+						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CvValue());
 						statuses.add(deco);
 					}
 					if (shippingCostRow.getCvValue() > 50.0) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Cargo CV is too high"));
+						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Gas CV is too high"));
 						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
 						statuses.add(deco);
 					}
@@ -78,5 +105,4 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 		}
 		return Activator.PLUGIN_ID;
 	}
-
 }

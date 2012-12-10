@@ -116,6 +116,16 @@ public interface CommercialFactory extends EFactory {
 	PriceExpressionContract createPriceExpressionContract();
 
 	/**
+	 * Returns a new object of class '<em>Redirection Contract Original Date</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Redirection Contract Original Date</em>'.
+	 * @generated
+	 */
+	RedirectionContractOriginalDate createRedirectionContractOriginalDate();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

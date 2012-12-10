@@ -1029,6 +1029,16 @@ public interface AnalyticsPackage extends EPackage {
 	int SHIPPING_COST_ROW__DESTINATION_TYPE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Heel Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__HEEL_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Shipping Cost Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1036,7 +1046,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SHIPPING_COST_ROW_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SHIPPING_COST_ROW_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 
 	/**
@@ -1846,6 +1856,18 @@ public interface AnalyticsPackage extends EPackage {
 	EAttribute getShippingCostRow_DestinationType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume <em>Heel Volume</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Heel Volume</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume()
+	 * @see #getShippingCostRow()
+	 * @generated
+	 */
+	EAttribute getShippingCostRow_HeelVolume();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -2485,6 +2507,15 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SHIPPING_COST_ROW__DESTINATION_TYPE = eINSTANCE.getShippingCostRow_DestinationType();
+
+		/**
+		 * The meta object literal for the '<em><b>Heel Volume</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SHIPPING_COST_ROW__HEEL_VOLUME = eINSTANCE.getShippingCostRow_HeelVolume();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.DestinationType <em>Destination Type</em>}' enum.

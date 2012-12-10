@@ -73,6 +73,8 @@ public class RedirectionPurchaseContractComponentHelper extends BaseComponentHel
 		add_desPurchasePortEditor(detailComposite, topClass);
 		add_sourcePurchasePortEditor(detailComposite, topClass);
 		add_profitShareEditor(detailComposite, topClass);
+		add_vesselClassEditor(detailComposite, topClass);
+		add_hireCostEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the baseSalesMarketPort feature on RedirectionPurchaseContract
@@ -132,5 +134,23 @@ public class RedirectionPurchaseContractComponentHelper extends BaseComponentHel
 	 */
 	protected void add_profitShareEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__PROFIT_SHARE));
+	}
+
+	/**
+	 * Create the editor for the vesselClass feature on RedirectionPurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_vesselClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__VESSEL_CLASS));
+	}
+
+	/**
+	 * Create the editor for the hireCost feature on RedirectionPurchaseContract
+	 *
+	 * @generated
+	 */
+	protected void add_hireCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__HIRE_COST));
 	}
 }

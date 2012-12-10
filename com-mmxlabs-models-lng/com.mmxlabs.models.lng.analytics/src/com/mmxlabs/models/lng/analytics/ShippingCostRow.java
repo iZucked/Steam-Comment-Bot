@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCargoPrice <em>Cargo Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDestinationType <em>Destination Type</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume <em>Heel Volume</em>}</li>
  * </ul>
  * </p>
  *
@@ -169,6 +170,32 @@ public interface ShippingCostRow extends MMXObject {
 	 * @generated
 	 */
 	void setDestinationType(DestinationType value);
+
+	/**
+	 * Returns the value of the '<em><b>Heel Volume</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Heel Volume</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Heel Volume</em>' attribute.
+	 * @see #setHeelVolume(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getShippingCostRow_HeelVolume()
+	 * @model
+	 * @generated
+	 */
+	int getHeelVolume();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume <em>Heel Volume</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Heel Volume</em>' attribute.
+	 * @see #getHeelVolume()
+	 * @generated
+	 */
+	void setHeelVolume(int value);
 
 } // end of  ShippingCostRow
 

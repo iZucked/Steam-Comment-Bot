@@ -306,6 +306,30 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RedirectionContractOriginalDateItemProvider redirectionContractOriginalDateItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRedirectionContractOriginalDateAdapter() {
+		if (redirectionContractOriginalDateItemProvider == null) {
+			redirectionContractOriginalDateItemProvider = new RedirectionContractOriginalDateItemProvider(this);
+		}
+
+		return redirectionContractOriginalDateItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -414,6 +438,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (notionalBallastParametersItemProvider != null) notionalBallastParametersItemProvider.dispose();
 		if (redirectionPurchaseContractItemProvider != null) redirectionPurchaseContractItemProvider.dispose();
 		if (priceExpressionContractItemProvider != null) priceExpressionContractItemProvider.dispose();
+		if (redirectionContractOriginalDateItemProvider != null) redirectionContractOriginalDateItemProvider.dispose();
 	}
 
 }

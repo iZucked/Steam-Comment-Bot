@@ -134,6 +134,10 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createPriceExpressionContractAdapter();
 			}
 			@Override
+			public Adapter caseRedirectionContractOriginalDate(RedirectionContractOriginalDate object) {
+				return createRedirectionContractOriginalDateAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -348,6 +352,21 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPriceExpressionContractAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate <em>Redirection Contract Original Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate
+	 * @generated
+	 */
+	public Adapter createRedirectionContractOriginalDateAdapter() {
 		return null;
 	}
 

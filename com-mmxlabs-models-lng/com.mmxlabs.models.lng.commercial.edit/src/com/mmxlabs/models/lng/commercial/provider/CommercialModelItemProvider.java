@@ -9,6 +9,8 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 
+import com.mmxlabs.models.lng.types.TypesFactory;
+import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
@@ -110,6 +112,7 @@ public class CommercialModelItemProvider
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES);
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS);
 			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS);
+			childrenFeatures.add(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS);
 		}
 		return childrenFeatures;
 	}
@@ -167,6 +170,7 @@ public class CommercialModelItemProvider
 			case CommercialPackage.COMMERCIAL_MODEL__ENTITIES:
 			case CommercialPackage.COMMERCIAL_MODEL__SALES_CONTRACTS:
 			case CommercialPackage.COMMERCIAL_MODEL__PURCHASE_CONTRACTS:
+			case CommercialPackage.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -233,6 +237,76 @@ public class CommercialModelItemProvider
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
 				 CommercialFactory.eINSTANCE.createPriceExpressionContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createCommercialModel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createLegalEntity()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createFixedPriceContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createIndexPriceContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createNetbackPurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createProfitSharePurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createRedirectionPurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createPriceExpressionContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createRedirectionContractOriginalDate()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 TypesFactory.eINSTANCE.createAVesselSet()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 TypesFactory.eINSTANCE.createABaseFuel()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 MMXCoreFactory.eINSTANCE.createUUIDObject()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 MMXCoreFactory.eINSTANCE.createMMXRootObject()));
 	}
 
 	/**
@@ -247,6 +321,8 @@ public class CommercialModelItemProvider
 		Object childObject = child;
 
 		boolean qualify =
+			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__ENTITIES ||
+			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS ||
 			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS ||
 			childFeature == CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS;
 

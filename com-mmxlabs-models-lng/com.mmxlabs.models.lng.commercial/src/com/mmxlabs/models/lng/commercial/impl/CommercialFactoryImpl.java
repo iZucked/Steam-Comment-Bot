@@ -68,6 +68,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS: return createNotionalBallastParameters();
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT: return createRedirectionPurchaseContract();
 			case CommercialPackage.PRICE_EXPRESSION_CONTRACT: return createPriceExpressionContract();
+			case CommercialPackage.REDIRECTION_CONTRACT_ORIGINAL_DATE: return createRedirectionContractOriginalDate();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -173,6 +174,17 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public PriceExpressionContract createPriceExpressionContract() {
 		PriceExpressionContractImpl priceExpressionContract = new PriceExpressionContractImpl();
 		return priceExpressionContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RedirectionContractOriginalDate createRedirectionContractOriginalDate() {
+		RedirectionContractOriginalDateImpl redirectionContractOriginalDate = new RedirectionContractOriginalDateImpl();
+		return redirectionContractOriginalDate;
 	}
 
 	/**
