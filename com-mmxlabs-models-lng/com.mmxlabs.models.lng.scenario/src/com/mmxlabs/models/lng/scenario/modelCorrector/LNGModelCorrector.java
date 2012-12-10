@@ -96,6 +96,11 @@ public class LNGModelCorrector {
 			LOOP_SLOTS: for (final LoadSlot slot : cargoModel.getLoadSlots()) {
 				if (slot.getContract() instanceof RedirectionPurchaseContract) {
 					final RedirectionPurchaseContract redirectionPurchaseContract = (RedirectionPurchaseContract) slot.getContract();
+
+					if (slot.getPort() != redirectionPurchaseContract.getBaseSalesMarketPort()) {
+						return;
+					}
+
 					final Calendar cal = Calendar.getInstance();
 					cal.setTime(slot.getWindowStartWithSlotOrPortTime());
 					cal.add(Calendar.DAY_OF_YEAR, -redirectionPurchaseContract.getDaysFromSource());
