@@ -60,7 +60,7 @@ public class ProfitSharingContract implements ILoadPriceCalculator {
 	@Override
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int actualSalesPricePerMMBTu,
 			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotation) {
-		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, actualSalesPricePerMMBTu, annotation);
+		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, actualSalesPricePerMMBTu, loadVolumeInM3, annotation);
 	}
 
 	/**
@@ -71,8 +71,8 @@ public class ProfitSharingContract implements ILoadPriceCalculator {
 			final IDetailTree annotations) {
 		final int marketPurchasePricePerMMBTu = market.getValueAtPoint(transferTime);
 
-		final int actualSalesPriceFractionPerM3 = Calculator.getShareOfPrice(salesMultiplier, actualSalesPricePerMMBTu);
-		final int basePricePerMMBTu = marketPurchasePricePerMMBTu - marginScaled - actualSalesPriceFractionPerM3;
+		final int actualSalesPriceFractionPerMMBTu = Calculator.getShareOfPrice(salesMultiplier, actualSalesPricePerMMBTu);
+		final int basePricePerMMBTu = marketPurchasePricePerMMBTu - marginScaled - actualSalesPriceFractionPerMMBTu;
 		if (baseMarketPorts.contains(dischargeOption.getPort())) {
 			return basePricePerMMBTu;
 		} else {
