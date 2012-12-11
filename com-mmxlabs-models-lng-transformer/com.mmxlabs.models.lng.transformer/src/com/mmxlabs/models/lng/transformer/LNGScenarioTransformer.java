@@ -364,6 +364,8 @@ public class LNGScenarioTransformer {
 
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 
+		// Any NPE's in the following code are likely due to missing associations between a IContractTransformer and the EMF AContract object. IContractTransformer instances are typically OSGi
+		// services. Ensure their bundles have been started!
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
 			final ILoadPriceCalculator calculator = transformer.transformPurchaseContract(c);
@@ -872,31 +874,27 @@ public class LNGScenarioTransformer {
 			final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
 			final long minCv;
 			final long maxCv;
-			
+
 			if (salesContract.isSetMinCvValue()) {
 				minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue());
-			}
-			else {
+			} else {
 				minCv = 0;
 			}
-			
+
 			if (salesContract.isSetMaxCvValue()) {
 				maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue());
-			}
-			else {
+			} else {
 				maxCv = Long.MAX_VALUE;
 			}
-			
+
 			if (dischargeSlot.isFOBSale()) {
-				discharge = builder.createFOBSaleDischargeSlot(name, port, dischargeWindow,
-						minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.isOptional());
+				discharge = builder.createFOBSaleDischargeSlot(name, port, dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.isOptional());
 			} else {
-				discharge = builder.createDischargeSlot(name, port, dischargeWindow,
-						minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
+				discharge = builder.createDischargeSlot(name, port, dischargeWindow, minVolume, maxVolume, minCv, maxCv, dischargePriceCalculator, dischargeSlot.getSlotOrPortDuration(),
 						dischargeSlot.isOptional());
 			}
 		}
-		
+
 		if (dischargeSlot instanceof SpotSlot) {
 			marketSlotsByID.put(dischargeSlot.getName(), dischargeSlot);
 			addSpotSlotToCount((SpotSlot) dischargeSlot);
@@ -1186,8 +1184,8 @@ public class LNGScenarioTransformer {
 								usedIDStrings.add(id);
 
 								final long minCv = 0;
-								final long maxCv = Long.MAX_VALUE; 
-								
+								final long maxCv = Long.MAX_VALUE;
+
 								final ISalesPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ISalesPriceCalculator.class);
 
 								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, loadIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
