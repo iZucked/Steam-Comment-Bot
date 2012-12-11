@@ -83,10 +83,13 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		final IEntity downstreamEntity = entityProvider.getEntityForSlot(dischargeOption);
 		final IEntity upstreamEntity = entityProvider.getEntityForSlot(currentAllocation.getLoadOption());
 
-		final int dischargePricePerM3 = currentAllocation.getDischargeM3Price();
 		final int cvValue = currentAllocation.getLoadOption().getCargoCVValue();
-		final long dischargeVolume = currentAllocation.getDischargeVolume();
-		final long loadVolume = currentAllocation.getLoadVolume();
+
+		final int dischargePricePerM3 = currentAllocation.getDischargeM3Price();
+		final int dischargePricePerMMBTu = Calculator.costPerMMBTuFromM3(dischargePricePerM3, cvValue);
+
+		final long dischargeVolumeInM3 = currentAllocation.getDischargeVolume();
+		final long loadVolumeInM3 = currentAllocation.getLoadVolume();
 		final int loadPricePerM3 = currentAllocation.getLoadM3Price();
 
 		// TODO should we be thinking in $/m3 or /mmbtu?
@@ -94,17 +97,17 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 		// TODO inter-entity taxation will also come in here.
 
 		final int shippingTransferPricePerM3 = downstreamEntity.getDownstreamTransferPrice(dischargePricePerM3, cvValue);
-		final long downstreamPaysShipping = Calculator.convertM3ToM3Price(dischargeVolume, shippingTransferPricePerM3);
-		final long downstreamRevenue = Calculator.convertM3ToM3Price(dischargeVolume, dischargePricePerM3);
+		final long downstreamPaysShipping = Calculator.convertM3ToM3Price(dischargeVolumeInM3, shippingTransferPricePerM3);
+		final long downstreamRevenue = Calculator.convertM3ToM3Price(dischargeVolumeInM3, dischargePricePerM3);
 
 		final long downstreamTotalPretaxProfit = downstreamRevenue - downstreamPaysShipping;
 
 		final int upstreamTransferPricePerM3 = upstreamEntity.getUpstreamTransferPrice(loadPricePerM3, cvValue);
-		final long shippingPaysUpstream = Calculator.convertM3ToM3Price(loadVolume, upstreamTransferPricePerM3);
+		final long shippingPaysUpstream = Calculator.convertM3ToM3Price(loadVolumeInM3, upstreamTransferPricePerM3);
 		final long shippingGasBalance = downstreamPaysShipping - shippingPaysUpstream;
 		// now we need the total non-LNG shipping cost for the whole thing, which shipping pays.
 
-		final long upstreamRevenue = -Calculator.convertM3ToM3Price(loadVolume, loadPricePerM3);
+		final long upstreamRevenue = -Calculator.convertM3ToM3Price(loadVolumeInM3, loadPricePerM3);
 		final long upstreamTotalPretaxProfit = upstreamRevenue + shippingPaysUpstream;
 
 		final long shippingCosts = getShippingCosts(plan, vessel, false, vesselStartTime, null);
@@ -131,11 +134,11 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final DetailTree shippingDetails = new DetailTree();
 				final DetailTree downstreamDetails = new DetailTree();
 
-				upstreamDetails.addChild(new LNGTransferDetailTree("Upstream purchase", loadVolume, loadPricePerM3, cvValue));
-				final IDetailTree upstreamToShipping = new LNGTransferDetailTree("Shipping to upstream", loadVolume, upstreamTransferPricePerM3, cvValue);
+				upstreamDetails.addChild(new LNGTransferDetailTree("Upstream purchase", loadVolumeInM3, loadPricePerM3, cvValue));
+				final IDetailTree upstreamToShipping = new LNGTransferDetailTree("Shipping to upstream", loadVolumeInM3, upstreamTransferPricePerM3, cvValue);
 				upstreamDetails.addChild(upstreamToShipping);
 				shippingDetails.addChild(upstreamToShipping);
-				final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolume, shippingTransferPricePerM3, cvValue);
+				final IDetailTree shippingToDownstream = new LNGTransferDetailTree("Downstream to shipping", dischargeVolumeInM3, shippingTransferPricePerM3, cvValue);
 				shippingDetails.addChild(shippingToDownstream);
 
 				final IDetailTree[] detailsRef = new IDetailTree[1];
@@ -147,7 +150,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 						new ShippingCostAnnotation(currentAllocation.getLoadTime(), costIncBoiloff, detailsRef[0]));
 
 				downstreamDetails.addChild(shippingToDownstream);
-				downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolume, dischargePricePerM3, cvValue));
+				downstreamDetails.addChild(new LNGTransferDetailTree("Downstream sale", dischargeVolumeInM3, dischargePricePerM3, cvValue));
 
 				entries.add(new ProfitAndLossEntry(upstreamEntity, upstreamProfit, upstreamDetails));
 				entries.add(new ProfitAndLossEntry(shippingEntity, shippingProfit, shippingDetails));
@@ -160,10 +163,10 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final ILoadOption loadOption = currentAllocation.getLoadOption();
 				if (loadOption instanceof ILoadSlot && dischargeOption instanceof IDischargeSlot) {
 					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, currentAllocation.getLoadTime(),
-							currentAllocation.getDischargeTime(), currentAllocation.getDischargeM3Price(), (int) loadVolume, vessel, plan, shippingDetails);
+							currentAllocation.getDischargeTime(), dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3, vessel, plan, shippingDetails);
 				} else {
-					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getLoadTime(), currentAllocation.getDischargeTime(),
-							currentAllocation.getDischargeM3Price(), shippingDetails);
+					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getLoadTime(), dischargePricePerMMBTu, currentAllocation.getLoadVolume(),
+							shippingDetails);
 				}
 			}
 
@@ -318,7 +321,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 				final VoyageDetails voyageDetails = (VoyageDetails) obj;
 				if (voyageDetails.getOptions().isCharterOutIdleTime()) {
 					final long hourlyCharterOutPrice = voyageDetails.getOptions().getCharterOutHourlyRate();
-					charterRevenue += Calculator.quantityFromRateTime(hourlyCharterOutPrice , voyageDetails.getIdleTime());
+					charterRevenue += Calculator.quantityFromRateTime(hourlyCharterOutPrice, voyageDetails.getIdleTime());
 				}
 			}
 		}

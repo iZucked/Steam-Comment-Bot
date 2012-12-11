@@ -54,25 +54,31 @@ public class ProfitSharingContract implements ILoadPriceCalculator {
 	public void prepareEvaluation(final ScheduledSequences sequences) {
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int actualSalesPrice, final int loadVolume,
-			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotation) {
-		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, actualSalesPrice, annotation);
+	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int actualSalesPricePerMMBTu,
+			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotation) {
+		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, actualSalesPricePerMMBTu, annotation);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int actualSalesPrice,
+	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int actualSalesPricePerMMBTu, long transferVolumeInM3,
 			final IDetailTree annotations) {
-		final int marketPurchasePrice = market.getValueAtPoint(loadTime);
+		final int marketPurchasePricePerMMBTu = market.getValueAtPoint(transferTime);
 
-		final int actualSalesPriceFraction = Calculator.getShareOfPrice(salesMultiplier, actualSalesPrice);
-		final int basePrice = marketPurchasePrice - marginScaled - actualSalesPriceFraction;
+		final int actualSalesPriceFractionPerM3 = Calculator.getShareOfPrice(salesMultiplier, actualSalesPricePerMMBTu);
+		final int basePricePerMMBTu = marketPurchasePricePerMMBTu - marginScaled - actualSalesPriceFractionPerM3;
 		if (baseMarketPorts.contains(dischargeOption.getPort())) {
-			return basePrice;
+			return basePricePerMMBTu;
 		} else {
 			// Profit Share
-			final int referenceSalesPrice = referenceMarket.getValueAtPoint(dischargeTime);
-			return (basePrice - Calculator.getShareOfPrice(profitShareScaled, actualSalesPrice - referenceSalesPrice));
+			final int referenceSalesPricePerMMBtu = referenceMarket.getValueAtPoint(transferTime);
+			return (basePricePerMMBTu - Calculator.getShareOfPrice(profitShareScaled, actualSalesPricePerMMBTu - referenceSalesPricePerMMBtu));
 		}
 	}
 }

@@ -9,7 +9,6 @@ import java.util.Map;
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.IDetailTree;
-import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
 import com.mmxlabs.common.detailtree.impl.DurationDetailElement;
 import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
@@ -83,17 +82,24 @@ public class NetbackContract implements ILoadPriceCalculator {
 
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int salesPrice, final int loadVolume,
-			final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
+	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int salesPricePerMMBTu,
+			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
 
-		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, salesPrice, loadVolume, vessel, plan, annotations, true);
+		return calculateLoadUnitPrice(loadSlot, dischargeSlot, loadTime, dischargeTime, salesPricePerMMBTu, loadVolumeInM3, vessel, plan, annotations, true);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
-	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice, IDetailTree annotations) {
+	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int salesPricePerMMBTu, final long transferVolumeInM3,
+			final IDetailTree annotations) {
 
-		return calculateLoadUnitPrice(loadOption, dischargeOption, loadTime, dischargeTime, salesPrice, -1, null, null, annotations, false);
+		return calculateLoadUnitPrice(loadOption, dischargeOption, transferTime, transferTime, salesPricePerMMBTu, transferVolumeInM3, null, null, annotations, false);
 	}
 
 	public Map<IVesselClass, BallastParameters> getBallastParameters() {
@@ -108,12 +114,12 @@ public class NetbackContract implements ILoadPriceCalculator {
 		return floorPriceScaled;
 	}
 
-	public void setFloorPriceScaled(int floorPriceScaled) {
+	public void setFloorPriceScaled(final int floorPriceScaled) {
 		this.floorPriceScaled = floorPriceScaled;
 	}
 
-	private int calculateLoadUnitPrice(final ILoadOption loadSlot, final IDischargeOption dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerM3,
-			final int loadVolume, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations, boolean includeShipping) {
+	private int calculateLoadUnitPrice(final ILoadOption loadSlot, final IDischargeOption dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
+			final long loadVolumeInM3, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations, final boolean includeShipping) {
 
 		long result = Long.MAX_VALUE;
 
@@ -135,21 +141,21 @@ public class NetbackContract implements ILoadPriceCalculator {
 			final BallastParameters notionalBallastParameters = ballastParameters.get(vesselClass);
 			// vessel cost (don't use calculator.multiply here; hours are not
 			// scaled, but price is)
-			final ICurve hireRate;
+			final ICurve hireRatePerHour;
 			switch (vessel.getVesselInstanceType()) {
 			case SPOT_CHARTER:
-				hireRate = vessel.getHourlyCharterInPrice();
+				hireRatePerHour = vessel.getHourlyCharterInPrice();
 				break;
 			case TIME_CHARTER:
-				hireRate = vessel.getHourlyCharterInPrice();
+				hireRatePerHour = vessel.getHourlyCharterInPrice();
 				break;
 			default:
-				hireRate = new ConstantValueCurve(notionalBallastParameters.getHireCost(dischargeTime));
+				hireRatePerHour = new ConstantValueCurve(notionalBallastParameters.getHireCost(dischargeTime));
 				break;
 			}
 
-			if (hireRate != null) {
-				totalRealTransportCosts += Calculator.quantityFromRateTime(hireRate.getValueAtPoint(dischargeTime), dischargeTime - loadTime);
+			if (hireRatePerHour != null) {
+				totalRealTransportCosts += Calculator.quantityFromRateTime(hireRatePerHour.getValueAtPoint(dischargeTime), dischargeTime - loadTime);
 			}
 			final int notionalReturnSpeed = notionalBallastParameters.getSpeed();
 
@@ -160,7 +166,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 					continue;
 				}
 
-				final int notionalTransportTime = Calculator.getTimeFromSpeedDistance(notionalReturnSpeed, distance);
+				final int notionalTransportTimeInHours = Calculator.getTimeFromSpeedDistance(notionalReturnSpeed, distance);
 
 				// TODO: Add in canal costs etc
 
@@ -168,7 +174,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 				long totalBaseFuelCosts;
 				{
 					final long notionalFuelCost = vesselClass.getBaseFuelUnitPrice();
-					final long totalFuelInMT = Calculator.quantityFromRateTime(notionalBallastParameters.getBaseFuelRate(), notionalTransportTime);
+					final long totalFuelInMT = Calculator.quantityFromRateTime(notionalBallastParameters.getBaseFuelRate(), notionalTransportTimeInHours);
 					totalBaseFuelCosts = Calculator.costFromConsumption(totalFuelInMT, notionalFuelCost);
 				}
 
@@ -176,16 +182,16 @@ public class NetbackContract implements ILoadPriceCalculator {
 				long totalNBOCosts;
 				{
 					final long nboInMMBTuPerDay = Calculator.convertM3ToMMBTu(notionalBallastParameters.getNBORate(), loadSlot.getCargoCVValue());
-					final long totalNBOInMMBtu = Calculator.quantityFromRateTime(nboInMMBTuPerDay, notionalTransportTime);
-					totalNBOCosts = Calculator.costFromConsumption(totalNBOInMMBtu, dischargePricePerM3);
+					final long totalNBOInMMBtu = Calculator.quantityFromRateTime(nboInMMBTuPerDay, notionalTransportTimeInHours);
+					totalNBOCosts = Calculator.costFromConsumption(totalNBOInMMBtu, dischargePricePerMMBTu);
 				}
 
 				long notionalTransportCosts = Math.min(totalBaseFuelCosts, totalNBOCosts);
-				if (hireRate != null) {
-					notionalTransportCosts += Calculator.quantityFromRateTime(hireRate.getValueAtPoint(dischargeTime), notionalTransportTime);
+				if (hireRatePerHour != null) {
+					notionalTransportCosts += Calculator.quantityFromRateTime(hireRatePerHour.getValueAtPoint(dischargeTime), notionalTransportTimeInHours);
 				}
 
-				final long transportCostPerMMBTU = Calculator.getPerMMBTuFromTotalAndVolumeInM3(notionalTransportCosts + totalRealTransportCosts, loadVolume, loadSlot.getCargoCVValue());
+				final long transportCostPerMMBTU = Calculator.getPerMMBTuFromTotalAndVolumeInM3(notionalTransportCosts + totalRealTransportCosts, loadVolumeInM3, loadSlot.getCargoCVValue());
 
 				if (transportCostPerMMBTU < result) {
 					result = transportCostPerMMBTU;
@@ -193,7 +199,7 @@ public class NetbackContract implements ILoadPriceCalculator {
 
 				if (annotations != null) {
 					final IDetailTree tree = annotations.addChild("Netback - " + route, transportCostPerMMBTU);
-					tree.addChild("Transport Time", new DurationDetailElement(notionalTransportTime));
+					tree.addChild("Transport Time", new DurationDetailElement(notionalTransportTimeInHours));
 					tree.addChild("Distance", distance);
 					tree.addChild("NBO Costs", new TotalCostDetailElement(totalNBOCosts));
 					tree.addChild("Base Costs", new TotalCostDetailElement(totalBaseFuelCosts));
@@ -203,10 +209,10 @@ public class NetbackContract implements ILoadPriceCalculator {
 		} else {
 			result = 0;
 		}
-		int rawPrice = (int) (dischargePricePerM3 - result - marginScaled);
-		if (rawPrice < floorPriceScaled) {
+		final int rawPricePerMMBTu = (int) (dischargePricePerMMBTu - result - marginScaled);
+		if (rawPricePerMMBTu < floorPriceScaled) {
 			return floorPriceScaled;
 		}
-		return rawPrice;
+		return rawPricePerMMBTu;
 	}
 }
