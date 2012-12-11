@@ -37,21 +37,30 @@ public interface ILoadPriceCalculator extends ICalculator {
 	 * @param dischargeSlot
 	 * @param loadTime
 	 * @param dischargeTime
-	 * @param dischargePrice
+	 * @param dischargePricePerMMBTu
+	 * @param loadVolumeInM3
+	 * @param dischargeVolumeInM3
+	 * 
 	 * @return
+	 * @since 2.0
 	 */
-	public int calculateLoadUnitPrice(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePricePerM3, int loadVolume, IVessel vessel, VoyagePlan plan,
-			IDetailTree annotations);
+	public int calculateLoadUnitPrice(ILoadSlot loadSlot, IDischargeSlot dischargeSlot, int loadTime, int dischargeTime, int dischargePricePerMMBTu, long loadVolumeInM3, long dischargeVolumeInM3,
+			IVessel vessel, VoyagePlan plan, IDetailTree annotations);
 
 	/**
 	 * Find the price in $/m3 for loading at the given slot and discharging at the given slot, when a third-party is handling shipping
 	 * 
-	 * TODO decide what scheduling information is needed here
 	 * 
 	 * @param loadOption
 	 * @param dischargeOption
+	 * @param transferTime
+	 * @param transferVolumeInM3
+	 *            The volume transfered between counter-parties
+	 * @param annotations
+	 *            Optional {@link IDetailTree} to store detailed calculation information e.g. during schedule export
 	 * @return
+	 * @since 2.0
 	 */
-	public int calculateLoadUnitPrice(ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargePricePerM3, final int salesPricePerM3,
+	public int calculateLoadUnitPrice(ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int dischargePricePerMMBTu, long transferVolumeInM3,
 			IDetailTree annotations);
 }

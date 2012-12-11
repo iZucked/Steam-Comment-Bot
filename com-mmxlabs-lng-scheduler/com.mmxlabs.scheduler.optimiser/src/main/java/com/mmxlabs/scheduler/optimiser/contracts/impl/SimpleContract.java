@@ -28,10 +28,10 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	protected abstract int calculateSimpleUnitPrice(final int loadTime);
-	
+
 	@Override
-	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePrice, final int loadVolume,
-			final IVessel vessel, final VoyagePlan plan, IDetailTree annotations) {
+	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
+			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
 		return calculateSimpleUnitPrice(loadTime);
 	}
 
@@ -59,7 +59,8 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	}
 
 	@Override
-	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int loadTime, final int dischargeTime, final int salesPrice, IDetailTree annotations) {
-		return calculateSimpleUnitPrice(loadTime);
+	public int calculateLoadUnitPrice(final ILoadOption loadOption, final IDischargeOption dischargeOption, final int transferTime, final int salesPricePerMMBTu, final long transferVolume,
+			final IDetailTree annotations) {
+		return calculateSimpleUnitPrice(transferTime);
 	}
 }
