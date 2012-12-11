@@ -20,3 +20,6 @@ syntax: regexp
 ^com\.mmxlabs\.jobmanager\.ipc/target$
 syntax: regexp
 ^com\.mmxlabs\.jobmanager\.ipc\.runner/target$
+
+syntax: regexp
+^com\.mmxlabs\.jobmanager\.feature/\.settings$
