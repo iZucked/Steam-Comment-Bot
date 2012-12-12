@@ -135,39 +135,43 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 			for (final ShippingCostRow row : plan.getRows()) {
 
 				if (lastRow != null && lastRow.getPort() != null && row.getPort() != null) {
-					final int availableTime = (int) ((row.getDate().getTime() - lastRow.getDate().getTime()) / Timer.ONE_HOUR);
 
-					if (availableTime < 0) {
-						final String msg = String.format("Date is before the previous date.");
-						final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(msg);
-						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
-						dsd.addEObjectAndFeature(lastRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_Date());
-						dsd.addEObjectAndFeature(row, AnalyticsPackage.eINSTANCE.getShippingCostRow_Date());
-						statuses.add(dsd);
-					}
+					if (row.getDate() != null && lastRow.getDate() != null) {
 
-					else {
-						final Pair<Port, Port> key = new Pair<Port, Port>(lastRow.getPort(), row.getPort());
-						final Integer time = minTimes.get(key);
+						final int availableTime = (int) ((row.getDate().getTime() - lastRow.getDate().getTime()) / Timer.ONE_HOUR);
 
-						if (time == null) {
-							// distance line is missing
-							final String msg = String.format("Impossible journey between %s and %s.", lastRow.getPort().getName(), row.getPort().getName());
+						if (availableTime < 0) {
+							final String msg = String.format("Date is before the previous date.");
 							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(msg);
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 							dsd.addEObjectAndFeature(lastRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_Date());
 							dsd.addEObjectAndFeature(row, AnalyticsPackage.eINSTANCE.getShippingCostRow_Date());
 							statuses.add(dsd);
-						} else {
-							if (time > availableTime) {
+						}
 
-								final String msg = String.format("Row does not have enough travel time - %s is required for the journey, but only %s is available.", formatHours(time),
-										formatHours(availableTime));
+						else {
+							final Pair<Port, Port> key = new Pair<Port, Port>(lastRow.getPort(), row.getPort());
+							final Integer time = minTimes.get(key);
 
-								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+							if (time == null) {
+								// distance line is missing
+								final String msg = String.format("Impossible journey between %s and %s.", lastRow.getPort().getName(), row.getPort().getName());
+								final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(msg);
+								final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(status);
 								dsd.addEObjectAndFeature(lastRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_Date());
 								dsd.addEObjectAndFeature(row, AnalyticsPackage.eINSTANCE.getShippingCostRow_Date());
 								statuses.add(dsd);
+							} else {
+								if (time > availableTime) {
+
+									final String msg = String.format("Row does not have enough travel time - %s is required for the journey, but only %s is available.", formatHours(time),
+											formatHours(availableTime));
+
+									final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(msg));
+									dsd.addEObjectAndFeature(lastRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_Date());
+									dsd.addEObjectAndFeature(row, AnalyticsPackage.eINSTANCE.getShippingCostRow_Date());
+									statuses.add(dsd);
+								}
 							}
 						}
 					}
