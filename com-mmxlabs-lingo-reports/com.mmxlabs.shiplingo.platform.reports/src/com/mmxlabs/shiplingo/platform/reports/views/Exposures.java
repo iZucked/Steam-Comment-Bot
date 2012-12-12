@@ -1,5 +1,9 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.Contract;
@@ -83,5 +87,51 @@ public class Exposures {
 			result += getExposure(allocation, indexName);						
 		}
 		return result;
+	}
+	
+	private static String getKeyFromDate(Date date) {
+		return String.format("%d-%d", date.getYear() + 1900, date.getMonth() + 1);
+	}
+	
+	public static Map<Date, Double> getExposuresByMonth(Schedule schedule, String indexName) {
+		HashMap<Date, Double> result = new HashMap<Date, Double>();
+		
+		for (CargoAllocation allocation: schedule.getCargoAllocations()) {
+			int loadVolume = allocation.getLoadVolume();
+			int dischargeVolume = allocation.getDischargeVolume();
+			
+			Contract purchaseContract = allocation.getLoadAllocation().getSlot().getContract();
+			Contract salesContract = allocation.getDischargeAllocation().getSlot().getContract();
+			
+			double purchaseExposureCoefficient = getExposureCoefficient(purchaseContract, indexName);
+			double salesExposureCoefficient = getExposureCoefficient(salesContract, indexName);
+			
+			Date purchaseMonth = allocation.getLoadAllocation().getSlotVisit().getStart();
+			Date salesMonth = allocation.getDischargeAllocation().getSlotVisit().getStart();
+			
+			purchaseMonth = new Date(purchaseMonth.getYear(), purchaseMonth.getMonth(), 1);
+			salesMonth = new Date(salesMonth.getYear(), salesMonth.getMonth(), 1);
+			
+			double purchaseExposure = loadVolume * purchaseExposureCoefficient;
+			double salesExposure = - dischargeVolume * salesExposureCoefficient; 
+			
+			if (result.containsKey(purchaseMonth)) {
+				result.put(purchaseMonth, result.get(purchaseMonth) + purchaseExposure);
+			}
+			else {
+				result.put(purchaseMonth, purchaseExposure);				
+			}
+
+			if (result.containsKey(salesMonth)) {
+				result.put(salesMonth, result.get(salesMonth) + salesExposure);
+			}
+			else {
+				result.put(salesMonth, salesExposure);				
+			}
+
+		}
+		
+		return result;
+		
 	}
 }
