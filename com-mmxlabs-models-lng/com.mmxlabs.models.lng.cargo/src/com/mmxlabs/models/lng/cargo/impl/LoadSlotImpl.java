@@ -323,8 +323,10 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	public double getSlotOrPortCV() {
 		if (isSetCargoCV()) {
 			return getCargoCV();
-		} else {
+		} else if (getPort() != null) {
 			return getPort().getCvValue();
+		} else {
+			return 0.0;
 		}
 	}
 
