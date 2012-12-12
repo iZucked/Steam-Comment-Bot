@@ -293,7 +293,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 							slot = builder.createDischargeSlot(id, port, timeWindow, 0, gasVolume, minCv, maxCv, priceCalculator, 24, false);
 						} else {
 							// TODO: Need general waypoint type
-							slot = builder.createCharterOutEvent(id, timeWindow, port, port, 24, vesselClass.getCargoCapacity(), cargoCVValue, gasPrice, 0, 0);
+							slot = builder.createCharterOutEvent(id, timeWindow, port, port, 24, gasVolume, cargoCVValue, gasPrice, 0, 0);
 						}
 					}
 					elements.add(slot);
