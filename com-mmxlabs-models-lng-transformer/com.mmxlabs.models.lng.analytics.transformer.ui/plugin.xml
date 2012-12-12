@@ -12,7 +12,7 @@
     <view
           category="com.mmxlabs.models.lng.views.logical"
           class="com.mmxlabs.models.lng.analytics.transformer.ui.views.ShippingCostsView"
-          id="com.mmxlabs.models.lng.analytics.transformer.ui.views.JourneyView"
+          id="com.mmxlabs.models.lng.analytics.transformer.ui.views.ShippingCostsView"
           name="Shipping Costs"
           restorable="true">
     </view>
