@@ -507,7 +507,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * @since 2.0
 	 */
 	protected void setControlsEnabled(final boolean enabled) {
-		if (label != null) {
+		if (label != null && !label.isDisposed()) {
 			label.setEnabled(enabled);
 		}
 	}
@@ -516,7 +516,7 @@ public abstract class BasicAttributeInlineEditor extends MMXAdapterImpl implemen
 	 * @since 2.0
 	 */
 	protected void setControlsVisible(final boolean visible) {
-		if (label != null) {
+		if (label != null && !label.isDisposed()) {
 			label.setVisible(visible);
 		}
 	}

@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Text;
  * 
  */
 public class NumberInlineEditor extends UnsettableInlineEditor implements ModifyListener, DisposeListener {
-	private EDataType type;
+	private final EDataType type;
 
 	private FormattedText text;
 	private Object defaultValue;
@@ -88,7 +88,7 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 	public Control createValueControl(Composite parent) {
 		if (unit != null) {
 			final Composite sub = new Composite(parent, SWT.NONE);
-			GridLayout layout = new GridLayout(2, false);
+			final GridLayout layout = new GridLayout(2, false);
 			layout.marginHeight = layout.marginWidth = 0;
 			sub.setLayout(layout);
 			parent = sub;
@@ -113,7 +113,9 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 
 	@Override
 	protected void updateValueDisplay(final Object value) {
-		text.setValue(scale(value));
+		if (text != null) {
+			text.setValue(scale(value));
+		}
 	}
 
 	@Override
