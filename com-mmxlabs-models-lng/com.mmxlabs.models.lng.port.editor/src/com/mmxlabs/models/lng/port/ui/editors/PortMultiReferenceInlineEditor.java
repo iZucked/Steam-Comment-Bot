@@ -103,6 +103,10 @@ public class PortMultiReferenceInlineEditor extends BasicAttributeInlineEditor {
 
 	@Override
 	protected void updateDisplay(final Object value) {
+		if (theLabel == null || theLabel.isDisposed()) {
+			return;
+		}
+
 		final List<? extends EObject> selectedValues = (List<? extends EObject>) value;
 		if (selectedValues != null) {
 			final StringBuilder sb = new StringBuilder();
