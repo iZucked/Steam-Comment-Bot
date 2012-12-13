@@ -353,8 +353,8 @@ public class LNGModelCorrector {
 				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.DES_PURCHASE);
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesPurchaseSpotMarket(), group));
+				fixSpotMarketGroupAvailabilityName(parent, group, ed);
 			} else {
-
 				fixSpotMarketGroupAvailabilityName(parent, pricingModel.getDesPurchaseSpotMarket(), ed);
 				for (final SpotMarket market : pricingModel.getDesPurchaseSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
@@ -366,7 +366,6 @@ public class LNGModelCorrector {
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesSalesSpotMarket(), group));
 				fixSpotMarketGroupAvailabilityName(parent, group, ed);
 			} else {
-
 				fixSpotMarketGroupAvailabilityName(parent, pricingModel.getDesSalesSpotMarket(), ed);
 				for (final SpotMarket market : pricingModel.getDesSalesSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
@@ -378,7 +377,6 @@ public class LNGModelCorrector {
 				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobPurchasesSpotMarket(), group));
 				fixSpotMarketGroupAvailabilityName(parent, group, ed);
 			} else {
-
 				fixSpotMarketGroupAvailabilityName(parent, pricingModel.getFobPurchasesSpotMarket(), ed);
 				for (final SpotMarket market : pricingModel.getFobPurchasesSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
