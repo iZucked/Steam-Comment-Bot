@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>optimiser-ga</artifactId>
 	<packaging>bundle</packaging>
-	<version>1.1.1-SNAPSHOT</version>
+	<version>1.1.1.RELEASE</version>
 	<name>Optimiser - GA</name>
 
 	<parent>
 		<groupId>com.mmxlabs.optimiser</groupId>
 		<artifactId>optimiser-parent</artifactId>
-		<version>1.1.1-SNAPSHOT</version>
+		<version>1.1.1.RELEASE</version>
 	</parent>
 
 	<dependencies>
@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>com.mmxlabs.optimiser</groupId>
 			<artifactId>optimiser-core</artifactId>
-			<version> 1.1.1-SNAPSHOT</version>
+			<version> 1.1.1.RELEASE</version>
 		</dependency>
 
 		<dependency>
