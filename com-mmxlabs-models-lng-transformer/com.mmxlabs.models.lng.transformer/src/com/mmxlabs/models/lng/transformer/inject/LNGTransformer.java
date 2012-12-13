@@ -9,7 +9,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.core.runtime.Platform;
 import org.ops4j.peaberry.Peaberry;
 import org.ops4j.peaberry.util.TypeLiterals;
 
@@ -76,7 +76,7 @@ public class LNGTransformer {
 		this.scenario = scenario;
 		{
 			final Injector tmpInjector;
-			if (PlatformUI.isWorkbenchRunning()) {
+			if (Platform.isRunning()) {
 				// Create temp injector to grab extraModules from OSGi services
 				final AbstractModule optimiserInjectorServiceModule = new AbstractModule() {
 
@@ -88,12 +88,16 @@ public class LNGTransformer {
 				tmpInjector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()), optimiserInjectorServiceModule);
 				final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
 				this.extraModules = (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key);
-			} else {
+			} else if (module != null) {
 				tmpInjector = Guice.createInjector(module);
+			} else {
+				tmpInjector = null;
 			}
 
-			final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
-			this.extraModules = (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key);
+			if (tmpInjector != null) {
+				final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
+				this.extraModules = (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key);
+			}
 		}
 
 		final List<Module> modules = new ArrayList<Module>();
