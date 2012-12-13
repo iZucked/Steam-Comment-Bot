@@ -234,7 +234,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 			enableOpenListener();
 
-			scenarioViewer.getGrid().setCellSelectionEnabled(true);
+//			scenarioViewer.getGrid().setCellSelectionEnabled(true);
 			filterField.setViewer(scenarioViewer);
 
 			final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
