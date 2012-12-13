@@ -592,8 +592,6 @@ public class DetailCompositeDialog extends Dialog {
 				}
 				selectionViewer.refresh();
 				selectionViewer.setSelection(new StructuredSelection(inputs.get(inputs.size() - 1)));
-				selectedObjectIndex = inputs.size() - 1;
-				updateEditor();
 			}
 		};
 	}
