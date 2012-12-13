@@ -3,11 +3,11 @@
 	<parent>
 		<artifactId>optimiser-parent</artifactId>
 		<groupId>com.mmxlabs.optimiser</groupId>
-		<version>1.1.1.RELEASE</version>
+		<version>1.1.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>optimiser-common</artifactId>
-	<version>1.1.1.RELEASE</version>
+	<version>1.1.2-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>Optimiser - Common</name>
 
@@ -15,7 +15,7 @@
 		<dependency>
 			<groupId>com.mmxlabs.optimiser</groupId>
 			<artifactId>optimiser-core</artifactId>
-			<version>1.1.1.RELEASE</version>
+			<version>1.1.2-SNAPSHOT</version>
 			<type>jar</type>
 			<scope>compile</scope>
 		</dependency>
