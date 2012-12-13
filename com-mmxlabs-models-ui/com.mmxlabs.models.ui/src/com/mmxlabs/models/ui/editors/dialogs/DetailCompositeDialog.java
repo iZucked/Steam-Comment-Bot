@@ -12,6 +12,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.management.RuntimeErrorException;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
@@ -785,10 +787,10 @@ public class DetailCompositeDialog extends Dialog {
 				if (!addedInputs.isEmpty()) {
 					Command delete = DeleteCommand.create(commandHandler.getEditingDomain(), addedInputs);
 					if (delete.canExecute()) {
-						System.err.println("Execute delete");
+//						System.err.println("Execute delete");
 						delete.execute();
 					} else {
-						System.err.println("Cannot execute delete");
+						log.error("Cannot execute delete", new RuntimeException());
 					}
 				}
 
