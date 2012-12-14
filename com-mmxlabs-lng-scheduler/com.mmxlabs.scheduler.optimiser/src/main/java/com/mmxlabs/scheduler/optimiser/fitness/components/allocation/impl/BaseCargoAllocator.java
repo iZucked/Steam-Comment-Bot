@@ -25,7 +25,6 @@ import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.VirtualCargo;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ITotalVolumeLimitProvider;
@@ -186,13 +185,6 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 					addVirtualCargo(loadDetails, dischargeDetails);
 				}
 			}
-
-		}
-
-		// TODO: Do we use this!
-		for (final VirtualCargo virtual : sequences.getVirtualCargoes()) {
-			// add virtual cargo, somehow; contracts need to know how to price this, because we need the load price.
-			addVirtualCargo(virtual);
 
 		}
 
@@ -409,13 +401,6 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		final ILoadOption loadSlot = (ILoadOption) loadDetails.getOptions().getPortSlot();
 		final IDischargeOption dischargeSlot = (IDischargeOption) dischargeDetails.getOptions().getPortSlot();
 
-		addVirtualCargo(loadSlot, dischargeSlot);
-	}
-
-	public void addVirtualCargo(final VirtualCargo cargo) {
-
-		final ILoadOption loadSlot = cargo.getLoadOption();
-		final IDischargeOption dischargeSlot = cargo.getDischargeOption();
 		addVirtualCargo(loadSlot, dischargeSlot);
 	}
 

@@ -29,9 +29,7 @@ import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.optimiser.core.scenario.common.MatrixEntry;
 import com.mmxlabs.scheduler.optimiser.Calculator;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IHeelOptionsPortSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -114,19 +112,12 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		for (int i = 0; i < sequences.size(); i++) {
 			final ISequence sequence = sequences.getSequence(i);
 			final IResource resource = resources.get(i);
-			final IVessel vessel = vesselProvider.getVessel(resource);
-			if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
-				assert sequence.size() == 4 : "A virtual sequence should always contain 4 elements (Start - Load - Discharge - End)";
 
-				result.addVirtualCargo((ILoadOption) portSlotProvider.getPortSlot(sequence.get(1)), (IDischargeOption) portSlotProvider.getPortSlot(sequence.get(2)), arrivalTimes[i][1],
-						arrivalTimes[i][2]);
-			} else {
-				final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
-				if (scheduledSequence == null) {
-					return null;
-				}
-				result.add(scheduledSequence);
+			final ScheduledSequence scheduledSequence = schedule(resource, sequence, arrivalTimes[i]);
+			if (scheduledSequence == null) {
+				return null;
 			}
+			result.add(scheduledSequence);
 		}
 
 		return result;
@@ -364,16 +355,15 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 						return null;
 					}
 				} else {
-//					if (!optimiseSequence(voyagePlans, Collections.singletonList(currentSequence.get(0)), currentTimes, voyagePlanOptimiser)) {
-//						return null;
-//					}
+					// if (!optimiseSequence(voyagePlans, Collections.singletonList(currentSequence.get(0)), currentTimes, voyagePlanOptimiser)) {
+					// return null;
+					// }
 				}
 
-				
 				if (isShortsSequence) {
 					voyagePlans.get(voyagePlans.size() - 1).setIgnoreEnd(false);
 				}
-				
+
 				// Reset useNBO flag
 				useNBO = false;
 				previousOptions = null;
@@ -426,8 +416,8 @@ public abstract class AbstractSequenceScheduler implements ISequenceScheduler {
 		}
 
 		if (!voyagePlans.isEmpty()) {
-		// Include very last element in a sequence
-//		voyagePlans.get(voyagePlans.size() - 1).setIgnoreEnd(false);
+			// Include very last element in a sequence
+			// voyagePlans.get(voyagePlans.size() - 1).setIgnoreEnd(false);
 		}
 		return new ScheduledSequence(resource, startTime, voyagePlans, arrivalTimes);
 	}
