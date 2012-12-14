@@ -1,0 +1,8 @@
+uuid,name,otherNames,minQuantity,maxQuantity,constant,multiplier,entity,allowedPorts,index,kind,preferredPort,pricePerMMBTU
+_s615QK_ZEeGyyNbjDp7Faw,Asian Spot Sales,,0,1000000,0.0,1.0,Others,,Asian Spot,IndexPriceContract,,
+_zWfuEK_ZEeGyyNbjDp7Faw,Brent Spot Sales,,0,1000000,0.0,1.0,Others,,Brent,IndexPriceContract,,
+_18lmkK_ZEeGyyNbjDp7Faw,HH Spot Sales,,0,1000000,0.0,1.0,Others,,HH,IndexPriceContract,,
+_3zSpgK_ZEeGyyNbjDp7Faw,Japanese Avg. Spot,,0,1000000,0.0,1.0,Others,Japanese Ports,Japanese Import,IndexPriceContract,Higashi-Ogishima,
+_6IN5gK_ZEeGyyNbjDp7Faw,Korean Avg. Spot,,0,1000000,0.0,1.0,Others,,Korean Import,IndexPriceContract,,
+_8jjTgK_ZEeGyyNbjDp7Faw,NBP Spot S,,0,1000000,0.0,1.0,Others,,NBP,IndexPriceContract,,
+_nSc38K_aEeGyyNbjDp7Faw,Sell 10,,0,1000000,,,Others,,,FixedPriceContract,,10.0
