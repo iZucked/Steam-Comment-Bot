@@ -9,10 +9,8 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.constraints.IPairwiseConstraintChecker;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.DischargeSlot;
-import com.mmxlabs.scheduler.optimiser.components.impl.LoadSlot;
+import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
+import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
@@ -20,17 +18,17 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
 public class ContractCvConstraintChecker implements IPairwiseConstraintChecker {
 
 	private final String name;
-	
+
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
-	
+
 	public ContractCvConstraintChecker(final String name) {
 		this.name = name;
 	}
-	
+
 	@Override
 	public String getName() {
 		return name;
@@ -48,8 +46,7 @@ public class ContractCvConstraintChecker implements IPairwiseConstraintChecker {
 				if (!checkPairwiseConstraint(prev, current, resource)) {
 					if (messages == null) {
 						return false;
-					}
-					else {
+					} else {
 						valid = false;
 						messages.add(explain(prev, current, resource));
 					}
@@ -59,7 +56,7 @@ public class ContractCvConstraintChecker implements IPairwiseConstraintChecker {
 		}
 		return valid;
 	}
-	
+
 	@Override
 	public boolean checkConstraints(final ISequences sequences) {
 		return checkConstraints(sequences, null);
@@ -68,14 +65,13 @@ public class ContractCvConstraintChecker implements IPairwiseConstraintChecker {
 	@Override
 	public boolean checkConstraints(final ISequences sequences, final List<String> messages) {
 		boolean valid = true;
-		
+
 		for (final IResource resource : sequences.getResources()) {
 			final ISequence sequence = sequences.getSequence(resource);
 			if (!checkSequence(sequence, resource, messages)) {
 				if (messages == null) {
 					return false;
-				}
-				else {
+				} else {
 					valid = false;
 				}
 			}
@@ -86,18 +82,18 @@ public class ContractCvConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Override
 	public boolean checkPairwiseConstraint(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		PortType firstType = portTypeProvider.getPortType(first);
-		PortType secondType = portTypeProvider.getPortType(second);
-		
+		final PortType firstType = portTypeProvider.getPortType(first);
+		final PortType secondType = portTypeProvider.getPortType(second);
+
 		// for load / discharge pairs, ensure that the CV value for the load is in any
 		// CV range specified at the discharge
 		if (firstType == PortType.Load && secondType == PortType.Discharge) {
-			ILoadSlot loadSlot = (ILoadSlot) portSlotProvider.getPortSlot(first);
-			IDischargeSlot dischargeSlot = (IDischargeSlot) portSlotProvider.getPortSlot(second);
+			final ILoadOption loadSlot = (ILoadOption) portSlotProvider.getPortSlot(first);
+			final IDischargeOption dischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(second);
 
-			int cv = loadSlot.getCargoCVValue();
-			
-			return (dischargeSlot.getMinCvValue() <= cv && dischargeSlot.getMaxCvValue() >= cv);									
+			final int cv = loadSlot.getCargoCVValue();
+
+			return (dischargeSlot.getMinCvValue() <= cv && dischargeSlot.getMaxCvValue() >= cv);
 		}
 
 		return true;
@@ -105,25 +101,24 @@ public class ContractCvConstraintChecker implements IPairwiseConstraintChecker {
 
 	@Override
 	public String explain(final ISequenceElement first, final ISequenceElement second, final IResource resource) {
-		PortType firstType = portTypeProvider.getPortType(first);
-		PortType secondType = portTypeProvider.getPortType(first);
-		
+		final PortType firstType = portTypeProvider.getPortType(first);
+		final PortType secondType = portTypeProvider.getPortType(first);
+
 		// for load / discharge pairs, ensure that the CV value for the load is in any
 		// CV range specified at the discharge
 		if (firstType == PortType.Load && secondType == PortType.Discharge) {
-			LoadSlot loadSlot = (LoadSlot) portSlotProvider.getPortSlot(first);
-			DischargeSlot dischargeSlot = (DischargeSlot) portSlotProvider.getPortSlot(second);
+			final ILoadOption loadSlot = (ILoadOption) portSlotProvider.getPortSlot(first);
+			final IDischargeOption dischargeSlot = (IDischargeOption) portSlotProvider.getPortSlot(second);
 
-			int cv = loadSlot.getCargoCVValue();
-			
-			String format = "CV (%d) for load slot %s is %s than %s CV (%d) for discharge slot %s.";
-			long minCv = dischargeSlot.getMinCvValue(); 
-			long maxCv = dischargeSlot.getMaxCvValue(); 
+			final int cv = loadSlot.getCargoCVValue();
+
+			final String format = "CV (%d) for load slot %s is %s than %s CV (%d) for discharge slot %s.";
+			final long minCv = dischargeSlot.getMinCvValue();
+			final long maxCv = dischargeSlot.getMaxCvValue();
 			if (cv < minCv) {
-				return String.format(format, cv, loadSlot.getId(), "less", "minimum", minCv, dischargeSlot.getId());  
-			}
-			else if (cv > maxCv) {
-				return String.format(format, cv, loadSlot.getId(), "more", "maximum", maxCv, dischargeSlot.getId());  				
+				return String.format(format, cv, loadSlot.getId(), "less", "minimum", minCv, dischargeSlot.getId());
+			} else if (cv > maxCv) {
+				return String.format(format, cv, loadSlot.getId(), "more", "maximum", maxCv, dischargeSlot.getId());
 			}
 		}
 
@@ -131,7 +126,7 @@ public class ContractCvConstraintChecker implements IPairwiseConstraintChecker {
 	}
 
 	@Override
-	public void setOptimisationData(IOptimisationData optimisationData) {
-		
+	public void setOptimisationData(final IOptimisationData optimisationData) {
+
 	}
 }
