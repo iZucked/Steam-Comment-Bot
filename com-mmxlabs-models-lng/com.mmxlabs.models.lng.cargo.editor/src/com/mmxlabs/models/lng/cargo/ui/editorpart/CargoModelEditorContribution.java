@@ -33,7 +33,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 
 	// Temp flag to turn on/off load/discharge slots during development
 	private static final boolean showSlotTabs = false;
-	private static final boolean useNewTradesEditor = true;
+	private static final boolean useNewTradesEditor = false;
 
 	@Override
 	public void addPages(final Composite parent) {
