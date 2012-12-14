@@ -35,8 +35,12 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 
 	private IExtraValidationContext extraContext;
 
+	private final ScenarioLock validationLock;
+
 	public ScenarioInstanceValidator(final ScenarioInstance scenarioInstance) {
 		this.scenarioInstance = scenarioInstance;
+		// Get hold of a reference to the validation lock
+		this.validationLock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
 		helper = new ValidationHelper();
 		final Object instance = scenarioInstance.getInstance();
 		if (instance instanceof MMXRootObject) {
@@ -70,7 +74,7 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 					if (extraContext == null) {
 						return;
 					}
-					
+
 					final Collection<EObject> modelRoots = new LinkedList<EObject>();
 					final MMXRootObject rootObject = extraContext.getRootObject();
 					if (rootObject == null) {
@@ -133,12 +137,10 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 	}
 
 	protected boolean claimValidationLock() {
-		final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
-		return lock.claim();
+		return validationLock.claim();
 	}
 
 	protected void releaseValidationLock() {
-		final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.VALIDATION);
-		lock.release();
+		validationLock.release();
 	}
 }
