@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.shiplingo.platform.reports.Exposures;
 
 /**
  * @since 2.0

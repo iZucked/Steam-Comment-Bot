@@ -1,4 +1,4 @@
-package com.mmxlabs.shiplingo.platform.reports.views;
+package com.mmxlabs.shiplingo.platform.reports;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -11,24 +11,29 @@ import com.mmxlabs.common.parser.IFunctionFactory;
 import com.mmxlabs.common.parser.IInfixOperatorFactory;
 import com.mmxlabs.common.parser.IPrefixOperatorFactory;
 import com.mmxlabs.common.parser.ITermFactory;
-import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.IndexPriceContract;
 import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
 import com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract;
-import com.mmxlabs.models.lng.pricing.DataIndex;
-import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 
 /**
+ * Utility class to calculate schedule exposure to market indices.
+ * Provides static methods  
+ * 
+ * @author Simon McGregor
  * @since 2.0
  */
 public class Exposures {
+	
+	/**
+	 * Simple tree class because Java utils inexplicably doesn't provide one
+	 * @author Simon McGregor
+	 *
+	 */
 	static class Node {
 		public final String token;
 		public final Node [] children;
@@ -39,6 +44,9 @@ public class Exposures {
 		}
 	}
 	
+	/**
+	 * IExpression class for parser to produce raw tree objects
+	 */
 	static class NodeExpression implements IExpression<Node> {
 		Node node;
 		
@@ -57,8 +65,16 @@ public class Exposures {
 		}
 	}
 	
-	static class TokenParser extends ExpressionParser<Node> {
-		public TokenParser() {
+	
+	/**
+	 * Parser for price expressions returning a raw parse tree.
+	 * NOTE: this class duplicates code in ISeriesParser and its ancestors
+	 * so it will NOT automatically remain in synch. 
+	 * 
+	 * @author Simon McGregor
+	 */
+	static class RawTreeParser extends ExpressionParser<Node> {
+		public RawTreeParser() {
 			setInfixOperatorFactory(new IInfixOperatorFactory<Node>() {
 
 				@Override
@@ -168,7 +184,7 @@ public class Exposures {
 	}
 	
 	/**
-	 * Determines the amount of exposure to a particular index which is created by a specific contract 
+	 * Determines the amount of exposure to a particular index which is created by a specific contract. 
 	 * 
 	 * @param contract
 	 * @param index
@@ -199,7 +215,7 @@ public class Exposures {
 		}
 		
 		if (priceExpression != null) {
-			TokenParser parser = new TokenParser();
+			RawTreeParser parser = new RawTreeParser();
 			IExpression<Node> parsed = parser.parse(priceExpression);
 			return getExposureCoefficient(parsed.evaluate(), index);
 		}		
@@ -207,6 +223,15 @@ public class Exposures {
 		return 0;
 	}
 
+	/**
+	 * Calculates the exposure of a given schedule to a given index. Depends on the 
+	 * getExposureCoefficient method to correctly determine the exposure per cubic metre
+	 * associated with a load or discharge slot.
+	 * 
+	 * @param schedule
+	 * @param index
+	 * @return
+	 */
 	public static Map<Date, Double> getExposuresByMonth(Schedule schedule, Index index) {
 		HashMap<Date, Double> result = new HashMap<Date, Double>();
 		
