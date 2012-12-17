@@ -129,11 +129,6 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.edapt.runtime.feature.feature.group" version="0.0.0"/>
-<unit id="org.eclipse.emf.edapt.runtime.sdk.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/edapt/update-site"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="json-simple.source.source" version="1.1.1"/>
 <unit id="com.googlecode.json-simple" version="1.1.1"/>
 <unit id="com.google.guava" version="13.0.1"/>

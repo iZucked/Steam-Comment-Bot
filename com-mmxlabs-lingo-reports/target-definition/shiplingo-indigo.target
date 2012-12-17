@@ -77,6 +77,10 @@
 <unit id="com.mmxlabs.optimiser.optimiser-core.source" version="0.0.0"/>
 <unit id="com.mmxlabs.optimiser.optimiser-common" version="0.0.0"/>
 <unit id="com.mmxlabs.optimiser.optimiser-common.source" version="0.0.0"/>
+<unit id="com.mmxlabs.scenario.service.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -127,6 +131,8 @@
 <repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/2.0"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.common.common-util" version="2.1.0.201211271403"/>
 <unit id="com.mmxlabs.common.common-util.source" version="2.1.0.201211271403"/>
 <unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="3.0.0.RELEASE"/>
