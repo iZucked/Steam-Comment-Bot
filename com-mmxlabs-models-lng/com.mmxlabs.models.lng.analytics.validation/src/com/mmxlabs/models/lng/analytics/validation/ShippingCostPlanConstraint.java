@@ -138,8 +138,17 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 
 					if (row.getDate() != null && lastRow.getDate() != null) {
 
-						final int availableTime = (int) ((row.getDate().getTime() - lastRow.getDate().getTime()) / Timer.ONE_HOUR);
 
+						int visitDuration = 0;
+						if (lastRow.getDestinationType() == DestinationType.LOAD ) {
+							visitDuration = lastRow.getPort().getLoadDuration();
+						} else  if(lastRow.getDestinationType() == DestinationType.DISCHARGE) {
+							visitDuration = lastRow.getPort().getDischargeDuration();
+						} else  if(lastRow.getDestinationType() == DestinationType.OTHER) {
+							visitDuration = 24;
+						}
+						final int availableTime = (int) ((row.getDate().getTime() - lastRow.getDate().getTime()) / Timer.ONE_HOUR) - visitDuration;
+						
 						if (availableTime < 0) {
 							final String msg = String.format("Date is before the previous date.");
 							final IConstraintStatus status = (IConstraintStatus) ctx.createFailureStatus(msg);
