@@ -283,14 +283,14 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 					final IPortSlot slot;
 					if (row.getDestinationType() == DestinationType.LOAD) {
 						final ILoadPriceCalculator priceCalculator = new FixedPriceContract(gasPrice);
-						slot = builder.createLoadSlot(id, port, timeWindow, 0, gasVolume, priceCalculator, cargoCVValue, 24, false, true, false);
+						slot = builder.createLoadSlot(id, port, timeWindow, 0, gasVolume, priceCalculator, cargoCVValue, row.getPort().getLoadDuration(), false, true, false);
 					} else {
 						if (row.getDestinationType() == DestinationType.DISCHARGE) {
 							final ISalesPriceCalculator priceCalculator = new FixedPriceContract(gasPrice);
 							// TODO: find out from Simon Goodall what the min and max cv values are for a ShippingCostRow
 							final long minCv = 0;
 							final long maxCv = Long.MAX_VALUE;
-							slot = builder.createDischargeSlot(id, port, timeWindow, 0, gasVolume, minCv, maxCv, priceCalculator, 24, false);
+							slot = builder.createDischargeSlot(id, port, timeWindow, 0, gasVolume, minCv, maxCv, priceCalculator, row.getPort().getDischargeDuration(), false);
 						} else {
 							// TODO: Need general waypoint type
 							slot = builder.createCharterOutEvent(id, timeWindow, port, port, 24, gasVolume, cargoCVValue, gasPrice, 0, 0);
