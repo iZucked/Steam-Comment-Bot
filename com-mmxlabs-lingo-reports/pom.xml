@@ -48,6 +48,7 @@
 
 		<!-- Test Plugins -->
 		<module>com.mmxlabs.shiplingo.platform.its</module>
+		<module>com.mmxlabs.shiplingo.platform.reports.tests</module>
 	</modules>
 
 	<build>
