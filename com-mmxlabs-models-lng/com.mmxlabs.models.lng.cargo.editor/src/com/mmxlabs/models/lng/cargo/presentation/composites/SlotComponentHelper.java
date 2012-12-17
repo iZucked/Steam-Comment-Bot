@@ -13,6 +13,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.nebula.widgets.formattedtext.DateTimeFormatter;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
@@ -160,8 +161,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 * @generated NOT
 	 */
 	protected void add_durationEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-
-		final NumberInlineEditor editor = new NumberInlineEditor(CargoPackage.eINSTANCE.getSlot_Duration()) {
+		final NumberInlineEditor editor = new NumberInlineEditor(CargoPackage.eINSTANCE.getSlot_Duration()); /* {
 			protected boolean updateOnChangeToFeature(final Object changedFeature) {
 				if (changedFeature == CargoPackage.eINSTANCE.getSlot_Port()) {
 					return true;
@@ -171,7 +171,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 			}
 
 		};
-		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());
+		editor.addNotificationChangedListener(new SlotInlineEditorChangedListener());*/
 		detailComposite.addInlineEditor(editor);
 	}
 

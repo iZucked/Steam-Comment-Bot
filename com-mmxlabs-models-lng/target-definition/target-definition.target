@@ -18,8 +18,6 @@
 <unit id="com.mmxlabs.common.common-util.source" version="2.1.0.201211271403"/>
 <unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="3.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="3.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="3.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="3.0.0.RELEASE"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -36,6 +34,8 @@
 <unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">

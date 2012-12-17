@@ -21,8 +21,10 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.lng.types.impl.ASlotImpl;
@@ -1027,28 +1029,26 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		result.append(')');
 		return result.toString();
 	}
-
+	
 	@Override
-	public Object getUnsetValue(EStructuralFeature feature) {
-
-		if (CargoPackage.eINSTANCE.getSlot_WindowStartTime() == feature) {
-			if (getPort() == null) return (Integer) 7;
-			else return getPort().getDefaultStartTime();
-		} else if (CargoPackage.eINSTANCE.getSlot_WindowSize() == feature) {
-			if (getPort() == null) return (Integer) 6;
-			else return getPort().getDefaultWindowSize();
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		CargoPackage cargo = CargoPackage.eINSTANCE;
+		PortPackage port = PortPackage.eINSTANCE;
+		CommercialPackage commercial = CommercialPackage.eINSTANCE;
+		if (cargo.getSlot_WindowStartTime() == feature) {
+			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultStartTime(), (Integer) 7);
+		} else if (cargo.getSlot_WindowSize() == feature) {
+			return new DelegateInformation(cargo.getSlot_Port(), port.getPort_DefaultWindowSize(), (Integer) 6);
 		} else if (CargoPackage.eINSTANCE.getSlot_MinQuantity() == feature) {
-			if (getContract() == null) return 0;
-			else return getContract().getMinQuantity();
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MinQuantity(), (Integer) 0);
 		} else if (CargoPackage.eINSTANCE.getSlot_MaxQuantity() == feature) {
-			if (getContract() == null) return 500000;
-			else return getContract().getMaxQuantity();
+			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) 500000);
 		} else if (CargoPackage.eINSTANCE.getSlot_FixedPrice() == feature) {
 			return null;
 		}
-		
-		return super.getUnsetValue(feature);
-	}
+		return super.getUnsetValueOrDelegate(feature);
+	}	
+	
 } // end of SlotImpl
 
 // finish type fixing

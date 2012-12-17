@@ -3,16 +3,17 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.cargo.impl;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
-import com.mmxlabs.models.lng.cargo.DischargeSlot;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.EStructuralFeature;
+
+import com.mmxlabs.models.lng.cargo.Cargo;
+import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.port.PortPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -274,12 +275,11 @@ public class DischargeSlotImpl extends SlotImpl implements DischargeSlot {
 	}
 
 	@Override
-	public Object getUnsetValue(EStructuralFeature feature) {
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		if (feature == CargoPackage.Literals.SLOT__DURATION) {
-			if (getPort() == null) return 12;
-			return getPort().getDischargeDuration();
+			return new DelegateInformation(CargoPackage.eINSTANCE.getSlot_Port(), PortPackage.eINSTANCE.getPort_DischargeDuration(), (Integer) 12);
 		}
-		return super.getUnsetValue(feature);
+		return super.getUnsetValueOrDelegate(feature);
 	}
 	
 } // end of DischargeSlotImpl

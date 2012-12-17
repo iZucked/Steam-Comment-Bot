@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.cargo.impl;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.port.PortPackage;
 
 import java.lang.reflect.InvocationTargetException;
 import org.eclipse.emf.common.notify.Notification;
@@ -484,15 +485,13 @@ public class LoadSlotImpl extends SlotImpl implements LoadSlot {
 	}
 
 	@Override
-	public Object getUnsetValue(EStructuralFeature feature) {
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
 		if (feature == CargoPackage.Literals.SLOT__DURATION) {
-			if (getPort() == null) return 12;
-			return getPort().getLoadDuration();
+			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__LOAD_DURATION, (Integer) 12);
 		} else if (feature == CargoPackage.Literals.LOAD_SLOT__CARGO_CV) {
-			if (getPort() == null) return 24.0;
-			return getPort().getCvValue();
+			return new DelegateInformation(CargoPackage.Literals.SLOT__PORT, PortPackage.Literals.PORT__CV_VALUE, (Double) 24.0);
 		}
-		return super.getUnsetValue(feature);
+		return super.getUnsetValueOrDelegate(feature);
 	}
 
 	
