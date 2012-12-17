@@ -20,16 +20,6 @@ import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.ScenarioRunner;
 import com.mmxlabs.shiplingo.platform.its.tests.calculation.ScenarioTools;
 
-/**
- * <a href="https://mmxlabs.fogbugz.com/default.asp?255">Case 255: Check constraints have not be violated</a><br>
- * 
- * This class tests the allowed vessel list on cargoes.<br>
- * 
- * Every Cargo has an 'allowedVessels' list; check that no cargo's slots are put on a vessel which is not in the allowedVessels list, unless it's empty.<br>
- * 
- * @author Adam
- * 
- */
 public class ContractCvConstraintCheckTest {
 
 	private static final int dischargePrice = 1;
