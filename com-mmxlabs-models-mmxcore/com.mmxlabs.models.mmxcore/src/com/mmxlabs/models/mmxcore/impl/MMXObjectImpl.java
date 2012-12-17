@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.mmxcore.impl;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -13,9 +14,9 @@ import java.util.Map;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
@@ -27,7 +28,6 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXProxy;
 import com.mmxlabs.models.mmxcore.UUIDObject;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * <!-- begin-user-doc -->
@@ -268,13 +268,37 @@ public class MMXObjectImpl extends EObjectImpl implements MMXObject {
 		return collection;
 	}
 
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NO
+	 * @since 3.1
+	 */
+	public DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature) {
+		return new DelegateInformation(null, null, eGet(feature));
+	}
+
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated NO
 	 */
 	public Object getUnsetValue(EStructuralFeature feature) {
-		return eGet(feature);
+		DelegateInformation dfi = getUnsetValueOrDelegate(feature);
+		if (dfi != null) {
+			if (dfi.delegate != null) {
+				MMXObject delegate = (MMXObject) eGet(dfi.delegate);
+				if (delegate != null)
+					return delegate.eGet(dfi.delegateFeature);
+			}
+			
+			return dfi.absentDelegateValue;
+		}
+		else {
+			return eGet(feature);
+		}
 	}
 
 

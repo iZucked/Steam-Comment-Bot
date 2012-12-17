@@ -7,13 +7,15 @@ package com.mmxlabs.models.mmxcore;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+
+import com.mmxlabs.common.Pair;
 
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>MMX Object</b></em>'.
+ * @noimplement
  * <!-- end-user-doc -->
  *
  * <p>
@@ -29,6 +31,25 @@ import org.eclipse.emf.ecore.EStructuralFeature;
  * @generated
  */
 public interface MMXObject extends EObject {
+	/**
+	 * @generated NOT
+	 * @since 3.1
+	 */
+	public class DelegateInformation {
+		// The subfield of the object to delegate to when a field is unset
+		public final EStructuralFeature delegate;
+		// The subfield of the delegate to use when a field is unset
+		public final EStructuralFeature delegateFeature;
+		// The value to use when a delegate is absent or there is no delegation
+		public final Object absentDelegateValue;
+		
+		public DelegateInformation(EStructuralFeature delegate, EStructuralFeature delegateFeature, Object value) {
+			this.delegate = delegate;
+			this.delegateFeature = delegateFeature;
+			this.absentDelegateValue = value;
+		}
+		
+	}
 	/**
 	 * Returns the value of the '<em><b>Extensions</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.mmxcore.UUIDObject}.
@@ -108,6 +129,18 @@ public interface MMXObject extends EObject {
 	 * @generated
 	 */
 	Object getUnsetValue(EStructuralFeature feature);
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * Returns a {@link DelegateInformation} structure providing information about whether an unset feature
+	 * is delegated to a subfield or not. If an unset feature is delegated, it should return a
+	 * new DelegateInformation(delegateFeature, 
+	 * 
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 * @since 3.1
+	 */
+	DelegateInformation getUnsetValueOrDelegate(EStructuralFeature feature);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -124,5 +157,6 @@ public interface MMXObject extends EObject {
 	 * @generated
 	 */
 	EObject eContainerOp();
-
+	
+	
 } // MMXObject
