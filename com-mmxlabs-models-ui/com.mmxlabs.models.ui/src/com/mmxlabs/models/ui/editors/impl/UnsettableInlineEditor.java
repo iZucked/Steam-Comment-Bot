@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.mmxcore.MMXObject;
+import com.mmxlabs.models.mmxcore.MMXObject.DelegateInformation;
 
 public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor {
 	private Button setButton;
@@ -196,5 +197,19 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 		if (setButton != null) {
 			setButton.setVisible(visible);
 		}
+	}
+	
+	@Override
+	protected boolean updateOnChangeToFeature(final Object changedFeature) {
+		if (input != null) {
+			MMXObject mmxinput = (MMXObject) input;
+			DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
+			if (di.delegate == changedFeature) {
+				return true;
+			}
+			
+		}
+
+		return super.updateOnChangeToFeature(changedFeature);
 	}
 }
