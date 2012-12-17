@@ -9,6 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -80,7 +81,9 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				});
 				
 				for (final Date date: dateRange()) {
-					result.add(new ColumnManager<IndexExposureData>(date.toString()) {
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(date);
+					result.add(new ColumnManager<IndexExposureData>(String.format("%d-%02d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1)) {
 						public String getColumnText(IndexExposureData data) {
 							double result = data.exposures.containsKey(date) ? data.exposures.get(date) : 0; 
 							return Double.toString(result);
@@ -93,20 +96,6 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 						}
 					});					
 				}
-				
-				/*
-				result.add(new ColumnManager<IndexExposureData>("Exposure") {
-					public String getColumnText(IndexExposureData data) {
-						return Double.toString(data.exposure);
-					}
-					
-					public int compare(IndexExposureData o1, IndexExposureData o2) {
-						return Double.compare(o1.exposure, o2.exposure);
-					}
-				});
-				*/
-
-				
 				
 				return result;		
 			}
@@ -122,7 +111,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				overallExposures.clear();
 				
 				for (Index<Double> index: indices) {
-					Map<Date, Double> exposures = Exposures.getExposuresByMonth(schedule, index.getName());
+					Map<Date, Double> exposures = Exposures.getExposuresByMonth(schedule, index);
 					overallExposures.put(index.getName(), exposures);
 					output.add(new IndexExposureData(index.getName(), exposures));
 				}
