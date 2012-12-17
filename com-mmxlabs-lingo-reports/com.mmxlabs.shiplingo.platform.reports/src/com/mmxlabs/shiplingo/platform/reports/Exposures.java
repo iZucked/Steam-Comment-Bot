@@ -148,7 +148,7 @@ public class Exposures {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public static double getExposureCoefficient(Node node, Index index) {
+	private static double getExposureCoefficient(Node node, Index index) {
 		String indexToken = index.getName();
 				
 		if (node.token.equals("+")) {
@@ -183,6 +183,12 @@ public class Exposures {
 		
 	}
 	
+	public static double getExposureCoefficient(String priceExpression, Index index) {
+		RawTreeParser parser = new RawTreeParser();
+		IExpression<Node> parsed = parser.parse(priceExpression);
+		return getExposureCoefficient(parsed.evaluate(), index);
+	}
+	
 	/**
 	 * Determines the amount of exposure to a particular index which is created by a specific contract. 
 	 * 
@@ -215,9 +221,7 @@ public class Exposures {
 		}
 		
 		if (priceExpression != null) {
-			RawTreeParser parser = new RawTreeParser();
-			IExpression<Node> parsed = parser.parse(priceExpression);
-			return getExposureCoefficient(parsed.evaluate(), index);
+			return getExposureCoefficient(priceExpression, index);
 		}		
 		
 		return 0;
