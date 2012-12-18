@@ -3,83 +3,14 @@
 <target name="ShipLingo Platform Target (Indigo)" sequenceNumber="1">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.0.RELEASE"/>
-<unit id="com.mmxlabs.common.common-util" version="2.1.0.201211271403"/>
-<unit id="com.mmxlabs.common.common-util.source" version="2.1.0.201211271403"/>
-<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="3.0.0.RELEASE"/>
-<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="3.0.0.RELEASE"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.optimiser.optimiser-common" version="0.0.0"/>
-<unit id="com.mmxlabs.optimiser.optimiser-core" version="0.0.0"/>
-<unit id="com.mmxlabs.optimiser.optimiser-ga" version="0.0.0"/>
-<unit id="com.mmxlabs.optimiser.optimiser-lso" version="0.0.0"/>
-<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser.source" version="0.0.0"/>
-<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="0.0.0"/>
-<unit id="com.mmxlabs.scenario.service.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.trading.optimiser.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.trading.optimiser.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.transformer.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.transformer.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.datasources.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.datasources.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="0.0.0"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/" id="mmxlabs-releases"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="0.0.0"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/nightly/" id="mmxlabs-releases"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/technology/nebula/incubation/snapshot"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
+<unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
+<unit id="org.eclipse.jdt.annotation.source" version="0.0.0"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.8"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.rcp.source.feature.group" version="3.7.2.v20120120-1424-9DB5FmnFq5JCf1UA38R-kz0S0272"/>
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.7.2.v20120130-0943"/>
 <unit id="org.eclipse.equinox.sdk.feature.group" version="3.7.1.R37x_v20110907-7M7W8i8eNV4WsRkue-4Vq4J6pCyW"/>
-<unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="1.0.0.v20110608-1633"/>
-<unit id="org.eclipse.emf.query.sdk.feature.group" version="1.5.0.v20110502-1600-67O-95GFz03DQEiNLXRMK_NPj507"/>
-<unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.5.0.v20110502-1600-67O-96SGR55YJeZPedcQnghI6uFA"/>
-<unit id="org.eclipse.ocl.all.sdk.feature.group" version="3.1.2.v20120206-0606"/>
 <repository location="http://download.eclipse.org/releases/indigo"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
-<unit id="org.eclipse.swtbot.ide.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
-<unit id="org.eclipse.swtbot.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
-<unit id="org.eclipse.swtbot.forms.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
-<repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.platform.sdk" version="3.7.2.M20120208-0800"/>
-<unit id="org.eclipse.sdk.ide" version="3.7.2.M20120208-0800"/>
-<unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="3.7.1.R37x_v20110909-7X7XGA5FOIm78Pif1n7BLB9"/>
-<unit id="org.eclipse.equinox.core.feature.feature.group" version="1.0.1.R37x_v20110907-7K7VFB_ETaXFZ3mP_8CeJQ02722"/>
-<unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.7.1.v20110928-1809-7uF9LFpHFUqIcLhnJMmHQGXy3BJB"/>
-<unit id="org.eclipse.equinox.sdk.feature.group" version="3.7.1.R37x_v20110907-7M7W8i8eNV4WsRkue-4Vq4J6pCyW"/>
-<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="jre.1.6.0_32.win32.win32.x86.feature.group" version="0.0.0"/>
-<unit id="jre.1.6.0_32.win32.win32.x86_64.feature.group" version="0.0.0"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/jre" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="javax.activation" version="1.1.0.v201108011116"/>
@@ -129,6 +60,56 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser.source" version="0.0.0"/>
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-ga.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-lso.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-core.source" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common" version="0.0.0"/>
+<unit id="com.mmxlabs.optimiser.optimiser-common.source" version="0.0.0"/>
+<unit id="com.mmxlabs.scenario.service.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.trading.optimiser.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.trading.optimiser.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.ui.runtime.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.ui.runtime.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.ui.runtime.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.ui.runtime.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.transformer.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.transformer.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.datasources.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.datasources.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="0.0.0"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.formattedtext.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/technology/nebula/incubation/snapshot"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.platform.sdk" version="3.7.2.M20120208-0800"/>
+<unit id="org.eclipse.sdk.ide" version="3.7.2.M20120208-0800"/>
+<unit id="org.eclipse.equinox.compendium.sdk.feature.group" version="3.7.1.R37x_v20110909-7X7XGA5FOIm78Pif1n7BLB9"/>
+<unit id="org.eclipse.equinox.core.feature.feature.group" version="1.0.1.R37x_v20110907-7K7VFB_ETaXFZ3mP_8CeJQ02722"/>
+<unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.7.1.v20110928-1809-7uF9LFpHFUqIcLhnJMmHQGXy3BJB"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.7.1.R37x_v20110907-7M7W8i8eNV4WsRkue-4Vq4J6pCyW"/>
+<repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="json-simple.source.source" version="1.1.1"/>
 <unit id="com.googlecode.json-simple" version="1.1.1"/>
 <unit id="com.google.guava" version="13.0.1"/>
@@ -142,15 +123,39 @@
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
-<unit id="org.eclipse.jdt.annotation.source" version="0.0.0"/>
-<repository location="http://download.eclipse.org/eclipse/updates/3.8"/>
+<unit id="org.eclipse.swtbot.eclipse.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
+<unit id="org.eclipse.swtbot.ide.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
+<unit id="org.eclipse.swtbot.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
+<unit id="org.eclipse.swtbot.forms.feature.group" version="2.0.5.20111003_1754-3676ac8-dev-e36"/>
+<repository location="http://download.eclipse.org/technology/swtbot/helios/dev-build/update-site"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.compare.feature.group" version="2.0.0.201209121410"/>
 <unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="2.0.0.201209121410"/>
 <unit id="org.eclipse.emf.compare.rcp.ui.feature.group" version="2.0.0.201209121410"/>
 <repository location="http://download.eclipse.org/modeling/emf/compare/updates/releases/2.0"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="jre.1.6.0_32.win32.win32.x86.feature.group" version="0.0.0"/>
+<unit id="jre.1.6.0_32.win32.win32.x86_64.feature.group" version="0.0.0"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/jre" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.common.common-util" version="2.1.0.201211271403"/>
+<unit id="com.mmxlabs.common.common-util.source" version="2.1.0.201211271403"/>
+<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.0.RELEASE"/>
+<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.source" version="1.0.0.RELEASE"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="1.1.0.201205150811"/>
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.8.1.v20120917-0436"/>
+<unit id="org.eclipse.emf.query.sdk.feature.group" version="1.6.0.v20120328-0001-67T-95GFz05DNIrNLOSNK_NPj507"/>
+<unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.6.0.v20120328-0001-67T-96SGR75UNqZNTdeQnghI6uFA"/>
+<unit id="org.eclipse.ocl.all.sdk.feature.group" version="4.0.1.v20120919-0602"/>
+<repository location="http://download.eclipse.org/releases/juno/"/>
 </location>
 </locations>
 </target>
