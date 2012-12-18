@@ -64,8 +64,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProviderEditor;
-import com.mmxlabs.scheduler.optimiser.providers.IRestrictedElementsProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IRestrictedElementsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IRouteCostProvider;
@@ -89,7 +87,6 @@ import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortExclusionProvider;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortSlotEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapPortTypeEditor;
-import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRestrictedElementsProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapReturnElementProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapRouteCostProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapShortCargoReturnElementProviderEditor;
@@ -263,10 +260,7 @@ public class DataComponentProviderModule extends AbstractModule {
 		final HashMapAlternativeElementProviderEditor alternativeElementProviderEditor = new HashMapAlternativeElementProviderEditor(SchedulerConstants.DCP_alternativeElementProvider);
 		bind(IAlternativeElementProvider.class).toInstance(alternativeElementProviderEditor);
 		bind(IAlternativeElementProviderEditor.class).toInstance(alternativeElementProviderEditor);
-		
-		final HashMapRestrictedElementsProviderEditor restrictedElementsProviderEditor = new HashMapRestrictedElementsProviderEditor(SchedulerConstants.DCP_restrictedElementProvider);
-		bind(IRestrictedElementsProvider.class).toInstance(restrictedElementsProviderEditor);
-		bind(IRestrictedElementsProviderEditor.class).toInstance(restrictedElementsProviderEditor);
+	
 	}
 
 	/**

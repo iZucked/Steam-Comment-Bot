@@ -16,7 +16,6 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.ContractCvConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortExclusionConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.PortTypeConstraintCheckerFactory;
-import com.mmxlabs.scheduler.optimiser.constraints.impl.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.SlotGroupCountConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
@@ -56,9 +55,6 @@ public class ConstraintCheckerServiceModule extends AbstractModule {
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(SlotGroupCountConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new SlotGroupCountConstraintCheckerFactory()).export());
-
-		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(RestrictedElementsConstraintCheckerFactory.class.getCanonicalName())).toProvider(
-				Peaberry.service(new RestrictedElementsConstraintCheckerFactory()).export());
 
 		bind(TypeLiterals.export(IConstraintCheckerFactory.class)).annotatedWith(Names.named(ContractCvConstraintCheckerFactory.class.getCanonicalName())).toProvider(
 				Peaberry.service(new ContractCvConstraintCheckerFactory()).export());
