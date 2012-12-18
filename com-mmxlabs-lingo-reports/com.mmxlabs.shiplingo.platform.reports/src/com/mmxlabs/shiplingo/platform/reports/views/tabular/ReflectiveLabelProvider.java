@@ -27,7 +27,7 @@ public class ReflectiveLabelProvider extends ColumnLabelProvider {
 	@Override
 	public String getText(final Object element) {
 		try {
-			final Object o = accessor.invoke(element, null);
+			final Object o = accessor.invoke(element);
 			return o.toString();
 		} catch (final Exception ex) {
 			return "ERROR";
