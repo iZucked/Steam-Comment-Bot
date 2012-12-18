@@ -45,5 +45,4 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  org.eclipse.emf.compare.ide.ui;bundle-version="2.0.0",
  org.mockito;bundle-version="[1.8.4,2.0.0)",
  com.mmxlabs.shiplingo.platform.reports;bundle-version="2.0.0"
-Bundle-ClassPath: data/,
- .
+Bundle-ClassPath: .
