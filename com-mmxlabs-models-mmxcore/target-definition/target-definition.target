@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.6"?><target name="Models MMXCore Target (Indigo)" sequenceNumber="5">
+<?pde version="3.6"?><target name="Models MMXCore Target (Indigo)" sequenceNumber="7">
 <locations>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.common.common-util" version="2.1.0.201211271403"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
-</location>
-<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="org.eclipse.emf.sdk.feature.group" version="2.7.2.v20120130-0943"/>
-<unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.5.0.v20110502-1600-67O-96SGR55YJeZPedcQnghI6uFA"/>
-<unit id="org.eclipse.ocl.all.sdk.feature.group" version="3.1.2.v20120206-0606"/>
-<repository location="http://download.eclipse.org/releases/indigo"/>
+<unit id="com.googlecode.json-simple" version="1.1.1"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/" id="mmxlabs-releases"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.platform.sdk" version="3.7.2.M20120208-0800"/>
@@ -17,13 +11,19 @@
 <repository location="http://download.eclipse.org/eclipse/updates/3.7"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.emf.sdk.feature.group" version="2.8.1.v20120917-0436"/>
+<unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.6.0.v20120328-0001-67T-96SGR75UNqZNTdeQnghI6uFA"/>
+<unit id="org.eclipse.ocl.all.sdk.feature.group" version="4.0.1.v20120919-0602"/>
+<repository location="http://download.eclipse.org/releases/juno"/>
+</location>
+<location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.slf4j.api" version="1.6.4.v20120130-2120"/>
 <unit id="org.slf4j.api.source" version="1.6.4.v20120130-2120"/>
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 <location includeAllPlatforms="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.googlecode.json-simple" version="1.1.1"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-external/"/>
+<unit id="com.mmxlabs.common.common-util" version="2.1.0.201211271403"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
 </location>
 </locations>
 </target>
