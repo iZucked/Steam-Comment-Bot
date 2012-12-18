@@ -117,7 +117,7 @@ public class EObjectTableViewer extends GridTableViewer {
 	final MMXContentAdapter adapter = new MMXContentAdapter() {
 		@Override
 		protected void missedNotifications(final List<Notification> notifications) {
-			for (final Notification notification : notifications) {
+			for (final Notification notification : new ArrayList<Notification>(notifications)) {
 				if (!notification.isTouch()) {
 					Display.getDefault().asyncExec(new Runnable() {
 						@Override
@@ -206,6 +206,13 @@ public class EObjectTableViewer extends GridTableViewer {
 	final HashSet<EObject> currentElements = new HashSet<EObject>();
 
 	private final IMMXAdapter externalAdapter = new MMXAdapterImpl() {
+
+		protected void missedNotifications(final List<Notification> missed) {
+			for (final Notification n : new ArrayList<Notification>(missed)) {
+				reallyNotifyChanged(n);
+			}
+		}
+
 		@Override
 		public void reallyNotifyChanged(final Notification msg) {
 			if (!msg.isTouch()) {
