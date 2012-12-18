@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.transformer.contracts;
+package com.mmxlabs.models.lng.transformer.extensions.simplecontracts;
 
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
@@ -6,11 +6,11 @@ import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 /**
  * @since 2.0
  */
-public class RestrictedElementsTransformerFactory implements ITransformerExtensionFactory {
+public class SimpleContractTransformerFactory implements ITransformerExtensionFactory {
 
 	@Override
 	public ITransformerExtension createInstance() {
-		return new RestrictedElementsTransformer();
+		return new SimpleContractTransformer();
 	}
 
 }

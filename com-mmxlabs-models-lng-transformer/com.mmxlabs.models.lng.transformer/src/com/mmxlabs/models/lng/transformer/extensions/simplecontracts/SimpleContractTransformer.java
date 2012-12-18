@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.transformer.contracts;
+package com.mmxlabs.models.lng.transformer.extensions.simplecontracts;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
@@ -39,17 +40,19 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.SimpleContract;
  * 
  * 
  * @author hinton
+ * @since 2.0
  * 
  */
 public class SimpleContractTransformer implements IContractTransformer {
 
 	private ModelEntityMap map;
 
-	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceContract(), CommercialPackage.eINSTANCE.getIndexPriceContract(), CommercialPackage.eINSTANCE.getPriceExpressionContract());
+	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceContract(), CommercialPackage.eINSTANCE.getIndexPriceContract(),
+			CommercialPackage.eINSTANCE.getPriceExpressionContract());
 
 	@Inject
 	private SeriesParser indices;
-	
+
 	@Override
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
 		this.map = map;
@@ -66,11 +69,9 @@ public class SimpleContractTransformer implements IContractTransformer {
 			return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getPricePerMMBTU()));
 		} else if (c instanceof IndexPriceContract) {
 			IndexPriceContract contract = (IndexPriceContract) c;
-			return createMarketPriceContract(map.getOptimiserObject(contract.getIndex(), ICurve.class),
-					OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getConstant()),
+			return createMarketPriceContract(map.getOptimiserObject(contract.getIndex(), ICurve.class), OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getConstant()),
 					OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getMultiplier()));
-		}
-		else if (c instanceof PriceExpressionContract) {
+		} else if (c instanceof PriceExpressionContract) {
 			PriceExpressionContract contract = (PriceExpressionContract) c;
 			return createPriceExpressionContract(contract.getPriceExpression());
 		}
@@ -110,15 +111,15 @@ public class SimpleContractTransformer implements IContractTransformer {
 	/**
 	 * Create an internal representation of a PriceExpressionContract from the price expression string.
 	 * 
-	 * @param priceExpression A string containing a valid price expression interpretable by a {@link SeriesParser}
-	 * @return An internal representation of a price expression contract for use by the optimiser 
+	 * @param priceExpression
+	 *            A string containing a valid price expression interpretable by a {@link SeriesParser}
+	 * @return An internal representation of a price expression contract for use by the optimiser
 	 */
 	com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract createPriceExpressionContract(String priceExpression) {
 		final ICurve curve = generateExpressionCurve(priceExpression);
 		return new com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract(curve);
 	}
 
-	
 	private StepwiseIntegerCurve generateExpressionCurve(final String priceExpression) {
 		final IExpression<ISeries> expression = indices.parse(priceExpression);
 		final ISeries parsed = expression.evaluate();
@@ -134,5 +135,5 @@ public class SimpleContractTransformer implements IContractTransformer {
 			}
 		}
 		return curve;
-	}	
+	}
 }

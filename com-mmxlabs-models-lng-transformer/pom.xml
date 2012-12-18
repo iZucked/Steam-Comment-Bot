@@ -38,9 +38,13 @@
 
 		<module>com.mmxlabs.models.lng.liveevaluator</module>
 
+		<module>com.mmxlabs.models.lng.transformer.tests</module>
+
 		<module>com.mmxlabs.models.lng.transformer.feature</module>
 
 		<module>com.mmxlabs.models.lng.transformer.p2</module>
+
+
 	</modules>
 
 	<build>
