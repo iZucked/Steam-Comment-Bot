@@ -201,7 +201,7 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 	
 	@Override
 	protected boolean updateOnChangeToFeature(final Object changedFeature) {
-		if (input != null) {
+		if (input instanceof MMXObject) {
 			MMXObject mmxinput = (MMXObject) input;
 			DelegateInformation di = mmxinput.getUnsetValueOrDelegate(feature);
 			if (di.delegate == changedFeature) {
