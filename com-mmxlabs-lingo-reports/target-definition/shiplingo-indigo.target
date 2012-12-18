@@ -81,6 +81,8 @@
 <unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.rcp.common.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="0.0.0"/>
+<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -142,8 +144,6 @@
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="jre.1.6.0_32.win32.win32.x86.feature.group" version="0.0.0"/>
 <unit id="jre.1.6.0_32.win32.win32.x86_64.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="0.0.0"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/jre"/>
 </location>
 </locations>
