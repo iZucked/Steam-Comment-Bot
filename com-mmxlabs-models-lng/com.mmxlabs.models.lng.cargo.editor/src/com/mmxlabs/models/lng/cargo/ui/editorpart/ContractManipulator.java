@@ -181,7 +181,7 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 			return Collections.emptySet();
 		}
 
-		final Object value = getValue(object);
+		final Object value = reallyGetValue(object);
 		if (value instanceof EObject) {
 			return valueProvider.getNotifiers((EObject) object, CargoPackage.eINSTANCE.getSlot_Contract(), (EObject) value);
 		} else {
