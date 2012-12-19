@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
+import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.its.tests.CustomScenarioCreator;
 import com.mmxlabs.shiplingo.platform.its.tests.ScenarioRunner;
@@ -24,6 +25,14 @@ public class ContractCvConstraintCheckTest {
 
 	private static final int dischargePrice = 1;
 	private final CustomScenarioCreator csc = new CustomScenarioCreator(dischargePrice);
+	
+	protected Port smallLoadPort;
+	protected Port bigLoadPort;
+	protected Port smallDischargePort;
+	protected Port bigDischargePort;
+	
+	protected Cargo smallToLargeCargo;
+	protected Cargo largeToSmallCargo;
 
 	/**
 	 * Creates a scenario object which has a strongly suboptimal wiring in PnL terms, ready to be rewired by the
@@ -38,7 +47,7 @@ public class ContractCvConstraintCheckTest {
 	 * @author Simon McGregor
 	 * @return The scenario object. 
 	 */
-	public MMXRootObject createScenario(boolean useMaxCvValue, boolean useMinCvValue) {
+	public MMXRootObject createSuboptimalScenario() {
 
 		final int loadPrice = 1;
 		final int dischargePrice = 90;
@@ -46,8 +55,13 @@ public class ContractCvConstraintCheckTest {
 		final int smallQty = 50000;
 		final int bigQty = 500000;
 
+		smallLoadPort = ScenarioTools.createPort("smallLoadPort");
+		bigLoadPort = ScenarioTools.createPort("bigLoadPort");
+		smallDischargePort = ScenarioTools.createPort("smallDischargePort");
+		bigDischargePort = ScenarioTools.createPort("bigDischargePort");
+		
 		// a list of ports to use in the scenario
-		final Port[] ports = new Port[] { ScenarioTools.createPort("portA"), ScenarioTools.createPort("portB"), ScenarioTools.createPort("portC"), ScenarioTools.createPort("portD") };
+		final Port[] ports = new Port[] { smallLoadPort, bigLoadPort, smallDischargePort, bigDischargePort };
 
 		// Add the ports, and set the distances.
 		SanityCheckTools.setPortDistances(csc, ports);
@@ -61,30 +75,20 @@ public class ContractCvConstraintCheckTest {
 		final Date cargoStart = new Date(System.currentTimeMillis());
 		
 		// create some cargoes with different CV values
-		Cargo cargoCv22 = csc.addCargo("CV-22-cargo", ports[0], ports[1], loadPrice, dischargePrice, 22, cargoStart, 50);
-		Cargo cargoCv23 = csc.addCargo("CV-23-Cargo", ports[2], ports[3], loadPrice, dischargePrice, 22, cargoStart, 50);
+		smallToLargeCargo = csc.addCargo("CV-22-cargo", smallLoadPort, bigDischargePort, loadPrice, dischargePrice, 22, cargoStart, 50);
+		largeToSmallCargo = csc.addCargo("CV-23-Cargo", bigLoadPort, smallDischargePort, loadPrice, dischargePrice, 22, cargoStart, 50);
 		
 		// make sure they can be rewired
-		cargoCv22.setAllowRewiring(true);
-		cargoCv23.setAllowRewiring(true);
+		smallToLargeCargo.setAllowRewiring(true);
+		largeToSmallCargo.setAllowRewiring(true);
 
 		// set up one cargo with a small load allowance and a large discharge allowance 
-		cargoCv22.getLoadSlot().setMaxQuantity(smallQty);
-		cargoCv22.getDischargeSlot().setMaxQuantity(bigQty);
-		// optionally constrain this discharge slot so it can't use the other cargo
-		if (useMaxCvValue) {
-			SalesContract contract = (SalesContract) cargoCv22.getDischargeSlot().getContract();
-			contract.setMaxCvValue(22.5);
-		}
+		smallToLargeCargo.getLoadSlot().setMaxQuantity(smallQty);
+		smallToLargeCargo.getDischargeSlot().setMaxQuantity(bigQty);
 		
 		// set up one cargo with a large load allowance and a small discharge allowance 
-		cargoCv23.getLoadSlot().setMaxQuantity(bigQty);
-		cargoCv23.getDischargeSlot().setMaxQuantity(smallQty);
-		// optionally constrain this discharge slot so it can't use the other cargo
-		if (useMinCvValue) {
-			SalesContract contract = (SalesContract) cargoCv22.getDischargeSlot().getContract();
-			contract.setMinCvValue(22.5);
-		}		
+		largeToSmallCargo.getLoadSlot().setMaxQuantity(bigQty);
+		largeToSmallCargo.getDischargeSlot().setMaxQuantity(smallQty);
 		
 		// build and run the scenario.
 		final MMXRootObject scenario = csc.buildScenario();
@@ -92,7 +96,7 @@ public class ContractCvConstraintCheckTest {
 		return scenario;
 	}
 
-	protected void testExpectedWiring(Schedule schedule, String [] loadPorts, String [] dischargePorts) {
+	protected void testExpectedWiring(Schedule schedule, Port [] loadPorts, Port [] dischargePorts) {
 		Assert.assertEquals("Load port and discharge port lists should have same length", loadPorts.length, dischargePorts.length);
 		
 		final int n = loadPorts.length;
@@ -106,11 +110,11 @@ public class ContractCvConstraintCheckTest {
 		// check that the cargo allocations wire load ports up with the expected discharge ports
 		for (final CargoAllocation ca : schedule.getCargoAllocations()) {
 			for (int i = 0; i < n; i++) {
-				String loadName = ca.getLoadAllocation().getPort().getName(); 
-				String dischargeName = ca.getDischargeAllocation().getPort().getName(); 
-				if (loadName.equals(loadPorts[i])) {
+				APort loadPort = ca.getLoadAllocation().getPort(); 
+				APort dischargePort = ca.getDischargeAllocation().getPort(); 
+				if (loadPort.equals(loadPorts[i])) {
 					found[i] = true;
-					Assert.assertEquals(String.format("Expected solution wires %s to %s", loadName, dischargePorts[i]), dischargePorts[i], dischargeName);
+					Assert.assertEquals(String.format("Expected solution wires %s to %s", loadPort.getName(), dischargePorts[i].getName()), dischargePorts[i], dischargePort);
 				}
 			}
 		}
@@ -129,7 +133,7 @@ public class ContractCvConstraintCheckTest {
 			
 	@Test
 	public void testNoConstraints() throws IncompleteScenarioException {
-		final MMXRootObject scenario = createScenario(false, false);
+		final MMXRootObject scenario = createSuboptimalScenario();
 		
 		ScenarioRunner runner = new ScenarioRunner(scenario);
 		runner.init();
@@ -137,8 +141,8 @@ public class ContractCvConstraintCheckTest {
 		
 		final Schedule endSchedule = runner.getFinalSchedule();
 		
-		String [] expectedLoadPorts = { "portA", "portC" };
-		String [] expectedDischargePorts = { "portD", "portB" };
+		Port [] expectedLoadPorts = { smallLoadPort, bigLoadPort };
+		Port [] expectedDischargePorts = { smallDischargePort, bigDischargePort };
 		testExpectedWiring(endSchedule, expectedLoadPorts, expectedDischargePorts);
 		
 	}
@@ -150,7 +154,10 @@ public class ContractCvConstraintCheckTest {
 	 */
 	@Test
 	public void testMaxCvConstraint() throws IncompleteScenarioException {
-		final MMXRootObject scenario = createScenario(true, false);
+		final MMXRootObject scenario = createSuboptimalScenario();
+
+		SalesContract contract = (SalesContract) smallToLargeCargo.getDischargeSlot().getContract();
+		contract.setMaxCvValue(22.5);
 		
 		ScenarioRunner runner = new ScenarioRunner(scenario);
 		runner.init();
@@ -158,11 +165,9 @@ public class ContractCvConstraintCheckTest {
 		
 		final Schedule endSchedule = runner.getFinalSchedule();
 		
-		String [] expectedLoadPorts = { "portA", "portC" };
-		String [] expectedDischargePorts = { "portB", "portD" };
+		Port [] expectedLoadPorts = { smallLoadPort, bigLoadPort };
+		Port [] expectedDischargePorts = { smallDischargePort, bigDischargePort };
 		testExpectedWiring(endSchedule, expectedLoadPorts, expectedDischargePorts);
-		
 	}
-
 
 }
