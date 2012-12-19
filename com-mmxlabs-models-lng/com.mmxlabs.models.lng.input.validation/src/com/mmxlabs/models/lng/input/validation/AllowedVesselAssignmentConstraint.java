@@ -4,8 +4,10 @@
  */
 package com.mmxlabs.models.lng.input.validation;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -27,6 +29,7 @@ import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputPackage;
 import com.mmxlabs.models.lng.input.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -53,11 +56,11 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 			final AVesselSet vesselAssignment = assignment.getAssignment();
 			if (vesselAssignment == null) {
 				if (assignedObject instanceof VesselEvent) {
-					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Vessel events must have a vessel assigned to them."));
+					final DetailConstraintStatusDecorator status = new DetailConstraintStatusDecorator(
+							(IConstraintStatus) ctx.createFailureStatus("Vessel events must have a vessel assigned to them."));
 					status.addEObjectAndFeature(assignment, InputPackage.eINSTANCE.getElementAssignment_Assignment());
-					return status;										
-				}
-				else
+					return status;
+				} else
 					return ctx.createSuccessStatus();
 			}
 
@@ -80,12 +83,24 @@ public class AllowedVesselAssignmentConstraint extends AbstractModelConstraint {
 				return ctx.createSuccessStatus();
 			}
 
+			// Expand out VesselGroups
+			final Set<AVesselSet> expandedVessels = new HashSet<AVesselSet>();
+			for (final AVesselSet s : allowedVessels) {
+				if (s instanceof Vessel) {
+					expandedVessels.add(s);
+				} else if (s instanceof VesselClass) {
+					expandedVessels.add(s);
+				} else {
+					expandedVessels.addAll(SetUtils.getVessels(s));
+				}
+			}
+
 			boolean permitted = false;
-			if (allowedVessels.contains(vesselAssignment)) {
+			if (expandedVessels.contains(vesselAssignment)) {
 				permitted = true;
 			} else if (vesselAssignment instanceof Vessel) {
 				final Vessel vessel = (Vessel) vesselAssignment;
-				for (final AVesselSet vs : allowedVessels) {
+				for (final AVesselSet vs : expandedVessels) {
 					if (vs instanceof VesselClass) {
 						if (vs == vessel.getVesselClass()) {
 							permitted = true;
