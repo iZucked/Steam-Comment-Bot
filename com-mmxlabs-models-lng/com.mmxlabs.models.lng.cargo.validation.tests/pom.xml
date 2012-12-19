@@ -11,8 +11,8 @@
 	<artifactId>com.mmxlabs.models.lng.cargo.validation.tests</artifactId>
 	<packaging>eclipse-test-plugin</packaging>
 	<version>2.0.0-SNAPSHOT</version>
-	
-		<build>
+
+	<build>
 
 		<plugins>
 			<plugin>
@@ -111,7 +111,7 @@
 
 	</build>
 	<profiles>
-			<!-- Enable this profile to run the its test independently of the full 
+		<!-- Enable this profile to run the its test independently of the full 
 			build. -->
 		<profile>
 			<id>useSnapshotsRepo</id>
