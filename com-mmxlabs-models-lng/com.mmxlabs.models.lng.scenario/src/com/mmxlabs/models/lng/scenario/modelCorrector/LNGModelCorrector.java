@@ -35,6 +35,7 @@ import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
+import com.mmxlabs.models.lng.port.CapabilityGroup;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
@@ -54,6 +55,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.types.AVesselSet;
+import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
@@ -81,10 +83,38 @@ public class LNGModelCorrector {
 		fixFixedPriceOverrides(cmd, rootObject, ed);
 		fixSequenceTypes(cmd, rootObject, ed);
 		fixRedirectionContracts(cmd, rootObject, ed);
+		fixPortCapabilityGroups(cmd, rootObject, ed);
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
 		}
 
+	}
+
+	private void fixPortCapabilityGroups(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
+
+		final CompoundCommand cmd = new CompoundCommand("Fix port capability groups");
+
+		final PortModel portModel = rootObject.getSubModel(PortModel.class);
+		if (portModel != null) {
+			for (final PortCapability capability : PortCapability.values()) {
+				boolean found = false;
+				for (final CapabilityGroup g : portModel.getSpecialPortGroups()) {
+					if (g.getCapability().equals(capability)) {
+						found = true;
+						break;
+					}
+				}
+				if (found == false) {
+					final CapabilityGroup g = PortFactory.eINSTANCE.createCapabilityGroup();
+					g.setName("All " + capability.getName() + " Ports");
+					g.setCapability(capability);
+					cmd.append(AddCommand.create(ed, portModel, PortPackage.Literals.PORT_MODEL__SPECIAL_PORT_GROUPS, g));
+				}
+			}
+		}
+		if (!cmd.isEmpty()) {
+			parent.append(cmd);
+		}
 	}
 
 	private void fixRedirectionContracts(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
