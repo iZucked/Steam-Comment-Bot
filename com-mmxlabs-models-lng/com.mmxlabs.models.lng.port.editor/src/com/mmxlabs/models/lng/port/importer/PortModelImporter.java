@@ -90,6 +90,26 @@ public class PortModelImporter implements ISubmodelImporter {
 	public UUIDObject importModel(Map<String, CSVReader> inputs, IImportContext context) {
 		final PortModel result = PortFactory.eINSTANCE.createPortModel();
 
+		final PortModel portModel = result;
+		if (portModel != null) {
+			for (final PortCapability capability : PortCapability.values()) {
+				boolean found = false;
+				for (final CapabilityGroup g : portModel.getSpecialPortGroups()) {
+					if (g.getCapability().equals(capability)) {
+						found = true;
+						break;
+					}
+				}
+				if (found == false) {
+					final CapabilityGroup g = PortFactory.eINSTANCE.createCapabilityGroup();
+					g.setName("All " + capability.getName() + " Ports");
+					g.setCapability(capability);
+					portModel.getSpecialPortGroups().add(g);
+					context.registerNamedObject(g);
+				}
+			}
+		}
+
 		if (inputs.containsKey(PORT_KEY)) {
 			final CSVReader reader = inputs.get(PORT_KEY);
 			result.getPorts().addAll((Collection<? extends Port>) portImporter.importObjects(PortPackage.eINSTANCE.getPort(), reader, context));
