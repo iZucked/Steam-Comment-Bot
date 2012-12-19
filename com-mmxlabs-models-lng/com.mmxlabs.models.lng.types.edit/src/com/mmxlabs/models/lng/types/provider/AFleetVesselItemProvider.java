@@ -30,9 +30,8 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class AFleetVesselItemProvider extends UUIDObjectItemProvider implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class AFleetVesselItemProvider extends UUIDObjectItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -67,8 +66,7 @@ public class AFleetVesselItemProvider extends UUIDObjectItemProvider implements
 	@Override
 	public String getText(Object object) {
 		String label = ((AFleetVessel) object).getUuid();
-		return label == null || label.length() == 0 ? getString("_UI_AFleetVessel_type")
-				: getString("_UI_AFleetVessel_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_AFleetVessel_type") : getString("_UI_AFleetVessel_type") + " " + label;
 	}
 
 	/**
@@ -92,8 +90,7 @@ public class AFleetVesselItemProvider extends UUIDObjectItemProvider implements
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

@@ -18,8 +18,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public abstract class AVesselClassImpl extends AVesselSetImpl implements
-		AVesselClass {
+public abstract class AVesselClassImpl extends AVesselSetImpl implements AVesselClass {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

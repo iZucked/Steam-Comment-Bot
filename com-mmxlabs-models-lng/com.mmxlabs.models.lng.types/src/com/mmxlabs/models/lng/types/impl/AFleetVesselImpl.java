@@ -20,8 +20,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *
  * @generated
  */
-public abstract class AFleetVesselImpl extends UUIDObjectImpl implements
-		AFleetVessel {
+public abstract class AFleetVesselImpl extends UUIDObjectImpl implements AFleetVessel {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

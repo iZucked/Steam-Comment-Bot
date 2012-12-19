@@ -26,9 +26,8 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ASalesContractItemProvider extends AContractItemProvider implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class ASalesContractItemProvider extends AContractItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -63,8 +62,7 @@ public class ASalesContractItemProvider extends AContractItemProvider implements
 	@Override
 	public String getText(Object object) {
 		String label = ((ASalesContract) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_ASalesContract_type")
-				: getString("_UI_ASalesContract_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_ASalesContract_type") : getString("_UI_ASalesContract_type") + " " + label;
 	}
 
 	/**
@@ -88,8 +86,7 @@ public class ASalesContractItemProvider extends AContractItemProvider implements
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

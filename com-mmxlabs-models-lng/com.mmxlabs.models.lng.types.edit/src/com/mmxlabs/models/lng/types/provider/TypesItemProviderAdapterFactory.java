@@ -34,8 +34,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
-		implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+public class TypesItemProviderAdapterFactory extends TypesAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -125,7 +124,6 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 2.0
 	 */
 	protected ExtraDataItemProvider extraDataItemProvider;
 
@@ -162,8 +160,7 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	@Override
 	public Adapter createExtraDataContainerAdapter() {
 		if (extraDataContainerItemProvider == null) {
-			extraDataContainerItemProvider = new ExtraDataContainerItemProvider(
-					this);
+			extraDataContainerItemProvider = new ExtraDataContainerItemProvider(this);
 		}
 
 		return extraDataContainerItemProvider;
@@ -176,8 +173,7 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	 * @generated
 	 */
 	public ComposeableAdapterFactory getRootAdapterFactory() {
-		return parentAdapterFactory == null ? this : parentAdapterFactory
-				.getRootAdapterFactory();
+		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
 	}
 
 	/**
@@ -186,8 +182,7 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParentAdapterFactory(
-			ComposedAdapterFactory parentAdapterFactory) {
+	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
 		this.parentAdapterFactory = parentAdapterFactory;
 	}
 
@@ -221,8 +216,7 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	public Object adapt(Object object, Object type) {
 		if (isFactoryForType(type)) {
 			Object adapter = super.adapt(object, type);
-			if (!(type instanceof Class<?>)
-					|| (((Class<?>) type).isInstance(adapter))) {
+			if (!(type instanceof Class<?>) || (((Class<?>) type).isInstance(adapter))) {
 				return adapter;
 			}
 		}

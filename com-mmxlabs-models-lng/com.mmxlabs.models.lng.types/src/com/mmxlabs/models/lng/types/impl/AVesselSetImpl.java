@@ -106,8 +106,7 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.AVESSEL_SET__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.AVESSEL_SET__NAME, oldName, name));
 	}
 
 	/**
@@ -118,8 +117,7 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
-					TypesPackage.AVESSEL_SET__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.AVESSEL_SET__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -198,8 +196,7 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.AVESSEL_SET__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.AVESSEL_SET__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}
@@ -253,8 +250,7 @@ public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments)
-			throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 		case TypesPackage.AVESSEL_SET___COLLECT__ELIST:
 			return collect((EList<AVesselSet>) arguments.get(0));

@@ -106,8 +106,7 @@ public abstract class APortSetImpl extends UUIDObjectImpl implements APortSet {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.APORT_SET__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.APORT_SET__NAME, oldName, name));
 	}
 
 	/**
@@ -118,8 +117,7 @@ public abstract class APortSetImpl extends UUIDObjectImpl implements APortSet {
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
-					TypesPackage.APORT_SET__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.APORT_SET__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -198,8 +196,7 @@ public abstract class APortSetImpl extends UUIDObjectImpl implements APortSet {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.APORT_SET__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.APORT_SET__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}
@@ -253,8 +250,7 @@ public abstract class APortSetImpl extends UUIDObjectImpl implements APortSet {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments)
-			throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 		case TypesPackage.APORT_SET___COLLECT__ELIST:
 			return collect((EList<APortSet>) arguments.get(0));

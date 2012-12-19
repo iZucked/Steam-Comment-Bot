@@ -104,8 +104,7 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.ACARGO__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.ACARGO__NAME, oldName, name));
 	}
 
 	/**
@@ -116,8 +115,7 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
-					TypesPackage.ACARGO__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.ACARGO__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -185,8 +183,7 @@ public abstract class ACargoImpl extends UUIDObjectImpl implements ACargo {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.ACARGO__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.ACARGO__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}

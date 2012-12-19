@@ -104,8 +104,7 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.AINDEX__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.AINDEX__NAME, oldName, name));
 	}
 
 	/**
@@ -116,8 +115,7 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
-					TypesPackage.AINDEX__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.AINDEX__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -185,8 +183,7 @@ public abstract class AIndexImpl extends UUIDObjectImpl implements AIndex {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.AINDEX__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.AINDEX__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}

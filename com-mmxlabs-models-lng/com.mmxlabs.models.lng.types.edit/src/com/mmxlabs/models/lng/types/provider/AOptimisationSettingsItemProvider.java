@@ -35,9 +35,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class AOptimisationSettingsItemProvider extends UUIDObjectItemProvider
-		implements IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class AOptimisationSettingsItemProvider extends UUIDObjectItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -74,18 +73,9 @@ public class AOptimisationSettingsItemProvider extends UUIDObjectItemProvider
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(
-						((ComposeableAdapterFactory) adapterFactory)
-								.getRootAdapterFactory(),
-						getResourceLocator(),
-						getString("_UI_NamedObject_name_feature"),
-						getString("_UI_PropertyDescriptor_description",
-								"_UI_NamedObject_name_feature",
-								"_UI_NamedObject_type"),
-						MMXCorePackage.Literals.NAMED_OBJECT__NAME, true,
-						false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_NamedObject_name_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"), MMXCorePackage.Literals.NAMED_OBJECT__NAME, true, false, false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -96,16 +86,9 @@ public class AOptimisationSettingsItemProvider extends UUIDObjectItemProvider
 	 * @generated
 	 */
 	protected void addOtherNamesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_NamedObject_otherNames_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_NamedObject_otherNames_feature",
-						"_UI_NamedObject_type"),
-				MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES, true, false,
-				false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_NamedObject_otherNames_feature"), getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
+				MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -118,8 +101,7 @@ public class AOptimisationSettingsItemProvider extends UUIDObjectItemProvider
 	@Override
 	public String getText(Object object) {
 		String label = ((AOptimisationSettings) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_AOptimisationSettings_type")
-				: getString("_UI_AOptimisationSettings_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_AOptimisationSettings_type") : getString("_UI_AOptimisationSettings_type") + " " + label;
 	}
 
 	/**
@@ -137,8 +119,7 @@ public class AOptimisationSettingsItemProvider extends UUIDObjectItemProvider
 		switch (notification.getFeatureID(AOptimisationSettings.class)) {
 		case TypesPackage.AOPTIMISATION_SETTINGS__NAME:
 		case TypesPackage.AOPTIMISATION_SETTINGS__OTHER_NAMES:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), false, true));
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -152,8 +133,7 @@ public class AOptimisationSettingsItemProvider extends UUIDObjectItemProvider
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

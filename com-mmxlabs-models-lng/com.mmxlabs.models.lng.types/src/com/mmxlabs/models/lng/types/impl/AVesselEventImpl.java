@@ -31,8 +31,7 @@ import java.util.Collection;
  *
  * @generated
  */
-public abstract class AVesselEventImpl extends UUIDObjectImpl implements
-		AVesselEvent {
+public abstract class AVesselEventImpl extends UUIDObjectImpl implements AVesselEvent {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -101,8 +100,7 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.AVESSEL_EVENT__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.AVESSEL_EVENT__NAME, oldName, name));
 	}
 
 	/**
@@ -113,8 +111,7 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
-					TypesPackage.AVESSEL_EVENT__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.AVESSEL_EVENT__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -182,8 +179,7 @@ public abstract class AVesselEventImpl extends UUIDObjectImpl implements
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.AVESSEL_EVENT__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.AVESSEL_EVENT__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}

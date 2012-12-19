@@ -184,8 +184,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 		String oldKey = key;
 		key = newKey;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.EXTRA_DATA__KEY, oldKey, key));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.EXTRA_DATA__KEY, oldKey, key));
 	}
 
 	/**
@@ -206,8 +205,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.EXTRA_DATA__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.EXTRA_DATA__NAME, oldName, name));
 	}
 
 	/**
@@ -230,9 +228,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 		boolean oldValueESet = valueESet;
 		valueESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.EXTRA_DATA__VALUE, oldValue, value,
-					!oldValueESet));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.EXTRA_DATA__VALUE, oldValue, value, !oldValueESet));
 	}
 
 	/**
@@ -246,9 +242,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 		value = VALUE_EDEFAULT;
 		valueESet = false;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET,
-					TypesPackage.EXTRA_DATA__VALUE, oldValue, VALUE_EDEFAULT,
-					oldValueESet));
+			eNotify(new ENotificationImpl(this, Notification.UNSET, TypesPackage.EXTRA_DATA__VALUE, oldValue, VALUE_EDEFAULT, oldValueESet));
 	}
 
 	/**
@@ -278,8 +272,7 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 		String oldFormat = format;
 		format = newFormat;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.EXTRA_DATA__FORMAT, oldFormat, format));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.EXTRA_DATA__FORMAT, oldFormat, format));
 	}
 
 	/**
@@ -298,12 +291,9 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	 */
 	public void setFormatType(ExtraDataFormatType newFormatType) {
 		ExtraDataFormatType oldFormatType = formatType;
-		formatType = newFormatType == null ? FORMAT_TYPE_EDEFAULT
-				: newFormatType;
+		formatType = newFormatType == null ? FORMAT_TYPE_EDEFAULT : newFormatType;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.EXTRA_DATA__FORMAT_TYPE, oldFormatType,
-					formatType));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.EXTRA_DATA__FORMAT_TYPE, oldFormatType, formatType));
 	}
 
 	/**
@@ -349,18 +339,14 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 					final int hrs = totalHours % 24;
 					final int days = totalHours / 24;
 					if (days > 0) {
-						return String.format("%dd, %dh", days, hrs);
+						return String.format("%d:%d", days, hrs);
 					} else {
-						return String.format("%dh", hrs);
+						return String.format("%d", hrs);
 					}
 				}
 				break;
 			case CURRENCY:
-				if (o instanceof Integer || o instanceof Long || o instanceof Short) {
-					return String.format("$%,d", o);
-				} else {
-					return String.format("$%,.03f", o);
-				}
+				return String.format("$%,d", o);
 			case DATE:
 				DateFormat dateFormat;
 				if (format != null && !format.isEmpty()) {
@@ -461,16 +447,13 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.EXTRA_DATA__KEY:
-			return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT
-					.equals(key);
+			return KEY_EDEFAULT == null ? key != null : !KEY_EDEFAULT.equals(key);
 		case TypesPackage.EXTRA_DATA__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.EXTRA_DATA__VALUE:
 			return isSetValue();
 		case TypesPackage.EXTRA_DATA__FORMAT:
-			return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT
-					.equals(format);
+			return FORMAT_EDEFAULT == null ? format != null : !FORMAT_EDEFAULT.equals(format);
 		case TypesPackage.EXTRA_DATA__FORMAT_TYPE:
 			return formatType != FORMAT_TYPE_EDEFAULT;
 		}
@@ -483,11 +466,11 @@ public class ExtraDataImpl extends ExtraDataContainerImpl implements ExtraData {
 	 * @generated
 	 */
 	@Override
-	public Object eInvoke(int operationID, EList<?> arguments)
-			throws InvocationTargetException {
+	@SuppressWarnings("unchecked")
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 		case TypesPackage.EXTRA_DATA___GET_VALUE_AS__CLASS:
-			return getValueAs((Class<?>) arguments.get(0));
+			return getValueAs((Class) arguments.get(0));
 		case TypesPackage.EXTRA_DATA___FORMAT_VALUE:
 			return formatValue();
 		}

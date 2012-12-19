@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
+ * @noimplement This interface is not intended to be implemented by clients.
  * <!-- end-user-doc -->
  * @see com.mmxlabs.models.lng.types.TypesFactory
  * @model kind="package"
@@ -60,8 +61,7 @@ public interface TypesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl
-			.init();
+	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl.init();
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
@@ -3087,6 +3087,17 @@ public interface TypesPackage extends EPackage {
 	int EXTRA_DATA_FORMAT_TYPE = 22;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getCargoDeliveryType()
+	 * @generated
+	 */
+	int CARGO_DELIVERY_TYPE = 25;
+
+	/**
 	 * The meta object id for the '<em>Serializable Object</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -3544,6 +3555,17 @@ public interface TypesPackage extends EPackage {
 	EEnum getExtraDataFormatType();
 
 	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Cargo Delivery Type</em>'.
+	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
+	 * @generated
+	 */
+	EEnum getCargoDeliveryType();
+
+	/**
 	 * Returns the meta object for data type '{@link java.io.Serializable <em>Serializable Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -3585,6 +3607,7 @@ public interface TypesPackage extends EPackage {
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>
+	 * @noimplement This interface is not intended to be implemented by clients.
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -3605,8 +3628,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation APORT___COLLECT__ELIST = eINSTANCE
-				.getAPort__Collect__EList();
+		EOperation APORT___COLLECT__ELIST = eINSTANCE.getAPort__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
@@ -3624,8 +3646,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation APORT_SET___COLLECT__ELIST = eINSTANCE
-				.getAPortSet__Collect__EList();
+		EOperation APORT_SET___COLLECT__ELIST = eINSTANCE.getAPortSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ARouteImpl <em>ARoute</em>}' class.
@@ -3653,8 +3674,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE
-				.getAVessel__Collect__EList();
+		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE.getAVessel__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AFleetVesselImpl <em>AFleet Vessel</em>}' class.
@@ -3753,8 +3773,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation AVESSEL_SET___COLLECT__ELIST = eINSTANCE
-				.getAVesselSet__Collect__EList();
+		EOperation AVESSEL_SET___COLLECT__ELIST = eINSTANCE.getAVesselSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}' class.
@@ -3772,8 +3791,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE
-				.getITimezoneProvider__GetTimeZone__EAttribute();
+		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE.getITimezoneProvider__GetTimeZone__EAttribute();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ABaseFuelImpl <em>ABase Fuel</em>}' class.
@@ -3881,8 +3899,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute EXTRA_DATA__FORMAT_TYPE = eINSTANCE
-				.getExtraData_FormatType();
+		EAttribute EXTRA_DATA__FORMAT_TYPE = eINSTANCE.getExtraData_FormatType();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Value As</b></em>' operation.
@@ -3891,8 +3908,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA___GET_VALUE_AS__CLASS = eINSTANCE
-				.getExtraData__GetValueAs__Class();
+		EOperation EXTRA_DATA___GET_VALUE_AS__CLASS = eINSTANCE.getExtraData__GetValueAs__Class();
 
 		/**
 		 * The meta object literal for the '<em><b>Format Value</b></em>' operation.
@@ -3901,8 +3917,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA___FORMAT_VALUE = eINSTANCE
-				.getExtraData__FormatValue();
+		EOperation EXTRA_DATA___FORMAT_VALUE = eINSTANCE.getExtraData__FormatValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl <em>Extra Data Container</em>}' class.
@@ -3922,8 +3937,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EXTRA_DATA_CONTAINER__EXTRA_DATA = eINSTANCE
-				.getExtraDataContainer_ExtraData();
+		EReference EXTRA_DATA_CONTAINER__EXTRA_DATA = eINSTANCE.getExtraDataContainer_ExtraData();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Data With Path</b></em>' operation.
@@ -3932,8 +3946,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE = eINSTANCE
-				.getExtraDataContainer__GetDataWithPath__Iterable();
+		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE = eINSTANCE.getExtraDataContainer__GetDataWithPath__Iterable();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Data With Key</b></em>' operation.
@@ -3942,8 +3955,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = eINSTANCE
-				.getExtraDataContainer__GetDataWithKey__String();
+		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = eINSTANCE.getExtraDataContainer__GetDataWithKey__String();
 
 		/**
 		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
@@ -3952,8 +3964,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = eINSTANCE
-				.getExtraDataContainer__AddExtraData__String_String();
+		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = eINSTANCE.getExtraDataContainer__AddExtraData__String_String();
 
 		/**
 		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
@@ -3972,8 +3983,7 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = eINSTANCE
-				.getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
+		EOperation EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = eINSTANCE.getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
@@ -3995,6 +4005,17 @@ public interface TypesPackage extends EPackage {
 		 * @generated
 		 */
 		EEnum EXTRA_DATA_FORMAT_TYPE = eINSTANCE.getExtraDataFormatType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * @since 3.1
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getCargoDeliveryType()
+		 * @generated
+		 */
+		EEnum CARGO_DELIVERY_TYPE = eINSTANCE.getCargoDeliveryType();
 
 		/**
 		 * The meta object literal for the '<em>Serializable Object</em>' data type.

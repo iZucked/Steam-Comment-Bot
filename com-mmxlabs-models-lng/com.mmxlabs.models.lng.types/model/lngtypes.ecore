@@ -204,4 +204,21 @@
     <eLiterals name="DATE" value="4" literal="DATE"/>
     <eLiterals name="STRING_FORMAT" value="5" literal="STRING_FORMAT"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="CargoDeliveryType">
+    <eLiterals name="Any">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="Any possible delivery method is permitted"/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Shipped" value="1">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The cargo must be shipped directly by the first party."/>
+      </eAnnotations>
+    </eLiterals>
+    <eLiterals name="Delivered" value="2">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="documentation" value="The cargo must be delivered by a third party."/>
+      </eAnnotations>
+    </eLiterals>
+  </eClassifiers>
 </ecore:EPackage>

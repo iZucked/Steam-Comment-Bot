@@ -19,8 +19,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public abstract class ASalesContractImpl extends AContractImpl implements
-		ASalesContract {
+public abstract class ASalesContractImpl extends AContractImpl implements ASalesContract {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

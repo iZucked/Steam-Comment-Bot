@@ -35,9 +35,8 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class AVesselEventItemProvider extends UUIDObjectItemProvider implements
-		IEditingDomainItemProvider, IStructuredItemContentProvider,
-		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
+public class AVesselEventItemProvider extends UUIDObjectItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
+		IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -72,18 +71,9 @@ public class AVesselEventItemProvider extends UUIDObjectItemProvider implements
 	 * @generated
 	 */
 	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(
-						((ComposeableAdapterFactory) adapterFactory)
-								.getRootAdapterFactory(),
-						getResourceLocator(),
-						getString("_UI_NamedObject_name_feature"),
-						getString("_UI_PropertyDescriptor_description",
-								"_UI_NamedObject_name_feature",
-								"_UI_NamedObject_type"),
-						MMXCorePackage.Literals.NAMED_OBJECT__NAME, true,
-						false, false,
-						ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(), getString("_UI_NamedObject_name_feature"),
+				getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_name_feature", "_UI_NamedObject_type"), MMXCorePackage.Literals.NAMED_OBJECT__NAME, true, false, false,
+				ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -94,16 +84,9 @@ public class AVesselEventItemProvider extends UUIDObjectItemProvider implements
 	 * @generated
 	 */
 	protected void addOtherNamesPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add(createItemPropertyDescriptor(
-				((ComposeableAdapterFactory) adapterFactory)
-						.getRootAdapterFactory(),
-				getResourceLocator(),
-				getString("_UI_NamedObject_otherNames_feature"),
-				getString("_UI_PropertyDescriptor_description",
-						"_UI_NamedObject_otherNames_feature",
-						"_UI_NamedObject_type"),
-				MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES, true, false,
-				false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_NamedObject_otherNames_feature"), getString("_UI_PropertyDescriptor_description", "_UI_NamedObject_otherNames_feature", "_UI_NamedObject_type"),
+				MMXCorePackage.Literals.NAMED_OBJECT__OTHER_NAMES, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -114,8 +97,7 @@ public class AVesselEventItemProvider extends UUIDObjectItemProvider implements
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object,
-				getResourceLocator().getImage("full/obj16/AVesselEvent"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/AVesselEvent"));
 	}
 
 	/**
@@ -127,8 +109,7 @@ public class AVesselEventItemProvider extends UUIDObjectItemProvider implements
 	@Override
 	public String getText(Object object) {
 		String label = ((AVesselEvent) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_AVesselEvent_type")
-				: getString("_UI_AVesselEvent_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_AVesselEvent_type") : getString("_UI_AVesselEvent_type") + " " + label;
 	}
 
 	/**
@@ -145,8 +126,7 @@ public class AVesselEventItemProvider extends UUIDObjectItemProvider implements
 		switch (notification.getFeatureID(AVesselEvent.class)) {
 		case TypesPackage.AVESSEL_EVENT__NAME:
 		case TypesPackage.AVESSEL_EVENT__OTHER_NAMES:
-			fireNotifyChanged(new ViewerNotification(notification,
-					notification.getNotifier(), false, true));
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -160,8 +140,7 @@ public class AVesselEventItemProvider extends UUIDObjectItemProvider implements
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(
-			Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

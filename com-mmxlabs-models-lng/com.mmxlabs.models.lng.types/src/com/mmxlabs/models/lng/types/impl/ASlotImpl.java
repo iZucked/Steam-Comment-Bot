@@ -100,8 +100,7 @@ public abstract class ASlotImpl extends UUIDObjectImpl implements ASlot {
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET,
-					TypesPackage.ASLOT__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.ASLOT__NAME, oldName, name));
 	}
 
 	/**
@@ -112,8 +111,7 @@ public abstract class ASlotImpl extends UUIDObjectImpl implements ASlot {
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
-					TypesPackage.ASLOT__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.ASLOT__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -181,8 +179,7 @@ public abstract class ASlotImpl extends UUIDObjectImpl implements ASlot {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.ASLOT__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
-					.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 		case TypesPackage.ASLOT__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}

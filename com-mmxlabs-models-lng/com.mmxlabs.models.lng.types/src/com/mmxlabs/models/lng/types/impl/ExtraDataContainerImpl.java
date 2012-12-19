@@ -37,8 +37,7 @@ import com.mmxlabs.models.lng.types.TypesPackage;
  *
  * @generated
  */
-public class ExtraDataContainerImpl extends EObjectImpl implements
-		ExtraDataContainer {
+public class ExtraDataContainerImpl extends EObjectImpl implements ExtraDataContainer {
 	/**
 	 * The cached value of the '{@link #getExtraData() <em>Extra Data</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -75,8 +74,7 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 	 */
 	public EList<ExtraData> getExtraData() {
 		if (extraData == null) {
-			extraData = new EObjectContainmentEList<ExtraData>(ExtraData.class,
-					this, TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA);
+			extraData = new EObjectContainmentEList<ExtraData>(ExtraData.class, this, TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA);
 		}
 		return extraData;
 	}
@@ -128,8 +126,7 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExtraData addExtraData(String key, String name, Serializable value,
-			ExtraDataFormatType format) {
+	public ExtraData addExtraData(String key, String name, Serializable value, ExtraDataFormatType format) {
 		final ExtraData result = addExtraData(key, name);
 		result.setValue(value);
 		result.setFormatType(format);
@@ -141,8 +138,7 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz,
-			T defaultValue) {
+	public <T> T getValueWithPathAs(Iterable<String> path, Class<T> clazz, T defaultValue) {
 		final ExtraData ed = getDataWithPath(path);
 		if (ed == null)
 			return defaultValue;
@@ -158,12 +154,10 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd,
-			int featureID, NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA:
-			return ((InternalEList<?>) getExtraData()).basicRemove(otherEnd,
-					msgs);
+			return ((InternalEList<?>) getExtraData()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -235,23 +229,18 @@ public class ExtraDataContainerImpl extends EObjectImpl implements
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
-	public Object eInvoke(int operationID, EList<?> arguments)
-			throws InvocationTargetException {
+	public Object eInvoke(int operationID, EList<?> arguments) throws InvocationTargetException {
 		switch (operationID) {
 		case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE:
 			return getDataWithPath((Iterable<String>) arguments.get(0));
 		case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING:
 			return getDataWithKey((String) arguments.get(0));
 		case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING:
-			return addExtraData((String) arguments.get(0),
-					(String) arguments.get(1));
+			return addExtraData((String) arguments.get(0), (String) arguments.get(1));
 		case TypesPackage.EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE:
-			return addExtraData((String) arguments.get(0),
-					(String) arguments.get(1), (Serializable) arguments.get(2),
-					(ExtraDataFormatType) arguments.get(3));
+			return addExtraData((String) arguments.get(0), (String) arguments.get(1), (Serializable) arguments.get(2), (ExtraDataFormatType) arguments.get(3));
 		case TypesPackage.EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT:
-			return getValueWithPathAs((Iterable<String>) arguments.get(0),
-					(Class) arguments.get(1), arguments.get(2));
+			return getValueWithPathAs((Iterable<String>) arguments.get(0), (Class) arguments.get(1), arguments.get(2));
 		}
 		return super.eInvoke(operationID, arguments);
 	}
