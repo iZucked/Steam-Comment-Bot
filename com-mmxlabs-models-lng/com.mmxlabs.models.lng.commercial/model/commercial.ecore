@@ -39,6 +39,8 @@
         unsettable="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxCvValue" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"
         unsettable="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="PurchaseDeliveryType" eType="ecore:EEnum platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//CargoDeliveryType"
+        defaultValueLiteral="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PurchaseContract" abstract="true" eSuperTypes="#//Contract platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APurchaseContract"/>
   <eClassifiers xsi:type="ecore:EClass" name="FixedPriceContract" eSuperTypes="#//SalesContract #//PurchaseContract">

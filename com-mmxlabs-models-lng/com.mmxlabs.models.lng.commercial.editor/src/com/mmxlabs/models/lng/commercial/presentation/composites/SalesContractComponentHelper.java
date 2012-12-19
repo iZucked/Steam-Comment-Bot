@@ -12,10 +12,12 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -66,6 +68,7 @@ public class SalesContractComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_minCvValueEditor(detailComposite, topClass);
 		add_maxCvValueEditor(detailComposite, topClass);
+		add_PurchaseDeliveryTypeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -84,5 +87,14 @@ public class SalesContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_maxCvValueEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__MAX_CV_VALUE));
+	}
+
+	/**
+	 * Create the editor for the PurchaseDeliveryType feature on SalesContract
+	 *
+	 * @generated
+	 */
+	protected void add_PurchaseDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
 	}
 }
