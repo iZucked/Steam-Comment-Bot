@@ -137,6 +137,10 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 				return createVesselGroupAdapter();
 			}
 			@Override
+			public Adapter caseVesselTypeGroup(VesselTypeGroup object) {
+				return createVesselTypeGroupAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -385,6 +389,21 @@ public class FleetAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createVesselGroupAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.fleet.VesselTypeGroup <em>Vessel Type Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.fleet.VesselTypeGroup
+	 * @generated
+	 */
+	public Adapter createVesselTypeGroupAdapter() {
 		return null;
 	}
 

@@ -30,7 +30,7 @@ public class VesselValueProviderFactory implements IReferenceValueProviderFactor
 		} else if (referenceClass == types.getAVesselClass() || referenceClass == fleet.getVesselClass()) {
 			return new SimpleReferenceValueProvider(fleetModel, fleet.getFleetModel_VesselClasses());
 		} else if (referenceClass == types.getAVesselSet()) {
-			return new MergedReferenceValueProvider(fleetModel, fleet.getFleetModel_VesselClasses(), fleet.getFleetModel_Vessels(), fleet.getFleetModel_VesselGroups());
+			return new MergedReferenceValueProvider(fleetModel, fleet.getFleetModel_VesselClasses(), fleet.getFleetModel_Vessels(), fleet.getFleetModel_SpecialVesselGroups(), fleet.getFleetModel_VesselGroups());
 		} else if (referenceClass == fleet.getVesselGroup()) {
 			return new SimpleReferenceValueProvider(fleetModel, fleet.getFleetModel_VesselGroups());
 		}

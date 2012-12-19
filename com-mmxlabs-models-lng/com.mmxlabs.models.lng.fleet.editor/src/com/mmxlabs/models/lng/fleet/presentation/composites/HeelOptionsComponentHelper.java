@@ -92,7 +92,6 @@ public class HeelOptionsComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_pricePerMMBTUEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		final IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__PRICE_PER_MMBTU);
-		detailComposite.addInlineEditor(new HeelOptionsInlineEditorWrapper(editor));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, FleetPackage.Literals.HEEL_OPTIONS__PRICE_PER_MMBTU));
 	}
 }

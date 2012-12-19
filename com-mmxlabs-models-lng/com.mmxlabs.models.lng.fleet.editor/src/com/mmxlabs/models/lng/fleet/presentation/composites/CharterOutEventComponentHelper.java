@@ -58,7 +58,7 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, FleetPackage.Literals.CHARTER_OUT_EVENT);
+		addEditorsToComposite(detailComposite, FleetPackage.Literals.CHARTER_OUT_EVENT);	
 	}
 
 	/**
@@ -68,8 +68,7 @@ public class CharterOutEventComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_relocateToEditor(detailComposite, topClass);
 		add_heelOptionsEditor(detailComposite, topClass);
 		add_repositioningFeeEditor(detailComposite, topClass);

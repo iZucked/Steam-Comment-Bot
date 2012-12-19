@@ -141,6 +141,16 @@ public interface FleetFactory extends EFactory {
 	VesselGroup createVesselGroup();
 
 	/**
+	 * Returns a new object of class '<em>Vessel Type Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Vessel Type Group</em>'.
+	 * @generated
+	 */
+	VesselTypeGroup createVesselTypeGroup();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

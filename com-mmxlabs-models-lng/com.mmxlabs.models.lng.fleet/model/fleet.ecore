@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fleet"
-    nsURI="http://www.mmxlabs.com/models/lng/fleet/1/" nsPrefix="lng.fleet">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="fleet" nsURI="http://www.mmxlabs.com/models/lng/fleet/1/" nsPrefix="lng.fleet">
   <eClassifiers xsi:type="ecore:EClass" name="Vessel" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel">
     <eOperations name="collect" upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVessel">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -117,6 +115,8 @@
         eType="#//BaseFuel" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vesselGroups" upperBound="-1"
         eType="#//VesselGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="specialVesselGroups" upperBound="-1"
+        eType="#//VesselTypeGroup" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BaseFuel" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ABaseFuel">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="equivalenceFactor" lowerBound="1"
@@ -217,5 +217,13 @@
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="vessels" upperBound="-1"
         eType="#//Vessel"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="VesselType">
+    <eLiterals name="Owned"/>
+    <eLiterals name="Time_Chartered" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="VesselTypeGroup" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AVesselSet">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="vesselType" lowerBound="1"
+        eType="#//VesselType"/>
   </eClassifiers>
 </ecore:EPackage>

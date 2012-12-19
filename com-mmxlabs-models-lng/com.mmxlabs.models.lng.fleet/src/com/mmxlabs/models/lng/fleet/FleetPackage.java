@@ -10,6 +10,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -106,6 +107,16 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int VESSEL__NAME = TypesPackage.AVESSEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL__OTHER_NAMES = TypesPackage.AVESSEL__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
@@ -206,6 +217,16 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int VESSEL_CLASS__NAME = TypesPackage.AVESSEL_CLASS__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_CLASS__OTHER_NAMES = TypesPackage.AVESSEL_CLASS__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Inaccessible Ports</b></em>' reference list.
@@ -389,6 +410,16 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_EVENT__NAME = TypesPackage.AVESSEL_EVENT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_EVENT__OTHER_NAMES = TypesPackage.AVESSEL_EVENT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -525,13 +556,23 @@ public interface FleetPackage extends EPackage {
 	int FLEET_MODEL__VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Special Vessel Groups</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FLEET_MODEL__SPECIAL_VESSEL_GROUPS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Model</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int FLEET_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -578,6 +619,16 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASE_FUEL__NAME = TypesPackage.ABASE_FUEL__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FUEL__OTHER_NAMES = TypesPackage.ABASE_FUEL__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Equivalence Factor</b></em>' attribute.
@@ -642,6 +693,16 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int DRY_DOCK_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRY_DOCK_EVENT__OTHER_NAMES = VESSEL_EVENT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
@@ -742,6 +803,16 @@ public interface FleetPackage extends EPackage {
 	 * @ordered
 	 */
 	int CHARTER_OUT_EVENT__NAME = VESSEL_EVENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CHARTER_OUT_EVENT__OTHER_NAMES = VESSEL_EVENT__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
@@ -1155,6 +1226,16 @@ public interface FleetPackage extends EPackage {
 	int MAINTENANCE_EVENT__NAME = VESSEL_EVENT__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MAINTENANCE_EVENT__OTHER_NAMES = VESSEL_EVENT__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Duration In Days</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1348,6 +1429,16 @@ public interface FleetPackage extends EPackage {
 	int VESSEL_GROUP__NAME = TypesPackage.AVESSEL_SET__NAME;
 
 	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_GROUP__OTHER_NAMES = TypesPackage.AVESSEL_SET__OTHER_NAMES;
+
+	/**
 	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1359,11 +1450,105 @@ public interface FleetPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Vessel Group</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int VESSEL_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselTypeGroupImpl <em>Vessel Type Group</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.impl.VesselTypeGroupImpl
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselTypeGroup()
+	 * @generated
+	 */
+	int VESSEL_TYPE_GROUP = 14;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__EXTENSIONS = TypesPackage.AVESSEL_SET__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__PROXIES = TypesPackage.AVESSEL_SET__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__UUID = TypesPackage.AVESSEL_SET__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__NAME = TypesPackage.AVESSEL_SET__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__OTHER_NAMES = TypesPackage.AVESSEL_SET__OTHER_NAMES;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP__VESSEL_TYPE = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Vessel Type Group</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VESSEL_TYPE_GROUP_FEATURE_COUNT = TypesPackage.AVESSEL_SET_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.fleet.VesselType <em>Vessel Type</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.fleet.VesselType
+	 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselType()
+	 * @generated
+	 */
+	int VESSEL_TYPE = 15;
 
 
 	/**
@@ -1724,6 +1909,18 @@ public interface FleetPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFleetModel_VesselGroups();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.fleet.FleetModel#getSpecialVesselGroups <em>Special Vessel Groups</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Special Vessel Groups</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.FleetModel#getSpecialVesselGroups()
+	 * @see #getFleetModel()
+	 * @generated
+	 */
+	EReference getFleetModel_SpecialVesselGroups();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.BaseFuel <em>Base Fuel</em>}'.
@@ -2134,6 +2331,40 @@ public interface FleetPackage extends EPackage {
 	EReference getVesselGroup_Vessels();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.fleet.VesselTypeGroup <em>Vessel Type Group</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Vessel Type Group</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselTypeGroup
+	 * @generated
+	 */
+	EClass getVesselTypeGroup();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.fleet.VesselTypeGroup#getVesselType <em>Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Vessel Type</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselTypeGroup#getVesselType()
+	 * @see #getVesselTypeGroup()
+	 * @generated
+	 */
+	EAttribute getVesselTypeGroup_VesselType();
+
+	/**
+	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.fleet.VesselType <em>Vessel Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>Vessel Type</em>'.
+	 * @see com.mmxlabs.models.lng.fleet.VesselType
+	 * @generated
+	 */
+	EEnum getVesselType();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2426,6 +2657,15 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FLEET_MODEL__VESSEL_GROUPS = eINSTANCE.getFleetModel_VesselGroups();
+
+		/**
+		 * The meta object literal for the '<em><b>Special Vessel Groups</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference FLEET_MODEL__SPECIAL_VESSEL_GROUPS = eINSTANCE.getFleetModel_SpecialVesselGroups();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.BaseFuelImpl <em>Base Fuel</em>}' class.
@@ -2750,6 +2990,37 @@ public interface FleetPackage extends EPackage {
 		 * @generated
 		 */
 		EReference VESSEL_GROUP__VESSELS = eINSTANCE.getVesselGroup_Vessels();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.impl.VesselTypeGroupImpl <em>Vessel Type Group</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.impl.VesselTypeGroupImpl
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselTypeGroup()
+		 * @generated
+		 */
+		EClass VESSEL_TYPE_GROUP = eINSTANCE.getVesselTypeGroup();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute VESSEL_TYPE_GROUP__VESSEL_TYPE = eINSTANCE.getVesselTypeGroup_VesselType();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.fleet.VesselType <em>Vessel Type</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.fleet.VesselType
+		 * @see com.mmxlabs.models.lng.fleet.impl.FleetPackageImpl#getVesselType()
+		 * @generated
+		 */
+		EEnum VESSEL_TYPE = eINSTANCE.getVesselType();
 
 	}
 

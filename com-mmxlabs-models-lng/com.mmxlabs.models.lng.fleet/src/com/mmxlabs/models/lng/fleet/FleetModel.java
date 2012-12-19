@@ -21,6 +21,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselEvents <em>Vessel Events</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getBaseFuels <em>Base Fuels</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getVesselGroups <em>Vessel Groups</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.fleet.FleetModel#getSpecialVesselGroups <em>Special Vessel Groups</em>}</li>
  * </ul>
  * </p>
  *
@@ -108,6 +109,23 @@ public interface FleetModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<VesselGroup> getVesselGroups();
+
+	/**
+	 * Returns the value of the '<em><b>Special Vessel Groups</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.fleet.VesselTypeGroup}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Special Vessel Groups</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Special Vessel Groups</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.fleet.FleetPackage#getFleetModel_SpecialVesselGroups()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<VesselTypeGroup> getSpecialVesselGroups();
 
 } // end of  FleetModel
 

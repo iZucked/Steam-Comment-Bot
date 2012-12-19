@@ -29,8 +29,12 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate;
 import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
+import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
+import com.mmxlabs.models.lng.fleet.FleetPackage;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
+import com.mmxlabs.models.lng.fleet.VesselType;
+import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -84,6 +88,7 @@ public class LNGModelCorrector {
 		fixSequenceTypes(cmd, rootObject, ed);
 		fixRedirectionContracts(cmd, rootObject, ed);
 		fixPortCapabilityGroups(cmd, rootObject, ed);
+		fixVesselTypeGroups(cmd, rootObject, ed);
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
 		}
@@ -109,6 +114,33 @@ public class LNGModelCorrector {
 					g.setName("All " + capability.getName() + " Ports");
 					g.setCapability(capability);
 					cmd.append(AddCommand.create(ed, portModel, PortPackage.Literals.PORT_MODEL__SPECIAL_PORT_GROUPS, g));
+				}
+			}
+		}
+		if (!cmd.isEmpty()) {
+			parent.append(cmd);
+		}
+	}
+
+	private void fixVesselTypeGroups(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
+
+		final CompoundCommand cmd = new CompoundCommand("Fix port capability groups");
+
+		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+		if (fleetModel != null) {
+			for (final VesselType vesselType : VesselType.values()) {
+				boolean found = false;
+				for (final VesselTypeGroup g : fleetModel.getSpecialVesselGroups()) {
+					if (g.getVesselType().equals(vesselType)) {
+						found = true;
+						break;
+					}
+				}
+				if (found == false) {
+					final VesselTypeGroup g = FleetFactory.eINSTANCE.createVesselTypeGroup();
+					g.setName("All " + vesselType.getName().replaceAll("_", " ") + " Vessels");
+					g.setVesselType(vesselType);
+					cmd.append(AddCommand.create(ed, fleetModel, FleetPackage.Literals.FLEET_MODEL__SPECIAL_VESSEL_GROUPS, g));
 				}
 			}
 		}

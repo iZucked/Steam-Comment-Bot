@@ -56,7 +56,7 @@ public class VesselEventComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, FleetPackage.Literals.VESSEL_EVENT);
+		addEditorsToComposite(detailComposite, FleetPackage.Literals.VESSEL_EVENT);	
 	}
 
 	/**
@@ -66,8 +66,7 @@ public class VesselEventComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_durationInDaysEditor(detailComposite, topClass);
 		add_allowedVesselsEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
