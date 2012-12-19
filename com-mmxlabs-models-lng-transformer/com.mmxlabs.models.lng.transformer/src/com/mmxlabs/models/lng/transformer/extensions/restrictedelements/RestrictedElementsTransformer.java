@@ -101,7 +101,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 								destinationElements = permissive;
 							}
 							for (final ISequenceElement source : sourceElements) {
-								restrictedElementsProviderEditor.setRestrictedElements(source, null, destinationElements);
+								restrictedElementsProviderEditor.setRestrictedElements(source, destinationElements, null);
 							}
 						}
 					}
@@ -115,7 +115,7 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 								destinationElements = permissive;
 							}
 							for (final ISequenceElement source : sourceElements) {
-								restrictedElementsProviderEditor.setRestrictedElements(source, null, destinationElements);
+								restrictedElementsProviderEditor.setRestrictedElements(source, destinationElements, null);
 							}
 						}
 					}
