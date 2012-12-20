@@ -549,9 +549,9 @@ public class DetailCompositeDialog extends Dialog {
 			dialogArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		} else {
 			// Create a toolbar for the copy action.
-			final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.LEFT);
+			final ToolBarManager barManager = new ToolBarManager(SWT.BORDER | SWT.RIGHT);
 
-			barManager.createControl(c).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING));
+			barManager.createControl(c).setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_END));
 
 			Action copy = new Action("Copy") {
 				@Override
@@ -785,7 +785,7 @@ public class DetailCompositeDialog extends Dialog {
 				if (!addedInputs.isEmpty()) {
 					Command delete = DeleteCommand.create(commandHandler.getEditingDomain(), addedInputs);
 					if (delete.canExecute()) {
-//						System.err.println("Execute delete");
+						// System.err.println("Execute delete");
 						delete.execute();
 					} else {
 						log.error("Cannot execute delete", new RuntimeException());
