@@ -256,6 +256,22 @@
                      class="Cargo">
                </target>
             </constraint>
+            <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.RestrictedElementsConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.RestrictedElementsConstraint"
+                  isEnabledByDefault="true"
+                  lang="java"
+                  mode="Batch"
+                  name="Restricted Elements Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="Cargo">
+               </target>
+            </constraint>
         </constraints>
       </constraintProvider>
    </extension>
