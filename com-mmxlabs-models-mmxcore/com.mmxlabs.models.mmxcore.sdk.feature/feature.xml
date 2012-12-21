@@ -24,10 +24,6 @@ All rights reserved.
       [Enter License Description here.]
    </license>
 
-   <requires>
-      <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="3.0.0" match="compatible"/>
-   </requires>
-
    <plugin
          id="com.mmxlabs.models.mmxcore.template"
          download-size="0"
