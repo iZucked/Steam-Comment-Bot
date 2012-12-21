@@ -5,11 +5,8 @@
 package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -19,12 +16,13 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.reports.Exposures;
+import com.mmxlabs.shiplingo.platform.reports.Exposures.MonthYear;
 
 /**
  * @since 2.0
  */
 public class ExposureReportView extends SimpleTabularReportView<IndexExposureData> {
-	public final Map<String,Map<Date,Double>> overallExposures = new HashMap<String,Map<Date,Double>>(); 
+	public final Map<String,Map<MonthYear,Double>> overallExposures = new HashMap<String,Map<MonthYear,Double>>(); 
 	
 	@Override
 	protected SimpleContentAndColumnProvider<IndexExposureData> createContentProvider() {
@@ -36,13 +34,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 			 * This may conceivably include months in which no transactions occur.
 			 * @return
 			 */
-			private List<Date> dateRange() {
-				List<Date> result = new ArrayList<Date>();
-				Date earliest = null;
-				Date latest = null;
+			private List<MonthYear> dateRange() {
+				List<MonthYear> result = new ArrayList<MonthYear>();
+				MonthYear earliest = null;
+				MonthYear latest = null;
 				
-				for (Map<Date, Double> exposures: overallExposures.values()) {
-					for (Date key: exposures.keySet()) {
+				for (Map<MonthYear, Double> exposures: overallExposures.values()) {
+					for (MonthYear key: exposures.keySet()) {
 						if (earliest == null || earliest.after(key)) {
 							earliest = key;
 						}
@@ -55,14 +53,13 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				if (earliest == null) {
 					return result;
 				}
-				
-				Calendar calendar = Calendar.getInstance();
-				calendar.setTime(earliest);
 
-				result.add(calendar.getTime());
-				while (calendar.getTime().before(latest)) {
-					calendar.add(Calendar.MONTH, 1);
-					result.add(calendar.getTime());					
+				MonthYear my = earliest;
+
+				result.add(my);
+				while (my.before(latest)) {
+					my = my.addMonths(1);
+					result.add(my);
 				}
 				return result;
 			}
@@ -81,10 +78,8 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 					}			
 				});
 				
-				for (final Date date: dateRange()) {
-					Calendar calendar = Calendar.getInstance();
-					calendar.setTime(date);
-					result.add(new ColumnManager<IndexExposureData>(String.format("%d-%02d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1)) {
+				for (final MonthYear date: dateRange()) {
+					result.add(new ColumnManager<IndexExposureData>(String.format("%d-%02d", date.getYear(), date.getMonth())) {
 						public String getColumnText(IndexExposureData data) {
 							double result = data.exposures.containsKey(date) ? data.exposures.get(date) : 0; 
 							return Double.toString(result);
@@ -112,7 +107,7 @@ public class ExposureReportView extends SimpleTabularReportView<IndexExposureDat
 				overallExposures.clear();
 				
 				for (Index<Double> index: indices) {
-					Map<Date, Double> exposures = Exposures.getExposuresByMonth(schedule, index);
+					Map<MonthYear, Double> exposures = Exposures.getExposuresByMonth(schedule, index);
 					overallExposures.put(index.getName(), exposures);
 					output.add(new IndexExposureData(index.getName(), exposures));
 				}

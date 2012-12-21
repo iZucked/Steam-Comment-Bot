@@ -1,5 +1,6 @@
 package com.mmxlabs.shiplingo.platform.reports;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -28,12 +29,114 @@ import com.mmxlabs.models.lng.schedule.Schedule;
  * @since 2.0
  */
 public class Exposures {
+
+	/**
+	 * Class to store cumulative numeric data by key.  
+	 */
+	public static class CumulativeMap<T> extends HashMap<T,Double> {
+		private static final long serialVersionUID = 1L;
+
+		/**
+		 * Adds a cumulative numeric value to the map. If the key is contained in the map,
+		 * the new value is added to the existing value. Otherwise, the new value is entered into
+		 * the map. In other words, the map conceptually defaults new keys to zero before adding
+		 * the specified value.
+		 *  
+		 * @param key
+		 * @param value
+		 */
+		public void plusEquals(T key, Double value) {
+			if (containsKey(key)) {
+				put(key, get(key) + value);
+			}
+			else {
+				put(key, value);
+			}
+		}
+	}
+	
+	/**
+	 * Simple class to represent a month and year. 
+	 * 
+	 * @author Simon McGregor
+	 *
+	 */
+	// TODO: move this out of here into a top-level class of its own somewhere useful.
+	public static class MonthYear implements Comparable<MonthYear> {
+		private int month;
+		private int year;
+		
+		public MonthYear(Date date) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			this.month = calendar.get(Calendar.MONTH) + 1;
+			this.year = calendar.get(Calendar.YEAR);
+		}
+		
+		public MonthYear(int month, int year) {
+			this.month = month;
+			this.year = year;
+					
+		}
+		
+		/**
+		 * Returns a new MonthYear which is a given number of months later than this one.
+		 *  
+		 * @param months The total number of months to add to this MonthYear
+		 * @return A new MonthYear which is the specified number of months later.
+		 */
+		public MonthYear addMonths(int months) {
+			int convenienceMonth = month - 1 + months;
+			int newYear = year + convenienceMonth / 12;
+			int newMonth = 1 + convenienceMonth % 12;
+			return new MonthYear(newMonth, newYear);
+		}
+		
+		public int getMonth() {
+			return month;
+		}
+		
+		public int getYear() {
+			return year;
+		}
+		
+		public boolean after(MonthYear my) {
+			return compareTo(my) > 0;
+		}
+
+		public boolean before(MonthYear my) {
+			return compareTo(my) < 0;
+		}
+		
+		@Override
+		// need to override equals and hashCode to provide sensible hashing behaviour
+		public boolean equals(Object object) {
+			if (object instanceof MonthYear) {
+				MonthYear my = (MonthYear) object;
+				return (month == my.getMonth()) && (year == my.getYear());
+			}
+			return false;
+		}
+		
+		@Override
+		// need to override equals and hashCode to provide sensible hashing behaviour
+		public int hashCode() {
+			int result = year * 100 + month; 
+			return result;
+		}
+
+		@Override
+		public int compareTo(MonthYear my) {
+			return (month + year * 100) - (my.getMonth() + my.getYear() * 100);
+		}
+	}
 	
 	/**
 	 * Simple tree class because Java utils inexplicably doesn't provide one
 	 * @author Simon McGregor
 	 *
 	 */
+	// TODO: move this out of here into a top-level class of its own somewhere useful.
 	static class Node {
 		public final String token;
 		public final Node [] children;
@@ -60,7 +163,6 @@ public class Exposures {
 		
 		@Override
 		public Node evaluate() {
-			// TODO Auto-generated method stub
 			return node;
 		}
 	}
@@ -81,7 +183,6 @@ public class Exposures {
 				public IExpression<Node> createInfixOperator(
 						char operator, IExpression<Node> lhs,
 						IExpression<Node> rhs) {
-					// TODO Auto-generated method stub
 					Node [] children = { lhs.evaluate(), rhs.evaluate() }; 
 					return new NodeExpression("" + operator, children);
 				}
@@ -114,7 +215,6 @@ public class Exposures {
 
 				@Override
 				public IExpression<Node> createTerm(String term) {
-					// TODO Auto-generated method stub
 					return new NodeExpression(term, new Node[0]);
 				}
 			});
@@ -183,7 +283,7 @@ public class Exposures {
 		
 	}
 	
-	public static double getExposureCoefficient(String priceExpression, Index index) {
+	public static double getExposureCoefficient(String priceExpression, Index<?> index) {
 		RawTreeParser parser = new RawTreeParser();
 		IExpression<Node> parsed = parser.parse(priceExpression);
 		return getExposureCoefficient(parsed.evaluate(), index);
@@ -196,7 +296,7 @@ public class Exposures {
 	 * @param index
 	 * @return
 	 */
-	public static double getExposureCoefficient(Slot slot, Index index) {
+	public static double getExposureCoefficient(Slot slot, Index<?> index) {
 		String priceExpression = null;
 		if (slot.isSetPriceExpression()) {
 			priceExpression = slot.getPriceExpression();
@@ -236,41 +336,28 @@ public class Exposures {
 	 * @param index
 	 * @return
 	 */
-	public static Map<Date, Double> getExposuresByMonth(Schedule schedule, Index index) {
-		HashMap<Date, Double> result = new HashMap<Date, Double>();
+	public static Map<MonthYear, Double> getExposuresByMonth(Schedule schedule, Index<?> index) {
+		CumulativeMap<MonthYear> result = new CumulativeMap<MonthYear>();
 		
 		for (CargoAllocation allocation: schedule.getCargoAllocations()) {
+			// calculate purchase and sales exposures separately
 			int loadVolume = allocation.getLoadVolume();
 			int dischargeVolume = allocation.getDischargeVolume();
 			
-			Slot loadSlot = allocation.getLoadAllocation().getSlot();
-			Slot dischargeSlot = allocation.getDischargeAllocation().getSlot();
-	
-			double purchaseExposureCoefficient = getExposureCoefficient(loadSlot, index);
-			double salesExposureCoefficient = getExposureCoefficient(dischargeSlot, index);
+			double purchaseExposureCoefficient = getExposureCoefficient(allocation.getLoadAllocation().getSlot(), index);
+			double salesExposureCoefficient = getExposureCoefficient(allocation.getDischargeAllocation().getSlot(), index);
 			
-			Date purchaseMonth = allocation.getLoadAllocation().getSlotVisit().getStart();
-			Date salesMonth = allocation.getDischargeAllocation().getSlotVisit().getStart();
-			
-			purchaseMonth = new Date(purchaseMonth.getYear(), purchaseMonth.getMonth(), 1);
-			salesMonth = new Date(salesMonth.getYear(), salesMonth.getMonth(), 1);
-			
+			// purchase is positive exposure, sales is negative
 			double purchaseExposure = loadVolume * purchaseExposureCoefficient;
 			double salesExposure = - dischargeVolume * salesExposureCoefficient; 
 			
-			if (result.containsKey(purchaseMonth)) {
-				result.put(purchaseMonth, result.get(purchaseMonth) + purchaseExposure);
-			}
-			else {
-				result.put(purchaseMonth, purchaseExposure);				
-			}
+			// find the months associated with the sales and the purchase
+			Date purchaseDate = allocation.getLoadAllocation().getSlotVisit().getStart();
+			Date salesDate = allocation.getDischargeAllocation().getSlotVisit().getStart();
 
-			if (result.containsKey(salesMonth)) {
-				result.put(salesMonth, result.get(salesMonth) + salesExposure);
-			}
-			else {
-				result.put(salesMonth, salesExposure);				
-			}
+			// add the exposure figures into the totals per month
+			result.plusEquals(new MonthYear(purchaseDate), purchaseExposure);
+			result.plusEquals(new MonthYear(salesDate), salesExposure);
 
 		}
 		
