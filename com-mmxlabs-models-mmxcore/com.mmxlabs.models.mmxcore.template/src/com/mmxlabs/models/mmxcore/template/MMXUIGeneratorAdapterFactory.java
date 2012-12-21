@@ -26,11 +26,9 @@ import com.mmxlabs.models.mmxcore.templates.editor.ComponentHelper;
 public class MMXUIGeneratorAdapterFactory extends GenBaseGeneratorAdapter {
 	public final static String CLASSPATH_VARIABLE_NAME = "MMX_UI_GENERATOR";
 
-	public final static String TEMPLATE_LOCATION = MMXUIGeneratorPlugin.INSTANCE
-			.getBaseURL().toString() + "templates";
+	public final static String TEMPLATE_LOCATION = MMXUIGeneratorPlugin.INSTANCE.getBaseURL().toString() + "templates";
 
 	public MMXUIGeneratorAdapterFactory() {
-		int x = 1;
 	}
 
 	@Override
@@ -43,9 +41,9 @@ public class MMXUIGeneratorAdapterFactory extends GenBaseGeneratorAdapter {
 			// cannot generate without dynamic templates; compiled form of
 			// templates is missing from project as well
 			// (should I add JET nature?)
-			if (genModel.isDynamicTemplates())
+			if (genModel.isDynamicTemplates()) {
 				return super.canGenerate(object, projectType);
-
+			}
 		}
 		return false;
 	}
@@ -54,25 +52,17 @@ public class MMXUIGeneratorAdapterFactory extends GenBaseGeneratorAdapter {
 	protected Diagnostic generateEditor(Object object, Monitor monitor) {
 		final GenPackage genPackage = (GenPackage) object;
 		final GenModel genModel = genPackage.getGenModel();
-		
-			monitor.beginTask("Generating detail composites", genPackage
-					.getGenClasses().size());
-			
-			final JETEmitter emitter = createJETEmitter(new JETEmitterDescriptor(
-					"editor/ComponentHelper.javajet",
-					ComponentHelper.class.getName()));
-			for (final GenClass genClass : genPackage.getGenClasses()) {
-				monitor.subTask("Generating composite for "
-						+ genClass.getName());
-				generateJava(
-						genModel.getEditorDirectory(),
-						// compute package name
-						genPackage.getPresentationPackageName() + ".composites",
-						genClass.getName() + "ComponentHelper", emitter, new Object[]{genClass},
-						createMonitor(monitor, 1));
-				monitor.worked(1);
-			}
-		
+
+		monitor.beginTask("Generating detail composites", genPackage.getGenClasses().size());
+
+		final JETEmitter emitter = createJETEmitter(new JETEmitterDescriptor("editor/ComponentHelper.javajet", ComponentHelper.class.getName()));
+		for (final GenClass genClass : genPackage.getGenClasses()) {
+			monitor.subTask("Generating composite for " + genClass.getName());
+			generateJava(genModel.getEditorDirectory(),
+			// compute package name
+					genPackage.getPresentationPackageName() + ".composites", genClass.getName() + "ComponentHelper", emitter, new Object[] { genClass }, createMonitor(monitor, 1));
+			monitor.worked(1);
+		}
 
 		return Diagnostic.OK_INSTANCE;
 	}
@@ -84,10 +74,8 @@ public class MMXUIGeneratorAdapterFactory extends GenBaseGeneratorAdapter {
 	}
 
 	@Override
-	protected void addClasspathEntries(JETEmitter jetEmitter)
-			throws JETException {
+	protected void addClasspathEntries(JETEmitter jetEmitter) throws JETException {
 		super.addClasspathEntries(jetEmitter);
-		jetEmitter
-				.addVariable(CLASSPATH_VARIABLE_NAME, MMXUIGeneratorPlugin.ID);
+		jetEmitter.addVariable(CLASSPATH_VARIABLE_NAME, MMXUIGeneratorPlugin.ID);
 	}
 }
