@@ -185,6 +185,8 @@
 							<excludes>
 								<exclude>**/OptimisationRepeatabilityTest.*</exclude>
 								<exclude>**/TestOptimisationResult*.*</exclude>
+								<exclude>**/TestDemoCases*.*</exclude>
+								<exclude>**/TestCSVDemoCases*.*</exclude>
 							</excludes>
 						</configuration>
 					</plugin>
