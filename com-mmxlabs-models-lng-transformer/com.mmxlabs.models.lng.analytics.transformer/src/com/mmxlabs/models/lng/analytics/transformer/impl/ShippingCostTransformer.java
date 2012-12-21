@@ -79,6 +79,7 @@ import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
+import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
@@ -369,7 +370,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			if (result == null) {
 				return Collections.emptyList();
 			}
-			
+
 			final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
 			aca.setVesselProvider(vesselProvider);
 
@@ -415,8 +416,11 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 						// Charter out is currently our OTHER destination
 						final String typeString = portType == PortType.CharterOut ? "Other" : portType.name();
 						final ExtraData extraData = line.addExtraData("port" + idxX, idxStr + " - " + portDetails.getOptions().getPortSlot().getPort().getName() + " - (" + typeString + ")");
-						createPortCostComponent(extraData, ports, pricing, plan, portDetails);
-
+						
+						// Exlcude end port from port costs
+						if (!(portDetails.getOptions().getPortSlot() instanceof EndPortSlot)) {
+							createPortCostComponent(extraData, ports, pricing, plan, portDetails);
+						}
 						if (portDetails.getOptions().getPortSlot() instanceof ILoadOption) {
 							currentAllocationAnnotation = allocationIterator.next();
 							// Add in LOAD VOLUME
