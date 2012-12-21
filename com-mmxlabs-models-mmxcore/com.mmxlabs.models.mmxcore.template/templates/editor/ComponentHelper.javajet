@@ -1,15 +1,14 @@
-<%@ jet package="com.mmxlabs.models.mmxcore.templates.editor" imports="java.util.* org.eclipse.emf.codegen.ecore.genmodel.*" class="ComponentHelper" version="1.0" %>
+<%@ jet package="com.mmxlabs.models.mmxcore.templates.editor" imports="org.eclipse.emf.codegen.ecore.genmodel.*" class="ComponentHelper" version="1.0" %>
 <% 
 /**
  * <copyright>
- * Copyright (c) 2012 Minimax Laboratories Inc. All Rights Reserved.
+ * Copyright (c) 2012 Minimax Labs Ltd. All Rights Reserved.
  * </copyright>
  */
  %>
 <%final GenClass genClass = (GenClass) argument;%>
 <%final GenPackage genPackage = genClass.getGenPackage();%>
 <%final GenModel genModel = genPackage.getGenModel(); %>
-<%final boolean isJDK50 = genModel.getComplianceLevel().getValue() >= GenJDKLevel.JDK50;%>
 <%final String thisClassName = genClass.getName()+"ComponentHelper"; %>
 <%@ include file="../Header.javajetinc"%>
 package <%=genPackage.getPresentationPackageName()%>.composites;

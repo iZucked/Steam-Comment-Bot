@@ -1,6 +1,5 @@
 package com.mmxlabs.models.mmxcore.templates.editor;
 
-import java.util.*;
 import org.eclipse.emf.codegen.ecore.genmodel.*;
 
 public class ComponentHelper
@@ -52,14 +51,13 @@ public class ComponentHelper
      
 /**
  * <copyright>
- * Copyright (c) 2012 Minimax Laboratories Inc. All Rights Reserved.
+ * Copyright (c) 2012 Minimax Labs Ltd. All Rights Reserved.
  * </copyright>
  */
  
     final GenClass genClass = (GenClass) argument;
     final GenPackage genPackage = genClass.getGenPackage();
     final GenModel genModel = genPackage.getGenModel(); 
-    final boolean isJDK50 = genModel.getComplianceLevel().getValue() >= GenJDKLevel.JDK50;
     final String thisClassName = genClass.getName()+"ComponentHelper"; 
     stringBuffer.append(TEXT_1);
     stringBuffer.append(TEXT_2);
