@@ -83,8 +83,9 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	protected EClass getTrueOutputClass(final EClass outputEClass, final String kind) {
-		if (kind == null)
+		if (kind == null) {
 			return outputEClass;
+		}
 
 		final EPackage ePackage = outputEClass.getEPackage();
 		// find a subclass with the right name
@@ -132,8 +133,9 @@ public class DefaultClassImporter implements IClassImporter {
 
 	protected void importReferences(final IFieldMap row, final IImportContext context, final EClass rowClass, final EObject instance, final LinkedList<EObject> results) {
 		for (final EReference reference : rowClass.getEAllReferences()) {
-			if (!shouldImportReference(reference))
+			if (!shouldImportReference(reference)) {
 				continue;
+			}
 			final String lcrn = reference.getName().toLowerCase();
 			if (row.containsKey(lcrn)) {
 				// The reference itself is present, so do a lookup later
@@ -143,8 +145,9 @@ public class DefaultClassImporter implements IClassImporter {
 				}
 			} else {
 				// The reference is missing entirely
-				if (reference.isMany())
+				if (reference.isMany()) {
 					continue;
+				}
 				// Maybe it is a sub-object; find any sub-keys
 				final IFieldMap subKeys = row.getSubMap(lcrn + DOT);
 
@@ -162,10 +165,12 @@ public class DefaultClassImporter implements IClassImporter {
 					final Collection<EObject> values = classImporter.importObject(reference.getEReferenceType(), subKeys, context);
 					final Iterator<EObject> iterator = values.iterator();
 					instance.eSet(reference, iterator.next());
-					if (reference.isContainment() == false)
+					if (reference.isContainment() == false) {
 						results.add((EObject) instance.eGet(reference));
-					while (iterator.hasNext())
+					}
+					while (iterator.hasNext()) {
 						results.add(iterator.next());
+					}
 				}
 			}
 		}
@@ -176,8 +181,9 @@ public class DefaultClassImporter implements IClassImporter {
 	}
 
 	private void notifyMissingFields(final EObject blank, final IImportProblem delegate, final IImportContext context) {
-		if (blank == null)
+		if (blank == null) {
 			return;
+		}
 		for (final EAttribute attribute : blank.eClass().getEAllAttributes()) {
 			context.addProblem(new IImportProblem() {
 				@Override
@@ -247,8 +253,9 @@ public class DefaultClassImporter implements IClassImporter {
 
 	protected void populateWithBlank(final EObject target, final EReference reference) {
 		final EClass objectClass = reference.getEReferenceType();
-		if (objectClass.isAbstract())
+		if (objectClass.isAbstract()) {
 			return;
+		}
 		final EObject content = objectClass.getEPackage().getEFactoryInstance().create(objectClass);
 		for (final EReference ref : content.eClass().getEAllReferences()) {
 			if (ref.isContainment() && ref.isMany() == false) {
@@ -263,8 +270,9 @@ public class DefaultClassImporter implements IClassImporter {
 			final String lowerCase = attribute.getName().toLowerCase();
 			if (row.containsKey(lowerCase)) {
 				final IAttributeImporter ai = importerRegistry.getAttributeImporter(attribute.getEAttributeType());
-				if (ai != null)
+				if (ai != null) {
 					ai.setAttribute(instance, attribute, row.get(lowerCase), context);
+				}
 			} else {
 				context.addProblem(context.createProblem("Field not present", true, false, true));
 			}
@@ -275,8 +283,9 @@ public class DefaultClassImporter implements IClassImporter {
 	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
 		final LinkedList<Map<String, String>> result = new LinkedList<Map<String, String>>();
 
-		if (objects.isEmpty())
+		if (objects.isEmpty()) {
 			return result;
+		}
 
 		for (final EObject object : objects) {
 			final Map<String, String> flattened = exportObject(object, root);
@@ -290,13 +299,15 @@ public class DefaultClassImporter implements IClassImporter {
 		final Map<String, String> result = new LinkedHashMap<String, String>();
 
 		for (final EAttribute attribute : object.eClass().getEAllAttributes()) {
-			if (shouldExportFeature(attribute))
+			if (shouldExportFeature(attribute)) {
 				exportAttribute(object, attribute, result);
+			}
 		}
 
 		for (final EReference reference : object.eClass().getEAllReferences()) {
-			if (shouldExportFeature(reference))
+			if (shouldExportFeature(reference)) {
 				exportReference(object, reference, result, root);
+			}
 		}
 
 		return result;
@@ -304,8 +315,9 @@ public class DefaultClassImporter implements IClassImporter {
 
 	protected void exportAttribute(final EObject object, final EAttribute attribute, final Map<String, String> result) {
 		final IAttributeImporter ai = Activator.getDefault().getImporterRegistry().getAttributeImporter(attribute.getEAttributeType());
-		if (ai != null)
+		if (ai != null) {
 			result.put(attribute.getName(), ai.writeAttribute(object, attribute, object.eGet(attribute)));
+		}
 	}
 
 	protected void exportReference(final EObject object, final EReference reference, final Map<String, String> result, final MMXRootObject root) {
@@ -328,8 +340,9 @@ public class DefaultClassImporter implements IClassImporter {
 				for (final Object o : values) {
 					if (o instanceof NamedObject) {
 						final NamedObject no = (NamedObject) o;
-						if (comma)
+						if (comma) {
 							sb.append(",");
+						}
 						comma = true;
 						sb.append(no.getName());
 					}
@@ -340,8 +353,9 @@ public class DefaultClassImporter implements IClassImporter {
 				final Object o = object.eGet(reference);
 				if (o instanceof NamedObject) {
 					final NamedObject no = (NamedObject) o;
-					if (no != null)
+					if (no != null) {
 						result.put(reference.getName(), no.getName());
+					}
 				}
 			}
 		}
@@ -359,7 +373,7 @@ public class DefaultClassImporter implements IClassImporter {
 	 * @since 2.0
 	 * @param importerRegistry
 	 */
-	public void setImporterRegistry(IImporterRegistry importerRegistry) {
+	public void setImporterRegistry(final IImporterRegistry importerRegistry) {
 		this.importerRegistry = importerRegistry;
 	}
 
