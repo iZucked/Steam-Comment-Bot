@@ -2,10 +2,7 @@
 <?pde version="3.8"?><target name="RCP Common Target (Indigo)" sequenceNumber="36">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="0.0.0"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/nightly/" id="mmxlabs-releases"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.1.RELEASE"/>
 <unit id="com.mmxlabs.common.common-util" version="1.0.2.201209070858"/>
 <unit id="com.mmxlabs.common.common-util.source" version="1.0.2.201209070858"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="3.0.0.RELEASE"/>
