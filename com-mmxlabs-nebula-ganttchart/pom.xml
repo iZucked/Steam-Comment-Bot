@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.eclipse.nebula.widgets</groupId>
 	<artifactId>com.mmxlabs.org.eclipse.nebula.widgets.ganttchart</artifactId>
-	<version>1.0.1.RELEASE</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>eclipse-plugin</packaging>
 
 	<parent>
