@@ -69,11 +69,12 @@ import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 import com.mmxlabs.models.util.importer.impl.DefaultImportContext;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class VesselClassViewerPane extends ScenarioTableViewerPane {
-	
-	private static final Logger log = LoggerFactory.getLogger(VesselClassViewerPane.class); 
-	
+
+	private static final Logger log = LoggerFactory.getLogger(VesselClassViewerPane.class);
+
 	private final IScenarioEditingLocation jointModelEditor;
 
 	public VesselClassViewerPane(final IWorkbenchPage page, final IWorkbenchPart part, final IScenarioEditingLocation location, final IActionBars actionBars) {
@@ -274,7 +275,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 				public IScenarioEditingLocation getEditorPart() {
 					return jointModelEditor;
 				}
-				
+
 				@Override
 				public ISelection getCurrentSelection() {
 					return viewer.getSelection();
@@ -298,11 +299,22 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 			final DetailCompositeDialog dcd = new DetailCompositeDialog(cellEditorWindow.getShell(), jointModelEditor.getDefaultCommandHandler());
 
 			final VesselStateAttributes attributes = (VesselStateAttributes) EcoreUtil.copy((EObject) getValue(object));
-			if (dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) attributes)) == Window.OK) {
-				return attributes;
-			} else {
-				return null;
+
+			final ScenarioLock editorLock = jointModelEditor.getEditorLock();
+			try {
+				editorLock.claim();
+				jointModelEditor.setDisableUpdates(true);
+
+				if (dcd.open(jointModelEditor, jointModelEditor.getRootObject(), Collections.singletonList((EObject) attributes)) == Window.OK) {
+					return attributes;
+				} else {
+					return null;
+				}
+			} finally {
+				jointModelEditor.setDisableUpdates(false);
+				editorLock.release();
 			}
+
 		}
 
 		@Override
