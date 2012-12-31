@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -27,6 +28,7 @@ import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IClassImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
@@ -43,6 +45,7 @@ public class DataIndexImporter implements IClassImporter {
 	private static final String EXPRESSION = "expression";
 	boolean parseAsInt = false;
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
+	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
 	/**
 	 * @return the parseAsInt
@@ -92,18 +95,18 @@ public class DataIndexImporter implements IClassImporter {
 		} else {
 			result = PricingFactory.eINSTANCE.createDataIndex();
 		}
-		
+
 		if (row.containsKey(NAME)) {
 			result.setName(row.get(NAME));
 		} else {
 			context.addProblem(context.createProblem("Index name is missing", true, true, true));
 		}
-		
+
 		if (result instanceof DataIndex) {
 			final DataIndex<Number> data = (DataIndex<Number>) result;
 			for (final String s : row.keySet()) {
 				try {
-					final Date date = shortDate.parse(s);
+					final Date date = dateParser.parseDate(s);
 					Calendar c = Calendar.getInstance();
 					c.setTime(date);
 					// Set back to start of month
@@ -124,7 +127,7 @@ public class DataIndexImporter implements IClassImporter {
 							int value = Integer.parseInt(row.get(s));
 							n = value;
 						} else {
-							double value  = Double.parseDouble(row.get(s));
+							double value = Double.parseDouble(row.get(s));
 							n = value;
 						}
 
@@ -149,7 +152,7 @@ public class DataIndexImporter implements IClassImporter {
 						context.addProblem(context.createProblem("Indices with an expression should not have any values set", true, true, true));
 					}
 				} catch (ParseException ex) {
-					
+
 				}
 			}
 		}
@@ -165,7 +168,7 @@ public class DataIndexImporter implements IClassImporter {
 		for (final EObject o : objects) {
 			if (o instanceof DataIndex) {
 				final DataIndex<Number> i = (DataIndex) o;
-				final Map<String, String> row = new LinkedHashMap<String, String>();
+				final Map<String, String> row = new TreeMap<String, String>();
 				row.put(NAME, i.getName());
 				for (final IndexPoint<Number> pt : i.getPoints()) {
 					final Number n = pt.getValue();
