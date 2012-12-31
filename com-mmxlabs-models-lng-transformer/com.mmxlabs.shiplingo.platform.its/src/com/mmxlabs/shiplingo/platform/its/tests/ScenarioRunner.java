@@ -81,7 +81,11 @@ public class ScenarioRunner {
 	}
 
 	public void run() {
-		optimiser.step(100);
+		run(100);
+	}
+
+	public void run(int percentage) {
+		optimiser.step(percentage);
 		finalSchedule = exportSchedule(optimiser.getBestSolution(true));
 	}
 
