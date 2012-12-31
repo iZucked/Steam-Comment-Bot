@@ -7,10 +7,11 @@ package com.mmxlabs.models.lng.port.importer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -118,14 +119,34 @@ public class RouteImporter {
 	 * @return
 	 */
 	public Collection<Map<String, String>> exportRoute(final Route r) {
-		final Map<String, Map<String, String>> rows = new HashMap<String, Map<String, String>>();
+		final Map<String, Map<String, String>> rows = new TreeMap<String, Map<String, String>>();
 		
 		for (final RouteLine line : r.getLines()) {
 			Map<String, String> row = rows.get(line.getFrom().getName());
 			if (row == null) {
-				row = new HashMap<String, String>();
+				row = new TreeMap<String, String>(new Comparator<String>() {
+					@Override
+					public int compare(final String o1, final String o2) {
+
+						// Always sort name column first
+						if ("from".equals(o1) && "from".equals(o2)) {
+							return 0;
+						}
+						if ("from".equals(o1)) {
+							return -1;
+						} else if ("from".equals(o2)) {
+							return 1;
+						}
+
+						return o1.compareTo(o2);
+					}
+				});
 				row.put("from", line.getFrom().getName());
 				rows.put(line.getFrom().getName(), row);
+				// Add in blank field for from -> from distance for sorting in export
+				// Not strictly required otherwise
+				row.put(line.getFrom().getName(), "");
+
 			}
 			row.put(line.getTo().getName(), line.getDistance() + "");
 		}
