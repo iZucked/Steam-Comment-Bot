@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.commercial.validation;
+package com.mmxlabs.models.lng.commercial.validation.util;
 
 import java.util.List;
 
