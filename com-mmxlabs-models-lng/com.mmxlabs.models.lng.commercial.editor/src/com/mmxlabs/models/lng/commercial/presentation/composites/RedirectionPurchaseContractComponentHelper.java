@@ -113,10 +113,10 @@ public class RedirectionPurchaseContractComponentHelper extends BaseComponentHel
 	/**
 	 * Create the editor for the desPurchasePort feature on RedirectionPurchaseContract
 	 *
-	 * @generated
+	 * @generated NOT
 	 */
 	protected void add_desPurchasePortEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT));
+//		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT__DES_PURCHASE_PORT));
 	}
 
 	/**
