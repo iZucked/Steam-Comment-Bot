@@ -41,7 +41,6 @@
 <unit id="org.hamcrest.text.source" version="1.1.0.v20090501071000"/>
 <unit id="org.mockito" version="1.8.4.v201102171835"/>
 <unit id="org.mockito.source" version="1.8.4.v201102171835"/>
-<unit id="org.swtchart" version="0.7.0.v201201201914"/>
 <unit id="javax.inject" version="1.0.0.v20091030"/>
 <unit id="javax.inject.source" version="1.0.0.v20091030"/>
 <unit id="javax.xml.ws" version="2.1.0.v200902101523"/>
