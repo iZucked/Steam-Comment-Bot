@@ -10,6 +10,7 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
+import com.mmxlabs.models.lng.commercial.validation.util.ContractConstraints;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 
 public class PriceExpressionContractConstraint extends

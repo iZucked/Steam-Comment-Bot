@@ -16,6 +16,7 @@ import com.mmxlabs.scenario.service.IScenarioServiceListener;
 import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * The {@link LNGModelCorrectorScenarioServiceListener} is an {@link IScenarioServiceListener} implementation intended to be registered as a OSGi service. It adds itself a a listener to
@@ -48,7 +49,14 @@ public class LNGModelCorrectorScenarioServiceListener extends ScenarioServiceLis
 
 					final EditingDomain ed = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 					if (ed != null) {
-						corrector.correctModel(rootObject, ed);
+						// TODO: Run this async to avoid blocking?
+						final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.EDITORS);
+						lock.awaitClaim();
+						try {
+							corrector.correctModel(rootObject, ed);
+						} finally {
+							lock.release();
+						}
 					}
 				}
 			}
@@ -64,7 +72,13 @@ public class LNGModelCorrectorScenarioServiceListener extends ScenarioServiceLis
 
 			final EditingDomain ed = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 			if (ed != null) {
-				corrector.correctModel(rootObject, ed);
+				final ScenarioLock lock = scenarioInstance.getLock(ScenarioLock.EDITORS);
+				lock.awaitClaim();
+				try {
+					corrector.correctModel(rootObject, ed);
+				} finally {
+					lock.release();
+				}
 			}
 		}
 	}

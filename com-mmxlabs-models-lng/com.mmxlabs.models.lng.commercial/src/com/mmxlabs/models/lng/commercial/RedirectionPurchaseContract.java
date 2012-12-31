@@ -148,6 +148,7 @@ public interface RedirectionPurchaseContract extends PurchaseContract {
 	 * If the meaning of the '<em>Des Purchase Port</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Des Purchase Port</em>' reference.
 	 * @see #setDesPurchasePort(Port)
@@ -160,6 +161,7 @@ public interface RedirectionPurchaseContract extends PurchaseContract {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDesPurchasePort <em>Des Purchase Port</em>}' reference.
 	 * <!-- begin-user-doc -->
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Des Purchase Port</em>' reference.
 	 * @see #getDesPurchasePort()
