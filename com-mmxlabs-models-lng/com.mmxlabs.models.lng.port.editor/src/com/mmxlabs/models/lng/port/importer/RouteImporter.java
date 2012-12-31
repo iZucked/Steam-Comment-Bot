@@ -33,6 +33,8 @@ import com.mmxlabs.models.util.importer.impl.SetReference;
  * 
  */
 public class RouteImporter {
+	private static final String FROM = "from";
+
 	public RouteImporter() {
 
 	}
@@ -129,19 +131,19 @@ public class RouteImporter {
 					public int compare(final String o1, final String o2) {
 
 						// Always sort name column first
-						if ("from".equals(o1) && "from".equals(o2)) {
+						if (FROM.equals(o1) && FROM.equals(o2)) {
 							return 0;
 						}
-						if ("from".equals(o1)) {
+						if (FROM.equals(o1)) {
 							return -1;
-						} else if ("from".equals(o2)) {
+						} else if (FROM.equals(o2)) {
 							return 1;
 						}
 
 						return o1.compareTo(o2);
 					}
 				});
-				row.put("from", line.getFrom().getName());
+				row.put(FROM, line.getFrom().getName());
 				rows.put(line.getFrom().getName(), row);
 				// Add in blank field for from -> from distance for sorting in export
 				// Not strictly required otherwise
