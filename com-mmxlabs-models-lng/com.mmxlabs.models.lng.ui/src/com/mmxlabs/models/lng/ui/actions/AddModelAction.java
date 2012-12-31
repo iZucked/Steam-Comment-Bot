@@ -31,6 +31,7 @@ import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.rcp.common.actions.AbstractMenuAction;
 import com.mmxlabs.rcp.common.actions.LockableAction;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
  * Action
@@ -98,11 +99,22 @@ class SingleAddAction extends LockableAction {
 
 			final DetailCompositeDialog editor = new DetailCompositeDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), context.getCommandHandler());
 
-			if (editor.open(context.getEditorPart(), context.getRootObject(), Collections.singletonList(settings.iterator().next().getInstance())) != Window.OK) {
-				// Revert state
-				assert commandStack.getUndoCommand() == add;
-				commandStack.undo();
+			final IScenarioEditingLocation editorPart = context.getEditorPart();
+			final ScenarioLock editorLock = editorPart.getEditorLock();
+			try {
+				editorLock.claim();
+				editorPart.setDisableUpdates(true);
+				if (editor.open(editorPart, context.getRootObject(), Collections.singletonList(settings.iterator().next().getInstance())) != Window.OK) {
+					// Revert state
+					assert commandStack.getUndoCommand() == add;
+					commandStack.undo();
+				} else {
+				}
+			} finally {
+				editorPart.setDisableUpdates(false);
+				editorLock.release();
 			}
+
 		}
 	}
 }
