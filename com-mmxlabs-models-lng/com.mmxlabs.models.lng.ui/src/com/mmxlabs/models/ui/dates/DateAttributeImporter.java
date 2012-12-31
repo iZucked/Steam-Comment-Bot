@@ -22,19 +22,21 @@ import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
 import com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter;
 
 public class DateAttributeImporter extends DefaultAttributeImporter {
-	final SimpleDateFormat consistentDate = new SimpleDateFormat("yyyy-MM-dd");
-	final SimpleDateFormat consistentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:00");
-	final SimpleDateFormat dateWithShortTime = new SimpleDateFormat("yyyy-MM-dd HH");
-	
-	final SimpleDateFormat consistentSlashDate = new SimpleDateFormat("yyyy/MM/dd");
-	final SimpleDateFormat consistentSlashDateTime = new SimpleDateFormat("yyyy/MM/dd HH:00");
-	final SimpleDateFormat slashDateWithShortTime = new SimpleDateFormat("yyyy/MM/dd HH");
+	private final SimpleDateFormat consistentDate = new SimpleDateFormat("yyyy-MM-dd");
+	private final SimpleDateFormat consistentDateTime = new SimpleDateFormat("yyyy-MM-dd HH:00");
+	private final SimpleDateFormat dateWithShortTime = new SimpleDateFormat("yyyy-MM-dd HH");
+
+	private final SimpleDateFormat consistentSlashDate = new SimpleDateFormat("yyyy/MM/dd");
+	private final SimpleDateFormat consistentSlashDateTime = new SimpleDateFormat("yyyy/MM/dd HH:00");
+	private final SimpleDateFormat slashDateWithShortTime = new SimpleDateFormat("yyyy/MM/dd HH");
+
+	private final SimpleDateFormat[] tryOrder = new SimpleDateFormat[] { consistentDateTime, dateWithShortTime, consistentDate, consistentSlashDateTime, slashDateWithShortTime, consistentSlashDate };
 
 	public DateAttributeImporter() {
 		final TimeZone utc = TimeZone.getTimeZone("UTC");
-		consistentDate.setTimeZone(utc);
-		consistentDateTime.setTimeZone(utc);
-		dateWithShortTime.setTimeZone(utc);
+		for (final SimpleDateFormat df : tryOrder) {
+			df.setTimeZone(utc);
+		}
 	}
 
 	/**
@@ -46,40 +48,12 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	 */
 	public Date parseDate(final String dateString) throws ParseException {
 		// try parsing as a date and time
-		try {
-			final Date result = consistentDateTime.parse(dateString);
-			return result;
-		} catch (final ParseException ex) {
-		}
-
-		try {
-			final Date result = dateWithShortTime.parse(dateString);
-			return result;
-		} catch (final ParseException ex) {
-		}
-
-		try {
-			final Date result = consistentDate.parse(dateString);
-			return result;
-		} catch (final ParseException ex) {
-		}
-		
-		try {
-			final Date result = consistentSlashDateTime.parse(dateString);
-			return result;
-		} catch (final ParseException ex) {
-		}
-
-		try {
-			final Date result = slashDateWithShortTime.parse(dateString);
-			return result;
-		} catch (final ParseException ex) {
-		}
-
-		try {
-			final Date result = consistentSlashDate.parse(dateString);
-			return result;
-		} catch (final ParseException ex) {
+		for (final SimpleDateFormat df : tryOrder) {
+			try {
+				final Date result = df.parse(dateString);
+				return result;
+			} catch (final ParseException ex) {
+			}
 		}
 
 		// last try - use ECore
@@ -91,73 +65,72 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	}
 
 	public String formatDate(final Date date, final TimeZone zone) {
-		SimpleDateFormat c = (SimpleDateFormat) consistentDateTime.clone();
+		final SimpleDateFormat c = (SimpleDateFormat) consistentDateTime.clone();
 		c.setTimeZone(zone);
 		return c.format(date);
 	}
 
-	
 	@Override
-	public void setAttribute(final EObject container, final EAttribute attribute,
-			String value, IImportContext context) {
+	public void setAttribute(final EObject container, final EAttribute attribute, final String value, final IImportContext context) {
 		super.setAttribute(container, attribute, value, context);
 		// add deferred action to fix localization
 		if (container instanceof ITimezoneProvider) {
-		context.doLater(new IDeferment() {			
-			@Override
-			public void run(final IImportContext context) {
-				if (attribute.isMany()) {
-					final List<Date> dates = (List<Date>) container.eGet(attribute);
-					final List<Date> fixedDates = new ArrayList<Date>(dates.size());
-					for (final Date date : dates) fixedDates.add(fixDate(date));
-					dates.clear();
-					dates.addAll(fixedDates);
-				} else {
-					final Date date = (Date) container.eGet(attribute);
-					container.eSet(attribute, fixDate(date));
+			context.doLater(new IDeferment() {
+				@Override
+				public void run(final IImportContext context) {
+					if (attribute.isMany()) {
+						final List<Date> dates = (List<Date>) container.eGet(attribute);
+						final List<Date> fixedDates = new ArrayList<Date>(dates.size());
+						for (final Date date : dates)
+							fixedDates.add(fixDate(date));
+						dates.clear();
+						dates.addAll(fixedDates);
+					} else {
+						final Date date = (Date) container.eGet(attribute);
+						container.eSet(attribute, fixDate(date));
+					}
 				}
-			}
-			
-			private Date fixDate(Date date) {
-				if (date == null) return date;
-				final TimeZone zone = LocalDateUtil.getTimeZone(container, attribute);
-				final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:00");
-				format.setTimeZone(TimeZone.getTimeZone("UTC"));
-				final String s = format.format(date);
 
-				format.setTimeZone(zone);
-				try {
-					final Date d2 = format.parse(s);
-					return d2;
-				} catch (final ParseException e) {
-					return date;
+				private Date fixDate(final Date date) {
+					if (date == null)
+						return date;
+					final TimeZone zone = LocalDateUtil.getTimeZone(container, attribute);
+					final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:00");
+					format.setTimeZone(TimeZone.getTimeZone("UTC"));
+					final String s = format.format(date);
+
+					format.setTimeZone(zone);
+					try {
+						final Date d2 = format.parse(s);
+						return d2;
+					} catch (final ParseException e) {
+						return date;
+					}
 				}
-			}
 
-			@Override
-			public int getStage() {
-				return IImportContext.STAGE_REFERENCES_RESOLVED;
-			}
-		});
+				@Override
+				public int getStage() {
+					return IImportContext.STAGE_REFERENCES_RESOLVED;
+				}
+			});
 		}
 	}
 
 	@Override
-	protected Object attributeFromString(final EObject container,
-			final EAttribute attribute, final String value, final IImportContext context) {
+	protected Object attributeFromString(final EObject container, final EAttribute attribute, final String value, final IImportContext context) {
 		try {
 			final Date date = parseDate(value);
 			return date;
-		} catch (ParseException ex) {
+		} catch (final ParseException ex) {
 			context.addProblem(context.createProblem("Could not parse date " + value, true, true, true));
 			return null;
 		}
 	}
 
 	@Override
-	protected String stringFromAttribute(EObject container,
-			EAttribute attribute, Object value) {
-		if (attribute.isUnsettable() && container.eIsSet(attribute) == false) return "";
+	protected String stringFromAttribute(final EObject container, final EAttribute attribute, final Object value) {
+		if (attribute.isUnsettable() && container.eIsSet(attribute) == false)
+			return "";
 		return formatDate((Date) value, LocalDateUtil.getTimeZone(container, attribute));
 	}
 }
