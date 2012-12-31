@@ -882,7 +882,7 @@ public class LNGScenarioTransformer {
 			}
 
 			if (salesContract.isSetMaxCvValue()) {
-				maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue());
+				maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMaxCvValue());
 			} else {
 				maxCv = Long.MAX_VALUE;
 			}
