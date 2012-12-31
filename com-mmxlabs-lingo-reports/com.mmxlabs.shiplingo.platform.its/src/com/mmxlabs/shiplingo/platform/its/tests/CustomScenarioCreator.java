@@ -25,8 +25,10 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.FixedPriceContract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
@@ -73,8 +75,10 @@ public class CustomScenarioCreator {
 	private final PricingModel pricingModel;
 	private final OptimiserModel optimiserModel;
 
-	final FixedPriceContract sc;
-	final FixedPriceContract pc;
+	final SalesContract sc;
+	final SalesContract pc;
+	final LegalEntity contractEntity;
+	final LegalEntity shippingEntity;
 
 	MMXRootObject scenario;
 
@@ -93,26 +97,17 @@ public class CustomScenarioCreator {
 		pricingModel = scenario.getSubModel(PricingModel.class);
 		optimiserModel = scenario.getSubModel(OptimiserModel.class);
 
-		final LegalEntity e = CommercialFactory.eINSTANCE.createLegalEntity();
-		final LegalEntity s = CommercialFactory.eINSTANCE.createLegalEntity();
-		commercialModel.getEntities().add(e);
-		commercialModel.getEntities().add(s);
-		commercialModel.setShippingEntity(s);
+		contractEntity = CommercialFactory.eINSTANCE.createLegalEntity();
+		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
+		commercialModel.getEntities().add(contractEntity);
+		commercialModel.getEntities().add(shippingEntity);
+		commercialModel.setShippingEntity(shippingEntity);
 
-		e.setName("Third-parties");
-		s.setName("Shipping");
+		contractEntity.setName("Third-parties");
+		shippingEntity.setName("Shipping");
 
-		sc = CommercialFactory.eINSTANCE.createFixedPriceContract();
-		sc.setName("Sales Contract");
-		pc = CommercialFactory.eINSTANCE.createFixedPriceContract();
-		pc.setName("Purchase Contract");
-
-		sc.setEntity(e);
-		pc.setEntity(e);
-		sc.setPricePerMMBTU(dischargePrice);
-
-		commercialModel.getSalesContracts().add(sc);
-		commercialModel.getPurchaseContracts().add(pc);
+		sc = addSalesContract("Sales Contract", dischargePrice);
+		pc = addPurchaseContract("Purchase Contract");
 
 		Route r = PortFactory.eINSTANCE.createRoute();
 		r.setName(ScenarioTools.defaultRouteName);
@@ -649,5 +644,44 @@ public class CustomScenarioCreator {
 		}
 		return false;
 
+	}
+	
+	/**
+	 * Adds a sales contract to the model.
+	 *
+	 * @author Simon McGregor
+	 * @param name
+	 * @param dischargePrice
+	 * @return
+	 */
+	public SalesContract addSalesContract(String name, float dischargePrice) {
+		FixedPriceContract result = CommercialFactory.eINSTANCE.createFixedPriceContract();
+		result.setName(name);
+
+		result.setEntity(contractEntity);
+		result.setPricePerMMBTU(dischargePrice);
+
+		commercialModel.getSalesContracts().add(result);
+		
+		return result;
+	}
+
+	/**
+	 * Adds a purchase contract to the model.
+	 * 
+	 * @author Simon McGregor
+	 * @param name
+	 * @param dischargePrice
+	 * @return
+	 */
+	public SalesContract addPurchaseContract(String name) {
+		FixedPriceContract result = CommercialFactory.eINSTANCE.createFixedPriceContract();
+		result.setName(name);
+
+		result.setEntity(contractEntity);
+
+		commercialModel.getPurchaseContracts().add(result);
+		
+		return result;
 	}
 }
