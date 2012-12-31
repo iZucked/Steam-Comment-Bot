@@ -209,7 +209,9 @@ public class EObjectTableViewer extends GridTableViewer {
 
 		protected void missedNotifications(final List<Notification> missed) {
 			for (final Notification n : new ArrayList<Notification>(missed)) {
-				reallyNotifyChanged(n);
+				if (n != null) {
+					reallyNotifyChanged(n);
+				}
 			}
 		}
 
