@@ -29,8 +29,6 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 
 	private final ScenarioInstance scenarioInstance;
 
-	private IBatchValidator validator = null;
-
 	private final ValidationHelper helper;
 
 	private IExtraValidationContext extraContext;
@@ -84,13 +82,11 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 						modelRoots.add(subModel.getSubModelInstance());
 					}
 
-					createValidator();
-
 					IStatus status = null;
 					// Perform initial validation
 					if (claimValidationLock()) {
 						try {
-							status = helper.runValidation(validator, extraContext, modelRoots);
+							status = helper.runValidation(createValidator(), extraContext, modelRoots);
 
 						} finally {
 							releaseValidationLock();
@@ -128,12 +124,11 @@ public class ScenarioInstanceValidator extends MMXContentAdapter {
 		performValidation();
 	}
 
-	private void createValidator() {
-		if (validator == null) {
-			// Set up a batch validation
-			validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
-			validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
-		}
+	private IBatchValidator createValidator() {
+		// Set up a batch validation
+		final IBatchValidator validator = (IBatchValidator) ModelValidationService.getInstance().newValidator(EvaluationMode.BATCH);
+		validator.setOption(IBatchValidator.OPTION_INCLUDE_LIVE_CONSTRAINTS, true);
+		return validator;
 	}
 
 	protected boolean claimValidationLock() {
