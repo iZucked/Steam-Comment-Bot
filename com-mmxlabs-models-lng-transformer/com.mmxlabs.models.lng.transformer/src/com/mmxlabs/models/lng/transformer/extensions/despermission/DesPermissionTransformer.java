@@ -15,6 +15,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
@@ -55,26 +56,23 @@ public class DesPermissionTransformer implements IContractTransformer {
 		if (modelSlot instanceof LoadSlot && ((LoadSlot) modelSlot).isDESPurchase()) {
 			desPermissionProviderEditor.addDesPurchaseSlot(sequenceElement);
 		}
-		
-		/*
-		if (modelSlot instanceof DischargeSlot) {
+				
+		else if (modelSlot instanceof DischargeSlot) {
 			DischargeSlot dischargeSlot = (DischargeSlot) modelSlot;
 			boolean desPurchaseProhibited = false;
-			if (dischargeSlot.isDESPurchaseProhibited()) {
+			if (dischargeSlot.isSetPurchaseDeliveryType() && (dischargeSlot.getPurchaseDeliveryType() == CargoDeliveryType.SHIPPED)) {
 				desPurchaseProhibited = true;
 			}
 			else {
 				Contract contract = dischargeSlot.getContract();
-				if (contract instanceof SalesContract) {
-					if (((SalesContract) contract).isDESPurchaseProhibited()) {
-						desPurchaseProhibited = true;
-					}
+				if (contract instanceof SalesContract && (((SalesContract) contract).getPurchaseDeliveryType() == CargoDeliveryType.SHIPPED)) {
+					desPurchaseProhibited = true;					
 				}
 			}
 			if (desPurchaseProhibited) {
-				desPermissionProviderEditor.addDesPurchaseSlot(sequenceElement);
+				desPermissionProviderEditor.addDesProhibitedSalesSlot(sequenceElement);
 			}
-		} */				
+		} 				
 	}
 
 	@Override

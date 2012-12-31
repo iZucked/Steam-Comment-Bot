@@ -40,7 +40,7 @@ public class HashMapDesPermissionProvider implements IDesPermissionProviderEdito
 	public Collection<ISequenceElement> getRestrictedPrecedingElements(
 			ISequenceElement element) {
 		if (desProhibitedSalesSlots.contains(element)) {
-			return desProhibitedSalesSlots;
+			return desPurchaseSlots;
 		}
 		return Collections.emptySet();
 	}
