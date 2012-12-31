@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.ui.dates;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,11 +31,15 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	private final SimpleDateFormat consistentSlashDateTime = new SimpleDateFormat("yyyy/MM/dd HH:00");
 	private final SimpleDateFormat slashDateWithShortTime = new SimpleDateFormat("yyyy/MM/dd HH");
 
-	private final SimpleDateFormat[] tryOrder = new SimpleDateFormat[] { consistentDateTime, dateWithShortTime, consistentDate, consistentSlashDateTime, slashDateWithShortTime, consistentSlashDate };
+	private final DateFormat localeDate = DateFormat.getDateInstance();
+	private final DateFormat localeDateTime = DateFormat.getDateTimeInstance();
+
+	private final DateFormat[] tryOrder = new DateFormat[] { consistentDateTime, dateWithShortTime, consistentDate, consistentSlashDateTime, slashDateWithShortTime, consistentSlashDate,
+			localeDateTime, localeDate };
 
 	public DateAttributeImporter() {
 		final TimeZone utc = TimeZone.getTimeZone("UTC");
-		for (final SimpleDateFormat df : tryOrder) {
+		for (final DateFormat df : tryOrder) {
 			df.setTimeZone(utc);
 		}
 	}
@@ -48,7 +53,7 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	 */
 	public Date parseDate(final String dateString) throws ParseException {
 		// try parsing as a date and time
-		for (final SimpleDateFormat df : tryOrder) {
+		for (final DateFormat df : tryOrder) {
 			try {
 				final Date result = df.parse(dateString);
 				return result;
