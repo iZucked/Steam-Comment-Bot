@@ -31,16 +31,20 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 	private final SimpleDateFormat consistentSlashDateTime = new SimpleDateFormat("yyyy/MM/dd HH:00");
 	private final SimpleDateFormat slashDateWithShortTime = new SimpleDateFormat("yyyy/MM/dd HH");
 
+	private final SimpleDateFormat dayMonthYearDate = new SimpleDateFormat("dd-MM-yyyy");
+	private final SimpleDateFormat dayMonthYearSlashDate = new SimpleDateFormat("dd/MM/yyyy");
+
 	private final DateFormat localeDate = DateFormat.getDateInstance();
 	private final DateFormat localeDateTime = DateFormat.getDateTimeInstance();
 
 	private final DateFormat[] tryOrder = new DateFormat[] { consistentDateTime, dateWithShortTime, consistentDate, consistentSlashDateTime, slashDateWithShortTime, consistentSlashDate,
-			localeDateTime, localeDate };
+			dayMonthYearDate, dayMonthYearSlashDate, localeDateTime, localeDate };
 
 	public DateAttributeImporter() {
 		final TimeZone utc = TimeZone.getTimeZone("UTC");
 		for (final DateFormat df : tryOrder) {
 			df.setTimeZone(utc);
+			df.setLenient(false);
 		}
 	}
 
@@ -55,7 +59,7 @@ public class DateAttributeImporter extends DefaultAttributeImporter {
 		// try parsing as a date and time
 		for (final DateFormat df : tryOrder) {
 			try {
-				final Date result = df.parse(dateString);
+				final Date result = df.parse(dateString.trim());
 				return result;
 			} catch (final ParseException ex) {
 			}
