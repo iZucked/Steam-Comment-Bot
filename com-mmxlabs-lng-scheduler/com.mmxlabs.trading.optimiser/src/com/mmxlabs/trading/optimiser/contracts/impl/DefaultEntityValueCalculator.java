@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.detailtree.DetailTree;
 import com.mmxlabs.common.detailtree.IDetailTree;
+import com.mmxlabs.common.detailtree.impl.DurationDetailElement;
 import com.mmxlabs.common.detailtree.impl.TotalCostDetailElement;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -279,33 +280,38 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 			hireRate = null;
 			break;
 		}
+		final long planDuration = getPartialPlanDuration(plan, 1); // skip off the last port details, as we don't pay for that here.
 		final long hireCosts;
 		if (hireRate == null) {
 			hireCosts = 0;
 		} else {
-			final long planDuration = getPartialPlanDuration(plan, 1); // skip off the last port details, as we don't pay for that here.
 			final long hourlyCharterInPrice = (int) hireRate.getValueAtPoint(vesselStartTime);
 			hireCosts = hourlyCharterInPrice * (long) planDuration;
 		}
 		if (detailsRef != null) {
 			//
+
 			final DetailTree details = new DetailTree("Shipping Costs", new TotalCostDetailElement(shippingCosts + hireCosts + portCosts));
-			//
-			// details.addChild("Route Cost", new CurrencyDetailElement(plan.getTotalRouteCost()));
-			// details.addChild("Base Fuel", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base)));
-			// details.addChild("Base Fuel Supplement", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Base_Supplemental)));
-			// details.addChild("Cooldown", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.Cooldown)));
-			// details.addChild("Idle Base", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleBase)));
-			// details.addChild("Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.PilotLight)));
-			// details.addChild("Idle Pilot Light", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdlePilotLight)));
-			// if (includeLNG) {
-			// details.addChild("NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
-			// details.addChild("FBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.FBO)));
-			// details.addChild("Idle NBO", new CurrencyDetailElement(plan.getTotalFuelCost(FuelComponent.IdleNBO)));
-			// }
-			// details.addChild("Hire Costs", new CurrencyDetailElement(hireCosts));
-			// details.addChild("Port Costs", new CurrencyDetailElement(portCosts));
-			//
+			// Note: This is a hack to avoid changing the interface and the default case..... We need to decide on how to manage this whole property thing properly.
+			// If length == 2 rather than 1, grab all the details...
+			if (detailsRef.length == 2) {
+				//
+				details.addChild("Duration", new DurationDetailElement(planDuration));
+ 				details.addChild("Route Cost", new TotalCostDetailElement(plan.getTotalRouteCost()));
+				details.addChild("Base Fuel", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.Base)));
+				details.addChild("Base Fuel Supplement", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.Base_Supplemental)));
+				details.addChild("Cooldown", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.Cooldown)));
+				details.addChild("Idle Base", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.IdleBase)));
+				details.addChild("Pilot Light", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.PilotLight)));
+				details.addChild("Idle Pilot Light", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.IdlePilotLight)));
+				if (includeLNG) {
+					details.addChild("NBO", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.NBO)));
+					details.addChild("FBO", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.FBO)));
+					details.addChild("Idle NBO", new TotalCostDetailElement(plan.getTotalFuelCost(FuelComponent.IdleNBO)));
+				}
+				details.addChild("Hire Costs", new TotalCostDetailElement(hireCosts));
+				details.addChild("Port Costs", new TotalCostDetailElement(portCosts));
+			}
 			detailsRef[0] = details;
 		}
 
