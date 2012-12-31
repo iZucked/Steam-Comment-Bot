@@ -308,37 +308,46 @@ public class TradingExporterExtension implements IExporterExtension {
 		ad.setKey(details.getKey());
 
 		Object value = details.getValue();
+		boolean round = false;
+		boolean valueSet = false;
 		if (value instanceof IDetailTreeElement) {
 			final IDetailTreeElement element = (IDetailTreeElement) value;
 			value = element.getObject();
 			if (element instanceof CurrencyDetailElement) {
 				ad.setFormatType(ExtraDataFormatType.CURRENCY);
+				round = true;
 			} else if (element instanceof TotalCostDetailElement) {
+				round = true;
 				ad.setFormatType(ExtraDataFormatType.CURRENCY);
 			} else if (element instanceof UnitPriceDetailElement) {
-				ad.setFormatType(ExtraDataFormatType.CURRENCY);
+				ad.setFormatType(ExtraDataFormatType.STRING_FORMAT);
+				ad.setFormat("$%,f");
 			} else if (element instanceof DurationDetailElement) {
+				// Set value here to avoid scaling below. Force to an Int as ExtraDataImpl expects an Integer object.
 				ad.setFormatType(ExtraDataFormatType.DURATION);
+				ad.setValue(((Number) value).intValue());
+				valueSet = true;
 			}
 		}
-
-		if (value instanceof Serializable) {
-			if (value instanceof Integer) {
-				final int x = (Integer) value;
-				if (x % Calculator.ScaleFactor == 0) {
-					ad.setValue(x / Calculator.ScaleFactor);
+		if (!valueSet) {
+			if (value instanceof Serializable) {
+				if (value instanceof Integer) {
+					final int x = (Integer) value;
+					if (round || x % Calculator.ScaleFactor == 0) {
+						ad.setValue(x / Calculator.ScaleFactor);
+					} else {
+						ad.setValue(x / (double) Calculator.ScaleFactor);
+					}
+				} else if (value instanceof Long) {
+					final long x = (Long) value;
+					if (round || x % Calculator.ScaleFactor == 0) {
+						ad.setValue((int) (x / Calculator.ScaleFactor));
+					} else {
+						ad.setValue(x / (double) Calculator.ScaleFactor);
+					}
 				} else {
-					ad.setValue(x / (double) Calculator.ScaleFactor);
+					ad.setValue((Serializable) value);
 				}
-			} else if (value instanceof Long) {
-				final long x = (Long) value;
-				if (x % Calculator.ScaleFactor == 0) {
-					ad.setValue((int) (x / Calculator.ScaleFactor));
-				} else {
-					ad.setValue(x / (double) Calculator.ScaleFactor);
-				}
-			} else {
-				ad.setValue((Serializable) value);
 			}
 		}
 
