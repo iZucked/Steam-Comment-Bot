@@ -19,7 +19,9 @@ public class LiveEvaluatorStartupExtension implements IStartup {
 		final ICommandService service = (ICommandService) workbench.getService(ICommandService.class);
 
 		final Command command = service.getCommand("com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled");
-
+		if (command == null) {
+			return;
+		}
 		final State state = command.getState("org.eclipse.ui.commands.toggleState");
 
 		if (state != null && state.getValue() instanceof Boolean) {
@@ -28,10 +30,12 @@ public class LiveEvaluatorStartupExtension implements IStartup {
 			final BundleContext bundleContext = Activator.getDefault().getBundle().getBundleContext();
 			final ServiceReference<ILiveEvaluatorService> serviceReference = bundleContext.getServiceReference(ILiveEvaluatorService.class);
 
-			final ILiveEvaluatorService evaluatorService = bundleContext.getService(serviceReference);
+			if (serviceReference != null) {
+				final ILiveEvaluatorService evaluatorService = bundleContext.getService(serviceReference);
 
-			if (evaluatorService != null) {
-				evaluatorService.setLiveEvaluatorEnabled(enabled);
+				if (evaluatorService != null) {
+					evaluatorService.setLiveEvaluatorEnabled(enabled);
+				}
 			}
 		}
 	}
