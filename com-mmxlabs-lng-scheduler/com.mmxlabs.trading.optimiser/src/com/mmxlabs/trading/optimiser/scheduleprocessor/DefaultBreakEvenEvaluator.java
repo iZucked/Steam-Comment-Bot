@@ -6,6 +6,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
+import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntityValueCalculator;
@@ -15,6 +16,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocation
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
@@ -45,6 +47,9 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 	@Inject
 	private IPortCostProvider portCostProvider;
+
+	@Inject
+	private IPortSlotProvider portSlotProvider;
 
 	@Override
 	public void processSchedule(final ScheduledSequences scheduledSequences) {
@@ -153,20 +158,12 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 					((IBreakEvenPriceCalculator) originalLoad.getLoadPriceCalculator()).setPrice((int) breakEvenPurchasePricePerMMBTu);
 
-					// final ILoadOption beSlot;
-					// if (originalLoad instanceof ILoadSlot) {
-					// beSlot = new BELoadSlot((ILoadSlot) originalLoad, (int) breakEvenPurchasePricePerMMBTu);
-					// } else {
-					// beSlot = new BELoadOption(originalLoad, (int) breakEvenPurchasePricePerMMBTu);
-					// }
-					// PortDetails detail = (PortDetails) (currentSequence[loadIdx]);
-					// detail = detail.clone();
-					// detail.setPortSlot(beSlot);
-					// newSequence[loadIdx] = detail;
-
 					// Overwrite existing data
-					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
-
+					if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+						vp.setSequence(newSequence);
+					} else {
+						voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
+					}
 				} else if (missingSalesPrice) {
 
 					// Perform a binary search on sales price
@@ -191,30 +188,13 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 					// final IDischargeOption beSlot;
 					((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(breakEvenPricePerMMBtu);
-					// if (originalDischarge instanceof IDischargeSlot) {
-					// beSlot = new BEDischargeSlot((IDischargeSlot) originalDischarge, breakEvenPricePerMMBtu);
-					// } else {
-					// beSlot = new BEDischargeOption(originalDischarge, breakEvenPricePerMMBtu);
-					// }
-					//
-					// if (beSlot.hashCode() != originalDischarge.hashCode()) {
-					// int ii = 0;
-					// }
-					// if (!beSlot.equals(originalDischarge)) {
-					// int ii = 0;
-					// }
-					// if (!originalDischarge.equals(beSlot)) {
-					//
-					// originalDischarge.equals(beSlot);
-					// int ii = 0;
-					// }
 
-					// PortDetails detail = (PortDetails) (currentSequence[dischargeIdx]);
-					// detail = detail.clone();
-					// // detail.setPortSlot(beSlot);
-					// newSequence[dischargeIdx] = detail;
+					if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+						vp.setSequence(newSequence);
+					} else {
+						voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
+					}
 
-					voyageCalculator.calculateVoyagePlan(vp, vessel, arrivalTimes, newSequence);
 				}
 				//
 				// final VoyagePlan newVoyagePlan = new VoyagePlan();
@@ -242,23 +222,17 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 	private long evaluateSalesPrice(final ScheduledSequence seq, final IVessel vessel, final int[] arrivalTimes, final int dischargeIdx, final Object[] currentSequence,
 			final IDischargeOption originalDischarge, final Object[] newSequence, final int currentPricePerMMBTu) {
-		// Create new discharge slot with sales price option
-		// final IDischargeOption beSlot;
-		// if (originalDischarge instanceof IDischargeSlot) {
-		// beSlot = new BEDischargeSlot((IDischargeSlot) originalDischarge, currentPricePerMMBTu);
-		// } else {
-		// beSlot = new BEDischargeOption(originalDischarge, currentPricePerMMBTu);
-		// }
-		//
-		// PortDetails detail = (PortDetails) (currentSequence[dischargeIdx]);
-		// detail = detail.clone();
-		// detail.setPortSlot(beSlot);
-		// newSequence[dischargeIdx] = detail;
 
+		// Overwrite current break even price with test price
 		((IBreakEvenPriceCalculator) originalDischarge.getDischargePriceCalculator()).setPrice(currentPricePerMMBTu);
 
 		final VoyagePlan newVoyagePlan = new VoyagePlan();
-		voyageCalculator.calculateVoyagePlan(newVoyagePlan, vessel, arrivalTimes, newSequence);
+
+		if (vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) {
+			newVoyagePlan.setSequence(currentSequence);
+		} else {
+			voyageCalculator.calculateVoyagePlan(newVoyagePlan, vessel, arrivalTimes, newSequence);
+		}
 		final IAllocationAnnotation newAllocation = cargoAllocator.allocate(vessel, newVoyagePlan, arrivalTimes);
 		final long newPnLValue = entityValueCalculator.evaluate(newVoyagePlan, newAllocation, vessel, seq.getStartTime(), null);
 		return newPnLValue;
