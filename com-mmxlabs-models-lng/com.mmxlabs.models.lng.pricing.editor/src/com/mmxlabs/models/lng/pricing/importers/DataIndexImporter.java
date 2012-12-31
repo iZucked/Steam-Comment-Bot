@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -58,12 +59,12 @@ public class DataIndexImporter implements IClassImporter {
 	 * @param parseAsInt
 	 *            the parseAsInt to set
 	 */
-	public void setParseAsInt(boolean parseAsInt) {
+	public void setParseAsInt(final boolean parseAsInt) {
 		this.parseAsInt = parseAsInt;
 	}
 
 	@Override
-	public Collection<EObject> importObjects(EClass targetClass, CSVReader reader, IImportContext context) {
+	public Collection<EObject> importObjects(final EClass targetClass, final CSVReader reader, final IImportContext context) {
 		final List<EObject> result = new LinkedList<EObject>();
 
 		Map<String, String> row;
@@ -72,7 +73,7 @@ public class DataIndexImporter implements IClassImporter {
 			while (null != (row = reader.readRow())) {
 				result.addAll(importObject(targetClass, row, context));
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			context.addProblem(context.createProblem("IO Error " + e.getMessage(), true, true, false));
 		} finally {
 			context.popReader();
@@ -82,7 +83,7 @@ public class DataIndexImporter implements IClassImporter {
 	}
 
 	@Override
-	public Collection<EObject> importObject(EClass targetClass, Map<String, String> row, IImportContext context) {
+	public Collection<EObject> importObject(final EClass targetClass, final Map<String, String> row, final IImportContext context) {
 		final Index<Number> result;
 		if (row.containsKey(EXPRESSION)) {
 			if (row.get(EXPRESSION).isEmpty() == false) {
@@ -107,7 +108,7 @@ public class DataIndexImporter implements IClassImporter {
 			for (final String s : row.keySet()) {
 				try {
 					final Date date = dateParser.parseDate(s);
-					Calendar c = Calendar.getInstance();
+					final Calendar c = Calendar.getInstance();
 					c.setTime(date);
 					// Set back to start of month
 					c.set(Calendar.DAY_OF_MONTH, 1);
@@ -124,10 +125,10 @@ public class DataIndexImporter implements IClassImporter {
 						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.25
 						// @see http://docs.oracle.com/javase/specs/jls/se7/html/jls-5.html#jls-5.6.2
 						if (parseAsInt) {
-							int value = Integer.parseInt(row.get(s));
+							final int value = Integer.parseInt(row.get(s));
 							n = value;
 						} else {
-							double value = Double.parseDouble(row.get(s));
+							final double value = Double.parseDouble(row.get(s));
 							n = value;
 						}
 
@@ -138,7 +139,7 @@ public class DataIndexImporter implements IClassImporter {
 					} catch (final NumberFormatException nfe) {
 						context.addProblem(context.createProblem("The value " + row.get(s) + " is not a number", true, true, true));
 					}
-				} catch (ParseException ex) {
+				} catch (final ParseException ex) {
 					if (s.equals(NAME) == false && s.equals(EXPRESSION) == false) {
 						context.addProblem(context.createProblem("The field " + s + " is not a date", true, false, true));
 					}
@@ -151,7 +152,7 @@ public class DataIndexImporter implements IClassImporter {
 					if (row.get(s).isEmpty() == false) {
 						context.addProblem(context.createProblem("Indices with an expression should not have any values set", true, true, true));
 					}
-				} catch (ParseException ex) {
+				} catch (final ParseException ex) {
 
 				}
 			}
@@ -163,12 +164,30 @@ public class DataIndexImporter implements IClassImporter {
 	}
 
 	@Override
-	public Collection<Map<String, String>> exportObjects(Collection<? extends EObject> objects, MMXRootObject root) {
+	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
 		final List<Map<String, String>> result = new ArrayList<Map<String, String>>();
 		for (final EObject o : objects) {
 			if (o instanceof DataIndex) {
 				final DataIndex<Number> i = (DataIndex) o;
-				final Map<String, String> row = new TreeMap<String, String>();
+				// Date sort columns, nut keep "name" column at start
+				final Map<String, String> row = new TreeMap<String, String>(new Comparator<String>() {
+
+					@Override
+					public int compare(final String o1, final String o2) {
+
+						// Always sort name column first
+						if (NAME.equals(o1) && NAME.equals(o2)) {
+							return 0;
+						}
+						if (NAME.equals(o1)) {
+							return -1;
+						} else if (NAME.equals(o2)) {
+							return 1;
+						}
+
+						return o1.compareTo(o2);
+					}
+				});
 				row.put(NAME, i.getName());
 				for (final IndexPoint<Number> pt : i.getPoints()) {
 					final Number n = pt.getValue();
