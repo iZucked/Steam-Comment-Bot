@@ -65,6 +65,7 @@ import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class ShippingCostsView extends ScenarioInstanceView {
 
@@ -423,18 +424,28 @@ public class ShippingCostsView extends ScenarioInstanceView {
 				if (settings.isEmpty()) {
 					return;
 				}
-				// now create an add command, which will include adding any
-				// other relevant objects
-				final CompoundCommand add = new CompoundCommand();
-				for (final ISetting setting : settings) {
-					final EObject instance = setting.getInstance();
-					final DetailCompositeDialog dialog = new DetailCompositeDialog(getSite().getShell(), getDefaultCommandHandler());
-					if (dialog.open(ShippingCostsView.this, rootObject, Collections.singletonList(instance)) == Window.OK) {
-						add.append(AddCommand.create(getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+
+				final ScenarioLock editorLock = getEditorLock();
+				try {
+					editorLock.claim();
+					setDisableUpdates(true);
+
+					// now create an add command, which will include adding any
+					// other relevant objects
+					final CompoundCommand add = new CompoundCommand();
+					for (final ISetting setting : settings) {
+						final EObject instance = setting.getInstance();
+						final DetailCompositeDialog dialog = new DetailCompositeDialog(getSite().getShell(), getDefaultCommandHandler());
+						if (dialog.open(ShippingCostsView.this, rootObject, Collections.singletonList(instance)) == Window.OK) {
+							add.append(AddCommand.create(getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+						}
 					}
+					getEditingDomain().getCommandStack().execute(add);
+					selectionViewer.refresh();
+				} finally {
+					setDisableUpdates(false);
+					editorLock.release();
 				}
-				getEditingDomain().getCommandStack().execute(add);
-				selectionViewer.refresh();
 			}
 		};
 	}
