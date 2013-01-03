@@ -16,7 +16,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
  */
 public abstract class AbstractPairwiseConstraintChecker implements IPairwiseConstraintChecker {
 
-	private final String name;
+	protected final String name;
 
 	public AbstractPairwiseConstraintChecker(final String name) {
 		this.name = name;
