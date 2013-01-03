@@ -16,6 +16,8 @@ import com.google.inject.AbstractModule;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsTransformerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
@@ -71,6 +73,7 @@ public class ContractExtensionTestModule extends AbstractModule {
 			transformerExtensionFactories.add(new SimpleContractTransformerFactory());
 			transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
 			transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
+			transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
 			bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
 			final List<IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<IExporterExtensionFactory>();
@@ -132,6 +135,8 @@ public class ContractExtensionTestModule extends AbstractModule {
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new RestrictedElementsConstraintCheckerFactory());
 
 		constraintCheckerRegistry.registerConstraintCheckerFactory(new ContractCvConstraintCheckerFactory());
+
+		constraintCheckerRegistry.registerConstraintCheckerFactory(new ShippingTypeRequirementConstraintCheckerFactory());
 
 		return constraintCheckerRegistry;
 	}
