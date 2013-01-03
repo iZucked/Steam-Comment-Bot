@@ -25,6 +25,7 @@ import com.mmxlabs.models.ui.validation.IExtraValidationContext;
  * @author Simon McGregor
  * 
  * Utility class to provide methods for help when validating contract constraints. 
+ * @since 2.0
  *
  */
 public class ContractConstraints {
