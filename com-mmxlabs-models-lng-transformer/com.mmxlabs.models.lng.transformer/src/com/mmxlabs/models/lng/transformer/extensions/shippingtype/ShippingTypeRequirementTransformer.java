@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.transformer.extensions.despermission;
+package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
 import java.util.Collection;
 import java.util.Collections;

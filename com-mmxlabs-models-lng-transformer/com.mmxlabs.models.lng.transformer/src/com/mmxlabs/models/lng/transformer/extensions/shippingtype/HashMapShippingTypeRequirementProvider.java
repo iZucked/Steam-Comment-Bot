@@ -1,17 +1,17 @@
-package com.mmxlabs.models.lng.transformer.extensions.despermission;
+package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
 import java.util.HashMap;
 
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 
-public class ShippingTypeRequirementProvider implements IShippingTypeRequirementProviderEditor {
+public class HashMapShippingTypeRequirementProvider implements IShippingTypeRequirementProviderEditor {
 	final String name;
 	
 	final HashMap<ISequenceElement, CargoDeliveryType> salesSlotsShippingRequirements = new HashMap<ISequenceElement, CargoDeliveryType>();
 	final HashMap<ISequenceElement, CargoDeliveryType> purchaseSlotsShippingTypes = new HashMap<ISequenceElement, CargoDeliveryType>();
 
-	public ShippingTypeRequirementProvider(String name) {
+	public HashMapShippingTypeRequirementProvider(String name) {
 		this.name = name;
 	}
 

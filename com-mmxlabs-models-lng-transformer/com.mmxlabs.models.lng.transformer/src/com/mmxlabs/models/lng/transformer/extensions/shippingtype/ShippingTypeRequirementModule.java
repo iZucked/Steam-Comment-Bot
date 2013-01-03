@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.transformer.extensions.despermission;
+package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
 import java.util.Collections;
 import java.util.EnumMap;
@@ -41,7 +41,7 @@ public class ShippingTypeRequirementModule extends PeaberryActivationModule {
 		@Override
 		protected void configure() {
 
-			final ShippingTypeRequirementProvider desPermissionProviderEditor = new ShippingTypeRequirementProvider(DCP_desPermissionElementProvider);
+			final HashMapShippingTypeRequirementProvider desPermissionProviderEditor = new HashMapShippingTypeRequirementProvider(DCP_desPermissionElementProvider);
 			bind(IShippingTypeRequirementProvider.class).toInstance(desPermissionProviderEditor);
 			bind(IShippingTypeRequirementProviderEditor.class).toInstance(desPermissionProviderEditor);
 		}

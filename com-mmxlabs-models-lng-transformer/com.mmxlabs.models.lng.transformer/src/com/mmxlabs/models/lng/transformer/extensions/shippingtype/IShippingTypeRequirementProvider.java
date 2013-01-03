@@ -1,4 +1,4 @@
-package com.mmxlabs.models.lng.transformer.extensions.despermission;
+package com.mmxlabs.models.lng.transformer.extensions.shippingtype;
 
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.ISequenceElement;
