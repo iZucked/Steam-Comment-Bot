@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
@@ -92,9 +91,10 @@ public class SalesContractComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the PurchaseDeliveryType feature on SalesContract
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_PurchaseDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
+		detailComposite.addInlineEditor(new EENumInlineEditor(CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
 	}
 }
