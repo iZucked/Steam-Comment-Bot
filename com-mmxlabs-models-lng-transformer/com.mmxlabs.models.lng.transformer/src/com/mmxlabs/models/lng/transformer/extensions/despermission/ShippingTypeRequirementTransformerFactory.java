@@ -6,11 +6,11 @@ import com.mmxlabs.models.lng.transformer.inject.ITransformerExtensionFactory;
 /**
  * @since 2.0
  */
-public class DesPermissionTransformerFactory implements ITransformerExtensionFactory {
+public class ShippingTypeRequirementTransformerFactory implements ITransformerExtensionFactory {
 
 	@Override
 	public ITransformerExtension createInstance() {
-		return new DesPermissionTransformer();
+		return new ShippingTypeRequirementTransformer();
 	}
 
 }

@@ -27,10 +27,10 @@ import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 /**
  * @since 2.0
  */
-public class DesPermissionTransformer implements IContractTransformer {
+public class ShippingTypeRequirementTransformer implements IContractTransformer {
 
 	@Inject
-	private IDesPermissionProviderEditor desPermissionProviderEditor;
+	private IShippingTypeRequirementProviderEditor desPermissionProviderEditor;
 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
@@ -53,24 +53,30 @@ public class DesPermissionTransformer implements IContractTransformer {
 	public void slotTransformed(final Slot modelSlot, final IPortSlot optimiserSlot) {
 		final ISequenceElement sequenceElement = portSlotProvider.getElement(optimiserSlot);
 
-		if (modelSlot instanceof LoadSlot && ((LoadSlot) modelSlot).isDESPurchase()) {
-			desPermissionProviderEditor.addDesPurchaseSlot(sequenceElement);
+		if (modelSlot instanceof LoadSlot) {
+			if (((LoadSlot) modelSlot).isDESPurchase()) {
+				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.DELIVERED);
+			}
+			else {
+				desPermissionProviderEditor.setPurchaseSlotDeliveryType(sequenceElement, CargoDeliveryType.SHIPPED);				
+			}
 		}
 				
 		else if (modelSlot instanceof DischargeSlot) {
 			DischargeSlot dischargeSlot = (DischargeSlot) modelSlot;
-			boolean desPurchaseProhibited = false;
-			if (dischargeSlot.isSetPurchaseDeliveryType() && (dischargeSlot.getPurchaseDeliveryType() == CargoDeliveryType.SHIPPED)) {
-				desPurchaseProhibited = true;
+			CargoDeliveryType cargoType = CargoDeliveryType.ANY;
+			
+			if (dischargeSlot.isSetPurchaseDeliveryType()) {
+				cargoType = dischargeSlot.getPurchaseDeliveryType();
 			}
 			else {
 				Contract contract = dischargeSlot.getContract();
-				if (contract instanceof SalesContract && (((SalesContract) contract).getPurchaseDeliveryType() == CargoDeliveryType.SHIPPED)) {
-					desPurchaseProhibited = true;					
+				if (contract instanceof SalesContract) {
+					cargoType = ((SalesContract) contract).getPurchaseDeliveryType();					
 				}
 			}
-			if (desPurchaseProhibited) {
-				desPermissionProviderEditor.addDesProhibitedSalesSlot(sequenceElement);
+			if (cargoType != CargoDeliveryType.ANY) {
+				desPermissionProviderEditor.setSalesSlotRequiredPurchaseType(sequenceElement, cargoType);
 			}
 		} 				
 	}

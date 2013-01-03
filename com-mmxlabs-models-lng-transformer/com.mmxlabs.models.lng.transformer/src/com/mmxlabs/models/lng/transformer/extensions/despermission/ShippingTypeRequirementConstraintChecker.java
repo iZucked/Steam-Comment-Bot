@@ -3,6 +3,7 @@ package com.mmxlabs.models.lng.transformer.extensions.despermission;
 import java.util.List;
 
 import com.google.inject.Inject;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -19,12 +20,12 @@ import com.mmxlabs.scheduler.optimiser.providers.PortType;
  * 
  * @since 2.0
  */
-public class DesPermissionConstraintChecker implements IPairwiseConstraintChecker {
+public class ShippingTypeRequirementConstraintChecker implements IPairwiseConstraintChecker {
 
 	private final String name;
 
 	@Inject
-	private IDesPermissionProvider desPermissionProvider;
+	private IShippingTypeRequirementProvider desPermissionProvider;
 
 	@Inject
 	private IVesselProvider vesselProvider;
@@ -32,7 +33,7 @@ public class DesPermissionConstraintChecker implements IPairwiseConstraintChecke
 	@Inject
 	private IPortTypeProvider portTypeProvider;
 
-	public DesPermissionConstraintChecker(final String name) {
+	public ShippingTypeRequirementConstraintChecker(final String name) {
 		this.name = name;
 	}
 
@@ -84,8 +85,13 @@ public class DesPermissionConstraintChecker implements IPairwiseConstraintChecke
 			}
 		}
 
-		final boolean result = !desPermissionProvider.getRestrictedFollowerElements(first).contains(second) && !desPermissionProvider.getRestrictedPrecedingElements(second).contains(first);
-		return result;
+		CargoDeliveryType requiredShippingType = desPermissionProvider.getSalesSlotRequiredDeliveryType(second);
+		
+		if (requiredShippingType != null) {
+			return requiredShippingType == desPermissionProvider.getPurchaseSlotDeliveryType(first);
+		}
+
+		return true;
 	}
 
 	@Override

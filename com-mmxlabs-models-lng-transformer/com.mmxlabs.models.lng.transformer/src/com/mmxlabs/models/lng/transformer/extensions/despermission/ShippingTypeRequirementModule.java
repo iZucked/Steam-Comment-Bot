@@ -21,7 +21,7 @@ import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
  * @since 2.0
  * 
  */
-public class DesPermissionModule extends PeaberryActivationModule {
+public class ShippingTypeRequirementModule extends PeaberryActivationModule {
 
 	public static final String DCP_desPermissionElementProvider = "provider-DES-permissions";
 
@@ -41,9 +41,9 @@ public class DesPermissionModule extends PeaberryActivationModule {
 		@Override
 		protected void configure() {
 
-			final HashMapDesPermissionProvider desPermissionProviderEditor = new HashMapDesPermissionProvider(DCP_desPermissionElementProvider);
-			bind(IDesPermissionProvider.class).toInstance(desPermissionProviderEditor);
-			bind(IDesPermissionProviderEditor.class).toInstance(desPermissionProviderEditor);
+			final ShippingTypeRequirementProvider desPermissionProviderEditor = new ShippingTypeRequirementProvider(DCP_desPermissionElementProvider);
+			bind(IShippingTypeRequirementProvider.class).toInstance(desPermissionProviderEditor);
+			bind(IShippingTypeRequirementProviderEditor.class).toInstance(desPermissionProviderEditor);
 		}
 	}
 

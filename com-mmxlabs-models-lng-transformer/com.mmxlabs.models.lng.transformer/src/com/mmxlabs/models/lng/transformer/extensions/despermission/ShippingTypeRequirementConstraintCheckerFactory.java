@@ -8,12 +8,12 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
 
 /**
- * {@link IConstraintCheckerFactory} implementation to create {@link DesPermissionConstraintChecker} instances.
+ * {@link IConstraintCheckerFactory} implementation to create {@link ShippingTypeRequirementConstraintChecker} instances.
  * 
  * @author Simon Goodall
  * @since 2.0
  */
-public final class DesPermissionConstraintCheckerFactory implements IConstraintCheckerFactory {
+public final class ShippingTypeRequirementConstraintCheckerFactory implements IConstraintCheckerFactory {
 
 	public static final String NAME = "RestrictedElementsConstraintChecker";
 
@@ -24,6 +24,6 @@ public final class DesPermissionConstraintCheckerFactory implements IConstraintC
 
 	@Override
 	public IConstraintChecker instantiate() {
-		return new DesPermissionConstraintChecker(NAME);
+		return new ShippingTypeRequirementConstraintChecker(NAME);
 	}
 }
