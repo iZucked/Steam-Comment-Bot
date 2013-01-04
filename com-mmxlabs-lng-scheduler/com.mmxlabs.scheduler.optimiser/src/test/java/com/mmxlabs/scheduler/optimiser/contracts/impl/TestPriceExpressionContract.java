@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Matchers;
 
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
