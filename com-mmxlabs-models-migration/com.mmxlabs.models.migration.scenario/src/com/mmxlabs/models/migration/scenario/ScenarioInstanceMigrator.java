@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 
 import com.mmxlabs.models.migration.IMigrationRegistry;
@@ -25,10 +26,12 @@ public class ScenarioInstanceMigrator {
 	}
 
 	public void performMigration(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) throws Exception {
-		final String context = "";//scenarioInstance.getMigrationContext();
+		final String context = scenarioInstance.getMigrationContext();
 		final int latestVersion = migrationRegistry.getLatestContextVersion(context);
-		final int scenarioVersion = 0;//scenarioInstance.getScenarioVersion();
+		final int scenarioVersion = scenarioInstance.getScenarioVersion();
 		final EList<String> subModelURIs = scenarioInstance.getSubModelURIs();
+
+		final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 
 		// Get original URI's as a list
 		final List<URI> uris = new ArrayList<URI>();
@@ -41,19 +44,21 @@ public class ScenarioInstanceMigrator {
 		try {
 			// Copy data files for manipulation
 			final List<URI> tmpURIs = new ArrayList<URI>();
-			final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 			for (final URI uri : uris) {
-				// Create a temp file and generate a URI to it to pass into migration code.
 				final File f = File.createTempFile("migration", "xmi");
+				// Create a temp file and generate a URI to it to pass into migration code.
 				final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
 				copyURIData(uc, uri, tmpURI);
 
 				// Store the URI
 				tmpURIs.add(tmpURI);
+				// Add a mapping between the original URI and the temp URI. This should permit internal references to resolve to the new data file.
+				// TODO: Check to see whether or not the URI is the original URI or the "resolved" uri.
+				uc.getURIMap().put(uri, tmpURI);
 			}
 
 			// Apply Migration Chain
-			applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs);
+			applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
 
 			// Copy back over original data
 			for (int i = 0; i < uris.size(); ++i) {
@@ -67,17 +72,17 @@ public class ScenarioInstanceMigrator {
 		}
 	}
 
-	public void applyMigrationChain(final String context, final int scenarioVersion, final int latestVersion, final List<URI> tmpURIs) throws Exception {
+	public void applyMigrationChain(final String context, final int scenarioVersion, final int latestVersion, final List<URI> tmpURIs, URIConverter uc) throws Exception {
 
 		final List<IMigrationUnit> chain = migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion);
 
 		for (final IMigrationUnit unit : chain) {
 
-			unit.migrate(tmpURIs);
+			unit.migrate(tmpURIs, uc);
 		}
 	}
 
-	private void copyURIData(final ExtensibleURIConverterImpl uc, final URI uri, final URI tmpURI) throws IOException {
+	public void copyURIData(final ExtensibleURIConverterImpl uc, final URI uri, final URI tmpURI) throws IOException {
 		InputStream is = null;
 		OutputStream os = null;
 		try {
