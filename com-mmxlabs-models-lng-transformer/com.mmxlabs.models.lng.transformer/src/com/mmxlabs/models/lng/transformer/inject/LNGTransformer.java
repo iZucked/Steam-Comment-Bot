@@ -85,9 +85,13 @@ public class LNGTransformer {
 						bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
 					}
 				};
-				tmpInjector = Guice.createInjector(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()), optimiserInjectorServiceModule);
-				final Key<Iterable<? extends IOptimiserInjectorService>> key = Key.<Iterable<? extends IOptimiserInjectorService>> get(TypeLiterals.iterable(IOptimiserInjectorService.class));
-				this.extraModules = (Iterable<IOptimiserInjectorService>) tmpInjector.getInstance(key);
+				List<Module> m = new ArrayList<Module>(3);
+				m.add(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()));
+				m.add(optimiserInjectorServiceModule);
+				if (module != null) {
+					m.add(module);
+				}
+				tmpInjector = Guice.createInjector(m);
 			} else if (module != null) {
 				tmpInjector = Guice.createInjector(module);
 			} else {
