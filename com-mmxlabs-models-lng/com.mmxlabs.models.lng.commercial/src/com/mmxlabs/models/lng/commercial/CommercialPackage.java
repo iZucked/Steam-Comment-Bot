@@ -509,6 +509,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -816,6 +817,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -993,6 +995,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1956,6 +1959,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2257,6 +2261,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Purchase Delivery Type</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType()
@@ -2947,6 +2952,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Purchase Delivery Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

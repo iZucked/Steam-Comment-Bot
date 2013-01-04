@@ -227,4 +227,25 @@
        </FeatureAnyOf>
     </editorFactory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.Contract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory_Contract"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.SalesContract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory_SalesContract"
+          inheritable="true">
+    </displayCompositeFactory>
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.PurchaseContract"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.ContractCompositeFactory_PurchaseContract"
+          inheritable="true">
+    </displayCompositeFactory>
+ </extension>
 </plugin>
