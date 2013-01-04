@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<feature
+      id="com.mmxlabs.models.migration.feature"
+      label="Model Migration Feature"
+      version="1.0.0.qualifier"
+      provider-name="Minimax Labs Ltd.">
+
+   <description url="http://www.example.com/description">
+      [Enter Feature Description here.]
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="com.mmxlabs.trading.integration"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.trading.optimiser"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

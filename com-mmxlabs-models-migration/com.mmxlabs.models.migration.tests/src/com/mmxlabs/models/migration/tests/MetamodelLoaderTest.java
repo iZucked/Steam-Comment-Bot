@@ -1,0 +1,169 @@
+package com.mmxlabs.models.migration.tests;
+
+import java.net.URL;
+
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EFactory;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.junit.Assert;
+import org.junit.Test;
+
+import com.mmxlabs.models.migration.utils.MetamodelLoader;
+
+public class MetamodelLoaderTest {
+
+	@Test
+	public void testSingleModel() {
+
+		final MetamodelLoader loader = new MetamodelLoader();
+
+		// Test load
+		final URL resourceURL = getClass().getResource("/model-v1.ecore");
+		final EPackage pkg1 = loader.loadEPackage(URI.createURI(resourceURL.toString()), "");
+		Assert.assertNotNull(pkg1);
+
+		// Test re-used reference
+		final EPackage pkg2 = loader.loadEPackage(URI.createURI(resourceURL.toString()), "");
+		Assert.assertNotNull(pkg2);
+
+		Assert.assertSame(pkg1, pkg2);
+	}
+
+	@Test
+	public void testMultipleModels() {
+
+		final MetamodelLoader loader = new MetamodelLoader();
+
+		// Test load
+
+		final URL resourceURL_V1 = getClass().getResource("/model-v1.ecore");
+		final EPackage v1_pkg1 = loader.loadEPackage(URI.createURI(resourceURL_V1.toString()), "");
+		Assert.assertNotNull(v1_pkg1);
+		final URL resourceURL_V2 = getClass().getResource("/model-v2.ecore");
+		final EPackage v2_pkg1 = loader.loadEPackage(URI.createURI(resourceURL_V2.toString()), "");
+		Assert.assertNotNull(v2_pkg1);
+		final URL resourceURL_V3 = getClass().getResource("/model-v3.ecore");
+		final EPackage v3_pkg1 = loader.loadEPackage(URI.createURI(resourceURL_V3.toString()), "");
+		Assert.assertNotNull(v3_pkg1);
+
+		// Test re-used reference
+		final EPackage v1_pkg2 = loader.loadEPackage(URI.createURI(resourceURL_V1.toString()), "");
+		Assert.assertNotNull(v1_pkg2);
+
+		final EPackage v2_pkg2 = loader.loadEPackage(URI.createURI(resourceURL_V2.toString()), "");
+		Assert.assertNotNull(v2_pkg2);
+
+		final EPackage v3_pkg2 = loader.loadEPackage(URI.createURI(resourceURL_V3.toString()), "");
+		Assert.assertNotNull(v3_pkg2);
+
+		Assert.assertSame(v1_pkg1, v1_pkg2);
+		Assert.assertSame(v2_pkg1, v2_pkg2);
+		Assert.assertSame(v3_pkg1, v3_pkg2);
+	}
+
+	/**
+	 * Load both model references and ensure references in the the super-model can be resolved from sub-model instances.
+	 */
+	@Test
+	public void testSingleSubModel() {
+
+		final MetamodelLoader loader = new MetamodelLoader();
+
+		// Test load
+		final URL subResourceURL = getClass().getResource("/sub-model-v1.ecore");
+		final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()), "");
+		Assert.assertNotNull(subPackage);
+
+		// Test re-used reference
+		final URL resourceURL = getClass().getResource("/model-v1.ecore");
+		final EPackage pkg = loader.loadEPackage(URI.createURI(resourceURL.toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
+		Assert.assertNotNull(pkg);
+
+		final EClass subClassA = (EClass) subPackage.getEClassifier("SubClassA");
+		Assert.assertNotNull(subClassA);
+
+		final EClass classA = (EClass) pkg.getEClassifier("ClassA");
+		Assert.assertNotNull(classA);
+
+		final EFactory subFactory = subPackage.getEFactoryInstance();
+
+		final EObject object = subFactory.create(subClassA);
+		Assert.assertNotNull(object);
+
+		final EStructuralFeature attributeA = classA.getEStructuralFeature("attributeA");
+
+		object.eSet(attributeA, 1);
+		Assert.assertEquals(1, ((Integer) object.eGet(attributeA)).intValue());
+	}
+
+	/**
+	 * Load both model references and ensure references in the the super-model can be resolved from sub-model instances.
+	 */
+	@Test
+	public void testMultiInstanceLoad() {
+		{
+			final MetamodelLoader loader = new MetamodelLoader();
+
+			// Test load
+			final URL subResourceURL = getClass().getResource("/sub-model-v1.ecore");
+			final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()), "");
+			Assert.assertNotNull(subPackage);
+
+			// Test re-used reference
+			final URL resourceURL = getClass().getResource("/model-v1.ecore");
+			final EPackage pkg = loader.loadEPackage(URI.createURI(resourceURL.toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
+			Assert.assertNotNull(pkg);
+
+			final EClass subClassA = (EClass) subPackage.getEClassifier("SubClassA");
+			Assert.assertNotNull(subClassA);
+
+			final EClass classA = (EClass) pkg.getEClassifier("ClassA");
+			Assert.assertNotNull(classA);
+
+			final EFactory subFactory = subPackage.getEFactoryInstance();
+
+			final EObject object = subFactory.create(subClassA);
+			Assert.assertNotNull(object);
+
+			final EStructuralFeature attributeA = classA.getEStructuralFeature("attributeB");
+
+			object.eSet(attributeA, 1);
+			Assert.assertEquals(1, ((Integer) object.eGet(attributeA)).intValue());
+		}
+
+		{
+			// Create second instance
+			final MetamodelLoader loader = new MetamodelLoader();
+
+			// Test load
+			final URL subResourceURL = getClass().getResource("/sub-model-v2.ecore");
+			final EPackage subPackage = loader.loadEPackage(URI.createURI(subResourceURL.toString()), "");
+			Assert.assertNotNull(subPackage);
+
+			// Test re-used reference
+			final URL resourceURL = getClass().getResource("/model-v2.ecore");
+			final EPackage pkg = loader.loadEPackage(URI.createURI(resourceURL.toString()), "platform:/plugin/com.mmxlabs.models.migration.tests/models/model.ecore");
+			Assert.assertNotNull(pkg);
+
+			final EClass subClassA = (EClass) subPackage.getEClassifier("SubClassA");
+			Assert.assertNotNull(subClassA);
+
+			final EClass classA = (EClass) pkg.getEClassifier("ClassA");
+			Assert.assertNotNull(classA);
+
+			final EFactory subFactory = subPackage.getEFactoryInstance();
+
+			final EObject object = subFactory.create(subClassA);
+			Assert.assertNotNull(object);
+
+			final EStructuralFeature attributeA = classA.getEStructuralFeature("attributeC");
+
+			object.eSet(attributeA, 1);
+			Assert.assertEquals(1, ((Integer) object.eGet(attributeA)).intValue());
+		}
+	}
+
+}
