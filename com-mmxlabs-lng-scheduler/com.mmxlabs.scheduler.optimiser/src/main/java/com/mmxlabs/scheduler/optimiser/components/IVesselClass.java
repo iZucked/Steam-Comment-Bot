@@ -53,6 +53,7 @@ public interface IVesselClass {
 	 * 
 	 * @param portType
 	 * @return
+	 * @since 2.0
 	 */
 
 	long getInPortConsumptionRate(PortType portType);

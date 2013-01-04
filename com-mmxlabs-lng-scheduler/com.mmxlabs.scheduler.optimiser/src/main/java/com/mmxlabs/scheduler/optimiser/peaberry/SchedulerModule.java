@@ -17,6 +17,9 @@ import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.IInitialSequenceBu
 import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.lso.LegalSequencingChecker;
 
+/**
+ * @since 2.0
+ */
 public class SchedulerModule extends AbstractModule {
 
 	@Override

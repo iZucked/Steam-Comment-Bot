@@ -19,6 +19,7 @@ import com.mmxlabs.optimiser.lso.IMove;
  * Swap one element for another within a single {@link ISequence}.
  * 
  * @author Simon Goodall
+ * @since 2.0
  * 
  */
 public class SwapSingleSequenceElements implements IMove {

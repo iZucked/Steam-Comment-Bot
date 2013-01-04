@@ -454,6 +454,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return element;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public IDischargeSlot createDischargeSlot(final String id, final IPort port, final ITimeWindow window, final long minVolumeInM3, final long maxVolumeInM3,
 			final long minCvValue, final long maxCvValue,
@@ -1090,6 +1093,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 		return vesselClass;
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public void setVesselClassStateParameters(final IVesselClass vesselClass, final VesselState state, final int nboRateInM3PerHour, final int idleNBORateInM3PerHour,
 			final int idleConsumptionRateInMTPerHour, final IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, final int nboSpeed) {
@@ -1123,6 +1129,7 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 	 * @param idleNBORateInM3PerHour
 	 * @param idleConsumptionRateInMTPerHour
 	 * @param consumptionCalculatorInMTPerHour
+	 * @since 2.0
 	 */
 	
 	@Override
@@ -1138,6 +1145,9 @@ public final class SchedulerBuilder implements ISchedulerBuilder {
 				nboSpeed);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public void setVesselClassPortTypeParameters(IVesselClass vc,
 			PortType portType, int inPortConsumptionRateInMTPerHour) {

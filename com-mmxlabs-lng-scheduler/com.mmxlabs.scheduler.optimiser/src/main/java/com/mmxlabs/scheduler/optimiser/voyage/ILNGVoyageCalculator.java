@@ -61,6 +61,7 @@ public interface ILNGVoyageCalculator {
 	 * @author Simon McGregor
 	 * @param sequence
 	 * @return Returns a new sequence of appropriate Details objects with fuel cost information attached
+	 * @since 2.0
 	 */
 	List<Object> generateFuelCostCalculatedSequence(Object... sequence);
 }

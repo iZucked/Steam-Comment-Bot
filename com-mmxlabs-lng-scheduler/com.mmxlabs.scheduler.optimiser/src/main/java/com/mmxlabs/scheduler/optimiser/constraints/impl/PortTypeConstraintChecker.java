@@ -48,6 +48,9 @@ public final class PortTypeConstraintChecker implements IPairwiseConstraintCheck
 	@Inject
 	private IVesselProvider vesselProvider;
 
+	/**
+	 * @since 2.0
+	 */
 	public PortTypeConstraintChecker(final String name) {
 		this.name = name;
 	}

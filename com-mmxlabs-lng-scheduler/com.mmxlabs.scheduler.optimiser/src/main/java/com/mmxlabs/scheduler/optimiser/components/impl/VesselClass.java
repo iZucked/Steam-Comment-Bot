@@ -100,6 +100,9 @@ public final class VesselClass implements IVesselClass {
 		return CollectionsUtil.getValue(idleConsumptionRate, vesselState, 0l);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public long getInPortConsumptionRate(final PortType portType) {
 		return CollectionsUtil.getValue(inPortConsumptionRate, portType, 0l);
@@ -145,6 +148,9 @@ public final class VesselClass implements IVesselClass {
 		this.idleConsumptionRate.put(state, rate);
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	public void setInPortConsumptionRate(final PortType portType, final long rate) {
 		this.inPortConsumptionRate.put(portType, rate);
 	}

@@ -49,6 +49,9 @@ public class VirtualVesselConstraintChecker implements IPairwiseConstraintChecke
 	@Inject
 	private IVirtualVesselSlotProvider virtualVesselSlotProvider;
 
+	/**
+	 * @since 2.0
+	 */
 	public VirtualVesselConstraintChecker(final String name) {
 		super();
 		this.name = name;

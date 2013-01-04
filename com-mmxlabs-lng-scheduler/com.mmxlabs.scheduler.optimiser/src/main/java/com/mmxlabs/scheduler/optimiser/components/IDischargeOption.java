@@ -29,6 +29,7 @@ public interface IDischargeOption extends IPortSlot {
 	 * Returns the minimum CV for this discharge slot, based on the sales contract. A value of zero is equivalent to no minimum bound.
 	 * 
 	 * @return
+	 * @since 2.0
 	 */
 	long getMinCvValue();
 
@@ -36,6 +37,7 @@ public interface IDischargeOption extends IPortSlot {
 	 * Returns the maximum CV for this discharge slot, based on the sales contract. A value of {@link Long#MAX_VALUE} is equivalent to no maximum bound.
 	 * 
 	 * @return
+	 * @since 2.0
 	 */
 	long getMaxCvValue();
 

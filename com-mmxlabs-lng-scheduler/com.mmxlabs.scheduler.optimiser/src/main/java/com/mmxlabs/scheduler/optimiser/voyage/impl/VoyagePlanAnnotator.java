@@ -72,6 +72,9 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 		annotateFromVoyagePlan(scheduledSequence.getResource(), scheduledSequence.getVoyagePlans(), solution, scheduledSequence.getArrivalTimes());
 	}
 
+	/**
+	 * @since 2.0
+	 */
 	@Override
 	public void annotateFromVoyagePlan(final IResource resource, final List<VoyagePlan> plans, final IAnnotatedSolution solution, final int[] arrivalTimes) {
 		final VoyagePlanIterator vpi = voyagePlanIteratorProvider.get();

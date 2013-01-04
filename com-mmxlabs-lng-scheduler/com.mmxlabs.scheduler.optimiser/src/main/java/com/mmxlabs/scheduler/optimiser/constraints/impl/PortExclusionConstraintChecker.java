@@ -40,6 +40,9 @@ public class PortExclusionConstraintChecker implements IPairwiseConstraintChecke
 
 	private final String name;
 
+	/**
+	 * @since 2.0
+	 */
 	public PortExclusionConstraintChecker(final String name) {
 		super();
 		this.name = name;

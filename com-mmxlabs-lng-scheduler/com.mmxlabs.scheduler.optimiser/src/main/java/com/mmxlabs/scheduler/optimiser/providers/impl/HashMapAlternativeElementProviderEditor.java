@@ -6,6 +6,9 @@ import com.google.common.collect.HashBiMap;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.providers.IAlternativeElementProviderEditor;
 
+/**
+ * @since 2.0
+ */
 public class HashMapAlternativeElementProviderEditor implements IAlternativeElementProviderEditor {
 
 	private final HashBiMap<ISequenceElement, ISequenceElement> map = HashBiMap.create();

@@ -15,7 +15,10 @@ public final class ScheduledSequence {
 	private final IResource resource;
 	private final int[] arrivalTimes;
 
-	public ScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans, int[] arrivalTimes) {
+	/**
+	 * @since 2.0
+	 */
+	public ScheduledSequence(final IResource resource, final int startTime, final List<VoyagePlan> voyagePlans, final int[] arrivalTimes) {
 		super();
 		this.startTime = startTime;
 		this.voyagePlans = voyagePlans;

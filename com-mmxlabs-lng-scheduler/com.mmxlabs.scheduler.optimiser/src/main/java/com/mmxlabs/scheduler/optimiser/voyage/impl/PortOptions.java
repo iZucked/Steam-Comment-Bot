@@ -14,6 +14,7 @@ import com.mmxlabs.scheduler.optimiser.components.VesselState;
  * Default implementation of {@link PortOptions}. This is @link {Cloneable} for use with @link{VoyagePlanOptimiser} use.
  * 
  * @author Simon Goodall
+ * @since 2.0
  * 
  */
 public final class PortOptions implements Cloneable {

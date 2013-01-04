@@ -651,6 +651,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	}
 
 	/**
+	 * @since 2.0
 	 * 
 	 */
 	
@@ -690,6 +691,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 	 * 
 	 * @param options The PortOptions to use, specifying vessel class, vessel state and port visit duration.
 	 * @param details The PortDetails to set the correct fuel consumption for.
+	 * @since 2.0
 	 */
 	public final void calculatePortFuelRequirements(PortOptions options,
 			PortDetails details) {

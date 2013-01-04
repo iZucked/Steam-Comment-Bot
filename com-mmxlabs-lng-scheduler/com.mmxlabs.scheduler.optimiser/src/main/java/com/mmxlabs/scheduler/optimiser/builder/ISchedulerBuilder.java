@@ -99,6 +99,7 @@ public interface ISchedulerBuilder {
 	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
 	 * @param nboSpeed
 	 *            Scaled speed in knots indicating the speed at which the vessel can travel to use up all NBO when travelling.
+	 * @since 2.0
 	 */
 	void setVesselClassStateParameters(IVesselClass vesselClass, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
 			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour, int nboSpeed);
@@ -118,6 +119,7 @@ public interface ISchedulerBuilder {
 	 *            Hourly scale MT of base fuel consumption when in port.
 	 * @param consumptionRateCalculatorInMTPerHour
 	 *            {@link IConsumptionRateCalculator} returning hourly scaled MT of base fuel consumption rate when travelling based upon speed.
+	 * @since 2.0
 	 */
 	void setVesselClassStateParameters(IVesselClass vc, VesselState state, int nboRateInM3PerHour, int idleNBORateInM3PerHour, int idleConsumptionRateInMTPerHour,
 			IConsumptionRateCalculator consumptionRateCalculatorInMTPerHour);
@@ -129,6 +131,7 @@ public interface ISchedulerBuilder {
 	 * @param portType
 	 * @param inPortConsumptionRateInMTPerHour
 	 *            Hourly scale MT of base fuel consumption when in port.
+	 * @since 2.0
 	 */
 	void setVesselClassPortTypeParameters(IVesselClass vc, PortType portType, int inPortConsumptionRateInMTPerHour);
 
@@ -431,6 +434,7 @@ public interface ISchedulerBuilder {
 	 * @param price
 	 *            Scaled sales price in $/MMBTu
 	 * @return
+	 * @since 2.0
 	 */
 	IDischargeSlot createDischargeSlot(String id, IPort port,
 			ITimeWindow window, long minVolumeInM3, long maxVolumeInM3,
