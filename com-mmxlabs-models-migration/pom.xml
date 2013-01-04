@@ -36,6 +36,7 @@
 		<module>com.mmxlabs.models.migration.p2</module>
 
 		<module>com.mmxlabs.models.migration.tests</module>
+		<module>com.mmxlabs.models.migration.scenario.tests</module>
 	</modules>
 
 	<build>
