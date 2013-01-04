@@ -35,6 +35,19 @@
                </message>
             </constraint>
             <constraint
+                  class="com.mmxlabs.models.lng.cargo.validation.ShippingTypeConstraint"
+                  id="com.mmxlabs.models.lng.cargo.validation.ShippingTypeConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Cargo DES / FOB Type"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+            </constraint>
+            <constraint
                   class="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint"
                   id="com.mmxlabs.models.lng.cargo.validation.CargoDateConstraint.cargo_order"
                   lang="Java"

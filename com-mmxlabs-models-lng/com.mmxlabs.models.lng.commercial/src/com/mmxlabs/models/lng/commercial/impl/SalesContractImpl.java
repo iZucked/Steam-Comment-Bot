@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
 /**
  * <!-- begin-user-doc -->
@@ -19,6 +20,7 @@ import com.mmxlabs.models.lng.commercial.SalesContract;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getMaxCvValue <em>Max Cv Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -85,6 +87,24 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 	 */
 	protected boolean maxCvValueESet;
 
+	/**
+	 * The default value of the '{@link #getPurchaseDeliveryType() <em>Purchase Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurchaseDeliveryType()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final CargoDeliveryType PURCHASE_DELIVERY_TYPE_EDEFAULT = CargoDeliveryType.ANY;
+	/**
+	 * The cached value of the '{@link #getPurchaseDeliveryType() <em>Purchase Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPurchaseDeliveryType()
+	 * @generated
+	 * @ordered
+	 */
+	protected CargoDeliveryType purchaseDeliveryType = PURCHASE_DELIVERY_TYPE_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -209,6 +229,27 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public CargoDeliveryType getPurchaseDeliveryType() {
+		return purchaseDeliveryType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPurchaseDeliveryType(CargoDeliveryType newPurchaseDeliveryType) {
+		CargoDeliveryType oldPurchaseDeliveryType = purchaseDeliveryType;
+		purchaseDeliveryType = newPurchaseDeliveryType == null ? PURCHASE_DELIVERY_TYPE_EDEFAULT : newPurchaseDeliveryType;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE, oldPurchaseDeliveryType, purchaseDeliveryType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -216,6 +257,8 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 				return getMinCvValue();
 			case CommercialPackage.SALES_CONTRACT__MAX_CV_VALUE:
 				return getMaxCvValue();
+			case CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE:
+				return getPurchaseDeliveryType();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -235,6 +278,9 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 			case CommercialPackage.SALES_CONTRACT__MAX_CV_VALUE:
 				setMaxCvValue((Double)newValue);
 				return;
+			case CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE:
+				setPurchaseDeliveryType((CargoDeliveryType)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -253,6 +299,9 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 			case CommercialPackage.SALES_CONTRACT__MAX_CV_VALUE:
 				unsetMaxCvValue();
 				return;
+			case CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE:
+				setPurchaseDeliveryType(PURCHASE_DELIVERY_TYPE_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -269,6 +318,8 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 				return isSetMinCvValue();
 			case CommercialPackage.SALES_CONTRACT__MAX_CV_VALUE:
 				return isSetMaxCvValue();
+			case CommercialPackage.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE:
+				return purchaseDeliveryType != PURCHASE_DELIVERY_TYPE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -287,6 +338,8 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 		if (minCvValueESet) result.append(minCvValue); else result.append("<unset>");
 		result.append(", maxCvValue: ");
 		if (maxCvValueESet) result.append(maxCvValue); else result.append("<unset>");
+		result.append(", PurchaseDeliveryType: ");
+		result.append(purchaseDeliveryType);
 		result.append(')');
 		return result.toString();
 	}

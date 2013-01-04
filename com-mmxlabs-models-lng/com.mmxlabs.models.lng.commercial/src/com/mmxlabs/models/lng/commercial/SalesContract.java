@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.lng.types.ASalesContract;
+import com.mmxlabs.models.lng.types.CargoDeliveryType;
 
 /**
  * <!-- begin-user-doc -->
@@ -16,6 +17,7 @@ import com.mmxlabs.models.lng.types.ASalesContract;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getMinCvValue <em>Min Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getMaxCvValue <em>Max Cv Value</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}</li>
  * </ul>
  * </p>
  *
@@ -138,6 +140,38 @@ public interface SalesContract extends Contract, ASalesContract {
 	 * @generated
 	 */
 	boolean isSetMaxCvValue();
+
+	/**
+	 * Returns the value of the '<em><b>Purchase Delivery Type</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * The literals are from the enumeration {@link com.mmxlabs.models.lng.types.CargoDeliveryType}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Purchase Delivery Type</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Purchase Delivery Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
+	 * @see #setPurchaseDeliveryType(CargoDeliveryType)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract_PurchaseDeliveryType()
+	 * @model default="false"
+	 * @generated
+	 */
+	CargoDeliveryType getPurchaseDeliveryType();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Purchase Delivery Type</em>' attribute.
+	 * @see com.mmxlabs.models.lng.types.CargoDeliveryType
+	 * @see #getPurchaseDeliveryType()
+	 * @generated
+	 */
+	void setPurchaseDeliveryType(CargoDeliveryType value);
 } // end of  SalesContract
 
 // finish type fixing

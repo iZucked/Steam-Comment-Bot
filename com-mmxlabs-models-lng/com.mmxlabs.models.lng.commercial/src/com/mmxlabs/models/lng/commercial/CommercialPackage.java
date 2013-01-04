@@ -507,13 +507,22 @@ public interface CommercialPackage extends EPackage {
 	int SALES_CONTRACT__MAX_CV_VALUE = CONTRACT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PURCHASE_DELIVERY_TYPE = CONTRACT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Sales Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 2;
+	int SALES_CONTRACT_FEATURE_COUNT = CONTRACT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.
@@ -805,6 +814,15 @@ public interface CommercialPackage extends EPackage {
 	int FIXED_PRICE_CONTRACT__MAX_CV_VALUE = SALES_CONTRACT__MAX_CV_VALUE;
 
 	/**
+	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__PURCHASE_DELIVERY_TYPE = SALES_CONTRACT__PURCHASE_DELIVERY_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -971,6 +989,15 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int INDEX_PRICE_CONTRACT__MAX_CV_VALUE = SALES_CONTRACT__MAX_CV_VALUE;
+
+	/**
+	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__PURCHASE_DELIVERY_TYPE = SALES_CONTRACT__PURCHASE_DELIVERY_TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
@@ -1927,6 +1954,15 @@ public interface CommercialPackage extends EPackage {
 	int PRICE_EXPRESSION_CONTRACT__MAX_CV_VALUE = SALES_CONTRACT__MAX_CV_VALUE;
 
 	/**
+	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__PURCHASE_DELIVERY_TYPE = SALES_CONTRACT__PURCHASE_DELIVERY_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -2217,6 +2253,17 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSalesContract_MaxCvValue();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Purchase Delivery Type</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType()
+	 * @see #getSalesContract()
+	 * @generated
+	 */
+	EAttribute getSalesContract_PurchaseDeliveryType();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Purchase Contract</em>}'.
@@ -2896,6 +2943,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SALES_CONTRACT__MAX_CV_VALUE = eINSTANCE.getSalesContract_MaxCvValue();
+
+		/**
+		 * The meta object literal for the '<em><b>Purchase Delivery Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SALES_CONTRACT__PURCHASE_DELIVERY_TYPE = eINSTANCE.getSalesContract_PurchaseDeliveryType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.PurchaseContractImpl <em>Purchase Contract</em>}' class.

@@ -1089,13 +1089,22 @@ public interface CargoPackage extends EPackage {
 	int DISCHARGE_SLOT__FOB_SALE = SLOT_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = SLOT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Discharge Slot</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 2;
+	int DISCHARGE_SLOT_FEATURE_COUNT = SLOT_FEATURE_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -2067,6 +2076,15 @@ public interface CargoPackage extends EPackage {
 	int SPOT_DISCHARGE_SLOT__FOB_SALE = DISCHARGE_SLOT__FOB_SALE;
 
 	/**
+	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE;
+
+	/**
 	 * The feature id for the '<em><b>Market</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2739,6 +2757,17 @@ public interface CargoPackage extends EPackage {
 	EAttribute getDischargeSlot_FOBSale();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.DischargeSlot#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Purchase Delivery Type</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.DischargeSlot#getPurchaseDeliveryType()
+	 * @see #getDischargeSlot()
+	 * @generated
+	 */
+	EAttribute getDischargeSlot_PurchaseDeliveryType();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.cargo.CargoModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3159,6 +3188,14 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute DISCHARGE_SLOT__FOB_SALE = eINSTANCE.getDischargeSlot_FOBSale();
+
+		/**
+		 * The meta object literal for the '<em><b>Purchase Delivery Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE = eINSTANCE.getDischargeSlot_PurchaseDeliveryType();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.cargo.impl.CargoModelImpl <em>Model</em>}' class.
