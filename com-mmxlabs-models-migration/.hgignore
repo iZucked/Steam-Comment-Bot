@@ -1,0 +1,25 @@
+^.*~$
+^.*.swp$
+^.project$
+^.settings$
+
+syntax: regexp
+^.*.orig$
+
+syntax: regexp
+^.*/bin$
+
+syntax: regexp
+^workspace$
+
+syntax: regexp
+^target$
+
+syntax: regexp
+^.*/target$
+
+syntax: regexp
+^.*/\.settings$
+
+syntax: regexp
+^target-definition/\.project$
