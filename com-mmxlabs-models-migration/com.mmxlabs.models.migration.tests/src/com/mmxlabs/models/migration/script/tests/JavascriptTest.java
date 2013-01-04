@@ -23,10 +23,10 @@ public class JavascriptTest {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
-		final URL resource = getClass().getResource("/model-v1.ecore");
+		final URL resource = getClass().getResource("/models/model-v1.ecore");
 		engine.put("pkg", loader.loadEPackage(URI.createURI(resource.toString()), ""));
 
-		final InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/packagename.js"));
+		final InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/scripts/packagename.js"));
 
 		engine.eval(reader);
 		final String output = (String) engine.get("output");
