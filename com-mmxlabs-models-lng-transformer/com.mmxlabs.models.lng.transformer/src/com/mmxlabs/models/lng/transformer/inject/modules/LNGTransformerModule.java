@@ -80,7 +80,6 @@ public class LNGTransformerModule extends AbstractModule {
 		install(new SequencesManipulatorModule());
 		install(new SchedulerModule());
 		install(new OptimiserCoreModule());
-		install(new OptimiserSettingsModule());
 		install(new LinearFitnessEvaluatorModule());
 
 		bind(MMXRootObject.class).toInstance(scenario);

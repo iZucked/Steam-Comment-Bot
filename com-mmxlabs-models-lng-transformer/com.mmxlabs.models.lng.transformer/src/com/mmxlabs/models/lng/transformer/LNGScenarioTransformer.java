@@ -26,6 +26,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,8 +53,6 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate;
-import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
@@ -720,7 +719,7 @@ public class LNGScenarioTransformer {
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
-					if (loadSlot.getContract() instanceof RedirectionPurchaseContract) {
+					if (loadSlot.getContract() .getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
 						// Redirection contracts can go to anywhere
 						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
 					} else {
@@ -792,7 +791,7 @@ public class LNGScenarioTransformer {
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
-					if (loadSlot.getContract() instanceof RedirectionPurchaseContract) {
+					if (loadSlot.getContract().getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
 						// Redirection contracts can go to anywhere
 						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
 					} else {
@@ -946,15 +945,17 @@ public class LNGScenarioTransformer {
 
 			final ITimeWindow localTimeWindow;
 			// FIXME: This should not really be in the builder, but need better API to permit this kind of transformation.
-			if (loadSlot.getContract() instanceof RedirectionPurchaseContract) {
+			if (loadSlot.getContract() .getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
 				// Redirection contracts can go to anywhere, so need larger window for compatibility
 				final int extraTime = 24 * 60; // approx 2 months
 				Date originalDate = null;
 				for (final UUIDObject ext : loadSlot.getExtensions()) {
-					if (ext instanceof RedirectionContractOriginalDate) {
-						final RedirectionContractOriginalDate originalDateExt = (RedirectionContractOriginalDate) ext;
+					if (ext.getClass().getSimpleName().equals("RedirectionContractOriginalDate")) {
+//						final RedirectionContractOriginalDate originalDateExt = (RedirectionContractOriginalDate) ext;
 						final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(loadSlot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
-						calendar.setTime(originalDateExt.getDate());
+						EStructuralFeature feature = ext.eClass().getEStructuralFeature("date");
+						Date originalDateExt = (Date)ext.eGet(feature);
+						calendar.setTime(originalDateExt);
 						originalDate = calendar.getTime();
 					}
 				}
