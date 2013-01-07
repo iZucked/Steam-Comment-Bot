@@ -20,14 +20,20 @@ public interface IOptimiserInjectorService {
 
 	enum ModuleType {
 		/**
-		 * Enum to specifies modules to override the Module(s) providing {@link IDataComponentProvider} instances.
+		 * Enum to specify modules to override the Module(s) providing {@link IDataComponentProvider} instances.
 		 */
 		Module_DataComponentProviderModule,
 
 		/**
-		 * Enum to specifies modules to override the Module(s) providing transformations to the scenario
+		 * Enum to specify modules to override the Module(s) providing transformations to the scenario
 		 */
-		Module_LNGTransformerModule
+		Module_LNGTransformerModule,
+
+		/**
+		 * Enum to specify modules to override the Module providing parameters (e.g. Seed or number of iterations) to the scenario.
+		 * @since 2.1
+		 */
+		Module_ParametersModule
 	};
 
 	/**
