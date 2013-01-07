@@ -6,6 +6,8 @@ package com.mmxlabs.models.lng.transformer.inject;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +69,8 @@ public class LNGTransformer {
 	@Inject
 	private LocalSearchOptimiser optimiser;
 
+	private final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides = new HashMap<IOptimiserInjectorService.ModuleType, List<Module>>();
+
 	public LNGTransformer(final MMXRootObject scenario) {
 		this(scenario, null);
 	}
@@ -85,7 +89,7 @@ public class LNGTransformer {
 						bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toProvider(Peaberry.service(IOptimiserInjectorService.class).multiple());
 					}
 				};
-				List<Module> m = new ArrayList<Module>(3);
+				final List<Module> m = new ArrayList<Module>(3);
 				m.add(Peaberry.osgiModule(Activator.getDefault().getBundle().getBundleContext()));
 				m.add(optimiserInjectorServiceModule);
 				if (module != null) {
@@ -128,6 +132,17 @@ public class LNGTransformer {
 					}
 				}
 			}
+		}
+		// Process local overrides
+		for (Map.Entry<IOptimiserInjectorService.ModuleType, List<Module>> e : localOverrides.entrySet()) {
+			List<Module> overrides;
+			if (moduleOverrides.containsKey(e.getKey())) {
+				overrides = moduleOverrides.get(e.getKey());
+			} else {
+				overrides = new ArrayList<Module>();
+				moduleOverrides.put(e.getKey(), overrides);
+			}
+			overrides.addAll(e.getValue());
 		}
 
 		// Install standard module with optional overrides
@@ -212,5 +227,22 @@ public class LNGTransformer {
 	 */
 	public Injector getInjector() {
 		return injector;
+	}
+
+	/**
+	 * Manually add an override {@link Module} for the given IOptimiserInjectorService.ModuleType
+	 * 
+	 * @since 2.0
+	 */
+
+	public void addModuleOverride(final IOptimiserInjectorService.ModuleType moduleType, final Module module) {
+		final List<Module> modules;
+		if (localOverrides.containsKey(moduleType)) {
+			modules = localOverrides.get(moduleType);
+		} else {
+			modules = new LinkedList<Module>();
+			localOverrides.put(moduleType, modules);
+		}
+		modules.add(module);
 	}
 }
