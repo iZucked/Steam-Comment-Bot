@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2012
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
 package com.mmxlabs.models.ui.validation.impl;
