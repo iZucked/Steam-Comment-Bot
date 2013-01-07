@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
+import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
@@ -63,5 +64,15 @@ public class LegalEntityComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
+		add_taxRatesEditor(detailComposite, topClass);
+	}
+
+	/**
+	 * Create the editor for the taxRates feature on LegalEntity
+	 *
+	 * @generated NO
+	 */
+	protected void add_taxRatesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES));
 	}
 }

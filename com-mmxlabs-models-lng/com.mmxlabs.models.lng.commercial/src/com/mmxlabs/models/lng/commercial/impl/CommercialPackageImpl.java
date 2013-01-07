@@ -25,6 +25,7 @@ import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate;
 import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 
@@ -125,6 +126,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass redirectionContractOriginalDateEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass taxRateEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -256,6 +264,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getLegalEntity_TaxRates() {
+		return (EReference)legalEntityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -369,6 +387,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -790,6 +809,36 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getTaxRate() {
+		return taxRateEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getTaxRate_Date() {
+		return (EAttribute)taxRateEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getTaxRate_Value() {
+		return (EAttribute)taxRateEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -824,6 +873,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEReference(commercialModelEClass, COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS);
 
 		legalEntityEClass = createEClass(LEGAL_ENTITY);
+		createEReference(legalEntityEClass, LEGAL_ENTITY__TAX_RATES);
 
 		contractEClass = createEClass(CONTRACT);
 		createEReference(contractEClass, CONTRACT__ENTITY);
@@ -892,6 +942,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		redirectionContractOriginalDateEClass = createEClass(REDIRECTION_CONTRACT_ORIGINAL_DATE);
 		createEAttribute(redirectionContractOriginalDateEClass, REDIRECTION_CONTRACT_ORIGINAL_DATE__DATE);
+
+		taxRateEClass = createEClass(TAX_RATE);
+		createEAttribute(taxRateEClass, TAX_RATE__DATE);
+		createEAttribute(taxRateEClass, TAX_RATE__VALUE);
 	}
 
 	/**
@@ -954,6 +1008,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEReference(getCommercialModel_ContractSlotExtensions(), theMMXCorePackage.getUUIDObject(), null, "contractSlotExtensions", null, 0, -1, CommercialModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(legalEntityEClass, LegalEntity.class, "LegalEntity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getLegalEntity_TaxRates(), this.getTaxRate(), null, "taxRates", null, 0, -1, LegalEntity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(contractEClass, Contract.class, "Contract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getContract_Entity(), this.getLegalEntity(), null, "entity", null, 1, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1022,6 +1077,10 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 		initEClass(redirectionContractOriginalDateEClass, RedirectionContractOriginalDate.class, "RedirectionContractOriginalDate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getRedirectionContractOriginalDate_Date(), ecorePackage.getEDate(), "date", null, 0, 1, RedirectionContractOriginalDate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(taxRateEClass, TaxRate.class, "TaxRate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getTaxRate_Date(), ecorePackage.getEDate(), "date", null, 0, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getTaxRate_Value(), ecorePackage.getEFloat(), "value", null, 0, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

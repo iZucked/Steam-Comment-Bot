@@ -93,7 +93,6 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract">
   </componentHelper>
-		
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -209,6 +208,15 @@
           outputEClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract"
           targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.LegalEntity"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">

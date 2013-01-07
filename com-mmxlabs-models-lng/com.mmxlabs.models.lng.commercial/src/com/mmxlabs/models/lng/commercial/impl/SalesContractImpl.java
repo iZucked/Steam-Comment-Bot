@@ -90,6 +90,7 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 	/**
 	 * The default value of the '{@link #getPurchaseDeliveryType() <em>Purchase Delivery Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getPurchaseDeliveryType()
 	 * @generated
@@ -99,6 +100,7 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 	/**
 	 * The cached value of the '{@link #getPurchaseDeliveryType() <em>Purchase Delivery Type</em>}' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @see #getPurchaseDeliveryType()
 	 * @generated
@@ -226,6 +228,7 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -235,6 +238,7 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

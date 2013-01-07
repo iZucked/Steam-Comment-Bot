@@ -209,13 +209,23 @@ public interface CommercialPackage extends EPackage {
 	int LEGAL_ENTITY__OTHER_NAMES = TypesPackage.ALEGAL_ENTITY__OTHER_NAMES;
 
 	/**
+	 * The feature id for the '<em><b>Tax Rates</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEGAL_ENTITY__TAX_RATES = TypesPackage.ALEGAL_ENTITY_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Legal Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY_FEATURE_COUNT = TypesPackage.ALEGAL_ENTITY_FEATURE_COUNT + 0;
+	int LEGAL_ENTITY_FEATURE_COUNT = TypesPackage.ALEGAL_ENTITY_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl <em>Contract</em>}' class.
@@ -509,6 +519,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -816,6 +827,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -993,6 +1005,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1956,6 +1969,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Purchase Delivery Type</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2044,6 +2058,47 @@ public interface CommercialPackage extends EPackage {
 	int REDIRECTION_CONTRACT_ORIGINAL_DATE_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.TaxRateImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getTaxRate()
+	 * @generated
+	 */
+	int TAX_RATE = 13;
+
+	/**
+	 * The feature id for the '<em><b>Date</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TAX_RATE__DATE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TAX_RATE__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Tax Rate</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TAX_RATE_FEATURE_COUNT = 2;
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2118,6 +2173,18 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getLegalEntity();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.LegalEntity#getTaxRates <em>Tax Rates</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Tax Rates</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.LegalEntity#getTaxRates()
+	 * @see #getLegalEntity()
+	 * @generated
+	 */
+	EReference getLegalEntity_TaxRates();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.Contract <em>Contract</em>}'.
@@ -2257,6 +2324,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType <em>Purchase Delivery Type</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Purchase Delivery Type</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getPurchaseDeliveryType()
@@ -2757,6 +2825,41 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getRedirectionContractOriginalDate_Date();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.TaxRate <em>Tax Rate</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Tax Rate</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.TaxRate
+	 * @generated
+	 */
+	EClass getTaxRate();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.TaxRate#getDate <em>Date</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Date</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.TaxRate#getDate()
+	 * @see #getTaxRate()
+	 * @generated
+	 */
+	EAttribute getTaxRate_Date();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.TaxRate#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Value</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.TaxRate#getValue()
+	 * @see #getTaxRate()
+	 * @generated
+	 */
+	EAttribute getTaxRate_Value();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2838,6 +2941,15 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EClass LEGAL_ENTITY = eINSTANCE.getLegalEntity();
+
+		/**
+		 * The meta object literal for the '<em><b>Tax Rates</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference LEGAL_ENTITY__TAX_RATES = eINSTANCE.getLegalEntity_TaxRates();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl <em>Contract</em>}' class.
@@ -2947,6 +3059,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Purchase Delivery Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 2.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3337,6 +3450,35 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute REDIRECTION_CONTRACT_ORIGINAL_DATE__DATE = eINSTANCE.getRedirectionContractOriginalDate_Date();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.TaxRateImpl <em>Tax Rate</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.TaxRateImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getTaxRate()
+		 * @generated
+		 */
+		EClass TAX_RATE = eINSTANCE.getTaxRate();
+
+		/**
+		 * The meta object literal for the '<em><b>Date</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TAX_RATE__DATE = eINSTANCE.getTaxRate_Date();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute TAX_RATE__VALUE = eINSTANCE.getTaxRate_Value();
 
 	}
 

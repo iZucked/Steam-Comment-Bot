@@ -15,7 +15,10 @@
         upperBound="-1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="LegalEntity" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ALegalEntity"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LegalEntity" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ALegalEntity">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="taxRates" upperBound="-1"
+        eType="#//TaxRate" containment="true"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Contract" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AContract">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"
         eType="#//LegalEntity"/>
@@ -123,5 +126,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RedirectionContractOriginalDate" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TaxRate">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="date" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"/>
   </eClassifiers>
 </ecore:EPackage>
