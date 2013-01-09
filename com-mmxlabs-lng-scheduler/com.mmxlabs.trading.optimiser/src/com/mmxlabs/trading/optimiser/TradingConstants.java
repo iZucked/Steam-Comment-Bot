@@ -12,10 +12,11 @@ public class TradingConstants {
 
 	public static final String THIRD_PARTIES = "Third-parties";
 
-	public static final String ExtraData_pnl = "pnl";
-	public static final String ExtraData_upstream = "upstream";
-	public static final String ExtraData_downstream = "downstream";
-	public static final String ExtraData_shipped = "shipped";
+	public static final String ExtraData_pnl = "__pnl";
+	public static final String ExtraData_upstream = "__upstream";
+	public static final String ExtraData_downstream = "__downstream";
+	public static final String ExtraData_shipped = "__shipped";
+
 	/**
 	 * @since 2.0
 	 */
