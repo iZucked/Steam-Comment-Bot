@@ -35,8 +35,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.nebula.widgets.formattedtext.DateFormatter;
-import org.eclipse.nebula.widgets.formattedtext.FloatFormatter;
 import org.eclipse.nebula.widgets.formattedtext.FormattedTextCellEditor;
+import org.eclipse.nebula.widgets.formattedtext.PercentFormatter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -100,7 +100,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 		final TableViewerColumn rateColumn = new TableViewerColumn(tableViewer, SWT.NONE);
 		
 		dateColumn.getColumn().setText("Date");
-		rateColumn.getColumn().setText("Tax Rate (%)");
+		rateColumn.getColumn().setText("Tax Rate");
 		
 		table.addListener(SWT.Resize, 
 				new Listener() {
@@ -145,15 +145,6 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 			}
 		});
 		
-		rateColumn.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return element == null ? "" : 
-					String.format("%.2f",
-					((TaxRate) element).getValue());
-			}
-		});
-		
 		dateColumn.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -166,10 +157,23 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 			}
 		});
 		
+
+		rateColumn.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return element == null ? "" : 
+					String.format("%.2f%%",
+					((TaxRate) element).getValue() * 100);
+			}
+		});
+		
 		rateColumn.setEditingSupport(new EditingSupport(tableViewer) {
 			final EAttribute attr = column2Feature;
 			@Override
 			protected void setValue(Object element, Object value) {
+				// PercentFormatter returns a Double, we need a Float
+				value = new Float(((Double) value).floatValue());
+				
 				final EditingDomain ed = commandHandler.getEditingDomain();
 				commandHandler.handleCommand(
 						SetCommand.create(ed, element, 
@@ -187,7 +191,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
-				ed.setFormatter(new FloatFormatter("#0.00"));
+				ed.setFormatter(new PercentFormatter("#0.00"));
 				return ed;
 			}
 			
@@ -282,7 +286,11 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 				}
 				final TaxRate newTaxRate = CommercialFactory.eINSTANCE.createTaxRate();
 				newTaxRate.setValue(0);
-				newTaxRate.setDate(new Date());
+				Date date = new Date();
+				date.setHours(0);
+				date.setMinutes(0);
+				date.setSeconds(0);
+				newTaxRate.setDate(date);
 				commandHandler.handleCommand(
 						AddCommand.create(commandHandler.getEditingDomain(), oldValue, editedAttribute, newTaxRate),
 						oldValue, editedAttribute);
