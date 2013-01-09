@@ -79,10 +79,9 @@ public class LNGTransformer {
 	 * @since 2.0
 	 */
 	public LNGTransformer(final MMXRootObject scenario, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides) {
-		this(scenario, null, localOverrides)
+		this(scenario, null, localOverrides);
 	}
 
-	@SuppressWarnings("unchecked")
 	public LNGTransformer(final MMXRootObject scenario, final Module module) {
 		this(scenario, module, null);
 	}
