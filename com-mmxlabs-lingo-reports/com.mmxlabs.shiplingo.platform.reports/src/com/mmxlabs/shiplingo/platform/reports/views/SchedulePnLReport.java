@@ -4,16 +4,23 @@
  */
 package com.mmxlabs.shiplingo.platform.reports.views;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
 import com.mmxlabs.models.lng.fleet.MaintenanceEvent;
@@ -30,7 +37,9 @@ import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
 import com.mmxlabs.trading.optimiser.TradingConstants;
 
@@ -42,6 +51,7 @@ public class SchedulePnLReport extends EMFReportView {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
+	final List<String> entityColumnNames = new ArrayList<String>(); 
 
 	public SchedulePnLReport() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
@@ -52,7 +62,13 @@ public class SchedulePnLReport extends EMFReportView {
 
 		addColumn("ID", objectFormatter, s.getEvent__Name());
 
+		// add the total (aggregate) P&L column 
 		addPNLColumn();
+		
+		//CommercialModel.getEntities();
+		
+		//addPNLColumn("Asia");
+		//addPNLColumn("Europe");
 
 		addColumn("Discharge Port", new BaseFormatter() {
 			@Override
@@ -217,16 +233,66 @@ public class SchedulePnLReport extends EMFReportView {
 		return Event.class;
 	}
 
+	private Integer getEntityPNLEntry(final ExtraDataContainer container, final String entity) {
+		if (container == null) {
+			return null;
+		}
+		
+		ExtraData data = null;
+		
+		// supplying null for the entity name indicates that the total group P&L should be returned 
+		if (entity == null) {
+			data = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+		}
+		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data 
+		else {
+			final String [] options = { TradingConstants.ExtraData_upstream, TradingConstants.ExtraData_shipped, TradingConstants.ExtraData_downstream  };
+			for (final String option: options) {
+				ExtraData possibleData = container.getDataWithKey(option);
+				if (possibleData != null) {
+					ExtraData entityData = possibleData.getDataWithKey(entity);
+					if (entityData != null) {
+						data = entityData.getDataWithKey(TradingConstants.ExtraData_pnl);
+					}
+				}
+				
+			}
+		}
+		
+		if (data == null) {
+			return null;
+		}
+		
+		return data.getValueAs(Integer.class);		
+	}
+	
 	private void addPNLColumn() {
-
-		final String title = "P&L";
+		addPNLColumn("Group Total", null);
+	}
+	
+	private void addPNLColumn(final String entityName) {
+		addPNLColumn(entityName, entityName);
+	}
+	
+	private void addPNLColumn(final String entityLabel, final String entityKey) {
+		final String title = String.format("P&L (%s)", entityLabel);
+		
+		// HACK: don't the label to the entity column names if the column is for total group P&L
+		if (entityKey != null) {
+			entityColumnNames.add(title);
+		}
+		
 		addColumn(title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				ExtraDataContainer container = null;
 
-				if (object instanceof CargoAllocation) {
-					container = (CargoAllocation) object;
+				if (object instanceof CargoAllocation
+						|| object instanceof VesselEventVisit
+						|| object instanceof StartEvent
+						|| object instanceof GeneratedCharterOut) 
+				{
+					container = (ExtraDataContainer) object;
 				}
 				if (object instanceof SlotVisit) {
 					final SlotVisit slotVisit = (SlotVisit) object;
@@ -234,30 +300,62 @@ public class SchedulePnLReport extends EMFReportView {
 						container = slotVisit.getSlotAllocation().getCargoAllocation();
 					}
 				}
-				if (object instanceof VesselEventVisit) {
-					container = (VesselEventVisit) object;
-				}
-				if (object instanceof StartEvent) {
-					container = (StartEvent) object;
-				}
-				if (object instanceof GeneratedCharterOut) {
-					container = (GeneratedCharterOut) object;
-				}
 
-				if (container != null) {
-					final ExtraData dataWithKey = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
-					if (dataWithKey != null) {
-						final Integer v = dataWithKey.getValueAs(Integer.class);
-						if (v != null) {
-							return v;
-						}
-					}
-				}
-
-				return null;
+				return getEntityPNLEntry(container, entityKey);
 			}
 		});
 	}
+	
+	@Override
+	protected IStructuredContentProvider getContentProvider() {
+		final IStructuredContentProvider superProvider = super.getContentProvider();
+		
+		return new IStructuredContentProvider() {
+			@Override
+			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
+				superProvider.inputChanged(viewer, oldInput, newInput);
+				Display.getCurrent().asyncExec(new Runnable() {
+					@Override
+					public void run() {
+						if (viewer.getControl().isDisposed()) {
+							return;
+						}
+
+						if (newInput instanceof IScenarioViewerSynchronizerOutput) {
+							final IScenarioViewerSynchronizerOutput synchronizerOutput = (IScenarioViewerSynchronizerOutput) newInput;
+							final Collection<MMXRootObject> rootObjects = synchronizerOutput.getRootObjects();
+							for (final String s : entityColumnNames) {
+								removeColumn(s);
+							}
+
+							entityColumnNames.clear();
+
+							for (final MMXRootObject rootObject : rootObjects) {
+
+								final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+								for (final LegalEntity e : commercialModel.getEntities()) {
+									addPNLColumn(e.getName());
+								}
+							}
+						}
+
+						viewer.refresh();
+					}
+				});
+			}
+
+			@Override
+			public void dispose() {
+				superProvider.dispose();
+			}
+
+			@Override
+			public Object[] getElements(final Object object) {
+				return superProvider.getElements(object);
+			}
+		};
+	}
+	
 
 	@Override
 	protected void processInputs(final Object[] result) {
