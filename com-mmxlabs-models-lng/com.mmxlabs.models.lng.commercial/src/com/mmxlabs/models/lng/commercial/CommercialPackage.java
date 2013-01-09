@@ -219,13 +219,22 @@ public interface CommercialPackage extends EPackage {
 	int LEGAL_ENTITY__TAX_RATES = TypesPackage.ALEGAL_ENTITY_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Transfer Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LEGAL_ENTITY__TRANSFER_PRICE = TypesPackage.ALEGAL_ENTITY_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Legal Entity</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LEGAL_ENTITY_FEATURE_COUNT = TypesPackage.ALEGAL_ENTITY_FEATURE_COUNT + 1;
+	int LEGAL_ENTITY_FEATURE_COUNT = TypesPackage.ALEGAL_ENTITY_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl <em>Contract</em>}' class.
@@ -2187,6 +2196,17 @@ public interface CommercialPackage extends EPackage {
 	EReference getLegalEntity_TaxRates();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.LegalEntity#getTransferPrice <em>Transfer Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Transfer Price</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.LegalEntity#getTransferPrice()
+	 * @see #getLegalEntity()
+	 * @generated
+	 */
+	EAttribute getLegalEntity_TransferPrice();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.Contract <em>Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2950,6 +2970,14 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference LEGAL_ENTITY__TAX_RATES = eINSTANCE.getLegalEntity_TaxRates();
+
+		/**
+		 * The meta object literal for the '<em><b>Transfer Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute LEGAL_ENTITY__TRANSFER_PRICE = eINSTANCE.getLegalEntity_TransferPrice();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl <em>Contract</em>}' class.

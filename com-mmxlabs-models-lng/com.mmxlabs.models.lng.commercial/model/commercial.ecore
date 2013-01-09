@@ -18,6 +18,8 @@
   <eClassifiers xsi:type="ecore:EClass" name="LegalEntity" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ALegalEntity">
     <eStructuralFeatures xsi:type="ecore:EReference" name="taxRates" upperBound="-1"
         eType="#//TaxRate" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="transferPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EFloat"
+        defaultValueLiteral="0"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Contract" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AContract">
     <eStructuralFeatures xsi:type="ecore:EReference" name="entity" lowerBound="1"

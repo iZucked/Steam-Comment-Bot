@@ -65,6 +65,7 @@ public class LegalEntityComponentHelper extends BaseComponentHelper {
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_taxRatesEditor(detailComposite, topClass);
+		add_transferPriceEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -74,5 +75,14 @@ public class LegalEntityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_taxRatesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES));
+	}
+
+	/**
+	 * Create the editor for the transferPrice feature on LegalEntity
+	 *
+	 * @generated
+	 */
+	protected void add_transferPriceEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.LEGAL_ENTITY__TRANSFER_PRICE));
 	}
 }
