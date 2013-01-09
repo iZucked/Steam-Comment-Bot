@@ -7,14 +7,17 @@ package com.mmxlabs.trading.integration.extensions;
 import java.util.Collection;
 
 import com.google.inject.Inject;
-import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
+import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
@@ -37,6 +40,9 @@ public class EntityTransformerExtension implements ITransformerExtension {
 
 	@Inject
 	private HashMapEntityProviderEditor entityProvider;
+	
+	@Inject
+	private DateAndCurveHelper dateAndCurveHelper;
 
 	@Override
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
@@ -48,7 +54,14 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	public void finishTransforming() {
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 		for (final LegalEntity e : commercialModel.getEntities()) {
-			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), new ConstantValueCurve(0), // TODO fix tax rates.
+			final StepwiseIntegerCurve taxCurve = new StepwiseIntegerCurve();  
+			taxCurve.setDefaultValue(0);
+			for (final TaxRate taxRate: e.getTaxRates()) {
+				final int convertedDate = dateAndCurveHelper.convertTime(entities.getEarliestDate(), taxRate.getDate());  
+				taxCurve.setValueAfter(convertedDate, (int) (taxRate.getValue() * Calculator.ScaleFactor));
+			}
+			
+			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), taxCurve, 
 					OptimiserUnitConvertor.convertToInternalConversionFactor(0));
 
 			entities.addModelObject(e, e2);
