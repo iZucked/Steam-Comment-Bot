@@ -62,7 +62,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 			}
 			
 			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), taxCurve, 
-					OptimiserUnitConvertor.convertToInternalConversionFactor(0));
+					OptimiserUnitConvertor.convertToInternalConversionFactor(e.getTransferPrice()));
 
 			entities.addModelObject(e, e2);
 		}
