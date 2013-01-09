@@ -121,6 +121,15 @@
           subModelImporterClass="com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter">
     </submodelImporter>
  </extension>
+  <extension
+       point="com.mmxlabs.models.util.import.classes">
+    <classImporter
+          ID="com.mmxlabs.models.lng.commercial.editor.legalEntityImporter"
+          classImporterClass="com.mmxlabs.models.lng.commercial.importer.LegalEntityImporter"
+          eClassName="com.mmxlabs.models.lng.commercial.LegalEntity"
+          inheritable="false">
+    </classImporter>
+ </extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
     <jointModelEditor
