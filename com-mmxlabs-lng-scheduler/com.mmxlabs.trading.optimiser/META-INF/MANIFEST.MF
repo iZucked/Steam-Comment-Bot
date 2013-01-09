@@ -4,7 +4,7 @@ Bundle-Name: Trading Optimiser
 Bundle-SymbolicName: com.mmxlabs.trading.optimiser
 Bundle-Version: 2.0.0.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
-Require-Bundle: com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="[2.0.0,3.0.0)",
+Require-Bundle: com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser;bundle-version="[3.0.0, 4.0.0)",
  com.mmxlabs.common.common-util;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.optimiser.optimiser-core;bundle-version="[1.0.0,2.0.0)",
  com.google.inject;bundle-version="3.0.0",
