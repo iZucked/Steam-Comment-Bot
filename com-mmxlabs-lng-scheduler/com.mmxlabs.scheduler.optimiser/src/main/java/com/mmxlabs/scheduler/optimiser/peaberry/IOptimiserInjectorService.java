@@ -31,7 +31,7 @@ public interface IOptimiserInjectorService {
 
 		/**
 		 * Enum to specify modules to override the Module providing parameters (e.g. Seed or number of iterations) to the scenario.
-		 * @since 2.1
+		 * @since 3.0
 		 */
 		Module_ParametersModule
 	};
