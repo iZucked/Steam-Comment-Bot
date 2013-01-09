@@ -45,7 +45,7 @@ public class SimpleEntity extends Entity {
 
 		final int flip = Calculator.ScaleFactor - taxRate;
 
-		final long ownershipValue = (long) ownership * (long) flip / Calculator.HighScaleFactor;
+		final long ownershipValue = ((long) ownership * (long) flip) / Calculator.HighScaleFactor;
 		final long taxedValue = Calculator.multiply(pretax, ownershipValue);
 		return taxedValue;
 	}
