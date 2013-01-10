@@ -11,6 +11,7 @@ import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
@@ -42,18 +43,22 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
 		this.rootObject = rootObject;
 		this.entities = map;
+
+		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+		for (final LegalEntity e : commercialModel.getEntities()) {
+			if (e.eClass() == CommercialPackage.eINSTANCE.getLegalEntity()) {
+				final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), new ConstantValueCurve(0), // TODO fix tax rates.
+						OptimiserUnitConvertor.convertToInternalConversionFactor(0));
+
+				entities.addModelObject(e, e2);
+			}
+		}
 	}
 
 	@Override
 	public void finishTransforming() {
+
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-		for (final LegalEntity e : commercialModel.getEntities()) {
-			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), new ConstantValueCurve(0), // TODO fix tax rates.
-					OptimiserUnitConvertor.convertToInternalConversionFactor(0));
-
-			entities.addModelObject(e, e2);
-		}
-
 		final LegalEntity shipping = commercialModel.getShippingEntity();
 
 		setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));
