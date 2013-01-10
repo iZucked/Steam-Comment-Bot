@@ -5,7 +5,6 @@
 package com.mmxlabs.models.lng.transformer.its.tests;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.Platform;
@@ -15,8 +14,10 @@ import com.google.common.collect.Lists;
 import com.google.inject.AbstractModule;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsConstraintCheckerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsModule;
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementConstraintCheckerFactory;
+import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementModule;
 import com.mmxlabs.models.lng.transformer.extensions.shippingtype.ShippingTypeRequirementTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.inject.IBuilderExtensionFactory;
@@ -40,14 +41,8 @@ import com.mmxlabs.scheduler.optimiser.constraints.impl.TimeSortConstraintChecke
 import com.mmxlabs.scheduler.optimiser.constraints.impl.TravelTimeConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.constraints.impl.VirtualVesselConstraintCheckerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoFitnessComponentProvider;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerComponentsInjectorService;
-import com.mmxlabs.trading.integration.TradingOptimiserModuleService;
-import com.mmxlabs.trading.integration.factories.EntityTransformerExtensionFactory;
-import com.mmxlabs.trading.integration.factories.StandardContractTransformerExtensionFactory;
-import com.mmxlabs.trading.integration.factories.TradingExporterExtensionFactory;
-import com.mmxlabs.trading.optimiser.components.ProfitAndLossAllocationComponentProvider;
 
 public class ContractExtensionTestModule extends AbstractModule {
 
@@ -60,24 +55,25 @@ public class ContractExtensionTestModule extends AbstractModule {
 			bind(IConstraintCheckerRegistry.class).toInstance(createConstraintCheckerRegistry());
 			bind(IEvaluationProcessRegistry.class).toInstance(createEvaluationProcessRegistry());
 
-			final List<IOptimiserInjectorService> injectorServices = Lists.newArrayList(new SchedulerComponentsInjectorService(), new TradingOptimiserModuleService());
+			final List<IOptimiserInjectorService> injectorServices = Lists.<IOptimiserInjectorService> newArrayList(new SchedulerComponentsInjectorService(),
+					new RestrictedElementsModule.RestrictedElementsInjectorService(), new ShippingTypeRequirementModule.DesPermissionInjectorService());
 
 			bind(TypeLiterals.iterable(IOptimiserInjectorService.class)).toInstance(injectorServices);
-			bind(TypeLiterals.iterable(ICargoFitnessComponentProvider.class)).toInstance(Collections.singleton(new ProfitAndLossAllocationComponentProvider()));
+			// bind(TypeLiterals.iterable(ICargoFitnessComponentProvider.class)).toInstance(Collections.singleton(new ProfitAndLossAllocationComponentProvider()));
 
 			final List<IBuilderExtensionFactory> builderExtensionFactories = new ArrayList<IBuilderExtensionFactory>();
 			bind(TypeLiterals.iterable(IBuilderExtensionFactory.class)).toInstance(builderExtensionFactories);
 
 			final List<ITransformerExtensionFactory> transformerExtensionFactories = new ArrayList<ITransformerExtensionFactory>();
-			transformerExtensionFactories.add(new EntityTransformerExtensionFactory());
+			// transformerExtensionFactories.add(new EntityTransformerExtensionFactory());
 			transformerExtensionFactories.add(new SimpleContractTransformerFactory());
-			transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
+			// transformerExtensionFactories.add(new StandardContractTransformerExtensionFactory());
 			transformerExtensionFactories.add(new RestrictedElementsTransformerFactory());
 			transformerExtensionFactories.add(new ShippingTypeRequirementTransformerFactory());
 			bind(TypeLiterals.iterable(ITransformerExtensionFactory.class)).toInstance(transformerExtensionFactories);
 
 			final List<IExporterExtensionFactory> exporterExtensionFactories = new ArrayList<IExporterExtensionFactory>();
-			exporterExtensionFactories.add(new TradingExporterExtensionFactory());
+			// exporterExtensionFactories.add(new TradingExporterExtensionFactory());
 			bind(TypeLiterals.iterable(IExporterExtensionFactory.class)).toInstance(exporterExtensionFactories);
 		}
 	}
@@ -96,7 +92,7 @@ public class ContractExtensionTestModule extends AbstractModule {
 		final FitnessFunctionRegistry fitnessFunctionRegistry = new FitnessFunctionRegistry();
 
 		final CargoSchedulerFitnessCoreFactory factory = new CargoSchedulerFitnessCoreFactory();
-		factory.setExternalComponentProviders(Collections.<ICargoFitnessComponentProvider> singleton(new ProfitAndLossAllocationComponentProvider()));
+		// factory.setExternalComponentProviders(Collections.<ICargoFitnessComponentProvider> singleton(new ProfitAndLossAllocationComponentProvider()));
 		fitnessFunctionRegistry.registerFitnessCoreFactory(factory);
 		fitnessFunctionRegistry.registerFitnessCoreFactory(new NonOptionalSlotFitnessCoreFactory());
 
