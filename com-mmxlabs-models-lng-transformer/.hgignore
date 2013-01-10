@@ -1,0 +1,15 @@
+
+.*~$
+.*\.orig$
+.*\.swp
+
+syntax: regexp
+^.*/bin$
+syntax: regexp
+^.*/target$
+
+syntax: regexp
+^.*/\.settings$
+
+.project
+.settings/

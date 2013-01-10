@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+       point="org.eclipse.ui.views">
+    <view
+          category="com.mmxlabs.models.lng.views.logical"
+          class="com.mmxlabs.models.lng.analytics.transformer.ui.views.ShippingCostsView"
+          id="com.mmxlabs.models.lng.analytics.transformer.ui.views.ShippingCostsView"
+          name="Shipping Costs"
+          restorable="true">
+    </view>
+ </extension>
+</plugin>

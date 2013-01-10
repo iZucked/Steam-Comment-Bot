@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<?eclipse version="3.0"?>
+
+<!--
+ <copyright>
+ </copyright>
+
+ $Id$
+-->
+
+<plugin>
+
+
+
+	
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          defaultHandler="com.mmxlabs.models.lng.analytics.ui.liveeval.internal.LiveEvaluatorStateCommandHandler"
+          id="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
+          name="Toggle Live Evaluator">
+       <state
+             class="org.eclipse.ui.handlers.RegistryToggleState:true"
+             id="org.eclipse.ui.commands.toggleState">
+       </state>
+    </command>
+ </extension>
+ <extension
+       point="org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+          locationURI="toolbar:org.eclipse.ui.trim.status">
+       <toolbar
+             id="com.mmxlabs.models.lng.analytics.editor.toolbar1">
+          <command
+                commandId="com.mmxlabs.models.lng.analytics.editor.LiveEvaluatorEnabled"
+                icon="icons/bg-eval.gif"
+                label="Toggle Background Evaluation"
+                style="toggle">
+          </command>
+       </toolbar>
+    </menuContribution>
+ </extension>
+ <extension
+       point="org.eclipse.ui.startup">
+    <startup
+          class="com.mmxlabs.models.lng.analytics.ui.liveeval.internal.LiveEvaluatorStartupExtension">
+    </startup>
+ </extension>
+</plugin>

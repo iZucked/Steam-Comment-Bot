@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<site>
+   <feature id="com.mmxlabs.models.lng.transformer.feature" version="0.0.0">
+      <category name="all"/>
+   </feature>
+   <feature id="com.mmxlabs.models.lng.transformer.feature.source" version="0.0.0">
+      <category name="all"/>
+   </feature>
+   <category-def name="all" label="Models: LNG Types - Transformer"/>
+</site>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="com.mmxlabs.models.lng.transformer.ui.deleteservice.DeletedScenarioServiceListener">
+   <implementation class="com.mmxlabs.models.lng.transformer.ui.deleteservice.DeletedScenarioServiceListener"/>
+  
+   <reference bind="bind" cardinality="0..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="unbind"/>
+   <reference bind="bind" cardinality="1..1" interface="com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager" name="IEclipseJobManager" policy="dynamic" unbind="unbind"/>
+</scr:component>

@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+            point="org.eclipse.ui.handlers">
+         <handler
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.StartOptimisationHandler"
+               commandId="com.mmxlabs.commands.optimisation.play">
+            <enabledWhen>
+                  <with
+                        variable="selection">
+               <iterate
+                     ifEmpty="false">
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <test
+                           forcePluginActivation="true"
+                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPlay">
+                     </test>
+                  </and>
+               </iterate>
+                  </with>
+            </enabledWhen>
+            <activeWhen>
+              <with
+                        variable="selection">
+               <iterate
+                        ifEmpty="false">
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
+                    </with>
+            </activeWhen>
+         </handler>
+         <handler
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.ForkAndStartOptimisationHandler"
+               commandId="com.mmxlabs.commands.optimisation.forkandplay">
+            <enabledWhen>
+                  <with
+                        variable="selection">
+               <iterate
+                     ifEmpty="false">
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <test
+                           forcePluginActivation="true"
+                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPlay">
+                     </test>
+                  </and>
+               </iterate>
+                  </with>
+            </enabledWhen>
+            <activeWhen>
+              <with
+                        variable="selection">
+               <iterate
+                        ifEmpty="false">
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                  </and>
+               </iterate>
+                    </with>
+            </activeWhen>
+         </handler>
+         <handler
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.StopOptimisationHandler"
+               commandId="com.mmxlabs.commands.optimisation.terminate">
+            <enabledWhen>
+               <iterate
+                     ifEmpty="false">
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <test
+                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canTerminate">
+                     </test>
+                  </and>
+               </iterate>
+            </enabledWhen>
+            <activeWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <and>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </and>
+                  </iterate>
+               </with>
+            </activeWhen>
+         </handler>
+         <handler
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.PauseOptimisationHandler"
+               commandId="com.mmxlabs.commands.optimisation.pause">
+            <enabledWhen>
+               <iterate
+                     ifEmpty="false">
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <test
+                           property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.canPause">
+                     </test>
+                  </and>
+               </iterate>
+            </enabledWhen>
+            <activeWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <and>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </and>
+                  </iterate>
+               </with>
+            </activeWhen>
+         </handler>
+         <handler
+               class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.EvaluateOptimisationHandler"
+               commandId="com.mmxlabs.commands.optimisation.evaluate">
+            <enabledWhen>
+               <iterate
+                     ifEmpty="false">
+                  <and>
+                     <instanceof
+                           value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                     </instanceof>
+                     <not>
+                        <test
+                              property="com.mmxlabs.shiplingo.platform.models.optimisation.properties.hasActiveJob">
+                        </test>
+                     </not>
+                  </and>
+               </iterate>
+            </enabledWhen>
+            <activeWhen>
+               <with
+                     variable="selection">
+                  <iterate
+                        ifEmpty="false">
+                     <and>
+                        <instanceof
+                              value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                        </instanceof>
+                     </and>
+                  </iterate>
+               </with>
+            </activeWhen>
+         </handler>
+      </extension>
+
+	<extension
+         point="org.eclipse.ui.commands">
+         <category
+            id="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.category"
+            name="Optimisation Commands">
+      </category>
+   
+      <command
+            categoryId="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.category"
+            id="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.SaveOptimisationJob"
+            name="Save Optimisation Job">
+      </command>
+   </extension>
+   
+   <extension
+         id="toolbar:com.mmxlabs.jobcontroller.views.JobManager"
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:com.mmxlabs.jobcontroller.views.JobManager">
+         <command
+               commandId="com.mmxlabs.shiplingo.platform.models.manifest.optimisation.commands.SaveOptimisationJob"
+               disabledIcon="icons/dtool16/saveas_edit.gif"
+               icon="icons/etool16/saveas_edit.gif"
+               label="Save"
+               style="push"
+               tooltip="Save selected optimisation">
+         </command>
+      </menuContribution>
+      
+      
+   </extension>
+   
+         <extension
+            point="org.eclipse.core.runtime.adapters">
+         <factory
+               adaptableType="com.mmxlabs.models.lng.transformer.ui.LNGSchedulerJobDescriptor"
+               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.LNGJobControlAdapterFactory">
+            <adapter
+                  type="com.mmxlabs.jobmanager.jobs.IJobControl">
+            </adapter>
+         </factory>
+         <factory
+               adaptableType="org.eclipse.core.resources.IResource"
+               class="com.mmxlabs.models.lng.transformer.ui.adapterfactories.ScenarioValidationStatusAdapterFactory">
+            <adapter
+                  type="org.eclipse.core.runtime.IStatus">
+            </adapter>
+         </factory>
+      </extension>
+   
+      <extension
+            point="org.eclipse.ui.commands">
+         <category
+               id="com.mmxlabs.commands.category.optimisation"
+               name="Optimisation Commands">
+         </category>
+         <command
+               categoryId="com.mmxlabs.commands.category.optimisation"
+               id="com.mmxlabs.commands.optimisation.play"
+               name="Start/Resume Optimisation">
+         </command>
+         <command
+               categoryId="com.mmxlabs.commands.category.optimisation"
+               id="com.mmxlabs.commands.optimisation.pause"
+               name="Pause Optimisation">
+         </command>
+         <command
+               categoryId="com.mmxlabs.commands.category.optimisation"
+               id="com.mmxlabs.commands.optimisation.terminate"
+               name="Terminate Optimisation">
+         </command>
+         <category
+               id="com.mmxlabs.commands.category.scenario"
+               name="Scenario Commands">
+         </category>
+         <command
+               categoryId="com.mmxlabs.commands.category.optimisation"
+               id="com.mmxlabs.commands.optimisation.evaluate"
+               name="Evaluate Schedule">
+         </command>
+         <command
+               categoryId="com.mmxlabs.commands.category.optimisation"
+               id="com.mmxlabs.commands.optimisation.forkandplay"
+               name="Fork and Optimise">
+         </command>
+      </extension>
+      
+      <extension
+            point="org.eclipse.ui.menus">
+         <menuContribution
+               allPopups="false"
+               locationURI="popup:com.mmxlabs.scenario.service.ui.navigator?after=optimisation">
+               <command
+                     commandId="com.mmxlabs.commands.optimisation.play"
+                     disabledIcon="icons/dlcl16/resume_co.gif"
+                     icon="icons/elcl16/resume_co.gif"
+                     id="com.mmxlabs.scenario.service.toolbars.optimisation.play"
+                     label="Optimise"
+                     style="push"
+                     tooltip="Start or resume optimisation">
+                  <visibleWhen
+                        checkEnabled="false">
+                     <and>
+                        <with
+                              variable="selection">
+                           <iterate
+                                 ifEmpty="false">
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                              <not>
+                                 <test
+                                       forcePluginActivation="true"
+                                       property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                                 </test>
+                              </not>
+                           </iterate>
+                        </with>
+                        <count
+                              value="1">
+                        </count>
+                     </and>
+                  </visibleWhen>
+               </command>
+               <command
+                     commandId="com.mmxlabs.commands.optimisation.forkandplay"
+                     icon="icons/forkandoptimise.gif"
+                     id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
+                     label="Fork and Optimise"
+                     style="push"
+                     tooltip="Fork and Optimise">
+                  <visibleWhen
+                        checkEnabled="false">
+                     <and>
+                        <with
+                              variable="selection">
+                           <iterate
+                                 ifEmpty="false">
+                              <instanceof
+                                    value="com.mmxlabs.scenario.service.model.ScenarioInstance">
+                              </instanceof>
+                              <not>
+                                 <test
+                                       forcePluginActivation="true"
+                                       property="com.mmxlabs.scenario.service.ui.properties.pinned">
+                                 </test>
+                              </not>
+                           </iterate>
+                        </with>
+                        <count
+                              value="1">
+                        </count>
+                     </and>
+                  </visibleWhen>
+               </command>
+         </menuContribution>
+      </extension>
+      <extension
+            point="org.eclipse.core.expressions.propertyTesters">
+         <propertyTester
+               class="com.mmxlabs.models.lng.transformer.ui.propertytesters.JobStatePropertyTester"
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.propertyTester"
+               namespace="com.mmxlabs.shiplingo.platform.models.optimisation.properties"
+               properties="jobState,canPause,canPlay,canTerminate,hasActiveJob"
+               type="com.mmxlabs.scenario.service.model.ScenarioInstance">
+         </propertyTester>
+      </extension>
+      <extension
+            point="org.eclipse.ui.editorActions">
+         <editorContribution
+               id="com.mmxlabs.shiplingo.platform.models.optimisation.editorContributions"
+               targetID="com.mmxlabs.models.lng.demo.scneditor">
+            <action
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.EvaluateOptimisationEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.evaluate"
+                  disabledIcon="icons/evaluate_schedule.gif"
+                  icon="icons/evaluate_schedule.gif"
+                  id="com.mmxlabs.shiplingo.platform.models.optimisation.action3"
+                  label="Evaluate"
+                  style="push"
+                  toolbarPath="additions"
+                  tooltip="Evaluate scenario">
+            </action>
+            <action
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StopOptimisationEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.terminate"
+                  disabledIcon="icons/dlcl16/terminate_co.gif"
+                  icon="icons/elcl16/terminate_co.gif"
+                  id="com.mmxlabs.shiplingo.platform.models.optimisation.stop"
+                  label="Stop Optimisation"
+                  style="push"
+                  toolbarPath="additions"
+                  tooltip="Terminate optimisation">
+            </action>
+            <action
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.PauseOptimisationEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.pause"
+                  disabledIcon="icons/dlcl16/suspend_co.gif"
+                  icon="icons/elcl16/suspend_co.gif"
+                  id="com.mmxlabs.shiplingo.platform.models.optimisation.pause"
+                  label="Pause Optimisation"
+                  style="push"
+                  toolbarPath="additions"
+                  tooltip="Pause optimisation">
+            </action>
+            <action
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.StartOptimisationEditorActionDelegate"
+                  definitionId="com.mmxlabs.commands.optimisation.play"
+                  disabledIcon="icons/dlcl16/resume_co.gif"
+                  icon="icons/elcl16/resume_co.gif"
+                  id="com.mmxlabs.shiplingo.platform.models.optimisation.play"
+                  label="Start/Resume Optimisation"
+                  style="push"
+                  toolbarPath="additions"
+                  tooltip="Start or Resume optimisation">
+            </action>
+            <action
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkAndStartOptimisationActionHandler"
+                  definitionId="com.mmxlabs.commands.optimisation.forkandplay"
+                  icon="icons/forkandoptimise.gif"
+                  id="com.mmxlabs.scenario.service.toolbars.optimisation.forkandplay"
+                  label="Fork and Optimise"
+                  style="push"
+                  toolbarPath="additions"
+                  tooltip="Fork scenario and optimise the fork">
+            </action>
+            <action
+                  class="com.mmxlabs.models.lng.transformer.ui.navigator.handlers.editor.ForkScenarioEditorActionDelegate"
+                  definitionId="com.mmxlabs.scenario.service.ui.fork"
+                  icon="icons/fork.gif"
+                  id="com.mmxlabs.scenario.service.ui.fork"
+                  label="Fork"
+                  style="push"
+                  toolbarPath="additions"
+                  tooltip="Fork scenario and continue editing">
+            </action>
+         </editorContribution>
+      </extension>
+</plugin>

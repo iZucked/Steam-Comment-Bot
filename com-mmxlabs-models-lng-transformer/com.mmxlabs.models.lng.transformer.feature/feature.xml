@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2012
+    All rights reserved.
+
+-->
+<feature
+      id="com.mmxlabs.models.lng.transformer.feature"
+      label="Models: LNG Types - Transformer Feature"
+      version="2.0.0.qualifier"
+      provider-name="Minimax Labs Ltd.">
+
+   <description>
+      LNG Types optimisation transformer.
+   </description>
+
+   <copyright>
+      Copyright (C) Minimax Labs Ltd., 2010 - 2012
+All rights reserved.
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <requires>
+      <import feature="com.mmxlabs.models.lng.feature" version="2.0.0" match="compatible"/>
+   </requires>
+
+   <plugin
+         id="com.mmxlabs.models.lng.transformer"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.transformer.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.liveevaluator"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.analytics.transformer"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.analytics.transformer.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
