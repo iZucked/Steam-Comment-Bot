@@ -59,7 +59,7 @@ public class ScenarioRunner {
 
 	public void init() throws IncompleteScenarioException {
 
-		final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
+		final LNGTransformer transformer = new LNGTransformer(scenario, new TransformerExtensionTestModule());
 
 		injector = transformer.getInjector();
 

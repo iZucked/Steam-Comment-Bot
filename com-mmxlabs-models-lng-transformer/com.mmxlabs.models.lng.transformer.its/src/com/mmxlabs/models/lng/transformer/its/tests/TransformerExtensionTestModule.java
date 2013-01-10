@@ -44,7 +44,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCoreFactory;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerComponentsInjectorService;
 
-public class ContractExtensionTestModule extends AbstractModule {
+public class TransformerExtensionTestModule extends AbstractModule {
 
 	@Override
 	protected void configure() {

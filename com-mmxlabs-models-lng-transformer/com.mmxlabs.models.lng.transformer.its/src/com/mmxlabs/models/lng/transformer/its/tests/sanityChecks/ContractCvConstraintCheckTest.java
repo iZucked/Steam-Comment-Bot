@@ -20,7 +20,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
-import com.mmxlabs.models.lng.transformer.its.tests.ContractExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.CustomScenarioCreator;
 import com.mmxlabs.models.lng.transformer.its.tests.ScenarioRunner;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
@@ -224,7 +224,7 @@ public class ContractCvConstraintCheckTest {
 		 */
 		// TODO: rewrite to take a constraint checker factory instead of a constraint checker, so that the expected parameter does not have weird not-initialised semantics
 		public void testConstraintChecker(boolean expectedResult, AbstractPairwiseConstraintChecker checker) {
-			final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
+			final LNGTransformer transformer = new LNGTransformer(scenario, new TransformerExtensionTestModule());
 			final IOptimisationData data = transformer.getOptimisationData();
 			
 			transformer.getInjector().injectMembers(checker);

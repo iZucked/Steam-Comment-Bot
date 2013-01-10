@@ -67,7 +67,7 @@ import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
-import com.mmxlabs.models.lng.transformer.its.tests.ContractExtensionTestModule;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -644,7 +644,7 @@ public class ScenarioTools {
 	 */
 	public static Schedule evaluate(final MMXRootObject scenario) {
 
-		final LNGTransformer transformer = new LNGTransformer(scenario, new ContractExtensionTestModule());
+		final LNGTransformer transformer = new LNGTransformer(scenario, new TransformerExtensionTestModule());
 
 		// Code to dump out the scenario to disk
 		if (false) {
