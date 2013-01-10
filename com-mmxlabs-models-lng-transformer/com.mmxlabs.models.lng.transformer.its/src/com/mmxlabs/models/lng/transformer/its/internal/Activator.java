@@ -19,7 +19,7 @@ import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "com.mmxlabs.shiplingo.platform.its"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "com.mmxlabs.models.lng.transformer.its"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;
