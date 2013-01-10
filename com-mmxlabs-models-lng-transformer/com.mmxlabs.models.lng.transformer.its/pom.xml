@@ -156,11 +156,6 @@
 							<autoStart>true</autoStart>
 						</bundle>
 						<bundle>
-							<id>com.mmxlabs.trading.integration</id>
-							<level>4</level>
-							<autoStart>true</autoStart>
-						</bundle>
-						<bundle>
 							<id>com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser</id>
 							<level>4</level>
 							<autoStart>true</autoStart>
@@ -171,41 +166,4 @@
 		</plugins>
 	</build>
 
-	<profiles>
-		<!-- The quickTests profile skips the long running scenario tests -->
-		<profile>
-			<id>quickTests</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.eclipse.tycho</groupId>
-						<artifactId>tycho-surefire-plugin</artifactId>
-						<version>${tycho.version}</version>
-						<configuration>
-							<excludes>
-								<exclude>**/OptimisationRepeatabilityTest.*</exclude>
-								<exclude>**/TestOptimisationResult*.*</exclude>
-								<exclude>**/TestDemoCases*.*</exclude>
-								<exclude>**/TestCSVDemoCases*.*</exclude>
-							</excludes>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-
-		</profile>
-
-		<!-- Enable this profile to run the its test independently of the full 
-			build. -->
-		<profile>
-			<id>useSnapshotsRepo</id>
-			<repositories>
-				<repository>
-					<id>mmxlabs-p2-snapshots</id>
-					<url>https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/com.mmxlabs.shiplingo.platform/nightly/</url>
-					<layout>p2</layout>
-				</repository>
-			</repositories>
-		</profile>
-	</profiles>
 </project>
