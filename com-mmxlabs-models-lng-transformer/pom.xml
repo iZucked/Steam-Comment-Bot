@@ -42,8 +42,9 @@
 
 		<module>com.mmxlabs.models.lng.transformer.feature</module>
 
-		<module>com.mmxlabs.models.lng.transformer.p2</module>
+		<module>com.mmxlabs.models.lng.transformer.its</module>
 
+		<module>com.mmxlabs.models.lng.transformer.p2</module>
 
 	</modules>
 
