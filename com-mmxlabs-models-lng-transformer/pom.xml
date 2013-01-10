@@ -11,8 +11,8 @@
 	<parent>
 		<groupId>com.mmxlabs.parent</groupId>
 		<artifactId>tycho-parent</artifactId>
-		<relativePath />
 		<version>18</version>
+		<relativePath />
 	</parent>
 
 	<scm>
@@ -68,7 +68,7 @@
 						<artifact>
 							<groupId>com.mmxlabs.models.lng.transformer</groupId>
 							<artifactId>target-definition</artifactId>
-							<version>2.0.0-SNAPSHOT</version>
+							<version>${project.version}</version>
 						</artifact>
 					</target>
 
