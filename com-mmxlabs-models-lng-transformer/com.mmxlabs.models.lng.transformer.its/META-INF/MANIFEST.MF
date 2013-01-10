@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Shiplingo Platform Integration Tests
-Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.its
+Bundle-Name: Shiplingo Transformer Tests
+Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.its
 Bundle-Version: 2.0.0.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
