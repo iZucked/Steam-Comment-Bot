@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="com.mmxlabs.models.lng.fleet.editor.commands.DateUpdatingCommandProvider">
    <implementation class="com.mmxlabs.models.lng.fleet.editor.commands.DateUpdatingCommandProvider"/>
    <service>
