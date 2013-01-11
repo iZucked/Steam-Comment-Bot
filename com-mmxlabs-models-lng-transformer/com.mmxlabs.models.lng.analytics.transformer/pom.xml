@@ -6,10 +6,10 @@
 	<parent>
 		<groupId>com.mmxlabs.models.lng.transformer</groupId>
 		<artifactId>com.mmxlabs.models.lng.transformer.parent</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>2.0.0.RELEASE</version>
 	</parent>
 
 	<artifactId>com.mmxlabs.models.lng.analytics.transformer</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>2.0.0.RELEASE</version>
 	<packaging>eclipse-plugin</packaging>
 </project>

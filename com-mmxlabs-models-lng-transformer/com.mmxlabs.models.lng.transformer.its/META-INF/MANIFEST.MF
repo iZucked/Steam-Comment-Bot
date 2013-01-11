@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Shiplingo Transformer Tests
 Bundle-SymbolicName: com.mmxlabs.models.lng.transformer.its
-Bundle-Version: 2.0.0.qualifier
+Bundle-Version: 2.0.0.RELEASE
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: org.junit;bundle-version="4.8.1",
