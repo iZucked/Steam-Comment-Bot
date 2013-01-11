@@ -41,9 +41,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-/**
- * @since 2.0
- */
 public class VanillaEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
