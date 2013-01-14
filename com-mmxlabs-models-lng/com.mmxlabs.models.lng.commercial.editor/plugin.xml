@@ -93,7 +93,6 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract">
   </componentHelper>
-		
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
@@ -121,6 +120,15 @@
           subModelClassName="com.mmxlabs.models.lng.commercial.CommercialModel"
           subModelImporterClass="com.mmxlabs.models.lng.commercial.importer.CommercialModelImporter">
     </submodelImporter>
+ </extension>
+  <extension
+       point="com.mmxlabs.models.util.import.classes">
+    <classImporter
+          ID="com.mmxlabs.models.lng.commercial.editor.legalEntityImporter"
+          classImporterClass="com.mmxlabs.models.lng.commercial.importer.LegalEntityImporter"
+          eClassName="com.mmxlabs.models.lng.commercial.LegalEntity"
+          inheritable="false">
+    </classImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
@@ -209,6 +217,15 @@
           outputEClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract"
           targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
+ </extension>
+ <extension
+       point="com.mmxlabs.models.ui.displaycompositefactories">
+    <displayCompositeFactory
+          eClass="com.mmxlabs.models.lng.commercial.LegalEntity"
+          factory="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityDisplayCompositeFactory"
+          id="com.mmxlabs.models.lng.commercial.ui.displaycomposites.LegalEntityDisplayCompositeFactory"
+          inheritable="true">
+    </displayCompositeFactory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.editorfactories">

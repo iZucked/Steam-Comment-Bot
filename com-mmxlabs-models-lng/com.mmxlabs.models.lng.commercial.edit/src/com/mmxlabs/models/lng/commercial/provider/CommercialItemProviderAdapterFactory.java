@@ -330,6 +330,30 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.TaxRate} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected TaxRateItemProvider taxRateItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.TaxRate}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createTaxRateAdapter() {
+		if (taxRateItemProvider == null) {
+			taxRateItemProvider = new TaxRateItemProvider(this);
+		}
+
+		return taxRateItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -439,6 +463,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (redirectionPurchaseContractItemProvider != null) redirectionPurchaseContractItemProvider.dispose();
 		if (priceExpressionContractItemProvider != null) priceExpressionContractItemProvider.dispose();
 		if (redirectionContractOriginalDateItemProvider != null) redirectionContractOriginalDateItemProvider.dispose();
+		if (taxRateItemProvider != null) taxRateItemProvider.dispose();
 	}
 
 }

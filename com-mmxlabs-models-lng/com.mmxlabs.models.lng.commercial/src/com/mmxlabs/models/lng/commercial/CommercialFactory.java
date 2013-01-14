@@ -126,6 +126,16 @@ public interface CommercialFactory extends EFactory {
 	RedirectionContractOriginalDate createRedirectionContractOriginalDate();
 
 	/**
+	 * Returns a new object of class '<em>Tax Rate</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Tax Rate</em>'.
+	 * @generated
+	 */
+	TaxRate createTaxRate();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
