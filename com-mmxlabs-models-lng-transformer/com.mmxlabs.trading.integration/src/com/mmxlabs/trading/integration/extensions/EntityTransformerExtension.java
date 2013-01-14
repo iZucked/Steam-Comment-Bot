@@ -52,11 +52,9 @@ public class EntityTransformerExtension implements ITransformerExtension {
 		this.entities = map;
 
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-		final EntityTransformerUtils transformerUtils = new EntityTransformerUtils();
-
 		
 		for (final LegalEntity e : commercialModel.getEntities()) {
-			final StepwiseIntegerCurve taxCurve = transformerUtils.createTaxCurve(e, map.getEarliestDate());  
+			final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(e, dateAndCurveHelper, map.getEarliestDate());  
 			
 			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), taxCurve);
 

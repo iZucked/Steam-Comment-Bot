@@ -13,10 +13,7 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  * @since 2.0
  */
 public class EntityTransformerUtils {
-	@Inject
-	private DateAndCurveHelper dateAndCurveHelper;
-
-	public StepwiseIntegerCurve createTaxCurve(LegalEntity entity, Date earliestDate) {
+	public static StepwiseIntegerCurve createTaxCurve(LegalEntity entity, DateAndCurveHelper dateAndCurveHelper, Date earliestDate) {
 		final StepwiseIntegerCurve taxCurve = new StepwiseIntegerCurve();  
 		taxCurve.setDefaultValue(0);
 		for (final TaxRate taxRate: entity.getTaxRates()) {
