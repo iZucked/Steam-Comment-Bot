@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>com.mmxlabs.shiplingo.platform</groupId>
 		<artifactId>com.mmxlabs.shiplingo.platform.parent</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
+		<version>2.0.1-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.mmxlabs.shiplingo.platform.feature</groupId>
 	<artifactId>com.mmxlabs.shiplingo.platform.feature</artifactId>
-	<version>2.0.0-SNAPSHOT</version>
+	<version>2.0.1-SNAPSHOT</version>
 	<packaging>eclipse-feature</packaging>
 
 	<build>
@@ -30,7 +30,14 @@
 						</goals>
 					</execution>
 				</executions>
+
+				<configuration>
+					<excludes>
+						<plugin id="com.mmxlabs.shiplingo.platform.doc" />
+					</excludes>
+				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-p2-plugin</artifactId>
