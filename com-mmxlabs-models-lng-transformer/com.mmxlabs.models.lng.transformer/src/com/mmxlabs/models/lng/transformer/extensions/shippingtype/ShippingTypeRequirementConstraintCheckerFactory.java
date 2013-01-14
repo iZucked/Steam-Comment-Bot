@@ -15,7 +15,7 @@ import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
  */
 public final class ShippingTypeRequirementConstraintCheckerFactory implements IConstraintCheckerFactory {
 
-	public static final String NAME = "RestrictedElementsConstraintChecker";
+	public static final String NAME = "ShippingTypeRequirementConstraintChecker";
 
 	@Override
 	public String getName() {
