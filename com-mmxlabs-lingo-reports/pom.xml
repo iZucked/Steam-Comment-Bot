@@ -41,14 +41,15 @@
 		<module>com.mmxlabs.shiplingo.platform.feature</module>
 		<module>com.mmxlabs.platform.feature</module>
 
-		<module>com.mmxlabs.shiplingo.platform.p2</module>
 
 		<!-- Product file project -->
-<!-- 		<module>com.mmxlabs.shiplingo.platform.product</module> -->
+		<!-- <module>com.mmxlabs.shiplingo.platform.product</module> -->
 
 		<!-- Test Plugins -->
-		<module>com.mmxlabs.shiplingo.platform.its</module>
+		<!-- <module>com.mmxlabs.shiplingo.platform.its</module> -->
 		<module>com.mmxlabs.shiplingo.platform.reports.tests</module>
+
+		<module>com.mmxlabs.shiplingo.platform.p2</module>
 	</modules>
 
 	<build>
@@ -113,6 +114,12 @@
 						</environment>
 					</environments>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-source-plugin</artifactId>
+				<inherited>true</inherited>
 			</plugin>
 
 		</plugins>
