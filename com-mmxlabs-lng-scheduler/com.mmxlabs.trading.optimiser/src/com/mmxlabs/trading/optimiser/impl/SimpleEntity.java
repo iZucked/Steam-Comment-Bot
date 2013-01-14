@@ -14,26 +14,34 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  * 
  */
 public class SimpleEntity extends Entity {
-	final ICurve taxCurve;
+	/**
+	 * @since 2.0
+	 */
+	final protected ICurve taxCurve;
 
-	final int ownership;
-	final int offsetPerMMBTU;
+	/**
+	 * @since 2.0
+	 */
+	final protected int ownership;
 
-	public SimpleEntity(final String name, final int ownership, final ICurve taxCurve, final int offset) {
+	/**
+	 * @since 2.0
+	 */
+	public SimpleEntity(final String name, final int ownership, final ICurve taxCurve) {
 		super(name);
 		this.ownership = ownership;
 		this.taxCurve = taxCurve;
-		this.offsetPerMMBTU = offset;
 	}
 
+	
 	@Override
 	public int getDownstreamTransferPrice(final int dischargePricePerM3, final int cvValue) {
-		return dischargePricePerM3 - Calculator.costPerM3FromMMBTu(offsetPerMMBTU, cvValue);
+		return dischargePricePerM3;
 	}
 
 	@Override
 	public int getUpstreamTransferPrice(final int loadPricePerM3, final int cvValue) {
-		return loadPricePerM3 + Calculator.costPerM3FromMMBTu(offsetPerMMBTU, cvValue);
+		return loadPricePerM3;
 	}
 
 	/**
