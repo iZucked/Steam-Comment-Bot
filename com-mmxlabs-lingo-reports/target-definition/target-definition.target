@@ -59,8 +59,6 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser.source" version="0.0.0"/>
-<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="0.0.0"/>
 <unit id="com.mmxlabs.trading.optimiser.feature.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.trading.optimiser.feature.source.feature.group" version="0.0.0"/>
 <unit id="com.mmxlabs.models.lng.feature.feature.group" version="0.0.0"/>
@@ -140,6 +138,8 @@
 <unit id="com.mmxlabs.optimiser.optimiser-core" version="1.1.1.201212131159"/>
 <unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.1.1.201212131159"/>
 <unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser.source" version="3.0.0.201301111643"/>
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="3.0.0.201301111643"/>
 <unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="2.0.0.RELEASE"/>
 <unit id="com.mmxlabs.rcp.common.feature.feature.group" version="2.0.0.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="2.0.0.RELEASE"/>

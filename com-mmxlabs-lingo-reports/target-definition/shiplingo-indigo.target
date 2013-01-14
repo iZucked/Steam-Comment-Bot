@@ -130,6 +130,8 @@
 <unit id="com.mmxlabs.optimiser.optimiser-core" version="1.1.1.201212131159"/>
 <unit id="com.mmxlabs.optimiser.optimiser-ga" version="1.1.1.201212131159"/>
 <unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.1.201212131159"/>
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser.source" version="3.0.0.201301111643"/>
+<unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="3.0.0.201301111643"/>
 <unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="2.0.0.RELEASE"/>
 <unit id="com.mmxlabs.rcp.common.feature.feature.group" version="2.0.0.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="2.0.0.RELEASE"/>
