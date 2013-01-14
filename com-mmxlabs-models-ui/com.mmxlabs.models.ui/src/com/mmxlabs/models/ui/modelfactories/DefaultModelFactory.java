@@ -13,8 +13,10 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
+import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.jface.viewers.ISelection;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -46,6 +48,26 @@ public class DefaultModelFactory implements IModelFactory {
 					}
 				}
 			}
+			
+			if (output == null) {
+				// All registry packages...
+				for (Object obj : Registry.INSTANCE.values()) {
+					if (obj instanceof EPackage) {
+						EPackage ePackage2 = (EPackage) obj;
+						for (final EClassifier e : ePackage2.getEClassifiers()) {
+							if (e instanceof EClass) {
+								if (e.getInstanceClass().getCanonicalName().equals(prototypeClass)) {
+									output = constructInstance((EClass) e);
+									break;
+								}
+							}
+						}
+					}
+
+				}
+
+			}
+			
 			if (output == null)
 				output = constructInstance(containment.getEReferenceType());
 		}
