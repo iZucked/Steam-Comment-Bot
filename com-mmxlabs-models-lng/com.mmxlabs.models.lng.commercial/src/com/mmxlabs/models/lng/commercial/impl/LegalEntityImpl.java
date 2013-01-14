@@ -27,7 +27,6 @@ import com.mmxlabs.models.lng.types.impl.ALegalEntityImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl#getTaxRates <em>Tax Rates</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.LegalEntityImpl#getTransferPrice <em>Transfer Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -44,28 +43,6 @@ public class LegalEntityImpl extends ALegalEntityImpl implements LegalEntity {
 	 * @ordered
 	 */
 	protected EList<TaxRate> taxRates;
-
-	/**
-	 * The default value of the '{@link #getTransferPrice() <em>Transfer Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see #getTransferPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final float TRANSFER_PRICE_EDEFAULT = 0.0F;
-
-	/**
-	 * The cached value of the '{@link #getTransferPrice() <em>Transfer Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @see #getTransferPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected float transferPrice = TRANSFER_PRICE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -102,29 +79,6 @@ public class LegalEntityImpl extends ALegalEntityImpl implements LegalEntity {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public float getTransferPrice() {
-		return transferPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setTransferPrice(float newTransferPrice) {
-		float oldTransferPrice = transferPrice;
-		transferPrice = newTransferPrice;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.LEGAL_ENTITY__TRANSFER_PRICE, oldTransferPrice, transferPrice));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -147,8 +101,6 @@ public class LegalEntityImpl extends ALegalEntityImpl implements LegalEntity {
 		switch (featureID) {
 			case CommercialPackage.LEGAL_ENTITY__TAX_RATES:
 				return getTaxRates();
-			case CommercialPackage.LEGAL_ENTITY__TRANSFER_PRICE:
-				return getTransferPrice();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -166,9 +118,6 @@ public class LegalEntityImpl extends ALegalEntityImpl implements LegalEntity {
 				getTaxRates().clear();
 				getTaxRates().addAll((Collection<? extends TaxRate>)newValue);
 				return;
-			case CommercialPackage.LEGAL_ENTITY__TRANSFER_PRICE:
-				setTransferPrice((Float)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -184,9 +133,6 @@ public class LegalEntityImpl extends ALegalEntityImpl implements LegalEntity {
 			case CommercialPackage.LEGAL_ENTITY__TAX_RATES:
 				getTaxRates().clear();
 				return;
-			case CommercialPackage.LEGAL_ENTITY__TRANSFER_PRICE:
-				setTransferPrice(TRANSFER_PRICE_EDEFAULT);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -201,26 +147,8 @@ public class LegalEntityImpl extends ALegalEntityImpl implements LegalEntity {
 		switch (featureID) {
 			case CommercialPackage.LEGAL_ENTITY__TAX_RATES:
 				return taxRates != null && !taxRates.isEmpty();
-			case CommercialPackage.LEGAL_ENTITY__TRANSFER_PRICE:
-				return transferPrice != TRANSFER_PRICE_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (transferPrice: ");
-		result.append(transferPrice);
-		result.append(')');
-		return result.toString();
 	}
 
 } // end of LegalEntityImpl

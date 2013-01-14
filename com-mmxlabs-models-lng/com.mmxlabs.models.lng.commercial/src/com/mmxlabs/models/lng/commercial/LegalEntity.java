@@ -15,7 +15,6 @@ import org.eclipse.emf.common.util.EList;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.commercial.LegalEntity#getTaxRates <em>Tax Rates</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.LegalEntity#getTransferPrice <em>Transfer Price</em>}</li>
  * </ul>
  * </p>
  *
@@ -41,35 +40,6 @@ public interface LegalEntity extends ALegalEntity {
 	 * @generated
 	 */
 	EList<TaxRate> getTaxRates();
-
-	/**
-	 * Returns the value of the '<em><b>Transfer Price</b></em>' attribute.
-	 * The default value is <code>"0"</code>.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Transfer Price</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Transfer Price</em>' attribute.
-	 * @see #setTransferPrice(float)
-	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getLegalEntity_TransferPrice()
-	 * @model default="0"
-	 * @generated
-	 */
-	float getTransferPrice();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.LegalEntity#getTransferPrice <em>Transfer Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Transfer Price</em>' attribute.
-	 * @see #getTransferPrice()
-	 * @generated
-	 */
-	void setTransferPrice(float value);
 } // end of  LegalEntity
 
 // finish type fixing
