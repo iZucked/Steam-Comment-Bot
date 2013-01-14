@@ -13,6 +13,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: javax.inject;version="1.0.0"
 Export-Package: com.mmxlabs.trading.optimiser,
  com.mmxlabs.trading.optimiser.components,
- com.mmxlabs.trading.optimiser.contracts.impl,
  com.mmxlabs.trading.optimiser.impl,
  com.mmxlabs.trading.optimiser.scheduleprocessor
