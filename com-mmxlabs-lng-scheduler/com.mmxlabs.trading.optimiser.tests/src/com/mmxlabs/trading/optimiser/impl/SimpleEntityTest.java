@@ -17,26 +17,10 @@ import com.mmxlabs.common.curves.ICurve;
 public class SimpleEntityTest {
 
 	@Test
-	public void testGetDownstreamTransferPrice() {
-
-		final SimpleEntity entity = new SimpleEntity("name", 500000, null, 2000000);
-		// 1234 - (scaled)500 * 2000
-		Assert.assertEquals(1234 - 10000, entity.getDownstreamTransferPrice(1234, 5000));
-	}
-
-	@Test
-	public void testGetUpstreamTransferPrice() {
-
-		final SimpleEntity entity = new SimpleEntity("name", 500000, null, 2000000);
-		// 1234 + (scaled)500 * 2000
-		Assert.assertEquals(1234 + 10000, entity.getUpstreamTransferPrice(1234, 5000));
-	}
-
-	@Test
 	public void testGetTaxedProfit() {
 		final ICurve curve = mock(ICurve.class);
 
-		final SimpleEntity entity = new SimpleEntity("name", 500000, curve, 2000000);
+		final SimpleEntity entity = new SimpleEntity("name", 500000, curve);
 
 		final int time = 12345;
 
