@@ -11,6 +11,7 @@ import com.mmxlabs.common.curves.ICurve;
 import com.mmxlabs.common.curves.StepwiseIntegerCurve;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
@@ -48,10 +49,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
 		this.rootObject = rootObject;
 		this.entities = map;
-	}
 
-	@Override
-	public void finishTransforming() {
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 		for (final LegalEntity e : commercialModel.getEntities()) {
 			final StepwiseIntegerCurve taxCurve = new StepwiseIntegerCurve();  
@@ -64,9 +62,14 @@ public class EntityTransformerExtension implements ITransformerExtension {
 			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), taxCurve, 
 					OptimiserUnitConvertor.convertToInternalConversionFactor(e.getTransferPrice()));
 
-			entities.addModelObject(e, e2);
+			entities.addModelObject(e, e2);			
 		}
+	}
 
+	@Override
+	public void finishTransforming() {
+
+		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
 		final LegalEntity shipping = commercialModel.getShippingEntity();
 
 		setShippingEntity(entities.getOptimiserObject(shipping, IEntity.class));

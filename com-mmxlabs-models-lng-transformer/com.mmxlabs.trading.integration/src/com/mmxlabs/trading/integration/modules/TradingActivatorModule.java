@@ -8,7 +8,6 @@ import org.ops4j.peaberry.activation.util.PeaberryActivationModule;
 
 import com.mmxlabs.trading.integration.TradingOptimiserModuleService;
 import com.mmxlabs.trading.integration.factories.EntityTransformerExtensionFactory;
-import com.mmxlabs.trading.integration.factories.StandardContractTransformerExtensionFactory;
 import com.mmxlabs.trading.integration.factories.TradingExporterExtensionFactory;
 import com.mmxlabs.trading.optimiser.components.ProfitAndLossAllocationComponentProvider;
 
@@ -20,7 +19,6 @@ public class TradingActivatorModule extends PeaberryActivationModule {
 	protected void configure() {
 		bindService(ProfitAndLossAllocationComponentProvider.class).export();
 
-		bindService(StandardContractTransformerExtensionFactory.class).export();
 		bindService(EntityTransformerExtensionFactory.class).export();
 		bindService(TradingExporterExtensionFactory.class).export();
 
