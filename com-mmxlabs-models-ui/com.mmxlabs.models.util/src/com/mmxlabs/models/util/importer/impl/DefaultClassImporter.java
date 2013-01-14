@@ -1,5 +1,5 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2012
  * All rights reserved.
  */
 package com.mmxlabs.models.util.importer.impl;
@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
@@ -96,6 +97,21 @@ public class DefaultClassImporter implements IClassImporter {
 					return (EClass) classifier;
 				}
 			}
+		}
+		// All registry packages...
+		for (Object obj : Registry.INSTANCE.values()) {
+			if (obj instanceof EPackage) {
+				EPackage ePackage2 = (EPackage) obj;
+				for (final EClassifier classifier : ePackage2.getEClassifiers()) {
+					if (classifier instanceof EClass) {
+						final EClass possibleSubClass = (EClass) classifier;
+						if (outputEClass.isSuperTypeOf(possibleSubClass) && (possibleSubClass.isAbstract() == false) && possibleSubClass.getName().equalsIgnoreCase(kind)) {
+							return (EClass) classifier;
+						}
+					}
+				}
+			}
+
 		}
 
 		return outputEClass;
