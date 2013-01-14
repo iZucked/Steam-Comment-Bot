@@ -25,6 +25,7 @@ import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.trading.optimiser.impl.SimpleEntity;
+import com.mmxlabs.trading.integration.EntityTransformerUtils;
 
 /**
  * Trading transformer extension which sets up entity models.
@@ -51,16 +52,13 @@ public class EntityTransformerExtension implements ITransformerExtension {
 		this.entities = map;
 
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+		final EntityTransformerUtils transformerUtils = new EntityTransformerUtils();
+
+		
 		for (final LegalEntity e : commercialModel.getEntities()) {
-			final StepwiseIntegerCurve taxCurve = new StepwiseIntegerCurve();  
-			taxCurve.setDefaultValue(0);
-			for (final TaxRate taxRate: e.getTaxRates()) {
-				final int convertedDate = dateAndCurveHelper.convertTime(entities.getEarliestDate(), taxRate.getDate());  
-				taxCurve.setValueAfter(convertedDate, (int) (taxRate.getValue() * Calculator.ScaleFactor));
-			}
+			final StepwiseIntegerCurve taxCurve = transformerUtils.createTaxCurve(e, map.getEarliestDate());  
 			
-			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), taxCurve, 
-					OptimiserUnitConvertor.convertToInternalConversionFactor(e.getTransferPrice()));
+			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), taxCurve);
 
 			entities.addModelObject(e, e2);			
 		}
@@ -89,8 +87,8 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	/**
 	 * @since 2.0
 	 */
-	public IEntity createGroupEntity(final String name, final int ownership, final ICurve taxCurve, final int offset) {
-		return new SimpleEntity(name, ownership, taxCurve, offset);
+	public IEntity createGroupEntity(final String name, final int ownership, final ICurve taxCurve) {
+		return new SimpleEntity(name, ownership, taxCurve);
 	}
 
 	/**
