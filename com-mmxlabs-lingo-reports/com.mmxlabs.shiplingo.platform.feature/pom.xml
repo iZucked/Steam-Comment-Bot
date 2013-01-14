@@ -30,7 +30,14 @@
 						</goals>
 					</execution>
 				</executions>
+
+				<configuration>
+					<excludes>
+						<plugin id="com.mmxlabs.shiplingo.platform.doc" />
+					</excludes>
+				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-p2-plugin</artifactId>

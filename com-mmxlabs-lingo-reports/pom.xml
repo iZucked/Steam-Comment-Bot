@@ -120,13 +120,7 @@
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-source-plugin</artifactId>
 				<inherited>true</inherited>
-				<configuration>
-					<excludes>
-						<plugin id="com.mmxlabs.shiplingo.platform.doc" />
-					</excludes>
-				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 
