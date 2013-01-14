@@ -59,19 +59,6 @@
 <repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20120526062928/repository"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.trading.optimiser.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.trading.optimiser.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.transformer.feature.feature.group" version="0.0.0"/>
-<unit id="com.mmxlabs.models.lng.transformer.feature.source.feature.group" version="0.0.0"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/" id="mmxlabs-releases"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="0.0.0"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-snapshots/nightly/" id="mmxlabs-releases"/>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.widgets.grid.feature.feature.group" version="0.0.0"/>
 <repository location="http://download.eclipse.org/technology/nebula/snapshot"/>
 </location>
@@ -150,6 +137,12 @@
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.source.feature.group" version="2.0.0.RELEASE"/>
 <unit id="com.mmxlabs.datasources.feature.feature.group" version="1.1.0.RELEASE"/>
 <unit id="com.mmxlabs.datasources.feature.source.feature.group" version="1.1.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.feature.feature.group" version="2.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.feature.source.feature.group" version="2.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.transformer.feature.feature.group" version="2.0.0.RELEASE"/>
+<unit id="com.mmxlabs.models.lng.transformer.feature.source.feature.group" version="2.0.0.RELEASE"/>
+<unit id="com.mmxlabs.trading.optimiser.feature.feature.group" version="2.0.0.RELEASE"/>
+<unit id="com.mmxlabs.trading.optimiser.feature.source.feature.group" version="2.0.0.RELEASE"/>
 <repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
