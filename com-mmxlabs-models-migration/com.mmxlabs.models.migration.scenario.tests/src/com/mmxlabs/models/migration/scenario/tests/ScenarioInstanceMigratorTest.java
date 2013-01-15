@@ -1,12 +1,16 @@
 package com.mmxlabs.models.migration.scenario.tests;
 
 import static org.mockito.Mockito.inOrder;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.emf.ecore.resource.impl.URIConverterImpl;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -23,7 +27,7 @@ public class ScenarioInstanceMigratorTest {
 
 		final IMigrationRegistry migrationRegistry = Mockito.mock(IMigrationRegistry.class);
 
-		final List<URI> tmpURIs = Mockito.mock(List.class);
+		final List<URI> tmpURIs = mock(List.class);
 
 		final String context = "Context";
 		final int scenarioVersion = 1;
@@ -43,12 +47,13 @@ public class ScenarioInstanceMigratorTest {
 
 		when(migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion)).thenReturn(units);
 
+		final URIConverter uc = mock(URIConverter.class);
 		final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(migrationRegistry);
-		migrator.applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs);
+		migrator.applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
 
 		final InOrder order = inOrder(unit1, unit2);
-		order.verify(unit1).migrate(tmpURIs);
-		order.verify(unit2).migrate(tmpURIs);
+		order.verify(unit1).migrate(tmpURIs, uc);
+		order.verify(unit2).migrate(tmpURIs, uc);
 
 	}
 }
