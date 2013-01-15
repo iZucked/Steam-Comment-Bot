@@ -10,7 +10,7 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationContext">
       <MigrationContext
-            latestVersion="1"
+            latestVersion="-1"
             name="com.mmxlabs.models.lng">
       </MigrationContext>
    </extension>
