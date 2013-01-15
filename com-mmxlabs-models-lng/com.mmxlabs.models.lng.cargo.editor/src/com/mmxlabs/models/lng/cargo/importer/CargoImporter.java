@@ -84,27 +84,32 @@ public class CargoImporter extends DefaultClassImporter {
 		DischargeSlot discharge = null;
 		Cargo cargo = null;
 		for (final EObject o : result) {
-			if (o instanceof Cargo)
+			if (o instanceof Cargo) {
 				cargo = (Cargo) o;
-			else if (o instanceof LoadSlot)
+			} else if (o instanceof LoadSlot) {
 				load = (LoadSlot) o;
-			else if (o instanceof DischargeSlot)
+			} else if (o instanceof DischargeSlot) {
 				discharge = (DischargeSlot) o;
+			}
 		}
 
 		// fix missing names
 
 		final List<EObject> newResults = new ArrayList<EObject>(3);
 		boolean keepCargo = true;
-		if (load.getWindowStart() == null) {
-			keepCargo = false;
-		} else {
-			newResults.add(load);
+		if (load != null) {
+			if (load.getWindowStart() == null) {
+				keepCargo = false;
+			} else {
+				newResults.add(load);
+			}
 		}
-		if (discharge.getWindowStart() == null) {
-			keepCargo = false;
-		} else {
-			newResults.add(discharge);
+		if (discharge != null) {
+			if (discharge.getWindowStart() == null) {
+				keepCargo = false;
+			} else {
+				newResults.add(discharge);
+			}
 		}
 		if (!keepCargo) {
 			cargo.setLoadSlot(null);
