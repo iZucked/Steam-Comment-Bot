@@ -2,6 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Shiplingo Reports Tests
 Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.reports.tests
+Fragment-Host: com.mmxlabs.shiplingo.platform.reports
 Bundle-Version: 2.0.1.qualifier
 Bundle-Vendor: Minimax Labs Ltd.
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
@@ -14,3 +15,4 @@ Require-Bundle: org.junit;bundle-version="4.8.1",
  com.mmxlabs.models.lng.commercial;bundle-version="2.0.0",
  com.mmxlabs.models.lng.pricing;bundle-version="2.0.0"
 Bundle-ClassPath: .
+
