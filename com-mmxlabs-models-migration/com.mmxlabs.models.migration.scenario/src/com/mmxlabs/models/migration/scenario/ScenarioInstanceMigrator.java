@@ -26,7 +26,7 @@ public class ScenarioInstanceMigrator {
 	}
 
 	public void performMigration(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) throws Exception {
-		final String context = scenarioInstance.getMigrationContext();
+		final String context = scenarioInstance.getVersionContext();
 		final int latestVersion = migrationRegistry.getLatestContextVersion(context);
 		final int scenarioVersion = scenarioInstance.getScenarioVersion();
 		final EList<String> subModelURIs = scenarioInstance.getSubModelURIs();
@@ -64,6 +64,8 @@ public class ScenarioInstanceMigrator {
 			for (int i = 0; i < uris.size(); ++i) {
 				copyURIData(uc, tmpURIs.get(i), uris.get(i));
 			}
+			scenarioInstance.setScenarioVersion(latestVersion);
+
 		} finally {
 			// Done! Clean up
 			for (final File f : tmpFiles) {
