@@ -88,7 +88,7 @@ public class TradingExporterExtension implements IExporterExtension {
 					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
 					CargoAllocation cargoAllocation = null;
 					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-						if (allocation.getLoadAllocation().getSlot() == modelSlot || allocation.getDischargeAllocation().getSlot() == slot) {
+						if (allocation.getLoadAllocation().getSlot() == modelSlot || allocation.getDischargeAllocation().getSlot() == modelSlot) {
 							cargoAllocation = allocation;
 							break;
 						}
@@ -210,7 +210,7 @@ public class TradingExporterExtension implements IExporterExtension {
 					final Slot modelSlot = entities.getModelObject(slot, Slot.class);
 					CargoAllocation cargoAllocation = null;
 					for (final CargoAllocation allocation : outputSchedule.getCargoAllocations()) {
-						if (allocation.getLoadAllocation().getSlot() == modelSlot || allocation.getDischargeAllocation().getSlot() == slot) {
+						if (allocation.getLoadAllocation().getSlot() == modelSlot || allocation.getDischargeAllocation().getSlot() == modelSlot) {
 							cargoAllocation = allocation;
 							break;
 						}
