@@ -120,8 +120,9 @@ public class PortGroupView extends ScenarioInstanceView {
 		
 		@Override
 		public void dispose() {
-			if (lastInput != null)
-				lastInput.eAdapters().remove(this);
+			if (lastInput != null) {
+				lastInput.eAdapters().remove(contentAdapter);
+			}
 			lastInput = null;
 		}
 		
