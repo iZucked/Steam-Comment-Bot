@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: %pluginName
 Bundle-SymbolicName: com.mmxlabs.models.lng.pricing.edit;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Activator: com.mmxlabs.models.lng.pricing.provider.PricingEditPlugin$Implementation
 Bundle-Vendor: %providerName
@@ -10,7 +10,7 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.models.lng.pricing.provider
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
- com.mmxlabs.models.lng.pricing;bundle-version="[2.0.0,3.0.0)";visibility:=reexport,
+ com.mmxlabs.models.lng.pricing;bundle-version="[3.0.0,4.0.0)";visibility:=reexport,
  org.eclipse.emf.edit;bundle-version="2.7.2";visibility:=reexport,
  com.mmxlabs.models.lng.types.edit;bundle-version="[2.0.0,4.0.0)";visibility:=reexport
 Bundle-ActivationPolicy: lazy
