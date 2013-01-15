@@ -70,7 +70,7 @@
 
 		<module>com.mmxlabs.models.lng.scenario</module>
 		<module>com.mmxlabs.models.lng.migration</module>
-	<module>com.mmxlabs.models.lng.migration.tests</module>
+<!-- 	<module>com.mmxlabs.models.lng.migration.tests</module> -->
 
 		<module>com.mmxlabs.models.lng.feature</module>
 		<module>com.mmxlabs.models.lng.p2</module>
