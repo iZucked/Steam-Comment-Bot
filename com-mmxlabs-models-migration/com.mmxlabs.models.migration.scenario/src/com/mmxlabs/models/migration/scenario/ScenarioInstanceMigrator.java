@@ -58,13 +58,13 @@ public class ScenarioInstanceMigrator {
 			}
 
 			// Apply Migration Chain
-			applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
+			int migratedVersion = applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
 
 			// Copy back over original data
 			for (int i = 0; i < uris.size(); ++i) {
 				copyURIData(uc, tmpURIs.get(i), uris.get(i));
 			}
-			scenarioInstance.setScenarioVersion(latestVersion);
+			scenarioInstance.setScenarioVersion(migratedVersion);
 
 		} finally {
 			// Done! Clean up
@@ -74,14 +74,33 @@ public class ScenarioInstanceMigrator {
 		}
 	}
 
-	public void applyMigrationChain(final String context, final int scenarioVersion, final int latestVersion, final List<URI> tmpURIs, URIConverter uc) throws Exception {
+	/**
+	 * Returns latest version number to store scenario against. This will be the value of the latestVersion param unless this is "-1" (snapshot) in which case the previous version numebr is returned.
+	 * 
+	 * @param context
+	 * @param scenarioVersion
+	 * @param latestVersion
+	 * @param tmpURIs
+	 * @param uc
+	 * @return
+	 * @throws Exception
+	 */
+	public int applyMigrationChain(final String context, final int scenarioVersion, final int latestVersion, final List<URI> tmpURIs, URIConverter uc) throws Exception {
 
 		final List<IMigrationUnit> chain = migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion);
 
+		int version = scenarioVersion;
 		for (final IMigrationUnit unit : chain) {
 
 			unit.migrate(tmpURIs, uc);
+
+			if (unit.getDestinationVersion() == -1) {
+				version = unit.getSourceVersion();
+			} else {
+				version = unit.getDestinationVersion();
+			}
 		}
+		return version;
 	}
 
 	public void copyURIData(final ExtensibleURIConverterImpl uc, final URI uri, final URI tmpURI) throws IOException {
