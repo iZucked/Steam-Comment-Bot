@@ -163,7 +163,7 @@ public class FileScenarioService extends AbstractScenarioService {
 		final EObject parent = container.eContainer();
 		if (parent != null) {
 			final EStructuralFeature containment = container.eContainingFeature();
-			if (container != null && containment != null) {
+			if (containment != null) {
 				if (containment.isMany()) {
 					final EList<EObject> value = (EList<EObject>) parent.eGet(containment);
 					while (value.remove(container))
