@@ -80,7 +80,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 3.0
 	 */
 	public IEntity createGroupEntity(final String name, final int ownership, final ICurve taxCurve) {
 		return new SimpleEntity(name, ownership, taxCurve);

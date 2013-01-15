@@ -9,7 +9,7 @@ import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 
 /**
- * @since 2.0
+ * @since 3.0
  */
 public class EntityTransformerUtils {
 	public static StepwiseIntegerCurve createTaxCurve(final LegalEntity entity, final DateAndCurveHelper dateAndCurveHelper, final Date earliestDate) {
