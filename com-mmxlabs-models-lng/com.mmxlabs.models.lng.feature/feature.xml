@@ -31,6 +31,7 @@ All rights reserved.
       <import feature="com.mmxlabs.models.ui.runtime.feature" version="2.0.0" match="compatible"/>
       <import feature="com.mmxlabs.rcp.common.feature" version="2.0.0" match="compatible"/>
       <import feature="com.mmxlabs.scenario.service.feature" version="3.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.models.migration.feature" version="1.0.0" match="compatible"/>
    </requires>
 
    <plugin

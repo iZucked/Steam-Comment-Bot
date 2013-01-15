@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright (C) Minimax Labs Ltd., 2010 - 2013
+    All rights reserved.
+
+-->
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="com.mmxlabs.models.migration.MigrationContext">
+      <MigrationContext
+            latestVersion="1"
+            name="com.mmxlabs.models.lng">
+      </MigrationContext>
+   </extension>
+
+</plugin>
