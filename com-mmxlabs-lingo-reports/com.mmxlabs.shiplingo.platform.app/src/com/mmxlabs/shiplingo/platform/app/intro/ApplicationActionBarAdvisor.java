@@ -18,7 +18,6 @@ import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.StatusLineContributionItem;
 import org.eclipse.jface.internal.provisional.action.IToolBarContributionItem;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.Util;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
@@ -192,7 +191,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 
 	// listener for the "close editors automatically"
 	// preference change
-	private IPropertyChangeListener propPrefListener;
+//	private IPropertyChangeListener propPrefListener;
 
 	// private IPageListener pageListener;
 
@@ -765,10 +764,10 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 		// .removePropertyChangeListener(prefListener);
 		// prefListener = null;
 		// }
-		if (propPrefListener != null) {
-			WorkbenchPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(propPrefListener);
-			propPrefListener = null;
-		}
+//		if (propPrefListener != null) {
+//			WorkbenchPlugin.getDefault().getPreferenceStore().removePropertyChangeListener(propPrefListener);
+//			propPrefListener = null;
+//		}
 		// if (resourceListener != null) {
 		// ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceListener);
 		// resourceListener = null;
@@ -842,7 +841,7 @@ public class ApplicationActionBarAdvisor extends ActionBarAdvisor {
 //		newWizardMenu = null;
 		statusLineItem = null;
 		// prefListener = null;
-		propPrefListener = null;
+//		propPrefListener = null;
 //		introAction = null;
 
 		super.dispose();
