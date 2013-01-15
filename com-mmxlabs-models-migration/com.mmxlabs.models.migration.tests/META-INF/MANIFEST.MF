@@ -10,3 +10,4 @@ Require-Bundle: org.objenesis;bundle-version="1.0.0",
  org.junit;bundle-version="4.8.2",
  org.hamcrest;bundle-version="1.1.0",
  org.mockito;bundle-version="1.8.4"
+Bundle-ClassPath: .
