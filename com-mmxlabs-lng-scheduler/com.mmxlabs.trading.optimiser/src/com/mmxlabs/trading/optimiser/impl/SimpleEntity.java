@@ -15,17 +15,17 @@ import com.mmxlabs.scheduler.optimiser.Calculator;
  */
 public class SimpleEntity extends Entity {
 	/**
-	 * @since 2.0
+	 * @since 3.0
 	 */
 	final protected ICurve taxCurve;
 
 	/**
-	 * @since 2.0
+	 * @since 3.0
 	 */
 	final protected int ownership;
 
 	/**
-	 * @since 2.0
+	 * @since 3.0
 	 */
 	public SimpleEntity(final String name, final int ownership, final ICurve taxCurve) {
 		super(name);
