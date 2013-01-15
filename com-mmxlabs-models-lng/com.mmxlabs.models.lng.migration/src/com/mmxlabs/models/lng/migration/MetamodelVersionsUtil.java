@@ -52,17 +52,17 @@ public class MetamodelVersionsUtil {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/models/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/models/types.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/models/analytics.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/models/cargo.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/models/commercial.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/models/fleet.ecore", true), ModelsLNGMigrationConstants.NSURI_FleetModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.input/models/input.ecore", true), ModelsLNGMigrationConstants.NSURI_InputModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.optimiser/models/optimiser.ecore", true), ModelsLNGMigrationConstants.NSURI_OptimiserModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/models/port.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/models/pricing.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/models/schedule.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/model/fleet-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_FleetModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.input/model/input-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_InputModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.optimiser/model/optimiser-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_OptimiserModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 
 		return loader;
 	}
@@ -71,17 +71,17 @@ public class MetamodelVersionsUtil {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/models/mmxcore-1.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/models/types-1.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/models/analytics-1.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/models/cargo-1.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/models/commercial-1.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/models/fleet-1.ecore", true), ModelsLNGMigrationConstants.NSURI_FleetModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.input/models/input-1.ecore", true), ModelsLNGMigrationConstants.NSURI_InputModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.optimiser/models/optimiser-1.ecore", true), ModelsLNGMigrationConstants.NSURI_OptimiserModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/models/port-1.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/models/pricing-1.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/models/schedule-1.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.fleet/model/fleet.ecore", true), ModelsLNGMigrationConstants.NSURI_FleetModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.input/model/input.ecore", true), ModelsLNGMigrationConstants.NSURI_InputModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.optimiser/model/optimiser.ecore", true), ModelsLNGMigrationConstants.NSURI_OptimiserModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 
 		return loader;
 	}
