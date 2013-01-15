@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model"
-    nsURI="http://com.mmxlabs.scenario.service/model/1" nsPrefix="com.mmxlabs.scenario.service">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="model" nsURI="http://com.mmxlabs.scenario.service/model/1" nsPrefix="com.mmxlabs.scenario.service">
   <eClassifiers xsi:type="ecore:EClass" name="ScenarioModel">
     <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioServices" upperBound="-1"
         eType="#//ScenarioService" transient="true"/>
@@ -72,6 +70,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="locks" upperBound="-1"
         eType="#//ScenarioLock" transient="true" containment="true" eOpposite="#//ScenarioLock/instance"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="validationStatusCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="scenarioVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionContext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metadata">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="creator" lowerBound="1"

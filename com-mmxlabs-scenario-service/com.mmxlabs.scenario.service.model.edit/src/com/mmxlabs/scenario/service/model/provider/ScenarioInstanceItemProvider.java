@@ -62,6 +62,8 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 			addDependencyUUIDsPropertyDescriptor(object);
 			addDirtyPropertyDescriptor(object);
 			addValidationStatusCodePropertyDescriptor(object);
+			addScenarioVersionPropertyDescriptor(object);
+			addVersionContextPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -125,6 +127,32 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 				getString("_UI_ScenarioInstance_dependencyUUIDs_feature"),
 				getString("_UI_PropertyDescriptor_description", "_UI_ScenarioInstance_dependencyUUIDs_feature", "_UI_ScenarioInstance_type"),
 				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Scenario Version feature.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addScenarioVersionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_scenarioVersion_feature"), getString("_UI_ScenarioInstance_scenarioVersion_description"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__SCENARIO_VERSION, true, false, false, ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Version Context feature.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVersionContextPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(), getResourceLocator(),
+				getString("_UI_ScenarioInstance_versionContext_feature"), getString("_UI_ScenarioInstance_versionContext_description"),
+				ScenarioServicePackage.Literals.SCENARIO_INSTANCE__VERSION_CONTEXT, true, false, false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null, null));
 	}
 
 	/**
@@ -237,6 +265,8 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DEPENDENCY_UUI_DS:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__DIRTY:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:

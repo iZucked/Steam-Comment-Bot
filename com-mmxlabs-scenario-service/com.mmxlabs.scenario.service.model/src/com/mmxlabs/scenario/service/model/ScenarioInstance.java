@@ -6,9 +6,7 @@ package com.mmxlabs.scenario.service.model;
 
 import java.util.Map;
 
-import java.util.concurrent.locks.Lock;
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -29,6 +27,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getLocks <em>Locks</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getScenarioVersion <em>Scenario Version</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVersionContext <em>Version Context</em>}</li>
  * </ul>
  * </p>
  *
@@ -198,6 +198,62 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	EList<String> getDependencyUUIDs();
+
+	/**
+	 * Returns the value of the '<em><b>Scenario Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Scenario Version</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scenario Version</em>' attribute.
+	 * @see #setScenarioVersion(int)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_ScenarioVersion()
+	 * @model
+	 * @generated
+	 */
+	int getScenarioVersion();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getScenarioVersion <em>Scenario Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scenario Version</em>' attribute.
+	 * @see #getScenarioVersion()
+	 * @generated
+	 */
+	void setScenarioVersion(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Version Context</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Version Context</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Version Context</em>' attribute.
+	 * @see #setVersionContext(String)
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_VersionContext()
+	 * @model
+	 * @generated
+	 */
+	String getVersionContext();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVersionContext <em>Version Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Version Context</em>' attribute.
+	 * @see #getVersionContext()
+	 * @generated
+	 */
+	void setVersionContext(String value);
 
 	/**
 	 * Returns the value of the '<em><b>Dirty</b></em>' attribute.

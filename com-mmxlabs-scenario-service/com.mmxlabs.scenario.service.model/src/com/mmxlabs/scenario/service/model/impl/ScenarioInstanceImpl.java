@@ -8,7 +8,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import java.util.concurrent.locks.Lock;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
@@ -19,7 +18,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
-import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.scenario.service.model.Metadata;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
@@ -44,6 +42,8 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#isDirty <em>Dirty</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getLocks <em>Locks</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getScenarioVersion <em>Scenario Version</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getVersionContext <em>Version Context</em>}</li>
  * </ul>
  * </p>
  *
@@ -189,6 +189,50 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @ordered
 	 */
 	protected int validationStatusCode = VALIDATION_STATUS_CODE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getScenarioVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SCENARIO_VERSION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getScenarioVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected int scenarioVersion = SCENARIO_VERSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getVersionContext()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String VERSION_CONTEXT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getVersionContext()
+	 * @generated
+	 * @ordered
+	 */
+	protected String versionContext = VERSION_CONTEXT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -382,6 +426,52 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getScenarioVersion() {
+		return scenarioVersion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setScenarioVersion(int newScenarioVersion) {
+		int oldScenarioVersion = scenarioVersion;
+		scenarioVersion = newScenarioVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION, oldScenarioVersion, scenarioVersion));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getVersionContext() {
+		return versionContext;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVersionContext(String newVersionContext) {
+		String oldVersionContext = versionContext;
+		versionContext = newVersionContext;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT, oldVersionContext, versionContext));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -526,6 +616,10 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return getLocks();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 			return getValidationStatusCode();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
+			return getScenarioVersion();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
+			return getVersionContext();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -572,6 +666,12 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 			setValidationStatusCode((Integer) newValue);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
+			setScenarioVersion((Integer) newValue);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
+			setVersionContext((String) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -614,6 +714,12 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 			setValidationStatusCode(VALIDATION_STATUS_CODE_EDEFAULT);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
+			setScenarioVersion(SCENARIO_VERSION_EDEFAULT);
+			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
+			setVersionContext(VERSION_CONTEXT_EDEFAULT);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -646,6 +752,10 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return locks != null && !locks.isEmpty();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VALIDATION_STATUS_CODE:
 			return validationStatusCode != VALIDATION_STATUS_CODE_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__SCENARIO_VERSION:
+			return scenarioVersion != SCENARIO_VERSION_EDEFAULT;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
+			return VERSION_CONTEXT_EDEFAULT == null ? versionContext != null : !VERSION_CONTEXT_EDEFAULT.equals(versionContext);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -675,6 +785,10 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		result.append(dirty);
 		result.append(", validationStatusCode: ");
 		result.append(validationStatusCode);
+		result.append(", scenarioVersion: ");
+		result.append(scenarioVersion);
+		result.append(", versionContext: ");
+		result.append(versionContext);
 		result.append(')');
 		return result.toString();
 	}
