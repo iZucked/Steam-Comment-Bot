@@ -2,12 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.migration.v1;
+package com.mmxlabs.models.lng.migration.internal;
 
 import java.util.Map;
 
 import org.eclipse.emf.ecore.EObject;
 
+import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
