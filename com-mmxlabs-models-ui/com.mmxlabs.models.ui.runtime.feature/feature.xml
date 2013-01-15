@@ -24,6 +24,11 @@ All rights reserved.
       [Enter License Description here.]
    </license>
 
+   <requires>
+      <import feature="com.mmxlabs.scenario.service.feature" version="3.0.0" match="compatible"/>
+      <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="3.1.0" match="compatible"/>
+   </requires>
+
    <plugin
          id="com.mmxlabs.models.ui"
          download-size="0"
