@@ -7,9 +7,6 @@ package com.mmxlabs.trading.integration.extensions;
 import java.io.Serializable;
 import java.util.Collection;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.common.detailtree.IDetailTreeElement;
 import com.mmxlabs.common.detailtree.impl.CurrencyDetailElement;
@@ -62,15 +59,12 @@ import com.mmxlabs.trading.optimiser.TradingConstants;
  * @since 2.0
  */
 public class TradingExporterExtension implements IExporterExtension {
-	private final static Logger log = LoggerFactory.getLogger(TradingExporterExtension.class);
-	private MMXRootObject inputScenario;
 	private ModelEntityMap entities;
 	private IAnnotatedSolution annotatedSolution;
 	private Schedule outputSchedule;
 
 	@Override
 	public void startExporting(final MMXRootObject inputScenario, final Schedule outputSchedule, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
-		this.inputScenario = inputScenario;
 		this.entities = entities;
 		this.annotatedSolution = annotatedSolution;
 		this.outputSchedule = outputSchedule;
@@ -235,7 +229,6 @@ public class TradingExporterExtension implements IExporterExtension {
 		}
 
 		// clear refs, just in case.
-		inputScenario = null;
 		entities = null;
 		outputSchedule = null;
 		annotatedSolution = null;
