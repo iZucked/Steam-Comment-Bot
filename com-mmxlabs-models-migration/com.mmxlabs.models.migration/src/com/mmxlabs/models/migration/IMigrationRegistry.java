@@ -44,4 +44,11 @@ public interface IMigrationRegistry {
 	 */
 	List<IMigrationUnit> getMigrationChain(String context, int fromVersion, int toVersion);
 
+	/**
+	 * Returns the default migration context for this application instance.
+	 * 
+	 * @return
+	 */
+	String getDefaultMigrationContext();
+
 }

@@ -6,8 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.inject.Inject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
+import com.mmxlabs.models.migration.extensions.DefaultMigrationContextExtensionPoint;
+import com.mmxlabs.models.migration.extensions.MigrationContextExtensionPoint;
+import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
 
 /**
  * An implementation of {@link IMigrationRegistry}.
@@ -17,9 +25,48 @@ import com.mmxlabs.models.migration.IMigrationUnit;
  */
 public class MigrationRegistry implements IMigrationRegistry {
 
+	private static final Logger log = LoggerFactory.getLogger(MigrationRegistry.class);
+
 	private final Map<String, Integer> contexts = new HashMap<String, Integer>();
 
 	private final Map<String, Map<Integer, IMigrationUnit>> fromVersionMap = new HashMap<String, Map<Integer, IMigrationUnit>>();
+
+	private String defaultContext;
+
+	/**
+	 * Initialise the registry with the initial set of migration units and contexts. There should be a single defaultMigrationContext
+	 * 
+	 * @param defaultMigrationContexts
+	 * @param migrationContexts
+	 * @param migrationUnits
+	 */
+	@Inject
+	public void init(final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts, final Iterable<MigrationContextExtensionPoint> migrationContexts,
+			final Iterable<MigrationUnitExtensionPoint> migrationUnits) {
+
+		for (final MigrationContextExtensionPoint ext : migrationContexts) {
+			try {
+				registerContext(ext.getName(), Integer.parseInt(ext.getLatestVersion()));
+			} catch (final NumberFormatException e) {
+				log.error("Unable to register context: " + ext.getName(), e);
+			}
+		}
+		for (final MigrationUnitExtensionPoint ext : migrationUnits) {
+			try {
+				registerMigrationUnit(ext.createMigrationUnit());
+			} catch (final Exception e) {
+				log.error("Unable to register migration unit for context: " + ext.getContext(), e);
+			}
+		}
+
+		for (final DefaultMigrationContextExtensionPoint ext : defaultMigrationContexts) {
+			if (defaultContext == null) {
+				defaultContext = ext.getContext();
+			} else {
+				log.error("There is already a default migration context set. " + ext.getContext() + " will not be set as the default.");
+			}
+		}
+	}
 
 	@Override
 	public Collection<String> getMigrationContexts() {
@@ -91,5 +138,10 @@ public class MigrationRegistry implements IMigrationRegistry {
 	public void registerMigrationUnit(final IMigrationUnit unit) {
 		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(unit.getContext());
 		map.put(unit.getSourceVersion(), unit);
+	}
+
+	@Override
+	public String getDefaultMigrationContext() {
+		return defaultContext;
 	}
 }
