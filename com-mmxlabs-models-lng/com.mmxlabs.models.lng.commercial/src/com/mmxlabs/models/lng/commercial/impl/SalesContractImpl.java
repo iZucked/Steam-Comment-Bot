@@ -272,7 +272,6 @@ public abstract class SalesContractImpl extends ContractImpl implements SalesCon
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {

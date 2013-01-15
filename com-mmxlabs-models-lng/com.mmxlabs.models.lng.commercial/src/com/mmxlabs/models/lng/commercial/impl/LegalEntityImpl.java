@@ -5,12 +5,10 @@
 package com.mmxlabs.models.lng.commercial.impl;
 import java.util.Collection;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -36,7 +34,7 @@ public class LegalEntityImpl extends ALegalEntityImpl implements LegalEntity {
 	/**
 	 * The cached value of the '{@link #getTaxRates() <em>Tax Rates</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see #getTaxRates()
 	 * @generated
@@ -66,7 +64,7 @@ public class LegalEntityImpl extends ALegalEntityImpl implements LegalEntity {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

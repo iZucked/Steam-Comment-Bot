@@ -22,7 +22,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Tax Rate</b></em>'.
- * @since 2.0
+ * @since 3.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

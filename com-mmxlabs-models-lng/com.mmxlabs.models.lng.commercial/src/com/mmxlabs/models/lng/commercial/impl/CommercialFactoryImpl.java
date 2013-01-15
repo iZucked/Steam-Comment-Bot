@@ -190,7 +190,7 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

@@ -332,7 +332,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.TaxRate} instances.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -343,6 +343,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
+	 * @since 3.0
 	 */
 	@Override
 	public Adapter createTaxRateAdapter() {

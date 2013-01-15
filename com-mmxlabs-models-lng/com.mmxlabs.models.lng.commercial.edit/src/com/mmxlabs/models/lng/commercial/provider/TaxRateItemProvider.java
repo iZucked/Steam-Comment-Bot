@@ -32,7 +32,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.TaxRate} object.
  * <!-- begin-user-doc --> 
- * @since 2.0
+ * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
