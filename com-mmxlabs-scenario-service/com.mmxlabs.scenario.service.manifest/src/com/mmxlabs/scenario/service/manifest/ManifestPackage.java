@@ -103,13 +103,33 @@ public interface ManifestPackage extends EPackage {
 	int MANIFEST__SCENARIO_TYPE = 3;
 
 	/**
+	 * The feature id for the '<em><b>Scenario Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANIFEST__SCENARIO_VERSION = 4;
+
+	/**
+	 * The feature id for the '<em><b>Version Context</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int MANIFEST__VERSION_CONTEXT = 5;
+
+	/**
 	 * The number of structural features of the '<em>Manifest</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int MANIFEST_FEATURE_COUNT = 4;
+	int MANIFEST_FEATURE_COUNT = 6;
 
 
 	/**
@@ -165,6 +185,30 @@ public interface ManifestPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getManifest_ScenarioType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.manifest.Manifest#getScenarioVersion <em>Scenario Version</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Scenario Version</em>'.
+	 * @see com.mmxlabs.scenario.service.manifest.Manifest#getScenarioVersion()
+	 * @see #getManifest()
+	 * @generated
+	 */
+	EAttribute getManifest_ScenarioVersion();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.manifest.Manifest#getVersionContext <em>Version Context</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Version Context</em>'.
+	 * @see com.mmxlabs.scenario.service.manifest.Manifest#getVersionContext()
+	 * @see #getManifest()
+	 * @generated
+	 */
+	EAttribute getManifest_VersionContext();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -229,6 +273,24 @@ public interface ManifestPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute MANIFEST__SCENARIO_TYPE = eINSTANCE.getManifest_ScenarioType();
+
+		/**
+		 * The meta object literal for the '<em><b>Scenario Version</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MANIFEST__SCENARIO_VERSION = eINSTANCE.getManifest_ScenarioVersion();
+
+		/**
+		 * The meta object literal for the '<em><b>Version Context</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute MANIFEST__VERSION_CONTEXT = eINSTANCE.getManifest_VersionContext();
 
 	}
 

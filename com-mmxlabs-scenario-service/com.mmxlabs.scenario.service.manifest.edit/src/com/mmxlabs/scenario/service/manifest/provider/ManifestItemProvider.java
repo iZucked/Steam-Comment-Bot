@@ -66,6 +66,8 @@ public class ManifestItemProvider
 			addDependencyUUIDsPropertyDescriptor(object);
 			addUUIDPropertyDescriptor(object);
 			addScenarioTypePropertyDescriptor(object);
+			addScenarioVersionPropertyDescriptor(object);
+			addVersionContextPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -159,6 +161,52 @@ public class ManifestItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Scenario Version feature.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addScenarioVersionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Manifest_scenarioVersion_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Manifest_scenarioVersion_feature", "_UI_Manifest_type"),
+				 ManifestPackage.Literals.MANIFEST__SCENARIO_VERSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Version Context feature.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addVersionContextPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Manifest_versionContext_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Manifest_versionContext_feature", "_UI_Manifest_type"),
+				 ManifestPackage.Literals.MANIFEST__VERSION_CONTEXT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns Manifest.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -199,6 +247,8 @@ public class ManifestItemProvider
 			case ManifestPackage.MANIFEST__DEPENDENCY_UUI_DS:
 			case ManifestPackage.MANIFEST__UUID:
 			case ManifestPackage.MANIFEST__SCENARIO_TYPE:
+			case ManifestPackage.MANIFEST__SCENARIO_VERSION:
+			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

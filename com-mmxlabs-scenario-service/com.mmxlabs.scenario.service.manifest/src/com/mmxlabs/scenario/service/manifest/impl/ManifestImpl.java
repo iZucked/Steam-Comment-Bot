@@ -31,6 +31,8 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getUUID <em>UUID</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getScenarioType <em>Scenario Type</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getScenarioVersion <em>Scenario Version</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.impl.ManifestImpl#getVersionContext <em>Version Context</em>}</li>
  * </ul>
  * </p>
  *
@@ -96,6 +98,50 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 	 * @ordered
 	 */
 	protected String scenarioType = SCENARIO_TYPE_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getScenarioVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int SCENARIO_VERSION_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getScenarioVersion()
+	 * @generated
+	 * @ordered
+	 */
+	protected int scenarioVersion = SCENARIO_VERSION_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getVersionContext()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String VERSION_CONTEXT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getVersionContext()
+	 * @generated
+	 * @ordered
+	 */
+	protected String versionContext = VERSION_CONTEXT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -184,6 +230,52 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public int getScenarioVersion() {
+		return scenarioVersion;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setScenarioVersion(int newScenarioVersion) {
+		int oldScenarioVersion = scenarioVersion;
+		scenarioVersion = newScenarioVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ManifestPackage.MANIFEST__SCENARIO_VERSION, oldScenarioVersion, scenarioVersion));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String getVersionContext() {
+		return versionContext;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setVersionContext(String newVersionContext) {
+		String oldVersionContext = versionContext;
+		versionContext = newVersionContext;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, ManifestPackage.MANIFEST__VERSION_CONTEXT, oldVersionContext, versionContext));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -198,6 +290,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 				return getUUID();
 			case ManifestPackage.MANIFEST__SCENARIO_TYPE:
 				return getScenarioType();
+			case ManifestPackage.MANIFEST__SCENARIO_VERSION:
+				return getScenarioVersion();
+			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
+				return getVersionContext();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -225,6 +321,12 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			case ManifestPackage.MANIFEST__SCENARIO_TYPE:
 				setScenarioType((String)newValue);
 				return;
+			case ManifestPackage.MANIFEST__SCENARIO_VERSION:
+				setScenarioVersion((Integer)newValue);
+				return;
+			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
+				setVersionContext((String)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -249,6 +351,12 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 			case ManifestPackage.MANIFEST__SCENARIO_TYPE:
 				setScenarioType(SCENARIO_TYPE_EDEFAULT);
 				return;
+			case ManifestPackage.MANIFEST__SCENARIO_VERSION:
+				setScenarioVersion(SCENARIO_VERSION_EDEFAULT);
+				return;
+			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
+				setVersionContext(VERSION_CONTEXT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -269,6 +377,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 				return UUID_EDEFAULT == null ? uuid != null : !UUID_EDEFAULT.equals(uuid);
 			case ManifestPackage.MANIFEST__SCENARIO_TYPE:
 				return SCENARIO_TYPE_EDEFAULT == null ? scenarioType != null : !SCENARIO_TYPE_EDEFAULT.equals(scenarioType);
+			case ManifestPackage.MANIFEST__SCENARIO_VERSION:
+				return scenarioVersion != SCENARIO_VERSION_EDEFAULT;
+			case ManifestPackage.MANIFEST__VERSION_CONTEXT:
+				return VERSION_CONTEXT_EDEFAULT == null ? versionContext != null : !VERSION_CONTEXT_EDEFAULT.equals(versionContext);
 		}
 		return super.eIsSet(featureID);
 	}
@@ -291,6 +403,10 @@ public class ManifestImpl extends EObjectImpl implements Manifest {
 		result.append(uuid);
 		result.append(", scenarioType: ");
 		result.append(scenarioType);
+		result.append(", scenarioVersion: ");
+		result.append(scenarioVersion);
+		result.append(", versionContext: ");
+		result.append(versionContext);
 		result.append(')');
 		return result.toString();
 	}

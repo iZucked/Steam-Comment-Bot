@@ -20,6 +20,8 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getDependencyUUIDs <em>Dependency UUI Ds</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getUUID <em>UUID</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getScenarioType <em>Scenario Type</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getScenarioVersion <em>Scenario Version</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.manifest.Manifest#getVersionContext <em>Version Context</em>}</li>
  * </ul>
  * </p>
  *
@@ -111,5 +113,61 @@ public interface Manifest extends EObject {
 	 * @generated
 	 */
 	void setScenarioType(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Scenario Version</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Scenario Version</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Scenario Version</em>' attribute.
+	 * @see #setScenarioVersion(int)
+	 * @see com.mmxlabs.scenario.service.manifest.ManifestPackage#getManifest_ScenarioVersion()
+	 * @model
+	 * @generated
+	 */
+	int getScenarioVersion();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.manifest.Manifest#getScenarioVersion <em>Scenario Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Scenario Version</em>' attribute.
+	 * @see #getScenarioVersion()
+	 * @generated
+	 */
+	void setScenarioVersion(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Version Context</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Version Context</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Version Context</em>' attribute.
+	 * @see #setVersionContext(String)
+	 * @see com.mmxlabs.scenario.service.manifest.ManifestPackage#getManifest_VersionContext()
+	 * @model
+	 * @generated
+	 */
+	String getVersionContext();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.scenario.service.manifest.Manifest#getVersionContext <em>Version Context</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Version Context</em>' attribute.
+	 * @see #getVersionContext()
+	 * @generated
+	 */
+	void setVersionContext(String value);
 
 } // Manifest
