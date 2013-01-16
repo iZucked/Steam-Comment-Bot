@@ -29,6 +29,7 @@ import org.eclipse.ui.internal.navigator.NavigatorDecoratingLabelProvider;
 /**
  * Fork of the {@link NavigatorDecoratingLabelProvider} to override {@link #getColumnImage(Object, int)};
  */
+@SuppressWarnings("restriction")
 public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingStyledCellLabelProvider implements IPropertyChangeListener, ILabelProvider, ITableLabelProvider {
 
 	private static class StyledLabelProviderAdapter implements IStyledLabelProvider, ITableLabelProvider, IColorProvider, IFontProvider {
