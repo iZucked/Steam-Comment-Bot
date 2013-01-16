@@ -8,10 +8,13 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -207,6 +210,12 @@ public class FileScenarioService extends AbstractScenarioService {
 	@Override
 	public void save(final ScenarioInstance scenarioInstance) throws IOException {
 		// store manifest
+		saveManifest(scenarioInstance);
+
+		super.save(scenarioInstance);
+	}
+
+	private void saveManifest(final ScenarioInstance scenarioInstance) {
 		try {
 			final Resource resource = resourceSet.createResource(resolveURI("instances/" + scenarioInstance.getUuid() + ".xmi"));
 			final ScenarioInstance copy = EcoreUtil.copy(scenarioInstance);
@@ -215,42 +224,62 @@ public class FileScenarioService extends AbstractScenarioService {
 			resourceSet.getResources().remove(resource);
 		} catch (final Throwable th) {
 		}
-
-		super.save(scenarioInstance);
 	}
 
 	@Override
 	public ScenarioInstance insert(final Container container, final Collection<ScenarioInstance> dependencies, final Collection<EObject> models) throws IOException {
 		log.debug("Inserting scenario into " + container);
 
-		final String uuid = UUID.randomUUID().toString();
+		// Create new model nodes
 		final ScenarioInstance newInstance = ScenarioServiceFactory.eINSTANCE.createScenarioInstance();
 		final Metadata metadata = ScenarioServiceFactory.eINSTANCE.createMetadata();
 
+		// Create a new UUID
+		final String uuid = UUID.randomUUID().toString();
 		newInstance.setUuid(uuid);
+
 		newInstance.setMetadata(metadata);
 
+		// Copy dependency UUIDs - i.e. other scenario instances
 		for (final ScenarioInstance dependency : dependencies) {
 			newInstance.getDependencyUUIDs().add(dependency.getUuid());
 		}
 
+		// Construct new URIs into the model service for our models.
 		int index = 0;
+		final List<IModelInstance> modelInstances = new ArrayList<IModelInstance>();
 		for (final EObject model : models) {
-			// URI rel = URI.createURI("./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi");
+			// Construct internal URI based on UUID and model class name
 			final String uriString = "./" + uuid + "-" + model.eClass().getName() + "-" + index++ + ".xmi";
 			final URI resolved = resolveURI(uriString);
 			log.debug("Storing submodel into " + resolved);
 			try {
+				// "Store" - map URI to model instance - this has not persisted the model yet
 				final IModelInstance instance = modelService.store(model, resolved);
+				// Record model instance for later
+				modelInstances.add(instance);
 			} catch (IOException e) {
 				return null;
 			}
+			// Record new submodel URI
 			newInstance.getSubModelURIs().add(uriString);
 		}
 
+		// Persist all the model at once.
+		modelService.saveTogether(modelInstances);
+
+		// Update last modified date
+		metadata.setLastModified(new Date());
+
+		// Save the scenario instance to a file for recovery
+		saveManifest(newInstance);
+
+		// Clear dirty flag
+		newInstance.setDirty(false);
+
+		// Finally add to node in the service model.
 		container.getElements().add(newInstance);
-		load(newInstance);
-		save(newInstance);
+
 		return newInstance;
 	}
 

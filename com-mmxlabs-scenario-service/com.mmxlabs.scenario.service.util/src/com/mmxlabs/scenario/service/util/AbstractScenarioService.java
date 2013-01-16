@@ -4,7 +4,10 @@
  */
 package com.mmxlabs.scenario.service.util;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -22,6 +25,8 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -45,6 +50,7 @@ import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
 import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.scenario.service.IScenarioMigrationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Metadata;
@@ -66,6 +72,8 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	private ScenarioService serviceModel;
 	protected IModelService modelService;
 	private static final EAttribute uuidAttribute = ScenarioServicePackage.eINSTANCE.getScenarioInstance_Uuid();
+
+	private IScenarioMigrationService scenarioMigrationService;
 
 	protected AbstractScenarioService(final String name) {
 		this.name = name;
@@ -127,6 +135,12 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		if (instance.getInstance() != null) {
 			// log.debug("Instance " + instance.getUuid() + " already loaded");
 			return instance.getInstance();
+		}
+
+		try {
+//			scenarioMigrationService.migrateScenario(this, instance);
+		} catch (final Exception e) {
+			throw new RuntimeException("Error migrating scenario", e);
 		}
 
 		fireEvent(ScenarioServiceEvent.PRE_LOAD, instance);
@@ -265,46 +279,87 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		final IScenarioService originalService = original.getScenarioService();
 		final List<EObject> originalSubModels = new ArrayList<EObject>();
 
-		// Remember instances which were not loaded originally and unload them after use.
-		final Set<IModelInstance> instancesToUnload = new HashSet<IModelInstance>();
+		// Determine whether or not the model is currently loaded. If it is not currently loaded, then attempt to perform a scenario migration before loading the models. If it is loaded, we can assume
+		// this process has already been performed.
+		final ScenarioInstance cpy;
+		final List<File> tmpFiles = new ArrayList<File>();
+		try {
+			if (original.getInstance() == null) {
+				// Not loaded - may need to be migrated!
 
-		for (final String subModelURI : original.getSubModelURIs()) {
-			log.debug("Loading submodel " + subModelURI);
-			try {
-				final URI realURI = originalService == null ? URI.createURI(subModelURI) : originalService.resolveURI(subModelURI);
+				// A URIConvertor to handle input/output streams
+				final ExtensibleURIConverterImpl uc = new ExtensibleURIConverterImpl();
 
-				final IModelInstance instance = modelService.getModel(realURI);
-				if (!instance.isLoaded()) {
-					instancesToUnload.add(instance);
+				// Create a copy of the data to avoid modifying it unexpectedly. E.g. this could come from a scenario data file on filesystem which should be left unchanged.
+				cpy = EcoreUtil.copy(original);
+				cpy.getSubModelURIs().clear();
+				for (final String subModelURI : original.getSubModelURIs()) {
+					final File f = File.createTempFile("migration", "xmi");
+					tmpFiles.add(f);
+					// Create a temp file and generate a URI to it to pass into migration code.
+					final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
+					final URI sourceURI = originalService == null ? URI.createURI(subModelURI) : originalService.resolveURI(subModelURI);
+					copyURIData(uc, sourceURI, tmpURI);
+					cpy.getSubModelURIs().add(tmpURI.toString());
 				}
-				originalSubModels.add(instance.getModel());
-			} catch (final IOException e1) {
-				log.error("IO Exception loading model from " + subModelURI, e1);
+
+				// Perform the migration!
+				try {
+//					scenarioMigrationService.migrateScenario(this, cpy);
+				} catch (final Exception e) {
+					throw new RuntimeException("Error migrating scenario", e);
+				}
+			} else {
+				// Already loaded? Just use the same instance.
+				cpy = original;
+			}
+
+			// Remember instances which were not loaded originally and unload them after use.
+			final Set<IModelInstance> instancesToUnload = new HashSet<IModelInstance>();
+
+			for (final String subModelURI : cpy.getSubModelURIs()) {
+				log.debug("Loading submodel " + subModelURI);
+				try {
+					final URI realURI = originalService == null ? URI.createURI(subModelURI) : originalService.resolveURI(subModelURI);
+
+					final IModelInstance instance = modelService.getModel(realURI);
+					if (!instance.isLoaded()) {
+						instancesToUnload.add(instance);
+					}
+					// This will trigger a model load if required.
+					originalSubModels.add(instance.getModel());
+				} catch (final IOException e1) {
+					log.error("IO Exception loading model from " + subModelURI, e1);
+				}
+			}
+
+			final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
+
+			final Collection<ScenarioInstance> dependencies = new ArrayList<ScenarioInstance>();
+
+			for (final String uuids : cpy.getDependencyUUIDs()) {
+				dependencies.add(getScenarioInstance(uuids));
+			}
+
+			final ScenarioInstance dup = insert(destination, dependencies, duppedSubModels);
+			// Copy across various bits of information
+			dup.getMetadata().setContentType(cpy.getMetadata().getContentType());
+			dup.getMetadata().setCreated(cpy.getMetadata().getCreated());
+			dup.getMetadata().setLastModified(new Date());
+			dup.setName(cpy.getName());
+
+			// Clean up
+			for (final IModelInstance toUnload : instancesToUnload) {
+				toUnload.unload();
+				toUnload.dispose();
+			}
+			return dup;
+		} finally {
+			// Clean up tmp files used for migration.
+			for (final File tmpFile : tmpFiles) {
+				tmpFile.delete();
 			}
 		}
-
-		final Collection<EObject> duppedSubModels = EcoreUtil.copyAll(originalSubModels);
-
-		final Collection<ScenarioInstance> dependencies = new ArrayList<ScenarioInstance>();
-
-		for (final String uuids : original.getDependencyUUIDs()) {
-			dependencies.add(getScenarioInstance(uuids));
-		}
-
-		final ScenarioInstance dup = insert(destination, dependencies, duppedSubModels);
-		// Copy across various bits of information.
-		dup.getMetadata().setContentType(original.getMetadata().getContentType());
-		dup.getMetadata().setCreated(original.getMetadata().getCreated());
-		dup.getMetadata().setLastModified(new Date());
-		dup.setName(original.getName());
-
-		// Clean up
-		for (final IModelInstance toUnload : instancesToUnload) {
-			toUnload.unload();
-			toUnload.dispose();
-		}
-
-		return dup;
 	}
 
 	/**
@@ -343,4 +398,53 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		fireEvent(ScenarioServiceEvent.POST_UNLOAD, instance);
 	}
 
+	/**
+	 * @since 3.0
+	 */
+	public IScenarioMigrationService getScenarioMigrationService() {
+		return scenarioMigrationService;
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public void setScenarioMigrationService(final IScenarioMigrationService scenarioMigrationHandler) {
+		this.scenarioMigrationService = scenarioMigrationHandler;
+	}
+
+	private void copyURIData(final URIConverter uc, final URI src, final URI dest) throws IOException {
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			// Get input stream from original URI
+			is = uc.createInputStream(src);
+
+			os = uc.createOutputStream(dest);
+
+			// Copy XMI file contents
+			// TODO: Tweak buffer size
+			// TODO: Java 7 APIs?
+			final byte[] buf = new byte[4096];
+			int c;
+			while ((c = is.read(buf)) > 0) {
+				os.write(buf, 0, c);
+			}
+
+		} finally {
+			if (is != null) {
+				try {
+					is.close();
+				} catch (final Exception e) {
+
+				}
+			}
+			if (os != null) {
+				try {
+					os.close();
+				} catch (final Exception e) {
+
+				}
+			}
+		}
+	}
 }
