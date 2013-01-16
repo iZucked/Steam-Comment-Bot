@@ -53,7 +53,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 		}
 		for (final MigrationUnitExtensionPoint ext : migrationUnits) {
 			try {
-				registerMigrationUnit(ext.createMigrationUnit());
+				registerMigrationUnit(new MigrationUnitProxy(ext));
 			} catch (final Exception e) {
 				log.error("Unable to register migration unit for context: " + ext.getContext(), e);
 			}
