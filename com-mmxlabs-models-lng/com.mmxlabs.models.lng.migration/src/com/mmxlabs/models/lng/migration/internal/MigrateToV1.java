@@ -26,6 +26,9 @@ import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 public class MigrateToV1 extends AbstractMigrationUnit {
 
+	private MetamodelLoader destiniationLoader;
+	private MetamodelLoader sourceLoader;
+
 	@Override
 	public String getContext() {
 		return ModelsLNGMigrationConstants.Context;
@@ -42,19 +45,25 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader createSourceMetamodelLoader() {
-		return MetamodelVersionsUtil.getV0Loader();
+	protected MetamodelLoader getSourceMetamodelLoader() {
+		if (sourceLoader == null) {
+			sourceLoader = MetamodelVersionsUtil.getV0Loader();
+		}
+		return sourceLoader;
 	}
 
 	@Override
-	protected MetamodelLoader createDestinationMetamodelLoader() {
-		return MetamodelVersionsUtil.getV1Loader();
+	protected MetamodelLoader getDestinationMetamodelLoader() {
+		if (destiniationLoader == null) {
+			destiniationLoader = MetamodelVersionsUtil.getV1Loader();
+		}
+		return destiniationLoader;
 	}
 
 	@Override
 	protected void doMigration(final Map<ModelsLNGSet_v1, EObject> models) {
 
-		final MetamodelLoader v1Loader = createDestinationMetamodelLoader();
+		final MetamodelLoader v1Loader = getDestinationMetamodelLoader();
 		clearFixedPrice(v1Loader, models);
 
 	}

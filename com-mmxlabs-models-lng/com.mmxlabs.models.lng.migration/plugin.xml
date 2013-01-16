@@ -14,5 +14,13 @@
             name="com.mmxlabs.models.lng">
       </MigrationContext>
    </extension>
-
+   <extension
+         point="com.mmxlabs.models.migration.MigrationUnit">
+      <MigrationUnit
+            class="com.mmxlabs.models.lng.migration.internal.MigrateToV1"
+            context="com.mmxlabs.models.lng"
+            from="0"
+            to="-1">
+      </MigrationUnit>
+   </extension>
 </plugin>

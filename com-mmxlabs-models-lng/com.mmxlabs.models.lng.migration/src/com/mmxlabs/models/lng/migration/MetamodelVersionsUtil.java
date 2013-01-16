@@ -5,6 +5,9 @@
 package com.mmxlabs.models.lng.migration;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EPackage;
 
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 
@@ -53,7 +56,7 @@ public class MetamodelVersionsUtil {
 		final MetamodelLoader loader = new MetamodelLoader();
 
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
+		final EPackage typesPackage = loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
@@ -64,7 +67,25 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 
+		hookSerializableObjectConvertor(typesPackage);
+
 		return loader;
+	}
+
+	private static void hookSerializableObjectConvertor(final EPackage typesPackage) {
+		final EClassifier eClassifier = typesPackage.getEClassifier("SerializableObject");
+		((EDataType.Internal) eClassifier).setConversionDelegate(new EDataType.Internal.ConversionDelegate() {
+
+			@Override
+			public Object createFromString(final String literal) {
+				return literal;
+			}
+
+			@Override
+			public String convertToString(final Object value) {
+				return value.toString();
+			}
+		});
 	}
 
 	public static MetamodelLoader getV1Loader() {
@@ -72,7 +93,7 @@ public class MetamodelVersionsUtil {
 		final MetamodelLoader loader = new MetamodelLoader();
 
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.mmxcore/model/mmxcore.ecore", true), ModelsLNGMigrationConstants.NSURI_MMXCore);
-		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
+		final EPackage typesPackage = loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.types/model/lngtypes.ecore", true), ModelsLNGMigrationConstants.NSURI_LNGTypes);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.analytics/model/analytics.ecore", true), ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.cargo/model/cargo.ecore", true), ModelsLNGMigrationConstants.NSURI_CargoModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.commercial/model/commercial.ecore", true), ModelsLNGMigrationConstants.NSURI_CommercialModel);
@@ -82,6 +103,8 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+
+		hookSerializableObjectConvertor(typesPackage);
 
 		return loader;
 	}

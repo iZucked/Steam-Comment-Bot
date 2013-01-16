@@ -55,14 +55,12 @@ public class MigrateToV1Test {
 	@Test
 	public void testSlotFixedPrice() throws IOException {
 
-		final MigrateToV1 migrator = new MigrateToV1();
-
 		// Load v0 metamodels
 
 		// Construct a scenario
 		File tmpFile = null;
 		{
-			final MetamodelLoader v0Loader = migrator.createSourceMetamodelLoader();
+			final MetamodelLoader v0Loader = new MigrateToV1().getSourceMetamodelLoader();
 			final EPackage cargoPackage = v0Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
 			final EFactory cargoFactory = cargoPackage.getEFactoryInstance();
 
@@ -108,8 +106,9 @@ public class MigrateToV1Test {
 		// Load v1 metamodels
 		// Load tmp file under v1
 		{
+			final MigrateToV1 migrator = new MigrateToV1();
 
-			final MetamodelLoader v1Loader = migrator.createDestinationMetamodelLoader();
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
 
 			final Resource r = v1Loader.getResourceSet().createResource(URI.createFileURI(tmpFile.toString()));
 
@@ -129,8 +128,9 @@ public class MigrateToV1Test {
 
 		// Check output
 		{
+			final MigrateToV1 migrator = new MigrateToV1();
 
-			final MetamodelLoader v1Loader = migrator.createDestinationMetamodelLoader();
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
 			final Resource r = v1Loader.getResourceSet().createResource(URI.createFileURI(tmpFile.toString()));
 			r.load(null);
 			tmpFile.delete();

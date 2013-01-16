@@ -35,14 +35,14 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader createSourceMetamodelLoader();
+	protected abstract MetamodelLoader getSourceMetamodelLoader();
 
 	/**
 	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getDestinationVersion()}
 	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader createDestinationMetamodelLoader();
+	protected abstract MetamodelLoader getDestinationMetamodelLoader();
 
 	/**
 	 * Perform the migration. Root object instance references are not expected to be changed.
@@ -56,14 +56,14 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 
 		final Map<MetamodelVersionsUtil.ModelsLNGSet_v1, EObject> models = new HashMap<MetamodelVersionsUtil.ModelsLNGSet_v1, EObject>();
 
-		final MetamodelLoader sourceLoader = createSourceMetamodelLoader();
+		final MetamodelLoader destinationLoader = getDestinationMetamodelLoader();
 
 		// Record features which have no meta-model equivalent so we can perform migration
 		final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
 		loadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
 
 		// Load all the current model versions
-		final ResourceSet resourceSet = sourceLoader.getResourceSet();
+		final ResourceSet resourceSet = destinationLoader.getResourceSet();
 
 		// Pass in URI Convertor to help URI resolution
 		resourceSet.setURIConverter(uc);
@@ -85,7 +85,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		// Save the models
 		final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
 		for (final Resource r : resourceSet.getResources()) {
-			if (r.isLoaded()) {
+			if (r.isLoaded() && r.isModified()) {
 				r.save(saveOptions);
 			}
 		}
