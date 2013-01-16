@@ -195,26 +195,13 @@ public class ScenarioStorageUtil {
 
 					result.setVersionContext(manifest.getVersionContext());
 					result.setScenarioVersion(manifest.getScenarioVersion());
-					
-					meta.setContentType(manifest.getScenarioType());
 
-					MMXRootObject implementation = null;
+					meta.setContentType(manifest.getScenarioType());
 
 					for (final String smu : manifest.getModelURIs()) {
 						URI rel = URI.createURI(smu);
 						if (rel.isRelative()) {
 							rel = rel.resolve(manifestURI);
-						}
-						if (preLoad) {
-							if (implementation == null) {
-								implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
-								result.setInstance(implementation);
-							}
-
-							final Resource r = resourceSet.createResource(rel);
-							r.load(null);
-							implementation.addSubModel((UUIDObject) r.getContents().get(0));
-
 						}
 						result.getSubModelURIs().add(rel.toString());
 					}
@@ -222,13 +209,22 @@ public class ScenarioStorageUtil {
 					result.getDependencyUUIDs().addAll(manifest.getDependencyUUIDs());
 
 					if (preLoad) {
+						final MMXRootObject implementation = MMXCoreFactory.eINSTANCE.createMMXRootObject();
+						result.setInstance(implementation);
+
+						for (final String rel : result.getSubModelURIs()) {
+							final Resource r = resourceSet.createResource(URI.createURI(rel));
+							r.load(null);
+							implementation.addSubModel((UUIDObject) r.getContents().get(0));
+						}
+
 						MMXCoreHandlerUtil.restoreProxiesForResources(resourceSet.getResources());
 					}
 
 					return result;
 				}
 			}
-		} catch (final IOException e) {
+		} catch (final Exception e) {
 			log.error(e.getMessage(), e);
 		}
 		return null;
