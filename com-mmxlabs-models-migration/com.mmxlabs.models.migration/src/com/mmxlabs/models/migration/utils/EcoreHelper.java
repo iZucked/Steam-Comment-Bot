@@ -38,15 +38,32 @@ public class EcoreHelper {
 		try {
 			inputStream = uc.createInputStream(uri, Collections.emptyMap());
 
-			// TODO: There may well be a better way to do this.
+			// TODO: There may well be a better way to do this. (I hope so...)
 
 			// Use an XML parser to parse document
 			final SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 
 			// Use handler to intercept the parsing an extract the NS URI attribute from document root.
 			final DefaultHandler handler = new DefaultHandler() {
+
+				private boolean firstElement = true;
+
 				@Override
 				public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+
+					if (firstElement) {
+						firstElement = false;
+
+						if (qName.contains(":")) {
+							String[] split = qName.split(":");
+							String value2 = attributes.getValue("xmlns:" + split[0]);
+							if (value2 != null) {
+								value[0] = value2;
+								// TODO: Break out of parsing early?
+							}
+						}
+					}
+
 					if (qName.equals("ecore:EPackage")) {
 						// Store the result
 						value[0] = attributes.getValue("nsURI");
