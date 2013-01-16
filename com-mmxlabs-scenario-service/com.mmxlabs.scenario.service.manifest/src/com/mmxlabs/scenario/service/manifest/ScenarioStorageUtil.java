@@ -93,6 +93,8 @@ public class ScenarioStorageUtil {
 		final Manifest manifest = ManifestFactory.eINSTANCE.createManifest();
 		manifest.setScenarioType(instance.getMetadata().getContentType());
 		manifest.setUUID(instance.getUuid());
+		manifest.setScenarioVersion(instance.getScenarioVersion());
+		manifest.setVersionContext(instance.getVersionContext());
 		final URI manifestURI = URI.createURI("archive:" + URI.createFileURI(file.getAbsolutePath()) + "!/MANIFEST.xmi");
 		final Resource manifestResource = resourceSet.createResource(manifestURI);
 
@@ -191,6 +193,9 @@ public class ScenarioStorageUtil {
 					result.setName(scenarioURI.trimFileExtension().lastSegment());
 					result.setUuid(manifest.getUUID());
 
+					result.setVersionContext(manifest.getVersionContext());
+					result.setScenarioVersion(manifest.getScenarioVersion());
+					
 					meta.setContentType(manifest.getScenarioType());
 
 					MMXRootObject implementation = null;
