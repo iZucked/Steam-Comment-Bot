@@ -41,14 +41,14 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 * @param migrationUnits
 	 */
 	@Inject
-	public void init(final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts, final Iterable<MigrationContextExtensionPoint> migrationContexts,
-			final Iterable<MigrationUnitExtensionPoint> migrationUnits) {
+	public void init(final Iterable<MigrationContextExtensionPoint> migrationContexts, final Iterable<MigrationUnitExtensionPoint> migrationUnits,
+			final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts) {
 
 		for (final MigrationContextExtensionPoint ext : migrationContexts) {
 			try {
-				registerContext(ext.getName(), Integer.parseInt(ext.getLatestVersion()));
+				registerContext(ext.getContextName(), Integer.parseInt(ext.getLatestVersion()));
 			} catch (final NumberFormatException e) {
-				log.error("Unable to register context: " + ext.getName(), e);
+				log.error("Unable to register context: " + ext.getContextName(), e);
 			}
 		}
 		for (final MigrationUnitExtensionPoint ext : migrationUnits) {
@@ -96,7 +96,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 		}
 
 		// Search through the map finding a set of IMigrationUnits to transform between the desired versions.
-		final List<IMigrationUnit> chain = new ArrayList<IMigrationUnit>(toVersion - fromVersion);
+		final List<IMigrationUnit> chain = new ArrayList<IMigrationUnit>(toVersion == -1 ? 2 : toVersion - fromVersion);
 		final Map<Integer, IMigrationUnit> froms = fromVersionMap.get(context);
 
 		int currentVersion = fromVersion;

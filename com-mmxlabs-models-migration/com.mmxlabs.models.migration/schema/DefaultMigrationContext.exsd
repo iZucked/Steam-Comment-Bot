@@ -3,7 +3,7 @@
 <schema targetNamespace="com.mmxlabs.models.migration" xmlns="http://www.w3.org/2001/XMLSchema">
 <annotation>
       <appinfo>
-         <meta.schema plugin="com.mmxlabs.models.migration" id="MigrationContext" name="MigrationContext"/>
+         <meta.schema plugin="com.mmxlabs.models.migration" id="DefaultMigrationContext" name="DefaultMigrationContext"/>
       </appinfo>
       <documentation>
          [Enter description of this extension point.]
@@ -18,7 +18,7 @@
       </annotation>
       <complexType>
          <sequence>
-            <element ref="MigrationContext" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="DefaultMigrationContext" minOccurs="0" maxOccurs="1"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -47,20 +47,16 @@
       </complexType>
    </element>
 
-   <element name="MigrationContext">
+   <element name="DefaultMigrationContext">
       <complexType>
-         <attribute name="name" type="string" use="required">
+         <attribute name="context" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The default migration context for the application. Only a single default context should be registered with the application.
                </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="latestVersion" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The most recent version version of the context.
-               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="com.mmxlabs.models.migration.MigrationContext/MigrationContext/@name"/>
+               </appinfo>
             </annotation>
          </attribute>
       </complexType>

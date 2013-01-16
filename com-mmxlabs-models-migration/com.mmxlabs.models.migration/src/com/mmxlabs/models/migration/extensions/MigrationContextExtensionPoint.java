@@ -7,9 +7,8 @@ import org.ops4j.peaberry.eclipse.MapName;
 public interface MigrationContextExtensionPoint {
 
 	@MapName("name")
-	String getName();
+	String getContextName();
 
 	@MapName("latestVersion")
 	String getLatestVersion();
-
 }
