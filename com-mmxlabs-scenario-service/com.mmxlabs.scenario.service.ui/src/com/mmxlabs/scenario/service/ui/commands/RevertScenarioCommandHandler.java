@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.scenario.service.ui.commands;
 
-import java.io.IOException;
 import java.util.Iterator;
 
 import org.eclipse.core.commands.AbstractHandler;
