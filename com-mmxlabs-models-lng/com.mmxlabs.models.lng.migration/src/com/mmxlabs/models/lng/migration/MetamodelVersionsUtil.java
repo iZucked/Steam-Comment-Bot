@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.migration;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
+import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EPackage;
 
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
@@ -72,6 +73,12 @@ public class MetamodelVersionsUtil {
 		return loader;
 	}
 
+	/**
+	 * The LNG Types model serialises objects into a Base 64 encoded byte array. The standard {@link EFactory} implemention cannot handle this and throws an exception. Here we hook into the datatype
+	 * "convert" the data into a string. There is (currently) no need to do anything with this data directly.
+	 * 
+	 * @param typesPackage
+	 */
 	private static void hookSerializableObjectConvertor(final EPackage typesPackage) {
 		final EClassifier eClassifier = typesPackage.getEClassifier("SerializableObject");
 		((EDataType.Internal) eClassifier).setConversionDelegate(new EDataType.Internal.ConversionDelegate() {
