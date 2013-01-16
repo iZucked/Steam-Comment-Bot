@@ -53,19 +53,15 @@ public class MetamodelLoader {
 		return resourceSet.getPackageRegistry().getEPackage(nsURI);
 	}
 
-	// public EFactory loadEFactory(final URI location) {
-	//
-	// final EPackage ePackage = loadEPackage(location);
-	// if (ePackage != null) {
-	// return ePackage.getEFactoryInstance();
-	// }
-	// return null;
-	// }
-
 	public EClassifier getClassifier(final EPackage ePackage, final String classifierName) {
 		return ePackage.getEClassifier(classifierName);
 	}
 
+	/**
+	 * Returns the {@link ResourceSet} used by this metamodel loader. Be careful about reusing this to load model instances.
+	 * 
+	 * @return
+	 */
 	public ResourceSet getResourceSet() {
 		return resourceSet;
 	}
