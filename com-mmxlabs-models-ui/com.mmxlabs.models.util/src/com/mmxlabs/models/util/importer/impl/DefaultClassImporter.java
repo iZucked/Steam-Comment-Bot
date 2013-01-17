@@ -369,9 +369,7 @@ public class DefaultClassImporter implements IClassImporter {
 				final Object o = object.eGet(reference);
 				if (o instanceof NamedObject) {
 					final NamedObject no = (NamedObject) o;
-					if (no != null) {
-						result.put(reference.getName(), no.getName());
-					}
+					result.put(reference.getName(), no.getName());
 				}
 			}
 		}
