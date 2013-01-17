@@ -116,12 +116,12 @@ public class MigrateToV1Test {
 			// Record features which have no meta-model equivalent so we can perform migration
 			loadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
 			r.load(loadOptions);
-			EObject cargoModel = r.getContents().get(0);
+			final EObject cargoModel = r.getContents().get(0);
 
-			Map<ModelsLNGSet_v1, EObject> models = new HashMap<ModelsLNGSet_v1, EObject>();
+			final Map<ModelsLNGSet_v1, EObject> models = new HashMap<ModelsLNGSet_v1, EObject>();
 			models.put(ModelsLNGSet_v1.Cargo, cargoModel);
 			// Run migration.
-			migrator.clearFixedPrice(v1Loader, models);
+			migrator.migrateFixedPrice(v1Loader, models);
 
 			r.save(null);
 		}
@@ -146,7 +146,7 @@ public class MigrateToV1Test {
 			final EClass class_LoadSlot = MetamodelUtils.getEClass(cargoPackage, "LoadSlot");
 			final EClass class_DischargeSlot = MetamodelUtils.getEClass(cargoPackage, "DischargeSlot");
 
-			EObject cargoModel = r.getContents().get(0);
+			final EObject cargoModel = r.getContents().get(0);
 
 			Assert.assertTrue(((XMLResource) r).getEObjectToExtensionMap().isEmpty());
 
@@ -165,6 +165,168 @@ public class MigrateToV1Test {
 			final EObject loadSlot3 = loadSlots.get(2);
 			Assert.assertTrue(loadSlot3.eIsSet(feature_priceExpression));
 			Assert.assertEquals("EXPR", loadSlot3.eGet(feature_priceExpression));
+		}
+	}
+
+	@Test
+	public void testRemoveExtraAnalyticsFields() throws IOException {
+
+		// Load v0 metamodels
+
+		// Construct a scenario
+		File portModelFile = null;
+		File analyticsModelFile = null;
+		{
+			final MetamodelLoader v0Loader = new MigrateToV1().getSourceMetamodelLoader();
+			final EPackage analyticsPackage = v0Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
+			final EFactory analyticsFactory = analyticsPackage.getEFactoryInstance();
+
+			final EPackage portPackage = v0Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PortModel);
+			final EFactory portFactory = portPackage.getEFactoryInstance();
+
+			final EClass class_portModel = MetamodelUtils.getEClass(portPackage, "PortModel");
+			final EStructuralFeature feature_PortModel_ports = MetamodelUtils.getStructuralFeature(class_portModel, "ports");
+
+			final EClass class_AnalyticsModel = MetamodelUtils.getEClass(analyticsPackage, "AnalyticsModel");
+			final EStructuralFeature feature_roundTripMatrices = MetamodelUtils.getStructuralFeature(class_AnalyticsModel, "roundTripMatrices");
+
+			final EClass class_UnitCostMatrix = MetamodelUtils.getEClass(analyticsPackage, "UnitCostMatrix");
+			final EStructuralFeature feature_toPorts = MetamodelUtils.getStructuralFeature(class_UnitCostMatrix, "toPorts");
+			final EStructuralFeature feature_fromPorts = MetamodelUtils.getStructuralFeature(class_UnitCostMatrix, "fromPorts");
+
+			final EStructuralFeature feature_ports = MetamodelUtils.getStructuralFeature(class_UnitCostMatrix, "ports");
+			final EStructuralFeature feature_returnIdleTime = MetamodelUtils.getStructuralFeature(class_UnitCostMatrix, "returnIdleTime");
+			final EStructuralFeature feature_dischargeIdleTime = MetamodelUtils.getStructuralFeature(class_UnitCostMatrix, "dischargeIdleTime");
+
+			final EClass class_port = MetamodelUtils.getEClass(portPackage, "Port");
+
+			final EObject portModel = portFactory.create(class_portModel);
+
+			final EObject port1 = portFactory.create(class_port);
+			final EObject port2 = portFactory.create(class_port);
+			final List<EObject> ports = new ArrayList<EObject>(2);
+			ports.add(port1);
+			ports.add(port2);
+
+			final EObject port3 = portFactory.create(class_port);
+			final List<EObject> ports2 = new ArrayList<EObject>(1);
+			ports2.add(port3);
+
+			List<EObject> allPorts = new ArrayList<EObject>(3);
+			allPorts.add(port1);
+			allPorts.add(port2);
+			allPorts.add(port3);
+			portModel.eSet(feature_PortModel_ports, allPorts);
+
+			final EObject analyticsModel = analyticsFactory.create(class_AnalyticsModel);
+
+			// No price values set -- no change
+			final EObject matrix1 = analyticsFactory.create(class_UnitCostMatrix);
+			matrix1.eSet(feature_ports, ports);
+			matrix1.eSet(feature_returnIdleTime, 5);
+			matrix1.eSet(feature_dischargeIdleTime, 10);
+
+			final EObject matrix2 = analyticsFactory.create(class_UnitCostMatrix);
+			matrix2.eSet(feature_ports, ports);
+			matrix2.eSet(feature_toPorts, ports2);
+			matrix2.eSet(feature_fromPorts, ports2);
+
+			final List<EObject> matrics = new ArrayList<EObject>(2);
+			matrics.add(matrix1);
+			matrics.add(matrix2);
+
+			analyticsModel.eSet(feature_roundTripMatrices, matrics);
+
+			// Save to tmp file
+
+			{
+				portModelFile = File.createTempFile("migrationtest-ports", ".xmi");
+
+				final Resource r = v0Loader.getResourceSet().createResource(URI.createFileURI(portModelFile.toString()));
+				r.getContents().add(portModel);
+				r.save(null);
+			}
+			{
+				analyticsModelFile = File.createTempFile("migrationtest-analytics", ".xmi");
+
+				final Resource r = v0Loader.getResourceSet().createResource(URI.createFileURI(analyticsModelFile.toString()));
+				r.getContents().add(analyticsModel);
+				r.save(null);
+			}
+		}
+
+		// Load v1 metamodels
+		// Load tmp file under v1
+		{
+			final MigrateToV1 migrator = new MigrateToV1();
+
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+
+			final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
+			// Record features which have no meta-model equivalent so we can perform migration
+			loadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+
+			final Resource portResource = v1Loader.getResourceSet().createResource(URI.createFileURI(portModelFile.toString()));
+			portResource.load(loadOptions);
+			final Resource analyticsResource = v1Loader.getResourceSet().createResource(URI.createFileURI(analyticsModelFile.toString()));
+			analyticsResource.load(loadOptions);
+
+			final EObject analyticsModel = analyticsResource.getContents().get(0);
+			final EObject portModel = portResource.getContents().get(0);
+
+			final Map<ModelsLNGSet_v1, EObject> models = new HashMap<ModelsLNGSet_v1, EObject>();
+			models.put(ModelsLNGSet_v1.Analytics, analyticsModel);
+			models.put(ModelsLNGSet_v1.Port, portModel);
+			// Run migration.
+			migrator.removeExtraAnalyticsFields(v1Loader, models);
+
+			portResource.save(null);
+			analyticsResource.save(null);
+		}
+
+		// Check output
+		{
+			final MigrateToV1 migrator = new MigrateToV1();
+
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+			final Resource portResource = v1Loader.getResourceSet().createResource(URI.createFileURI(portModelFile.toString()));
+			portResource.load(null);
+			final Resource analyticsResource = v1Loader.getResourceSet().createResource(URI.createFileURI(analyticsModelFile.toString()));
+			analyticsResource.load(null);
+			portModelFile.delete();
+			analyticsModelFile.delete();
+
+			final EPackage analyticsPackage = v1Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
+
+			final EClass class_AnalyticsModel = MetamodelUtils.getEClass(analyticsPackage, "AnalyticsModel");
+			final EStructuralFeature feature_roundTripMatrices = MetamodelUtils.getStructuralFeature(class_AnalyticsModel, "roundTripMatrices");
+
+			final EClass class_UnitCostMatrix = MetamodelUtils.getEClass(analyticsPackage, "UnitCostMatrix");
+			final EStructuralFeature feature_toPorts = MetamodelUtils.getStructuralFeature(class_UnitCostMatrix, "toPorts");
+			final EStructuralFeature feature_fromPorts = MetamodelUtils.getStructuralFeature(class_UnitCostMatrix, "fromPorts");
+
+			final EObject analyticsModel = analyticsResource.getContents().get(0);
+
+			// No unknown features have been left over
+			Assert.assertTrue(((XMLResource) analyticsResource).getEObjectToExtensionMap().isEmpty());
+
+			final List<EObject> matrices = MetamodelUtils.getValueAsTypedList(analyticsModel, feature_roundTripMatrices);
+
+			// No price values set -- no change
+			final EObject matrix1 = matrices.get(0);
+			Assert.assertTrue(matrix1.eIsSet(feature_toPorts));
+			Assert.assertTrue(matrix1.eIsSet(feature_fromPorts));
+
+			Assert.assertEquals(2, MetamodelUtils.getValueAsTypedList(matrix1, feature_toPorts).size());
+			Assert.assertEquals(2, MetamodelUtils.getValueAsTypedList(matrix1, feature_fromPorts).size());
+
+			final EObject matrix2 = matrices.get(1);
+			Assert.assertTrue(matrix2.eIsSet(feature_toPorts));
+			Assert.assertTrue(matrix2.eIsSet(feature_fromPorts));
+
+			Assert.assertEquals(1, MetamodelUtils.getValueAsTypedList(matrix2, feature_toPorts).size());
+			Assert.assertEquals(1, MetamodelUtils.getValueAsTypedList(matrix2, feature_fromPorts).size());
+
 		}
 	}
 }
