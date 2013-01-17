@@ -8,8 +8,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
+import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.util.importer.registry.ExtensionConfigurationModule;
 import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
 
@@ -24,8 +24,7 @@ public class Activator extends AbstractUIPlugin {
 	// The shared instance
 	private static Activator plugin;
 
-	@Inject
-	IImporterRegistry importerRegistry;
+	private Injector injector;
 
 	/**
 	 * The constructor
@@ -43,8 +42,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		Injector injector = Guice.createInjector(new ExtensionConfigurationModule(getBundle().getBundleContext()));
-		injector.injectMembers(this);
+		injector = Guice.createInjector(new ExtensionConfigurationModule(getBundle().getBundleContext()));
 	}
 
 	/*
@@ -68,6 +66,10 @@ public class Activator extends AbstractUIPlugin {
 	}
 
 	public IImporterRegistry getImporterRegistry() {
-		return importerRegistry;
+		return injector.getInstance(IImporterRegistry.class);
+	}
+
+	public IMigrationRegistry getMigrationRegistry() {
+		return injector.getInstance(IMigrationRegistry.class);
 	}
 }

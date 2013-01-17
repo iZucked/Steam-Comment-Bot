@@ -41,6 +41,8 @@ import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
+import com.mmxlabs.models.migration.IMigrationRegistry;
+import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -156,7 +158,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			if (importer == null) {
 				continue;
 			}
-			EClass subModelClass = importer.getEClass();
+			final EClass subModelClass = importer.getEClass();
 			final Chunk chunk = new Chunk(importer);
 			final Map<String, String> parts = importer.getRequiredInputs();
 			chunks.add(chunk);
@@ -237,6 +239,8 @@ public class ImportCSVFilesPage extends WizardPage {
 					try {
 						final DefaultImportContext context = new DefaultImportContext();
 
+						final IMigrationRegistry migrationRegistry = Activator.getDefault().getMigrationRegistry();
+
 						final List<EObject> models = new LinkedList<EObject>();
 						if (doImport(context, models) != null) {
 
@@ -248,6 +252,16 @@ public class ImportCSVFilesPage extends WizardPage {
 
 							try {
 								final ScenarioInstance instance = scenarioService.insert(container, Collections.<ScenarioInstance> emptySet(), models);
+
+								final String versionContext = migrationRegistry.getDefaultMigrationContext();
+								instance.setVersionContext(versionContext);
+								int latestContextVersion = migrationRegistry.getLatestContextVersion(versionContext);
+								// Snapshot version - so find last good version number
+								if (latestContextVersion == IMigrationRegistry.SNAPSHOT_VERSION) {
+									latestContextVersion = migrationRegistry.getLastReleaseVersion(versionContext);
+								}
+								instance.setScenarioVersion(latestContextVersion);
+
 								monitor.worked(1);
 
 								instance.setName(mainPage.getFileName());
