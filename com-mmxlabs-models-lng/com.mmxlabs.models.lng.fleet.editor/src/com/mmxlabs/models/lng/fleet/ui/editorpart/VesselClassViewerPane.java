@@ -129,10 +129,11 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						fileDialog.setFilterExtensions(new String[] { "*.csv" });
 						final String path = fileDialog.open();
 
-						if (path == null)
+						if (path == null) {
 							return;
+						}
 
-						CSVReader reader;
+						CSVReader reader = null;
 						try {
 							reader = new CSVReader(new File(path));
 							final Collection<EObject> importedObjects = importer.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), reader, context);
@@ -141,6 +142,15 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 									.execute(mergeLists(getScenarioViewer().getCurrentContainer(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels(), new ArrayList<EObject>(importedObjects)));
 						} catch (final IOException e) {
 							log.error(e.getMessage(), e);
+						} finally {
+
+							if (reader != null) {
+								try {
+									reader.close();
+								} catch (final IOException e) {
+								}
+							}
+
 						}
 					}
 				};
@@ -162,7 +172,7 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						if (path == null)
 							return;
 
-						CSVReader reader;
+						CSVReader reader = null;
 						try {
 							jointModelEditor.setDisableUpdates(true);
 							jointModelEditor.setDisableCommandProviders(true);
@@ -200,6 +210,13 @@ public class VesselClassViewerPane extends ScenarioTableViewerPane {
 						} finally {
 							jointModelEditor.setDisableUpdates(false);
 							jointModelEditor.setDisableCommandProviders(false);
+
+							if (reader != null) {
+								try {
+									reader.close();
+								} catch (final IOException e) {
+								}
+							}
 						}
 					}
 				};

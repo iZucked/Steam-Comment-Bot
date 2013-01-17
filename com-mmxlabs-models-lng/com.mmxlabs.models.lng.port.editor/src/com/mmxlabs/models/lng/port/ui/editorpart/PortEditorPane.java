@@ -152,7 +152,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								return;
 							final RouteImporter routeImporter = new RouteImporter();
 
-							CSVReader reader;
+							CSVReader reader = null;
 							try {
 								reader = new CSVReader(new File(path));
 								final Route importRoute = routeImporter.importRoute(reader, context);
@@ -169,6 +169,15 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								getJointModelEditorPart().setDisableUpdates(false);
 							} catch (final IOException e) {
 								log.error(e.getMessage(), e);
+							} finally {
+
+								if (reader != null) {
+									try {
+										reader.close();
+									} catch (final IOException e) {
+									}
+								}
+
 							}
 						}
 					};
@@ -206,7 +215,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 							final String newName = input.getValue();
 							final RouteImporter routeImporter = new RouteImporter();
 
-							CSVReader reader;
+							CSVReader reader = null;
 							try {
 								reader = new CSVReader(new File(path));
 
@@ -223,6 +232,15 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								getJointModelEditorPart().setDisableUpdates(false);
 							} catch (final IOException e) {
 								log.error(e.getMessage(), e);
+							} finally {
+
+								if (reader != null) {
+									try {
+										reader.close();
+									} catch (final IOException e) {
+									}
+								}
+
 							}
 						}
 					}
@@ -254,7 +272,7 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 							final String newName = "Direct";
 							final RouteImporter routeImporter = new RouteImporter();
 
-							CSVReader reader;
+							CSVReader reader = null;
 							try {
 								reader = new CSVReader(new File(path));
 
@@ -271,6 +289,15 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 								getJointModelEditorPart().setDisableUpdates(false);
 							} catch (final IOException e) {
 								log.error(e.getMessage(), e);
+							} finally {
+
+								if (reader != null) {
+									try {
+										reader.close();
+									} catch (final IOException e) {
+									}
+								}
+
 							}
 						}
 

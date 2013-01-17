@@ -142,7 +142,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 						if (path == null)
 							return;
 
-						CSVReader reader;
+						CSVReader reader = null;
 						try {
 							reader = new CSVReader(new File(path));
 							final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
@@ -150,6 +150,15 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 							part.getEditingDomain().getCommandStack().execute(mergeLists(container, containment, new ArrayList<EObject>(importedObjects)));
 						} catch (final IOException e) {
 							log.error(e.getMessage(), e);
+						} finally {
+
+							if (reader != null) {
+								try {
+									reader.close();
+								} catch (final IOException e) {
+								}
+							}
+
 						}
 					}
 				};
@@ -170,7 +179,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 						if (path == null)
 							return;
 
-						CSVReader reader;
+						CSVReader reader = null;
 						try {
 							reader = new CSVReader(new File(path));
 							final Collection<EObject> importedObjects = importer.importObjects(FleetPackage.eINSTANCE.getBaseFuel(), reader, context);
@@ -179,6 +188,15 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 									.execute(mergeLists(getScenarioViewer().getCurrentContainer(), FleetPackage.eINSTANCE.getFleetModel_BaseFuels(), new ArrayList<EObject>(importedObjects)));
 						} catch (final IOException e) {
 							log.error(e.getMessage(), e);
+						} finally {
+
+							if (reader != null) {
+								try {
+									reader.close();
+								} catch (final IOException e) {
+								}
+							}
+
 						}
 					}
 				};
@@ -200,7 +218,7 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 						if (path == null)
 							return;
 
-						CSVReader reader;
+						CSVReader reader = null;
 						try {
 							jointModelEditor.setDisableUpdates(true);
 							jointModelEditor.setDisableCommandProviders(true);
@@ -238,6 +256,14 @@ public class VesselViewerPane_Editor extends ScenarioTableViewerPane {
 						} finally {
 							jointModelEditor.setDisableUpdates(false);
 							jointModelEditor.setDisableCommandProviders(false);
+
+							if (reader != null) {
+								try {
+									reader.close();
+								} catch (final IOException e) {
+								}
+							}
+
 						}
 					}
 				};
