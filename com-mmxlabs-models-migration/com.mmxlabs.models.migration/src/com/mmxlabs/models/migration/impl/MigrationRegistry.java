@@ -144,4 +144,17 @@ public class MigrationRegistry implements IMigrationRegistry {
 	public String getDefaultMigrationContext() {
 		return defaultContext;
 	}
+
+	@Override
+	public int getLastReleaseVersion(final String context) {
+
+		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(context);
+		int lastNumber = -1;
+		for (final Integer v : map.keySet()) {
+			if (v.intValue() > lastNumber) {
+				lastNumber = v.intValue();
+			}
+		}
+		return lastNumber;
+	}
 }
