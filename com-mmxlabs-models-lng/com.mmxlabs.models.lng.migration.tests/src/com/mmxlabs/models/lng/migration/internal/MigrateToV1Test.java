@@ -346,6 +346,7 @@ public class MigrateToV1Test {
 
 			final EClass class_inputModel = MetamodelUtils.getEClass(inputPackage, "InputModel");
 			final EStructuralFeature feature_InputModel_assignments = MetamodelUtils.getStructuralFeature(class_inputModel, "assignments");
+			final EStructuralFeature feature_InputModel_lockedAssignedObjects = MetamodelUtils.getStructuralFeature(class_inputModel, "lockedAssignedObjects");
 
 			final EClass class_Assignment = MetamodelUtils.getEClass(inputPackage, "Assignment");
 			final EStructuralFeature feature_vessels = MetamodelUtils.getStructuralFeature(class_Assignment, "vessels");
@@ -385,6 +386,7 @@ public class MigrateToV1Test {
 			final EObject inputModel = inputFactory.create(class_inputModel);
 			inputModel.eSet(feature_InputModel_assignments, Lists.newArrayList(assignment1, assignment2));
 
+			inputModel.eSet(feature_InputModel_lockedAssignedObjects, allVessels);
 			// Save to tmp file
 
 			{
@@ -448,6 +450,7 @@ public class MigrateToV1Test {
 
 			final EClass class_inputModel = MetamodelUtils.getEClass(inputPackage, "InputModel");
 			final EStructuralFeature feature_InputModel_assignments = MetamodelUtils.getStructuralFeature(class_inputModel, "assignments");
+			final EStructuralFeature feature_InputModel_lockedAssignedObjects = MetamodelUtils.getStructuralFeature(class_inputModel, "lockedAssignedObjects");
 
 			final EObject inputModel = inputResource.getContents().get(0);
 			Assert.assertNotNull(inputModel);
@@ -455,6 +458,7 @@ public class MigrateToV1Test {
 			// No unknown features have been left over
 			Assert.assertTrue(((XMLResource) inputResource).getEObjectToExtensionMap().isEmpty());
 			Assert.assertFalse(inputModel.eIsSet(feature_InputModel_assignments));
+			Assert.assertFalse(inputModel.eIsSet(feature_InputModel_lockedAssignedObjects));
 
 		}
 	}

@@ -145,8 +145,10 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 
 		final EClass class_InputModel = MetamodelUtils.getEClass(inputPackage, "InputModel");
 		final EStructuralFeature feature_assignments = MetamodelUtils.getStructuralFeature(class_InputModel, "assignments");
+		final EStructuralFeature feature_lockedAssignedObjects = MetamodelUtils.getStructuralFeature(class_InputModel, "lockedAssignedObjects");
 
 		inputModel.eUnset(feature_assignments);
+		inputModel.eUnset(feature_lockedAssignedObjects);
 	}
 
 	public void removeExtraAnalyticsFields(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
