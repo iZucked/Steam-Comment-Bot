@@ -50,10 +50,11 @@ public class SimpleImportAction extends ImportAction {
 		fileDialog.setFilterExtensions(new String[] { "*.csv" });
 		final String path = fileDialog.open();
 
-		if (path == null)
+		if (path == null) {
 			return;
+		}
 
-		CSVReader reader;
+		CSVReader reader = null;
 		try {
 			reader = new CSVReader(new File(path));
 			final Collection<EObject> importedObjects = importer.importObjects(containment.getEReferenceType(), reader, context);
@@ -62,6 +63,13 @@ public class SimpleImportAction extends ImportAction {
 			part.getEditingDomain().getCommandStack().execute(cmd);
 		} catch (final IOException e) {
 			log.error(e.getMessage(), e);
+		} finally {
+			try {
+				if (reader != null) {
+					reader.close();
+				}
+			} catch (final IOException e) {
+			}
 		}
 	}
 
