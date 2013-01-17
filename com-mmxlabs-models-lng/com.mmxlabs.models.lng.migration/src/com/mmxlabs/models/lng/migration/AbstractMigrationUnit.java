@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
@@ -31,7 +32,7 @@ import com.mmxlabs.models.migration.utils.MetamodelLoader;
 public abstract class AbstractMigrationUnit implements IMigrationUnit {
 
 	/**
-	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getSourceVersion()}
+	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getSourceVersion()}.
 	 * 
 	 * @return
 	 */
@@ -58,13 +59,15 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 
 		final MetamodelLoader destinationLoader = getDestinationMetamodelLoader();
 
-		// Record features which have no meta-model equivalent so we can perform migration
 		final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
-		loadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
 
 		// Load all the current model versions
 		final ResourceSet resourceSet = destinationLoader.getResourceSet();
 
+		// Record features which have no meta-model equivalent so we can perform migration
+		loadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+
+		resourceSet.getLoadOptions().put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
 		// Pass in URI Convertor to help URI resolution
 		resourceSet.setURIConverter(uc);
 
@@ -72,7 +75,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		for (final URI uri : baseURIs) {
 			final String nsURI = EcoreHelper.getPackageNS(uri);
 			final ModelsLNGSet_v1 type = MetamodelVersionsUtil.getTypeFromNS(nsURI);
-			final Resource r = resourceSet.getResource(uri, true);
+			final XMIResource r = (XMIResource) resourceSet.createResource(uri);
 			if (type != null) {
 				r.load(loadOptions);
 				models.put(type, r.getContents().get(0));
