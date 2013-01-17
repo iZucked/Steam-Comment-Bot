@@ -12,6 +12,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 
+import com.google.common.io.ByteStreams;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -103,36 +104,28 @@ public class ScenarioInstanceMigrator {
 		return version;
 	}
 
-	public void copyURIData(final ExtensibleURIConverterImpl uc, final URI uri, final URI tmpURI) throws IOException {
+	public void copyURIData(final URIConverter uc, final URI uri, final URI tmpURI) throws IOException {
 		InputStream is = null;
 		OutputStream os = null;
 		try {
+
 			// Get input stream from original URI
 			is = uc.createInputStream(uri);
-
 			os = uc.createOutputStream(tmpURI);
 
-			// Copy XMI file contents
-			// TODO: Tweak buffer size
-			// TODO: Java 7 APIs?
-			final byte[] buf = new byte[4096];
-			int c;
-			while ((c = is.read(buf)) > 0) {
-				os.write(buf, 0, c);
-			}
-
+			ByteStreams.copy(is, os);
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
-				} catch (final Exception e) {
+				} catch (final IOException e) {
 
 				}
 			}
 			if (os != null) {
 				try {
 					os.close();
-				} catch (final Exception e) {
+				} catch (final IOException e) {
 
 				}
 			}
