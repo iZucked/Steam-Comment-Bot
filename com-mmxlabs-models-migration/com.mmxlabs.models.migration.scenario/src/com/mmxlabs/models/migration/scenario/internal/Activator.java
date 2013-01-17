@@ -1,3 +1,7 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
 package com.mmxlabs.models.migration.scenario.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
