@@ -241,7 +241,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 			final float startMid = terminalPositions.get(i);
 			final float endMid = terminalPositions.get(destination);
 
-			final float midMid = (startMid + endMid) / 2.0f;
+//			final float midMid = (startMid + endMid) / 2.0f;
 
 			// final Path path = new Path(e.display);
 			// path.moveTo((float) (1.5 * terminalSize), startMid);
