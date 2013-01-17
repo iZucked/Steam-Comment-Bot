@@ -36,20 +36,18 @@ import com.mmxlabs.models.ui.editors.dialogs.MessageDialogWithCheckbox;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 /**
- * Action which deletes selected cargo, prompting the user to decide whether they want to
- * delete the associated slots, using a "Use this choice for all" checkbox if the selection
- * has more than one item in it. If the user selects "Cancel" while going through the 
- * cargoes, no cargoes are deleted.
+ * Action which deletes selected cargo, prompting the user to decide whether they want to delete the associated slots, using a "Use this choice for all" checkbox if the selection has more than one
+ * item in it. If the user selects "Cancel" while going through the cargoes, no cargoes are deleted.
  * 
  * Internally performs a single delete action which can be reversed by "Undo".
  * 
  * @author smcgregor
- *
+ * 
  */
 public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 	IScenarioEditingLocation part;
 	Viewer viewer;
-	
+
 	public DeleteSelectedCargoAction(final IScenarioEditingLocation jointModelEditorPart, final Viewer aViewer) {
 		super("Delete");
 		setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
@@ -58,21 +56,21 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 		this.viewer = aViewer;
 		viewer.addSelectionChangedListener(this);
 	}
-	
+
 	public void run() {
 		// some constants for the dialog options
-		final int LOADBUTTON = 0; 
-		final int CARGOBUTTON = 1; 
-		final int ALLBUTTON = 2; 
-		final int DISCHARGEBUTTON = 3; 
+		final int LOADBUTTON = 0;
+		final int CARGOBUTTON = 1;
+		final int ALLBUTTON = 2;
+		final int DISCHARGEBUTTON = 3;
 		final int CANCELBUTTON = 4;
-		final String [] dialogOptions = new String[5];
+		final String[] dialogOptions = new String[5];
 		dialogOptions[LOADBUTTON] = "Cargo and Load";
 		dialogOptions[CARGOBUTTON] = "Cargo Only";
 		dialogOptions[ALLBUTTON] = "Cargo, Load and Discharge";
 		dialogOptions[DISCHARGEBUTTON] = "Cargo and Discharge";
-		dialogOptions[CANCELBUTTON] = "Cancel";				
-		
+		dialogOptions[CANCELBUTTON] = "Cancel";
+
 		// Delete commands can be slow, so show the busy indicator while deleting.
 		final Runnable runnable = new Runnable() {
 
@@ -82,14 +80,14 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 				final ScenarioLock editorLock = part.getEditorLock();
 				editorLock.awaitClaim();
 				part.setDisableUpdates(true);
-				
+
 				try {
 					final ISelection sel = getLastSelection();
 					if (sel instanceof IStructuredSelection) {
 						final EditingDomain ed = part.getEditingDomain();
-						// Copy selection								
+						// Copy selection
 						final ArrayList<Object> cargoes = new ArrayList<Object>(((IStructuredSelection) sel).toList());
-						// Set up a list of objects for deletion 
+						// Set up a list of objects for deletion
 						// This will include the cargoes but may also include load or discharge slots
 						final ArrayList<Object> trash = new ArrayList<Object>();
 						trash.addAll(0, cargoes);
@@ -98,85 +96,88 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 						boolean useResponseForAll = false;
 						boolean dialogDefault = true;
 						int size = cargoes.size();
-												
+
 						for (int i = 0; i < size; i++) {
 							Object object = cargoes.get(i);
 							final Cargo cargo = (object instanceof Cargo ? (Cargo) object : null);
-							final boolean spotLoad = cargo.getLoadSlot() instanceof SpotSlot;
-							final boolean spotDischarge = cargo.getDischargeSlot() instanceof SpotSlot;
-							
-							// Pop up a dialog if there are remaining cargoes and the user has not checked "use this response for all".
-							if (!useResponseForAll) {
-								final String dialogMessage = String.format("Do you want to delete the load and discharge slots for cargo %s?", ((Cargo) cargo).getName());
-								String dialogTitle = "Delete Cargo";
-								// get the active shell for the default display - a better solution would be to get the shell for the app
-								Shell shell = Display.getDefault().getActiveShell();
-								// don't display a checkbox if there is only one remaining item
-								final boolean showCheckbox = (i < size-1);
-								int remaining = size-1-i; 
-								String cargoSuffix = (remaining == 1 ? "" : "es");
-								String cargoIndicator = (remaining == 1 ? "that" : "those");
-								String checkboxTitle = String.format("Use this choice for another %d selected cargo%s? (Spot slots for %s cargo%s will be automatically deleted.)", remaining, cargoSuffix, cargoIndicator, cargoSuffix);
-									
-								// create a new customised dialog which hides the checkbox if appropriate and enables / disables
-								// the buttons according to spot slots and checkbox status
-								final MessageDialogWithCheckbox dialog = new MessageDialogWithCheckbox(shell, dialogTitle, null, dialogMessage, MessageDialog.QUESTION, dialogOptions, LOADBUTTON, checkboxTitle, dialogDefault && showCheckbox) {
-									// enable / disable the buttons depending on the toggle state
-									protected void fixDisplay() {
-										boolean toggleState = getToggleState();
-										
-										// disable buttons appropriately if the load or discharge slots are spot slots
-										getButton(DISCHARGEBUTTON).setEnabled(toggleState || !spotLoad);
-										getButton(LOADBUTTON).setEnabled(toggleState || !spotDischarge);
-										getButton(CARGOBUTTON).setEnabled(toggleState || (!spotDischarge && !spotLoad));
+							if (cargo != null) {
+								final boolean spotLoad = cargo.getLoadSlot() instanceof SpotSlot;
+								final boolean spotDischarge = cargo.getDischargeSlot() instanceof SpotSlot;
 
-										// change the dialog message appropriately if there are spot slots for this cargo
-										String labelText = dialogMessage;
-										if (spotLoad || spotDischarge) {
-											labelText += " (Spot slots from this cargo will be deleted.)";
-										}
-										messageLabel.setText(labelText);
-									}
-									
-									// make sure the buttons are updated when the checkbox is ticked / unticked
-									protected Button createToggleButton(Composite parent) {
-										Button checkbox = super.createToggleButton(parent);
-										// don't display the checkbox if there is only one remaining item
-										checkbox.setVisible(showCheckbox);
-										checkbox.addSelectionListener(new SelectionAdapter() {
-											public void widgetSelected(SelectionEvent e) {
-												fixDisplay();
+								// Pop up a dialog if there are remaining cargoes and the user has not checked "use this response for all".
+								if (!useResponseForAll) {
+									final String dialogMessage = String.format("Do you want to delete the load and discharge slots for cargo %s?", ((Cargo) cargo).getName());
+									String dialogTitle = "Delete Cargo";
+									// get the active shell for the default display - a better solution would be to get the shell for the app
+									Shell shell = Display.getDefault().getActiveShell();
+									// don't display a checkbox if there is only one remaining item
+									final boolean showCheckbox = (i < size - 1);
+									int remaining = size - 1 - i;
+									String cargoSuffix = (remaining == 1 ? "" : "es");
+									String cargoIndicator = (remaining == 1 ? "that" : "those");
+									String checkboxTitle = String.format("Use this choice for another %d selected cargo%s? (Spot slots for %s cargo%s will be automatically deleted.)", remaining,
+											cargoSuffix, cargoIndicator, cargoSuffix);
+
+									// create a new customised dialog which hides the checkbox if appropriate and enables / disables
+									// the buttons according to spot slots and checkbox status
+									final MessageDialogWithCheckbox dialog = new MessageDialogWithCheckbox(shell, dialogTitle, null, dialogMessage, MessageDialog.QUESTION, dialogOptions, LOADBUTTON,
+											checkboxTitle, dialogDefault && showCheckbox) {
+										// enable / disable the buttons depending on the toggle state
+										protected void fixDisplay() {
+											boolean toggleState = getToggleState();
+
+											// disable buttons appropriately if the load or discharge slots are spot slots
+											getButton(DISCHARGEBUTTON).setEnabled(toggleState || !spotLoad);
+											getButton(LOADBUTTON).setEnabled(toggleState || !spotDischarge);
+											getButton(CARGOBUTTON).setEnabled(toggleState || (!spotDischarge && !spotLoad));
+
+											// change the dialog message appropriately if there are spot slots for this cargo
+											String labelText = dialogMessage;
+											if (spotLoad || spotDischarge) {
+												labelText += " (Spot slots from this cargo will be deleted.)";
 											}
-										});
-										return checkbox;
-									}
+											messageLabel.setText(labelText);
+										}
 
-									// make sure the buttons are enabled / disabled correctly when the dialog is created
-									protected Control createContents(Composite shell) {										
-										Control result = super.createContents(shell);
-										fixDisplay();			
-										return result;
+										// make sure the buttons are updated when the checkbox is ticked / unticked
+										protected Button createToggleButton(Composite parent) {
+											Button checkbox = super.createToggleButton(parent);
+											// don't display the checkbox if there is only one remaining item
+											checkbox.setVisible(showCheckbox);
+											checkbox.addSelectionListener(new SelectionAdapter() {
+												public void widgetSelected(SelectionEvent e) {
+													fixDisplay();
+												}
+											});
+											return checkbox;
+										}
+
+										// make sure the buttons are enabled / disabled correctly when the dialog is created
+										protected Control createContents(Composite shell) {
+											Control result = super.createContents(shell);
+											fixDisplay();
+											return result;
+										}
+									};
+									dialogResponse = dialog.open();
+
+									// "Cancel" cancels the deletion for all cargoes (including previous ones in this selection)
+									if (dialogResponse == CANCELBUTTON || dialogResponse < 0) {
+										return;
 									}
-								}; 
-								
-								dialogResponse = dialog.open();
-								
-								// "Cancel" cancels the deletion for all cargoes (including previous ones in this selection)
-								if (dialogResponse == CANCELBUTTON || dialogResponse < 0) {
-									return;
+									// remember the checkbox state
+									dialogDefault = useResponseForAll = dialog.getToggleState();
 								}
-								// remember the checkbox state
-								dialogDefault = useResponseForAll = dialog.getToggleState();
 							}
-							
+
 							boolean deleteLoad = (dialogResponse == LOADBUTTON) || (dialogResponse == ALLBUTTON);
-							boolean deleteDischarge = (dialogResponse == DISCHARGEBUTTON) || (dialogResponse == ALLBUTTON);				
+							boolean deleteDischarge = (dialogResponse == DISCHARGEBUTTON) || (dialogResponse == ALLBUTTON);
 							if (cargo instanceof Cargo) {
 								LoadSlot loadSlot = cargo.getLoadSlot();
 								DischargeSlot dischargeSlot = cargo.getDischargeSlot();
 								// delete the load slot if the user has so directed (or delete it automatically
 								// if it's a spot slot)
-								if (loadSlot != null && (deleteLoad || loadSlot instanceof SpotSlot))  {											
+								if (loadSlot != null && (deleteLoad || loadSlot instanceof SpotSlot)) {
 									trash.add(loadSlot);
 								}
 								// delete the discharge slot if the user has so directed (or delete it automatically
@@ -186,8 +187,7 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 								}
 							}
 						}
-						
-						
+
 						// Clear current selection
 						selectionChanged(new SelectionChangedEvent(viewer, StructuredSelection.EMPTY));
 
@@ -207,6 +207,6 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 	@Override
 	protected boolean isApplicableToSelection(final ISelection selection) {
 		return selection.isEmpty() == false && selection instanceof IStructuredSelection;
-	}			
+	}
 
 }
