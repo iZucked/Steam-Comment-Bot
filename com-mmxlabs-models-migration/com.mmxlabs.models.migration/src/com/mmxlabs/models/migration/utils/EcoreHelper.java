@@ -1,5 +1,6 @@
 package com.mmxlabs.models.migration.utils;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
 
@@ -55,8 +56,8 @@ public class EcoreHelper {
 						firstElement = false;
 
 						if (qName.contains(":")) {
-							String[] split = qName.split(":");
-							String value2 = attributes.getValue("xmlns:" + split[0]);
+							final String[] split = qName.split(":");
+							final String value2 = attributes.getValue("xmlns:" + split[0]);
 							if (value2 != null) {
 								value[0] = value2;
 								// TODO: Break out of parsing early?
@@ -79,7 +80,11 @@ public class EcoreHelper {
 			parser.parse(inputStream, handler);
 		} finally {
 			if (inputStream != null) {
-				inputStream.close();
+				try {
+					inputStream.close();
+				} catch (final IOException e) {
+
+				}
 			}
 		}
 
