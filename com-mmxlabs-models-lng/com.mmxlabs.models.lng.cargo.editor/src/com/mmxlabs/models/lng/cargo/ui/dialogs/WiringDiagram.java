@@ -161,11 +161,11 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		this.wiring.addAll(wiring);
 	}
 
-	public List<Integer> getWiring() {
+	public synchronized List<Integer> getWiring() {
 		return Collections.unmodifiableList(wiring);
 	}
 
-	public int getTerminalSize() {
+	public synchronized int getTerminalSize() {
 		return terminalSize;
 	}
 
@@ -173,7 +173,7 @@ public abstract class WiringDiagram extends Canvas implements PaintListener, Mou
 		this.terminalSize = terminalSize;
 	}
 
-	public int getPathWidth() {
+	public synchronized int getPathWidth() {
 		return pathWidth;
 	}
 
