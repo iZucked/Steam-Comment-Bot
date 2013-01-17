@@ -2,15 +2,12 @@ package com.mmxlabs.models.migration.scenario.tests;
 
 import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
-import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
-import org.eclipse.emf.ecore.resource.impl.URIConverterImpl;
 import org.junit.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -27,6 +24,7 @@ public class ScenarioInstanceMigratorTest {
 
 		final IMigrationRegistry migrationRegistry = Mockito.mock(IMigrationRegistry.class);
 
+		@SuppressWarnings("unchecked")
 		final List<URI> tmpURIs = mock(List.class);
 
 		final String context = "Context";
