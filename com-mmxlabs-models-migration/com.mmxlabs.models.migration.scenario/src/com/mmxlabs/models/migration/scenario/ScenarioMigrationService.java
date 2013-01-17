@@ -1,16 +1,11 @@
 package com.mmxlabs.models.migration.scenario;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.scenario.service.IScenarioMigrationService;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ScenarioMigrationService implements IScenarioMigrationService {
-
-	private static final Logger log = LoggerFactory.getLogger(ScenarioMigrationService.class);
 
 	private IMigrationRegistry migrationRegistry;
 
