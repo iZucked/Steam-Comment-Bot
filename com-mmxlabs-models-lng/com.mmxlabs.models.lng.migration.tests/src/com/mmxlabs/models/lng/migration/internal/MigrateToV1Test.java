@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.google.common.collect.Lists;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
@@ -212,7 +213,7 @@ public class MigrateToV1Test {
 			final List<EObject> ports2 = new ArrayList<EObject>(1);
 			ports2.add(port3);
 
-			List<EObject> allPorts = new ArrayList<EObject>(3);
+			final List<EObject> allPorts = new ArrayList<EObject>(3);
 			allPorts.add(port1);
 			allPorts.add(port2);
 			allPorts.add(port3);
@@ -329,4 +330,133 @@ public class MigrateToV1Test {
 
 		}
 	}
+
+	@Test
+	public void testClearAssignments() throws IOException {
+
+		// Load v0 metamodels
+
+		// Construct a scenario
+		File inputModelFile = null;
+		File fleetModelFile = null;
+		{
+			final MetamodelLoader v0Loader = new MigrateToV1().getSourceMetamodelLoader();
+			final EPackage inputPackage = v0Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_InputModel);
+			final EFactory inputFactory = inputPackage.getEFactoryInstance();
+
+			final EClass class_inputModel = MetamodelUtils.getEClass(inputPackage, "InputModel");
+			final EStructuralFeature feature_InputModel_assignments = MetamodelUtils.getStructuralFeature(class_inputModel, "assignments");
+
+			final EClass class_Assignment = MetamodelUtils.getEClass(inputPackage, "Assignment");
+			final EStructuralFeature feature_vessels = MetamodelUtils.getStructuralFeature(class_Assignment, "vessels");
+			final EStructuralFeature feature_assignToSpot = MetamodelUtils.getStructuralFeature(class_Assignment, "assignToSpot");
+			final EStructuralFeature feature_assignedObjects = MetamodelUtils.getStructuralFeature(class_Assignment, "assignedObjects");
+
+			final EPackage vesselPackage = v0Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_FleetModel);
+			final EFactory fleetFactory = vesselPackage.getEFactoryInstance();
+
+			final EClass class_FleetModel = MetamodelUtils.getEClass(vesselPackage, "FleetModel");
+			final EStructuralFeature feature_FleetModel_vessels = MetamodelUtils.getStructuralFeature(class_FleetModel, "vessels");
+
+			final EClass class_Vessel = MetamodelUtils.getEClass(vesselPackage, "Vessel");
+
+			// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+			final EObject fleetModel = fleetFactory.create(class_FleetModel);
+
+			final EObject vessel1 = fleetFactory.create(class_Vessel);
+			final EObject vessel2 = fleetFactory.create(class_Vessel);
+			final EObject vessel3 = fleetFactory.create(class_Vessel);
+			final EObject vessel4 = fleetFactory.create(class_Vessel);
+
+			final List<EObject> allVessels = Lists.newArrayList(vessel1, vessel2, vessel3, vessel4);
+			fleetModel.eSet(feature_FleetModel_vessels, allVessels);
+
+			final EObject assignment1 = inputFactory.create(class_Assignment);
+			assignment1.eSet(feature_vessels, Lists.newArrayList(vessel1));
+			assignment1.eSet(feature_assignedObjects, Lists.newArrayList(vessel2));
+			assignment1.eSet(feature_assignToSpot, true);
+
+			final EObject assignment2 = inputFactory.create(class_Assignment);
+			assignment2.eSet(feature_vessels, Lists.newArrayList(vessel3));
+			assignment2.eSet(feature_assignedObjects, Lists.newArrayList(vessel4));
+			assignment2.eSet(feature_assignToSpot, false);
+
+			final EObject inputModel = inputFactory.create(class_inputModel);
+			inputModel.eSet(feature_InputModel_assignments, Lists.newArrayList(assignment1, assignment2));
+
+			// Save to tmp file
+
+			{
+				fleetModelFile = File.createTempFile("migrationtest-vessel", ".xmi");
+
+				final Resource r = v0Loader.getResourceSet().createResource(URI.createFileURI(fleetModelFile.toString()));
+				r.getContents().add(fleetModel);
+				r.save(null);
+			}
+			{
+				inputModelFile = File.createTempFile("migrationtest-input", ".xmi");
+
+				final Resource r = v0Loader.getResourceSet().createResource(URI.createFileURI(inputModelFile.toString()));
+				r.getContents().add(inputModel);
+				r.save(null);
+			}
+		}
+
+		// Load v1 metamodels
+		// Load tmp file under v1
+		{
+			final MigrateToV1 migrator = new MigrateToV1();
+
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+
+			final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
+			// Record features which have no meta-model equivalent so we can perform migration
+			loadOptions.put(XMLResource.OPTION_RECORD_UNKNOWN_FEATURE, Boolean.TRUE);
+
+			final Resource vesselResource = v1Loader.getResourceSet().createResource(URI.createFileURI(fleetModelFile.toString()));
+			vesselResource.load(loadOptions);
+			final Resource inputResource = v1Loader.getResourceSet().createResource(URI.createFileURI(inputModelFile.toString()));
+			inputResource.load(loadOptions);
+
+			final EObject inputModel = inputResource.getContents().get(0);
+			final EObject vesselModel = vesselResource.getContents().get(0);
+
+			final Map<ModelsLNGSet_v1, EObject> models = new HashMap<ModelsLNGSet_v1, EObject>();
+			models.put(ModelsLNGSet_v1.Input, inputModel);
+			models.put(ModelsLNGSet_v1.Fleet, vesselModel);
+			// Run migration.
+			migrator.clearAssignments(v1Loader, models);
+
+			vesselResource.save(null);
+			inputResource.save(null);
+		}
+
+		// Check output
+		{
+			final MigrateToV1 migrator = new MigrateToV1();
+
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+			final Resource fleetResource = v1Loader.getResourceSet().createResource(URI.createFileURI(fleetModelFile.toString()));
+			fleetResource.load(null);
+			final Resource inputResource = v1Loader.getResourceSet().createResource(URI.createFileURI(inputModelFile.toString()));
+			inputResource.load(null);
+			inputModelFile.delete();
+			fleetModelFile.delete();
+
+			final EPackage inputPackage = v1Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_InputModel);
+
+			final EClass class_inputModel = MetamodelUtils.getEClass(inputPackage, "InputModel");
+			final EStructuralFeature feature_InputModel_assignments = MetamodelUtils.getStructuralFeature(class_inputModel, "assignments");
+
+			final EObject inputModel = inputResource.getContents().get(0);
+			Assert.assertNotNull(inputModel);
+
+			// No unknown features have been left over
+			Assert.assertTrue(((XMLResource) inputResource).getEObjectToExtensionMap().isEmpty());
+			Assert.assertFalse(inputModel.eIsSet(feature_InputModel_assignments));
+
+		}
+	}
+
 }
