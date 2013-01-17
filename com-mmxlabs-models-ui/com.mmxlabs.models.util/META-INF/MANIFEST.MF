@@ -10,11 +10,10 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  org.eclipse.emf.ecore;bundle-version="2.7.0",
  org.eclipse.emf.ecore.xmi;bundle-version="2.7.0",
  org.ops4j.peaberry.eclipse;bundle-version="1.1.1",
- org.slf4j.api;bundle-version="1.6.1",
  com.google.inject;bundle-version="3.0.0",
  org.ops4j.peaberry;bundle-version="1.2.0",
- com.mmxlabs.common.common-util;bundle-version="1.0.0",
- com.mmxlabs.models.mmxcore;bundle-version="[2.0.0,4.0.0)"
+ com.mmxlabs.models.mmxcore;bundle-version="[2.0.0,4.0.0)",
+ com.mmxlabs.models.migration;bundle-version="[1.0.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.models.util,
@@ -23,4 +22,7 @@ Export-Package: com.mmxlabs.models.util,
  com.mmxlabs.models.util.importer.impl,
  com.mmxlabs.models.util.importer.registry,
  com.mmxlabs.models.util.importer.registry.impl
-Import-Package: javax.inject;version="1.0.0"
+Import-Package: com.mmxlabs.common;version="2.1.0",
+ com.mmxlabs.common.compilation;version="2.1.0",
+ javax.inject;version="1.0.0",
+ org.slf4j;version="1.6.4"
