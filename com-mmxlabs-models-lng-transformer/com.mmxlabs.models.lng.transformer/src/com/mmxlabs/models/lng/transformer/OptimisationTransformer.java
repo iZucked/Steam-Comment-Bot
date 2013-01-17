@@ -23,15 +23,10 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
-import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.input.editor.utils.CollectedAssignment;
-import com.mmxlabs.models.lng.types.AVessel;
-import com.mmxlabs.models.lng.types.AVesselClass;
-import com.mmxlabs.models.lng.types.AVesselSet;
-import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
@@ -59,7 +54,6 @@ import com.mmxlabs.scheduler.optimiser.providers.IVirtualVesselSlotProvider;
  * @author hinton
  * 
  */
-@SuppressWarnings("deprecation")
 public class OptimisationTransformer implements IOptimisationTransformer {
 	private static final Logger log = LoggerFactory.getLogger(OptimisationTransformer.class);
 
@@ -258,59 +252,7 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 					}
 				}
 			}
-
-		} else if (!inputModel.getAssignments().isEmpty()) {
-			assignments: for (final Assignment assignment : inputModel.getAssignments()) {
-				if (assignment.getVessels().isEmpty())
-					continue assignments;
-				IVessel vessel = null;
-
-				if (assignment.isAssignToSpot()) {
-					if (inputModel.getLockedAssignedObjects().containsAll(assignment.getAssignedObjects())) {
-						continue assignments; // these will get assigned by their constraints.
-					}
-					AVesselClass modelVesselClass;
-					for (final AVesselSet set : assignment.getVessels()) {
-						if (set instanceof AVesselClass) {
-							modelVesselClass = (AVesselClass) set;
-							final IVesselClass vesselClass = mem.getOptimiserObject(modelVesselClass, IVesselClass.class);
-
-							final List<IVessel> vesselsOfClass = spotVesselsByClass.get(vesselClass);
-							if (vesselsOfClass == null || vesselsOfClass.isEmpty())
-								continue assignments;
-
-							vessel = vesselsOfClass.get(0);
-							vesselsOfClass.remove(0);
-
-							break;
-						}
-					}
-				} else {
-					final AVessel modelVessel = SetUtils.getVessels(assignment.getVessels()).iterator().next();
-					vessel = mem.getOptimiserObject(modelVessel, IVessel.class);
-				}
-				if (vessel == null) {
-					log.warn("Vessel from assignments not found");
-					continue assignments;
-				}
-				final IResource resource = vp.getResource(vessel);
-				if (assignment.getAssignedObjects().size() == 1) {
-					for (final ISequenceElement element : getElements(assignment.getAssignedObjects().get(0), psp, mem)) {
-						resourceAdvice.put(element, resource);
-					}
-				} else {
-					final IModifiableSequence sequence = advice.getModifiableSequence(resource);
-					for (final UUIDObject assignedObject : assignment.getAssignedObjects()) {
-						if (assignedObject instanceof Cargo && ((Cargo) assignedObject).getCargoType() != CargoType.FLEET)
-							continue;
-						for (final ISequenceElement element : getElements(assignedObject, psp, mem)) {
-							sequence.add(element);
-						}
-					}
-				}
-			}
 		}
-
 		// Add in end elements
 		for (final Entry<IResource, IModifiableSequence> sequence : advice.getModifiableSequences().entrySet()) {
 			sequence.getValue().add(serp.getEndElement(sequence.getKey()));
