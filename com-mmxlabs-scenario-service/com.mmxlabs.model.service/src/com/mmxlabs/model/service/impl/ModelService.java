@@ -145,10 +145,18 @@ public class ModelService implements IModelService {
 					// Ignore this as the original resource may not exist yet. This can happen we we first create a resource and persist it.
 				} finally {
 					if (creator != null) {
-						creator.close();
+						try {
+							creator.close();
+						} catch (final IOException e) {
+
+						}
 					}
 					if (input != null) {
-						input.close();
+						try {
+							input.close();
+						} catch (final IOException e) {
+
+						}
 					}
 				}
 			}
@@ -179,10 +187,18 @@ public class ModelService implements IModelService {
 						}
 					} finally {
 						if (output != null) {
-							output.close();
+							try {
+								output.close();
+							} catch (final IOException e) {
+
+							}
 						}
 						if (input != null) {
-							input.close();
+							try {
+								input.close();
+							} catch (final IOException e) {
+
+							}
 						}
 					}
 
