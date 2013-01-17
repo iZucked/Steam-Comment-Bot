@@ -237,7 +237,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_WindowStart() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(3);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -246,7 +246,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_WindowStartTime() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -255,7 +255,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_WindowSize() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(5);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(4);
 	}
 
 	/**
@@ -264,7 +264,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EReference getSlot_Port() {
-		return (EReference)slotEClass.getEStructuralFeatures().get(2);
+		return (EReference)slotEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -282,7 +282,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_Duration() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(6);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_MinQuantity() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(7);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(6);
 	}
 
 	/**
@@ -300,7 +300,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_MaxQuantity() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(8);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(7);
 	}
 
 	/**
@@ -309,7 +309,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_Optional() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(9);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -319,17 +319,7 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 	 * @generated
 	 */
 	public EAttribute getSlot_PriceExpression() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(10);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @deprecated Use {@link #getSlot_PriceExpression()}
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getSlot_FixedPrice() {
-		return (EAttribute)slotEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)slotEClass.getEStructuralFeatures().get(9);
 	}
 
 	/**
@@ -622,7 +612,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		slotEClass = createEClass(SLOT);
 		createEReference(slotEClass, SLOT__CONTRACT);
-		createEAttribute(slotEClass, SLOT__FIXED_PRICE);
 		createEReference(slotEClass, SLOT__PORT);
 		createEAttribute(slotEClass, SLOT__WINDOW_START);
 		createEAttribute(slotEClass, SLOT__WINDOW_START_TIME);
@@ -727,7 +716,6 @@ public class CargoPackageImpl extends EPackageImpl implements CargoPackage {
 
 		initEClass(slotEClass, Slot.class, "Slot", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSlot_Contract(), theTypesPackage.getAContract(), null, "contract", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getSlot_FixedPrice(), ecorePackage.getEDouble(), "fixedPrice", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSlot_Port(), theTypesPackage.getAPort(), null, "port", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowStart(), ecorePackage.getEDate(), "windowStart", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSlot_WindowStartTime(), ecorePackage.getEInt(), "windowStartTime", null, 1, 1, Slot.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

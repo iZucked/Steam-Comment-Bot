@@ -35,7 +35,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getName <em>Name</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getOtherNames <em>Other Names</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getFromPorts <em>From Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getToPorts <em>To Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getVessel <em>Vessel</em>}</li>
@@ -50,8 +49,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCargoPrice <em>Cargo Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCvValue <em>Cv Value</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getDischargeIdleTime <em>Discharge Idle Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getReturnIdleTime <em>Return Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getCostLines <em>Cost Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getAllowedRoutes <em>Allowed Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostMatrixImpl#getRevenueShare <em>Revenue Share</em>}</li>
@@ -92,16 +89,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	 * @ordered
 	 */
 	protected EList<String> otherNames;
-
-	/**
-	 * The cached value of the '{@link #getPorts() <em>Ports</em>}' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getPorts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<APortSet> ports;
 
 	/**
 	 * The cached value of the '{@link #getFromPorts() <em>From Ports</em>}' reference list.
@@ -372,46 +359,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	protected boolean cvValueESet;
 
 	/**
-	 * The default value of the '{@link #getDischargeIdleTime() <em>Discharge Idle Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDischargeIdleTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int DISCHARGE_IDLE_TIME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getDischargeIdleTime() <em>Discharge Idle Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDischargeIdleTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected int dischargeIdleTime = DISCHARGE_IDLE_TIME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getReturnIdleTime() <em>Return Idle Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReturnIdleTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final int RETURN_IDLE_TIME_EDEFAULT = 0;
-
-	/**
-	 * The cached value of the '{@link #getReturnIdleTime() <em>Return Idle Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getReturnIdleTime()
-	 * @generated
-	 * @ordered
-	 */
-	protected int returnIdleTime = RETURN_IDLE_TIME_EDEFAULT;
-
-	/**
 	 * The cached value of the '{@link #getCostLines() <em>Cost Lines</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -541,18 +488,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			otherNames = new EDataTypeUniqueEList<String>(String.class, this, AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES);
 		}
 		return otherNames;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList<APortSet> getPorts() {
-		if (ports == null) {
-			ports = new EObjectResolvingEList<APortSet>(APortSet.class, this, AnalyticsPackage.UNIT_COST_MATRIX__PORTS);
-		}
-		return ports;
 	}
 
 	/**
@@ -901,48 +836,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getDischargeIdleTime() {
-		return dischargeIdleTime;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDischargeIdleTime(int newDischargeIdleTime) {
-		int oldDischargeIdleTime = dischargeIdleTime;
-		dischargeIdleTime = newDischargeIdleTime;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME, oldDischargeIdleTime, dischargeIdleTime));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public int getReturnIdleTime() {
-		return returnIdleTime;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setReturnIdleTime(int newReturnIdleTime) {
-		int oldReturnIdleTime = returnIdleTime;
-		returnIdleTime = newReturnIdleTime;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_MATRIX__RETURN_IDLE_TIME, oldReturnIdleTime, returnIdleTime));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
 	 * @generated NO
 	 */
 	public EList<UnitCostLine> getCostLines() {
@@ -1057,8 +950,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return getName();
 			case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES:
 				return getOtherNames();
-			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
-				return getPorts();
 			case AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS:
 				return getFromPorts();
 			case AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS:
@@ -1088,10 +979,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return getBaseFuelPrice();
 			case AnalyticsPackage.UNIT_COST_MATRIX__CV_VALUE:
 				return getCvValue();
-			case AnalyticsPackage.UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME:
-				return getDischargeIdleTime();
-			case AnalyticsPackage.UNIT_COST_MATRIX__RETURN_IDLE_TIME:
-				return getReturnIdleTime();
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				return getCostLines();
 			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
@@ -1121,10 +1008,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES:
 				getOtherNames().clear();
 				getOtherNames().addAll((Collection<? extends String>)newValue);
-				return;
-			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
-				getPorts().clear();
-				getPorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS:
 				getFromPorts().clear();
@@ -1170,12 +1053,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__CV_VALUE:
 				setCvValue((Double)newValue);
 				return;
-			case AnalyticsPackage.UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME:
-				setDischargeIdleTime((Integer)newValue);
-				return;
-			case AnalyticsPackage.UNIT_COST_MATRIX__RETURN_IDLE_TIME:
-				setReturnIdleTime((Integer)newValue);
-				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				getCostLines().clear();
 				getCostLines().addAll((Collection<? extends UnitCostLine>)newValue);
@@ -1210,9 +1087,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES:
 				getOtherNames().clear();
-				return;
-			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
-				getPorts().clear();
 				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS:
 				getFromPorts().clear();
@@ -1256,12 +1130,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 			case AnalyticsPackage.UNIT_COST_MATRIX__CV_VALUE:
 				unsetCvValue();
 				return;
-			case AnalyticsPackage.UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME:
-				setDischargeIdleTime(DISCHARGE_IDLE_TIME_EDEFAULT);
-				return;
-			case AnalyticsPackage.UNIT_COST_MATRIX__RETURN_IDLE_TIME:
-				setReturnIdleTime(RETURN_IDLE_TIME_EDEFAULT);
-				return;
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				getCostLines().clear();
 				return;
@@ -1293,8 +1161,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case AnalyticsPackage.UNIT_COST_MATRIX__OTHER_NAMES:
 				return otherNames != null && !otherNames.isEmpty();
-			case AnalyticsPackage.UNIT_COST_MATRIX__PORTS:
-				return ports != null && !ports.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__FROM_PORTS:
 				return fromPorts != null && !fromPorts.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__TO_PORTS:
@@ -1323,10 +1189,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 				return baseFuelPrice != BASE_FUEL_PRICE_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_MATRIX__CV_VALUE:
 				return isSetCvValue();
-			case AnalyticsPackage.UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME:
-				return dischargeIdleTime != DISCHARGE_IDLE_TIME_EDEFAULT;
-			case AnalyticsPackage.UNIT_COST_MATRIX__RETURN_IDLE_TIME:
-				return returnIdleTime != RETURN_IDLE_TIME_EDEFAULT;
 			case AnalyticsPackage.UNIT_COST_MATRIX__COST_LINES:
 				return costLines != null && !costLines.isEmpty();
 			case AnalyticsPackage.UNIT_COST_MATRIX__ALLOWED_ROUTES:
@@ -1411,10 +1273,6 @@ public class UnitCostMatrixImpl extends UUIDObjectImpl implements UnitCostMatrix
 		result.append(baseFuelPrice);
 		result.append(", cvValue: ");
 		if (cvValueESet) result.append(cvValue); else result.append("<unset>");
-		result.append(", dischargeIdleTime: ");
-		result.append(dischargeIdleTime);
-		result.append(", returnIdleTime: ");
-		result.append(returnIdleTime);
 		result.append(", revenueShare: ");
 		result.append(revenueShare);
 		result.append(", ladenTimeAllowance: ");

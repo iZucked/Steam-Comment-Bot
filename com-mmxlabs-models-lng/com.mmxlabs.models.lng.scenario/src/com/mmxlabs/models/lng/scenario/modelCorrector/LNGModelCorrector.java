@@ -20,7 +20,6 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
-import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
@@ -84,7 +83,6 @@ public class LNGModelCorrector {
 		fixMissingVesselEventElementAssignments(cmd, rootObject, ed);
 		removeBadElementAssignments(cmd, rootObject, ed);
 		fixMissingSpotCargoMarkets(cmd, rootObject, ed);
-		fixFixedPriceOverrides(cmd, rootObject, ed);
 		fixSequenceTypes(cmd, rootObject, ed);
 		fixRedirectionContracts(cmd, rootObject, ed);
 		fixPortCapabilityGroups(cmd, rootObject, ed);
@@ -240,35 +238,6 @@ public class LNGModelCorrector {
 			parent.append(cmd);
 		}
 
-	}
-
-	@SuppressWarnings("deprecation")
-	private void fixFixedPriceOverrides(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
-		final CompoundCommand cmd = new CompoundCommand("Fix price expressions");
-		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-		if (cargoModel != null) {
-
-			final Set<Slot> slots = new HashSet<Slot>();
-			slots.addAll(cargoModel.getLoadSlots());
-			slots.addAll(cargoModel.getDischargeSlots());
-
-			for (final Slot slot : slots) {
-
-				if (slot.isSetFixedPrice()) {
-					if (!slot.isSetPriceExpression()) {
-						final double d = slot.getFixedPrice();
-						final String str = Double.toString(d);
-						cmd.append(SetCommand.create(ed, slot, CargoPackage.eINSTANCE.getSlot_PriceExpression(), str));
-					}
-
-					cmd.append(SetCommand.create(ed, slot, CargoPackage.eINSTANCE.getSlot_FixedPrice(), SetCommand.UNSET_VALUE));
-
-				}
-			}
-		}
-		if (!cmd.isEmpty()) {
-			parent.append(cmd);
-		}
 	}
 
 	private void fixDuplicateUUIDs(final CompoundCommand cmd, final MMXRootObject rootObject, final EditingDomain ed) {

@@ -61,7 +61,6 @@ public class SlotItemProvider
 			super.getPropertyDescriptors(object);
 
 			addContractPropertyDescriptor(object);
-			addFixedPricePropertyDescriptor(object);
 			addPortPropertyDescriptor(object);
 			addWindowStartPropertyDescriptor(object);
 			addWindowStartTimePropertyDescriptor(object);
@@ -297,28 +296,6 @@ public class SlotItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Fixed Price feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addFixedPricePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Slot_fixedPrice_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_Slot_fixedPrice_feature", "_UI_Slot_type"),
-				 CargoPackage.Literals.SLOT__FIXED_PRICE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
 	 * This returns Slot.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -355,7 +332,6 @@ public class SlotItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Slot.class)) {
-			case CargoPackage.SLOT__FIXED_PRICE:
 			case CargoPackage.SLOT__WINDOW_START:
 			case CargoPackage.SLOT__WINDOW_START_TIME:
 			case CargoPackage.SLOT__WINDOW_SIZE:

@@ -65,7 +65,6 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_portsEditor(detailComposite, topClass);
 		add_fromPortsEditor(detailComposite, topClass);
 		add_toPortsEditor(detailComposite, topClass);
 		add_vesselEditor(detailComposite, topClass);
@@ -80,8 +79,6 @@ public class UnitCostMatrixComponentHelper extends BaseComponentHelper {
 		add_cargoPriceEditor(detailComposite, topClass);
 		add_baseFuelPriceEditor(detailComposite, topClass);
 		add_cvValueEditor(detailComposite, topClass);
-		add_dischargeIdleTimeEditor(detailComposite, topClass);
-		add_returnIdleTimeEditor(detailComposite, topClass);
 		add_costLinesEditor(detailComposite, topClass);
 		add_allowedRoutesEditor(detailComposite, topClass);
 		add_revenueShareEditor(detailComposite, topClass);

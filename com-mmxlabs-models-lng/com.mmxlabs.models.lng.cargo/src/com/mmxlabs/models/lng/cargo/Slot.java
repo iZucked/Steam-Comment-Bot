@@ -19,7 +19,6 @@ import java.util.Date;
  * The following features are supported:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getFixedPrice <em>Fixed Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStartTime <em>Window Start Time</em>}</li>
@@ -464,61 +463,6 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * @generated
 	 */
 	boolean isSetPriceExpression();
-
-	/**
-	 * Returns the value of the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Fixed Price</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * @deprecated Use {@link #getPriceExpression()}
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Fixed Price</em>' attribute.
-	 * @see #isSetFixedPrice()
-	 * @see #unsetFixedPrice()
-	 * @see #setFixedPrice(double)
-	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_FixedPrice()
-	 * @model unsettable="true" required="true"
-	 * @generated
-	 */
-	double getFixedPrice();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getFixedPrice <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * @deprecated Use {@link #setPriceExpression(String)}
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Fixed Price</em>' attribute.
-	 * @see #isSetFixedPrice()
-	 * @see #unsetFixedPrice()
-	 * @see #getFixedPrice()
-	 * @generated
-	 */
-	void setFixedPrice(double value);
-
-	/**
-	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getFixedPrice <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isSetFixedPrice()
-	 * @see #getFixedPrice()
-	 * @see #setFixedPrice(double)
-	 * @generated
-	 */
-	void unsetFixedPrice();
-
-	/**
-	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getFixedPrice <em>Fixed Price</em>}' attribute is set.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return whether the value of the '<em>Fixed Price</em>' attribute is set.
-	 * @see #unsetFixedPrice()
-	 * @see #getFixedPrice()
-	 * @see #setFixedPrice(double)
-	 * @generated
-	 */
-	boolean isSetFixedPrice();
 
 	/**
 	 * <!-- begin-user-doc -->

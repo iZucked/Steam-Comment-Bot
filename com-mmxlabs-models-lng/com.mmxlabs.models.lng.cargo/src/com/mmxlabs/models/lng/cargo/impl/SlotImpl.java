@@ -35,7 +35,6 @@ import com.mmxlabs.models.lng.types.impl.ASlotImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getContract <em>Contract</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getFixedPrice <em>Fixed Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getPort <em>Port</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStart <em>Window Start</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.cargo.impl.SlotImpl#getWindowStartTime <em>Window Start Time</em>}</li>
@@ -59,32 +58,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	 * @ordered
 	 */
 	protected Contract contract;
-
-	/**
-	 * The default value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getFixedPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double FIXED_PRICE_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getFixedPrice() <em>Fixed Price</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @see #getFixedPrice()
-	 * @generated
-	 * @ordered
-	 */
-	protected double fixedPrice = FIXED_PRICE_EDEFAULT;
-
-	/**
-	 * This is true if the Fixed Price attribute has been set.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean fixedPriceESet;
 
 	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
@@ -683,54 +656,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	}
 
 	/**
-	 * <!-- begin-user-doc --> 
-	 * @deprecated Use {@link #getPriceExpression()}
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public double getFixedPrice() {
-		return fixedPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> 
-	 * @deprecated Use {@link #setPriceExpression(String)}
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setFixedPrice(double newFixedPrice) {
-		double oldFixedPrice = fixedPrice;
-		fixedPrice = newFixedPrice;
-		boolean oldFixedPriceESet = fixedPriceESet;
-		fixedPriceESet = true;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__FIXED_PRICE, oldFixedPrice, fixedPrice, !oldFixedPriceESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void unsetFixedPrice() {
-		double oldFixedPrice = fixedPrice;
-		boolean oldFixedPriceESet = fixedPriceESet;
-		fixedPrice = FIXED_PRICE_EDEFAULT;
-		fixedPriceESet = false;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__FIXED_PRICE, oldFixedPrice, FIXED_PRICE_EDEFAULT, oldFixedPriceESet));
-	}
-
-	/**
-	 * <!-- begin-user-doc --> 
-	 * @deprecated Use {@link #isSetPriceExpression()}
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isSetFixedPrice() {
-		return fixedPriceESet;
-	}
-
-	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated NOT
@@ -811,8 +736,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__CONTRACT:
 				if (resolve) return getContract();
 				return basicGetContract();
-			case CargoPackage.SLOT__FIXED_PRICE:
-				return getFixedPrice();
 			case CargoPackage.SLOT__PORT:
 				if (resolve) return getPort();
 				return basicGetPort();
@@ -845,9 +768,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		switch (featureID) {
 			case CargoPackage.SLOT__CONTRACT:
 				setContract((Contract)newValue);
-				return;
-			case CargoPackage.SLOT__FIXED_PRICE:
-				setFixedPrice((Double)newValue);
 				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)newValue);
@@ -890,9 +810,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			case CargoPackage.SLOT__CONTRACT:
 				setContract((Contract)null);
 				return;
-			case CargoPackage.SLOT__FIXED_PRICE:
-				unsetFixedPrice();
-				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)null);
 				return;
@@ -933,8 +850,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		switch (featureID) {
 			case CargoPackage.SLOT__CONTRACT:
 				return contract != null;
-			case CargoPackage.SLOT__FIXED_PRICE:
-				return isSetFixedPrice();
 			case CargoPackage.SLOT__PORT:
 				return port != null;
 			case CargoPackage.SLOT__WINDOW_START:
@@ -1008,9 +923,7 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (fixedPrice: ");
-		if (fixedPriceESet) result.append(fixedPrice); else result.append("<unset>");
-		result.append(", windowStart: ");
+		result.append(" (windowStart: ");
 		result.append(windowStart);
 		result.append(", windowStartTime: ");
 		if (windowStartTimeESet) result.append(windowStartTime); else result.append("<unset>");
@@ -1043,8 +956,6 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MinQuantity(), (Integer) 0);
 		} else if (CargoPackage.eINSTANCE.getSlot_MaxQuantity() == feature) {
 			return new DelegateInformation(cargo.getSlot_Contract(), commercial.getContract_MaxQuantity(), (Integer) 500000);
-		} else if (CargoPackage.eINSTANCE.getSlot_FixedPrice() == feature) {
-			return null;
 		}
 		return super.getUnsetValueOrDelegate(feature);
 	}	

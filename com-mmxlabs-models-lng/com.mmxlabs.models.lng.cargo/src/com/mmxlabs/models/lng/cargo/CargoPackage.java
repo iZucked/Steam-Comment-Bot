@@ -318,23 +318,13 @@ public interface CargoPackage extends EPackage {
 	int SLOT__CONTRACT = TypesPackage.ASLOT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @deprecated Use {@link #SLOT__PRICE_EXPRESSION}
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SLOT__FIXED_PRICE = TypesPackage.ASLOT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PORT = TypesPackage.ASLOT_FEATURE_COUNT + 2;
+	int SLOT__PORT = TypesPackage.ASLOT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Window Start</b></em>' attribute.
@@ -343,7 +333,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START = TypesPackage.ASLOT_FEATURE_COUNT + 3;
+	int SLOT__WINDOW_START = TypesPackage.ASLOT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Window Start Time</b></em>' attribute.
@@ -352,7 +342,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_START_TIME = TypesPackage.ASLOT_FEATURE_COUNT + 4;
+	int SLOT__WINDOW_START_TIME = TypesPackage.ASLOT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Window Size</b></em>' attribute.
@@ -361,7 +351,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__WINDOW_SIZE = TypesPackage.ASLOT_FEATURE_COUNT + 5;
+	int SLOT__WINDOW_SIZE = TypesPackage.ASLOT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Duration</b></em>' attribute.
@@ -370,7 +360,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__DURATION = TypesPackage.ASLOT_FEATURE_COUNT + 6;
+	int SLOT__DURATION = TypesPackage.ASLOT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Min Quantity</b></em>' attribute.
@@ -379,7 +369,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MIN_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 7;
+	int SLOT__MIN_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Max Quantity</b></em>' attribute.
@@ -388,7 +378,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__MAX_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 8;
+	int SLOT__MAX_QUANTITY = TypesPackage.ASLOT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Optional</b></em>' attribute.
@@ -397,7 +387,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__OPTIONAL = TypesPackage.ASLOT_FEATURE_COUNT + 9;
+	int SLOT__OPTIONAL = TypesPackage.ASLOT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
@@ -407,7 +397,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT__PRICE_EXPRESSION = TypesPackage.ASLOT_FEATURE_COUNT + 10;
+	int SLOT__PRICE_EXPRESSION = TypesPackage.ASLOT_FEATURE_COUNT + 9;
 
 	/**
 	 * The number of structural features of the '<em>Slot</em>' class.
@@ -416,7 +406,7 @@ public interface CargoPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 11;
+	int SLOT_FEATURE_COUNT = TypesPackage.ASLOT_FEATURE_COUNT + 10;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -625,15 +615,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOAD_SLOT__CONTRACT = SLOT__CONTRACT;
-
-	/**
-	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOAD_SLOT__FIXED_PRICE = SLOT__FIXED_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -978,15 +959,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int DISCHARGE_SLOT__CONTRACT = SLOT__CONTRACT;
-
-	/**
-	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DISCHARGE_SLOT__FIXED_PRICE = SLOT__FIXED_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -1606,15 +1578,6 @@ public interface CargoPackage extends EPackage {
 	int SPOT_LOAD_SLOT__CONTRACT = LOAD_SLOT__CONTRACT;
 
 	/**
-	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_LOAD_SLOT__FIXED_PRICE = LOAD_SLOT__FIXED_PRICE;
-
-	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1966,15 +1929,6 @@ public interface CargoPackage extends EPackage {
 	 * @ordered
 	 */
 	int SPOT_DISCHARGE_SLOT__CONTRACT = DISCHARGE_SLOT__CONTRACT;
-
-	/**
-	 * The feature id for the '<em><b>Fixed Price</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SPOT_DISCHARGE_SLOT__FIXED_PRICE = DISCHARGE_SLOT__FIXED_PRICE;
 
 	/**
 	 * The feature id for the '<em><b>Port</b></em>' reference.
@@ -2591,18 +2545,6 @@ public interface CargoPackage extends EPackage {
 	EAttribute getSlot_PriceExpression();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getFixedPrice <em>Fixed Price</em>}'.
-	 * <!-- begin-user-doc -->
-	 * @deprecated Use {@link #getSlot_PriceExpression()}
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Fixed Price</em>'.
-	 * @see com.mmxlabs.models.lng.cargo.Slot#getFixedPrice()
-	 * @see #getSlot()
-	 * @generated
-	 */
-	EAttribute getSlot_FixedPrice();
-
-	/**
 	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.cargo.Slot#getSlotOrPortDuration() <em>Get Slot Or Port Duration</em>}' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3058,15 +3000,6 @@ public interface CargoPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SLOT__PRICE_EXPRESSION = eINSTANCE.getSlot_PriceExpression();
-
-		/**
-		 * The meta object literal for the '<em><b>Fixed Price</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * @deprecated Use {@link #SLOT__PRICE_EXPRESSION}
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SLOT__FIXED_PRICE = eINSTANCE.getSlot_FixedPrice();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Slot Or Port Duration</b></em>' operation.

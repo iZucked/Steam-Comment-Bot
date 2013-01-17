@@ -190,22 +190,13 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_MATRIX__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Ports</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>From Ports</b></em>' reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__FROM_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int UNIT_COST_MATRIX__FROM_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>To Ports</b></em>' reference list.
@@ -214,7 +205,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__TO_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
+	int UNIT_COST_MATRIX__TO_PORTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Vessel</b></em>' reference.
@@ -223,7 +214,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
+	int UNIT_COST_MATRIX__VESSEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Notional Day Rate</b></em>' attribute.
@@ -232,7 +223,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__NOTIONAL_DAY_RATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
+	int UNIT_COST_MATRIX__NOTIONAL_DAY_RATE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Speed</b></em>' attribute.
@@ -241,7 +232,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__SPEED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
+	int UNIT_COST_MATRIX__SPEED = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Round Trip</b></em>' attribute.
@@ -250,7 +241,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__ROUND_TRIP = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
+	int UNIT_COST_MATRIX__ROUND_TRIP = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Minimum Load</b></em>' attribute.
@@ -259,7 +250,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__MINIMUM_LOAD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
+	int UNIT_COST_MATRIX__MINIMUM_LOAD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Maximum Load</b></em>' attribute.
@@ -268,7 +259,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__MAXIMUM_LOAD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
+	int UNIT_COST_MATRIX__MAXIMUM_LOAD = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Minimum Discharge</b></em>' attribute.
@@ -277,7 +268,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__MINIMUM_DISCHARGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
+	int UNIT_COST_MATRIX__MINIMUM_DISCHARGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The feature id for the '<em><b>Maximum Discharge</b></em>' attribute.
@@ -286,7 +277,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__MAXIMUM_DISCHARGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
+	int UNIT_COST_MATRIX__MAXIMUM_DISCHARGE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The feature id for the '<em><b>Retain Heel</b></em>' attribute.
@@ -295,7 +286,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__RETAIN_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
+	int UNIT_COST_MATRIX__RETAIN_HEEL = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 12;
 
 	/**
 	 * The feature id for the '<em><b>Cargo Price</b></em>' attribute.
@@ -304,7 +295,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__CARGO_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
+	int UNIT_COST_MATRIX__CARGO_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 13;
 
 	/**
 	 * The feature id for the '<em><b>Base Fuel Price</b></em>' attribute.
@@ -313,7 +304,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__BASE_FUEL_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
+	int UNIT_COST_MATRIX__BASE_FUEL_PRICE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 14;
 
 	/**
 	 * The feature id for the '<em><b>Cv Value</b></em>' attribute.
@@ -322,25 +313,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__CV_VALUE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Idle Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
-
-	/**
-	 * The feature id for the '<em><b>Return Idle Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNIT_COST_MATRIX__RETURN_IDLE_TIME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
+	int UNIT_COST_MATRIX__CV_VALUE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 15;
 
 	/**
 	 * The feature id for the '<em><b>Cost Lines</b></em>' containment reference list.
@@ -349,7 +322,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__COST_LINES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
+	int UNIT_COST_MATRIX__COST_LINES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 16;
 
 	/**
 	 * The feature id for the '<em><b>Allowed Routes</b></em>' reference list.
@@ -358,7 +331,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__ALLOWED_ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
+	int UNIT_COST_MATRIX__ALLOWED_ROUTES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 17;
 
 	/**
 	 * The feature id for the '<em><b>Revenue Share</b></em>' attribute.
@@ -367,7 +340,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__REVENUE_SHARE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
+	int UNIT_COST_MATRIX__REVENUE_SHARE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 18;
 
 	/**
 	 * The feature id for the '<em><b>Laden Time Allowance</b></em>' attribute.
@@ -376,7 +349,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 22;
+	int UNIT_COST_MATRIX__LADEN_TIME_ALLOWANCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 19;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Time Allowance</b></em>' attribute.
@@ -385,7 +358,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 23;
+	int UNIT_COST_MATRIX__BALLAST_TIME_ALLOWANCE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 20;
 
 	/**
 	 * The number of structural features of the '<em>Unit Cost Matrix</em>' class.
@@ -394,7 +367,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_MATRIX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 24;
+	int UNIT_COST_MATRIX_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 21;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl <em>Unit Cost Line</em>}' class.
@@ -1116,17 +1089,6 @@ public interface AnalyticsPackage extends EPackage {
 	EClass getUnitCostMatrix();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getPorts <em>Ports</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Ports</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getPorts()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EReference getUnitCostMatrix_Ports();
-
-	/**
 	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getFromPorts <em>From Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1279,28 +1241,6 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getUnitCostMatrix_CvValue();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getDischargeIdleTime <em>Discharge Idle Time</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Discharge Idle Time</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getDischargeIdleTime()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_DischargeIdleTime();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getReturnIdleTime <em>Return Idle Time</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Return Idle Time</em>'.
-	 * @see com.mmxlabs.models.lng.analytics.UnitCostMatrix#getReturnIdleTime()
-	 * @see #getUnitCostMatrix()
-	 * @generated
-	 */
-	EAttribute getUnitCostMatrix_ReturnIdleTime();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCostLines <em>Cost Lines</em>}'.
@@ -1946,14 +1886,6 @@ public interface AnalyticsPackage extends EPackage {
 		EClass UNIT_COST_MATRIX = eINSTANCE.getUnitCostMatrix();
 
 		/**
-		 * The meta object literal for the '<em><b>Ports</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNIT_COST_MATRIX__PORTS = eINSTANCE.getUnitCostMatrix_Ports();
-
-		/**
 		 * The meta object literal for the '<em><b>From Ports</b></em>' reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -2064,22 +1996,6 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute UNIT_COST_MATRIX__CV_VALUE = eINSTANCE.getUnitCostMatrix_CvValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Idle Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__DISCHARGE_IDLE_TIME = eINSTANCE.getUnitCostMatrix_DischargeIdleTime();
-
-		/**
-		 * The meta object literal for the '<em><b>Return Idle Time</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute UNIT_COST_MATRIX__RETURN_IDLE_TIME = eINSTANCE.getUnitCostMatrix_ReturnIdleTime();
 
 		/**
 		 * The meta object literal for the '<em><b>Cost Lines</b></em>' containment reference list feature.

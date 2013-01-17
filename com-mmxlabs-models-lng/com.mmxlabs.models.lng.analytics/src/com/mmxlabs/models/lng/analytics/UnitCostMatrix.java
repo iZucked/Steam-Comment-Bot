@@ -19,7 +19,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getPorts <em>Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getFromPorts <em>From Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getToPorts <em>To Ports</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getVessel <em>Vessel</em>}</li>
@@ -34,8 +33,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCargoPrice <em>Cargo Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getBaseFuelPrice <em>Base Fuel Price</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCvValue <em>Cv Value</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getDischargeIdleTime <em>Discharge Idle Time</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getReturnIdleTime <em>Return Idle Time</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getCostLines <em>Cost Lines</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getAllowedRoutes <em>Allowed Routes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getRevenueShare <em>Revenue Share</em>}</li>
@@ -49,25 +46,6 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  * @generated
  */
 public interface UnitCostMatrix extends UUIDObject, NamedObject {
-	/**
-	 * Returns the value of the '<em><b>Ports</b></em>' reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Ports</em>' reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * 
-	 * @deprecated due to {@link #getFromPorts()} and {@link #getToPorts()}
-	 * 
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Ports</em>' reference list.
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_Ports()
-	 * @model
-	 * @generated
-	 */
-	EList<APortSet> getPorts();
-
 	/**
 	 * Returns the value of the '<em><b>From Ports</b></em>' reference list.
 	 * The list contents are of type {@link com.mmxlabs.models.lng.types.APortSet}.
@@ -474,64 +452,6 @@ public interface UnitCostMatrix extends UUIDObject, NamedObject {
 	 * @generated
 	 */
 	boolean isSetCvValue();
-
-	/**
-	 * Returns the value of the '<em><b>Discharge Idle Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Discharge Idle Time</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * @deprecated
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Discharge Idle Time</em>' attribute.
-	 * @see #setDischargeIdleTime(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_DischargeIdleTime()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs'"
-	 * @generated
-	 */
-	int getDischargeIdleTime();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getDischargeIdleTime <em>Discharge Idle Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Discharge Idle Time</em>' attribute.
-	 * @see #getDischargeIdleTime()
-	 * @generated
-	 */
-	void setDischargeIdleTime(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Return Idle Time</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Return Idle Time</em>' attribute isn't clear,
-	 * there really should be more of a description here...
-	 * @deprecated
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Return Idle Time</em>' attribute.
-	 * @see #setReturnIdleTime(int)
-	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostMatrix_ReturnIdleTime()
-	 * @model required="true"
-	 *        annotation="http://www.mmxlabs.com/models/ui/numberFormat unit='hrs'"
-	 * @generated
-	 */
-	int getReturnIdleTime();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostMatrix#getReturnIdleTime <em>Return Idle Time</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Return Idle Time</em>' attribute.
-	 * @see #getReturnIdleTime()
-	 * @generated
-	 */
-	void setReturnIdleTime(int value);
 
 	/**
 	 * Returns the value of the '<em><b>Cost Lines</b></em>' containment reference list.
