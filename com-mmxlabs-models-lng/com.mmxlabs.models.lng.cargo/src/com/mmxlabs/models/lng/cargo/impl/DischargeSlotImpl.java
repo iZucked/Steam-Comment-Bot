@@ -16,7 +16,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.port.PortPackage;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
-import com.mmxlabs.models.lng.types.TypesPackage;
 
 /**
  * <!-- begin-user-doc -->

@@ -42,7 +42,6 @@ import org.slf4j.LoggerFactory;
 import com.mmxlabs.models.lng.scenario.internal.Activator;
 import com.mmxlabs.models.lng.scenario.wizards.ScenarioServiceNewScenarioPage;
 import com.mmxlabs.models.migration.IMigrationRegistry;
-import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
