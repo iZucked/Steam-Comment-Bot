@@ -11,5 +11,5 @@
       <provide interface="com.mmxlabs.models.lng.analytics.ui.liveeval.ILiveEvaluatorService"/>
    </service>
    <reference bind="addScenarioService" cardinality="0..n" interface="com.mmxlabs.scenario.service.IScenarioService" name="IScenarioService" policy="dynamic" unbind="removeScenarioService"/>
-   <reference bind="setScenarioInstanceEvaluator" cardinality="1..1" interface="com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator" name="IScenarioInstanceEvaluator" policy="dynamic"/>
+   <reference bind="setScenarioInstanceEvaluator" cardinality="0..1" interface="com.mmxlabs.models.lng.analytics.ui.liveeval.IScenarioInstanceEvaluator" name="IScenarioInstanceEvaluator" policy="dynamic"/>
 </scr:component>
