@@ -17,7 +17,7 @@ import com.mmxlabs.jobmanager.jobs.IJobControlListener;
 import com.mmxlabs.jobmanager.jobs.IJobDescriptor;
 import com.mmxlabs.jobmanager.jobs.impl.JobControlAdapter;
 import com.mmxlabs.jobmanager.manager.IJobManagerListener;
-import com.mmxlabs.models.lng.transformer.ui.Activator;
+import com.mmxlabs.models.lng.transformer.ui.internal.Activator;
 
 /**
  * Base {@link IHandler} implementation to cause enabled state to be refreshed on job progress updates.
