@@ -8,19 +8,20 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.ui.dates.DateAttributeImporter;
 import com.mmxlabs.models.util.importer.IImportContext;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
@@ -31,54 +32,60 @@ public class LegalEntityImporter extends DefaultClassImporter {
 
 	static final String NAME = "name";
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
+	final DateAttributeImporter dateParser = new DateAttributeImporter();
 
 	@Override
 	public Collection<EObject> importObject(EClass targetClass,
 			Map<String, String> row, IImportContext context) {
+				
+		// use the default importer to import the object's usual attributes 
+		final Collection<EObject> result = super.importObject(targetClass, row, context);
 		
-		final Collection<EObject> result = new LinkedList<EObject>();
-		final Set<String> keys = row.keySet();
-
-		/**
-		 * A legal entity should be serialised with a name field.
-		 */
-		if (keys.contains(NAME)) {
-			final LegalEntity entity = CommercialFactory.eINSTANCE.createLegalEntity();
-			entity.setName(row.get(NAME));
-			keys.remove(NAME);
-
-			LinkedList<TaxRate> rates = new LinkedList<TaxRate>();
-			for (final String key: keys) {
-				try {
-					Date date = shortDate.parse(key);
-					final TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
-					taxRate.setDate(date);
-					taxRate.setValue(Float.parseFloat(row.get(key)));
-					rates.add(taxRate);
-					
-				} 
-				catch (ParseException e) {
+		// pick the legal entity which was created by the default importer
+		LegalEntity entity = null;		
+		for (final EObject object: result) {
+			if (object instanceof LegalEntity) {
+				if (entity != null) {
+					context.addProblem(context.createProblem("Multiple entities created for one import line.", true, true, true));				
 				}
-				catch (NumberFormatException e) {					
-				}
+				entity = (LegalEntity) object;
+			}
+		}
+		
+		// now read the tax rates out of the CSV data row
+		LinkedList<TaxRate> rates = new LinkedList<TaxRate>();
+		for (final String key: row.keySet()) {
+			final String value = row.get(key);
+			if (value.equals("")) {
+				continue;
+			}
+			try {
+				Date date = dateParser.parseDate(key);
+				final TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
+				taxRate.setDate(date);
+				taxRate.setValue(Float.parseFloat(row.get(key)));
+				rates.add(taxRate);
+				
+			} 
+			catch (ParseException e) {
+			}
+			catch (NumberFormatException e) {					
+				String message = String.format("Could not understand '%s' as a tax rate for date '%s'.", row.get(key), key);
+				context.addProblem(context.createProblem(message, true, true, true));
 			}
 			
-			entity.eSet(CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES, rates);
-			result.add(entity);					
 		}
 
+		entity.eSet(CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES, rates);
 		return result;
 		
 	}
-
-	protected Map<String, String> exportEntity(final EObject object, final Collection<String> dates, final MMXRootObject root) {
+	
+	protected Map<String, String> exportTaxCurve(final EObject object, final Collection<String> dates, final MMXRootObject root) {
 		if (object instanceof LegalEntity) {
 			final LegalEntity entity = (LegalEntity) object;
-			final LinkedHashMap<String, String> result = new LinkedHashMap<String, String>();
+			final Map<String, String> result = new LinkedHashMap<String,String>();
 
-			result.put(NAME, entity.getName());
-			
-			// populate the result with empty columns
 			for (final String date: dates) {
 				result.put(date, "");
 			}
@@ -90,7 +97,6 @@ public class LegalEntityImporter extends DefaultClassImporter {
 			
 			return result;
 		}
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
@@ -104,22 +110,58 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		 */
 		final SortedSet<String> dates = new TreeSet<String>();
 
+		// make a list of objects in the order they are first traversed
+		// this is paranoia in case the "objects" parameter returns its elements
+		// in an inconsistent order
+		final LinkedList<EObject> objectList = new LinkedList<EObject>();
+
 		for (final EObject object: objects) {
 			if (object instanceof LegalEntity) {
 				for (final TaxRate taxRate: ((LegalEntity) object).getTaxRates()) {
 					dates.add(shortDate.format(taxRate.getDate()));
 				}
 			}
+			objectList.add(object);
 		}
 		
-		/*
-		 * Add the maps for each entity to the method result.
-		 */
 		
-		for (final EObject object: objects) {
-			result.add(exportEntity(object, dates, root));
+		/*
+		 * Add the default export maps for each entity to the method result.
+		 * A minor hack occurs here: we will list all non-date fields
+		 * used by any exported element, and add them to the first element
+		 * of the result so that when they are exported, non-date columns will 
+		 * precede all date columns.
+		 */
+
+		final SortedSet<String> fields = new TreeSet<String>();
+		
+		for (final EObject object: objectList) {
+			Map<String, String> data = exportObject(object, root);
+			data.put(KIND_KEY, object.eClass().getName());
+			// add the data to the result
+			result.add(data);
+			// remember the fields used
+			fields.addAll(data.keySet());
+		}
+		
+		// if there are any fields, attach them to the first element
+		final Map<String, String> first = result.getFirst();
+		for (final String field: fields) {
+			if (first.get(field) == null) {
+				first.put(field, "");
+			}
+		}
+		
+		// now export the tax curve date fields per object
+		// this guarantees they will appear after the non-date columns
+		for (int i = 0; i < objects.size(); i++) {
+			result.get(i).putAll(exportTaxCurve(objectList.get(i), dates, root));
 		}
 		
 		return result;
+	}
+	
+	protected boolean shouldImportReference(final EReference reference) {
+		return reference != CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES;
 	}
 }
