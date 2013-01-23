@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.commercial.impl;
 
 import com.mmxlabs.models.lng.commercial.*;
 
+import com.mmxlabs.models.mmxcore.NamedObject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -127,31 +128,37 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NetbackPurchaseContract createNetbackPurchaseContract() {
-		NetbackPurchaseContractImpl netbackPurchaseContract = new NetbackPurchaseContractImpl();
+	public PurchaseContract createNetbackPurchaseContract() {
+		PurchaseContract netbackPurchaseContract = (PurchaseContract)super.create(CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT);
 		return netbackPurchaseContract;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ProfitSharePurchaseContract createProfitSharePurchaseContract() {
-		ProfitSharePurchaseContractImpl profitSharePurchaseContract = new ProfitSharePurchaseContractImpl();
+	public PurchaseContract createProfitSharePurchaseContract() {
+		PurchaseContract profitSharePurchaseContract = (PurchaseContract)super.create(CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT);
 		return profitSharePurchaseContract;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotionalBallastParameters createNotionalBallastParameters() {
-		NotionalBallastParametersImpl notionalBallastParameters = new NotionalBallastParametersImpl();
+	public NamedObject createNotionalBallastParameters() {
+		NamedObject notionalBallastParameters = (NamedObject)super.create(CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS);
 		return notionalBallastParameters;
 	}
 

@@ -16,9 +16,6 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.FixedPriceContract;
 import com.mmxlabs.models.lng.commercial.IndexPriceContract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.commercial.NetbackPurchaseContract;
-import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
-import com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.types.AContract;
@@ -114,15 +111,15 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createIndexPriceContractAdapter();
 			}
 			@Override
-			public Adapter caseNetbackPurchaseContract(NetbackPurchaseContract object) {
+			public Adapter caseNetbackPurchaseContract(PurchaseContract object) {
 				return createNetbackPurchaseContractAdapter();
 			}
 			@Override
-			public Adapter caseProfitSharePurchaseContract(ProfitSharePurchaseContract object) {
+			public Adapter caseProfitSharePurchaseContract(PurchaseContract object) {
 				return createProfitSharePurchaseContractAdapter();
 			}
 			@Override
-			public Adapter caseNotionalBallastParameters(NotionalBallastParameters object) {
+			public Adapter caseNotionalBallastParameters(NamedObject object) {
 				return createNotionalBallastParametersAdapter();
 			}
 			@Override
@@ -288,13 +285,13 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract <em>Netback Purchase Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Netback Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract
 	 * @generated
 	 */
 	public Adapter createNetbackPurchaseContractAdapter() {
@@ -302,13 +299,13 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract <em>Profit Share Purchase Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Profit Share Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract
 	 * @generated
 	 */
 	public Adapter createProfitSharePurchaseContractAdapter() {
@@ -316,13 +313,13 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters <em>Notional Ballast Parameters</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.NamedObject <em>Notional Ballast Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters
+	 * @see com.mmxlabs.models.mmxcore.NamedObject
 	 * @generated
 	 */
 	public Adapter createNotionalBallastParametersAdapter() {

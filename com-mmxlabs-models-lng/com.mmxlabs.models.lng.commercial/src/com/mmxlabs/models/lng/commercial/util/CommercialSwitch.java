@@ -160,7 +160,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT: {
-				NetbackPurchaseContract netbackPurchaseContract = (NetbackPurchaseContract)theEObject;
+				PurchaseContract netbackPurchaseContract = (PurchaseContract)theEObject;
 				T result = caseNetbackPurchaseContract(netbackPurchaseContract);
 				if (result == null) result = casePurchaseContract(netbackPurchaseContract);
 				if (result == null) result = caseContract(netbackPurchaseContract);
@@ -173,7 +173,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT: {
-				ProfitSharePurchaseContract profitSharePurchaseContract = (ProfitSharePurchaseContract)theEObject;
+				PurchaseContract profitSharePurchaseContract = (PurchaseContract)theEObject;
 				T result = caseProfitSharePurchaseContract(profitSharePurchaseContract);
 				if (result == null) result = casePurchaseContract(profitSharePurchaseContract);
 				if (result == null) result = caseContract(profitSharePurchaseContract);
@@ -186,7 +186,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS: {
-				NotionalBallastParameters notionalBallastParameters = (NotionalBallastParameters)theEObject;
+				NamedObject notionalBallastParameters = (NamedObject)theEObject;
 				T result = caseNotionalBallastParameters(notionalBallastParameters);
 				if (result == null) result = caseNamedObject(notionalBallastParameters);
 				if (result == null) result = caseMMXObject(notionalBallastParameters);
@@ -349,13 +349,15 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Netback Purchase Contract</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNetbackPurchaseContract(NetbackPurchaseContract object) {
+	public T caseNetbackPurchaseContract(PurchaseContract object) {
 		return null;
 	}
 
@@ -364,13 +366,15 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Profit Share Purchase Contract</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseProfitSharePurchaseContract(ProfitSharePurchaseContract object) {
+	public T caseProfitSharePurchaseContract(PurchaseContract object) {
 		return null;
 	}
 
@@ -379,13 +383,15 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * @deprecated
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Notional Ballast Parameters</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseNotionalBallastParameters(NotionalBallastParameters object) {
+	public T caseNotionalBallastParameters(NamedObject object) {
 		return null;
 	}
 

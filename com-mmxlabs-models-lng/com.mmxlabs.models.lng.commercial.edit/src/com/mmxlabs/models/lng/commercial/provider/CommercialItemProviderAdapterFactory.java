@@ -189,7 +189,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PurchaseContract} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -197,7 +197,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	protected NetbackPurchaseContractItemProvider netbackPurchaseContractItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PurchaseContract}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -212,7 +212,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PurchaseContract} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -220,7 +220,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	protected ProfitSharePurchaseContractItemProvider profitSharePurchaseContractItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PurchaseContract}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -234,8 +234,9 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		return profitSharePurchaseContractItemProvider;
 	}
 
+
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters} instances.
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.NamedObject} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -243,7 +244,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	protected NotionalBallastParametersItemProvider notionalBallastParametersItemProvider;
 
 	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters}.
+	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.NamedObject}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -343,7 +344,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 3.0
 	 */
 	@Override
 	public Adapter createTaxRateAdapter() {

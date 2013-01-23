@@ -22,11 +22,11 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.NotionalBallastParameters;
+import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.mmxcore.NamedObject} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
@@ -221,7 +221,7 @@ public class NotionalBallastParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((NotionalBallastParameters)object).getName();
+		String label = ((NamedObject)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_NotionalBallastParameters_type") :
 			getString("_UI_NotionalBallastParameters_type") + " " + label;
@@ -238,7 +238,7 @@ public class NotionalBallastParametersItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(NotionalBallastParameters.class)) {
+		switch (notification.getFeatureID(NamedObject.class)) {
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__SPEED:
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__HIRE_COST:
 			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS__NBO_RATE:

@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.commercial;
 
+import com.mmxlabs.models.mmxcore.NamedObject;
 import org.eclipse.emf.ecore.EFactory;
 
 /**
@@ -75,7 +76,7 @@ public interface CommercialFactory extends EFactory {
 	 * @return a new object of class '<em>Netback Purchase Contract</em>'.
 	 * @generated
 	 */
-	NetbackPurchaseContract createNetbackPurchaseContract();
+	PurchaseContract createNetbackPurchaseContract();
 
 	/**
 	 * Returns a new object of class '<em>Profit Share Purchase Contract</em>'.
@@ -84,7 +85,7 @@ public interface CommercialFactory extends EFactory {
 	 * @return a new object of class '<em>Profit Share Purchase Contract</em>'.
 	 * @generated
 	 */
-	ProfitSharePurchaseContract createProfitSharePurchaseContract();
+	PurchaseContract createProfitSharePurchaseContract();
 
 	/**
 	 * Returns a new object of class '<em>Notional Ballast Parameters</em>'.
@@ -93,7 +94,7 @@ public interface CommercialFactory extends EFactory {
 	 * @return a new object of class '<em>Notional Ballast Parameters</em>'.
 	 * @generated
 	 */
-	NotionalBallastParameters createNotionalBallastParameters();
+	NamedObject createNotionalBallastParameters();
 
 	/**
 	 * Returns a new object of class '<em>Redirection Purchase Contract</em>'.
