@@ -142,6 +142,23 @@
             </constraint>
 
             <constraint
+                  class="com.mmxlabs.models.lng.commercial.validation.EntityTaxRateRangeConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.EntityTaxRateRangeConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Entity Tax Rate Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="LegalEntity">
+               </target>
+            </constraint>
+
+            <constraint
                   class="com.mmxlabs.models.lng.commercial.validation.ContractPortsConstraint"
                   id="com.mmxlabs.models.lng.commercial.validation.ContractPortsConstraint"
                   isEnabledByDefault="true"

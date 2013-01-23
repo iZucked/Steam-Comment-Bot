@@ -69,7 +69,7 @@ import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
  *
  */
 public class LegalEntityDetailComposite extends Composite implements IDisplayComposite {
-	private IDisplayComposite delegate;
+	private DefaultDetailComposite delegate;
 	private ICommandHandler commandHandler;
 	private TableViewer tableViewer;
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -77,18 +77,40 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 	private static EStructuralFeature editedAttribute = CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES; 
 	private static EAttribute [] columnFeatures = {CommercialPackage.Literals.TAX_RATE__DATE, CommercialPackage.Literals.TAX_RATE__VALUE};
 	private static EAttribute column1Feature = columnFeatures[0];
-	private static EAttribute column2Feature = columnFeatures[1];			
+	private static EAttribute column2Feature = columnFeatures[1];	
 	
+	private final ValidationDecorator validationDecorator;
+	
+	private EObject target;
+
 	public LegalEntityDetailComposite(final Composite parent, final int style) {
 		super(parent, style);
 		setLayout(new GridLayout(1, false));
+				
 		delegate = new DefaultDetailComposite(this, style);
 		delegate.getComposite().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+
 		final Label taxCurve = new Label(this, SWT.NONE);
 		taxCurve.setText("Tax Rate");
-		
+
 		final TableViewer tableViewer = new TableViewer(this, SWT.FULL_SELECTION);
 		final Table table = tableViewer.getTable();
+
+		// set the validation decorator for the tax rate field
+		validationDecorator = new ValidationDecorator(table, SWT.LEFT | SWT.TOP) {
+
+			@Override
+			protected EObject getFeature() {
+				return editedAttribute;
+			}
+
+			@Override
+			protected EObject getTarget() {
+				return target;
+			}
+
+		};
+		
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.heightHint = 100;
 		table.setLayoutData(gridData);
@@ -327,6 +349,7 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 	
 	@Override
 	public void display(final IScenarioEditingLocation location, final MMXRootObject root, final EObject value, final Collection<EObject> range) {
+		target = value;
 		delegate.display(location, root, value, range);
 		tableViewer.setInput(value);
 		removeAdapter();
@@ -348,6 +371,9 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 
 	@Override
 	public void displayValidationStatus(final IStatus status) {
+		// display validation for the tax rate field
+		validationDecorator.processValidation(status);
+		// display default validation information otherwise
 		delegate.displayValidationStatus(status);
 	}
 
@@ -358,4 +384,6 @@ public class LegalEntityDetailComposite extends Composite implements IDisplayCom
 	public void setEditorWrapper(IInlineEditorWrapper wrapper) {
 		delegate.setEditorWrapper(wrapper);
 	}
+
+
 }
