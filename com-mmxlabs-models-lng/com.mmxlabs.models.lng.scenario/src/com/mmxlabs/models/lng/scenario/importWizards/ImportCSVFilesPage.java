@@ -272,10 +272,16 @@ public class ImportCSVFilesPage extends WizardPage {
 
 								ImportCSVFilesPage.this.setScenarioInstance(instance);
 
+							} catch (final IllegalArgumentException e) {
+								log.error(e.getMessage(), e);
+								setErrorMessage(e.getMessage());
 							} catch (final IOException e) {
+								// NOTE: in Java SE 7 we can incorporate this into the previous
+								// exception block as catch(final IllegalArgumentException|IOException e)
 								log.error(e.getMessage(), e);
 								setErrorMessage(e.getMessage());
 							}
+							
 						}
 					} finally {
 						monitor.done();
