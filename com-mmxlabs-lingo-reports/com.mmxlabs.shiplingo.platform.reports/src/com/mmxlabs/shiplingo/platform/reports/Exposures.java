@@ -20,7 +20,6 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.IndexPriceContract;
 import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
-import com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -314,9 +313,6 @@ public class Exposures {
 				if (ipc.getIndex().equals(index)) {
 					return ipc.getMultiplier(); 
 				}
-			}
-			else if (contract instanceof ProfitSharePurchaseContract) {
-				// don't know how these work
 			}
 			else if (contract instanceof PriceExpressionContract) {
 				PriceExpressionContract pec = (PriceExpressionContract) contract;
