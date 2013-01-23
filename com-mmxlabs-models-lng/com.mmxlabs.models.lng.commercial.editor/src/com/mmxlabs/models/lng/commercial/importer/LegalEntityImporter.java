@@ -92,7 +92,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 			
 			final EList<TaxRate> taxRates = entity.getTaxRates();
 			for (final TaxRate rate: taxRates) {
-				result.put(shortDate.format(rate.getDate()), String.format("%.02f", rate.getValue()));
+				result.put(shortDate.format(rate.getDate()), String.format("%.4f", rate.getValue()));
 			}
 			
 			return result;
