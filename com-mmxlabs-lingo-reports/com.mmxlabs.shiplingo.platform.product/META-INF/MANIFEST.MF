@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Bundle-ManifestVersion: 2
-Bundle-Name: Product
-Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.product
-Bundle-Version: 1.0.0.RELEASE
-Bundle-Vendor: Minimax Labs Ltd.
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
