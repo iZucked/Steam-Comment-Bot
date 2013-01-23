@@ -42,21 +42,21 @@ public class DefaultModelFactory implements IModelFactory {
 		} else {
 			for (final EClassifier e : containment.getEReferenceType().getEPackage().getEClassifiers()) {
 				if (e instanceof EClass) {
-					if (e.getInstanceClass().getCanonicalName().equals(prototypeClass)) {
+					if (e.getInstanceClass() != null && e.getInstanceClass().getCanonicalName().equals(prototypeClass)) {
 						output = constructInstance((EClass) e);
 						break;
 					}
 				}
 			}
-			
+
 			if (output == null) {
 				// All registry packages...
-				for (Object obj : Registry.INSTANCE.values()) {
+				for (final Object obj : Registry.INSTANCE.values()) {
 					if (obj instanceof EPackage) {
-						EPackage ePackage2 = (EPackage) obj;
+						final EPackage ePackage2 = (EPackage) obj;
 						for (final EClassifier e : ePackage2.getEClassifiers()) {
 							if (e instanceof EClass) {
-								if (e.getInstanceClass().getCanonicalName().equals(prototypeClass)) {
+								if (e.getInstanceClass() != null && e.getInstanceClass().getCanonicalName().equals(prototypeClass)) {
 									output = constructInstance((EClass) e);
 									break;
 								}
@@ -67,7 +67,7 @@ public class DefaultModelFactory implements IModelFactory {
 				}
 
 			}
-			
+
 			if (output == null)
 				output = constructInstance(containment.getEReferenceType());
 		}
@@ -143,12 +143,12 @@ public class DefaultModelFactory implements IModelFactory {
 	 * @param instance
 	 * @param selection
 	 */
-	protected void addSelectionToInstance(EClass cls, EObject instance, ISelection selection) {
+	protected void addSelectionToInstance(final EClass cls, final EObject instance, final ISelection selection) {
 
 	}
 
 	@Override
-	public void initFromExtension(String ID, String label, String prototype) {
+	public void initFromExtension(final String ID, final String label, final String prototype) {
 		this.label = label;
 		this.extensionID = ID;
 		this.prototypeClass = prototype;
