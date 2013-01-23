@@ -1,5 +1,0 @@
-uuid,name,otherNames,minQuantity,maxQuantity,restrictedListsArePermissive,minCvValue,maxCvValue,pricePerMMBTU,entity,allowedPorts,restrictedContracts,restrictedPorts,kind
-_g2QRkG3kEeGoB9CX9jdaHQ,HH Sales,,0,0,false,,,7.0,US,,,,FixedPriceContract
-_g2QRkW3kEeGoB9CX9jdaHQ,NBP Sales,,0,0,false,,,7.0,Europe,,,,FixedPriceContract
-_g2QRkm3kEeGoB9CX9jdaHQ,TTF Sales,,0,0,false,,,7.0,Europe,,,,FixedPriceContract
-_g2QRk23kEeGoB9CX9jdaHQ,JCC Sales,,0,0,false,,,7.0,Asia,,,,FixedPriceContract

@@ -1,4 +1,0 @@
-uuid,name,otherNames,minQuantity,maxQuantity,constant,multiplier,entity,allowedPorts,index,kind,pricePerMMBTU
-_QpoQ8K_aEeGyyNbjDp7Faw,NBP Spot P,,0,1000000,0.0,1.0,Others,All LOAD Ports,NBP,IndexPriceContract,
-_T94P8K_aEeGyyNbjDp7Faw,HH Spot P,,0,1000000,0.0,1.0,Others,All LOAD Ports,HH,IndexPriceContract,
-_pDILYK_aEeGyyNbjDp7Faw,Buy 5,,0,1000000,,,Others,,,FixedPriceContract,5.0
