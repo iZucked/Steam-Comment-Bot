@@ -10,13 +10,20 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdapterManager;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Widget;
 
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -84,7 +91,23 @@ public class RouteCostComponentHelper extends BaseComponentHelper {
 	 * @generated
 	 */
 	protected void add_vesselClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__VESSEL_CLASS));
+		BasicAttributeInlineEditor editor = new BasicAttributeInlineEditor(PricingPackage.Literals.ROUTE_COST__VESSEL_CLASS) {
+			Label label;
+			@Override
+			public Control createControl(Composite parent) {
+				label = new Label(parent, 0);
+				return super.wrapControl(label);
+			}
+
+			@Override
+			protected void updateDisplay(Object value) {
+				if (value instanceof VesselClass) {
+					label.setText(((VesselClass) value).getName());
+				}
+			}
+			
+		};
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
