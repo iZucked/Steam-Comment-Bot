@@ -32,6 +32,7 @@ public class EcoreHelper {
 	 * @return
 	 * @throws Exception
 	 */
+	@SuppressWarnings("resource")
 	public static String getPackageNS(final URI uri) throws Exception {
 
 		// Use a single element array to store the result from parsing
