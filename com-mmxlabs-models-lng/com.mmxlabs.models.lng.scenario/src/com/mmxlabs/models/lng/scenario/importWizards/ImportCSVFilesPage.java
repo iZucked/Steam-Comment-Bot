@@ -213,7 +213,7 @@ public class ImportCSVFilesPage extends WizardPage {
 					models.add(subModel);
 					root.addSubModel(subModel);
 				} catch (final Throwable th) {
-					th.printStackTrace();
+					log.error(th.getMessage(), th);
 				}
 			} finally {
 				for (final CSVReader r : readers.values()) {
