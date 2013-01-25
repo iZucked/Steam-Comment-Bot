@@ -77,6 +77,8 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 		final Combo combo = new Combo(parent, SWT.READ_ONLY);
 		this.combo = combo;
 
+		combo.setEnabled(isEditorEnabled());
+
 		combo.addSelectionListener(new SelectionListener() {
 			{
 				final SelectionListener sl = this;
@@ -155,7 +157,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public void setControlsEnabled(final boolean enabled) {
-		if (!combo.isDisposed()) {
+		if (combo != null && !combo.isDisposed()) {
 			combo.setEnabled(enabled);
 		}
 
