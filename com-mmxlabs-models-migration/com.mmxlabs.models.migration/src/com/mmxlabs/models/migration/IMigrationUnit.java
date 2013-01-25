@@ -5,9 +5,12 @@
 package com.mmxlabs.models.migration;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * A single migration unit to convert between two versions of a scenario version.
@@ -44,7 +47,8 @@ public interface IMigrationUnit {
 	 * 
 	 * @param uris
 	 * @param uc
+	 * @param extraPackages 
 	 * @throws Exception
 	 */
-	void migrate(List<URI> uris, URIConverter uc) throws Exception;
+	void migrate(@NonNull List<URI> uris, @NonNull URIConverter uc, @Nullable Map<String, URI> extraPackages) throws Exception;
 }

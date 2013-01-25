@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.migration.scenario;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.scenario.service.IScenarioMigrationService;
 import com.mmxlabs.scenario.service.IScenarioService;
@@ -14,7 +16,7 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 	private IMigrationRegistry migrationRegistry;
 
 	@Override
-	public void migrateScenario(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) throws Exception {
+	public void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception {
 
 		String context = scenarioInstance.getVersionContext();
 
@@ -24,7 +26,7 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 			scenarioInstance.setScenarioVersion(0);
 		}
 
-		if (getMigrationRegistry().getMigrationContexts().contains(context)) {
+		if (context != null && getMigrationRegistry().getMigrationContexts().contains(context)) {
 
 			final int latestVersion = getMigrationRegistry().getLatestContextVersion(context);
 

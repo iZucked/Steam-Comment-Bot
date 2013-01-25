@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,17 +50,22 @@ public class MigrationRegistry implements IMigrationRegistry {
 			final Iterable<DefaultMigrationContextExtensionPoint> defaultMigrationContexts) {
 
 		for (final MigrationContextExtensionPoint ext : migrationContexts) {
+			final String contextName = ext.getContextName();
 			try {
-				registerContext(ext.getContextName(), Integer.parseInt(ext.getLatestVersion()));
+				if (contextName != null) {
+					registerContext(contextName, Integer.parseInt(ext.getLatestVersion()));
+				}
 			} catch (final NumberFormatException e) {
-				log.error("Unable to register context: " + ext.getContextName(), e);
+				log.error("Unable to register context: " + contextName, e);
 			}
 		}
 		for (final MigrationUnitExtensionPoint ext : migrationUnits) {
 			try {
-				registerMigrationUnit(new MigrationUnitProxy(ext));
+				if (ext != null) {
+					registerMigrationUnit(new MigrationUnitProxy(ext));
+				}
 			} catch (final Exception e) {
-				log.error("Unable to register migration unit for context: " + ext.getContext(), e);
+				log.error("Unable to register migration unit for context: " + (ext == null ? "unknown" : ext.getContext()), e);
 			}
 		}
 
@@ -73,17 +79,18 @@ public class MigrationRegistry implements IMigrationRegistry {
 	}
 
 	@Override
+	@NonNull
 	public Collection<String> getMigrationContexts() {
 		return contexts.keySet();
 	}
 
 	@Override
-	public boolean isContextRegistered(final String context) {
+	public boolean isContextRegistered(@NonNull final String context) {
 		return contexts.containsKey(context);
 	}
 
 	@Override
-	public int getLatestContextVersion(final String context) {
+	public int getLatestContextVersion(@NonNull final String context) {
 
 		if (contexts.containsKey(context)) {
 			return contexts.get(context);
@@ -93,7 +100,8 @@ public class MigrationRegistry implements IMigrationRegistry {
 	}
 
 	@Override
-	public List<IMigrationUnit> getMigrationChain(final String context, final int fromVersion, final int toVersion) {
+	@NonNull
+	public List<IMigrationUnit> getMigrationChain(@NonNull final String context, final int fromVersion, final int toVersion) {
 
 		if (!contexts.containsKey(context)) {
 			throw new IllegalArgumentException("Context not registered: " + context);
@@ -125,7 +133,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 * @param context
 	 * @param latestVersion
 	 */
-	public void registerContext(final String context, final int latestVersion) {
+	public void registerContext(@NonNull final String context, final int latestVersion) {
 
 		if (contexts.containsKey(context)) {
 			throw new IllegalStateException("Context already registered: " + context);
@@ -139,7 +147,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 	 * 
 	 * @param unit
 	 */
-	public void registerMigrationUnit(final IMigrationUnit unit) {
+	public void registerMigrationUnit(@NonNull final IMigrationUnit unit) {
 		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(unit.getContext());
 		map.put(unit.getSourceVersion(), unit);
 	}
@@ -150,7 +158,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 	}
 
 	@Override
-	public int getLastReleaseVersion(final String context) {
+	public int getLastReleaseVersion(@NonNull final String context) {
 
 		final Map<Integer, IMigrationUnit> map = fromVersionMap.get(context);
 		int lastNumber = -1;

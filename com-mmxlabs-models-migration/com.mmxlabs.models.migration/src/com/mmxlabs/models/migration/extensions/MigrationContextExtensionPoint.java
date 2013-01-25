@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.migration.extensions;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
@@ -11,8 +12,8 @@ import org.ops4j.peaberry.eclipse.MapName;
 public interface MigrationContextExtensionPoint {
 
 	@MapName("name")
-	String getContextName();
+	@Nullable String getContextName();
 
 	@MapName("latestVersion")
-	String getLatestVersion();
+	@Nullable String getLatestVersion();
 }

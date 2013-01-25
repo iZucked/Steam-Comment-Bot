@@ -9,12 +9,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.models.migration.IMigrationRegistry;
@@ -30,8 +32,11 @@ public class ScenarioInstanceMigrator {
 		this.migrationRegistry = migrationRegistry;
 	}
 
-	public void performMigration(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) throws Exception {
+	public void performMigration(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception {
 		final String context = scenarioInstance.getVersionContext();
+		if (context == null) {
+			throw new IllegalArgumentException("Scenario has no version context. Unable to migrate");
+		}
 		final int latestVersion = migrationRegistry.getLatestContextVersion(context);
 		final int scenarioVersion = scenarioInstance.getScenarioVersion();
 		final EList<String> subModelURIs = scenarioInstance.getSubModelURIs();
@@ -90,14 +95,14 @@ public class ScenarioInstanceMigrator {
 	 * @return
 	 * @throws Exception
 	 */
-	public int applyMigrationChain(final String context, final int scenarioVersion, final int latestVersion, final List<URI> tmpURIs, URIConverter uc) throws Exception {
+	public int applyMigrationChain(@NonNull final String context, final int scenarioVersion, final int latestVersion, @NonNull final List<URI> tmpURIs, @NonNull URIConverter uc) throws Exception {
 
 		final List<IMigrationUnit> chain = migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion);
 
 		int version = scenarioVersion;
 		for (final IMigrationUnit unit : chain) {
 
-			unit.migrate(tmpURIs, uc);
+			unit.migrate(tmpURIs, uc, Collections.<String, URI> emptyMap());
 
 			if (unit.getDestinationVersion() == -1) {
 				version = unit.getSourceVersion();
@@ -108,7 +113,8 @@ public class ScenarioInstanceMigrator {
 		return version;
 	}
 
-	public void copyURIData(final URIConverter uc, final URI uri, final URI tmpURI) throws IOException {
+	@SuppressWarnings("resource")
+	public void copyURIData(@NonNull final URIConverter uc, @NonNull final URI uri, @NonNull final URI tmpURI) throws IOException {
 		InputStream is = null;
 		OutputStream os = null;
 		try {

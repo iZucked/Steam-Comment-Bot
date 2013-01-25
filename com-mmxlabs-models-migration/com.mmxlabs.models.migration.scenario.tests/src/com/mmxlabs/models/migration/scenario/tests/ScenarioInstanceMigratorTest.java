@@ -8,6 +8,7 @@ import static org.mockito.Mockito.inOrder;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
@@ -54,8 +55,8 @@ public class ScenarioInstanceMigratorTest {
 		migrator.applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
 
 		final InOrder order = inOrder(unit1, unit2);
-		order.verify(unit1).migrate(tmpURIs, uc);
-		order.verify(unit2).migrate(tmpURIs, uc);
+		order.verify(unit1).migrate(tmpURIs, uc, Collections.<String, URI>emptyMap());
+		order.verify(unit2).migrate(tmpURIs, uc, Collections.<String, URI>emptyMap());
 
 	}
 }

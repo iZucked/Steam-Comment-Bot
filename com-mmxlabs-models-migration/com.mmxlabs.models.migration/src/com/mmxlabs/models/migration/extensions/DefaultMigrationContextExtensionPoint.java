@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.migration.extensions;
 
+import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
@@ -11,5 +12,5 @@ import org.ops4j.peaberry.eclipse.MapName;
 public interface DefaultMigrationContextExtensionPoint {
 
 	@MapName("context")
-	String getContext();
+	@Nullable String getContext();
 }
