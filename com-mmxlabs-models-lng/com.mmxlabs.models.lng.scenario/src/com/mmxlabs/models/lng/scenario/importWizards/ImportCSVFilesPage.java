@@ -262,15 +262,20 @@ public class ImportCSVFilesPage extends WizardPage {
 							try {
 								final ScenarioInstance instance = scenarioService.insert(container, Collections.<ScenarioInstance> emptySet(), models);
 
-								final String versionContext = migrationRegistry.getDefaultMigrationContext();
-								if (versionContext != null) {
-									instance.setVersionContext(versionContext);
-									int latestContextVersion = migrationRegistry.getLatestContextVersion(versionContext);
-									// Snapshot version - so find last good version number
-									if (latestContextVersion == IMigrationRegistry.SNAPSHOT_VERSION) {
-										latestContextVersion = migrationRegistry.getLastReleaseVersion(versionContext);
+								try {
+									final String versionContext = migrationRegistry.getDefaultMigrationContext();
+									if (versionContext != null) {
+										instance.setVersionContext(versionContext);
+										int latestContextVersion = migrationRegistry.getLatestContextVersion(versionContext);
+										// Snapshot version - so find last good version number
+										if (latestContextVersion == IMigrationRegistry.SNAPSHOT_VERSION) {
+											latestContextVersion = migrationRegistry.getLastReleaseVersion(versionContext);
+										}
+										instance.setScenarioVersion(latestContextVersion);
 									}
-									instance.setScenarioVersion(latestContextVersion);
+								} catch (final IllegalArgumentException e) {
+									log.error(e.getMessage(), e);
+									setErrorMessage(e.getMessage());
 								}
 								monitor.worked(1);
 
@@ -284,6 +289,8 @@ public class ImportCSVFilesPage extends WizardPage {
 								ImportCSVFilesPage.this.setScenarioInstance(instance);
 
 							} catch (final IOException e) {
+								// NOTE: in Java SE 7 we can incorporate this into the previous
+								// exception block as catch(final IllegalArgumentException|IOException e)
 								log.error(e.getMessage(), e);
 								setErrorMessage(e.getMessage());
 							}

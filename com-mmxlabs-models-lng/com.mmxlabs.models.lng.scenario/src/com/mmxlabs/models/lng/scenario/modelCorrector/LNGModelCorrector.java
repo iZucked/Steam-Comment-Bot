@@ -15,9 +15,11 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
+import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
@@ -31,6 +33,7 @@ import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
+import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselEvent;
 import com.mmxlabs.models.lng.fleet.VesselType;
 import com.mmxlabs.models.lng.fleet.VesselTypeGroup;
@@ -43,14 +46,17 @@ import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.port.PortFactory;
 import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.PortPackage;
+import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.pricing.SpotAvailability;
 import com.mmxlabs.models.lng.pricing.SpotMarket;
 import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.lng.pricing.SpotType;
+import com.mmxlabs.models.lng.pricing.impl.RouteCostImpl;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
@@ -87,12 +93,71 @@ public class LNGModelCorrector {
 		fixRedirectionContracts(cmd, rootObject, ed);
 		fixPortCapabilityGroups(cmd, rootObject, ed);
 		fixVesselTypeGroups(cmd, rootObject, ed);
+		fixCanalCostVesselTypes(cmd, rootObject, ed);
+		
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
 		}
 
 	}
+	private void fixCanalCostVesselTypes(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
 
+		final CompoundCommand cmd = new CompoundCommand("Fix canal cost vessel types");
+
+		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
+		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
+		final PortModel portModel = rootObject.getSubModel(PortModel.class);
+		
+		if (pricingModel != null) {
+			Set<VesselClass> vesselClasses = new HashSet<VesselClass>(fleetModel.getVesselClasses());
+			Set<Route> routes = new HashSet<Route>(portModel.getRoutes());
+			Set<Pair<Route,VesselClass>> entriesExpected = new HashSet<Pair<Route,VesselClass>>();
+			Set<Pair<Route,VesselClass>> entriesFound = new HashSet<Pair<Route,VesselClass>>();
+			
+			// populate the expected entries set
+			for (Route route: routes) {
+				// only specify route costs for canal routes
+				if (route.isCanal()) {
+					// we expect a route cost for each vessel class for this route
+					for (VesselClass vesselClass: vesselClasses) {
+						entriesExpected.add(new Pair<Route, VesselClass>(route, vesselClass));
+					}
+				}		
+			}
+			
+			// populate the found entries set
+			for (RouteCost rc: pricingModel.getRouteCosts()) {
+				Route route = rc.getRoute();
+				VesselClass vc = rc.getVesselClass();
+				Pair<Route, VesselClass> pair = new Pair<Route, VesselClass>(route, vc);
+				
+				// remove duplicate entries or unexpected entries
+				if (entriesFound.contains(pair) || !entriesExpected.contains(pair)) {
+					cmd.append(RemoveCommand.create(ed, pricingModel, PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS, rc));					
+				}
+				// remember all other entries
+				else {
+					entriesFound.add(pair);
+				}
+			}
+			
+			// add missing entries
+			entriesExpected.removeAll(entriesFound);
+			for (Pair<Route, VesselClass> pair: entriesExpected) {
+				RouteCost rc = PricingFactory.eINSTANCE.createRouteCost();
+				rc.setRoute(pair.getFirst());
+				rc.setVesselClass(pair.getSecond());
+				cmd.append(AddCommand.create(ed, pricingModel, PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS, rc));					
+			}
+			
+		}
+		
+		if (!cmd.isEmpty()) {
+			parent.append(cmd);
+		}
+	}
+	
+	
 	private void fixPortCapabilityGroups(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix port capability groups");
@@ -122,7 +187,7 @@ public class LNGModelCorrector {
 
 	private void fixVesselTypeGroups(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
 
-		final CompoundCommand cmd = new CompoundCommand("Fix port capability groups");
+		final CompoundCommand cmd = new CompoundCommand("Fix vessel type groups");
 
 		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 		if (fleetModel != null) {
