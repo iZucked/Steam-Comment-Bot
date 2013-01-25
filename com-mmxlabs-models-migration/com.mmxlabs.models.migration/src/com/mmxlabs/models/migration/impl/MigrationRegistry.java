@@ -78,6 +78,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 		}
 	}
 
+	@SuppressWarnings("null")
 	@Override
 	@NonNull
 	public Collection<String> getMigrationContexts() {
