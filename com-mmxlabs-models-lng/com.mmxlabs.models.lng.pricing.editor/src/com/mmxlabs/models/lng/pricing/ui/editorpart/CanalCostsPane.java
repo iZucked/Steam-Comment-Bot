@@ -39,7 +39,6 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory);
 
 		EditingDomain ed = getEditingDomain();
-		IReferenceValueProviderProvider rvpc = getReferenceValueProviderCache();
 		
 		NonEditableColumn vesselManipulator = new NonEditableColumn() {
 			@Override
@@ -52,7 +51,18 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 		};
 		
-		addTypicalColumn("Route", new SingleReferenceManipulator(PricingPackage.Literals.ROUTE_COST__ROUTE, rvpc, ed));
+		NonEditableColumn routeManipulator = new NonEditableColumn() {
+			@Override
+			public String render(Object object) {
+				if (object instanceof RouteCost) {
+					return ((RouteCost) object).getRoute().getName();
+				}
+				return "Unknown";
+			}
+
+		};
+		
+		addTypicalColumn("Route", routeManipulator);
 		addTypicalColumn("Vessel Class", vesselManipulator);
 		addTypicalColumn("Laden Toll", new NumericAttributeManipulator(PricingPackage.Literals.ROUTE_COST__LADEN_COST, ed));
 		addTypicalColumn("Ballast Toll", new NumericAttributeManipulator(PricingPackage.Literals.ROUTE_COST__BALLAST_COST, ed));

@@ -13,16 +13,15 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Widget;
 
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
+import com.mmxlabs.models.ui.editors.IInlineEditor;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
@@ -79,18 +78,23 @@ public class RouteCostComponentHelper extends BaseComponentHelper {
 	/**
 	 * Create the editor for the route feature on RouteCost
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_routeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__ROUTE));
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__ROUTE);
+		editor.setEditorEnabled(false); // NOTE: this causes an exception because it is not expected before the control is created
+		detailComposite.addInlineEditor(editor);
 	}
 
 	/**
 	 * Create the editor for the vesselClass feature on RouteCost
 	 *
-	 * @generated
+	 * @generated NO
 	 */
 	protected void add_vesselClassEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		IInlineEditor editor = ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.ROUTE_COST__VESSEL_CLASS);
+		editor.setEditorEnabled(false);
+		/*
 		BasicAttributeInlineEditor editor = new BasicAttributeInlineEditor(PricingPackage.Literals.ROUTE_COST__VESSEL_CLASS) {
 			Label label;
 			@Override
@@ -106,7 +110,7 @@ public class RouteCostComponentHelper extends BaseComponentHelper {
 				}
 			}
 			
-		};
+		}; */
 		detailComposite.addInlineEditor(editor);
 	}
 
