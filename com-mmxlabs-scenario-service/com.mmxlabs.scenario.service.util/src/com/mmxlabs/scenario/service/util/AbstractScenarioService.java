@@ -38,10 +38,12 @@ import org.eclipse.emf.query.statements.FROM;
 import org.eclipse.emf.query.statements.IQueryResult;
 import org.eclipse.emf.query.statements.SELECT;
 import org.eclipse.emf.query.statements.WHERE;
+import org.eclipse.jdt.annotation.NonNull;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.ByteStreams;
 import com.mmxlabs.model.service.IModelInstance;
 import com.mmxlabs.model.service.IModelService;
 import com.mmxlabs.models.common.commandservice.CommandProviderAwareEditingDomain;
@@ -412,36 +414,29 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		this.scenarioMigrationService = scenarioMigrationHandler;
 	}
 
-	private void copyURIData(final URIConverter uc, final URI src, final URI dest) throws IOException {
+	@SuppressWarnings("resource")
+	private void copyURIData(@NonNull final URIConverter uc, @NonNull final URI src, @NonNull final URI dest) throws IOException {
 		InputStream is = null;
 		OutputStream os = null;
 		try {
 			// Get input stream from original URI
 			is = uc.createInputStream(src);
-
 			os = uc.createOutputStream(dest);
 
-			// Copy XMI file contents
-			// TODO: Tweak buffer size
-			// TODO: Java 7 APIs?
-			final byte[] buf = new byte[4096];
-			int c;
-			while ((c = is.read(buf)) > 0) {
-				os.write(buf, 0, c);
-			}
+			ByteStreams.copy(is, os);
 
 		} finally {
 			if (is != null) {
 				try {
 					is.close();
-				} catch (final Exception e) {
+				} catch (final IOException e) {
 
 				}
 			}
 			if (os != null) {
 				try {
 					os.close();
-				} catch (final Exception e) {
+				} catch (final IOException e) {
 
 				}
 			}

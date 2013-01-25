@@ -118,6 +118,7 @@ public class ModelService implements IModelService {
 		MMXCoreHandlerUtil.restoreProxiesForEObjects(parts);
 	}
 
+	@SuppressWarnings("resource")
 	@Override
 	public void saveTogether(final Collection<IModelInstance> instances) throws IOException {
 		// 1. backup all old model files

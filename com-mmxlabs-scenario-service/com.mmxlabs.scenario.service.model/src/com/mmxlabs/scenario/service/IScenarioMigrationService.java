@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scenario.service;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -20,5 +22,5 @@ public interface IScenarioMigrationService {
 	 * @param scenarioService
 	 * @param scenarioInstance
 	 */
-	void migrateScenario(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) throws Exception;
+	void migrateScenario(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception;
 }
