@@ -61,7 +61,7 @@ public class MigrateToV1Test {
 		// Construct a scenario
 		File tmpFile = null;
 		{
-			final MetamodelLoader v0Loader = new MigrateToV1().getSourceMetamodelLoader();
+			final MetamodelLoader v0Loader = new MigrateToV1().getSourceMetamodelLoader(null);
 			final EPackage cargoPackage = v0Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CargoModel);
 			final EFactory cargoFactory = cargoPackage.getEFactoryInstance();
 
@@ -109,7 +109,7 @@ public class MigrateToV1Test {
 		{
 			final MigrateToV1 migrator = new MigrateToV1();
 
-			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader(null);
 
 			final Resource r = v1Loader.getResourceSet().createResource(URI.createFileURI(tmpFile.toString()));
 
@@ -131,7 +131,7 @@ public class MigrateToV1Test {
 		{
 			final MigrateToV1 migrator = new MigrateToV1();
 
-			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader(null);
 			final Resource r = v1Loader.getResourceSet().createResource(URI.createFileURI(tmpFile.toString()));
 			r.load(null);
 			tmpFile.delete();
@@ -178,7 +178,7 @@ public class MigrateToV1Test {
 		File portModelFile = null;
 		File analyticsModelFile = null;
 		{
-			final MetamodelLoader v0Loader = new MigrateToV1().getSourceMetamodelLoader();
+			final MetamodelLoader v0Loader = new MigrateToV1().getSourceMetamodelLoader(null);
 			final EPackage analyticsPackage = v0Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_AnalyticsModel);
 			final EFactory analyticsFactory = analyticsPackage.getEFactoryInstance();
 
@@ -261,7 +261,7 @@ public class MigrateToV1Test {
 		{
 			final MigrateToV1 migrator = new MigrateToV1();
 
-			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader(null);
 
 			final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
 			// Record features which have no meta-model equivalent so we can perform migration
@@ -289,7 +289,7 @@ public class MigrateToV1Test {
 		{
 			final MigrateToV1 migrator = new MigrateToV1();
 
-			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader(null);
 			final Resource portResource = v1Loader.getResourceSet().createResource(URI.createFileURI(portModelFile.toString()));
 			portResource.load(null);
 			final Resource analyticsResource = v1Loader.getResourceSet().createResource(URI.createFileURI(analyticsModelFile.toString()));
@@ -340,7 +340,7 @@ public class MigrateToV1Test {
 		File inputModelFile = null;
 		File fleetModelFile = null;
 		{
-			final MetamodelLoader v0Loader = new MigrateToV1().getSourceMetamodelLoader();
+			final MetamodelLoader v0Loader = new MigrateToV1().getSourceMetamodelLoader(null);
 			final EPackage inputPackage = v0Loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_InputModel);
 			final EFactory inputFactory = inputPackage.getEFactoryInstance();
 
@@ -410,7 +410,7 @@ public class MigrateToV1Test {
 		{
 			final MigrateToV1 migrator = new MigrateToV1();
 
-			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader(null);
 
 			final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
 			// Record features which have no meta-model equivalent so we can perform migration
@@ -438,7 +438,7 @@ public class MigrateToV1Test {
 		{
 			final MigrateToV1 migrator = new MigrateToV1();
 
-			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader();
+			final MetamodelLoader v1Loader = migrator.getDestinationMetamodelLoader(null);
 			final Resource fleetResource = v1Loader.getResourceSet().createResource(URI.createFileURI(fleetModelFile.toString()));
 			fleetResource.load(null);
 			final Resource inputResource = v1Loader.getResourceSet().createResource(URI.createFileURI(inputModelFile.toString()));

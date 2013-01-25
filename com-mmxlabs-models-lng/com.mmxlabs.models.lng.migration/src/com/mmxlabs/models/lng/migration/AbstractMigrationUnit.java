@@ -16,6 +16,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.xmi.XMIResource;
 import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
 import com.mmxlabs.models.migration.IMigrationUnit;
@@ -36,14 +38,16 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader getSourceMetamodelLoader();
+	protected abstract MetamodelLoader getSourceMetamodelLoader(Map<String, URI> extraPackages);
 
 	/**
 	 * Returns a {@link MetamodelLoader} for the {@link IMigrationUnit#getDestinationVersion()}
 	 * 
+	 * @param extraPackages
+	 * 
 	 * @return
 	 */
-	protected abstract MetamodelLoader getDestinationMetamodelLoader();
+	protected abstract MetamodelLoader getDestinationMetamodelLoader(Map<String, URI> extraPackages);
 
 	/**
 	 * Perform the migration. Root object instance references are not expected to be changed.
@@ -53,11 +57,11 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	protected abstract void doMigration(Map<ModelsLNGSet_v1, EObject> models);
 
 	@Override
-	public void migrate(final List<URI> baseURIs, final URIConverter uc) throws Exception {
+	public void migrate(final @NonNull List<URI> baseURIs, final @NonNull URIConverter uc, @Nullable final Map<String, URI> extraPackages) throws Exception {
 
 		final Map<MetamodelVersionsUtil.ModelsLNGSet_v1, EObject> models = new HashMap<MetamodelVersionsUtil.ModelsLNGSet_v1, EObject>();
 
-		final MetamodelLoader destinationLoader = getDestinationMetamodelLoader();
+		final MetamodelLoader destinationLoader = getDestinationMetamodelLoader(extraPackages);
 
 		final Map<Object, Object> loadOptions = new HashMap<Object, Object>();
 
