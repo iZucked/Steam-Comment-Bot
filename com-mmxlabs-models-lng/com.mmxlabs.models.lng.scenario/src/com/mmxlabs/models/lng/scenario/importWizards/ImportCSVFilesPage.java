@@ -199,20 +199,30 @@ public class ImportCSVFilesPage extends WizardPage {
 
 		for (final Chunk c : chunks) {
 			final HashMap<String, CSVReader> readers = new HashMap<String, CSVReader>();
-			for (final String key : c.keys.keySet()) {
-				try {
-					final CSVReader r = new CSVReader(new File(c.keys.get(key)));
-					readers.put(key, r);
-				} catch (final IOException e) {
-					e.printStackTrace();
-				}
-			}
 			try {
-				final UUIDObject subModel = c.importer.importModel(readers, context);
-				models.add(subModel);
-				root.addSubModel(subModel);
-			} catch (final Throwable th) {
-				th.printStackTrace();
+				for (final String key : c.keys.keySet()) {
+					try {
+						final CSVReader r = new CSVReader(new File(c.keys.get(key)));
+						readers.put(key, r);
+					} catch (final IOException e) {
+						log.error(e.getMessage(), e);
+					}
+				}
+				try {
+					final UUIDObject subModel = c.importer.importModel(readers, context);
+					models.add(subModel);
+					root.addSubModel(subModel);
+				} catch (final Throwable th) {
+					th.printStackTrace();
+				}
+			} finally {
+				for (final CSVReader r : readers.values()) {
+					try {
+						r.close();
+					} catch (final IOException e) {
+
+					}
+				}
 			}
 
 		}
@@ -253,14 +263,15 @@ public class ImportCSVFilesPage extends WizardPage {
 								final ScenarioInstance instance = scenarioService.insert(container, Collections.<ScenarioInstance> emptySet(), models);
 
 								final String versionContext = migrationRegistry.getDefaultMigrationContext();
-								instance.setVersionContext(versionContext);
-								int latestContextVersion = migrationRegistry.getLatestContextVersion(versionContext);
-								// Snapshot version - so find last good version number
-								if (latestContextVersion == IMigrationRegistry.SNAPSHOT_VERSION) {
-									latestContextVersion = migrationRegistry.getLastReleaseVersion(versionContext);
+								if (versionContext != null) {
+									instance.setVersionContext(versionContext);
+									int latestContextVersion = migrationRegistry.getLatestContextVersion(versionContext);
+									// Snapshot version - so find last good version number
+									if (latestContextVersion == IMigrationRegistry.SNAPSHOT_VERSION) {
+										latestContextVersion = migrationRegistry.getLastReleaseVersion(versionContext);
+									}
+									instance.setScenarioVersion(latestContextVersion);
 								}
-								instance.setScenarioVersion(latestContextVersion);
-
 								monitor.worked(1);
 
 								instance.setName(mainPage.getFileName());
