@@ -6,7 +6,7 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 
 import java.util.Map;
 
-import com.mmxlabs.shiplingo.platform.reports.Exposures.MonthYear;
+import com.mmxlabs.models.lng.commercial.parseutils.Exposures.MonthYear;
 
 /**
  * @since 2.0

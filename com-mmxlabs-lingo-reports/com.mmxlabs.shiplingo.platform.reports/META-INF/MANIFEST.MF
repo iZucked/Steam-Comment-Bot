@@ -30,3 +30,4 @@ Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.shiplingo.platform.reports,
  com.mmxlabs.shiplingo.platform.reports.properties,
  com.mmxlabs.shiplingo.platform.reports.views
+Import-Package: com.mmxlabs.models.lng.commercial.parseutils

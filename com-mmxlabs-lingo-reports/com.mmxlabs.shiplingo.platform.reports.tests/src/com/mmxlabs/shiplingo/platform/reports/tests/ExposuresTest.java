@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.commercial.FixedPriceContract;
 import com.mmxlabs.models.lng.commercial.IndexPriceContract;
 import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
 import com.mmxlabs.models.lng.pricing.Index;
-import com.mmxlabs.shiplingo.platform.reports.Exposures;
+import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 
 /**
  * JUnit tests for the exposures calculations.
