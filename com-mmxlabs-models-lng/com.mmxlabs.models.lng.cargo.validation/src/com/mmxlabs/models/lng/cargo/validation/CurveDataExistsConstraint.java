@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.cargo.validation;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -26,13 +27,13 @@ import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.TaxRate;
+import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 
 /**
  * A model constraint for checking that a slot's minimum and maximum volumes are sensible (0 <= min <= max)
@@ -43,6 +44,8 @@ import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
 public class CurveDataExistsConstraint extends AbstractModelConstraint {
 	IndexStartFinder indexFinder = new IndexStartFinder();
 	TaxRateStartFinder taxFinder = new TaxRateStartFinder();
+	
+	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
 	interface CurveStartFinder<CurveType> {
 		Date getStart(CurveType curve);
@@ -122,7 +125,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 			if (Exposures.getExposureCoefficient(slot, index) != 0) {
 				if (date.before(getEarliestDate(indexFinder, index, ctx))) {
 					String format = "There is no data in index '%s' for '%s' (the window start of slot '%s').";
-					final String failureMessage = String.format(format, index.getName(), slot.getWindowStart(), slot.getName());
+					final String failureMessage = String.format(format, index.getName(), sdf.format(slot.getWindowStart()), slot.getName());
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 					if (slot.isSetPriceExpression()) {
 						dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__PRICE_EXPRESSION);						
@@ -141,7 +144,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 		// check entity tax rates
 		if (date.before(getEarliestDate(taxFinder, entity.getTaxRates(), ctx))) {
 			String format = "There is no tax data in contract entity '%s' for '%s' (the window start of slot '%s').";
-			final String failureMessage = String.format(format, entity.getName(), date, slot.getName());
+			final String failureMessage = String.format(format, entity.getName(), sdf.format(date), slot.getName());
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 			dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__WINDOW_START);
 			dsd.addEObjectAndFeature(slot, CargoPackage.Literals.SLOT__CONTRACT);
@@ -173,7 +176,7 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 		// check entity tax rates
 		if (date.before(getEarliestDate(taxFinder, entity.getTaxRates(), ctx))) {
 			String format = "There is no tax data in shipping entity '%s' for '%s' (the load date for cargo '%s').";
-			final String failureMessage = String.format(format, entity.getName(), date, cargo.getName());
+			final String failureMessage = String.format(format, entity.getName(), sdf.format(date), cargo.getName());
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(failureMessage), IStatus.WARNING);
 			dsd.addEObjectAndFeature(loadSlot, CargoPackage.Literals.SLOT__WINDOW_START);
 			dsd.addEObjectAndFeature(entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES);
