@@ -74,7 +74,7 @@ public class CopyDialogToClipboard implements IInlineEditorWrapper {
 
 				if (value instanceof EObject) {
 					final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) adapterFactory.adapt(value, IItemLabelProvider.class);
-					final String str = itemLabelProvider != null ? itemLabelProvider.getText(value) : value == null ? "" : value.toString();
+					final String str = itemLabelProvider != null ? itemLabelProvider.getText(value) : value.toString();
 					sb.append(str);
 				} else if (value instanceof List) {
 					final List<?> l = (List<?>) value;
@@ -87,7 +87,7 @@ public class CopyDialogToClipboard implements IInlineEditorWrapper {
 						first = false;
 						if (o instanceof EObject) {
 							final IItemLabelProvider itemLabelProvider = (IItemLabelProvider) adapterFactory.adapt(o, IItemLabelProvider.class);
-							final String str = itemLabelProvider != null ? itemLabelProvider.getText(o) : o == null ? "" : o.toString();
+							final String str = itemLabelProvider != null ? itemLabelProvider.getText(o) : o.toString();
 							sb.append(str);
 						} else {
 							sb.append(o.toString());

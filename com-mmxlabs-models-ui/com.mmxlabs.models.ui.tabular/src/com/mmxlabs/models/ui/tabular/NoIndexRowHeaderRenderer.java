@@ -5,7 +5,6 @@
 package com.mmxlabs.models.ui.tabular;
 
 import org.eclipse.nebula.widgets.grid.AbstractRenderer;
-import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
