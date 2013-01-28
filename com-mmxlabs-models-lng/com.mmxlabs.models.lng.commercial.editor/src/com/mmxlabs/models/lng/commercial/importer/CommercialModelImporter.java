@@ -40,7 +40,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	@Inject
 	private IImporterRegistry importerRegistry;
 
-	private IClassImporter entityImporter;
+	private LegalEntityImporter entityImporter;
 	private IClassImporter purchaseImporter;
 	private IClassImporter salesImporter;
 
@@ -66,7 +66,7 @@ public class CommercialModelImporter implements ISubmodelImporter {
 	private void registryInit() {
 		if (importerRegistry != null) {
 
-			entityImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
+			entityImporter = (LegalEntityImporter) importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getLegalEntity());
 			purchaseImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getPurchaseContract());
 			salesImporter = importerRegistry.getClassImporter(CommercialPackage.eINSTANCE.getSalesContract());
 
@@ -83,9 +83,11 @@ public class CommercialModelImporter implements ISubmodelImporter {
 		final CommercialModel commercial = CommercialFactory.eINSTANCE.createCommercialModel();
 		if (inputs.containsKey(ENTITIES_KEY)) {
 			commercial.getEntities().addAll((Collection<? extends LegalEntity>) entityImporter.importObjects(CommercialPackage.eINSTANCE.getLegalEntity(), inputs.get(ENTITIES_KEY), context));
-			if (commercial.getEntities().isEmpty() == false) {
+			/*
+			LegalEntity shippingEntity = entityImporter.getShippingEntity();
+			if (commercial.getEntities().isEmpty() == false && shippingEntity == null) {
 				commercial.setShippingEntity(commercial.getEntities().get(0));
-			}
+			} */
 		}
 		if (inputs.containsKey(SALES_CON_KEY)) {
 			commercial.getSalesContracts()

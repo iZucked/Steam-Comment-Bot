@@ -17,22 +17,66 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
+import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.TaxRate;
+import com.mmxlabs.models.mmxcore.MMXObject;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.dates.DateAttributeImporter;
+import com.mmxlabs.models.util.importer.CSVReader;
 import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.IImportContext.IDeferment;
+import com.mmxlabs.models.util.importer.IImportContext.IImportProblem;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
  * @since 3.0
+ * @author Simon McGregor
  */
 public class LegalEntityImporter extends DefaultClassImporter {
 
 	static final String NAME = "name";
+	static final String SHIPPING_KEY = "shipping";
 	final DateFormat shortDate = new SimpleDateFormat("yyyy-MM-dd");
 	final DateAttributeImporter dateParser = new DateAttributeImporter();
+	protected LegalEntity shippingEntity = null;
+
+	@Override
+	public Collection<EObject> importObjects(final EClass targetClass, final CSVReader reader, final IImportContext context) {
+		// reset the shipping entity
+		shippingEntity = null;
+		// shipping entity may be set by importObjects
+		final Collection<EObject> result = super.importObjects(targetClass, reader, context);
+
+		// final variable for closure
+		final LegalEntity finalEntity = shippingEntity;
+		
+		final IDeferment setShippingEntity = new IDeferment() {
+
+			@Override
+			public void run(IImportContext context) {
+				CommercialModel commercialModel = context.getRootObject().getSubModel(CommercialModel.class);
+				LegalEntity entity = finalEntity;
+				if (entity == null) {
+					context.addProblem(context.createProblem("No shipping entity was specified. An arbitrary one was chosen.", true, true, true));
+					EList<LegalEntity> entities = commercialModel.getEntities();
+					if (!entities.isEmpty()) {
+						entity = entities.get(0);
+					}
+				}
+				commercialModel.setShippingEntity(entity);
+			}
+
+			@Override
+			public int getStage() {
+				return IImportContext.STAGE_MODIFY_SUBMODELS;
+			}
+			
+		};
+		context.doLater(setShippingEntity);
+		return result;
+	}
 
 	@Override
 	public Collection<EObject> importObject(EClass targetClass,
@@ -50,6 +94,17 @@ public class LegalEntityImporter extends DefaultClassImporter {
 				}
 				entity = (LegalEntity) object;
 			}
+		}
+		
+		// if this entity is the shipping entity, set it as the shipping entity
+		String shipping = row.get(SHIPPING_KEY); 
+		// this will require importing later, when the submodels have been built
+		if (shipping != null && !shipping.equals("")) {
+			if (shippingEntity != null) {
+				final IImportProblem problem = context.createProblem("The importer is trying to set more than one shipping entity.", true, true, true);
+				context.addProblem(problem);
+			}
+			shippingEntity = entity;
 		}
 		
 		// now read the tax rates out of the CSV data row
@@ -81,6 +136,14 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		
 	}
 	
+	/**
+	 * Adds tax rate data to a LegalEntity's CSV export fields. To preserve a consistent file structure, all tax rate
+	 * dates specified for any entity have to be included for all other entities.
+	 * @param object
+	 * @param dates
+	 * @param root
+	 * @return
+	 */
 	protected Map<String, String> exportTaxCurve(final EObject object, final Collection<String> dates, final MMXRootObject root) {
 		if (object instanceof LegalEntity) {
 			final LegalEntity entity = (LegalEntity) object;
@@ -102,7 +165,10 @@ public class LegalEntityImporter extends DefaultClassImporter {
 	
 	@Override
 	public Collection<Map<String, String>> exportObjects(final Collection<? extends EObject> objects, final MMXRootObject root) {
-		final LinkedList<Map<String, String>> result = new LinkedList<Map<String,String>>();
+		final LinkedList<Map<String, String>> result = new LinkedList<Map<String,String>>();		
+		
+		// determine which entity is the default shipping entity
+		LegalEntity shippingEntity = root.getSubModel(CommercialModel.class).getShippingEntity();
 		
 		/*
 		 * Every entity must have a field for every date keypoint in any entity's tax data, not just its own tax data.
@@ -116,6 +182,7 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		final LinkedList<EObject> objectList = new LinkedList<EObject>();
 
 		for (final EObject object: objects) {
+			// while we are at it, remember the dates attached to each entity's tax rates
 			if (object instanceof LegalEntity) {
 				for (final TaxRate taxRate: ((LegalEntity) object).getTaxRates()) {
 					dates.add(shortDate.format(taxRate.getDate()));
@@ -137,7 +204,10 @@ public class LegalEntityImporter extends DefaultClassImporter {
 		
 		for (final EObject object: objectList) {
 			Map<String, String> data = exportObject(object, root);
+			// export the "kind" field containing the metaclass name
 			data.put(KIND_KEY, object.eClass().getName());
+			data.put(SHIPPING_KEY, object == shippingEntity ? "Y" : "");
+			
 			// add the data to the result
 			result.add(data);
 			// remember the fields used
@@ -163,5 +233,9 @@ public class LegalEntityImporter extends DefaultClassImporter {
 	
 	protected boolean shouldImportReference(final EReference reference) {
 		return reference != CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES;
+	}
+	
+	public LegalEntity getShippingEntity() {
+		return shippingEntity;
 	}
 }
