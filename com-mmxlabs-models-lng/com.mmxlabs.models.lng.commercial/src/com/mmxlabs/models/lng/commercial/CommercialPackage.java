@@ -2408,240 +2408,243 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getIndexPriceContract_Multiplier();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract <em>Netback Purchase Contract</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Netback Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Netback Purchase Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract
+	 * @model
 	 * @generated
 	 */
 	EClass getNetbackPurchaseContract();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getNotionalBallastParameters <em>Notional Ballast Parameters</em>}'.
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getNotionalBallastParameters <em>Notional Ballast Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Notional Ballast Parameters</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getNotionalBallastParameters()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getNotionalBallastParameters()
 	 * @see #getNetbackPurchaseContract()
 	 * @generated
 	 */
 	EReference getNetbackPurchaseContract_NotionalBallastParameters();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getMargin <em>Margin</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getMargin <em>Margin</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Margin</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getMargin()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getMargin()
 	 * @see #getNetbackPurchaseContract()
 	 * @generated
 	 */
 	EAttribute getNetbackPurchaseContract_Margin();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getFloorPrice <em>Floor Price</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getFloorPrice <em>Floor Price</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Floor Price</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NetbackPurchaseContract#getFloorPrice()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getFloorPrice()
 	 * @see #getNetbackPurchaseContract()
 	 * @generated
 	 */
 	EAttribute getNetbackPurchaseContract_FloorPrice();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract <em>Profit Share Purchase Contract</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Profit Share Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Profit Share Purchase Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract
+	 * @model
 	 * @generated
 	 */
 	EClass getProfitSharePurchaseContract();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketPorts <em>Base Market Ports</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseMarketPorts <em>Base Market Ports</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Base Market Ports</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketPorts()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseMarketPorts()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EReference getProfitSharePurchaseContract_BaseMarketPorts();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketIndex <em>Base Market Index</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseMarketIndex <em>Base Market Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Base Market Index</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketIndex()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseMarketIndex()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EReference getProfitSharePurchaseContract_BaseMarketIndex();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketConstant <em>Base Market Constant</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseMarketConstant <em>Base Market Constant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Base Market Constant</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketConstant()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseMarketConstant()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EAttribute getProfitSharePurchaseContract_BaseMarketConstant();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketMultiplier <em>Base Market Multiplier</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseMarketMultiplier <em>Base Market Multiplier</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Base Market Multiplier</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getBaseMarketMultiplier()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseMarketMultiplier()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EAttribute getProfitSharePurchaseContract_BaseMarketMultiplier();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketIndex <em>Ref Market Index</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getRefMarketIndex <em>Ref Market Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Ref Market Index</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketIndex()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getRefMarketIndex()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EReference getProfitSharePurchaseContract_RefMarketIndex();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketConstant <em>Ref Market Constant</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getRefMarketConstant <em>Ref Market Constant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Ref Market Constant</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketConstant()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getRefMarketConstant()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EAttribute getProfitSharePurchaseContract_RefMarketConstant();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketMultiplier <em>Ref Market Multiplier</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getRefMarketMultiplier <em>Ref Market Multiplier</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Ref Market Multiplier</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getRefMarketMultiplier()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getRefMarketMultiplier()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EAttribute getProfitSharePurchaseContract_RefMarketMultiplier();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getShare <em>Share</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getShare <em>Share</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Share</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getShare()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getShare()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EAttribute getProfitSharePurchaseContract_Share();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMargin <em>Margin</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getMargin <em>Margin</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Margin</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getMargin()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getMargin()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EAttribute getProfitSharePurchaseContract_Margin();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getSalesMultiplier <em>Sales Multiplier</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesMultiplier <em>Sales Multiplier</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Sales Multiplier</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract#getSalesMultiplier()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getSalesMultiplier()
 	 * @see #getProfitSharePurchaseContract()
 	 * @generated
 	 */
 	EAttribute getProfitSharePurchaseContract_SalesMultiplier();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters <em>Notional Ballast Parameters</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.NamedObject <em>Notional Ballast Parameters</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Notional Ballast Parameters</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters
+	 * @see com.mmxlabs.models.mmxcore.NamedObject
+	 * @model
 	 * @generated
 	 */
 	EClass getNotionalBallastParameters();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getRoutes <em>Routes</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.mmxcore.NamedObject#getRoutes <em>Routes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Routes</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getRoutes()
+	 * @see com.mmxlabs.models.mmxcore.NamedObject#getRoutes()
 	 * @see #getNotionalBallastParameters()
 	 * @generated
 	 */
 	EReference getNotionalBallastParameters_Routes();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getSpeed <em>Speed</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.mmxcore.NamedObject#getSpeed <em>Speed</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Speed</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getSpeed()
+	 * @see com.mmxlabs.models.mmxcore.NamedObject#getSpeed()
 	 * @see #getNotionalBallastParameters()
 	 * @generated
 	 */
 	EAttribute getNotionalBallastParameters_Speed();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getHireCost <em>Hire Cost</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.mmxcore.NamedObject#getHireCost <em>Hire Cost</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getHireCost()
+	 * @see com.mmxlabs.models.mmxcore.NamedObject#getHireCost()
 	 * @see #getNotionalBallastParameters()
 	 * @generated
 	 */
 	EAttribute getNotionalBallastParameters_HireCost();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getNboRate <em>Nbo Rate</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.mmxcore.NamedObject#getNboRate <em>Nbo Rate</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Nbo Rate</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getNboRate()
+	 * @see com.mmxlabs.models.mmxcore.NamedObject#getNboRate()
 	 * @see #getNotionalBallastParameters()
 	 * @generated
 	 */
 	EAttribute getNotionalBallastParameters_NboRate();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getBaseConsumption <em>Base Consumption</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.mmxcore.NamedObject#getBaseConsumption <em>Base Consumption</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Base Consumption</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getBaseConsumption()
+	 * @see com.mmxlabs.models.mmxcore.NamedObject#getBaseConsumption()
 	 * @see #getNotionalBallastParameters()
 	 * @generated
 	 */
 	EAttribute getNotionalBallastParameters_BaseConsumption();
 
 	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getVesselClasses <em>Vessel Classes</em>}'.
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.mmxcore.NamedObject#getVesselClasses <em>Vessel Classes</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference list '<em>Vessel Classes</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.NotionalBallastParameters#getVesselClasses()
+	 * @see com.mmxlabs.models.mmxcore.NamedObject#getVesselClasses()
 	 * @see #getNotionalBallastParameters()
 	 * @generated
 	 */

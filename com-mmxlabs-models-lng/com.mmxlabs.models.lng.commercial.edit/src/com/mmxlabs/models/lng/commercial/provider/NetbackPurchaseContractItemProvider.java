@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.commercial.provider;
 
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.NetbackPurchaseContract;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +28,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.NetbackPurchaseContract} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.PurchaseContract} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
@@ -184,7 +184,7 @@ public class NetbackPurchaseContractItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((NetbackPurchaseContract)object).getName();
+		String label = ((PurchaseContract)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_NetbackPurchaseContract_type") :
 			getString("_UI_NetbackPurchaseContract_type") + " " + label;
@@ -201,7 +201,7 @@ public class NetbackPurchaseContractItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(NetbackPurchaseContract.class)) {
+		switch (notification.getFeatureID(PurchaseContract.class)) {
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__MARGIN:
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT__FLOOR_PRICE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

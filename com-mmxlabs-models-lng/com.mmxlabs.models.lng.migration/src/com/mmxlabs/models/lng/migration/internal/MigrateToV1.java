@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -46,17 +47,17 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected MetamodelLoader getSourceMetamodelLoader() {
+	protected MetamodelLoader getSourceMetamodelLoader(Map<String, URI> extraPackages) {
 		if (sourceLoader == null) {
-			sourceLoader = MetamodelVersionsUtil.getV0Loader();
+			sourceLoader = MetamodelVersionsUtil.createV0Loader(extraPackages);
 		}
 		return sourceLoader;
 	}
 
 	@Override
-	protected MetamodelLoader getDestinationMetamodelLoader() {
+	protected MetamodelLoader getDestinationMetamodelLoader(Map<String, URI> extraPackages) {
 		if (destiniationLoader == null) {
-			destiniationLoader = MetamodelVersionsUtil.getV1Loader();
+			destiniationLoader = MetamodelVersionsUtil.createV1Loader(extraPackages);
 		}
 		return destiniationLoader;
 	}
@@ -64,7 +65,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 	@Override
 	protected void doMigration(final Map<ModelsLNGSet_v1, EObject> models) {
 
-		final MetamodelLoader v1Loader = getDestinationMetamodelLoader();
+		final MetamodelLoader v1Loader = destiniationLoader;
 		migrateFixedPrice(v1Loader, models);
 		removeOptimisedSchedule(v1Loader, models);
 		clearAssignments(v1Loader, models);

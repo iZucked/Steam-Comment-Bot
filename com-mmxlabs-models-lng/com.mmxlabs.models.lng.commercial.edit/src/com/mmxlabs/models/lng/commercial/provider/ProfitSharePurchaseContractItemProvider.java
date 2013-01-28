@@ -6,8 +6,7 @@ package com.mmxlabs.models.lng.commercial.provider;
 
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract;
-
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,7 +24,7 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.PurchaseContract} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
@@ -313,7 +312,7 @@ public class ProfitSharePurchaseContractItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((ProfitSharePurchaseContract)object).getName();
+		String label = ((PurchaseContract)object).getName();
 		return label == null || label.length() == 0 ?
 			getString("_UI_ProfitSharePurchaseContract_type") :
 			getString("_UI_ProfitSharePurchaseContract_type") + " " + label;
@@ -330,7 +329,7 @@ public class ProfitSharePurchaseContractItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(ProfitSharePurchaseContract.class)) {
+		switch (notification.getFeatureID(PurchaseContract.class)) {
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_MULTIPLIER:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__BASE_MARKET_CONSTANT:
 			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT__REF_MARKET_MULTIPLIER:

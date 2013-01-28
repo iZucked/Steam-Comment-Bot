@@ -63,24 +63,7 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.commercial.FixedPriceContract">
   </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.NetbackPurchaseContractComponentHelper"
-        id="com.mmxlabs.models.lng.commercial.editor.netbackPurchaseContractHelper"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ProfitSharePurchaseContractComponentHelper"
-        id="com.mmxlabs.models.lng.commercial.editor.profitSharePurchaseContractHelper"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.NotionalBallastParametersComponentHelper"
-        id="com.mmxlabs.models.lng.commercial.editor.notionalBallastparametersHelper"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
-  </componentHelper>
+
   <componentHelper
         helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
         id="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
@@ -176,27 +159,6 @@
           targetEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.NetbackPurchaseContractFactory"
-          factory="com.mmxlabs.models.lng.commercial.modelfactories.NetbackPurchaseContractFactory"
-          label="Netback Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.ProfitSharePurchaseContractFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Profit Share Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.ProfitSharePurchaseContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.NotionalBallastParametersFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Notional Ballast Parameters"
-          outputEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters"
-          targetEClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
-    </factory>
-    <factory
           ID="com.mmxlabs.models.lng.commercial.editor.RedirectionPurchaseContractFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Redirection Purchase Contract"
@@ -227,23 +189,7 @@
           inheritable="true">
     </displayCompositeFactory>
  </extension>
- <extension
-       point="com.mmxlabs.models.ui.editorfactories">
-    <editorFactory
-          factoryClass="com.mmxlabs.models.lng.commercial.ui.inlineeditors.NotionalBallastParametersInlineEditorFactory"
-          id="com.mmxlabs.models.lng.commercial.ui.inlineeditors.NotionalBallastParametersInlineEditorFactory">
-       <OwnerAnyOf>
-          <EClassExtends
-                EClass="com.mmxlabs.models.lng.commercial.NetbackPurchaseContract">
-          </EClassExtends>
-       </OwnerAnyOf>
-       <FeatureAnyOf>
-          <EClassExtends
-                EClass="com.mmxlabs.models.lng.commercial.NotionalBallastParameters">
-          </EClassExtends>
-       </FeatureAnyOf>
-    </editorFactory>
- </extension>
+
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
     <displayCompositeFactory

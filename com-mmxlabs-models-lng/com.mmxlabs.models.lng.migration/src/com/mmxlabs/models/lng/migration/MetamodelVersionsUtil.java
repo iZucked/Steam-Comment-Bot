@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.migration;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EDataType;
@@ -52,7 +54,7 @@ public class MetamodelVersionsUtil {
 		return null;
 	}
 
-	public static MetamodelLoader getV0Loader() {
+	public static MetamodelLoader createV0Loader(final Map<String, URI> extraPackages) {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
@@ -69,6 +71,12 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 
 		hookSerializableObjectConvertor(typesPackage);
+
+		if (extraPackages != null) {
+			for (final Map.Entry<String, URI> e : extraPackages.entrySet()) {
+				loader.loadEPackage(e.getValue(), e.getKey());
+			}
+		}
 
 		return loader;
 	}
@@ -95,7 +103,7 @@ public class MetamodelVersionsUtil {
 		});
 	}
 
-	public static MetamodelLoader getV1Loader() {
+	public static MetamodelLoader createV1Loader(final Map<String, URI> extraPackages) {
 
 		final MetamodelLoader loader = new MetamodelLoader();
 
@@ -112,6 +120,12 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 
 		hookSerializableObjectConvertor(typesPackage);
+
+		if (extraPackages != null) {
+			for (final Map.Entry<String, URI> e : extraPackages.entrySet()) {
+				loader.loadEPackage(e.getValue(), e.getKey());
+			}
+		}
 
 		return loader;
 	}

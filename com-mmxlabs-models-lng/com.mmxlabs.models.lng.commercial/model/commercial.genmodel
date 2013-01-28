@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<genmodel:GenModel xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.commercial/src"
-    modelPluginID="com.mmxlabs.models.lng.commercial" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.commercial/src" modelPluginID="com.mmxlabs.models.lng.commercial"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" modelName="Commercial" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
   <foreignModel>commercial.ecore</foreignModel>
@@ -13,47 +12,81 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/salesContracts"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/shippingEntity"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/purchaseContracts"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//CommercialModel/contractSlotExtensions"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//LegalEntity"/>
+    <genClasses ecoreClass="commercial.ecore#//LegalEntity">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//LegalEntity/taxRates"/>
+    </genClasses>
     <genClasses ecoreClass="commercial.ecore#//Contract">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/entity"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/allowedPorts"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/preferredPort"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/minQuantity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/maxQuantity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/restrictedListsArePermissive"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/restrictedContracts"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/restrictedPorts"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//SalesContract"/>
+    <genClasses ecoreClass="commercial.ecore#//SalesContract">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/maxCvValue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/PurchaseDeliveryType"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="commercial.ecore#//PurchaseContract"/>
     <genClasses ecoreClass="commercial.ecore#//FixedPriceContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//FixedPriceContract/pricePerMMBTU"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//IndexPriceContract">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//IndexPriceContract/index"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//IndexPriceContract/constant"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//IndexPriceContract/multiplier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//IndexPriceContract/constant"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//NetbackPurchaseContract">
+    <genClasses dynamic="true" ecoreClass="commercial.ecore#//NetbackPurchaseContract">
       <genFeatures property="Readonly" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//NetbackPurchaseContract/notionalBallastParameters"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NetbackPurchaseContract/margin"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NetbackPurchaseContract/floorPrice"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//ProfitSharePurchaseContract">
+    <genClasses dynamic="true" ecoreClass="commercial.ecore#//ProfitSharePurchaseContract">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ProfitSharePurchaseContract/baseMarketPorts"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ProfitSharePurchaseContract/baseMarketIndex"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/baseMarketConstant"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/baseMarketMultiplier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/baseMarketConstant"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//ProfitSharePurchaseContract/refMarketIndex"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/refMarketConstant"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/refMarketMultiplier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/refMarketConstant"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/share"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/margin"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//ProfitSharePurchaseContract/salesMultiplier"/>
     </genClasses>
-    <genClasses ecoreClass="commercial.ecore#//NotionalBallastParameters">
+    <genClasses dynamic="true" ecoreClass="commercial.ecore#//NotionalBallastParameters">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalBallastParameters/routes"/>
       <genFeatures createChild="false" propertyDescription="Notional speed" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalBallastParameters/speed"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalBallastParameters/hireCost"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalBallastParameters/nboRate"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//NotionalBallastParameters/baseConsumption"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//NotionalBallastParameters/vesselClasses"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//RedirectionPurchaseContract">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//RedirectionPurchaseContract/baseSalesMarketPort"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RedirectionPurchaseContract/baseSalesPriceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RedirectionPurchaseContract/basePurchasePriceExpression"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RedirectionPurchaseContract/notionalSpeed"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//RedirectionPurchaseContract/desPurchasePort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//RedirectionPurchaseContract/sourcePurchasePort"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RedirectionPurchaseContract/profitShare"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//RedirectionPurchaseContract/vesselClass"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RedirectionPurchaseContract/hireCost"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RedirectionPurchaseContract/daysFromSource"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//PriceExpressionContract">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//PriceExpressionContract/priceExpression"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//RedirectionContractOriginalDate">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//RedirectionContractOriginalDate/date"/>
+    </genClasses>
+    <genClasses ecoreClass="commercial.ecore#//TaxRate">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//TaxRate/date"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//TaxRate/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

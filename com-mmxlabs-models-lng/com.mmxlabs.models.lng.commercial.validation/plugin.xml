@@ -44,54 +44,6 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.NetbackPurchaseContractConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.NetbackPurchaseContractConstraint"
-                  isEnabledByDefault="true"
-                  lang="Java"
-                  mode="Batch"
-                  name="Netback Purchase Contract Constraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="NetbackPurchaseContract">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.ProfitSharePurchaseContractConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.ProfitSharePurchaseContractConstraint"
-                  isEnabledByDefault="true"
-                  lang="Java"
-                  mode="Batch"
-                  name="Profit Share Purchase Contract Constraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="ProfitSharePurchaseContract">
-               </target>
-            </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.NotionalBallastParametersConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.NotionalBallastParametersConstraint"
-                  isEnabledByDefault="true"
-                  lang="Java"
-                  mode="Batch"
-                  name="Notional Ballast Parameters Constraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="NotionalBallastParameters">
-               </target>
-            </constraint>
-            <constraint
                   class="com.mmxlabs.models.lng.commercial.validation.RedirectionPurchaseContractConstraint"
                   id="com.mmxlabs.models.lng.commercial.validation.RedirectionPurchaseContractConstraint"
                   isEnabledByDefault="true"
