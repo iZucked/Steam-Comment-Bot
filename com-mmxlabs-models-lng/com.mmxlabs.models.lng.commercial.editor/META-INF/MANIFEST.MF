@@ -9,6 +9,7 @@ Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: com.mmxlabs.models.lng.commercial.importer,
+ com.mmxlabs.models.lng.commercial.parseutils,
  com.mmxlabs.models.lng.commercial.presentation
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  org.eclipse.core.resources;bundle-version="3.7.101";visibility:=reexport,
@@ -25,5 +26,8 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.ui;bundle-version="[2.0.0,3.0.0)"
 Bundle-ActivationPolicy: lazy
 Import-Package: com.mmxlabs.common;version="2.0.0",
+ com.mmxlabs.models.lng.cargo,
+ com.mmxlabs.models.lng.pricing,
+ com.mmxlabs.models.lng.schedule,
  javax.inject;version="1.0.0",
  org.eclipse.nebula.widgets.formattedtext
