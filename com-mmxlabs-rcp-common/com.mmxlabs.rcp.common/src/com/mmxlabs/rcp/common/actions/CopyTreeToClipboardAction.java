@@ -101,11 +101,11 @@ public class CopyTreeToClipboardAction extends Action {
 			} else {
 				sb.append(separator);
 			}
+		}
 
-			// Recurse.....
-			for (final TreeItem child : item.getItems()) {
-				processTreeItem(sb, numColumns, child);
-			}
+		// Recurse.....
+		for (final TreeItem child : item.getItems()) {
+			processTreeItem(sb, numColumns, child);
 		}
 	}
 }
