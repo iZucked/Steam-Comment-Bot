@@ -140,6 +140,7 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 
 				if (lastRow != null && lastRow.getPort() != null && row.getPort() != null) {
 
+					
 					if (row.getDate() != null && lastRow.getDate() != null) {
 
 
@@ -162,7 +163,7 @@ public class ShippingCostPlanConstraint extends AbstractModelMultiConstraint {
 							statuses.add(dsd);
 						}
 
-						else {
+						else if (!lastRow.getPort().equals(row.getPort())) {
 							final Pair<Port, Port> key = new Pair<Port, Port>(lastRow.getPort(), row.getPort());
 							final Integer time = minTimes.get(key);
 
