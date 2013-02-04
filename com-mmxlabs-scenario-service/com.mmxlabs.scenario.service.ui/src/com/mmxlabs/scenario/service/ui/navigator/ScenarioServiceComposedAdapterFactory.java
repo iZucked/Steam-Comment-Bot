@@ -31,7 +31,12 @@ public class ScenarioServiceComposedAdapterFactory {
 	}
 
 	private static ComposedAdapterFactory createNewAdapterFactory() {
-		return new ComposedAdapterFactory(createFactoryList());
+		// Hook in the global registry to get other adapter factories
+		final ComposedAdapterFactory factory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+		factory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+		factory.addAdapterFactory(new ScenarioServiceItemProviderAdapterFactory());
+		factory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+		return factory;
 	}
 
 	public final static List<AdapterFactory> createFactoryList() {
