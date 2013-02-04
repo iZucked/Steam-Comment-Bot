@@ -15,6 +15,7 @@ import org.eclipse.swt.widgets.Layout;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editors.IDisplayCompositeLayoutProvider;
 import com.mmxlabs.models.ui.editors.IInlineEditor;
+import com.mmxlabs.models.ui.editors.ILabelLayoutDataProvidingEditor;
 
 public class DefaultDisplayCompositeLayoutProvider implements
 		IDisplayCompositeLayoutProvider {
@@ -50,6 +51,11 @@ public class DefaultDisplayCompositeLayoutProvider implements
 	@Override
 	public Object createLabelLayoutData(MMXRootObject root, EObject value,
 			IInlineEditor editor, Control control, final Label label) {
-		return new GridData(SWT.RIGHT, SWT.CENTER, false, false);
+		if (editor instanceof ILabelLayoutDataProvidingEditor) {
+			return ((ILabelLayoutDataProvidingEditor) editor).createLabelLayoutData(root, value, control, label);
+		}
+		else {
+			return new GridData(SWT.RIGHT, SWT.CENTER, false, false);
+		}
 	}
 }
