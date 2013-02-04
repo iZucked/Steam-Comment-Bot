@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.shiplingo.platform.feature"
       label="Shiplingo Platform Feature"
-      version="2.0.1.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.shiplingo.platform.app">
 
@@ -117,6 +117,13 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.shiplingo.platform.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.analytics.navigator"
          download-size="0"
          install-size="0"
          version="0.0.0"
