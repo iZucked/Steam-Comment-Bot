@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.io.ByteStreams;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -85,6 +86,7 @@ public class ScenarioStorageUtil {
 		return tempFile.getAbsolutePath();
 	}
 
+	@SuppressWarnings("resource")
 	public static void storeToFile(final ScenarioInstance instance, final File file) throws IOException {
 		final ResourceSetImpl resourceSet = new ResourceSetImpl();
 		resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new MMXCoreResourceFactoryImpl());
@@ -107,7 +109,6 @@ public class ScenarioStorageUtil {
 
 		final URIConverter conv = resourceSet.getURIConverter();
 
-		final byte[] buffer = new byte[10 * 4096];
 		// long l = System.currentTimeMillis();
 		//
 		// int index = 0;
@@ -128,20 +129,32 @@ public class ScenarioStorageUtil {
 
 		for (final String partURI : partURIs) {
 			final URI u = scenarioService.resolveURI(partURI);
-			final InputStream input = conv.createInputStream(u);
 			final URI relativeURI = URI.createURI("/" + u.segment(u.segmentCount() - 1));
 			manifest.getModelURIs().add(relativeURI.toString());
 			final URI resolved = relativeURI.resolve(manifestURI);
-			final OutputStream output = conv.createOutputStream(resolved);
+			OutputStream output = null;
+			InputStream input = null;
 			try {
-				int b;
-				while ((b = input.read(buffer)) != -1) {
-					output.write(buffer, 0, b);
-				}
+				input = conv.createInputStream(u);
+				output = conv.createOutputStream(resolved);
 
+				ByteStreams.copy(input, output);
 				output.flush();
 			} finally {
-				output.close();
+				if (input != null) {
+					try {
+						input.close();
+					} catch (final IOException e) {
+
+					}
+				}
+				if (output != null) {
+					try {
+						output.close();
+					} catch (final IOException e) {
+
+					}
+				}
 			}
 		}
 		// System.err.println("time: " + (System.currentTimeMillis() - l));
