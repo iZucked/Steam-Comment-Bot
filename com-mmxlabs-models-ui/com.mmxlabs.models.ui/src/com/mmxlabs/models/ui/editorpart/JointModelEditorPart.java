@@ -78,6 +78,7 @@ import com.mmxlabs.models.ui.validation.gui.IValidationStatusGoto;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderProvider;
 import com.mmxlabs.models.ui.valueproviders.ReferenceValueProviderCache;
+import com.mmxlabs.rcp.common.editors.IPartGotoTarget;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
@@ -146,6 +147,18 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 		@Override
 		public EditingDomain getEditingDomain() {
 			return JointModelEditorPart.this.getEditingDomain();
+		}
+	};
+
+	private IPartGotoTarget partGotoTarget = new IPartGotoTarget() {
+
+		@Override
+		public void gotoTarget(final Object object) {
+			for (final IJointModelEditorContribution contrib : contributions) {
+				if (contrib instanceof IPartGotoTarget) {
+					((IPartGotoTarget) contrib).gotoTarget(object);
+				}
+			}
 		}
 	};
 
@@ -311,6 +324,8 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			return propertySheetPage;
 		} else if (adapter.isAssignableFrom(IValidationStatusGoto.class)) {
 			return this;
+		} else if (adapter.isAssignableFrom(IPartGotoTarget.class)) {
+			return partGotoTarget;
 		}
 
 		return super.getAdapter(adapter);
