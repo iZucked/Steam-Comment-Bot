@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.mmxlabs.scenario.service.model" version="2">
+    <resource path="src/com/mmxlabs/scenario/service/model/ScenarioServicePackage.java" type="com.mmxlabs.scenario.service.model.ScenarioServicePackage">
+        <filter comment="Ignore feature count" id="388194388">
+            <message_arguments>
+                <message_argument value="com.mmxlabs.scenario.service.model.ScenarioServicePackage"/>
+                <message_argument value="ISCENARIO_SERVICE"/>
+                <message_argument value="7"/>
+            </message_arguments>
+        </filter>
+        <filter comment="Ignore feature counts " id="388194388">
+            <message_arguments>
+                <message_argument value="com.mmxlabs.scenario.service.model.ScenarioServicePackage"/>
+                <message_argument value="SCENARIO_INSTANCE_FEATURE_COUNT"/>
+                <message_argument value="17"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>
