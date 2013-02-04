@@ -1,0 +1,154 @@
+package com.mmxlabs.models.lng.analytics.navigator;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.databinding.EMFObservables;
+
+import com.mmxlabs.models.lng.analytics.AnalyticsModel;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.impl.MMXAdapterImpl;
+import com.mmxlabs.scenario.service.IScenarioService;
+import com.mmxlabs.scenario.service.impl.ScenarioServiceListener;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
+import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
+
+/**
+ * An implementation of {@link ScenarioServiceListener} which maintains {@link ScenarioFragment} links to all {@link ShippingCostPlan}s
+ * 
+ * @author Simon Goodall
+ * 
+ */
+public class ShippingCostPlanSSListener extends ScenarioServiceListener {
+
+	private final Map<ScenarioInstance, ShippingCostPlanAdapter> adapterMap = new HashMap<ScenarioInstance, ShippingCostPlanAdapter>();
+
+	private class ShippingCostPlanAdapter extends MMXAdapterImpl {
+
+		private final EMFDataBindingContext dbc = new EMFDataBindingContext();
+		private final ObservablesManager manager = new ObservablesManager();
+
+		private final ScenarioInstance scenarioInstance;
+		private AnalyticsModel analyticsModel;
+		private final Map<ShippingCostPlan, ScenarioFragment> planToFragmentMap = new HashMap<ShippingCostPlan, ScenarioFragment>();
+
+		public ShippingCostPlanAdapter(final ScenarioInstance scenarioInstance) {
+			this.scenarioInstance = scenarioInstance;
+			processScenario();
+
+		}
+
+		/**
+		 * Process initial scenario state and create fragments.
+		 */
+		private void processScenario() {
+			final MMXRootObject rootObject = (MMXRootObject) scenarioInstance.getInstance();
+			analyticsModel = rootObject.getSubModel(AnalyticsModel.class);
+
+			for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
+				createFragment(plan);
+			}
+
+			analyticsModel.eAdapters().add(ShippingCostPlanAdapter.this);
+
+		}
+
+		public void dispose() {
+
+			manager.dispose();
+			analyticsModel.eAdapters().remove(ShippingCostPlanAdapter.this);
+
+			for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
+				removeFragment(plan);
+			}
+
+			// Safety check - previous step should have removed all the fragments, but just in case, remove anything left over.
+			for (final ShippingCostPlan plan : new HashSet<ShippingCostPlan>(planToFragmentMap.keySet())) {
+				removeFragment(plan);
+			}
+		}
+
+		@Override
+		protected void missedNotifications(final List<Notification> missed) {
+			super.missedNotifications(missed);
+			for (final Notification n : new ArrayList<Notification>(missed)) {
+				if (n != null) {
+					reallyNotifyChanged(n);
+				}
+			}
+		}
+
+		@Override
+		public void reallyNotifyChanged(final Notification notification) {
+
+			// Basic filter
+			if (notification.isTouch() || notification.getEventType() == Notification.REMOVING_ADAPTER) {
+				return;
+			}
+
+			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_ShippingCostPlans()) {
+				if (notification.getEventType() == Notification.ADD) {
+					final ShippingCostPlan plan = (ShippingCostPlan) notification.getNewValue();
+					createFragment(plan);
+				} else if (notification.getEventType() == Notification.REMOVE) {
+					final ShippingCostPlan plan = (ShippingCostPlan) notification.getOldValue();
+					removeFragment(plan);
+				}
+				// TODO: Handle ADD_/REMOVE_MANY ?
+			}
+		}
+
+		private void removeFragment(final ShippingCostPlan plan) {
+			final ScenarioFragment fragment = planToFragmentMap.remove(plan);
+			scenarioInstance.getFragments().remove(fragment);
+		}
+
+		private void createFragment(final ShippingCostPlan plan) {
+			final ScenarioFragment fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
+			fragment.setFragment(plan);
+			planToFragmentMap.put(plan, fragment);
+			scenarioInstance.getFragments().add(fragment);
+
+			// Create a databinding to keep names in sync
+			final IObservableValue fragmentObserver = EMFObservables.observeValue(fragment, ScenarioServicePackage.eINSTANCE.getScenarioFragment_Name());
+			final IObservableValue planObserver = EMFObservables.observeValue(plan, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+			dbc.bindValue(fragmentObserver, planObserver);
+
+			// Add to manager to handle clean up
+			manager.addObservable(fragmentObserver);
+			manager.addObservable(planObserver);
+		}
+	}
+
+	@Override
+	public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+		final ShippingCostPlanAdapter adapter = new ShippingCostPlanAdapter(scenarioInstance);
+		adapterMap.put(scenarioInstance, adapter);
+	}
+
+	@Override
+	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
+
+		final ShippingCostPlanAdapter adapter = adapterMap.remove(scenarioInstance);
+		adapter.dispose();
+	}
+
+	public void dispose() {
+		for (final ShippingCostPlanAdapter adapter : adapterMap.values()) {
+			adapter.dispose();
+		}
+		adapterMap.clear();
+	}
+}
