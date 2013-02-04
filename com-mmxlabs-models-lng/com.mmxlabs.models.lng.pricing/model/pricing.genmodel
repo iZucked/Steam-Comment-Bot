@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<genmodel:GenModel xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.pricing/src"
-    modelPluginID="com.mmxlabs.models.lng.pricing" templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.pricing/src" modelPluginID="com.mmxlabs.models.lng.pricing"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
     dynamicTemplates="true" modelName="Pricing" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="6.0" copyrightFields="false" usedGenPackages="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
   <foreignModel>pricing.ecore</foreignModel>
@@ -21,6 +20,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/routeCosts"/>
       <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/portCosts"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/cooldownPrices"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/desPurchaseSpotMarket"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/desSalesSpotMarket"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/fobPurchasesSpotMarket"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//PricingModel/fobSalesSpotMarket"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//DataIndex">
       <genTypeParameters ecoreTypeParameter="pricing.ecore#//DataIndex/Value"/>
@@ -41,6 +44,12 @@
         <genParameters ecoreParameter="pricing.ecore#//Index/getValueForMonth/date"/>
       </genOperations>
       <genOperations ecoreOperation="pricing.ecore#//Index/getDates"/>
+      <genOperations ecoreOperation="pricing.ecore#//Index/getForwardValueForMonth">
+        <genParameters ecoreParameter="pricing.ecore#//Index/getForwardValueForMonth/date"/>
+      </genOperations>
+      <genOperations ecoreOperation="pricing.ecore#//Index/getBackwardsValueForMonth">
+        <genParameters ecoreParameter="pricing.ecore#//Index/getBackwardsValueForMonth/date"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//FleetCostModel">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//FleetCostModel/charterCosts"/>
@@ -57,19 +66,22 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CharterCostModel/charterInPrice"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CharterCostModel/charterOutPrice"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute pricing.ecore#//CharterCostModel/spotCharterCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//CharterCostModel/minCharterOutDuration"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//BaseFuelCost">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//BaseFuelCost/fuel"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute pricing.ecore#//BaseFuelCost/price"/>
     </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//SpotMarketGroup">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarketGroup/availability"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SpotMarketGroup/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarketGroup/markets"/>
+    </genClasses>
     <genClasses ecoreClass="pricing.ecore#//SpotMarket">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarket/availability"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarket/ports"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SpotMarket/minQuantity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SpotMarket/maxQuantity"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarket/notionalPort"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SpotMarket/type"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//SpotMarket/contract"/>
+      <genOperations ecoreOperation="pricing.ecore#//SpotMarket/getContract"/>
     </genClasses>
     <genClasses ecoreClass="pricing.ecore#//PortCost">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//PortCost/ports"/>
@@ -87,6 +99,28 @@
     <genClasses ecoreClass="pricing.ecore#//CooldownPrice">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CooldownPrice/ports"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//CooldownPrice/index"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//DESPurchaseMarket">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//DESPurchaseMarket/cv"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//DESPurchaseMarket/destinationPorts"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//DESPurchaseMarket/contract"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//DESSalesMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//DESSalesMarket/notionalPort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//DESSalesMarket/contract"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//FOBPurchasesMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//FOBPurchasesMarket/notionalPort"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//FOBPurchasesMarket/cv"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//FOBPurchasesMarket/contract"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//FOBSalesMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//FOBSalesMarket/loadPort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference pricing.ecore#//FOBSalesMarket/contract"/>
+    </genClasses>
+    <genClasses ecoreClass="pricing.ecore#//SpotAvailability">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pricing.ecore#//SpotAvailability/constant"/>
+      <genFeatures children="true" createChild="true" propertyDescription="" ecoreFeature="ecore:EReference pricing.ecore#//SpotAvailability/curve"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
