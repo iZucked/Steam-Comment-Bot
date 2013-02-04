@@ -332,6 +332,9 @@
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.Folder">
                   </instanceof>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioFragment">
+                  </instanceof>
                </or>
             </iterate>
          </activeWhen>
@@ -344,6 +347,9 @@
                   </instanceof>
                   <instanceof
                         value="com.mmxlabs.scenario.service.model.Folder">
+                  </instanceof>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioFragment">
                   </instanceof>
                </or>
             </iterate>
@@ -397,6 +403,30 @@
       <handler
             class="com.mmxlabs.scenario.service.ui.commands.DiffEditScenarioCommandHandler"
             commandId="com.mmxlabs.scenario.service.ui.diffedit">
+      </handler>
+      <handler
+            class="com.mmxlabs.scenario.service.ui.commands.DeleteScenarioFragmentCommandHandler"
+            commandId="org.eclipse.ui.edit.delete">
+         <activeWhen>
+            <iterate
+                  ifEmpty="false">
+               <and>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioFragment">
+                  </instanceof>
+               </and>
+            </iterate>
+         </activeWhen>
+         <enabledWhen>
+            <iterate
+                  ifEmpty="false">
+               <and>
+                  <instanceof
+                        value="com.mmxlabs.scenario.service.model.ScenarioFragment">
+                  </instanceof>
+               </and>
+            </iterate>
+         </enabledWhen>
       </handler>
    </extension>
    <extension

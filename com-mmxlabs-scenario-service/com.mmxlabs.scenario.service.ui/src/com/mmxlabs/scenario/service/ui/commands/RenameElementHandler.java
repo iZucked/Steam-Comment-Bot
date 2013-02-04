@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
@@ -54,6 +55,12 @@ public class RenameElementHandler extends AbstractHandler {
 					final String newName = getNewName(folder.getName());
 					if (newName != null) {
 						folder.setName(newName);
+					}
+				} else if (element instanceof ScenarioFragment) {
+					ScenarioFragment scenarioFragment = (ScenarioFragment) element;
+					final String newName = getNewName(scenarioFragment.getName());
+					if (newName != null) {
+						scenarioFragment.setName(newName);
 					}
 				}
 			}
