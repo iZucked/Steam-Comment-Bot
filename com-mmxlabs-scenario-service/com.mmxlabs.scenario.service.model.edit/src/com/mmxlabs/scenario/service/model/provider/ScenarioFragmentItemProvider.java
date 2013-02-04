@@ -4,17 +4,13 @@
  */
 package com.mmxlabs.scenario.service.model.provider;
 
-import com.mmxlabs.scenario.service.model.ScenarioFragment;
-import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
-
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -25,6 +21,9 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
+import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
 
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioFragment} object.
@@ -103,10 +102,18 @@ public class ScenarioFragmentItemProvider extends ItemProviderAdapter implements
 	 * This returns ScenarioFragment.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
+	 * @generated NOT
 	 */
 	@Override
 	public Object getImage(Object object) {
+		
+		// Delegate to the fragment's item provider to get an image if possible.
+		final EObject fragment = ((ScenarioFragment) object).getFragment();
+		final IItemLabelProvider lp = (IItemLabelProvider) ((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory().adapt(fragment, IItemLabelProvider.class);
+		if (lp != null) {
+			return lp.getImage(fragment);
+		}
+		
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/ScenarioFragment"));
 	}
 
