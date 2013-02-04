@@ -8,10 +8,17 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.core.databinding.ObservablesManager;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.list.ObservableList;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.Command;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.databinding.EMFProperties;
+import org.eclipse.emf.databinding.edit.EMFEditProperties;
+import org.eclipse.emf.databinding.edit.IEMFEditListProperty;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
@@ -23,12 +30,12 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.ToolBarManager;
-import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ObservableMapCellLabelProvider;
 import org.eclipse.jface.viewers.IOpenListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -57,8 +64,8 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.transformer.IShippingCostTransformer;
 import com.mmxlabs.models.lng.analytics.transformer.impl.ShippingCostTransformer;
 import com.mmxlabs.models.lng.analytics.ui.properties.UnitCostLinePropertySource;
+import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.mmxcore.NamedObject;
 import com.mmxlabs.models.ui.Activator;
 import com.mmxlabs.models.ui.editorpart.ScenarioInstanceView;
 import com.mmxlabs.models.ui.editors.dialogs.DetailCompositeDialog;
@@ -86,16 +93,32 @@ public class ShippingCostsView extends ScenarioInstanceView {
 
 	private Action deleteAction;
 
+	private EMFDataBindingContext dbc;
+	private ObservablesManager manager;
+
 	@Override
 	protected void displayScenarioInstance(final ScenarioInstance instance) {
 		if (instance != getScenarioInstance()) {
 			disposeContents();
 			getSite().setSelectionProvider(null);
 			super.displayScenarioInstance(instance);
+
+			manager = new ObservablesManager();
+			dbc = new EMFDataBindingContext();
+
 			if (instance != null) {
-				createContents();
+				manager.runAndCollect(new Runnable() {
+
+					@Override
+					public void run() {
+						createContents();
+					}
+				});
 			} else {
-				selectionViewer.setInput(new Object[0]);
+				final IObservableList list = new ObservableList(Collections.emptyList(), ShippingCostPlan.class) {
+
+				};
+				selectionViewer.setInput(list);
 			}
 		}
 		if (addAction != null) {
@@ -107,6 +130,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 	}
 
 	private void disposeContents() {
+
 		if (rows != null) {
 			final Control control = rows.getControl();
 			// This can be null if the pane has already been disposed.
@@ -116,10 +140,24 @@ public class ShippingCostsView extends ScenarioInstanceView {
 			rows.dispose();
 			rows = null;
 		}
+		if (manager != null) {
+			manager.dispose();
+		}
+		if (dbc != null) {
+			dbc.dispose();
+		}
 	}
 
 	private void createContents() {
-		selectionViewer.setInput(getRootObject().getSubModel(AnalyticsModel.class).getShippingCostPlans());
+		final IEMFEditListProperty prop = EMFEditProperties.list(getEditingDomain(), AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS);
+		// TODO Auto-generated method stub
+		final IObservableList modelObserver = prop.observe(getRootObject().getSubModel(AnalyticsModel.class));
+		selectionViewer.setInput(modelObserver);
+
+		// IViewerValueProperty targetObserver = ViewerProperties.input();
+		// dbc.bindValue(targetObserver.observe(selectionViewer), modelObserver);
+
+		// selectionViewer.setInput(getRootObject().getSubModel(AnalyticsModel.class).getShippingCostPlans());
 
 		rows = new ShippingCostRowViewerPane(getSite().getPage(), this, this, this.getViewSite().getActionBars());
 		// rows.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
@@ -169,14 +207,12 @@ public class ShippingCostsView extends ScenarioInstanceView {
 
 		selectionViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		selectionViewer.setLabelProvider(new LabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ((NamedObject) element).getName();
-			}
-		});
+		final ObservableListContentProvider contentProvider = new ObservableListContentProvider();
+		selectionViewer.setContentProvider(contentProvider);
 
-		selectionViewer.setContentProvider(new ArrayContentProvider());
+		// Bind the label provider to the name attribute
+		selectionViewer.setLabelProvider(new ObservableMapCellLabelProvider(EMFProperties.value(MMXCorePackage.eINSTANCE.getNamedObject_Name()).observeDetail(contentProvider.getKnownElements())));
+
 		selectionViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
@@ -264,7 +300,6 @@ public class ShippingCostsView extends ScenarioInstanceView {
 	public void dispose() {
 		disposeContents();
 		getSite().setSelectionProvider(null);
-
 		super.dispose();
 	}
 
