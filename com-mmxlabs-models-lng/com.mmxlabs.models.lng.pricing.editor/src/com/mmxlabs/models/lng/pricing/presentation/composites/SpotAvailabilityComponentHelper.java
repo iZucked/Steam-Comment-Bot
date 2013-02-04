@@ -80,6 +80,6 @@ public class SpotAvailabilityComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_curveEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.SPOT_AVAILABILITY__CURVE));
-		detailComposite.addInlineEditor(new CurveInlineEditor(PricingPackage.Literals.SPOT_AVAILABILITY__CURVE, Integer.class));
+		detailComposite.addInlineEditor(new CurveInlineEditor(PricingPackage.Literals.SPOT_AVAILABILITY__CURVE));
 	}
 }

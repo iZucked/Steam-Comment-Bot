@@ -8,8 +8,11 @@ import java.util.Date;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.RemoveCommand;
 import org.eclipse.emf.edit.command.SetCommand;
@@ -64,7 +67,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	Index<?> index = null;
 	EObject originalInput = null;
 	final Repacker repacker = new Repacker();
-	final Class<?> clazz;
+	final EClassifier indexRawType;
 	EStructuralFeature indexPointsFeature = PricingPackage.Literals.DATA_INDEX__POINTS;
 	
 	// we need to override the layout set by the default display composite
@@ -78,11 +81,10 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 	 * @param feature
 	 * @param clazz
 	 */
-	public CurveInlineEditor(EStructuralFeature feature, Class<?> clazz) {
+	public CurveInlineEditor(EStructuralFeature feature) {
 		super(feature);
-		// TODO: infer the class from the EMF feature object, whose etype should be a parameterised index
-		// EClassifier etype = feature.getEType(); 
-		this.clazz = clazz;
+		// infer the class from the EMF feature object, whose etype should be a parameterised DataIndex
+		indexRawType = feature.getEGenericType().getETypeArguments().get(0).getERawType();
 	}
 	
 	public IStructuredContentProvider createContentProvider() {
@@ -209,7 +211,8 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 			@Override
 			protected CellEditor getCellEditor(Object element) {
 				final FormattedTextCellEditor ed = new FormattedTextCellEditor(table);
-				if (clazz.equals(Integer.class)) {
+				
+				if (indexRawType.equals(EcorePackage.Literals.EINTEGER_OBJECT) || indexRawType.equals(EcorePackage.Literals.EINT)) {
 					ed.setFormatter(new IntegerFormatter());
 				}
 				else {
@@ -283,7 +286,7 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILa
 					if (field instanceof DataIndex) {
 						DataIndex<?> index = (DataIndex<?>) field;
 						final IndexPoint<?> newPoint;
-						if (clazz.equals(Integer.class)) {
+						if (indexRawType.equals(EcorePackage.Literals.EINTEGER_OBJECT) || indexRawType.equals(EcorePackage.Literals.EINT)) {
 							IndexPoint<Integer> point = PricingFactory.eINSTANCE.createIndexPoint();
 							point.setValue(0);
 							newPoint = point;
