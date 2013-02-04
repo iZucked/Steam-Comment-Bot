@@ -32,9 +32,8 @@ import com.mmxlabs.scenario.service.ui.editing.ScenarioServiceEditorInput;
  * 
  */
 public class OpenScenarioUtils {
-	
-	private static final Logger log = LoggerFactory.getLogger(OpenScenarioUtils.class);
 
+	private static final Logger log = LoggerFactory.getLogger(OpenScenarioUtils.class);
 
 	public static void openScenarioInstance(final IWorkbenchPage activePage, final ScenarioInstance model) throws PartInitException {
 
@@ -44,11 +43,27 @@ public class OpenScenarioUtils {
 	}
 
 	public static void openEditor(final IScenarioServiceEditorInput editorInput) throws PartInitException {
-
 		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		openAndReturnEditorPart(activePage, editorInput);
+	}
+
+	/**
+	 * @since 3.1
+	 */
+	public static IEditorPart openAndReturnEditorPart(final IWorkbenchPage activePage, final ScenarioInstance model) throws PartInitException {
+		final ScenarioServiceEditorInput editorInput = new ScenarioServiceEditorInput(model);
+		return openAndReturnEditorPart(activePage, editorInput);
+	}
+
+	/**
+	 * @since 3.1
+	 */
+	public static IEditorPart openAndReturnEditorPart(final IWorkbenchPage activePage, final IScenarioServiceEditorInput editorInput) throws PartInitException {
+
 		final IEditorPart editorPart = activePage.findEditor(editorInput);
 		if (editorPart != null) {
 			activePage.activate(editorPart);
+			return editorPart;
 		} else {
 			final IEditorRegistry registry = PlatformUI.getWorkbench().getEditorRegistry();
 			final String contentTypeString = editorInput.getContentType();
@@ -60,11 +75,13 @@ public class OpenScenarioUtils {
 
 				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 				try {
+					final IEditorPart editorRef[] = new IEditorPart[1];
 					dialog.run(false, false, new IRunnableWithProgress() {
 						public void run(final IProgressMonitor monitor) {
 							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
 							try {
-								activePage.openEditor(editorInput, descriptor.getId());
+								final IEditorPart editorPart = activePage.openEditor(editorInput, descriptor.getId());
+								editorRef[0] = editorPart;
 								monitor.worked(1);
 							} catch (final PartInitException e) {
 								log.error(e.getMessage(), e);
@@ -73,6 +90,7 @@ public class OpenScenarioUtils {
 							}
 						}
 					});
+					return editorRef[0];
 				} catch (final InvocationTargetException e) {
 					log.error(e.getMessage(), e);
 				} catch (final InterruptedException e) {
@@ -80,6 +98,7 @@ public class OpenScenarioUtils {
 				}
 
 			}
+			return null;
 		}
 	}
 }
