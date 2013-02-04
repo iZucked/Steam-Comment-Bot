@@ -17,4 +17,13 @@
           restorable="true">
     </view>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.analytics.transformer.ui.jointModelEditor1"
+          implementation="com.mmxlabs.models.lng.analytics.transformer.ui.editors.ShippingCostPlanModelEditorContribution"
+          priority="0"
+          subModelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel">
+    </jointModelEditor>
+ </extension>
 </plugin>
