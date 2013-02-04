@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 
@@ -49,12 +50,13 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
+import com.mmxlabs.models.ui.editors.ILabelLayoutDataProvidingEditor;
 import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
 
 /**
  * @since 2.0
  */
-public class CurveInlineEditor extends BasicAttributeInlineEditor {
+public class CurveInlineEditor extends BasicAttributeInlineEditor implements ILabelLayoutDataProvidingEditor {
 
 	Control control;
 	Table table;
@@ -368,6 +370,13 @@ public class CurveInlineEditor extends BasicAttributeInlineEditor {
 		control.setLayoutData(layoutData);
 		originalInput = input;
 		super.display(location, context, input, range);
+	}
+
+	@Override
+	public Object createLabelLayoutData(MMXRootObject root, EObject value,
+			Control control, Label label) {
+		// TODO Auto-generated method stub
+		return new GridData(SWT.RIGHT, SWT.TOP, false, false);
 	}
 
 }
