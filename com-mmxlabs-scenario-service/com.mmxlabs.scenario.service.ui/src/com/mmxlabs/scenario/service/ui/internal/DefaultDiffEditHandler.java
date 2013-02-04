@@ -60,6 +60,7 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 		cleanUpOnDispose = false;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void onEditorApply() {
 
@@ -88,8 +89,8 @@ public class DefaultDiffEditHandler implements IDiffEditHandler {
 				}
 				for (final EStructuralFeature feature : left.eClass().getEAllStructuralFeatures()) {
 					if (feature.isMany() && left.eIsSet(feature)) {
-						// Passing in lists breaks undo()/redo() as the list contents change
-						cmd.append(SetCommand.create(editingDomain, right, feature, new ArrayList((List<?>) left.eGet(feature))));
+						// Passing in raw lists breaks undo()/redo() as the list contents change - so take a copy instead
+						cmd.append(SetCommand.create(editingDomain, right, feature, new ArrayList((List)left.eGet(feature))));
 					} else {
 						cmd.append(SetCommand.create(editingDomain, right, feature, left.eGet(feature)));
 					}
