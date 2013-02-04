@@ -42,7 +42,6 @@ public class OpenScenarioCommandHandler extends AbstractHandler {
 			for (final Iterator<?> iterator = strucSelection.iterator(); iterator.hasNext();) {
 				final Object element = iterator.next();
 				if (element instanceof ScenarioInstance) {
-
 					openEditor(activePage, element);
 				} else if (element instanceof ScenarioFragment) {
 					final ScenarioFragment scenarioFragment = (ScenarioFragment) element;
