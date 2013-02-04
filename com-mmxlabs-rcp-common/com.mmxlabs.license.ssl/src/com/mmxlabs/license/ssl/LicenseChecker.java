@@ -15,7 +15,6 @@ import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.Properties;
 
 import com.mmxlabs.license.ssl.internal.Activator;
 
@@ -100,6 +99,7 @@ public final class LicenseChecker {
 		return null;
 	}
 
+	@SuppressWarnings("resource")
 	private static Certificate getEclipseHomeLicense() throws CertificateException, FileNotFoundException {
 
 		InputStream inStream = null;
