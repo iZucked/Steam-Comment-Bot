@@ -18,6 +18,7 @@ import com.mmxlabs.scenario.service.ScenarioServiceRegistry;
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
 import com.mmxlabs.scenario.service.model.ScenarioService;
@@ -122,6 +123,8 @@ public class ScenarioServiceContentProvider extends AdapterFactoryContentProvide
 			} else if (e instanceof IScenarioService || e instanceof ScenarioService) {
 				filtered = !isShowScenarioServices();
 			} else if (e instanceof ScenarioServiceRegistry) {
+				filtered = false;
+			} else if (e instanceof ScenarioFragment) {
 				filtered = false;
 			} else {
 				filtered = true;

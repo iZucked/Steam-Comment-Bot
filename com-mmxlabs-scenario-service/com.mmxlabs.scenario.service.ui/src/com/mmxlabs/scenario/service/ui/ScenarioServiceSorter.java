@@ -11,12 +11,13 @@ import org.eclipse.jface.viewers.ViewerSorter;
 
 import com.mmxlabs.scenario.service.model.Container;
 import com.mmxlabs.scenario.service.model.Folder;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 public class ScenarioServiceSorter extends ViewerSorter {
 
 	private enum Types {
-		CONTAINER, FOLDER, SCENARIO, UNKNOWN
+		FRAGMENT, CONTAINER, FOLDER, SCENARIO, UNKNOWN
 	}
 
 	public ScenarioServiceSorter() {
@@ -37,7 +38,6 @@ public class ScenarioServiceSorter extends ViewerSorter {
 				final Container c1 = (Container) e1;
 				final Container c2 = (Container) e2;
 
-				// todo need nul cjecks
 				if (c1.getName() == null) {
 					return -1;
 				} else if (c2.getName() == null) {
@@ -61,6 +61,8 @@ public class ScenarioServiceSorter extends ViewerSorter {
 			type = Types.FOLDER;
 		} else if (obj instanceof Container) {
 			type = Types.CONTAINER;
+		} else if (obj instanceof ScenarioFragment) {
+			type = Types.FRAGMENT;
 		}
 		return type;
 	}
