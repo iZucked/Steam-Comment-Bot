@@ -96,9 +96,9 @@ public class SpotAvailabilityItemProvider
 	/**
 	 * This adds a property descriptor for the Curve feature.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
-	 * @since 3.0
 	 */
 	protected void addCurvePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
