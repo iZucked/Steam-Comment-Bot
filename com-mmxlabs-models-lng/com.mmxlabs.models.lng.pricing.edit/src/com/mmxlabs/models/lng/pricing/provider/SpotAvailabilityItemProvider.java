@@ -66,6 +66,7 @@ public class SpotAvailabilityItemProvider
 			super.getPropertyDescriptors(object);
 
 			addConstantPropertyDescriptor(object);
+			addCurvePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -88,6 +89,29 @@ public class SpotAvailabilityItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Curve feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @since 3.0
+	 */
+	protected void addCurvePropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_SpotAvailability_curve_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_SpotAvailability_curve_feature", "_UI_SpotAvailability_type"),
+				 PricingPackage.Literals.SPOT_AVAILABILITY__CURVE,
+				 true,
+				 false,
+				 false,
+				 null,
 				 null,
 				 null));
 	}

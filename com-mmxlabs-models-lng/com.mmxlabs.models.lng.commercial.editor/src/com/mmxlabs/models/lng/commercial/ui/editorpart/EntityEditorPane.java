@@ -45,7 +45,7 @@ public class EntityEditorPane extends ScenarioTableViewerPane {
 	class ShippingEntityManipulator implements ICellRenderer, ICellManipulator {
 		@Override
 		public void setValue(final Object object, final Object value) {
-			if (object instanceof LegalEntity) {
+			if (object instanceof LegalEntity && (Integer) value == 0) {
 				final LegalEntity settings = (LegalEntity) object;
 				if (settings.eContainer() instanceof CommercialModel) {
 					final CommercialModel cm = (CommercialModel) settings.eContainer();
