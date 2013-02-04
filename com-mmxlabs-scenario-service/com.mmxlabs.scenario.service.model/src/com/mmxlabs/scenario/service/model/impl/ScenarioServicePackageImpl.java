@@ -7,6 +7,7 @@ package com.mmxlabs.scenario.service.model.impl;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.Folder;
 import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioModel;
@@ -79,6 +80,13 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 	 * @generated
 	 */
 	private EClass scenarioLockEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass scenarioFragmentEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -360,6 +368,16 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenarioInstance_Fragments() {
+		return (EReference) scenarioInstanceEClass.getEStructuralFeatures().get(12);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -495,6 +513,56 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getScenarioFragment() {
+		return scenarioFragmentEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenarioFragment_ScenarioInstance() {
+		return (EReference) scenarioFragmentEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioFragment_Name() {
+		return (EAttribute) scenarioFragmentEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getScenarioFragment_Fragment() {
+		return (EReference) scenarioFragmentEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getScenarioFragment_ContentType() {
+		return (EAttribute) scenarioFragmentEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -561,6 +629,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__VALIDATION_STATUS_CODE);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__SCENARIO_VERSION);
 		createEAttribute(scenarioInstanceEClass, SCENARIO_INSTANCE__VERSION_CONTEXT);
+		createEReference(scenarioInstanceEClass, SCENARIO_INSTANCE__FRAGMENTS);
 
 		metadataEClass = createEClass(METADATA);
 		createEAttribute(metadataEClass, METADATA__CREATOR);
@@ -575,6 +644,12 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		createEAttribute(scenarioLockEClass, SCENARIO_LOCK__CLAIMED);
 		createEAttribute(scenarioLockEClass, SCENARIO_LOCK__KEY);
 		createEReference(scenarioLockEClass, SCENARIO_LOCK__INSTANCE);
+
+		scenarioFragmentEClass = createEClass(SCENARIO_FRAGMENT);
+		createEReference(scenarioFragmentEClass, SCENARIO_FRAGMENT__SCENARIO_INSTANCE);
+		createEAttribute(scenarioFragmentEClass, SCENARIO_FRAGMENT__NAME);
+		createEReference(scenarioFragmentEClass, SCENARIO_FRAGMENT__FRAGMENT);
+		createEAttribute(scenarioFragmentEClass, SCENARIO_FRAGMENT__CONTENT_TYPE);
 
 		// Create data types
 		iScenarioServiceEDataType = createEDataType(ISCENARIO_SERVICE);
@@ -676,6 +751,8 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScenarioInstance_VersionContext(), ecorePackage.getEString(), "versionContext", null, 0, 1, ScenarioInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE,
 				!IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioInstance_Fragments(), this.getScenarioFragment(), this.getScenarioFragment_ScenarioInstance(), "fragments", null, 0, -1, ScenarioInstance.class, IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(scenarioInstanceEClass, ecorePackage.getEInt(), "getContainedInstanceCount", 1, 1, IS_UNIQUE, IS_ORDERED);
 
@@ -713,6 +790,16 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 		addEOperation(scenarioLockEClass, null, "release", 1, 1, IS_UNIQUE, IS_ORDERED);
 
 		addEOperation(scenarioLockEClass, null, "init", 1, 1, IS_UNIQUE, IS_ORDERED);
+
+		initEClass(scenarioFragmentEClass, ScenarioFragment.class, "ScenarioFragment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getScenarioFragment_ScenarioInstance(), this.getScenarioInstance(), this.getScenarioInstance_Fragments(), "scenarioInstance", null, 0, 1, ScenarioFragment.class, IS_TRANSIENT,
+				!IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioFragment_Name(), ecorePackage.getEString(), "name", null, 0, 1, ScenarioFragment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID,
+				IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScenarioFragment_Fragment(), ecorePackage.getEObject(), null, "fragment", null, 0, 1, ScenarioFragment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getScenarioFragment_ContentType(), ecorePackage.getEString(), "contentType", null, 0, 1, ScenarioFragment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE,
+				!IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize data types
 		initEDataType(iScenarioServiceEDataType, IScenarioService.class, "IScenarioService", !IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS);

@@ -212,6 +212,31 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.scenario.service.model.ScenarioFragment} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ScenarioFragmentItemProvider scenarioFragmentItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.scenario.service.model.ScenarioFragment}.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createScenarioFragmentAdapter() {
+		if (scenarioFragmentItemProvider == null) {
+			scenarioFragmentItemProvider = new ScenarioFragmentItemProvider(this);
+		}
+
+		return scenarioFragmentItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -322,6 +347,8 @@ public class ScenarioServiceItemProviderAdapterFactory extends ScenarioServiceAd
 			metadataItemProvider.dispose();
 		if (scenarioLockItemProvider != null)
 			scenarioLockItemProvider.dispose();
+		if (scenarioFragmentItemProvider != null)
+			scenarioFragmentItemProvider.dispose();
 	}
 
 }

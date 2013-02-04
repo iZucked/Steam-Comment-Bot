@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Scenario Instance</b></em>'.
+ * @noimplement This interface is not intended to be implemented by clients.
  * <!-- end-user-doc -->
  *
  * <p>
@@ -29,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getValidationStatusCode <em>Validation Status Code</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getScenarioVersion <em>Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getVersionContext <em>Version Context</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}</li>
  * </ul>
  * </p>
  *
@@ -254,6 +256,25 @@ public interface ScenarioInstance extends Container {
 	 * @generated
 	 */
 	void setVersionContext(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Fragments</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.scenario.service.model.ScenarioFragment}.
+	 * It is bidirectional and its opposite is '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getScenarioInstance <em>Scenario Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Fragments</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Fragments</em>' containment reference list.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage#getScenarioInstance_Fragments()
+	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getScenarioInstance
+	 * @model opposite="scenarioInstance" containment="true" transient="true"
+	 * @generated
+	 */
+	EList<ScenarioFragment> getFragments();
 
 	/**
 	 * Returns the value of the '<em><b>Dirty</b></em>' attribute.

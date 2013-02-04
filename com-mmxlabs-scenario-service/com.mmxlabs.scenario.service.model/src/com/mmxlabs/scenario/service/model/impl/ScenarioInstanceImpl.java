@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import com.mmxlabs.scenario.service.model.Metadata;
+import com.mmxlabs.scenario.service.model.ScenarioFragment;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 import com.mmxlabs.scenario.service.model.ScenarioServiceFactory;
@@ -44,6 +45,7 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getValidationStatusCode <em>Validation Status Code</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getScenarioVersion <em>Scenario Version</em>}</li>
  *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getVersionContext <em>Version Context</em>}</li>
+ *   <li>{@link com.mmxlabs.scenario.service.model.impl.ScenarioInstanceImpl#getFragments <em>Fragments</em>}</li>
  * </ul>
  * </p>
  *
@@ -233,6 +235,17 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	 * @ordered
 	 */
 	protected String versionContext = VERSION_CONTEXT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getFragments() <em>Fragments</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @see #getFragments()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<ScenarioFragment> fragments;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -472,6 +485,20 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EList<ScenarioFragment> getFragments() {
+		if (fragments == null) {
+			fragments = new EObjectContainmentWithInverseEList<ScenarioFragment>(ScenarioFragment.class, this, ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS,
+					ScenarioServicePackage.SCENARIO_FRAGMENT__SCENARIO_INSTANCE);
+		}
+		return fragments;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -566,6 +593,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		switch (featureID) {
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
 			return ((InternalEList<InternalEObject>) (InternalEList<?>) getLocks()).basicAdd(otherEnd, msgs);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getFragments()).basicAdd(otherEnd, msgs);
 		}
 		return super.eInverseAdd(otherEnd, featureID, msgs);
 	}
@@ -582,6 +611,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return basicSetMetadata(null, msgs);
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
 			return ((InternalEList<?>) getLocks()).basicRemove(otherEnd, msgs);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			return ((InternalEList<?>) getFragments()).basicRemove(otherEnd, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -620,6 +651,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return getScenarioVersion();
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 			return getVersionContext();
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			return getFragments();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -672,6 +705,10 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 			setVersionContext((String) newValue);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			getFragments().clear();
+			getFragments().addAll((Collection<? extends ScenarioFragment>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -720,6 +757,9 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 			setVersionContext(VERSION_CONTEXT_EDEFAULT);
 			return;
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			getFragments().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -756,6 +796,8 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 			return scenarioVersion != SCENARIO_VERSION_EDEFAULT;
 		case ScenarioServicePackage.SCENARIO_INSTANCE__VERSION_CONTEXT:
 			return VERSION_CONTEXT_EDEFAULT == null ? versionContext != null : !VERSION_CONTEXT_EDEFAULT.equals(versionContext);
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
+			return fragments != null && !fragments.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

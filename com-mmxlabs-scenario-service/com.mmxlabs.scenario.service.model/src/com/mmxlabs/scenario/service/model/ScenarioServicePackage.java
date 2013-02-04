@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
+ * @noimplement This interface is not intended to be implemented by clients.
  * <!-- end-user-doc -->
  * @see com.mmxlabs.scenario.service.model.ScenarioServiceFactory
  * @model kind="package"
@@ -471,13 +472,24 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_INSTANCE__VERSION_CONTEXT = CONTAINER_FEATURE_COUNT + 11;
 
 	/**
-	 * The number of structural features of the '<em>Scenario Instance</em>' class.
+	 * The feature id for the '<em><b>Fragments</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 12;
+	int SCENARIO_INSTANCE__FRAGMENTS = CONTAINER_FEATURE_COUNT + 12;
+
+	/**
+	 * The number of structural features of the '<em>Scenario Instance</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @Note: Compatibility filter created
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_INSTANCE_FEATURE_COUNT = CONTAINER_FEATURE_COUNT + 13;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.MetadataImpl <em>Metadata</em>}' class.
@@ -608,14 +620,76 @@ public interface ScenarioServicePackage extends EPackage {
 	int SCENARIO_LOCK_FEATURE_COUNT = 4;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl <em>Scenario Fragment</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl
+	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioFragment()
+	 * @generated
+	 */
+	int SCENARIO_FRAGMENT = 7;
+
+	/**
+	 * The feature id for the '<em><b>Scenario Instance</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FRAGMENT__SCENARIO_INSTANCE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FRAGMENT__NAME = 1;
+
+	/**
+	 * The feature id for the '<em><b>Fragment</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FRAGMENT__FRAGMENT = 2;
+
+	/**
+	 * The feature id for the '<em><b>Content Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FRAGMENT__CONTENT_TYPE = 3;
+
+	/**
+	 * The number of structural features of the '<em>Scenario Fragment</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SCENARIO_FRAGMENT_FEATURE_COUNT = 4;
+
+	/**
 	 * The meta object id for the '<em>IScenario Service</em>' data type.
 	 * <!-- begin-user-doc -->
+	 * @Note: Compatibility filter created
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.scenario.service.IScenarioService
 	 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getIScenarioService()
 	 * @generated
 	 */
-	int ISCENARIO_SERVICE = 7;
+	int ISCENARIO_SERVICE = 8;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioModel <em>Scenario Model</em>}'.
@@ -868,6 +942,18 @@ public interface ScenarioServicePackage extends EPackage {
 	EAttribute getScenarioInstance_VersionContext();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments <em>Fragments</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Fragments</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioInstance#getFragments()
+	 * @see #getScenarioInstance()
+	 * @generated
+	 */
+	EReference getScenarioInstance_Fragments();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioInstance#isDirty <em>Dirty</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1031,6 +1117,65 @@ public interface ScenarioServicePackage extends EPackage {
 	EReference getScenarioLock_Instance();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.scenario.service.model.ScenarioFragment <em>Scenario Fragment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Scenario Fragment</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment
+	 * @generated
+	 */
+	EClass getScenarioFragment();
+
+	/**
+	 * Returns the meta object for the container reference '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getScenarioInstance <em>Scenario Instance</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Scenario Instance</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getScenarioInstance()
+	 * @see #getScenarioFragment()
+	 * @generated
+	 */
+	EReference getScenarioFragment_ScenarioInstance();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Name</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getName()
+	 * @see #getScenarioFragment()
+	 * @generated
+	 */
+	EAttribute getScenarioFragment_Name();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getFragment <em>Fragment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Fragment</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getFragment()
+	 * @see #getScenarioFragment()
+	 * @generated
+	 */
+	EReference getScenarioFragment_Fragment();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.scenario.service.model.ScenarioFragment#getContentType <em>Content Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Content Type</em>'.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment#getContentType()
+	 * @see #getScenarioFragment()
+	 * @generated
+	 */
+	EAttribute getScenarioFragment_ContentType();
+
+	/**
 	 * Returns the meta object for data type '{@link com.mmxlabs.scenario.service.IScenarioService <em>IScenario Service</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1059,6 +1204,7 @@ public interface ScenarioServicePackage extends EPackage {
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>
+	 * @noimplement This interface is not intended to be implemented by clients.
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -1260,6 +1406,15 @@ public interface ScenarioServicePackage extends EPackage {
 		EAttribute SCENARIO_INSTANCE__VERSION_CONTEXT = eINSTANCE.getScenarioInstance_VersionContext();
 
 		/**
+		 * The meta object literal for the '<em><b>Fragments</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.1
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO_INSTANCE__FRAGMENTS = eINSTANCE.getScenarioInstance_Fragments();
+
+		/**
 		 * The meta object literal for the '<em><b>Dirty</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -1382,6 +1537,53 @@ public interface ScenarioServicePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCENARIO_LOCK__INSTANCE = eINSTANCE.getScenarioLock_Instance();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl <em>Scenario Fragment</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 3.1
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioFragmentImpl
+		 * @see com.mmxlabs.scenario.service.model.impl.ScenarioServicePackageImpl#getScenarioFragment()
+		 * @generated
+		 */
+		EClass SCENARIO_FRAGMENT = eINSTANCE.getScenarioFragment();
+
+		/**
+		 * The meta object literal for the '<em><b>Scenario Instance</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.1
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO_FRAGMENT__SCENARIO_INSTANCE = eINSTANCE.getScenarioFragment_ScenarioInstance();
+
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.1
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_FRAGMENT__NAME = eINSTANCE.getScenarioFragment_Name();
+
+		/**
+		 * The meta object literal for the '<em><b>Fragment</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.1
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SCENARIO_FRAGMENT__FRAGMENT = eINSTANCE.getScenarioFragment_Fragment();
+
+		/**
+		 * The meta object literal for the '<em><b>Content Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.1
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SCENARIO_FRAGMENT__CONTENT_TYPE = eINSTANCE.getScenarioFragment_ContentType();
 
 		/**
 		 * The meta object literal for the '<em>IScenario Service</em>' data type.

@@ -194,6 +194,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__METADATA);
 			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__INSTANCE);
 			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__LOCKS);
+			childrenFeatures.add(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__FRAGMENTS);
 		}
 		return childrenFeatures;
 	}
@@ -272,6 +273,7 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		case ScenarioServicePackage.SCENARIO_INSTANCE__METADATA:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__INSTANCE:
 		case ScenarioServicePackage.SCENARIO_INSTANCE__LOCKS:
+		case ScenarioServicePackage.SCENARIO_INSTANCE__FRAGMENTS:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		}
@@ -292,6 +294,8 @@ public class ScenarioInstanceItemProvider extends ContainerItemProvider implemen
 		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__METADATA, ScenarioServiceFactory.eINSTANCE.createMetadata()));
 
 		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__LOCKS, ScenarioServiceFactory.eINSTANCE.createScenarioLock()));
+
+		newChildDescriptors.add(createChildParameter(ScenarioServicePackage.Literals.SCENARIO_INSTANCE__FRAGMENTS, ScenarioServiceFactory.eINSTANCE.createScenarioFragment()));
 	}
 
 }

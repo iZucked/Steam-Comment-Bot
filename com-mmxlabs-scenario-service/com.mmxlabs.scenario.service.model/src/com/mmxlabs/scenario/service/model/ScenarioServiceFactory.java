@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EFactory;
  * <!-- begin-user-doc -->
  * The <b>Factory</b> for the model.
  * It provides a create method for each non-abstract class of the model.
+ * @noimplement This interface is not intended to be implemented by clients.
  * <!-- end-user-doc -->
  * @see com.mmxlabs.scenario.service.model.ScenarioServicePackage
  * @generated
@@ -76,6 +77,16 @@ public interface ScenarioServiceFactory extends EFactory {
 	 * @generated
 	 */
 	ScenarioLock createScenarioLock();
+
+	/**
+	 * Returns a new object of class '<em>Scenario Fragment</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Scenario Fragment</em>'.
+	 * @generated
+	 */
+	ScenarioFragment createScenarioFragment();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -104,6 +104,11 @@ public class ScenarioServiceAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseScenarioFragment(ScenarioFragment object) {
+			return createScenarioFragmentAdapter();
+		}
+
+		@Override
 		public Adapter defaultCase(EObject object) {
 			return createEObjectAdapter();
 		}
@@ -217,6 +222,21 @@ public class ScenarioServiceAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createScenarioLockAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.scenario.service.model.ScenarioFragment <em>Scenario Fragment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.scenario.service.model.ScenarioFragment
+	 * @generated
+	 */
+	public Adapter createScenarioFragmentAdapter() {
 		return null;
 	}
 

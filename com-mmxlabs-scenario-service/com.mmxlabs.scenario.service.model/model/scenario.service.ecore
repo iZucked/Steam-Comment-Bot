@@ -72,6 +72,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="validationStatusCode" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="scenarioVersion" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="versionContext" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fragments" upperBound="-1"
+        eType="#//ScenarioFragment" transient="true" containment="true" eOpposite="#//ScenarioFragment/scenarioInstance"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Metadata">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="creator" lowerBound="1"
@@ -83,8 +85,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lastModifiedBy" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EDataType" name="IScenarioService" instanceClassName="com.mmxlabs.scenario.service.IScenarioService"
-      serializable="false"/>
   <eClassifiers xsi:type="ecore:EClass" name="ScenarioLock">
     <eOperations name="claim" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eOperations name="awaitClaim" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
@@ -98,4 +98,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="instance" lowerBound="1"
         eType="#//ScenarioInstance" transient="true" eOpposite="#//ScenarioInstance/locks"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ScenarioFragment">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="scenarioInstance" eType="#//ScenarioInstance"
+        transient="true" eOpposite="#//ScenarioInstance/fragments"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="fragment" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="contentType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EDataType" name="IScenarioService" instanceClassName="com.mmxlabs.scenario.service.IScenarioService"
+      serializable="false"/>
 </ecore:EPackage>

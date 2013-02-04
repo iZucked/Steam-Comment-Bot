@@ -123,6 +123,13 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case ScenarioServicePackage.SCENARIO_FRAGMENT: {
+			ScenarioFragment scenarioFragment = (ScenarioFragment) theEObject;
+			T result = caseScenarioFragment(scenarioFragment);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -230,6 +237,22 @@ public class ScenarioServiceSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseScenarioLock(ScenarioLock object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Scenario Fragment</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Scenario Fragment</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseScenarioFragment(ScenarioFragment object) {
 		return null;
 	}
 

@@ -70,6 +70,8 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 			return createMetadata();
 		case ScenarioServicePackage.SCENARIO_LOCK:
 			return createScenarioLock();
+		case ScenarioServicePackage.SCENARIO_FRAGMENT:
+			return createScenarioFragment();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -159,6 +161,17 @@ public class ScenarioServiceFactoryImpl extends EFactoryImpl implements Scenario
 	public ScenarioLock createScenarioLock() {
 		ScenarioLockImpl scenarioLock = new ScenarioLockImpl();
 		return scenarioLock;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ScenarioFragment createScenarioFragment() {
+		ScenarioFragmentImpl scenarioFragment = new ScenarioFragmentImpl();
+		return scenarioFragment;
 	}
 
 	/**
