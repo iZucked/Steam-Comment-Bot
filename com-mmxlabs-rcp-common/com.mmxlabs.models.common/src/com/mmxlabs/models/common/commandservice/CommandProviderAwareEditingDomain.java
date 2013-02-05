@@ -108,7 +108,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 	public Command createCommand(final Class<? extends Command> commandClass, final CommandParameter commandParameter) {
 		final Command normal;
 		
-		// DOES NOT WORK - DELETEING A SALES CONTRACT DID NOT UPDATE REFERENCES.
+		// DOES NOT WORK - DELETING A SALES CONTRACT DID NOT UPDATE REFERENCES.
 		
 //		if (commandClass == DeleteCommand.class) {
 //			normal = new DeleteCommand(this, commandParameter.getCollection()) {
