@@ -45,7 +45,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 */
 	public static TypesFactory init() {
 		try {
-			TypesFactory theTypesFactory = (TypesFactory) EPackage.Registry.INSTANCE.getEFactory("http://www.mmxlabs.com/models/lng/types/1/");
+			TypesFactory theTypesFactory = (TypesFactory) EPackage.Registry.INSTANCE
+					.getEFactory("http://www.mmxlabs.com/models/lng/types/1/");
 			if (theTypesFactory != null) {
 				return theTypesFactory;
 			}
@@ -81,8 +82,11 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 			return createExtraData();
 		case TypesPackage.EXTRA_DATA_CONTAINER:
 			return createExtraDataContainer();
+		case TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS:
+			return createALNGPriceCalculatorParameters();
 		default:
-			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The class '" + eClass.getName()
+					+ "' is not a valid classifier");
 		}
 	}
 
@@ -105,7 +109,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 		case TypesPackage.ITERABLE:
 			return createIterableFromString(eDataType, initialValue);
 		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '"
+					+ eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -128,7 +133,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 		case TypesPackage.ITERABLE:
 			return convertIterableToString(eDataType, instanceValue);
 		default:
-			throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+			throw new IllegalArgumentException("The datatype '"
+					+ eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -176,13 +182,27 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PortCapability createPortCapabilityFromString(EDataType eDataType, String initialValue) {
+	public ALNGPriceCalculatorParameters createALNGPriceCalculatorParameters() {
+		ALNGPriceCalculatorParametersImpl alngPriceCalculatorParameters = new ALNGPriceCalculatorParametersImpl();
+		return alngPriceCalculatorParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PortCapability createPortCapabilityFromString(EDataType eDataType,
+			String initialValue) {
 		PortCapability result = PortCapability.get(initialValue);
 		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+			throw new IllegalArgumentException("The value '" + initialValue
+					+ "' is not a valid enumerator of '" + eDataType.getName()
+					+ "'");
 		return result;
 	}
 
@@ -191,7 +211,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertPortCapabilityToString(EDataType eDataType, Object instanceValue) {
+	public String convertPortCapabilityToString(EDataType eDataType,
+			Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
@@ -201,10 +222,13 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public ExtraDataFormatType createExtraDataFormatTypeFromString(EDataType eDataType, String initialValue) {
+	public ExtraDataFormatType createExtraDataFormatTypeFromString(
+			EDataType eDataType, String initialValue) {
 		ExtraDataFormatType result = ExtraDataFormatType.get(initialValue);
 		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+			throw new IllegalArgumentException("The value '" + initialValue
+					+ "' is not a valid enumerator of '" + eDataType.getName()
+					+ "'");
 		return result;
 	}
 
@@ -214,7 +238,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertExtraDataFormatTypeToString(EDataType eDataType, Object instanceValue) {
+	public String convertExtraDataFormatTypeToString(EDataType eDataType,
+			Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
@@ -224,10 +249,13 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CargoDeliveryType createCargoDeliveryTypeFromString(EDataType eDataType, String initialValue) {
+	public CargoDeliveryType createCargoDeliveryTypeFromString(
+			EDataType eDataType, String initialValue) {
 		CargoDeliveryType result = CargoDeliveryType.get(initialValue);
 		if (result == null)
-			throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+			throw new IllegalArgumentException("The value '" + initialValue
+					+ "' is not a valid enumerator of '" + eDataType.getName()
+					+ "'");
 		return result;
 	}
 
@@ -237,7 +265,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertCargoDeliveryTypeToString(EDataType eDataType, Object instanceValue) {
+	public String convertCargoDeliveryTypeToString(EDataType eDataType,
+			Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 
@@ -247,9 +276,11 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public Serializable createSerializableObjectFromString(EDataType eDataType, String initialValue) {
+	public Serializable createSerializableObjectFromString(EDataType eDataType,
+			String initialValue) {
 		try {
-			final ByteArrayInputStream bais = new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(initialValue));
+			final ByteArrayInputStream bais = new ByteArrayInputStream(
+					DatatypeConverter.parseBase64Binary(initialValue));
 			final ObjectInputStream ois = new ObjectInputStream(bais);
 			return (Serializable) ois.readObject();
 		} catch (Exception e) {
@@ -265,7 +296,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated NOT
 	 */
-	public String convertSerializableObjectToString(EDataType eDataType, Object instanceValue) {
+	public String convertSerializableObjectToString(EDataType eDataType,
+			Object instanceValue) {
 		if (instanceValue instanceof Serializable) {
 			final Serializable s = (Serializable) instanceValue;
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -274,7 +306,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 				oos.writeObject(s);
 				oos.flush();
 				oos.close();
-				final String b64 = DatatypeConverter.printBase64Binary(baos.toByteArray());
+				final String b64 = DatatypeConverter.printBase64Binary(baos
+						.toByteArray());
 				return b64;
 			} catch (IOException e) {
 			}
@@ -289,7 +322,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Iterable<?> createIterableFromString(EDataType eDataType, String initialValue) {
+	public Iterable<?> createIterableFromString(EDataType eDataType,
+			String initialValue) {
 		return (Iterable<?>) super.createFromString(initialValue);
 	}
 
@@ -299,7 +333,8 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertIterableToString(EDataType eDataType, Object instanceValue) {
+	public String convertIterableToString(EDataType eDataType,
+			Object instanceValue) {
 		return super.convertToString(instanceValue);
 	}
 

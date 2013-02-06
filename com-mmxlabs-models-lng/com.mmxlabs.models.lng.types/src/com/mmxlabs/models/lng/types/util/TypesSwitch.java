@@ -337,6 +337,19 @@ public class TypesSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
+		case TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS: {
+			ALNGPriceCalculatorParameters alngPriceCalculatorParameters = (ALNGPriceCalculatorParameters) theEObject;
+			T result = caseALNGPriceCalculatorParameters(alngPriceCalculatorParameters);
+			if (result == null)
+				result = caseUUIDObject(alngPriceCalculatorParameters);
+			if (result == null)
+				result = caseNamedObject(alngPriceCalculatorParameters);
+			if (result == null)
+				result = caseMMXObject(alngPriceCalculatorParameters);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
 		default:
 			return defaultCase(theEObject);
 		}
@@ -659,6 +672,23 @@ public class TypesSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseExtraDataContainer(ExtraDataContainer object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseALNGPriceCalculatorParameters(
+			ALNGPriceCalculatorParameters object) {
 		return null;
 	}
 

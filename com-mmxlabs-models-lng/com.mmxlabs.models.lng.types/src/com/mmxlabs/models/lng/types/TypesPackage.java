@@ -61,7 +61,8 @@ public interface TypesPackage extends EPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl.init();
+	TypesPackage eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesPackageImpl
+			.init();
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
@@ -3066,6 +3067,168 @@ public interface TypesPackage extends EPackage {
 	int EXTRA_DATA_OPERATION_COUNT = EXTRA_DATA_CONTAINER_OPERATION_COUNT + 2;
 
 	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl <em>ALNG Price Calculator Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl
+	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALNGPriceCalculatorParameters()
+	 * @generated
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS = 21;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS = MMXCorePackage.UUID_OBJECT__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS__PROXIES = MMXCorePackage.UUID_OBJECT__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The number of structural features of the '<em>ALNG Price Calculator Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The operation id for the '<em>Make Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS___MAKE_PROXIES = MMXCorePackage.UUID_OBJECT___MAKE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Resolve Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS___RESOLVE_PROXIES__MAP = MMXCorePackage.UUID_OBJECT___RESOLVE_PROXIES__MAP;
+
+	/**
+	 * The operation id for the '<em>Restore Proxies</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS___RESTORE_PROXIES = MMXCorePackage.UUID_OBJECT___RESTORE_PROXIES;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS__MAP;
+
+	/**
+	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @ordered
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS___COLLECT_UUID_OBJECTS = MMXCorePackage.UUID_OBJECT___COLLECT_UUID_OBJECTS;
+
+	/**
+	 * The operation id for the '<em>Get Unset Value</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EGet With Default</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.UUID_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
+
+	/**
+	 * The operation id for the '<em>EContainer Op</em>' operation.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS___ECONTAINER_OP = MMXCorePackage.UUID_OBJECT___ECONTAINER_OP;
+
+	/**
+	 * The number of operations of the '<em>ALNG Price Calculator Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ALNG_PRICE_CALCULATOR_PARAMETERS_OPERATION_COUNT = MMXCorePackage.UUID_OBJECT_OPERATION_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3073,7 +3236,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getPortCapability()
 	 * @generated
 	 */
-	int PORT_CAPABILITY = 21;
+	int PORT_CAPABILITY = 22;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.ExtraDataFormatType <em>Extra Data Format Type</em>}' enum.
@@ -3084,7 +3247,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getExtraDataFormatType()
 	 * @generated
 	 */
-	int EXTRA_DATA_FORMAT_TYPE = 22;
+	int EXTRA_DATA_FORMAT_TYPE = 23;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.types.CargoDeliveryType <em>Cargo Delivery Type</em>}' enum.
@@ -3095,7 +3258,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getCargoDeliveryType()
 	 * @generated
 	 */
-	int CARGO_DELIVERY_TYPE = 25;
+	int CARGO_DELIVERY_TYPE = 24;
 
 	/**
 	 * The meta object id for the '<em>Serializable Object</em>' data type.
@@ -3106,7 +3269,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getSerializableObject()
 	 * @generated
 	 */
-	int SERIALIZABLE_OBJECT = 23;
+	int SERIALIZABLE_OBJECT = 25;
 
 	/**
 	 * The meta object id for the '<em>Iterable</em>' data type.
@@ -3117,7 +3280,7 @@ public interface TypesPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 24;
+	int ITERABLE = 26;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.APort <em>APort</em>}'.
@@ -3534,6 +3697,17 @@ public interface TypesPackage extends EPackage {
 	EOperation getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters <em>ALNG Price Calculator Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ALNG Price Calculator Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters
+	 * @generated
+	 */
+	EClass getALNGPriceCalculatorParameters();
+
+	/**
 	 * Returns the meta object for enum '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3628,7 +3802,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation APORT___COLLECT__ELIST = eINSTANCE.getAPort__Collect__EList();
+		EOperation APORT___COLLECT__ELIST = eINSTANCE
+				.getAPort__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.APortSetImpl <em>APort Set</em>}' class.
@@ -3646,7 +3821,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation APORT_SET___COLLECT__ELIST = eINSTANCE.getAPortSet__Collect__EList();
+		EOperation APORT_SET___COLLECT__ELIST = eINSTANCE
+				.getAPortSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ARouteImpl <em>ARoute</em>}' class.
@@ -3674,7 +3850,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE.getAVessel__Collect__EList();
+		EOperation AVESSEL___COLLECT__ELIST = eINSTANCE
+				.getAVessel__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.AFleetVesselImpl <em>AFleet Vessel</em>}' class.
@@ -3773,7 +3950,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation AVESSEL_SET___COLLECT__ELIST = eINSTANCE.getAVesselSet__Collect__EList();
+		EOperation AVESSEL_SET___COLLECT__ELIST = eINSTANCE
+				.getAVesselSet__Collect__EList();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.ITimezoneProvider <em>ITimezone Provider</em>}' class.
@@ -3791,7 +3969,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE.getITimezoneProvider__GetTimeZone__EAttribute();
+		EOperation ITIMEZONE_PROVIDER___GET_TIME_ZONE__EATTRIBUTE = eINSTANCE
+				.getITimezoneProvider__GetTimeZone__EAttribute();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ABaseFuelImpl <em>ABase Fuel</em>}' class.
@@ -3899,7 +4078,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EAttribute EXTRA_DATA__FORMAT_TYPE = eINSTANCE.getExtraData_FormatType();
+		EAttribute EXTRA_DATA__FORMAT_TYPE = eINSTANCE
+				.getExtraData_FormatType();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Value As</b></em>' operation.
@@ -3908,7 +4088,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA___GET_VALUE_AS__CLASS = eINSTANCE.getExtraData__GetValueAs__Class();
+		EOperation EXTRA_DATA___GET_VALUE_AS__CLASS = eINSTANCE
+				.getExtraData__GetValueAs__Class();
 
 		/**
 		 * The meta object literal for the '<em><b>Format Value</b></em>' operation.
@@ -3917,7 +4098,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA___FORMAT_VALUE = eINSTANCE.getExtraData__FormatValue();
+		EOperation EXTRA_DATA___FORMAT_VALUE = eINSTANCE
+				.getExtraData__FormatValue();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ExtraDataContainerImpl <em>Extra Data Container</em>}' class.
@@ -3937,7 +4119,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference EXTRA_DATA_CONTAINER__EXTRA_DATA = eINSTANCE.getExtraDataContainer_ExtraData();
+		EReference EXTRA_DATA_CONTAINER__EXTRA_DATA = eINSTANCE
+				.getExtraDataContainer_ExtraData();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Data With Path</b></em>' operation.
@@ -3946,7 +4129,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE = eINSTANCE.getExtraDataContainer__GetDataWithPath__Iterable();
+		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE = eINSTANCE
+				.getExtraDataContainer__GetDataWithPath__Iterable();
 
 		/**
 		 * The meta object literal for the '<em><b>Get Data With Key</b></em>' operation.
@@ -3955,7 +4139,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = eINSTANCE.getExtraDataContainer__GetDataWithKey__String();
+		EOperation EXTRA_DATA_CONTAINER___GET_DATA_WITH_KEY__STRING = eINSTANCE
+				.getExtraDataContainer__GetDataWithKey__String();
 
 		/**
 		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
@@ -3964,7 +4149,8 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = eINSTANCE.getExtraDataContainer__AddExtraData__String_String();
+		EOperation EXTRA_DATA_CONTAINER___ADD_EXTRA_DATA__STRING_STRING = eINSTANCE
+				.getExtraDataContainer__AddExtraData__String_String();
 
 		/**
 		 * The meta object literal for the '<em><b>Add Extra Data</b></em>' operation.
@@ -3983,7 +4169,20 @@ public interface TypesPackage extends EPackage {
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EOperation EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = eINSTANCE.getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
+		EOperation EXTRA_DATA_CONTAINER___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = eINSTANCE
+				.getExtraDataContainer__GetValueWithPathAs__Iterable_Class_Object();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl <em>ALNG Price Calculator Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 4.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl
+		 * @see com.mmxlabs.models.lng.types.impl.TypesPackageImpl#getALNGPriceCalculatorParameters()
+		 * @generated
+		 */
+		EClass ALNG_PRICE_CALCULATOR_PARAMETERS = eINSTANCE
+				.getALNGPriceCalculatorParameters();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.types.PortCapability <em>Port Capability</em>}' enum.

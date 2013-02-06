@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ecore:EPackage xmi:version="2.0"
-    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="types"
-    nsURI="http://www.mmxlabs.com/models/lng/types/1/" nsPrefix="lng.types">
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="types" nsURI="http://www.mmxlabs.com/models/lng/types/1/" nsPrefix="lng.types">
   <eClassifiers xsi:type="ecore:EClass" name="APort" abstract="true" eSuperTypes="#//APortSet">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.port.Port"/>
@@ -220,5 +218,10 @@
         <details key="documentation" value="The cargo must be delivered by a third party."/>
       </eAnnotations>
     </eLiterals>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ALNGPriceCalculatorParameters" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+    <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
+      <details key="generatedType" value="com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters"/>
+    </eAnnotations>
   </eClassifiers>
 </ecore:EPackage>

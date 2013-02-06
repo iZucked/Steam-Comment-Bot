@@ -21,7 +21,8 @@ public interface TypesFactory extends EFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	TypesFactory eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesFactoryImpl.init();
+	TypesFactory eINSTANCE = com.mmxlabs.models.lng.types.impl.TypesFactoryImpl
+			.init();
 
 	/**
 	 * Returns a new object of class '<em>AVessel Set</em>'.
@@ -60,6 +61,16 @@ public interface TypesFactory extends EFactory {
 	 * @generated
 	 */
 	ExtraDataContainer createExtraDataContainer();
+
+	/**
+	 * Returns a new object of class '<em>ALNG Price Calculator Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ALNG Price Calculator Parameters</em>'.
+	 * @generated
+	 */
+	ALNGPriceCalculatorParameters createALNGPriceCalculatorParameters();
 
 	/**
 	 * Returns the package supported by this factory.

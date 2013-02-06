@@ -34,7 +34,8 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class TypesItemProviderAdapterFactory extends TypesAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
+public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
+		implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
 	/**
 	 * This keeps track of the root adapter factory that delegates to this adapter factory.
 	 * <!-- begin-user-doc -->
@@ -160,10 +161,36 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 	@Override
 	public Adapter createExtraDataContainerAdapter() {
 		if (extraDataContainerItemProvider == null) {
-			extraDataContainerItemProvider = new ExtraDataContainerItemProvider(this);
+			extraDataContainerItemProvider = new ExtraDataContainerItemProvider(
+					this);
 		}
 
 		return extraDataContainerItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 4.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ALNGPriceCalculatorParametersItemProvider alngPriceCalculatorParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createALNGPriceCalculatorParametersAdapter() {
+		if (alngPriceCalculatorParametersItemProvider == null) {
+			alngPriceCalculatorParametersItemProvider = new ALNGPriceCalculatorParametersItemProvider(
+					this);
+		}
+
+		return alngPriceCalculatorParametersItemProvider;
 	}
 
 	/**
@@ -173,7 +200,8 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 	 * @generated
 	 */
 	public ComposeableAdapterFactory getRootAdapterFactory() {
-		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
+		return parentAdapterFactory == null ? this : parentAdapterFactory
+				.getRootAdapterFactory();
 	}
 
 	/**
@@ -182,7 +210,8 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
+	public void setParentAdapterFactory(
+			ComposedAdapterFactory parentAdapterFactory) {
 		this.parentAdapterFactory = parentAdapterFactory;
 	}
 
@@ -216,7 +245,8 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 	public Object adapt(Object object, Object type) {
 		if (isFactoryForType(type)) {
 			Object adapter = super.adapt(object, type);
-			if (!(type instanceof Class<?>) || (((Class<?>) type).isInstance(adapter))) {
+			if (!(type instanceof Class<?>)
+					|| (((Class<?>) type).isInstance(adapter))) {
 				return adapter;
 			}
 		}
@@ -273,6 +303,8 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory impleme
 			extraDataItemProvider.dispose();
 		if (extraDataContainerItemProvider != null)
 			extraDataContainerItemProvider.dispose();
+		if (alngPriceCalculatorParametersItemProvider != null)
+			alngPriceCalculatorParametersItemProvider.dispose();
 	}
 
 }
