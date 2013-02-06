@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Scheduleview
 Bundle-SymbolicName: com.mmxlabs.shiplingo.platform.scheduleview;singleton:=true
-Bundle-Version: 2.0.1.qualifier
+Bundle-Version: 3.0.0.qualifier
 Bundle-Activator: com.mmxlabs.shiplingo.platform.scheduleview.internal.Activator
 Bundle-Vendor: Minimax Labs Ltd.
 Require-Bundle: org.eclipse.help;bundle-version="3.5.0",
@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.help;bundle-version="3.5.0",
  com.google.inject;bundle-version="3.0.0",
  com.mmxlabs.common.common-util;bundle-version="2.0.0",
  com.mmxlabs.ganttviewer;bundle-version="[2.0.0,3.0.0)",
- com.mmxlabs.shiplingo.platform.reports;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.shiplingo.platform.reports;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.jobmanager.eclipse;bundle-version="[1.0.0,2.0.0)",
  com.mmxlabs.models.lng.cargo;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.models.lng.commercial;bundle-version="[3.0.0,4.0.0)",

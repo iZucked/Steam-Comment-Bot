@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.platform.feature"
       label="Eclipse Platform Feature"
-      version="2.0.1.qualifier"
+      version="3.0.0.qualifier"
       provider-name="Minimax Labs Ltd.">
 
    <description>
@@ -1370,6 +1370,20 @@
 
    <plugin
          id="org.eclipse.ocl.common"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.databinding"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.databinding.edit"
          download-size="0"
          install-size="0"
          version="0.0.0"
