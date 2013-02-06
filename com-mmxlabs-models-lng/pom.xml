@@ -64,6 +64,7 @@
 		<module>com.mmxlabs.models.lng.analytics.edit</module>
 		<module>com.mmxlabs.models.lng.analytics.editor</module>
 		<module>com.mmxlabs.models.lng.analytics.validation</module>
+		<module>com.mmxlabs.models.lng.analytics.navigator</module>
 
 		<module>com.mmxlabs.models.lng.cargo.validation.tests</module>
 		<module>com.mmxlabs.models.lng.fleet.validation.tests</module>

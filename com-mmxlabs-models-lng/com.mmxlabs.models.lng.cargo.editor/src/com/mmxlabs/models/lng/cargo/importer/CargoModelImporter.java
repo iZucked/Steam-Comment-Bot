@@ -79,6 +79,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 		final CargoModel cargoModel = CargoFactory.eINSTANCE.createCargoModel();
 
 		if (inputs.containsKey(CARGO_KEY)) {
+			@SuppressWarnings("resource")
 			final CSVReader reader = inputs.get(CARGO_KEY);
 			final Collection<EObject> values = cargoImporter.importObjects(CargoPackage.eINSTANCE.getCargo(), reader, context);
 			for (final EObject object : values) {
@@ -93,6 +94,7 @@ public class CargoModelImporter implements ISubmodelImporter {
 		}
 
 		if (inputs.containsKey(CARGO_GROUP_KEY)) {
+			@SuppressWarnings("resource")
 			final CSVReader reader = inputs.get(CARGO_GROUP_KEY);
 			final Collection<EObject> values = cargoGroupImporter.importObjects(CargoPackage.eINSTANCE.getCargoGroup(), reader, context);
 			cargoModel.getCargoGroups().addAll((Collection<? extends CargoGroup>) values);
