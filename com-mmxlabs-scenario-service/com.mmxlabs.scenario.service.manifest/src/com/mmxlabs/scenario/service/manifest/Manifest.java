@@ -121,7 +121,7 @@ public interface Manifest extends EObject {
 	 * If the meaning of the '<em>Scenario Version</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Scenario Version</em>' attribute.
 	 * @see #setScenarioVersion(int)
@@ -134,7 +134,7 @@ public interface Manifest extends EObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.manifest.Manifest#getScenarioVersion <em>Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Scenario Version</em>' attribute.
 	 * @see #getScenarioVersion()
@@ -149,7 +149,7 @@ public interface Manifest extends EObject {
 	 * If the meaning of the '<em>Version Context</em>' attribute isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Version Context</em>' attribute.
 	 * @see #setVersionContext(String)
@@ -162,7 +162,7 @@ public interface Manifest extends EObject {
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.scenario.service.manifest.Manifest#getVersionContext <em>Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Version Context</em>' attribute.
 	 * @see #getVersionContext()

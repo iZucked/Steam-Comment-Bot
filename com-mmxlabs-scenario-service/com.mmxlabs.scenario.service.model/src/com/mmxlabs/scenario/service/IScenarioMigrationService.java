@@ -11,7 +11,7 @@ import com.mmxlabs.scenario.service.model.ScenarioInstance;
 /**
  * An interface specifying a service to handle scenario migration. Scenario services should require an instance of this service to be available to ensure scenarios can be properly loaded.
  * 
- * @since 3.0
+ * @since 3.1
  */
 public interface IScenarioMigrationService {
 

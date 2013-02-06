@@ -136,7 +136,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -146,7 +146,7 @@ public class ManifestPackageImpl extends EPackageImpl implements ManifestPackage
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

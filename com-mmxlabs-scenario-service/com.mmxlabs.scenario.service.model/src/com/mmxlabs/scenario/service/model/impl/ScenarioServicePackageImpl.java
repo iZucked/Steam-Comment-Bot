@@ -348,7 +348,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -358,7 +358,7 @@ public class ScenarioServicePackageImpl extends EPackageImpl implements Scenario
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
