@@ -1202,7 +1202,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				alngPriceCalculatorParametersEClass,
 				source,
 				new String[] { "generatedType",
-						"com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters" });
+						"com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters" });
 	}
 
 } //TypesPackageImpl

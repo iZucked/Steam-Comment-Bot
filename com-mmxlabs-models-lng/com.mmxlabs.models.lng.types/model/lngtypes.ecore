@@ -221,7 +221,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ALNGPriceCalculatorParameters" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
-      <details key="generatedType" value="com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters"/>
+      <details key="generatedType" value="com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters"/>
     </eAnnotations>
   </eClassifiers>
 </ecore:EPackage>
