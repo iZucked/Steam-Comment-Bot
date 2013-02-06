@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="MMXLabs Workspace Target" sequenceNumber="60">
+<?pde version="3.8"?><target name="MMXLabs Workspace Target" sequenceNumber="61">
 <locations>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.jdt.annotation" version="0.0.0"/>
@@ -117,7 +117,6 @@
 <unit id="com.mmxlabs.jobmanager.feature.source.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.jobmanager.feature.feature.group" version="1.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.lng.types.feature.source.feature.group" version="3.1.0.RELEASE"/>
-<unit id="com.mmxlabs.models.lng.types.feature.feature.group" version="3.1.0.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.source.feature.group" version="3.1.0.RELEASE"/>
 <unit id="com.mmxlabs.models.mmxcore.runtime.feature.feature.group" version="3.1.0.RELEASE"/>
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart" version="1.0.1.RELEASE"/>
@@ -132,8 +131,8 @@
 <unit id="com.mmxlabs.optimiser.optimiser-lso" version="1.1.1.201212131159"/>
 <unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser.source" version="3.0.0.201301111643"/>
 <unit id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser" version="3.0.0.201301111643"/>
-<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="2.0.0.RELEASE"/>
-<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="2.0.0.RELEASE"/>
+<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="2.0.1.RELEASE"/>
+<unit id="com.mmxlabs.rcp.common.feature.feature.group" version="2.0.1.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="3.0.0.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="3.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.migration.feature.source.feature.group" version="1.0.0.RELEASE"/>
@@ -144,7 +143,7 @@
 <unit id="com.mmxlabs.models.lng.ui.runtime.feature.source.feature.group" version="2.0.1.RELEASE"/>
 <unit id="com.mmxlabs.datasources.feature.feature.group" version="1.1.1.RELEASE"/>
 <unit id="com.mmxlabs.datasources.feature.source.feature.group" version="1.1.1.RELEASE"/>
-<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/" id="mmxlabs-releases"/>
+<repository location="https://s3-proxy.appspot.com/mmxlabs-p2-repos/repositories/mmxlabs-p2-releases/"/>
 </location>
 <location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.emf.ecoretools.sdk.feature.group" version="1.1.0.201205150811"/>
@@ -153,6 +152,9 @@
 <unit id="org.eclipse.emf.validation.sdk.feature.group" version="1.6.0.v20120328-0001-67T-96SGR75UNqZNTdeQnghI6uFA"/>
 <unit id="org.eclipse.ocl.all.sdk.feature.group" version="4.0.1.v20120919-0602"/>
 <repository location="http://download.eclipse.org/releases/juno/"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.mmxlabs.models.mmxcore" version="3.1.1.201212211550"/>
 </location>
 </locations>
 </target>
