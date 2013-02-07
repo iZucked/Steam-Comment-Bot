@@ -1,23 +1,20 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.pricing.provider;
 
 
-import com.mmxlabs.models.lng.pricing.PricingFactory;
+import com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.SpotAvailability;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
-import org.eclipse.emf.ecore.EStructuralFeature;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -27,17 +24,16 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.SpotAvailability} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SpotAvailabilityItemProvider
-	extends ItemProviderAdapter
+public class LNGIndexPriceParametersItemProvider
+	extends LNGPriceCalculatorParametersItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -50,7 +46,7 @@ public class SpotAvailabilityItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SpotAvailabilityItemProvider(AdapterFactory adapterFactory) {
+	public LNGIndexPriceParametersItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -65,10 +61,55 @@ public class SpotAvailabilityItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addIndexPropertyDescriptor(object);
+			addMultiplierPropertyDescriptor(object);
 			addConstantPropertyDescriptor(object);
-			addCurvePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Index feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIndexPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGIndexPriceParameters_index_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGIndexPriceParameters_index_feature", "_UI_LNGIndexPriceParameters_type"),
+				 PricingPackage.Literals.LNG_INDEX_PRICE_PARAMETERS__INDEX,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This adds a property descriptor for the Multiplier feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMultiplierPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_LNGIndexPriceParameters_multiplier_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGIndexPriceParameters_multiplier_feature", "_UI_LNGIndexPriceParameters_type"),
+				 PricingPackage.Literals.LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -82,79 +123,26 @@ public class SpotAvailabilityItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_SpotAvailability_constant_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotAvailability_constant_feature", "_UI_SpotAvailability_type"),
-				 PricingPackage.Literals.SPOT_AVAILABILITY__CONSTANT,
+				 getString("_UI_LNGIndexPriceParameters_constant_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_LNGIndexPriceParameters_constant_feature", "_UI_LNGIndexPriceParameters_type"),
+				 PricingPackage.Literals.LNG_INDEX_PRICE_PARAMETERS__CONSTANT,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Curve feature.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addCurvePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_SpotAvailability_curve_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_SpotAvailability_curve_feature", "_UI_SpotAvailability_type"),
-				 PricingPackage.Literals.SPOT_AVAILABILITY__CURVE,
-				 true,
-				 false,
-				 false,
-				 null,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.SPOT_AVAILABILITY__CURVE);
-		}
-		return childrenFeatures;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
-
-		return super.getChildFeature(object, child);
-	}
-
-	/**
-	 * This returns SpotAvailability.gif.
+	 * This returns LNGIndexPriceParameters.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SpotAvailability"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/LNGIndexPriceParameters"));
 	}
 
 	/**
@@ -165,8 +153,10 @@ public class SpotAvailabilityItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		SpotAvailability spotAvailability = (SpotAvailability)object;
-		return getString("_UI_SpotAvailability_type") + " " + spotAvailability.getConstant();
+		String label = ((LNGIndexPriceParameters)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_LNGIndexPriceParameters_type") :
+			getString("_UI_LNGIndexPriceParameters_type") + " " + label;
 	}
 
 	/**
@@ -180,12 +170,10 @@ public class SpotAvailabilityItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(SpotAvailability.class)) {
-			case PricingPackage.SPOT_AVAILABILITY__CONSTANT:
+		switch (notification.getFeatureID(LNGIndexPriceParameters.class)) {
+			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER:
+			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__CONSTANT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case PricingPackage.SPOT_AVAILABILITY__CURVE:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
 		super.notifyChanged(notification);
@@ -201,22 +189,6 @@ public class SpotAvailabilityItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.SPOT_AVAILABILITY__CURVE,
-				 PricingFactory.eINSTANCE.createDataIndex()));
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return PricingEditPlugin.INSTANCE;
 	}
 
 }

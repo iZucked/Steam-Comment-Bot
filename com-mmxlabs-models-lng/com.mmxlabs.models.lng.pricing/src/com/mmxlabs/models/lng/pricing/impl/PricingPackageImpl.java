@@ -26,6 +26,10 @@ import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
+import com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters;
+import com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters;
+import com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -178,6 +182,34 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * @generated
 	 */
 	private EClass spotAvailabilityEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass lngPriceCalculatorParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass lngFixedPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass lngIndexPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass lngPriceExpressionParametersEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -895,6 +927,87 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getLNGPriceCalculatorParameters() {
+		return lngPriceCalculatorParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getLNGFixedPriceParameters() {
+		return lngFixedPriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLNGFixedPriceParameters_PricePerMMBTU() {
+		return (EAttribute)lngFixedPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getLNGIndexPriceParameters() {
+		return lngIndexPriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getLNGIndexPriceParameters_Index() {
+		return (EReference)lngIndexPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLNGIndexPriceParameters_Multiplier() {
+		return (EAttribute)lngIndexPriceParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLNGIndexPriceParameters_Constant() {
+		return (EAttribute)lngIndexPriceParametersEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getLNGPriceExpressionParameters() {
+		return lngPriceExpressionParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getLNGPriceExpressionParameters_PriceExpression() {
+		return (EAttribute)lngPriceExpressionParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EEnum getSpotType() {
 		return spotTypeEEnum;
 	}
@@ -1017,6 +1130,19 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		createEAttribute(spotAvailabilityEClass, SPOT_AVAILABILITY__CONSTANT);
 		createEReference(spotAvailabilityEClass, SPOT_AVAILABILITY__CURVE);
 
+		lngPriceCalculatorParametersEClass = createEClass(LNG_PRICE_CALCULATOR_PARAMETERS);
+
+		lngFixedPriceParametersEClass = createEClass(LNG_FIXED_PRICE_PARAMETERS);
+		createEAttribute(lngFixedPriceParametersEClass, LNG_FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU);
+
+		lngIndexPriceParametersEClass = createEClass(LNG_INDEX_PRICE_PARAMETERS);
+		createEReference(lngIndexPriceParametersEClass, LNG_INDEX_PRICE_PARAMETERS__INDEX);
+		createEAttribute(lngIndexPriceParametersEClass, LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER);
+		createEAttribute(lngIndexPriceParametersEClass, LNG_INDEX_PRICE_PARAMETERS__CONSTANT);
+
+		lngPriceExpressionParametersEClass = createEClass(LNG_PRICE_EXPRESSION_PARAMETERS);
+		createEAttribute(lngPriceExpressionParametersEClass, LNG_PRICE_EXPRESSION_PARAMETERS__PRICE_EXPRESSION);
+
 		// Create enums
 		spotTypeEEnum = createEEnum(SPOT_TYPE);
 	}
@@ -1079,6 +1205,10 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		desSalesMarketEClass.getESuperTypes().add(this.getSpotMarket());
 		fobPurchasesMarketEClass.getESuperTypes().add(this.getSpotMarket());
 		fobSalesMarketEClass.getESuperTypes().add(this.getSpotMarket());
+		lngPriceCalculatorParametersEClass.getESuperTypes().add(theTypesPackage.getALNGPriceCalculatorParameters());
+		lngFixedPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		lngIndexPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		lngPriceExpressionParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(pricingModelEClass, PricingModel.class, "PricingModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1215,6 +1345,19 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 		g2 = createEGenericType(ecorePackage.getEIntegerObject());
 		g1.getETypeArguments().add(g2);
 		initEReference(getSpotAvailability_Curve(), g1, null, "curve", null, 1, 1, SpotAvailability.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(lngPriceCalculatorParametersEClass, LNGPriceCalculatorParameters.class, "LNGPriceCalculatorParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(lngFixedPriceParametersEClass, LNGFixedPriceParameters.class, "LNGFixedPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLNGFixedPriceParameters_PricePerMMBTU(), ecorePackage.getEDouble(), "pricePerMMBTU", "0", 1, 1, LNGFixedPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(lngIndexPriceParametersEClass, LNGIndexPriceParameters.class, "LNGIndexPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getLNGIndexPriceParameters_Index(), theTypesPackage.getAIndex(), null, "index", null, 1, 1, LNGIndexPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLNGIndexPriceParameters_Multiplier(), ecorePackage.getEDouble(), "multiplier", "1", 1, 1, LNGIndexPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getLNGIndexPriceParameters_Constant(), ecorePackage.getEDouble(), "constant", "0", 1, 1, LNGIndexPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(lngPriceExpressionParametersEClass, LNGPriceExpressionParameters.class, "LNGPriceExpressionParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getLNGPriceExpressionParameters_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 0, 1, LNGPriceExpressionParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(spotTypeEEnum, SpotType.class, "SpotType");
