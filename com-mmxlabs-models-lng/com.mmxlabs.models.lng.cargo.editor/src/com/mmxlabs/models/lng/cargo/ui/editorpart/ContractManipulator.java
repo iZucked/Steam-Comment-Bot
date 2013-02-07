@@ -171,7 +171,14 @@ public class ContractManipulator implements ICellManipulator, ICellRenderer {
 		if (editor == null) {
 			return;
 		}
-		editor.setItems(names.toArray(new String[] {}));
+		// names can be null; editor entries can't
+		final String [] items = new String [names.size()];
+		int i = 0;
+		for (String name: names) {
+			items[i++] = (name == null) ? "" : name;
+		}
+		//editor.setItems(names.toArray(new String[] {}));
+		editor.setItems(items);
 	}
 
 	@Override
