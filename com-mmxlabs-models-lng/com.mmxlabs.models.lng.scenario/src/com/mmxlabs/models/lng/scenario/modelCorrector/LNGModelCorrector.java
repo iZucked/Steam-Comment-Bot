@@ -28,8 +28,10 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate;
 import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
+import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
 import com.mmxlabs.models.lng.fleet.FleetPackage;
@@ -94,71 +96,110 @@ public class LNGModelCorrector {
 		fixPortCapabilityGroups(cmd, rootObject, ed);
 		fixVesselTypeGroups(cmd, rootObject, ed);
 		fixCanalCostVesselTypes(cmd, rootObject, ed);
-		
+
+		addMissingTaxCurves(cmd, rootObject, ed);
+
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
 		}
 
 	}
-	private void fixCanalCostVesselTypes(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
+
+	private void addMissingTaxCurves(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
+
+		final CompoundCommand cmd = new CompoundCommand("Fix canal cost vessel types");
+
+		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+
+		if (commercialModel != null) {
+			for (final LegalEntity entity : commercialModel.getEntities()) {
+				if (entity.getTaxRates() == null || entity.getTaxRates().isEmpty()) {
+					final TaxRate taxRate = CommercialFactory.eINSTANCE.createTaxRate();
+					taxRate.setValue(0.0f);
+
+					final Calendar cal = Calendar.getInstance();
+
+					cal.set(Calendar.YEAR, 2000);
+					cal.set(Calendar.MONTH, Calendar.APRIL);
+					cal.set(Calendar.DAY_OF_MONTH, 1);
+					cal.set(Calendar.YEAR, 2000);
+					cal.set(Calendar.HOUR, 0);
+					cal.set(Calendar.MINUTE, 0);
+					cal.set(Calendar.SECOND, 0);
+					cal.set(Calendar.MILLISECOND, 0);
+
+					taxRate.setDate(cal.getTime());
+
+					cmd.append(AddCommand.create(ed, entity, CommercialPackage.Literals.LEGAL_ENTITY__TAX_RATES, taxRate));
+
+				}
+			}
+		}
+
+		if (!cmd.isEmpty()) {
+			parent.append(cmd);
+		}
+
+	}
+
+	private void fixCanalCostVesselTypes(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix canal cost vessel types");
 
 		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
 		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 		final PortModel portModel = rootObject.getSubModel(PortModel.class);
-		
+
 		if (pricingModel != null) {
-			Set<VesselClass> vesselClasses = new HashSet<VesselClass>(fleetModel.getVesselClasses());
-			Set<Route> routes = new HashSet<Route>(portModel.getRoutes());
-			Set<Pair<Route,VesselClass>> entriesExpected = new HashSet<Pair<Route,VesselClass>>();
-			Set<Pair<Route,VesselClass>> entriesFound = new HashSet<Pair<Route,VesselClass>>();
-			
+			final Set<VesselClass> vesselClasses = new HashSet<VesselClass>(fleetModel.getVesselClasses());
+			final Set<Route> routes = new HashSet<Route>(portModel.getRoutes());
+			final Set<Pair<Route, VesselClass>> entriesExpected = new HashSet<Pair<Route, VesselClass>>();
+			final Set<Pair<Route, VesselClass>> entriesFound = new HashSet<Pair<Route, VesselClass>>();
+
 			// populate the expected entries set
-			for (Route route: routes) {
+			for (final Route route : routes) {
 				// only specify route costs for canal routes
 				if (route.isCanal()) {
 					// we expect a route cost for each vessel class for this route
-					for (VesselClass vesselClass: vesselClasses) {
+					for (final VesselClass vesselClass : vesselClasses) {
 						entriesExpected.add(new Pair<Route, VesselClass>(route, vesselClass));
 					}
-				}		
+				}
 			}
-			
+
 			// populate the found entries set
-			for (RouteCost rc: pricingModel.getRouteCosts()) {
-				Route route = rc.getRoute();
-				VesselClass vc = rc.getVesselClass();
-				Pair<Route, VesselClass> pair = new Pair<Route, VesselClass>(route, vc);
-				
+			for (final RouteCost rc : pricingModel.getRouteCosts()) {
+				final Route route = rc.getRoute();
+				final VesselClass vc = rc.getVesselClass();
+				final Pair<Route, VesselClass> pair = new Pair<Route, VesselClass>(route, vc);
+
 				// remove duplicate entries or unexpected entries
 				if (entriesFound.contains(pair) || !entriesExpected.contains(pair)) {
-					cmd.append(RemoveCommand.create(ed, pricingModel, PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS, rc));					
+					cmd.append(RemoveCommand.create(ed, pricingModel, PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS, rc));
 				}
 				// remember all other entries
 				else {
 					entriesFound.add(pair);
 				}
 			}
-			
+
 			// add missing entries
 			entriesExpected.removeAll(entriesFound);
-			for (Pair<Route, VesselClass> pair: entriesExpected) {
-				RouteCost rc = PricingFactory.eINSTANCE.createRouteCost();
+			for (final Pair<Route, VesselClass> pair : entriesExpected) {
+				final RouteCost rc = PricingFactory.eINSTANCE.createRouteCost();
 				rc.setRoute(pair.getFirst());
 				rc.setVesselClass(pair.getSecond());
-				cmd.append(AddCommand.create(ed, pricingModel, PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS, rc));					
+				cmd.append(AddCommand.create(ed, pricingModel, PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS, rc));
 			}
-			
+
 		}
-		
+
 		if (!cmd.isEmpty()) {
 			parent.append(cmd);
 		}
 	}
-	
-	
-	private void fixPortCapabilityGroups(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
+
+	private void fixPortCapabilityGroups(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix port capability groups");
 
@@ -185,7 +226,7 @@ public class LNGModelCorrector {
 		}
 	}
 
-	private void fixVesselTypeGroups(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
+	private void fixVesselTypeGroups(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix vessel type groups");
 
