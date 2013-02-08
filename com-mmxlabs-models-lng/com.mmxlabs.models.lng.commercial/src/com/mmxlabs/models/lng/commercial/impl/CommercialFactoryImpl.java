@@ -76,8 +76,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.FIXED_PRICE_PARAMETERS: return createFixedPriceParameters();
 			case CommercialPackage.INDEX_PRICE_PARAMETERS: return createIndexPriceParameters();
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
-			case CommercialPackage.NETBACK_PRICE_PARAMETERS: return createNetbackPriceParameters();
-			case CommercialPackage.PROFIT_SHARE_PRICE_PARAMETERS: return createProfitSharePriceParameters();
 			case CommercialPackage.REDIRECTION_PRICE_PARAMETERS: return createRedirectionPriceParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -262,26 +260,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public ExpressionPriceParameters createExpressionPriceParameters() {
 		ExpressionPriceParametersImpl expressionPriceParameters = new ExpressionPriceParametersImpl();
 		return expressionPriceParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NetbackPriceParameters createNetbackPriceParameters() {
-		NetbackPriceParametersImpl netbackPriceParameters = new NetbackPriceParametersImpl();
-		return netbackPriceParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ProfitSharePriceParameters createProfitSharePriceParameters() {
-		ProfitSharePriceParametersImpl profitSharePriceParameters = new ProfitSharePriceParametersImpl();
-		return profitSharePriceParameters;
 	}
 
 	/**

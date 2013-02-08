@@ -189,24 +189,6 @@ public interface CommercialFactory extends EFactory {
 	ExpressionPriceParameters createExpressionPriceParameters();
 
 	/**
-	 * Returns a new object of class '<em>Netback Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Netback Price Parameters</em>'.
-	 * @generated
-	 */
-	NetbackPriceParameters createNetbackPriceParameters();
-
-	/**
-	 * Returns a new object of class '<em>Profit Share Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Profit Share Price Parameters</em>'.
-	 * @generated
-	 */
-	ProfitSharePriceParameters createProfitSharePriceParameters();
-
-	/**
 	 * Returns a new object of class '<em>Redirection Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

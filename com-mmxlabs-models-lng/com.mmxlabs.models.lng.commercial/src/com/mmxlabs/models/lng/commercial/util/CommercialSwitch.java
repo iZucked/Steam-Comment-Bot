@@ -275,26 +275,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.NETBACK_PRICE_PARAMETERS: {
-				NetbackPriceParameters netbackPriceParameters = (NetbackPriceParameters)theEObject;
-				T result = caseNetbackPriceParameters(netbackPriceParameters);
-				if (result == null) result = caseLNGPriceCalculatorParameters(netbackPriceParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(netbackPriceParameters);
-				if (result == null) result = caseUUIDObject(netbackPriceParameters);
-				if (result == null) result = caseMMXObject(netbackPriceParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CommercialPackage.PROFIT_SHARE_PRICE_PARAMETERS: {
-				ProfitSharePriceParameters profitSharePriceParameters = (ProfitSharePriceParameters)theEObject;
-				T result = caseProfitSharePriceParameters(profitSharePriceParameters);
-				if (result == null) result = caseLNGPriceCalculatorParameters(profitSharePriceParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(profitSharePriceParameters);
-				if (result == null) result = caseUUIDObject(profitSharePriceParameters);
-				if (result == null) result = caseMMXObject(profitSharePriceParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case CommercialPackage.REDIRECTION_PRICE_PARAMETERS: {
 				RedirectionPriceParameters redirectionPriceParameters = (RedirectionPriceParameters)theEObject;
 				T result = caseRedirectionPriceParameters(redirectionPriceParameters);
@@ -550,6 +530,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Fixed Price Parameters</em>'.
@@ -565,6 +546,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Index Price Parameters</em>'.
@@ -580,6 +562,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Expression Price Parameters</em>'.
@@ -591,40 +574,11 @@ public class CommercialSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Netback Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Netback Price Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseNetbackPriceParameters(NetbackPriceParameters object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Profit Share Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Profit Share Price Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseProfitSharePriceParameters(ProfitSharePriceParameters object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Redirection Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Redirection Price Parameters</em>'.

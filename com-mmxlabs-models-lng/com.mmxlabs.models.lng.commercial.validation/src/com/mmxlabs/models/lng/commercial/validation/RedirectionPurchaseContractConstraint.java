@@ -14,11 +14,11 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.RedirectionPriceParameters;
 import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.validation.util.ContractConstraints;
+import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
@@ -44,7 +44,7 @@ public class RedirectionPurchaseContractConstraint extends AbstractModelMultiCon
 			// TODO: Check notional speed is within the vessel speed range
 		}
 		else if (target instanceof Contract) {
-			LNGPriceCalculatorParameters priceInfo = ((Contract) target).getPriceInfo();
+			ALNGPriceCalculatorParameters priceInfo = ((Contract) target).getPriceInfo();
 			if (priceInfo instanceof RedirectionPriceParameters) {
 				RedirectionPriceParameters info = (RedirectionPriceParameters) priceInfo;
 				final SeriesParser parser = ContractConstraints.getParser();

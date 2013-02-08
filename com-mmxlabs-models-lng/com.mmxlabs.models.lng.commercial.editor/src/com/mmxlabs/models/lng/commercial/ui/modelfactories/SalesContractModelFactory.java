@@ -2,7 +2,7 @@ package com.mmxlabs.models.lng.commercial.ui.modelfactories;
 
 
 /**
- * @since 2.0
+ * @since 3.0
  */
 public class SalesContractModelFactory extends ContractModelFactory {
 	@Override

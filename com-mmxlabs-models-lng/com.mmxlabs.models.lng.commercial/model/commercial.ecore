@@ -150,34 +150,6 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString" defaultValueLiteral=""/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="NetbackPriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="notionalBallastParameters"
-        lowerBound="1" upperBound="-1" eType="#//NotionalBallastParameters" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="margin" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="floorPrice" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ProfitSharePriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseMarketPorts" upperBound="-1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="baseMarketIndex" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AIndex"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseMarketMultiplier" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="1"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="baseMarketConstant" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="refMarketIndex" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AIndex"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="refMarketMultiplier" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="1"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="refMarketConstant" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="share" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="margin" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="salesMultiplier" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RedirectionPriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseSalesMarketPort" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>

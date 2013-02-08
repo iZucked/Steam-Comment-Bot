@@ -8,15 +8,15 @@ import com.mmxlabs.models.lng.types.AIndex;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>Index Price Contract</b></em>'.
+ * A representation of the model object '<em><b>AIndex Price Contract</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getIndex <em>Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getConstant <em>Constant</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getIndex <em>AIndex</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getMultiplier <em>Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getConstant <em>Constant</em>}</li>
  * </ul>
  * </p>
  *
@@ -26,15 +26,15 @@ import com.mmxlabs.models.lng.types.AIndex;
  */
 public interface IndexPriceContract extends SalesContract, PurchaseContract {
 	/**
-	 * Returns the value of the '<em><b>Index</b></em>' reference.
+	 * Returns the value of the '<em><b>AIndex</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Index</em>' reference isn't clear,
+	 * If the meaning of the '<em>AIndex</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Index</em>' reference.
-	 * @see #setIndex(Index)
+	 * @return the value of the '<em>AIndex</em>' reference.
+	 * @see #setIndex(AIndex)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getIndexPriceContract_Index()
 	 * @model required="true"
 	 * @generated
@@ -42,10 +42,10 @@ public interface IndexPriceContract extends SalesContract, PurchaseContract {
 	AIndex getIndex();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getIndex <em>Index</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getIndex <em>AIndex</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Index</em>' reference.
+	 * @param value the new value of the '<em>AIndex</em>' reference.
 	 * @see #getIndex()
 	 * @generated
 	 */

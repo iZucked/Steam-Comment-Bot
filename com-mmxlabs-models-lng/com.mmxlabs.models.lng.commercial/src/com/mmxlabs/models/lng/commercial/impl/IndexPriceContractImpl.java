@@ -14,14 +14,14 @@ import com.mmxlabs.models.lng.types.AIndex;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Index Price Contract</b></em>'.
+ * An implementation of the model object '<em><b>AIndex Price Contract</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceContractImpl#getIndex <em>Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceContractImpl#getConstant <em>Constant</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceContractImpl#getIndex <em>AIndex</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceContractImpl#getMultiplier <em>Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceContractImpl#getConstant <em>Constant</em>}</li>
  * </ul>
  * </p>
  *
@@ -29,7 +29,7 @@ import com.mmxlabs.models.lng.types.AIndex;
  */
 public class IndexPriceContractImpl extends SalesContractImpl implements IndexPriceContract {
 	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
+	 * The cached value of the '{@link #getIndex() <em>AIndex</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getIndex()
@@ -37,26 +37,6 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 	 * @ordered
 	 */
 	protected AIndex index;
-
-	/**
-	 * The default value of the '{@link #getConstant() <em>Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getConstant()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final double CONSTANT_EDEFAULT = 0.0;
-
-	/**
-	 * The cached value of the '{@link #getConstant() <em>Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getConstant()
-	 * @generated
-	 * @ordered
-	 */
-	protected double constant = CONSTANT_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getMultiplier() <em>Multiplier</em>}' attribute.
@@ -77,6 +57,26 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 	 * @ordered
 	 */
 	protected double multiplier = MULTIPLIER_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getConstant() <em>Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getConstant()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final double CONSTANT_EDEFAULT = 0.0;
+
+	/**
+	 * The cached value of the '{@link #getConstant() <em>Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getConstant()
+	 * @generated
+	 * @ordered
+	 */
+	protected double constant = CONSTANT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -188,10 +188,10 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 			case CommercialPackage.INDEX_PRICE_CONTRACT__INDEX:
 				if (resolve) return getIndex();
 				return basicGetIndex();
-			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
-				return getConstant();
 			case CommercialPackage.INDEX_PRICE_CONTRACT__MULTIPLIER:
 				return getMultiplier();
+			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
+				return getConstant();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -207,11 +207,11 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 			case CommercialPackage.INDEX_PRICE_CONTRACT__INDEX:
 				setIndex((AIndex)newValue);
 				return;
-			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
-				setConstant((Double)newValue);
-				return;
 			case CommercialPackage.INDEX_PRICE_CONTRACT__MULTIPLIER:
 				setMultiplier((Double)newValue);
+				return;
+			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
+				setConstant((Double)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -228,11 +228,11 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 			case CommercialPackage.INDEX_PRICE_CONTRACT__INDEX:
 				setIndex((AIndex)null);
 				return;
-			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
-				setConstant(CONSTANT_EDEFAULT);
-				return;
 			case CommercialPackage.INDEX_PRICE_CONTRACT__MULTIPLIER:
 				setMultiplier(MULTIPLIER_EDEFAULT);
+				return;
+			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
+				setConstant(CONSTANT_EDEFAULT);
 				return;
 		}
 		super.eUnset(featureID);
@@ -248,10 +248,10 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 		switch (featureID) {
 			case CommercialPackage.INDEX_PRICE_CONTRACT__INDEX:
 				return index != null;
-			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
-				return constant != CONSTANT_EDEFAULT;
 			case CommercialPackage.INDEX_PRICE_CONTRACT__MULTIPLIER:
 				return multiplier != MULTIPLIER_EDEFAULT;
+			case CommercialPackage.INDEX_PRICE_CONTRACT__CONSTANT:
+				return constant != CONSTANT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -266,10 +266,10 @@ public class IndexPriceContractImpl extends SalesContractImpl implements IndexPr
 		if (eIsProxy()) return super.toString();
 
 		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (constant: ");
-		result.append(constant);
-		result.append(", multiplier: ");
+		result.append(" (multiplier: ");
 		result.append(multiplier);
+		result.append(", constant: ");
+		result.append(constant);
 		result.append(')');
 		return result.toString();
 	}

@@ -11,6 +11,7 @@ package com.mmxlabs.models.lng.commercial;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Fixed Price Parameters</b></em>'.
+ * @since 3.0
  * <!-- end-user-doc -->
  *
  * <p>

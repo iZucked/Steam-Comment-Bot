@@ -365,16 +365,6 @@ public class ContractItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
-				 CommercialFactory.eINSTANCE.createNetbackPriceParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
-				 CommercialFactory.eINSTANCE.createProfitSharePriceParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
 				 CommercialFactory.eINSTANCE.createRedirectionPriceParameters()));
 	}
 

@@ -471,52 +471,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NetbackPriceParameters} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NetbackPriceParametersItemProvider netbackPriceParametersItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NetbackPriceParameters}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNetbackPriceParametersAdapter() {
-		if (netbackPriceParametersItemProvider == null) {
-			netbackPriceParametersItemProvider = new NetbackPriceParametersItemProvider(this);
-		}
-
-		return netbackPriceParametersItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ProfitSharePriceParametersItemProvider profitSharePriceParametersItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createProfitSharePriceParametersAdapter() {
-		if (profitSharePriceParametersItemProvider == null) {
-			profitSharePriceParametersItemProvider = new ProfitSharePriceParametersItemProvider(this);
-		}
-
-		return profitSharePriceParametersItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -655,8 +609,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (fixedPriceParametersItemProvider != null) fixedPriceParametersItemProvider.dispose();
 		if (indexPriceParametersItemProvider != null) indexPriceParametersItemProvider.dispose();
 		if (expressionPriceParametersItemProvider != null) expressionPriceParametersItemProvider.dispose();
-		if (netbackPriceParametersItemProvider != null) netbackPriceParametersItemProvider.dispose();
-		if (profitSharePriceParametersItemProvider != null) profitSharePriceParametersItemProvider.dispose();
 		if (redirectionPriceParametersItemProvider != null) redirectionPriceParametersItemProvider.dispose();
 	}
 

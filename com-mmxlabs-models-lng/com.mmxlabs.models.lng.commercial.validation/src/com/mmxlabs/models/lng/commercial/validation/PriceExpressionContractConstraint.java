@@ -14,10 +14,10 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.validation.util.ContractConstraints;
+import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 
 public class PriceExpressionContractConstraint extends
@@ -36,7 +36,7 @@ public class PriceExpressionContractConstraint extends
 
 		}
 		else if (target instanceof Contract) {
-			LNGPriceCalculatorParameters priceInfo = ((Contract) target).getPriceInfo();
+			ALNGPriceCalculatorParameters priceInfo = ((Contract) target).getPriceInfo();
 			if (priceInfo instanceof ExpressionPriceParameters) {
 				final SeriesParser parser = ContractConstraints.getParser();
 				final ExpressionPriceParameters info = (ExpressionPriceParameters) priceInfo;

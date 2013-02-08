@@ -14,6 +14,7 @@ import org.eclipse.emf.common.util.EList;
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Netback Price Parameters</b></em>'.
+ * @since 3.0
  * <!-- end-user-doc -->
  *
  * <p>
