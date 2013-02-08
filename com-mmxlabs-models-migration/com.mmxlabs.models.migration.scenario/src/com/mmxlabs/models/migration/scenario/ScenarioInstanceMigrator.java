@@ -59,9 +59,11 @@ public class ScenarioInstanceMigrator {
 			// Copy data files for manipulation
 			final List<URI> tmpURIs = new ArrayList<URI>();
 			for (final URI uri : uris) {
+				assert uri != null;
 				final File f = File.createTempFile("migration", "xmi");
 				// Create a temp file and generate a URI to it to pass into migration code.
 				final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
+				assert tmpURI != null;
 				copyURIData(uc, uri, tmpURI);
 
 				// Store the URI
@@ -71,12 +73,19 @@ public class ScenarioInstanceMigrator {
 				uc.getURIMap().put(uri, tmpURI);
 			}
 
+			assert tmpURIs.size() == uris.size();
+
 			// Apply Migration Chain
 			int migratedVersion = applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
 
 			// Copy back over original data
 			for (int i = 0; i < uris.size(); ++i) {
-				copyURIData(uc, tmpURIs.get(i), uris.get(i));
+				final URI tmpURI = tmpURIs.get(i);
+				assert tmpURI != null;
+				final URI uri = uris.get(i);
+				assert uri != null;
+				// Use a new URI Convertor otherwise the previous map will cause source == dest!
+				copyURIData(new ExtensibleURIConverterImpl(), tmpURI, uri);
 			}
 			scenarioInstance.setScenarioVersion(migratedVersion);
 
@@ -99,7 +108,8 @@ public class ScenarioInstanceMigrator {
 	 * @return
 	 * @throws Exception
 	 */
-	public int applyMigrationChain(@NonNull final String context, final int scenarioVersion, final int latestVersion, @NonNull final List<URI> tmpURIs, @NonNull URIConverter uc) throws Exception {
+	public int applyMigrationChain(@NonNull final String context, final int scenarioVersion, final int latestVersion, @NonNull final List<URI> tmpURIs, @NonNull final URIConverter uc)
+			throws Exception {
 
 		final List<IMigrationUnit> chain = migrationRegistry.getMigrationChain(context, scenarioVersion, latestVersion);
 
