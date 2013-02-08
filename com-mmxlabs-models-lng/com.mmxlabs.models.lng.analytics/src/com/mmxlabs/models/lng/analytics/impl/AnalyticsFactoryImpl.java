@@ -76,6 +76,10 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 			case AnalyticsPackage.JOURNEY: return createJourney();
 			case AnalyticsPackage.SHIPPING_COST_PLAN: return createShippingCostPlan();
 			case AnalyticsPackage.SHIPPING_COST_ROW: return createShippingCostRow();
+			case AnalyticsPackage.CARGO_SANDBOX: return createCargoSandbox();
+			case AnalyticsPackage.PROVISIONAL_CARGO: return createProvisionalCargo();
+			case AnalyticsPackage.BUY_OPPORTUNITY: return createBuyOpportunity();
+			case AnalyticsPackage.SELL_OPPORTUNITY: return createSellOpportunity();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -211,6 +215,50 @@ public class AnalyticsFactoryImpl extends EFactoryImpl implements AnalyticsFacto
 	public ShippingCostRow createShippingCostRow() {
 		ShippingCostRowImpl shippingCostRow = new ShippingCostRowImpl();
 		return shippingCostRow;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CargoSandbox createCargoSandbox() {
+		CargoSandboxImpl cargoSandbox = new CargoSandboxImpl();
+		return cargoSandbox;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProvisionalCargo createProvisionalCargo() {
+		ProvisionalCargoImpl provisionalCargo = new ProvisionalCargoImpl();
+		return provisionalCargo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public BuyOpportunity createBuyOpportunity() {
+		BuyOpportunityImpl buyOpportunity = new BuyOpportunityImpl();
+		return buyOpportunity;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SellOpportunity createSellOpportunity() {
+		SellOpportunityImpl sellOpportunity = new SellOpportunityImpl();
+		return sellOpportunity;
 	}
 
 	/**
