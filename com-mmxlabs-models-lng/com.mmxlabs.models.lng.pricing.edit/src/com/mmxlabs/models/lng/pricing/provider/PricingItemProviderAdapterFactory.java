@@ -464,6 +464,98 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LNGPriceCalculatorParametersItemProvider lngPriceCalculatorParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLNGPriceCalculatorParametersAdapter() {
+		if (lngPriceCalculatorParametersItemProvider == null) {
+			lngPriceCalculatorParametersItemProvider = new LNGPriceCalculatorParametersItemProvider(this);
+		}
+
+		return lngPriceCalculatorParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LNGFixedPriceParametersItemProvider lngFixedPriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLNGFixedPriceParametersAdapter() {
+		if (lngFixedPriceParametersItemProvider == null) {
+			lngFixedPriceParametersItemProvider = new LNGFixedPriceParametersItemProvider(this);
+		}
+
+		return lngFixedPriceParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LNGIndexPriceParametersItemProvider lngIndexPriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLNGIndexPriceParametersAdapter() {
+		if (lngIndexPriceParametersItemProvider == null) {
+			lngIndexPriceParametersItemProvider = new LNGIndexPriceParametersItemProvider(this);
+		}
+
+		return lngIndexPriceParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected LNGPriceExpressionParametersItemProvider lngPriceExpressionParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createLNGPriceExpressionParametersAdapter() {
+		if (lngPriceExpressionParametersItemProvider == null) {
+			lngPriceExpressionParametersItemProvider = new LNGPriceExpressionParametersItemProvider(this);
+		}
+
+		return lngPriceExpressionParametersItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -579,6 +671,10 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 		if (fobPurchasesMarketItemProvider != null) fobPurchasesMarketItemProvider.dispose();
 		if (fobSalesMarketItemProvider != null) fobSalesMarketItemProvider.dispose();
 		if (spotAvailabilityItemProvider != null) spotAvailabilityItemProvider.dispose();
+		if (lngPriceCalculatorParametersItemProvider != null) lngPriceCalculatorParametersItemProvider.dispose();
+		if (lngFixedPriceParametersItemProvider != null) lngFixedPriceParametersItemProvider.dispose();
+		if (lngIndexPriceParametersItemProvider != null) lngIndexPriceParametersItemProvider.dispose();
+		if (lngPriceExpressionParametersItemProvider != null) lngPriceExpressionParametersItemProvider.dispose();
 	}
 
 }

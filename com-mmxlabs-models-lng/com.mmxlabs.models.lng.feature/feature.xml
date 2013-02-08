@@ -25,7 +25,7 @@ All rights reserved.
    </license>
 
    <requires>
-      <import feature="com.mmxlabs.models.lng.types.feature" version="3.1.0" match="compatible"/>
+      <import feature="com.mmxlabs.models.lng.types.feature" version="4.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.mmxcore.runtime.feature" version="3.1.0" match="compatible"/>
       <import feature="com.mmxlabs.models.lng.ui.runtime.feature" version="2.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.ui.runtime.feature" version="2.0.0" match="compatible"/>

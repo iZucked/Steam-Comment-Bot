@@ -199,4 +199,20 @@
       </eGenericType>
     </eStructuralFeatures>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LNGPriceCalculatorParameters" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ALNGPriceCalculatorParameters"/>
+  <eClassifiers xsi:type="ecore:EClass" name="LNGFixedPriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="pricePerMMBTU" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LNGIndexPriceParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="index" lowerBound="1" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AIndex"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="multiplier" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="1"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="LNGPriceExpressionParameters" eSuperTypes="#//LNGPriceCalculatorParameters">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="priceExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        defaultValueLiteral=""/>
+  </eClassifiers>
 </ecore:EPackage>
