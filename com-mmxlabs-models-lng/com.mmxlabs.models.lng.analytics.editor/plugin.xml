@@ -81,6 +81,30 @@
         inheritable="true"
         modelClass="com.mmxlabs.models.lng.analytics.ShippingCostRow">
   </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.CargoSandboxComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.CargoSandboxComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.CargoSandbox">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.ProvisionalCargoComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.ProvisionalCargoComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.ProvisionalCargo">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOpportunityComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.BuyOpportunityComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.BuyOpportunity">
+  </componentHelper>
+  <componentHelper
+        helperClass="com.mmxlabs.models.lng.analytics.presentation.composites.SellOpportunityComponentHelper"
+        id="com.mmxlabs.models.lng.analytics.presentation.composites.SellOpportunityComponentHelper"
+        inheritable="true"
+        modelClass="com.mmxlabs.models.lng.analytics.SellOpportunity">
+  </componentHelper>
 		
 	</extension>
  <extension
@@ -119,6 +143,18 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Shipping Cost Row"
           targetEClass="com.mmxlabs.models.lng.analytics.ShippingCostRow">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.ProvisionalCargoFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Provisional Cargo"
+          targetEClass="com.mmxlabs.models.lng.analytics.ProvisionalCargo">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.CargoSandboxFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Cargo Sandbox"
+          targetEClass="com.mmxlabs.models.lng.analytics.CargoSandbox">
     </factory>
  </extension>
  <extension

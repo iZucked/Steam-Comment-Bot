@@ -120,6 +120,22 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 				return createShippingCostRowAdapter();
 			}
 			@Override
+			public Adapter caseCargoSandbox(CargoSandbox object) {
+				return createCargoSandboxAdapter();
+			}
+			@Override
+			public Adapter caseProvisionalCargo(ProvisionalCargo object) {
+				return createProvisionalCargoAdapter();
+			}
+			@Override
+			public Adapter caseBuyOpportunity(BuyOpportunity object) {
+				return createBuyOpportunityAdapter();
+			}
+			@Override
+			public Adapter caseSellOpportunity(SellOpportunity object) {
+				return createSellOpportunityAdapter();
+			}
+			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -294,6 +310,66 @@ public class AnalyticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createShippingCostRowAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.CargoSandbox <em>Cargo Sandbox</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.CargoSandbox
+	 * @generated
+	 */
+	public Adapter createCargoSandboxAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.ProvisionalCargo <em>Provisional Cargo</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.ProvisionalCargo
+	 * @generated
+	 */
+	public Adapter createProvisionalCargoAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.BuyOpportunity <em>Buy Opportunity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.BuyOpportunity
+	 * @generated
+	 */
+	public Adapter createBuyOpportunityAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.analytics.SellOpportunity <em>Sell Opportunity</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see com.mmxlabs.models.lng.analytics.SellOpportunity
+	 * @generated
+	 */
+	public Adapter createSellOpportunityAdapter() {
 		return null;
 	}
 

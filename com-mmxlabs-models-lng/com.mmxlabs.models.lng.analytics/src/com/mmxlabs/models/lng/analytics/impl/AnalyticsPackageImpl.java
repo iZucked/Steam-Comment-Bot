@@ -14,10 +14,14 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
+import com.mmxlabs.models.lng.analytics.CargoSandbox;
 import com.mmxlabs.models.lng.analytics.CostComponent;
 import com.mmxlabs.models.lng.analytics.DestinationType;
 import com.mmxlabs.models.lng.analytics.FuelCost;
 import com.mmxlabs.models.lng.analytics.Journey;
+import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
+import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.ShippingCostRow;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
@@ -103,6 +107,34 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 * @generated
 	 */
 	private EClass shippingCostRowEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass cargoSandboxEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass provisionalCargoEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass buyOpportunityEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass sellOpportunityEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -210,6 +242,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 	 */
 	public EReference getAnalyticsModel_ShippingCostPlans() {
 		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getAnalyticsModel_CargoSandboxes() {
+		return (EReference)analyticsModelEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -820,6 +862,176 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getCargoSandbox() {
+		return cargoSandboxEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getCargoSandbox_Cargoes() {
+		return (EReference)cargoSandboxEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getProvisionalCargo() {
+		return provisionalCargoEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProvisionalCargo_Buy() {
+		return (EReference)provisionalCargoEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProvisionalCargo_Sell() {
+		return (EReference)provisionalCargoEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProvisionalCargo_CostLine() {
+		return (EReference)provisionalCargoEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProvisionalCargo_Vessel() {
+		return (EReference)provisionalCargoEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getBuyOpportunity() {
+		return buyOpportunityEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBuyOpportunity_Port() {
+		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getBuyOpportunity_Contract() {
+		return (EReference)buyOpportunityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBuyOpportunity_Date() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getBuyOpportunity_PriceExpression() {
+		return (EAttribute)buyOpportunityEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getSellOpportunity() {
+		return sellOpportunityEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSellOpportunity_Port() {
+		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getSellOpportunity_Contract() {
+		return (EReference)sellOpportunityEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSellOpportunity_Date() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getSellOpportunity_PriceExpression() {
+		return (EAttribute)sellOpportunityEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -860,6 +1072,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__ROUND_TRIP_MATRICES);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__SELECTED_MATRIX);
 		createEReference(analyticsModelEClass, ANALYTICS_MODEL__SHIPPING_COST_PLANS);
+		createEReference(analyticsModelEClass, ANALYTICS_MODEL__CARGO_SANDBOXES);
 
 		unitCostMatrixEClass = createEClass(UNIT_COST_MATRIX);
 		createEReference(unitCostMatrixEClass, UNIT_COST_MATRIX__FROM_PORTS);
@@ -936,6 +1149,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__DESTINATION_TYPE);
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__HEEL_VOLUME);
 
+		cargoSandboxEClass = createEClass(CARGO_SANDBOX);
+		createEReference(cargoSandboxEClass, CARGO_SANDBOX__CARGOES);
+
+		provisionalCargoEClass = createEClass(PROVISIONAL_CARGO);
+		createEReference(provisionalCargoEClass, PROVISIONAL_CARGO__BUY);
+		createEReference(provisionalCargoEClass, PROVISIONAL_CARGO__SELL);
+		createEReference(provisionalCargoEClass, PROVISIONAL_CARGO__COST_LINE);
+		createEReference(provisionalCargoEClass, PROVISIONAL_CARGO__VESSEL);
+
+		buyOpportunityEClass = createEClass(BUY_OPPORTUNITY);
+		createEReference(buyOpportunityEClass, BUY_OPPORTUNITY__PORT);
+		createEReference(buyOpportunityEClass, BUY_OPPORTUNITY__CONTRACT);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__DATE);
+		createEAttribute(buyOpportunityEClass, BUY_OPPORTUNITY__PRICE_EXPRESSION);
+
+		sellOpportunityEClass = createEClass(SELL_OPPORTUNITY);
+		createEReference(sellOpportunityEClass, SELL_OPPORTUNITY__PORT);
+		createEReference(sellOpportunityEClass, SELL_OPPORTUNITY__CONTRACT);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__DATE);
+		createEAttribute(sellOpportunityEClass, SELL_OPPORTUNITY__PRICE_EXPRESSION);
+
 		// Create enums
 		destinationTypeEEnum = createEEnum(DESTINATION_TYPE);
 	}
@@ -981,12 +1215,17 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		visitEClass.getESuperTypes().add(this.getCostComponent());
 		shippingCostPlanEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		shippingCostRowEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		cargoSandboxEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
+		provisionalCargoEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		buyOpportunityEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
+		sellOpportunityEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(analyticsModelEClass, AnalyticsModel.class, "AnalyticsModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getAnalyticsModel_RoundTripMatrices(), this.getUnitCostMatrix(), null, "roundTripMatrices", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_SelectedMatrix(), this.getUnitCostMatrix(), null, "selectedMatrix", null, 1, 1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getAnalyticsModel_ShippingCostPlans(), this.getShippingCostPlan(), null, "shippingCostPlans", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getAnalyticsModel_CargoSandboxes(), this.getCargoSandbox(), null, "cargoSandboxes", null, 0, -1, AnalyticsModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(unitCostMatrixEClass, UnitCostMatrix.class, "UnitCostMatrix", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getUnitCostMatrix_FromPorts(), theTypesPackage.getAPortSet(), null, "fromPorts", null, 0, -1, UnitCostMatrix.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1066,6 +1305,27 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getShippingCostRow_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_DestinationType(), this.getDestinationType(), "destinationType", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_HeelVolume(), ecorePackage.getEInt(), "heelVolume", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(cargoSandboxEClass, CargoSandbox.class, "CargoSandbox", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getCargoSandbox_Cargoes(), this.getProvisionalCargo(), null, "cargoes", null, 0, -1, CargoSandbox.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(provisionalCargoEClass, ProvisionalCargo.class, "ProvisionalCargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getProvisionalCargo_Buy(), this.getBuyOpportunity(), null, "buy", null, 0, 1, ProvisionalCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProvisionalCargo_Sell(), this.getSellOpportunity(), null, "sell", null, 0, 1, ProvisionalCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProvisionalCargo_CostLine(), this.getUnitCostLine(), null, "costLine", null, 0, 1, ProvisionalCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProvisionalCargo_Vessel(), theTypesPackage.getAVessel(), null, "vessel", null, 0, 1, ProvisionalCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(buyOpportunityEClass, BuyOpportunity.class, "BuyOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getBuyOpportunity_Port(), theTypesPackage.getAPort(), null, "port", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getBuyOpportunity_Contract(), theTypesPackage.getAPurchaseContract(), null, "contract", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_Date(), ecorePackage.getEDate(), "date", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getBuyOpportunity_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, BuyOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(sellOpportunityEClass, SellOpportunity.class, "SellOpportunity", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSellOpportunity_Port(), theTypesPackage.getAPort(), null, "port", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getSellOpportunity_Contract(), theTypesPackage.getASalesContract(), null, "contract", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_Date(), ecorePackage.getEDate(), "date", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getSellOpportunity_PriceExpression(), ecorePackage.getEString(), "priceExpression", null, 0, 1, SellOpportunity.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(destinationTypeEEnum, DestinationType.class, "DestinationType");

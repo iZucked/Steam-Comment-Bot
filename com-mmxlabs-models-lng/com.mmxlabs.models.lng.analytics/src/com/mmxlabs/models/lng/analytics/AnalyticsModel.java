@@ -18,6 +18,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getRoundTripMatrices <em>Round Trip Matrices</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getSelectedMatrix <em>Selected Matrix</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getShippingCostPlans <em>Shipping Cost Plans</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.AnalyticsModel#getCargoSandboxes <em>Cargo Sandboxes</em>}</li>
  * </ul>
  * </p>
  *
@@ -84,6 +85,23 @@ public interface AnalyticsModel extends UUIDObject {
 	 * @generated
 	 */
 	EList<ShippingCostPlan> getShippingCostPlans();
+
+	/**
+	 * Returns the value of the '<em><b>Cargo Sandboxes</b></em>' containment reference list.
+	 * The list contents are of type {@link com.mmxlabs.models.lng.analytics.CargoSandbox}.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Cargo Sandboxes</em>' containment reference list isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Cargo Sandboxes</em>' containment reference list.
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getAnalyticsModel_CargoSandboxes()
+	 * @model containment="true"
+	 * @generated
+	 */
+	EList<CargoSandbox> getCargoSandboxes();
 
 } // end of  AnalyticsModel
 

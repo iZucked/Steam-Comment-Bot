@@ -1,18 +1,28 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.analytics.provider;
 
+
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.CargoSandbox;
+
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.common.util.ResourceLocator;
+
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
+
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -21,19 +31,15 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
-import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
-import com.mmxlabs.models.lng.analytics.AnalyticsModel;
-import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
-import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
-
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.AnalyticsModel} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.CargoSandbox} object.
  * <!-- begin-user-doc -->
+ * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
-public class AnalyticsModelItemProvider
-	extends UUIDObjectItemProvider
+public class CargoSandboxItemProvider
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -46,7 +52,7 @@ public class AnalyticsModelItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AnalyticsModelItemProvider(AdapterFactory adapterFactory) {
+	public CargoSandboxItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -61,31 +67,8 @@ public class AnalyticsModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addSelectedMatrixPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Selected Matrix feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSelectedMatrixPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AnalyticsModel_selectedMatrix_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_AnalyticsModel_selectedMatrix_feature", "_UI_AnalyticsModel_type"),
-				 AnalyticsPackage.Literals.ANALYTICS_MODEL__SELECTED_MATRIX,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -100,9 +83,7 @@ public class AnalyticsModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS);
-			childrenFeatures.add(AnalyticsPackage.Literals.ANALYTICS_MODEL__CARGO_SANDBOXES);
+			childrenFeatures.add(AnalyticsPackage.Literals.CARGO_SANDBOX__CARGOES);
 		}
 		return childrenFeatures;
 	}
@@ -121,14 +102,14 @@ public class AnalyticsModelItemProvider
 	}
 
 	/**
-	 * This returns AnalyticsModel.gif.
+	 * This returns CargoSandbox.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AnalyticsModel"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CargoSandbox"));
 	}
 
 	/**
@@ -139,10 +120,10 @@ public class AnalyticsModelItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((AnalyticsModel)object).getUuid();
+		String label = ((CargoSandbox)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_AnalyticsModel_type") :
-			getString("_UI_AnalyticsModel_type") + " " + label;
+			getString("_UI_CargoSandbox_type") :
+			getString("_UI_CargoSandbox_type") + " " + label;
 	}
 
 	/**
@@ -156,10 +137,8 @@ public class AnalyticsModelItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(AnalyticsModel.class)) {
-			case AnalyticsPackage.ANALYTICS_MODEL__ROUND_TRIP_MATRICES:
-			case AnalyticsPackage.ANALYTICS_MODEL__SHIPPING_COST_PLANS:
-			case AnalyticsPackage.ANALYTICS_MODEL__CARGO_SANDBOXES:
+		switch (notification.getFeatureID(CargoSandbox.class)) {
+			case AnalyticsPackage.CARGO_SANDBOX__CARGOES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -179,18 +158,8 @@ public class AnalyticsModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__ROUND_TRIP_MATRICES,
-				 AnalyticsFactory.eINSTANCE.createUnitCostMatrix()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__SHIPPING_COST_PLANS,
-				 AnalyticsFactory.eINSTANCE.createShippingCostPlan()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(AnalyticsPackage.Literals.ANALYTICS_MODEL__CARGO_SANDBOXES,
-				 AnalyticsFactory.eINSTANCE.createCargoSandbox()));
+				(AnalyticsPackage.Literals.CARGO_SANDBOX__CARGOES,
+				 AnalyticsFactory.eINSTANCE.createProvisionalCargo()));
 	}
 
 	/**
