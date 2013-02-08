@@ -49,6 +49,7 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
 import com.mmxlabs.models.lng.analytics.transformer.ICargoSandboxTransformer;
+import com.mmxlabs.models.lng.analytics.transformer.internal.TmpDefaultBreakEvenEvaluator;
 import com.mmxlabs.models.lng.analytics.transformer.internal.TmpVanillaEntityValueCalculator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -67,7 +68,6 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.TransformerHelper;
-import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.ExtraData;
@@ -509,7 +509,11 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		if (result == null) {
 			// Error scheduling
 			return null;
+
 		}
+		TmpDefaultBreakEvenEvaluator beCalc = new TmpDefaultBreakEvenEvaluator();
+		injector.injectMembers(beCalc);
+		beCalc.processSchedule(result);
 
 		final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
 		aca.setVesselProvider(vesselProvider);
@@ -633,7 +637,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				summary.addExtraData("routecost", "Route Cost", totalRouteCost, ExtraDataFormatType.CURRENCY);
 				summary.addExtraData("portcost", "Port Cost", totalPortCost, ExtraDataFormatType.CURRENCY);
 				summary.addExtraData("profit", "Profit", line.getProfit(), ExtraDataFormatType.CURRENCY);
-				summary.addExtraData("ssalesprice", "Sales Price", allocation.getDischargeM3Price() / cv  / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
+				summary.addExtraData("ssalesprice", "Sales Price", allocation.getDischargeM3Price() / cv / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
 				summary.addExtraData("purchaseprice", "Purchase Price", allocation.getLoadM3Price() / cv / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
 				// summary.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * totalDuration) / 24, ExtraDataFormatType.CURRENCY);
 
@@ -660,6 +664,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 				bind(ScheduleEvaluator.class);
 				bind(ICargoAllocator.class).to(UnconstrainedCargoAllocator.class);
+				bind(IEntityValueCalculator.class).to(TmpVanillaEntityValueCalculator.class);
+
 			}
 		};
 	}
