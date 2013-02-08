@@ -35,7 +35,7 @@ public class DefaultModelFactory implements IModelFactory {
 	protected String prototypeClass;
 	
 	/**
-	 * @since 2.0
+	 * @since 2.1
 	 */
 	protected EClass findEClassInClassifiers(String name, EList<EClassifier> eclassifiers) {
 		for (final EClassifier e : eclassifiers) {
@@ -47,13 +47,17 @@ public class DefaultModelFactory implements IModelFactory {
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 2.1
 	 */
 	protected EClass getEClassFromName(String name, final EReference containment) {
 		if (name != null) {
-			EClass result = findEClassInClassifiers(name, containment.getEReferenceType().getEPackage().getEClassifiers());
-			if (result != null)
-				return result;
+			EClass result;
+
+			if (containment != null) {
+				result = findEClassInClassifiers(name, containment.getEReferenceType().getEPackage().getEClassifiers());
+				if (result != null)
+					return result;
+			}			
 									
 			// All registry packages...
 			for (final Object obj : Registry.INSTANCE.values()) {
@@ -65,7 +69,10 @@ public class DefaultModelFactory implements IModelFactory {
 	
 			}
 		}
-		return containment.getEReferenceType();
+		if (containment != null) {
+			return containment.getEReferenceType();
+		}
+		return null;
 	}
 	
 	@Override
