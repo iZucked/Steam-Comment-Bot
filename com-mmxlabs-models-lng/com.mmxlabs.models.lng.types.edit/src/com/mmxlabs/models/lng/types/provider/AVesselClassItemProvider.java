@@ -25,8 +25,9 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class AVesselClassItemProvider extends AVesselSetItemProvider implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
-		IItemPropertySource {
+public class AVesselClassItemProvider extends AVesselSetItemProvider implements
+		IEditingDomainItemProvider, IStructuredItemContentProvider,
+		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -60,7 +61,8 @@ public class AVesselClassItemProvider extends AVesselSetItemProvider implements 
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/AVesselClass"));
+		return overlayImage(object,
+				getResourceLocator().getImage("full/obj16/AVesselClass"));
 	}
 
 	/**
@@ -72,7 +74,8 @@ public class AVesselClassItemProvider extends AVesselSetItemProvider implements 
 	@Override
 	public String getText(Object object) {
 		String label = ((AVesselClass) object).getName();
-		return label == null || label.length() == 0 ? getString("_UI_AVesselClass_type") : getString("_UI_AVesselClass_type") + " " + label;
+		return label == null || label.length() == 0 ? getString("_UI_AVesselClass_type")
+				: getString("_UI_AVesselClass_type") + " " + label;
 	}
 
 	/**
@@ -96,7 +99,8 @@ public class AVesselClassItemProvider extends AVesselSetItemProvider implements 
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(
+			Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

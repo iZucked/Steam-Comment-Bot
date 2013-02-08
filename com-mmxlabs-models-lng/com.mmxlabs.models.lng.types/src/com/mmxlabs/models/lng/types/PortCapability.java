@@ -126,7 +126,8 @@ public enum PortCapability implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final PortCapability[] VALUES_ARRAY = new PortCapability[] { LOAD, DISCHARGE, DRYDOCK, MAINTENANCE, };
+	private static final PortCapability[] VALUES_ARRAY = new PortCapability[] {
+			LOAD, DISCHARGE, DRYDOCK, MAINTENANCE, };
 
 	/**
 	 * A public read-only list of all the '<em><b>Port Capability</b></em>' enumerators.
@@ -134,7 +135,8 @@ public enum PortCapability implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<PortCapability> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+	public static final List<PortCapability> VALUES = Collections
+			.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
 	 * Returns the '<em><b>Port Capability</b></em>' literal with the specified literal value.

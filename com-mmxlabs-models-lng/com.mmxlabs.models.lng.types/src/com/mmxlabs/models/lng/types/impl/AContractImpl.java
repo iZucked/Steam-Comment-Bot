@@ -104,7 +104,8 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 		String oldName = name;
 		name = newName;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, TypesPackage.ACONTRACT__NAME, oldName, name));
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					TypesPackage.ACONTRACT__NAME, oldName, name));
 	}
 
 	/**
@@ -115,7 +116,8 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 	 */
 	public EList<String> getOtherNames() {
 		if (otherNames == null) {
-			otherNames = new EDataTypeUniqueEList<String>(String.class, this, TypesPackage.ACONTRACT__OTHER_NAMES);
+			otherNames = new EDataTypeUniqueEList<String>(String.class, this,
+					TypesPackage.ACONTRACT__OTHER_NAMES);
 		}
 		return otherNames;
 	}
@@ -183,7 +185,8 @@ public abstract class AContractImpl extends UUIDObjectImpl implements AContract 
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case TypesPackage.ACONTRACT__NAME:
-			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT
+					.equals(name);
 		case TypesPackage.ACONTRACT__OTHER_NAMES:
 			return otherNames != null && !otherNames.isEmpty();
 		}

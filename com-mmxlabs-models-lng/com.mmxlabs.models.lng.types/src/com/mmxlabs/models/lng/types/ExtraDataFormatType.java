@@ -177,7 +177,8 @@ public enum ExtraDataFormatType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private static final ExtraDataFormatType[] VALUES_ARRAY = new ExtraDataFormatType[] { AUTO, INTEGER, DURATION, CURRENCY, DATE, STRING_FORMAT, };
+	private static final ExtraDataFormatType[] VALUES_ARRAY = new ExtraDataFormatType[] {
+			AUTO, INTEGER, DURATION, CURRENCY, DATE, STRING_FORMAT, };
 
 	/**
 	 * A public read-only list of all the '<em><b>Extra Data Format Type</b></em>' enumerators.
@@ -185,7 +186,8 @@ public enum ExtraDataFormatType implements Enumerator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public static final List<ExtraDataFormatType> VALUES = Collections.unmodifiableList(Arrays.asList(VALUES_ARRAY));
+	public static final List<ExtraDataFormatType> VALUES = Collections
+			.unmodifiableList(Arrays.asList(VALUES_ARRAY));
 
 	/**
 	 * Returns the '<em><b>Extra Data Format Type</b></em>' literal with the specified literal value.

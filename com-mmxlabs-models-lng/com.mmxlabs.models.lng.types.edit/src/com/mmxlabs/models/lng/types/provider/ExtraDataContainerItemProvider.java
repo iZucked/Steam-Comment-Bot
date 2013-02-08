@@ -34,8 +34,9 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
  * <!-- end-user-doc -->
  * @generated
  */
-public class ExtraDataContainerItemProvider extends ItemProviderAdapter implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider, IItemLabelProvider,
-		IItemPropertySource {
+public class ExtraDataContainerItemProvider extends ItemProviderAdapter
+		implements IEditingDomainItemProvider, IStructuredItemContentProvider,
+		ITreeItemContentProvider, IItemLabelProvider, IItemPropertySource {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -70,10 +71,12 @@ public class ExtraDataContainerItemProvider extends ItemProviderAdapter implemen
 	 * @generated
 	 */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(
+			Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
+			childrenFeatures
+					.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
 		}
 		return childrenFeatures;
 	}
@@ -99,7 +102,8 @@ public class ExtraDataContainerItemProvider extends ItemProviderAdapter implemen
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ExtraDataContainer"));
+		return overlayImage(object,
+				getResourceLocator().getImage("full/obj16/ExtraDataContainer"));
 	}
 
 	/**
@@ -126,7 +130,8 @@ public class ExtraDataContainerItemProvider extends ItemProviderAdapter implemen
 
 		switch (notification.getFeatureID(ExtraDataContainer.class)) {
 		case TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA:
-			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+			fireNotifyChanged(new ViewerNotification(notification,
+					notification.getNotifier(), true, false));
 			return;
 		}
 		super.notifyChanged(notification);
@@ -140,10 +145,13 @@ public class ExtraDataContainerItemProvider extends ItemProviderAdapter implemen
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(
+			Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-		newChildDescriptors.add(createChildParameter(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA, TypesFactory.eINSTANCE.createExtraData()));
+		newChildDescriptors.add(createChildParameter(
+				TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA,
+				TypesFactory.eINSTANCE.createExtraData()));
 	}
 
 	/**

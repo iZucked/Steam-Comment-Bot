@@ -182,7 +182,6 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 4.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
