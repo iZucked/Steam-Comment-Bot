@@ -63,8 +63,27 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.commercial.FixedPriceContract">
   </componentHelper>
-
-  <componentHelper
+	<componentHelper
+		id="com.mmxlabs.models.lng.commercial.helpers.FixedPriceParameters"
+		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.FixedPriceParametersComponentHelper"
+		inheritable="false"
+		modelClass="com.mmxlabs.models.lng.commercial.FixedPriceParameters" />
+	<componentHelper
+		id="com.mmxlabs.models.lng.commercial.helpers.IndexPriceParameters"
+		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.IndexPriceParametersComponentHelper"
+		inheritable="false"
+		modelClass="com.mmxlabs.models.lng.commercial.IndexPriceParameters" />
+	<componentHelper
+		id="com.mmxlabs.models.lng.commercial.helpers.ExpressionPriceParameters"
+		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
+		inheritable="false"
+		modelClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters" />
+	<componentHelper
+		id="com.mmxlabs.models.lng.commercial.helpers.RedirectionPriceParameters"
+		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPriceParametersComponentHelper"
+		inheritable="false"
+		modelClass="com.mmxlabs.models.lng.commercial.RedirectionPriceParameters" />
+ <componentHelper
         helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
         id="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
         inheritable="false"
@@ -124,40 +143,37 @@
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
+
+    <!-- Purchase Contract Factories -->
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.fixedPurchaseFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
           label="Fixed Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.FixedPriceContract"
+          outputEClass="com.mmxlabs.models.lng.commercial.FixedPriceParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.fixedSalesFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Fixed Sales Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.FixedPriceContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.indexPurchaseFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Indexed Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceContract"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
+          label="Index Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.indexSalesFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Indexed Sales Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+          ID="com.mmxlabs.models.lng.commercial.editor.expressionPurchaseFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
+          label="Price Expression Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
     <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.entityFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Entity"
-          targetEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
+          ID="com.mmxlabs.models.lng.commercial.editor.redirectionPurchaseFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.PurchaseContractModelFactory"
+          label="Redirection Purchase Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPriceParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
+    <!--
     <factory
           ID="com.mmxlabs.models.lng.commercial.editor.RedirectionPurchaseContractFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
@@ -165,20 +181,37 @@
           outputEClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract"
           targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
     </factory>
+    -->
+    <!-- Sales Contract Factories -->
     <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.priceExpressionPurchaseFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Price Expression Purchase Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract"
-          targetEClass="com.mmxlabs.models.lng.commercial.PurchaseContract">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.commercial.editor.priceExpressionSalesFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Price Expression Sales Contract"
-          outputEClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract"
+          ID="com.mmxlabs.models.lng.commercial.editor.fixedSalesFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
+          label="Fixed Sales Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.FixedPriceParameters"
           targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.expressionSalesFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
+          label="Price Expression Sales Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+    </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.indexSalesFactory"
+          factory="com.mmxlabs.models.lng.commercial.ui.modelfactories.SalesContractModelFactory"
+          label="Indexed Sales Contract"
+          outputEClass="com.mmxlabs.models.lng.commercial.IndexPriceParameters"
+          targetEClass="com.mmxlabs.models.lng.commercial.SalesContract">
+    </factory>
+	<!-- Other Factories -->
+    <factory
+          ID="com.mmxlabs.models.lng.commercial.editor.entityFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Entity"
+          targetEClass="com.mmxlabs.models.lng.commercial.LegalEntity">
+    </factory>
+
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">

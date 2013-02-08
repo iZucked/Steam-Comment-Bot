@@ -6,54 +6,54 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing;
-import com.mmxlabs.models.lng.pricing.Index;
+package com.mmxlabs.models.lng.commercial;
+import com.mmxlabs.models.lng.types.AIndex;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>LNG Index Price Parameters</b></em>'.
+ * A representation of the model object '<em><b>AIndex Price Parameters</b></em>'.
  * @since 3.0
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getIndex <em>Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getMultiplier <em>Multiplier</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getConstant <em>Constant</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex <em>AIndex</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getMultiplier <em>Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getConstant <em>Constant</em>}</li>
  * </ul>
  * </p>
  *
- * @see com.mmxlabs.models.lng.pricing.PricingPackage#getLNGIndexPriceParameters()
+ * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getIndexPriceParameters()
  * @model
  * @generated
  */
-public interface LNGIndexPriceParameters extends LNGPriceCalculatorParameters {
+public interface IndexPriceParameters extends LNGPriceCalculatorParameters {
 	/**
-	 * Returns the value of the '<em><b>Index</b></em>' reference.
+	 * Returns the value of the '<em><b>AIndex</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
-	 * If the meaning of the '<em>Index</em>' reference isn't clear,
+	 * If the meaning of the '<em>AIndex</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Index</em>' reference.
-	 * @see #setIndex(Index)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getLNGIndexPriceParameters_Index()
+	 * @return the value of the '<em>AIndex</em>' reference.
+	 * @see #setIndex(AIndex)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getIndexPriceParameters_Index()
 	 * @model required="true"
 	 * @generated
 	 */
-	Index getIndex();
+	AIndex getIndex();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getIndex <em>Index</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex <em>AIndex</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Index</em>' reference.
+	 * @param value the new value of the '<em>AIndex</em>' reference.
 	 * @see #getIndex()
 	 * @generated
 	 */
-	void setIndex(Index value);
+	void setIndex(AIndex value);
 
 	/**
 	 * Returns the value of the '<em><b>Multiplier</b></em>' attribute.
@@ -66,14 +66,14 @@ public interface LNGIndexPriceParameters extends LNGPriceCalculatorParameters {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Multiplier</em>' attribute.
 	 * @see #setMultiplier(double)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getLNGIndexPriceParameters_Multiplier()
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getIndexPriceParameters_Multiplier()
 	 * @model default="1" required="true"
 	 * @generated
 	 */
 	double getMultiplier();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getMultiplier <em>Multiplier</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getMultiplier <em>Multiplier</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Multiplier</em>' attribute.
@@ -93,14 +93,14 @@ public interface LNGIndexPriceParameters extends LNGPriceCalculatorParameters {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Constant</em>' attribute.
 	 * @see #setConstant(double)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getLNGIndexPriceParameters_Constant()
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getIndexPriceParameters_Constant()
 	 * @model default="0" required="true"
 	 * @generated
 	 */
 	double getConstant();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getConstant <em>Constant</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getConstant <em>Constant</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Constant</em>' attribute.
@@ -109,6 +109,6 @@ public interface LNGIndexPriceParameters extends LNGPriceCalculatorParameters {
 	 */
 	void setConstant(double value);
 
-} // end of  LNGIndexPriceParameters
+} // end of  IndexPriceParameters
 
 // finish type fixing

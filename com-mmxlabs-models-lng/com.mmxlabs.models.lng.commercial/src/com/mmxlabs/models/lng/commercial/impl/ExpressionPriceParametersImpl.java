@@ -6,9 +6,9 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing.impl;
-import com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
+package com.mmxlabs.models.lng.commercial.impl;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -18,18 +18,18 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>LNG Price Expression Parameters</b></em>'.
+ * An implementation of the model object '<em><b>Expression Price Parameters</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.LNGPriceExpressionParametersImpl#getPriceExpression <em>Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class LNGPriceExpressionParametersImpl extends LNGPriceCalculatorParametersImpl implements LNGPriceExpressionParameters {
+public class ExpressionPriceParametersImpl extends LNGPriceCalculatorParametersImpl implements ExpressionPriceParameters {
 	/**
 	 * The default value of the '{@link #getPriceExpression() <em>Price Expression</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -55,7 +55,7 @@ public class LNGPriceExpressionParametersImpl extends LNGPriceCalculatorParamete
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LNGPriceExpressionParametersImpl() {
+	protected ExpressionPriceParametersImpl() {
 		super();
 	}
 
@@ -66,7 +66,7 @@ public class LNGPriceExpressionParametersImpl extends LNGPriceCalculatorParamete
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return PricingPackage.Literals.LNG_PRICE_EXPRESSION_PARAMETERS;
+		return CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS;
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class LNGPriceExpressionParametersImpl extends LNGPriceCalculatorParamete
 		String oldPriceExpression = priceExpression;
 		priceExpression = newPriceExpression;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.LNG_PRICE_EXPRESSION_PARAMETERS__PRICE_EXPRESSION, oldPriceExpression, priceExpression));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION, oldPriceExpression, priceExpression));
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class LNGPriceExpressionParametersImpl extends LNGPriceCalculatorParamete
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.LNG_PRICE_EXPRESSION_PARAMETERS__PRICE_EXPRESSION:
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION:
 				return getPriceExpression();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -112,7 +112,7 @@ public class LNGPriceExpressionParametersImpl extends LNGPriceCalculatorParamete
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.LNG_PRICE_EXPRESSION_PARAMETERS__PRICE_EXPRESSION:
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION:
 				setPriceExpression((String)newValue);
 				return;
 		}
@@ -127,7 +127,7 @@ public class LNGPriceExpressionParametersImpl extends LNGPriceCalculatorParamete
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.LNG_PRICE_EXPRESSION_PARAMETERS__PRICE_EXPRESSION:
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION:
 				setPriceExpression(PRICE_EXPRESSION_EDEFAULT);
 				return;
 		}
@@ -142,7 +142,7 @@ public class LNGPriceExpressionParametersImpl extends LNGPriceCalculatorParamete
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.LNG_PRICE_EXPRESSION_PARAMETERS__PRICE_EXPRESSION:
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION:
 				return PRICE_EXPRESSION_EDEFAULT == null ? priceExpression != null : !PRICE_EXPRESSION_EDEFAULT.equals(priceExpression);
 		}
 		return super.eIsSet(featureID);
@@ -164,6 +164,6 @@ public class LNGPriceExpressionParametersImpl extends LNGPriceCalculatorParamete
 		return result.toString();
 	}
 
-} // end of LNGPriceExpressionParametersImpl
+} // end of ExpressionPriceParametersImpl
 
 // finish type fixing

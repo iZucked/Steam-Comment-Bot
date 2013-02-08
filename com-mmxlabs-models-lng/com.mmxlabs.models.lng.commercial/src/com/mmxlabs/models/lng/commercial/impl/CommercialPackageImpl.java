@@ -14,12 +14,19 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.FixedPriceContract;
+import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.IndexPriceContract;
+import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.NetbackPriceParameters;
 import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
+import com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate;
+import com.mmxlabs.models.lng.commercial.RedirectionPriceParameters;
 import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.commercial.TaxRate;
@@ -130,6 +137,55 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 * @generated
 	 */
 	private EClass taxRateEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass lngPriceCalculatorParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass fixedPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass indexPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass expressionPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass netbackPriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass profitSharePriceParametersEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass redirectionPriceParametersEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -351,6 +407,16 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 	 */
 	public EReference getContract_RestrictedPorts() {
 		return (EReference)contractEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getContract_PriceInfo() {
+		return (EReference)contractEClass.getEStructuralFeatures().get(8);
 	}
 
 	/**
@@ -836,6 +902,357 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getLNGPriceCalculatorParameters() {
+		return lngPriceCalculatorParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getFixedPriceParameters() {
+		return fixedPriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getFixedPriceParameters_PricePerMMBTU() {
+		return (EAttribute)fixedPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getIndexPriceParameters() {
+		return indexPriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getIndexPriceParameters_Index() {
+		return (EReference)indexPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getIndexPriceParameters_Multiplier() {
+		return (EAttribute)indexPriceParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getIndexPriceParameters_Constant() {
+		return (EAttribute)indexPriceParametersEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getExpressionPriceParameters() {
+		return expressionPriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getExpressionPriceParameters_PriceExpression() {
+		return (EAttribute)expressionPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getNetbackPriceParameters() {
+		return netbackPriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getNetbackPriceParameters_NotionalBallastParameters() {
+		return (EReference)netbackPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNetbackPriceParameters_Margin() {
+		return (EAttribute)netbackPriceParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getNetbackPriceParameters_FloorPrice() {
+		return (EAttribute)netbackPriceParametersEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getProfitSharePriceParameters() {
+		return profitSharePriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProfitSharePriceParameters_BaseMarketPorts() {
+		return (EReference)profitSharePriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProfitSharePriceParameters_BaseMarketIndex() {
+		return (EReference)profitSharePriceParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getProfitSharePriceParameters_BaseMarketMultiplier() {
+		return (EAttribute)profitSharePriceParametersEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getProfitSharePriceParameters_BaseMarketConstant() {
+		return (EAttribute)profitSharePriceParametersEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getProfitSharePriceParameters_RefMarketIndex() {
+		return (EReference)profitSharePriceParametersEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getProfitSharePriceParameters_RefMarketMultiplier() {
+		return (EAttribute)profitSharePriceParametersEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getProfitSharePriceParameters_RefMarketConstant() {
+		return (EAttribute)profitSharePriceParametersEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getProfitSharePriceParameters_Share() {
+		return (EAttribute)profitSharePriceParametersEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getProfitSharePriceParameters_Margin() {
+		return (EAttribute)profitSharePriceParametersEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getProfitSharePriceParameters_SalesMultiplier() {
+		return (EAttribute)profitSharePriceParametersEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EClass getRedirectionPriceParameters() {
+		return redirectionPriceParametersEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRedirectionPriceParameters_BaseSalesMarketPort() {
+		return (EReference)redirectionPriceParametersEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRedirectionPriceParameters_BaseSalesPriceExpression() {
+		return (EAttribute)redirectionPriceParametersEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRedirectionPriceParameters_BasePurchasePriceExpression() {
+		return (EAttribute)redirectionPriceParametersEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRedirectionPriceParameters_NotionalSpeed() {
+		return (EAttribute)redirectionPriceParametersEClass.getEStructuralFeatures().get(3);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRedirectionPriceParameters_DesPurchasePort() {
+		return (EReference)redirectionPriceParametersEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRedirectionPriceParameters_SourcePurchasePort() {
+		return (EReference)redirectionPriceParametersEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRedirectionPriceParameters_ProfitShare() {
+		return (EAttribute)redirectionPriceParametersEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EReference getRedirectionPriceParameters_VesselClass() {
+		return (EReference)redirectionPriceParametersEClass.getEStructuralFeatures().get(7);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRedirectionPriceParameters_HireCost() {
+		return (EAttribute)redirectionPriceParametersEClass.getEStructuralFeatures().get(8);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getRedirectionPriceParameters_DaysFromSource() {
+		return (EAttribute)redirectionPriceParametersEClass.getEStructuralFeatures().get(9);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -881,6 +1298,7 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		createEAttribute(contractEClass, CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE);
 		createEReference(contractEClass, CONTRACT__RESTRICTED_CONTRACTS);
 		createEReference(contractEClass, CONTRACT__RESTRICTED_PORTS);
+		createEReference(contractEClass, CONTRACT__PRICE_INFO);
 
 		salesContractEClass = createEClass(SALES_CONTRACT);
 		createEAttribute(salesContractEClass, SALES_CONTRACT__MIN_CV_VALUE);
@@ -943,6 +1361,48 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		taxRateEClass = createEClass(TAX_RATE);
 		createEAttribute(taxRateEClass, TAX_RATE__DATE);
 		createEAttribute(taxRateEClass, TAX_RATE__VALUE);
+
+		lngPriceCalculatorParametersEClass = createEClass(LNG_PRICE_CALCULATOR_PARAMETERS);
+
+		fixedPriceParametersEClass = createEClass(FIXED_PRICE_PARAMETERS);
+		createEAttribute(fixedPriceParametersEClass, FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU);
+
+		indexPriceParametersEClass = createEClass(INDEX_PRICE_PARAMETERS);
+		createEReference(indexPriceParametersEClass, INDEX_PRICE_PARAMETERS__INDEX);
+		createEAttribute(indexPriceParametersEClass, INDEX_PRICE_PARAMETERS__MULTIPLIER);
+		createEAttribute(indexPriceParametersEClass, INDEX_PRICE_PARAMETERS__CONSTANT);
+
+		expressionPriceParametersEClass = createEClass(EXPRESSION_PRICE_PARAMETERS);
+		createEAttribute(expressionPriceParametersEClass, EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION);
+
+		netbackPriceParametersEClass = createEClass(NETBACK_PRICE_PARAMETERS);
+		createEReference(netbackPriceParametersEClass, NETBACK_PRICE_PARAMETERS__NOTIONAL_BALLAST_PARAMETERS);
+		createEAttribute(netbackPriceParametersEClass, NETBACK_PRICE_PARAMETERS__MARGIN);
+		createEAttribute(netbackPriceParametersEClass, NETBACK_PRICE_PARAMETERS__FLOOR_PRICE);
+
+		profitSharePriceParametersEClass = createEClass(PROFIT_SHARE_PRICE_PARAMETERS);
+		createEReference(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_PORTS);
+		createEReference(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_INDEX);
+		createEAttribute(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_MULTIPLIER);
+		createEAttribute(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_CONSTANT);
+		createEReference(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__REF_MARKET_INDEX);
+		createEAttribute(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__REF_MARKET_MULTIPLIER);
+		createEAttribute(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__REF_MARKET_CONSTANT);
+		createEAttribute(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__SHARE);
+		createEAttribute(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__MARGIN);
+		createEAttribute(profitSharePriceParametersEClass, PROFIT_SHARE_PRICE_PARAMETERS__SALES_MULTIPLIER);
+
+		redirectionPriceParametersEClass = createEClass(REDIRECTION_PRICE_PARAMETERS);
+		createEReference(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__BASE_SALES_MARKET_PORT);
+		createEAttribute(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__BASE_SALES_PRICE_EXPRESSION);
+		createEAttribute(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__BASE_PURCHASE_PRICE_EXPRESSION);
+		createEAttribute(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__NOTIONAL_SPEED);
+		createEReference(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__DES_PURCHASE_PORT);
+		createEReference(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__SOURCE_PURCHASE_PORT);
+		createEAttribute(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__PROFIT_SHARE);
+		createEReference(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__VESSEL_CLASS);
+		createEAttribute(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__HIRE_COST);
+		createEAttribute(redirectionPriceParametersEClass, REDIRECTION_PRICE_PARAMETERS__DAYS_FROM_SOURCE);
 	}
 
 	/**
@@ -995,6 +1455,13 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		priceExpressionContractEClass.getESuperTypes().add(this.getSalesContract());
 		priceExpressionContractEClass.getESuperTypes().add(this.getPurchaseContract());
 		redirectionContractOriginalDateEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
+		lngPriceCalculatorParametersEClass.getESuperTypes().add(theTypesPackage.getALNGPriceCalculatorParameters());
+		fixedPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		indexPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		expressionPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		netbackPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		profitSharePriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
+		redirectionPriceParametersEClass.getESuperTypes().add(this.getLNGPriceCalculatorParameters());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(commercialModelEClass, CommercialModel.class, "CommercialModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -1016,13 +1483,14 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEAttribute(getContract_RestrictedListsArePermissive(), ecorePackage.getEBoolean(), "restrictedListsArePermissive", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContract_RestrictedContracts(), this.getContract(), null, "restrictedContracts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getContract_RestrictedPorts(), theTypesPackage.getAPortSet(), null, "restrictedPorts", null, 0, -1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getContract_PriceInfo(), theTypesPackage.getALNGPriceCalculatorParameters(), null, "priceInfo", null, 0, 1, Contract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(salesContractEClass, SalesContract.class, "SalesContract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(salesContractEClass, SalesContract.class, "SalesContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSalesContract_MinCvValue(), ecorePackage.getEDouble(), "minCvValue", null, 0, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSalesContract_MaxCvValue(), ecorePackage.getEDouble(), "maxCvValue", null, 0, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getSalesContract_PurchaseDeliveryType(), theTypesPackage.getCargoDeliveryType(), "PurchaseDeliveryType", "false", 0, 1, SalesContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(purchaseContractEClass, PurchaseContract.class, "PurchaseContract", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEClass(purchaseContractEClass, PurchaseContract.class, "PurchaseContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(fixedPriceContractEClass, FixedPriceContract.class, "FixedPriceContract", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getFixedPriceContract_PricePerMMBTU(), ecorePackage.getEDouble(), "pricePerMMBTU", null, 1, 1, FixedPriceContract.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1078,6 +1546,48 @@ public class CommercialPackageImpl extends EPackageImpl implements CommercialPac
 		initEClass(taxRateEClass, TaxRate.class, "TaxRate", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getTaxRate_Date(), ecorePackage.getEDate(), "date", null, 0, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getTaxRate_Value(), ecorePackage.getEFloat(), "value", null, 0, 1, TaxRate.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(lngPriceCalculatorParametersEClass, LNGPriceCalculatorParameters.class, "LNGPriceCalculatorParameters", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+
+		initEClass(fixedPriceParametersEClass, FixedPriceParameters.class, "FixedPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getFixedPriceParameters_PricePerMMBTU(), ecorePackage.getEDouble(), "pricePerMMBTU", "0", 1, 1, FixedPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(indexPriceParametersEClass, IndexPriceParameters.class, "IndexPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getIndexPriceParameters_Index(), theTypesPackage.getAIndex(), null, "index", null, 1, 1, IndexPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIndexPriceParameters_Multiplier(), ecorePackage.getEDouble(), "multiplier", "1", 1, 1, IndexPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getIndexPriceParameters_Constant(), ecorePackage.getEDouble(), "constant", "0", 1, 1, IndexPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(expressionPriceParametersEClass, ExpressionPriceParameters.class, "ExpressionPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEAttribute(getExpressionPriceParameters_PriceExpression(), ecorePackage.getEString(), "priceExpression", "", 1, 1, ExpressionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(netbackPriceParametersEClass, NetbackPriceParameters.class, "NetbackPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getNetbackPriceParameters_NotionalBallastParameters(), this.getNotionalBallastParameters(), null, "notionalBallastParameters", null, 1, -1, NetbackPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNetbackPriceParameters_Margin(), ecorePackage.getEDouble(), "margin", "0", 1, 1, NetbackPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getNetbackPriceParameters_FloorPrice(), ecorePackage.getEDouble(), "floorPrice", null, 0, 1, NetbackPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(profitSharePriceParametersEClass, ProfitSharePriceParameters.class, "ProfitSharePriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getProfitSharePriceParameters_BaseMarketPorts(), theTypesPackage.getAPortSet(), null, "baseMarketPorts", null, 0, -1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProfitSharePriceParameters_BaseMarketIndex(), theTypesPackage.getAIndex(), null, "baseMarketIndex", null, 1, 1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProfitSharePriceParameters_BaseMarketMultiplier(), ecorePackage.getEDouble(), "baseMarketMultiplier", "1", 1, 1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProfitSharePriceParameters_BaseMarketConstant(), ecorePackage.getEDouble(), "baseMarketConstant", "0", 1, 1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getProfitSharePriceParameters_RefMarketIndex(), theTypesPackage.getAIndex(), null, "refMarketIndex", null, 1, 1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProfitSharePriceParameters_RefMarketMultiplier(), ecorePackage.getEDouble(), "refMarketMultiplier", "1", 1, 1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProfitSharePriceParameters_RefMarketConstant(), ecorePackage.getEDouble(), "refMarketConstant", "0", 1, 1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProfitSharePriceParameters_Share(), ecorePackage.getEDouble(), "share", null, 0, 1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProfitSharePriceParameters_Margin(), ecorePackage.getEDouble(), "margin", "0", 1, 1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getProfitSharePriceParameters_SalesMultiplier(), ecorePackage.getEDouble(), "salesMultiplier", null, 1, 1, ProfitSharePriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(redirectionPriceParametersEClass, RedirectionPriceParameters.class, "RedirectionPriceParameters", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRedirectionPriceParameters_BaseSalesMarketPort(), theTypesPackage.getAPort(), null, "baseSalesMarketPort", null, 1, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPriceParameters_BaseSalesPriceExpression(), ecorePackage.getEString(), "baseSalesPriceExpression", null, 0, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPriceParameters_BasePurchasePriceExpression(), ecorePackage.getEString(), "basePurchasePriceExpression", null, 0, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPriceParameters_NotionalSpeed(), ecorePackage.getEDouble(), "notionalSpeed", null, 0, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRedirectionPriceParameters_DesPurchasePort(), theTypesPackage.getAPort(), null, "desPurchasePort", null, 1, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRedirectionPriceParameters_SourcePurchasePort(), theTypesPackage.getAPort(), null, "sourcePurchasePort", null, 1, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPriceParameters_ProfitShare(), ecorePackage.getEDouble(), "profitShare", null, 0, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRedirectionPriceParameters_VesselClass(), theTypesPackage.getAVesselClass(), null, "vesselClass", null, 0, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPriceParameters_HireCost(), ecorePackage.getEInt(), "hireCost", null, 0, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getRedirectionPriceParameters_DaysFromSource(), ecorePackage.getEInt(), "daysFromSource", null, 0, 1, RedirectionPriceParameters.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

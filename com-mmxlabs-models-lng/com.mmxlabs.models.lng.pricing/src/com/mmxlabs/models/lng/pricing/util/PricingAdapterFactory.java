@@ -164,22 +164,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 				return createSpotAvailabilityAdapter();
 			}
 			@Override
-			public Adapter caseLNGPriceCalculatorParameters(LNGPriceCalculatorParameters object) {
-				return createLNGPriceCalculatorParametersAdapter();
-			}
-			@Override
-			public Adapter caseLNGFixedPriceParameters(LNGFixedPriceParameters object) {
-				return createLNGFixedPriceParametersAdapter();
-			}
-			@Override
-			public Adapter caseLNGIndexPriceParameters(LNGIndexPriceParameters object) {
-				return createLNGIndexPriceParametersAdapter();
-			}
-			@Override
-			public Adapter caseLNGPriceExpressionParameters(LNGPriceExpressionParameters object) {
-				return createLNGPriceExpressionParametersAdapter();
-			}
-			@Override
 			public Adapter caseMMXObject(MMXObject object) {
 				return createMMXObjectAdapter();
 			}
@@ -198,10 +182,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseASpotMarket(ASpotMarket object) {
 				return createASpotMarketAdapter();
-			}
-			@Override
-			public Adapter caseALNGPriceCalculatorParameters(ALNGPriceCalculatorParameters object) {
-				return createALNGPriceCalculatorParametersAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -490,62 +470,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters <em>LNG Price Calculator Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters
-	 * @generated
-	 */
-	public Adapter createLNGPriceCalculatorParametersAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters <em>LNG Fixed Price Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters
-	 * @generated
-	 */
-	public Adapter createLNGFixedPriceParametersAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters <em>LNG Index Price Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters
-	 * @generated
-	 */
-	public Adapter createLNGIndexPriceParametersAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters <em>LNG Price Expression Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters
-	 * @generated
-	 */
-	public Adapter createLNGPriceExpressionParametersAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.MMXObject <em>MMX Object</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -612,20 +536,6 @@ public class PricingAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createASpotMarketAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters <em>ALNG Price Calculator Parameters</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters
-	 * @generated
-	 */
-	public Adapter createALNGPriceCalculatorParametersAdapter() {
 		return null;
 	}
 

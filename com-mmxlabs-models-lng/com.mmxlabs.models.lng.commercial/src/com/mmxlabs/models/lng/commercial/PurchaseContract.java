@@ -13,7 +13,7 @@ import com.mmxlabs.models.lng.types.APurchaseContract;
  *
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getPurchaseContract()
- * @model abstract="true"
+ * @model
  * @generated
  */
 public interface PurchaseContract extends Contract, APurchaseContract {

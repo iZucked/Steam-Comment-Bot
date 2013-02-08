@@ -5,9 +5,11 @@
 package com.mmxlabs.models.lng.commercial.provider;
 
 
+import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 
+import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.provider.AContractItemProvider;
 
 import java.util.Collection;
@@ -18,6 +20,7 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -255,6 +258,36 @@ public class ContractItemProvider
 	}
 
 	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(CommercialPackage.Literals.CONTRACT__PRICE_INFO);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
+	}
+
+	/**
 	 * This returns Contract.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -296,6 +329,9 @@ public class ContractItemProvider
 			case CommercialPackage.CONTRACT__RESTRICTED_LISTS_ARE_PERMISSIVE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
+			case CommercialPackage.CONTRACT__PRICE_INFO:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
 		}
 		super.notifyChanged(notification);
 	}
@@ -310,6 +346,36 @@ public class ContractItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createFixedPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createIndexPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createNetbackPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createProfitSharePriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
+				 CommercialFactory.eINSTANCE.createRedirectionPriceParameters()));
 	}
 
 	/**

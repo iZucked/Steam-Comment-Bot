@@ -248,49 +248,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case PricingPackage.LNG_PRICE_CALCULATOR_PARAMETERS: {
-				LNGPriceCalculatorParameters lngPriceCalculatorParameters = (LNGPriceCalculatorParameters)theEObject;
-				T result = caseLNGPriceCalculatorParameters(lngPriceCalculatorParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(lngPriceCalculatorParameters);
-				if (result == null) result = caseUUIDObject(lngPriceCalculatorParameters);
-				if (result == null) result = caseNamedObject(lngPriceCalculatorParameters);
-				if (result == null) result = caseMMXObject(lngPriceCalculatorParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.LNG_FIXED_PRICE_PARAMETERS: {
-				LNGFixedPriceParameters lngFixedPriceParameters = (LNGFixedPriceParameters)theEObject;
-				T result = caseLNGFixedPriceParameters(lngFixedPriceParameters);
-				if (result == null) result = caseLNGPriceCalculatorParameters(lngFixedPriceParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(lngFixedPriceParameters);
-				if (result == null) result = caseUUIDObject(lngFixedPriceParameters);
-				if (result == null) result = caseNamedObject(lngFixedPriceParameters);
-				if (result == null) result = caseMMXObject(lngFixedPriceParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS: {
-				LNGIndexPriceParameters lngIndexPriceParameters = (LNGIndexPriceParameters)theEObject;
-				T result = caseLNGIndexPriceParameters(lngIndexPriceParameters);
-				if (result == null) result = caseLNGPriceCalculatorParameters(lngIndexPriceParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(lngIndexPriceParameters);
-				if (result == null) result = caseUUIDObject(lngIndexPriceParameters);
-				if (result == null) result = caseNamedObject(lngIndexPriceParameters);
-				if (result == null) result = caseMMXObject(lngIndexPriceParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case PricingPackage.LNG_PRICE_EXPRESSION_PARAMETERS: {
-				LNGPriceExpressionParameters lngPriceExpressionParameters = (LNGPriceExpressionParameters)theEObject;
-				T result = caseLNGPriceExpressionParameters(lngPriceExpressionParameters);
-				if (result == null) result = caseLNGPriceCalculatorParameters(lngPriceExpressionParameters);
-				if (result == null) result = caseALNGPriceCalculatorParameters(lngPriceExpressionParameters);
-				if (result == null) result = caseUUIDObject(lngPriceExpressionParameters);
-				if (result == null) result = caseNamedObject(lngPriceExpressionParameters);
-				if (result == null) result = caseMMXObject(lngPriceExpressionParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -581,70 +538,6 @@ public class PricingSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>LNG Price Calculator Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>LNG Price Calculator Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLNGPriceCalculatorParameters(LNGPriceCalculatorParameters object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>LNG Fixed Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>LNG Fixed Price Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLNGFixedPriceParameters(LNGFixedPriceParameters object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>LNG Index Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>LNG Index Price Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLNGIndexPriceParameters(LNGIndexPriceParameters object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>LNG Price Expression Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>LNG Price Expression Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLNGPriceExpressionParameters(LNGPriceExpressionParameters object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>MMX Object</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -716,22 +609,6 @@ public class PricingSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseASpotMarket(ASpotMarket object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseALNGPriceCalculatorParameters(ALNGPriceCalculatorParameters object) {
 		return null;
 	}
 

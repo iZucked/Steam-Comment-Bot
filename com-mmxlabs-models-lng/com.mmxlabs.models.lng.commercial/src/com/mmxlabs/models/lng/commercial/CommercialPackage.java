@@ -358,13 +358,23 @@ public interface CommercialPackage extends EPackage {
 	int CONTRACT__RESTRICTED_PORTS = TypesPackage.ACONTRACT_FEATURE_COUNT + 7;
 
 	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int CONTRACT__PRICE_INFO = TypesPackage.ACONTRACT_FEATURE_COUNT + 8;
+
+	/**
 	 * The number of structural features of the '<em>Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONTRACT_FEATURE_COUNT = TypesPackage.ACONTRACT_FEATURE_COUNT + 8;
+	int CONTRACT_FEATURE_COUNT = TypesPackage.ACONTRACT_FEATURE_COUNT + 9;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -495,6 +505,16 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int SALES_CONTRACT__RESTRICTED_PORTS = CONTRACT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SALES_CONTRACT__PRICE_INFO = CONTRACT__PRICE_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -666,6 +686,16 @@ public interface CommercialPackage extends EPackage {
 	int PURCHASE_CONTRACT__RESTRICTED_PORTS = CONTRACT__RESTRICTED_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PURCHASE_CONTRACT__PRICE_INFO = CONTRACT__PRICE_INFO;
+
+	/**
 	 * The number of structural features of the '<em>Purchase Contract</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -803,6 +833,16 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int FIXED_PRICE_CONTRACT__RESTRICTED_PORTS = SALES_CONTRACT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_CONTRACT__PRICE_INFO = SALES_CONTRACT__PRICE_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -981,6 +1021,16 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int INDEX_PRICE_CONTRACT__RESTRICTED_PORTS = SALES_CONTRACT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_CONTRACT__PRICE_INFO = SALES_CONTRACT__PRICE_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
@@ -1179,6 +1229,16 @@ public interface CommercialPackage extends EPackage {
 	int NETBACK_PURCHASE_CONTRACT__RESTRICTED_PORTS = PURCHASE_CONTRACT__RESTRICTED_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PURCHASE_CONTRACT__PRICE_INFO = PURCHASE_CONTRACT__PRICE_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Notional Ballast Parameters</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1343,6 +1403,16 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int PROFIT_SHARE_PURCHASE_CONTRACT__RESTRICTED_PORTS = PURCHASE_CONTRACT__RESTRICTED_PORTS;
+
+	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PURCHASE_CONTRACT__PRICE_INFO = PURCHASE_CONTRACT__PRICE_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Base Market Ports</b></em>' reference list.
@@ -1695,6 +1765,16 @@ public interface CommercialPackage extends EPackage {
 	int REDIRECTION_PURCHASE_CONTRACT__RESTRICTED_PORTS = PURCHASE_CONTRACT__RESTRICTED_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PURCHASE_CONTRACT__PRICE_INFO = PURCHASE_CONTRACT__PRICE_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Base Sales Market Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1947,6 +2027,16 @@ public interface CommercialPackage extends EPackage {
 	int PRICE_EXPRESSION_CONTRACT__RESTRICTED_PORTS = SALES_CONTRACT__RESTRICTED_PORTS;
 
 	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PRICE_EXPRESSION_CONTRACT__PRICE_INFO = SALES_CONTRACT__PRICE_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Min Cv Value</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -2097,6 +2187,585 @@ public interface CommercialPackage extends EPackage {
 	 * @ordered
 	 */
 	int TAX_RATE_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.LNGPriceCalculatorParametersImpl <em>LNG Price Calculator Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.LNGPriceCalculatorParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLNGPriceCalculatorParameters()
+	 * @generated
+	 */
+	int LNG_PRICE_CALCULATOR_PARAMETERS = 14;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_PRICE_CALCULATOR_PARAMETERS__PROXIES = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_PRICE_CALCULATOR_PARAMETERS__UUID = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The number of structural features of the '<em>LNG Price Calculator Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl <em>Fixed Price Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getFixedPriceParameters()
+	 * @generated
+	 */
+	int FIXED_PRICE_PARAMETERS = 15;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PARAMETERS__PROXIES = LNG_PRICE_CALCULATOR_PARAMETERS__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Fixed Price Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FIXED_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl <em>Index Price Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIndexPriceParameters()
+	 * @generated
+	 */
+	int INDEX_PRICE_PARAMETERS = 16;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PARAMETERS__PROXIES = LNG_PRICE_CALCULATOR_PARAMETERS__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PARAMETERS__INDEX = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Multiplier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PARAMETERS__MULTIPLIER = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PARAMETERS__CONSTANT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Index Price Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int INDEX_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getExpressionPriceParameters()
+	 * @generated
+	 */
+	int EXPRESSION_PRICE_PARAMETERS = 17;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_PRICE_PARAMETERS__PROXIES = LNG_PRICE_CALCULATOR_PARAMETERS__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>Expression Price Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int EXPRESSION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.NetbackPriceParametersImpl <em>Netback Price Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.NetbackPriceParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNetbackPriceParameters()
+	 * @generated
+	 */
+	int NETBACK_PRICE_PARAMETERS = 18;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PRICE_PARAMETERS__PROXIES = LNG_PRICE_CALCULATOR_PARAMETERS__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Notional Ballast Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PRICE_PARAMETERS__NOTIONAL_BALLAST_PARAMETERS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Margin</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PRICE_PARAMETERS__MARGIN = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Floor Price</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PRICE_PARAMETERS__FLOOR_PRICE = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Netback Price Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int NETBACK_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePriceParametersImpl <em>Profit Share Price Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.ProfitSharePriceParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getProfitSharePriceParameters()
+	 * @generated
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS = 19;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__PROXIES = LNG_PRICE_CALCULATOR_PARAMETERS__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Base Market Ports</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_PORTS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Base Market Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_INDEX = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Base Market Multiplier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_MULTIPLIER = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Base Market Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_CONSTANT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Ref Market Index</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__REF_MARKET_INDEX = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Ref Market Multiplier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__REF_MARKET_MULTIPLIER = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Ref Market Constant</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__REF_MARKET_CONSTANT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Share</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__SHARE = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Margin</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__MARGIN = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Sales Multiplier</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS__SALES_MULTIPLIER = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 9;
+
+	/**
+	 * The number of structural features of the '<em>Profit Share Price Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int PROFIT_SHARE_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 10;
+
+	/**
+	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPriceParametersImpl <em>Redirection Price Parameters</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see com.mmxlabs.models.lng.commercial.impl.RedirectionPriceParametersImpl
+	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRedirectionPriceParameters()
+	 * @generated
+	 */
+	int REDIRECTION_PRICE_PARAMETERS = 20;
+
+	/**
+	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__EXTENSIONS = LNG_PRICE_CALCULATOR_PARAMETERS__EXTENSIONS;
+
+	/**
+	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__PROXIES = LNG_PRICE_CALCULATOR_PARAMETERS__PROXIES;
+
+	/**
+	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
+
+	/**
+	 * The feature id for the '<em><b>Base Sales Market Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__BASE_SALES_MARKET_PORT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Base Sales Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__BASE_SALES_PRICE_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Base Purchase Price Expression</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__BASE_PURCHASE_PRICE_EXPRESSION = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Notional Speed</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__NOTIONAL_SPEED = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 3;
+
+	/**
+	 * The feature id for the '<em><b>Des Purchase Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__DES_PURCHASE_PORT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 4;
+
+	/**
+	 * The feature id for the '<em><b>Source Purchase Port</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__SOURCE_PURCHASE_PORT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 5;
+
+	/**
+	 * The feature id for the '<em><b>Profit Share</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__PROFIT_SHARE = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 6;
+
+	/**
+	 * The feature id for the '<em><b>Vessel Class</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__VESSEL_CLASS = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 7;
+
+	/**
+	 * The feature id for the '<em><b>Hire Cost</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__HIRE_COST = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 8;
+
+	/**
+	 * The feature id for the '<em><b>Days From Source</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS__DAYS_FROM_SOURCE = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 9;
+
+	/**
+	 * The number of structural features of the '<em>Redirection Price Parameters</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int REDIRECTION_PRICE_PARAMETERS_FEATURE_COUNT = LNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT + 10;
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.CommercialModel <em>Model</em>}'.
@@ -2286,6 +2955,18 @@ public interface CommercialPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getContract_RestrictedPorts();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Price Info</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.Contract#getPriceInfo()
+	 * @see #getContract()
+	 * @generated
+	 */
+	EReference getContract_PriceInfo();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Sales Contract</em>}'.
@@ -2863,6 +3544,385 @@ public interface CommercialPackage extends EPackage {
 	EAttribute getTaxRate_Value();
 
 	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters <em>LNG Price Calculator Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>LNG Price Calculator Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters
+	 * @generated
+	 */
+	EClass getLNGPriceCalculatorParameters();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.FixedPriceParameters <em>Fixed Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Fixed Price Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.FixedPriceParameters
+	 * @generated
+	 */
+	EClass getFixedPriceParameters();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.FixedPriceParameters#getPricePerMMBTU <em>Price Per MMBTU</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Per MMBTU</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.FixedPriceParameters#getPricePerMMBTU()
+	 * @see #getFixedPriceParameters()
+	 * @generated
+	 */
+	EAttribute getFixedPriceParameters_PricePerMMBTU();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters <em>Index Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Index Price Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters
+	 * @generated
+	 */
+	EClass getIndexPriceParameters();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex <em>Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Index</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex()
+	 * @see #getIndexPriceParameters()
+	 * @generated
+	 */
+	EReference getIndexPriceParameters_Index();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getMultiplier <em>Multiplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Multiplier</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters#getMultiplier()
+	 * @see #getIndexPriceParameters()
+	 * @generated
+	 */
+	EAttribute getIndexPriceParameters_Multiplier();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getConstant <em>Constant</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Constant</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters#getConstant()
+	 * @see #getIndexPriceParameters()
+	 * @generated
+	 */
+	EAttribute getIndexPriceParameters_Constant();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters <em>Expression Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Expression Price Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters
+	 * @generated
+	 */
+	EClass getExpressionPriceParameters();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression <em>Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression()
+	 * @see #getExpressionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getExpressionPriceParameters_PriceExpression();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.NetbackPriceParameters <em>Netback Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Netback Price Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPriceParameters
+	 * @generated
+	 */
+	EClass getNetbackPriceParameters();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.commercial.NetbackPriceParameters#getNotionalBallastParameters <em>Notional Ballast Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Notional Ballast Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPriceParameters#getNotionalBallastParameters()
+	 * @see #getNetbackPriceParameters()
+	 * @generated
+	 */
+	EReference getNetbackPriceParameters_NotionalBallastParameters();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NetbackPriceParameters#getMargin <em>Margin</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Margin</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPriceParameters#getMargin()
+	 * @see #getNetbackPriceParameters()
+	 * @generated
+	 */
+	EAttribute getNetbackPriceParameters_Margin();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.NetbackPriceParameters#getFloorPrice <em>Floor Price</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Floor Price</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.NetbackPriceParameters#getFloorPrice()
+	 * @see #getNetbackPriceParameters()
+	 * @generated
+	 */
+	EAttribute getNetbackPriceParameters_FloorPrice();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters <em>Profit Share Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Profit Share Price Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters
+	 * @generated
+	 */
+	EClass getProfitSharePriceParameters();
+
+	/**
+	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getBaseMarketPorts <em>Base Market Ports</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Base Market Ports</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getBaseMarketPorts()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EReference getProfitSharePriceParameters_BaseMarketPorts();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getBaseMarketIndex <em>Base Market Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Base Market Index</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getBaseMarketIndex()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EReference getProfitSharePriceParameters_BaseMarketIndex();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getBaseMarketMultiplier <em>Base Market Multiplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Market Multiplier</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getBaseMarketMultiplier()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EAttribute getProfitSharePriceParameters_BaseMarketMultiplier();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getBaseMarketConstant <em>Base Market Constant</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Market Constant</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getBaseMarketConstant()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EAttribute getProfitSharePriceParameters_BaseMarketConstant();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getRefMarketIndex <em>Ref Market Index</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Ref Market Index</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getRefMarketIndex()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EReference getProfitSharePriceParameters_RefMarketIndex();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getRefMarketMultiplier <em>Ref Market Multiplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ref Market Multiplier</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getRefMarketMultiplier()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EAttribute getProfitSharePriceParameters_RefMarketMultiplier();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getRefMarketConstant <em>Ref Market Constant</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Ref Market Constant</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getRefMarketConstant()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EAttribute getProfitSharePriceParameters_RefMarketConstant();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getShare <em>Share</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Share</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getShare()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EAttribute getProfitSharePriceParameters_Share();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getMargin <em>Margin</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Margin</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getMargin()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EAttribute getProfitSharePriceParameters_Margin();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getSalesMultiplier <em>Sales Multiplier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Sales Multiplier</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters#getSalesMultiplier()
+	 * @see #getProfitSharePriceParameters()
+	 * @generated
+	 */
+	EAttribute getProfitSharePriceParameters_SalesMultiplier();
+
+	/**
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters <em>Redirection Price Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Redirection Price Parameters</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters
+	 * @generated
+	 */
+	EClass getRedirectionPriceParameters();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getBaseSalesMarketPort <em>Base Sales Market Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Base Sales Market Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getBaseSalesMarketPort()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EReference getRedirectionPriceParameters_BaseSalesMarketPort();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getBaseSalesPriceExpression <em>Base Sales Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Sales Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getBaseSalesPriceExpression()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getRedirectionPriceParameters_BaseSalesPriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getBasePurchasePriceExpression <em>Base Purchase Price Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Base Purchase Price Expression</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getBasePurchasePriceExpression()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getRedirectionPriceParameters_BasePurchasePriceExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getNotionalSpeed <em>Notional Speed</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Notional Speed</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getNotionalSpeed()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getRedirectionPriceParameters_NotionalSpeed();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getDesPurchasePort <em>Des Purchase Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Des Purchase Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getDesPurchasePort()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EReference getRedirectionPriceParameters_DesPurchasePort();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getSourcePurchasePort <em>Source Purchase Port</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Source Purchase Port</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getSourcePurchasePort()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EReference getRedirectionPriceParameters_SourcePurchasePort();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getProfitShare <em>Profit Share</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit Share</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getProfitShare()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getRedirectionPriceParameters_ProfitShare();
+
+	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getVesselClass <em>Vessel Class</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Vessel Class</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getVesselClass()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EReference getRedirectionPriceParameters_VesselClass();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getHireCost <em>Hire Cost</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getHireCost()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getRedirectionPriceParameters_HireCost();
+
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getDaysFromSource <em>Days From Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Days From Source</em>'.
+	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters#getDaysFromSource()
+	 * @see #getRedirectionPriceParameters()
+	 * @generated
+	 */
+	EAttribute getRedirectionPriceParameters_DaysFromSource();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3030,6 +4090,15 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONTRACT__RESTRICTED_PORTS = eINSTANCE.getContract_RestrictedPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Info</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference CONTRACT__PRICE_INFO = eINSTANCE.getContract_PriceInfo();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.SalesContractImpl <em>Sales Contract</em>}' class.
@@ -3482,6 +4551,301 @@ public interface CommercialPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute TAX_RATE__VALUE = eINSTANCE.getTaxRate_Value();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.LNGPriceCalculatorParametersImpl <em>LNG Price Calculator Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * @since 3.0
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.LNGPriceCalculatorParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getLNGPriceCalculatorParameters()
+		 * @generated
+		 */
+		EClass LNG_PRICE_CALCULATOR_PARAMETERS = eINSTANCE.getLNGPriceCalculatorParameters();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl <em>Fixed Price Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getFixedPriceParameters()
+		 * @generated
+		 */
+		EClass FIXED_PRICE_PARAMETERS = eINSTANCE.getFixedPriceParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Per MMBTU</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU = eINSTANCE.getFixedPriceParameters_PricePerMMBTU();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl <em>Index Price Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIndexPriceParameters()
+		 * @generated
+		 */
+		EClass INDEX_PRICE_PARAMETERS = eINSTANCE.getIndexPriceParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference INDEX_PRICE_PARAMETERS__INDEX = eINSTANCE.getIndexPriceParameters_Index();
+
+		/**
+		 * The meta object literal for the '<em><b>Multiplier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INDEX_PRICE_PARAMETERS__MULTIPLIER = eINSTANCE.getIndexPriceParameters_Multiplier();
+
+		/**
+		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute INDEX_PRICE_PARAMETERS__CONSTANT = eINSTANCE.getIndexPriceParameters_Constant();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getExpressionPriceParameters()
+		 * @generated
+		 */
+		EClass EXPRESSION_PRICE_PARAMETERS = eINSTANCE.getExpressionPriceParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION = eINSTANCE.getExpressionPriceParameters_PriceExpression();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.NetbackPriceParametersImpl <em>Netback Price Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.NetbackPriceParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getNetbackPriceParameters()
+		 * @generated
+		 */
+		EClass NETBACK_PRICE_PARAMETERS = eINSTANCE.getNetbackPriceParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Notional Ballast Parameters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference NETBACK_PRICE_PARAMETERS__NOTIONAL_BALLAST_PARAMETERS = eINSTANCE.getNetbackPriceParameters_NotionalBallastParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Margin</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NETBACK_PRICE_PARAMETERS__MARGIN = eINSTANCE.getNetbackPriceParameters_Margin();
+
+		/**
+		 * The meta object literal for the '<em><b>Floor Price</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute NETBACK_PRICE_PARAMETERS__FLOOR_PRICE = eINSTANCE.getNetbackPriceParameters_FloorPrice();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ProfitSharePriceParametersImpl <em>Profit Share Price Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.ProfitSharePriceParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getProfitSharePriceParameters()
+		 * @generated
+		 */
+		EClass PROFIT_SHARE_PRICE_PARAMETERS = eINSTANCE.getProfitSharePriceParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Market Ports</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_PORTS = eINSTANCE.getProfitSharePriceParameters_BaseMarketPorts();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Market Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_INDEX = eINSTANCE.getProfitSharePriceParameters_BaseMarketIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Market Multiplier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_MULTIPLIER = eINSTANCE.getProfitSharePriceParameters_BaseMarketMultiplier();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Market Constant</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PRICE_PARAMETERS__BASE_MARKET_CONSTANT = eINSTANCE.getProfitSharePriceParameters_BaseMarketConstant();
+
+		/**
+		 * The meta object literal for the '<em><b>Ref Market Index</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference PROFIT_SHARE_PRICE_PARAMETERS__REF_MARKET_INDEX = eINSTANCE.getProfitSharePriceParameters_RefMarketIndex();
+
+		/**
+		 * The meta object literal for the '<em><b>Ref Market Multiplier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PRICE_PARAMETERS__REF_MARKET_MULTIPLIER = eINSTANCE.getProfitSharePriceParameters_RefMarketMultiplier();
+
+		/**
+		 * The meta object literal for the '<em><b>Ref Market Constant</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PRICE_PARAMETERS__REF_MARKET_CONSTANT = eINSTANCE.getProfitSharePriceParameters_RefMarketConstant();
+
+		/**
+		 * The meta object literal for the '<em><b>Share</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PRICE_PARAMETERS__SHARE = eINSTANCE.getProfitSharePriceParameters_Share();
+
+		/**
+		 * The meta object literal for the '<em><b>Margin</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PRICE_PARAMETERS__MARGIN = eINSTANCE.getProfitSharePriceParameters_Margin();
+
+		/**
+		 * The meta object literal for the '<em><b>Sales Multiplier</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute PROFIT_SHARE_PRICE_PARAMETERS__SALES_MULTIPLIER = eINSTANCE.getProfitSharePriceParameters_SalesMultiplier();
+
+		/**
+		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.RedirectionPriceParametersImpl <em>Redirection Price Parameters</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see com.mmxlabs.models.lng.commercial.impl.RedirectionPriceParametersImpl
+		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getRedirectionPriceParameters()
+		 * @generated
+		 */
+		EClass REDIRECTION_PRICE_PARAMETERS = eINSTANCE.getRedirectionPriceParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Sales Market Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REDIRECTION_PRICE_PARAMETERS__BASE_SALES_MARKET_PORT = eINSTANCE.getRedirectionPriceParameters_BaseSalesMarketPort();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Sales Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PRICE_PARAMETERS__BASE_SALES_PRICE_EXPRESSION = eINSTANCE.getRedirectionPriceParameters_BaseSalesPriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Base Purchase Price Expression</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PRICE_PARAMETERS__BASE_PURCHASE_PRICE_EXPRESSION = eINSTANCE.getRedirectionPriceParameters_BasePurchasePriceExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Notional Speed</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PRICE_PARAMETERS__NOTIONAL_SPEED = eINSTANCE.getRedirectionPriceParameters_NotionalSpeed();
+
+		/**
+		 * The meta object literal for the '<em><b>Des Purchase Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REDIRECTION_PRICE_PARAMETERS__DES_PURCHASE_PORT = eINSTANCE.getRedirectionPriceParameters_DesPurchasePort();
+
+		/**
+		 * The meta object literal for the '<em><b>Source Purchase Port</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REDIRECTION_PRICE_PARAMETERS__SOURCE_PURCHASE_PORT = eINSTANCE.getRedirectionPriceParameters_SourcePurchasePort();
+
+		/**
+		 * The meta object literal for the '<em><b>Profit Share</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PRICE_PARAMETERS__PROFIT_SHARE = eINSTANCE.getRedirectionPriceParameters_ProfitShare();
+
+		/**
+		 * The meta object literal for the '<em><b>Vessel Class</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference REDIRECTION_PRICE_PARAMETERS__VESSEL_CLASS = eINSTANCE.getRedirectionPriceParameters_VesselClass();
+
+		/**
+		 * The meta object literal for the '<em><b>Hire Cost</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PRICE_PARAMETERS__HIRE_COST = eINSTANCE.getRedirectionPriceParameters_HireCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Days From Source</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute REDIRECTION_PRICE_PARAMETERS__DAYS_FROM_SOURCE = eINSTANCE.getRedirectionPriceParameters_DaysFromSource();
 
 	}
 

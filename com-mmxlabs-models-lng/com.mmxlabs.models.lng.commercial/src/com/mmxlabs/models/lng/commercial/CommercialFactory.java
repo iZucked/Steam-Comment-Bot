@@ -52,6 +52,25 @@ public interface CommercialFactory extends EFactory {
 	Contract createContract();
 
 	/**
+	 * Returns a new object of class '<em>Sales Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sales Contract</em>'.
+	 * @generated
+	 */
+	SalesContract createSalesContract();
+
+	/**
+	 * Returns a new object of class '<em>Purchase Contract</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Purchase Contract</em>'.
+	 * @generated
+	 */
+	PurchaseContract createPurchaseContract();
+
+	/**
 	 * Returns a new object of class '<em>Fixed Price Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -141,6 +160,60 @@ public interface CommercialFactory extends EFactory {
 	 * @generated
 	 */
 	TaxRate createTaxRate();
+
+	/**
+	 * Returns a new object of class '<em>Fixed Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fixed Price Parameters</em>'.
+	 * @generated
+	 */
+	FixedPriceParameters createFixedPriceParameters();
+
+	/**
+	 * Returns a new object of class '<em>Index Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Index Price Parameters</em>'.
+	 * @generated
+	 */
+	IndexPriceParameters createIndexPriceParameters();
+
+	/**
+	 * Returns a new object of class '<em>Expression Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Expression Price Parameters</em>'.
+	 * @generated
+	 */
+	ExpressionPriceParameters createExpressionPriceParameters();
+
+	/**
+	 * Returns a new object of class '<em>Netback Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Netback Price Parameters</em>'.
+	 * @generated
+	 */
+	NetbackPriceParameters createNetbackPriceParameters();
+
+	/**
+	 * Returns a new object of class '<em>Profit Share Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Profit Share Price Parameters</em>'.
+	 * @generated
+	 */
+	ProfitSharePriceParameters createProfitSharePriceParameters();
+
+	/**
+	 * Returns a new object of class '<em>Redirection Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Redirection Price Parameters</em>'.
+	 * @generated
+	 */
+	RedirectionPriceParameters createRedirectionPriceParameters();
 
 	/**
 	 * Returns the package supported by this factory.

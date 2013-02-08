@@ -72,6 +72,7 @@ public class ContractComponentHelper extends BaseComponentHelper {
 		add_restrictedListsArePermissiveEditor(detailComposite, topClass);
 		add_restrictedContractsEditor(detailComposite, topClass);
 		add_restrictedPortsEditor(detailComposite, topClass);
+		add_priceInfoEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the entity feature on Contract
@@ -143,5 +144,15 @@ public class ContractComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_restrictedPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__RESTRICTED_PORTS));
+	}
+
+	/**
+	 * Create the editor for the priceInfo feature on Contract
+	 *
+	 * @generated NO
+	 */
+	protected void add_priceInfoEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		//Composite composite = new Composite(detailComposite);
+		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.CONTRACT__PRICE_INFO));
 	}
 }

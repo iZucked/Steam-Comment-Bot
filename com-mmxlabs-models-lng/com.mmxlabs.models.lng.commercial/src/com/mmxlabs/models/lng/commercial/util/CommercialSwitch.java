@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.commercial.util;
 import com.mmxlabs.models.lng.commercial.*;
 
 import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.types.ALegalEntity;
 
 import com.mmxlabs.models.lng.types.APurchaseContract;
@@ -235,6 +236,75 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case CommercialPackage.LNG_PRICE_CALCULATOR_PARAMETERS: {
+				LNGPriceCalculatorParameters lngPriceCalculatorParameters = (LNGPriceCalculatorParameters)theEObject;
+				T result = caseLNGPriceCalculatorParameters(lngPriceCalculatorParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(lngPriceCalculatorParameters);
+				if (result == null) result = caseUUIDObject(lngPriceCalculatorParameters);
+				if (result == null) result = caseMMXObject(lngPriceCalculatorParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.FIXED_PRICE_PARAMETERS: {
+				FixedPriceParameters fixedPriceParameters = (FixedPriceParameters)theEObject;
+				T result = caseFixedPriceParameters(fixedPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(fixedPriceParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(fixedPriceParameters);
+				if (result == null) result = caseUUIDObject(fixedPriceParameters);
+				if (result == null) result = caseMMXObject(fixedPriceParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.INDEX_PRICE_PARAMETERS: {
+				IndexPriceParameters indexPriceParameters = (IndexPriceParameters)theEObject;
+				T result = caseIndexPriceParameters(indexPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(indexPriceParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(indexPriceParameters);
+				if (result == null) result = caseUUIDObject(indexPriceParameters);
+				if (result == null) result = caseMMXObject(indexPriceParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: {
+				ExpressionPriceParameters expressionPriceParameters = (ExpressionPriceParameters)theEObject;
+				T result = caseExpressionPriceParameters(expressionPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(expressionPriceParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(expressionPriceParameters);
+				if (result == null) result = caseUUIDObject(expressionPriceParameters);
+				if (result == null) result = caseMMXObject(expressionPriceParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.NETBACK_PRICE_PARAMETERS: {
+				NetbackPriceParameters netbackPriceParameters = (NetbackPriceParameters)theEObject;
+				T result = caseNetbackPriceParameters(netbackPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(netbackPriceParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(netbackPriceParameters);
+				if (result == null) result = caseUUIDObject(netbackPriceParameters);
+				if (result == null) result = caseMMXObject(netbackPriceParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.PROFIT_SHARE_PRICE_PARAMETERS: {
+				ProfitSharePriceParameters profitSharePriceParameters = (ProfitSharePriceParameters)theEObject;
+				T result = caseProfitSharePriceParameters(profitSharePriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(profitSharePriceParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(profitSharePriceParameters);
+				if (result == null) result = caseUUIDObject(profitSharePriceParameters);
+				if (result == null) result = caseMMXObject(profitSharePriceParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.REDIRECTION_PRICE_PARAMETERS: {
+				RedirectionPriceParameters redirectionPriceParameters = (RedirectionPriceParameters)theEObject;
+				T result = caseRedirectionPriceParameters(redirectionPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(redirectionPriceParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(redirectionPriceParameters);
+				if (result == null) result = caseUUIDObject(redirectionPriceParameters);
+				if (result == null) result = caseMMXObject(redirectionPriceParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -460,6 +530,112 @@ public class CommercialSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>LNG Price Calculator Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>LNG Price Calculator Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLNGPriceCalculatorParameters(LNGPriceCalculatorParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fixed Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fixed Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFixedPriceParameters(FixedPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Index Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Index Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIndexPriceParameters(IndexPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Expression Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Expression Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseExpressionPriceParameters(ExpressionPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Netback Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Netback Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseNetbackPriceParameters(NetbackPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Profit Share Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Profit Share Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseProfitSharePriceParameters(ProfitSharePriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Redirection Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Redirection Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRedirectionPriceParameters(RedirectionPriceParameters object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>MMX Object</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -561,6 +737,22 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAPurchaseContract(APurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseALNGPriceCalculatorParameters(ALNGPriceCalculatorParameters object) {
 		return null;
 	}
 

@@ -189,6 +189,11 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
+				 CommercialFactory.eINSTANCE.createSalesContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
 				 CommercialFactory.eINSTANCE.createFixedPriceContract()));
 
 		newChildDescriptors.add
@@ -200,6 +205,11 @@ public class CommercialModelItemProvider
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
 				 CommercialFactory.eINSTANCE.createPriceExpressionContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
+				 CommercialFactory.eINSTANCE.createPurchaseContract()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -249,6 +259,16 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createSalesContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createPurchaseContract()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
 				 CommercialFactory.eINSTANCE.createFixedPriceContract()));
 
 		newChildDescriptors.add
@@ -284,12 +304,32 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 TypesFactory.eINSTANCE.createAVesselSet()));
+				 CommercialFactory.eINSTANCE.createFixedPriceParameters()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 TypesFactory.eINSTANCE.createABaseFuel()));
+				 CommercialFactory.eINSTANCE.createIndexPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createNetbackPriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createProfitSharePriceParameters()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
+				 CommercialFactory.eINSTANCE.createRedirectionPriceParameters()));
 
 		newChildDescriptors.add
 			(createChildParameter

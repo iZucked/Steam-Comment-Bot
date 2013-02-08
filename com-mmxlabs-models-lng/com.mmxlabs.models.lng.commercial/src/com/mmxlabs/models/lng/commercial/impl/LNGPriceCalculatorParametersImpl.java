@@ -6,9 +6,9 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing.impl;
-import com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
+package com.mmxlabs.models.lng.commercial.impl;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 
 import com.mmxlabs.models.lng.types.impl.ALNGPriceCalculatorParametersImpl;
 
@@ -24,7 +24,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public class LNGPriceCalculatorParametersImpl extends ALNGPriceCalculatorParametersImpl implements LNGPriceCalculatorParameters {
+public abstract class LNGPriceCalculatorParametersImpl extends ALNGPriceCalculatorParametersImpl implements LNGPriceCalculatorParameters {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -41,7 +41,7 @@ public class LNGPriceCalculatorParametersImpl extends ALNGPriceCalculatorParamet
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return PricingPackage.Literals.LNG_PRICE_CALCULATOR_PARAMETERS;
+		return CommercialPackage.Literals.LNG_PRICE_CALCULATOR_PARAMETERS;
 	}
 
 } // end of LNGPriceCalculatorParametersImpl

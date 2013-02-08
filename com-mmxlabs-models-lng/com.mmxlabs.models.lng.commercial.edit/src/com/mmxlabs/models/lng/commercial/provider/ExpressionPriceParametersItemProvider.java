@@ -4,11 +4,11 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing.provider;
+package com.mmxlabs.models.lng.commercial.provider;
 
 
-import com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,12 +27,12 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class LNGFixedPriceParametersItemProvider
+public class ExpressionPriceParametersItemProvider
 	extends LNGPriceCalculatorParametersItemProvider
 	implements
 		IEditingDomainItemProvider,
@@ -46,7 +46,7 @@ public class LNGFixedPriceParametersItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LNGFixedPriceParametersItemProvider(AdapterFactory adapterFactory) {
+	public ExpressionPriceParametersItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -61,42 +61,42 @@ public class LNGFixedPriceParametersItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addPricePerMMBTUPropertyDescriptor(object);
+			addPriceExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Price Per MMBTU feature.
+	 * This adds a property descriptor for the Price Expression feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPricePerMMBTUPropertyDescriptor(Object object) {
+	protected void addPriceExpressionPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LNGFixedPriceParameters_pricePerMMBTU_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LNGFixedPriceParameters_pricePerMMBTU_feature", "_UI_LNGFixedPriceParameters_type"),
-				 PricingPackage.Literals.LNG_FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU,
+				 getString("_UI_ExpressionPriceParameters_priceExpression_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ExpressionPriceParameters_priceExpression_feature", "_UI_ExpressionPriceParameters_type"),
+				 CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This returns LNGFixedPriceParameters.gif.
+	 * This returns ExpressionPriceParameters.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LNGFixedPriceParameters"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/ExpressionPriceParameters"));
 	}
 
 	/**
@@ -107,10 +107,10 @@ public class LNGFixedPriceParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGFixedPriceParameters)object).getName();
+		String label = ((ExpressionPriceParameters)object).getUuid();
 		return label == null || label.length() == 0 ?
-			getString("_UI_LNGFixedPriceParameters_type") :
-			getString("_UI_LNGFixedPriceParameters_type") + " " + label;
+			getString("_UI_ExpressionPriceParameters_type") :
+			getString("_UI_ExpressionPriceParameters_type") + " " + label;
 	}
 
 	/**
@@ -124,8 +124,8 @@ public class LNGFixedPriceParametersItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(LNGFixedPriceParameters.class)) {
-			case PricingPackage.LNG_FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU:
+		switch (notification.getFeatureID(ExpressionPriceParameters.class)) {
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

@@ -53,42 +53,43 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		gd.verticalIndent = 0;
 		gd.horizontalIndent = 0;
 		tabFolder.setLayoutData(gd);
-		final TabItem page1 = new TabItem(tabFolder, SWT.None);
-		page1.setText(EditorUtils.unmangle(eClass.getName()));
-		final Composite g = new Composite(tabFolder, SWT.NONE);
-		page1.setControl(g);
+		final TabItem mainTabPage = new TabItem(tabFolder, SWT.None);
+		mainTabPage.setText(EditorUtils.unmangle(eClass.getName()));
+		final Composite mainTabComposite = new Composite(tabFolder, SWT.NONE);
+		mainTabPage.setControl(mainTabComposite);
 		// g.setText(EditorUtils.unmangle(eClass.getName()));
-		g.setLayout(new FillLayout());
-		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
+		mainTabComposite.setLayout(new FillLayout());
+		mainTabComposite.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		// Create the directly rather than go through the registry. True indicates this is the top section. The bottom will be created later on
-		topLevel = new ContractDetailComposite(g, SWT.NONE, true);
+		topLevel = new ContractDetailComposite(mainTabComposite, SWT.NONE, true);
 		topLevel.setCommandHandler(commandHandler);
 		topLevel.setEditorWrapper(editorWrapper);
 
-		// Initialise middle composite
-		// middle = new Composite(this, SWT.NONE);
-		// // We know there is only the load and discharge slot, so two columns
-		// middle.setLayout(new GridLayout(2, true));
-		//
-		// createChildComposites(root, object, eClass, middle);
+		final TabItem priceInfoTabPage = new TabItem(tabFolder, SWT.None);
+		priceInfoTabPage.setText("Price Info");
+		final Composite priceInfoTabComposite = new Composite(tabFolder, SWT.NONE);
+		priceInfoTabPage.setControl(priceInfoTabComposite);
+		priceInfoTabComposite.setLayout(new GridLayout(1, true));
+		createChildComposites(root, object, eClass, priceInfoTabComposite);
 
-		final TabItem page2 = new TabItem(tabFolder, SWT.None);
-		page2.setText("Additional Constraints");
+		final TabItem constraintTabPage = new TabItem(tabFolder, SWT.None);
+		constraintTabPage.setText("Additional Constraints");
 		// final Group g = new Group(tabFolder, SWT.NONE);
-		final Composite g2 = new Composite(tabFolder, SWT.NONE);
-		page2.setControl(g2);
+		final Composite constraintTabComposite = new Composite(tabFolder, SWT.NONE);
+		constraintTabPage.setControl(constraintTabComposite);
 
 		// Additional Group for the bottom section
 		// g2.setText("Additional Constraints");
-		g2.setLayout(new FillLayout());
-		g2.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
+		constraintTabComposite.setLayout(new FillLayout());
+		constraintTabComposite.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		// Create the directly rather than go through the registry. True indicates this is the bottom section.
-		bottomLevel = new ContractDetailComposite(g2, SWT.NONE, false);
+		bottomLevel = new ContractDetailComposite(constraintTabComposite, SWT.NONE, false);
 		bottomLevel.setCommandHandler(commandHandler);
 		bottomLevel.setEditorWrapper(editorWrapper);
 
 		topLevel.display(location, root, object, range);
 		bottomLevel.display(location, root, object, range);
+
 
 		final Iterator<EReference> refs = childReferences.iterator();
 		final Iterator<IDisplayComposite> children = childComposites.iterator();

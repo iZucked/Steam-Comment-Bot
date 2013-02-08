@@ -143,6 +143,53 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.SalesContract} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SalesContractItemProvider salesContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.SalesContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSalesContractAdapter() {
+		if (salesContractItemProvider == null) {
+			salesContractItemProvider = new SalesContractItemProvider(this);
+		}
+
+		return salesContractItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PurchaseContract} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PurchaseContractItemProvider purchaseContractItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PurchaseContract}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPurchaseContractAdapter() {
+		if (purchaseContractItemProvider == null) {
+			purchaseContractItemProvider = new PurchaseContractItemProvider(this);
+		}
+
+		return purchaseContractItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.FixedPriceContract} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -355,6 +402,144 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.FixedPriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected FixedPriceParametersItemProvider fixedPriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.FixedPriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createFixedPriceParametersAdapter() {
+		if (fixedPriceParametersItemProvider == null) {
+			fixedPriceParametersItemProvider = new FixedPriceParametersItemProvider(this);
+		}
+
+		return fixedPriceParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.IndexPriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected IndexPriceParametersItemProvider indexPriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.IndexPriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createIndexPriceParametersAdapter() {
+		if (indexPriceParametersItemProvider == null) {
+			indexPriceParametersItemProvider = new IndexPriceParametersItemProvider(this);
+		}
+
+		return indexPriceParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ExpressionPriceParametersItemProvider expressionPriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createExpressionPriceParametersAdapter() {
+		if (expressionPriceParametersItemProvider == null) {
+			expressionPriceParametersItemProvider = new ExpressionPriceParametersItemProvider(this);
+		}
+
+		return expressionPriceParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.NetbackPriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected NetbackPriceParametersItemProvider netbackPriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.NetbackPriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createNetbackPriceParametersAdapter() {
+		if (netbackPriceParametersItemProvider == null) {
+			netbackPriceParametersItemProvider = new NetbackPriceParametersItemProvider(this);
+		}
+
+		return netbackPriceParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProfitSharePriceParametersItemProvider profitSharePriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.ProfitSharePriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProfitSharePriceParametersAdapter() {
+		if (profitSharePriceParametersItemProvider == null) {
+			profitSharePriceParametersItemProvider = new ProfitSharePriceParametersItemProvider(this);
+		}
+
+		return profitSharePriceParametersItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected RedirectionPriceParametersItemProvider redirectionPriceParametersItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createRedirectionPriceParametersAdapter() {
+		if (redirectionPriceParametersItemProvider == null) {
+			redirectionPriceParametersItemProvider = new RedirectionPriceParametersItemProvider(this);
+		}
+
+		return redirectionPriceParametersItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -456,6 +641,8 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (commercialModelItemProvider != null) commercialModelItemProvider.dispose();
 		if (legalEntityItemProvider != null) legalEntityItemProvider.dispose();
 		if (contractItemProvider != null) contractItemProvider.dispose();
+		if (salesContractItemProvider != null) salesContractItemProvider.dispose();
+		if (purchaseContractItemProvider != null) purchaseContractItemProvider.dispose();
 		if (fixedPriceContractItemProvider != null) fixedPriceContractItemProvider.dispose();
 		if (indexPriceContractItemProvider != null) indexPriceContractItemProvider.dispose();
 		if (netbackPurchaseContractItemProvider != null) netbackPurchaseContractItemProvider.dispose();
@@ -465,6 +652,12 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (priceExpressionContractItemProvider != null) priceExpressionContractItemProvider.dispose();
 		if (redirectionContractOriginalDateItemProvider != null) redirectionContractOriginalDateItemProvider.dispose();
 		if (taxRateItemProvider != null) taxRateItemProvider.dispose();
+		if (fixedPriceParametersItemProvider != null) fixedPriceParametersItemProvider.dispose();
+		if (indexPriceParametersItemProvider != null) indexPriceParametersItemProvider.dispose();
+		if (expressionPriceParametersItemProvider != null) expressionPriceParametersItemProvider.dispose();
+		if (netbackPriceParametersItemProvider != null) netbackPriceParametersItemProvider.dispose();
+		if (profitSharePriceParametersItemProvider != null) profitSharePriceParametersItemProvider.dispose();
+		if (redirectionPriceParametersItemProvider != null) redirectionPriceParametersItemProvider.dispose();
 	}
 
 }

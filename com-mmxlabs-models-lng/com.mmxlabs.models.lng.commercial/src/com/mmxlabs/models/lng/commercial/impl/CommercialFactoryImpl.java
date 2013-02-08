@@ -62,6 +62,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.COMMERCIAL_MODEL: return createCommercialModel();
 			case CommercialPackage.LEGAL_ENTITY: return createLegalEntity();
 			case CommercialPackage.CONTRACT: return createContract();
+			case CommercialPackage.SALES_CONTRACT: return createSalesContract();
+			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			case CommercialPackage.FIXED_PRICE_CONTRACT: return createFixedPriceContract();
 			case CommercialPackage.INDEX_PRICE_CONTRACT: return createIndexPriceContract();
 			case CommercialPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();
@@ -71,6 +73,12 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.PRICE_EXPRESSION_CONTRACT: return createPriceExpressionContract();
 			case CommercialPackage.REDIRECTION_CONTRACT_ORIGINAL_DATE: return createRedirectionContractOriginalDate();
 			case CommercialPackage.TAX_RATE: return createTaxRate();
+			case CommercialPackage.FIXED_PRICE_PARAMETERS: return createFixedPriceParameters();
+			case CommercialPackage.INDEX_PRICE_PARAMETERS: return createIndexPriceParameters();
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
+			case CommercialPackage.NETBACK_PRICE_PARAMETERS: return createNetbackPriceParameters();
+			case CommercialPackage.PROFIT_SHARE_PRICE_PARAMETERS: return createProfitSharePriceParameters();
+			case CommercialPackage.REDIRECTION_PRICE_PARAMETERS: return createRedirectionPriceParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -104,6 +112,26 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public Contract createContract() {
 		ContractImpl contract = new ContractImpl();
 		return contract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public SalesContract createSalesContract() {
+		SalesContractImpl salesContract = new SalesContractImpl();
+		return salesContract;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public PurchaseContract createPurchaseContract() {
+		PurchaseContractImpl purchaseContract = new PurchaseContractImpl();
+		return purchaseContract;
 	}
 
 	/**
@@ -204,6 +232,66 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public TaxRate createTaxRate() {
 		TaxRateImpl taxRate = new TaxRateImpl();
 		return taxRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FixedPriceParameters createFixedPriceParameters() {
+		FixedPriceParametersImpl fixedPriceParameters = new FixedPriceParametersImpl();
+		return fixedPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IndexPriceParameters createIndexPriceParameters() {
+		IndexPriceParametersImpl indexPriceParameters = new IndexPriceParametersImpl();
+		return indexPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExpressionPriceParameters createExpressionPriceParameters() {
+		ExpressionPriceParametersImpl expressionPriceParameters = new ExpressionPriceParametersImpl();
+		return expressionPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NetbackPriceParameters createNetbackPriceParameters() {
+		NetbackPriceParametersImpl netbackPriceParameters = new NetbackPriceParametersImpl();
+		return netbackPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ProfitSharePriceParameters createProfitSharePriceParameters() {
+		ProfitSharePriceParametersImpl profitSharePriceParameters = new ProfitSharePriceParametersImpl();
+		return profitSharePriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public RedirectionPriceParameters createRedirectionPriceParameters() {
+		RedirectionPriceParametersImpl redirectionPriceParameters = new RedirectionPriceParametersImpl();
+		return redirectionPriceParameters;
 	}
 
 	/**

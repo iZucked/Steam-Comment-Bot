@@ -1,30 +1,35 @@
 /**
- * Copyright (C) Minimax Labs Ltd., 2010 - 2013
- * All rights reserved.
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
  */
 package com.mmxlabs.models.lng.commercial.presentation.composites;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+
+import com.mmxlabs.models.lng.types.TypesPackage;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.IAdapterManager;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.ecore.EClass;
-
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
+import org.eclipse.core.runtime.IAdapterManager;
+import org.eclipse.core.runtime.Platform;
+
 /**
- * A component helper for PurchaseContract instances
+ * A component helper for LNGPriceCalculatorParameters instances
  *
  * @generated
  */
-public class PurchaseContractComponentHelper extends BaseComponentHelper {
+public class LNGPriceCalculatorParametersComponentHelper extends BaseComponentHelper {
 	protected List<IComponentHelper> superClassesHelpers = new ArrayList<IComponentHelper>();
 
 	/**
@@ -32,29 +37,28 @@ public class PurchaseContractComponentHelper extends BaseComponentHelper {
 	 *
 	 * @generated
 	 */
-	public PurchaseContractComponentHelper() {
+	public LNGPriceCalculatorParametersComponentHelper() {
 		this(Platform.getAdapterManager());
 	}
 
 	/**
 	 * Construct a new instance of this helper
 	 *
-	 * @generated NOT
+	 * @generated
 	 */
-	public PurchaseContractComponentHelper(IAdapterManager adapterManager) {
+	public LNGPriceCalculatorParametersComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
-		superClassesHelpers.addAll(registry.getComponentHelpers(CommercialPackage.Literals.CONTRACT));
-//		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.APURCHASE_CONTRACT));
+		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ALNG_PRICE_CALCULATOR_PARAMETERS));
 	}
 	
 	/**
-	 * add editors to a composite, using PurchaseContract as the supertype
+	 * add editors to a composite, using LNGPriceCalculatorParameters as the supertype
 	 *
 	 * @generated
 	 */
 	 @Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CommercialPackage.Literals.PURCHASE_CONTRACT);	
+		addEditorsToComposite(detailComposite, CommercialPackage.Literals.LNG_PRICE_CALCULATOR_PARAMETERS);	
 	}
 	
 	/**

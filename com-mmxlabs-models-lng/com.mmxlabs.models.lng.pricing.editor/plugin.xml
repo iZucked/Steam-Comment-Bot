@@ -87,6 +87,8 @@
 			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.PortCost" />
+
+  
   <componentHelper
         helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CooldownPriceComponentHelper"
         id="com.mmxlabs.models.lng.pricing.helpers.CooldownPrice"

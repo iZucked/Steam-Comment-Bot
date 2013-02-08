@@ -6,45 +6,42 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing.impl;
-import com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-
-import com.mmxlabs.models.lng.pricing.Index;
-
+package com.mmxlabs.models.lng.commercial.impl;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
+import com.mmxlabs.models.lng.types.AIndex;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>LNG Index Price Parameters</b></em>'.
+ * An implementation of the model object '<em><b>AIndex Price Parameters</b></em>'.
  * @since 3.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.LNGIndexPriceParametersImpl#getIndex <em>Index</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.LNGIndexPriceParametersImpl#getMultiplier <em>Multiplier</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.LNGIndexPriceParametersImpl#getConstant <em>Constant</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl#getIndex <em>AIndex</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl#getMultiplier <em>Multiplier</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl#getConstant <em>Constant</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImpl implements LNGIndexPriceParameters {
+public class IndexPriceParametersImpl extends LNGPriceCalculatorParametersImpl implements IndexPriceParameters {
 	/**
-	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
+	 * The cached value of the '{@link #getIndex() <em>AIndex</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getIndex()
 	 * @generated
 	 * @ordered
 	 */
-	protected Index index;
+	protected AIndex index;
 
 	/**
 	 * The default value of the '{@link #getMultiplier() <em>Multiplier</em>}' attribute.
@@ -91,7 +88,7 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LNGIndexPriceParametersImpl() {
+	protected IndexPriceParametersImpl() {
 		super();
 	}
 
@@ -102,7 +99,7 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return PricingPackage.Literals.LNG_INDEX_PRICE_PARAMETERS;
+		return CommercialPackage.Literals.INDEX_PRICE_PARAMETERS;
 	}
 
 	/**
@@ -110,13 +107,13 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index getIndex() {
+	public AIndex getIndex() {
 		if (index != null && index.eIsProxy()) {
 			InternalEObject oldIndex = (InternalEObject)index;
-			index = (Index)eResolveProxy(oldIndex);
+			index = (AIndex)eResolveProxy(oldIndex);
 			if (index != oldIndex) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PricingPackage.LNG_INDEX_PRICE_PARAMETERS__INDEX, oldIndex, index));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX, oldIndex, index));
 			}
 		}
 		return index;
@@ -127,7 +124,7 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Index basicGetIndex() {
+	public AIndex basicGetIndex() {
 		return index;
 	}
 
@@ -136,11 +133,11 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIndex(Index newIndex) {
-		Index oldIndex = index;
+	public void setIndex(AIndex newIndex) {
+		AIndex oldIndex = index;
 		index = newIndex;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.LNG_INDEX_PRICE_PARAMETERS__INDEX, oldIndex, index));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX, oldIndex, index));
 	}
 
 	/**
@@ -161,7 +158,7 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 		double oldMultiplier = multiplier;
 		multiplier = newMultiplier;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER, oldMultiplier, multiplier));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.INDEX_PRICE_PARAMETERS__MULTIPLIER, oldMultiplier, multiplier));
 	}
 
 	/**
@@ -182,7 +179,7 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 		double oldConstant = constant;
 		constant = newConstant;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.LNG_INDEX_PRICE_PARAMETERS__CONSTANT, oldConstant, constant));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.INDEX_PRICE_PARAMETERS__CONSTANT, oldConstant, constant));
 	}
 
 	/**
@@ -193,12 +190,12 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__INDEX:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX:
 				if (resolve) return getIndex();
 				return basicGetIndex();
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__MULTIPLIER:
 				return getMultiplier();
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__CONSTANT:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__CONSTANT:
 				return getConstant();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -212,13 +209,13 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__INDEX:
-				setIndex((Index)newValue);
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX:
+				setIndex((AIndex)newValue);
 				return;
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__MULTIPLIER:
 				setMultiplier((Double)newValue);
 				return;
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__CONSTANT:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__CONSTANT:
 				setConstant((Double)newValue);
 				return;
 		}
@@ -233,13 +230,13 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__INDEX:
-				setIndex((Index)null);
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX:
+				setIndex((AIndex)null);
 				return;
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__MULTIPLIER:
 				setMultiplier(MULTIPLIER_EDEFAULT);
 				return;
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__CONSTANT:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__CONSTANT:
 				setConstant(CONSTANT_EDEFAULT);
 				return;
 		}
@@ -254,11 +251,11 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__INDEX:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX:
 				return index != null;
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__MULTIPLIER:
 				return multiplier != MULTIPLIER_EDEFAULT;
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__CONSTANT:
+			case CommercialPackage.INDEX_PRICE_PARAMETERS__CONSTANT:
 				return constant != CONSTANT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -282,6 +279,6 @@ public class LNGIndexPriceParametersImpl extends LNGPriceCalculatorParametersImp
 		return result.toString();
 	}
 
-} // end of LNGIndexPriceParametersImpl
+} // end of IndexPriceParametersImpl
 
 // finish type fixing

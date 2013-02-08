@@ -6,26 +6,25 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing;
+package com.mmxlabs.models.lng.commercial;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>LNG Fixed Price Parameters</b></em>'.
- * @since 3.0
+ * A representation of the model object '<em><b>Fixed Price Parameters</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters#getPricePerMMBTU <em>Price Per MMBTU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.FixedPriceParameters#getPricePerMMBTU <em>Price Per MMBTU</em>}</li>
  * </ul>
  * </p>
  *
- * @see com.mmxlabs.models.lng.pricing.PricingPackage#getLNGFixedPriceParameters()
+ * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getFixedPriceParameters()
  * @model
  * @generated
  */
-public interface LNGFixedPriceParameters extends LNGPriceCalculatorParameters {
+public interface FixedPriceParameters extends LNGPriceCalculatorParameters {
 	/**
 	 * Returns the value of the '<em><b>Price Per MMBTU</b></em>' attribute.
 	 * The default value is <code>"0"</code>.
@@ -37,14 +36,14 @@ public interface LNGFixedPriceParameters extends LNGPriceCalculatorParameters {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Price Per MMBTU</em>' attribute.
 	 * @see #setPricePerMMBTU(double)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getLNGFixedPriceParameters_PricePerMMBTU()
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getFixedPriceParameters_PricePerMMBTU()
 	 * @model default="0" required="true"
 	 * @generated
 	 */
 	double getPricePerMMBTU();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters#getPricePerMMBTU <em>Price Per MMBTU</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.FixedPriceParameters#getPricePerMMBTU <em>Price Per MMBTU</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Price Per MMBTU</em>' attribute.
@@ -53,6 +52,6 @@ public interface LNGFixedPriceParameters extends LNGPriceCalculatorParameters {
 	 */
 	void setPricePerMMBTU(double value);
 
-} // end of  LNGFixedPriceParameters
+} // end of  FixedPriceParameters
 
 // finish type fixing

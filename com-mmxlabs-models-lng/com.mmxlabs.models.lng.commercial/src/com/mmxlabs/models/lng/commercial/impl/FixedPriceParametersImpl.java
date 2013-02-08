@@ -6,9 +6,9 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing.impl;
-import com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
+package com.mmxlabs.models.lng.commercial.impl;
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -18,19 +18,18 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>LNG Fixed Price Parameters</b></em>'.
- * @since 3.0
+ * An implementation of the model object '<em><b>Fixed Price Parameters</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.LNGFixedPriceParametersImpl#getPricePerMMBTU <em>Price Per MMBTU</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl#getPricePerMMBTU <em>Price Per MMBTU</em>}</li>
  * </ul>
  * </p>
  *
  * @generated
  */
-public class LNGFixedPriceParametersImpl extends LNGPriceCalculatorParametersImpl implements LNGFixedPriceParameters {
+public class FixedPriceParametersImpl extends LNGPriceCalculatorParametersImpl implements FixedPriceParameters {
 	/**
 	 * The default value of the '{@link #getPricePerMMBTU() <em>Price Per MMBTU</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -56,7 +55,7 @@ public class LNGFixedPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected LNGFixedPriceParametersImpl() {
+	protected FixedPriceParametersImpl() {
 		super();
 	}
 
@@ -67,7 +66,7 @@ public class LNGFixedPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	 */
 	@Override
 	protected EClass eStaticClass() {
-		return PricingPackage.Literals.LNG_FIXED_PRICE_PARAMETERS;
+		return CommercialPackage.Literals.FIXED_PRICE_PARAMETERS;
 	}
 
 	/**
@@ -88,7 +87,7 @@ public class LNGFixedPriceParametersImpl extends LNGPriceCalculatorParametersImp
 		double oldPricePerMMBTU = pricePerMMBTU;
 		pricePerMMBTU = newPricePerMMBTU;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.LNG_FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU, oldPricePerMMBTU, pricePerMMBTU));
+			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU, oldPricePerMMBTU, pricePerMMBTU));
 	}
 
 	/**
@@ -99,7 +98,7 @@ public class LNGFixedPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.LNG_FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU:
+			case CommercialPackage.FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU:
 				return getPricePerMMBTU();
 		}
 		return super.eGet(featureID, resolve, coreType);
@@ -113,7 +112,7 @@ public class LNGFixedPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.LNG_FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU:
+			case CommercialPackage.FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU:
 				setPricePerMMBTU((Double)newValue);
 				return;
 		}
@@ -128,7 +127,7 @@ public class LNGFixedPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.LNG_FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU:
+			case CommercialPackage.FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU:
 				setPricePerMMBTU(PRICE_PER_MMBTU_EDEFAULT);
 				return;
 		}
@@ -143,7 +142,7 @@ public class LNGFixedPriceParametersImpl extends LNGPriceCalculatorParametersImp
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.LNG_FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU:
+			case CommercialPackage.FIXED_PRICE_PARAMETERS__PRICE_PER_MMBTU:
 				return pricePerMMBTU != PRICE_PER_MMBTU_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
@@ -165,6 +164,6 @@ public class LNGFixedPriceParametersImpl extends LNGPriceCalculatorParametersImp
 		return result.toString();
 	}
 
-} // end of LNGFixedPriceParametersImpl
+} // end of FixedPriceParametersImpl
 
 // finish type fixing

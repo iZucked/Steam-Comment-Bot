@@ -6,7 +6,7 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing;
+package com.mmxlabs.models.lng.commercial;
 import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 
 /**
@@ -16,8 +16,8 @@ import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
  * <!-- end-user-doc -->
  *
  *
- * @see com.mmxlabs.models.lng.pricing.PricingPackage#getLNGPriceCalculatorParameters()
- * @model
+ * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getLNGPriceCalculatorParameters()
+ * @model abstract="true"
  * @generated
  */
 public interface LNGPriceCalculatorParameters extends ALNGPriceCalculatorParameters {

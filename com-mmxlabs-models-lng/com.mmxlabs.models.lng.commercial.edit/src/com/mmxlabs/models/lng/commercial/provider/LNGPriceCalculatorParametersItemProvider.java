@@ -4,10 +4,10 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing.provider;
+package com.mmxlabs.models.lng.commercial.provider;
 
 
-import com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 
 import com.mmxlabs.models.lng.types.provider.ALNGPriceCalculatorParametersItemProvider;
 
@@ -27,8 +27,9 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters} object.
  * <!-- begin-user-doc -->
+ * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
@@ -66,17 +67,6 @@ public class LNGPriceCalculatorParametersItemProvider
 	}
 
 	/**
-	 * This returns LNGPriceCalculatorParameters.gif.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LNGPriceCalculatorParameters"));
-	}
-
-	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -84,7 +74,7 @@ public class LNGPriceCalculatorParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGPriceCalculatorParameters)object).getName();
+		String label = ((LNGPriceCalculatorParameters)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_LNGPriceCalculatorParameters_type") :
 			getString("_UI_LNGPriceCalculatorParameters_type") + " " + label;
@@ -123,7 +113,7 @@ public class LNGPriceCalculatorParametersItemProvider
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return PricingEditPlugin.INSTANCE;
+		return CommercialEditPlugin.INSTANCE;
 	}
 
 }

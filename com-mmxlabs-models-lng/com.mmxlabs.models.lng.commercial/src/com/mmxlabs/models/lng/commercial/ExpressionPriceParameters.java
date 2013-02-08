@@ -6,25 +6,25 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing;
+package com.mmxlabs.models.lng.commercial;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>LNG Price Expression Parameters</b></em>'.
+ * A representation of the model object '<em><b>Expression Price Parameters</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters#getPriceExpression <em>Price Expression</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression <em>Price Expression</em>}</li>
  * </ul>
  * </p>
  *
- * @see com.mmxlabs.models.lng.pricing.PricingPackage#getLNGPriceExpressionParameters()
+ * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getExpressionPriceParameters()
  * @model
  * @generated
  */
-public interface LNGPriceExpressionParameters extends LNGPriceCalculatorParameters {
+public interface ExpressionPriceParameters extends LNGPriceCalculatorParameters {
 	/**
 	 * Returns the value of the '<em><b>Price Expression</b></em>' attribute.
 	 * The default value is <code>""</code>.
@@ -36,14 +36,14 @@ public interface LNGPriceExpressionParameters extends LNGPriceCalculatorParamete
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Price Expression</em>' attribute.
 	 * @see #setPriceExpression(String)
-	 * @see com.mmxlabs.models.lng.pricing.PricingPackage#getLNGPriceExpressionParameters_PriceExpression()
-	 * @model default=""
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getExpressionPriceParameters_PriceExpression()
+	 * @model default="" required="true"
 	 * @generated
 	 */
 	String getPriceExpression();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters#getPriceExpression <em>Price Expression</em>}' attribute.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression <em>Price Expression</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Price Expression</em>' attribute.
@@ -52,6 +52,6 @@ public interface LNGPriceExpressionParameters extends LNGPriceCalculatorParamete
 	 */
 	void setPriceExpression(String value);
 
-} // end of  LNGPriceExpressionParameters
+} // end of  ExpressionPriceParameters
 
 // finish type fixing

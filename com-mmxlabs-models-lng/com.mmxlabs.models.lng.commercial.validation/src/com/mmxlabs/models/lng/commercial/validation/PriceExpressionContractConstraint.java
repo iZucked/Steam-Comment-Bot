@@ -12,6 +12,9 @@ import org.eclipse.emf.validation.IValidationContext;
 
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.validation.util.ContractConstraints;
@@ -28,10 +31,22 @@ public class PriceExpressionContractConstraint extends
 			final SeriesParser parser = ContractConstraints.getParser();
 			final PriceExpressionContract contract = (PriceExpressionContract) target;
 
-			ContractConstraints.validatePriceExpression(ctx, contract, CommercialPackage.eINSTANCE.getRedirectionPurchaseContract_BasePurchasePriceExpression(), contract.getPriceExpression(), parser,
+			ContractConstraints.validatePriceExpression(ctx, contract, CommercialPackage.Literals.PRICE_EXPRESSION_CONTRACT__PRICE_EXPRESSION, contract.getPriceExpression(), parser,
 					failures);
 
 		}
+		else if (target instanceof Contract) {
+			LNGPriceCalculatorParameters priceInfo = ((Contract) target).getPriceInfo();
+			if (priceInfo instanceof ExpressionPriceParameters) {
+				final SeriesParser parser = ContractConstraints.getParser();
+				final ExpressionPriceParameters info = (ExpressionPriceParameters) priceInfo;
+
+				ContractConstraints.validatePriceExpression(ctx, priceInfo, CommercialPackage.Literals.EXPRESSION_PRICE_PARAMETERS__PRICE_EXPRESSION, info.getPriceExpression(), parser,
+						failures);
+				
+			}
+		}
+		
 		return Activator.PLUGIN_ID;
 	}
 }

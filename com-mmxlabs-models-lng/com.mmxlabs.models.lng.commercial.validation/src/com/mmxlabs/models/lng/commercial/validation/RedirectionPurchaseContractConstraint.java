@@ -13,6 +13,9 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.RedirectionPriceParameters;
 import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.commercial.validation.util.ContractConstraints;
@@ -40,6 +43,26 @@ public class RedirectionPurchaseContractConstraint extends AbstractModelMultiCon
 			}
 			// TODO: Check notional speed is within the vessel speed range
 		}
+		else if (target instanceof Contract) {
+			LNGPriceCalculatorParameters priceInfo = ((Contract) target).getPriceInfo();
+			if (priceInfo instanceof RedirectionPriceParameters) {
+				RedirectionPriceParameters info = (RedirectionPriceParameters) priceInfo;
+				final SeriesParser parser = ContractConstraints.getParser();
+
+				ContractConstraints.validatePriceExpression(ctx, info, CommercialPackage.Literals.REDIRECTION_PRICE_PARAMETERS__BASE_PURCHASE_PRICE_EXPRESSION, info.getBasePurchasePriceExpression(), parser,
+						failures);
+				ContractConstraints.validatePriceExpression(ctx, info, CommercialPackage.Literals.REDIRECTION_PRICE_PARAMETERS__BASE_SALES_PRICE_EXPRESSION, info.getBaseSalesPriceExpression(), parser, failures);
+
+				if (info.getNotionalSpeed() < 10.0) {
+
+					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Notional speed should be a normal speed"));
+					dsd.addEObjectAndFeature(info, CommercialPackage.Literals.REDIRECTION_PRICE_PARAMETERS__NOTIONAL_SPEED);
+					failures.add(dsd);
+				}
+			}
+			
+		}
+		
 		return Activator.PLUGIN_ID;
 	}
 
