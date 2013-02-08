@@ -128,14 +128,14 @@ public class ScenarioInstanceMigrator {
 	}
 
 	@SuppressWarnings("resource")
-	public void copyURIData(@NonNull final URIConverter uc, @NonNull final URI uri, @NonNull final URI tmpURI) throws IOException {
+	public void copyURIData(@NonNull final URIConverter uc, @NonNull final URI sourceURI, @NonNull final URI destURI) throws IOException {
 		InputStream is = null;
 		OutputStream os = null;
 		try {
 
 			// Get input stream from original URI
-			is = uc.createInputStream(uri);
-			os = uc.createOutputStream(tmpURI);
+			is = uc.createInputStream(sourceURI);
+			os = uc.createOutputStream(destURI);
 
 			ByteStreams.copy(is, os);
 		} finally {
