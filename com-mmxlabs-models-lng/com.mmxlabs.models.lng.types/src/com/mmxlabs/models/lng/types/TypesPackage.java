@@ -3108,26 +3108,6 @@ public interface TypesPackage extends EPackage {
 	int ALNG_PRICE_CALCULATOR_PARAMETERS__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS__NAME = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>ALNG Price Calculator Parameters</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 4.0
@@ -3135,7 +3115,7 @@ public interface TypesPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ALNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int ALNG_PRICE_CALCULATOR_PARAMETERS_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.

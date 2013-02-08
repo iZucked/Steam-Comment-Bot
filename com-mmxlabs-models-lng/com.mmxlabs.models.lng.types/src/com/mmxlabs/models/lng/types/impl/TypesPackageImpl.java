@@ -927,8 +927,6 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		extraDataEClass.getESuperTypes().add(this.getExtraDataContainer());
 		alngPriceCalculatorParametersEClass.getESuperTypes().add(
 				theMMXCorePackage.getUUIDObject());
-		alngPriceCalculatorParametersEClass.getESuperTypes().add(
-				theMMXCorePackage.getNamedObject());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(aPortEClass, APort.class, "APort", IS_ABSTRACT,
@@ -1202,7 +1200,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				alngPriceCalculatorParametersEClass,
 				source,
 				new String[] { "generatedType",
-						"com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters" });
+						"com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters" });
 	}
 
 } //TypesPackageImpl

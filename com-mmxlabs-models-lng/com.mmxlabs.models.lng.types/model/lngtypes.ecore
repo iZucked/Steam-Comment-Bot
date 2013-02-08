@@ -12,12 +12,12 @@
       <eParameters name="marked" upperBound="-1" eType="#//APortSet"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="APortSet" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="APortSet" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eOperations name="collect" upperBound="-1" eType="#//APort">
       <eParameters name="marked" upperBound="-1" eType="#//APortSet"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ARoute" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ARoute" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.port.Route"/>
     </eAnnotations>
@@ -33,7 +33,7 @@
       <eParameters name="marked" upperBound="-1" eType="#//AVesselSet"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AFleetVessel" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="AFleetVessel" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.fleet.Vessel"/>
     </eAnnotations>
@@ -43,37 +43,37 @@
       <details key="generatedType" value="com.mmxlabs.models.lng.fleet.VesselClass"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AVesselEvent" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="AVesselEvent" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.fleet.VesselEvent"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AContract" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="AContract" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.commercial.Contract"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ALegalEntity" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ALegalEntity" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.commercial.LegalEntity"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AIndex" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="AIndex" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.pricing.Index"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ACargo" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ACargo" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.cargo.Cargo"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ASlot" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ASlot" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.cargo.Slot"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AVesselSet" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="AVesselSet" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eOperations name="collect" upperBound="-1" eType="#//AVessel">
       <eParameters name="marked" upperBound="-1" eType="#//AVesselSet"/>
     </eOperations>
@@ -83,12 +83,12 @@
       <eParameters name="attribute" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ABaseFuel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ABaseFuel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.fleet.BaseFuel"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ASpotMarket" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ASpotMarket" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
   <eClassifiers xsi:type="ecore:EEnum" name="PortCapability">
     <eLiterals name="LOAD" literal="LOAD"/>
     <eLiterals name="DISCHARGE" value="1" literal="DISCHARGE"/>
@@ -96,7 +96,7 @@
     <eLiterals name="MAINTENANCE" value="3" literal="MAINTENANCE"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AOptimisationSettings" abstract="true"
-      eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
+      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject"/>
   <eClassifiers xsi:type="ecore:EClass" name="APurchaseContract" abstract="true" eSuperTypes="#//AContract">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.commercial.PurchaseContract"/>
@@ -219,9 +219,9 @@
       </eAnnotations>
     </eLiterals>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ALNGPriceCalculatorParameters" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ALNGPriceCalculatorParameters" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
-      <details key="generatedType" value="com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters"/>
+      <details key="generatedType" value="com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters"/>
     </eAnnotations>
   </eClassifiers>
 </ecore:EPackage>

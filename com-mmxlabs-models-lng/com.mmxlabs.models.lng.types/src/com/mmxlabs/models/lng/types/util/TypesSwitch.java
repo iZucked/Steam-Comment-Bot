@@ -343,8 +343,6 @@ public class TypesSwitch<T> extends Switch<T> {
 			if (result == null)
 				result = caseUUIDObject(alngPriceCalculatorParameters);
 			if (result == null)
-				result = caseNamedObject(alngPriceCalculatorParameters);
-			if (result == null)
 				result = caseMMXObject(alngPriceCalculatorParameters);
 			if (result == null)
 				result = defaultCase(theEObject);
