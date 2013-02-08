@@ -11,9 +11,11 @@ import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.databinding.EMFDataBindingContext;
 import org.eclipse.emf.databinding.EMFObservables;
+import org.eclipse.emf.ecore.EObject;
 
 import com.mmxlabs.models.lng.analytics.AnalyticsModel;
 import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.CargoSandbox;
 import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -33,18 +35,18 @@ import com.mmxlabs.scenario.service.model.ScenarioServicePackage;
  */
 public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 
-	private final Map<ScenarioInstance, ShippingCostPlanAdapter> adapterMap = new HashMap<ScenarioInstance, ShippingCostPlanAdapter>();
+	private final Map<ScenarioInstance, ModelAdapter> adapterMap = new HashMap<ScenarioInstance, ModelAdapter>();
 
-	private class ShippingCostPlanAdapter extends MMXAdapterImpl {
+	private class ModelAdapter extends MMXAdapterImpl {
 
 		private final EMFDataBindingContext dbc = new EMFDataBindingContext();
 		private final ObservablesManager manager = new ObservablesManager();
 
 		private final ScenarioInstance scenarioInstance;
 		private AnalyticsModel analyticsModel;
-		private final Map<ShippingCostPlan, ScenarioFragment> planToFragmentMap = new HashMap<ShippingCostPlan, ScenarioFragment>();
+		private final Map<EObject, ScenarioFragment> objectToFragmentMap = new HashMap<EObject, ScenarioFragment>();
 
-		public ShippingCostPlanAdapter(final ScenarioInstance scenarioInstance) {
+		public ModelAdapter(final ScenarioInstance scenarioInstance) {
 			this.scenarioInstance = scenarioInstance;
 			processScenario();
 
@@ -60,22 +62,28 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 			for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
 				createFragment(plan);
 			}
+			for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
+				createFragment(box);
+			}
 
-			analyticsModel.eAdapters().add(ShippingCostPlanAdapter.this);
+			analyticsModel.eAdapters().add(ModelAdapter.this);
 
 		}
 
 		public void dispose() {
 
 			manager.dispose();
-			analyticsModel.eAdapters().remove(ShippingCostPlanAdapter.this);
+			analyticsModel.eAdapters().remove(ModelAdapter.this);
 
 			for (final ShippingCostPlan plan : analyticsModel.getShippingCostPlans()) {
 				removeFragment(plan);
 			}
+			for (final CargoSandbox box : analyticsModel.getCargoSandboxes()) {
+				removeFragment(box);
+			}
 
 			// Safety check - previous step should have removed all the fragments, but just in case, remove anything left over.
-			for (final ShippingCostPlan plan : new HashSet<ShippingCostPlan>(planToFragmentMap.keySet())) {
+			for (final EObject plan : new HashSet<EObject>(objectToFragmentMap.keySet())) {
 				removeFragment(plan);
 			}
 		}
@@ -98,55 +106,56 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 				return;
 			}
 
-			if (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_ShippingCostPlans()) {
+			if ((notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_ShippingCostPlans())
+					|| (notification.getFeature() == AnalyticsPackage.eINSTANCE.getAnalyticsModel_CargoSandboxes())) {
 				if (notification.getEventType() == Notification.ADD) {
-					final ShippingCostPlan plan = (ShippingCostPlan) notification.getNewValue();
-					createFragment(plan);
+					final EObject eObj = (EObject) notification.getNewValue();
+					createFragment(eObj);
 				} else if (notification.getEventType() == Notification.REMOVE) {
-					final ShippingCostPlan plan = (ShippingCostPlan) notification.getOldValue();
-					removeFragment(plan);
+					final EObject eObj = (EObject) notification.getOldValue();
+					removeFragment(eObj);
 				}
 				// TODO: Handle ADD_/REMOVE_MANY ?
 			}
 		}
 
-		private void removeFragment(final ShippingCostPlan plan) {
-			final ScenarioFragment fragment = planToFragmentMap.remove(plan);
+		private void removeFragment(final EObject plan) {
+			final ScenarioFragment fragment = objectToFragmentMap.remove(plan);
 			scenarioInstance.getFragments().remove(fragment);
 		}
 
-		private void createFragment(final ShippingCostPlan plan) {
+		private void createFragment(final EObject plan) {
 			final ScenarioFragment fragment = ScenarioServiceFactory.eINSTANCE.createScenarioFragment();
 			fragment.setFragment(plan);
-			planToFragmentMap.put(plan, fragment);
+			objectToFragmentMap.put(plan, fragment);
 			scenarioInstance.getFragments().add(fragment);
 
 			// Create a databinding to keep names in sync
 			final IObservableValue fragmentObserver = EMFObservables.observeValue(fragment, ScenarioServicePackage.eINSTANCE.getScenarioFragment_Name());
-			final IObservableValue planObserver = EMFObservables.observeValue(plan, MMXCorePackage.eINSTANCE.getNamedObject_Name());
-			dbc.bindValue(fragmentObserver, planObserver);
+			final IObservableValue objectObserver = EMFObservables.observeValue(plan, MMXCorePackage.eINSTANCE.getNamedObject_Name());
+			dbc.bindValue(fragmentObserver, objectObserver);
 
 			// Add to manager to handle clean up
 			manager.addObservable(fragmentObserver);
-			manager.addObservable(planObserver);
+			manager.addObservable(objectObserver);
 		}
 	}
 
 	@Override
 	public void onPostScenarioInstanceLoad(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
-		final ShippingCostPlanAdapter adapter = new ShippingCostPlanAdapter(scenarioInstance);
+		final ModelAdapter adapter = new ModelAdapter(scenarioInstance);
 		adapterMap.put(scenarioInstance, adapter);
 	}
 
 	@Override
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 
-		final ShippingCostPlanAdapter adapter = adapterMap.remove(scenarioInstance);
+		final ModelAdapter adapter = adapterMap.remove(scenarioInstance);
 		adapter.dispose();
 	}
 
 	public void dispose() {
-		for (final ShippingCostPlanAdapter adapter : adapterMap.values()) {
+		for (final ModelAdapter adapter : adapterMap.values()) {
 			adapter.dispose();
 		}
 		adapterMap.clear();
