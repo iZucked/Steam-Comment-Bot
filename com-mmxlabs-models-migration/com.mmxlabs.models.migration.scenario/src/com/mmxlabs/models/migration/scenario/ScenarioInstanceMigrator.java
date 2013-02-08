@@ -37,6 +37,10 @@ public class ScenarioInstanceMigrator {
 		if (context == null) {
 			throw new IllegalArgumentException("Scenario has no version context. Unable to migrate");
 		}
+
+		if (scenarioInstance.getInstance() != null) {
+			throw new IllegalArgumentException("Scenario already loaded. Unable to migrate");
+		}
 		final int latestVersion = migrationRegistry.getLatestContextVersion(context);
 		final int scenarioVersion = scenarioInstance.getScenarioVersion();
 		final EList<String> subModelURIs = scenarioInstance.getSubModelURIs();
