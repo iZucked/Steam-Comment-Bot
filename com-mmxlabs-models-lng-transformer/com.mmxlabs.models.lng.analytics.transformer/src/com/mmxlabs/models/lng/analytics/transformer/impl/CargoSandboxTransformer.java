@@ -25,7 +25,6 @@ import org.eclipse.emf.validation.service.IConstraintDescriptor;
 import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jdt.annotation.Nullable;
-import org.omg.PortableServer.SERVANT_RETENTION_POLICY_ID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,10 +46,10 @@ import com.mmxlabs.models.lng.analytics.CostComponent;
 import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
 import com.mmxlabs.models.lng.analytics.UnitCostLine;
-import com.mmxlabs.models.lng.analytics.UnitCostMatrix;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
 import com.mmxlabs.models.lng.analytics.transformer.ICargoSandboxTransformer;
+import com.mmxlabs.models.lng.analytics.transformer.internal.TmpVanillaEntityValueCalculator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -68,6 +67,7 @@ import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.TransformerHelper;
+import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.ExtraData;
@@ -81,13 +81,17 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
+import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
@@ -97,29 +101,30 @@ import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.IVesselClass;
 import com.mmxlabs.scheduler.optimiser.components.VesselState;
 import com.mmxlabs.scheduler.optimiser.contracts.ICooldownPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
+import com.mmxlabs.scheduler.optimiser.contracts.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.BaseCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
+import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
+import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -301,6 +306,37 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			}
 		}
 
+		IEntity entity = new IEntity() {
+
+			@Override
+			public int getUpstreamTransferPrice(int loadPricePerM3, int cvValue) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+
+			@Override
+			public long getTaxedProfit(long downstreamTotalPretaxProfit, int time) {
+				// TODO Auto-generated method stub
+				return downstreamTotalPretaxProfit;
+			}
+
+			@Override
+			public String getName() {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			@Override
+			public int getDownstreamTransferPrice(int dischargePricePerM3, int cvValue) {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+		};
+
+		HashMapEntityProviderEditor entityProvider = (HashMapEntityProviderEditor) injector.getInstance(IEntityProvider.class);
+
+		entityProvider.setShippingEntity(entity);
+
 		// / Build up list of elements to schedule
 		final List<IPortSlot> elements = new LinkedList<IPortSlot>();
 		IStartEndRequirement startConstraint = null;
@@ -350,6 +386,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			}
 
 			IPortSlot slot = builder.createLoadSlot(id, buyPort, timeWindow, 0, gasVolume, priceCalculator, cargoCVValue, buy.getPort().getLoadDuration(), false, true, false);
+			entityProvider.setEntityForSlot(entity, slot);
 
 			elements.add(slot);
 
@@ -387,6 +424,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			final long maxCv = Long.MAX_VALUE;
 			IPortSlot slot = builder.createDischargeSlot(id, sellPort, timeWindow, 0, gasVolume, minCv, maxCv, priceCalculator, sell.getPort().getDischargeDuration(), false);
 			elements.add(slot);
+			entityProvider.setEntityForSlot(entity, slot);
 		}
 
 		{
@@ -454,7 +492,12 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		};
 		injector.injectMembers(scheduler);
 		// scheduler.setScheduleEvaluator(injector.getInstance(ScheduleEvaluator.class));
-
+		//
+		// ScheduleEvaluator evaluator = injector.getInstance(ScheduleEvaluator.class);
+		// evaluator.setCargoAllocator(injector.getInstance(ICargoAllocator.class));
+		// evaluator.setFitnessComponents(Collections.<ICargoSchedulerFitnessComponent>emptySet(), Collections.<ICargoAllocationFitnessComponent>singleton(new
+		// TmpProfitAndLossAllocationComponent("")));
+		// evaluator.setLoadPriceCalculators(buy)
 		// // injector.injectMembers(scheduler);
 		// SchedulerUtils.setDataComponentProviders(data, scheduler);
 		// scheduler.setVoyagePlanOptimiser(optimiser);
@@ -477,10 +520,31 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		/*
 		 * Unpack the annotated solution and create output lines
 		 */
+
+		IEntityValueCalculator entityValueCalculator = new TmpVanillaEntityValueCalculator();
+		injector.injectMembers(entityValueCalculator);
+
+		AnnotatedSolution solution = new AnnotatedSolution();
+		solution.setSequences(sequences);
+		// AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		// exporter.exportAnnotatedSolution(root, entities, solution);
+
 		for (final ScheduledSequence sequence : result) {
 			final IAllocationAnnotation allocation = allocationIterator.next();
 			final VoyagePlan plan = sequence.getVoyagePlans().get(1);
 			// create line for plan
+			long evaluate = entityValueCalculator.evaluate(plan, allocation, vessel, 0, solution);
+
+			// VisitEventExporter visitExporter = new VisitEventExporter();
+
+			ISequenceElement buyElement = slotProvider.getElement(elements.get(0));
+			// visitExporter.export(buyElement, solution.getElementAnnotations());
+			final IProfitAndLossAnnotation generatedCharterOutProfitAndLoss = solution.getElementAnnotations().getAnnotation(buyElement, "element-profit-and-loss", IProfitAndLossAnnotation.class);
+
+			long totalPNL = 0;
+			for (IProfitAndLossEntry entry : generatedCharterOutProfitAndLoss.getEntries()) {
+				totalPNL += entry.getFinalGroupValue();
+			}
 
 			final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
 
@@ -538,6 +602,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			line.setHireCost((notionalDayRate * totalDuration) / 24);
 			line.setPortCost(totalPortCost);
 
+			line.setProfit((int) (totalPNL / 1000l));
+
 			line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolume() + allocation.getFuelVolume()));
 			line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolume()));
 
@@ -566,6 +632,9 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 
 				summary.addExtraData("routecost", "Route Cost", totalRouteCost, ExtraDataFormatType.CURRENCY);
 				summary.addExtraData("portcost", "Port Cost", totalPortCost, ExtraDataFormatType.CURRENCY);
+				summary.addExtraData("profit", "Profit", line.getProfit(), ExtraDataFormatType.CURRENCY);
+				summary.addExtraData("ssalesprice", "Sales Price", allocation.getDischargeM3Price() / cv  / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
+				summary.addExtraData("purchaseprice", "Purchase Price", allocation.getLoadM3Price() / cv / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
 				// summary.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * totalDuration) / 24, ExtraDataFormatType.CURRENCY);
 
 				final ExtraData dischargeData = summary.addExtraData("discharged", "MMBTU Discharged", (int) (line.getVolumeDischarged() * cv), ExtraDataFormatType.INTEGER);

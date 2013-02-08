@@ -46,6 +46,8 @@ import com.mmxlabs.models.ui.dates.DateAttributeManipulator;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory;
 import com.mmxlabs.models.ui.modelfactories.IModelFactory.ISetting;
+import com.mmxlabs.models.ui.tabular.BasicAttributeManipulator;
+import com.mmxlabs.models.ui.tabular.NumericAttributeManipulator;
 import com.mmxlabs.models.ui.tabular.SingleReferenceManipulator;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
@@ -83,14 +85,15 @@ public class CargoSandboxesViewerPane extends ScenarioTableViewerPane {
 		super.init(path, adapterFactory);
 		addTypicalColumn("Buy Port", new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getBuyOpportunity_Port(), getReferenceValueProviderCache(), getEditingDomain()),
 				AnalyticsPackage.eINSTANCE.getProvisionalCargo_Buy());
-		addTypicalColumn("Buy Contract", new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getBuyOpportunity_Contract(), getReferenceValueProviderCache(), getEditingDomain()),
+		addTypicalColumn("Buy Expr", new BasicAttributeManipulator(AnalyticsPackage.eINSTANCE.getBuyOpportunity_PriceExpression(), getEditingDomain()),
 				AnalyticsPackage.eINSTANCE.getProvisionalCargo_Buy());
 		addTypicalColumn("Buy Date", new DateAttributeManipulator(AnalyticsPackage.eINSTANCE.getBuyOpportunity_Date(), getEditingDomain()), AnalyticsPackage.eINSTANCE.getProvisionalCargo_Buy());
 		addTypicalColumn("Sell Port", new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getSellOpportunity_Port(), getReferenceValueProviderCache(), getEditingDomain()),
 				AnalyticsPackage.eINSTANCE.getProvisionalCargo_Sell());
-		addTypicalColumn("Sell Contract", new SingleReferenceManipulator(AnalyticsPackage.eINSTANCE.getSellOpportunity_Contract(), getReferenceValueProviderCache(), getEditingDomain()),
+		addTypicalColumn("Sell Expr", new BasicAttributeManipulator(AnalyticsPackage.eINSTANCE.getSellOpportunity_PriceExpression(), getEditingDomain()),
 				AnalyticsPackage.eINSTANCE.getProvisionalCargo_Sell());
 		addTypicalColumn("Sell Date", new DateAttributeManipulator(AnalyticsPackage.eINSTANCE.getSellOpportunity_Date(), getEditingDomain()), AnalyticsPackage.eINSTANCE.getProvisionalCargo_Sell());
+		addTypicalColumn("Profit", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getUnitCostLine_Profit(), getEditingDomain()), AnalyticsPackage.eINSTANCE.getProvisionalCargo_CostLine());
 
 		// addTypicalColumn("Date", new DateAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_Date(), getEditingDomain()));
 		// addTypicalColumn("Gas Price", new NumericAttributeManipulator(AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice(), getEditingDomain()) {
