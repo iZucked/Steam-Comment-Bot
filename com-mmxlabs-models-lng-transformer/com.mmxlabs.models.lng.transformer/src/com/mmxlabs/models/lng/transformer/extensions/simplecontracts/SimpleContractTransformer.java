@@ -19,14 +19,18 @@ import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.FixedPriceContract;
+import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.IndexPriceContract;
+import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
 import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
+import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
@@ -48,7 +52,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 	private ModelEntityMap map;
 
 	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceContract(), CommercialPackage.eINSTANCE.getIndexPriceContract(),
-			CommercialPackage.eINSTANCE.getPriceExpressionContract());
+			CommercialPackage.eINSTANCE.getPriceExpressionContract(), CommercialPackage.eINSTANCE.getSalesContract(), CommercialPackage.eINSTANCE.getPurchaseContract());
 
 	@Inject
 	private SeriesParser indices;
@@ -75,6 +79,25 @@ public class SimpleContractTransformer implements IContractTransformer {
 			PriceExpressionContract contract = (PriceExpressionContract) c;
 			return createPriceExpressionContract(contract.getPriceExpression());
 		}
+
+		ALNGPriceCalculatorParameters priceInfo = c.getPriceInfo();
+		if (priceInfo instanceof FixedPriceParameters) {
+			FixedPriceParameters fixedPriceInfo = (FixedPriceParameters) c.getPriceInfo();
+			return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(fixedPriceInfo.getPricePerMMBTU()));
+		}
+		if (priceInfo instanceof IndexPriceParameters) {
+			IndexPriceParameters indexPriceInfo = (IndexPriceParameters) priceInfo;
+			return createMarketPriceContract(map.getOptimiserObject(indexPriceInfo.getIndex(), ICurve.class), OptimiserUnitConvertor.convertToInternalConversionFactor(indexPriceInfo.getConstant()),
+					OptimiserUnitConvertor.convertToInternalConversionFactor(indexPriceInfo.getMultiplier()));
+			
+		}
+		if (priceInfo instanceof ExpressionPriceParameters) {
+			ExpressionPriceParameters expressionPriceInfo = (ExpressionPriceParameters) priceInfo;
+			return createPriceExpressionContract(expressionPriceInfo.getPriceExpression());
+			
+		}
+		
+
 		return null;
 	}
 
