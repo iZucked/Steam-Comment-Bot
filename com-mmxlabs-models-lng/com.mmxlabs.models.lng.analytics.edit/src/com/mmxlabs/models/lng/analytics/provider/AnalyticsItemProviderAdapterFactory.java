@@ -307,6 +307,102 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.CargoSandbox} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CargoSandboxItemProvider cargoSandboxItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.CargoSandbox}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCargoSandboxAdapter() {
+		if (cargoSandboxItemProvider == null) {
+			cargoSandboxItemProvider = new CargoSandboxItemProvider(this);
+		}
+
+		return cargoSandboxItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.ProvisionalCargo} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ProvisionalCargoItemProvider provisionalCargoItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.ProvisionalCargo}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createProvisionalCargoAdapter() {
+		if (provisionalCargoItemProvider == null) {
+			provisionalCargoItemProvider = new ProvisionalCargoItemProvider(this);
+		}
+
+		return provisionalCargoItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.BuyOpportunity} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected BuyOpportunityItemProvider buyOpportunityItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.BuyOpportunity}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createBuyOpportunityAdapter() {
+		if (buyOpportunityItemProvider == null) {
+			buyOpportunityItemProvider = new BuyOpportunityItemProvider(this);
+		}
+
+		return buyOpportunityItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.analytics.SellOpportunity} instances.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected SellOpportunityItemProvider sellOpportunityItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link com.mmxlabs.models.lng.analytics.SellOpportunity}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createSellOpportunityAdapter() {
+		if (sellOpportunityItemProvider == null) {
+			sellOpportunityItemProvider = new SellOpportunityItemProvider(this);
+		}
+
+		return sellOpportunityItemProvider;
+	}
+
+	/**
 	 * This returns the root adapter factory that contains this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -415,6 +511,10 @@ public class AnalyticsItemProviderAdapterFactory extends AnalyticsAdapterFactory
 		if (journeyItemProvider != null) journeyItemProvider.dispose();
 		if (shippingCostPlanItemProvider != null) shippingCostPlanItemProvider.dispose();
 		if (shippingCostRowItemProvider != null) shippingCostRowItemProvider.dispose();
+		if (cargoSandboxItemProvider != null) cargoSandboxItemProvider.dispose();
+		if (provisionalCargoItemProvider != null) provisionalCargoItemProvider.dispose();
+		if (buyOpportunityItemProvider != null) buyOpportunityItemProvider.dispose();
+		if (sellOpportunityItemProvider != null) sellOpportunityItemProvider.dispose();
 	}
 
 }

@@ -171,47 +171,49 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 
 		final Map<EObject, AnyType> oldFeatures = ((XMLResource) analyticsModel.eResource()).getEObjectToExtensionMap();
 
-		for (final EObject matrix : matrices) {
-			// Convert unknown features
-			if (oldFeatures.containsKey(matrix)) {
+		if (matrices != null) {
+			for (final EObject matrix : matrices) {
+				// Convert unknown features
+				if (oldFeatures.containsKey(matrix)) {
 
-				final AnyType anyType = oldFeatures.get(matrix);
+					final AnyType anyType = oldFeatures.get(matrix);
 
-				for (final Iterator<FeatureMap.Entry> iter = anyType.getAnyAttribute().iterator(); iter.hasNext();) {
-					final FeatureMap.Entry entry = iter.next();
-					final EStructuralFeature eStructuralFeature = entry.getEStructuralFeature();
-					// Unset times
-					if (eStructuralFeature.getName().equals("returnIdleTime")) {
-						iter.remove();
-					}
-					if (eStructuralFeature.getName().equals("dischargeIdleTime")) {
-						iter.remove();
-					}
+					for (final Iterator<FeatureMap.Entry> iter = anyType.getAnyAttribute().iterator(); iter.hasNext();) {
+						final FeatureMap.Entry entry = iter.next();
+						final EStructuralFeature eStructuralFeature = entry.getEStructuralFeature();
+						// Unset times
+						if (eStructuralFeature.getName().equals("returnIdleTime")) {
+							iter.remove();
+						}
+						if (eStructuralFeature.getName().equals("dischargeIdleTime")) {
+							iter.remove();
+						}
 
-				}
-
-				// Each item in the original list is an entry in the iterator, so we need to build up a copy of the list before we can use it.
-				final List<EObject> ports = new ArrayList<EObject>();
-				for (final Iterator<FeatureMap.Entry> iter = anyType.getAny().iterator(); iter.hasNext();) {
-					final FeatureMap.Entry entry = iter.next();
-					final EStructuralFeature eStructuralFeature = entry.getEStructuralFeature();
-
-					if (eStructuralFeature.getName().equals("ports")) {
-
-						final EObject port = (EObject) entry.getValue();
-						ports.add(port);
-
-						// Clear old reference
-						iter.remove();
 					}
 
-				}
-				// Clone ports list into to/from.
-				if (!matrix.eIsSet(feature_toPorts)) {
-					matrix.eSet(feature_toPorts, ports);
-				}
-				if (!matrix.eIsSet(feature_fromPorts)) {
-					matrix.eSet(feature_fromPorts, ports);
+					// Each item in the original list is an entry in the iterator, so we need to build up a copy of the list before we can use it.
+					final List<EObject> ports = new ArrayList<EObject>();
+					for (final Iterator<FeatureMap.Entry> iter = anyType.getAny().iterator(); iter.hasNext();) {
+						final FeatureMap.Entry entry = iter.next();
+						final EStructuralFeature eStructuralFeature = entry.getEStructuralFeature();
+
+						if (eStructuralFeature.getName().equals("ports")) {
+
+							final EObject port = (EObject) entry.getValue();
+							ports.add(port);
+
+							// Clear old reference
+							iter.remove();
+						}
+
+					}
+					// Clone ports list into to/from.
+					if (!matrix.eIsSet(feature_toPorts)) {
+						matrix.eSet(feature_toPorts, ports);
+					}
+					if (!matrix.eIsSet(feature_fromPorts)) {
+						matrix.eSet(feature_fromPorts, ports);
+					}
 				}
 			}
 		}

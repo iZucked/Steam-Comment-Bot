@@ -466,6 +466,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -489,6 +490,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -512,6 +514,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -535,6 +538,7 @@ public class PricingItemProviderAdapterFactory extends PricingAdapterFactory imp
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

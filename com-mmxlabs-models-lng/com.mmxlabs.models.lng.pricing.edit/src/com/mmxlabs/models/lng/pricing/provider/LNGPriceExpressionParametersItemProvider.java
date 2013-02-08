@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters} object.
  * <!-- begin-user-doc -->
+ * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
@@ -107,7 +108,7 @@ public class LNGPriceExpressionParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGPriceExpressionParameters)object).getName();
+		String label = ((LNGPriceExpressionParameters)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_LNGPriceExpressionParameters_type") :
 			getString("_UI_LNGPriceExpressionParameters_type") + " " + label;

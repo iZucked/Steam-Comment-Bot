@@ -151,6 +151,35 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case AnalyticsPackage.CARGO_SANDBOX: {
+				CargoSandbox cargoSandbox = (CargoSandbox)theEObject;
+				T result = caseCargoSandbox(cargoSandbox);
+				if (result == null) result = caseNamedObject(cargoSandbox);
+				if (result == null) result = caseMMXObject(cargoSandbox);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.PROVISIONAL_CARGO: {
+				ProvisionalCargo provisionalCargo = (ProvisionalCargo)theEObject;
+				T result = caseProvisionalCargo(provisionalCargo);
+				if (result == null) result = caseMMXObject(provisionalCargo);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.BUY_OPPORTUNITY: {
+				BuyOpportunity buyOpportunity = (BuyOpportunity)theEObject;
+				T result = caseBuyOpportunity(buyOpportunity);
+				if (result == null) result = caseMMXObject(buyOpportunity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case AnalyticsPackage.SELL_OPPORTUNITY: {
+				SellOpportunity sellOpportunity = (SellOpportunity)theEObject;
+				T result = caseSellOpportunity(sellOpportunity);
+				if (result == null) result = caseMMXObject(sellOpportunity);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -304,6 +333,70 @@ public class AnalyticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseShippingCostRow(ShippingCostRow object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Cargo Sandbox</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Cargo Sandbox</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCargoSandbox(CargoSandbox object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Provisional Cargo</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Provisional Cargo</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseProvisionalCargo(ProvisionalCargo object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Buy Opportunity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Buy Opportunity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBuyOpportunity(BuyOpportunity object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Sell Opportunity</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sell Opportunity</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSellOpportunity(SellOpportunity object) {
 		return null;
 	}
 

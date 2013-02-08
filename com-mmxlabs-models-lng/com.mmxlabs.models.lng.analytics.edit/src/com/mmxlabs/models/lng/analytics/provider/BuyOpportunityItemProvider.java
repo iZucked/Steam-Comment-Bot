@@ -4,17 +4,22 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing.provider;
+package com.mmxlabs.models.lng.analytics.provider;
 
 
-import com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.BuyOpportunity;
+
+import com.mmxlabs.models.mmxcore.provider.MMXObjectItemProvider;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+
+import org.eclipse.emf.common.util.ResourceLocator;
 
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
@@ -27,14 +32,14 @@ import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.BuyOpportunity} object.
  * <!-- begin-user-doc -->
  * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
-public class LNGIndexPriceParametersItemProvider
-	extends LNGPriceCalculatorParametersItemProvider
+public class BuyOpportunityItemProvider
+	extends MMXObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -47,7 +52,7 @@ public class LNGIndexPriceParametersItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LNGIndexPriceParametersItemProvider(AdapterFactory adapterFactory) {
+	public BuyOpportunityItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -62,27 +67,28 @@ public class LNGIndexPriceParametersItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addIndexPropertyDescriptor(object);
-			addMultiplierPropertyDescriptor(object);
-			addConstantPropertyDescriptor(object);
+			addPortPropertyDescriptor(object);
+			addContractPropertyDescriptor(object);
+			addDatePropertyDescriptor(object);
+			addPriceExpressionPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This adds a property descriptor for the Index feature.
+	 * This adds a property descriptor for the Port feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addIndexPropertyDescriptor(Object object) {
+	protected void addPortPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LNGIndexPriceParameters_index_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LNGIndexPriceParameters_index_feature", "_UI_LNGIndexPriceParameters_type"),
-				 PricingPackage.Literals.LNG_INDEX_PRICE_PARAMETERS__INDEX,
+				 getString("_UI_BuyOpportunity_port_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_port_feature", "_UI_BuyOpportunity_type"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__PORT,
 				 true,
 				 false,
 				 true,
@@ -92,58 +98,80 @@ public class LNGIndexPriceParametersItemProvider
 	}
 
 	/**
-	 * This adds a property descriptor for the Multiplier feature.
+	 * This adds a property descriptor for the Contract feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addMultiplierPropertyDescriptor(Object object) {
+	protected void addContractPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LNGIndexPriceParameters_multiplier_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LNGIndexPriceParameters_multiplier_feature", "_UI_LNGIndexPriceParameters_type"),
-				 PricingPackage.Literals.LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER,
+				 getString("_UI_BuyOpportunity_contract_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_contract_feature", "_UI_BuyOpportunity_type"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__CONTRACT,
 				 true,
 				 false,
-				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 true,
+				 null,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This adds a property descriptor for the Constant feature.
+	 * This adds a property descriptor for the Date feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addConstantPropertyDescriptor(Object object) {
+	protected void addDatePropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LNGIndexPriceParameters_constant_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_LNGIndexPriceParameters_constant_feature", "_UI_LNGIndexPriceParameters_type"),
-				 PricingPackage.Literals.LNG_INDEX_PRICE_PARAMETERS__CONSTANT,
+				 getString("_UI_BuyOpportunity_date_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_date_feature", "_UI_BuyOpportunity_type"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__DATE,
 				 true,
 				 false,
 				 false,
-				 ItemPropertyDescriptor.REAL_VALUE_IMAGE,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}
 
 	/**
-	 * This returns LNGIndexPriceParameters.gif.
+	 * This adds a property descriptor for the Price Expression feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addPriceExpressionPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_BuyOpportunity_priceExpression_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_BuyOpportunity_priceExpression_feature", "_UI_BuyOpportunity_type"),
+				 AnalyticsPackage.Literals.BUY_OPPORTUNITY__PRICE_EXPRESSION,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns BuyOpportunity.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LNGIndexPriceParameters"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/BuyOpportunity"));
 	}
 
 	/**
@@ -154,10 +182,11 @@ public class LNGIndexPriceParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGIndexPriceParameters)object).getUuid();
+		Date labelValue = ((BuyOpportunity)object).getDate();
+		String label = labelValue == null ? null : labelValue.toString();
 		return label == null || label.length() == 0 ?
-			getString("_UI_LNGIndexPriceParameters_type") :
-			getString("_UI_LNGIndexPriceParameters_type") + " " + label;
+			getString("_UI_BuyOpportunity_type") :
+			getString("_UI_BuyOpportunity_type") + " " + label;
 	}
 
 	/**
@@ -171,9 +200,9 @@ public class LNGIndexPriceParametersItemProvider
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
 
-		switch (notification.getFeatureID(LNGIndexPriceParameters.class)) {
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__MULTIPLIER:
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS__CONSTANT:
+		switch (notification.getFeatureID(BuyOpportunity.class)) {
+			case AnalyticsPackage.BUY_OPPORTUNITY__DATE:
+			case AnalyticsPackage.BUY_OPPORTUNITY__PRICE_EXPRESSION:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}
@@ -190,6 +219,17 @@ public class LNGIndexPriceParametersItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+	}
+
+	/**
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ResourceLocator getResourceLocator() {
+		return AnalyticsEditPlugin.INSTANCE;
 	}
 
 }

@@ -253,7 +253,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				T result = caseLNGPriceCalculatorParameters(lngPriceCalculatorParameters);
 				if (result == null) result = caseALNGPriceCalculatorParameters(lngPriceCalculatorParameters);
 				if (result == null) result = caseUUIDObject(lngPriceCalculatorParameters);
-				if (result == null) result = caseNamedObject(lngPriceCalculatorParameters);
 				if (result == null) result = caseMMXObject(lngPriceCalculatorParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -264,7 +263,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLNGPriceCalculatorParameters(lngFixedPriceParameters);
 				if (result == null) result = caseALNGPriceCalculatorParameters(lngFixedPriceParameters);
 				if (result == null) result = caseUUIDObject(lngFixedPriceParameters);
-				if (result == null) result = caseNamedObject(lngFixedPriceParameters);
 				if (result == null) result = caseMMXObject(lngFixedPriceParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -275,7 +273,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLNGPriceCalculatorParameters(lngIndexPriceParameters);
 				if (result == null) result = caseALNGPriceCalculatorParameters(lngIndexPriceParameters);
 				if (result == null) result = caseUUIDObject(lngIndexPriceParameters);
-				if (result == null) result = caseNamedObject(lngIndexPriceParameters);
 				if (result == null) result = caseMMXObject(lngIndexPriceParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -286,7 +283,6 @@ public class PricingSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLNGPriceCalculatorParameters(lngPriceExpressionParameters);
 				if (result == null) result = caseALNGPriceCalculatorParameters(lngPriceExpressionParameters);
 				if (result == null) result = caseUUIDObject(lngPriceExpressionParameters);
-				if (result == null) result = caseNamedObject(lngPriceExpressionParameters);
 				if (result == null) result = caseMMXObject(lngPriceExpressionParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

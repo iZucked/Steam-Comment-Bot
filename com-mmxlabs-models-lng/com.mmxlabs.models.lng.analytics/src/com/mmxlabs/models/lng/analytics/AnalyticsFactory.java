@@ -116,6 +116,46 @@ public interface AnalyticsFactory extends EFactory {
 	ShippingCostRow createShippingCostRow();
 
 	/**
+	 * Returns a new object of class '<em>Cargo Sandbox</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Cargo Sandbox</em>'.
+	 * @generated
+	 */
+	CargoSandbox createCargoSandbox();
+
+	/**
+	 * Returns a new object of class '<em>Provisional Cargo</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Provisional Cargo</em>'.
+	 * @generated
+	 */
+	ProvisionalCargo createProvisionalCargo();
+
+	/**
+	 * Returns a new object of class '<em>Buy Opportunity</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Buy Opportunity</em>'.
+	 * @generated
+	 */
+	BuyOpportunity createBuyOpportunity();
+
+	/**
+	 * Returns a new object of class '<em>Sell Opportunity</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sell Opportunity</em>'.
+	 * @generated
+	 */
+	SellOpportunity createSellOpportunity();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

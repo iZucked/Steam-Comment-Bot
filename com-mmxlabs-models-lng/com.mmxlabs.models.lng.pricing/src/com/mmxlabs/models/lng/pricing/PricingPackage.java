@@ -1517,6 +1517,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.LNGPriceCalculatorParametersImpl <em>LNG Price Calculator Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.pricing.impl.LNGPriceCalculatorParametersImpl
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getLNGPriceCalculatorParameters()
@@ -1527,6 +1528,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1536,6 +1538,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1545,6 +1548,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1552,26 +1556,9 @@ public interface PricingPackage extends EPackage {
 	int LNG_PRICE_CALCULATOR_PARAMETERS__UUID = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PRICE_CALCULATOR_PARAMETERS__NAME = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES;
-
-	/**
 	 * The number of structural features of the '<em>LNG Price Calculator Parameters</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1581,6 +1568,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.LNGFixedPriceParametersImpl <em>LNG Fixed Price Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.pricing.impl.LNGFixedPriceParametersImpl
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getLNGFixedPriceParameters()
@@ -1591,6 +1579,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1600,6 +1589,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1609,6 +1599,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1616,26 +1607,9 @@ public interface PricingPackage extends EPackage {
 	int LNG_FIXED_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_FIXED_PRICE_PARAMETERS__NAME = LNG_PRICE_CALCULATOR_PARAMETERS__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_FIXED_PRICE_PARAMETERS__OTHER_NAMES = LNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES;
-
-	/**
 	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1645,6 +1619,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>LNG Fixed Price Parameters</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1654,6 +1629,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.LNGIndexPriceParametersImpl <em>LNG Index Price Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.pricing.impl.LNGIndexPriceParametersImpl
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getLNGIndexPriceParameters()
@@ -1664,6 +1640,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1673,6 +1650,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1682,6 +1660,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1689,26 +1668,9 @@ public interface PricingPackage extends EPackage {
 	int LNG_INDEX_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_INDEX_PRICE_PARAMETERS__NAME = LNG_PRICE_CALCULATOR_PARAMETERS__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_INDEX_PRICE_PARAMETERS__OTHER_NAMES = LNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES;
-
-	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1718,6 +1680,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Multiplier</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1727,6 +1690,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Constant</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1736,6 +1700,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>LNG Index Price Parameters</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1745,6 +1710,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.pricing.impl.LNGPriceExpressionParametersImpl <em>LNG Price Expression Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.pricing.impl.LNGPriceExpressionParametersImpl
 	 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getLNGPriceExpressionParameters()
@@ -1755,6 +1721,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1764,6 +1731,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1773,6 +1741,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1780,26 +1749,9 @@ public interface PricingPackage extends EPackage {
 	int LNG_PRICE_EXPRESSION_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PRICE_EXPRESSION_PARAMETERS__NAME = LNG_PRICE_CALCULATOR_PARAMETERS__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PRICE_EXPRESSION_PARAMETERS__OTHER_NAMES = LNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES;
-
-	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1809,6 +1761,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>LNG Price Expression Parameters</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -2592,6 +2545,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters <em>LNG Price Calculator Parameters</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>LNG Price Calculator Parameters</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters
@@ -2602,6 +2556,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters <em>LNG Fixed Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>LNG Fixed Price Parameters</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters
@@ -2612,6 +2567,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters#getPricePerMMBTU <em>Price Per MMBTU</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Per MMBTU</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters#getPricePerMMBTU()
@@ -2623,6 +2579,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters <em>LNG Index Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>LNG Index Price Parameters</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters
@@ -2633,6 +2590,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getIndex <em>Index</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Index</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getIndex()
@@ -2644,6 +2602,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getMultiplier <em>Multiplier</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Multiplier</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getMultiplier()
@@ -2655,6 +2614,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getConstant <em>Constant</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Constant</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters#getConstant()
@@ -2666,6 +2626,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters <em>LNG Price Expression Parameters</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>LNG Price Expression Parameters</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters
@@ -2676,6 +2637,7 @@ public interface PricingPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters#getPriceExpression <em>Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Expression</em>'.
 	 * @see com.mmxlabs.models.lng.pricing.LNGPriceExpressionParameters#getPriceExpression()
@@ -3326,6 +3288,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.LNGPriceCalculatorParametersImpl <em>LNG Price Calculator Parameters</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.pricing.impl.LNGPriceCalculatorParametersImpl
 		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getLNGPriceCalculatorParameters()
@@ -3336,6 +3299,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.LNGFixedPriceParametersImpl <em>LNG Fixed Price Parameters</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.pricing.impl.LNGFixedPriceParametersImpl
 		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getLNGFixedPriceParameters()
@@ -3346,6 +3310,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price Per MMBTU</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3354,6 +3319,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.LNGIndexPriceParametersImpl <em>LNG Index Price Parameters</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.pricing.impl.LNGIndexPriceParametersImpl
 		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getLNGIndexPriceParameters()
@@ -3364,6 +3330,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3372,6 +3339,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Multiplier</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3380,6 +3348,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -3388,6 +3357,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.pricing.impl.LNGPriceExpressionParametersImpl <em>LNG Price Expression Parameters</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.pricing.impl.LNGPriceExpressionParametersImpl
 		 * @see com.mmxlabs.models.lng.pricing.impl.PricingPackageImpl#getLNGPriceExpressionParameters()
@@ -3398,6 +3368,7 @@ public interface PricingPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

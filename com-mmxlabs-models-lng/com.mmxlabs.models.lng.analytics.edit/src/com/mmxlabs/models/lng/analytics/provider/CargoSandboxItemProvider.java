@@ -4,12 +4,14 @@
  *
  * $Id$
  */
-package com.mmxlabs.models.lng.pricing.provider;
+package com.mmxlabs.models.lng.analytics.provider;
 
 
-import com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.analytics.AnalyticsFactory;
+import com.mmxlabs.models.lng.analytics.AnalyticsPackage;
+import com.mmxlabs.models.lng.analytics.CargoSandbox;
 
-import com.mmxlabs.models.lng.types.provider.ALNGPriceCalculatorParametersItemProvider;
+import com.mmxlabs.models.mmxcore.provider.NamedObjectItemProvider;
 
 import java.util.Collection;
 import java.util.List;
@@ -19,22 +21,25 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
 
+import org.eclipse.emf.ecore.EStructuralFeature;
+
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters} object.
+ * This is the item provider adapter for a {@link com.mmxlabs.models.lng.analytics.CargoSandbox} object.
  * <!-- begin-user-doc -->
  * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
-public class LNGPriceCalculatorParametersItemProvider
-	extends ALNGPriceCalculatorParametersItemProvider
+public class CargoSandboxItemProvider
+	extends NamedObjectItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -47,7 +52,7 @@ public class LNGPriceCalculatorParametersItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public LNGPriceCalculatorParametersItemProvider(AdapterFactory adapterFactory) {
+	public CargoSandboxItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -67,14 +72,44 @@ public class LNGPriceCalculatorParametersItemProvider
 	}
 
 	/**
-	 * This returns LNGPriceCalculatorParameters.gif.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(AnalyticsPackage.Literals.CARGO_SANDBOX__CARGOES);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
+	}
+
+	/**
+	 * This returns CargoSandbox.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/LNGPriceCalculatorParameters"));
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CargoSandbox"));
 	}
 
 	/**
@@ -85,10 +120,10 @@ public class LNGPriceCalculatorParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGPriceCalculatorParameters)object).getUuid();
+		String label = ((CargoSandbox)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_LNGPriceCalculatorParameters_type") :
-			getString("_UI_LNGPriceCalculatorParameters_type") + " " + label;
+			getString("_UI_CargoSandbox_type") :
+			getString("_UI_CargoSandbox_type") + " " + label;
 	}
 
 	/**
@@ -101,6 +136,12 @@ public class LNGPriceCalculatorParametersItemProvider
 	@Override
 	public void notifyChanged(Notification notification) {
 		updateChildren(notification);
+
+		switch (notification.getFeatureID(CargoSandbox.class)) {
+			case AnalyticsPackage.CARGO_SANDBOX__CARGOES:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
+		}
 		super.notifyChanged(notification);
 	}
 
@@ -114,6 +155,11 @@ public class LNGPriceCalculatorParametersItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(AnalyticsPackage.Literals.CARGO_SANDBOX__CARGOES,
+				 AnalyticsFactory.eINSTANCE.createProvisionalCargo()));
 	}
 
 	/**
@@ -124,7 +170,7 @@ public class LNGPriceCalculatorParametersItemProvider
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-		return PricingEditPlugin.INSTANCE;
+		return AnalyticsEditPlugin.INSTANCE;
 	}
 
 }
