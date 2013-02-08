@@ -284,16 +284,6 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 TypesFactory.eINSTANCE.createAVesselSet()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 TypesFactory.eINSTANCE.createABaseFuel()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
 				 MMXCoreFactory.eINSTANCE.createUUIDObject()));
 
 		newChildDescriptors.add
