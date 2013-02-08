@@ -20,9 +20,15 @@
  <extension
        point="com.mmxlabs.models.ui.jointmodeleditors">
     <jointModelEditor
-          id="com.mmxlabs.models.lng.analytics.transformer.ui.jointModelEditor1"
+          id="com.mmxlabs.models.lng.analytics.transformer.ui.editors.ShippingCostPlanModelEditorContribution"
           implementation="com.mmxlabs.models.lng.analytics.transformer.ui.editors.ShippingCostPlanModelEditorContribution"
           priority="0"
+          subModelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel">
+    </jointModelEditor>
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.analytics.transformer.ui.editors.CargoSandboxEditorContribution"
+          implementation="com.mmxlabs.models.lng.analytics.transformer.ui.editors.CargoSandboxEditorContribution"
+          priority="4"
           subModelClass="com.mmxlabs.models.lng.analytics.AnalyticsModel">
     </jointModelEditor>
  </extension>
