@@ -9,14 +9,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EcorePackage;
-import org.eclipse.emf.ecore.EPackage.Registry;
 import org.eclipse.jface.viewers.ISelection;
 
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -32,7 +33,41 @@ public class DefaultModelFactory implements IModelFactory {
 	private String extensionID;
 	private String label;
 	protected String prototypeClass;
+	
+	/**
+	 * @since 2.0
+	 */
+	protected EClass findEClassInClassifiers(String name, EList<EClassifier> eclassifiers) {
+		for (final EClassifier e : eclassifiers) {
+			if (e.getInstanceClass() != null && e.getInstanceClass().getCanonicalName().equals(name)) {
+				return (EClass) e;
+			}
+		}
+		return null;
+	}
 
+	/**
+	 * @since 2.0
+	 */
+	protected EClass getEClassFromName(String name, final EReference containment) {
+		if (name != null) {
+			EClass result = findEClassInClassifiers(name, containment.getEReferenceType().getEPackage().getEClassifiers());
+			if (result != null)
+				return result;
+									
+			// All registry packages...
+			for (final Object obj : Registry.INSTANCE.values()) {
+				if (obj instanceof EPackage) {
+					result = findEClassInClassifiers(name, ((EPackage) obj).getEClassifiers());
+					if (result != null)
+						return result;
+				}
+	
+			}
+		}
+		return containment.getEReferenceType();
+	}
+	
 	@Override
 	public Collection<ISetting> createInstance(final MMXRootObject rootObject, final EObject container, final EReference containment, final ISelection selection) {
 		EObject output = null;
