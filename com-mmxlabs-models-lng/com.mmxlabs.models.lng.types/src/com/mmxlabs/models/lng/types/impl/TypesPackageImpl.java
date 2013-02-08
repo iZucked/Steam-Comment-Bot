@@ -981,7 +981,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(aVesselSetEClass, AVesselSet.class, "AVesselSet",
-				!IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+				IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		op = initEOperation(getAVesselSet__Collect__EList(), this.getAVessel(),
 				"collect", 0, -1, IS_UNIQUE, IS_ORDERED);
@@ -998,7 +998,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 		addEParameter(op, ecorePackage.getEAttribute(), "attribute", 1, 1,
 				IS_UNIQUE, IS_ORDERED);
 
-		initEClass(aBaseFuelEClass, ABaseFuel.class, "ABaseFuel", !IS_ABSTRACT,
+		initEClass(aBaseFuelEClass, ABaseFuel.class, "ABaseFuel", IS_ABSTRACT,
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		initEClass(aSpotMarketEClass, ASpotMarket.class, "ASpotMarket",
@@ -1116,7 +1116,7 @@ public class TypesPackageImpl extends EPackageImpl implements TypesPackage {
 
 		initEClass(alngPriceCalculatorParametersEClass,
 				ALNGPriceCalculatorParameters.class,
-				"ALNGPriceCalculatorParameters", !IS_ABSTRACT, !IS_INTERFACE,
+				"ALNGPriceCalculatorParameters", IS_ABSTRACT, !IS_INTERFACE,
 				IS_GENERATED_INSTANCE_CLASS);
 
 		// Initialize enums and add enum literals

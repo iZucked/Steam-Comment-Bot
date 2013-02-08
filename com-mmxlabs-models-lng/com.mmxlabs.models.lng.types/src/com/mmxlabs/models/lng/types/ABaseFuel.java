@@ -14,7 +14,8 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
  *
  *
  * @see com.mmxlabs.models.lng.types.TypesPackage#getABaseFuel()
- * @model annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.models.lng.fleet.BaseFuel'"
+ * @model abstract="true"
+ *        annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.models.lng.fleet.BaseFuel'"
  * @generated
  */
 public interface ABaseFuel extends UUIDObject, NamedObject {

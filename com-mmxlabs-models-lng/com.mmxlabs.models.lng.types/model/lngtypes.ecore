@@ -73,7 +73,7 @@
       <details key="generatedType" value="com.mmxlabs.models.lng.cargo.Slot"/>
     </eAnnotations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AVesselSet" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="AVesselSet" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eOperations name="collect" upperBound="-1" eType="#//AVessel">
       <eParameters name="marked" upperBound="-1" eType="#//AVesselSet"/>
     </eOperations>
@@ -83,7 +83,7 @@
       <eParameters name="attribute" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EAttribute"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ABaseFuel" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ABaseFuel" abstract="true" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject ../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.fleet.BaseFuel"/>
     </eAnnotations>
@@ -219,7 +219,8 @@
       </eAnnotations>
     </eLiterals>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ALNGPriceCalculatorParameters" eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
+  <eClassifiers xsi:type="ecore:EClass" name="ALNGPriceCalculatorParameters" abstract="true"
+      eSuperTypes="../../com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
     <eAnnotations source="http://www.mmxlabs.com/mmxcore/1/MMXCore">
       <details key="generatedType" value="com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters"/>
     </eAnnotations>

@@ -35,7 +35,7 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *
  * @generated
  */
-public class ABaseFuelImpl extends UUIDObjectImpl implements ABaseFuel {
+public abstract class ABaseFuelImpl extends UUIDObjectImpl implements ABaseFuel {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->

@@ -15,7 +15,7 @@ import org.eclipse.emf.common.util.EList;
  *
  *
  * @see com.mmxlabs.models.lng.types.TypesPackage#getAVesselSet()
- * @model
+ * @model abstract="true"
  * @generated
  */
 public interface AVesselSet extends UUIDObject, NamedObject {

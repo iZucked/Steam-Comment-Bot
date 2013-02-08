@@ -16,7 +16,8 @@ import org.eclipse.emf.ecore.EObject;
  *
  *
  * @see com.mmxlabs.models.lng.types.TypesPackage#getALNGPriceCalculatorParameters()
- * @model annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters'"
+ * @model abstract="true"
+ *        annotation="http://www.mmxlabs.com/mmxcore/1/MMXCore generatedType='com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters'"
  * @generated
  */
 public interface ALNGPriceCalculatorParameters extends UUIDObject {

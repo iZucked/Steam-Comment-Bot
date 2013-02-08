@@ -75,52 +75,6 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.AVesselSet} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected AVesselSetItemProvider aVesselSetItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.types.AVesselSet}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createAVesselSetAdapter() {
-		if (aVesselSetItemProvider == null) {
-			aVesselSetItemProvider = new AVesselSetItemProvider(this);
-		}
-
-		return aVesselSetItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.ABaseFuel} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ABaseFuelItemProvider aBaseFuelItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.types.ABaseFuel}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createABaseFuelAdapter() {
-		if (aBaseFuelItemProvider == null) {
-			aBaseFuelItemProvider = new ABaseFuelItemProvider(this);
-		}
-
-		return aBaseFuelItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.ExtraData} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -166,31 +120,6 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 		}
 
 		return extraDataContainerItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters} instances.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ALNGPriceCalculatorParametersItemProvider alngPriceCalculatorParametersItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createALNGPriceCalculatorParametersAdapter() {
-		if (alngPriceCalculatorParametersItemProvider == null) {
-			alngPriceCalculatorParametersItemProvider = new ALNGPriceCalculatorParametersItemProvider(
-					this);
-		}
-
-		return alngPriceCalculatorParametersItemProvider;
 	}
 
 	/**
@@ -295,16 +224,10 @@ public class TypesItemProviderAdapterFactory extends TypesAdapterFactory
 	 * @generated
 	 */
 	public void dispose() {
-		if (aVesselSetItemProvider != null)
-			aVesselSetItemProvider.dispose();
-		if (aBaseFuelItemProvider != null)
-			aBaseFuelItemProvider.dispose();
 		if (extraDataItemProvider != null)
 			extraDataItemProvider.dispose();
 		if (extraDataContainerItemProvider != null)
 			extraDataContainerItemProvider.dispose();
-		if (alngPriceCalculatorParametersItemProvider != null)
-			alngPriceCalculatorParametersItemProvider.dispose();
 	}
 
 }

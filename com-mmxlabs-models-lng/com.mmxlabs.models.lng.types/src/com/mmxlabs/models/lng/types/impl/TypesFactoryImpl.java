@@ -74,16 +74,10 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
-		case TypesPackage.AVESSEL_SET:
-			return createAVesselSet();
-		case TypesPackage.ABASE_FUEL:
-			return createABaseFuel();
 		case TypesPackage.EXTRA_DATA:
 			return createExtraData();
 		case TypesPackage.EXTRA_DATA_CONTAINER:
 			return createExtraDataContainer();
-		case TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS:
-			return createALNGPriceCalculatorParameters();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName()
 					+ "' is not a valid classifier");
@@ -140,26 +134,6 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AVesselSet createAVesselSet() {
-		AVesselSetImpl aVesselSet = new AVesselSetImpl();
-		return aVesselSet;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ABaseFuel createABaseFuel() {
-		ABaseFuelImpl aBaseFuel = new ABaseFuelImpl();
-		return aBaseFuel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -178,16 +152,6 @@ public class TypesFactoryImpl extends EFactoryImpl implements TypesFactory {
 	public ExtraDataContainer createExtraDataContainer() {
 		ExtraDataContainerImpl extraDataContainer = new ExtraDataContainerImpl();
 		return extraDataContainer;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ALNGPriceCalculatorParameters createALNGPriceCalculatorParameters() {
-		ALNGPriceCalculatorParametersImpl alngPriceCalculatorParameters = new ALNGPriceCalculatorParametersImpl();
-		return alngPriceCalculatorParameters;
 	}
 
 	/**

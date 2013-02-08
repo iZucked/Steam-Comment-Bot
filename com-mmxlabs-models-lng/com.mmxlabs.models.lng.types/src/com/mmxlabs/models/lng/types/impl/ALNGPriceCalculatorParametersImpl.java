@@ -29,8 +29,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *
  * @generated
  */
-public class ALNGPriceCalculatorParametersImpl extends UUIDObjectImpl implements
-		ALNGPriceCalculatorParameters {
+public abstract class ALNGPriceCalculatorParametersImpl extends UUIDObjectImpl
+		implements ALNGPriceCalculatorParameters {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -25,24 +25,6 @@ public interface TypesFactory extends EFactory {
 			.init();
 
 	/**
-	 * Returns a new object of class '<em>AVessel Set</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>AVessel Set</em>'.
-	 * @generated
-	 */
-	AVesselSet createAVesselSet();
-
-	/**
-	 * Returns a new object of class '<em>ABase Fuel</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>ABase Fuel</em>'.
-	 * @generated
-	 */
-	ABaseFuel createABaseFuel();
-
-	/**
 	 * Returns a new object of class '<em>Extra Data</em>'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -61,16 +43,6 @@ public interface TypesFactory extends EFactory {
 	 * @generated
 	 */
 	ExtraDataContainer createExtraDataContainer();
-
-	/**
-	 * Returns a new object of class '<em>ALNG Price Calculator Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 4.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>ALNG Price Calculator Parameters</em>'.
-	 * @generated
-	 */
-	ALNGPriceCalculatorParameters createALNGPriceCalculatorParameters();
 
 	/**
 	 * Returns the package supported by this factory.

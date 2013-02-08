@@ -37,7 +37,8 @@ import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
  *
  * @generated
  */
-public class AVesselSetImpl extends UUIDObjectImpl implements AVesselSet {
+public abstract class AVesselSetImpl extends UUIDObjectImpl implements
+		AVesselSet {
 	/**
 	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
 	 * <!-- begin-user-doc -->
