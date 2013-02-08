@@ -35,15 +35,15 @@ public class ScenarioServiceSorter extends ViewerSorter {
 
 		if (e1Type == e2Type) {
 			if (e1Type != Types.UNKNOWN) {
-				final Container c1 = (Container) e1;
-				final Container c2 = (Container) e2;
+				final String n1 = getName(e1);
+				final String n2 = getName(e2);
 
-				if (c1.getName() == null) {
+				if (n1 == null) {
 					return -1;
-				} else if (c2.getName() == null) {
+				} else if (n2 == null) {
 					return 1;
 				}
-				return c1.getName().compareTo(c2.getName());
+				return n1.compareTo(n2);
 			}
 
 			return super.compare(viewer, e1Type, e2Type);
@@ -51,6 +51,15 @@ public class ScenarioServiceSorter extends ViewerSorter {
 
 		return e1Type.ordinal() - e2Type.ordinal();
 
+	}
+
+	String getName(final Object o) {
+		if (o instanceof Container) {
+			return ((Container) o).getName();
+		} else if (o instanceof ScenarioFragment) {
+			return ((ScenarioFragment) o).getName();
+		}
+		return null;
 	}
 
 	Types getType(final Object obj) {
