@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.LNGPriceCalculatorParameters} object.
  * <!-- begin-user-doc -->
+ * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
@@ -84,7 +85,7 @@ public class LNGPriceCalculatorParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGPriceCalculatorParameters)object).getName();
+		String label = ((LNGPriceCalculatorParameters)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_LNGPriceCalculatorParameters_type") :
 			getString("_UI_LNGPriceCalculatorParameters_type") + " " + label;

@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.LNGFixedPriceParameters} object.
  * <!-- begin-user-doc -->
+ * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
@@ -107,7 +108,7 @@ public class LNGFixedPriceParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGFixedPriceParameters)object).getName();
+		String label = ((LNGFixedPriceParameters)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_LNGFixedPriceParameters_type") :
 			getString("_UI_LNGFixedPriceParameters_type") + " " + label;

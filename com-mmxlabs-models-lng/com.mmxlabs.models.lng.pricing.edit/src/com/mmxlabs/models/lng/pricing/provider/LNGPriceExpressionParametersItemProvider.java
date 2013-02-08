@@ -107,7 +107,7 @@ public class LNGPriceExpressionParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGPriceExpressionParameters)object).getName();
+		String label = ((LNGPriceExpressionParameters)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_LNGPriceExpressionParameters_type") :
 			getString("_UI_LNGPriceExpressionParameters_type") + " " + label;

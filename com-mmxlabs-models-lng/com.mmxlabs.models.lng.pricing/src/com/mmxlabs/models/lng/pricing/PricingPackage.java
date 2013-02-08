@@ -1556,26 +1556,6 @@ public interface PricingPackage extends EPackage {
 	int LNG_PRICE_CALCULATOR_PARAMETERS__UUID = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PRICE_CALCULATOR_PARAMETERS__NAME = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES = TypesPackage.ALNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES;
-
-	/**
 	 * The number of structural features of the '<em>LNG Price Calculator Parameters</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1625,26 +1605,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int LNG_FIXED_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_FIXED_PRICE_PARAMETERS__NAME = LNG_PRICE_CALCULATOR_PARAMETERS__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_FIXED_PRICE_PARAMETERS__OTHER_NAMES = LNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
@@ -1706,26 +1666,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int LNG_INDEX_PRICE_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_INDEX_PRICE_PARAMETERS__NAME = LNG_PRICE_CALCULATOR_PARAMETERS__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_INDEX_PRICE_PARAMETERS__OTHER_NAMES = LNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
@@ -1807,26 +1747,6 @@ public interface PricingPackage extends EPackage {
 	 * @ordered
 	 */
 	int LNG_PRICE_EXPRESSION_PARAMETERS__UUID = LNG_PRICE_CALCULATOR_PARAMETERS__UUID;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PRICE_EXPRESSION_PARAMETERS__NAME = LNG_PRICE_CALCULATOR_PARAMETERS__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LNG_PRICE_EXPRESSION_PARAMETERS__OTHER_NAMES = LNG_PRICE_CALCULATOR_PARAMETERS__OTHER_NAMES;
 
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.

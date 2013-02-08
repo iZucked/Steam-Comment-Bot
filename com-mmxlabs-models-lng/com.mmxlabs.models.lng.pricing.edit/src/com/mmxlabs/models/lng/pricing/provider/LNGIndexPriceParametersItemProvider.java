@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.pricing.LNGIndexPriceParameters} object.
  * <!-- begin-user-doc -->
+ * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
@@ -153,7 +154,7 @@ public class LNGIndexPriceParametersItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((LNGIndexPriceParameters)object).getName();
+		String label = ((LNGIndexPriceParameters)object).getUuid();
 		return label == null || label.length() == 0 ?
 			getString("_UI_LNGIndexPriceParameters_type") :
 			getString("_UI_LNGIndexPriceParameters_type") + " " + label;
