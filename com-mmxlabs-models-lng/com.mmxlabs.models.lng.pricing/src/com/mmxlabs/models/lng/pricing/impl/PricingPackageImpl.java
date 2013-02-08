@@ -954,9 +954,9 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @generated
-	 * <!-- end-user-doc -->
 	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
 	 */
 	public EClass getLNGIndexPriceParameters() {
 		return lngIndexPriceParametersEClass;
