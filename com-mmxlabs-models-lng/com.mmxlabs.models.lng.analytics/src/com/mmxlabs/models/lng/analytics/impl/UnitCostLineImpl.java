@@ -47,6 +47,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getCanalCost <em>Canal Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getCostComponents <em>Cost Components</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getPortCost <em>Port Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.UnitCostLineImpl#getProfit <em>Profit</em>}</li>
  * </ul>
  * </p>
  *
@@ -272,6 +273,26 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * @ordered
 	 */
 	protected int portCost = PORT_COST_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getProfit() <em>Profit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProfit()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final int PROFIT_EDEFAULT = 0;
+
+	/**
+	 * The cached value of the '{@link #getProfit() <em>Profit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getProfit()
+	 * @generated
+	 * @ordered
+	 */
+	protected int profit = PROFIT_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -660,6 +681,27 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public int getProfit() {
+		return profit;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setProfit(int newProfit) {
+		int oldProfit = profit;
+		profit = newProfit;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.UNIT_COST_LINE__PROFIT, oldProfit, profit));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -707,6 +749,8 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 				return getCostComponents();
 			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
 				return getPortCost();
+			case AnalyticsPackage.UNIT_COST_LINE__PROFIT:
+				return getProfit();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -761,6 +805,9 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
 				setPortCost((Integer)newValue);
 				return;
+			case AnalyticsPackage.UNIT_COST_LINE__PROFIT:
+				setProfit((Integer)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -812,6 +859,9 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
 				setPortCost(PORT_COST_EDEFAULT);
 				return;
+			case AnalyticsPackage.UNIT_COST_LINE__PROFIT:
+				setProfit(PROFIT_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -850,6 +900,8 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 				return costComponents != null && !costComponents.isEmpty();
 			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
 				return portCost != PORT_COST_EDEFAULT;
+			case AnalyticsPackage.UNIT_COST_LINE__PROFIT:
+				return profit != PROFIT_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -914,6 +966,8 @@ public class UnitCostLineImpl extends MMXObjectImpl implements UnitCostLine {
 		result.append(canalCost);
 		result.append(", portCost: ");
 		result.append(portCost);
+		result.append(", profit: ");
+		result.append(profit);
 		result.append(')');
 		return result.toString();
 	}

@@ -78,6 +78,7 @@ public class UnitCostLineComponentHelper extends BaseComponentHelper {
 		add_canalCostEditor(detailComposite, topClass);
 		add_costComponentsEditor(detailComposite, topClass);
 		add_portCostEditor(detailComposite, topClass);
+		add_profitEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the unitCost feature on UnitCostLine
@@ -179,5 +180,14 @@ public class UnitCostLineComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_portCostEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__PORT_COST));
+	}
+
+	/**
+	 * Create the editor for the profit feature on UnitCostLine
+	 *
+	 * @generated
+	 */
+	protected void add_profitEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, AnalyticsPackage.Literals.UNIT_COST_LINE__PROFIT));
 	}
 }

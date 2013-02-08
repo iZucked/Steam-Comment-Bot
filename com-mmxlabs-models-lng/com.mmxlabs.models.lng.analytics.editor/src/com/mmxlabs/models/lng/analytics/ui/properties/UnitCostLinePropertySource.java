@@ -155,6 +155,15 @@ public class UnitCostLinePropertySource extends ExtraDataContainerPropertySource
 				return line.getVolumeDischarged();
 			}
 		}, "m3 Discharged", OVERVIEW, integerLabelProvider));
+
+		if (line.getProfit() != 0)
+		descriptors.add(makeDescriptor(new IPropertyGetter() {
+			@Override
+			public Object get(UnitCostLine line) {
+				return line.getProfit();
+			}
+		}, "Profit", OVERVIEW, costLabelProvider));
+
 		
 		addVisitDescriptors(descriptors, "2. Loading", (Visit) line.getCostComponents().get(0));
 		addVoyageDescriptors(descriptors, "3. Laden Voyage", (Voyage) line.getCostComponents().get(1));

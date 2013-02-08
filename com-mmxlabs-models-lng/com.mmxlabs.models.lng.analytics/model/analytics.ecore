@@ -130,6 +130,8 @@
         eType="#//CostComponent" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCost" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="profit" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Voyage" eSuperTypes="#//CostComponent">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="route" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

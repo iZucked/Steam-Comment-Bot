@@ -78,6 +78,7 @@ public class UnitCostLineItemProvider
 			addFuelCostPropertyDescriptor(object);
 			addCanalCostPropertyDescriptor(object);
 			addPortCostPropertyDescriptor(object);
+			addProfitPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -325,6 +326,28 @@ public class UnitCostLineItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Profit feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addProfitPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_UnitCostLine_profit_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_UnitCostLine_profit_feature", "_UI_UnitCostLine_type"),
+				 AnalyticsPackage.Literals.UNIT_COST_LINE__PROFIT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
 	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
 	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
@@ -399,6 +422,7 @@ public class UnitCostLineItemProvider
 			case AnalyticsPackage.UNIT_COST_LINE__FUEL_COST:
 			case AnalyticsPackage.UNIT_COST_LINE__CANAL_COST:
 			case AnalyticsPackage.UNIT_COST_LINE__PORT_COST:
+			case AnalyticsPackage.UNIT_COST_LINE__PROFIT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case AnalyticsPackage.UNIT_COST_LINE__EXTRA_DATA:

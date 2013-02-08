@@ -525,13 +525,22 @@ public interface AnalyticsPackage extends EPackage {
 	int UNIT_COST_LINE__PORT_COST = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
 
 	/**
+	 * The feature id for the '<em><b>Profit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int UNIT_COST_LINE__PROFIT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
+
+	/**
 	 * The number of structural features of the '<em>Unit Cost Line</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UNIT_COST_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 13;
+	int UNIT_COST_LINE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 14;
 
 
 	/**
@@ -1776,6 +1785,17 @@ public interface AnalyticsPackage extends EPackage {
 	EAttribute getUnitCostLine_PortCost();
 
 	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit <em>Profit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Profit</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit()
+	 * @see #getUnitCostLine()
+	 * @generated
+	 */
+	EAttribute getUnitCostLine_Profit();
+
+	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.Voyage <em>Voyage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2687,6 +2707,14 @@ public interface AnalyticsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute UNIT_COST_LINE__PORT_COST = eINSTANCE.getUnitCostLine_PortCost();
+
+		/**
+		 * The meta object literal for the '<em><b>Profit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute UNIT_COST_LINE__PROFIT = eINSTANCE.getUnitCostLine_Profit();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.VoyageImpl <em>Voyage</em>}' class.

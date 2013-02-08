@@ -29,6 +29,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getCanalCost <em>Canal Cost</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getCostComponents <em>Cost Components</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getPortCost <em>Port Cost</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit <em>Profit</em>}</li>
  * </ul>
  * </p>
  *
@@ -351,6 +352,34 @@ public interface UnitCostLine extends MMXObject, ExtraDataContainer {
 	 * @generated
 	 */
 	void setPortCost(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Profit</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Profit</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Profit</em>' attribute.
+	 * @see #setProfit(int)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getUnitCostLine_Profit()
+	 * @model required="true"
+	 * @generated
+	 */
+	int getProfit();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit <em>Profit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Profit</em>' attribute.
+	 * @see #getProfit()
+	 * @generated
+	 */
+	void setProfit(int value);
 
 } // end of  UnitCostLine
 
