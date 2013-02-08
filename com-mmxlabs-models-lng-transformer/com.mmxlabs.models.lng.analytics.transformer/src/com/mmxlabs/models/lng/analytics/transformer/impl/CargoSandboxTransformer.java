@@ -328,7 +328,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			final int gasVolume = Integer.MAX_VALUE;// OptimiserUnitConvertor.convertToInternalConversionFactor(row.getHeelVolume());
 
 			final ILoadPriceCalculator priceCalculator;
-			final String priceExpression = sell.getPriceExpression();
+
+			final String priceExpression = buy.getPriceExpression();
 			if (IBreakEvenEvaluator.MARKER.equals(priceExpression)) {
 				priceCalculator = new BreakEvenLoadPriceCalculator();
 			} else {
@@ -389,7 +390,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		}
 
 		{
-			endConstraint = builder.createStartEndRequirement(buyPort, builder.createTimeWindow(2*sellTime, 2*sellTime + 24));
+			endConstraint = builder.createStartEndRequirement(buyPort, builder.createTimeWindow(2 * sellTime, 2 * sellTime + 24));
 
 		}
 
