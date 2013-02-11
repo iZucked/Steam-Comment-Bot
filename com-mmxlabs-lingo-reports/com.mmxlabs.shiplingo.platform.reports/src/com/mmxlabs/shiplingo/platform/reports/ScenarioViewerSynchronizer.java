@@ -114,7 +114,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 
 	@Override
 	public void reallyNotifyChanged(Notification notification) {
-		if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule() || notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule()) {
+		if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Schedule()) {
 			refreshViewer();
 		}
 	}
@@ -122,8 +122,7 @@ public class ScenarioViewerSynchronizer extends MMXAdapterImpl implements IScena
 	@Override
 	protected void missedNotifications(final List<Notification> notifications) {
 		for (final Notification notification : notifications) {
-			if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule()
-					|| notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule()) {
+			if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Schedule()) {
 				refreshViewer();
 				return;
 			}
