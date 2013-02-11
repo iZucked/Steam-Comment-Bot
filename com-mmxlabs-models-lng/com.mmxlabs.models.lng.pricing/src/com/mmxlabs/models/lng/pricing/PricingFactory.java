@@ -179,6 +179,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>LNG Price Calculator Parameters</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>LNG Price Calculator Parameters</em>'.
 	 * @generated
@@ -188,6 +189,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>LNG Fixed Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>LNG Fixed Price Parameters</em>'.
 	 * @generated
@@ -197,6 +199,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>LNG Index Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>LNG Index Price Parameters</em>'.
 	 * @generated
@@ -206,6 +209,7 @@ public interface PricingFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>LNG Price Expression Parameters</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>LNG Price Expression Parameters</em>'.
 	 * @generated
