@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.ecore.EFactory;
 
 /**
@@ -64,6 +65,7 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Purchase Contract</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Purchase Contract</em>'.
 	 * @generated
@@ -73,20 +75,22 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Fixed Price Contract</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Fixed Price Contract</em>'.
 	 * @generated
 	 */
-	FixedPriceContract createFixedPriceContract();
+	SalesContract createFixedPriceContract();
 
 	/**
 	 * Returns a new object of class '<em>Index Price Contract</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Index Price Contract</em>'.
 	 * @generated
 	 */
-	IndexPriceContract createIndexPriceContract();
+	SalesContract createIndexPriceContract();
 
 	/**
 	 * Returns a new object of class '<em>Netback Purchase Contract</em>'.
@@ -124,12 +128,12 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Redirection Purchase Contract</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Redirection Purchase Contract</em>'.
 	 * @generated
 	 */
-	RedirectionPurchaseContract createRedirectionPurchaseContract();
+	PurchaseContract createRedirectionPurchaseContract();
 
 	/**
 	 * Returns a new object of class '<em>Price Expression Contract</em>'.
@@ -139,17 +143,17 @@ public interface CommercialFactory extends EFactory {
 	 * @return a new object of class '<em>Price Expression Contract</em>'.
 	 * @generated
 	 */
-	PriceExpressionContract createPriceExpressionContract();
+	SalesContract createPriceExpressionContract();
 
 	/**
 	 * Returns a new object of class '<em>Redirection Contract Original Date</em>'.
 	 * <!-- begin-user-doc -->
-	 * @since 2.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Redirection Contract Original Date</em>'.
 	 * @generated
 	 */
-	RedirectionContractOriginalDate createRedirectionContractOriginalDate();
+	UUIDObject createRedirectionContractOriginalDate();
 
 	/**
 	 * Returns a new object of class '<em>Tax Rate</em>'.
@@ -164,6 +168,7 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Fixed Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Fixed Price Parameters</em>'.
 	 * @generated
@@ -173,6 +178,7 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Index Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Index Price Parameters</em>'.
 	 * @generated
@@ -182,6 +188,7 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Expression Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Expression Price Parameters</em>'.
 	 * @generated
@@ -191,6 +198,7 @@ public interface CommercialFactory extends EFactory {
 	/**
 	 * Returns a new object of class '<em>Redirection Price Parameters</em>'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Redirection Price Parameters</em>'.
 	 * @generated

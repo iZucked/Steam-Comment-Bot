@@ -13,8 +13,6 @@ import org.eclipse.emf.ecore.EObject;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.FixedPriceContract;
-import com.mmxlabs.models.lng.commercial.IndexPriceContract;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
@@ -104,11 +102,11 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createPurchaseContractAdapter();
 			}
 			@Override
-			public Adapter caseFixedPriceContract(FixedPriceContract object) {
+			public Adapter caseFixedPriceContract(SalesContract object) {
 				return createFixedPriceContractAdapter();
 			}
 			@Override
-			public Adapter caseIndexPriceContract(IndexPriceContract object) {
+			public Adapter caseIndexPriceContract(SalesContract object) {
 				return createIndexPriceContractAdapter();
 			}
 			@Override
@@ -124,15 +122,15 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 				return createNotionalBallastParametersAdapter();
 			}
 			@Override
-			public Adapter caseRedirectionPurchaseContract(RedirectionPurchaseContract object) {
+			public Adapter caseRedirectionPurchaseContract(PurchaseContract object) {
 				return createRedirectionPurchaseContractAdapter();
 			}
 			@Override
-			public Adapter casePriceExpressionContract(PriceExpressionContract object) {
+			public Adapter casePriceExpressionContract(SalesContract object) {
 				return createPriceExpressionContractAdapter();
 			}
 			@Override
-			public Adapter caseRedirectionContractOriginalDate(RedirectionContractOriginalDate object) {
+			public Adapter caseRedirectionContractOriginalDate(UUIDObject object) {
 				return createRedirectionContractOriginalDateAdapter();
 			}
 			@Override
@@ -282,13 +280,13 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.FixedPriceContract <em>Fixed Price Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Fixed Price Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.FixedPriceContract
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract
 	 * @generated
 	 */
 	public Adapter createFixedPriceContractAdapter() {
@@ -296,13 +294,13 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract <em>Index Price Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Index Price Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract
 	 * @generated
 	 */
 	public Adapter createIndexPriceContractAdapter() {
@@ -352,14 +350,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract <em>Redirection Purchase Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Redirection Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract
 	 * @generated
 	 */
 	public Adapter createRedirectionPurchaseContractAdapter() {
@@ -367,14 +365,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.PriceExpressionContract <em>Price Expression Contract</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Price Expression Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.PriceExpressionContract
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract
 	 * @generated
 	 */
 	public Adapter createPriceExpressionContractAdapter() {
@@ -382,14 +380,14 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate <em>Redirection Contract Original Date</em>}'.
+	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.mmxcore.UUIDObject <em>Redirection Contract Original Date</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate
+	 * @see com.mmxlabs.models.mmxcore.UUIDObject
 	 * @generated
 	 */
 	public Adapter createRedirectionContractOriginalDateAdapter() {
@@ -416,6 +414,7 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters
@@ -430,6 +429,7 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.commercial.FixedPriceParameters
@@ -444,6 +444,7 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters
@@ -458,6 +459,7 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters
@@ -472,6 +474,7 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.commercial.RedirectionPriceParameters
@@ -584,6 +587,7 @@ public class CommercialAdapterFactory extends AdapterFactoryImpl {
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
 	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the new adapter.
 	 * @see com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters

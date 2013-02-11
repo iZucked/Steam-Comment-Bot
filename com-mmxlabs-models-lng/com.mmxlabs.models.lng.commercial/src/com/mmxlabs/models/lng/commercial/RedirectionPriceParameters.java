@@ -228,7 +228,7 @@ public interface RedirectionPriceParameters extends LNGPriceCalculatorParameters
 	 * </p>
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Vessel Class</em>' reference.
-	 * @see #setVesselClass(AVesselClass)
+	 * @see #setVesselClass(VesselClass)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getRedirectionPriceParameters_VesselClass()
 	 * @model
 	 * @generated

@@ -19,6 +19,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Expression Price Parameters</b></em>'.
+ * @since 3.0
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:

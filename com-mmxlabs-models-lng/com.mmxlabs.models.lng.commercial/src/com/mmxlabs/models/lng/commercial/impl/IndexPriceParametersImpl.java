@@ -24,7 +24,7 @@ import com.mmxlabs.models.lng.types.AIndex;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl#getIndex <em>AIndex</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl#getIndex <em>Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl#getMultiplier <em>Multiplier</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl#getConstant <em>Constant</em>}</li>
  * </ul>
@@ -34,7 +34,7 @@ import com.mmxlabs.models.lng.types.AIndex;
  */
 public class IndexPriceParametersImpl extends LNGPriceCalculatorParametersImpl implements IndexPriceParameters {
 	/**
-	 * The cached value of the '{@link #getIndex() <em>AIndex</em>}' reference.
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getIndex()

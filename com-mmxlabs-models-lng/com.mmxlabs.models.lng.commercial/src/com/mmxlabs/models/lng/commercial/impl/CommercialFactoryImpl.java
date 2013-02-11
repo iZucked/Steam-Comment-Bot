@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.commercial.impl;
 import com.mmxlabs.models.lng.commercial.*;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -137,8 +138,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FixedPriceContract createFixedPriceContract() {
-		FixedPriceContractImpl fixedPriceContract = new FixedPriceContractImpl();
+	public SalesContract createFixedPriceContract() {
+		SalesContract fixedPriceContract = (SalesContract)super.create(CommercialPackage.Literals.FIXED_PRICE_CONTRACT);
 		return fixedPriceContract;
 	}
 
@@ -147,8 +148,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IndexPriceContract createIndexPriceContract() {
-		IndexPriceContractImpl indexPriceContract = new IndexPriceContractImpl();
+	public SalesContract createIndexPriceContract() {
+		SalesContract indexPriceContract = (SalesContract)super.create(CommercialPackage.Literals.INDEX_PRICE_CONTRACT);
 		return indexPriceContract;
 	}
 
@@ -194,8 +195,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RedirectionPurchaseContract createRedirectionPurchaseContract() {
-		RedirectionPurchaseContractImpl redirectionPurchaseContract = new RedirectionPurchaseContractImpl();
+	public PurchaseContract createRedirectionPurchaseContract() {
+		PurchaseContract redirectionPurchaseContract = (PurchaseContract)super.create(CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT);
 		return redirectionPurchaseContract;
 	}
 
@@ -205,8 +206,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PriceExpressionContract createPriceExpressionContract() {
-		PriceExpressionContractImpl priceExpressionContract = new PriceExpressionContractImpl();
+	public SalesContract createPriceExpressionContract() {
+		SalesContract priceExpressionContract = (SalesContract)super.create(CommercialPackage.Literals.PRICE_EXPRESSION_CONTRACT);
 		return priceExpressionContract;
 	}
 
@@ -216,8 +217,8 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public RedirectionContractOriginalDate createRedirectionContractOriginalDate() {
-		RedirectionContractOriginalDateImpl redirectionContractOriginalDate = new RedirectionContractOriginalDateImpl();
+	public UUIDObject createRedirectionContractOriginalDate() {
+		UUIDObject redirectionContractOriginalDate = (UUIDObject)super.create(CommercialPackage.Literals.REDIRECTION_CONTRACT_ORIGINAL_DATE);
 		return redirectionContractOriginalDate;
 	}
 

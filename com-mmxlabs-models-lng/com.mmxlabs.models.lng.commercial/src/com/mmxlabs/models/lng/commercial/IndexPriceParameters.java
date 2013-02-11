@@ -18,7 +18,7 @@ import com.mmxlabs.models.lng.types.AIndex;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex <em>AIndex</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex <em>Index</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getMultiplier <em>Multiplier</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getConstant <em>Constant</em>}</li>
  * </ul>
@@ -30,15 +30,15 @@ import com.mmxlabs.models.lng.types.AIndex;
  */
 public interface IndexPriceParameters extends LNGPriceCalculatorParameters {
 	/**
-	 * Returns the value of the '<em><b>AIndex</b></em>' reference.
+	 * Returns the value of the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>AIndex</em>' reference isn't clear,
 	 * there really should be more of a description here...
 	 * </p>
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>AIndex</em>' reference.
-	 * @see #setIndex(AIndex)
+	 * @return the value of the '<em>Index</em>' reference.
+	 * @see #setIndex(Index)
 	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getIndexPriceParameters_Index()
 	 * @model required="true"
 	 * @generated
@@ -46,10 +46,10 @@ public interface IndexPriceParameters extends LNGPriceCalculatorParameters {
 	AIndex getIndex();
 
 	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex <em>AIndex</em>}' reference.
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex <em>Index</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>AIndex</em>' reference.
+	 * @param value the new value of the '<em>Index</em>' reference.
 	 * @see #getIndex()
 	 * @generated
 	 */

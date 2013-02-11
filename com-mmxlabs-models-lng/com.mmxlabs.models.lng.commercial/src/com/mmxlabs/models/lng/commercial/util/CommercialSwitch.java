@@ -131,13 +131,11 @@ public class CommercialSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CommercialPackage.FIXED_PRICE_CONTRACT: {
-				FixedPriceContract fixedPriceContract = (FixedPriceContract)theEObject;
+				SalesContract fixedPriceContract = (SalesContract)theEObject;
 				T result = caseFixedPriceContract(fixedPriceContract);
 				if (result == null) result = caseSalesContract(fixedPriceContract);
-				if (result == null) result = casePurchaseContract(fixedPriceContract);
 				if (result == null) result = caseContract(fixedPriceContract);
 				if (result == null) result = caseASalesContract(fixedPriceContract);
-				if (result == null) result = caseAPurchaseContract(fixedPriceContract);
 				if (result == null) result = caseAContract(fixedPriceContract);
 				if (result == null) result = caseUUIDObject(fixedPriceContract);
 				if (result == null) result = caseNamedObject(fixedPriceContract);
@@ -146,13 +144,11 @@ public class CommercialSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CommercialPackage.INDEX_PRICE_CONTRACT: {
-				IndexPriceContract indexPriceContract = (IndexPriceContract)theEObject;
+				SalesContract indexPriceContract = (SalesContract)theEObject;
 				T result = caseIndexPriceContract(indexPriceContract);
 				if (result == null) result = caseSalesContract(indexPriceContract);
-				if (result == null) result = casePurchaseContract(indexPriceContract);
 				if (result == null) result = caseContract(indexPriceContract);
 				if (result == null) result = caseASalesContract(indexPriceContract);
-				if (result == null) result = caseAPurchaseContract(indexPriceContract);
 				if (result == null) result = caseAContract(indexPriceContract);
 				if (result == null) result = caseUUIDObject(indexPriceContract);
 				if (result == null) result = caseNamedObject(indexPriceContract);
@@ -195,7 +191,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT: {
-				RedirectionPurchaseContract redirectionPurchaseContract = (RedirectionPurchaseContract)theEObject;
+				PurchaseContract redirectionPurchaseContract = (PurchaseContract)theEObject;
 				T result = caseRedirectionPurchaseContract(redirectionPurchaseContract);
 				if (result == null) result = casePurchaseContract(redirectionPurchaseContract);
 				if (result == null) result = caseContract(redirectionPurchaseContract);
@@ -208,13 +204,11 @@ public class CommercialSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CommercialPackage.PRICE_EXPRESSION_CONTRACT: {
-				PriceExpressionContract priceExpressionContract = (PriceExpressionContract)theEObject;
+				SalesContract priceExpressionContract = (SalesContract)theEObject;
 				T result = casePriceExpressionContract(priceExpressionContract);
 				if (result == null) result = caseSalesContract(priceExpressionContract);
-				if (result == null) result = casePurchaseContract(priceExpressionContract);
 				if (result == null) result = caseContract(priceExpressionContract);
 				if (result == null) result = caseASalesContract(priceExpressionContract);
-				if (result == null) result = caseAPurchaseContract(priceExpressionContract);
 				if (result == null) result = caseAContract(priceExpressionContract);
 				if (result == null) result = caseUUIDObject(priceExpressionContract);
 				if (result == null) result = caseNamedObject(priceExpressionContract);
@@ -223,7 +217,7 @@ public class CommercialSwitch<T> extends Switch<T> {
 				return result;
 			}
 			case CommercialPackage.REDIRECTION_CONTRACT_ORIGINAL_DATE: {
-				RedirectionContractOriginalDate redirectionContractOriginalDate = (RedirectionContractOriginalDate)theEObject;
+				UUIDObject redirectionContractOriginalDate = (UUIDObject)theEObject;
 				T result = caseRedirectionContractOriginalDate(redirectionContractOriginalDate);
 				if (result == null) result = caseUUIDObject(redirectionContractOriginalDate);
 				if (result == null) result = caseMMXObject(redirectionContractOriginalDate);
@@ -369,13 +363,14 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Fixed Price Contract</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFixedPriceContract(FixedPriceContract object) {
+	public T caseFixedPriceContract(SalesContract object) {
 		return null;
 	}
 
@@ -384,13 +379,14 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Index Price Contract</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseIndexPriceContract(IndexPriceContract object) {
+	public T caseIndexPriceContract(SalesContract object) {
 		return null;
 	}
 
@@ -450,14 +446,14 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
-	 * @since 2.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Redirection Purchase Contract</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseRedirectionPurchaseContract(RedirectionPurchaseContract object) {
+	public T caseRedirectionPurchaseContract(PurchaseContract object) {
 		return null;
 	}
 
@@ -466,14 +462,14 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
-	 * @since 2.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Price Expression Contract</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T casePriceExpressionContract(PriceExpressionContract object) {
+	public T casePriceExpressionContract(SalesContract object) {
 		return null;
 	}
 
@@ -482,14 +478,14 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
-	 * @since 2.0
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
 	 * @return the result of interpreting the object as an instance of '<em>Redirection Contract Original Date</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseRedirectionContractOriginalDate(RedirectionContractOriginalDate object) {
+	public T caseRedirectionContractOriginalDate(UUIDObject object) {
 		return null;
 	}
 

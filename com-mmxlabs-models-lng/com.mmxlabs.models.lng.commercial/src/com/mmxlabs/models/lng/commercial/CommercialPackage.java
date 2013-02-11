@@ -2816,64 +2816,66 @@ public interface CommercialPackage extends EPackage {
 	EClass getPurchaseContract();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.FixedPriceContract <em>Fixed Price Contract</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Fixed Price Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Fixed Price Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.FixedPriceContract
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract
+	 * @model
 	 * @generated
 	 */
 	EClass getFixedPriceContract();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.FixedPriceContract#getPricePerMMBTU <em>Price Per MMBTU</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getPricePerMMBTU <em>Price Per MMBTU</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Per MMBTU</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.FixedPriceContract#getPricePerMMBTU()
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getPricePerMMBTU()
 	 * @see #getFixedPriceContract()
 	 * @generated
 	 */
 	EAttribute getFixedPriceContract_PricePerMMBTU();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract <em>Index Price Contract</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Index Price Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Index Price Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract
+	 * @model
 	 * @generated
 	 */
 	EClass getIndexPriceContract();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getIndex <em>Index</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.SalesContract#getIndex <em>Index</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Index</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract#getIndex()
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getIndex()
 	 * @see #getIndexPriceContract()
 	 * @generated
 	 */
 	EReference getIndexPriceContract_Index();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getConstant <em>Constant</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getConstant <em>Constant</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Constant</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract#getConstant()
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getConstant()
 	 * @see #getIndexPriceContract()
 	 * @generated
 	 */
 	EAttribute getIndexPriceContract_Constant();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceContract#getMultiplier <em>Multiplier</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getMultiplier <em>Multiplier</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Multiplier</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.IndexPriceContract#getMultiplier()
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getMultiplier()
 	 * @see #getIndexPriceContract()
 	 * @generated
 	 */
@@ -3123,177 +3125,180 @@ public interface CommercialPackage extends EPackage {
 	EReference getNotionalBallastParameters_VesselClasses();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract <em>Redirection Purchase Contract</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PurchaseContract <em>Redirection Purchase Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Redirection Purchase Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract
+	 * @model
 	 * @generated
 	 */
 	EClass getRedirectionPurchaseContract();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBaseSalesMarketPort <em>Base Sales Market Port</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseSalesMarketPort <em>Base Sales Market Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Base Sales Market Port</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBaseSalesMarketPort()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseSalesMarketPort()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EReference getRedirectionPurchaseContract_BaseSalesMarketPort();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBaseSalesPriceExpression <em>Base Sales Price Expression</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseSalesPriceExpression <em>Base Sales Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Base Sales Price Expression</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBaseSalesPriceExpression()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getBaseSalesPriceExpression()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EAttribute getRedirectionPurchaseContract_BaseSalesPriceExpression();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBasePurchasePriceExpression <em>Base Purchase Price Expression</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getBasePurchasePriceExpression <em>Base Purchase Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Base Purchase Price Expression</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getBasePurchasePriceExpression()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getBasePurchasePriceExpression()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EAttribute getRedirectionPurchaseContract_BasePurchasePriceExpression();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getNotionalSpeed <em>Notional Speed</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getNotionalSpeed <em>Notional Speed</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Notional Speed</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getNotionalSpeed()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getNotionalSpeed()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EAttribute getRedirectionPurchaseContract_NotionalSpeed();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDesPurchasePort <em>Des Purchase Port</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getDesPurchasePort <em>Des Purchase Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Des Purchase Port</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDesPurchasePort()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getDesPurchasePort()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EReference getRedirectionPurchaseContract_DesPurchasePort();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getSourcePurchasePort <em>Source Purchase Port</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getSourcePurchasePort <em>Source Purchase Port</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Source Purchase Port</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getSourcePurchasePort()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getSourcePurchasePort()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EReference getRedirectionPurchaseContract_SourcePurchasePort();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getProfitShare <em>Profit Share</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getProfitShare <em>Profit Share</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit Share</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getProfitShare()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getProfitShare()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EAttribute getRedirectionPurchaseContract_ProfitShare();
 
 	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getVesselClass <em>Vessel Class</em>}'.
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getVesselClass <em>Vessel Class</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Vessel Class</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getVesselClass()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getVesselClass()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EReference getRedirectionPurchaseContract_VesselClass();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getHireCost <em>Hire Cost</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getHireCost <em>Hire Cost</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Hire Cost</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getHireCost()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getHireCost()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EAttribute getRedirectionPurchaseContract_HireCost();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDaysFromSource <em>Days From Source</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PurchaseContract#getDaysFromSource <em>Days From Source</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Days From Source</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract#getDaysFromSource()
+	 * @see com.mmxlabs.models.lng.commercial.PurchaseContract#getDaysFromSource()
 	 * @see #getRedirectionPurchaseContract()
 	 * @generated
 	 */
 	EAttribute getRedirectionPurchaseContract_DaysFromSource();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.PriceExpressionContract <em>Price Expression Contract</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.SalesContract <em>Price Expression Contract</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Price Expression Contract</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.PriceExpressionContract
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract
+	 * @model
 	 * @generated
 	 */
 	EClass getPriceExpressionContract();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.PriceExpressionContract#getPriceExpression <em>Price Expression</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.SalesContract#getPriceExpression <em>Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Expression</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.PriceExpressionContract#getPriceExpression()
+	 * @see com.mmxlabs.models.lng.commercial.SalesContract#getPriceExpression()
 	 * @see #getPriceExpressionContract()
 	 * @generated
 	 */
 	EAttribute getPriceExpressionContract_PriceExpression();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate <em>Redirection Contract Original Date</em>}'.
+	 * Returns the meta object for class '{@link com.mmxlabs.models.mmxcore.UUIDObject <em>Redirection Contract Original Date</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Redirection Contract Original Date</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate
+	 * @see com.mmxlabs.models.mmxcore.UUIDObject
+	 * @model
 	 * @generated
 	 */
 	EClass getRedirectionContractOriginalDate();
 
 	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate#getDate <em>Date</em>}'.
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.mmxcore.UUIDObject#getDate <em>Date</em>}'.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Date</em>'.
-	 * @see com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate#getDate()
+	 * @see com.mmxlabs.models.mmxcore.UUIDObject#getDate()
 	 * @see #getRedirectionContractOriginalDate()
 	 * @generated
 	 */
