@@ -109,7 +109,7 @@ public class MigrationRegistry implements IMigrationRegistry {
 		}
 
 		// Search through the map finding a set of IMigrationUnits to transform between the desired versions.
-		final List<IMigrationUnit> chain = new ArrayList<IMigrationUnit>(toVersion == -1 ? 2 : toVersion - fromVersion);
+		final List<IMigrationUnit> chain = new ArrayList<IMigrationUnit>(Math.min(1, Math.abs(toVersion - fromVersion)));
 		final Map<Integer, IMigrationUnit> froms = fromVersionMap.get(context);
 
 		int currentVersion = fromVersion;

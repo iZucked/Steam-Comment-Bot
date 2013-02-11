@@ -19,11 +19,6 @@ import org.eclipse.jdt.annotation.Nullable;
 public interface IMigrationRegistry {
 
 	/**
-	 * Constant indicating a snapshot version - one that is still in development.
-	 */
-	public static final int SNAPSHOT_VERSION = -1;
-
-	/**
 	 * Returns true of the given string is a known migration context
 	 * 
 	 * @param context
@@ -36,7 +31,8 @@ public interface IMigrationRegistry {
 	 * 
 	 * @return
 	 */
-	@NonNull Collection<String> getMigrationContexts();
+	@NonNull
+	Collection<String> getMigrationContexts();
 
 	/**
 	 * Returns the latest version registered againt the given context.
@@ -54,14 +50,16 @@ public interface IMigrationRegistry {
 	 * @param toVersion
 	 * @return
 	 */
-	@NonNull List<IMigrationUnit> getMigrationChain(@NonNull String context, int fromVersion, int toVersion);
+	@NonNull
+	List<IMigrationUnit> getMigrationChain(@NonNull String context, int fromVersion, int toVersion);
 
 	/**
 	 * Returns the default migration context for this application instance.
 	 * 
 	 * @return
 	 */
-	@Nullable String getDefaultMigrationContext();
+	@Nullable
+	String getDefaultMigrationContext();
 
 	/**
 	 * Returns the greatest version number known for the context. This should be used when {@link #getLatestContextVersion(String)} is equals to {@link #SNAPSHOT_VERSION} to get the current release
