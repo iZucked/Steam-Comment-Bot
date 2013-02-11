@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import com.mmxlabs.models.lng.schedule.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -165,14 +166,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePortVisit(PortVisit object) {
 				return createPortVisitAdapter();
-			}
-			@Override
-			public Adapter caseAdditionalData(AdditionalData object) {
-				return createAdditionalDataAdapter();
-			}
-			@Override
-			public Adapter caseAdditionalDataHolder(AdditionalDataHolder object) {
-				return createAdditionalDataHolderAdapter();
 			}
 			@Override
 			public Adapter caseStartEvent(StartEvent object) {
@@ -472,34 +465,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortVisitAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.AdditionalData <em>Additional Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData
-	 * @generated
-	 */
-	public Adapter createAdditionalDataAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder <em>Additional Data Holder</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalDataHolder
-	 * @generated
-	 */
-	public Adapter createAdditionalDataHolderAdapter() {
 		return null;
 	}
 

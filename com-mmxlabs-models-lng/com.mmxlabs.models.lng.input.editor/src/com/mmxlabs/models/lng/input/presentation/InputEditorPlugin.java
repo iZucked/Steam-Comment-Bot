@@ -15,37 +15,41 @@ import com.mmxlabs.models.lng.types.provider.LNGTypesEditPlugin;
 import com.mmxlabs.models.mmxcore.provider.MmxcoreEditPlugin;
 
 /**
- * This is the central singleton for the Input editor plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
- * 
+ * This is the central singleton for the Input editor plugin.
+ * <!-- begin-user-doc --> <!-- end-user-doc -->
  * @generated
  */
 public final class InputEditorPlugin extends EMFPlugin {
 	/**
-	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Keep track of the singleton.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static final InputEditorPlugin INSTANCE = new InputEditorPlugin();
 
 	/**
-	 * Keep track of the singleton. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Keep track of the singleton.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	private static Implementation plugin;
 
 	/**
-	 * Create the instance. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Create the instance.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public InputEditorPlugin() {
-		super(new ResourceLocator[] { LNGTypesEditPlugin.INSTANCE, MmxcoreEditPlugin.INSTANCE, });
+		super
+			(new ResourceLocator [] {
+				LNGTypesEditPlugin.INSTANCE,
+				MmxcoreEditPlugin.INSTANCE,
+			});
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the singleton instance of the Eclipse plugin.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the singleton instance.
 	 * @generated
 	 */
@@ -55,8 +59,8 @@ public final class InputEditorPlugin extends EMFPlugin {
 	}
 
 	/**
-	 * Returns the singleton instance of the Eclipse plugin. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * Returns the singleton instance of the Eclipse plugin.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @return the singleton instance.
 	 * @generated
 	 */
@@ -65,8 +69,8 @@ public final class InputEditorPlugin extends EMFPlugin {
 	}
 
 	/**
-	 * The actual implementation of the Eclipse <b>Plugin</b>. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The actual implementation of the Eclipse <b>Plugin</b>.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public static class Implementation extends EclipseUIPlugin {
@@ -75,13 +79,13 @@ public final class InputEditorPlugin extends EMFPlugin {
 		private AssignmentEditorColors assignmentEditorColors = null;
 
 		/**
-		 * Creates an instance. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 * Creates an instance.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 * @generated
 		 */
 		public Implementation() {
 			super();
-
+	
 			// Remember the static instance.
 			//
 			plugin = this;

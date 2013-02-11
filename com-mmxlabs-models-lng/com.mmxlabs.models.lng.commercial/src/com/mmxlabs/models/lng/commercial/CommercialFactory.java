@@ -5,6 +5,7 @@
 package com.mmxlabs.models.lng.commercial;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.ecore.EFactory;
 
 /**
@@ -52,85 +53,24 @@ public interface CommercialFactory extends EFactory {
 	Contract createContract();
 
 	/**
-	 * Returns a new object of class '<em>Fixed Price Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Fixed Price Contract</em>'.
-	 * @generated
-	 */
-	FixedPriceContract createFixedPriceContract();
-
-	/**
-	 * Returns a new object of class '<em>Index Price Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Index Price Contract</em>'.
-	 * @generated
-	 */
-	IndexPriceContract createIndexPriceContract();
-
-	/**
-	 * Returns a new object of class '<em>Netback Purchase Contract</em>'.
+	 * Returns a new object of class '<em>Sales Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
-	 * @deprecated
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Netback Purchase Contract</em>'.
+	 * @return a new object of class '<em>Sales Contract</em>'.
 	 * @generated
 	 */
-	PurchaseContract createNetbackPurchaseContract();
+	SalesContract createSalesContract();
 
 	/**
-	 * Returns a new object of class '<em>Profit Share Purchase Contract</em>'.
+	 * Returns a new object of class '<em>Purchase Contract</em>'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
-	 * @deprecated
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Profit Share Purchase Contract</em>'.
+	 * @return a new object of class '<em>Purchase Contract</em>'.
 	 * @generated
 	 */
-	PurchaseContract createProfitSharePurchaseContract();
-
-	/**
-	 * Returns a new object of class '<em>Notional Ballast Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Notional Ballast Parameters</em>'.
-	 * @generated
-	 */
-	NamedObject createNotionalBallastParameters();
-
-	/**
-	 * Returns a new object of class '<em>Redirection Purchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Redirection Purchase Contract</em>'.
-	 * @generated
-	 */
-	RedirectionPurchaseContract createRedirectionPurchaseContract();
-
-	/**
-	 * Returns a new object of class '<em>Price Expression Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Price Expression Contract</em>'.
-	 * @generated
-	 */
-	PriceExpressionContract createPriceExpressionContract();
-
-	/**
-	 * Returns a new object of class '<em>Redirection Contract Original Date</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Redirection Contract Original Date</em>'.
-	 * @generated
-	 */
-	RedirectionContractOriginalDate createRedirectionContractOriginalDate();
+	PurchaseContract createPurchaseContract();
 
 	/**
 	 * Returns a new object of class '<em>Tax Rate</em>'.
@@ -141,6 +81,36 @@ public interface CommercialFactory extends EFactory {
 	 * @generated
 	 */
 	TaxRate createTaxRate();
+
+	/**
+	 * Returns a new object of class '<em>Fixed Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Fixed Price Parameters</em>'.
+	 * @generated
+	 */
+	FixedPriceParameters createFixedPriceParameters();
+
+	/**
+	 * Returns a new object of class '<em>Index Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Index Price Parameters</em>'.
+	 * @generated
+	 */
+	IndexPriceParameters createIndexPriceParameters();
+
+	/**
+	 * Returns a new object of class '<em>Expression Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Expression Price Parameters</em>'.
+	 * @generated
+	 */
+	ExpressionPriceParameters createExpressionPriceParameters();
 
 	/**
 	 * Returns the package supported by this factory.

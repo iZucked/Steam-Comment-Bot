@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.schedule.*;
+import java.lang.Iterable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -112,8 +114,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.FUEL_AMOUNT: return createFuelAmount();
 			case SchedulePackage.FITNESS: return createFitness();
 			case SchedulePackage.PORT_VISIT: return createPortVisit();
-			case SchedulePackage.ADDITIONAL_DATA: return createAdditionalData();
-			case SchedulePackage.ADDITIONAL_DATA_HOLDER: return createAdditionalDataHolder();
 			case SchedulePackage.START_EVENT: return createStartEvent();
 			case SchedulePackage.END_EVENT: return createEndEvent();
 			default:
@@ -350,26 +350,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public PortVisit createPortVisit() {
 		PortVisitImpl portVisit = new PortVisitImpl();
 		return portVisit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdditionalData createAdditionalData() {
-		AdditionalDataImpl additionalData = new AdditionalDataImpl();
-		return additionalData;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdditionalDataHolder createAdditionalDataHolder() {
-		AdditionalDataHolderImpl additionalDataHolder = new AdditionalDataHolderImpl();
-		return additionalDataHolder;
 	}
 
 	/**

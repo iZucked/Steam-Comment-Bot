@@ -18,8 +18,9 @@ import com.mmxlabs.common.parser.IPrefixOperatorFactory;
 import com.mmxlabs.common.parser.ITermFactory;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.IndexPriceContract;
-import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -310,17 +311,21 @@ public class Exposures {
 			priceExpression = slot.getPriceExpression();
 		}
 		else {
-			Contract contract = slot.getContract(); 
+			LNGPriceCalculatorParameters parameters = null;
+			Contract contract = slot.getContract();
+			if (contract != null) {
+				parameters = contract.getPriceInfo();
+			}
 			// do a case switch on contract class
 			// TODO: refactor this into the actual contract classes?
-			if (contract instanceof IndexPriceContract) {
-				IndexPriceContract ipc = (IndexPriceContract) contract;
+			if (parameters instanceof IndexPriceParameters) {
+				IndexPriceParameters ipc = (IndexPriceParameters) parameters;
 				if (ipc.getIndex().equals(index)) {
 					return ipc.getMultiplier(); 
 				}
 			}
-			else if (contract instanceof PriceExpressionContract) {
-				PriceExpressionContract pec = (PriceExpressionContract) contract;
+			else if (parameters instanceof ExpressionPriceParameters) {
+				ExpressionPriceParameters pec = (ExpressionPriceParameters) parameters;
 				priceExpression = pec.getPriceExpression();
 			}
 		}

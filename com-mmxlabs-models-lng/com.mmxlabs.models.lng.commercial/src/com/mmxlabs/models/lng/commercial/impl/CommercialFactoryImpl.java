@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.commercial.impl;
 import com.mmxlabs.models.lng.commercial.*;
 
 import com.mmxlabs.models.mmxcore.NamedObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -62,15 +63,12 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.COMMERCIAL_MODEL: return createCommercialModel();
 			case CommercialPackage.LEGAL_ENTITY: return createLegalEntity();
 			case CommercialPackage.CONTRACT: return createContract();
-			case CommercialPackage.FIXED_PRICE_CONTRACT: return createFixedPriceContract();
-			case CommercialPackage.INDEX_PRICE_CONTRACT: return createIndexPriceContract();
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT: return createProfitSharePurchaseContract();
-			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS: return createNotionalBallastParameters();
-			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT: return createRedirectionPurchaseContract();
-			case CommercialPackage.PRICE_EXPRESSION_CONTRACT: return createPriceExpressionContract();
-			case CommercialPackage.REDIRECTION_CONTRACT_ORIGINAL_DATE: return createRedirectionContractOriginalDate();
+			case CommercialPackage.SALES_CONTRACT: return createSalesContract();
+			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
 			case CommercialPackage.TAX_RATE: return createTaxRate();
+			case CommercialPackage.FIXED_PRICE_PARAMETERS: return createFixedPriceParameters();
+			case CommercialPackage.INDEX_PRICE_PARAMETERS: return createIndexPriceParameters();
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -111,9 +109,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public FixedPriceContract createFixedPriceContract() {
-		FixedPriceContractImpl fixedPriceContract = new FixedPriceContractImpl();
-		return fixedPriceContract;
+	public SalesContract createSalesContract() {
+		SalesContractImpl salesContract = new SalesContractImpl();
+		return salesContract;
 	}
 
 	/**
@@ -121,78 +119,9 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IndexPriceContract createIndexPriceContract() {
-		IndexPriceContractImpl indexPriceContract = new IndexPriceContractImpl();
-		return indexPriceContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PurchaseContract createNetbackPurchaseContract() {
-		PurchaseContract netbackPurchaseContract = (PurchaseContract)super.create(CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT);
-		return netbackPurchaseContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PurchaseContract createProfitSharePurchaseContract() {
-		PurchaseContract profitSharePurchaseContract = (PurchaseContract)super.create(CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT);
-		return profitSharePurchaseContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NamedObject createNotionalBallastParameters() {
-		NamedObject notionalBallastParameters = (NamedObject)super.create(CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS);
-		return notionalBallastParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public RedirectionPurchaseContract createRedirectionPurchaseContract() {
-		RedirectionPurchaseContractImpl redirectionPurchaseContract = new RedirectionPurchaseContractImpl();
-		return redirectionPurchaseContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PriceExpressionContract createPriceExpressionContract() {
-		PriceExpressionContractImpl priceExpressionContract = new PriceExpressionContractImpl();
-		return priceExpressionContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public RedirectionContractOriginalDate createRedirectionContractOriginalDate() {
-		RedirectionContractOriginalDateImpl redirectionContractOriginalDate = new RedirectionContractOriginalDateImpl();
-		return redirectionContractOriginalDate;
+	public PurchaseContract createPurchaseContract() {
+		PurchaseContractImpl purchaseContract = new PurchaseContractImpl();
+		return purchaseContract;
 	}
 
 	/**
@@ -204,6 +133,36 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public TaxRate createTaxRate() {
 		TaxRateImpl taxRate = new TaxRateImpl();
 		return taxRate;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public FixedPriceParameters createFixedPriceParameters() {
+		FixedPriceParametersImpl fixedPriceParameters = new FixedPriceParametersImpl();
+		return fixedPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public IndexPriceParameters createIndexPriceParameters() {
+		IndexPriceParametersImpl indexPriceParameters = new IndexPriceParametersImpl();
+		return indexPriceParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public ExpressionPriceParameters createExpressionPriceParameters() {
+		ExpressionPriceParametersImpl expressionPriceParameters = new ExpressionPriceParametersImpl();
+		return expressionPriceParameters;
 	}
 
 	/**

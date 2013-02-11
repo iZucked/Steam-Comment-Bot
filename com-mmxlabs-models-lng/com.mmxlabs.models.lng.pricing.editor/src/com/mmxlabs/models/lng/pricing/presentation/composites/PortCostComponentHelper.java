@@ -70,7 +70,7 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, PricingPackage.Literals.PORT_COST);
+		addEditorsToComposite(detailComposite, PricingPackage.Literals.PORT_COST);	
 	}
 
 	/**
@@ -80,8 +80,7 @@ public class PortCostComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_portsEditor(detailComposite, topClass);
 		add_entriesEditor(detailComposite, topClass);
 		add_referenceCapacityEditor(detailComposite, topClass);

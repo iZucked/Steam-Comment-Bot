@@ -61,31 +61,8 @@ public class InputModelItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addLockedAssignedObjectsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Locked Assigned Objects feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addLockedAssignedObjectsPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_InputModel_lockedAssignedObjects_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_InputModel_lockedAssignedObjects_feature", "_UI_InputModel_type"),
-				 InputPackage.Literals.INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
 	}
 
 	/**
@@ -100,7 +77,6 @@ public class InputModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(InputPackage.Literals.INPUT_MODEL__ASSIGNMENTS);
 			childrenFeatures.add(InputPackage.Literals.INPUT_MODEL__ELEMENT_ASSIGNMENTS);
 		}
 		return childrenFeatures;
@@ -156,7 +132,6 @@ public class InputModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(InputModel.class)) {
-			case InputPackage.INPUT_MODEL__ASSIGNMENTS:
 			case InputPackage.INPUT_MODEL__ELEMENT_ASSIGNMENTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -174,11 +149,6 @@ public class InputModelItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(InputPackage.Literals.INPUT_MODEL__ASSIGNMENTS,
-				 InputFactory.eINSTANCE.createAssignment()));
 
 		newChildDescriptors.add
 			(createChildParameter

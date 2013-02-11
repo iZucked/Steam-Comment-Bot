@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -31,13 +30,6 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 	 * @generated
 	 */
 	private EClass inputModelEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass assignmentEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -124,62 +116,8 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getInputModel_Assignments() {
-		return (EReference)inputModelEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getInputModel_LockedAssignedObjects() {
-		return (EReference)inputModelEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getInputModel_ElementAssignments() {
-		return (EReference)inputModelEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getAssignment() {
-		return assignmentEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getAssignment_Vessels() {
-		return (EReference)assignmentEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getAssignment_AssignToSpot() {
-		return (EAttribute)assignmentEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getAssignment_AssignedObjects() {
-		return (EReference)assignmentEClass.getEStructuralFeatures().get(2);
+		return (EReference)inputModelEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -265,14 +203,7 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 
 		// Create classes and their features
 		inputModelEClass = createEClass(INPUT_MODEL);
-		createEReference(inputModelEClass, INPUT_MODEL__ASSIGNMENTS);
-		createEReference(inputModelEClass, INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS);
 		createEReference(inputModelEClass, INPUT_MODEL__ELEMENT_ASSIGNMENTS);
-
-		assignmentEClass = createEClass(ASSIGNMENT);
-		createEReference(assignmentEClass, ASSIGNMENT__VESSELS);
-		createEAttribute(assignmentEClass, ASSIGNMENT__ASSIGN_TO_SPOT);
-		createEReference(assignmentEClass, ASSIGNMENT__ASSIGNED_OBJECTS);
 
 		elementAssignmentEClass = createEClass(ELEMENT_ASSIGNMENT);
 		createEReference(elementAssignmentEClass, ELEMENT_ASSIGNMENT__ASSIGNED_OBJECT);
@@ -315,19 +246,11 @@ public class InputPackageImpl extends EPackageImpl implements InputPackage {
 
 		// Add supertypes to classes
 		inputModelEClass.getESuperTypes().add(theMMXCorePackage.getUUIDObject());
-		assignmentEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		elementAssignmentEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(inputModelEClass, InputModel.class, "InputModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getInputModel_Assignments(), this.getAssignment(), null, "assignments", null, 0, -1, InputModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getInputModel_LockedAssignedObjects(), theMMXCorePackage.getUUIDObject(), null, "lockedAssignedObjects", null, 0, -1, InputModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getInputModel_ElementAssignments(), this.getElementAssignment(), null, "elementAssignments", null, 0, -1, InputModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(assignmentEClass, Assignment.class, "Assignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAssignment_Vessels(), theTypesPackage.getAVesselSet(), null, "vessels", null, 0, -1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAssignment_AssignToSpot(), ecorePackage.getEBoolean(), "assignToSpot", null, 1, 1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getAssignment_AssignedObjects(), theMMXCorePackage.getUUIDObject(), null, "assignedObjects", null, 0, -1, Assignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(elementAssignmentEClass, ElementAssignment.class, "ElementAssignment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getElementAssignment_AssignedObject(), theMMXCorePackage.getUUIDObject(), null, "assignedObject", null, 1, 1, ElementAssignment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

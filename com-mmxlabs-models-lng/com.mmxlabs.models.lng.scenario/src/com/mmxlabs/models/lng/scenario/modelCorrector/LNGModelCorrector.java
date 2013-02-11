@@ -29,8 +29,6 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
-import com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate;
-import com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract;
 import com.mmxlabs.models.lng.commercial.TaxRate;
 import com.mmxlabs.models.lng.fleet.FleetFactory;
 import com.mmxlabs.models.lng.fleet.FleetModel;
@@ -92,7 +90,7 @@ public class LNGModelCorrector {
 		removeBadElementAssignments(cmd, rootObject, ed);
 		fixMissingSpotCargoMarkets(cmd, rootObject, ed);
 		fixSequenceTypes(cmd, rootObject, ed);
-		fixRedirectionContracts(cmd, rootObject, ed);
+//		fixRedirectionContracts(cmd, rootObject, ed);
 		fixPortCapabilityGroups(cmd, rootObject, ed);
 		fixVesselTypeGroups(cmd, rootObject, ed);
 		fixCanalCostVesselTypes(cmd, rootObject, ed);
@@ -253,59 +251,59 @@ public class LNGModelCorrector {
 		}
 	}
 
-	private void fixRedirectionContracts(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
-		final CompoundCommand cmd = new CompoundCommand("Fix redirection contracts");
-
-		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-		if (cargoModel != null && commercialModel != null) {
-			LOOP_SLOTS: for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-				if (slot.getContract() instanceof RedirectionPurchaseContract) {
-					final RedirectionPurchaseContract redirectionPurchaseContract = (RedirectionPurchaseContract) slot.getContract();
-
-					if (slot.getPort() != redirectionPurchaseContract.getBaseSalesMarketPort()) {
-						return;
-					}
-
-					final Calendar cal = Calendar.getInstance();
-					cal.setTime(slot.getWindowStartWithSlotOrPortTime());
-					cal.add(Calendar.DAY_OF_YEAR, -redirectionPurchaseContract.getDaysFromSource());
-
-					RedirectionContractOriginalDate redirectionContractOriginalDate = null;
-					for (final UUIDObject ext : slot.getExtensions()) {
-						if (ext instanceof RedirectionContractOriginalDate) {
-							redirectionContractOriginalDate = (RedirectionContractOriginalDate) ext;
-							// Check valid
-							if (cal.getTime() == redirectionContractOriginalDate.getDate()) {
-
-								// We're ok, next slot
-								continue LOOP_SLOTS;
-							}
-						}
-					}
-					// Nothing found, create extension
-					if (redirectionContractOriginalDate == null) {
-						redirectionContractOriginalDate = CommercialFactory.eINSTANCE.createRedirectionContractOriginalDate();
-
-						cmd.append(AddCommand.create(ed, slot, MMXCorePackage.eINSTANCE.getMMXObject_Extensions(), redirectionContractOriginalDate));
-						cmd.append(AddCommand.create(ed, commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_ContractSlotExtensions(), redirectionContractOriginalDate));
-					}
-					cmd.append(SetCommand.create(ed, redirectionContractOriginalDate, CommercialPackage.eINSTANCE.getRedirectionContractOriginalDate_Date(), cal.getTime()));
-				}
-			}
-		}
-		if (!cmd.isEmpty()) {
-			parent.append(cmd);
-		}
-	}
+//	private void fixRedirectionContracts(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
+//		final CompoundCommand cmd = new CompoundCommand("Fix redirection contracts");
+//
+//		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+//		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+//		if (cargoModel != null && commercialModel != null) {
+//			LOOP_SLOTS: for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+//				if (slot.getContract() instanceof RedirectionPurchaseContract) {
+//					final RedirectionPurchaseContract redirectionPurchaseContract = (RedirectionPurchaseContract) slot.getContract();
+//
+//					if (slot.getPort() != redirectionPurchaseContract.getBaseSalesMarketPort()) {
+//						return;
+//					}
+//
+//					final Calendar cal = Calendar.getInstance();
+//					cal.setTime(slot.getWindowStartWithSlotOrPortTime());
+//					cal.add(Calendar.DAY_OF_YEAR, -redirectionPurchaseContract.getDaysFromSource());
+//
+//					RedirectionContractOriginalDate redirectionContractOriginalDate = null;
+//					for (final UUIDObject ext : slot.getExtensions()) {
+//						if (ext instanceof RedirectionContractOriginalDate) {
+//							redirectionContractOriginalDate = (RedirectionContractOriginalDate) ext;
+//							// Check valid
+//							if (cal.getTime() == redirectionContractOriginalDate.getDate()) {
+//
+//								// We're ok, next slot
+//								continue LOOP_SLOTS;
+//							}
+//						}
+//					}
+//					// Nothing found, create extension
+//					if (redirectionContractOriginalDate == null) {
+//						redirectionContractOriginalDate = CommercialFactory.eINSTANCE.createRedirectionContractOriginalDate();
+//
+//						cmd.append(AddCommand.create(ed, slot, MMXCorePackage.eINSTANCE.getMMXObject_Extensions(), redirectionContractOriginalDate));
+//						cmd.append(AddCommand.create(ed, commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_ContractSlotExtensions(), redirectionContractOriginalDate));
+//					}
+//					cmd.append(SetCommand.create(ed, redirectionContractOriginalDate, CommercialPackage.eINSTANCE.getRedirectionContractOriginalDate_Date(), cal.getTime()));
+//				}
+//			}
+//		}
+//		if (!cmd.isEmpty()) {
+//			parent.append(cmd);
+//		}
+//	}
 
 	private void fixSequenceTypes(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 		final CompoundCommand cmd = new CompoundCommand("Fix sequence types");
 		final ScheduleModel scheduleModel = rootObject.getSubModel(ScheduleModel.class);
 		if (scheduleModel != null) {
 
-			if (scheduleModel.getInitialSchedule() != null) {
-				LOOP_SEQUENCES: for (final Sequence seq : scheduleModel.getInitialSchedule().getSequences()) {
+			if (scheduleModel.getSchedule() != null) {
+				LOOP_SEQUENCES: for (final Sequence seq : scheduleModel.getSchedule().getSequences()) {
 					if (seq.getSequenceType() == null) {
 						if (seq.isSetVessel()) {
 							cmd.append(SetCommand.create(ed, seq, SchedulePackage.eINSTANCE.getSequence_SequenceType(), SequenceType.VESSEL));

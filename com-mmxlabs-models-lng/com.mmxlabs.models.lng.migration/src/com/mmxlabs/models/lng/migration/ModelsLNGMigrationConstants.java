@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.migration;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 public class ModelsLNGMigrationConstants {
 
 	// Context under which migration units

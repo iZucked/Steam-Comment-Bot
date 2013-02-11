@@ -3,10 +3,13 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial;
-import com.mmxlabs.models.lng.types.AContract;
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.port.Port;
 import org.eclipse.emf.common.util.EList;
+
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 
 /**
  * <!-- begin-user-doc -->
@@ -24,6 +27,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}</li>
  * </ul>
  * </p>
  *
@@ -213,6 +217,63 @@ public interface Contract extends AContract {
 	 * @generated
 	 */
 	EList<APortSet> getRestrictedPorts();
+
+	/**
+	 * Returns the value of the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Price Info</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price Info</em>' containment reference.
+	 * @see #isSetPriceInfo()
+	 * @see #unsetPriceInfo()
+	 * @see #setPriceInfo(LNGPriceCalculatorParameters)
+	 * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getContract_PriceInfo()
+	 * @model containment="true" unsettable="true"
+	 * @generated
+	 */
+	LNGPriceCalculatorParameters getPriceInfo();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price Info</em>' containment reference.
+	 * @see #isSetPriceInfo()
+	 * @see #unsetPriceInfo()
+	 * @see #getPriceInfo()
+	 * @generated
+	 */
+	void setPriceInfo(LNGPriceCalculatorParameters value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #isSetPriceInfo()
+	 * @see #getPriceInfo()
+	 * @see #setPriceInfo(LNGPriceCalculatorParameters)
+	 * @generated
+	 */
+	void unsetPriceInfo();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.commercial.Contract#getPriceInfo <em>Price Info</em>}' containment reference is set.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Price Info</em>' containment reference is set.
+	 * @see #unsetPriceInfo()
+	 * @see #getPriceInfo()
+	 * @see #setPriceInfo(LNGPriceCalculatorParameters)
+	 * @generated
+	 */
+	boolean isSetPriceInfo();
 
 } // end of  Contract
 

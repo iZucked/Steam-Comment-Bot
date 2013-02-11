@@ -32,7 +32,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * @model
  * @generated
  */
-public interface CargoAllocation extends MMXObject, AdditionalDataHolder, ExtraDataContainer {
+public interface CargoAllocation extends MMXObject, ExtraDataContainer {
 	/**
 	 * Returns the value of the '<em><b>Load Allocation</b></em>' reference.
 	 * <!-- begin-user-doc -->

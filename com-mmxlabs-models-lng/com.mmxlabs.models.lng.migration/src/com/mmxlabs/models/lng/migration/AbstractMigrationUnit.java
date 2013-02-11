@@ -79,11 +79,16 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		for (final URI uri : baseURIs) {
 			final String nsURI = EcoreHelper.getPackageNS(uri);
 			final ModelsLNGSet_v1 type = MetamodelVersionsUtil.getTypeFromNS(nsURI);
+			if (type == null) {
+				int gg =0;
+			}
 			final XMIResource r = (XMIResource) resourceSet.createResource(uri);
 			r.setTrackingModification(true);
 			if (type != null) {
 				r.load(loadOptions);
-				models.put(type, r.getContents().get(0));
+				EObject eObject = r.getContents().get(0);
+				assert eObject != null;
+				models.put(type, eObject);
 			}
 		}
 

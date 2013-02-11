@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.commercial.util;
 import com.mmxlabs.models.lng.commercial.*;
 
 import com.mmxlabs.models.lng.types.AContract;
+import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.types.ALegalEntity;
 
 import com.mmxlabs.models.lng.types.APurchaseContract;
@@ -129,109 +130,48 @@ public class CommercialSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case CommercialPackage.FIXED_PRICE_CONTRACT: {
-				FixedPriceContract fixedPriceContract = (FixedPriceContract)theEObject;
-				T result = caseFixedPriceContract(fixedPriceContract);
-				if (result == null) result = caseSalesContract(fixedPriceContract);
-				if (result == null) result = casePurchaseContract(fixedPriceContract);
-				if (result == null) result = caseContract(fixedPriceContract);
-				if (result == null) result = caseASalesContract(fixedPriceContract);
-				if (result == null) result = caseAPurchaseContract(fixedPriceContract);
-				if (result == null) result = caseAContract(fixedPriceContract);
-				if (result == null) result = caseUUIDObject(fixedPriceContract);
-				if (result == null) result = caseNamedObject(fixedPriceContract);
-				if (result == null) result = caseMMXObject(fixedPriceContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CommercialPackage.INDEX_PRICE_CONTRACT: {
-				IndexPriceContract indexPriceContract = (IndexPriceContract)theEObject;
-				T result = caseIndexPriceContract(indexPriceContract);
-				if (result == null) result = caseSalesContract(indexPriceContract);
-				if (result == null) result = casePurchaseContract(indexPriceContract);
-				if (result == null) result = caseContract(indexPriceContract);
-				if (result == null) result = caseASalesContract(indexPriceContract);
-				if (result == null) result = caseAPurchaseContract(indexPriceContract);
-				if (result == null) result = caseAContract(indexPriceContract);
-				if (result == null) result = caseUUIDObject(indexPriceContract);
-				if (result == null) result = caseNamedObject(indexPriceContract);
-				if (result == null) result = caseMMXObject(indexPriceContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT: {
-				PurchaseContract netbackPurchaseContract = (PurchaseContract)theEObject;
-				T result = caseNetbackPurchaseContract(netbackPurchaseContract);
-				if (result == null) result = casePurchaseContract(netbackPurchaseContract);
-				if (result == null) result = caseContract(netbackPurchaseContract);
-				if (result == null) result = caseAPurchaseContract(netbackPurchaseContract);
-				if (result == null) result = caseAContract(netbackPurchaseContract);
-				if (result == null) result = caseUUIDObject(netbackPurchaseContract);
-				if (result == null) result = caseNamedObject(netbackPurchaseContract);
-				if (result == null) result = caseMMXObject(netbackPurchaseContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT: {
-				PurchaseContract profitSharePurchaseContract = (PurchaseContract)theEObject;
-				T result = caseProfitSharePurchaseContract(profitSharePurchaseContract);
-				if (result == null) result = casePurchaseContract(profitSharePurchaseContract);
-				if (result == null) result = caseContract(profitSharePurchaseContract);
-				if (result == null) result = caseAPurchaseContract(profitSharePurchaseContract);
-				if (result == null) result = caseAContract(profitSharePurchaseContract);
-				if (result == null) result = caseUUIDObject(profitSharePurchaseContract);
-				if (result == null) result = caseNamedObject(profitSharePurchaseContract);
-				if (result == null) result = caseMMXObject(profitSharePurchaseContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS: {
-				NamedObject notionalBallastParameters = (NamedObject)theEObject;
-				T result = caseNotionalBallastParameters(notionalBallastParameters);
-				if (result == null) result = caseNamedObject(notionalBallastParameters);
-				if (result == null) result = caseMMXObject(notionalBallastParameters);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT: {
-				RedirectionPurchaseContract redirectionPurchaseContract = (RedirectionPurchaseContract)theEObject;
-				T result = caseRedirectionPurchaseContract(redirectionPurchaseContract);
-				if (result == null) result = casePurchaseContract(redirectionPurchaseContract);
-				if (result == null) result = caseContract(redirectionPurchaseContract);
-				if (result == null) result = caseAPurchaseContract(redirectionPurchaseContract);
-				if (result == null) result = caseAContract(redirectionPurchaseContract);
-				if (result == null) result = caseUUIDObject(redirectionPurchaseContract);
-				if (result == null) result = caseNamedObject(redirectionPurchaseContract);
-				if (result == null) result = caseMMXObject(redirectionPurchaseContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CommercialPackage.PRICE_EXPRESSION_CONTRACT: {
-				PriceExpressionContract priceExpressionContract = (PriceExpressionContract)theEObject;
-				T result = casePriceExpressionContract(priceExpressionContract);
-				if (result == null) result = caseSalesContract(priceExpressionContract);
-				if (result == null) result = casePurchaseContract(priceExpressionContract);
-				if (result == null) result = caseContract(priceExpressionContract);
-				if (result == null) result = caseASalesContract(priceExpressionContract);
-				if (result == null) result = caseAPurchaseContract(priceExpressionContract);
-				if (result == null) result = caseAContract(priceExpressionContract);
-				if (result == null) result = caseUUIDObject(priceExpressionContract);
-				if (result == null) result = caseNamedObject(priceExpressionContract);
-				if (result == null) result = caseMMXObject(priceExpressionContract);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case CommercialPackage.REDIRECTION_CONTRACT_ORIGINAL_DATE: {
-				RedirectionContractOriginalDate redirectionContractOriginalDate = (RedirectionContractOriginalDate)theEObject;
-				T result = caseRedirectionContractOriginalDate(redirectionContractOriginalDate);
-				if (result == null) result = caseUUIDObject(redirectionContractOriginalDate);
-				if (result == null) result = caseMMXObject(redirectionContractOriginalDate);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case CommercialPackage.TAX_RATE: {
 				TaxRate taxRate = (TaxRate)theEObject;
 				T result = caseTaxRate(taxRate);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.LNG_PRICE_CALCULATOR_PARAMETERS: {
+				LNGPriceCalculatorParameters lngPriceCalculatorParameters = (LNGPriceCalculatorParameters)theEObject;
+				T result = caseLNGPriceCalculatorParameters(lngPriceCalculatorParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(lngPriceCalculatorParameters);
+				if (result == null) result = caseUUIDObject(lngPriceCalculatorParameters);
+				if (result == null) result = caseMMXObject(lngPriceCalculatorParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.FIXED_PRICE_PARAMETERS: {
+				FixedPriceParameters fixedPriceParameters = (FixedPriceParameters)theEObject;
+				T result = caseFixedPriceParameters(fixedPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(fixedPriceParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(fixedPriceParameters);
+				if (result == null) result = caseUUIDObject(fixedPriceParameters);
+				if (result == null) result = caseMMXObject(fixedPriceParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.INDEX_PRICE_PARAMETERS: {
+				IndexPriceParameters indexPriceParameters = (IndexPriceParameters)theEObject;
+				T result = caseIndexPriceParameters(indexPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(indexPriceParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(indexPriceParameters);
+				if (result == null) result = caseUUIDObject(indexPriceParameters);
+				if (result == null) result = caseMMXObject(indexPriceParameters);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: {
+				ExpressionPriceParameters expressionPriceParameters = (ExpressionPriceParameters)theEObject;
+				T result = caseExpressionPriceParameters(expressionPriceParameters);
+				if (result == null) result = caseLNGPriceCalculatorParameters(expressionPriceParameters);
+				if (result == null) result = caseALNGPriceCalculatorParameters(expressionPriceParameters);
+				if (result == null) result = caseUUIDObject(expressionPriceParameters);
+				if (result == null) result = caseMMXObject(expressionPriceParameters);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -315,135 +255,6 @@ public class CommercialSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Fixed Price Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Fixed Price Contract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseFixedPriceContract(FixedPriceContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Index Price Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Index Price Contract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseIndexPriceContract(IndexPriceContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Netback Purchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Netback Purchase Contract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseNetbackPurchaseContract(PurchaseContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Profit Share Purchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Profit Share Purchase Contract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseProfitSharePurchaseContract(PurchaseContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Notional Ballast Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Notional Ballast Parameters</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseNotionalBallastParameters(NamedObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Redirection Purchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Redirection Purchase Contract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseRedirectionPurchaseContract(RedirectionPurchaseContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Price Expression Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Price Expression Contract</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T casePriceExpressionContract(PriceExpressionContract object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Redirection Contract Original Date</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Redirection Contract Original Date</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseRedirectionContractOriginalDate(RedirectionContractOriginalDate object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Tax Rate</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -456,6 +267,70 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseTaxRate(TaxRate object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>LNG Price Calculator Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>LNG Price Calculator Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLNGPriceCalculatorParameters(LNGPriceCalculatorParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Fixed Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Fixed Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFixedPriceParameters(FixedPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Index Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Index Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIndexPriceParameters(IndexPriceParameters object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Expression Price Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Expression Price Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseExpressionPriceParameters(ExpressionPriceParameters object) {
 		return null;
 	}
 
@@ -561,6 +436,22 @@ public class CommercialSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAPurchaseContract(APurchaseContract object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ALNG Price Calculator Parameters</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseALNGPriceCalculatorParameters(ALNGPriceCalculatorParameters object) {
 		return null;
 	}
 

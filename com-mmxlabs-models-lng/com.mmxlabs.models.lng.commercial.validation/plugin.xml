@@ -58,6 +58,9 @@
                <target
                      class="RedirectionPurchaseContract">
                </target>
+               <target
+                     class="Contract">
+               </target>
             </constraint>
             <constraint
                   class="com.mmxlabs.models.lng.commercial.validation.PriceExpressionContractConstraint"
@@ -73,6 +76,9 @@
                </message>
                <target
                      class="PriceExpressionContract">
+               </target>
+               <target
+                     class="Contract">
                </target>
             </constraint>
             

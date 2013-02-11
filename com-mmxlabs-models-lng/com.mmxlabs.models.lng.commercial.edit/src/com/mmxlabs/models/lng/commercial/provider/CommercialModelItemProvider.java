@@ -24,7 +24,6 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.provider.UUIDObjectItemProvider;
 
@@ -189,47 +188,12 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createFixedPriceContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createIndexPriceContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__SALES_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createPriceExpressionContract()));
+				 CommercialFactory.eINSTANCE.createSalesContract()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createFixedPriceContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createIndexPriceContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createNetbackPurchaseContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createProfitSharePurchaseContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createRedirectionPurchaseContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__PURCHASE_CONTRACTS,
-				 CommercialFactory.eINSTANCE.createPriceExpressionContract()));
+				 CommercialFactory.eINSTANCE.createPurchaseContract()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -249,37 +213,27 @@ public class CommercialModelItemProvider
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createFixedPriceContract()));
+				 CommercialFactory.eINSTANCE.createSalesContract()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createIndexPriceContract()));
+				 CommercialFactory.eINSTANCE.createPurchaseContract()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createNetbackPurchaseContract()));
+				 CommercialFactory.eINSTANCE.createFixedPriceParameters()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createProfitSharePurchaseContract()));
+				 CommercialFactory.eINSTANCE.createIndexPriceParameters()));
 
 		newChildDescriptors.add
 			(createChildParameter
 				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createRedirectionPurchaseContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createPriceExpressionContract()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.COMMERCIAL_MODEL__CONTRACT_SLOT_EXTENSIONS,
-				 CommercialFactory.eINSTANCE.createRedirectionContractOriginalDate()));
+				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
 
 		newChildDescriptors.add
 			(createChildParameter
