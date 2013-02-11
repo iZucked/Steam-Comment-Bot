@@ -20,11 +20,8 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
-import com.mmxlabs.models.lng.commercial.FixedPriceContract;
 import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
-import com.mmxlabs.models.lng.commercial.IndexPriceContract;
 import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
-import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
@@ -51,8 +48,8 @@ public class SimpleContractTransformer implements IContractTransformer {
 
 	private ModelEntityMap map;
 
-	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceContract(), CommercialPackage.eINSTANCE.getIndexPriceContract(),
-			CommercialPackage.eINSTANCE.getPriceExpressionContract(), CommercialPackage.eINSTANCE.getSalesContract(), CommercialPackage.eINSTANCE.getPurchaseContract());
+	private final Collection<EClass> handledClasses = Arrays.asList(CommercialPackage.eINSTANCE.getFixedPriceParameters(), CommercialPackage.eINSTANCE.getIndexPriceParameters(),
+			CommercialPackage.eINSTANCE.getExpressionPriceParameters(), CommercialPackage.eINSTANCE.getSalesContract(), CommercialPackage.eINSTANCE.getPurchaseContract());
 
 	@Inject
 	private SeriesParser indices;
@@ -68,17 +65,17 @@ public class SimpleContractTransformer implements IContractTransformer {
 	}
 
 	private SimpleContract instantiate(final Contract c) {
-		if (c instanceof FixedPriceContract) {
-			FixedPriceContract contract = (FixedPriceContract) c;
-			return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getPricePerMMBTU()));
-		} else if (c instanceof IndexPriceContract) {
-			IndexPriceContract contract = (IndexPriceContract) c;
-			return createMarketPriceContract(map.getOptimiserObject(contract.getIndex(), ICurve.class), OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getConstant()),
-					OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getMultiplier()));
-		} else if (c instanceof PriceExpressionContract) {
-			PriceExpressionContract contract = (PriceExpressionContract) c;
-			return createPriceExpressionContract(contract.getPriceExpression());
-		}
+		// if (c instanceof FixedPriceContract) {
+		// FixedPriceContract contract = (FixedPriceContract) c;
+		// return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getPricePerMMBTU()));
+		// } else if (c instanceof IndexPriceContract) {
+		// IndexPriceContract contract = (IndexPriceContract) c;
+		// return createMarketPriceContract(map.getOptimiserObject(contract.getIndex(), ICurve.class), OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getConstant()),
+		// OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getMultiplier()));
+		// } else if (c instanceof PriceExpressionContract) {
+		// PriceExpressionContract contract = (PriceExpressionContract) c;
+		// return createPriceExpressionContract(contract.getPriceExpression());
+		// }
 
 		ALNGPriceCalculatorParameters priceInfo = c.getPriceInfo();
 		if (priceInfo instanceof FixedPriceParameters) {
@@ -89,14 +86,13 @@ public class SimpleContractTransformer implements IContractTransformer {
 			IndexPriceParameters indexPriceInfo = (IndexPriceParameters) priceInfo;
 			return createMarketPriceContract(map.getOptimiserObject(indexPriceInfo.getIndex(), ICurve.class), OptimiserUnitConvertor.convertToInternalConversionFactor(indexPriceInfo.getConstant()),
 					OptimiserUnitConvertor.convertToInternalConversionFactor(indexPriceInfo.getMultiplier()));
-			
+
 		}
 		if (priceInfo instanceof ExpressionPriceParameters) {
 			ExpressionPriceParameters expressionPriceInfo = (ExpressionPriceParameters) priceInfo;
 			return createPriceExpressionContract(expressionPriceInfo.getPriceExpression());
-			
+
 		}
-		
 
 		return null;
 	}
