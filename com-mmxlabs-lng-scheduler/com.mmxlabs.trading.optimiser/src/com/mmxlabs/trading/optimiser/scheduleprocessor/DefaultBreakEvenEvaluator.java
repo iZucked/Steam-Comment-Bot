@@ -18,7 +18,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
-import com.mmxlabs.scheduler.optimiser.providers.ICharterMarketProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -45,9 +44,6 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 	@Inject
 	private ICargoAllocator cargoAllocator;
-
-	@Inject
-	private ICharterMarketProvider charterMarketProvider;
 
 	@Inject
 	private IPortCostProvider portCostProvider;
