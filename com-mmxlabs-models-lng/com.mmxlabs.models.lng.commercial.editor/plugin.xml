@@ -51,18 +51,6 @@
 			helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.PurchaseContractComponentHelper"
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.commercial.PurchaseContract" />
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.IndexPriceContractComponentHelper"
-        id="com.mmxlabs.models.lng.commercial.editor.indexPriceHelper"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.commercial.IndexPriceContract">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.FixedPriceContractComponentHelper"
-        id="com.mmxlabs.models.lng.commercial.editor.fixedPriceHelper"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.commercial.FixedPriceContract">
-  </componentHelper>
 	<componentHelper
 		id="com.mmxlabs.models.lng.commercial.helpers.FixedPriceParameters"
 		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.FixedPriceParametersComponentHelper"
@@ -78,23 +66,6 @@
 		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.ExpressionPriceParametersComponentHelper"
 		inheritable="false"
 		modelClass="com.mmxlabs.models.lng.commercial.ExpressionPriceParameters" />
-	<componentHelper
-		id="com.mmxlabs.models.lng.commercial.helpers.RedirectionPriceParameters"
-		helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPriceParametersComponentHelper"
-		inheritable="false"
-		modelClass="com.mmxlabs.models.lng.commercial.RedirectionPriceParameters" />
- <componentHelper
-        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
-        id="com.mmxlabs.models.lng.commercial.presentation.composites.RedirectionPurchaseContractComponentHelper"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.commercial.presentation.composites.PriceExpressionContractComponentHelper"
-        id="com.mmxlabs.models.lng.commercial.composites.PriceExpressionContract"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.commercial.PriceExpressionContract">
-  </componentHelper>
 	</extension>
  <extension
        point="com.mmxlabs.models.ui.valueproviders">
