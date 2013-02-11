@@ -338,7 +338,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 			}
 		}
 		final EObject paramsObject = commercialFactory.create(class_params);
-		// List of features to copy over from params
+		// List of features to copy over to params
 		for (final EStructuralFeature feature : class_params.getEAllStructuralFeatures()) {
 			final EStructuralFeature oldFeature = original.eClass().getEStructuralFeature(feature.getName());
 			if (original.eIsSet(oldFeature)) {
