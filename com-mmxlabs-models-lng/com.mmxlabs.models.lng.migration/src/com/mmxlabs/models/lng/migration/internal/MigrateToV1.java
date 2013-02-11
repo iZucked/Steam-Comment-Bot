@@ -199,7 +199,6 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 
 		final Map<EObject, AnyType> oldFeatures = ((XMLResource) analyticsModel.eResource()).getEObjectToExtensionMap();
 		if (matrices != null) {
-		if (matrices != null) {
 			for (final EObject matrix : matrices) {
 				// Convert unknown features
 				if (oldFeatures.containsKey(matrix)) {
@@ -241,7 +240,6 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 					}
 					if (!matrix.eIsSet(feature_fromPorts)) {
 						matrix.eSet(feature_fromPorts, ports);
-					}
 					}
 				}
 			}
