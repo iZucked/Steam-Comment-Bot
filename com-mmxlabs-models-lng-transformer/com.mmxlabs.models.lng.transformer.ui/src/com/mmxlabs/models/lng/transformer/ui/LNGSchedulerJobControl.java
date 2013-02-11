@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.transformer.ui;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -45,7 +44,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
-import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -187,8 +185,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			if (domain instanceof CommandProviderAwareEditingDomain) {
 				((CommandProviderAwareEditingDomain) domain).setCommandProvidersDisabled(true);
 			}
-			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule(), schedule));
-			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_OptimisedSchedule(), null));
+			command.append(SetCommand.create(editingDomain, scheduleModel, SchedulePackage.eINSTANCE.getScheduleModel_Schedule(), schedule));
 
 			final Injector childInjector = injector.createChildInjector(new PostExportProcessorModule());
 
@@ -439,7 +436,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			}
 		}
 
-		final List<Assignment> blank = Collections.emptyList();
 		final List<ElementAssignment> newElementAssignments = new LinkedList<ElementAssignment>();
 
 		int spotIndex = 0;
@@ -490,7 +486,6 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		}
 
 		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_ElementAssignments(), newElementAssignments));
-		cmd.append(SetCommand.create(domain, inputModel, InputPackage.eINSTANCE.getInputModel_Assignments(), blank));
 
 		if (postExportProcessors != null) {
 			for (final IPostExportProcessor processor : postExportProcessors) {
