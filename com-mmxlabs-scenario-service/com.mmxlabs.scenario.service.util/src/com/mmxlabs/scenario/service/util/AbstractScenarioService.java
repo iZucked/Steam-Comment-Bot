@@ -296,11 +296,13 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				cpy = EcoreUtil.copy(original);
 				cpy.getSubModelURIs().clear();
 				for (final String subModelURI : original.getSubModelURIs()) {
-					final File f = File.createTempFile("migration", "xmi");
+					final File f = File.createTempFile("migration", ".xmi");
 					tmpFiles.add(f);
 					// Create a temp file and generate a URI to it to pass into migration code.
 					final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
+					assert tmpURI != null;
 					final URI sourceURI = originalService == null ? URI.createURI(subModelURI) : originalService.resolveURI(subModelURI);
+					assert sourceURI != null;
 					copyURIData(uc, sourceURI, tmpURI);
 					cpy.getSubModelURIs().add(tmpURI.toString());
 				}
@@ -331,7 +333,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 					// This will trigger a model load if required.
 					originalSubModels.add(instance.getModel());
 				} catch (final IOException e1) {
-					log.error("IO Exception loading model from " + subModelURI, e1);
+					throw new RuntimeException("IO Exception loading model from " + subModelURI, e1);
 				}
 			}
 
