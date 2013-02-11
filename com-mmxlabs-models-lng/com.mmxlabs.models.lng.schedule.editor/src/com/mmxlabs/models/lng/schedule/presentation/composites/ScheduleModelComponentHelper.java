@@ -64,25 +64,16 @@ public class ScheduleModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_initialScheduleEditor(detailComposite, topClass);
-		add_optimisedScheduleEditor(detailComposite, topClass);
+		add_scheduleEditor(detailComposite, topClass);
 		add_dirtyEditor(detailComposite, topClass);
 	}
 	/**
-	 * Create the editor for the initialSchedule feature on ScheduleModel
+	 * Create the editor for the schedule feature on ScheduleModel
 	 *
 	 * @generated
 	 */
-	protected void add_initialScheduleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE_MODEL__INITIAL_SCHEDULE));
-	}
-	/**
-	 * Create the editor for the optimisedSchedule feature on ScheduleModel
-	 *
-	 * @generated
-	 */
-	protected void add_optimisedScheduleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE_MODEL__OPTIMISED_SCHEDULE));
+	protected void add_scheduleEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE));
 	}
 
 	/**

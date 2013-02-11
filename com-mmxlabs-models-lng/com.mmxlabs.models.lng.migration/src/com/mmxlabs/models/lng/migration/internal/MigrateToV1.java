@@ -69,6 +69,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		final MetamodelLoader v1Loader = destiniationLoader;
 		migrateFixedPrice(v1Loader, models);
 		removeOptimisedSchedule(v1Loader, models);
+		clearAdditionalDataFromSchedule(v1Loader, models);
 		clearAssignments(v1Loader, models);
 		removeExtraAnalyticsFields(v1Loader, models);
 		migrateContracts(v1Loader, models);
@@ -138,8 +139,33 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 
 		final EClass class_ScheduleModel = MetamodelUtils.getEClass(schedulePackage, "ScheduleModel");
 		final EStructuralFeature feature_optimisedSchedule = MetamodelUtils.getStructuralFeature(class_ScheduleModel, "optimisedSchedule");
+		final EStructuralFeature feature_initialSchedule = MetamodelUtils.getStructuralFeature(class_ScheduleModel, "initialSchedule");
+		final EStructuralFeature feature_schedule = MetamodelUtils.getStructuralFeature(class_ScheduleModel, "schedule");
 
 		scheduleModel.eUnset(feature_optimisedSchedule);
+		scheduleModel.eSet(feature_schedule, scheduleModel.eGet(feature_initialSchedule));
+	}
+
+	public void clearAdditionalDataFromSchedule(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
+		final EObject scheduleModel = models.get(ModelsLNGSet_v1.Schedule);
+		final EPackage schedulePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+
+		final EClass class_ScheduleModel = MetamodelUtils.getEClass(schedulePackage, "ScheduleModel");
+		final EStructuralFeature feature_schedule = MetamodelUtils.getStructuralFeature(class_ScheduleModel, "schedule");
+
+		EObject schedule = (EObject) scheduleModel.eGet(feature_schedule);
+
+		EClass class_AdditionalDataHolder = MetamodelUtils.getEClass(schedulePackage, "AdditionalDataHolder");
+		EStructuralFeature feature_additionalData = MetamodelUtils.getStructuralFeature(class_AdditionalDataHolder, "additionalData");
+
+		Iterator<EObject> itr = schedule.eAllContents();
+		while (itr.hasNext()) {
+			EObject eObj = itr.next();
+			if (class_AdditionalDataHolder.isInstance(eObj)) {
+				eObj.eUnset(feature_additionalData);
+			}
+		}
+
 	}
 
 	public void clearAssignments(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {

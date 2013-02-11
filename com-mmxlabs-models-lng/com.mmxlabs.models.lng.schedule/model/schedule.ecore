@@ -3,9 +3,7 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="schedule" nsURI="http://www.mmxlabs.com/models/lng/schedule/1/"
     nsPrefix="lng.schedule">
   <eClassifiers xsi:type="ecore:EClass" name="ScheduleModel" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//UUIDObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="initialSchedule" lowerBound="1"
-        eType="#//Schedule" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="optimisedSchedule" lowerBound="1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="schedule" lowerBound="1"
         eType="#//Schedule" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="dirty" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
@@ -119,7 +117,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject #//AdditionalDataHolder platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ExtraDataContainer">
+  <eClassifiers xsi:type="ecore:EClass" name="CargoAllocation" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ExtraDataContainer">
     <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eOperations name="getType" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadAllocation" lowerBound="1"
@@ -180,51 +178,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="PortVisit" eSuperTypes="#//Event">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="portCost" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AdditionalData" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//NamedObject #//AdditionalDataHolder">
-    <eAnnotations source="http://www.mmxlabs.com/models/mmxcore/validation/NamedObject">
-      <details key="nonUnique" value="true"/>
-    </eAnnotations>
-    <eOperations name="getIntValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="final Object value = getValue();&#xA;&#xA;if (value instanceof Number) {&#xA;&#x9;return ((Number)value).intValue();&#xA;}&#xA;&#xA;throw new IllegalStateException(&quot;Not an instanceof Number: &quot; + value);"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="format" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="final Object value = getValue();&#xA;final String render = getRender();&#xA;&#xA;if (render != null &amp;&amp; !render.isEmpty()) {&#xA;&#x9;return String.format(render, value);&#xA;} else {&#xA;&#x9;return &quot;&quot; + value;&#xA;}"/>
-      </eAnnotations>
-    </eOperations>
-    <eOperations name="getIntegerValue" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EIntegerObject">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="final Object value = getValue();&#xA;&#xA;if (value instanceof Number) {&#xA;&#x9;return ((Number)value).intValue();&#xA;}&#xA;&#xA;return null;"/>
-      </eAnnotations>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" lowerBound="1" eType="#//Object"
-        unsettable="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="render" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AdditionalDataHolder">
-    <eOperations name="getAdditionalDataWithKey" lowerBound="1" eType="#//AdditionalData">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="for (final AdditionalData ad : getAdditionalData()) {&#xA;  if (ad.getKey().equals(key)) return ad;&#xA;}&#xA;&#xA;return null;"/>
-      </eAnnotations>
-      <eParameters name="key" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    </eOperations>
-    <eOperations name="getAdditionalDataWithPath" lowerBound="1" eType="#//AdditionalData">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="AdditionalDataHolder adh = this;&#xA;for (final String key : keys) {&#xA;&#x9;if (adh == null) return null;&#xA;&#x9;adh = adh.getAdditionalDataWithKey(key);&#xA;}&#xA;if (adh instanceof AdditionalData) return (AdditionalData) adh;&#xA;return null;"/>
-      </eAnnotations>
-      <eParameters name="keys" lowerBound="1">
-        <eGenericType eClassifier="#//Iterable">
-          <eTypeArguments eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-        </eGenericType>
-      </eParameters>
-    </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="additionalData" upperBound="-1"
-        eType="#//AdditionalData" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="Iterable" instanceClassName="java.lang.Iterable">
     <eTypeParameters name="T"/>

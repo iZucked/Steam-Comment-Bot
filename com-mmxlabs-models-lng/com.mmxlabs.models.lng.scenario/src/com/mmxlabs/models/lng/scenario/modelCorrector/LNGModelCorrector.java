@@ -261,8 +261,8 @@ public class LNGModelCorrector {
 		final ScheduleModel scheduleModel = rootObject.getSubModel(ScheduleModel.class);
 		if (scheduleModel != null) {
 
-			if (scheduleModel.getInitialSchedule() != null) {
-				LOOP_SEQUENCES: for (final Sequence seq : scheduleModel.getInitialSchedule().getSequences()) {
+			if (scheduleModel.getSchedule() != null) {
+				LOOP_SEQUENCES: for (final Sequence seq : scheduleModel.getSchedule().getSequences()) {
 					if (seq.getSequenceType() == null) {
 						if (seq.isSetVessel()) {
 							cmd.append(SetCommand.create(ed, seq, SchedulePackage.eINSTANCE.getSequence_SequenceType(), SequenceType.VESSEL));

@@ -21,8 +21,7 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getInitialSchedule <em>Initial Schedule</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getOptimisedSchedule <em>Optimised Schedule</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#getSchedule <em>Schedule</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleModelImpl#isDirty <em>Dirty</em>}</li>
  * </ul>
  * </p>
@@ -31,24 +30,14 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  */
 public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	/**
-	 * The cached value of the '{@link #getInitialSchedule() <em>Initial Schedule</em>}' containment reference.
+	 * The cached value of the '{@link #getSchedule() <em>Schedule</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getInitialSchedule()
+	 * @see #getSchedule()
 	 * @generated
 	 * @ordered
 	 */
-	protected Schedule initialSchedule;
-
-	/**
-	 * The cached value of the '{@link #getOptimisedSchedule() <em>Optimised Schedule</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getOptimisedSchedule()
-	 * @generated
-	 * @ordered
-	 */
-	protected Schedule optimisedSchedule;
+	protected Schedule schedule;
 
 	/**
 	 * The default value of the '{@link #isDirty() <em>Dirty</em>}' attribute.
@@ -94,8 +83,8 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public Schedule getInitialSchedule() {
-		return initialSchedule;
+	public Schedule getSchedule() {
+		return schedule;
 	}
 
 	/**
@@ -103,11 +92,11 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetInitialSchedule(Schedule newInitialSchedule, NotificationChain msgs) {
-		Schedule oldInitialSchedule = initialSchedule;
-		initialSchedule = newInitialSchedule;
+	public NotificationChain basicSetSchedule(Schedule newSchedule, NotificationChain msgs) {
+		Schedule oldSchedule = schedule;
+		schedule = newSchedule;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE, oldInitialSchedule, newInitialSchedule);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE_MODEL__SCHEDULE, oldSchedule, newSchedule);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -118,61 +107,18 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setInitialSchedule(Schedule newInitialSchedule) {
-		if (newInitialSchedule != initialSchedule) {
+	public void setSchedule(Schedule newSchedule) {
+		if (newSchedule != schedule) {
 			NotificationChain msgs = null;
-			if (initialSchedule != null)
-				msgs = ((InternalEObject)initialSchedule).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE, null, msgs);
-			if (newInitialSchedule != null)
-				msgs = ((InternalEObject)newInitialSchedule).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE, null, msgs);
-			msgs = basicSetInitialSchedule(newInitialSchedule, msgs);
+			if (schedule != null)
+				msgs = ((InternalEObject)schedule).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SCHEDULE_MODEL__SCHEDULE, null, msgs);
+			if (newSchedule != null)
+				msgs = ((InternalEObject)newSchedule).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SCHEDULE_MODEL__SCHEDULE, null, msgs);
+			msgs = basicSetSchedule(newSchedule, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE, newInitialSchedule, newInitialSchedule));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Schedule getOptimisedSchedule() {
-		return optimisedSchedule;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetOptimisedSchedule(Schedule newOptimisedSchedule, NotificationChain msgs) {
-		Schedule oldOptimisedSchedule = optimisedSchedule;
-		optimisedSchedule = newOptimisedSchedule;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE, oldOptimisedSchedule, newOptimisedSchedule);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setOptimisedSchedule(Schedule newOptimisedSchedule) {
-		if (newOptimisedSchedule != optimisedSchedule) {
-			NotificationChain msgs = null;
-			if (optimisedSchedule != null)
-				msgs = ((InternalEObject)optimisedSchedule).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE, null, msgs);
-			if (newOptimisedSchedule != null)
-				msgs = ((InternalEObject)newOptimisedSchedule).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE, null, msgs);
-			msgs = basicSetOptimisedSchedule(newOptimisedSchedule, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE, newOptimisedSchedule, newOptimisedSchedule));
+			eNotify(new ENotificationImpl(this, Notification.SET, SchedulePackage.SCHEDULE_MODEL__SCHEDULE, newSchedule, newSchedule));
 	}
 
 	/**
@@ -204,10 +150,8 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
-				return basicSetInitialSchedule(null, msgs);
-			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
-				return basicSetOptimisedSchedule(null, msgs);
+			case SchedulePackage.SCHEDULE_MODEL__SCHEDULE:
+				return basicSetSchedule(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -220,10 +164,8 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
-				return getInitialSchedule();
-			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
-				return getOptimisedSchedule();
+			case SchedulePackage.SCHEDULE_MODEL__SCHEDULE:
+				return getSchedule();
 			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
 				return isDirty();
 		}
@@ -238,11 +180,8 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
-				setInitialSchedule((Schedule)newValue);
-				return;
-			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
-				setOptimisedSchedule((Schedule)newValue);
+			case SchedulePackage.SCHEDULE_MODEL__SCHEDULE:
+				setSchedule((Schedule)newValue);
 				return;
 			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
 				setDirty((Boolean)newValue);
@@ -259,11 +198,8 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
-				setInitialSchedule((Schedule)null);
-				return;
-			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
-				setOptimisedSchedule((Schedule)null);
+			case SchedulePackage.SCHEDULE_MODEL__SCHEDULE:
+				setSchedule((Schedule)null);
 				return;
 			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
 				setDirty(DIRTY_EDEFAULT);
@@ -280,10 +216,8 @@ public class ScheduleModelImpl extends UUIDObjectImpl implements ScheduleModel {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
-				return initialSchedule != null;
-			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
-				return optimisedSchedule != null;
+			case SchedulePackage.SCHEDULE_MODEL__SCHEDULE:
+				return schedule != null;
 			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
 				return dirty != DIRTY_EDEFAULT;
 		}

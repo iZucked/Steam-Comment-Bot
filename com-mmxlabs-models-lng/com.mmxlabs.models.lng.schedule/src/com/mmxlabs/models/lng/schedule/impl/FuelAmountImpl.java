@@ -145,7 +145,7 @@ public class FuelAmountImpl extends EObjectImpl implements FuelAmount {
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case SchedulePackage.FUEL_AMOUNT__UNIT:
-				setUnit((FuelUnit) newValue);
+				setUnit((FuelUnit)newValue);
 				return;
 			case SchedulePackage.FUEL_AMOUNT__QUANTITY:
 				setQuantity((Integer)newValue);
