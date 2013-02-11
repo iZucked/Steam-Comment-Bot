@@ -73,89 +73,6 @@ public interface CommercialFactory extends EFactory {
 	PurchaseContract createPurchaseContract();
 
 	/**
-	 * Returns a new object of class '<em>Fixed Price Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Fixed Price Contract</em>'.
-	 * @generated
-	 */
-	SalesContract createFixedPriceContract();
-
-	/**
-	 * Returns a new object of class '<em>Index Price Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Index Price Contract</em>'.
-	 * @generated
-	 */
-	SalesContract createIndexPriceContract();
-
-	/**
-	 * Returns a new object of class '<em>Netback Purchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Netback Purchase Contract</em>'.
-	 * @generated
-	 */
-	PurchaseContract createNetbackPurchaseContract();
-
-	/**
-	 * Returns a new object of class '<em>Profit Share Purchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Profit Share Purchase Contract</em>'.
-	 * @generated
-	 */
-	PurchaseContract createProfitSharePurchaseContract();
-
-	/**
-	 * Returns a new object of class '<em>Notional Ballast Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Notional Ballast Parameters</em>'.
-	 * @generated
-	 */
-	NamedObject createNotionalBallastParameters();
-
-	/**
-	 * Returns a new object of class '<em>Redirection Purchase Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Redirection Purchase Contract</em>'.
-	 * @generated
-	 */
-	PurchaseContract createRedirectionPurchaseContract();
-
-	/**
-	 * Returns a new object of class '<em>Price Expression Contract</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Price Expression Contract</em>'.
-	 * @generated
-	 */
-	SalesContract createPriceExpressionContract();
-
-	/**
-	 * Returns a new object of class '<em>Redirection Contract Original Date</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Redirection Contract Original Date</em>'.
-	 * @generated
-	 */
-	UUIDObject createRedirectionContractOriginalDate();
-
-	/**
 	 * Returns a new object of class '<em>Tax Rate</em>'.
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -194,16 +111,6 @@ public interface CommercialFactory extends EFactory {
 	 * @generated
 	 */
 	ExpressionPriceParameters createExpressionPriceParameters();
-
-	/**
-	 * Returns a new object of class '<em>Redirection Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Redirection Price Parameters</em>'.
-	 * @generated
-	 */
-	RedirectionPriceParameters createRedirectionPriceParameters();
 
 	/**
 	 * Returns the package supported by this factory.

@@ -9,7 +9,6 @@ import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.Contract;
 
-import com.mmxlabs.models.lng.types.TypesFactory;
 import com.mmxlabs.models.lng.types.provider.AContractItemProvider;
 
 import java.util.Collection;
@@ -361,11 +360,6 @@ public class ContractItemProvider
 			(createChildParameter
 				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
 				 CommercialFactory.eINSTANCE.createExpressionPriceParameters()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(CommercialPackage.Literals.CONTRACT__PRICE_INFO,
-				 CommercialFactory.eINSTANCE.createRedirectionPriceParameters()));
 	}
 
 	/**

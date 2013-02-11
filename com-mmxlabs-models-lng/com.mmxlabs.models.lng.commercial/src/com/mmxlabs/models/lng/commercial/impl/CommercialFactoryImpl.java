@@ -65,19 +65,10 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 			case CommercialPackage.CONTRACT: return createContract();
 			case CommercialPackage.SALES_CONTRACT: return createSalesContract();
 			case CommercialPackage.PURCHASE_CONTRACT: return createPurchaseContract();
-			case CommercialPackage.FIXED_PRICE_CONTRACT: return createFixedPriceContract();
-			case CommercialPackage.INDEX_PRICE_CONTRACT: return createIndexPriceContract();
-			case CommercialPackage.NETBACK_PURCHASE_CONTRACT: return createNetbackPurchaseContract();
-			case CommercialPackage.PROFIT_SHARE_PURCHASE_CONTRACT: return createProfitSharePurchaseContract();
-			case CommercialPackage.NOTIONAL_BALLAST_PARAMETERS: return createNotionalBallastParameters();
-			case CommercialPackage.REDIRECTION_PURCHASE_CONTRACT: return createRedirectionPurchaseContract();
-			case CommercialPackage.PRICE_EXPRESSION_CONTRACT: return createPriceExpressionContract();
-			case CommercialPackage.REDIRECTION_CONTRACT_ORIGINAL_DATE: return createRedirectionContractOriginalDate();
 			case CommercialPackage.TAX_RATE: return createTaxRate();
 			case CommercialPackage.FIXED_PRICE_PARAMETERS: return createFixedPriceParameters();
 			case CommercialPackage.INDEX_PRICE_PARAMETERS: return createIndexPriceParameters();
 			case CommercialPackage.EXPRESSION_PRICE_PARAMETERS: return createExpressionPriceParameters();
-			case CommercialPackage.REDIRECTION_PRICE_PARAMETERS: return createRedirectionPriceParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -135,95 +126,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SalesContract createFixedPriceContract() {
-		SalesContract fixedPriceContract = (SalesContract)super.create(CommercialPackage.Literals.FIXED_PRICE_CONTRACT);
-		return fixedPriceContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SalesContract createIndexPriceContract() {
-		SalesContract indexPriceContract = (SalesContract)super.create(CommercialPackage.Literals.INDEX_PRICE_CONTRACT);
-		return indexPriceContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PurchaseContract createNetbackPurchaseContract() {
-		PurchaseContract netbackPurchaseContract = (PurchaseContract)super.create(CommercialPackage.Literals.NETBACK_PURCHASE_CONTRACT);
-		return netbackPurchaseContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PurchaseContract createProfitSharePurchaseContract() {
-		PurchaseContract profitSharePurchaseContract = (PurchaseContract)super.create(CommercialPackage.Literals.PROFIT_SHARE_PURCHASE_CONTRACT);
-		return profitSharePurchaseContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 3.0
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NamedObject createNotionalBallastParameters() {
-		NamedObject notionalBallastParameters = (NamedObject)super.create(CommercialPackage.Literals.NOTIONAL_BALLAST_PARAMETERS);
-		return notionalBallastParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PurchaseContract createRedirectionPurchaseContract() {
-		PurchaseContract redirectionPurchaseContract = (PurchaseContract)super.create(CommercialPackage.Literals.REDIRECTION_PURCHASE_CONTRACT);
-		return redirectionPurchaseContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SalesContract createPriceExpressionContract() {
-		SalesContract priceExpressionContract = (SalesContract)super.create(CommercialPackage.Literals.PRICE_EXPRESSION_CONTRACT);
-		return priceExpressionContract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public UUIDObject createRedirectionContractOriginalDate() {
-		UUIDObject redirectionContractOriginalDate = (UUIDObject)super.create(CommercialPackage.Literals.REDIRECTION_CONTRACT_ORIGINAL_DATE);
-		return redirectionContractOriginalDate;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
 	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -261,16 +163,6 @@ public class CommercialFactoryImpl extends EFactoryImpl implements CommercialFac
 	public ExpressionPriceParameters createExpressionPriceParameters() {
 		ExpressionPriceParametersImpl expressionPriceParameters = new ExpressionPriceParametersImpl();
 		return expressionPriceParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public RedirectionPriceParameters createRedirectionPriceParameters() {
-		RedirectionPriceParametersImpl redirectionPriceParameters = new RedirectionPriceParametersImpl();
-		return redirectionPriceParameters;
 	}
 
 	/**

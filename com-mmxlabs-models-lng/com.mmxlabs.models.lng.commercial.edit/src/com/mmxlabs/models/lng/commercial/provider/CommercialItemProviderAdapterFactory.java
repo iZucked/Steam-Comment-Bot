@@ -169,6 +169,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PurchaseContract} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -187,194 +188,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		}
 
 		return purchaseContractItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.FixedPriceContract} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected FixedPriceContractItemProvider fixedPriceContractItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.FixedPriceContract}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createFixedPriceContractAdapter() {
-		if (fixedPriceContractItemProvider == null) {
-			fixedPriceContractItemProvider = new FixedPriceContractItemProvider(this);
-		}
-
-		return fixedPriceContractItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.IndexPriceContract} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected IndexPriceContractItemProvider indexPriceContractItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.IndexPriceContract}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createIndexPriceContractAdapter() {
-		if (indexPriceContractItemProvider == null) {
-			indexPriceContractItemProvider = new IndexPriceContractItemProvider(this);
-		}
-
-		return indexPriceContractItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PurchaseContract} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NetbackPurchaseContractItemProvider netbackPurchaseContractItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PurchaseContract}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNetbackPurchaseContractAdapter() {
-		if (netbackPurchaseContractItemProvider == null) {
-			netbackPurchaseContractItemProvider = new NetbackPurchaseContractItemProvider(this);
-		}
-
-		return netbackPurchaseContractItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PurchaseContract} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ProfitSharePurchaseContractItemProvider profitSharePurchaseContractItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PurchaseContract}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createProfitSharePurchaseContractAdapter() {
-		if (profitSharePurchaseContractItemProvider == null) {
-			profitSharePurchaseContractItemProvider = new ProfitSharePurchaseContractItemProvider(this);
-		}
-
-		return profitSharePurchaseContractItemProvider;
-	}
-
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.mmxcore.NamedObject} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected NotionalBallastParametersItemProvider notionalBallastParametersItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.mmxcore.NamedObject}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createNotionalBallastParametersAdapter() {
-		if (notionalBallastParametersItemProvider == null) {
-			notionalBallastParametersItemProvider = new NotionalBallastParametersItemProvider(this);
-		}
-
-		return notionalBallastParametersItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract} instances.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RedirectionPurchaseContractItemProvider redirectionPurchaseContractItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RedirectionPurchaseContract}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRedirectionPurchaseContractAdapter() {
-		if (redirectionPurchaseContractItemProvider == null) {
-			redirectionPurchaseContractItemProvider = new RedirectionPurchaseContractItemProvider(this);
-		}
-
-		return redirectionPurchaseContractItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.PriceExpressionContract} instances.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected PriceExpressionContractItemProvider priceExpressionContractItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.PriceExpressionContract}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createPriceExpressionContractAdapter() {
-		if (priceExpressionContractItemProvider == null) {
-			priceExpressionContractItemProvider = new PriceExpressionContractItemProvider(this);
-		}
-
-		return priceExpressionContractItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate} instances.
-	 * <!-- begin-user-doc -->
-	 * @since 2.0
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RedirectionContractOriginalDateItemProvider redirectionContractOriginalDateItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RedirectionContractOriginalDate}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRedirectionContractOriginalDateAdapter() {
-		if (redirectionContractOriginalDateItemProvider == null) {
-			redirectionContractOriginalDateItemProvider = new RedirectionContractOriginalDateItemProvider(this);
-		}
-
-		return redirectionContractOriginalDateItemProvider;
 	}
 
 	/**
@@ -404,6 +217,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.FixedPriceParameters} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -427,6 +241,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.IndexPriceParameters} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -450,6 +265,7 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters} instances.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -468,29 +284,6 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		}
 
 		return expressionPriceParametersItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected RedirectionPriceParametersItemProvider redirectionPriceParametersItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.commercial.RedirectionPriceParameters}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createRedirectionPriceParametersAdapter() {
-		if (redirectionPriceParametersItemProvider == null) {
-			redirectionPriceParametersItemProvider = new RedirectionPriceParametersItemProvider(this);
-		}
-
-		return redirectionPriceParametersItemProvider;
 	}
 
 	/**
@@ -597,19 +390,10 @@ public class CommercialItemProviderAdapterFactory extends CommercialAdapterFacto
 		if (contractItemProvider != null) contractItemProvider.dispose();
 		if (salesContractItemProvider != null) salesContractItemProvider.dispose();
 		if (purchaseContractItemProvider != null) purchaseContractItemProvider.dispose();
-		if (fixedPriceContractItemProvider != null) fixedPriceContractItemProvider.dispose();
-		if (indexPriceContractItemProvider != null) indexPriceContractItemProvider.dispose();
-		if (netbackPurchaseContractItemProvider != null) netbackPurchaseContractItemProvider.dispose();
-		if (profitSharePurchaseContractItemProvider != null) profitSharePurchaseContractItemProvider.dispose();
-		if (notionalBallastParametersItemProvider != null) notionalBallastParametersItemProvider.dispose();
-		if (redirectionPurchaseContractItemProvider != null) redirectionPurchaseContractItemProvider.dispose();
-		if (priceExpressionContractItemProvider != null) priceExpressionContractItemProvider.dispose();
-		if (redirectionContractOriginalDateItemProvider != null) redirectionContractOriginalDateItemProvider.dispose();
 		if (taxRateItemProvider != null) taxRateItemProvider.dispose();
 		if (fixedPriceParametersItemProvider != null) fixedPriceParametersItemProvider.dispose();
 		if (indexPriceParametersItemProvider != null) indexPriceParametersItemProvider.dispose();
 		if (expressionPriceParametersItemProvider != null) expressionPriceParametersItemProvider.dispose();
-		if (redirectionPriceParametersItemProvider != null) redirectionPriceParametersItemProvider.dispose();
 	}
 
 }

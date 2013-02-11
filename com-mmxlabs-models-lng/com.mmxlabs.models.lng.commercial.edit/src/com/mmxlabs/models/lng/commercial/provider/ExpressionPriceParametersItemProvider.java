@@ -29,6 +29,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 /**
  * This is the item provider adapter for a {@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters} object.
  * <!-- begin-user-doc -->
+ * @since 3.0
  * <!-- end-user-doc -->
  * @generated
  */
