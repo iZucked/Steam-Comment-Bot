@@ -799,6 +799,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl <em>Fixed Price Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getFixedPriceParameters()
@@ -809,6 +810,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -818,6 +820,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -827,6 +830,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -836,6 +840,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Per MMBTU</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -845,6 +850,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Fixed Price Parameters</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -854,6 +860,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl <em>Index Price Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIndexPriceParameters()
@@ -864,6 +871,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -873,6 +881,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -882,6 +891,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -891,6 +901,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Index</b></em>' reference.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -900,6 +911,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Multiplier</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -909,6 +921,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Constant</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -918,6 +931,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Index Price Parameters</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -927,6 +941,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @see com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl
 	 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getExpressionPriceParameters()
@@ -937,6 +952,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -946,6 +962,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -955,6 +972,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Uuid</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -964,6 +982,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Price Expression</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -973,6 +992,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * The number of structural features of the '<em>Expression Price Parameters</em>' class.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1285,6 +1305,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.FixedPriceParameters <em>Fixed Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Fixed Price Parameters</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.FixedPriceParameters
@@ -1295,6 +1316,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.FixedPriceParameters#getPricePerMMBTU <em>Price Per MMBTU</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Per MMBTU</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.FixedPriceParameters#getPricePerMMBTU()
@@ -1306,6 +1328,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters <em>Index Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Index Price Parameters</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters
@@ -1316,6 +1339,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex <em>Index</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Index</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters#getIndex()
@@ -1327,6 +1351,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getMultiplier <em>Multiplier</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Multiplier</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters#getMultiplier()
@@ -1338,6 +1363,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.IndexPriceParameters#getConstant <em>Constant</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Constant</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.IndexPriceParameters#getConstant()
@@ -1349,6 +1375,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters <em>Expression Price Parameters</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Expression Price Parameters</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters
@@ -1359,6 +1386,7 @@ public interface CommercialPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression <em>Price Expression</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Price Expression</em>'.
 	 * @see com.mmxlabs.models.lng.commercial.ExpressionPriceParameters#getPriceExpression()
@@ -1635,6 +1663,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl <em>Fixed Price Parameters</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.impl.FixedPriceParametersImpl
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getFixedPriceParameters()
@@ -1645,6 +1674,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price Per MMBTU</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1653,6 +1683,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl <em>Index Price Parameters</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.impl.IndexPriceParametersImpl
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getIndexPriceParameters()
@@ -1663,6 +1694,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Index</b></em>' reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1671,6 +1703,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Multiplier</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1679,6 +1712,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
@@ -1687,6 +1721,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl <em>Expression Price Parameters</em>}' class.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @see com.mmxlabs.models.lng.commercial.impl.ExpressionPriceParametersImpl
 		 * @see com.mmxlabs.models.lng.commercial.impl.CommercialPackageImpl#getExpressionPriceParameters()
@@ -1697,6 +1732,7 @@ public interface CommercialPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Price Expression</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */

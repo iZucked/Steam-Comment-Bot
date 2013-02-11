@@ -311,6 +311,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

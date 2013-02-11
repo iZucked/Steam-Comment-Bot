@@ -896,14 +896,6 @@ public class PricingPackageImpl extends EPackageImpl implements PricingPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	 * @since 3.0
-	 * @since 3.0
-	 * @since 3.0
-	 * @since 3.0
-	 * @since 3.0
-	 * @since 3.0
-	 * @since 3.0
-	 * @since 3.0
 	public EEnum getSpotType() {
 		return spotTypeEEnum;
 	}
