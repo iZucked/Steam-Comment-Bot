@@ -50,7 +50,7 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 		else 
 			storage.clear();
 		
-		storage.addAll(valueProvider.getAllowedValues(target, InputPackage.eINSTANCE.getAssignment_Vessels()));
+		storage.addAll(valueProvider.getAllowedValues(target, InputPackage.eINSTANCE.getElementAssignment_Assignment()));
 		
 		return storage;
 	}

@@ -302,7 +302,7 @@ public class AssignmentInlineEditorComponentHelper extends BaseComponentHelper {
 				
 			final EObject target = (assignment == null ? object : assignment);
 			
-			final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(target, InputPackage.eINSTANCE.getAssignment_Vessels());			
+			final List<Pair<String, EObject>> values = valueProvider.getAllowedValues(target, InputPackage.eINSTANCE.getElementAssignment_Assignment());			
 
 			combo.removeAll();
 			nameList.clear();

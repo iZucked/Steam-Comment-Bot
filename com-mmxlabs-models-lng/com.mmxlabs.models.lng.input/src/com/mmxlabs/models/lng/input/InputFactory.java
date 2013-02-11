@@ -33,15 +33,6 @@ public interface InputFactory extends EFactory {
 	InputModel createInputModel();
 
 	/**
-	 * Returns a new object of class '<em>Assignment</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Assignment</em>'.
-	 * @generated
-	 */
-	Assignment createAssignment();
-
-	/**
 	 * Returns a new object of class '<em>Element Assignment</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

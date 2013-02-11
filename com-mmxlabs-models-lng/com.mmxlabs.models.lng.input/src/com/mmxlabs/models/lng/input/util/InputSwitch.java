@@ -4,11 +4,11 @@
  */
 package com.mmxlabs.models.lng.input.util;
 
+import com.mmxlabs.models.lng.input.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
-import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.InputPackage;
@@ -80,13 +80,6 @@ public class InputSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case InputPackage.ASSIGNMENT: {
-				Assignment assignment = (Assignment)theEObject;
-				T result = caseAssignment(assignment);
-				if (result == null) result = caseMMXObject(assignment);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case InputPackage.ELEMENT_ASSIGNMENT: {
 				ElementAssignment elementAssignment = (ElementAssignment)theEObject;
 				T result = caseElementAssignment(elementAssignment);
@@ -110,21 +103,6 @@ public class InputSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseInputModel(InputModel object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Assignment</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Assignment</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAssignment(Assignment object) {
 		return null;
 	}
 
