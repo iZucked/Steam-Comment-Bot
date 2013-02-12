@@ -676,7 +676,7 @@ public class CustomScenarioCreator {
 	 * @param name
 	 * @param dischargePrice
 	 * @return
-	 * @since 2.0
+	 * @since 3.0
 	 */
 	public PurchaseContract addPurchaseContract(String name) {
 		PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
