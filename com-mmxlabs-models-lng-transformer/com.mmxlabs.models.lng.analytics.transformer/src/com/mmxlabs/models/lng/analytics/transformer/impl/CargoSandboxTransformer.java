@@ -134,7 +134,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
- * @since 2.1
+ * @since 3.0
  */
 public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 
