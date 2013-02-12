@@ -26,8 +26,9 @@ import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.FixedPriceContract;
+import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
@@ -76,7 +77,7 @@ public class CustomScenarioCreator {
 	private final OptimiserModel optimiserModel;
 
 	final SalesContract sc;
-	final SalesContract pc;
+	final PurchaseContract pc;
 	final LegalEntity contractEntity;
 	final LegalEntity shippingEntity;
 
@@ -645,24 +646,26 @@ public class CustomScenarioCreator {
 		return false;
 
 	}
-	
+
 	/**
 	 * Adds a sales contract to the model.
-	 *
+	 * 
 	 * @author Simon McGregor
 	 * @param name
 	 * @param dischargePrice
 	 * @return
 	 */
 	public SalesContract addSalesContract(String name, float dischargePrice) {
-		FixedPriceContract result = CommercialFactory.eINSTANCE.createFixedPriceContract();
+		SalesContract result = CommercialFactory.eINSTANCE.createSalesContract();
+		FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
 		result.setName(name);
 
 		result.setEntity(contractEntity);
-		result.setPricePerMMBTU(dischargePrice);
+		params.setPricePerMMBTU(dischargePrice);
 
+		result.setPriceInfo(params);
 		commercialModel.getSalesContracts().add(result);
-		
+
 		return result;
 	}
 
@@ -673,15 +676,18 @@ public class CustomScenarioCreator {
 	 * @param name
 	 * @param dischargePrice
 	 * @return
+	 * @since 2.0
 	 */
-	public SalesContract addPurchaseContract(String name) {
-		FixedPriceContract result = CommercialFactory.eINSTANCE.createFixedPriceContract();
+	public PurchaseContract addPurchaseContract(String name) {
+		PurchaseContract result = CommercialFactory.eINSTANCE.createPurchaseContract();
+		FixedPriceParameters params = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+
 		result.setName(name);
 
 		result.setEntity(contractEntity);
-
+		result.setPriceInfo(params);
 		commercialModel.getPurchaseContracts().add(result);
-		
+
 		return result;
 	}
 }

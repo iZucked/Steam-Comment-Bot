@@ -28,9 +28,11 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.IndexPriceContract;
+import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
+import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.BaseFuel;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
 import com.mmxlabs.models.lng.fleet.DryDockEvent;
@@ -67,8 +69,8 @@ import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
-import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.its.tests.ManifestJointModel;
+import com.mmxlabs.models.lng.transformer.its.tests.TransformerExtensionTestModule;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.MMXSubModel;
@@ -303,7 +305,7 @@ public class ScenarioTools {
 
 		vessel.setAvailability(availablility);
 
-		HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
+		final HeelOptions heelOptions = FleetFactory.eINSTANCE.createHeelOptions();
 		vessel.setStartHeel(heelOptions);
 
 		fleetModel.getVessels().add(vessel);
@@ -341,9 +343,11 @@ public class ScenarioTools {
 		e.setName("Other");
 		s.setName("Shipping");
 
-		final IndexPriceContract sc = CommercialFactory.eINSTANCE.createIndexPriceContract();
-		final PurchaseContract pc = CommercialFactory.eINSTANCE.createFixedPriceContract();
-
+		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final FixedPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+		pc.setPriceInfo(purchaseParams);
+		
+		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
 		final DataIndex<Double> sales = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
 
@@ -351,7 +355,9 @@ public class ScenarioTools {
 
 		sc.setEntity(e);
 		pc.setEntity(e);
-		sc.setIndex(sales);
+		final IndexPriceParameters salesParams = CommercialFactory.eINSTANCE.createIndexPriceParameters();
+		salesParams.setIndex(sales);
+		sc.setPriceInfo(salesParams);
 
 		commercialModel.getSalesContracts().add(sc);
 		commercialModel.getPurchaseContracts().add(pc);
@@ -581,10 +587,14 @@ public class ScenarioTools {
 
 		e.setName("Other");
 		s.setName("Shipping");
+		
+		
 
-		final IndexPriceContract sc = CommercialFactory.eINSTANCE.createIndexPriceContract();
-		final PurchaseContract pc = CommercialFactory.eINSTANCE.createFixedPriceContract();
-
+		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
+		final FixedPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createFixedPriceParameters();
+		pc.setPriceInfo(purchaseParams);
+		
+		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
 		final DataIndex<Double> sales = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
 
@@ -592,7 +602,9 @@ public class ScenarioTools {
 
 		sc.setEntity(e);
 		pc.setEntity(e);
-		sc.setIndex(sales);
+		final IndexPriceParameters salesParams = CommercialFactory.eINSTANCE.createIndexPriceParameters();
+		salesParams.setIndex(sales);
+		sc.setPriceInfo(salesParams);
 
 		commercialModel.getSalesContracts().add(sc);
 		commercialModel.getPurchaseContracts().add(pc);
@@ -650,7 +662,7 @@ public class ScenarioTools {
 		if (false) {
 			try {
 				storeToFile(scenario, new File("c:/temp/test.scenario"));
-			} catch (IOException e) {
+			} catch (final IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -743,7 +755,7 @@ public class ScenarioTools {
 		for (final FuelQuantity fq : fuelQuantities) {
 			// FIXME: Update for API changes
 
-			for (FuelAmount fa : fq.getAmounts()) {
+			for (final FuelAmount fa : fq.getAmounts()) {
 				System.err.println("\t" + fq.getFuel() + " " + fa.getQuantity() + fa.getUnit() + " at $" + fq.getCost());
 			}
 			// System.err.println("\t" + fq.getFuel() + " " + fq.getAmounts(). + fq.getFuelUnit() + " at $" + fq.getTotalPrice());
@@ -844,7 +856,7 @@ public class ScenarioTools {
 		int index = 0;
 		// long l = System.currentTimeMillis();
 		//
-		for (MMXSubModel sub : instance.getSubModels()) {
+		for (final MMXSubModel sub : instance.getSubModels()) {
 			final EObject top = sub.getSubModelInstance();
 			final URI relativeURI = URI.createURI("/" + top.eClass().getName() + index++ + ".xmi");
 			manifest.getModelURIs().add(relativeURI.toString());
