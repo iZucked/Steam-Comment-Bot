@@ -4,7 +4,6 @@
  */
 package com.mmxlabs.models.lng.input.util;
 
-import com.mmxlabs.models.lng.input.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
