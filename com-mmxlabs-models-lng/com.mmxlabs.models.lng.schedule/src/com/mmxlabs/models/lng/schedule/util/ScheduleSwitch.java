@@ -9,8 +9,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
-import com.mmxlabs.models.lng.schedule.AdditionalData;
-import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -30,7 +28,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
@@ -174,13 +171,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseExtraDataContainer(generatedCharterOut);
 				if (result == null) result = caseMMXObject(generatedCharterOut);
 				if (result == null) result = caseITimezoneProvider(generatedCharterOut);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.UNSCHEDULED_CARGO: {
-				UnscheduledCargo unscheduledCargo = (UnscheduledCargo)theEObject;
-				T result = caseUnscheduledCargo(unscheduledCargo);
-				if (result == null) result = caseMMXObject(unscheduledCargo);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -405,21 +395,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseGeneratedCharterOut(GeneratedCharterOut object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Unscheduled Cargo</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Unscheduled Cargo</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseUnscheduledCargo(UnscheduledCargo object) {
 		return null;
 	}
 

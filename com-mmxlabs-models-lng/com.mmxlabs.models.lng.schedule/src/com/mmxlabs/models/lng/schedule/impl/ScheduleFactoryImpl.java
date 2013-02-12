@@ -23,8 +23,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import com.mmxlabs.models.lng.schedule.AdditionalData;
-import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -48,7 +46,6 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 
@@ -105,7 +102,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.JOURNEY: return createJourney();
 			case SchedulePackage.IDLE: return createIdle();
 			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
-			case SchedulePackage.UNSCHEDULED_CARGO: return createUnscheduledCargo();
 			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
 			case SchedulePackage.FUEL_QUANTITY: return createFuelQuantity();
 			case SchedulePackage.COOLDOWN: return createCooldown();
@@ -260,16 +256,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public GeneratedCharterOut createGeneratedCharterOut() {
 		GeneratedCharterOutImpl generatedCharterOut = new GeneratedCharterOutImpl();
 		return generatedCharterOut;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public UnscheduledCargo createUnscheduledCargo() {
-		UnscheduledCargoImpl unscheduledCargo = new UnscheduledCargoImpl();
-		return unscheduledCargo;
 	}
 
 	/**

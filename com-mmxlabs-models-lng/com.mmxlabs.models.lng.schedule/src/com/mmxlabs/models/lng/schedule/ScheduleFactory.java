@@ -106,15 +106,6 @@ public interface ScheduleFactory extends EFactory {
 	GeneratedCharterOut createGeneratedCharterOut();
 
 	/**
-	 * Returns a new object of class '<em>Unscheduled Cargo</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Unscheduled Cargo</em>'.
-	 * @generated
-	 */
-	UnscheduledCargo createUnscheduledCargo();
-
-	/**
 	 * Returns a new object of class '<em>Fuel Usage</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -69,7 +69,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		final MetamodelLoader v1Loader = destiniationLoader;
 		migrateFixedPrice(v1Loader, models);
 		removeOptimisedSchedule(v1Loader, models);
-		clearAdditionalDataFromSchedule(v1Loader, models);
+		clearOldElementsFromSchedule(v1Loader, models);
 		clearAssignments(v1Loader, models);
 		removeExtraAnalyticsFields(v1Loader, models);
 		migrateContracts(v1Loader, models);
@@ -146,26 +146,33 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		scheduleModel.eSet(feature_schedule, scheduleModel.eGet(feature_initialSchedule));
 	}
 
-	public void clearAdditionalDataFromSchedule(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
+	public void clearOldElementsFromSchedule(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
 		final EObject scheduleModel = models.get(ModelsLNGSet_v1.Schedule);
 		final EPackage schedulePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
 
 		final EClass class_ScheduleModel = MetamodelUtils.getEClass(schedulePackage, "ScheduleModel");
 		final EStructuralFeature feature_schedule = MetamodelUtils.getStructuralFeature(class_ScheduleModel, "schedule");
 
-		EObject schedule = (EObject) scheduleModel.eGet(feature_schedule);
+		final EObject schedule = (EObject) scheduleModel.eGet(feature_schedule);
+		final EClass class_Schedule = MetamodelUtils.getEClass(schedulePackage, "Schedule");
 
-		EClass class_AdditionalDataHolder = MetamodelUtils.getEClass(schedulePackage, "AdditionalDataHolder");
-		EStructuralFeature feature_additionalData = MetamodelUtils.getStructuralFeature(class_AdditionalDataHolder, "additionalData");
+		if (schedule != null) {
+			// Clear any unscheduled cargoes -- these have not been used for a long time, if at all.
+			final EStructuralFeature feature_unscheduledCargoes = MetamodelUtils.getStructuralFeature(class_Schedule, "unscheduledCargoes");
+			schedule.eUnset(feature_unscheduledCargoes);
 
-		Iterator<EObject> itr = schedule.eAllContents();
-		while (itr.hasNext()) {
-			EObject eObj = itr.next();
-			if (class_AdditionalDataHolder.isInstance(eObj)) {
-				eObj.eUnset(feature_additionalData);
+			// Clear any additional data -> should now be ExtraData
+			final EClass class_AdditionalDataHolder = MetamodelUtils.getEClass(schedulePackage, "AdditionalDataHolder");
+			final EStructuralFeature feature_additionalData = MetamodelUtils.getStructuralFeature(class_AdditionalDataHolder, "additionalData");
+
+			final Iterator<EObject> itr = schedule.eAllContents();
+			while (itr.hasNext()) {
+				final EObject eObj = itr.next();
+				if (class_AdditionalDataHolder.isInstance(eObj)) {
+					eObj.eUnset(feature_additionalData);
+				}
 			}
 		}
-
 	}
 
 	public void clearAssignments(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {

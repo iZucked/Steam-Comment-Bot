@@ -18,7 +18,6 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#isComplete <em>Complete</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSequences <em>Sequences</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargoes <em>Unscheduled Cargoes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.Schedule#getFitnesses <em>Fitnesses</em>}</li>
@@ -72,23 +71,6 @@ public interface Schedule extends MMXObject {
 	 * @generated
 	 */
 	EList<Sequence> getSequences();
-
-	/**
-	 * Returns the value of the '<em><b>Unscheduled Cargoes</b></em>' containment reference list.
-	 * The list contents are of type {@link com.mmxlabs.models.lng.schedule.UnscheduledCargo}.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Unscheduled Cargoes</em>' containment reference list isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * @deprecated
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Unscheduled Cargoes</em>' containment reference list.
-	 * @see com.mmxlabs.models.lng.schedule.SchedulePackage#getSchedule_UnscheduledCargoes()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<UnscheduledCargo> getUnscheduledCargoes();
 
 	/**
 	 * Returns the value of the '<em><b>Cargo Allocations</b></em>' containment reference list.

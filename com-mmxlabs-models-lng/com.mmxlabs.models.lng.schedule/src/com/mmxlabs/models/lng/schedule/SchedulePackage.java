@@ -254,22 +254,13 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__SEQUENCES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Unscheduled Cargoes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE__UNSCHEDULED_CARGOES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Cargo Allocations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__CARGO_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int SCHEDULE__CARGO_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' containment reference list.
@@ -278,7 +269,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int SCHEDULE__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fitnesses</b></em>' containment reference list.
@@ -287,7 +278,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SCHEDULE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Unused Elements</b></em>' reference list.
@@ -296,7 +287,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__UNUSED_ELEMENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int SCHEDULE__UNUSED_ELEMENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
@@ -305,7 +296,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -2320,142 +2311,6 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl <em>Unscheduled Cargo</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getUnscheduledCargo()
-	 * @generated
-	 */
-	int UNSCHEDULED_CARGO = 9;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO__LOAD_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Unscheduled Cargo</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>Unscheduled Cargo</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2463,7 +2318,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUsage()
 	 * @generated
 	 */
-	int FUEL_USAGE = 10;
+	int FUEL_USAGE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2509,7 +2364,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelQuantity()
 	 * @generated
 	 */
-	int FUEL_QUANTITY = 11;
+	int FUEL_QUANTITY = 10;
 
 	/**
 	 * The feature id for the '<em><b>Fuel</b></em>' attribute.
@@ -2564,7 +2419,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCooldown()
 	 * @generated
 	 */
-	int COOLDOWN = 12;
+	int COOLDOWN = 11;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -2835,7 +2690,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCargoAllocation()
 	 * @generated
 	 */
-	int CARGO_ALLOCATION = 13;
+	int CARGO_ALLOCATION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3115,7 +2970,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocation()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION = 14;
+	int SLOT_ALLOCATION = 13;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3323,7 +3178,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelAmount()
 	 * @generated
 	 */
-	int FUEL_AMOUNT = 15;
+	int FUEL_AMOUNT = 14;
 
 	/**
 	 * The feature id for the '<em><b>Unit</b></em>' attribute.
@@ -3369,7 +3224,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFitness()
 	 * @generated
 	 */
-	int FITNESS = 16;
+	int FITNESS = 15;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3514,7 +3369,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisit()
 	 * @generated
 	 */
-	int PORT_VISIT = 17;
+	int PORT_VISIT = 16;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3758,7 +3613,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getStartEvent()
 	 * @generated
 	 */
-	int START_EVENT = 18;
+	int START_EVENT = 17;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -4083,7 +3938,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEndEvent()
 	 * @generated
 	 */
-	int END_EVENT = 19;
+	int END_EVENT = 18;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -4408,7 +4263,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 20;
+	int FUEL_UNIT = 19;
 
 
 	/**
@@ -4419,7 +4274,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 21;
+	int FUEL = 20;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4430,7 +4285,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 22;
+	int SEQUENCE_TYPE = 21;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4440,7 +4295,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 23;
+	int CALENDAR = 22;
 
 
 	/**
@@ -4451,7 +4306,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 24;
+	int ITERABLE = 23;
 
 
 	/**
@@ -4462,7 +4317,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 25;
+	int OBJECT = 24;
 
 
 	/**
@@ -4528,17 +4383,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSchedule_Sequences();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargoes <em>Unscheduled Cargoes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Unscheduled Cargoes</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargoes()
-	 * @see #getSchedule()
-	 * @generated
-	 */
-	EReference getSchedule_UnscheduledCargoes();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}'.
@@ -5009,38 +4853,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getGeneratedCharterOut_Revenue();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.UnscheduledCargo <em>Unscheduled Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Unscheduled Cargo</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.UnscheduledCargo
-	 * @generated
-	 */
-	EClass getUnscheduledCargo();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.UnscheduledCargo#getLoadAllocation <em>Load Allocation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.UnscheduledCargo#getLoadAllocation()
-	 * @see #getUnscheduledCargo()
-	 * @generated
-	 */
-	EReference getUnscheduledCargo_LoadAllocation();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.UnscheduledCargo#getDischargeAllocation <em>Discharge Allocation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discharge Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.UnscheduledCargo#getDischargeAllocation()
-	 * @see #getUnscheduledCargo()
-	 * @generated
-	 */
-	EReference getUnscheduledCargo_DischargeAllocation();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.FuelUsage <em>Fuel Usage</em>}'.
@@ -5658,14 +5470,6 @@ public interface SchedulePackage extends EPackage {
 		EReference SCHEDULE__SEQUENCES = eINSTANCE.getSchedule_Sequences();
 
 		/**
-		 * The meta object literal for the '<em><b>Unscheduled Cargoes</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCHEDULE__UNSCHEDULED_CARGOES = eINSTANCE.getSchedule_UnscheduledCargoes();
-
-		/**
 		 * The meta object literal for the '<em><b>Cargo Allocations</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6033,32 +5837,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute GENERATED_CHARTER_OUT__REVENUE = eINSTANCE.getGeneratedCharterOut_Revenue();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl <em>Unscheduled Cargo</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl
-		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getUnscheduledCargo()
-		 * @generated
-		 */
-		EClass UNSCHEDULED_CARGO = eINSTANCE.getUnscheduledCargo();
-
-		/**
-		 * The meta object literal for the '<em><b>Load Allocation</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNSCHEDULED_CARGO__LOAD_ALLOCATION = eINSTANCE.getUnscheduledCargo_LoadAllocation();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Allocation</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION = eINSTANCE.getUnscheduledCargo_DischargeAllocation();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.

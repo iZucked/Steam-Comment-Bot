@@ -12,8 +12,6 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="sequences" upperBound="-1"
         eType="#//Sequence" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="unscheduledCargoes" upperBound="-1"
-        eType="#//UnscheduledCargo" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cargoAllocations" upperBound="-1"
         eType="#//CargoAllocation" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="slotAllocations" upperBound="-1"
@@ -85,12 +83,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="GeneratedCharterOut" eSuperTypes="#//Event platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ExtraDataContainer">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="revenue" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="UnscheduledCargo" eSuperTypes="platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.ecore#//MMXObject">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="loadAllocation" lowerBound="1"
-        eType="#//SlotAllocation"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="dischargeAllocation" lowerBound="1"
-        eType="#//SlotAllocation"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FuelUsage">
     <eOperations name="getFuelCost" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">

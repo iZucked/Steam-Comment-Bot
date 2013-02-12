@@ -95,12 +95,6 @@
 			modelClass="com.mmxlabs.models.lng.schedule.Idle" />
 		
 		<componentHelper
-			id="com.mmxlabs.models.lng.schedule.helpers.UnscheduledCargo"
-			helperClass="com.mmxlabs.models.lng.schedule.presentation.composites.UnscheduledCargoComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.schedule.UnscheduledCargo" />
-		
-		<componentHelper
 			id="com.mmxlabs.models.lng.schedule.helpers.FuelUsage"
 			helperClass="com.mmxlabs.models.lng.schedule.presentation.composites.FuelUsageComponentHelper"
 			inheritable="false"

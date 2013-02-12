@@ -16,8 +16,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import com.mmxlabs.models.lng.schedule.AdditionalData;
-import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -41,7 +39,6 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -116,13 +113,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass generatedCharterOutEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass unscheduledCargoEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -360,7 +350,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_UnscheduledCargoes() {
+	public EReference getSchedule_CargoAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -369,7 +359,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_CargoAllocations() {
+	public EReference getSchedule_SlotAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -378,7 +368,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_SlotAllocations() {
+	public EReference getSchedule_Fitnesses() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -387,17 +377,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_Fitnesses() {
-		return (EReference)scheduleEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getSchedule_UnusedElements() {
-		return (EReference)scheduleEClass.getEStructuralFeatures().get(6);
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -761,33 +742,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getGeneratedCharterOut_Revenue() {
 		return (EAttribute)generatedCharterOutEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getUnscheduledCargo() {
-		return unscheduledCargoEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getUnscheduledCargo_LoadAllocation() {
-		return (EReference)unscheduledCargoEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getUnscheduledCargo_DischargeAllocation() {
-		return (EReference)unscheduledCargoEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1285,7 +1239,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		scheduleEClass = createEClass(SCHEDULE);
 		createEAttribute(scheduleEClass, SCHEDULE__COMPLETE);
 		createEReference(scheduleEClass, SCHEDULE__SEQUENCES);
-		createEReference(scheduleEClass, SCHEDULE__UNSCHEDULED_CARGOES);
 		createEReference(scheduleEClass, SCHEDULE__CARGO_ALLOCATIONS);
 		createEReference(scheduleEClass, SCHEDULE__SLOT_ALLOCATIONS);
 		createEReference(scheduleEClass, SCHEDULE__FITNESSES);
@@ -1337,10 +1290,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		generatedCharterOutEClass = createEClass(GENERATED_CHARTER_OUT);
 		createEAttribute(generatedCharterOutEClass, GENERATED_CHARTER_OUT__REVENUE);
-
-		unscheduledCargoEClass = createEClass(UNSCHEDULED_CARGO);
-		createEReference(unscheduledCargoEClass, UNSCHEDULED_CARGO__LOAD_ALLOCATION);
-		createEReference(unscheduledCargoEClass, UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION);
 
 		fuelUsageEClass = createEClass(FUEL_USAGE);
 		createEReference(fuelUsageEClass, FUEL_USAGE__FUELS);
@@ -1458,7 +1407,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		idleEClass.getESuperTypes().add(this.getFuelUsage());
 		generatedCharterOutEClass.getESuperTypes().add(this.getEvent());
 		generatedCharterOutEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
-		unscheduledCargoEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cooldownEClass.getESuperTypes().add(this.getEvent());
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		cargoAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
@@ -1483,7 +1431,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(scheduleEClass, Schedule.class, "Schedule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSchedule_Complete(), ecorePackage.getEBoolean(), "complete", null, 1, 1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_Sequences(), this.getSequence(), null, "sequences", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSchedule_UnscheduledCargoes(), this.getUnscheduledCargo(), null, "unscheduledCargoes", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_CargoAllocations(), this.getCargoAllocation(), null, "cargoAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_SlotAllocations(), this.getSlotAllocation(), null, "slotAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1545,10 +1492,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		initEClass(generatedCharterOutEClass, GeneratedCharterOut.class, "GeneratedCharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGeneratedCharterOut_Revenue(), ecorePackage.getEInt(), "revenue", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(unscheduledCargoEClass, UnscheduledCargo.class, "UnscheduledCargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getUnscheduledCargo_LoadAllocation(), this.getSlotAllocation(), null, "loadAllocation", null, 1, 1, UnscheduledCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUnscheduledCargo_DischargeAllocation(), this.getSlotAllocation(), null, "dischargeAllocation", null, 1, 1, UnscheduledCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fuelUsageEClass, FuelUsage.class, "FuelUsage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFuelUsage_Fuels(), this.getFuelQuantity(), null, "fuels", null, 0, -1, FuelUsage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

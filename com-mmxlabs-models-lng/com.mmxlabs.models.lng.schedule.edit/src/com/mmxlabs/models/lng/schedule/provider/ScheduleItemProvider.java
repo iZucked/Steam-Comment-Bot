@@ -152,7 +152,6 @@ public class ScheduleItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SEQUENCES);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__UNSCHEDULED_CARGOES);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__CARGO_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__SLOT_ALLOCATIONS);
 			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE__FITNESSES);
@@ -212,7 +211,6 @@ public class ScheduleItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SchedulePackage.SCHEDULE__SEQUENCES:
-			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOES:
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
 			case SchedulePackage.SCHEDULE__FITNESSES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
@@ -236,11 +234,6 @@ public class ScheduleItemProvider
 			(createChildParameter
 				(SchedulePackage.Literals.SCHEDULE__SEQUENCES,
 				 ScheduleFactory.eINSTANCE.createSequence()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE__UNSCHEDULED_CARGOES,
-				 ScheduleFactory.eINSTANCE.createUnscheduledCargo()));
 
 		newChildDescriptors.add
 			(createChildParameter
