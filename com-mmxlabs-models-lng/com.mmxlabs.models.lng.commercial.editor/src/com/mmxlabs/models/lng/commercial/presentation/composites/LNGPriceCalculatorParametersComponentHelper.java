@@ -7,8 +7,6 @@
 package com.mmxlabs.models.lng.commercial.presentation.composites;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-
 import com.mmxlabs.models.lng.types.TypesPackage;
 
 import java.util.ArrayList;
@@ -16,7 +14,6 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.ui.BaseComponentHelper;
-import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
