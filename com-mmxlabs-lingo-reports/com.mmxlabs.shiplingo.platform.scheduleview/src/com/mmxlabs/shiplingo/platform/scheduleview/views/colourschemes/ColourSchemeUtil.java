@@ -67,9 +67,9 @@ public class ColourSchemeUtil {
 			if (visit.getStart().after(visit.getSlotAllocation().getSlot().getWindowEndWithSlotOrPortTime())) {
 				return true;
 			}
-			if (visit.getStart().before(visit.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime())) {
-				return true;
-			}
+//			if (visit.getStart().before(visit.getSlotAllocation().getSlot().getWindowStartWithSlotOrPortTime())) {
+//				return true;
+//			}
 		}
 		return false;
 	}
