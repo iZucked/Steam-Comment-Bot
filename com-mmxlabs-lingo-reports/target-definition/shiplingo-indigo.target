@@ -157,8 +157,5 @@
 <unit id="org.eclipse.ocl.all.sdk.feature.group" version="4.0.1.v20120919-0602"/>
 <repository location="http://download.eclipse.org/releases/juno/"/>
 </location>
-</location>
-<location includeAllPlatforms="true" includeConfigurePhase="false" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="com.mmxlabs.rcp.common" version="2.1.0.201302041451"/>
 </locations>
 </target>
