@@ -5,13 +5,17 @@
 package com.mmxlabs.models.lng.scenario.modelCorrector;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.DeleteCommand;
@@ -67,7 +71,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * The {@link LNGModelCorrector} is intended to correct models when they are loaded. For example new references added to a metamodel may be in an incorrect state for existing model instances. This
- * class can be invoked to correct such references. Should model migration be added at some point, this class should become redundant.
+ * class can be invoked to correct such references. Much of this should now be ported to the model migration.
  * 
  * @author Simon Goodall
  * 
@@ -89,13 +93,14 @@ public class LNGModelCorrector {
 		fixRedirectionContracts(cmd, rootObject, ed);
 		fixPortCapabilityGroups(cmd, rootObject, ed);
 		fixVesselTypeGroups(cmd, rootObject, ed);
+		correctDateObjects(cmd, rootObject, ed);
 		if (!cmd.isEmpty()) {
 			ed.getCommandStack().execute(cmd);
 		}
 
 	}
 
-	private void fixPortCapabilityGroups(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
+	private void fixPortCapabilityGroups(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix port capability groups");
 
@@ -122,7 +127,7 @@ public class LNGModelCorrector {
 		}
 	}
 
-	private void fixVesselTypeGroups(CompoundCommand parent, MMXRootObject rootObject, EditingDomain ed) {
+	private void fixVesselTypeGroups(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix port capability groups");
 
@@ -484,6 +489,51 @@ public class LNGModelCorrector {
 					parent.append(SetCommand.create(ed, curve, MMXCorePackage.eINSTANCE.getNamedObject_Name(), market.getType().getName()));
 				}
 			}
+		}
+	}
+
+	private void correctDateObjects(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
+
+		final CompoundCommand cmd = new CompoundCommand("Fix date objects");
+
+		// Loop over all models
+		for (final MMXSubModel subModel : rootObject.getSubModels()) {
+			final EObject model = subModel.getSubModelInstance();
+			if (model != null) {
+				// Loop over all contents
+				final Iterator<EObject> itr = model.eAllContents();
+				while (itr.hasNext()) {
+					final EObject eObj = itr.next();
+					// Find all set date attributes
+					for (final EAttribute attrib : eObj.eClass().getEAllAttributes()) {
+						if (eObj.eIsSet(attrib)) {
+							if (attrib.getEAttributeType().equals(EcorePackage.eINSTANCE.getEDate())) {
+								final Date originalDate = (Date) eObj.eGet(attrib);
+								final Calendar c = Calendar.getInstance();
+								c.setTime(originalDate);
+								// Are the lower date fields set?
+								if (c.get(Calendar.MILLISECOND) != 0 || c.get(Calendar.SECOND) != 0 || c.get(Calendar.MINUTE) != 0) {
+									// Clear them
+									c.set(Calendar.MILLISECOND, 0);
+									c.set(Calendar.SECOND, 0);
+									c.set(Calendar.MINUTE, 0);
+
+									// Round upwards. Demo scenario in question
+									// has times of 6:55 which should be 7:00
+									// SG: Discussion with proshun - 2013/02/13
+									c.add(Calendar.HOUR_OF_DAY, 1);
+
+									cmd.append(SetCommand.create(ed, eObj, attrib, c.getTime()));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (!cmd.isEmpty()) {
+			parent.append(cmd);
 		}
 	}
 }
