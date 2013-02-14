@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.TreeSet;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.jface.viewers.IStructuredContentProvider;

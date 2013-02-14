@@ -11,11 +11,12 @@ import org.junit.Test;
 
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.FixedPriceContract;
-import com.mmxlabs.models.lng.commercial.IndexPriceContract;
-import com.mmxlabs.models.lng.commercial.PriceExpressionContract;
-import com.mmxlabs.models.lng.pricing.Index;
+import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
+import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
+import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
+import com.mmxlabs.models.lng.pricing.Index;
 
 /**
  * JUnit tests for the exposures calculations.
@@ -33,9 +34,12 @@ public class ExposuresTest {
 		Assert.assertEquals(expected, actual, 0.000000001);		
 	}
 	
-	public void testSlotExposureCoefficient(String slotPriceExpression, Contract contract, Index index, double expected) {
+	public void testSlotExposureCoefficient(String slotPriceExpression, LNGPriceCalculatorParameters priceInfo, Index index, double expected) {
 		Slot slot = mock(Slot.class);
+		Contract contract = mock(Contract.class);
 		when(slot.getContract()).thenReturn(contract);
+		when(contract.getPriceInfo()).thenReturn(priceInfo);
+		
 		if (slotPriceExpression != null) {
 			when(slot.isSetPriceExpression()).thenReturn(true);
 			when(slot.getPriceExpression()).thenReturn(slotPriceExpression);
@@ -74,16 +78,16 @@ public class ExposuresTest {
 		when(otherIndex.getName()).thenReturn(redHerringName);
 		
 		// set up mock contracts
-		FixedPriceContract fixedPriceContract = mock(FixedPriceContract.class);
+		FixedPriceParameters fixedPriceContract = mock(FixedPriceParameters.class);
 		
-		PriceExpressionContract priceExpressionContract = mock(PriceExpressionContract.class);
+		ExpressionPriceParameters priceExpressionContract = mock(ExpressionPriceParameters.class);
 		when(priceExpressionContract.getPriceExpression()).thenReturn(contractPriceExpression);
 		
-		IndexPriceContract indexPriceContract1 = mock(IndexPriceContract.class);
+		IndexPriceParameters indexPriceContract1 = mock(IndexPriceParameters.class);
 		when(indexPriceContract1.getMultiplier()).thenReturn(ipcCoefficient);
 		when(indexPriceContract1.getIndex()).thenReturn(index);
 		
-		IndexPriceContract indexPriceContract2 = mock(IndexPriceContract.class);
+		IndexPriceParameters indexPriceContract2 = mock(IndexPriceParameters.class);
 		when(indexPriceContract2.getMultiplier()).thenReturn(ipcCoefficient);
 		when(indexPriceContract2.getIndex()).thenReturn(otherIndex);
 		
@@ -103,11 +107,6 @@ public class ExposuresTest {
 		testSlotExposureCoefficient(slotPriceExpression, fixedPriceContract, index, slotCoefficient);
 		testSlotExposureCoefficient(slotPriceExpression, priceExpressionContract, index, slotCoefficient);
 		testSlotExposureCoefficient(slotPriceExpression, indexPriceContract1, index, slotCoefficient);
-		
-		
-		
 	}
-	
-	
 	
 }
