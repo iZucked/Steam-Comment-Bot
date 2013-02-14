@@ -8,7 +8,7 @@
 <feature
       id="com.mmxlabs.shiplingo.platform.feature"
       label="Shiplingo Platform Feature"
-      version="2.0.3.RELEASE"
+      version="2.0.4.RELEASE"
       provider-name="Minimax Labs Ltd."
       plugin="com.mmxlabs.shiplingo.platform.app">
 
