@@ -13,8 +13,8 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 
 import com.mmxlabs.models.lng.cargo.CargoPackage;
 import com.mmxlabs.models.lng.cargo.Slot;
-import com.mmxlabs.models.lng.pricing.CharterCostModel;
-import com.mmxlabs.models.lng.pricing.PricingModel;
+import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.AbstractModelMultiConstraint;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -34,14 +34,14 @@ public class BreakEvenCharterOutConstraint extends AbstractModelMultiConstraint 
 			final Slot slot = (Slot) target;
 			final IExtraValidationContext extraContext = Activator.getDefault().getExtraValidationContext();
 			final MMXRootObject rootObject = extraContext.getRootObject();
-			final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
+			final SpotMarketsModel spotMarketsModel = rootObject.getSubModel(SpotMarketsModel.class);
 
-			if (pricingModel == null) {
+			if (spotMarketsModel == null) {
 				// Nothing to validate against
 				return Activator.PLUGIN_ID;
 			}
 			boolean charterOutEnabled = false;
-			for (final CharterCostModel ccm : pricingModel.getFleetCost().getCharterCosts()) {
+			for (final CharterCostModel ccm : spotMarketsModel.getCharteringSpotMarkets()) {
 				if (ccm.getCharterOutPrice() != null) {
 					charterOutEnabled = true;
 					break;
