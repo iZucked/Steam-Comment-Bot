@@ -74,24 +74,25 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
-import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
-import com.mmxlabs.models.lng.pricing.DESSalesMarket;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
-import com.mmxlabs.models.lng.pricing.FOBPurchasesMarket;
-import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PortCostEntry;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.SpotAvailability;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
-import com.mmxlabs.models.lng.pricing.SpotType;
+import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
@@ -719,7 +720,7 @@ public class LNGScenarioTransformer {
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
-					if (loadSlot.getContract() .getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
+					if (loadSlot.getContract().getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
 						// Redirection contracts can go to anywhere
 						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
 					} else {
@@ -867,7 +868,7 @@ public class LNGScenarioTransformer {
 		{
 			// convenience variables
 			final String name = dischargeSlot.getName();
-			IPort port = portAssociation.lookup(dischargeSlot.getPort());
+			final IPort port = portAssociation.lookup(dischargeSlot.getPort());
 			final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity());
 			final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
 			final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
@@ -945,16 +946,16 @@ public class LNGScenarioTransformer {
 
 			final ITimeWindow localTimeWindow;
 			// FIXME: This should not really be in the builder, but need better API to permit this kind of transformation.
-			if (loadSlot.getContract() .getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
+			if (loadSlot.getContract().getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
 				// Redirection contracts can go to anywhere, so need larger window for compatibility
 				final int extraTime = 24 * 60; // approx 2 months
 				Date originalDate = null;
 				for (final UUIDObject ext : loadSlot.getExtensions()) {
 					if (ext.getClass().getSimpleName().equals("RedirectionContractOriginalDate")) {
-//						final RedirectionContractOriginalDate originalDateExt = (RedirectionContractOriginalDate) ext;
+						// final RedirectionContractOriginalDate originalDateExt = (RedirectionContractOriginalDate) ext;
 						final Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone(loadSlot.getTimeZone(CargoPackage.eINSTANCE.getSlot_WindowStart())));
-						EStructuralFeature feature = ext.eClass().getEStructuralFeature("date");
-						Date originalDateExt = (Date)ext.eGet(feature);
+						final EStructuralFeature feature = ext.eClass().getEStructuralFeature("date");
+						final Date originalDateExt = (Date) ext.eGet(feature);
 						calendar.setTime(originalDateExt);
 						originalDate = calendar.getTime();
 					}
@@ -990,17 +991,17 @@ public class LNGScenarioTransformer {
 	private void buildSpotCargoMarkets(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Index<?>, ICurve> indexAssociation,
 			final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities) {
 
-		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
-		if (pricingModel == null) {
+		final SpotMarketsModel spotMarketsModel = rootObject.getSubModel(SpotMarketsModel.class);
+		if (spotMarketsModel == null) {
 			return;
 		}
 		final Date earliestDate = getOptimisationSettings().getRange().isSetOptimiseAfter() ? getOptimisationSettings().getRange().getOptimiseAfter() : earliestTime;
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 
-		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, pricingModel.getDesPurchaseSpotMarket());
-		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, pricingModel.getDesSalesSpotMarket());
-		buildFOBPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, pricingModel.getFobPurchasesSpotMarket());
-		buildFOBSalesSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, pricingModel.getFobSalesSpotMarket());
+		buildDESPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, spotMarketsModel.getDesPurchaseSpotMarket());
+		buildDESSalesSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, spotMarketsModel.getDesSalesSpotMarket());
+		buildFOBPurchaseSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, spotMarketsModel.getFobPurchasesSpotMarket());
+		buildFOBSalesSpotMarket(builder, portAssociation, contractTransformers, entities, earliestDate, latestDate, spotMarketsModel.getFobSalesSpotMarket());
 
 	}
 
@@ -1560,7 +1561,7 @@ public class LNGScenarioTransformer {
 
 		final FleetModel fleetModel = rootObject.getSubModel(FleetModel.class);
 		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
-
+		final SpotMarketsModel spotMarketsModel = rootObject.getSubModel(SpotMarketsModel.class);
 		// look up prices
 
 		for (final VesselClass eVc : fleetModel.getVesselClasses()) {
@@ -1620,7 +1621,7 @@ public class LNGScenarioTransformer {
 
 		{
 			int charterCount = 0;
-			for (final CharterCostModel charterCost : pricingModel.getFleetCost().getCharterCosts()) {
+			for (final CharterCostModel charterCost : spotMarketsModel.getCharteringSpotMarkets()) {
 
 				for (final VesselClass eVc : charterCost.getVesselClasses()) {
 					final ICurve charterInCurve;

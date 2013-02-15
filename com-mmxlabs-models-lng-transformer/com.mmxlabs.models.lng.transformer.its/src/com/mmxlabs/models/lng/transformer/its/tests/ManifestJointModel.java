@@ -36,6 +36,8 @@ import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.schedule.ScheduleFactory;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXCoreFactory;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -61,6 +63,7 @@ public class ManifestJointModel {
 	private static final String ROOT_MODEL_KEY = "root-model";
 	private static final String OPTIMISER_MODEL_KEY = "optimiser-model";
 	private static final String ANALYTICS_MODEL_KEY = "analytics-model";
+	private static final String SPOT_MARKETS_MODEL_KEY = "spot-markets-model";
 
 	/**
 	 * This map lets us know what kind of model class has what key.
@@ -77,6 +80,7 @@ public class ManifestJointModel {
 		modelClassKeys.put(SchedulePackage.eINSTANCE.getScheduleModel(), SCHEDULE_MODEL_KEY);
 		modelClassKeys.put(OptimiserPackage.eINSTANCE.getOptimiserModel(), OPTIMISER_MODEL_KEY);
 //		modelClassKeys.put(AnalyticsPackage.eINSTANCE.getAnalyticsModel(), ANALYTICS_MODEL_KEY);
+		modelClassKeys.put(SpotMarketsPackage.eINSTANCE.getSpotMarketsModel(), SPOT_MARKETS_MODEL_KEY);
 
 		/*
 		 * There is no migration history for MMXCore, but this is not a problem; the joint model will ignore submodels which have no release history and leave them out of the upgrade process.
@@ -113,6 +117,7 @@ public class ManifestJointModel {
 		rootObject.addSubModel(ScheduleFactory.eINSTANCE.createScheduleModel());
 		rootObject.addSubModel(CommercialFactory.eINSTANCE.createCommercialModel());
 		rootObject.addSubModel(OptimiserFactory.eINSTANCE.createOptimiserModel());
+		rootObject.addSubModel(SpotMarketsFactory.eINSTANCE.createSpotMarketsModel());
 //		rootObject.addSubModel(AnalyticsFactory.eINSTANCE.createAnalyticsModel());
 
 		if (models != null) {

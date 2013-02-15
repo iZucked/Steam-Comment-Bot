@@ -50,7 +50,6 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
@@ -65,6 +64,9 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
+import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
@@ -203,6 +205,7 @@ public class ScenarioTools {
 
 		final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
 		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final SpotMarketsModel spotMarketsModel = scenario.getSubModel(SpotMarketsModel.class);
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -260,12 +263,12 @@ public class ScenarioTools {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		final CharterCostModel charterCostModel = PricingFactory.eINSTANCE.createCharterCostModel();
+		final CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
 		charterCostModel.setSpotCharterCount(spotCharterCount);
 		// Costs
 		charterCostModel.getVesselClasses().add(vc);
 
-		fleetCostModel.getCharterCosts().add(charterCostModel);
+		spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
 
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
@@ -346,7 +349,7 @@ public class ScenarioTools {
 		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final FixedPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createFixedPriceParameters();
 		pc.setPriceInfo(purchaseParams);
-		
+
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
 		final DataIndex<Double> sales = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");
@@ -464,6 +467,7 @@ public class ScenarioTools {
 		final FleetModel fleetModel = scenario.getSubModel(FleetModel.class);
 		final PricingModel pricingModel = scenario.getSubModel(PricingModel.class);
 		final FleetCostModel fleetCostModel = pricingModel.getFleetCost();
+		final SpotMarketsModel spotMarketsModel = scenario.getSubModel(SpotMarketsModel.class);
 
 		// 'magic' numbers that could be set in the arguments.
 		// vessel class
@@ -508,12 +512,12 @@ public class ScenarioTools {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		final CharterCostModel charterCostModel = PricingFactory.eINSTANCE.createCharterCostModel();
+		final CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
 		charterCostModel.setSpotCharterCount(spotCharterCount);
 		// Costs
 		charterCostModel.getVesselClasses().add(vc);
 
-		fleetCostModel.getCharterCosts().add(charterCostModel);
+		spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
 
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
@@ -587,13 +591,11 @@ public class ScenarioTools {
 
 		e.setName("Other");
 		s.setName("Shipping");
-		
-		
 
 		final PurchaseContract pc = CommercialFactory.eINSTANCE.createPurchaseContract();
 		final FixedPriceParameters purchaseParams = CommercialFactory.eINSTANCE.createFixedPriceParameters();
 		pc.setPriceInfo(purchaseParams);
-		
+
 		final SalesContract sc = CommercialFactory.eINSTANCE.createSalesContract();
 		final DataIndex<Double> sales = PricingFactory.eINSTANCE.createDataIndex();
 		sales.setName("Sales");

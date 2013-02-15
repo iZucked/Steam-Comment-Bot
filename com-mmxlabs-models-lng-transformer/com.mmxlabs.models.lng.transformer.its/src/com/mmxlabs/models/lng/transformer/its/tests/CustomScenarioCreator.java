@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
@@ -49,11 +48,13 @@ import com.mmxlabs.models.lng.port.PortModel;
 import com.mmxlabs.models.lng.port.Route;
 import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.transformer.its.tests.calculation.ScenarioTools;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -75,6 +76,7 @@ public class CustomScenarioCreator {
 	private final FleetModel fleetModel;
 	private final PricingModel pricingModel;
 	private final OptimiserModel optimiserModel;
+	private final SpotMarketsModel spotMarketsModel;
 
 	final SalesContract sc;
 	final PurchaseContract pc;
@@ -97,6 +99,7 @@ public class CustomScenarioCreator {
 		fleetModel = scenario.getSubModel(FleetModel.class);
 		pricingModel = scenario.getSubModel(PricingModel.class);
 		optimiserModel = scenario.getSubModel(OptimiserModel.class);
+		spotMarketsModel = scenario.getSubModel(SpotMarketsModel.class);
 
 		contractEntity = CommercialFactory.eINSTANCE.createLegalEntity();
 		shippingEntity = CommercialFactory.eINSTANCE.createLegalEntity();
@@ -199,12 +202,12 @@ public class CustomScenarioCreator {
 		vc.setMinHeel(minHeelVolume);
 		vc.setFillCapacity(fillCapacity);
 
-		CharterCostModel charterCostModel = PricingFactory.eINSTANCE.createCharterCostModel();
+		CharterCostModel charterCostModel = SpotMarketsFactory.eINSTANCE.createCharterCostModel();
 		charterCostModel.setSpotCharterCount(spotCharterCount);
 		// Costs
 		charterCostModel.getVesselClasses().add(vc);
 
-		fleetCostModel.getCharterCosts().add(charterCostModel);
+		spotMarketsModel.getCharteringSpotMarkets().add(charterCostModel);
 
 		final FuelConsumption ladenMin = FleetFactory.eINSTANCE.createFuelConsumption();
 		final FuelConsumption ladenMax = FleetFactory.eINSTANCE.createFuelConsumption();
