@@ -32,7 +32,7 @@ public class ScenarioMigrationService implements IScenarioMigrationService {
 
 			final int scenarioVersion = scenarioInstance.getScenarioVersion();
 
-			if (latestVersion == -1 || scenarioVersion < latestVersion) {
+			if (latestVersion < 0 || scenarioVersion < latestVersion) {
 
 				final ScenarioInstanceMigrator migrator = new ScenarioInstanceMigrator(getMigrationRegistry());
 				migrator.performMigration(scenarioService, scenarioInstance);
