@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/com.mmxlabs.models.lng.spotmarkets/src" modelPluginID="com.mmxlabs.models.lng.spotmarkets"
+    templateDirectory="platform:/plugin/com.mmxlabs.models.mmxcore.template/templates/"
+    dynamicTemplates="true" modelName="SpotMarkets" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false" usedGenPackages="../../com.mmxlabs.models.lng.pricing/model/pricing.genmodel#//pricing platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.genmodel#//types platform:/plugin/com.mmxlabs.models.mmxcore/model/mmxcore.genmodel#//mmxcore">
+  <foreignModel>spotmarkets.ecore</foreignModel>
+  <genPackages prefix="SpotMarkets" basePackage="com.mmxlabs.models.lng" disposableProviderFactory="true"
+      generateModelWizard="false" ecorePackage="spotmarkets.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="spotmarkets.ecore#//SpotType">
+      <genEnumLiterals ecoreEnumLiteral="spotmarkets.ecore#//SpotType/FOBSale"/>
+      <genEnumLiterals ecoreEnumLiteral="spotmarkets.ecore#//SpotType/DESPurchase"/>
+      <genEnumLiterals ecoreEnumLiteral="spotmarkets.ecore#//SpotType/DESSale"/>
+      <genEnumLiterals ecoreEnumLiteral="spotmarkets.ecore#//SpotType/FOBPurchase"/>
+    </genEnums>
+    <genClasses ecoreClass="spotmarkets.ecore#//SpotMarketsModel">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/desPurchaseSpotMarket"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/desSalesSpotMarket"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/fobPurchasesSpotMarket"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/fobSalesSpotMarket"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketsModel/charteringSpotMarkets"/>
+    </genClasses>
+    <genClasses ecoreClass="spotmarkets.ecore#//CharterCostModel">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterCostModel/vesselClasses"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterCostModel/charterInPrice"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//CharterCostModel/charterOutPrice"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterCostModel/spotCharterCount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//CharterCostModel/minCharterOutDuration"/>
+    </genClasses>
+    <genClasses ecoreClass="spotmarkets.ecore#//SpotMarketGroup">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketGroup/availability"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarketGroup/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarketGroup/markets"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="spotmarkets.ecore#//SpotMarket">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotMarket/availability"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/minQuantity"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotMarket/maxQuantity"/>
+      <genOperations ecoreOperation="spotmarkets.ecore#//SpotMarket/getContract"/>
+    </genClasses>
+    <genClasses ecoreClass="spotmarkets.ecore#//DESPurchaseMarket">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//DESPurchaseMarket/cv"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//DESPurchaseMarket/destinationPorts"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//DESPurchaseMarket/contract"/>
+    </genClasses>
+    <genClasses ecoreClass="spotmarkets.ecore#//DESSalesMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//DESSalesMarket/notionalPort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//DESSalesMarket/contract"/>
+    </genClasses>
+    <genClasses ecoreClass="spotmarkets.ecore#//FOBPurchasesMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//FOBPurchasesMarket/notionalPort"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//FOBPurchasesMarket/cv"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//FOBPurchasesMarket/contract"/>
+    </genClasses>
+    <genClasses ecoreClass="spotmarkets.ecore#//FOBSalesMarket">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//FOBSalesMarket/loadPort"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//FOBSalesMarket/contract"/>
+    </genClasses>
+    <genClasses ecoreClass="spotmarkets.ecore#//SpotAvailability">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute spotmarkets.ecore#//SpotAvailability/constant"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference spotmarkets.ecore#//SpotAvailability/curve"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

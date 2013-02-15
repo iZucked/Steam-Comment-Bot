@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: com.mmxlabs.models.lng.spotmarkets.edit;singleton:=true
+Bundle-Version: 3.0.0.qualifier
+Bundle-ClassPath: .
+Bundle-Activator: com.mmxlabs.models.lng.spotmarkets.provider.SpotMarketsEditPlugin$Implementation
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.mmxlabs.models.lng.spotmarkets.provider
+Require-Bundle: org.eclipse.core.runtime,
+ com.mmxlabs.models.lng.spotmarkets;visibility:=reexport,
+ org.eclipse.emf.edit;visibility:=reexport,
+ com.mmxlabs.models.lng.pricing.edit;visibility:=reexport,
+ com.mmxlabs.models.lng.types.edit;visibility:=reexport
+Bundle-ActivationPolicy: lazy
