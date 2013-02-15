@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
@@ -31,6 +32,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -50,7 +52,7 @@ public class SchedulePnLReport extends EMFReportView {
 	 * The ID of the view as specified by the extension.
 	 */
 	public static final String ID = "com.mmxlabs.shiplingo.platform.reports.views.SchedulePnLReport";
-	final List<String> entityColumnNames = new ArrayList<String>(); 
+	final List<String> entityColumnNames = new ArrayList<String>();
 
 	public SchedulePnLReport() {
 		super("com.mmxlabs.shiplingo.platform.reports.CargoPnLReportView");
@@ -61,13 +63,13 @@ public class SchedulePnLReport extends EMFReportView {
 
 		addColumn("ID", objectFormatter, s.getEvent__Name());
 
-		// add the total (aggregate) P&L column 
+		// add the total (aggregate) P&L column
 		addPNLColumn();
-		
-		//CommercialModel.getEntities();
-		
-		//addPNLColumn("Asia");
-		//addPNLColumn("Europe");
+
+		// CommercialModel.getEntities();
+
+		// addPNLColumn("Asia");
+		// addPNLColumn("Europe");
 
 		addColumn("Discharge Port", new BaseFormatter() {
 			@Override
@@ -150,7 +152,13 @@ public class SchedulePnLReport extends EMFReportView {
 
 			Double getValue(final SlotVisit visit) {
 				final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-				if (cargoAllocation.getInputCargo().getCargoType() != CargoType.FLEET) {
+				if (cargoAllocation == null) {
+				}
+				final Cargo inputCargo = cargoAllocation.getInputCargo();
+				if (inputCargo == null) {
+					return null;
+				}
+				if (inputCargo.getCargoType() != CargoType.FLEET) {
 					return null;
 				}
 				// TODO: Fixed (other) port costs?
@@ -160,7 +168,11 @@ public class SchedulePnLReport extends EMFReportView {
 				if (dataWithKey != null) {
 					final Integer v = dataWithKey.getValueAs(Integer.class);
 					if (v != null) {
-						final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
+						SlotAllocation loadAllocation = cargoAllocation.getLoadAllocation();
+						if (loadAllocation == null) {
+							return null;
+						}
+						final double dischargeVolumeInMMBTu = (double) cargoAllocation.getDischargeVolume() * ((LoadSlot) loadAllocation.getSlot()).getSlotOrPortCV();
 						if (dischargeVolumeInMMBTu == 0.0) {
 							return 0.0;
 						}
@@ -236,61 +248,57 @@ public class SchedulePnLReport extends EMFReportView {
 		if (container == null) {
 			return null;
 		}
-		
+
 		ExtraData data = null;
-		
-		// supplying null for the entity name indicates that the total group P&L should be returned 
+
+		// supplying null for the entity name indicates that the total group P&L should be returned
 		if (entity == null) {
 			data = container.getDataWithKey(TradingConstants.ExtraData_GroupValue);
 		}
-		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data 
+		// with a specific entity name, we search the upstream, shipping and downstream entities for the P&L data
 		else {
-			final String [] options = { TradingConstants.ExtraData_upstream, TradingConstants.ExtraData_shipped, TradingConstants.ExtraData_downstream  };
-			for (final String option: options) {
-				ExtraData possibleData = container.getDataWithKey(option);
+			final String[] options = { TradingConstants.ExtraData_upstream, TradingConstants.ExtraData_shipped, TradingConstants.ExtraData_downstream };
+			for (final String option : options) {
+				final ExtraData possibleData = container.getDataWithKey(option);
 				if (possibleData != null) {
-					ExtraData entityData = possibleData.getDataWithKey(entity);
+					final ExtraData entityData = possibleData.getDataWithKey(entity);
 					if (entityData != null) {
 						data = entityData.getDataWithKey(TradingConstants.ExtraData_pnl);
 					}
 				}
-				
+
 			}
 		}
-		
+
 		if (data == null) {
 			return null;
 		}
-		
-		return data.getValueAs(Integer.class);		
+
+		return data.getValueAs(Integer.class);
 	}
-	
+
 	private void addPNLColumn() {
 		addPNLColumn("Group Total", null);
 	}
-	
+
 	private void addPNLColumn(final String entityName) {
 		addPNLColumn(entityName, entityName);
 	}
-	
+
 	private void addPNLColumn(final String entityLabel, final String entityKey) {
 		final String title = String.format("P&L (%s)", entityLabel);
-		
+
 		// HACK: don't the label to the entity column names if the column is for total group P&L
 		if (entityKey != null) {
 			entityColumnNames.add(title);
 		}
-		
+
 		addColumn(title, new IntegerFormatter() {
 			@Override
 			public Integer getIntValue(final Object object) {
 				ExtraDataContainer container = null;
 
-				if (object instanceof CargoAllocation
-						|| object instanceof VesselEventVisit
-						|| object instanceof StartEvent
-						|| object instanceof GeneratedCharterOut) 
-				{
+				if (object instanceof CargoAllocation || object instanceof VesselEventVisit || object instanceof StartEvent || object instanceof GeneratedCharterOut) {
 					container = (ExtraDataContainer) object;
 				}
 				if (object instanceof SlotVisit) {
@@ -304,11 +312,11 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 		});
 	}
-	
+
 	@Override
 	protected IStructuredContentProvider getContentProvider() {
 		final IStructuredContentProvider superProvider = super.getContentProvider();
-		
+
 		return new IStructuredContentProvider() {
 			@Override
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
@@ -332,8 +340,10 @@ public class SchedulePnLReport extends EMFReportView {
 							for (final MMXRootObject rootObject : rootObjects) {
 
 								final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-								for (final LegalEntity e : commercialModel.getEntities()) {
-									addPNLColumn(e.getName());
+								if (commercialModel != null) {
+									for (final LegalEntity e : commercialModel.getEntities()) {
+										addPNLColumn(e.getName());
+									}
 								}
 							}
 						}
@@ -354,7 +364,6 @@ public class SchedulePnLReport extends EMFReportView {
 			}
 		};
 	}
-	
 
 	@Override
 	protected void processInputs(final Object[] result) {
