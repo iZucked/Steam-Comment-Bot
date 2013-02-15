@@ -103,16 +103,16 @@ import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
-import com.mmxlabs.models.lng.pricing.DESSalesMarket;
-import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
-import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
-import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewer;
@@ -1559,7 +1559,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 	}
 
 	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source, final boolean sourceIsLoad) {
-		final PricingModel pricingModel = jointModelEditorPart.getRootObject().getSubModel(PricingModel.class);
+		final SpotMarketsModel pricingModel = jointModelEditorPart.getRootObject().getSubModel(SpotMarketsModel.class);
 		final Collection<SpotMarket> validMarkets = new LinkedList<SpotMarket>();
 		String menuName = "";
 		boolean isSpecial = false;

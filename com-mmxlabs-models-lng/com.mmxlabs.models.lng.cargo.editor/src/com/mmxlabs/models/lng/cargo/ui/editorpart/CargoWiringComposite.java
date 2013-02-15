@@ -71,13 +71,13 @@ import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.input.InputModel;
 import com.mmxlabs.models.lng.input.editor.utils.AssignmentEditorHelper;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
-import com.mmxlabs.models.lng.pricing.DESSalesMarket;
-import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
-import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
-import com.mmxlabs.models.lng.pricing.SpotType;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.APort;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -1669,13 +1669,13 @@ public class CargoWiringComposite extends Composite {
 	}
 
 	void createSpotMarketMenu(final IMenuManager manager, final SpotType spotType, final Slot source, final boolean sourceIsLoad) {
-		final PricingModel pricingModel = location.getRootObject().getSubModel(PricingModel.class);
+		final SpotMarketsModel spotMarketsModel = location.getRootObject().getSubModel(SpotMarketsModel.class);
 		final Collection<SpotMarket> validMarkets = new LinkedList<SpotMarket>();
 		String menuName = "";
 		boolean isSpecial = false;
 		if (spotType == SpotType.DES_PURCHASE) {
 			menuName = "DES Purchase";
-			final SpotMarketGroup group = pricingModel.getDesPurchaseSpotMarket();
+			final SpotMarketGroup group = spotMarketsModel.getDesPurchaseSpotMarket();
 			for (final SpotMarket market : group.getMarkets()) {
 				final Set<APort> ports = SetUtils.getPorts(((DESPurchaseMarket) market).getDestinationPorts());
 				if (ports.contains(source.getPort())) {
@@ -1685,13 +1685,13 @@ public class CargoWiringComposite extends Composite {
 			isSpecial = true;
 		} else if (spotType == SpotType.DES_SALE) {
 			menuName = "DES Sale";
-			validMarkets.addAll(pricingModel.getDesSalesSpotMarket().getMarkets());
+			validMarkets.addAll(spotMarketsModel.getDesSalesSpotMarket().getMarkets());
 		} else if (spotType == SpotType.FOB_PURCHASE) {
 			menuName = "FOB Purchase";
-			validMarkets.addAll(pricingModel.getFobPurchasesSpotMarket().getMarkets());
+			validMarkets.addAll(spotMarketsModel.getFobPurchasesSpotMarket().getMarkets());
 		} else if (spotType == SpotType.FOB_SALE) {
 			menuName = "FOB Sale";
-			final SpotMarketGroup group = pricingModel.getFobSalesSpotMarket();
+			final SpotMarketGroup group = spotMarketsModel.getFobSalesSpotMarket();
 			for (final SpotMarket market : group.getMarkets()) {
 				final APort loadPort = ((FOBSalesMarket) market).getLoadPort();
 				if (loadPort == source.getPort()) {

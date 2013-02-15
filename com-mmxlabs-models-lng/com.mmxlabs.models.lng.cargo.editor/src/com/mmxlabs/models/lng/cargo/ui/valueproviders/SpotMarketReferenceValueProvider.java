@@ -16,9 +16,9 @@ import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.BaseReferenceValueProvider;
 
@@ -47,18 +47,18 @@ public class SpotMarketReferenceValueProvider extends BaseReferenceValueProvider
 			final SpotLoadSlot slot = (SpotLoadSlot) target;
 
 			if (slot.isDESPurchase()) {
-				feature = PricingPackage.eINSTANCE.getPricingModel_DesPurchaseSpotMarket();
+				feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket();
 			} else {
-				feature = PricingPackage.eINSTANCE.getPricingModel_FobPurchasesSpotMarket();
+				feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobPurchasesSpotMarket();
 			}
 		} else if (target instanceof SpotDischargeSlot) {
 
 			final SpotDischargeSlot slot = (SpotDischargeSlot) target;
 
 			if (slot.isFOBSale()) {
-				feature = PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket();
+				feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobSalesSpotMarket();
 			} else {
-				feature = PricingPackage.eINSTANCE.getPricingModel_DesSalesSpotMarket();
+				feature = SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesSalesSpotMarket();
 			}
 		} else {
 			feature = null;

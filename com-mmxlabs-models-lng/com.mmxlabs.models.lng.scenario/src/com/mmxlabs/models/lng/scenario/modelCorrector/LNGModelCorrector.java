@@ -56,16 +56,19 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.SpotAvailability;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
-import com.mmxlabs.models.lng.pricing.SpotType;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.ScheduleModel;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
+import com.mmxlabs.models.lng.spotmarkets.SpotAvailability;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.types.AVesselSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
@@ -93,7 +96,7 @@ public class LNGModelCorrector {
 		removeBadElementAssignments(cmd, rootObject, ed);
 		fixMissingSpotCargoMarkets(cmd, rootObject, ed);
 		fixSequenceTypes(cmd, rootObject, ed);
-//		fixRedirectionContracts(cmd, rootObject, ed);
+		// fixRedirectionContracts(cmd, rootObject, ed);
 		fixPortCapabilityGroups(cmd, rootObject, ed);
 		fixVesselTypeGroups(cmd, rootObject, ed);
 		correctDateObjects(cmd, rootObject, ed);
@@ -255,51 +258,51 @@ public class LNGModelCorrector {
 		}
 	}
 
-//	private void fixRedirectionContracts(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
-//		final CompoundCommand cmd = new CompoundCommand("Fix redirection contracts");
-//
-//		final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
-//		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-//		if (cargoModel != null && commercialModel != null) {
-//			LOOP_SLOTS: for (final LoadSlot slot : cargoModel.getLoadSlots()) {
-//				if (slot.getContract() instanceof RedirectionPurchaseContract) {
-//					final RedirectionPurchaseContract redirectionPurchaseContract = (RedirectionPurchaseContract) slot.getContract();
-//
-//					if (slot.getPort() != redirectionPurchaseContract.getBaseSalesMarketPort()) {
-//						return;
-//					}
-//
-//					final Calendar cal = Calendar.getInstance();
-//					cal.setTime(slot.getWindowStartWithSlotOrPortTime());
-//					cal.add(Calendar.DAY_OF_YEAR, -redirectionPurchaseContract.getDaysFromSource());
-//
-//					RedirectionContractOriginalDate redirectionContractOriginalDate = null;
-//					for (final UUIDObject ext : slot.getExtensions()) {
-//						if (ext instanceof RedirectionContractOriginalDate) {
-//							redirectionContractOriginalDate = (RedirectionContractOriginalDate) ext;
-//							// Check valid
-//							if (cal.getTime() == redirectionContractOriginalDate.getDate()) {
-//
-//								// We're ok, next slot
-//								continue LOOP_SLOTS;
-//							}
-//						}
-//					}
-//					// Nothing found, create extension
-//					if (redirectionContractOriginalDate == null) {
-//						redirectionContractOriginalDate = CommercialFactory.eINSTANCE.createRedirectionContractOriginalDate();
-//
-//						cmd.append(AddCommand.create(ed, slot, MMXCorePackage.eINSTANCE.getMMXObject_Extensions(), redirectionContractOriginalDate));
-//						cmd.append(AddCommand.create(ed, commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_ContractSlotExtensions(), redirectionContractOriginalDate));
-//					}
-//					cmd.append(SetCommand.create(ed, redirectionContractOriginalDate, CommercialPackage.eINSTANCE.getRedirectionContractOriginalDate_Date(), cal.getTime()));
-//				}
-//			}
-//		}
-//		if (!cmd.isEmpty()) {
-//			parent.append(cmd);
-//		}
-//	}
+	// private void fixRedirectionContracts(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
+	// final CompoundCommand cmd = new CompoundCommand("Fix redirection contracts");
+	//
+	// final CargoModel cargoModel = rootObject.getSubModel(CargoModel.class);
+	// final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
+	// if (cargoModel != null && commercialModel != null) {
+	// LOOP_SLOTS: for (final LoadSlot slot : cargoModel.getLoadSlots()) {
+	// if (slot.getContract() instanceof RedirectionPurchaseContract) {
+	// final RedirectionPurchaseContract redirectionPurchaseContract = (RedirectionPurchaseContract) slot.getContract();
+	//
+	// if (slot.getPort() != redirectionPurchaseContract.getBaseSalesMarketPort()) {
+	// return;
+	// }
+	//
+	// final Calendar cal = Calendar.getInstance();
+	// cal.setTime(slot.getWindowStartWithSlotOrPortTime());
+	// cal.add(Calendar.DAY_OF_YEAR, -redirectionPurchaseContract.getDaysFromSource());
+	//
+	// RedirectionContractOriginalDate redirectionContractOriginalDate = null;
+	// for (final UUIDObject ext : slot.getExtensions()) {
+	// if (ext instanceof RedirectionContractOriginalDate) {
+	// redirectionContractOriginalDate = (RedirectionContractOriginalDate) ext;
+	// // Check valid
+	// if (cal.getTime() == redirectionContractOriginalDate.getDate()) {
+	//
+	// // We're ok, next slot
+	// continue LOOP_SLOTS;
+	// }
+	// }
+	// }
+	// // Nothing found, create extension
+	// if (redirectionContractOriginalDate == null) {
+	// redirectionContractOriginalDate = CommercialFactory.eINSTANCE.createRedirectionContractOriginalDate();
+	//
+	// cmd.append(AddCommand.create(ed, slot, MMXCorePackage.eINSTANCE.getMMXObject_Extensions(), redirectionContractOriginalDate));
+	// cmd.append(AddCommand.create(ed, commercialModel, CommercialPackage.eINSTANCE.getCommercialModel_ContractSlotExtensions(), redirectionContractOriginalDate));
+	// }
+	// cmd.append(SetCommand.create(ed, redirectionContractOriginalDate, CommercialPackage.eINSTANCE.getRedirectionContractOriginalDate_Date(), cal.getTime()));
+	// }
+	// }
+	// }
+	// if (!cmd.isEmpty()) {
+	// parent.append(cmd);
+	// }
+	// }
 
 	private void fixSequenceTypes(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 		final CompoundCommand cmd = new CompoundCommand("Fix sequence types");
@@ -485,50 +488,50 @@ public class LNGModelCorrector {
 	private void fixMissingSpotCargoMarkets(final CompoundCommand parent, final MMXRootObject rootObject, final EditingDomain ed) {
 
 		final CompoundCommand cmd = new CompoundCommand("Fix missing spot cargo markets");
-		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
-		if (pricingModel != null) {
+		final SpotMarketsModel spotMarketsModel = rootObject.getSubModel(SpotMarketsModel.class);
+		if (spotMarketsModel != null) {
 
-			if (pricingModel.getDesPurchaseSpotMarket() == null) {
-				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
+			if (spotMarketsModel.getDesPurchaseSpotMarket() == null) {
+				final SpotMarketGroup group = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.DES_PURCHASE);
-				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesPurchaseSpotMarket(), group));
+				cmd.append(SetCommand.create(ed, spotMarketsModel, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket(), group));
 				fixSpotMarketGroupAvailabilityName(parent, group, ed);
 			} else {
-				fixSpotMarketGroupAvailabilityName(parent, pricingModel.getDesPurchaseSpotMarket(), ed);
-				for (final SpotMarket market : pricingModel.getDesPurchaseSpotMarket().getMarkets()) {
+				fixSpotMarketGroupAvailabilityName(parent, spotMarketsModel.getDesPurchaseSpotMarket(), ed);
+				for (final SpotMarket market : spotMarketsModel.getDesPurchaseSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
 				}
 			}
-			if (pricingModel.getDesSalesSpotMarket() == null) {
-				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
+			if (spotMarketsModel.getDesSalesSpotMarket() == null) {
+				final SpotMarketGroup group = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.DES_SALE);
-				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_DesSalesSpotMarket(), group));
+				cmd.append(SetCommand.create(ed, spotMarketsModel, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesSalesSpotMarket(), group));
 				fixSpotMarketGroupAvailabilityName(parent, group, ed);
 			} else {
-				fixSpotMarketGroupAvailabilityName(parent, pricingModel.getDesSalesSpotMarket(), ed);
-				for (final SpotMarket market : pricingModel.getDesSalesSpotMarket().getMarkets()) {
+				fixSpotMarketGroupAvailabilityName(parent, spotMarketsModel.getDesSalesSpotMarket(), ed);
+				for (final SpotMarket market : spotMarketsModel.getDesSalesSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
 				}
 			}
-			if (pricingModel.getFobPurchasesSpotMarket() == null) {
-				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
+			if (spotMarketsModel.getFobPurchasesSpotMarket() == null) {
+				final SpotMarketGroup group = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.FOB_PURCHASE);
-				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobPurchasesSpotMarket(), group));
+				cmd.append(SetCommand.create(ed, spotMarketsModel, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobPurchasesSpotMarket(), group));
 				fixSpotMarketGroupAvailabilityName(parent, group, ed);
 			} else {
-				fixSpotMarketGroupAvailabilityName(parent, pricingModel.getFobPurchasesSpotMarket(), ed);
-				for (final SpotMarket market : pricingModel.getFobPurchasesSpotMarket().getMarkets()) {
+				fixSpotMarketGroupAvailabilityName(parent, spotMarketsModel.getFobPurchasesSpotMarket(), ed);
+				for (final SpotMarket market : spotMarketsModel.getFobPurchasesSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
 				}
 			}
-			if (pricingModel.getFobSalesSpotMarket() == null) {
-				final SpotMarketGroup group = PricingFactory.eINSTANCE.createSpotMarketGroup();
+			if (spotMarketsModel.getFobSalesSpotMarket() == null) {
+				final SpotMarketGroup group = SpotMarketsFactory.eINSTANCE.createSpotMarketGroup();
 				group.setType(SpotType.FOB_SALE);
-				cmd.append(SetCommand.create(ed, pricingModel, PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket(), group));
+				cmd.append(SetCommand.create(ed, spotMarketsModel, SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobSalesSpotMarket(), group));
 				fixSpotMarketGroupAvailabilityName(parent, group, ed);
 			} else {
-				fixSpotMarketGroupAvailabilityName(parent, pricingModel.getFobSalesSpotMarket(), ed);
-				for (final SpotMarket market : pricingModel.getFobSalesSpotMarket().getMarkets()) {
+				fixSpotMarketGroupAvailabilityName(parent, spotMarketsModel.getFobSalesSpotMarket(), ed);
+				for (final SpotMarket market : spotMarketsModel.getFobSalesSpotMarket().getMarkets()) {
 					fixSpotMarketAvailabilityName(cmd, market, ed);
 				}
 			}
