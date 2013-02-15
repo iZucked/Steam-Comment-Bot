@@ -282,29 +282,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.UnscheduledCargo} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected UnscheduledCargoItemProvider unscheduledCargoItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.UnscheduledCargo}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createUnscheduledCargoAdapter() {
-		if (unscheduledCargoItemProvider == null) {
-			unscheduledCargoItemProvider = new UnscheduledCargoItemProvider(this);
-		}
-
-		return unscheduledCargoItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.FuelUsage} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -489,52 +466,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 	}
 
 	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.AdditionalData} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected AdditionalDataItemProvider additionalDataItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.AdditionalData}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createAdditionalDataAdapter() {
-		if (additionalDataItemProvider == null) {
-			additionalDataItemProvider = new AdditionalDataItemProvider(this);
-		}
-
-		return additionalDataItemProvider;
-	}
-
-	/**
-	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder} instances.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected AdditionalDataHolderItemProvider additionalDataHolderItemProvider;
-
-	/**
-	 * This creates an adapter for a {@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Adapter createAdditionalDataHolderAdapter() {
-		if (additionalDataHolderItemProvider == null) {
-			additionalDataHolderItemProvider = new AdditionalDataHolderItemProvider(this);
-		}
-
-		return additionalDataHolderItemProvider;
-	}
-
-	/**
 	 * This keeps track of the one adapter used for all {@link com.mmxlabs.models.lng.schedule.StartEvent} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -688,7 +619,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (journeyItemProvider != null) journeyItemProvider.dispose();
 		if (idleItemProvider != null) idleItemProvider.dispose();
 		if (generatedCharterOutItemProvider != null) generatedCharterOutItemProvider.dispose();
-		if (unscheduledCargoItemProvider != null) unscheduledCargoItemProvider.dispose();
 		if (fuelUsageItemProvider != null) fuelUsageItemProvider.dispose();
 		if (fuelQuantityItemProvider != null) fuelQuantityItemProvider.dispose();
 		if (cooldownItemProvider != null) cooldownItemProvider.dispose();
@@ -697,8 +627,6 @@ public class ScheduleItemProviderAdapterFactory extends ScheduleAdapterFactory i
 		if (fuelAmountItemProvider != null) fuelAmountItemProvider.dispose();
 		if (fitnessItemProvider != null) fitnessItemProvider.dispose();
 		if (portVisitItemProvider != null) portVisitItemProvider.dispose();
-		if (additionalDataItemProvider != null) additionalDataItemProvider.dispose();
-		if (additionalDataHolderItemProvider != null) additionalDataHolderItemProvider.dispose();
 		if (startEventItemProvider != null) startEventItemProvider.dispose();
 		if (endEventItemProvider != null) endEventItemProvider.dispose();
 	}

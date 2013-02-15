@@ -10,7 +10,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import com.mmxlabs.models.lng.input.Assignment;
 import com.mmxlabs.models.lng.input.ElementAssignment;
 import com.mmxlabs.models.lng.input.InputFactory;
 import com.mmxlabs.models.lng.input.InputModel;
@@ -61,7 +60,6 @@ public class InputFactoryImpl extends EFactoryImpl implements InputFactory {
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
 			case InputPackage.INPUT_MODEL: return createInputModel();
-			case InputPackage.ASSIGNMENT: return createAssignment();
 			case InputPackage.ELEMENT_ASSIGNMENT: return createElementAssignment();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
@@ -76,16 +74,6 @@ public class InputFactoryImpl extends EFactoryImpl implements InputFactory {
 	public InputModel createInputModel() {
 		InputModelImpl inputModel = new InputModelImpl();
 		return inputModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Assignment createAssignment() {
-		AssignmentImpl assignment = new AssignmentImpl();
-		return assignment;
 	}
 
 	/**

@@ -57,12 +57,10 @@ public class ScheduleModelCommandProvider extends BaseModelCommandProvider<Objec
 
 		final List<EObject> delete = new ArrayList<EObject>(2);
 
-		if (scheduleModel.getInitialSchedule() != null)
-			delete.add(scheduleModel.getInitialSchedule());
-
-		if (scheduleModel.getOptimisedSchedule() != null)
-			delete.add(scheduleModel.getOptimisedSchedule());
-
+		if (scheduleModel.getSchedule() != null) {
+			delete.add(scheduleModel.getSchedule());
+		}
+			
 		if (delete.isEmpty())
 			return null;
 		return DeleteCommand.create(domain, delete);

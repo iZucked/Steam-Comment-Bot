@@ -202,6 +202,7 @@ public class ImportCSVFilesPage extends WizardPage {
 			try {
 				for (final String key : c.keys.keySet()) {
 					try {
+						@SuppressWarnings("resource")
 						final CSVReader r = new CSVReader(new File(c.keys.get(key)));
 						readers.put(key, r);
 					} catch (final IOException e) {
@@ -268,7 +269,7 @@ public class ImportCSVFilesPage extends WizardPage {
 										instance.setVersionContext(versionContext);
 										int latestContextVersion = migrationRegistry.getLatestContextVersion(versionContext);
 										// Snapshot version - so find last good version number
-										if (latestContextVersion == IMigrationRegistry.SNAPSHOT_VERSION) {
+										if (latestContextVersion < 0) {
 											latestContextVersion = migrationRegistry.getLastReleaseVersion(versionContext);
 										}
 										instance.setScenarioVersion(latestContextVersion);

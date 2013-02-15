@@ -22,7 +22,6 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
-import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
 
 /**
@@ -34,7 +33,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#isComplete <em>Complete</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSequences <em>Sequences</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getUnscheduledCargoes <em>Unscheduled Cargoes</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getCargoAllocations <em>Cargo Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getSlotAllocations <em>Slot Allocations</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.ScheduleImpl#getFitnesses <em>Fitnesses</em>}</li>
@@ -74,16 +72,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * @ordered
 	 */
 	protected EList<Sequence> sequences;
-
-	/**
-	 * The cached value of the '{@link #getUnscheduledCargoes() <em>Unscheduled Cargoes</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getUnscheduledCargoes()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<UnscheduledCargo> unscheduledCargoes;
 
 	/**
 	 * The cached value of the '{@link #getCargoAllocations() <em>Cargo Allocations</em>}' containment reference list.
@@ -182,18 +170,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<UnscheduledCargo> getUnscheduledCargoes() {
-		if (unscheduledCargoes == null) {
-			unscheduledCargoes = new EObjectContainmentEList<UnscheduledCargo>(UnscheduledCargo.class, this, SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOES);
-		}
-		return unscheduledCargoes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<CargoAllocation> getCargoAllocations() {
 		if (cargoAllocations == null) {
 			cargoAllocations = new EObjectContainmentEList<CargoAllocation>(CargoAllocation.class, this, SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS);
@@ -247,8 +223,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 		switch (featureID) {
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 				return ((InternalEList<?>)getSequences()).basicRemove(otherEnd, msgs);
-			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOES:
-				return ((InternalEList<?>)getUnscheduledCargoes()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				return ((InternalEList<?>)getCargoAllocations()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
@@ -271,8 +245,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return isComplete();
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 				return getSequences();
-			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOES:
-				return getUnscheduledCargoes();
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				return getCargoAllocations();
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:
@@ -300,10 +272,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 				getSequences().clear();
 				getSequences().addAll((Collection<? extends Sequence>)newValue);
-				return;
-			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOES:
-				getUnscheduledCargoes().clear();
-				getUnscheduledCargoes().addAll((Collection<? extends UnscheduledCargo>)newValue);
 				return;
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				getCargoAllocations().clear();
@@ -339,9 +307,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 				getSequences().clear();
 				return;
-			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOES:
-				getUnscheduledCargoes().clear();
-				return;
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				getCargoAllocations().clear();
 				return;
@@ -370,8 +335,6 @@ public class ScheduleImpl extends MMXObjectImpl implements Schedule {
 				return complete != COMPLETE_EDEFAULT;
 			case SchedulePackage.SCHEDULE__SEQUENCES:
 				return sequences != null && !sequences.isEmpty();
-			case SchedulePackage.SCHEDULE__UNSCHEDULED_CARGOES:
-				return unscheduledCargoes != null && !unscheduledCargoes.isEmpty();
 			case SchedulePackage.SCHEDULE__CARGO_ALLOCATIONS:
 				return cargoAllocations != null && !cargoAllocations.isEmpty();
 			case SchedulePackage.SCHEDULE__SLOT_ALLOCATIONS:

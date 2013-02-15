@@ -328,6 +328,7 @@ public class UnitCostLineItemProvider
 	/**
 	 * This adds a property descriptor for the Profit feature.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

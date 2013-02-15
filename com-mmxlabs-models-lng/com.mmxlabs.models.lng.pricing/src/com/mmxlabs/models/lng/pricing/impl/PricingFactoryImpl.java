@@ -88,10 +88,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.FOB_PURCHASES_MARKET: return createFOBPurchasesMarket();
 			case PricingPackage.FOB_SALES_MARKET: return createFOBSalesMarket();
 			case PricingPackage.SPOT_AVAILABILITY: return createSpotAvailability();
-			case PricingPackage.LNG_PRICE_CALCULATOR_PARAMETERS: return createLNGPriceCalculatorParameters();
-			case PricingPackage.LNG_FIXED_PRICE_PARAMETERS: return createLNGFixedPriceParameters();
-			case PricingPackage.LNG_INDEX_PRICE_PARAMETERS: return createLNGIndexPriceParameters();
-			case PricingPackage.LNG_PRICE_EXPRESSION_PARAMETERS: return createLNGPriceExpressionParameters();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -295,46 +291,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public SpotAvailability createSpotAvailability() {
 		SpotAvailabilityImpl spotAvailability = new SpotAvailabilityImpl();
 		return spotAvailability;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LNGPriceCalculatorParameters createLNGPriceCalculatorParameters() {
-		LNGPriceCalculatorParametersImpl lngPriceCalculatorParameters = new LNGPriceCalculatorParametersImpl();
-		return lngPriceCalculatorParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LNGFixedPriceParameters createLNGFixedPriceParameters() {
-		LNGFixedPriceParametersImpl lngFixedPriceParameters = new LNGFixedPriceParametersImpl();
-		return lngFixedPriceParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LNGIndexPriceParameters createLNGIndexPriceParameters() {
-		LNGIndexPriceParametersImpl lngIndexPriceParameters = new LNGIndexPriceParametersImpl();
-		return lngIndexPriceParameters;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LNGPriceExpressionParameters createLNGPriceExpressionParameters() {
-		LNGPriceExpressionParametersImpl lngPriceExpressionParameters = new LNGPriceExpressionParametersImpl();
-		return lngPriceExpressionParameters;
 	}
 
 	/**

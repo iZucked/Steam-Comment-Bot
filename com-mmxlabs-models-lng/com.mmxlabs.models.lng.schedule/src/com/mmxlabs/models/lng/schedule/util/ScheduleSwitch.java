@@ -4,12 +4,11 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import com.mmxlabs.models.lng.schedule.*;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
-import com.mmxlabs.models.lng.schedule.AdditionalData;
-import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -29,7 +28,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
@@ -176,13 +174,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case SchedulePackage.UNSCHEDULED_CARGO: {
-				UnscheduledCargo unscheduledCargo = (UnscheduledCargo)theEObject;
-				T result = caseUnscheduledCargo(unscheduledCargo);
-				if (result == null) result = caseMMXObject(unscheduledCargo);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case SchedulePackage.FUEL_USAGE: {
 				FuelUsage fuelUsage = (FuelUsage)theEObject;
 				T result = caseFuelUsage(fuelUsage);
@@ -209,7 +200,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				CargoAllocation cargoAllocation = (CargoAllocation)theEObject;
 				T result = caseCargoAllocation(cargoAllocation);
 				if (result == null) result = caseMMXObject(cargoAllocation);
-				if (result == null) result = caseAdditionalDataHolder(cargoAllocation);
 				if (result == null) result = caseExtraDataContainer(cargoAllocation);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -241,21 +231,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 				if (result == null) result = caseEvent(portVisit);
 				if (result == null) result = caseMMXObject(portVisit);
 				if (result == null) result = caseITimezoneProvider(portVisit);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.ADDITIONAL_DATA: {
-				AdditionalData additionalData = (AdditionalData)theEObject;
-				T result = caseAdditionalData(additionalData);
-				if (result == null) result = caseNamedObject(additionalData);
-				if (result == null) result = caseAdditionalDataHolder(additionalData);
-				if (result == null) result = caseMMXObject(additionalData);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case SchedulePackage.ADDITIONAL_DATA_HOLDER: {
-				AdditionalDataHolder additionalDataHolder = (AdditionalDataHolder)theEObject;
-				T result = caseAdditionalDataHolder(additionalDataHolder);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -424,21 +399,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Unscheduled Cargo</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Unscheduled Cargo</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseUnscheduledCargo(UnscheduledCargo object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Fuel Usage</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -555,36 +515,6 @@ public class ScheduleSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T casePortVisit(PortVisit object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Additional Data</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Additional Data</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAdditionalData(AdditionalData object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Additional Data Holder</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Additional Data Holder</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAdditionalDataHolder(AdditionalDataHolder object) {
 		return null;
 	}
 

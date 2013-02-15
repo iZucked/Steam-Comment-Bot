@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 import java.io.Serializable;
+import java.lang.Iterable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 
@@ -17,8 +18,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.schedule.AdditionalData;
-import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
@@ -39,7 +38,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getAdditionalData <em>Additional Data</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getExtraData <em>Extra Data</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getLoadAllocation <em>Load Allocation</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.schedule.impl.CargoAllocationImpl#getDischargeAllocation <em>Discharge Allocation</em>}</li>
@@ -57,16 +55,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * @generated
  */
 public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocation {
-	/**
-	 * The cached value of the '{@link #getAdditionalData() <em>Additional Data</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getAdditionalData()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<AdditionalData> additionalData;
-
 	/**
 	 * The cached value of the '{@link #getExtraData() <em>Extra Data</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -635,18 +623,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<AdditionalData> getAdditionalData() {
-		if (additionalData == null) {
-			additionalData = new EObjectContainmentEList<AdditionalData>(AdditionalData.class, this, SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA);
-		}
-		return additionalData;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<ExtraData> getExtraData() {
 		if (extraData == null) {
 			extraData = new EObjectContainmentEList<ExtraData>(ExtraData.class, this, SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA);
@@ -750,39 +726,9 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AdditionalData getAdditionalDataWithKey(String key) {
-		for (final AdditionalData ad : getAdditionalData()) {
-		  if (ad.getKey().equals(key)) return ad;
-		}
-		
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdditionalData getAdditionalDataWithPath(Iterable<String> keys) {
-		AdditionalDataHolder adh = this;
-		for (final String key : keys) {
-			if (adh == null) return null;
-			adh = adh.getAdditionalDataWithKey(key);
-		}
-		if (adh instanceof AdditionalData) return (AdditionalData) adh;
-		return null;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
-				return ((InternalEList<?>)getAdditionalData()).basicRemove(otherEnd, msgs);
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				return ((InternalEList<?>)getExtraData()).basicRemove(otherEnd, msgs);
 		}
@@ -797,8 +743,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
-				return getAdditionalData();
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				return getExtraData();
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
@@ -842,10 +786,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
-				getAdditionalData().clear();
-				getAdditionalData().addAll((Collection<? extends AdditionalData>)newValue);
-				return;
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				getExtraData().clear();
 				getExtraData().addAll((Collection<? extends ExtraData>)newValue);
@@ -892,9 +832,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
-				getAdditionalData().clear();
-				return;
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				getExtraData().clear();
 				return;
@@ -940,8 +877,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
-				return additionalData != null && !additionalData.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				return extraData != null && !extraData.isEmpty();
 			case SchedulePackage.CARGO_ALLOCATION__LOAD_ALLOCATION:
@@ -975,12 +910,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 */
 	@Override
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
-		if (baseClass == AdditionalDataHolder.class) {
-			switch (derivedFeatureID) {
-				case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA: return SchedulePackage.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA;
-				default: return -1;
-			}
-		}
 		if (baseClass == ExtraDataContainer.class) {
 			switch (derivedFeatureID) {
 				case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA: return TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA;
@@ -997,12 +926,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 */
 	@Override
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
-		if (baseClass == AdditionalDataHolder.class) {
-			switch (baseFeatureID) {
-				case SchedulePackage.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA: return SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA;
-				default: return -1;
-			}
-		}
 		if (baseClass == ExtraDataContainer.class) {
 			switch (baseFeatureID) {
 				case TypesPackage.EXTRA_DATA_CONTAINER__EXTRA_DATA: return SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA;
@@ -1019,13 +942,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 	 */
 	@Override
 	public int eDerivedOperationID(int baseOperationID, Class<?> baseClass) {
-		if (baseClass == AdditionalDataHolder.class) {
-			switch (baseOperationID) {
-				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING: return SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING;
-				case SchedulePackage.ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE: return SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE;
-				default: return -1;
-			}
-		}
 		if (baseClass == ExtraDataContainer.class) {
 			switch (baseOperationID) {
 				case TypesPackage.EXTRA_DATA_CONTAINER___GET_DATA_WITH_PATH__ITERABLE: return SchedulePackage.CARGO_ALLOCATION___GET_DATA_WITH_PATH__ITERABLE;
@@ -1062,10 +978,6 @@ public class CargoAllocationImpl extends MMXObjectImpl implements CargoAllocatio
 				return addExtraData((String)arguments.get(0), (String)arguments.get(1), (Serializable)arguments.get(2), (ExtraDataFormatType)arguments.get(3));
 			case SchedulePackage.CARGO_ALLOCATION___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT:
 				return getValueWithPathAs((Iterable<String>)arguments.get(0), (Class)arguments.get(1), arguments.get(2));
-			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING:
-				return getAdditionalDataWithKey((String)arguments.get(0));
-			case SchedulePackage.CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE:
-				return getAdditionalDataWithPath((Iterable<String>)arguments.get(0));
 		}
 		return super.eInvoke(operationID, arguments);
 	}

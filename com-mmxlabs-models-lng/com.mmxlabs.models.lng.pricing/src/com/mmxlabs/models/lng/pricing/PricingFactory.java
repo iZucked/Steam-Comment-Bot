@@ -177,42 +177,10 @@ public interface PricingFactory extends EFactory {
 	SpotAvailability createSpotAvailability();
 
 	/**
-	 * Returns a new object of class '<em>LNG Price Calculator Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>LNG Price Calculator Parameters</em>'.
-	 * @generated
-	 */
-	LNGPriceCalculatorParameters createLNGPriceCalculatorParameters();
-
-	/**
-	 * Returns a new object of class '<em>LNG Fixed Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>LNG Fixed Price Parameters</em>'.
-	 * @generated
-	 */
-	LNGFixedPriceParameters createLNGFixedPriceParameters();
-
-	/**
-	 * Returns a new object of class '<em>LNG Index Price Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>LNG Index Price Parameters</em>'.
-	 * @generated
-	 */
-	LNGIndexPriceParameters createLNGIndexPriceParameters();
-
-	/**
-	 * Returns a new object of class '<em>LNG Price Expression Parameters</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>LNG Price Expression Parameters</em>'.
-	 * @generated
-	 */
-	LNGPriceExpressionParameters createLNGPriceExpressionParameters();
-
-	/**
+	 * @since 3.0
+	 * @since 3.0
+	 * @since 3.0
+	 * @since 3.0
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

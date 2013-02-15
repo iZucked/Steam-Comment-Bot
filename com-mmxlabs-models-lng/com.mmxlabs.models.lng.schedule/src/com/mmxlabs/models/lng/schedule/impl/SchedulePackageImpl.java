@@ -16,8 +16,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import com.mmxlabs.models.lng.schedule.AdditionalData;
-import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -41,10 +39,10 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import java.lang.Iterable;
 
 /**
  * <!-- begin-user-doc -->
@@ -121,13 +119,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	private EClass unscheduledCargoEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	private EClass fuelUsageEClass = null;
 
 	/**
@@ -178,20 +169,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * @generated
 	 */
 	private EClass portVisitEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass additionalDataEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass additionalDataHolderEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -324,10 +301,11 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getScheduleModel_InitialSchedule() {
+	public EReference getScheduleModel_Schedule() {
 		return (EReference)scheduleModelEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -336,17 +314,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getScheduleModel_OptimisedSchedule() {
-		return (EReference)scheduleModelEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EAttribute getScheduleModel_Dirty() {
-		return (EAttribute)scheduleModelEClass.getEStructuralFeatures().get(2);
+		return (EAttribute)scheduleModelEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -381,7 +350,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_UnscheduledCargoes() {
+	public EReference getSchedule_CargoAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -390,7 +359,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_CargoAllocations() {
+	public EReference getSchedule_SlotAllocations() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -399,7 +368,7 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_SlotAllocations() {
+	public EReference getSchedule_Fitnesses() {
 		return (EReference)scheduleEClass.getEStructuralFeatures().get(4);
 	}
 
@@ -408,17 +377,8 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EReference getSchedule_Fitnesses() {
-		return (EReference)scheduleEClass.getEStructuralFeatures().get(5);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EReference getSchedule_UnusedElements() {
-		return (EReference)scheduleEClass.getEStructuralFeatures().get(6);
+		return (EReference)scheduleEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -782,33 +742,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 */
 	public EAttribute getGeneratedCharterOut_Revenue() {
 		return (EAttribute)generatedCharterOutEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getUnscheduledCargo() {
-		return unscheduledCargoEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getUnscheduledCargo_LoadAllocation() {
-		return (EReference)unscheduledCargoEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getUnscheduledCargo_DischargeAllocation() {
-		return (EReference)unscheduledCargoEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -1185,105 +1118,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EClass getAdditionalData() {
-		return additionalDataEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getAdditionalData_Key() {
-		return (EAttribute)additionalDataEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getAdditionalData_Value() {
-		return (EAttribute)additionalDataEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EAttribute getAdditionalData_Render() {
-		return (EAttribute)additionalDataEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getAdditionalData__GetIntValue() {
-		return additionalDataEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getAdditionalData__Format() {
-		return additionalDataEClass.getEOperations().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getAdditionalData__GetIntegerValue() {
-		return additionalDataEClass.getEOperations().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EClass getAdditionalDataHolder() {
-		return additionalDataHolderEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EReference getAdditionalDataHolder_AdditionalData() {
-		return (EReference)additionalDataHolderEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getAdditionalDataHolder__GetAdditionalDataWithKey__String() {
-		return additionalDataHolderEClass.getEOperations().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EOperation getAdditionalDataHolder__GetAdditionalDataWithPath__Iterable() {
-		return additionalDataHolderEClass.getEOperations().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EClass getStartEvent() {
 		return startEventEClass;
 	}
@@ -1399,14 +1233,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Create classes and their features
 		scheduleModelEClass = createEClass(SCHEDULE_MODEL);
-		createEReference(scheduleModelEClass, SCHEDULE_MODEL__INITIAL_SCHEDULE);
-		createEReference(scheduleModelEClass, SCHEDULE_MODEL__OPTIMISED_SCHEDULE);
+		createEReference(scheduleModelEClass, SCHEDULE_MODEL__SCHEDULE);
 		createEAttribute(scheduleModelEClass, SCHEDULE_MODEL__DIRTY);
 
 		scheduleEClass = createEClass(SCHEDULE);
 		createEAttribute(scheduleEClass, SCHEDULE__COMPLETE);
 		createEReference(scheduleEClass, SCHEDULE__SEQUENCES);
-		createEReference(scheduleEClass, SCHEDULE__UNSCHEDULED_CARGOES);
 		createEReference(scheduleEClass, SCHEDULE__CARGO_ALLOCATIONS);
 		createEReference(scheduleEClass, SCHEDULE__SLOT_ALLOCATIONS);
 		createEReference(scheduleEClass, SCHEDULE__FITNESSES);
@@ -1459,10 +1291,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		generatedCharterOutEClass = createEClass(GENERATED_CHARTER_OUT);
 		createEAttribute(generatedCharterOutEClass, GENERATED_CHARTER_OUT__REVENUE);
 
-		unscheduledCargoEClass = createEClass(UNSCHEDULED_CARGO);
-		createEReference(unscheduledCargoEClass, UNSCHEDULED_CARGO__LOAD_ALLOCATION);
-		createEReference(unscheduledCargoEClass, UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION);
-
 		fuelUsageEClass = createEClass(FUEL_USAGE);
 		createEReference(fuelUsageEClass, FUEL_USAGE__FUELS);
 		createEOperation(fuelUsageEClass, FUEL_USAGE___GET_FUEL_COST);
@@ -1511,19 +1339,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		portVisitEClass = createEClass(PORT_VISIT);
 		createEAttribute(portVisitEClass, PORT_VISIT__PORT_COST);
-
-		additionalDataEClass = createEClass(ADDITIONAL_DATA);
-		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__KEY);
-		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__VALUE);
-		createEAttribute(additionalDataEClass, ADDITIONAL_DATA__RENDER);
-		createEOperation(additionalDataEClass, ADDITIONAL_DATA___GET_INT_VALUE);
-		createEOperation(additionalDataEClass, ADDITIONAL_DATA___FORMAT);
-		createEOperation(additionalDataEClass, ADDITIONAL_DATA___GET_INTEGER_VALUE);
-
-		additionalDataHolderEClass = createEClass(ADDITIONAL_DATA_HOLDER);
-		createEReference(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
-		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING);
-		createEOperation(additionalDataHolderEClass, ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE);
 
 		startEventEClass = createEClass(START_EVENT);
 		createEReference(startEventEClass, START_EVENT__SLOT_ALLOCATION);
@@ -1592,17 +1407,13 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		idleEClass.getESuperTypes().add(this.getFuelUsage());
 		generatedCharterOutEClass.getESuperTypes().add(this.getEvent());
 		generatedCharterOutEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
-		unscheduledCargoEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		cooldownEClass.getESuperTypes().add(this.getEvent());
 		cooldownEClass.getESuperTypes().add(this.getFuelUsage());
 		cargoAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
-		cargoAllocationEClass.getESuperTypes().add(this.getAdditionalDataHolder());
 		cargoAllocationEClass.getESuperTypes().add(theTypesPackage.getExtraDataContainer());
 		slotAllocationEClass.getESuperTypes().add(theMMXCorePackage.getMMXObject());
 		fitnessEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
 		portVisitEClass.getESuperTypes().add(this.getEvent());
-		additionalDataEClass.getESuperTypes().add(theMMXCorePackage.getNamedObject());
-		additionalDataEClass.getESuperTypes().add(this.getAdditionalDataHolder());
 		startEventEClass.getESuperTypes().add(this.getEvent());
 		startEventEClass.getESuperTypes().add(this.getFuelUsage());
 		startEventEClass.getESuperTypes().add(this.getPortVisit());
@@ -1614,14 +1425,12 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(scheduleModelEClass, ScheduleModel.class, "ScheduleModel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getScheduleModel_InitialSchedule(), this.getSchedule(), null, "initialSchedule", null, 1, 1, ScheduleModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getScheduleModel_OptimisedSchedule(), this.getSchedule(), null, "optimisedSchedule", null, 1, 1, ScheduleModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getScheduleModel_Schedule(), this.getSchedule(), null, "schedule", null, 1, 1, ScheduleModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getScheduleModel_Dirty(), ecorePackage.getEBoolean(), "dirty", null, 1, 1, ScheduleModel.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(scheduleEClass, Schedule.class, "Schedule", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSchedule_Complete(), ecorePackage.getEBoolean(), "complete", null, 1, 1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_Sequences(), this.getSequence(), null, "sequences", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSchedule_UnscheduledCargoes(), this.getUnscheduledCargo(), null, "unscheduledCargoes", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_CargoAllocations(), this.getCargoAllocation(), null, "cargoAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_SlotAllocations(), this.getSlotAllocation(), null, "slotAllocations", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSchedule_Fitnesses(), this.getFitness(), null, "fitnesses", null, 0, -1, Schedule.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1684,10 +1493,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(generatedCharterOutEClass, GeneratedCharterOut.class, "GeneratedCharterOut", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getGeneratedCharterOut_Revenue(), ecorePackage.getEInt(), "revenue", null, 1, 1, GeneratedCharterOut.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(unscheduledCargoEClass, UnscheduledCargo.class, "UnscheduledCargo", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getUnscheduledCargo_LoadAllocation(), this.getSlotAllocation(), null, "loadAllocation", null, 1, 1, UnscheduledCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getUnscheduledCargo_DischargeAllocation(), this.getSlotAllocation(), null, "dischargeAllocation", null, 1, 1, UnscheduledCargo.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
 		initEClass(fuelUsageEClass, FuelUsage.class, "FuelUsage", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFuelUsage_Fuels(), this.getFuelQuantity(), null, "fuels", null, 0, -1, FuelUsage.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1745,29 +1550,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 		initEClass(portVisitEClass, PortVisit.class, "PortVisit", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getPortVisit_PortCost(), ecorePackage.getEInt(), "portCost", null, 1, 1, PortVisit.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		initEClass(additionalDataEClass, AdditionalData.class, "AdditionalData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getAdditionalData_Key(), ecorePackage.getEString(), "key", null, 1, 1, AdditionalData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAdditionalData_Value(), this.getObject(), "value", null, 1, 1, AdditionalData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEAttribute(getAdditionalData_Render(), ecorePackage.getEString(), "render", null, 1, 1, AdditionalData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEOperation(getAdditionalData__GetIntValue(), ecorePackage.getEInt(), "getIntValue", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getAdditionalData__Format(), ecorePackage.getEString(), "format", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEOperation(getAdditionalData__GetIntegerValue(), ecorePackage.getEIntegerObject(), "getIntegerValue", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		initEClass(additionalDataHolderEClass, AdditionalDataHolder.class, "AdditionalDataHolder", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getAdditionalDataHolder_AdditionalData(), this.getAdditionalData(), null, "additionalData", null, 0, -1, AdditionalDataHolder.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		EOperation op = initEOperation(getAdditionalDataHolder__GetAdditionalDataWithKey__String(), this.getAdditionalData(), "getAdditionalDataWithKey", 1, 1, IS_UNIQUE, IS_ORDERED);
-		addEParameter(op, ecorePackage.getEString(), "key", 1, 1, IS_UNIQUE, IS_ORDERED);
-
-		op = initEOperation(getAdditionalDataHolder__GetAdditionalDataWithPath__Iterable(), this.getAdditionalData(), "getAdditionalDataWithPath", 1, 1, IS_UNIQUE, IS_ORDERED);
-		EGenericType g1 = createEGenericType(this.getIterable());
-		EGenericType g2 = createEGenericType(ecorePackage.getEString());
-		g1.getETypeArguments().add(g2);
-		addEParameter(op, g1, "keys", 1, 1, IS_UNIQUE, IS_ORDERED);
-
 		initEClass(startEventEClass, StartEvent.class, "StartEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getStartEvent_SlotAllocation(), this.getSlotAllocation(), null, "slotAllocation", null, 1, 1, StartEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
@@ -1800,26 +1582,6 @@ public class SchedulePackageImpl extends EPackageImpl implements SchedulePackage
 
 		// Create resource
 		createResource(eNS_URI);
-
-		// Create annotations
-		// http://www.mmxlabs.com/models/mmxcore/validation/NamedObject
-		createNamedObjectAnnotations();
-	}
-
-	/**
-	 * Initializes the annotations for <b>http://www.mmxlabs.com/models/mmxcore/validation/NamedObject</b>.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void createNamedObjectAnnotations() {
-		String source = "http://www.mmxlabs.com/models/mmxcore/validation/NamedObject";			
-		addAnnotation
-		  (additionalDataEClass, 
-		   source, 
-		   new String[] {
-			 "nonUnique", "true"
-		   });					
 	}
 
 } //SchedulePackageImpl

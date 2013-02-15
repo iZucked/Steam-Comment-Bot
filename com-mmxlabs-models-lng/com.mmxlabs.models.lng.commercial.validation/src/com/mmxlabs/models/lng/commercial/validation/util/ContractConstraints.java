@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.commercial.validation.util;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
@@ -14,7 +15,6 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.common.parser.IExpression;
 import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.validation.internal.Activator;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
@@ -39,18 +39,19 @@ public class ContractConstraints {
 	 * Validates a price expression for a given contract
 	 * 
 	 * @param ctx A validation context.
-	 * @param contract The contract to associate validation failures with.
+	 * @param target The EMF object to associate validation failures with.
 	 * @param feature The structural feature to attach validation failures to.
 	 * @param priceExpression The price expression to validate.
 	 * @param parser A parser for price expressions.
 	 * @param failures The list of validation failures to append to.
+	 * @since 3.0
 	 */
-	public static void validatePriceExpression(final IValidationContext ctx, final Contract contract, final EStructuralFeature feature, final String priceExpression,
+	public static void validatePriceExpression(final IValidationContext ctx, final EObject target, final EStructuralFeature feature, final String priceExpression,
 			final SeriesParser parser, final List<IStatus> failures) {
 
 		if (priceExpression == null || priceExpression.isEmpty()) {
 			final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Price Expression is missing."));
-			dsd.addEObjectAndFeature(contract, feature);
+			dsd.addEObjectAndFeature(target, feature);
 			failures.add(dsd);
 			return;
 		}
@@ -67,7 +68,7 @@ public class ContractConstraints {
 			}
 			if (parsed == null) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Unable to parse price expression. " + hints));
-				dsd.addEObjectAndFeature(contract, feature);
+				dsd.addEObjectAndFeature(target, feature);
 				failures.add(dsd);
 			}
 		}

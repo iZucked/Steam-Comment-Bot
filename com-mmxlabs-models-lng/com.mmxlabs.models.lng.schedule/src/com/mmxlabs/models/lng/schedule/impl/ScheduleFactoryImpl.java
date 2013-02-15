@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.lng.schedule.impl;
 
+import com.mmxlabs.models.lng.schedule.*;
+import java.lang.Iterable;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -21,8 +23,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
-import com.mmxlabs.models.lng.schedule.AdditionalData;
-import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -46,7 +46,6 @@ import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 
 
@@ -103,7 +102,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.JOURNEY: return createJourney();
 			case SchedulePackage.IDLE: return createIdle();
 			case SchedulePackage.GENERATED_CHARTER_OUT: return createGeneratedCharterOut();
-			case SchedulePackage.UNSCHEDULED_CARGO: return createUnscheduledCargo();
 			case SchedulePackage.FUEL_USAGE: return createFuelUsage();
 			case SchedulePackage.FUEL_QUANTITY: return createFuelQuantity();
 			case SchedulePackage.COOLDOWN: return createCooldown();
@@ -112,8 +110,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 			case SchedulePackage.FUEL_AMOUNT: return createFuelAmount();
 			case SchedulePackage.FITNESS: return createFitness();
 			case SchedulePackage.PORT_VISIT: return createPortVisit();
-			case SchedulePackage.ADDITIONAL_DATA: return createAdditionalData();
-			case SchedulePackage.ADDITIONAL_DATA_HOLDER: return createAdditionalDataHolder();
 			case SchedulePackage.START_EVENT: return createStartEvent();
 			case SchedulePackage.END_EVENT: return createEndEvent();
 			default:
@@ -267,16 +263,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public UnscheduledCargo createUnscheduledCargo() {
-		UnscheduledCargoImpl unscheduledCargo = new UnscheduledCargoImpl();
-		return unscheduledCargo;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public FuelUsage createFuelUsage() {
 		FuelUsageImpl fuelUsage = new FuelUsageImpl();
 		return fuelUsage;
@@ -350,26 +336,6 @@ public class ScheduleFactoryImpl extends EFactoryImpl implements ScheduleFactory
 	public PortVisit createPortVisit() {
 		PortVisitImpl portVisit = new PortVisitImpl();
 		return portVisit;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdditionalData createAdditionalData() {
-		AdditionalDataImpl additionalData = new AdditionalDataImpl();
-		return additionalData;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public AdditionalDataHolder createAdditionalDataHolder() {
-		AdditionalDataHolderImpl additionalDataHolder = new AdditionalDataHolderImpl();
-		return additionalDataHolder;
 	}
 
 	/**

@@ -100,22 +100,13 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Initial Schedule</b></em>' containment reference.
+	 * The feature id for the '<em><b>Schedule</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_MODEL__INITIAL_SCHEDULE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Optimised Schedule</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE_MODEL__OPTIMISED_SCHEDULE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
+	int SCHEDULE_MODEL__SCHEDULE = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Dirty</b></em>' attribute.
@@ -124,7 +115,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_MODEL__DIRTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int SCHEDULE_MODEL__DIRTY = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -133,7 +124,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
+	int SCHEDULE_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -263,22 +254,13 @@ public interface SchedulePackage extends EPackage {
 	int SCHEDULE__SEQUENCES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Unscheduled Cargoes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SCHEDULE__UNSCHEDULED_CARGOES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Cargo Allocations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__CARGO_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int SCHEDULE__CARGO_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Slot Allocations</b></em>' containment reference list.
@@ -287,7 +269,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int SCHEDULE__SLOT_ALLOCATIONS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Fitnesses</b></em>' containment reference list.
@@ -296,7 +278,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int SCHEDULE__FITNESSES = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Unused Elements</b></em>' reference list.
@@ -305,7 +287,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE__UNUSED_ELEMENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int SCHEDULE__UNUSED_ELEMENTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Schedule</em>' class.
@@ -314,7 +296,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int SCHEDULE_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -2329,142 +2311,6 @@ public interface SchedulePackage extends EPackage {
 	int GENERATED_CHARTER_OUT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 5;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl <em>Unscheduled Cargo</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getUnscheduledCargo()
-	 * @generated
-	 */
-	int UNSCHEDULED_CARGO = 9;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO__LOAD_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The number of structural features of the '<em>Unscheduled Cargo</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___MAKE_PROXIES = MMXCorePackage.MMX_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___RESOLVE_PROXIES__MAP = MMXCorePackage.MMX_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___RESTORE_PROXIES = MMXCorePackage.MMX_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___COLLECT_UUID_OBJECTS = MMXCorePackage.MMX_OBJECT___COLLECT_UUID_OBJECTS;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.MMX_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The number of operations of the '<em>Unscheduled Cargo</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int UNSCHEDULED_CARGO_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2472,7 +2318,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUsage()
 	 * @generated
 	 */
-	int FUEL_USAGE = 10;
+	int FUEL_USAGE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Fuels</b></em>' containment reference list.
@@ -2518,7 +2364,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelQuantity()
 	 * @generated
 	 */
-	int FUEL_QUANTITY = 11;
+	int FUEL_QUANTITY = 10;
 
 	/**
 	 * The feature id for the '<em><b>Fuel</b></em>' attribute.
@@ -2573,7 +2419,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCooldown()
 	 * @generated
 	 */
-	int COOLDOWN = 12;
+	int COOLDOWN = 11;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -2844,7 +2690,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCargoAllocation()
 	 * @generated
 	 */
-	int CARGO_ALLOCATION = 13;
+	int CARGO_ALLOCATION = 12;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -2865,22 +2711,13 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
 
 	/**
-	 * The feature id for the '<em><b>Additional Data</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION__ADDITIONAL_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Extra Data</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__EXTRA_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
+	int CARGO_ALLOCATION__EXTRA_DATA = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Load Allocation</b></em>' reference.
@@ -2889,7 +2726,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LOAD_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
+	int CARGO_ALLOCATION__LOAD_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Allocation</b></em>' reference.
@@ -2898,7 +2735,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__DISCHARGE_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
+	int CARGO_ALLOCATION__DISCHARGE_ALLOCATION = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Load Volume</b></em>' attribute.
@@ -2907,7 +2744,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LOAD_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
+	int CARGO_ALLOCATION__LOAD_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Discharge Volume</b></em>' attribute.
@@ -2916,7 +2753,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__DISCHARGE_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
+	int CARGO_ALLOCATION__DISCHARGE_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Input Cargo</b></em>' reference.
@@ -2925,7 +2762,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int CARGO_ALLOCATION__INPUT_CARGO = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Laden Leg</b></em>' reference.
@@ -2934,7 +2771,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LADEN_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
+	int CARGO_ALLOCATION__LADEN_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Leg</b></em>' reference.
@@ -2943,7 +2780,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__BALLAST_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
+	int CARGO_ALLOCATION__BALLAST_LEG = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 	/**
 	 * The feature id for the '<em><b>Laden Idle</b></em>' reference.
@@ -2952,7 +2789,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__LADEN_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
+	int CARGO_ALLOCATION__LADEN_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 8;
 
 	/**
 	 * The feature id for the '<em><b>Ballast Idle</b></em>' reference.
@@ -2961,7 +2798,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__BALLAST_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
+	int CARGO_ALLOCATION__BALLAST_IDLE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 9;
 
 	/**
 	 * The feature id for the '<em><b>Sequence</b></em>' reference.
@@ -2970,7 +2807,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
+	int CARGO_ALLOCATION__SEQUENCE = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 10;
 
 	/**
 	 * The number of structural features of the '<em>Cargo Allocation</em>' class.
@@ -2979,7 +2816,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 12;
+	int CARGO_ALLOCATION_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 11;
 
 	/**
 	 * The operation id for the '<em>Make Proxies</em>' operation.
@@ -3054,31 +2891,13 @@ public interface SchedulePackage extends EPackage {
 	int CARGO_ALLOCATION___ECONTAINER_OP = MMXCorePackage.MMX_OBJECT___ECONTAINER_OP;
 
 	/**
-	 * The operation id for the '<em>Get Additional Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_KEY__STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Additional Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CARGO_ALLOCATION___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
-
-	/**
 	 * The operation id for the '<em>Get Data With Path</em>' operation.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_DATA_WITH_PATH__ITERABLE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
+	int CARGO_ALLOCATION___GET_DATA_WITH_PATH__ITERABLE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 0;
 
 	/**
 	 * The operation id for the '<em>Get Data With Key</em>' operation.
@@ -3087,7 +2906,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_DATA_WITH_KEY__STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
+	int CARGO_ALLOCATION___GET_DATA_WITH_KEY__STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 1;
 
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
@@ -3096,7 +2915,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
+	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 2;
 
 	/**
 	 * The operation id for the '<em>Add Extra Data</em>' operation.
@@ -3105,7 +2924,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
+	int CARGO_ALLOCATION___ADD_EXTRA_DATA__STRING_STRING_SERIALIZABLE_EXTRADATAFORMATTYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 3;
 
 	/**
 	 * The operation id for the '<em>Get Value With Path As</em>' operation.
@@ -3114,7 +2933,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
+	int CARGO_ALLOCATION___GET_VALUE_WITH_PATH_AS__ITERABLE_CLASS_OBJECT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 4;
 
 	/**
 	 * The operation id for the '<em>Get Name</em>' operation.
@@ -3123,7 +2942,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 7;
+	int CARGO_ALLOCATION___GET_NAME = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 5;
 
 	/**
 	 * The operation id for the '<em>Get Type</em>' operation.
@@ -3132,7 +2951,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION___GET_TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 8;
+	int CARGO_ALLOCATION___GET_TYPE = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 6;
 
 	/**
 	 * The number of operations of the '<em>Cargo Allocation</em>' class.
@@ -3141,7 +2960,7 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 9;
+	int CARGO_ALLOCATION_OPERATION_COUNT = MMXCorePackage.MMX_OBJECT_OPERATION_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.SlotAllocationImpl <em>Slot Allocation</em>}' class.
@@ -3151,7 +2970,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSlotAllocation()
 	 * @generated
 	 */
-	int SLOT_ALLOCATION = 14;
+	int SLOT_ALLOCATION = 13;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3359,7 +3178,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelAmount()
 	 * @generated
 	 */
-	int FUEL_AMOUNT = 15;
+	int FUEL_AMOUNT = 14;
 
 	/**
 	 * The feature id for the '<em><b>Unit</b></em>' attribute.
@@ -3405,7 +3224,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFitness()
 	 * @generated
 	 */
-	int FITNESS = 16;
+	int FITNESS = 15;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3550,7 +3369,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getPortVisit()
 	 * @generated
 	 */
-	int PORT_VISIT = 17;
+	int PORT_VISIT = 16;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -3787,278 +3606,6 @@ public interface SchedulePackage extends EPackage {
 	int PORT_VISIT_OPERATION_COUNT = EVENT_OPERATION_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataImpl <em>Additional Data</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.AdditionalDataImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getAdditionalData()
-	 * @generated
-	 */
-	int ADDITIONAL_DATA = 18;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA__EXTENSIONS = MMXCorePackage.NAMED_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA__PROXIES = MMXCorePackage.NAMED_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA__NAME = MMXCorePackage.NAMED_OBJECT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Other Names</b></em>' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA__OTHER_NAMES = MMXCorePackage.NAMED_OBJECT__OTHER_NAMES;
-
-	/**
-	 * The feature id for the '<em><b>Additional Data</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA__ADDITIONAL_DATA = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Key</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA__KEY = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA__VALUE = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The feature id for the '<em><b>Render</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA__RENDER = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The number of structural features of the '<em>Additional Data</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA_FEATURE_COUNT = MMXCorePackage.NAMED_OBJECT_FEATURE_COUNT + 4;
-
-	/**
-	 * The operation id for the '<em>Make Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___MAKE_PROXIES = MMXCorePackage.NAMED_OBJECT___MAKE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Resolve Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___RESOLVE_PROXIES__MAP = MMXCorePackage.NAMED_OBJECT___RESOLVE_PROXIES__MAP;
-
-	/**
-	 * The operation id for the '<em>Restore Proxies</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___RESTORE_PROXIES = MMXCorePackage.NAMED_OBJECT___RESTORE_PROXIES;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___COLLECT_UUID_OBJECTS__MAP = MMXCorePackage.NAMED_OBJECT___COLLECT_UUID_OBJECTS__MAP;
-
-	/**
-	 * The operation id for the '<em>Collect UUID Objects</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___COLLECT_UUID_OBJECTS = MMXCorePackage.NAMED_OBJECT___COLLECT_UUID_OBJECTS;
-
-	/**
-	 * The operation id for the '<em>Get Unset Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___GET_UNSET_VALUE__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___GET_UNSET_VALUE__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EGet With Default</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE = MMXCorePackage.NAMED_OBJECT___EGET_WITH_DEFAULT__ESTRUCTURALFEATURE;
-
-	/**
-	 * The operation id for the '<em>EContainer Op</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___ECONTAINER_OP = MMXCorePackage.NAMED_OBJECT___ECONTAINER_OP;
-
-	/**
-	 * The operation id for the '<em>Get Additional Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_KEY__STRING = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 0;
-
-	/**
-	 * The operation id for the '<em>Get Additional Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 1;
-
-	/**
-	 * The operation id for the '<em>Get Int Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___GET_INT_VALUE = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 2;
-
-	/**
-	 * The operation id for the '<em>Format</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___FORMAT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 3;
-
-	/**
-	 * The operation id for the '<em>Get Integer Value</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA___GET_INTEGER_VALUE = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 4;
-
-	/**
-	 * The number of operations of the '<em>Additional Data</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA_OPERATION_COUNT = MMXCorePackage.NAMED_OBJECT_OPERATION_COUNT + 5;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataHolderImpl <em>Additional Data Holder</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.schedule.impl.AdditionalDataHolderImpl
-	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getAdditionalDataHolder()
-	 * @generated
-	 */
-	int ADDITIONAL_DATA_HOLDER = 19;
-
-	/**
-	 * The feature id for the '<em><b>Additional Data</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA = 0;
-
-	/**
-	 * The number of structural features of the '<em>Additional Data Holder</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA_HOLDER_FEATURE_COUNT = 1;
-
-	/**
-	 * The operation id for the '<em>Get Additional Data With Key</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING = 0;
-
-	/**
-	 * The operation id for the '<em>Get Additional Data With Path</em>' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = 1;
-
-	/**
-	 * The number of operations of the '<em>Additional Data Holder</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADDITIONAL_DATA_HOLDER_OPERATION_COUNT = 2;
-
-	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl <em>Start Event</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4066,7 +3613,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getStartEvent()
 	 * @generated
 	 */
-	int START_EVENT = 20;
+	int START_EVENT = 17;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -4391,7 +3938,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getEndEvent()
 	 * @generated
 	 */
-	int END_EVENT = 21;
+	int END_EVENT = 18;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -4716,7 +4263,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuelUnit()
 	 * @generated
 	 */
-	int FUEL_UNIT = 22;
+	int FUEL_UNIT = 19;
 
 
 	/**
@@ -4727,7 +4274,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getFuel()
 	 * @generated
 	 */
-	int FUEL = 23;
+	int FUEL = 20;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.schedule.SequenceType <em>Sequence Type</em>}' enum.
@@ -4738,7 +4285,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getSequenceType()
 	 * @generated
 	 */
-	int SEQUENCE_TYPE = 24;
+	int SEQUENCE_TYPE = 21;
 
 	/**
 	 * The meta object id for the '<em>Calendar</em>' data type.
@@ -4748,7 +4295,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getCalendar()
 	 * @generated
 	 */
-	int CALENDAR = 25;
+	int CALENDAR = 22;
 
 
 	/**
@@ -4759,7 +4306,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getIterable()
 	 * @generated
 	 */
-	int ITERABLE = 26;
+	int ITERABLE = 23;
 
 
 	/**
@@ -4770,7 +4317,7 @@ public interface SchedulePackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getObject()
 	 * @generated
 	 */
-	int OBJECT = 27;
+	int OBJECT = 24;
 
 
 	/**
@@ -4784,26 +4331,15 @@ public interface SchedulePackage extends EPackage {
 	EClass getScheduleModel();
 
 	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getInitialSchedule <em>Initial Schedule</em>}'.
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getSchedule <em>Schedule</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Initial Schedule</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.ScheduleModel#getInitialSchedule()
+	 * @return the meta object for the containment reference '<em>Schedule</em>'.
+	 * @see com.mmxlabs.models.lng.schedule.ScheduleModel#getSchedule()
 	 * @see #getScheduleModel()
 	 * @generated
 	 */
-	EReference getScheduleModel_InitialSchedule();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getOptimisedSchedule <em>Optimised Schedule</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Optimised Schedule</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.ScheduleModel#getOptimisedSchedule()
-	 * @see #getScheduleModel()
-	 * @generated
-	 */
-	EReference getScheduleModel_OptimisedSchedule();
+	EReference getScheduleModel_Schedule();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#isDirty <em>Dirty</em>}'.
@@ -4847,17 +4383,6 @@ public interface SchedulePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSchedule_Sequences();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargoes <em>Unscheduled Cargoes</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Unscheduled Cargoes</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.Schedule#getUnscheduledCargoes()
-	 * @see #getSchedule()
-	 * @generated
-	 */
-	EReference getSchedule_UnscheduledCargoes();
 
 	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.Schedule#getCargoAllocations <em>Cargo Allocations</em>}'.
@@ -5330,38 +4855,6 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getGeneratedCharterOut_Revenue();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.UnscheduledCargo <em>Unscheduled Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Unscheduled Cargo</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.UnscheduledCargo
-	 * @generated
-	 */
-	EClass getUnscheduledCargo();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.UnscheduledCargo#getLoadAllocation <em>Load Allocation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Load Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.UnscheduledCargo#getLoadAllocation()
-	 * @see #getUnscheduledCargo()
-	 * @generated
-	 */
-	EReference getUnscheduledCargo_LoadAllocation();
-
-	/**
-	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.schedule.UnscheduledCargo#getDischargeAllocation <em>Discharge Allocation</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Discharge Allocation</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.UnscheduledCargo#getDischargeAllocation()
-	 * @see #getUnscheduledCargo()
-	 * @generated
-	 */
-	EReference getUnscheduledCargo_DischargeAllocation();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.FuelUsage <em>Fuel Usage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -5797,120 +5290,6 @@ public interface SchedulePackage extends EPackage {
 	EAttribute getPortVisit_PortCost();
 
 	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.AdditionalData <em>Additional Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Additional Data</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData
-	 * @generated
-	 */
-	EClass getAdditionalData();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getKey <em>Key</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Key</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getKey()
-	 * @see #getAdditionalData()
-	 * @generated
-	 */
-	EAttribute getAdditionalData_Key();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getValue <em>Value</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Value</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getValue()
-	 * @see #getAdditionalData()
-	 * @generated
-	 */
-	EAttribute getAdditionalData_Value();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getRender <em>Render</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Render</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getRender()
-	 * @see #getAdditionalData()
-	 * @generated
-	 */
-	EAttribute getAdditionalData_Render();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getIntValue() <em>Get Int Value</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Int Value</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getIntValue()
-	 * @generated
-	 */
-	EOperation getAdditionalData__GetIntValue();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.AdditionalData#format() <em>Format</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Format</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#format()
-	 * @generated
-	 */
-	EOperation getAdditionalData__Format();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.AdditionalData#getIntegerValue() <em>Get Integer Value</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Integer Value</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData#getIntegerValue()
-	 * @generated
-	 */
-	EOperation getAdditionalData__GetIntegerValue();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder <em>Additional Data Holder</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Additional Data Holder</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalDataHolder
-	 * @generated
-	 */
-	EClass getAdditionalDataHolder();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder#getAdditionalData <em>Additional Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Additional Data</em>'.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalDataHolder#getAdditionalData()
-	 * @see #getAdditionalDataHolder()
-	 * @generated
-	 */
-	EReference getAdditionalDataHolder_AdditionalData();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder#getAdditionalDataWithKey(java.lang.String) <em>Get Additional Data With Key</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Additional Data With Key</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalDataHolder#getAdditionalDataWithKey(java.lang.String)
-	 * @generated
-	 */
-	EOperation getAdditionalDataHolder__GetAdditionalDataWithKey__String();
-
-	/**
-	 * Returns the meta object for the '{@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder#getAdditionalDataWithPath(java.lang.Iterable) <em>Get Additional Data With Path</em>}' operation.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the '<em>Get Additional Data With Path</em>' operation.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalDataHolder#getAdditionalDataWithPath(java.lang.Iterable)
-	 * @generated
-	 */
-	EOperation getAdditionalDataHolder__GetAdditionalDataWithPath__Iterable();
-
-	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.schedule.StartEvent <em>Start Event</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6049,20 +5428,12 @@ public interface SchedulePackage extends EPackage {
 		EClass SCHEDULE_MODEL = eINSTANCE.getScheduleModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Initial Schedule</b></em>' containment reference feature.
+		 * The meta object literal for the '<em><b>Schedule</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
-		EReference SCHEDULE_MODEL__INITIAL_SCHEDULE = eINSTANCE.getScheduleModel_InitialSchedule();
-
-		/**
-		 * The meta object literal for the '<em><b>Optimised Schedule</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCHEDULE_MODEL__OPTIMISED_SCHEDULE = eINSTANCE.getScheduleModel_OptimisedSchedule();
+		EReference SCHEDULE_MODEL__SCHEDULE = eINSTANCE.getScheduleModel_Schedule();
 
 		/**
 		 * The meta object literal for the '<em><b>Dirty</b></em>' attribute feature.
@@ -6097,14 +5468,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EReference SCHEDULE__SEQUENCES = eINSTANCE.getSchedule_Sequences();
-
-		/**
-		 * The meta object literal for the '<em><b>Unscheduled Cargoes</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SCHEDULE__UNSCHEDULED_CARGOES = eINSTANCE.getSchedule_UnscheduledCargoes();
 
 		/**
 		 * The meta object literal for the '<em><b>Cargo Allocations</b></em>' containment reference list feature.
@@ -6476,32 +5839,6 @@ public interface SchedulePackage extends EPackage {
 		EAttribute GENERATED_CHARTER_OUT__REVENUE = eINSTANCE.getGeneratedCharterOut_Revenue();
 
 		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl <em>Unscheduled Cargo</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.schedule.impl.UnscheduledCargoImpl
-		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getUnscheduledCargo()
-		 * @generated
-		 */
-		EClass UNSCHEDULED_CARGO = eINSTANCE.getUnscheduledCargo();
-
-		/**
-		 * The meta object literal for the '<em><b>Load Allocation</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNSCHEDULED_CARGO__LOAD_ALLOCATION = eINSTANCE.getUnscheduledCargo_LoadAllocation();
-
-		/**
-		 * The meta object literal for the '<em><b>Discharge Allocation</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference UNSCHEDULED_CARGO__DISCHARGE_ALLOCATION = eINSTANCE.getUnscheduledCargo_DischargeAllocation();
-
-		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.FuelUsageImpl <em>Fuel Usage</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -6844,98 +6181,6 @@ public interface SchedulePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute PORT_VISIT__PORT_COST = eINSTANCE.getPortVisit_PortCost();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataImpl <em>Additional Data</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.schedule.impl.AdditionalDataImpl
-		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getAdditionalData()
-		 * @generated
-		 */
-		EClass ADDITIONAL_DATA = eINSTANCE.getAdditionalData();
-
-		/**
-		 * The meta object literal for the '<em><b>Key</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ADDITIONAL_DATA__KEY = eINSTANCE.getAdditionalData_Key();
-
-		/**
-		 * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ADDITIONAL_DATA__VALUE = eINSTANCE.getAdditionalData_Value();
-
-		/**
-		 * The meta object literal for the '<em><b>Render</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ADDITIONAL_DATA__RENDER = eINSTANCE.getAdditionalData_Render();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Int Value</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation ADDITIONAL_DATA___GET_INT_VALUE = eINSTANCE.getAdditionalData__GetIntValue();
-
-		/**
-		 * The meta object literal for the '<em><b>Format</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation ADDITIONAL_DATA___FORMAT = eINSTANCE.getAdditionalData__Format();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Integer Value</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation ADDITIONAL_DATA___GET_INTEGER_VALUE = eINSTANCE.getAdditionalData__GetIntegerValue();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.AdditionalDataHolderImpl <em>Additional Data Holder</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.schedule.impl.AdditionalDataHolderImpl
-		 * @see com.mmxlabs.models.lng.schedule.impl.SchedulePackageImpl#getAdditionalDataHolder()
-		 * @generated
-		 */
-		EClass ADDITIONAL_DATA_HOLDER = eINSTANCE.getAdditionalDataHolder();
-
-		/**
-		 * The meta object literal for the '<em><b>Additional Data</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA = eINSTANCE.getAdditionalDataHolder_AdditionalData();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Additional Data With Key</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_KEY__STRING = eINSTANCE.getAdditionalDataHolder__GetAdditionalDataWithKey__String();
-
-		/**
-		 * The meta object literal for the '<em><b>Get Additional Data With Path</b></em>' operation.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EOperation ADDITIONAL_DATA_HOLDER___GET_ADDITIONAL_DATA_WITH_PATH__ITERABLE = eINSTANCE.getAdditionalDataHolder__GetAdditionalDataWithPath__Iterable();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.schedule.impl.StartEventImpl <em>Start Event</em>}' class.

@@ -26,7 +26,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  *
  * @generated
  */
-public abstract class SalesContractImpl extends ContractImpl implements SalesContract {
+public class SalesContractImpl extends ContractImpl implements SalesContract {
 	/**
 	 * The default value of the '{@link #getMinCvValue() <em>Min Cv Value</em>}' attribute.
 	 * <!-- begin-user-doc -->

@@ -4,13 +4,12 @@
  */
 package com.mmxlabs.models.lng.schedule.util;
 
+import com.mmxlabs.models.lng.schedule.*;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
-import com.mmxlabs.models.lng.schedule.AdditionalData;
-import com.mmxlabs.models.lng.schedule.AdditionalDataHolder;
 import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Cooldown;
 import com.mmxlabs.models.lng.schedule.EndEvent;
@@ -30,7 +29,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
-import com.mmxlabs.models.lng.schedule.UnscheduledCargo;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.models.lng.types.ITimezoneProvider;
@@ -131,10 +129,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 				return createGeneratedCharterOutAdapter();
 			}
 			@Override
-			public Adapter caseUnscheduledCargo(UnscheduledCargo object) {
-				return createUnscheduledCargoAdapter();
-			}
-			@Override
 			public Adapter caseFuelUsage(FuelUsage object) {
 				return createFuelUsageAdapter();
 			}
@@ -165,14 +159,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter casePortVisit(PortVisit object) {
 				return createPortVisitAdapter();
-			}
-			@Override
-			public Adapter caseAdditionalData(AdditionalData object) {
-				return createAdditionalDataAdapter();
-			}
-			@Override
-			public Adapter caseAdditionalDataHolder(AdditionalDataHolder object) {
-				return createAdditionalDataHolderAdapter();
 			}
 			@Override
 			public Adapter caseStartEvent(StartEvent object) {
@@ -350,20 +336,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.UnscheduledCargo <em>Unscheduled Cargo</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.schedule.UnscheduledCargo
-	 * @generated
-	 */
-	public Adapter createUnscheduledCargoAdapter() {
-		return null;
-	}
-
-	/**
 	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.FuelUsage <em>Fuel Usage</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -472,34 +444,6 @@ public class ScheduleAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createPortVisitAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.AdditionalData <em>Additional Data</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalData
-	 * @generated
-	 */
-	public Adapter createAdditionalDataAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class '{@link com.mmxlabs.models.lng.schedule.AdditionalDataHolder <em>Additional Data Holder</em>}'.
-	 * <!-- begin-user-doc -->
-	 * This default implementation returns null so that we can easily ignore cases;
-	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
-	 * <!-- end-user-doc -->
-	 * @return the new adapter.
-	 * @see com.mmxlabs.models.lng.schedule.AdditionalDataHolder
-	 * @generated
-	 */
-	public Adapter createAdditionalDataHolderAdapter() {
 		return null;
 	}
 

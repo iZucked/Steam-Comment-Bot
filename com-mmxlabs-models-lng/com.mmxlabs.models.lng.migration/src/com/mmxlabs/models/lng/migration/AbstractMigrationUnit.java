@@ -79,12 +79,19 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		for (final URI uri : baseURIs) {
 			final String nsURI = EcoreHelper.getPackageNS(uri);
 			final ModelsLNGSet_v1 type = MetamodelVersionsUtil.getTypeFromNS(nsURI);
+			// This could potentially happen if we load the wrong type of scenario in the application...
+			if (type == null) {
+				throw new RuntimeException("Unknown namespace: " + nsURI);
+			}
+
 			final XMIResource r = (XMIResource) resourceSet.createResource(uri);
 			r.setTrackingModification(true);
-			if (type != null) {
-				r.load(loadOptions);
-				models.put(type, r.getContents().get(0));
-			}
+			r.load(loadOptions);
+
+			EObject eObject = r.getContents().get(0);
+			assert eObject != null;
+
+			models.put(type, eObject);
 		}
 
 		// Migrate!

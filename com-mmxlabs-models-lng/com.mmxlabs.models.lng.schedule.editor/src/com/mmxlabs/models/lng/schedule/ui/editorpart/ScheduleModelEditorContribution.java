@@ -43,7 +43,7 @@ public class ScheduleModelEditorContribution extends BaseJointModelEditorContrib
 				if (notification.getFeature() == MMXCorePackage.eINSTANCE.getNamedObject_Name()) {
 					return false; // this feature is irrelevant
 				}
-				else if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_InitialSchedule()) {
+				else if (notification.getFeature() == SchedulePackage.eINSTANCE.getScheduleModel_Schedule()) {
 					// If a new schedule is set, ignore this change
 					return false;
 				}

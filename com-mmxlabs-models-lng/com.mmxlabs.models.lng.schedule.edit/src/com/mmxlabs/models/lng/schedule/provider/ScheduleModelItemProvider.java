@@ -101,8 +101,7 @@ public class ScheduleModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE_MODEL__INITIAL_SCHEDULE);
-			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE_MODEL__OPTIMISED_SCHEDULE);
+			childrenFeatures.add(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE);
 		}
 		return childrenFeatures;
 	}
@@ -160,8 +159,7 @@ public class ScheduleModelItemProvider
 			case SchedulePackage.SCHEDULE_MODEL__DIRTY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case SchedulePackage.SCHEDULE_MODEL__INITIAL_SCHEDULE:
-			case SchedulePackage.SCHEDULE_MODEL__OPTIMISED_SCHEDULE:
+			case SchedulePackage.SCHEDULE_MODEL__SCHEDULE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -181,36 +179,8 @@ public class ScheduleModelItemProvider
 
 		newChildDescriptors.add
 			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE_MODEL__INITIAL_SCHEDULE,
+				(SchedulePackage.Literals.SCHEDULE_MODEL__SCHEDULE,
 				 ScheduleFactory.eINSTANCE.createSchedule()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.SCHEDULE_MODEL__OPTIMISED_SCHEDULE,
-				 ScheduleFactory.eINSTANCE.createSchedule()));
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == SchedulePackage.Literals.SCHEDULE_MODEL__INITIAL_SCHEDULE ||
-			childFeature == SchedulePackage.Literals.SCHEDULE_MODEL__OPTIMISED_SCHEDULE;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2",
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 	/**

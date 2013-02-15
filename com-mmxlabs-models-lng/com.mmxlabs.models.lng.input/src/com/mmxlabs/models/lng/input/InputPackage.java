@@ -97,31 +97,13 @@ public interface InputPackage extends EPackage {
 	int INPUT_MODEL__UUID = MMXCorePackage.UUID_OBJECT__UUID;
 
 	/**
-	 * The feature id for the '<em><b>Assignments</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_MODEL__ASSIGNMENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Locked Assigned Objects</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Element Assignments</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_MODEL__ELEMENT_ASSIGNMENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 2;
+	int INPUT_MODEL__ELEMENT_ASSIGNMENTS = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 0;
 
 	/**
 	 * The number of structural features of the '<em>Model</em>' class.
@@ -130,72 +112,7 @@ public interface InputPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int INPUT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 3;
-
-	/**
-	 * The meta object id for the '{@link com.mmxlabs.models.lng.input.impl.AssignmentImpl <em>Assignment</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see com.mmxlabs.models.lng.input.impl.AssignmentImpl
-	 * @see com.mmxlabs.models.lng.input.impl.InputPackageImpl#getAssignment()
-	 * @generated
-	 */
-	int ASSIGNMENT = 1;
-
-	/**
-	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSIGNMENT__EXTENSIONS = MMXCorePackage.MMX_OBJECT__EXTENSIONS;
-
-	/**
-	 * The feature id for the '<em><b>Proxies</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSIGNMENT__PROXIES = MMXCorePackage.MMX_OBJECT__PROXIES;
-
-	/**
-	 * The feature id for the '<em><b>Vessels</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSIGNMENT__VESSELS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Assign To Spot</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSIGNMENT__ASSIGN_TO_SPOT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Assigned Objects</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSIGNMENT__ASSIGNED_OBJECTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Assignment</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ASSIGNMENT_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 3;
-
+	int INPUT_MODEL_FEATURE_COUNT = MMXCorePackage.UUID_OBJECT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.input.impl.ElementAssignmentImpl <em>Element Assignment</em>}' class.
@@ -205,7 +122,7 @@ public interface InputPackage extends EPackage {
 	 * @see com.mmxlabs.models.lng.input.impl.InputPackageImpl#getElementAssignment()
 	 * @generated
 	 */
-	int ELEMENT_ASSIGNMENT = 2;
+	int ELEMENT_ASSIGNMENT = 1;
 
 	/**
 	 * The feature id for the '<em><b>Extensions</b></em>' reference list.
@@ -291,28 +208,6 @@ public interface InputPackage extends EPackage {
 	EClass getInputModel();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.input.InputModel#getAssignments <em>Assignments</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Assignments</em>'.
-	 * @see com.mmxlabs.models.lng.input.InputModel#getAssignments()
-	 * @see #getInputModel()
-	 * @generated
-	 */
-	EReference getInputModel_Assignments();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.input.InputModel#getLockedAssignedObjects <em>Locked Assigned Objects</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Locked Assigned Objects</em>'.
-	 * @see com.mmxlabs.models.lng.input.InputModel#getLockedAssignedObjects()
-	 * @see #getInputModel()
-	 * @generated
-	 */
-	EReference getInputModel_LockedAssignedObjects();
-
-	/**
 	 * Returns the meta object for the containment reference list '{@link com.mmxlabs.models.lng.input.InputModel#getElementAssignments <em>Element Assignments</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -322,49 +217,6 @@ public interface InputPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getInputModel_ElementAssignments();
-
-	/**
-	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.input.Assignment <em>Assignment</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for class '<em>Assignment</em>'.
-	 * @see com.mmxlabs.models.lng.input.Assignment
-	 * @generated
-	 */
-	EClass getAssignment();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.input.Assignment#getVessels <em>Vessels</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Vessels</em>'.
-	 * @see com.mmxlabs.models.lng.input.Assignment#getVessels()
-	 * @see #getAssignment()
-	 * @generated
-	 */
-	EReference getAssignment_Vessels();
-
-	/**
-	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.input.Assignment#isAssignToSpot <em>Assign To Spot</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Assign To Spot</em>'.
-	 * @see com.mmxlabs.models.lng.input.Assignment#isAssignToSpot()
-	 * @see #getAssignment()
-	 * @generated
-	 */
-	EAttribute getAssignment_AssignToSpot();
-
-	/**
-	 * Returns the meta object for the reference list '{@link com.mmxlabs.models.lng.input.Assignment#getAssignedObjects <em>Assigned Objects</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Assigned Objects</em>'.
-	 * @see com.mmxlabs.models.lng.input.Assignment#getAssignedObjects()
-	 * @see #getAssignment()
-	 * @generated
-	 */
-	EReference getAssignment_AssignedObjects();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.input.ElementAssignment <em>Element Assignment</em>}'.
@@ -464,62 +316,12 @@ public interface InputPackage extends EPackage {
 		EClass INPUT_MODEL = eINSTANCE.getInputModel();
 
 		/**
-		 * The meta object literal for the '<em><b>Assignments</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference INPUT_MODEL__ASSIGNMENTS = eINSTANCE.getInputModel_Assignments();
-
-		/**
-		 * The meta object literal for the '<em><b>Locked Assigned Objects</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference INPUT_MODEL__LOCKED_ASSIGNED_OBJECTS = eINSTANCE.getInputModel_LockedAssignedObjects();
-
-		/**
 		 * The meta object literal for the '<em><b>Element Assignments</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference INPUT_MODEL__ELEMENT_ASSIGNMENTS = eINSTANCE.getInputModel_ElementAssignments();
-
-		/**
-		 * The meta object literal for the '{@link com.mmxlabs.models.lng.input.impl.AssignmentImpl <em>Assignment</em>}' class.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @see com.mmxlabs.models.lng.input.impl.AssignmentImpl
-		 * @see com.mmxlabs.models.lng.input.impl.InputPackageImpl#getAssignment()
-		 * @generated
-		 */
-		EClass ASSIGNMENT = eINSTANCE.getAssignment();
-
-		/**
-		 * The meta object literal for the '<em><b>Vessels</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ASSIGNMENT__VESSELS = eINSTANCE.getAssignment_Vessels();
-
-		/**
-		 * The meta object literal for the '<em><b>Assign To Spot</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ASSIGNMENT__ASSIGN_TO_SPOT = eINSTANCE.getAssignment_AssignToSpot();
-
-		/**
-		 * The meta object literal for the '<em><b>Assigned Objects</b></em>' reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ASSIGNMENT__ASSIGNED_OBJECTS = eINSTANCE.getAssignment_AssignedObjects();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.input.impl.ElementAssignmentImpl <em>Element Assignment</em>}' class.

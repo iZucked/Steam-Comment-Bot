@@ -3,23 +3,23 @@
  * All rights reserved.
  */
 package com.mmxlabs.models.lng.commercial.impl;
-import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.LegalEntity;
-
-import com.mmxlabs.models.lng.types.APortSet;
-import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.types.impl.AContractImpl;
-
 import java.util.Collection;
-import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+
+import com.mmxlabs.models.lng.commercial.CommercialPackage;
+import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
+import com.mmxlabs.models.lng.commercial.LegalEntity;
+import com.mmxlabs.models.lng.port.Port;
+import com.mmxlabs.models.lng.types.APortSet;
+import com.mmxlabs.models.lng.types.impl.AContractImpl;
 
 /**
  * <!-- begin-user-doc -->
@@ -36,6 +36,7 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#isRestrictedListsArePermissive <em>Restricted Lists Are Permissive</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedContracts <em>Restricted Contracts</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getRestrictedPorts <em>Restricted Ports</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.commercial.impl.ContractImpl#getPriceInfo <em>Price Info</em>}</li>
  * </ul>
  * </p>
  *
@@ -154,6 +155,27 @@ public class ContractImpl extends AContractImpl implements Contract {
 	 * @ordered
 	 */
 	protected EList<APortSet> restrictedPorts;
+
+	/**
+	 * The cached value of the '{@link #getPriceInfo() <em>Price Info</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #getPriceInfo()
+	 * @generated
+	 * @ordered
+	 */
+	protected LNGPriceCalculatorParameters priceInfo;
+
+	/**
+	 * This is true if the Price Info containment reference has been set.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean priceInfoESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -355,6 +377,121 @@ public class ContractImpl extends AContractImpl implements Contract {
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public LNGPriceCalculatorParameters getPriceInfo() {
+		return priceInfo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPriceInfo(LNGPriceCalculatorParameters newPriceInfo, NotificationChain msgs) {
+		LNGPriceCalculatorParameters oldPriceInfo = priceInfo;
+		priceInfo = newPriceInfo;
+		boolean oldPriceInfoESet = priceInfoESet;
+		priceInfoESet = true;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PRICE_INFO, oldPriceInfo, newPriceInfo, !oldPriceInfoESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPriceInfo(LNGPriceCalculatorParameters newPriceInfo) {
+		if (newPriceInfo != priceInfo) {
+			NotificationChain msgs = null;
+			if (priceInfo != null)
+				msgs = ((InternalEObject)priceInfo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.CONTRACT__PRICE_INFO, null, msgs);
+			if (newPriceInfo != null)
+				msgs = ((InternalEObject)newPriceInfo).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.CONTRACT__PRICE_INFO, null, msgs);
+			msgs = basicSetPriceInfo(newPriceInfo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldPriceInfoESet = priceInfoESet;
+			priceInfoESet = true;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.CONTRACT__PRICE_INFO, newPriceInfo, newPriceInfo, !oldPriceInfoESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicUnsetPriceInfo(NotificationChain msgs) {
+		LNGPriceCalculatorParameters oldPriceInfo = priceInfo;
+		priceInfo = null;
+		boolean oldPriceInfoESet = priceInfoESet;
+		priceInfoESet = false;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.UNSET, CommercialPackage.CONTRACT__PRICE_INFO, oldPriceInfo, null, oldPriceInfoESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetPriceInfo() {
+		if (priceInfo != null) {
+			NotificationChain msgs = null;
+			msgs = ((InternalEObject)priceInfo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - CommercialPackage.CONTRACT__PRICE_INFO, null, msgs);
+			msgs = basicUnsetPriceInfo(msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldPriceInfoESet = priceInfoESet;
+			priceInfoESet = false;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.UNSET, CommercialPackage.CONTRACT__PRICE_INFO, null, null, oldPriceInfoESet));
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetPriceInfo() {
+		return priceInfoESet;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case CommercialPackage.CONTRACT__PRICE_INFO:
+				return basicUnsetPriceInfo(msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -379,6 +516,8 @@ public class ContractImpl extends AContractImpl implements Contract {
 				return getRestrictedContracts();
 			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
 				return getRestrictedPorts();
+			case CommercialPackage.CONTRACT__PRICE_INFO:
+				return getPriceInfo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -419,6 +558,9 @@ public class ContractImpl extends AContractImpl implements Contract {
 				getRestrictedPorts().clear();
 				getRestrictedPorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
+			case CommercialPackage.CONTRACT__PRICE_INFO:
+				setPriceInfo((LNGPriceCalculatorParameters)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -455,6 +597,9 @@ public class ContractImpl extends AContractImpl implements Contract {
 			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
 				getRestrictedPorts().clear();
 				return;
+			case CommercialPackage.CONTRACT__PRICE_INFO:
+				unsetPriceInfo();
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -483,6 +628,8 @@ public class ContractImpl extends AContractImpl implements Contract {
 				return restrictedContracts != null && !restrictedContracts.isEmpty();
 			case CommercialPackage.CONTRACT__RESTRICTED_PORTS:
 				return restrictedPorts != null && !restrictedPorts.isEmpty();
+			case CommercialPackage.CONTRACT__PRICE_INFO:
+				return isSetPriceInfo();
 		}
 		return super.eIsSet(featureID);
 	}

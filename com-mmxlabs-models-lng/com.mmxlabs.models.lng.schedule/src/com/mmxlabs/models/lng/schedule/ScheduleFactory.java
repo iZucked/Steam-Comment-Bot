@@ -106,15 +106,6 @@ public interface ScheduleFactory extends EFactory {
 	GeneratedCharterOut createGeneratedCharterOut();
 
 	/**
-	 * Returns a new object of class '<em>Unscheduled Cargo</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Unscheduled Cargo</em>'.
-	 * @generated
-	 */
-	UnscheduledCargo createUnscheduledCargo();
-
-	/**
 	 * Returns a new object of class '<em>Fuel Usage</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -185,24 +176,6 @@ public interface ScheduleFactory extends EFactory {
 	 * @generated
 	 */
 	PortVisit createPortVisit();
-
-	/**
-	 * Returns a new object of class '<em>Additional Data</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Additional Data</em>'.
-	 * @generated
-	 */
-	AdditionalData createAdditionalData();
-
-	/**
-	 * Returns a new object of class '<em>Additional Data Holder</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Additional Data Holder</em>'.
-	 * @generated
-	 */
-	AdditionalDataHolder createAdditionalDataHolder();
 
 	/**
 	 * Returns a new object of class '<em>Start Event</em>'.

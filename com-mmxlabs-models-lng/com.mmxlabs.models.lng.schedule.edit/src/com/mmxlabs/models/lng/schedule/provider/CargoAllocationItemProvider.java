@@ -311,7 +311,6 @@ public class CargoAllocationItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA);
 			childrenFeatures.add(TypesPackage.Literals.EXTRA_DATA_CONTAINER__EXTRA_DATA);
 			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__LOAD_ALLOCATION);
 			childrenFeatures.add(SchedulePackage.Literals.CARGO_ALLOCATION__DISCHARGE_ALLOCATION);
@@ -377,7 +376,6 @@ public class CargoAllocationItemProvider
 			case SchedulePackage.CARGO_ALLOCATION__DISCHARGE_VOLUME:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
-			case SchedulePackage.CARGO_ALLOCATION__ADDITIONAL_DATA:
 			case SchedulePackage.CARGO_ALLOCATION__EXTRA_DATA:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -395,11 +393,6 @@ public class CargoAllocationItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(SchedulePackage.Literals.ADDITIONAL_DATA_HOLDER__ADDITIONAL_DATA,
-				 ScheduleFactory.eINSTANCE.createAdditionalData()));
 
 		newChildDescriptors.add
 			(createChildParameter

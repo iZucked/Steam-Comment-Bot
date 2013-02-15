@@ -22,7 +22,7 @@ import com.mmxlabs.models.lng.types.CargoDeliveryType;
  * </p>
  *
  * @see com.mmxlabs.models.lng.commercial.CommercialPackage#getSalesContract()
- * @model abstract="true"
+ * @model
  * @generated
  */
 public interface SalesContract extends Contract, ASalesContract {

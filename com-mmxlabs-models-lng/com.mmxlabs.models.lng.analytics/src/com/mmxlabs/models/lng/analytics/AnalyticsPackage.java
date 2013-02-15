@@ -527,6 +527,7 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Profit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -1787,6 +1788,7 @@ public interface AnalyticsPackage extends EPackage {
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit <em>Profit</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Profit</em>'.
 	 * @see com.mmxlabs.models.lng.analytics.UnitCostLine#getProfit()
@@ -2711,6 +2713,7 @@ public interface AnalyticsPackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Profit</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
