@@ -4,16 +4,13 @@
  */
 package com.mmxlabs.models.lng.pricing.impl;
 
-import com.mmxlabs.models.lng.pricing.*;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.CooldownPrice;
 import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
@@ -25,7 +22,6 @@ import com.mmxlabs.models.lng.pricing.PricingFactory;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.SpotType;
 
 /**
  * <!-- begin-user-doc -->
@@ -77,49 +73,12 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 			case PricingPackage.INDEX_POINT: return createIndexPoint();
 			case PricingPackage.FLEET_COST_MODEL: return createFleetCostModel();
 			case PricingPackage.ROUTE_COST: return createRouteCost();
-			case PricingPackage.CHARTER_COST_MODEL: return createCharterCostModel();
 			case PricingPackage.BASE_FUEL_COST: return createBaseFuelCost();
-			case PricingPackage.SPOT_MARKET_GROUP: return createSpotMarketGroup();
 			case PricingPackage.PORT_COST: return createPortCost();
 			case PricingPackage.PORT_COST_ENTRY: return createPortCostEntry();
 			case PricingPackage.COOLDOWN_PRICE: return createCooldownPrice();
-			case PricingPackage.DES_PURCHASE_MARKET: return createDESPurchaseMarket();
-			case PricingPackage.DES_SALES_MARKET: return createDESSalesMarket();
-			case PricingPackage.FOB_PURCHASES_MARKET: return createFOBPurchasesMarket();
-			case PricingPackage.FOB_SALES_MARKET: return createFOBSalesMarket();
-			case PricingPackage.SPOT_AVAILABILITY: return createSpotAvailability();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object createFromString(EDataType eDataType, String initialValue) {
-		switch (eDataType.getClassifierID()) {
-			case PricingPackage.SPOT_TYPE:
-				return createSpotTypeFromString(eDataType, initialValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String convertToString(EDataType eDataType, Object instanceValue) {
-		switch (eDataType.getClassifierID()) {
-			case PricingPackage.SPOT_TYPE:
-				return convertSpotTypeToString(eDataType, instanceValue);
-			default:
-				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
 		}
 	}
 
@@ -188,29 +147,9 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CharterCostModel createCharterCostModel() {
-		CharterCostModelImpl charterCostModel = new CharterCostModelImpl();
-		return charterCostModel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public BaseFuelCost createBaseFuelCost() {
 		BaseFuelCostImpl baseFuelCost = new BaseFuelCostImpl();
 		return baseFuelCost;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotMarketGroup createSpotMarketGroup() {
-		SpotMarketGroupImpl spotMarketGroup = new SpotMarketGroupImpl();
-		return spotMarketGroup;
 	}
 
 	/**
@@ -241,76 +180,6 @@ public class PricingFactoryImpl extends EFactoryImpl implements PricingFactory {
 	public CooldownPrice createCooldownPrice() {
 		CooldownPriceImpl cooldownPrice = new CooldownPriceImpl();
 		return cooldownPrice;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DESPurchaseMarket createDESPurchaseMarket() {
-		DESPurchaseMarketImpl desPurchaseMarket = new DESPurchaseMarketImpl();
-		return desPurchaseMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DESSalesMarket createDESSalesMarket() {
-		DESSalesMarketImpl desSalesMarket = new DESSalesMarketImpl();
-		return desSalesMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FOBPurchasesMarket createFOBPurchasesMarket() {
-		FOBPurchasesMarketImpl fobPurchasesMarket = new FOBPurchasesMarketImpl();
-		return fobPurchasesMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FOBSalesMarket createFOBSalesMarket() {
-		FOBSalesMarketImpl fobSalesMarket = new FOBSalesMarketImpl();
-		return fobSalesMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotAvailability createSpotAvailability() {
-		SpotAvailabilityImpl spotAvailability = new SpotAvailabilityImpl();
-		return spotAvailability;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotType createSpotTypeFromString(EDataType eDataType, String initialValue) {
-		SpotType result = SpotType.get(initialValue);
-		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-		return result;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String convertSpotTypeToString(EDataType eDataType, Object instanceValue) {
-		return instanceValue == null ? null : instanceValue.toString();
 	}
 
 	/**

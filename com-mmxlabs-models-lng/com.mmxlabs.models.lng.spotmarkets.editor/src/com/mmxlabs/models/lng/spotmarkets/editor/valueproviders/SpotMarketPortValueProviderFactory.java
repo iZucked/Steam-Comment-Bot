@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.pricing.ui.valueproviders;
+package com.mmxlabs.models.lng.spotmarkets.editor.valueproviders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +16,10 @@ import org.eclipse.emf.ecore.EcorePackage;
 
 import com.mmxlabs.common.Pair;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.DESPurchaseMarket;
-import com.mmxlabs.models.lng.pricing.DESSalesMarket;
-import com.mmxlabs.models.lng.pricing.FOBPurchasesMarket;
-import com.mmxlabs.models.lng.pricing.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.TypesPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;

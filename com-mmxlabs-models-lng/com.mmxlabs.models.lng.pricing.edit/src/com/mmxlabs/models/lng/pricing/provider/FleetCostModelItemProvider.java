@@ -76,7 +76,6 @@ public class FleetCostModelItemProvider
 	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
-			childrenFeatures.add(PricingPackage.Literals.FLEET_COST_MODEL__CHARTER_COSTS);
 			childrenFeatures.add(PricingPackage.Literals.FLEET_COST_MODEL__BASE_FUEL_PRICES);
 		}
 		return childrenFeatures;
@@ -129,7 +128,6 @@ public class FleetCostModelItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(FleetCostModel.class)) {
-			case PricingPackage.FLEET_COST_MODEL__CHARTER_COSTS:
 			case PricingPackage.FLEET_COST_MODEL__BASE_FUEL_PRICES:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
@@ -147,11 +145,6 @@ public class FleetCostModelItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.FLEET_COST_MODEL__CHARTER_COSTS,
-				 PricingFactory.eINSTANCE.createCharterCostModel()));
 
 		newChildDescriptors.add
 			(createChildParameter

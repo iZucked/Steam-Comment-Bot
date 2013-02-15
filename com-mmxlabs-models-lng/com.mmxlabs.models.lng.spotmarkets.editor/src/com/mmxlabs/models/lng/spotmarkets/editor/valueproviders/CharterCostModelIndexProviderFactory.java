@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.pricing.ui.valueproviders;
+package com.mmxlabs.models.lng.spotmarkets.editor.valueproviders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 
 import com.mmxlabs.common.Pair;
+import com.mmxlabs.models.lng.pricing.ui.valueproviders.IndexReferenceValueProviderFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;

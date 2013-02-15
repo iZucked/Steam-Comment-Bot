@@ -106,10 +106,6 @@ public class PricingModelItemProvider
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__ROUTE_COSTS);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__PORT_COSTS);
 			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__DES_SALES_SPOT_MARKET);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET);
-			childrenFeatures.add(PricingPackage.Literals.PRICING_MODEL__FOB_SALES_SPOT_MARKET);
 		}
 		return childrenFeatures;
 	}
@@ -170,10 +166,6 @@ public class PricingModelItemProvider
 			case PricingPackage.PRICING_MODEL__ROUTE_COSTS:
 			case PricingPackage.PRICING_MODEL__PORT_COSTS:
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
-			case PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET:
-			case PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET:
-			case PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET:
-			case PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
@@ -230,26 +222,6 @@ public class PricingModelItemProvider
 			(createChildParameter
 				(PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES,
 				 PricingFactory.eINSTANCE.createCooldownPrice()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET,
-				 PricingFactory.eINSTANCE.createSpotMarketGroup()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__DES_SALES_SPOT_MARKET,
-				 PricingFactory.eINSTANCE.createSpotMarketGroup()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET,
-				 PricingFactory.eINSTANCE.createSpotMarketGroup()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PricingPackage.Literals.PRICING_MODEL__FOB_SALES_SPOT_MARKET,
-				 PricingFactory.eINSTANCE.createSpotMarketGroup()));
 	}
 
 	/**
@@ -265,11 +237,7 @@ public class PricingModelItemProvider
 
 		boolean qualify =
 			childFeature == PricingPackage.Literals.PRICING_MODEL__COMMODITY_INDICES ||
-			childFeature == PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES ||
-			childFeature == PricingPackage.Literals.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET ||
-			childFeature == PricingPackage.Literals.PRICING_MODEL__DES_SALES_SPOT_MARKET ||
-			childFeature == PricingPackage.Literals.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET ||
-			childFeature == PricingPackage.Literals.PRICING_MODEL__FOB_SALES_SPOT_MARKET;
+			childFeature == PricingPackage.Literals.PRICING_MODEL__CHARTER_INDICES;
 
 		if (qualify) {
 			return getString

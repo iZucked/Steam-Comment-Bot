@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.pricing.ui.views;
+package com.mmxlabs.models.lng.spotmarkets.editor.views;
 
 import java.util.Arrays;
 
@@ -11,24 +11,24 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 
 import com.mmxlabs.models.lng.pricing.PricingModel;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-import com.mmxlabs.models.lng.pricing.SpotType;
-import com.mmxlabs.models.lng.pricing.ui.editorpart.SpotMarketGroupPane;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.lng.spotmarkets.SpotType;
+import com.mmxlabs.models.lng.spotmarkets.editor.editorpart.SpotMarketGroupPane;
 import com.mmxlabs.models.lng.ui.views.ScenarioTableViewerView;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 
-public class FOBSalesSpotMarketView extends ScenarioTableViewerView<SpotMarketGroupPane> {
-	public static final String ID = "com.mmxlabs.models.lng.pricing.editor.FOBSalesSpotMarketView";
+public class DESPurchaseSpotMarketView extends ScenarioTableViewerView<SpotMarketGroupPane> {
+	public static final String ID = "com.mmxlabs.models.lng.pricing.editor.DESPurchaseSpotMarketView";
 
 	@Override
 	protected SpotMarketGroupPane createViewerPane() {
-		return new SpotMarketGroupPane(getSite().getPage(), this, this, getViewSite().getActionBars(), SpotType.FOB_SALE);
+		return new SpotMarketGroupPane(getSite().getPage(), this, this, getViewSite().getActionBars(), SpotType.DES_PURCHASE);
 	}
 
 	@Override
 	protected void initViewerPane(final SpotMarketGroupPane pane) {
-		pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_FobSalesSpotMarket(), PricingPackage.eINSTANCE.getSpotMarketGroup_Markets() }), null);
+		pane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }), null);
 		pane.getViewer().setInput(getRootObject().getSubModel(PricingModel.class));
 	}
 

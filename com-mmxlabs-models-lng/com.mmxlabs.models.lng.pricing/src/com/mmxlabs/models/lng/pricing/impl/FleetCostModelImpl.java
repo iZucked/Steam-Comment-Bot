@@ -13,7 +13,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import com.mmxlabs.models.lng.pricing.BaseFuelCost;
-import com.mmxlabs.models.lng.pricing.CharterCostModel;
 import com.mmxlabs.models.lng.pricing.FleetCostModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
@@ -25,7 +24,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.FleetCostModelImpl#getCharterCosts <em>Charter Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.FleetCostModelImpl#getBaseFuelPrices <em>Base Fuel Prices</em>}</li>
  * </ul>
  * </p>
@@ -33,16 +31,6 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  * @generated
  */
 public class FleetCostModelImpl extends MMXObjectImpl implements FleetCostModel {
-	/**
-	 * The cached value of the '{@link #getCharterCosts() <em>Charter Costs</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getCharterCosts()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<CharterCostModel> charterCosts;
-
 	/**
 	 * The cached value of the '{@link #getBaseFuelPrices() <em>Base Fuel Prices</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -77,18 +65,6 @@ public class FleetCostModelImpl extends MMXObjectImpl implements FleetCostModel 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public EList<CharterCostModel> getCharterCosts() {
-		if (charterCosts == null) {
-			charterCosts = new EObjectContainmentEList<CharterCostModel>(CharterCostModel.class, this, PricingPackage.FLEET_COST_MODEL__CHARTER_COSTS);
-		}
-		return charterCosts;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public EList<BaseFuelCost> getBaseFuelPrices() {
 		if (baseFuelPrices == null) {
 			baseFuelPrices = new EObjectContainmentEList<BaseFuelCost>(BaseFuelCost.class, this, PricingPackage.FLEET_COST_MODEL__BASE_FUEL_PRICES);
@@ -104,8 +80,6 @@ public class FleetCostModelImpl extends MMXObjectImpl implements FleetCostModel 
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case PricingPackage.FLEET_COST_MODEL__CHARTER_COSTS:
-				return ((InternalEList<?>)getCharterCosts()).basicRemove(otherEnd, msgs);
 			case PricingPackage.FLEET_COST_MODEL__BASE_FUEL_PRICES:
 				return ((InternalEList<?>)getBaseFuelPrices()).basicRemove(otherEnd, msgs);
 		}
@@ -120,8 +94,6 @@ public class FleetCostModelImpl extends MMXObjectImpl implements FleetCostModel 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case PricingPackage.FLEET_COST_MODEL__CHARTER_COSTS:
-				return getCharterCosts();
 			case PricingPackage.FLEET_COST_MODEL__BASE_FUEL_PRICES:
 				return getBaseFuelPrices();
 		}
@@ -137,10 +109,6 @@ public class FleetCostModelImpl extends MMXObjectImpl implements FleetCostModel 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case PricingPackage.FLEET_COST_MODEL__CHARTER_COSTS:
-				getCharterCosts().clear();
-				getCharterCosts().addAll((Collection<? extends CharterCostModel>)newValue);
-				return;
 			case PricingPackage.FLEET_COST_MODEL__BASE_FUEL_PRICES:
 				getBaseFuelPrices().clear();
 				getBaseFuelPrices().addAll((Collection<? extends BaseFuelCost>)newValue);
@@ -157,9 +125,6 @@ public class FleetCostModelImpl extends MMXObjectImpl implements FleetCostModel 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case PricingPackage.FLEET_COST_MODEL__CHARTER_COSTS:
-				getCharterCosts().clear();
-				return;
 			case PricingPackage.FLEET_COST_MODEL__BASE_FUEL_PRICES:
 				getBaseFuelPrices().clear();
 				return;
@@ -175,8 +140,6 @@ public class FleetCostModelImpl extends MMXObjectImpl implements FleetCostModel 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case PricingPackage.FLEET_COST_MODEL__CHARTER_COSTS:
-				return charterCosts != null && !charterCosts.isEmpty();
 			case PricingPackage.FLEET_COST_MODEL__BASE_FUEL_PRICES:
 				return baseFuelPrices != null && !baseFuelPrices.isEmpty();
 		}

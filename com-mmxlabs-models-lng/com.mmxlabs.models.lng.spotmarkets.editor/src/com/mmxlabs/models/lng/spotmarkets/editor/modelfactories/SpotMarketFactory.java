@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.pricing.ui.modelfactories;
+package com.mmxlabs.models.lng.spotmarkets.editor.modelfactories;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -14,9 +14,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.ISelection;
 
-import com.mmxlabs.models.lng.pricing.PricingFactory;
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.modelfactories.DefaultModelFactory;
 
@@ -92,16 +92,16 @@ public class SpotMarketFactory extends DefaultModelFactory {
 			final SpotMarketGroup spotMarketGroup = (SpotMarketGroup) container;
 			switch (spotMarketGroup.getType()) {
 			case DES_PURCHASE:
-				object = PricingFactory.eINSTANCE.createDESPurchaseMarket();
+				object = SpotMarketsFactory.eINSTANCE.createDESPurchaseMarket();
 				break;
 			case DES_SALE:
-				object = PricingFactory.eINSTANCE.createDESSalesMarket();
+				object = SpotMarketsFactory.eINSTANCE.createDESSalesMarket();
 				break;
 			case FOB_PURCHASE:
-				object = PricingFactory.eINSTANCE.createFOBPurchasesMarket();
+				object = SpotMarketsFactory.eINSTANCE.createFOBPurchasesMarket();
 				break;
 			case FOB_SALE:
-				object = PricingFactory.eINSTANCE.createFOBSalesMarket();
+				object = SpotMarketsFactory.eINSTANCE.createFOBSalesMarket();
 				break;
 				default:
 				object = eClass.getEPackage().getEFactoryInstance().create(eClass);

@@ -70,10 +70,6 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 		add_routeCostsEditor(detailComposite, topClass);
 		add_portCostsEditor(detailComposite, topClass);
 		add_cooldownPricesEditor(detailComposite, topClass);
-		add_desPurchaseSpotMarketEditor(detailComposite, topClass);
-		add_desSalesSpotMarketEditor(detailComposite, topClass);
-		add_fobPurchasesSpotMarketEditor(detailComposite, topClass);
-		add_fobSalesSpotMarketEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the commodityIndices feature on PricingModel
@@ -123,41 +119,5 @@ public class PricingModelComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_cooldownPricesEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__COOLDOWN_PRICES));
-	}
-
-	/**
-	 * Create the editor for the desPurchaseSpotMarket feature on PricingModel
-	 *
-	 * @generated
-	 */
-	protected void add_desPurchaseSpotMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET));
-	}
-
-	/**
-	 * Create the editor for the desSalesSpotMarket feature on PricingModel
-	 *
-	 * @generated
-	 */
-	protected void add_desSalesSpotMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__DES_SALES_SPOT_MARKET));
-	}
-
-	/**
-	 * Create the editor for the fobPurchasesSpotMarket feature on PricingModel
-	 *
-	 * @generated
-	 */
-	protected void add_fobPurchasesSpotMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET));
-	}
-
-	/**
-	 * Create the editor for the fobSalesSpotMarket feature on PricingModel
-	 *
-	 * @generated
-	 */
-	protected void add_fobSalesSpotMarketEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.PRICING_MODEL__FOB_SALES_SPOT_MARKET));
 	}
 }

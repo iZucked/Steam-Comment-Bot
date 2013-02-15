@@ -64,11 +64,6 @@
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.RouteCost" />
 		
-		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.CharterCostModel"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.CharterCostModelComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.CharterCostModel" />
 		
 		<componentHelper
 			id="com.mmxlabs.models.lng.pricing.helpers.BaseFuelCost"
@@ -76,17 +71,7 @@
 			inheritable="false"
 			modelClass="com.mmxlabs.models.lng.pricing.BaseFuelCost" />
 		
-		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.SpotMarket"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SpotMarketComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.SpotMarket" />
 		
-		<componentHelper
-			id="com.mmxlabs.models.lng.pricing.helpers.PortCost"
-			helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.PortCostComponentHelper"
-			inheritable="false"
-			modelClass="com.mmxlabs.models.lng.pricing.PortCost" />
 
   
   <componentHelper
@@ -95,42 +80,6 @@
         inheritable="false"
         modelClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
   </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SpotMarketComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.helpers.SpotMarket"
-        inheritable="true"
-        modelClass="com.mmxlabs.models.lng.pricing.SpotMarket">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.SpotAvailabilityComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.helpers.SpotAvailability"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.pricing.SpotAvailability">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DESPurchaseMarketComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.helpers.DESPurchaseMarket"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.pricing.DESPurchaseMarket">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.DESSalesMarketComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.helpers.DESSalesMarket"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.pricing.DESSalesMarket">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.FOBPurchasesMarketComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.helpers.FOBPurchasesMarket"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.pricing.FOBPurchasesMarket">
-  </componentHelper>
-  <componentHelper
-        helperClass="com.mmxlabs.models.lng.pricing.presentation.composites.FOBSalesMarketComponentHelper"
-        id="com.mmxlabs.models.lng.pricing.helpers.FOBSalesMarket"
-        inheritable="false"
-        modelClass="com.mmxlabs.models.lng.pricing.FOBSalesMarket">
-  </componentHelper>
 		
 	</extension>
  <extension
@@ -138,18 +87,6 @@
     <valueProvider
           factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.IndexReferenceValueProviderFactory"
           id="com.mmxlabs.models.lng.pricing.editor.indexProvider"
-          referenceEClass="com.mmxlabs.models.lng.types.AIndex">
-    </valueProvider>
-    <valueProvider
-          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.SpotMarketPortValueProviderFactory"
-          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.SpotMarketPortValueProviderFactory"
-          ownerEClass="com.mmxlabs.models.lng.pricing.SpotMarket"
-          referenceEClass="com.mmxlabs.models.lng.types.APort">
-    </valueProvider>
-    <valueProvider
-          factory="com.mmxlabs.models.lng.pricing.ui.valueproviders.CharterCostModelIndexProviderFactory"
-          id="com.mmxlabs.models.lng.pricing.ui.valueproviders.CharterCostModelIndexProviderFactory"
-          ownerEClass="com.mmxlabs.models.lng.pricing.CharterCostModel"
           referenceEClass="com.mmxlabs.models.lng.types.AIndex">
     </valueProvider>
  </extension>
@@ -178,21 +115,9 @@
           eClassName="com.mmxlabs.models.lng.pricing.DataIndex"
           inheritable="false">
     </classImporter>
-    <classImporter
-          ID="com.mmxlabs.models.lng.pricing.importers.SpotMarketImporter"
-          classImporterClass="com.mmxlabs.models.lng.pricing.importers.SpotMarketImporter"
-          eClassName="com.mmxlabs.models.lng.pricing.SpotMarket"
-          inheritable="true">
-    </classImporter>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.modelfactories">
-    <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.charterCostFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Charter Price"
-          targetEClass="com.mmxlabs.models.lng.pricing.CharterCostModel">
-    </factory>
     <factory
           ID="com.mmxlabs.models.lng.pricing.editor.dataIndexFactory"
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
@@ -212,18 +137,6 @@
           factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
           label="Cooldown Price"
           targetEClass="com.mmxlabs.models.lng.pricing.CooldownPrice">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.portCostFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Port Cost"
-          targetEClass="com.mmxlabs.models.lng.pricing.PortCost">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.pricing.editor.SpotMarket"
-          factory="com.mmxlabs.models.lng.pricing.ui.modelfactories.SpotMarketFactory"
-          label="Spot Market"
-          targetEClass="com.mmxlabs.models.lng.pricing.SpotMarket">
     </factory>
  </extension>
  <extension
@@ -251,17 +164,6 @@
     </classImporter>
  </extension>
  <extension
-       point="com.mmxlabs.models.util.import.attributes">
-    <attributeImporter
-          ID="com.mmxlabs.models.lng.pricing.editor.SpotTypeAttributeImporter"
-          attributeImporterClass="com.mmxlabs.models.util.importer.impl.DefaultAttributeImporter">
-       <dataType
-             attributeTypeName="SpotType"
-             attributeTypeURI="http://www.mmxlabs.com/models/lng/pricing/1/">
-       </dataType>
-    </attributeImporter>
- </extension>
- <extension
        point="org.eclipse.ui.views">
     <view
           category="com.mmxlabs.models.lng.views.physical"
@@ -282,20 +184,6 @@
           class="com.mmxlabs.models.lng.pricing.ui.views.CanalCostsView"
           id="com.mmxlabs.models.lng.pricing.editor.CanalCostsView"
           name="Canal Costs"
-          restorable="true">
-    </view>
-    <view
-          category="com.mmxlabs.models.lng.views.physical"
-          class="com.mmxlabs.models.lng.pricing.ui.views.FOBSalesSpotMarketView"
-          id="com.mmxlabs.models.lng.pricing.editor.FOBSalesSpotMarketView"
-          name="FOB Sales Spot Markets"
-          restorable="true">
-    </view>
-    <view
-          category="com.mmxlabs.models.lng.views.physical"
-          class="com.mmxlabs.models.lng.pricing.ui.views.DESPurchaseSpotMarketView"
-          id="com.mmxlabs.models.lng.pricing.editor.DESPurchaseSpotMarketView"
-          name="DES Purchase Spot Markets"
           restorable="true">
     </view>
  </extension>

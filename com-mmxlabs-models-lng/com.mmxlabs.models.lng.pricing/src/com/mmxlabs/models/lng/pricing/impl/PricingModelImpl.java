@@ -21,7 +21,6 @@ import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
 
 /**
@@ -37,10 +36,6 @@ import com.mmxlabs.models.mmxcore.impl.UUIDObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getRouteCosts <em>Route Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getPortCosts <em>Port Costs</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getCooldownPrices <em>Cooldown Prices</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getDesPurchaseSpotMarket <em>Des Purchase Spot Market</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getDesSalesSpotMarket <em>Des Sales Spot Market</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getFobPurchasesSpotMarket <em>Fob Purchases Spot Market</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.pricing.impl.PricingModelImpl#getFobSalesSpotMarket <em>Fob Sales Spot Market</em>}</li>
  * </ul>
  * </p>
  *
@@ -106,46 +101,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * @ordered
 	 */
 	protected EList<CooldownPrice> cooldownPrices;
-
-	/**
-	 * The cached value of the '{@link #getDesPurchaseSpotMarket() <em>Des Purchase Spot Market</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDesPurchaseSpotMarket()
-	 * @generated
-	 * @ordered
-	 */
-	protected SpotMarketGroup desPurchaseSpotMarket;
-
-	/**
-	 * The cached value of the '{@link #getDesSalesSpotMarket() <em>Des Sales Spot Market</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getDesSalesSpotMarket()
-	 * @generated
-	 * @ordered
-	 */
-	protected SpotMarketGroup desSalesSpotMarket;
-
-	/**
-	 * The cached value of the '{@link #getFobPurchasesSpotMarket() <em>Fob Purchases Spot Market</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFobPurchasesSpotMarket()
-	 * @generated
-	 * @ordered
-	 */
-	protected SpotMarketGroup fobPurchasesSpotMarket;
-
-	/**
-	 * The cached value of the '{@link #getFobSalesSpotMarket() <em>Fob Sales Spot Market</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFobSalesSpotMarket()
-	 * @generated
-	 * @ordered
-	 */
-	protected SpotMarketGroup fobSalesSpotMarket;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -274,178 +229,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SpotMarketGroup getDesPurchaseSpotMarket() {
-		return desPurchaseSpotMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetDesPurchaseSpotMarket(SpotMarketGroup newDesPurchaseSpotMarket, NotificationChain msgs) {
-		SpotMarketGroup oldDesPurchaseSpotMarket = desPurchaseSpotMarket;
-		desPurchaseSpotMarket = newDesPurchaseSpotMarket;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET, oldDesPurchaseSpotMarket, newDesPurchaseSpotMarket);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDesPurchaseSpotMarket(SpotMarketGroup newDesPurchaseSpotMarket) {
-		if (newDesPurchaseSpotMarket != desPurchaseSpotMarket) {
-			NotificationChain msgs = null;
-			if (desPurchaseSpotMarket != null)
-				msgs = ((InternalEObject)desPurchaseSpotMarket).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET, null, msgs);
-			if (newDesPurchaseSpotMarket != null)
-				msgs = ((InternalEObject)newDesPurchaseSpotMarket).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET, null, msgs);
-			msgs = basicSetDesPurchaseSpotMarket(newDesPurchaseSpotMarket, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET, newDesPurchaseSpotMarket, newDesPurchaseSpotMarket));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotMarketGroup getDesSalesSpotMarket() {
-		return desSalesSpotMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetDesSalesSpotMarket(SpotMarketGroup newDesSalesSpotMarket, NotificationChain msgs) {
-		SpotMarketGroup oldDesSalesSpotMarket = desSalesSpotMarket;
-		desSalesSpotMarket = newDesSalesSpotMarket;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET, oldDesSalesSpotMarket, newDesSalesSpotMarket);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDesSalesSpotMarket(SpotMarketGroup newDesSalesSpotMarket) {
-		if (newDesSalesSpotMarket != desSalesSpotMarket) {
-			NotificationChain msgs = null;
-			if (desSalesSpotMarket != null)
-				msgs = ((InternalEObject)desSalesSpotMarket).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET, null, msgs);
-			if (newDesSalesSpotMarket != null)
-				msgs = ((InternalEObject)newDesSalesSpotMarket).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET, null, msgs);
-			msgs = basicSetDesSalesSpotMarket(newDesSalesSpotMarket, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET, newDesSalesSpotMarket, newDesSalesSpotMarket));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotMarketGroup getFobPurchasesSpotMarket() {
-		return fobPurchasesSpotMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetFobPurchasesSpotMarket(SpotMarketGroup newFobPurchasesSpotMarket, NotificationChain msgs) {
-		SpotMarketGroup oldFobPurchasesSpotMarket = fobPurchasesSpotMarket;
-		fobPurchasesSpotMarket = newFobPurchasesSpotMarket;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET, oldFobPurchasesSpotMarket, newFobPurchasesSpotMarket);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setFobPurchasesSpotMarket(SpotMarketGroup newFobPurchasesSpotMarket) {
-		if (newFobPurchasesSpotMarket != fobPurchasesSpotMarket) {
-			NotificationChain msgs = null;
-			if (fobPurchasesSpotMarket != null)
-				msgs = ((InternalEObject)fobPurchasesSpotMarket).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET, null, msgs);
-			if (newFobPurchasesSpotMarket != null)
-				msgs = ((InternalEObject)newFobPurchasesSpotMarket).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET, null, msgs);
-			msgs = basicSetFobPurchasesSpotMarket(newFobPurchasesSpotMarket, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET, newFobPurchasesSpotMarket, newFobPurchasesSpotMarket));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SpotMarketGroup getFobSalesSpotMarket() {
-		return fobSalesSpotMarket;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetFobSalesSpotMarket(SpotMarketGroup newFobSalesSpotMarket, NotificationChain msgs) {
-		SpotMarketGroup oldFobSalesSpotMarket = fobSalesSpotMarket;
-		fobSalesSpotMarket = newFobSalesSpotMarket;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET, oldFobSalesSpotMarket, newFobSalesSpotMarket);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setFobSalesSpotMarket(SpotMarketGroup newFobSalesSpotMarket) {
-		if (newFobSalesSpotMarket != fobSalesSpotMarket) {
-			NotificationChain msgs = null;
-			if (fobSalesSpotMarket != null)
-				msgs = ((InternalEObject)fobSalesSpotMarket).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET, null, msgs);
-			if (newFobSalesSpotMarket != null)
-				msgs = ((InternalEObject)newFobSalesSpotMarket).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET, null, msgs);
-			msgs = basicSetFobSalesSpotMarket(newFobSalesSpotMarket, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET, newFobSalesSpotMarket, newFobSalesSpotMarket));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -461,14 +244,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return ((InternalEList<?>)getPortCosts()).basicRemove(otherEnd, msgs);
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				return ((InternalEList<?>)getCooldownPrices()).basicRemove(otherEnd, msgs);
-			case PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET:
-				return basicSetDesPurchaseSpotMarket(null, msgs);
-			case PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET:
-				return basicSetDesSalesSpotMarket(null, msgs);
-			case PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET:
-				return basicSetFobPurchasesSpotMarket(null, msgs);
-			case PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET:
-				return basicSetFobSalesSpotMarket(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -493,14 +268,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return getPortCosts();
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				return getCooldownPrices();
-			case PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET:
-				return getDesPurchaseSpotMarket();
-			case PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET:
-				return getDesSalesSpotMarket();
-			case PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET:
-				return getFobPurchasesSpotMarket();
-			case PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET:
-				return getFobSalesSpotMarket();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -537,18 +304,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				getCooldownPrices().clear();
 				getCooldownPrices().addAll((Collection<? extends CooldownPrice>)newValue);
 				return;
-			case PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET:
-				setDesPurchaseSpotMarket((SpotMarketGroup)newValue);
-				return;
-			case PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET:
-				setDesSalesSpotMarket((SpotMarketGroup)newValue);
-				return;
-			case PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET:
-				setFobPurchasesSpotMarket((SpotMarketGroup)newValue);
-				return;
-			case PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET:
-				setFobSalesSpotMarket((SpotMarketGroup)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -579,18 +334,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				getCooldownPrices().clear();
 				return;
-			case PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET:
-				setDesPurchaseSpotMarket((SpotMarketGroup)null);
-				return;
-			case PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET:
-				setDesSalesSpotMarket((SpotMarketGroup)null);
-				return;
-			case PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET:
-				setFobPurchasesSpotMarket((SpotMarketGroup)null);
-				return;
-			case PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET:
-				setFobSalesSpotMarket((SpotMarketGroup)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -615,14 +358,6 @@ public class PricingModelImpl extends UUIDObjectImpl implements PricingModel {
 				return portCosts != null && !portCosts.isEmpty();
 			case PricingPackage.PRICING_MODEL__COOLDOWN_PRICES:
 				return cooldownPrices != null && !cooldownPrices.isEmpty();
-			case PricingPackage.PRICING_MODEL__DES_PURCHASE_SPOT_MARKET:
-				return desPurchaseSpotMarket != null;
-			case PricingPackage.PRICING_MODEL__DES_SALES_SPOT_MARKET:
-				return desSalesSpotMarket != null;
-			case PricingPackage.PRICING_MODEL__FOB_PURCHASES_SPOT_MARKET:
-				return fobPurchasesSpotMarket != null;
-			case PricingPackage.PRICING_MODEL__FOB_SALES_SPOT_MARKET:
-				return fobSalesSpotMarket != null;
 		}
 		return super.eIsSet(featureID);
 	}

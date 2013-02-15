@@ -59,22 +59,6 @@
                      class="PricingModel">
                </target>
             </constraint>
-            <constraint
-                  class="com.mmxlabs.models.lng.pricing.validation.SpotMarketConstraint"
-                  id="com.mmxlabs.models.lng.pricing.validation.SpotMarketConstraint"
-                  isEnabledByDefault="true"
-                  lang="Java"
-                  mode="Batch"
-                  name="name"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="SpotMarket">
-               </target>
-            </constraint>
          </constraints>
       </constraintProvider>
    </extension>

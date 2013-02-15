@@ -64,16 +64,7 @@ public class FleetCostModelComponentHelper extends BaseComponentHelper {
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
-		add_charterCostsEditor(detailComposite, topClass);
 		add_baseFuelPricesEditor(detailComposite, topClass);
-	}
-	/**
-	 * Create the editor for the charterCosts feature on FleetCostModel
-	 *
-	 * @generated
-	 */
-	protected void add_charterCostsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, PricingPackage.Literals.FLEET_COST_MODEL__CHARTER_COSTS));
 	}
 	/**
 	 * Create the editor for the baseFuelPrices feature on FleetCostModel

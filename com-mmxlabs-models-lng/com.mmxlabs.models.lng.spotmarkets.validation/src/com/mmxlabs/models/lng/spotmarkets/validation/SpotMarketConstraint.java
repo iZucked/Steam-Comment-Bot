@@ -19,13 +19,13 @@ import org.eclipse.emf.validation.model.IConstraintStatus;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
-import com.mmxlabs.models.lng.pricing.PricingPackage;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
 import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.APort;
@@ -49,8 +49,8 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				if (spotMarket.getMaxQuantity() < spotMarket.getMinQuantity()) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
 							(IConstraintStatus) ctx.createFailureStatus("Min quantity should be less than or equal to max quantity."));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getSpotMarket_MinQuantity());
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getSpotMarket_MaxQuantity());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MinQuantity());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getSpotMarket_MaxQuantity());
 					failures.add(dsd);
 				}
 			}
@@ -62,14 +62,14 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 
 				if (desPurchaseMarket.getCv() < 0.001) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A positive CV value should be set"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getDESPurchaseMarket_Cv());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_Cv());
 					failures.add(dsd);
 				}
 
 				final Set<APort> ports = SetUtils.getPorts(desPurchaseMarket.getDestinationPorts());
 				if (ports.isEmpty()) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("One or more discharge ports must be set"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
 					failures.add(dsd);
 				}
 				for (final APort p : ports) {
@@ -78,7 +78,7 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 						if (!port.getCapabilities().contains(PortCapability.DISCHARGE)) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Port " + port.getName()
 									+ " is not a discharge port"), IStatus.WARNING);
-							dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
+							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_DestinationPorts());
 							failures.add(dsd);
 						}
 					}
@@ -86,7 +86,7 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 
 				if (desPurchaseMarket.getContract() == null || !(desPurchaseMarket.getContract() instanceof PurchaseContract)) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A purchase contract must be specified"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getDESPurchaseMarket_Contract());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_Contract());
 					failures.add(dsd);
 				}
 			}
@@ -99,13 +99,13 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				final Port notionalPort = desSalesMarket.getNotionalPort();
 				if (notionalPort == null || notionalPort.getCapabilities().contains(PortCapability.DISCHARGE) == false) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A notional discharge port must be set"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getDESSalesMarket_NotionalPort());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESSalesMarket_NotionalPort());
 					failures.add(dsd);
 				}
 
 				if (desSalesMarket.getContract() == null || !(desSalesMarket.getContract() instanceof SalesContract)) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A sales contract must be specified"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getDESSalesMarket_Contract());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESSalesMarket_Contract());
 					failures.add(dsd);
 				} else {
 					final SalesContract salesContract = (SalesContract) desSalesMarket.getContract();
@@ -113,7 +113,7 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					if (allowedPorts != null && !allowedPorts.isEmpty()) {
 						if (!allowedPorts.contains(notionalPort)) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Notional port is not a valid contract port."));
-							dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getDESSalesMarket_NotionalPort());
+							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESSalesMarket_NotionalPort());
 							failures.add(dsd);
 						}
 					}
@@ -128,19 +128,19 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				final Port notionalPort = fobPurchasesMarket.getNotionalPort();
 				if (notionalPort == null || notionalPort.getCapabilities().contains(PortCapability.LOAD) == false) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A notional load port must be set"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getFOBPurchasesMarket_NotionalPort());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_NotionalPort());
 					failures.add(dsd);
 				}
 
 				if (fobPurchasesMarket.getCv() < 0.001) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A positive CV value should be set"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getFOBPurchasesMarket_Cv());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_Cv());
 					failures.add(dsd);
 				}
 
 				if (fobPurchasesMarket.getContract() == null || !(fobPurchasesMarket.getContract() instanceof PurchaseContract)) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A purchase contract must be specified"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getFOBPurchasesMarket_Contract());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_Contract());
 					failures.add(dsd);
 				} else {
 					final PurchaseContract salesContract = (PurchaseContract) fobPurchasesMarket.getContract();
@@ -148,7 +148,7 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					if (allowedPorts != null && !allowedPorts.isEmpty()) {
 						if (!allowedPorts.contains(notionalPort)) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Notional port is not a valid contract port."));
-							dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getFOBPurchasesMarket_NotionalPort());
+							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_NotionalPort());
 							failures.add(dsd);
 						}
 					}
@@ -163,13 +163,13 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 				final Port loadPort = fobSalesMarket.getLoadPort();
 				if (loadPort == null || loadPort.getCapabilities().contains(PortCapability.LOAD) == false) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A load port must be set"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getFOBSalesMarket_LoadPort());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBSalesMarket_LoadPort());
 					failures.add(dsd);
 				}
 
 				if (fobSalesMarket.getContract() == null || !(fobSalesMarket.getContract() instanceof SalesContract)) {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A sales contract must be specified"));
-					dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getFOBSalesMarket_Contract());
+					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBSalesMarket_Contract());
 					failures.add(dsd);
 				} else {
 					final SalesContract salesContract = (SalesContract) fobSalesMarket.getContract();
@@ -177,7 +177,7 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					if (allowedPorts != null && !allowedPorts.isEmpty()) {
 						if (!allowedPorts.contains(loadPort)) {
 							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Notional port is not a valid contract port."));
-							dsd.addEObjectAndFeature(spotMarket, PricingPackage.eINSTANCE.getFOBSalesMarket_LoadPort());
+							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBSalesMarket_LoadPort());
 							failures.add(dsd);
 						}
 					}
@@ -204,7 +204,7 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 			if (spotMarketGroup.getType() != spotType) {
 				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus(spotMarket.eClass().getName()
 						+ " is in the SpotMarketGroup for " + spotType));
-				dsd.addEObjectAndFeature(spotMarketGroup, PricingPackage.eINSTANCE.getSpotMarketGroup_Markets());
+				dsd.addEObjectAndFeature(spotMarketGroup, SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets());
 				failures.add(dsd);
 			}
 		}

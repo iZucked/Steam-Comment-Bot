@@ -2,14 +2,12 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.pricing.importers;
+package com.mmxlabs.models.lng.spotmarkets.editor.importers;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EPackage;
 
-import com.mmxlabs.models.lng.pricing.SpotMarket;
-import com.mmxlabs.models.lng.pricing.SpotMarketGroup;
 import com.mmxlabs.models.util.importer.impl.DefaultClassImporter;
 
 /**
