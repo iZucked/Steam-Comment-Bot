@@ -60,7 +60,7 @@ public class ScenarioInstanceMigrator {
 			final List<URI> tmpURIs = new ArrayList<URI>();
 			for (final URI uri : uris) {
 				assert uri != null;
-				final File f = File.createTempFile("migration", "xmi");
+				final File f = File.createTempFile("migration", ".xmi");
 				// Create a temp file and generate a URI to it to pass into migration code.
 				final URI tmpURI = URI.createFileURI(f.getCanonicalPath());
 				assert tmpURI != null;
