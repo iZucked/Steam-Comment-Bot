@@ -163,7 +163,7 @@ public class ManifestItemProvider
 	/**
 	 * This adds a property descriptor for the Scenario Version feature.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -186,7 +186,7 @@ public class ManifestItemProvider
 	/**
 	 * This adds a property descriptor for the Version Context feature.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */

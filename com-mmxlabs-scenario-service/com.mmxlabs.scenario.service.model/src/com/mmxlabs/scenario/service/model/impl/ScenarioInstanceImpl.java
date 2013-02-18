@@ -195,7 +195,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * The default value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @see #getScenarioVersion()
 	 * @generated
@@ -206,7 +206,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * The cached value of the '{@link #getScenarioVersion() <em>Scenario Version</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @see #getScenarioVersion()
 	 * @generated
@@ -217,7 +217,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * The default value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @see #getVersionContext()
 	 * @generated
@@ -228,7 +228,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 	/**
 	 * The cached value of the '{@link #getVersionContext() <em>Version Context</em>}' attribute.
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @see #getVersionContext()
 	 * @generated
@@ -439,7 +439,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -449,7 +449,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -462,7 +462,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -472,7 +472,7 @@ public class ScenarioInstanceImpl extends ContainerImpl implements ScenarioInsta
 
 	/**
 	 * <!-- begin-user-doc -->
-	 * @since 3.0
+	 * @since 3.1
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
