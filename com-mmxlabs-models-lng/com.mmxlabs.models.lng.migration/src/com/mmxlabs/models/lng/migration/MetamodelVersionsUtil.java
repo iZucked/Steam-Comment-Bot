@@ -28,7 +28,7 @@ public class MetamodelVersionsUtil {
 	 * 
 	 */
 	public enum ModelsLNGSet_v1 {
-		Analytics, Cargo, Commercial, Fleet, Input, Optimiser, Port, Pricing, Schedule
+		Analytics, Cargo, Commercial, Fleet, Input, Optimiser, Port, Pricing, Schedule, SpotMarkets
 	}
 
 	public static ModelsLNGSet_v1 getTypeFromNS(final String nsURI) {
@@ -50,6 +50,8 @@ public class MetamodelVersionsUtil {
 			return ModelsLNGSet_v1.Pricing;
 		} else if (ModelsLNGMigrationConstants.NSURI_ScheduleModel.equals(nsURI)) {
 			return ModelsLNGSet_v1.Schedule;
+		} else if (ModelsLNGMigrationConstants.NSURI_SpotMarketsModel.equals(nsURI)) {
+			return ModelsLNGSet_v1.SpotMarkets;
 		}
 		return null;
 	}
@@ -69,6 +71,7 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/spotmarkets-v0.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
 
 		hookSerializableObjectConvertor(typesPackage);
 
@@ -118,6 +121,7 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/spotmarkets-v1.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
 
 		hookSerializableObjectConvertor(typesPackage);
 
@@ -144,6 +148,7 @@ public class MetamodelVersionsUtil {
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.port/model/port.ecore", true), ModelsLNGMigrationConstants.NSURI_PortModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.pricing/model/pricing.ecore", true), ModelsLNGMigrationConstants.NSURI_PricingModel);
 		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/schedule.ecore", true), ModelsLNGMigrationConstants.NSURI_ScheduleModel);
+		loader.loadEPackage(URI.createPlatformPluginURI("/com.mmxlabs.models.lng.schedule/model/spotmarkets.ecore", true), ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
 		
 		hookSerializableObjectConvertor(typesPackage);
 		
