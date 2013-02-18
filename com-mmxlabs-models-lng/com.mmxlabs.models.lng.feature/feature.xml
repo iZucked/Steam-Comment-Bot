@@ -300,4 +300,32 @@ All rights reserved.
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="com.mmxlabs.models.lng.spotmarkets"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.spotmarkets.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.spotmarkets.editor"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.models.lng.spotmarkets.validation"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
