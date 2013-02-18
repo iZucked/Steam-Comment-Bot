@@ -1,0 +1,192 @@
+/**
+ * Copyright (C) Minimax Labs Ltd., 2010 - 2013
+ * All rights reserved.
+ */
+package com.mmxlabs.models.lng.spotmarkets.editor.importers;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
+
+import com.mmxlabs.models.lng.pricing.PricingPackage;
+import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
+import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
+import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBPurchasesMarket;
+import com.mmxlabs.models.lng.spotmarkets.FOBSalesMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
+import com.mmxlabs.models.mmxcore.MMXRootObject;
+import com.mmxlabs.models.mmxcore.UUIDObject;
+import com.mmxlabs.models.util.Activator;
+import com.mmxlabs.models.util.importer.CSVReader;
+import com.mmxlabs.models.util.importer.IClassImporter;
+import com.mmxlabs.models.util.importer.IImportContext;
+import com.mmxlabs.models.util.importer.ISubmodelImporter;
+import com.mmxlabs.models.util.importer.registry.IImporterRegistry;
+
+/**
+ * @since 2.0
+ */
+public class SpotMarketsModelImporter implements ISubmodelImporter {
+	private static final HashMap<String, String> inputs = new HashMap<String, String>();
+	public static final String CHARTER_PRICING_KEY = "CHARTER_PRICING";
+	public static final String SPOT_CARGO_MARKETS_KEY = "SPOT_CARGO_MARKETS";
+	public static final String SPOT_CARGO_MARKETS_AVAILABILITY_KEY = "SPOT_CARGO_MARKETS_AVAILABILITY";
+
+	static {
+		inputs.put(CHARTER_PRICING_KEY, "Charter Rates");
+		inputs.put(SPOT_CARGO_MARKETS_KEY, "Spot Cargo Markets");
+		// inputs.put(SPOT_CARGO_MARKETS_AVAILABILITY_KEY, "Spot Cargo Markets Availability");
+	}
+
+	@Inject
+	private IImporterRegistry importerRegistry;
+
+	private IClassImporter charterPriceImporter;
+
+	private IClassImporter spotCargoMarketImporter;
+
+	private IClassImporter spotCargoMarketAvailabilityImporter;
+
+	/**
+	 * @since 2.0
+	 */
+	public SpotMarketsModelImporter() {
+		final Activator activator = Activator.getDefault();
+		if (activator != null) {
+
+			importerRegistry = activator.getImporterRegistry();
+			registryInit();
+		}
+	}
+
+	@Inject
+	private void registryInit() {
+		if (importerRegistry != null) {
+
+			charterPriceImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getCharterCostModel());
+			spotCargoMarketImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getSpotMarket());
+			spotCargoMarketAvailabilityImporter = importerRegistry.getClassImporter(SpotMarketsPackage.eINSTANCE.getSpotAvailability());
+
+		}
+	}
+
+	@Override
+	public Map<String, String> getRequiredInputs() {
+		return inputs;
+	}
+
+	@Override
+	public UUIDObject importModel(final Map<String, CSVReader> inputs, final IImportContext context) {
+		final SpotMarketsModel spotMarketsModel = SpotMarketsFactory.eINSTANCE.createSpotMarketsModel();
+
+		if (inputs.containsKey(CHARTER_PRICING_KEY))
+			spotMarketsModel.getCharteringSpotMarkets().addAll(
+					(Collection<? extends CharterCostModel>) charterPriceImporter.importObjects(SpotMarketsPackage.eINSTANCE.getCharterCostModel(), inputs.get(CHARTER_PRICING_KEY), context));
+
+		if (inputs.containsKey(SPOT_CARGO_MARKETS_KEY)) {
+			final Collection<EObject> markets = (spotCargoMarketImporter.importObjects(SpotMarketsPackage.eINSTANCE.getSpotMarket(), inputs.get(SPOT_CARGO_MARKETS_KEY), context));
+
+			SpotMarketGroup desPurchaseGroup = null;
+			SpotMarketGroup desSaleGroup = null;
+			SpotMarketGroup fobPurchaseGroup = null;
+			SpotMarketGroup fobSaleGroup = null;
+
+			final List<SpotMarket> desPurchaseMarkets = new LinkedList<SpotMarket>();
+			final List<SpotMarket> desSaleMarkets = new LinkedList<SpotMarket>();
+			final List<SpotMarket> fobPurchaseMarkets = new LinkedList<SpotMarket>();
+			final List<SpotMarket> fobSaleMarkets = new LinkedList<SpotMarket>();
+			for (final EObject market : markets) {
+
+				if (market instanceof SpotMarketGroup) {
+					final SpotMarketGroup group = (SpotMarketGroup) market;
+					switch (group.getType()) {
+					case DES_PURCHASE:
+						desPurchaseGroup = group;
+						break;
+					case DES_SALE:
+						desSaleGroup = group;
+						break;
+					case FOB_PURCHASE:
+						fobPurchaseGroup = group;
+						break;
+					case FOB_SALE:
+						fobSaleGroup = group;
+						break;
+					default:
+						break;
+
+					}
+				} else if (market instanceof DESPurchaseMarket) {
+					desPurchaseMarkets.add((SpotMarket) market);
+				} else if (market instanceof DESSalesMarket) {
+					desSaleMarkets.add((SpotMarket) market);
+				} else if (market instanceof FOBPurchasesMarket) {
+					fobPurchaseMarkets.add((SpotMarket) market);
+				} else if (market instanceof FOBSalesMarket) {
+					fobSaleMarkets.add((SpotMarket) market);
+				}
+
+			}
+			// Set the groups
+			spotMarketsModel.setDesPurchaseSpotMarket(desPurchaseGroup);
+			spotMarketsModel.setDesSalesSpotMarket(desSaleGroup);
+			spotMarketsModel.setFobPurchasesSpotMarket(fobPurchaseGroup);
+			spotMarketsModel.setFobSalesSpotMarket(fobSaleGroup);
+
+			// set the markets
+			if (desPurchaseGroup != null) {
+				desPurchaseGroup.getMarkets().addAll(desPurchaseMarkets);
+			}
+			if (desSaleGroup != null) {
+				desSaleGroup.getMarkets().addAll(desSaleMarkets);
+			}
+			if (fobPurchaseGroup != null) {
+				fobPurchaseGroup.getMarkets().addAll(fobPurchaseMarkets);
+			}
+			if (fobSaleGroup != null) {
+				fobSaleGroup.getMarkets().addAll(fobSaleMarkets);
+			}
+		}
+
+		return spotMarketsModel;
+	}
+
+	@Override
+	public void exportModel(final MMXRootObject root, final UUIDObject model, final Map<String, Collection<Map<String, String>>> output) {
+		final SpotMarketsModel spotMarketsModel = (SpotMarketsModel) model;
+		output.put(CHARTER_PRICING_KEY, charterPriceImporter.exportObjects(spotMarketsModel.getCharteringSpotMarkets(), root));
+		{
+			// Group the SpotMarketGroup and SpotMarkets all into the same export file
+			final LinkedList<EObject> spotMarkets = new LinkedList<EObject>();
+			spotMarkets.add(spotMarketsModel.getDesPurchaseSpotMarket());
+			spotMarkets.add(spotMarketsModel.getDesSalesSpotMarket());
+			spotMarkets.add(spotMarketsModel.getFobPurchasesSpotMarket());
+			spotMarkets.add(spotMarketsModel.getFobSalesSpotMarket());
+
+			spotMarkets.addAll(spotMarketsModel.getDesPurchaseSpotMarket().getMarkets());
+			spotMarkets.addAll(spotMarketsModel.getDesSalesSpotMarket().getMarkets());
+			spotMarkets.addAll(spotMarketsModel.getFobPurchasesSpotMarket().getMarkets());
+			spotMarkets.addAll(spotMarketsModel.getFobSalesSpotMarket().getMarkets());
+
+			output.put(SPOT_CARGO_MARKETS_KEY, spotCargoMarketImporter.exportObjects(spotMarkets, root));
+		}
+
+	}
+
+	@Override
+	public EClass getEClass() {
+		return PricingPackage.eINSTANCE.getPricingModel();
+	}
+}

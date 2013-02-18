@@ -158,7 +158,7 @@
     <submodelImporter
           ID="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMartketsModelImporter"
           subModelClassName="com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel"
-          subModelImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMartketsModelImporter">
+          subModelImporterClass="com.mmxlabs.models.lng.spotmarkets.editor.importers.SpotMarketsModelImporter">
     </submodelImporter>
  </extension>
 </plugin>
