@@ -299,8 +299,9 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 						for (final IJointModelEditorContribution contribution : contributions) {
 							if (contribution instanceof IPropertySourceProvider) {
 								final IPropertySource delegate = ((IPropertySourceProvider) contribution).getPropertySource(object);
-								if (delegate != null)
+								if (delegate != null) {
 									return delegate;
+								}
 							}
 						}
 						return null;
@@ -839,6 +840,14 @@ public class JointModelEditorPart extends MultiPageEditorPart implements IEditor
 			// Remember it.
 			//
 			currentViewer = viewer;
+
+			if (propertySheetPage != null) {
+				if (viewer instanceof IPropertySourceProvider) {
+					propertySheetPage.setPropertySourceProvider((IPropertySourceProvider) viewer);
+				} else {
+					propertySheetPage.setPropertySourceProvider(new AdapterFactoryContentProvider(adapterFactory));
+				}
+			}
 
 			// Set the editors selection based on the current viewer's
 			// selection.
