@@ -17,6 +17,9 @@ import com.mmxlabs.models.ui.valueproviders.IReferenceValueProvider;
 import com.mmxlabs.models.ui.valueproviders.IReferenceValueProviderFactory;
 import com.mmxlabs.models.ui.valueproviders.SimpleReferenceValueProvider;
 
+/**
+ * @since 3.0
+ */
 public class IndexReferenceValueProviderFactory implements IReferenceValueProviderFactory {
 	@Override
 	public IReferenceValueProvider createReferenceValueProvider(final EClass owner,

@@ -102,6 +102,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * The feature id for the '<em><b>Schedule</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
@@ -4333,6 +4334,7 @@ public interface SchedulePackage extends EPackage {
 	/**
 	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.schedule.ScheduleModel#getSchedule <em>Schedule</em>}'.
 	 * <!-- begin-user-doc -->
+	 * @since 3.0
 	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Schedule</em>'.
 	 * @see com.mmxlabs.models.lng.schedule.ScheduleModel#getSchedule()
@@ -5430,6 +5432,7 @@ public interface SchedulePackage extends EPackage {
 		/**
 		 * The meta object literal for the '<em><b>Schedule</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
+		 * @since 3.0
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
