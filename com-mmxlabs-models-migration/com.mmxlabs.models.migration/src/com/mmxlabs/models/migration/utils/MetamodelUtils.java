@@ -7,6 +7,7 @@ package com.mmxlabs.models.migration.utils;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EEnumLiteral;
 import org.eclipse.emf.ecore.EObject;
@@ -59,5 +60,18 @@ public class MetamodelUtils {
 	public static EEnumLiteral getEEnum_Literal(final EEnum eEnum, final String literal) {
 
 		return eEnum.getEEnumLiteral(literal);
+	}
+
+	/**
+	 * Returns the {@link EDataType} from the given package
+	 * 
+	 * @param ePackage
+	 * @param dataTypeName
+	 *            The name of an {@link EDataType}
+	 * @return
+	 * @since 2.0
+	 */
+	public static EDataType getEDataType(EPackage ePackage, String dataTypeName) {
+		return (EDataType) ePackage.getEClassifier(dataTypeName);
 	}
 }
