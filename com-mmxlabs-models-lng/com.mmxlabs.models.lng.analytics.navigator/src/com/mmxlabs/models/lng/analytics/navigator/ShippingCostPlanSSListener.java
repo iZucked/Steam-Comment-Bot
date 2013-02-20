@@ -151,7 +151,10 @@ public class ShippingCostPlanSSListener extends ScenarioServiceListener {
 	public void onPreScenarioInstanceUnload(final IScenarioService scenarioService, final ScenarioInstance scenarioInstance) {
 
 		final ModelAdapter adapter = adapterMap.remove(scenarioInstance);
-		adapter.dispose();
+		// Sometimes the adapter will be null - I think if there is an error loading the scenario initially.
+		if (adapter != null) {
+			adapter.dispose();
+		}
 	}
 
 	public void dispose() {
