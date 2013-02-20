@@ -104,7 +104,11 @@ public abstract class ScenarioInstanceView extends ViewPart implements IScenario
 					final IEditorInput editorInput = editorPart.getEditorInput();
 					final ScenarioInstance scenarioInstance = (ScenarioInstance) editorInput.getAdapter(ScenarioInstance.class);
 					lastPart = part;
-					selectionChanged(part, new StructuredSelection(scenarioInstance));
+					if (scenarioInstance != null) {
+						selectionChanged(part, new StructuredSelection(scenarioInstance));
+					} else {
+						selectionChanged(part, new StructuredSelection());
+					}
 				}
 			}
 		};
