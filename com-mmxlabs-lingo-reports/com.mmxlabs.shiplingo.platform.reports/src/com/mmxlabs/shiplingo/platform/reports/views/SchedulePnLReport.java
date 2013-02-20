@@ -481,6 +481,7 @@ public class SchedulePnLReport extends EMFReportView {
 		return false;
 	}
 
+	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduleElementCollector() {
 
@@ -525,6 +526,7 @@ public class SchedulePnLReport extends EMFReportView {
 	 * @return
 	 * @since 1.1
 	 */
+	@Override
 	protected String getElementKey(final EObject element) {
 		if (element instanceof CargoAllocation) {
 			return ((CargoAllocation) element).getName();
