@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.parsers.SAXParser;
@@ -203,7 +204,7 @@ public class EcoreHelper {
 			final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(destination, feature_proxies);
 			if (proxies != null) {
 				for (final EObject proxy : proxies) {
-					updateMMXProxy(proxy, mmxcorePackage, destination.eClass().getEPackage(), destination.eClass());
+					updateMMXProxy(proxy, mmxcorePackage, destination.eClass());
 				}
 			}
 
@@ -217,7 +218,7 @@ public class EcoreHelper {
 	 * 
 	 * @since 2.0
 	 */
-	public static void updateMMXProxy(final EObject mmxProxy, final EPackage mmxcorePackage, final EPackage newPackage, final EClass containerClass) {
+	public static void updateMMXProxy(final EObject mmxProxy, final EPackage mmxcorePackage, final EClass containerClass) {
 		final EClass class_MMXProxy = MetamodelUtils.getEClass(mmxcorePackage, "MMXProxy");
 		final EStructuralFeature feature_reference = MetamodelUtils.getStructuralFeature(class_MMXProxy, "reference");
 
@@ -237,11 +238,52 @@ public class EcoreHelper {
 			// Note: This depends upon the internal structure of the EMF serialisation
 			// Note: This may not work for sub packages in the EMF metamodel
 			final String nsURI = containerClass.getEPackage().getNsURI();
-			final URI newURI = URI.createURI(nsURI).appendFragment("//" + reference.getEContainingClass().getName() + "/" + reference.getName());
+			final URI newURI = URI.createURI(nsURI).appendFragment("//" + containerClass.getName() + "/" + reference.getName());
 			((InternalEObject) newReference).eSetProxyURI(newURI);
 
 			// Store the new reference
 			mmxProxy.eSet(feature_reference, newReference);
 		}
 	}
+
+	/**
+	 * @since 2.0
+	 */
+	public static void updateMMXProxy(final EObject containerClass, final EPackage mmxcorePackage) {
+
+		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
+		if (class_MMXObject.isInstance(containerClass)) {
+			final EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
+			final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(containerClass, feature_proxies);
+			if (proxies != null) {
+				for (final EObject proxy : proxies) {
+					updateMMXProxy(proxy, mmxcorePackage, containerClass.eClass());
+				}
+			}
+
+		}
+	}
+
+	/**
+	 * @since 2.0
+	 */
+	public static void updateAllMMXProxies(final EObject modelRoot, final EPackage mmxcorePackage) {
+
+		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
+		Iterator<EObject> itr = modelRoot.eAllContents();
+		while (itr.hasNext()) {
+			EObject containerClass = itr.next();
+			if (class_MMXObject.isInstance(containerClass)) {
+				final EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
+				final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(containerClass, feature_proxies);
+				if (proxies != null) {
+					for (final EObject proxy : proxies) {
+						updateMMXProxy(proxy, mmxcorePackage, containerClass.eClass());
+					}
+				}
+
+			}
+		}
+	}
+
 }
