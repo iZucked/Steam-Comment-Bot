@@ -94,7 +94,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 				for (final String filePath : files) {
 					// Expect this type of extension
-					if (!(filePath.endsWith(".sc2") || filePath.endsWith(".scn") || filePath.endsWith(".scenario"))) {
+					if (!(filePath.endsWith(".sc2") || filePath.endsWith(".scn") || filePath.endsWith(".scenario") || filePath.endsWith(".lingo"))) {
 						return Status.CANCEL_STATUS;
 
 					}
@@ -173,7 +173,8 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 						final ScenarioInstance instance = ScenarioStorageUtil.loadInstanceFromFile(filePath);
 						if (instance != null) {
 							try {
-								container.getScenarioService().duplicate(instance, container).setName(new File(filePath).getName());
+								String scenarioName = new File(filePath).getName();
+								container.getScenarioService().duplicate(instance, container).setName(scenarioName);
 							} catch (final IOException e) {
 								log.error(e.getMessage(), e);
 							}
