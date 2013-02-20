@@ -4,6 +4,7 @@
  */
 package com.mmxlabs.models.lng.migration;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -88,22 +89,59 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 			r.setTrackingModification(true);
 			r.load(loadOptions);
 
-			EObject eObject = r.getContents().get(0);
+			final EObject eObject = r.getContents().get(0);
 			assert eObject != null;
 
 			models.put(type, eObject);
 		}
 
+		// Request new model instances should they be needed
+		final Map<ModelsLNGSet_v1, EObject> newModels = new HashMap<ModelsLNGSet_v1, EObject>();
+		hookInNewModels(destinationLoader, newModels);
+
+		// For new models, we need to create a resource object for persistence
+		for (final Map.Entry<ModelsLNGSet_v1, EObject> e : newModels.entrySet()) {
+
+			// Generate a tmp file
+			// TODO: This file is *NOT* cleaned up
+			final File f = File.createTempFile("new-migration", ".xmi");
+			// Create a temp file and generate a URI to it to pass into migration code.
+			final URI uri = URI.createFileURI(f.getCanonicalPath());
+			assert uri != null;
+			// Create new resource
+			final Resource r = resourceSet.createResource(uri);
+			// Add model to resource
+			r.getContents().add(e.getValue());
+			// Peform an initial save
+			r.save(Collections.emptyMap());
+			// Add into main model map
+			models.put(e.getKey(), e.getValue());
+			// Add to input URI's list, calling code should detect change in size
+			baseURIs.add(uri);
+			// Track modifications so we can save again if needed.
+			r.setTrackingModification(true);
+		}
+
 		// Migrate!
 		doMigration(Collections.unmodifiableMap(models));
 
-		// Save the models
+		// Save the models. We check isModified as we cannot save metamodels which are also listed as resources here
 		final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
 		for (final Resource r : resourceSet.getResources()) {
 			if (r.isLoaded() && r.isModified()) {
 				r.save(saveOptions);
 			}
 		}
+	}
+
+	/**
+	 * Sub classes can initialise new sub model instances here and add them to the map.
+	 * 
+	 * @param loader
+	 * @param newModels
+	 */
+	protected void hookInNewModels(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> newModels) {
+
 	}
 
 }
