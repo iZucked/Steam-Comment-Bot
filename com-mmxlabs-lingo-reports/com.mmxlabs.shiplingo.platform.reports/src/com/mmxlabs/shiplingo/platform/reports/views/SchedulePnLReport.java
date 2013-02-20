@@ -153,6 +153,7 @@ public class SchedulePnLReport extends EMFReportView {
 			Double getValue(final SlotVisit visit) {
 				final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
 				if (cargoAllocation == null) {
+					return null;
 				}
 				final Cargo inputCargo = cargoAllocation.getInputCargo();
 				if (inputCargo == null) {
