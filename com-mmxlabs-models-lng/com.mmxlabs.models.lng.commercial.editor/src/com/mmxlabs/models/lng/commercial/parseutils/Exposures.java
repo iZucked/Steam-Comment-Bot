@@ -320,6 +320,9 @@ public class Exposures {
 			// TODO: refactor this into the actual contract classes?
 			if (parameters instanceof IndexPriceParameters) {
 				IndexPriceParameters ipc = (IndexPriceParameters) parameters;
+				if (ipc.getIndex() == null) {
+					return 0;
+				}
 				if (ipc.getIndex().equals(index)) {
 					return ipc.getMultiplier(); 
 				}
