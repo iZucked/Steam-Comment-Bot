@@ -12,6 +12,7 @@ import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -24,6 +25,7 @@ import com.mmxlabs.models.lng.migration.AbstractMigrationUnit;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil;
 import com.mmxlabs.models.lng.migration.MetamodelVersionsUtil.ModelsLNGSet_v1;
 import com.mmxlabs.models.lng.migration.ModelsLNGMigrationConstants;
+import com.mmxlabs.models.migration.utils.EcoreHelper;
 import com.mmxlabs.models.migration.utils.MetamodelLoader;
 import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
@@ -72,6 +74,11 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		clearOldElementsFromSchedule(v1Loader, models);
 		clearAssignments(v1Loader, models);
 		removeExtraAnalyticsFields(v1Loader, models);
+
+		migrateSpotMarketModel(v1Loader, models);
+		// From LNG Model Corrector
+		fixMissingSpotCargoMarkets(v1Loader, models);
+
 		migrateContracts(v1Loader, models);
 	}
 
@@ -360,4 +367,184 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 
 		return newContract;
 	}
+
+	public void migrateSpotMarketModel(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
+		final EPackage pricingPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
+		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+		final EFactory spotMarketsFactory = spotMarketsPackage.getEFactoryInstance();
+
+		final EObject pricingModel = models.get(ModelsLNGSet_v1.Pricing);
+		final EObject spotMarketsModel = models.get(ModelsLNGSet_v1.SpotMarkets);
+
+		final EClass class_PricingModel = MetamodelUtils.getEClass(pricingPackage, "PricingModel");
+		final EClass class_SpotMarketsModel = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketsModel");
+
+		// Migrate each of the four spot markets
+		{
+
+			EcoreHelper.copyEObjectFeature(pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "desPurchaseSpotMarket"));
+			pricingModel.eUnset(MetamodelUtils.getStructuralFeature(class_PricingModel, "desPurchaseSpotMarket"));
+			EcoreHelper.copyEObjectFeature(pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "fobPurchasesSpotMarket"));
+			pricingModel.eUnset(MetamodelUtils.getStructuralFeature(class_PricingModel, "fobPurchasesSpotMarket"));
+			EcoreHelper.copyEObjectFeature(pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "desSalesSpotMarket"));
+			pricingModel.eUnset(MetamodelUtils.getStructuralFeature(class_PricingModel, "desSalesSpotMarket"));
+			EcoreHelper.copyEObjectFeature(pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "fobSalesSpotMarket"));
+			pricingModel.eUnset(MetamodelUtils.getStructuralFeature(class_PricingModel, "fobSalesSpotMarket"));
+		}
+
+		// Convert contract at same time
+
+		// Migrate the charter costs models
+		{
+			final EStructuralFeature feature_PM_fleetCost = MetamodelUtils.getStructuralFeature(class_PricingModel, "fleetCost");
+			final EClass class_PM_FleetCostModel = MetamodelUtils.getEClass(pricingPackage, "FleetCostModel");
+			final EStructuralFeature feature_PM_FCM_charterCosts = MetamodelUtils.getStructuralFeature(class_PM_FleetCostModel, "charterCosts");
+
+			final EStructuralFeature feature_SMM_charteringSpotMarkets = MetamodelUtils.getStructuralFeature(class_SpotMarketsModel, "charteringSpotMarkets");
+			final EClass class_SMM_CharterCostModel = MetamodelUtils.getEClass(spotMarketsPackage, "CharterCostModel");
+
+			final EObject fleetCostModel = (EObject) pricingModel.eGet(feature_PM_fleetCost);
+			if (fleetCostModel != null) {
+				final List<EObject> charterCosts = MetamodelUtils.getValueAsTypedList(fleetCostModel, feature_PM_FCM_charterCosts);
+
+				final List<EObject> newCharteringCostModels = new ArrayList<EObject>(charterCosts.size());
+
+				for (final EObject oldCharterCost : charterCosts) {
+					// TODO: CONVERT
+					final EObject newCharterCost = spotMarketsFactory.create(class_SMM_CharterCostModel);
+
+					EcoreHelper.copyEObject(oldCharterCost, newCharterCost);
+					newCharteringCostModels.add(newCharterCost);
+				}
+
+				spotMarketsModel.eSet(feature_SMM_charteringSpotMarkets, newCharteringCostModels);
+				// Remove old refs
+				fleetCostModel.eUnset(feature_PM_FCM_charterCosts);
+			}
+
+		}
+	}
+
+	@Override
+	protected void hookInNewModels(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> newModels) {
+		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+		final EFactory factory = spotMarketsPackage.getEFactoryInstance();
+		final EClass class_SpotMarketsModel = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketsModel");
+		final EObject spotMarketsModel = factory.create(class_SpotMarketsModel);
+		newModels.put(ModelsLNGSet_v1.SpotMarkets, spotMarketsModel);
+
+	}
+
+	private void fixMissingSpotCargoMarkets(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
+
+		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+
+		final EClass class_SpotMarketsModel = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketsModel");
+
+		final EObject spotMarketsModel = models.get(ModelsLNGSet_v1.SpotMarkets);
+		if (spotMarketsModel != null) {
+			{
+				final EStructuralFeature feature = MetamodelUtils.getStructuralFeature(class_SpotMarketsModel, "desPurchaseSpotMarket");
+				fixUpSpotMarketGroup(loader, spotMarketsModel, feature, "DES_PURCHASE");
+			}
+			{
+				final EStructuralFeature feature = MetamodelUtils.getStructuralFeature(class_SpotMarketsModel, "desSalesSpotMarket");
+				fixUpSpotMarketGroup(loader, spotMarketsModel, feature, "DES_SALES");
+			}
+			{
+				final EStructuralFeature feature = MetamodelUtils.getStructuralFeature(class_SpotMarketsModel, "fobPurchasesSpotMarket");
+				fixUpSpotMarketGroup(loader, spotMarketsModel, feature, "FOB_PURCHASE");
+			}
+			{
+				final EStructuralFeature feature = MetamodelUtils.getStructuralFeature(class_SpotMarketsModel, "fobSalesSpotMarket");
+				fixUpSpotMarketGroup(loader, spotMarketsModel, feature, "FOB_SALES");
+			}
+		}
+	}
+
+	/**
+	 * For the given SpotMarketGroup instance, ensure ensure the correct spot type is set on the group and any contained markets. Also ensure there is a name set on any curve data.
+	 * 
+	 * @param loader
+	 * @param spotMarketsModel
+	 * @param feature
+	 * @param spotTypeString
+	 */
+	private void fixUpSpotMarketGroup(final MetamodelLoader loader, final EObject spotMarketsModel, final EStructuralFeature feature, final String spotTypeString) {
+
+		final EPackage mmxcorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+
+		final EClass class_NamedObject = MetamodelUtils.getEClass(mmxcorePackage, "NamedObject");
+		final EStructuralFeature feature_NO_name = MetamodelUtils.getStructuralFeature(class_NamedObject, "name");
+
+		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+		final EFactory spotMarketsFactory = spotMarketsPackage.getEFactoryInstance();
+
+		final EClass class_SpotMarketGroup = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketGroup");
+		final EStructuralFeature feature_SMG_type = MetamodelUtils.getStructuralFeature(class_SpotMarketGroup, "type");
+		final EStructuralFeature feature_SMG_markets = MetamodelUtils.getStructuralFeature(class_SpotMarketGroup, "markets");
+		final EStructuralFeature feature_SMG_availability = MetamodelUtils.getStructuralFeature(class_SpotMarketGroup, "availability");
+
+		final EClass class_SpotMarket = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarket");
+		final EStructuralFeature feature_SM_type = MetamodelUtils.getStructuralFeature(class_SpotMarket, "type");
+		final EStructuralFeature feature_SM_availability = MetamodelUtils.getStructuralFeature(class_SpotMarket, "availability");
+
+		final EDataType dt_SpotType = MetamodelUtils.getEDataType(spotMarketsPackage, "SpotType");
+
+		final Object dt_SpotType_INSTANCE = spotMarketsFactory.createFromString(dt_SpotType, spotTypeString);
+		if (spotMarketsModel.eIsSet(feature) == false) {
+			final EObject group = spotMarketsFactory.create(class_SpotMarketGroup);
+			group.eSet(feature_SMG_type, dt_SpotType_INSTANCE);
+			spotMarketsModel.eSet(feature, group);
+		}
+		final EObject group = (EObject) spotMarketsModel.eGet(feature);
+		if (group.eIsSet(feature_NO_name) == false) {
+			group.eSet(feature_NO_name, spotTypeString);
+		}
+		if (group.eIsSet(feature_SMG_availability)) {
+			fixSpotAvailabilityName(loader, (EObject) group.eGet(feature_SMG_availability), spotTypeString);
+		}
+
+		if (group.eIsSet(feature_SMG_markets)) {
+			final List<EObject> spotMarkets = MetamodelUtils.getValueAsTypedList(group, feature_SMG_markets);
+			for (final EObject market : spotMarkets) {
+				if (market.eGet(feature_SM_type) != dt_SpotType_INSTANCE) {
+					market.eSet(feature_SM_type, dt_SpotType_INSTANCE);
+				}
+				if (market.eIsSet(feature_SM_availability)) {
+					fixSpotAvailabilityName(loader, (EObject) market.eGet(feature_SM_availability), spotTypeString);
+				}
+			}
+		}
+	}
+
+	private void fixSpotAvailabilityName(final MetamodelLoader loader, final EObject availability, final String name) {
+
+		final EPackage mmxcorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+
+		final EClass class_NamedObject = MetamodelUtils.getEClass(mmxcorePackage, "NamedObject");
+		final EStructuralFeature feature_NO_name = MetamodelUtils.getStructuralFeature(class_NamedObject, "name");
+
+		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+
+		final EClass class_SpotAvailability = MetamodelUtils.getEClass(spotMarketsPackage, "SpotAvailability");
+		final EStructuralFeature feature_SA_curve = MetamodelUtils.getStructuralFeature(class_SpotAvailability, "curve");
+
+		if (availability != null) {
+			if (availability.eIsSet(feature_SA_curve)) {
+				final EObject curve = (EObject) availability.eGet(feature_SA_curve);
+
+				if (!curve.eIsSet(feature_NO_name)) {
+					curve.eSet(feature_NO_name, name);
+				} else {
+					final String currentName = (String) curve.eGet(feature_NO_name);
+					if (currentName.isEmpty()) {
+
+						curve.eSet(feature_NO_name, name);
+					}
+				}
+			}
+		}
+	}
+
 }
