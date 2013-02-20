@@ -488,7 +488,6 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		final EStructuralFeature feature_SMG_availability = MetamodelUtils.getStructuralFeature(class_SpotMarketGroup, "availability");
 
 		final EClass class_SpotMarket = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarket");
-		final EStructuralFeature feature_SM_type = MetamodelUtils.getStructuralFeature(class_SpotMarket, "type");
 		final EStructuralFeature feature_SM_availability = MetamodelUtils.getStructuralFeature(class_SpotMarket, "availability");
 
 		final EDataType dt_SpotType = MetamodelUtils.getEDataType(spotMarketsPackage, "SpotType");
@@ -507,9 +506,6 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		if (group.eIsSet(feature_SMG_markets)) {
 			final List<EObject> spotMarkets = MetamodelUtils.getValueAsTypedList(group, feature_SMG_markets);
 			for (final EObject market : spotMarkets) {
-				if (market.eGet(feature_SM_type) != dt_SpotType_INSTANCE) {
-					market.eSet(feature_SM_type, dt_SpotType_INSTANCE);
-				}
 				if (market.eIsSet(feature_SM_availability)) {
 					fixSpotAvailabilityName(loader, (EObject) market.eGet(feature_SM_availability), spotTypeString);
 				}
