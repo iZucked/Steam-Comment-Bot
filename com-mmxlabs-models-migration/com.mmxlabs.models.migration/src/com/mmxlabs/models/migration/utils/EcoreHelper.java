@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -113,7 +114,7 @@ public class EcoreHelper {
 	 * 
 	 * @since 2.0
 	 */
-	public static void copyEObjectFeature(final EObject sourceContainer, final EObject destinationContainer, final EStructuralFeature sourceFeature) {
+	public static void copyEObjectFeature(final EPackage mmxcorePackage, final EObject sourceContainer, final EObject destinationContainer, final EStructuralFeature sourceFeature) {
 
 		if (sourceContainer.eIsSet(sourceFeature) == false) {
 			return;
@@ -128,13 +129,13 @@ public class EcoreHelper {
 				final List<EObject> subRefs = MetamodelUtils.getValueAsTypedList(sourceContainer, sourceReference);
 				final List<EObject> newSubRefs = new ArrayList<EObject>(subRefs.size());
 				for (final EObject subRef : subRefs) {
-					final EObject newSubRef = copyIfRequired(sourceContainer, destPackage, subRef);
+					final EObject newSubRef = copyIfRequired(mmxcorePackage, sourceContainer, destPackage, subRef);
 					newSubRefs.add(newSubRef);
 				}
 				destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), newSubRefs);
 			} else {
 				final EObject subRef = (EObject) sourceContainer.eGet(sourceReference);
-				final EObject newSubRef = copyIfRequired(sourceContainer, destPackage, subRef);
+				final EObject newSubRef = copyIfRequired(mmxcorePackage, sourceContainer, destPackage, subRef);
 				destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), newSubRef);
 			}
 
@@ -146,13 +147,13 @@ public class EcoreHelper {
 			if (attribPackage.equals(containerPackage)) {
 				EClassifier destClassifier = destPackage.getEClassifier(eAttributeType.getName());
 				if (destClassifier instanceof EDataType) {
-					Object destValue = destPackage.getEFactoryInstance().createFromString((EDataType)destClassifier, sourceContainer.eGet(eAttribute).toString());
+					Object destValue = destPackage.getEFactoryInstance().createFromString((EDataType) destClassifier, sourceContainer.eGet(eAttribute).toString());
 					destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), destValue);
 				} else {
 					destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), sourceContainer.eGet(sourceFeature));
 				}
 			} else {
-			destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), sourceContainer.eGet(sourceFeature));
+				destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), sourceContainer.eGet(sourceFeature));
 			}
 		} else {
 			destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), sourceContainer.eGet(sourceFeature));
@@ -164,7 +165,7 @@ public class EcoreHelper {
 	 * 
 	 * @since 2.0
 	 */
-	public static EObject copyIfRequired(final EObject sourceContainer, final EPackage destPackage, final EObject subRef) {
+	public static EObject copyIfRequired(final EPackage mmxcorePackage, final EObject sourceContainer, final EPackage destPackage, final EObject subRef) {
 		EObject newSubRef = subRef;
 		// Parent and child (or other relation) are in the same package -- probably needs to be converted.
 		if (subRef.eClass().getEPackage().equals(sourceContainer.eClass().getEPackage())) {
@@ -174,7 +175,8 @@ public class EcoreHelper {
 			if (destClass != null) {
 				final EObject clone = destFactory.create(destClass);
 				// Deep copy of the object
-				copyEObject(subRef, clone);
+				copyEObject(mmxcorePackage, subRef, clone);
+								
 				newSubRef = clone;
 			}
 		}
@@ -187,11 +189,50 @@ public class EcoreHelper {
 	 * @param destination
 	 * @since 2.0
 	 */
-	public static void copyEObject(final EObject source, final EObject destination) {
+	public static void copyEObject(final EPackage mmxcorePackage, final EObject source, final EObject destination) {
 		// Copy feature data
 		for (final EStructuralFeature f : source.eClass().getEAllStructuralFeatures()) {
 			// Copy data
-			copyEObjectFeature(source, destination, f);
+			copyEObjectFeature(mmxcorePackage, source, destination, f);
+		}
+		
+		EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
+		if (class_MMXObject.isInstance(destination)) {
+			EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
+			List<EObject> proxies = MetamodelUtils.getValueAsTypedList(destination, feature_proxies);
+			List<EObject> source_proxies = MetamodelUtils.getValueAsTypedList(source, feature_proxies);
+			if (proxies != null) {
+				for (EObject proxy : proxies) {
+					updateMMXProxy(proxy, mmxcorePackage, destination.eClass().getEPackage());
+				}
+			}
+			
+		}
+
+	}
+
+	
+	/**
+	 * @since 2.0
+	 */
+	public static void updateMMXProxy(EObject mmxProxy, EPackage mmxcorePackage, EPackage newPackage) {
+		EClass class_MMXProxy = MetamodelUtils.getEClass(mmxcorePackage, "MMXProxy");
+		EStructuralFeature feature_reference = MetamodelUtils.getStructuralFeature(class_MMXProxy, "reference");
+
+		if (mmxProxy.eIsSet(feature_reference)) {
+			EReference reference = (EReference) mmxProxy.eGet(feature_reference);
+			 reference = (EReference)  EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
+			EClass class_OldReferenceClass = reference.getEReferenceType();
+			EClass class_NewReferenceClass = MetamodelUtils.getEClass(newPackage, class_OldReferenceClass.getName());
+			if (class_NewReferenceClass != null) {
+				String feature_name = class_OldReferenceClass.getEStructuralFeature(reference.getFeatureID()).getName();
+
+				EStructuralFeature newReference = MetamodelUtils.getStructuralFeature(class_NewReferenceClass, feature_name);
+
+				if (newReference != null) {
+					mmxProxy.eSet(feature_reference, newReference);
+				}
+			}
 		}
 	}
 }
