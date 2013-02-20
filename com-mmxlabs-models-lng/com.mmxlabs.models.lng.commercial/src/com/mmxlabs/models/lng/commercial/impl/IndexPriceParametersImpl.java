@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
 import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
+import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.types.AIndex;
 
 /**
@@ -41,7 +42,7 @@ public class IndexPriceParametersImpl extends LNGPriceCalculatorParametersImpl i
 	 * @generated
 	 * @ordered
 	 */
-	protected AIndex index;
+	protected Index index;
 
 	/**
 	 * The default value of the '{@link #getMultiplier() <em>Multiplier</em>}' attribute.
@@ -107,10 +108,10 @@ public class IndexPriceParametersImpl extends LNGPriceCalculatorParametersImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AIndex getIndex() {
+	public Index getIndex() {
 		if (index != null && index.eIsProxy()) {
 			InternalEObject oldIndex = (InternalEObject)index;
-			index = (AIndex)eResolveProxy(oldIndex);
+			index = (Index)eResolveProxy(oldIndex);
 			if (index != oldIndex) {
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX, oldIndex, index));
@@ -124,7 +125,7 @@ public class IndexPriceParametersImpl extends LNGPriceCalculatorParametersImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AIndex basicGetIndex() {
+	public Index basicGetIndex() {
 		return index;
 	}
 
@@ -133,8 +134,8 @@ public class IndexPriceParametersImpl extends LNGPriceCalculatorParametersImpl i
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setIndex(AIndex newIndex) {
-		AIndex oldIndex = index;
+	public void setIndex(Index newIndex) {
+		Index oldIndex = index;
 		index = newIndex;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX, oldIndex, index));
@@ -210,7 +211,7 @@ public class IndexPriceParametersImpl extends LNGPriceCalculatorParametersImpl i
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX:
-				setIndex((AIndex)newValue);
+				setIndex((Index)newValue);
 				return;
 			case CommercialPackage.INDEX_PRICE_PARAMETERS__MULTIPLIER:
 				setMultiplier((Double)newValue);
@@ -231,7 +232,7 @@ public class IndexPriceParametersImpl extends LNGPriceCalculatorParametersImpl i
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case CommercialPackage.INDEX_PRICE_PARAMETERS__INDEX:
-				setIndex((AIndex)null);
+				setIndex((Index)null);
 				return;
 			case CommercialPackage.INDEX_PRICE_PARAMETERS__MULTIPLIER:
 				setMultiplier(MULTIPLIER_EDEFAULT);
