@@ -279,7 +279,6 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	public ScenarioInstance duplicate(final ScenarioInstance original, final Container destination) throws IOException {
 		log.debug("Duplicating " + original.getUuid() + " into " + destination);
 		final IScenarioService originalService = original.getScenarioService();
-		final List<EObject> originalSubModels = new ArrayList<EObject>();
 
 		// Determine whether or not the model is currently loaded. If it is not currently loaded, then attempt to perform a scenario migration before loading the models. If it is loaded, we can assume
 		// this process has already been performed.
@@ -318,6 +317,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 				cpy = original;
 			}
 
+			final List<EObject> originalSubModels = new ArrayList<EObject>();
 			// Remember instances which were not loaded originally and unload them after use.
 			final Set<IModelInstance> instancesToUnload = new HashSet<IModelInstance>();
 
