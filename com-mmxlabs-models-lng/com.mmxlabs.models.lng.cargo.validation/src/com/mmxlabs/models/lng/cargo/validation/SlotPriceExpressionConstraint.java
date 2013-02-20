@@ -92,6 +92,9 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 			final SeriesParser indices = new SeriesParser();
 
 			final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
+			if (pricingModel == null) {
+				return null;
+			}
 			for (final Index<Double> index : pricingModel.getCommodityIndices()) {
 				if (index instanceof DataIndex) {
 					// For this validation, we do not need real times or values

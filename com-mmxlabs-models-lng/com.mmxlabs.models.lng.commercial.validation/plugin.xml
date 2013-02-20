@@ -44,25 +44,6 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.RedirectionPurchaseContractConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.RedirectionPurchaseContractConstraint"
-                  isEnabledByDefault="true"
-                  lang="Java"
-                  mode="Batch"
-                  name="Redirection Purchase Contract Constraint"
-                  severity="ERROR"
-                  statusCode="1">
-               <message>
-                  {0}
-               </message>
-               <target
-                     class="RedirectionPurchaseContract">
-               </target>
-               <target
-                     class="Contract">
-               </target>
-            </constraint>
-            <constraint
                   class="com.mmxlabs.models.lng.commercial.validation.PriceExpressionContractConstraint"
                   id="com.mmxlabs.models.lng.commercial.validation.PriceExpressionContractConstraint"
                   isEnabledByDefault="true"
