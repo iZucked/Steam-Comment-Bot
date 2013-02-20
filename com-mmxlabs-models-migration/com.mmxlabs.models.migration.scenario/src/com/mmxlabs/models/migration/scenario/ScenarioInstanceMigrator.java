@@ -24,6 +24,9 @@ import com.mmxlabs.models.migration.IMigrationUnit;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
+/**
+ * @since 2.0
+ */
 public class ScenarioInstanceMigrator {
 
 	private final IMigrationRegistry migrationRegistry;

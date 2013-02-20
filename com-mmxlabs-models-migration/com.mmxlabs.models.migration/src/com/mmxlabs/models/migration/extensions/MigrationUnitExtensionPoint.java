@@ -10,6 +10,9 @@ import org.ops4j.peaberry.eclipse.MapName;
 
 import com.mmxlabs.models.migration.IMigrationUnit;
 
+/**
+ * @since 2.0
+ */
 @ExtensionBean("com.mmxlabs.models.migration.MigrationUnit")
 public interface MigrationUnitExtensionPoint {
 

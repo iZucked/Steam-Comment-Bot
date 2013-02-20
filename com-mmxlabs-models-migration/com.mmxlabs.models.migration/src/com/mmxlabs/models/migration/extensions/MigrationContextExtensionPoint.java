@@ -8,6 +8,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.ops4j.peaberry.eclipse.ExtensionBean;
 import org.ops4j.peaberry.eclipse.MapName;
 
+/**
+ * @since 2.0
+ */
 @ExtensionBean("com.mmxlabs.models.migration.MigrationContext")
 public interface MigrationContextExtensionPoint {
 

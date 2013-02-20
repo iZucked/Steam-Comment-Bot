@@ -26,6 +26,7 @@ import com.mmxlabs.models.migration.extensions.MigrationUnitExtensionPoint;
  * An implementation of {@link IMigrationRegistry} populated by extensions points.
  * 
  * @author Simon Goodall
+ * @since 2.0
  * 
  */
 public class MigrationRegistry implements IMigrationRegistry {
