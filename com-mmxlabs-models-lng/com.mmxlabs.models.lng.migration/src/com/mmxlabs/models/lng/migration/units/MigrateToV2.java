@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.migration.internal;
+package com.mmxlabs.models.lng.migration.units;
 
 import java.util.Map;
 

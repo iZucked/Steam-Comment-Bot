@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.models.lng.migration.internal;
+package com.mmxlabs.models.lng.migration.units;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -428,7 +428,12 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 	}
 
 	@Override
-	protected void hookInNewModels(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> newModels) {
+	protected void hookInNewModels(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> existingModels, final Map<ModelsLNGSet_v1, EObject> newModels) {
+
+		if (existingModels.containsKey(ModelsLNGSet_v1.SpotMarkets)) {
+			return;
+		}
+
 		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
 		final EFactory factory = spotMarketsPackage.getEFactoryInstance();
 		final EClass class_SpotMarketsModel = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketsModel");

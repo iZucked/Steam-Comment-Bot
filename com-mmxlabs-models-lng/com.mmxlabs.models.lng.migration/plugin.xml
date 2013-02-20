@@ -17,13 +17,13 @@
    <extension
          point="com.mmxlabs.models.migration.MigrationUnit">
       <MigrationUnit
-            class="com.mmxlabs.models.lng.migration.internal.MigrateToV1"
+            class="com.mmxlabs.models.lng.migration.units.MigrateToV1"
             context="com.mmxlabs.models.lng"
             from="0"
             to="-1">
       </MigrationUnit>
       <MigrationUnit
-            class="com.mmxlabs.models.lng.migration.internal.MigrateToV2"
+            class="com.mmxlabs.models.lng.migration.units.MigrateToV2"
             context="com.mmxlabs.models.lng"
             from="-1"
             to="-2">
