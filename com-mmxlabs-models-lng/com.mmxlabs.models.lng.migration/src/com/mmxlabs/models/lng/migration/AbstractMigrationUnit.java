@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.URIConverter;
@@ -129,6 +130,9 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
 		for (final Resource r : resourceSet.getResources()) {
 			if (r.isLoaded() && r.isModified()) {
+				EPackage mmxcorePackage = destinationLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+				EcoreHelper.updateAllMMXProxies(r.getContents().get(0), mmxcorePackage);
+				
 				r.save(saveOptions);
 			}
 		}
