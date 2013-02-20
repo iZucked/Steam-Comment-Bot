@@ -44,22 +44,19 @@
                </target>
             </constraint>
             <constraint
-                  class="com.mmxlabs.models.lng.commercial.validation.PriceExpressionContractConstraint"
-                  id="com.mmxlabs.models.lng.commercial.validation.PriceExpressionContractConstraint"
+                  class="com.mmxlabs.models.lng.commercial.validation.PriceExpressionParametersConstraint"
+                  id="com.mmxlabs.models.lng.commercial.validation.PriceExpressionParametersConstraint"
                   isEnabledByDefault="true"
                   lang="Java"
                   mode="Batch"
-                  name="Price Expression Contract Constraint"
+                  name="Price Expression Constraint"
                   severity="ERROR"
                   statusCode="1">
                <message>
                   {0}
                </message>
                <target
-                     class="PriceExpressionContract">
-               </target>
-               <target
-                     class="Contract">
+                     class="ExpressionPriceParameters">
                </target>
             </constraint>
             

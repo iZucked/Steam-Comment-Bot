@@ -10,8 +10,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.spotmarkets.editor.editorpart.SpotMarketGroupPane;
@@ -29,7 +29,7 @@ public class DESPurchaseSpotMarketView extends ScenarioTableViewerView<SpotMarke
 	@Override
 	protected void initViewerPane(final SpotMarketGroupPane pane) {
 		pane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }), null);
-		pane.getViewer().setInput(getRootObject().getSubModel(PricingModel.class));
+		pane.getViewer().setInput(getRootObject().getSubModel(SpotMarketsModel.class));
 	}
 
 	@Override

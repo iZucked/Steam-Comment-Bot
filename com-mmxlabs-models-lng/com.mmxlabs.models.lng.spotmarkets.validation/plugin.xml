@@ -36,8 +36,8 @@
                <target
                      class="SpotMarket">
                </target>
-            </constraint>
-         </constraints>
+            </constraint>       
+            </constraints>
       </constraintProvider>
    </extension>
 

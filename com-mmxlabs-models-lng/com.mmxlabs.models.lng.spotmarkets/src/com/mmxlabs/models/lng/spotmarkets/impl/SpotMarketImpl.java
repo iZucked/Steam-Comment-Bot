@@ -13,6 +13,7 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 
 import com.mmxlabs.models.lng.types.AContract;
 
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.types.impl.ASpotMarketImpl;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -33,6 +34,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.SpotMarketImpl#getPriceInfo <em>Price Info</em>}</li>
  * </ul>
  * </p>
  *
@@ -88,6 +90,16 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	 * @ordered
 	 */
 	protected int maxQuantity = MAX_QUANTITY_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getPriceInfo() <em>Price Info</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPriceInfo()
+	 * @generated
+	 * @ordered
+	 */
+	protected LNGPriceCalculatorParameters priceInfo;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -198,6 +210,49 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public LNGPriceCalculatorParameters getPriceInfo() {
+		return priceInfo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPriceInfo(LNGPriceCalculatorParameters newPriceInfo, NotificationChain msgs) {
+		LNGPriceCalculatorParameters oldPriceInfo = priceInfo;
+		priceInfo = newPriceInfo;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__PRICE_INFO, oldPriceInfo, newPriceInfo);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setPriceInfo(LNGPriceCalculatorParameters newPriceInfo) {
+		if (newPriceInfo != priceInfo) {
+			NotificationChain msgs = null;
+			if (priceInfo != null)
+				msgs = ((InternalEObject)priceInfo).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - SpotMarketsPackage.SPOT_MARKET__PRICE_INFO, null, msgs);
+			if (newPriceInfo != null)
+				msgs = ((InternalEObject)newPriceInfo).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - SpotMarketsPackage.SPOT_MARKET__PRICE_INFO, null, msgs);
+			msgs = basicSetPriceInfo(newPriceInfo, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.SPOT_MARKET__PRICE_INFO, newPriceInfo, newPriceInfo));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public AContract getContract() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT
@@ -214,6 +269,8 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 		switch (featureID) {
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
 				return basicSetAvailability(null, msgs);
+			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
+				return basicSetPriceInfo(null, msgs);
 		}
 		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
@@ -232,6 +289,8 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 				return getMinQuantity();
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				return getMaxQuantity();
+			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
+				return getPriceInfo();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -252,6 +311,9 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity((Integer)newValue);
+				return;
+			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
+				setPriceInfo((LNGPriceCalculatorParameters)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -274,6 +336,9 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				setMaxQuantity(MAX_QUANTITY_EDEFAULT);
 				return;
+			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
+				setPriceInfo((LNGPriceCalculatorParameters)null);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -292,6 +357,8 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 				return minQuantity != MIN_QUANTITY_EDEFAULT;
 			case SpotMarketsPackage.SPOT_MARKET__MAX_QUANTITY:
 				return maxQuantity != MAX_QUANTITY_EDEFAULT;
+			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
+				return priceInfo != null;
 		}
 		return super.eIsSet(featureID);
 	}
