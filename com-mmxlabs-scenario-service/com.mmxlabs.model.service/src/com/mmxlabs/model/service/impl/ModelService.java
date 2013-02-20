@@ -37,6 +37,7 @@ import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 
 /**
  * Default implementation of {@link IModelService}.
+ * @since 3.1
  * 
  */
 public class ModelService implements IModelService {

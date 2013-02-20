@@ -24,6 +24,11 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.models.mmxcore.UUIDObject;
 import com.mmxlabs.models.mmxcore.impl.MMXContentAdapter;
 
+/**
+ * A {@link ModelInstance} is a wrapper around a top level {@link EObject} instance.
+ * 
+ * @since 3.1
+ */
 public class ModelInstance implements IModelInstance {
 	private static final Logger log = LoggerFactory.getLogger(ModelInstance.class);
 	private final Resource resource;
@@ -153,6 +158,7 @@ public class ModelInstance implements IModelInstance {
 		}
 	}
 
+	@Override
 	public void saveWithMany() throws IOException {
 		if (!isDirty()) {
 			log.debug("Not saving " + resource.getURI() + ", as it's not modified");
