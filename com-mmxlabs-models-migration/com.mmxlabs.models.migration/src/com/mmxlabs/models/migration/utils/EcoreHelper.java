@@ -140,14 +140,14 @@ public class EcoreHelper {
 			}
 
 		} else if (sourceFeature instanceof EAttribute) {
-			EAttribute eAttribute = (EAttribute) sourceFeature;
-			EDataType eAttributeType = eAttribute.getEAttributeType();
-			EPackage attribPackage = eAttributeType.getEPackage();
-			EPackage containerPackage = sourceContainer.eClass().getEPackage();
+			final EAttribute eAttribute = (EAttribute) sourceFeature;
+			final EDataType eAttributeType = eAttribute.getEAttributeType();
+			final EPackage attribPackage = eAttributeType.getEPackage();
+			final EPackage containerPackage = sourceContainer.eClass().getEPackage();
 			if (attribPackage.equals(containerPackage)) {
-				EClassifier destClassifier = destPackage.getEClassifier(eAttributeType.getName());
+				final EClassifier destClassifier = destPackage.getEClassifier(eAttributeType.getName());
 				if (destClassifier instanceof EDataType) {
-					Object destValue = destPackage.getEFactoryInstance().createFromString((EDataType) destClassifier, sourceContainer.eGet(eAttribute).toString());
+					final Object destValue = destPackage.getEFactoryInstance().createFromString((EDataType) destClassifier, sourceContainer.eGet(eAttribute).toString());
 					destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), destValue);
 				} else {
 					destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), sourceContainer.eGet(sourceFeature));
@@ -176,7 +176,7 @@ public class EcoreHelper {
 				final EObject clone = destFactory.create(destClass);
 				// Deep copy of the object
 				copyEObject(mmxcorePackage, subRef, clone);
-								
+
 				newSubRef = clone;
 			}
 		}
@@ -195,43 +195,41 @@ public class EcoreHelper {
 			// Copy data
 			copyEObjectFeature(mmxcorePackage, source, destination, f);
 		}
-		
-		EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
+
+		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
 		if (class_MMXObject.isInstance(destination)) {
-			EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
-			List<EObject> proxies = MetamodelUtils.getValueAsTypedList(destination, feature_proxies);
-			List<EObject> source_proxies = MetamodelUtils.getValueAsTypedList(source, feature_proxies);
+			final EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
+			final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(destination, feature_proxies);
 			if (proxies != null) {
-				for (EObject proxy : proxies) {
-					updateMMXProxy(proxy, mmxcorePackage, destination.eClass().getEPackage());
+				for (final EObject proxy : proxies) {
+					updateMMXProxy(proxy, mmxcorePackage, destination.eClass().getEPackage(), destination.eClass());
 				}
 			}
-			
+
 		}
 
 	}
 
-	
 	/**
 	 * @since 2.0
 	 */
-	public static void updateMMXProxy(EObject mmxProxy, EPackage mmxcorePackage, EPackage newPackage) {
-		EClass class_MMXProxy = MetamodelUtils.getEClass(mmxcorePackage, "MMXProxy");
-		EStructuralFeature feature_reference = MetamodelUtils.getStructuralFeature(class_MMXProxy, "reference");
+	public static void updateMMXProxy(final EObject mmxProxy, final EPackage mmxcorePackage, final EPackage newPackage, final EClass containerClass) {
+		final EClass class_MMXProxy = MetamodelUtils.getEClass(mmxcorePackage, "MMXProxy");
+		final EStructuralFeature feature_reference = MetamodelUtils.getStructuralFeature(class_MMXProxy, "reference");
 
 		if (mmxProxy.eIsSet(feature_reference)) {
+			// Initial reference will be a "proxy"...
 			EReference reference = (EReference) mmxProxy.eGet(feature_reference);
-			 reference = (EReference)  EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
-			EClass class_OldReferenceClass = reference.getEReferenceType();
-			EClass class_NewReferenceClass = MetamodelUtils.getEClass(newPackage, class_OldReferenceClass.getName());
-			if (class_NewReferenceClass != null) {
-				String feature_name = class_OldReferenceClass.getEStructuralFeature(reference.getFeatureID()).getName();
+			// ... so we need to "resolve" it to load in the types from our metamodels.
+			reference = (EReference) EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
 
-				EStructuralFeature newReference = MetamodelUtils.getStructuralFeature(class_NewReferenceClass, feature_name);
+			final EClass class_OldContainingClass = reference.getEContainingClass();
+			final String feature_name = class_OldContainingClass.getEStructuralFeature(reference.getFeatureID()).getName();
 
-				if (newReference != null) {
-					mmxProxy.eSet(feature_reference, newReference);
-				}
+			final EStructuralFeature newReference = MetamodelUtils.getStructuralFeature(containerClass, feature_name);
+
+			if (newReference != null) {
+				mmxProxy.eSet(feature_reference, newReference);
 			}
 		}
 	}
