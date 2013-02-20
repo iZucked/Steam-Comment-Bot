@@ -384,13 +384,22 @@ public interface SpotMarketsPackage extends EPackage {
 	int SPOT_MARKET__MAX_QUANTITY = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SPOT_MARKET__PRICE_INFO = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Spot Market</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SPOT_MARKET_FEATURE_COUNT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 3;
+	int SPOT_MARKET_FEATURE_COUNT = TypesPackage.ASPOT_MARKET_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.
@@ -473,6 +482,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int DES_PURCHASE_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_PURCHASE_MARKET__PRICE_INFO = SPOT_MARKET__PRICE_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Cv</b></em>' attribute.
@@ -593,6 +611,15 @@ public interface SpotMarketsPackage extends EPackage {
 	int DES_SALES_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
 
 	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DES_SALES_MARKET__PRICE_INFO = SPOT_MARKET__PRICE_INFO;
+
+	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -700,6 +727,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_PURCHASES_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_PURCHASES_MARKET__PRICE_INFO = SPOT_MARKET__PRICE_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Notional Port</b></em>' reference.
@@ -818,6 +854,15 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FOB_SALES_MARKET__MAX_QUANTITY = SPOT_MARKET__MAX_QUANTITY;
+
+	/**
+	 * The feature id for the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int FOB_SALES_MARKET__PRICE_INFO = SPOT_MARKET__PRICE_INFO;
 
 	/**
 	 * The feature id for the '<em><b>Load Port</b></em>' reference.
@@ -1109,6 +1154,17 @@ public interface SpotMarketsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getSpotMarket_MaxQuantity();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPriceInfo <em>Price Info</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Price Info</em>'.
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPriceInfo()
+	 * @see #getSpotMarket()
+	 * @generated
+	 */
+	EReference getSpotMarket_PriceInfo();
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket <em>DES Purchase Market</em>}'.
@@ -1491,6 +1547,14 @@ public interface SpotMarketsPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SPOT_MARKET__MAX_QUANTITY = eINSTANCE.getSpotMarket_MaxQuantity();
+
+		/**
+		 * The meta object literal for the '<em><b>Price Info</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SPOT_MARKET__PRICE_INFO = eINSTANCE.getSpotMarket_PriceInfo();
 
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl <em>DES Purchase Market</em>}' class.

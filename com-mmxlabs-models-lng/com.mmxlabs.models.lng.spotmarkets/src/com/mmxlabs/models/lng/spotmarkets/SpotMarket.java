@@ -9,6 +9,7 @@
 package com.mmxlabs.models.lng.spotmarkets;
 import com.mmxlabs.models.lng.types.AContract;
 import com.mmxlabs.models.lng.types.ASpotMarket;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 
 /**
  * <!-- begin-user-doc -->
@@ -21,6 +22,7 @@ import com.mmxlabs.models.lng.types.ASpotMarket;
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getAvailability <em>Availability</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getMinQuantity <em>Min Quantity</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getMaxQuantity <em>Max Quantity</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPriceInfo <em>Price Info</em>}</li>
  * </ul>
  * </p>
  *
@@ -106,6 +108,32 @@ public interface SpotMarket extends ASpotMarket {
 	 * @generated
 	 */
 	void setMaxQuantity(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Price Info</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Price Info</em>' containment reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Price Info</em>' containment reference.
+	 * @see #setPriceInfo(LNGPriceCalculatorParameters)
+	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getSpotMarket_PriceInfo()
+	 * @model containment="true"
+	 * @generated
+	 */
+	LNGPriceCalculatorParameters getPriceInfo();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.SpotMarket#getPriceInfo <em>Price Info</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Price Info</em>' containment reference.
+	 * @see #getPriceInfo()
+	 * @generated
+	 */
+	void setPriceInfo(LNGPriceCalculatorParameters value);
 
 	/**
 	 * <!-- begin-user-doc -->

@@ -17,6 +17,7 @@ import org.eclipse.jface.viewers.ISelection;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.modelfactories.DefaultModelFactory;
 
@@ -27,6 +28,7 @@ import com.mmxlabs.models.ui.modelfactories.DefaultModelFactory;
  * 
  */
 public class SpotMarketFactory extends DefaultModelFactory {
+	protected String priceInfoClassName;
 
 	public SpotMarketFactory() {
 		super();
@@ -120,4 +122,26 @@ public class SpotMarketFactory extends DefaultModelFactory {
 
 		return object;
 	}
+
+	@Override
+	protected EObject createSubInstance(final EObject top, final EReference reference) {
+		if (reference.equals(SpotMarketsPackage.Literals.SPOT_MARKET__PRICE_INFO)) {
+			EClass priceInfoClass = getEClassFromName(priceInfoClassName, null);
+			if (priceInfoClass != null) {
+				return priceInfoClass.getEPackage().getEFactoryInstance().create(priceInfoClass);
+			}
+			
+			return null;
+			
+		}
+		return super.createSubInstance(top, reference);
+	}
+
+	@Override
+	public void initFromExtension(final String ID, final String label, final String prototype) {
+		super.initFromExtension(ID, label, "com.mmxlabs.models.lng.spotmarkets.SpotMarket");
+		this.priceInfoClassName = prototype;
+	}
+	
+
 }

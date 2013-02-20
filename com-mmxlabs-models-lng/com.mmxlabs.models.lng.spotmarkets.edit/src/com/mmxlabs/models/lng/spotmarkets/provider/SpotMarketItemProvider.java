@@ -127,6 +127,7 @@ public class SpotMarketItemProvider
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKET__AVAILABILITY);
+			childrenFeatures.add(SpotMarketsPackage.Literals.SPOT_MARKET__PRICE_INFO);
 		}
 		return childrenFeatures;
 	}
@@ -175,6 +176,7 @@ public class SpotMarketItemProvider
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			case SpotMarketsPackage.SPOT_MARKET__AVAILABILITY:
+			case SpotMarketsPackage.SPOT_MARKET__PRICE_INFO:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 		}
