@@ -87,6 +87,34 @@ public class ScenarioInstanceMigrator {
 				// Use a new URI Convertor otherwise the previous map will cause source == dest!
 				copyURIData(new ExtensibleURIConverterImpl(), tmpURI, uri);
 			}
+
+			// For new URI's added to the collection, we need to add them to the scenario model
+			if (tmpURIs.size() > uris.size()) {
+				for (int i = uris.size(); i < tmpURIs.size(); ++i) {
+					final URI tmpURI = tmpURIs.get(i);
+					assert tmpURI != null;
+
+					final URI uri = uris.get(0);
+					assert uri != null;
+
+					// Construct new URI for model store - here we are using knowledge of how uri's are constructed. We should really create some API around this in scenario service.
+					String newURIStr = "./" + scenarioInstance.getUuid() + "-" + i + ".xmi";
+					// Copy data into the new data file
+					URI destURI = scenarioService.resolveURI(newURIStr);
+
+					if (destURI.isRelative()) {
+						final File f = File.createTempFile("migration", ".xmi");
+						destURI = URI.createFileURI(f.getCanonicalPath());
+					}
+					copyURIData(new ExtensibleURIConverterImpl(), tmpURI, destURI);
+
+					// Add submodel URI to the model def
+					scenarioInstance.getSubModelURIs().add(destURI.toString());
+
+				}
+
+			}
+
 			scenarioInstance.setScenarioVersion(migratedVersion);
 
 		} finally {
