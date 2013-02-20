@@ -168,6 +168,12 @@ public class ScenarioServiceSaveHook {
 			return false;
 		} 
 		
+		if (scenariosToSave == null) {
+			// Not sure why this could happen, but it did once...
+			// SG - 2013-02-18
+			return false;
+		} 
+		
 		/*else if (ret == 1) {
 			// Discard
 			return true;
