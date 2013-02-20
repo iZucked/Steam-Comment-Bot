@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.xml.sax.Attributes;
@@ -211,6 +212,9 @@ public class EcoreHelper {
 	}
 
 	/**
+	 * This method updates the stored MMXProxy references to point to the new reference. As we move a class from one metamodel to another one, the persisted reference will store the ecore model
+	 * reference to the old model definition. This method will load the reference and locate the equivalent on the new model class.
+	 * 
 	 * @since 2.0
 	 */
 	public static void updateMMXProxy(final EObject mmxProxy, final EPackage mmxcorePackage, final EPackage newPackage, final EClass containerClass) {
@@ -226,11 +230,18 @@ public class EcoreHelper {
 			final EClass class_OldContainingClass = reference.getEContainingClass();
 			final String feature_name = class_OldContainingClass.getEStructuralFeature(reference.getFeatureID()).getName();
 
+			// This bit gets the new model reference. However it will be match against the platform URI rather than namespace URI.
 			final EStructuralFeature newReference = MetamodelUtils.getStructuralFeature(containerClass, feature_name);
 
-			if (newReference != null) {
-				mmxProxy.eSet(feature_reference, newReference);
-			}
+			// Here we attempt to reconstruct the real reference URI using the namespace rather than the platform URI.
+			// Note: This depends upon the internal structure of the EMF serialisation
+			// Note: This may not work for sub packages in the EMF metamodel
+			final String nsURI = containerClass.getEPackage().getNsURI();
+			final URI newURI = URI.createURI(nsURI).appendFragment("//" + reference.getEContainingClass().getName() + "/" + reference.getName());
+			((InternalEObject) newReference).eSetProxyURI(newURI);
+
+			// Store the new reference
+			mmxProxy.eSet(feature_reference, newReference);
 		}
 	}
 }
