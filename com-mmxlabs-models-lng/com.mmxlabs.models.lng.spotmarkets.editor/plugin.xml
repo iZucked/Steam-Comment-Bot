@@ -141,6 +141,15 @@
     </factory>
  </extension>
  <extension
+       point="com.mmxlabs.models.ui.jointmodeleditors">
+    <jointModelEditor
+          id="com.mmxlabs.models.lng.spotmarkets.editor.spotmarketseditor"
+          implementation="com.mmxlabs.models.lng.spotmarkets.editor.editorpart.SpotMarketsModelEditorContribution"
+          priority="10"
+          subModelClass="com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel">
+    </jointModelEditor>
+ </extension>
+ <extension
        point="com.mmxlabs.models.ui.valueproviders">
     <valueProvider
           factory="com.mmxlabs.models.lng.spotmarkets.editor.valueproviders.SpotMarketPortValueProviderFactory"
