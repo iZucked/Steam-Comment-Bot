@@ -15,4 +15,5 @@ Require-Bundle: com.mmxlabs.models.migration;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.models.lng.port;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.models.lng.pricing;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.models.lng.schedule;bundle-version="[3.0.0,4.0.0)"
-Export-Package: com.mmxlabs.models.lng.migration
+Export-Package: com.mmxlabs.models.lng.migration,
+ com.mmxlabs.models.lng.migration.units

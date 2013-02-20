@@ -97,7 +97,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 
 		// Request new model instances should they be needed
 		final Map<ModelsLNGSet_v1, EObject> newModels = new HashMap<ModelsLNGSet_v1, EObject>();
-		hookInNewModels(destinationLoader, newModels);
+		hookInNewModels(destinationLoader, models, newModels);
 
 		// For new models, we need to create a resource object for persistence
 		for (final Map.Entry<ModelsLNGSet_v1, EObject> e : newModels.entrySet()) {
@@ -140,7 +140,7 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * @param loader
 	 * @param newModels
 	 */
-	protected void hookInNewModels(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> newModels) {
+	protected void hookInNewModels(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> existingModels, final Map<ModelsLNGSet_v1, EObject> newModels) {
 
 	}
 
