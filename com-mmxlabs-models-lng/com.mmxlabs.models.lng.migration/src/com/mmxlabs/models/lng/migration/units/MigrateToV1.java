@@ -16,7 +16,9 @@ import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EFactory;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xml.type.AnyType;
@@ -263,6 +265,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 	public void migrateContracts(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
 		final EObject commercialModel = models.get(ModelsLNGSet_v1.Commercial);
 		final EPackage commercialPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CommercialModel);
+		final EPackage mmxcorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
 		// final EFactory commercialFactory = commercialPackage.getEFactoryInstance();
 
 		final EClass class_CommercialModel = MetamodelUtils.getEClass(commercialPackage, "CommercialModel");
@@ -304,7 +307,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 					throw new IllegalStateException("Unknown contract type: " + oldContract.eClass().getName());
 				}
 
-				final EObject newContract = convertContract(oldContract, class_params, commercialPackage, true);
+				final EObject newContract = convertContract(oldContract, class_params, commercialPackage, mmxcorePackage, true);
 				contracts.set(i, newContract);
 			}
 			commercialModel.eSet(feature_purchaseContracts, contracts);
@@ -329,7 +332,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 					throw new IllegalStateException("Unknown contract type: " + oldContract.eClass().getName());
 				}
 
-				final EObject newContract = convertContract(oldContract, class_params, commercialPackage, false);
+				final EObject newContract = convertContract(oldContract, class_params, commercialPackage, mmxcorePackage, false);
 				contracts.set(i, newContract);
 			}
 			commercialModel.eSet(feature_salesContracts, contracts);
@@ -337,33 +340,91 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 
 	}
 
-	public EObject convertContract(final EObject original, final EClass class_params, final EPackage commercialPackage, final boolean isPurchase) {
+	public EObject convertContract(final EObject original, final EClass class_params, final EPackage commercialPackage, final EPackage mmxcorePackage, final boolean isPurchase) {
 		final EFactory commercialFactory = commercialPackage.getEFactoryInstance();
-
+		final EClass class_Contract = MetamodelUtils.getEClass(commercialPackage, "Contract");
 		final EClass class_targetType = MetamodelUtils.getEClass(commercialPackage, isPurchase ? "PurchaseContract" : "SalesContract");
 
+		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
+		final EClass class_MMXProxy = MetamodelUtils.getEClass(mmxcorePackage, "MMXProxy");
+		final EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
+		final EStructuralFeature feature_reference = MetamodelUtils.getStructuralFeature(class_MMXProxy, "reference");
+
 		final EObject newContract = commercialFactory.create(class_targetType);
+		final EObject paramsObject = commercialFactory.create(class_params);
 		// Copy contract params over
 		for (final EStructuralFeature feature : class_targetType.getEAllStructuralFeatures()) {
 			if (original.eIsSet(feature)) {
-				newContract.eSet(feature, original.eGet(feature));
+
+				if (feature instanceof EReference && ((EReference) feature).getEReferenceType() == class_MMXProxy) {
+					final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(original, feature_proxies);
+					final List<EObject> newContractProxies = new ArrayList<EObject>();
+					final List<EObject> newParamsProxies = new ArrayList<EObject>();
+					if (proxies != null) {
+						for (final EObject mmxProxy : proxies) {
+
+							if (mmxProxy.eIsSet(feature_reference)) {
+								// Initial reference will be a "proxy"...
+								EReference reference = (EReference) mmxProxy.eGet(feature_reference);
+								// ... so we need to "resolve" it to load in the types from our metamodels.
+								reference = (EReference) EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
+
+								if (reference.getEContainingClass() == class_targetType || reference.getEContainingClass() == class_Contract) {
+									newContractProxies.add(mmxProxy);
+								} else {
+									newParamsProxies.add(mmxProxy);
+								}
+							}
+						}
+					}
+					newContract.eSet(feature, newContractProxies);
+					paramsObject.eSet(feature, newParamsProxies);
+
+				} else {
+					newContract.eSet(feature, original.eGet(feature));
+				}
 			}
 		}
-		final EObject paramsObject = commercialFactory.create(class_params);
 		// List of features to copy over to params
 		for (final EStructuralFeature feature : class_params.getEAllStructuralFeatures()) {
 			final EStructuralFeature oldFeature = original.eClass().getEStructuralFeature(feature.getName());
 			if (original.eIsSet(oldFeature)) {
-				paramsObject.eSet(feature, original.eGet(oldFeature));
-				// Clear old data
+
+				if (feature instanceof EReference && ((EReference) feature).getEReferenceType() == class_MMXProxy) {
+//					List<EObject> proxies = MetamodelUtils.getValueAsTypedList(paramsObject, feature_proxies);
+//					List<EObject> newProxies = new ArrayList<EObject>();
+//					if (proxies != null) {
+//						for (EObject mmxProxy : proxies) {
+//
+//							if (mmxProxy.eIsSet(feature_reference)) {
+//								// Initial reference will be a "proxy"...
+//								EReference reference = (EReference) mmxProxy.eGet(feature_reference);
+//								// ... so we need to "resolve" it to load in the types from our metamodels.
+//								reference = (EReference) EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
+//
+//								if (!(reference.getEReferenceType() == class_targetType || reference.getEReferenceType() == class_Contract)) {
+//									newProxies.add(mmxProxy);
+//								}
+//							}
+//						}
+//					}
+//					paramsObject.eSet(feature, newProxies);
+
+				} else {
+
+					paramsObject.eSet(feature, original.eGet(oldFeature));
+					// Clear old data
+				}
 				original.eUnset(oldFeature);
 			}
 		}
 
 		// Set params feature
-		final EClass class_Contract = MetamodelUtils.getEClass(commercialPackage, "Contract");
 		final EStructuralFeature feature_priceInfo = MetamodelUtils.getStructuralFeature(class_Contract, "priceInfo");
 		newContract.eSet(feature_priceInfo, paramsObject);
+
+		EcoreHelper.updateMMXProxy(newContract, mmxcorePackage);
+		EcoreHelper.updateMMXProxy(paramsObject, mmxcorePackage);
 
 		return newContract;
 	}
