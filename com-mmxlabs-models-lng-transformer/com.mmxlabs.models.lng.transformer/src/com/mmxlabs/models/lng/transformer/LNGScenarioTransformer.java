@@ -375,6 +375,9 @@ public class LNGScenarioTransformer {
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
 			final ISalesPriceCalculator calculator = transformer.transformSalesContract(c);
+			if (calculator == null) {
+				throw new IllegalStateException("Unable to transform contract");
+			}
 			entities.addModelObject(c, calculator);
 		}
 
