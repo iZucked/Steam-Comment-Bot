@@ -128,6 +128,10 @@ public class CurveDataExistsConstraint extends AbstractModelConstraint {
 		final MMXRootObject rootObject = extraValidationContext.getRootObject();
 		final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
 
+		if (pricingModel == null) {
+			return;
+		}
+		
 		// earliest slot date 
 		final Date date = slot.getWindowStartWithSlotOrPortTime();
 		
