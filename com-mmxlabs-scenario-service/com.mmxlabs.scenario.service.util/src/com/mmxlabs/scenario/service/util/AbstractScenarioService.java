@@ -403,14 +403,14 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public IScenarioMigrationService getScenarioMigrationService() {
 		return scenarioMigrationService;
 	}
 
 	/**
-	 * @since 3.0
+	 * @since 3.1
 	 */
 	public void setScenarioMigrationService(final IScenarioMigrationService scenarioMigrationHandler) {
 		this.scenarioMigrationService = scenarioMigrationHandler;
