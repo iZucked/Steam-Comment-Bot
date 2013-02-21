@@ -11,6 +11,7 @@ import java.util.Set;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
@@ -93,7 +94,7 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 		final IInputValidator validator = null;
 		final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Fork " + oldName, "Choose new name for fork", suggestedName, validator);
 
-		if (dialog.open() == InputDialog.OK) {
+		if (dialog.open() == Window.OK) {
 			return dialog.getValue();
 		}
 		return null;

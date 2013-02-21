@@ -19,6 +19,7 @@ import org.eclipse.emf.validation.service.ModelValidationService;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionDelegate;
 import org.eclipse.ui.IEditorPart;
@@ -253,7 +254,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 				// Wait for use to press a button before continuing.
 				dialog.setBlockOnOpen(true);
 
-				if (dialog.open() == Dialog.CANCEL) {
+				if (dialog.open() == Window.CANCEL) {
 					return false;
 				}
 			}
