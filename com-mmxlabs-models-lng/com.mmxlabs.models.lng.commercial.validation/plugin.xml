@@ -37,9 +37,6 @@
                      class="Contract">
                </target>
                <target
-                     class="NotionalBallastParameters">
-               </target>
-               <target
                      class="CommercialModel">
                </target>
             </constraint>
