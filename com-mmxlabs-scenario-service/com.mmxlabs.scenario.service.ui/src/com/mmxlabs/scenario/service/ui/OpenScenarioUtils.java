@@ -81,8 +81,8 @@ public class OpenScenarioUtils {
 						public void run(final IProgressMonitor monitor) {
 							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
 							try {
-								final IEditorPart editorPart = activePage.openEditor(editorInput, descriptor.getId());
-								editorRef[0] = editorPart;
+								final IEditorPart openEditorPart = activePage.openEditor(editorInput, descriptor.getId());
+								editorRef[0] = openEditorPart;
 								monitor.worked(1);
 							} catch (final PartInitException e) {
 								log.error(e.getMessage(), e);
