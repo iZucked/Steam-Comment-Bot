@@ -265,6 +265,12 @@ public class EcoreHelper {
 	}
 
 	/**
+	 * This method updates the stored MMXProxy references to point to the new references for all objects in a model tree. See {@link #updateMMXProxy(EObject, EPackage)} for more details.
+	 * 
+	 * @param modelRoot
+	 *            The root node in the model tree.
+	 * @param mmxcorePackage
+	 *            The MMXCore {@link EPackage} instance to use to find the MMXProxy EClass and related features.
 	 * @since 2.0
 	 */
 	public static void updateAllMMXProxies(final EObject modelRoot, final EPackage mmxcorePackage) {
