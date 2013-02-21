@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.shiplingo.platform.vanilla.extensions.pnl;
+package com.mmxlabs.scheduler.optimiser.entities.impl;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -32,8 +32,8 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.impl.VesselEventPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
-import com.mmxlabs.scheduler.optimiser.contracts.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
@@ -45,7 +45,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
-public class VanillaEntityValueCalculator implements IEntityValueCalculator {
+public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 	@Inject
 	private IEntityProvider entityProvider;
@@ -59,7 +59,7 @@ public class VanillaEntityValueCalculator implements IEntityValueCalculator {
 	@Inject
 	private IPortCostProvider portCostProvider;
 
-	public VanillaEntityValueCalculator() {
+	public DefaultEntityValueCalculator() {
 
 	}
 
