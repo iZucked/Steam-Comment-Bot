@@ -136,7 +136,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		saveInitialSolution(startSolution, 0);
 	}
 
-	private Schedule saveInitialSolution(final IAnnotatedSolution solution, final int currentProgress) {
+	private Schedule saveInitialSolution(final IAnnotatedSolution solution, final int solutionCurrentProgress) {
 
 		final EditingDomain domain = (EditingDomain) scenarioInstance.getAdapters().get(EditingDomain.class);
 		try {
@@ -146,7 +146,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			}
 
 			// Rollback last "save" and re-apply to avoid long history of undos
-			if (currentProgress != 0) {
+			if (solutionCurrentProgress != 0) {
 				final Command mostRecentCommand = editingDomain.getCommandStack().getMostRecentCommand();
 				if (mostRecentCommand != null) {
 					if (mostRecentCommand.getLabel().startsWith(LABEL_PREFIX)) {
@@ -178,7 +178,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		final InputModel inputModel = scenario.getSubModel(InputModel.class);
 		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
 
-		final String label = (currentProgress != 0) ? (LABEL_PREFIX + currentProgress + "%") : ("Evaluate");
+		final String label = (solutionCurrentProgress != 0) ? (LABEL_PREFIX + solutionCurrentProgress + "%") : ("Evaluate");
 		final CompoundCommand command = new CompoundCommand(label);
 
 		try {
