@@ -287,9 +287,7 @@ public class EcoreHelper {
 						updateMMXProxy(proxy, mmxcorePackage, containerClass.eClass());
 					}
 				}
-
 			}
 		}
 	}
-
 }
