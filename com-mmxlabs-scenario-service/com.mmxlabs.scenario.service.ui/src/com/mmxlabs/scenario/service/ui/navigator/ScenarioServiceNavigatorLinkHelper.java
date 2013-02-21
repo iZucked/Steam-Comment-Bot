@@ -48,11 +48,12 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 
 	private boolean checked;
 
-	private UIJob activateEditorJob = new UIJob("Activate Editor") {
-		public IStatus runInUIThread(IProgressMonitor monitor) {
+	private final UIJob activateEditorJob = new UIJob("Activate Editor") {
+		@Override
+		public IStatus runInUIThread(final IProgressMonitor monitor) {
 
 			if (!commonViewer.getControl().isDisposed()) {
-				ISelection selection = commonViewer.getSelection();
+				final ISelection selection = commonViewer.getSelection();
 				if (selection != null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
 
 					final IStructuredSelection sSelection = (IStructuredSelection) selection;
@@ -61,6 +62,7 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 						if (helpers.length > 0) {
 							ignoreEditorActivation = true;
 							SafeRunner.run(new SafeRunnable() {
+								@Override
 								public void run() throws Exception {
 									helpers[0].activateEditor(commonNavigator.getSite().getPage(), sSelection);
 								}
@@ -74,18 +76,20 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 		}
 	};
 
-	private UIJob updateSelectionJob = new UIJob("Update selection") {
-		public IStatus runInUIThread(IProgressMonitor monitor) {
+	private final UIJob updateSelectionJob = new UIJob("Update selection") {
+		@Override
+		public IStatus runInUIThread(final IProgressMonitor monitor) {
 
 			if (!commonNavigator.getCommonViewer().getControl().isDisposed()) {
 				SafeRunner.run(new SafeRunnable() {
+					@Override
 					public void run() throws Exception {
-						IWorkbenchPage page = commonNavigator.getSite().getPage();
+						final IWorkbenchPage page = commonNavigator.getSite().getPage();
 						if (page != null) {
-							IEditorPart editor = page.getActiveEditor();
+							final IEditorPart editor = page.getActiveEditor();
 							if (editor != null) {
-								IEditorInput input = editor.getEditorInput();
-								IStructuredSelection newSelection = linkService.getSelectionFor(input);
+								final IEditorInput input = editor.getEditorInput();
+								final IStructuredSelection newSelection = linkService.getSelectionFor(input);
 								if (!newSelection.isEmpty()) {
 									ignoreSelectionChanged = true;
 									commonNavigator.selectReveal(newSelection);
@@ -110,7 +114,7 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 	 *            The common viewer instance with a {@link INavigatorContentService}.
 	 * @param linkHelperService
 	 */
-	public ScenarioServiceNavigatorLinkHelper(CommonNavigator aNavigator, CommonViewer aViewer, LinkHelperService linkHelperService) {
+	public ScenarioServiceNavigatorLinkHelper(final CommonNavigator aNavigator, final CommonViewer aViewer, final LinkHelperService linkHelperService) {
 		linkService = linkHelperService;
 		commonNavigator = aNavigator;
 		commonViewer = aViewer;
@@ -123,26 +127,31 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 	protected void init() {
 		partListener = new IPartListener() {
 
-			public void partActivated(IWorkbenchPart part) {
+			@Override
+			public void partActivated(final IWorkbenchPart part) {
 				if (part instanceof IEditorPart && !ignoreEditorActivation) {
 					updateSelectionJob.schedule(LINK_HELPER_DELAY);
 				}
 			}
 
-			public void partBroughtToTop(IWorkbenchPart part) {
+			@Override
+			public void partBroughtToTop(final IWorkbenchPart part) {
 				if (part instanceof IEditorPart && !ignoreEditorActivation) {
 					updateSelectionJob.schedule(LINK_HELPER_DELAY);
 				}
 			}
 
-			public void partClosed(IWorkbenchPart part) {
+			@Override
+			public void partClosed(final IWorkbenchPart part) {
 
 			}
 
-			public void partDeactivated(IWorkbenchPart part) {
+			@Override
+			public void partDeactivated(final IWorkbenchPart part) {
 			}
 
-			public void partOpened(IWorkbenchPart part) {
+			@Override
+			public void partOpened(final IWorkbenchPart part) {
 			}
 		};
 
@@ -171,7 +180,8 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 	 * 
 	 * @see org.eclipse.jface.viewers.ISelectionChangedList
 	 */
-	public void selectionChanged(SelectionChangedEvent event) {
+	@Override
+	public void selectionChanged(final SelectionChangedEvent event) {
 		if (commonNavigator.isLinkingEnabled() && !ignoreSelectionChanged) {
 			activateEditor();
 		}
@@ -181,7 +191,7 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 	 * Update the active editor based on the current selection in the Navigator.
 	 */
 	protected void activateEditor() {
-		ISelection selection = commonViewer.getSelection();
+		final ISelection selection = commonViewer.getSelection();
 		if (selection != null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
 			/*
 			 * Create and schedule a UI Job to activate the editor in a valid Display thread
@@ -195,7 +205,8 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 	 * 
 	 * @see org.eclipse.ui.IPropertyListener#propertyChanged(java.lang.Object, int)
 	 */
-	public void propertyChanged(Object aSource, int aPropertyId) {
+	@Override
+	public void propertyChanged(final Object aSource, final int aPropertyId) {
 		switch (aPropertyId) {
 		case CommonNavigator.IS_LINKING_ENABLED_PROPERTY:
 			updateLinkingEnabled(((CommonNavigator) aSource).isLinkingEnabled());
@@ -205,7 +216,7 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 	/**
 	 * @param toEnableLinking
 	 */
-	private void updateLinkingEnabled(boolean toEnableLinking) {
+	private void updateLinkingEnabled(final boolean toEnableLinking) {
 		setChecked(toEnableLinking);
 
 		if (toEnableLinking) {
@@ -224,7 +235,7 @@ public class ScenarioServiceNavigatorLinkHelper implements ISelectionChangedList
 		return checked;
 	}
 
-	public void setChecked(boolean checked) {
+	public void setChecked(final boolean checked) {
 		this.checked = checked;
 	}
 
