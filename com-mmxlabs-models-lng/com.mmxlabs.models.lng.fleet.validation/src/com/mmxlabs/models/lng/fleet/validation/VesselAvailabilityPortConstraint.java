@@ -47,7 +47,7 @@ public class VesselAvailabilityPortConstraint extends AbstractModelMultiConstrai
 			final EObject container = extraContext.getContainer(availablility);
 			if (container instanceof Vessel) {
 				final Vessel vessel = (Vessel) container;
-				final VesselClass vesselClass = (VesselClass) vessel.getVesselClass();
+				final VesselClass vesselClass = vessel.getVesselClass();
 				if (vesselClass == null) {
 					return Activator.PLUGIN_ID;
 				}
