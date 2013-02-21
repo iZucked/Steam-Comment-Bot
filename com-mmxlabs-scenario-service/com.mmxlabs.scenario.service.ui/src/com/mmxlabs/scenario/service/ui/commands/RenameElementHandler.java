@@ -13,6 +13,7 @@ import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -74,7 +75,7 @@ public class RenameElementHandler extends AbstractHandler {
 		final IInputValidator validator = null;
 		final InputDialog dialog = new InputDialog(Display.getDefault().getActiveShell(), "Rename element", "Choose new element name", oldName, validator);
 
-		if (dialog.open() == InputDialog.OK) {
+		if (dialog.open() == Window.OK) {
 			return dialog.getValue();
 		}
 		return null;
