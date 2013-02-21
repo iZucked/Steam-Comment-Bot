@@ -34,7 +34,6 @@ All rights reserved.
       <import feature="com.mmxlabs.models.lng.feature" version="3.0.0" match="compatible"/>
       <import feature="com.mmxlabs.rcp.common.feature" version="2.0.0" match="compatible"/>
       <import feature="com.mmxlabs.scenario.service.feature" version="3.0.0" match="compatible"/>
-      <import feature="com.mmxlabs.trading.optimiser.feature" version="3.0.0" match="compatible"/>
       <import feature="com.mmxlabs.models.lng.transformer.feature" version="3.0.0" match="compatible"/>
    </requires>
 
@@ -47,13 +46,6 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.shiplingo.platform.reports"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.mmxlabs.scheduler.com.mmxlabs.scheduler.optimiser"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -124,6 +116,13 @@ All rights reserved.
 
    <plugin
          id="com.mmxlabs.models.lng.analytics.navigator"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="com.mmxlabs.scheduler.optimiser"
          download-size="0"
          install-size="0"
          version="0.0.0"

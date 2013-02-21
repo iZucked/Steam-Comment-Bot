@@ -46,8 +46,8 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataContainer;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
+import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioViewerSynchronizerOutput;
-import com.mmxlabs.trading.optimiser.TradingConstants;
 
 /**
  * @author hinton

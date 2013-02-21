@@ -11,12 +11,12 @@ import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
 
+import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
+import com.mmxlabs.models.lng.commercial.parseutils.Exposures.MonthYear;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures;
-import com.mmxlabs.models.lng.commercial.parseutils.Exposures.MonthYear;
 
 /**
  * @since 2.0

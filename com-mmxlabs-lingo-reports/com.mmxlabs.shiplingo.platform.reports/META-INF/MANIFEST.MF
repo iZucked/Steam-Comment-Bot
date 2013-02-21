@@ -9,7 +9,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.google.guava;bundle-version="11.0.1",
  org.slf4j.api;bundle-version="1.6.4",
  org.eclipse.emf.edit.ui;bundle-version="2.7.0",
- com.mmxlabs.common.common-util;bundle-version="2.0.0",
  com.mmxlabs.rcp.common;bundle-version="[2.0.0,3.0.0)",
  com.mmxlabs.jobmanager;bundle-version="[1.0.0,2.0.0)",
  com.mmxlabs.models.util;bundle-version="[2.0.0,3.0.0)",
@@ -23,11 +22,11 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="3.7.0",
  com.mmxlabs.models.lng.optimiser.edit;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.models.lng.port.edit;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.models.lng.pricing.edit;bundle-version="[3.0.0,4.0.0)",
- com.mmxlabs.models.lng.schedule.edit;bundle-version="[3.0.0,4.0.0)",
- com.mmxlabs.trading.optimiser;bundle-version="[3.0.0,4.0.0)"
+ com.mmxlabs.models.lng.schedule.edit;bundle-version="[3.0.0,4.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy
 Export-Package: com.mmxlabs.shiplingo.platform.reports,
  com.mmxlabs.shiplingo.platform.reports.properties,
  com.mmxlabs.shiplingo.platform.reports.views
-Import-Package: com.mmxlabs.models.lng.commercial.parseutils
+Import-Package: com.mmxlabs.models.lng.commercial.parseutils,
+ com.mmxlabs.scheduler.optimiser;version="3.0.1"

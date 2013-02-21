@@ -16,9 +16,9 @@ import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
+import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
-import com.mmxlabs.trading.optimiser.TradingConstants;
 
 public class CargoPnLReportView extends EMFReportView {
 	/**
