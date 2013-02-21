@@ -145,7 +145,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 							control.addListener(new IJobControlListener() {
 
 								@Override
-								public boolean jobStateChanged(final IJobControl control, final EJobState oldState, final EJobState newState) {
+								public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
 
 									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
 										// instance.setLocked(false);
@@ -157,7 +157,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 								}
 
 								@Override
-								public boolean jobProgressUpdated(final IJobControl methodJob, final int progressDelta) {
+								public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
 									return true;
 								}
 							});
@@ -193,7 +193,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 						control.addListener(new IJobControlListener() {
 
 							@Override
-							public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
+							public boolean jobStateChanged(final IJobControl jobControl, final EJobState oldState, final EJobState newState) {
 
 								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
 									// instance.setLocked(false);
@@ -204,7 +204,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 							}
 
 							@Override
-							public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
+							public boolean jobProgressUpdated(final IJobControl jobControl, final int progressDelta) {
 								return true;
 							}
 						});
