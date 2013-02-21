@@ -29,7 +29,7 @@ import com.mmxlabs.models.migration.utils.MetamodelUtils;
 
 public class EcoreHelperTest {
 	@Test
-	public void test() throws Exception {
+	public void getPackageNSTest() throws Exception {
 
 		final URI uri = URI.createURI(getClass().getResource("/models/model-v1.ecore").toString());
 		assert uri != null;
