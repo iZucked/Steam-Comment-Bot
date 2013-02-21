@@ -137,6 +137,7 @@ public class DiffEditScenarioCommandHandler extends AbstractHandler {
 				final ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 				try {
 					dialog.run(false, false, new IRunnableWithProgress() {
+						@Override
 						public void run(final IProgressMonitor monitor) {
 							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
 							try {
