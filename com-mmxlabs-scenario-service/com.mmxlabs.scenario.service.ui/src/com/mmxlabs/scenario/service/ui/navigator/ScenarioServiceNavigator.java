@@ -39,6 +39,7 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.navigator.CommonNavigator;
 import org.eclipse.ui.navigator.CommonViewer;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.views.properties.IPropertySheetPage;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
@@ -222,8 +223,8 @@ public class ScenarioServiceNavigator extends CommonNavigator {
 
 		Activator.getDefault().getScenarioServiceSelectionProvider().addSelectionChangedListener(selectionChangedListener);
 		Activator.getDefault().getEclipseJobManager().addEclipseJobManagerListener(jobManagerListener);
-		showColumnImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
-		optImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/opt.gif").createImage();
+		showColumnImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
+		optImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/opt.gif").createImage();
 	}
 
 	@Override
