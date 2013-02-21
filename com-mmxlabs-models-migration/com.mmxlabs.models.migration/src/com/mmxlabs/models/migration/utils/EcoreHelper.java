@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -125,6 +124,7 @@ public class EcoreHelper {
 		}
 
 		final EPackage destPackage = destinationContainer.eClass().getEPackage();
+		assert destPackage != null;
 		if (sourceFeature instanceof EReference) {
 			final EReference sourceReference = (EReference) sourceFeature;
 
@@ -133,12 +133,14 @@ public class EcoreHelper {
 				final List<EObject> subRefs = MetamodelUtils.getValueAsTypedList(sourceContainer, sourceReference);
 				final List<EObject> newSubRefs = new ArrayList<EObject>(subRefs.size());
 				for (final EObject subRef : subRefs) {
+					assert subRef != null;
 					final EObject newSubRef = copyIfRequired(sourceContainer, destPackage, subRef);
 					newSubRefs.add(newSubRef);
 				}
 				destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), newSubRefs);
 			} else {
 				final EObject subRef = (EObject) sourceContainer.eGet(sourceReference);
+				assert subRef != null;
 				final EObject newSubRef = copyIfRequired(sourceContainer, destPackage, subRef);
 				destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), newSubRef);
 			}
