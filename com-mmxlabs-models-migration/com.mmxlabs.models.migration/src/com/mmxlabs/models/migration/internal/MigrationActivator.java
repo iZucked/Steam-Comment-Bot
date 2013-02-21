@@ -21,6 +21,7 @@ public class MigrationActivator implements BundleActivator {
 	@Inject
 	private Export<IMigrationRegistry> migrationRegistry;
 
+	@Override
 	public void start(final BundleContext bc) throws Exception {
 		// Bind our module together with the hooks to the eclipse registry to get plugin extensions.
 		final Injector inj = Guice.createInjector(Peaberry.osgiModule(bc, EclipseRegistry.eclipseRegistry()), new MigrationActivationModule());
