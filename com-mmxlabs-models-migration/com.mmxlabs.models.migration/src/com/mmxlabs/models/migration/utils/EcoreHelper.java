@@ -27,6 +27,8 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -47,7 +49,7 @@ public class EcoreHelper {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("resource")
-	public static String getPackageNS(final URI uri) throws Exception {
+	public static String getPackageNS(@NonNull final URI uri) throws Exception {
 
 		// Use a single element array to store the result from parsing
 		final String[] value = new String[1];
@@ -116,7 +118,7 @@ public class EcoreHelper {
 	 * 
 	 * @since 2.0
 	 */
-	public static void copyEObjectFeature(final EPackage mmxcorePackage, final EObject sourceContainer, final EObject destinationContainer, final EStructuralFeature sourceFeature) {
+	public static void copyEObjectFeature(@NonNull final EObject sourceContainer, @NonNull final EObject destinationContainer, @NonNull final EStructuralFeature sourceFeature) {
 
 		if (sourceContainer.eIsSet(sourceFeature) == false) {
 			return;
@@ -131,13 +133,13 @@ public class EcoreHelper {
 				final List<EObject> subRefs = MetamodelUtils.getValueAsTypedList(sourceContainer, sourceReference);
 				final List<EObject> newSubRefs = new ArrayList<EObject>(subRefs.size());
 				for (final EObject subRef : subRefs) {
-					final EObject newSubRef = copyIfRequired(mmxcorePackage, sourceContainer, destPackage, subRef);
+					final EObject newSubRef = copyIfRequired(sourceContainer, destPackage, subRef);
 					newSubRefs.add(newSubRef);
 				}
 				destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), newSubRefs);
 			} else {
 				final EObject subRef = (EObject) sourceContainer.eGet(sourceReference);
-				final EObject newSubRef = copyIfRequired(mmxcorePackage, sourceContainer, destPackage, subRef);
+				final EObject newSubRef = copyIfRequired(sourceContainer, destPackage, subRef);
 				destinationContainer.eSet(MetamodelUtils.getStructuralFeature(destinationContainer.eClass(), sourceFeature.getName()), newSubRef);
 			}
 
@@ -167,7 +169,7 @@ public class EcoreHelper {
 	 * 
 	 * @since 2.0
 	 */
-	public static EObject copyIfRequired(final EPackage mmxcorePackage, final EObject sourceContainer, final EPackage destPackage, final EObject subRef) {
+	public static EObject copyIfRequired(@NonNull final EObject sourceContainer, @NonNull final EPackage destPackage, @NonNull final EObject subRef) {
 		EObject newSubRef = subRef;
 		// Parent and child (or other relation) are in the same package -- probably needs to be converted.
 		if (subRef.eClass().getEPackage().equals(sourceContainer.eClass().getEPackage())) {
@@ -176,8 +178,9 @@ public class EcoreHelper {
 			final EClass destClass = MetamodelUtils.getEClass(destPackage, subRef.eClass().getName());
 			if (destClass != null) {
 				final EObject clone = destFactory.create(destClass);
+				assert clone != null;
 				// Deep copy of the object
-				copyEObject(mmxcorePackage, subRef, clone);
+				copyEObject(subRef, clone);
 
 				newSubRef = clone;
 			}
@@ -191,25 +194,13 @@ public class EcoreHelper {
 	 * @param destination
 	 * @since 2.0
 	 */
-	public static void copyEObject(final EPackage mmxcorePackage, final EObject source, final EObject destination) {
+	public static void copyEObject(@NonNull final EObject source, @NonNull final EObject destination) {
 		// Copy feature data
 		for (final EStructuralFeature f : source.eClass().getEAllStructuralFeatures()) {
+			assert f != null;
 			// Copy data
-			copyEObjectFeature(mmxcorePackage, source, destination, f);
+			copyEObjectFeature(source, destination, f);
 		}
-
-		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
-		if (class_MMXObject.isInstance(destination)) {
-			final EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
-			final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(destination, feature_proxies);
-			if (proxies != null) {
-				for (final EObject proxy : proxies) {
-					updateMMXProxy(proxy, mmxcorePackage, destination.eClass());
-				}
-			}
-
-		}
-
 	}
 
 	/**
@@ -218,7 +209,7 @@ public class EcoreHelper {
 	 * 
 	 * @since 2.0
 	 */
-	public static void updateMMXProxy(final EObject mmxProxy, final EPackage mmxcorePackage, final EClass containerClass) {
+	public static void updateMMXProxy(@NonNull final EObject mmxProxy, @NonNull final EPackage mmxcorePackage, @NonNull final EClass containerClass) {
 		final EClass class_MMXProxy = MetamodelUtils.getEClass(mmxcorePackage, "MMXProxy");
 		final EStructuralFeature feature_reference = MetamodelUtils.getStructuralFeature(class_MMXProxy, "reference");
 
@@ -249,7 +240,7 @@ public class EcoreHelper {
 	/**
 	 * @since 2.0
 	 */
-	public static void updateMMXProxy(final EObject containerClass, final EPackage mmxcorePackage) {
+	public static void updateMMXProxy(@NonNull final EObject containerClass, @NonNull final EPackage mmxcorePackage) {
 
 		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
 		if (class_MMXObject.isInstance(containerClass)) {
@@ -257,7 +248,10 @@ public class EcoreHelper {
 			final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(containerClass, feature_proxies);
 			if (proxies != null) {
 				for (final EObject proxy : proxies) {
-					updateMMXProxy(proxy, mmxcorePackage, containerClass.eClass());
+					assert proxy != null;
+					final EClass containerEClass = containerClass.eClass();
+					assert containerEClass != null;
+					updateMMXProxy(proxy, mmxcorePackage, containerEClass);
 				}
 			}
 
@@ -273,7 +267,7 @@ public class EcoreHelper {
 	 *            The MMXCore {@link EPackage} instance to use to find the MMXProxy EClass and related features.
 	 * @since 2.0
 	 */
-	public static void updateAllMMXProxies(final EObject modelRoot, final EPackage mmxcorePackage) {
+	public static void updateAllMMXProxies(@NonNull final EObject modelRoot, @NonNull final EPackage mmxcorePackage) {
 
 		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
 		final Iterator<EObject> itr = modelRoot.eAllContents();
@@ -284,7 +278,10 @@ public class EcoreHelper {
 				final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(containerClass, feature_proxies);
 				if (proxies != null) {
 					for (final EObject proxy : proxies) {
-						updateMMXProxy(proxy, mmxcorePackage, containerClass.eClass());
+						assert proxy != null;
+						EClass containerEClass = containerClass.eClass();
+						assert containerEClass != null;
+						updateMMXProxy(proxy, mmxcorePackage, containerEClass);
 					}
 				}
 			}
