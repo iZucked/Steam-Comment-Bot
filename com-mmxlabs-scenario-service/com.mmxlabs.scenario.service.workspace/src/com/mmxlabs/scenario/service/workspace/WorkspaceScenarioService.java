@@ -155,6 +155,7 @@ public class WorkspaceScenarioService extends AbstractScenarioService {
 		workspaceChangeListener = null;
 	}
 
+	@Override
 	protected ScenarioService initServiceModel() {
 		final ScenarioService serviceService = ScenarioServiceFactory.eINSTANCE.createScenarioService();
 

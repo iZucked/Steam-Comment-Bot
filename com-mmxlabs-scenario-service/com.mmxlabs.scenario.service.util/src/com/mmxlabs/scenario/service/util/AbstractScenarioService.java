@@ -130,6 +130,7 @@ public abstract class AbstractScenarioService extends AbstractScenarioServiceLis
 		return serviceModel;
 	}
 
+	@Override
 	public abstract URI resolveURI(final String URI);
 
 	@Override

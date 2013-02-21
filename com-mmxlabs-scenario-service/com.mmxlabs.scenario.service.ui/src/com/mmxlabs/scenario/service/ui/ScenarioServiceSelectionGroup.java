@@ -54,6 +54,7 @@ public class ScenarioServiceSelectionGroup extends Composite {
 		treeViewer.setSorter(new ScenarioServiceSorter());
 		
 		treeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
 			public void selectionChanged(final SelectionChangedEvent event) {
 				final IStructuredSelection selection = (IStructuredSelection) event.getSelection();
 
@@ -67,6 +68,7 @@ public class ScenarioServiceSelectionGroup extends Composite {
 		});
 
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
+			@Override
 			public void doubleClick(final DoubleClickEvent event) {
 				final ISelection selection = event.getSelection();
 				if (selection instanceof IStructuredSelection) {
