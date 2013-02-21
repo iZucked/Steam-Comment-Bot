@@ -367,13 +367,13 @@ public class LNGScenarioTransformer {
 		// Any NPE's in the following code are likely due to missing associations between a IContractTransformer and the EMF AContract object. IContractTransformer instances are typically OSGi
 		// services. Ensure their bundles have been started!
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
-			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
+			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
 			final ILoadPriceCalculator calculator = transformer.transformPurchaseContract(c);
 			entities.addModelObject(c, calculator);
 		}
 
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
-			final IContractTransformer transformer = contractTransformersByEClass.get(c.eClass());
+			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
 			final ISalesPriceCalculator calculator = transformer.transformSalesContract(c);
 			if (calculator == null) {
 				throw new IllegalStateException("Unable to transform contract");
