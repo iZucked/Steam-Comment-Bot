@@ -1,7 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>com.mmxlabs.scheduler.optimiser</artifactId>
-	<version>3.0.1-SNAPSHOT</version>
+	<version>4.0.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 	<name>Scheduler - Optimiser</name>
 	<description>LNG Scheduler</description>
@@ -9,7 +10,7 @@
 	<parent>
 		<groupId>com.mmxlabs.scheduler</groupId>
 		<artifactId>com.mmxlabs.scheduler.parent</artifactId>
-		<version>3.0.1-SNAPSHOT</version>
+		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
@@ -69,7 +70,7 @@
 			<artifactId>guava</artifactId>
 			<version>${guava-osgi.version}</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.ops4j.peaberry.extensions</groupId>
 			<artifactId>peaberry.activation</artifactId>
@@ -96,9 +97,10 @@
 
 				<configuration>
 					<instructions>
+						<Bundle-SymbolicName>com.mmxlabs.scheduler.optimiser</Bundle-SymbolicName>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
-						<Export-Package>com.mmxlabs.scheduler.optimiser.*;version="${_Bundle-UnqualifiedVersion}",com.mmxlabs.trading.optimiser.*;version="${_Bundle-UnqualifiedVersion}"</Export-Package>
+						<Export-Package>com.mmxlabs.scheduler.optimiser.*;version="${_Bundle-UnqualifiedVersion}"</Export-Package>
 						<Bundle-Module>com.mmxlabs.scheduler.optimiser.peaberry.OptimiserServiceModule</Bundle-Module>
 					</instructions>
 				</configuration>
