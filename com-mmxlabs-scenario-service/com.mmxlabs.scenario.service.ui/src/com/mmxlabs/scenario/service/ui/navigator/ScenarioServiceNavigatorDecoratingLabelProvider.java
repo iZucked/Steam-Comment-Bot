@@ -36,7 +36,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 
 		private final ILabelProvider provider;
 
-		public StyledLabelProviderAdapter(ILabelProvider provider) {
+		public StyledLabelProviderAdapter(final ILabelProvider provider) {
 			this.provider = provider;
 		}
 
@@ -45,7 +45,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider#getImage(java.lang.Object)
 		 */
-		public Image getImage(Object element) {
+		@Override
+		public Image getImage(final Object element) {
 			return provider.getImage(element);
 		}
 
@@ -54,7 +55,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider#getStyledText(java.lang.Object)
 		 */
-		public StyledString getStyledText(Object element) {
+		@Override
+		public StyledString getStyledText(final Object element) {
 			if (provider instanceof IStyledLabelProvider) {
 				return ((IStyledLabelProvider) provider).getStyledText(element);
 			}
@@ -69,7 +71,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.IBaseLabelProvider#addListener(org.eclipse.jface.viewers.ILabelProviderListener)
 		 */
-		public void addListener(ILabelProviderListener listener) {
+		@Override
+		public void addListener(final ILabelProviderListener listener) {
 			provider.addListener(listener);
 		}
 
@@ -78,6 +81,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.IBaseLabelProvider#dispose()
 		 */
+		@Override
 		public void dispose() {
 			provider.dispose();
 		}
@@ -87,7 +91,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.IBaseLabelProvider#isLabelProperty(java.lang.Object, java.lang.String)
 		 */
-		public boolean isLabelProperty(Object element, String property) {
+		@Override
+		public boolean isLabelProperty(final Object element, final String property) {
 			return provider.isLabelProperty(element, property);
 		}
 
@@ -96,7 +101,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.IBaseLabelProvider#removeListener(org.eclipse.jface.viewers.ILabelProviderListener)
 		 */
-		public void removeListener(ILabelProviderListener listener) {
+		@Override
+		public void removeListener(final ILabelProviderListener listener) {
 			provider.removeListener(listener);
 		}
 
@@ -105,7 +111,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.IColorProvider#getBackground(java.lang.Object)
 		 */
-		public Color getBackground(Object element) {
+		@Override
+		public Color getBackground(final Object element) {
 			if (provider instanceof IColorProvider) {
 				return ((IColorProvider) provider).getBackground(element);
 			}
@@ -117,7 +124,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.IColorProvider#getForeground(java.lang.Object)
 		 */
-		public Color getForeground(Object element) {
+		@Override
+		public Color getForeground(final Object element) {
 			if (provider instanceof IColorProvider) {
 				return ((IColorProvider) provider).getForeground(element);
 			}
@@ -129,7 +137,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.IFontProvider#getFont(java.lang.Object)
 		 */
-		public Font getFont(Object element) {
+		@Override
+		public Font getFont(final Object element) {
 			if (provider instanceof IFontProvider) {
 				return ((IFontProvider) provider).getFont(element);
 			}
@@ -141,7 +150,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
 		 */
-		public Image getColumnImage(Object element, int columnIndex) {
+		@Override
+		public Image getColumnImage(final Object element, final int columnIndex) {
 			if (provider instanceof ITableLabelProvider) {
 				return ((ITableLabelProvider) provider).getColumnImage(element, columnIndex);
 			}
@@ -153,7 +163,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 		 * 
 		 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 		 */
-		public String getColumnText(Object element, int columnIndex) {
+		@Override
+		public String getColumnText(final Object element, final int columnIndex) {
 			if (provider instanceof ITableLabelProvider) {
 				return ((ITableLabelProvider) provider).getColumnText(element, columnIndex);
 			}
@@ -167,7 +178,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	 * @param commonLabelProvider
 	 *            the label provider to use
 	 */
-	public ScenarioServiceNavigatorDecoratingLabelProvider(ILabelProvider commonLabelProvider) {
+	public ScenarioServiceNavigatorDecoratingLabelProvider(final ILabelProvider commonLabelProvider) {
 		super(new StyledLabelProviderAdapter(commonLabelProvider), PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator(), null);
 	}
 
@@ -176,7 +187,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	 * 
 	 * @see org.eclipse.jface.viewers.StyledCellLabelProvider#initialize(org.eclipse.jface.viewers.ColumnViewer, org.eclipse.jface.viewers.ViewerColumn)
 	 */
-	public void initialize(ColumnViewer viewer, ViewerColumn column) {
+	@Override
+	public void initialize(final ColumnViewer viewer, final ViewerColumn column) {
 		PlatformUI.getPreferenceStore().addPropertyChangeListener(this);
 		JFaceResources.getColorRegistry().addListener(this);
 
@@ -190,6 +202,7 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	 * 
 	 * @see org.eclipse.jface.viewers.DecoratingStyledCellLabelProvider#dispose()
 	 */
+	@Override
 	public void dispose() {
 		super.dispose();
 		PlatformUI.getPreferenceStore().removePropertyChangeListener(this);
@@ -197,11 +210,11 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	}
 
 	private void refresh() {
-		ColumnViewer viewer = getViewer();
+		final ColumnViewer viewer = getViewer();
 		if (viewer == null) {
 			return;
 		}
-		boolean showColoredLabels = showColoredLabels();
+		final boolean showColoredLabels = showColoredLabels();
 		if (showColoredLabels != isOwnerDrawEnabled()) {
 			setOwnerDrawEnabled(showColoredLabels);
 			viewer.refresh();
@@ -219,11 +232,13 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	 * 
 	 * @see org.eclipse.jface.util.IPropertyChangeListener#propertyChange(org.eclipse.jface.util.PropertyChangeEvent)
 	 */
-	public void propertyChange(PropertyChangeEvent event) {
-		String property = event.getProperty();
+	@Override
+	public void propertyChange(final PropertyChangeEvent event) {
+		final String property = event.getProperty();
 		if (property.equals(JFacePreferences.QUALIFIER_COLOR) || property.equals(JFacePreferences.COUNTER_COLOR) || property.equals(JFacePreferences.DECORATIONS_COLOR)
 				|| property.equals(IWorkbenchPreferenceConstants.USE_COLORED_LABELS)) {
 			Display.getDefault().asyncExec(new Runnable() {
+				@Override
 				public void run() {
 					refresh();
 				}
@@ -236,7 +251,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	 * 
 	 * @see org.eclipse.jface.viewers.ILabelProvider#getText(java.lang.Object)
 	 */
-	public String getText(Object element) {
+	@Override
+	public String getText(final Object element) {
 		return getStyledText(element).getString();
 	}
 
@@ -245,8 +261,9 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	 * 
 	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
 	 */
-	public Image getColumnImage(Object element, int columnIndex) {
-		Image image = ((StyledLabelProviderAdapter) getStyledStringProvider()).getColumnImage(element, columnIndex);
+	@Override
+	public Image getColumnImage(final Object element, final int columnIndex) {
+		final Image image = ((StyledLabelProviderAdapter) getStyledStringProvider()).getColumnImage(element, columnIndex);
 
 		if (columnIndex == ScenarioServiceNavigator.COLUMN_NAME_IDX) {
 			if (this.getLabelDecorator() == null) {
@@ -272,7 +289,8 @@ public class ScenarioServiceNavigatorDecoratingLabelProvider extends DecoratingS
 	 * 
 	 * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
 	 */
-	public String getColumnText(Object element, int columnIndex) {
+	@Override
+	public String getColumnText(final Object element, final int columnIndex) {
 		return ((StyledLabelProviderAdapter) getStyledStringProvider()).getColumnText(element, columnIndex);
 	}
 }
