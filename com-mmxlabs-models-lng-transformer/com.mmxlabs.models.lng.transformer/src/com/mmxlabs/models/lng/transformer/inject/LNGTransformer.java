@@ -6,8 +6,6 @@ package com.mmxlabs.models.lng.transformer.inject;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +34,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.lso.impl.LocalSearchOptimiser;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService;
 import com.mmxlabs.scheduler.optimiser.peaberry.IOptimiserInjectorService.ModuleType;
-import com.mmxlabs.scheduler.optimiser.peaberry.OptimiserServiceModule;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 
 /**

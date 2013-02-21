@@ -1,4 +1,4 @@
-package com.mmxlabs.trading.integration;
+package com.mmxlabs.models.lng.transformer.util;
 
 import java.util.Date;
 

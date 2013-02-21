@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.trading.integration.extensions;
+package com.mmxlabs.models.lng.transformer.extensions.tradingexporter;
 
 import java.io.Serializable;
 import java.util.Collection;
@@ -38,6 +38,7 @@ import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
+import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
 import com.mmxlabs.scheduler.optimiser.annotations.IShippingCostAnnotation;
@@ -49,14 +50,13 @@ import com.mmxlabs.scheduler.optimiser.components.impl.EndPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.impl.StartPortSlot;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
-import com.mmxlabs.trading.optimiser.TradingConstants;
 
 /**
  * EMF export side for trading optimiser information. Model may need reworking, so this isn't exactly final.
  * 
  * @author hinton
  * 
- * @since 2.0
+ * @since 3.0
  */
 public class TradingExporterExtension implements IExporterExtension {
 	private ModelEntityMap entities;

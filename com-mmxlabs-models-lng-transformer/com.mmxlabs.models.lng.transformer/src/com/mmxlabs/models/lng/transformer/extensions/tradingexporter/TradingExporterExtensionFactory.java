@@ -2,14 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.trading.integration.factories;
+package com.mmxlabs.models.lng.transformer.extensions.tradingexporter;
 
 import com.mmxlabs.models.lng.transformer.export.IExporterExtension;
 import com.mmxlabs.models.lng.transformer.inject.IExporterExtensionFactory;
-import com.mmxlabs.trading.integration.extensions.TradingExporterExtension;
 
 /**
- * @since 2.0
+ * @since 3.0
  */
 public class TradingExporterExtensionFactory implements IExporterExtensionFactory {
 

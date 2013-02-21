@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.trading.integration.extensions;
+package com.mmxlabs.models.lng.transformer.extensions.entities;
 
 import java.util.Collection;
 
@@ -15,21 +15,21 @@ import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
+import com.mmxlabs.models.lng.transformer.util.EntityTransformerUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.impl.SimpleEntity;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
-import com.mmxlabs.trading.optimiser.impl.SimpleEntity;
-import com.mmxlabs.trading.integration.EntityTransformerUtils;
 
 /**
  * Trading transformer extension which sets up entity models.
  * 
  * @author hinton
  * 
- * @since 2.0
+ * @since 3.0
  */
 public class EntityTransformerExtension implements ITransformerExtension {
 

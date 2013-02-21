@@ -49,8 +49,6 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
 import com.mmxlabs.models.lng.analytics.transformer.ICargoSandboxTransformer;
-import com.mmxlabs.models.lng.analytics.transformer.internal.TmpDefaultBreakEvenEvaluator;
-import com.mmxlabs.models.lng.analytics.transformer.internal.TmpVanillaEntityValueCalculator;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -109,6 +107,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -126,6 +125,7 @@ import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
+import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.DefaultBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
@@ -183,8 +183,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			return null;
 		}
 
-		BuyOpportunity buy = provisionalCargo.getBuy();
-		SellOpportunity sell = provisionalCargo.getSell();
+		final BuyOpportunity buy = provisionalCargo.getBuy();
+		final SellOpportunity sell = provisionalCargo.getSell();
 
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule(), createShippingCostModule());
 		final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
@@ -306,16 +306,16 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			}
 		}
 
-		IEntity entity = new IEntity() {
+		final IEntity entity = new IEntity() {
 
 			@Override
-			public int getUpstreamTransferPrice(int loadPricePerM3, int cvValue) {
+			public int getUpstreamTransferPrice(final int loadPricePerM3, final int cvValue) {
 				// TODO Auto-generated method stub
 				return 0;
 			}
 
 			@Override
-			public long getTaxedProfit(long downstreamTotalPretaxProfit, int time) {
+			public long getTaxedProfit(final long downstreamTotalPretaxProfit, final int time) {
 				// TODO Auto-generated method stub
 				return downstreamTotalPretaxProfit;
 			}
@@ -327,13 +327,13 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			}
 
 			@Override
-			public int getDownstreamTransferPrice(int dischargePricePerM3, int cvValue) {
+			public int getDownstreamTransferPrice(final int dischargePricePerM3, final int cvValue) {
 				// TODO Auto-generated method stub
 				return 0;
 			}
 		};
 
-		HashMapEntityProviderEditor entityProvider = (HashMapEntityProviderEditor) injector.getInstance(IEntityProvider.class);
+		final HashMapEntityProviderEditor entityProvider = (HashMapEntityProviderEditor) injector.getInstance(IEntityProvider.class);
 
 		entityProvider.setShippingEntity(entity);
 
@@ -341,12 +341,12 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		final List<IPortSlot> elements = new LinkedList<IPortSlot>();
 		IStartEndRequirement startConstraint = null;
 		IStartEndRequirement endConstraint = null;
-		int startHeelPrice = 0;
-		int startHeelCV = 0;
-		int startHeelVolume = 0;
+		final int startHeelPrice = 0;
+		final int startHeelCV = 0;
+		final int startHeelVolume = 0;
 
-		IPort buyPort = ports.lookup(buy.getPort());
-		IPort sellPort = ports.lookup(sell.getPort());
+		final IPort buyPort = ports.lookup(buy.getPort());
+		final IPort sellPort = ports.lookup(sell.getPort());
 		// Start Event
 		final int buyTime = entities.getHoursFromDate(buy.getDate());
 		final int sellTime = entities.getHoursFromDate(sell.getDate());
@@ -385,7 +385,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				priceCalculator = new PriceExpressionContract(curve);
 			}
 
-			IPortSlot slot = builder.createLoadSlot(id, buyPort, timeWindow, 0, gasVolume, priceCalculator, cargoCVValue, buy.getPort().getLoadDuration(), false, true, false);
+			final IPortSlot slot = builder.createLoadSlot(id, buyPort, timeWindow, 0, gasVolume, priceCalculator, cargoCVValue, buy.getPort().getLoadDuration(), false, true, false);
 			entityProvider.setEntityForSlot(entity, slot);
 
 			elements.add(slot);
@@ -422,7 +422,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 
 			final long minCv = 0;
 			final long maxCv = Long.MAX_VALUE;
-			IPortSlot slot = builder.createDischargeSlot(id, sellPort, timeWindow, 0, gasVolume, minCv, maxCv, priceCalculator, sell.getPort().getDischargeDuration(), false);
+			final IPortSlot slot = builder.createDischargeSlot(id, sellPort, timeWindow, 0, gasVolume, minCv, maxCv, priceCalculator, sell.getPort().getDischargeDuration(), false);
 			elements.add(slot);
 			entityProvider.setEntityForSlot(entity, slot);
 		}
@@ -432,7 +432,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 
 		}
 
-		int notionalDayRate = 0;
+		final int notionalDayRate = 0;
 		// Create the vessel now we have the start/end requirements
 		final IVessel vessel = builder.createVessel(modelVessel.getName(), vesselClass, new ConstantValueCurve(notionalDayRate / 24), startConstraint, endConstraint, startHeelVolume, startHeelCV,
 				startHeelPrice);
@@ -461,7 +461,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			}
 			sequence.add(startEndProvider.getEndElement(resource));
 
-			IStartEndRequirement endRequirement = startEndProvider.getEndRequirement(resource);
+			final IStartEndRequirement endRequirement = startEndProvider.getEndRequirement(resource);
 			arrivalTimes[0][index++] = endRequirement.getTimeWindow().getStart();
 		}
 		// }
@@ -511,7 +511,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			return null;
 
 		}
-		TmpDefaultBreakEvenEvaluator beCalc = new TmpDefaultBreakEvenEvaluator();
+		final IBreakEvenEvaluator beCalc = new DefaultBreakEvenEvaluator();
 		injector.injectMembers(beCalc);
 		beCalc.processSchedule(result);
 
@@ -525,10 +525,10 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		 * Unpack the annotated solution and create output lines
 		 */
 
-		IEntityValueCalculator entityValueCalculator = new TmpVanillaEntityValueCalculator();
+		final IEntityValueCalculator entityValueCalculator = new DefaultEntityValueCalculator();
 		injector.injectMembers(entityValueCalculator);
 
-		AnnotatedSolution solution = new AnnotatedSolution();
+		final AnnotatedSolution solution = new AnnotatedSolution();
 		solution.setSequences(sequences);
 		// AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
 		// exporter.exportAnnotatedSolution(root, entities, solution);
@@ -537,16 +537,16 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			final IAllocationAnnotation allocation = allocationIterator.next();
 			final VoyagePlan plan = sequence.getVoyagePlans().get(1);
 			// create line for plan
-			long evaluate = entityValueCalculator.evaluate(plan, allocation, vessel, 0, solution);
+			final long evaluate = entityValueCalculator.evaluate(plan, allocation, vessel, 0, solution);
 
 			// VisitEventExporter visitExporter = new VisitEventExporter();
 
-			ISequenceElement buyElement = slotProvider.getElement(elements.get(0));
+			final ISequenceElement buyElement = slotProvider.getElement(elements.get(0));
 			// visitExporter.export(buyElement, solution.getElementAnnotations());
 			final IProfitAndLossAnnotation generatedCharterOutProfitAndLoss = solution.getElementAnnotations().getAnnotation(buyElement, "element-profit-and-loss", IProfitAndLossAnnotation.class);
 
 			long totalPNL = 0;
-			for (IProfitAndLossEntry entry : generatedCharterOutProfitAndLoss.getEntries()) {
+			for (final IProfitAndLossEntry entry : generatedCharterOutProfitAndLoss.getEntries()) {
 				totalPNL += entry.getFinalGroupValue();
 			}
 
@@ -664,13 +664,13 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 				bind(ScheduleEvaluator.class);
 				bind(ICargoAllocator.class).to(UnconstrainedCargoAllocator.class);
-				bind(IEntityValueCalculator.class).to(TmpVanillaEntityValueCalculator.class);
+				bind(IEntityValueCalculator.class).to(DefaultEntityValueCalculator.class);
 
 			}
 		};
 	}
 
-	private void createVoyageCostComponent(final ExtraData d, final VoyageDetails voyageDetails, int notionalDayRate) {
+	private void createVoyageCostComponent(final ExtraData d, final VoyageDetails voyageDetails, final int notionalDayRate) {
 		final int duration = voyageDetails.getIdleTime() + voyageDetails.getTravelTime();
 		int totalCost = 0;
 		d.addExtraData("distance", "Distance", voyageDetails.getOptions().getDistance(), ExtraDataFormatType.INTEGER);
@@ -735,8 +735,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		}
 	}
 
-	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final PortDetails portDetails, int notionalDayRate,
-			VesselClass vesselClass) {
+	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final PortDetails portDetails, final int notionalDayRate,
+			final VesselClass vesselClass) {
 		result.addExtraData("duration", "Duration", portDetails.getOptions().getVisitDuration(), ExtraDataFormatType.DURATION);
 		final Port port = ports.reverseLookup(portDetails.getOptions().getPortSlot().getPort());
 		result.addExtraData("location", "Location", port.getName(), ExtraDataFormatType.AUTO);

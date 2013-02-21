@@ -17,11 +17,6 @@ import com.mmxlabs.trading.optimiser.components.ProfitAndLossAllocationComponent
 public class TradingActivatorModule extends PeaberryActivationModule {
 	@Override
 	protected void configure() {
-		bindService(ProfitAndLossAllocationComponentProvider.class).export();
 
-		bindService(EntityTransformerExtensionFactory.class).export();
-		bindService(TradingExporterExtensionFactory.class).export();
-
-		bindService(TradingOptimiserModuleService.class).export();
 	}
 }
