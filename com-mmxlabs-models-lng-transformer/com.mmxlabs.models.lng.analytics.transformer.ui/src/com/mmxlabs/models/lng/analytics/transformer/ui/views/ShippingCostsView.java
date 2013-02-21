@@ -279,7 +279,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 							try {
 								if (lines != null && !lines.isEmpty()) {
 									// TODO: Handle multiple cases
-									final UnitCostLine line = (UnitCostLine) lines.get(0);
+									final UnitCostLine line = lines.get(0);
 									return new UnitCostLinePropertySource(line);
 								}
 							} catch (final Throwable th) {
