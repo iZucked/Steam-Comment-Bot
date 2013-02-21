@@ -142,6 +142,12 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 
 	}
 
+	/**
+	 * Remove the optimisedSchedule feature and move initialSchedule to the schedule feature.
+	 * 
+	 * @param loader
+	 * @param models
+	 */
 	public void removeOptimisedSchedule(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
 		final EObject scheduleModel = models.get(ModelsLNGSet_v1.Schedule);
 		final EPackage schedulePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
@@ -155,6 +161,12 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		scheduleModel.eSet(feature_schedule, scheduleModel.eGet(feature_initialSchedule));
 	}
 
+	/**
+	 * Remove old, obsolete items from the schedule. These should not be present in the scenario - but very old files may have them.
+	 * 
+	 * @param loader
+	 * @param models
+	 */
 	public void clearOldElementsFromSchedule(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
 		final EObject scheduleModel = models.get(ModelsLNGSet_v1.Schedule);
 		final EPackage schedulePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_ScheduleModel);
@@ -391,24 +403,24 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 			if (original.eIsSet(oldFeature)) {
 
 				if (feature instanceof EReference && ((EReference) feature).getEReferenceType() == class_MMXProxy) {
-//					List<EObject> proxies = MetamodelUtils.getValueAsTypedList(paramsObject, feature_proxies);
-//					List<EObject> newProxies = new ArrayList<EObject>();
-//					if (proxies != null) {
-//						for (EObject mmxProxy : proxies) {
-//
-//							if (mmxProxy.eIsSet(feature_reference)) {
-//								// Initial reference will be a "proxy"...
-//								EReference reference = (EReference) mmxProxy.eGet(feature_reference);
-//								// ... so we need to "resolve" it to load in the types from our metamodels.
-//								reference = (EReference) EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
-//
-//								if (!(reference.getEReferenceType() == class_targetType || reference.getEReferenceType() == class_Contract)) {
-//									newProxies.add(mmxProxy);
-//								}
-//							}
-//						}
-//					}
-//					paramsObject.eSet(feature, newProxies);
+					// List<EObject> proxies = MetamodelUtils.getValueAsTypedList(paramsObject, feature_proxies);
+					// List<EObject> newProxies = new ArrayList<EObject>();
+					// if (proxies != null) {
+					// for (EObject mmxProxy : proxies) {
+					//
+					// if (mmxProxy.eIsSet(feature_reference)) {
+					// // Initial reference will be a "proxy"...
+					// EReference reference = (EReference) mmxProxy.eGet(feature_reference);
+					// // ... so we need to "resolve" it to load in the types from our metamodels.
+					// reference = (EReference) EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
+					//
+					// if (!(reference.getEReferenceType() == class_targetType || reference.getEReferenceType() == class_Contract)) {
+					// newProxies.add(mmxProxy);
+					// }
+					// }
+					// }
+					// }
+					// paramsObject.eSet(feature, newProxies);
 
 				} else {
 
@@ -427,7 +439,6 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 	}
 
 	public void migrateSpotMarketModel(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
-		final EPackage mmxcorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
 		final EPackage pricingPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_PricingModel);
 		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
 		final EFactory spotMarketsFactory = spotMarketsPackage.getEFactoryInstance();
@@ -441,13 +452,13 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		// Migrate each of the four spot markets
 		{
 
-			EcoreHelper.copyEObjectFeature(mmxcorePackage, pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "desPurchaseSpotMarket"));
+			EcoreHelper.copyEObjectFeature(pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "desPurchaseSpotMarket"));
 			pricingModel.eUnset(MetamodelUtils.getStructuralFeature(class_PricingModel, "desPurchaseSpotMarket"));
-			EcoreHelper.copyEObjectFeature(mmxcorePackage, pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "fobPurchasesSpotMarket"));
+			EcoreHelper.copyEObjectFeature(pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "fobPurchasesSpotMarket"));
 			pricingModel.eUnset(MetamodelUtils.getStructuralFeature(class_PricingModel, "fobPurchasesSpotMarket"));
-			EcoreHelper.copyEObjectFeature(mmxcorePackage, pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "desSalesSpotMarket"));
+			EcoreHelper.copyEObjectFeature(pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "desSalesSpotMarket"));
 			pricingModel.eUnset(MetamodelUtils.getStructuralFeature(class_PricingModel, "desSalesSpotMarket"));
-			EcoreHelper.copyEObjectFeature(mmxcorePackage, pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "fobSalesSpotMarket"));
+			EcoreHelper.copyEObjectFeature(pricingModel, spotMarketsModel, MetamodelUtils.getStructuralFeature(class_PricingModel, "fobSalesSpotMarket"));
 			pricingModel.eUnset(MetamodelUtils.getStructuralFeature(class_PricingModel, "fobSalesSpotMarket"));
 		}
 
@@ -472,7 +483,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 						// TODO: CONVERT
 						final EObject newCharterCost = spotMarketsFactory.create(class_SMM_CharterCostModel);
 
-						EcoreHelper.copyEObject(mmxcorePackage, oldCharterCost, newCharterCost);
+						EcoreHelper.copyEObject(oldCharterCost, newCharterCost);
 						newCharteringCostModels.add(newCharterCost);
 					}
 
