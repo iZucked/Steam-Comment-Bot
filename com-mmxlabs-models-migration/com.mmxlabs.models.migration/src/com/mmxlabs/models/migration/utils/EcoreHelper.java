@@ -69,7 +69,7 @@ public class EcoreHelper {
 				private boolean firstElement = true;
 
 				@Override
-				public void startElement(final String uri, final String localName, final String qName, final Attributes attributes) throws SAXException {
+				public void startElement(final String elementUri, final String localName, final String qName, final Attributes attributes) throws SAXException {
 
 					if (firstElement) {
 						firstElement = false;
@@ -90,7 +90,7 @@ public class EcoreHelper {
 						// TODO: Break out of parsing early?
 					}
 
-					super.startElement(uri, localName, qName, attributes);
+					super.startElement(elementUri, localName, qName, attributes);
 				}
 
 			};
@@ -276,9 +276,9 @@ public class EcoreHelper {
 	public static void updateAllMMXProxies(final EObject modelRoot, final EPackage mmxcorePackage) {
 
 		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
-		Iterator<EObject> itr = modelRoot.eAllContents();
+		final Iterator<EObject> itr = modelRoot.eAllContents();
 		while (itr.hasNext()) {
-			EObject containerClass = itr.next();
+			final EObject containerClass = itr.next();
 			if (class_MMXObject.isInstance(containerClass)) {
 				final EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
 				final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(containerClass, feature_proxies);
