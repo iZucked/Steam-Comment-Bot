@@ -13,7 +13,6 @@ import com.mmxlabs.models.lng.analytics.BuyOpportunity;
 import com.mmxlabs.models.lng.analytics.CargoSandbox;
 import com.mmxlabs.models.lng.analytics.ProvisionalCargo;
 import com.mmxlabs.models.lng.analytics.SellOpportunity;
-import com.mmxlabs.models.lng.analytics.ShippingCostPlan;
 import com.mmxlabs.models.lng.analytics.transformer.ui.views.CargoSandboxesViewerPane;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.mmxcore.UUIDObject;
@@ -84,6 +83,7 @@ public class CargoSandboxEditorContribution implements IJointModelEditorContribu
 		}
 	}
 
+	@Override
 	public boolean canHandle(final IStatus status) {
 
 		if (status instanceof DetailConstraintStatusDecorator) {

@@ -297,6 +297,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 		return null;
 	}
 
+	@Override
 	public void dispose() {
 		disposeContents();
 		getSite().setSelectionProvider(null);

@@ -81,6 +81,7 @@ public class ShippingCostPlanModelEditorContribution implements IJointModelEdito
 		}
 	}
 
+	@Override
 	public boolean canHandle(final IStatus status) {
 
 		if (status instanceof DetailConstraintStatusDecorator) {

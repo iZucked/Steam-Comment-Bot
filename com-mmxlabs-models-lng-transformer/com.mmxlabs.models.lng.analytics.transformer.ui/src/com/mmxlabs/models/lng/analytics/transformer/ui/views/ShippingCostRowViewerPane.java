@@ -106,6 +106,7 @@ public class ShippingCostRowViewerPane extends ScenarioTableViewerPane {
 		getScenarioViewer().setComparator(null);
 	}
 
+	@Override
 	protected Action createDeleteAction() {
 		return new ScenarioModifyingAction("Delete") {
 			{

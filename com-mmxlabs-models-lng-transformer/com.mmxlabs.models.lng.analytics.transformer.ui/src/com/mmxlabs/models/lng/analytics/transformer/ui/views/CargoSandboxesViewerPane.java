@@ -360,6 +360,7 @@ public class CargoSandboxesViewerPane extends ScenarioTableViewerPane {
 
 	};
 
+	@Override
 	protected ScenarioTableViewer constructViewer(final Composite parent) {
 		return new LocalScenarioTableViewer(parent, SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL, jointModelEditorPart);
 	}
