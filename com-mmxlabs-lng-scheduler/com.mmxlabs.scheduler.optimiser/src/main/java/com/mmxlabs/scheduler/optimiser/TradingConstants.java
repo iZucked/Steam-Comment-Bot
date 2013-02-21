@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.trading.optimiser;
+package com.mmxlabs.scheduler.optimiser;
 
 /**
  * @author hinton

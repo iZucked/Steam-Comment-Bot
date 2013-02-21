@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.providers.IEntityProvider;
 
 /**

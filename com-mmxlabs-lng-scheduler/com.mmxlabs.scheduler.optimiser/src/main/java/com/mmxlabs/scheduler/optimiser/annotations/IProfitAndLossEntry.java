@@ -5,7 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.annotations;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
-import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 /**
  * A single P&L entry.

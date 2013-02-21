@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.annotations.impl;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
 import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
-import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 /**
  * @author hinton

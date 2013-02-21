@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.trading.optimiser.components;
+package com.mmxlabs.scheduler.optimiser.fitness.components.pnl;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -15,7 +15,7 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
-import com.mmxlabs.scheduler.optimiser.contracts.IEntityValueCalculator;
+import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;

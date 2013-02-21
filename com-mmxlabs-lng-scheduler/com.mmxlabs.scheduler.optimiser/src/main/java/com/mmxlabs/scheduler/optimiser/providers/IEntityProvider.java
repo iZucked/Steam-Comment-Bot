@@ -6,7 +6,7 @@ package com.mmxlabs.scheduler.optimiser.providers;
 
 import com.mmxlabs.optimiser.core.scenario.IDataComponentProvider;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
-import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 /**
  * DCP linking IPortSlot instances with IEntity instances. ICalculators are not linked, because of the fixed price override creating a bogus calculator.

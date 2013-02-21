@@ -2,9 +2,9 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.trading.optimiser.impl;
+package com.mmxlabs.scheduler.optimiser.entities.impl;
 
-import com.mmxlabs.scheduler.optimiser.contracts.IEntity;
+import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 
 /**
  * Basic entity implementation.
