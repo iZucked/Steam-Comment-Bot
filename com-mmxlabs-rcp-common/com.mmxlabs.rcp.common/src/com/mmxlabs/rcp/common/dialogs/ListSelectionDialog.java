@@ -606,6 +606,7 @@ public class ListSelectionDialog extends Dialog {
 
 	}
 
+	@Override
 	protected void buttonPressed(final int buttonId) {
 		if (IDialogConstants.SELECT_ALL_ID == buttonId) {
 			selectAll();

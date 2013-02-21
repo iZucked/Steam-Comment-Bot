@@ -21,6 +21,7 @@ public class LoggingActivator extends AbstractUIPlugin {
 	private ServiceTracker<ExtendedLogService, ExtendedLogService> logServiceTracker;
 	private BundleContext context;
 
+	@Override
 	public void start(final BundleContext context) throws Exception {
 
 		super.start(context);
@@ -31,6 +32,7 @@ public class LoggingActivator extends AbstractUIPlugin {
 		logServiceTracker.open();
 	}
 
+	@Override
 	public void stop(final BundleContext context) throws Exception {
 
 		// close the service tracker
