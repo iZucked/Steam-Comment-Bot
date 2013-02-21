@@ -28,6 +28,7 @@ public class StopOptimisationEditorActionDelegate extends AbstractOptimisationEd
 	public StopOptimisationEditorActionDelegate() {
 	}
 
+	@Override
 	public void run(IAction action) {
 
 		if (editor != null) {

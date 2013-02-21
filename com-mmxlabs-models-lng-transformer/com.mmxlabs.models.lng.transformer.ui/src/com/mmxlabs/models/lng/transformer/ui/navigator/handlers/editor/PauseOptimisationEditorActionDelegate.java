@@ -29,6 +29,7 @@ public class PauseOptimisationEditorActionDelegate extends AbstractOptimisationE
 
 	}
 
+	@Override
 	public void run(final IAction action) {
 
 		if (editor != null) {
