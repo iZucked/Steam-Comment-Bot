@@ -6,11 +6,11 @@ package com.mmxlabs.scenario.service.ui;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.util.tracker.ServiceTracker;
 
 import com.mmxlabs.jobmanager.eclipse.manager.IEclipseJobManager;
@@ -23,7 +23,7 @@ import com.mmxlabs.scenario.service.ui.navigator.PieChartRenderer;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceComposedAdapterFactory;
 import com.mmxlabs.scenario.service.ui.navigator.ScenarioServiceNavigator;
 
-public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider implements ITableLabelProvider {
+public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider {
 	private final ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider> selectionProviderTracker = new ServiceTracker<IScenarioServiceSelectionProvider, IScenarioServiceSelectionProvider>(
 			Activator.getDefault().getBundle().getBundleContext(), IScenarioServiceSelectionProvider.class, null);
 
@@ -44,11 +44,11 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 	public ScenarioServiceLabelProvider() {
 		super(ScenarioServiceComposedAdapterFactory.getAdapterFactory());
 		selectionProviderTracker.open();
-		showEnabledImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
-		showDisabledImage = ImageDescriptor.createWithFlags(Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif"), SWT.IMAGE_DISABLE).createImage();
-		pinImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif").createImage();
-		noJobImage = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/no_job.gif").createImage();
-		jobComplete = Activator.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/complete_job.gif").createImage();
+		showEnabledImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif").createImage();
+		showDisabledImage = ImageDescriptor.createWithFlags(AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/console_view.gif"), SWT.IMAGE_DISABLE).createImage();
+		pinImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/pin_editor.gif").createImage();
+		noJobImage = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/no_job.gif").createImage();
+		jobComplete = AbstractUIPlugin.imageDescriptorFromPlugin(Activator.PLUGIN_ID, "/icons/complete_job.gif").createImage();
 		majorColor = new Color(Display.getDefault(), 240, 80, 85);
 		defaultMinorColour = new Color(Display.getDefault(), 100, 230, 120);
 	}
@@ -62,10 +62,10 @@ public class ScenarioServiceLabelProvider extends AdapterFactoryLabelProvider im
 		noJobImage.dispose();
 		jobComplete.dispose();
 		pinImage.dispose();
-		
+
 		defaultMinorColour.dispose();
 		majorColor.dispose();
-		
+
 		super.dispose();
 	}
 
