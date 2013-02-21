@@ -423,9 +423,6 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		final EStructuralFeature feature_priceInfo = MetamodelUtils.getStructuralFeature(class_Contract, "priceInfo");
 		newContract.eSet(feature_priceInfo, paramsObject);
 
-		EcoreHelper.updateMMXProxy(newContract, mmxcorePackage);
-		EcoreHelper.updateMMXProxy(paramsObject, mmxcorePackage);
-
 		return newContract;
 	}
 
