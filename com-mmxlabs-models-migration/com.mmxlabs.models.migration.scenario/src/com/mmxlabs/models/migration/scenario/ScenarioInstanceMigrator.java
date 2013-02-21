@@ -16,13 +16,19 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.URIConverter;
 import org.eclipse.emf.ecore.resource.impl.ExtensibleURIConverterImpl;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.google.common.io.ByteStreams;
 import com.mmxlabs.models.migration.IMigrationRegistry;
 import com.mmxlabs.models.migration.IMigrationUnit;
+import com.mmxlabs.models.mmxcore.util.MMXCoreBinaryResourceFactoryImpl;
+import com.mmxlabs.models.mmxcore.util.MMXCoreHandlerUtil;
+import com.mmxlabs.models.mmxcore.util.MMXCoreResourceFactoryImpl;
 import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
@@ -85,6 +91,32 @@ public class ScenarioInstanceMigrator {
 
 			// Apply Migration Chain
 			final int migratedVersion = applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
+
+			// Sanity check - can we load the new scenario without error?
+			{
+				// Construct a normal resource set. This will use the global package registry etc
+				final ResourceSetImpl resourceSet = new ResourceSetImpl();
+				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmi", new MMXCoreResourceFactoryImpl());
+				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("xmb", new MMXCoreBinaryResourceFactoryImpl());
+				resourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap().put("*", new XMIResourceFactoryImpl());
+
+				try {
+					// Create a sample instance object
+					for (final URI uri : tmpURIs) {
+						final Resource r = resourceSet.createResource(uri);
+						r.load(null);
+						final Object submodel = r.getContents().get(0);
+						if (submodel == null) {
+							throw new RuntimeException("Error loading migrated scenario model. Aborting");
+						}
+					}
+
+					// Attempt to resolve inter-model references.
+					MMXCoreHandlerUtil.restoreProxiesForResources(resourceSet.getResources());
+				} catch (final Exception e) {
+					throw new RuntimeException("Error loading migrated scenario. Aborting", e);
+				}
+			}
 
 			// Copy back over original data
 			for (int i = 0; i < uris.size(); ++i) {
