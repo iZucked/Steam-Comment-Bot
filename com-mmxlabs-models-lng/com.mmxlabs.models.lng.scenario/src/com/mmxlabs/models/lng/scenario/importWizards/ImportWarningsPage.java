@@ -36,7 +36,7 @@ public class ImportWarningsPage extends WizardPage {
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
-		if (visible = true) {
+		if (visible == true) {
 
 			viewer.setInput(filesPage.getImportContext());
 			viewer.refresh();
