@@ -220,6 +220,7 @@ public class ScenarioDragAssistant extends CommonDropAdapterAssistant {
 
 	}
 
+	@Override
 	public boolean isSupportedType(final TransferData aTransferType) {
 		return LocalSelectionTransfer.getTransfer().isSupportedType(aTransferType) || FileTransfer.getInstance().isSupportedType(aTransferType);
 	}
