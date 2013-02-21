@@ -44,7 +44,7 @@ public class ForkScenarioEditorActionDelegate implements IEditorActionDelegate, 
 		if (editor != null) {
 			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				final ScenarioInstance instance = (ScenarioInstance) scenarioServiceEditorInput.getScenarioInstance();
+				final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
 
 				final IScenarioService scenarioService = instance.getScenarioService();
 

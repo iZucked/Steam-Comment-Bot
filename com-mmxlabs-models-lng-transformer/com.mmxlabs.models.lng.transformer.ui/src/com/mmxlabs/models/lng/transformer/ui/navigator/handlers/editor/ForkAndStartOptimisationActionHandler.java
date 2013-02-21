@@ -46,7 +46,7 @@ public class ForkAndStartOptimisationActionHandler extends StartOptimisationEdit
 			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
 				final IEclipseJobManager jobManager = Activator.getDefault().getJobManager();
 				final IScenarioServiceEditorInput scenarioServiceEditorInput = (IScenarioServiceEditorInput) editor.getEditorInput();
-				final ScenarioInstance instance = (ScenarioInstance) scenarioServiceEditorInput.getScenarioInstance();
+				final ScenarioInstance instance = scenarioServiceEditorInput.getScenarioInstance();
 
 				final IScenarioService scenarioService = instance.getScenarioService();
 

@@ -194,7 +194,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 			Iterable<IPostExportProcessor> postExportProcessors;
 			try {
-				postExportProcessors = (Iterable<IPostExportProcessor>) childInjector.getInstance(key);
+				postExportProcessors = childInjector.getInstance(key);
 				//
 			} catch (final ConfigurationException e) {
 				postExportProcessors = null;
