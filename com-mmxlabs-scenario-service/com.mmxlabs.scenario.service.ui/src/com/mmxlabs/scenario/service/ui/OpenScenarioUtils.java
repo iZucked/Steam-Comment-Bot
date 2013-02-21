@@ -77,6 +77,7 @@ public class OpenScenarioUtils {
 				try {
 					final IEditorPart editorRef[] = new IEditorPart[1];
 					dialog.run(false, false, new IRunnableWithProgress() {
+						@Override
 						public void run(final IProgressMonitor monitor) {
 							monitor.beginTask("Opening editor", IProgressMonitor.UNKNOWN);
 							try {
