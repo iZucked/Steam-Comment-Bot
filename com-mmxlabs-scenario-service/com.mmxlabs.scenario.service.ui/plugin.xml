@@ -98,6 +98,10 @@
                </or>
             </parentExpression>
          </commonSorter>
+         <actionProvider
+               class="org.eclipse.ui.navigator.resources.GoIntoActionProvider"
+               id="com.mmxlabs.scenario.service.ui.GoIntoActionProvider">
+         </actionProvider>
       </navigatorContent>
    </extension>
    <extension
