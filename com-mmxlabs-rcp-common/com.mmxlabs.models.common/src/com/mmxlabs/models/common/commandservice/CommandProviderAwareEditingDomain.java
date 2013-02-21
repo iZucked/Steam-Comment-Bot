@@ -166,7 +166,7 @@ public class CommandProviderAwareEditingDomain extends AdapterFactoryEditingDoma
 			}
 
 			for (final IModelCommandProvider provider : providers) {
-				final Command addition = provider.provideAdditionalCommand(this, (MMXRootObject) rootObject, overrides, editSet, commandClass, commandParameter, normal);
+				final Command addition = provider.provideAdditionalCommand(this, rootObject, overrides, editSet, commandClass, commandParameter, normal);
 				if (addition != null) {
 					log.debug(provider.getClass().getName() + " provided " + addition + " to " + normal);
 					if (addition.canExecute() == false) {
