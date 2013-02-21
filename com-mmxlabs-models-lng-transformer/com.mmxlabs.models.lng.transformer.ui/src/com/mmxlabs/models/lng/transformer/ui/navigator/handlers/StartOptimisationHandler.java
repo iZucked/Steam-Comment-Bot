@@ -19,7 +19,6 @@ import org.eclipse.emf.validation.service.IBatchValidator;
 import org.eclipse.emf.validation.service.IConstraintDescriptor;
 import org.eclipse.emf.validation.service.IConstraintFilter;
 import org.eclipse.emf.validation.service.ModelValidationService;
-import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -158,7 +157,7 @@ public class StartOptimisationHandler extends AbstractOptimisationHandler {
 								}
 
 								@Override
-								public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
+								public boolean jobProgressUpdated(final IJobControl methodJob, final int progressDelta) {
 									return true;
 								}
 							});
