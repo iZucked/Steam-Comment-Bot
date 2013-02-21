@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.trading.optimiser.impl;
+package com.mmxlabs.scheduler.optimiser.entities.impl;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
