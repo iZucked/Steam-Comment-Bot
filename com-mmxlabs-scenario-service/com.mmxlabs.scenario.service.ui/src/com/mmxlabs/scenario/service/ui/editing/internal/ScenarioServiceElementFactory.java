@@ -29,6 +29,7 @@ public class ScenarioServiceElementFactory implements IElementFactory {
 	/*
 	 * (non-Javadoc) Method declared on IElementFactory.
 	 */
+	@Override
 	public IAdaptable createElement(final IMemento memento) {
 		final String uuid = memento.getString(TAG_UUID);
 		if (uuid == null) {
