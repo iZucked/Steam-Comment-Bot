@@ -6,9 +6,6 @@ package com.mmxlabs.scheduler.optimiser.constraints.impl;
 
 import com.mmxlabs.optimiser.core.constraints.IConstraintChecker;
 import com.mmxlabs.optimiser.core.constraints.IConstraintCheckerFactory;
-import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 
 /**
  * {@link IConstraintCheckerFactory} implementation to create {@link PortTypeConstraintChecker} instances.
