@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.models.migration.scenario;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +27,9 @@ import com.mmxlabs.scenario.service.IScenarioService;
 import com.mmxlabs.scenario.service.model.ScenarioInstance;
 
 /**
+ * The {@link ScenarioInstanceMigrator} controls the migration process for a {@link ScenarioInstance}. It will attempt to migrate a scenario if required. It will create a copy of the scenario data to
+ * migrate and only overwrite the orginal when the migration process completes without an {@link Exception}. Note, incorrectly coded migration steps could still corrupt a scenario.
+ * 
  * @since 2.0
  */
 public class ScenarioInstanceMigrator {
@@ -36,14 +41,14 @@ public class ScenarioInstanceMigrator {
 	}
 
 	public void performMigration(@NonNull final IScenarioService scenarioService, @NonNull final ScenarioInstance scenarioInstance) throws Exception {
+		// Check inputs
 		final String context = scenarioInstance.getVersionContext();
-		if (context == null) {
-			throw new IllegalArgumentException("Scenario has no version context. Unable to migrate");
-		}
 
-		if (scenarioInstance.getInstance() != null) {
-			throw new IllegalArgumentException("Scenario already loaded. Unable to migrate");
-		}
+		checkArgument(context != null, "Scenario has no version context. Unable to migrate");
+		checkArgument(scenarioInstance.getInstance() == null, "Scenario already loaded. Unable to migrate");
+
+		assert context != null;
+
 		final int latestVersion = migrationRegistry.getLatestContextVersion(context);
 		final int scenarioVersion = scenarioInstance.getScenarioVersion();
 		final EList<String> subModelURIs = scenarioInstance.getSubModelURIs();
@@ -79,7 +84,7 @@ public class ScenarioInstanceMigrator {
 			assert tmpURIs.size() == uris.size();
 
 			// Apply Migration Chain
-			int migratedVersion = applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
+			final int migratedVersion = applyMigrationChain(context, scenarioVersion, latestVersion, tmpURIs, uc);
 
 			// Copy back over original data
 			for (int i = 0; i < uris.size(); ++i) {
@@ -97,11 +102,8 @@ public class ScenarioInstanceMigrator {
 					final URI tmpURI = tmpURIs.get(i);
 					assert tmpURI != null;
 
-					final URI uri = uris.get(0);
-					assert uri != null;
-
 					// Construct new URI for model store - here we are using knowledge of how uri's are constructed. We should really create some API around this in scenario service.
-					String newURIStr = "./" + scenarioInstance.getUuid() + "-" + i + ".xmi";
+					final String newURIStr = "./" + scenarioInstance.getUuid() + "-" + i + ".xmi";
 					// Copy data into the new data file
 					URI destURI = scenarioService.resolveURI(newURIStr);
 
@@ -109,13 +111,12 @@ public class ScenarioInstanceMigrator {
 						final File f = File.createTempFile("migration", ".xmi");
 						destURI = URI.createFileURI(f.getCanonicalPath());
 					}
+					assert destURI != null;
 					copyURIData(new ExtensibleURIConverterImpl(), tmpURI, destURI);
 
 					// Add submodel URI to the model def
 					scenarioInstance.getSubModelURIs().add(destURI.toString());
-
 				}
-
 			}
 
 			scenarioInstance.setScenarioVersion(migratedVersion);
