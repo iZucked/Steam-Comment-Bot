@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Random;
 
 import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.TreeNode;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
@@ -26,7 +25,7 @@ import com.mmxlabs.ganttviewer.IGanttChartToolTipProvider;
 
 public class GanttViewerTest {
 
-	public static class GanttLabelProvider implements ILabelProvider, IGanttChartToolTipProvider, IColorProvider {
+	public static class GanttLabelProvider implements IGanttChartToolTipProvider, IColorProvider {
 
 		public GanttLabelProvider() {
 
