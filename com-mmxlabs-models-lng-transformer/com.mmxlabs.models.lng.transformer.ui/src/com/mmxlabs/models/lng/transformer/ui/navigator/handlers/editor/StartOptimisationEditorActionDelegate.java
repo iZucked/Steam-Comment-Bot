@@ -71,7 +71,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 	 */
 
 	@Override
-	public void run(final IAction action) {
+	public void run(final IAction methodAction) {
 
 		if (editor != null) {
 			if (editor.getEditorInput() instanceof IScenarioServiceEditorInput) {
@@ -134,7 +134,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 							control.addListener(new IJobControlListener() {
 
 								@Override
-								public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
+								public boolean jobStateChanged(final IJobControl methodJob, final EJobState oldState, final EJobState newState) {
 
 									if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
 										// instance.setLocked(false);
@@ -146,7 +146,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 								}
 
 								@Override
-								public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
+								public boolean jobProgressUpdated(final IJobControl methodJob, final int progressDelta) {
 									return true;
 								}
 							});
@@ -182,7 +182,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 						control.addListener(new IJobControlListener() {
 
 							@Override
-							public boolean jobStateChanged(final IJobControl job, final EJobState oldState, final EJobState newState) {
+							public boolean jobStateChanged(final IJobControl methodJob, final EJobState oldState, final EJobState newState) {
 
 								if (newState == EJobState.CANCELLED || newState == EJobState.COMPLETED) {
 									// instance.setLocked(false);
@@ -193,7 +193,7 @@ public class StartOptimisationEditorActionDelegate extends AbstractOptimisationE
 							}
 
 							@Override
-							public boolean jobProgressUpdated(final IJobControl job, final int progressDelta) {
+							public boolean jobProgressUpdated(final IJobControl methodJob, final int progressDelta) {
 								return true;
 							}
 						});
