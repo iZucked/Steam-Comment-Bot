@@ -72,11 +72,13 @@ public class ValidatingDecorator extends LabelProvider implements ILightweightLa
 		}
 
 		final EContentAdapter validationAdapter = new EContentAdapter() {
+			@Override
 			public void notifyChanged(Notification notification) {
 				super.notifyChanged(notification);
 				if (notification.getFeature() == ScenarioServicePackage.eINSTANCE.getScenarioInstance_ValidationStatusCode()) {
 					final LabelProviderChangedEvent event = new LabelProviderChangedEvent(ValidatingDecorator.this, scenarioInstance);
 					Display.getDefault().asyncExec(new Runnable() {
+						@Override
 						public void run() {
 							fireLabelProviderChanged(event);
 						}
