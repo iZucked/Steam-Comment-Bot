@@ -130,9 +130,11 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 		final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
 		for (final Resource r : resourceSet.getResources()) {
 			if (r.isLoaded() && r.isModified()) {
-				EPackage mmxcorePackage = destinationLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+				// For modified models, we need to update the proxy references otherwise wrong package URI's can be saved.
+				final EPackage mmxcorePackage = destinationLoader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
 				EcoreHelper.updateAllMMXProxies(r.getContents().get(0), mmxcorePackage);
-				
+
+				// Save the changed scenarios
 				r.save(saveOptions);
 			}
 		}
@@ -142,7 +144,11 @@ public abstract class AbstractMigrationUnit implements IMigrationUnit {
 	 * Sub classes can initialise new sub model instances here and add them to the map.
 	 * 
 	 * @param loader
+	 *            (in)
+	 * @param existingModels
+	 *            (in) The set of existing models in the scenario
 	 * @param newModels
+	 *            (out) A map to store new model references in.
 	 */
 	protected void hookInNewModels(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> existingModels, final Map<ModelsLNGSet_v1, EObject> newModels) {
 
