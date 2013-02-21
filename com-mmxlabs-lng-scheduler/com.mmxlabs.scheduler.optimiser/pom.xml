@@ -13,6 +13,11 @@
 		<version>4.0.0-SNAPSHOT</version>
 	</parent>
 
+
+	<properties>
+		<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+	</properties>
+
 	<dependencies>
 
 		<dependency>
@@ -97,7 +102,6 @@
 
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>com.mmxlabs.scheduler.optimiser</Bundle-SymbolicName>
 						<!-- Export all packages with this prefix. Default is all local excluding 
 							.impl packages -->
 						<Export-Package>com.mmxlabs.scheduler.optimiser.*;version="${_Bundle-UnqualifiedVersion}"</Export-Package>
