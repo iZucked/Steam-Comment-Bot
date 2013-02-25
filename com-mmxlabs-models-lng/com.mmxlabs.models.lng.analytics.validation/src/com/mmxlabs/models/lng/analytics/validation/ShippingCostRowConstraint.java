@@ -56,17 +56,17 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 				statuses.add(deco);
 			} else {
 				if (destinationType == DestinationType.START || destinationType == DestinationType.DISCHARGE || destinationType == DestinationType.OTHER) {
-					if (shippingCostRow.getCargoPrice() < 0.0001) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No gas price specified -  must be non-zero"));
-						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
-						statuses.add(deco);
-					}
-					if (shippingCostRow.getCargoPrice() > 70.0) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Gas price is too high."));
-						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
-						statuses.add(deco);
-					}
 					if (shippingCostRow.getHeelVolume() > 0) {
+						if (shippingCostRow.getCargoPrice() < 0.0001) {
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No gas price specified -  must be non-zero"));
+							deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
+							statuses.add(deco);
+						}
+						if (shippingCostRow.getCargoPrice() > 70.0) {
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Gas price is too high."));
+							deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
+							statuses.add(deco);
+						}
 						EObject container = shippingCostRow.eContainer();
 						if (container == null) {
 
@@ -93,15 +93,17 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 					}
 				}
 				if (destinationType == DestinationType.START || destinationType == DestinationType.LOAD || destinationType == DestinationType.OTHER) {
-					if (shippingCostRow.getCvValue() < 0.0001) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No gas CV specified - must be non-zero"));
-						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CvValue());
-						statuses.add(deco);
-					}
-					if (shippingCostRow.getCvValue() > 50.0) {
-						final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Gas CV is too high"));
-						deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
-						statuses.add(deco);
+					if (shippingCostRow.getHeelVolume() > 0) {
+						if (shippingCostRow.getCvValue() < 0.0001) {
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("No gas CV specified - must be non-zero"));
+							deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CvValue());
+							statuses.add(deco);
+						}
+						if (shippingCostRow.getCvValue() > 50.0) {
+							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Gas CV is too high"));
+							deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
+							statuses.add(deco);
+						}
 					}
 				}
 			}
