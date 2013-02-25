@@ -64,10 +64,8 @@ public abstract class UnsettableInlineEditor extends BasicAttributeInlineEditor 
 			this.lastSetValue = getInitialUnsetValue();
 			final Composite sub = new Composite(parent, SWT.NONE);
 			sub.setLayout(new GridLayout(2, false));
-			final Button setButton = new Button(sub, SWT.CHECK);
-			this.setButton = setButton;
-			final Control inner = createValueControl(sub);
-			this.inner = inner;
+			this.setButton = new Button(sub, SWT.CHECK);
+			this.inner = createValueControl(sub);
 			setButton.addSelectionListener(new SelectionAdapter() {
 				{
 					final SelectionAdapter self = this;
