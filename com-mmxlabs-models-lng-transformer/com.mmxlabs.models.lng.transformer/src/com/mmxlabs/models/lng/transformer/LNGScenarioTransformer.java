@@ -725,7 +725,7 @@ public class LNGScenarioTransformer {
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
-					if (loadSlot.getContract().getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
+					if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
 						// Redirection contracts can go to anywhere
 						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
 					} else {
@@ -797,7 +797,7 @@ public class LNGScenarioTransformer {
 					}
 					builder.bindDischargeSlotsToDESPurchase(load, marketPorts);
 				} else {
-					if (loadSlot.getContract().getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
+					if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
 						// Redirection contracts can go to anywhere
 						builder.bindDischargeSlotsToDESPurchase(load, dischargePorts);
 					} else {
@@ -865,8 +865,10 @@ public class LNGScenarioTransformer {
 				dischargePriceCalculator = new PriceExpressionContract(curve);
 			}
 
-		} else {
+		} else if (dischargeSlot.isSetContract()) {
 			dischargePriceCalculator = entities.getOptimiserObject(dischargeSlot.getContract(), ISalesPriceCalculator.class);
+		} else {
+			throw new IllegalStateException("Discharge Slot has no contract or other pricing data");
 		}
 
 		// local scope for slot creation convenience variables
@@ -876,19 +878,26 @@ public class LNGScenarioTransformer {
 			final IPort port = portAssociation.lookup(dischargeSlot.getPort());
 			final long minVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMinQuantity());
 			final long maxVolume = OptimiserUnitConvertor.convertToInternalVolume(dischargeSlot.getSlotOrContractMaxQuantity());
-			final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
+
 			final long minCv;
 			final long maxCv;
 
-			if (salesContract.isSetMinCvValue()) {
-				minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue());
+			if (dischargeSlot.isSetContract()) {
+				final SalesContract salesContract = (SalesContract) dischargeSlot.getContract();
+
+				if (salesContract.isSetMinCvValue()) {
+					minCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMinCvValue());
+				} else {
+					minCv = 0;
+				}
+
+				if (salesContract.isSetMaxCvValue()) {
+					maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMaxCvValue());
+				} else {
+					maxCv = Long.MAX_VALUE;
+				}
 			} else {
 				minCv = 0;
-			}
-
-			if (salesContract.isSetMaxCvValue()) {
-				maxCv = OptimiserUnitConvertor.convertToInternalConversionFactor(salesContract.getMaxCvValue());
-			} else {
 				maxCv = Long.MAX_VALUE;
 			}
 
@@ -943,15 +952,17 @@ public class LNGScenarioTransformer {
 				}
 				loadPriceCalculator = new PriceExpressionContract(curve);
 			}
-		} else {
+		} else if (loadSlot.isSetContract()) {
 			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot.getContract());
 			loadPriceCalculator = entities.getOptimiserObject(purchaseContract, ILoadPriceCalculator.class);
+		} else {
+			throw new IllegalStateException("Load Slot has no contract or other pricing data");
 		}
 		if (loadSlot.isDESPurchase()) {
 
 			final ITimeWindow localTimeWindow;
 			// FIXME: This should not really be in the builder, but need better API to permit this kind of transformation.
-			if (loadSlot.getContract().getClass().getSimpleName().equals("RedirectionPurchaseContract")) {
+			if (loadSlot.isSetContract() && loadSlot.getContract().getPriceInfo().getClass().getSimpleName().contains("Redirection")) {
 				// Redirection contracts can go to anywhere, so need larger window for compatibility
 				final int extraTime = 24 * 60; // approx 2 months
 				Date originalDate = null;

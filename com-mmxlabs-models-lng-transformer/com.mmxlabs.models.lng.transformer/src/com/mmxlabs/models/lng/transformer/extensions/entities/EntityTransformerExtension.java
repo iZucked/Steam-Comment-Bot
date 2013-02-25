@@ -39,7 +39,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 
 	@Inject
 	private HashMapEntityProviderEditor entityProvider;
-	
+
 	@Inject
 	private DateAndCurveHelper dateAndCurveHelper;
 
@@ -49,13 +49,13 @@ public class EntityTransformerExtension implements ITransformerExtension {
 		this.entities = map;
 
 		final CommercialModel commercialModel = rootObject.getSubModel(CommercialModel.class);
-		
+
 		for (final LegalEntity e : commercialModel.getEntities()) {
-			final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(e, dateAndCurveHelper, map.getEarliestDate());  
-			
+			final StepwiseIntegerCurve taxCurve = EntityTransformerUtils.createTaxCurve(e, dateAndCurveHelper, map.getEarliestDate());
+
 			final IEntity e2 = createGroupEntity(e.getName(), OptimiserUnitConvertor.convertToInternalConversionFactor(1.0), taxCurve);
 
-			entities.addModelObject(e, e2);			
+			entities.addModelObject(e, e2);
 		}
 	}
 
@@ -72,7 +72,17 @@ public class EntityTransformerExtension implements ITransformerExtension {
 		for (final Slot slot : slots) {
 			final IPortSlot portSlot = entities.getOptimiserObject(slot, IPortSlot.class);
 			if (portSlot != null) {
-				final IEntity entity = entities.getOptimiserObject(slot.getContract().getEntity(), IEntity.class);
+				LegalEntity slotEntity = null;
+//				if (slot.isSetPriceInfo()) {
+//					slotEntity = slot.getPriceInfo().getEntity();
+//				} else 
+					if (slot.isSetContract()) {
+					slotEntity = slot.getContract().getEntity();
+				} else {
+					slotEntity = shipping;
+				}
+
+				final IEntity entity = entities.getOptimiserObject(slotEntity, IEntity.class);
 				setEntityForSlot(entity, portSlot);
 
 			}
