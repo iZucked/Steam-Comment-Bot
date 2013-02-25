@@ -10,14 +10,11 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.validation.AbstractModelConstraint;
 import org.eclipse.emf.validation.IValidationContext;
 import org.eclipse.emf.validation.model.IConstraintStatus;
 
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
 import com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket;
 import com.mmxlabs.models.lng.spotmarkets.DESSalesMarket;
@@ -29,7 +26,6 @@ import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.lng.spotmarkets.SpotType;
 import com.mmxlabs.models.lng.spotmarkets.validation.internal.Activator;
 import com.mmxlabs.models.lng.types.APort;
-import com.mmxlabs.models.lng.types.APortSet;
 import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
@@ -83,12 +79,6 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 						}
 					}
 				}
-
-				if (desPurchaseMarket.getContract() == null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A purchase contract must be specified"));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESPurchaseMarket_Contract());
-					failures.add(dsd);
-				}
 			}
 
 			if (spotMarket instanceof DESSalesMarket) {
@@ -101,22 +91,6 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A notional discharge port must be set"));
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESSalesMarket_NotionalPort());
 					failures.add(dsd);
-				}
-
-				if (desSalesMarket.getContract() == null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A sales contract must be specified"));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESSalesMarket_Contract());
-					failures.add(dsd);
-				} else {
-					final SalesContract salesContract = desSalesMarket.getContract();
-					final EList<APortSet> allowedPorts = salesContract.getAllowedPorts();
-					if (allowedPorts != null && !allowedPorts.isEmpty()) {
-						if (!allowedPorts.contains(notionalPort)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Notional port is not a valid contract port."));
-							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getDESSalesMarket_NotionalPort());
-							failures.add(dsd);
-						}
-					}
 				}
 			}
 
@@ -137,22 +111,6 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_Cv());
 					failures.add(dsd);
 				}
-
-				if (fobPurchasesMarket.getContract() == null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A purchase contract must be specified"));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_Contract());
-					failures.add(dsd);
-				} else {
-					final PurchaseContract purchaseContract = fobPurchasesMarket.getContract();
-					final EList<APortSet> allowedPorts = purchaseContract.getAllowedPorts();
-					if (allowedPorts != null && !allowedPorts.isEmpty()) {
-						if (!allowedPorts.contains(notionalPort)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Notional port is not a valid contract port."));
-							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBPurchasesMarket_NotionalPort());
-							failures.add(dsd);
-						}
-					}
-				}
 			}
 
 			if (spotMarket instanceof FOBSalesMarket) {
@@ -165,22 +123,6 @@ public class SpotMarketConstraint extends AbstractModelConstraint {
 					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A load port must be set"));
 					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBSalesMarket_LoadPort());
 					failures.add(dsd);
-				}
-
-				if (fobSalesMarket.getContract() == null) {
-					final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A sales contract must be specified"));
-					dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBSalesMarket_Contract());
-					failures.add(dsd);
-				} else {
-					final SalesContract salesContract = fobSalesMarket.getContract();
-					final EList<APortSet> allowedPorts = salesContract.getAllowedPorts();
-					if (allowedPorts != null && !allowedPorts.isEmpty()) {
-						if (!allowedPorts.contains(loadPort)) {
-							final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Notional port is not a valid contract port."));
-							dsd.addEObjectAndFeature(spotMarket, SpotMarketsPackage.eINSTANCE.getFOBSalesMarket_LoadPort());
-							failures.add(dsd);
-						}
-					}
 				}
 			}
 		}

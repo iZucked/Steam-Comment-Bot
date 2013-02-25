@@ -60,6 +60,16 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	protected Contract contract;
 
 	/**
+	 * This is true if the Contract reference has been set.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean contractESet;
+
+	/**
 	 * The cached value of the '{@link #getPort() <em>Port</em>}' reference.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getPort()
@@ -454,8 +464,35 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public void setContract(Contract newContract) {
 		Contract oldContract = contract;
 		contract = newContract;
+		boolean oldContractESet = contractESet;
+		contractESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract));
+			eNotify(new ENotificationImpl(this, Notification.SET, CargoPackage.SLOT__CONTRACT, oldContract, contract, !oldContractESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void unsetContract() {
+		Contract oldContract = contract;
+		boolean oldContractESet = contractESet;
+		contract = null;
+		contractESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, CargoPackage.SLOT__CONTRACT, oldContract, null, oldContractESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isSetContract() {
+		return contractESet;
 	}
 
 	/**
@@ -808,7 +845,7 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case CargoPackage.SLOT__CONTRACT:
-				setContract((Contract)null);
+				unsetContract();
 				return;
 			case CargoPackage.SLOT__PORT:
 				setPort((Port)null);
@@ -849,7 +886,7 @@ public abstract class SlotImpl extends ASlotImpl implements Slot {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case CargoPackage.SLOT__CONTRACT:
-				return contract != null;
+				return isSetContract();
 			case CargoPackage.SLOT__PORT:
 				return port != null;
 			case CargoPackage.SLOT__WINDOW_START:

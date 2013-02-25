@@ -253,17 +253,6 @@ public abstract class SpotMarketImpl extends ASpotMarketImpl implements SpotMark
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public AContract getContract() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {

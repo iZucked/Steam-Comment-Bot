@@ -68,7 +68,6 @@ public class DESPurchaseMarketComponentHelper extends BaseComponentHelper {
 		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_cvEditor(detailComposite, topClass);
 		add_destinationPortsEditor(detailComposite, topClass);
-		add_contractEditor(detailComposite, topClass);
 	}
 	/**
 	 * Create the editor for the cv feature on DESPurchaseMarket
@@ -85,13 +84,5 @@ public class DESPurchaseMarketComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_destinationPortsEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.DES_PURCHASE_MARKET__DESTINATION_PORTS));
-	}
-	/**
-	 * Create the editor for the contract feature on DESPurchaseMarket
-	 *
-	 * @generated
-	 */
-	protected void add_contractEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, SpotMarketsPackage.Literals.DES_PURCHASE_MARKET__CONTRACT));
 	}
 }

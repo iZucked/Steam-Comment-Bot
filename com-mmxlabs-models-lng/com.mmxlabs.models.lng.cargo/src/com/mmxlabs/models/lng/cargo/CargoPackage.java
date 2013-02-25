@@ -2434,6 +2434,17 @@ public interface CargoPackage extends EPackage {
 	EClass getSlot();
 
 	/**
+	 * Returns the meta object for the reference '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Contract</em>'.
+	 * @see com.mmxlabs.models.lng.cargo.Slot#getContract()
+	 * @see #getSlot()
+	 * @generated
+	 */
+	EReference getSlot_Contract();
+
+	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getWindowStart <em>Window Start</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2486,7 +2497,7 @@ public interface CargoPackage extends EPackage {
 	 * @see #getSlot()
 	 * @generated
 	 */
-	EReference getSlot_Contract();
+//	EReference getSlot_Contract();
 
 	/**
 	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.cargo.Slot#getDuration <em>Duration</em>}'.

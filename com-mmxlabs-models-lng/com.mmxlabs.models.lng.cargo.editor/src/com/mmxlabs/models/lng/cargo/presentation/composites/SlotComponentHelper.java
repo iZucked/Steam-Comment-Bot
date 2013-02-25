@@ -69,7 +69,7 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.SLOT);	
 	}
 
 	/**
@@ -79,10 +79,8 @@ public class SlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_contractEditor(detailComposite, topClass);
-		add_fixedPriceEditor(detailComposite, topClass);
 		add_portEditor(detailComposite, topClass);
 		add_windowStartEditor(detailComposite, topClass);
 		add_windowStartTimeEditor(detailComposite, topClass);

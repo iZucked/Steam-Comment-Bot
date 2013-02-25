@@ -501,10 +501,10 @@ public class SlotAllocationImpl extends MMXObjectImpl implements SlotAllocation 
 	public AContract getContract() {
 		if (isSetSlot()) {
 			return slot.getContract();
-		} else if (isSetSpotMarket()) {
-			return ((SpotMarket)getSpotMarket()).getContract();
+//		} else if (isSetSpotMarket()) {
+//			return ((SpotMarket)getSpotMarket()).getContract();
 		}
-		throw new UnsupportedOperationException();
+		return null;
 	}
 
 	/**

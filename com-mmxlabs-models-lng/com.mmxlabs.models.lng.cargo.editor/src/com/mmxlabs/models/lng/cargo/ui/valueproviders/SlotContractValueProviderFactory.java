@@ -80,7 +80,7 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 								filteredList.add(value);
 							}
 						}
-						return filteredList;
+						return addNullEntry(filteredList);
 					} else if (target instanceof DischargeSlot) {
 						final ArrayList<Pair<String, EObject>> filteredList = new ArrayList<Pair<String, EObject>>();
 						for (final Pair<String, EObject> value : delegateValue) {
@@ -88,10 +88,23 @@ public class SlotContractValueProviderFactory implements IReferenceValueProvider
 								filteredList.add(value);
 							}
 						}
-						return filteredList;
+						return addNullEntry(filteredList);
 					}
 
-					return delegateValue;
+					return addNullEntry(delegateValue);
+				}
+
+				/**
+				 * Adds the null entry to the list
+				 * 
+				 * @param input
+				 * @return
+				 */
+				private List<Pair<String, EObject>> addNullEntry(List<Pair<String, EObject>> input) {
+					final ArrayList<Pair<String, EObject>> output = new ArrayList<Pair<String, EObject>>();
+					output.add(new Pair<String, EObject>("<None>", null));
+					output.addAll(input);
+					return output;
 				}
 			};
 		} else {

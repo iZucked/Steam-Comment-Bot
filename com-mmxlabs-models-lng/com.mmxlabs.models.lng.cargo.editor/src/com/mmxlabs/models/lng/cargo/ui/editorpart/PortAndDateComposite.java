@@ -141,12 +141,12 @@ public class PortAndDateComposite extends Composite implements IDisplayComposite
 		return slot.getPort();
 	}
 
-	public Contract getContract() {
-		if (slot == null) {
-			return null;
-		}
-		return slot.getContract();
-	}
+//	public Contract getContract() {
+//		if (slot == null) {
+//			return null;
+//		}
+//		return slot.getContract();
+//	}
 
 	@Override
 	public void addInlineEditor(final IInlineEditor editor) {

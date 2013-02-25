@@ -46,7 +46,6 @@
         eType="#//SpotMarket" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SpotMarket" abstract="true" eSuperTypes="platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASpotMarket">
-    <eOperations name="getContract" eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//AContract"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="availability" lowerBound="1"
         eType="#//SpotAvailability" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="minQuantity" lowerBound="1"
@@ -60,27 +59,19 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="destinationPorts" upperBound="-1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APortSet"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APurchaseContract"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DESSalesMarket" eSuperTypes="#//SpotMarket">
     <eStructuralFeatures xsi:type="ecore:EReference" name="notionalPort" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASalesContract"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FOBPurchasesMarket" eSuperTypes="#//SpotMarket">
     <eStructuralFeatures xsi:type="ecore:EReference" name="notionalPort" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cv" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APurchaseContract"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FOBSalesMarket" eSuperTypes="#//SpotMarket">
     <eStructuralFeatures xsi:type="ecore:EReference" name="loadPort" lowerBound="1"
         eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//APort"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="contract" lowerBound="1"
-        eType="ecore:EClass platform:/plugin/com.mmxlabs.models.lng.types/model/lngtypes.ecore#//ASalesContract"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SpotAvailability">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="constant" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"

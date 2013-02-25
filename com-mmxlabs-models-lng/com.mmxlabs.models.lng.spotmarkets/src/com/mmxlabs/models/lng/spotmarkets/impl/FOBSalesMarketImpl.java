@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  * The following features are implemented:
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBSalesMarketImpl#getLoadPort <em>Load Port</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.FOBSalesMarketImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -44,16 +43,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	 * @ordered
 	 */
 	protected Port loadPort;
-
-	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected SalesContract contract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -117,53 +106,12 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SalesContract getContract() {
-		if (contract != null && contract.eIsProxy()) {
-			InternalEObject oldContract = (InternalEObject)contract;
-			contract = (SalesContract)eResolveProxy(oldContract);
-			if (contract != oldContract) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.FOB_SALES_MARKET__CONTRACT, oldContract, contract));
-			}
-		}
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public SalesContract basicGetContract() {
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setContract(SalesContract newContract) {
-		SalesContract oldContract = contract;
-		contract = newContract;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.FOB_SALES_MARKET__CONTRACT, oldContract, contract));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
 				if (resolve) return getLoadPort();
 				return basicGetLoadPort();
-			case SpotMarketsPackage.FOB_SALES_MARKET__CONTRACT:
-				if (resolve) return getContract();
-				return basicGetContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -178,9 +126,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 		switch (featureID) {
 			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
 				setLoadPort((Port)newValue);
-				return;
-			case SpotMarketsPackage.FOB_SALES_MARKET__CONTRACT:
-				setContract((SalesContract)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -197,9 +142,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
 				setLoadPort((Port)null);
 				return;
-			case SpotMarketsPackage.FOB_SALES_MARKET__CONTRACT:
-				setContract((SalesContract)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -214,8 +156,6 @@ public class FOBSalesMarketImpl extends SpotMarketImpl implements FOBSalesMarket
 		switch (featureID) {
 			case SpotMarketsPackage.FOB_SALES_MARKET__LOAD_PORT:
 				return loadPort != null;
-			case SpotMarketsPackage.FOB_SALES_MARKET__CONTRACT:
-				return contract != null;
 		}
 		return super.eIsSet(featureID);
 	}

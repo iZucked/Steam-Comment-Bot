@@ -49,7 +49,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 * 
 	 * @generated
 	 */
-	public LoadSlotComponentHelper(final IAdapterManager adapterManager) {
+	public LoadSlotComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(CargoPackage.Literals.SLOT));
 	}
@@ -61,7 +61,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.LOAD_SLOT);	
 	}
 
 	/**
@@ -71,8 +71,7 @@ public class LoadSlotComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		for (final IComponentHelper helper : superClassesHelpers)
-			helper.addEditorsToComposite(detailComposite, topClass);
+		for (final IComponentHelper helper : superClassesHelpers) helper.addEditorsToComposite(detailComposite, topClass);
 		add_cargoCVEditor(detailComposite, topClass);
 		add_arriveColdEditor(detailComposite, topClass);
 		add_cargoEditor(detailComposite, topClass);

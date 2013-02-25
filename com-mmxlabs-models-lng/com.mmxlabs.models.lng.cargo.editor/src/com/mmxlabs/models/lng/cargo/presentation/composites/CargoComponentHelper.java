@@ -53,7 +53,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 * 
 	 * @generated
 	 */
-	public CargoComponentHelper(final IAdapterManager adapterManager) {
+	public CargoComponentHelper(IAdapterManager adapterManager) {
 		final IComponentHelperRegistry registry = com.mmxlabs.models.ui.Activator.getDefault().getComponentHelperRegistry();
 		superClassesHelpers.addAll(registry.getComponentHelpers(TypesPackage.Literals.ACARGO));
 	}
@@ -65,7 +65,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 	 */
 	@Override
 	public void addEditorsToComposite(final IInlineEditorContainer detailComposite) {
-		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);
+		addEditorsToComposite(detailComposite, CargoPackage.Literals.CARGO);	
 	}
 
 	/**

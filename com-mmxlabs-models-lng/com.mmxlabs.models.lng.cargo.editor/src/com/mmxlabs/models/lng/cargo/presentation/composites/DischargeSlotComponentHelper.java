@@ -72,7 +72,6 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 		add_cargoEditor(detailComposite, topClass);
 		add_FOBSaleEditor(detailComposite, topClass);
 		add_PurchaseDeliveryTypeEditor(detailComposite, topClass);
-		add_RequiredPurchaseTypeEditor(detailComposite, topClass);
 	}
 
 	/**

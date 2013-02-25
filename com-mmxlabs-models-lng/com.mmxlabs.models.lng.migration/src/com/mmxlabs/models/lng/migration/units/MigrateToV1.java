@@ -78,6 +78,7 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		removeExtraAnalyticsFields(v1Loader, models);
 
 		migrateSpotMarketModel(v1Loader, models);
+		migrateSpotMarketContracts(v1Loader, models);
 		// From LNG Model Corrector
 		fixMissingSpotCargoMarkets(v1Loader, models);
 
@@ -274,6 +275,87 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		}
 	}
 
+	public void migrateSpotMarketContracts(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
+		final EObject spotMarketsModel = models.get(ModelsLNGSet_v1.SpotMarkets);
+		final EObject commercialModel = models.get(ModelsLNGSet_v1.Commercial);
+
+		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+		final EPackage commercialPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CommercialModel);
+		final EPackage mmxcorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+		// final EFactory commercialFactory = commercialPackage.getEFactoryInstance();
+
+		final EClass class_SpotMarketGroup = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarketGroup");
+		final EStructuralFeature feature_SMG_markets = MetamodelUtils.getStructuralFeature(class_SpotMarketGroup, "markets");
+
+		final EClass class_SpotMarket = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarket");
+		final EStructuralFeature feature_SM_priceInfo = MetamodelUtils.getStructuralFeature(class_SpotMarket, "priceInfo");
+
+		final EClass class_DESPurchaseMarket = MetamodelUtils.getEClass(spotMarketsPackage, "DESPurchaseMarket");
+		final EClass class_DESSalesMarket = MetamodelUtils.getEClass(spotMarketsPackage, "DESSalesMarket");
+		final EClass class_FOBPurchasesMarket = MetamodelUtils.getEClass(spotMarketsPackage, "FOBPurchasesMarket");
+		final EClass class_FOBSalesMarket = MetamodelUtils.getEClass(spotMarketsPackage, "FOBSalesMarket");
+
+		final EClass class_CommercialModel = MetamodelUtils.getEClass(commercialPackage, "CommercialModel");
+		final EStructuralFeature feature_purchaseContracts = MetamodelUtils.getStructuralFeature(class_CommercialModel, "purchaseContracts");
+		final EStructuralFeature feature_salesContracts = MetamodelUtils.getStructuralFeature(class_CommercialModel, "salesContracts");
+
+		Iterator<EObject> itr = spotMarketsModel.eAllContents();
+		while (itr.hasNext()) {
+			EObject eObj = itr.next();
+			EStructuralFeature feature = null;
+			boolean isPurchase;
+			if (class_DESPurchaseMarket.isInstance(eObj)) {
+				feature = MetamodelUtils.getStructuralFeature(class_DESPurchaseMarket, "contract");
+				isPurchase = true;
+			} else if (class_DESSalesMarket.isInstance(eObj)) {
+				feature = MetamodelUtils.getStructuralFeature(class_DESSalesMarket, "contract");
+				isPurchase = false;
+			} else if (class_FOBPurchasesMarket.isInstance(eObj)) {
+				feature = MetamodelUtils.getStructuralFeature(class_FOBPurchasesMarket, "contract");
+				isPurchase = true;
+			} else if (class_FOBSalesMarket.isInstance(eObj)) {
+				feature = MetamodelUtils.getStructuralFeature(class_FOBSalesMarket, "contract");
+				isPurchase = false;
+			} else {
+				continue;
+			}
+
+			EObject oldContract = (EObject) eObj.eGet(feature);
+			EClass class_params = null;
+			if (oldContract.eClass().getName().equals("FixedPriceContract")) {
+				class_params = MetamodelUtils.getEClass(commercialPackage, "FixedPriceParameters");
+			} else if (oldContract.eClass().getName().equals("IndexPriceContract")) {
+				class_params = MetamodelUtils.getEClass(commercialPackage, "IndexPriceParameters");
+			} else if (oldContract.eClass().getName().equals("PriceExpressionContract")) {
+				class_params = MetamodelUtils.getEClass(commercialPackage, "ExpressionPriceParameters");
+			} else if (oldContract.eClass().getName().equals("RedirectionContract")) {
+				class_params = MetamodelUtils.getEClass(commercialPackage, "RedirectionPriceParameters");
+
+			} else if (oldContract.eClass().getName().equals("RedirectionPurchaseContract")) {
+				// PETRONAS MIGRATION SHOULD HANDLE THESE
+
+				continue;
+			} else if (oldContract.eClass().getName().equals("NetbackPurchaseContract")) {
+				// VANILLA MIGRATION SHOULD HANDLE THESE
+				continue;
+				// class_params = MetamodelUtils.getEClass(commercialPackage, "NetbackPriceParameters");
+			} else if (oldContract.eClass().getName().equals("ProfitSharePurchaseContract")) {
+				// VANILLA MIGRATION SHOULD HANDLE THESE
+				continue;
+				// class_params = MetamodelUtils.getEClass(commercialPackage, "ProfitSharePriceParameters");
+			} else if (oldContract.eClass().getName().equals("PurchaseContract")) {
+				continue;
+			}
+
+			if (class_params == null) {
+				throw new IllegalStateException("Unknown contract type: " + oldContract.eClass().getName());
+			}
+
+			convertSpotMarketContract(loader, eObj, oldContract, class_params, isPurchase);
+		}
+
+	}
+
 	public void migrateContracts(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {
 		final EObject commercialModel = models.get(ModelsLNGSet_v1.Commercial);
 		final EPackage commercialPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CommercialModel);
@@ -436,6 +518,95 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 		newContract.eSet(feature_priceInfo, paramsObject);
 
 		return newContract;
+	}
+
+	public void convertSpotMarketContract(MetamodelLoader loader, final EObject spotMarket, final EObject original, final EClass class_params, final boolean isPurchase) {
+
+		final EPackage commercialPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_CommercialModel);
+		final EPackage mmxcorePackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_MMXCore);
+		final EPackage spotMarketsPackage = loader.getPackageByNSURI(ModelsLNGMigrationConstants.NSURI_SpotMarketsModel);
+
+		final EFactory commercialFactory = commercialPackage.getEFactoryInstance();
+		final EClass class_Contract = MetamodelUtils.getEClass(commercialPackage, "Contract");
+		final EClass class_targetType = MetamodelUtils.getEClass(commercialPackage, isPurchase ? "PurchaseContract" : "SalesContract");
+
+		final EClass class_MMXObject = MetamodelUtils.getEClass(mmxcorePackage, "MMXObject");
+		final EClass class_MMXProxy = MetamodelUtils.getEClass(mmxcorePackage, "MMXProxy");
+		final EStructuralFeature feature_proxies = MetamodelUtils.getStructuralFeature(class_MMXObject, "proxies");
+		final EStructuralFeature feature_reference = MetamodelUtils.getStructuralFeature(class_MMXProxy, "reference");
+
+		final EObject paramsObject = commercialFactory.create(class_params);
+
+		final EClass class_SpotMarket = MetamodelUtils.getEClass(spotMarketsPackage, "SpotMarket");
+		final EStructuralFeature feature_SM_priceInfo = MetamodelUtils.getStructuralFeature(class_SpotMarket, "priceInfo");
+
+		// Already present, so skip
+		if (spotMarket.eIsSet(feature_SM_priceInfo)) {
+			return;
+		}
+
+		// Copy contract params over
+		for (final EStructuralFeature feature : class_targetType.getEAllStructuralFeatures()) {
+			if (original.eIsSet(feature)) {
+
+				if (feature instanceof EReference && ((EReference) feature).getEReferenceType() == class_MMXProxy) {
+					final List<EObject> proxies = MetamodelUtils.getValueAsTypedList(original, feature_proxies);
+					final List<EObject> newParamsProxies = new ArrayList<EObject>();
+					if (proxies != null) {
+						for (EObject mmxProxy : proxies) {
+
+							// Copy the object
+							mmxProxy = EcoreUtil.copy(mmxProxy);
+
+							if (mmxProxy.eIsSet(feature_reference)) {
+								// Initial reference will be a "proxy"...
+								EReference reference = (EReference) mmxProxy.eGet(feature_reference);
+								// ... so we need to "resolve" it to load in the types from our metamodels.
+								reference = (EReference) EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
+
+								if (!(reference.getEContainingClass() == class_targetType || reference.getEContainingClass() == class_Contract)) {
+									newParamsProxies.add(mmxProxy);
+								}
+							}
+						}
+					}
+					paramsObject.eSet(feature, newParamsProxies);
+				}
+			}
+		}
+		// List of features to copy over to params
+		for (final EStructuralFeature feature : class_params.getEAllStructuralFeatures()) {
+			final EStructuralFeature oldFeature = original.eClass().getEStructuralFeature(feature.getName());
+			if (original.eIsSet(oldFeature)) {
+
+				if (feature instanceof EReference && ((EReference) feature).getEReferenceType() == class_MMXProxy) {
+					// List<EObject> proxies = MetamodelUtils.getValueAsTypedList(paramsObject, feature_proxies);
+					// List<EObject> newProxies = new ArrayList<EObject>();
+					// if (proxies != null) {
+					// for (EObject mmxProxy : proxies) {
+					//
+					// if (mmxProxy.eIsSet(feature_reference)) {
+					// // Initial reference will be a "proxy"...
+					// EReference reference = (EReference) mmxProxy.eGet(feature_reference);
+					// // ... so we need to "resolve" it to load in the types from our metamodels.
+					// reference = (EReference) EcoreUtil.resolve(reference, mmxcorePackage.eResource().getResourceSet());
+					//
+					// if (!(reference.getEReferenceType() == class_targetType || reference.getEReferenceType() == class_Contract)) {
+					// newProxies.add(mmxProxy);
+					// }
+					// }
+					// }
+					// }
+					// paramsObject.eSet(feature, newProxies);
+				} else if (feature instanceof EReference) {
+					throw new IllegalStateException("Unexpected state!");
+				} else {
+					paramsObject.eSet(feature, original.eGet(oldFeature));
+				}
+			}
+		}
+
+		spotMarket.eSet(feature_SM_priceInfo, paramsObject);
 	}
 
 	public void migrateSpotMarketModel(final MetamodelLoader loader, final Map<ModelsLNGSet_v1, EObject> models) {

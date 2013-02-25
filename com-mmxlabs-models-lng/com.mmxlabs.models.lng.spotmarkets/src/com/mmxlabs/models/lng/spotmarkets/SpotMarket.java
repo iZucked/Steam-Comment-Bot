@@ -141,7 +141,7 @@ public interface SpotMarket extends ASpotMarket {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	AContract getContract();
+//	AContract getContract();
 
 } // end of  SpotMarket
 

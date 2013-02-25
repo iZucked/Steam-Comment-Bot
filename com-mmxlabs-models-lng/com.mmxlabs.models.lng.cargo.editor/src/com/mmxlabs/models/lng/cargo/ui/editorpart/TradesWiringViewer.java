@@ -1414,7 +1414,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		newLoad.setDESPurchase(isDESPurchase);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newLoad.setMarket(market);
-		newLoad.setContract((Contract) market.getContract());
+//		newLoad.setContract((Contract) market.getContract());
 		newLoad.setOptional(true);
 		newLoad.setName("");
 		currentWiringCommand.append(AddCommand.create(jointModelEditorPart.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
@@ -1449,7 +1449,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		newDischarge.setFOBSale(isFOBSale);
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newDischarge.setMarket(market);
-		newDischarge.setContract((Contract) market.getContract());
+//		newDischarge.setContract((Contract) market.getContract());
 		newDischarge.setName("");
 		if (market instanceof DESSalesMarket) {
 

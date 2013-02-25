@@ -22,7 +22,6 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket#getDestinationPorts <em>Destination Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -72,32 +71,6 @@ public interface DESPurchaseMarket extends SpotMarket {
 	 * @generated
 	 */
 	EList<APortSet> getDestinationPorts();
-
-	/**
-	 * Returns the value of the '<em><b>Contract</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Contract</em>' reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Contract</em>' reference.
-	 * @see #setContract(PurchaseContract)
-	 * @see com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage#getDESPurchaseMarket_Contract()
-	 * @model required="true"
-	 * @generated
-	 */
-	PurchaseContract getContract();
-
-	/**
-	 * Sets the value of the '{@link com.mmxlabs.models.lng.spotmarkets.DESPurchaseMarket#getContract <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Contract</em>' reference.
-	 * @see #getContract()
-	 * @generated
-	 */
-	void setContract(PurchaseContract value);
 
 } // end of  DESPurchaseMarket
 

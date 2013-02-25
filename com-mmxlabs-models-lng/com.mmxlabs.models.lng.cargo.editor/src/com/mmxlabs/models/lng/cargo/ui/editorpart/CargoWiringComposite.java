@@ -546,7 +546,7 @@ public class CargoWiringComposite extends Composite {
 				}
 			}
 
-			for (Cargo c : cargoes) {
+			for (final Cargo c : cargoes) {
 				c.eAdapters().remove(cargoChangeAdapter);
 			}
 
@@ -1446,7 +1446,7 @@ public class CargoWiringComposite extends Composite {
 	private String getActionName(final Slot slot, final boolean includePort, final boolean includeContract) {
 		final StringBuilder sb = new StringBuilder();
 
-		if (includeContract && slot.getContract() != null) {
+		if (includeContract && slot.isSetContract()) {
 			sb.append(slot.getContract().getName());
 			sb.append(" - ");
 		}
@@ -1531,7 +1531,7 @@ public class CargoWiringComposite extends Composite {
 		newLoad.setDESPurchase(isDESPurchase);
 		newLoad.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newLoad.setMarket(market);
-		newLoad.setContract((Contract) market.getContract());
+		// newLoad.setContract((Contract) market.getContract());
 		newLoad.setOptional(true);
 		newLoad.setName("");
 		currentWiringCommand.append(AddCommand.create(location.getEditingDomain(), cargoModel, CargoPackage.eINSTANCE.getCargoModel_LoadSlots(), newLoad));
@@ -1566,7 +1566,7 @@ public class CargoWiringComposite extends Composite {
 		newDischarge.setFOBSale(isFOBSale);
 		newDischarge.eSet(MMXCorePackage.eINSTANCE.getUUIDObject_Uuid(), EcoreUtil.generateUUID());
 		newDischarge.setMarket(market);
-		newDischarge.setContract((Contract) market.getContract());
+		// newDischarge.setContract((Contract) market.getContract());
 		newDischarge.setName("");
 		if (market instanceof DESSalesMarket) {
 

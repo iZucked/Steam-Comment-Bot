@@ -37,6 +37,61 @@ import java.util.Date;
  */
 public interface Slot extends ASlot, ITimezoneProvider {
 	/**
+	 * Returns the value of the '<em><b>Contract</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Contract</em>' reference isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Contract</em>' reference.
+	 * @see #isSetContract()
+	 * @see #unsetContract()
+	 * @see #setContract(Contract)
+	 * @see com.mmxlabs.models.lng.cargo.CargoPackage#getSlot_Contract()
+	 * @model unsettable="true" required="true"
+	 * @generated
+	 */
+	Contract getContract();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Contract</em>' reference.
+	 * @see #isSetContract()
+	 * @see #unsetContract()
+	 * @see #getContract()
+	 * @generated
+	 */
+	void setContract(Contract value);
+
+	/**
+	 * Unsets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @see #isSetContract()
+	 * @see #getContract()
+	 * @see #setContract(Contract)
+	 * @generated
+	 */
+	void unsetContract();
+
+	/**
+	 * Returns whether the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference is set.
+	 * <!-- begin-user-doc -->
+	 * @since 3.0
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Contract</em>' reference is set.
+	 * @see #unsetContract()
+	 * @see #getContract()
+	 * @see #setContract(Contract)
+	 * @generated
+	 */
+	boolean isSetContract();
+
+	/**
 	 * Returns the value of the '<em><b>Window Start</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <p>
@@ -209,7 +264,7 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * @model required="true"
 	 * @generated
 	 */
-	Contract getContract();
+//	Contract getContract();
 
 	/**
 	 * Sets the value of the '{@link com.mmxlabs.models.lng.cargo.Slot#getContract <em>Contract</em>}' reference.
@@ -220,7 +275,7 @@ public interface Slot extends ASlot, ITimezoneProvider {
 	 * @see #getContract()
 	 * @generated
 	 */
-	void setContract(Contract value);
+//	void setContract(Contract value);
 
 	/**
 	 * Returns the value of the '<em><b>Duration</b></em>' attribute.

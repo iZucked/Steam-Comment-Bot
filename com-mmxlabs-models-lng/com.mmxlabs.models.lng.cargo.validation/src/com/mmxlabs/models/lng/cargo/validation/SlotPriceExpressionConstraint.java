@@ -41,6 +41,11 @@ public class SlotPriceExpressionConstraint extends AbstractModelMultiConstraint 
 
 			if (slot.isSetPriceExpression()) {
 				validatePriceExpression(ctx, slot, CargoPackage.eINSTANCE.getSlot_PriceExpression(), slot.getPriceExpression(), parser, failures);
+			} else if (!slot.isSetContract()) {
+				final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("A price expression or a contract must be set."));
+				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_PriceExpression());
+				dsd.addEObjectAndFeature(slot, CargoPackage.eINSTANCE.getSlot_Contract());
+				failures.add(dsd);
 			}
 		}
 		return Activator.PLUGIN_ID;

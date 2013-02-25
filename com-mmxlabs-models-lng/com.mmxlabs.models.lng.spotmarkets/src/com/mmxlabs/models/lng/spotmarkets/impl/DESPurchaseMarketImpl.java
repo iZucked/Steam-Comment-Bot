@@ -35,7 +35,6 @@ import org.eclipse.emf.ecore.util.EObjectResolvingEList;
  * <ul>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl#getCv <em>Cv</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl#getDestinationPorts <em>Destination Ports</em>}</li>
- *   <li>{@link com.mmxlabs.models.lng.spotmarkets.impl.DESPurchaseMarketImpl#getContract <em>Contract</em>}</li>
  * </ul>
  * </p>
  *
@@ -71,16 +70,6 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 	 * @ordered
 	 */
 	protected EList<APortSet> destinationPorts;
-
-	/**
-	 * The cached value of the '{@link #getContract() <em>Contract</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getContract()
-	 * @generated
-	 * @ordered
-	 */
-	protected PurchaseContract contract;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -139,44 +128,6 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public PurchaseContract getContract() {
-		if (contract != null && contract.eIsProxy()) {
-			InternalEObject oldContract = (InternalEObject)contract;
-			contract = (PurchaseContract)eResolveProxy(oldContract);
-			if (contract != oldContract) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, SpotMarketsPackage.DES_PURCHASE_MARKET__CONTRACT, oldContract, contract));
-			}
-		}
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PurchaseContract basicGetContract() {
-		return contract;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setContract(PurchaseContract newContract) {
-		PurchaseContract oldContract = contract;
-		contract = newContract;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, SpotMarketsPackage.DES_PURCHASE_MARKET__CONTRACT, oldContract, contract));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -184,9 +135,6 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 				return getCv();
 			case SpotMarketsPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS:
 				return getDestinationPorts();
-			case SpotMarketsPackage.DES_PURCHASE_MARKET__CONTRACT:
-				if (resolve) return getContract();
-				return basicGetContract();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -207,9 +155,6 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 				getDestinationPorts().clear();
 				getDestinationPorts().addAll((Collection<? extends APortSet>)newValue);
 				return;
-			case SpotMarketsPackage.DES_PURCHASE_MARKET__CONTRACT:
-				setContract((PurchaseContract)newValue);
-				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -228,9 +173,6 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 			case SpotMarketsPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS:
 				getDestinationPorts().clear();
 				return;
-			case SpotMarketsPackage.DES_PURCHASE_MARKET__CONTRACT:
-				setContract((PurchaseContract)null);
-				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -247,8 +189,6 @@ public class DESPurchaseMarketImpl extends SpotMarketImpl implements DESPurchase
 				return cv != CV_EDEFAULT;
 			case SpotMarketsPackage.DES_PURCHASE_MARKET__DESTINATION_PORTS:
 				return destinationPorts != null && !destinationPorts.isEmpty();
-			case SpotMarketsPackage.DES_PURCHASE_MARKET__CONTRACT:
-				return contract != null;
 		}
 		return super.eIsSet(featureID);
 	}

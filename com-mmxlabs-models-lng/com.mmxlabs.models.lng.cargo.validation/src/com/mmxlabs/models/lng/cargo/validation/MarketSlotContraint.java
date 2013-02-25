@@ -45,10 +45,10 @@ public class MarketSlotContraint extends AbstractModelConstraint {
 				if (market instanceof DESPurchaseMarket) {
 					final DESPurchaseMarket desPurchaseMarket = (DESPurchaseMarket) market;
 
-					if (spotLoadSlot.getContract() != desPurchaseMarket.getContract()) {
+					if (spotLoadSlot.getContract() != null) {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("DES Purchase Contract does not match market contract of ." + desPurchaseMarket.getContract().getName()), IStatus.WARNING);
+								(IConstraintStatus) ctx.createFailureStatus("DES Purchase should not have a contract set."), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Contract());
 						failures.add(dsd);
 
@@ -73,10 +73,10 @@ public class MarketSlotContraint extends AbstractModelConstraint {
 
 					}
 
-					if (spotLoadSlot.getContract() != fobPurchasesMarket.getContract()) {
+					if (spotLoadSlot.getContract() != null) {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("FOB Purchase Contract does not match market contract of ." + fobPurchasesMarket.getContract().getName()), IStatus.WARNING);
+								(IConstraintStatus) ctx.createFailureStatus("FOB Purchase should not have a contract set."), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotLoadSlot, CargoPackage.eINSTANCE.getSlot_Contract());
 						failures.add(dsd);
 
@@ -89,10 +89,10 @@ public class MarketSlotContraint extends AbstractModelConstraint {
 
 				if (market instanceof DESSalesMarket) {
 					final DESSalesMarket desSalesMarket = (DESSalesMarket) market;
-					if (spotDischargeSlot.getContract() != desSalesMarket.getContract()) {
+					if (spotDischargeSlot.getContract() != null) {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("DES Sales Contract does not match market contract of ." + desSalesMarket.getContract().getName()), IStatus.WARNING);
+								(IConstraintStatus) ctx.createFailureStatus("DES Sales should not have a contract set."), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
 						failures.add(dsd);
 
@@ -110,10 +110,10 @@ public class MarketSlotContraint extends AbstractModelConstraint {
 				} else if (market instanceof FOBSalesMarket) {
 					final FOBSalesMarket fobSalesMarket = (FOBSalesMarket) market;
 
-					if (spotDischargeSlot.getContract() != fobSalesMarket.getContract()) {
+					if (spotDischargeSlot.getContract() != null) {
 
 						final DetailConstraintStatusDecorator dsd = new DetailConstraintStatusDecorator(
-								(IConstraintStatus) ctx.createFailureStatus("FOB Sales Contract does not match market contract of ." + fobSalesMarket.getContract().getName()), IStatus.WARNING);
+								(IConstraintStatus) ctx.createFailureStatus("FOB Sales should not have a contract set."), IStatus.WARNING);
 						dsd.addEObjectAndFeature(spotDischargeSlot, CargoPackage.eINSTANCE.getSlot_Contract());
 						failures.add(dsd);
 
