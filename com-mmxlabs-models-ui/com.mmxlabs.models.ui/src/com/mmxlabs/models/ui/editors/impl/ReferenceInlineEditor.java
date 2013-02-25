@@ -74,8 +74,7 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 	@Override
 	public Control createValueControl(final Composite parent) {
-		final Combo combo = new Combo(parent, SWT.READ_ONLY);
-		this.combo = combo;
+		this.combo = new Combo(parent, SWT.READ_ONLY);
 
 		combo.setEnabled(isEditorEnabled());
 
@@ -127,11 +126,10 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 	 */
 	@Override
 	protected void updateDisplay(final Object target) {
-		final Object value = getValue();
-		updateControl();
-		updateValueDisplay(value);
+
+		super.updateDisplay(getValue());
 	}
-	
+
 	@Override
 	protected void updateValueDisplay(final Object value) {
 		if (combo.isDisposed()) {
@@ -163,12 +161,13 @@ public class ReferenceInlineEditor extends UnsettableInlineEditor {
 
 		super.setControlsEnabled(enabled);
 	}
+
 	@Override
 	public void setControlsVisible(final boolean visible) {
 		if (!combo.isDisposed()) {
 			combo.setVisible(visible);
 		}
-		
+
 		super.setControlsVisible(visible);
 	}
 }
