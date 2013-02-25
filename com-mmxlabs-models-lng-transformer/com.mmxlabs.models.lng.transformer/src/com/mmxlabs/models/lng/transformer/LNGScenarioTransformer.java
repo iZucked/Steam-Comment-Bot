@@ -125,6 +125,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenLoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.BreakEvenSalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.MarketPriceContract;
+import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.providers.PortType;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
 
@@ -860,7 +861,7 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				dischargePriceCalculator = new MarketPriceContract(curve, 0, OptimiserUnitConvertor.convertToInternalConversionFactor(1));
+				dischargePriceCalculator = new PriceExpressionContract(curve);
 			}
 
 		} else {
@@ -939,7 +940,7 @@ public class LNGScenarioTransformer {
 						curve.setValueAfter(i - 1, OptimiserUnitConvertor.convertToInternalPrice(parsed.evaluate(i).doubleValue()));
 					}
 				}
-				loadPriceCalculator = new MarketPriceContract(curve, 0, OptimiserUnitConvertor.convertToInternalConversionFactor(1));
+				loadPriceCalculator = new PriceExpressionContract(curve);
 			}
 		} else {
 			final PurchaseContract purchaseContract = (PurchaseContract) (loadSlot.getContract());
