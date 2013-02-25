@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.utils.ScheduleDiffUtils;
 
 /**
  * 
@@ -85,58 +86,11 @@ public class BasicCargoReportView extends EMFReportView {
 	}
 
 	@Override
-	protected boolean isElementDifferent(EObject pinnedObject, EObject otherObject) {
-		CargoAllocation ref = null;
-		if (pinnedObject instanceof CargoAllocation) {
-			ref = (CargoAllocation) pinnedObject;
-		}
-
-		CargoAllocation ca = null;
-		if (otherObject instanceof CargoAllocation) {
-			ca = (CargoAllocation) otherObject;
-		}
-
-		if (ca == null || ref == null) {
-			return true;
-		}
-
-		boolean different = false;
-
-		// Check vessel
-		if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
-			different = true;
-		} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
-			different = true;
-		} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
-			different = true;
-		} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
-			different = true;
-		}
-
-		if (!different) {
-			if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
-				different = true;
-			}
-		}
-		if (!different) {
-			if (!ca.getLoadAllocation().getContract().getName().equals(ref.getLoadAllocation().getContract().getName())) {
-				different = true;
-			}
-		}
-		if (!different) {
-			if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
-				different = true;
-			}
-		}
-		if (!different) {
-			if (!ca.getDischargeAllocation().getContract().getName().equals(ref.getDischargeAllocation().getContract().getName())) {
-				different = true;
-			}
-		}
-
-		return different;
+	protected boolean isElementDifferent(final EObject pinnedObject, final EObject otherObject) {
+		return ScheduleDiffUtils.isElementDifferent(pinnedObject, otherObject);
 	}
 
+	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduleElementCollector() {
 

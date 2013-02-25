@@ -19,6 +19,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
 import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.shiplingo.platform.reports.IScenarioInstanceElementCollector;
 import com.mmxlabs.shiplingo.platform.reports.ScheduleElementCollector;
+import com.mmxlabs.shiplingo.platform.reports.utils.ScheduleDiffUtils;
 
 public class CargoPnLReportView extends EMFReportView {
 	/**
@@ -42,12 +43,12 @@ public class CargoPnLReportView extends EMFReportView {
 
 		// addColumn("Load Port", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetPort(), name);
 		addColumn("Load Date", datePartFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetLocalStart());
-//		addColumn("Buy Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
+		// addColumn("Buy Contract", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation__GetContract(), name);
 		addColumn("Buy Price", objectFormatter, s.getCargoAllocation_LoadAllocation(), s.getSlotAllocation_Price());
 
 		// addColumn("Discharge Port", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetPort(), name);
 		// addColumn("Discharge Date", datePartFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetLocalStart());
-//		addColumn("Sell Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
+		// addColumn("Sell Contract", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation__GetContract(), name);
 		addColumn("Sell Price", objectFormatter, s.getCargoAllocation_DischargeAllocation(), s.getSlotAllocation_Price());
 
 		// addColumn("Vessel", objectFormatter, s.getCargoAllocation_Sequence(), SchedulePackage.eINSTANCE.getSequence__GetName());
@@ -105,57 +106,10 @@ public class CargoPnLReportView extends EMFReportView {
 
 	@Override
 	protected boolean isElementDifferent(EObject pinnedObject, EObject otherObject) {
-		CargoAllocation ref = null;
-		if (pinnedObject instanceof CargoAllocation) {
-			ref = (CargoAllocation) pinnedObject;
-		}
-
-		CargoAllocation ca = null;
-		if (otherObject instanceof CargoAllocation) {
-			ca = (CargoAllocation) otherObject;
-		}
-
-		if (ca == null || ref == null) {
-			return true;
-		}
-
-		boolean different = false;
-
-		// Check vessel
-		if ((ca.getSequence().getVessel() == null) != (ref.getSequence().getVessel() == null)) {
-			different = true;
-		} else if ((ca.getSequence().getVesselClass() == null) != (ref.getSequence().getVesselClass() == null)) {
-			different = true;
-		} else if (ca.getSequence().getVessel() != null && (!ca.getSequence().getVessel().getName().equals(ref.getSequence().getVessel().getName()))) {
-			different = true;
-		} else if (ca.getSequence().getVesselClass() != null && (!ca.getSequence().getVesselClass().getName().equals(ref.getSequence().getVesselClass().getName()))) {
-			different = true;
-		}
-
-		if (!different) {
-			if (!ca.getLoadAllocation().getPort().getName().equals(ref.getLoadAllocation().getPort().getName())) {
-				different = true;
-			}
-		}
-		if (!different) {
-			if (!ca.getLoadAllocation().getContract().getName().equals(ref.getLoadAllocation().getContract().getName())) {
-				different = true;
-			}
-		}
-		if (!different) {
-			if (!ca.getDischargeAllocation().getPort().getName().equals(ref.getDischargeAllocation().getPort().getName())) {
-				different = true;
-			}
-		}
-		if (!different) {
-			if (!ca.getDischargeAllocation().getContract().getName().equals(ref.getDischargeAllocation().getContract().getName())) {
-				different = true;
-			}
-		}
-
-		return different;
+		return ScheduleDiffUtils.isElementDifferent(pinnedObject, otherObject);
 	}
 
+	@Override
 	protected IScenarioInstanceElementCollector getElementCollector() {
 		return new ScheduleElementCollector() {
 
@@ -184,6 +138,7 @@ public class CargoPnLReportView extends EMFReportView {
 	 * @return
 	 * @since 1.1
 	 */
+	@Override
 	protected String getElementKey(final EObject element) {
 		if (element instanceof CargoAllocation) {
 			return ((CargoAllocation) element).getName();
