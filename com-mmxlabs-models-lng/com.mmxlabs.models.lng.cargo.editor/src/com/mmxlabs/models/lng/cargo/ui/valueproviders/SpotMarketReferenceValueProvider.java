@@ -18,6 +18,7 @@ import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarket;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketGroup;
+import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsPackage;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.valueproviders.BaseReferenceValueProvider;
@@ -66,8 +67,8 @@ public class SpotMarketReferenceValueProvider extends BaseReferenceValueProvider
 
 		if (feature != null) {
 
-			final PricingModel pricingModel = rootObject.getSubModel(PricingModel.class);
-			final SpotMarketGroup group = (SpotMarketGroup) pricingModel.eGet(feature);
+			final SpotMarketsModel spotMarketsModel = rootObject.getSubModel(SpotMarketsModel.class);
+			final SpotMarketGroup group = (SpotMarketGroup) spotMarketsModel.eGet(feature);
 			if (group != null) {
 				final List<Pair<String, EObject>> values = Lists.transform(group.getMarkets(), new Function<SpotMarket, Pair<String, EObject>>() {
 
