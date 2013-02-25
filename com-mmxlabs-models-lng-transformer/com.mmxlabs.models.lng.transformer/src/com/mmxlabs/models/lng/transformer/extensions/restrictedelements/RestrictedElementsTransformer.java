@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.EClass;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.Contract;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.port.Port;
@@ -133,13 +134,19 @@ public class RestrictedElementsTransformer implements IContractTransformer {
 		allElements.clear();
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	@Override
-	public ISalesPriceCalculator transformSalesContract(final SalesContract sc) {
+	public ISalesPriceCalculator transformSalesPriceParameters(final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	@Override
-	public ILoadPriceCalculator transformPurchaseContract(final PurchaseContract pc) {
+	public ILoadPriceCalculator transformPurchasePriceParameters(final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 

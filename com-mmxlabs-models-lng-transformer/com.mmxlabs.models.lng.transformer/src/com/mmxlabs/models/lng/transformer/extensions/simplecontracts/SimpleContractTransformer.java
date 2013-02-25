@@ -18,16 +18,13 @@ import com.mmxlabs.common.parser.series.ISeries;
 import com.mmxlabs.common.parser.series.SeriesParser;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialPackage;
-import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.ExpressionPriceParameters;
 import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
 import com.mmxlabs.models.lng.commercial.IndexPriceParameters;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
-import com.mmxlabs.models.lng.commercial.SalesContract;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
-import com.mmxlabs.models.lng.types.ALNGPriceCalculatorParameters;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
@@ -64,7 +61,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 		this.map = null;
 	}
 
-	private SimpleContract instantiate(final Contract c) {
+	private SimpleContract instantiate(final LNGPriceCalculatorParameters priceInfo) {
 		// if (c instanceof FixedPriceContract) {
 		// FixedPriceContract contract = (FixedPriceContract) c;
 		// return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(contract.getPricePerMMBTU()));
@@ -77,9 +74,9 @@ public class SimpleContractTransformer implements IContractTransformer {
 		// return createPriceExpressionContract(contract.getPriceExpression());
 		// }
 
-		ALNGPriceCalculatorParameters priceInfo = c.getPriceInfo();
+		// ALNGPriceCalculatorParameters priceInfo = c.getPriceInfo();
 		if (priceInfo instanceof FixedPriceParameters) {
-			FixedPriceParameters fixedPriceInfo = (FixedPriceParameters) c.getPriceInfo();
+			FixedPriceParameters fixedPriceInfo = (FixedPriceParameters) priceInfo;
 			return createFixedPriceContract(OptimiserUnitConvertor.convertToInternalConversionFactor(fixedPriceInfo.getPricePerMMBTU()));
 		}
 		if (priceInfo instanceof IndexPriceParameters) {
@@ -97,14 +94,20 @@ public class SimpleContractTransformer implements IContractTransformer {
 		return null;
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	@Override
-	public ISalesPriceCalculator transformSalesContract(final SalesContract sc) {
-		return instantiate(sc);
+	public ISalesPriceCalculator transformSalesPriceParameters(final LNGPriceCalculatorParameters priceParameters) {
+		return instantiate(priceParameters);
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	@Override
-	public ILoadPriceCalculator transformPurchaseContract(final PurchaseContract pc) {
-		return instantiate(pc);
+	public ILoadPriceCalculator transformPurchasePriceParameters(final LNGPriceCalculatorParameters priceParameters) {
+		return instantiate(priceParameters);
 	}
 
 	@Override
@@ -114,6 +117,7 @@ public class SimpleContractTransformer implements IContractTransformer {
 
 	/**
 	 * @return
+	 * @since 3.0
 	 */
 	public Collection<EClass> getContractEClasses() {
 		return handledClasses;

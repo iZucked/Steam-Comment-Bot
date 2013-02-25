@@ -15,7 +15,7 @@ import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
-import com.mmxlabs.models.lng.commercial.PurchaseContract;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
@@ -43,13 +43,19 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	@Override
-	public ISalesPriceCalculator transformSalesContract(final SalesContract sc) {
+	public ISalesPriceCalculator transformSalesPriceParameters(final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	@Override
-	public ILoadPriceCalculator transformPurchaseContract(final PurchaseContract pc) {
+	public ILoadPriceCalculator transformPurchasePriceParameters(final LNGPriceCalculatorParameters priceParameters) {
 		return null;
 	}
 

@@ -9,6 +9,7 @@ import java.util.Collection;
 import org.eclipse.emf.ecore.EClass;
 
 import com.mmxlabs.models.lng.cargo.Slot;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
@@ -29,16 +30,18 @@ public interface IContractTransformer extends ITransformerExtension {
 	 * 
 	 * @param sc
 	 * @return
+	 * @since 3.0
 	 */
-	public ISalesPriceCalculator transformSalesContract(SalesContract sc);
+	public ISalesPriceCalculator transformSalesPriceParameters(LNGPriceCalculatorParameters priceParameters);
 
 	/**
 	 * Create an {@link ILoadPriceCalculator} from a {@link PurchaseContract}
 	 * 
 	 * @param pc
 	 * @return
+	 * @since 3.0
 	 */
-	public ILoadPriceCalculator transformPurchaseContract(PurchaseContract pc);
+	public ILoadPriceCalculator transformPurchasePriceParameters(LNGPriceCalculatorParameters priceParameters);
 
 	/**
 	 * Called when a slot has been transformed. This allows the transformer to get hold of any slot related extension data and do whatever it may want to do with it. This will be called for

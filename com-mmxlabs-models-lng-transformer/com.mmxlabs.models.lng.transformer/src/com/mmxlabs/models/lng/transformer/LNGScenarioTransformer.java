@@ -52,6 +52,7 @@ import com.mmxlabs.models.lng.cargo.SpotDischargeSlot;
 import com.mmxlabs.models.lng.cargo.SpotLoadSlot;
 import com.mmxlabs.models.lng.cargo.SpotSlot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
+import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.PurchaseContract;
 import com.mmxlabs.models.lng.commercial.SalesContract;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
@@ -369,13 +370,13 @@ public class LNGScenarioTransformer {
 		// services. Ensure their bundles have been started!
 		for (final PurchaseContract c : commercialModel.getPurchaseContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
-			final ILoadPriceCalculator calculator = transformer.transformPurchaseContract(c);
+			final ILoadPriceCalculator calculator = transformer.transformPurchasePriceParameters(c.getPriceInfo());
 			entities.addModelObject(c, calculator);
 		}
 
 		for (final SalesContract c : commercialModel.getSalesContracts()) {
 			final IContractTransformer transformer = contractTransformersByEClass.get(c.getPriceInfo().eClass());
-			final ISalesPriceCalculator calculator = transformer.transformSalesContract(c);
+			final ISalesPriceCalculator calculator = transformer.transformSalesPriceParameters(c.getPriceInfo());
 			if (calculator == null) {
 				throw new IllegalStateException("Unable to transform contract");
 			}
@@ -1062,6 +1063,9 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
+						final IContractTransformer transformer = contractTransformersByEClass.get(desPurchaseMarket.getPriceInfo().eClass());
+						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(desPurchaseMarket.getPriceInfo());
+
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
 							int offset = 0;
@@ -1080,8 +1084,6 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(id);
 
-								final ILoadPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ILoadPriceCalculator.class);
-
 								final ILoadOption desPurchaseSlot = builder.createDESPurchaseLoadSlot(id, null, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), priceCalculator, cargoCVValue, true);
 
@@ -1092,7 +1094,7 @@ public class LNGScenarioTransformer {
 								desSlot.setArriveCold(false);
 								desSlot.setCargoCV(desPurchaseMarket.getCv());
 								desSlot.setWindowStart(new Date(startTime.getTime()));
-								desSlot.setContract(desPurchaseMarket.getContract());
+								// desSlot.setContract(desPurchaseMarket.getContract());
 								desSlot.setOptional(true);
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60;
 								desSlot.setWindowSize((int) duration);
@@ -1174,6 +1176,9 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
+						final IContractTransformer transformer = contractTransformersByEClass.get(fobSaleMarket.getPriceInfo().eClass());
+						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(fobSaleMarket.getPriceInfo());
+
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
 							int offset = 0;
@@ -1192,8 +1197,6 @@ public class LNGScenarioTransformer {
 								final long minCv = 0;
 								final long maxCv = Long.MAX_VALUE;
 
-								final ISalesPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ISalesPriceCalculator.class);
-
 								final IDischargeOption fobSaleSlot = builder.createFOBSaleDischargeSlot(id, loadIPort, tw, OptimiserUnitConvertor.convertToInternalVolume(market.getMinQuantity()),
 										OptimiserUnitConvertor.convertToInternalVolume(market.getMaxQuantity()), minCv, maxCv, priceCalculator, true);
 
@@ -1203,7 +1206,7 @@ public class LNGScenarioTransformer {
 								fobSlot.setName(id);
 								fobSlot.setPort(loadPort);
 								fobSlot.setWindowStart(new Date(startTime.getTime()));
-								fobSlot.setContract(fobSaleMarket.getContract());
+								// fobSlot.setContract(fobSaleMarket.getContract());
 								fobSlot.setOptional(true);
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000 / 60 / 60;
 								fobSlot.setWindowSize((int) duration);
@@ -1285,6 +1288,9 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
+						final IContractTransformer transformer = contractTransformersByEClass.get(desSalesMarket.getPriceInfo().eClass());
+						final ISalesPriceCalculator priceCalculator = transformer.transformSalesPriceParameters(desSalesMarket.getPriceInfo());
+
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
 							int offset = 0;
@@ -1300,13 +1306,11 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(id);
 
-								final ISalesPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ISalesPriceCalculator.class);
-
 								// Create a fake model object to add in here;
 								final SpotDischargeSlot desSlot = CargoFactory.eINSTANCE.createSpotDischargeSlot();
 								desSlot.setName(id);
 								desSlot.setWindowStart(new Date(startTime.getTime()));
-								desSlot.setContract(desSalesMarket.getContract());
+								// desSlot.setContract(desSalesMarket.getContract());
 								desSlot.setOptional(true);
 								desSlot.setPort((Port) notionalAPort);
 								final long duration = (endTime.getTime() - startTime.getTime()) / 1000l / 60l / 60l;
@@ -1394,6 +1398,9 @@ public class LNGScenarioTransformer {
 							marketGroupSlots.add(portSlot);
 						}
 
+						final IContractTransformer transformer = contractTransformersByEClass.get(fobPurchaseMarket.getPriceInfo().eClass());
+						final ILoadPriceCalculator priceCalculator = transformer.transformPurchasePriceParameters(fobPurchaseMarket.getPriceInfo());
+
 						final int remaining = count - existing.size();
 						if (remaining > 0) {
 							int offset = 0;
@@ -1410,13 +1417,11 @@ public class LNGScenarioTransformer {
 								}
 								usedIDStrings.add(id);
 
-								final ILoadPriceCalculator priceCalculator = entities.getOptimiserObject(market.getContract(), ILoadPriceCalculator.class);
-
 								// Create a fake model object to add in here;
 								final SpotLoadSlot fobSlot = CargoFactory.eINSTANCE.createSpotLoadSlot();
 								fobSlot.setName(id);
 								fobSlot.setWindowStart(new Date(startTime.getTime()));
-								fobSlot.setContract(fobPurchaseMarket.getContract());
+								// fobSlot.setContract(fobPurchaseMarket.getContract());
 								fobSlot.setOptional(true);
 								fobSlot.setArriveCold(true);
 								fobSlot.setCargoCV(fobPurchaseMarket.getCv());
