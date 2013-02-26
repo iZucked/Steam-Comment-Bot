@@ -112,6 +112,9 @@ public class DestinationTypeValueListInlineEditor extends BasicAttributeInlineEd
 
 	@Override
 	protected void updateDisplay(final Object value) {
+		if (combo.isDisposed()) {
+			return;
+		}
 		final int indexOf = values.indexOf(value);
 		combo.select(indexOf);
 	}
