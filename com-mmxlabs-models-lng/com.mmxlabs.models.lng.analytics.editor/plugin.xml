@@ -140,15 +140,9 @@
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.analytics.ShippingCostRowFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          factory="com.mmxlabs.models.lng.analytics.modelfactories.ShippingCostRowFactory"
           label="Shipping Cost Row"
           targetEClass="com.mmxlabs.models.lng.analytics.ShippingCostRow">
-    </factory>
-    <factory
-          ID="com.mmxlabs.models.lng.analytics.ProvisionalCargoFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
-          label="Provisional Cargo"
-          targetEClass="com.mmxlabs.models.lng.analytics.ProvisionalCargo">
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.analytics.CargoSandboxFactory"
