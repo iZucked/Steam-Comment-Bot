@@ -116,7 +116,7 @@
     </factory>
     <factory
           ID="com.mmxlabs.models.lng.analytics.ShippingCostRowFactory"
-          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          factory="com.mmxlabs.models.lng.analytics.modelfactories.ShippingCostRowFactory"
           label="Shipping Cost Row"
           targetEClass="com.mmxlabs.models.lng.analytics.ShippingCostRow">
     </factory>
