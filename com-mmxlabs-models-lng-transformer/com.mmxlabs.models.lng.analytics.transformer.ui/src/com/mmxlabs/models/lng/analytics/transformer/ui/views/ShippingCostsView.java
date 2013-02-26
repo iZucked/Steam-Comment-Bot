@@ -357,7 +357,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 					}
 				});
 
-				if (selectionIndex >= 0 && selectionIndex < plan.getRows().size() - 1) {
+				if (selectionIndex > 1 && selectionIndex < plan.getRows().size() - 2) {
 					manager.add(new Action("Move Down") {
 						@Override
 						public void run() {
@@ -377,7 +377,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 					});
 				}
 
-				if (selectionIndex > 0) {
+				if (selectionIndex > 1 && selectionIndex < plan.getRows().size() - 2) {
 					manager.add(new Action("Move Up") {
 						@Override
 						public void run() {
