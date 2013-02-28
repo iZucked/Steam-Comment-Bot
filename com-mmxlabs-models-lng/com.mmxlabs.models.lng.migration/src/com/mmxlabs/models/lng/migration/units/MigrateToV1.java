@@ -321,6 +321,10 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 			}
 
 			EObject oldContract = (EObject) eObj.eGet(feature);
+			if (oldContract == null) {
+				continue;
+			}
+			
 			EClass class_params = null;
 			if (oldContract.eClass().getName().equals("FixedPriceContract")) {
 				class_params = MetamodelUtils.getEClass(commercialPackage, "FixedPriceParameters");
