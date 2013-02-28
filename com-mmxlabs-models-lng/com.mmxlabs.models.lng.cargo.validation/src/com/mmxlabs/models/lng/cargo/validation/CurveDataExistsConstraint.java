@@ -36,9 +36,10 @@ import com.mmxlabs.models.ui.validation.DetailConstraintStatusDecorator;
 import com.mmxlabs.models.ui.validation.IExtraValidationContext;
 
 /**
- * A model constraint for checking that a slot's minimum and maximum volumes are sensible (0 <= min <= max)
+ * A model constraint for checking that curves which are attached to objects have data for
+ * the dates associated with those objects.
  * 
- * @author Tom Hinton
+ * @author Simon McGregor
  * 
  */
 public class CurveDataExistsConstraint extends AbstractModelConstraint {
