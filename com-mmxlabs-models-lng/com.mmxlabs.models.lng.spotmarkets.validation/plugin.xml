@@ -37,6 +37,22 @@
                      class="SpotMarket">
                </target>
             </constraint>       
+            <constraint
+                  class="com.mmxlabs.models.lng.spotmarkets.validation.CharterCostModelConstraint"
+                  id="com.mmxlabs.models.lng.spotmarkets.validation.CharterCostModelConstraint"
+                  isEnabledByDefault="true"
+                  lang="Java"
+                  mode="Batch"
+                  name="Charter Cost Model Constraint"
+                  severity="ERROR"
+                  statusCode="1">
+               <message>
+                  {0}
+               </message>
+               <target
+                     class="CharterCostModel">
+               </target>
+            </constraint>       
             </constraints>
       </constraintProvider>
    </extension>
