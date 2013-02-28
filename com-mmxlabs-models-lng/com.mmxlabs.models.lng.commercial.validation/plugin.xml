@@ -147,7 +147,7 @@
                   isEnabledByDefault="true"
                   lang="java"
                   mode="Batch"
-                  name="Contract Port Contrraint"
+                  name="Contract Port Constraint"
                   severity="ERROR"
                   statusCode="1">
                <message>
