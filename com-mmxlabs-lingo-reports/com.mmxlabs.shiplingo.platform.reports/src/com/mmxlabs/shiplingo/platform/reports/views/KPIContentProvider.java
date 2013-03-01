@@ -19,6 +19,7 @@ import com.mmxlabs.models.lng.schedule.CargoAllocation;
 import com.mmxlabs.models.lng.schedule.Event;
 import com.mmxlabs.models.lng.schedule.FuelQuantity;
 import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Idle;
 import com.mmxlabs.models.lng.schedule.Journey;
 import com.mmxlabs.models.lng.schedule.PortVisit;
 import com.mmxlabs.models.lng.schedule.Schedule;
@@ -41,6 +42,7 @@ import com.mmxlabs.trading.optimiser.TradingConstants;
 public class KPIContentProvider implements IStructuredContentProvider {
 
 	public static final String LATENESS = "Lateness";
+	private static final String IDLE = "Idle Time";
 	private static final String TOTAL_COST = "Shipping Cost";
 	private static final String TOTAL_PNL = "P&L";
 
@@ -77,8 +79,9 @@ public class KPIContentProvider implements IStructuredContentProvider {
 	private void createRowData(final Schedule schedule, final ScenarioInstance scenarioInstance, final List<RowData> output) {
 
 		long totalCost = 0l;
-		long lateness = 0;
+		long lateness = 0l;
 		long totalPNL = 0l;
+		long totalIdleHours = 0l;
 
 		for (final Sequence seq : schedule.getSequences()) {
 
@@ -94,6 +97,10 @@ public class KPIContentProvider implements IStructuredContentProvider {
 				if (evt instanceof Journey) {
 					final Journey journey = (Journey) evt;
 					totalCost += journey.getToll();
+				}
+				if (evt instanceof Idle) {
+					final Idle idle = (Idle) evt;
+					totalIdleHours += idle.getDuration();
 				}
 				if (evt instanceof PortVisit) {
 					final int cost = ((PortVisit) evt).getPortCost();
@@ -162,11 +169,12 @@ public class KPIContentProvider implements IStructuredContentProvider {
 			}
 		}
 
-		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true));
 		if (totalPNL != 0) {
 			output.add(new RowData(scenarioInstance.getName(), TOTAL_PNL, TYPE_COST, totalPNL, TotalsHierarchyView.ID, false));
 		}
+		output.add(new RowData(scenarioInstance.getName(), TOTAL_COST, TYPE_COST, totalCost, TotalsHierarchyView.ID, true));
 		output.add(new RowData(scenarioInstance.getName(), LATENESS, TYPE_TIME, lateness, LatenessReportView.ID, true));
+		output.add(new RowData(scenarioInstance.getName(), IDLE, TYPE_TIME, totalIdleHours, null, true));
 	}
 
 	private long getElementPNL(final ExtraDataContainer container) {

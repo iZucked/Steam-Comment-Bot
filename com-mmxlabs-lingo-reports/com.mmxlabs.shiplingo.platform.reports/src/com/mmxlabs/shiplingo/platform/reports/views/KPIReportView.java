@@ -7,7 +7,6 @@ package com.mmxlabs.shiplingo.platform.reports.views;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
@@ -23,17 +22,10 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableColorProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.OpenEvent;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
-import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -192,41 +184,41 @@ public class KPIReportView extends ViewPart {
 	 */
 	public KPIReportView() {
 	}
-
-	private void addSortSelectionListener(final GridColumn column, final int value) {
-		column.addSelectionListener(new SelectionAdapter() {
-			{
-				final SelectionAdapter self = this;
-				column.addDisposeListener(new DisposeListener() {
-					@Override
-					public void widgetDisposed(final DisposeEvent e) {
-						column.removeSelectionListener(self);
-					}
-				});
-			}
-
-			@Override
-			public void widgetSelected(final SelectionEvent e) {
-				setSortColumn(column, value);
-			}
-		});
-	}
-
-	protected void setSortColumn(final GridColumn column, final int value) {
-		if (sortColumns.get(0) == value) {
-			inverseSort = !inverseSort;
-		} else {
-			inverseSort = false;
-			sortColumns.remove((Object) value);
-			sortColumns.add(0, value);
-		}
-
-		// viewer.getGrid().setSortColumn(column);
-		// viewer.getGrid().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
-
-		viewer.refresh();
-	}
-
+//
+//	private void addSortSelectionListener(final GridColumn column, final int value) {
+//		column.addSelectionListener(new SelectionAdapter() {
+//			{
+//				final SelectionAdapter self = this;
+//				column.addDisposeListener(new DisposeListener() {
+//					@Override
+//					public void widgetDisposed(final DisposeEvent e) {
+//						column.removeSelectionListener(self);
+//					}
+//				});
+//			}
+//
+//			@Override
+//			public void widgetSelected(final SelectionEvent e) {
+//				setSortColumn(column, value);
+//			}
+//		});
+//	}
+//
+//	protected void setSortColumn(final GridColumn column, final int value) {
+//		if (sortColumns.get(0) == value) {
+//			inverseSort = !inverseSort;
+//		} else {
+//			inverseSort = false;
+//			sortColumns.remove((Object) value);
+//			sortColumns.add(0, value);
+//		}
+//
+//		// viewer.getGrid().setSortColumn(column);
+//		// viewer.getGrid().setSortDirection(inverseSort ? SWT.DOWN : SWT.UP);
+//
+//		viewer.refresh();
+//	}
+//
 	/**
 	 * This is a callback that will allow us to create the viewer and initialise it.
 	 */
@@ -256,17 +248,17 @@ public class KPIReportView extends ViewPart {
 		scheduleColumnViewer = new GridViewerColumn(viewer, SWT.NONE);
 		scheduleColumnViewer.getColumn().setText("Schedule");
 		scheduleColumnViewer.getColumn().pack();
-		addSortSelectionListener(scheduleColumnViewer.getColumn(), 0);
+//		addSortSelectionListener(scheduleColumnViewer.getColumn(), 0);
 
 		final GridViewerColumn tvc1 = new GridViewerColumn(viewer, SWT.NONE);
 		tvc1.getColumn().setText("KPI");
 		tvc1.getColumn().pack();
-		addSortSelectionListener(tvc1.getColumn(), 1);
+//		addSortSelectionListener(tvc1.getColumn(), 1);
 
 		final GridViewerColumn tvc2 = new GridViewerColumn(viewer, SWT.NONE);
 		tvc2.getColumn().setText("Value");
 		tvc2.getColumn().pack();
-		addSortSelectionListener(tvc2.getColumn(), 2);
+//		addSortSelectionListener(tvc2.getColumn(), 2);
 
 		viewer.setLabelProvider(new ViewLabelProvider());
 
@@ -281,40 +273,40 @@ public class KPIReportView extends ViewPart {
 //		viewer.getGrid().setSortColumn(scheduleColumnViewer.getColumn());
 //		viewer.getGrid().setSortDirection(SWT.UP);
 
-		viewer.setComparator(new ViewerComparator() {
-			@Override
-			public int compare(final Viewer viewer, final Object e1, final Object e2) {
-				final RowData r1 = (RowData) e1;
-				final RowData r2 = (RowData) e2;
-
-				final int d = inverseSort ? -1 : 1;
-				int sort = 0;
-				final Iterator<Integer> iterator = sortColumns.iterator();
-				while (iterator.hasNext() && (sort == 0)) {
-					switch (iterator.next()) {
-					case 0:
-						sort = r1.scheduleName.compareTo(r2.scheduleName);
-						break;
-					case 1:
-						if(r1.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
-							sort = 1;
-						}
-						else if(r2.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
-							sort = -1;
-						}
-						else{
-							sort = r1.component.compareTo(r2.component);
-						}
-						break;
-					case 2:
-						sort = ((Long) r1.value).compareTo(r2.value);
-						break;
-					}
-				}
-
-				return d * sort;
-			}
-		});
+//		viewer.setComparator(new ViewerComparator() {
+//			@Override
+//			public int compare(final Viewer viewer, final Object e1, final Object e2) {
+//				final RowData r1 = (RowData) e1;
+//				final RowData r2 = (RowData) e2;
+//
+//				final int d = inverseSort ? -1 : 1;
+//				int sort = 0;
+//				final Iterator<Integer> iterator = sortColumns.iterator();
+//				while (iterator.hasNext() && (sort == 0)) {
+//					switch (iterator.next()) {
+//					case 0:
+//						sort = r1.scheduleName.compareTo(r2.scheduleName);
+//						break;
+//					case 1:
+//						if(r1.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
+//							sort = 1;
+//						}
+//						else if(r2.component.equalsIgnoreCase(KPIContentProvider.LATENESS)){
+//							sort = -1;
+//						}
+//						else{
+//							sort = r1.component.compareTo(r2.component);
+//						}
+//						break;
+//					case 2:
+//						sort = ((Long) r1.value).compareTo(r2.value);
+//						break;
+//					}
+//				}
+//
+//				return d * sort;
+//			}
+//		});
 
 		// Create the help context id for the viewer's control
 		PlatformUI.getWorkbench().getHelpSystem().setHelp(viewer.getControl(), "com.mmxlabs.demo.reports.KPIReportView");
@@ -463,7 +455,7 @@ public class KPIReportView extends ViewPart {
 				delta = new GridViewerColumn(viewer, SWT.NONE);
 				delta.getColumn().setText("Change");
 				delta.getColumn().pack();
-				addSortSelectionListener(delta.getColumn(), 4);
+//				addSortSelectionListener(delta.getColumn(), 4);
 				viewer.setLabelProvider(viewer.getLabelProvider());
 			}
 		} else {
