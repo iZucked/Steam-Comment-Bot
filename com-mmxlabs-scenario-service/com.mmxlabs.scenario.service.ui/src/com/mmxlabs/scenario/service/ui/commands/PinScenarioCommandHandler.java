@@ -19,12 +19,13 @@ import com.mmxlabs.scenario.service.ui.internal.Activator;
 
 /**
  * Command handler which sets/clears the pin on a scenario.
+ * 
  * @author hinton
- *
+ * 
  */
 public class PinScenarioCommandHandler extends AbstractHandler {
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IWorkbenchPage activePage = HandlerUtil.getActiveWorkbenchWindow(event).getActivePage();
 
 		final ISelection selection = activePage.getSelection();
