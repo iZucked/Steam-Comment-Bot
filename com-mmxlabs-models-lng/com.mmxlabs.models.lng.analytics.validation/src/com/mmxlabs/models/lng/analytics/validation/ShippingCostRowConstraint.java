@@ -101,7 +101,7 @@ public class ShippingCostRowConstraint extends AbstractModelMultiConstraint {
 						}
 						if (shippingCostRow.getCvValue() > 50.0) {
 							final DetailConstraintStatusDecorator deco = new DetailConstraintStatusDecorator((IConstraintStatus) ctx.createFailureStatus("Gas CV is too high"));
-							deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CargoPrice());
+							deco.addEObjectAndFeature(shippingCostRow, AnalyticsPackage.eINSTANCE.getShippingCostRow_CvValue());
 							statuses.add(deco);
 						}
 					}
