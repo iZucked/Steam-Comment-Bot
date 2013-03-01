@@ -870,6 +870,18 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(5);
 	}
 
+		/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getShippingCostRow_IncludePortCosts() {
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(6);
+	}
+
+
+	
 	/**
 	 * <!-- begin-user-doc -->
 	 * @since 3.0
@@ -1159,6 +1171,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__CV_VALUE);
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__DESTINATION_TYPE);
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__HEEL_VOLUME);
+		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__INCLUDE_PORT_COSTS);
 
 		cargoSandboxEClass = createEClass(CARGO_SANDBOX);
 		createEReference(cargoSandboxEClass, CARGO_SANDBOX__CARGOES);
@@ -1317,6 +1330,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getShippingCostRow_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_DestinationType(), this.getDestinationType(), "destinationType", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_HeelVolume(), ecorePackage.getEInt(), "heelVolume", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getShippingCostRow_IncludePortCosts(), ecorePackage.getEBoolean(), "includePortCosts", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(cargoSandboxEClass, CargoSandbox.class, "CargoSandbox", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCargoSandbox_Cargoes(), this.getProvisionalCargo(), null, "cargoes", null, 0, -1, CargoSandbox.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

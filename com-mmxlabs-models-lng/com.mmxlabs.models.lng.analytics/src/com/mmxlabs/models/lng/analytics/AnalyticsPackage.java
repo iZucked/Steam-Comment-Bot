@@ -22,6 +22,7 @@ import com.mmxlabs.models.mmxcore.MMXCorePackage;
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
+ * @noimplement This interface is not intended to be implemented by clients.
  * <!-- end-user-doc -->
  * @see com.mmxlabs.models.lng.analytics.AnalyticsFactory
  * @model kind="package"
@@ -1032,6 +1033,16 @@ public interface AnalyticsPackage extends EPackage {
 	int SHIPPING_COST_ROW__HEEL_VOLUME = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 5;
 
 	/**
+	 * The feature id for the '<em><b>Include Port Costs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SHIPPING_COST_ROW__INCLUDE_PORT_COSTS = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+
+	/**
 	 * The number of structural features of the '<em>Shipping Cost Row</em>' class.
 	 * <!-- begin-user-doc -->
 	 * @since 2.0
@@ -1039,7 +1050,7 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SHIPPING_COST_ROW_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 6;
+	int SHIPPING_COST_ROW_FEATURE_COUNT = MMXCorePackage.MMX_OBJECT_FEATURE_COUNT + 7;
 
 
 	/**
@@ -2164,6 +2175,20 @@ public interface AnalyticsPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getShippingCostRow_HeelVolume();
+	
+	
+	/**
+	 * Returns the meta object for the attribute '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts <em>Include Port Costs</em>}'.
+	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Include Port Costs</em>'.
+	 * @see com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts()
+	 * @see #getShippingCostRow()
+	 * @generated
+	 */
+	EAttribute getShippingCostRow_IncludePortCosts();
+
 
 	/**
 	 * Returns the meta object for class '{@link com.mmxlabs.models.lng.analytics.CargoSandbox <em>Cargo Sandbox</em>}'.
@@ -2394,6 +2419,7 @@ public interface AnalyticsPackage extends EPackage {
 	 *   <li>each enum,</li>
 	 *   <li>and each data type</li>
 	 * </ul>
+	 * @noimplement This interface is not intended to be implemented by clients.
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -3009,6 +3035,16 @@ public interface AnalyticsPackage extends EPackage {
 		 */
 		EAttribute SHIPPING_COST_ROW__HEEL_VOLUME = eINSTANCE.getShippingCostRow_HeelVolume();
 
+		/**
+		 * The meta object literal for the '<em><b>Include Port Costs</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * @since 2.1
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SHIPPING_COST_ROW__INCLUDE_PORT_COSTS = eINSTANCE.getShippingCostRow_IncludePortCosts();
+
+		
 		/**
 		 * The meta object literal for the '{@link com.mmxlabs.models.lng.analytics.impl.CargoSandboxImpl <em>Cargo Sandbox</em>}' class.
 		 * <!-- begin-user-doc -->

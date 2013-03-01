@@ -12,6 +12,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Shipping Cost Row</b></em>'.
  * @since 2.0
+ * @noimplement This interface is not intended to be implemented by clients.
  * <!-- end-user-doc -->
  *
  * <p>
@@ -23,6 +24,7 @@ import com.mmxlabs.models.mmxcore.MMXObject;
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getDestinationType <em>Destination Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#getHeelVolume <em>Heel Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts <em>Include Port Costs</em>}</li>
  * </ul>
  * </p>
  *
@@ -190,6 +192,34 @@ public interface ShippingCostRow extends MMXObject {
 	 * @generated
 	 */
 	void setHeelVolume(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Include Port Costs</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Include Port Costs</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Include Port Costs</em>' attribute.
+	 * @see #setIncludePortCosts(boolean)
+	 * @see com.mmxlabs.models.lng.analytics.AnalyticsPackage#getShippingCostRow_IncludePortCosts()
+	 * @model
+	 * @generated
+	 */
+	boolean isIncludePortCosts();
+
+	/**
+	 * Sets the value of the '{@link com.mmxlabs.models.lng.analytics.ShippingCostRow#isIncludePortCosts <em>Include Port Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Include Port Costs</em>' attribute.
+	 * @see #isIncludePortCosts()
+	 * @generated
+	 */
+	void setIncludePortCosts(boolean value);
 
 } // end of  ShippingCostRow
 

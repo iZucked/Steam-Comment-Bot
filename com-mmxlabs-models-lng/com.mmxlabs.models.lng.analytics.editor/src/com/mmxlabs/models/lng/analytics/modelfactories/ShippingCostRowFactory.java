@@ -19,6 +19,7 @@ public class ShippingCostRowFactory extends DefaultModelFactory {
 		if (top instanceof ShippingCostRow) {
 			final ShippingCostRow shippingCostRow = (ShippingCostRow) top;
 			shippingCostRow.setDestinationType(DestinationType.OTHER);
+			shippingCostRow.setIncludePortCosts(true);
 		}
 	}
 }
