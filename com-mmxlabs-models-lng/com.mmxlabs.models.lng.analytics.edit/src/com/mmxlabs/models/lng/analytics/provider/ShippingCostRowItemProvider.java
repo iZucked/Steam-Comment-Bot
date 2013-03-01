@@ -68,6 +68,7 @@ public class ShippingCostRowItemProvider
 			addCvValuePropertyDescriptor(object);
 			addDestinationTypePropertyDescriptor(object);
 			addHeelVolumePropertyDescriptor(object);
+			addIncludePortCostsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -205,6 +206,29 @@ public class ShippingCostRowItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Include Port Costs feature.
+	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addIncludePortCostsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_ShippingCostRow_includePortCosts_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_ShippingCostRow_includePortCosts_feature", "_UI_ShippingCostRow_type"),
+				 AnalyticsPackage.Literals.SHIPPING_COST_ROW__INCLUDE_PORT_COSTS,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
+
+	/**
 	 * This returns ShippingCostRow.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -247,6 +271,7 @@ public class ShippingCostRowItemProvider
 			case AnalyticsPackage.SHIPPING_COST_ROW__CV_VALUE:
 			case AnalyticsPackage.SHIPPING_COST_ROW__DESTINATION_TYPE:
 			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
+			case AnalyticsPackage.SHIPPING_COST_ROW__INCLUDE_PORT_COSTS:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 		}

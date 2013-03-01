@@ -214,6 +214,7 @@
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDouble"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="destinationType" eType="#//DestinationType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="heelVolume" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="includePortCosts" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="DestinationType">
     <eLiterals name="START"/>

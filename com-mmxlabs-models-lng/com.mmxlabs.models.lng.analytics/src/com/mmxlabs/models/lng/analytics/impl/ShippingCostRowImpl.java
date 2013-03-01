@@ -30,6 +30,7 @@ import com.mmxlabs.models.mmxcore.impl.MMXObjectImpl;
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getCvValue <em>Cv Value</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getDestinationType <em>Destination Type</em>}</li>
  *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#getHeelVolume <em>Heel Volume</em>}</li>
+ *   <li>{@link com.mmxlabs.models.lng.analytics.impl.ShippingCostRowImpl#isIncludePortCosts <em>Include Port Costs</em>}</li>
  * </ul>
  * </p>
  *
@@ -145,6 +146,28 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 	 * @ordered
 	 */
 	protected int heelVolume = HEEL_VOLUME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isIncludePortCosts() <em>Include Port Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @see #isIncludePortCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean INCLUDE_PORT_COSTS_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isIncludePortCosts() <em>Include Port Costs</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @see #isIncludePortCosts()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean includePortCosts = INCLUDE_PORT_COSTS_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -310,6 +333,29 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public boolean isIncludePortCosts() {
+		return includePortCosts;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setIncludePortCosts(boolean newIncludePortCosts) {
+		boolean oldIncludePortCosts = includePortCosts;
+		includePortCosts = newIncludePortCosts;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, AnalyticsPackage.SHIPPING_COST_ROW__INCLUDE_PORT_COSTS, oldIncludePortCosts, includePortCosts));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -329,6 +375,8 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 				return getDestinationType();
 			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
 				return getHeelVolume();
+			case AnalyticsPackage.SHIPPING_COST_ROW__INCLUDE_PORT_COSTS:
+				return isIncludePortCosts();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -358,6 +406,9 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 				return;
 			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
 				setHeelVolume((Integer)newValue);
+				return;
+			case AnalyticsPackage.SHIPPING_COST_ROW__INCLUDE_PORT_COSTS:
+				setIncludePortCosts((Boolean)newValue);
 				return;
 		}
 		super.eSet(featureID, newValue);
@@ -389,6 +440,9 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
 				setHeelVolume(HEEL_VOLUME_EDEFAULT);
 				return;
+			case AnalyticsPackage.SHIPPING_COST_ROW__INCLUDE_PORT_COSTS:
+				setIncludePortCosts(INCLUDE_PORT_COSTS_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -413,6 +467,8 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 				return destinationType != DESTINATION_TYPE_EDEFAULT;
 			case AnalyticsPackage.SHIPPING_COST_ROW__HEEL_VOLUME:
 				return heelVolume != HEEL_VOLUME_EDEFAULT;
+			case AnalyticsPackage.SHIPPING_COST_ROW__INCLUDE_PORT_COSTS:
+				return includePortCosts != INCLUDE_PORT_COSTS_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -437,6 +493,8 @@ public class ShippingCostRowImpl extends MMXObjectImpl implements ShippingCostRo
 		result.append(destinationType);
 		result.append(", heelVolume: ");
 		result.append(heelVolume);
+		result.append(", includePortCosts: ");
+		result.append(includePortCosts);
 		result.append(')');
 		return result.toString();
 	}

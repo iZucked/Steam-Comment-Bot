@@ -847,6 +847,16 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 
 	/**
 	 * <!-- begin-user-doc -->
+	 * @since 2.1
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public EAttribute getShippingCostRow_IncludePortCosts() {
+		return (EAttribute)shippingCostRowEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
 	 * @since 2.0
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -965,6 +975,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__CV_VALUE);
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__DESTINATION_TYPE);
 		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__HEEL_VOLUME);
+		createEAttribute(shippingCostRowEClass, SHIPPING_COST_ROW__INCLUDE_PORT_COSTS);
 
 		// Create enums
 		destinationTypeEEnum = createEEnum(DESTINATION_TYPE);
@@ -1099,6 +1110,7 @@ public class AnalyticsPackageImpl extends EPackageImpl implements AnalyticsPacka
 		initEAttribute(getShippingCostRow_CvValue(), ecorePackage.getEDouble(), "cvValue", null, 1, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_DestinationType(), this.getDestinationType(), "destinationType", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getShippingCostRow_HeelVolume(), ecorePackage.getEInt(), "heelVolume", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getShippingCostRow_IncludePortCosts(), ecorePackage.getEBoolean(), "includePortCosts", null, 0, 1, ShippingCostRow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Initialize enums and add enum literals
 		initEEnum(destinationTypeEEnum, DestinationType.class, "DestinationType");
