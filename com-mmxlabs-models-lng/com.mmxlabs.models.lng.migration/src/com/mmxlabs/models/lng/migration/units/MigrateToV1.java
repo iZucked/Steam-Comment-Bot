@@ -319,13 +319,19 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 			} else {
 				continue;
 			}
-
+			
+			// Is the feature set?
+			if (!eObj.eIsSet(feature)) {
+				continue;
+			}
+			
 			EObject oldContract = (EObject) eObj.eGet(feature);
 			if (oldContract == null) {
 				continue;
 			}
 			
 			EClass class_params = null;
+			// NPE here?
 			if (oldContract.eClass().getName().equals("FixedPriceContract")) {
 				class_params = MetamodelUtils.getEClass(commercialPackage, "FixedPriceParameters");
 			} else if (oldContract.eClass().getName().equals("IndexPriceContract")) {
@@ -337,7 +343,6 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 
 			} else if (oldContract.eClass().getName().equals("RedirectionPurchaseContract")) {
 				// PETRONAS MIGRATION SHOULD HANDLE THESE
-
 				continue;
 			} else if (oldContract.eClass().getName().equals("NetbackPurchaseContract")) {
 				// VANILLA MIGRATION SHOULD HANDLE THESE
