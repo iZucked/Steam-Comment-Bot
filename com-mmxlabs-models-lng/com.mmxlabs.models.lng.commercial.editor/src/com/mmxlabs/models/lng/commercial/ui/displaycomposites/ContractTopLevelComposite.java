@@ -54,7 +54,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		gd.horizontalIndent = 0;
 		tabFolder.setLayoutData(gd);
 		final TabItem page1 = new TabItem(tabFolder, SWT.None);
-		page1.setText(EditorUtils.unmangle(eClass.getName()));
+		page1.setText("Contract");//EditorUtils.unmangle(eClass.getName()));
 		final Composite g = new Composite(tabFolder, SWT.NONE);
 		page1.setControl(g);
 		// g.setText(EditorUtils.unmangle(eClass.getName()));
