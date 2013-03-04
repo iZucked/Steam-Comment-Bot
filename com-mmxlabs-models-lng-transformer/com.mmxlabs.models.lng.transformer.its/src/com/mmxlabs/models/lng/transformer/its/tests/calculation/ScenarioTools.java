@@ -801,7 +801,7 @@ public class ScenarioTools {
 
 				final Journey j = (Journey) e;
 				System.err.println("Journey:");
-				System.err.println("\tDuration: " + j.getDuration() + ", distance: " + j.getDistance() + ", destination: " + j.getPort().getName());
+				System.err.println("\tDuration: " + j.getDuration() + ", distance: " + j.getDistance() + ", ports: " + j.getPort().getName() + " -> " + j.getDestination().getName());
 
 				ScenarioTools.printFuel(j.getFuels());
 
