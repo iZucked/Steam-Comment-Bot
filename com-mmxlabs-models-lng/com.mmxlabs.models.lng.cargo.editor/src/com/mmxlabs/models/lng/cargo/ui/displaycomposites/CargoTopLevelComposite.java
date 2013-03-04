@@ -17,7 +17,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoPackage;
+import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.editorpart.IScenarioEditingLocation;
 import com.mmxlabs.models.ui.editors.IDisplayComposite;
@@ -55,7 +57,14 @@ public class CargoTopLevelComposite extends DefaultTopLevelComposite {
 
 		final EClass eClass = object.eClass();
 		final Group g = new Group(this, SWT.NONE);
-		g.setText(EditorUtils.unmangle(eClass.getName()));
+
+		String groupName = EditorUtils.unmangle(eClass.getName());
+		if (object instanceof Cargo) {
+			CargoType cargoType = ((Cargo) object).getCargoType();
+			groupName += " Type: " + cargoType.getName();
+		}
+
+		g.setText(groupName);
 		g.setLayout(new FillLayout());
 		g.setLayoutData(layoutProvider.createTopLayoutData(root, object, object));
 		// Create the directly rather than go through the registry. True indicates this is the top section. The bottom will be created later on

@@ -61,16 +61,16 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 	
 	public void run() {
 		// some constants for the dialog options
-		final int LOADBUTTON = 0; 
-		final int CARGOBUTTON = 1; 
-		final int ALLBUTTON = 2; 
-		final int DISCHARGEBUTTON = 3; 
-		final int CANCELBUTTON = 4;
-		final String [] dialogOptions = new String[5];
-		dialogOptions[LOADBUTTON] = "Cargo and Load";
+//		final int LOADBUTTON = 0; 
+		final int CARGOBUTTON = 0; 
+		final int ALLBUTTON = 1; 
+//		final int DISCHARGEBUTTON = 3; 
+		final int CANCELBUTTON = 2;
+		final String [] dialogOptions = new String[3];
+//		dialogOptions[LOADBUTTON] = "Cargo and Load";
 		dialogOptions[CARGOBUTTON] = "Cargo Only";
-		dialogOptions[ALLBUTTON] = "Cargo, Load and Discharge";
-		dialogOptions[DISCHARGEBUTTON] = "Cargo and Discharge";
+		dialogOptions[ALLBUTTON] = "Both Slots";
+//		dialogOptions[DISCHARGEBUTTON] = "Cargo and Discharge";
 		dialogOptions[CANCELBUTTON] = "Cancel";				
 		
 		// Delete commands can be slow, so show the busy indicator while deleting.
@@ -107,7 +107,9 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 							
 							// Pop up a dialog if there are remaining cargoes and the user has not checked "use this response for all".
 							if (!useResponseForAll) {
-								final String dialogMessage = String.format("Do you want to delete the load and discharge slots for cargo %s?", ((Cargo) cargo).getName());
+//								final String dialogMessage = String.format("Do you want to delete the load and discharge slots for cargo %s?", ((Cargo) cargo).getName());
+								final String dialogMessage = "What would you like to delete?\n\nSpot market slots for will be automatically deleted.\nDeleting slots with remove them from the scenario";
+
 								String dialogTitle = "Delete Cargo";
 								// get the active shell for the default display - a better solution would be to get the shell for the app
 								Shell shell = Display.getDefault().getActiveShell();
@@ -116,18 +118,18 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 								int remaining = size-1-i; 
 								String cargoSuffix = (remaining == 1 ? "" : "es");
 								String cargoIndicator = (remaining == 1 ? "that" : "those");
-								String checkboxTitle = String.format("Use this choice for another %d selected cargo%s? (Spot slots for %s cargo%s will be automatically deleted.)", remaining, cargoSuffix, cargoIndicator, cargoSuffix);
+								String checkboxTitle = String.format("Use this choice for another %d selected cargo%s? ", remaining, cargoSuffix, cargoIndicator, cargoSuffix);
 									
 								// create a new customised dialog which hides the checkbox if appropriate and enables / disables
 								// the buttons according to spot slots and checkbox status
-								final MessageDialogWithCheckbox dialog = new MessageDialogWithCheckbox(shell, dialogTitle, null, dialogMessage, MessageDialog.QUESTION, dialogOptions, LOADBUTTON, checkboxTitle, dialogDefault && showCheckbox) {
+								final MessageDialogWithCheckbox dialog = new MessageDialogWithCheckbox(shell, dialogTitle, null, dialogMessage, MessageDialog.QUESTION, dialogOptions, ALLBUTTON, checkboxTitle, dialogDefault && showCheckbox) {
 									// enable / disable the buttons depending on the toggle state
 									protected void fixDisplay() {
 										boolean toggleState = getToggleState();
 										
 										// disable buttons appropriately if the load or discharge slots are spot slots
-										getButton(DISCHARGEBUTTON).setEnabled(toggleState || !spotLoad);
-										getButton(LOADBUTTON).setEnabled(toggleState || !spotDischarge);
+//										getButton(DISCHARGEBUTTON).setEnabled(toggleState || !spotLoad);
+//										getButton(LOADBUTTON).setEnabled(toggleState || !spotDischarge);
 										getButton(CARGOBUTTON).setEnabled(toggleState || (!spotDischarge && !spotLoad));
 
 										// change the dialog message appropriately if there are spot slots for this cargo
@@ -169,8 +171,8 @@ public class DeleteSelectedCargoAction extends ScenarioModifyingAction {
 								dialogDefault = useResponseForAll = dialog.getToggleState();
 							}
 							
-							boolean deleteLoad = (dialogResponse == LOADBUTTON) || (dialogResponse == ALLBUTTON);
-							boolean deleteDischarge = (dialogResponse == DISCHARGEBUTTON) || (dialogResponse == ALLBUTTON);				
+							boolean deleteLoad = (dialogResponse == ALLBUTTON);
+							boolean deleteDischarge = (dialogResponse == ALLBUTTON);				
 							if (cargo instanceof Cargo) {
 								LoadSlot loadSlot = cargo.getLoadSlot();
 								DischargeSlot dischargeSlot = cargo.getDischargeSlot();
