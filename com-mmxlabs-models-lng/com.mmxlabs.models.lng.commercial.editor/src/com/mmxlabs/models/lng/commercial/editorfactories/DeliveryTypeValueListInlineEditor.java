@@ -22,13 +22,13 @@ import org.eclipse.swt.widgets.Control;
 
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.lng.types.TypesPackage;
-import com.mmxlabs.models.ui.editors.impl.BasicAttributeInlineEditor;
+import com.mmxlabs.models.ui.editors.impl.UnsettableInlineEditor;
 
 /**
  * @since 2.0
  */
 
-public class DeliveryTypeValueListInlineEditor extends BasicAttributeInlineEditor {
+public class DeliveryTypeValueListInlineEditor extends UnsettableInlineEditor {
 	private Combo combo;
 
 	private final List<String> names;
@@ -64,23 +64,7 @@ public class DeliveryTypeValueListInlineEditor extends BasicAttributeInlineEdito
 	}
 
 	@Override
-	protected void setControlsEnabled(final boolean enabled) {
-
-		combo.setEnabled(enabled);
-
-		super.setControlsEnabled(enabled);
-	}
-
-	@Override
-	protected void setControlsVisible(final boolean visible) {
-
-		combo.setVisible(visible);
-
-		super.setControlsVisible(visible);
-	}
-
-	@Override
-	public Control createControl(final Composite parent) {
+	protected Control createValueControl(final Composite parent) {
 		combo = new Combo(parent, SWT.READ_ONLY);
 
 		combo.setItems(names.toArray(new String[names.size()]));
@@ -103,12 +87,65 @@ public class DeliveryTypeValueListInlineEditor extends BasicAttributeInlineEdito
 		return wrapControl(combo);
 	}
 
+//	@Override
+//	protected void updateValueDisplay(final Object value) {
+//		if (combo.isDisposed()) {
+//			return;
+//		}
+//		final int indexOf = values.indexOf(value);
+//		combo.select(indexOf);
+//	}
+
+//	@Override
+//	protected Control createValueControl(final Composite parent) {
+//		combo = new Combo(parent, SWT.READ_ONLY);
+//
+//		combo.setItems(names.toArray(new String[names.size()]));
+//
+//		final SelectionListener sl = new SelectionAdapter() {
+//			@Override
+//			public void widgetSelected(SelectionEvent e) {
+//				doSetValue(values.get(combo.getSelectionIndex()), false);
+//			}
+//		};
+//
+//		combo.addSelectionListener(sl);
+//		combo.addDisposeListener(new DisposeListener() {
+//			@Override
+//			public void widgetDisposed(DisposeEvent e) {
+//				combo.removeSelectionListener(sl);
+//			}
+//		});
+//
+//		return combo;
+//	}
+
 	@Override
-	protected void updateDisplay(final Object value) {
+	protected void updateValueDisplay(final Object value) {
 		if (combo.isDisposed()) {
 			return;
 		}
-		final int indexOf = values.indexOf(value);
-		combo.select(indexOf);
+		combo.select(values.indexOf(value));
+	}
+
+	@Override
+	protected Object getInitialUnsetValue() {
+		return values.get(0);
+	}
+
+	@Override
+	protected void setControlsEnabled(final boolean enabled) {
+
+		combo.setEnabled(enabled);
+
+		super.setControlsEnabled(enabled);
+	}
+
+	@Override
+	protected void setControlsVisible(final boolean visible) {
+
+		combo.setVisible(visible);
+
+		super.setControlsVisible(visible);
 	}
 }

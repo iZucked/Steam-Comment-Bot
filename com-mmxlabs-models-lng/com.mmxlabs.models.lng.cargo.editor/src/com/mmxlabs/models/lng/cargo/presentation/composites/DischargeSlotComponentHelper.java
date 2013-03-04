@@ -21,7 +21,6 @@ import com.mmxlabs.models.ui.BaseComponentHelper;
 import com.mmxlabs.models.ui.ComponentHelperUtils;
 import com.mmxlabs.models.ui.IComponentHelper;
 import com.mmxlabs.models.ui.IInlineEditorContainer;
-import com.mmxlabs.models.ui.editors.impl.EENumInlineEditor;
 import com.mmxlabs.models.ui.registries.IComponentHelperRegistry;
 
 /**
@@ -72,7 +71,6 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 		add_cargoEditor(detailComposite, topClass);
 		add_FOBSaleEditor(detailComposite, topClass);
 		add_PurchaseDeliveryTypeEditor(detailComposite, topClass);
-		add_RequiredPurchaseTypeEditor(detailComposite, topClass);
 	}
 
 	/**
@@ -102,16 +100,6 @@ public class DischargeSlotComponentHelper extends BaseComponentHelper {
 	 */
 	protected void add_PurchaseDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
 		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE));
-	}
-
-	/**
-	 * Create the editor for the RequiredPurchaseType feature on DischargeSlot
-	 *
-	 * @generated NO
-	 */
-	protected void add_RequiredPurchaseTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CargoPackage.Literals.DISCHARGE_SLOT__REQUIRED_PURCHASE_TYPE));
-		detailComposite.addInlineEditor(new EENumInlineEditor(CargoPackage.Literals.DISCHARGE_SLOT__PURCHASE_DELIVERY_TYPE));
 	}
 
 	@Override
