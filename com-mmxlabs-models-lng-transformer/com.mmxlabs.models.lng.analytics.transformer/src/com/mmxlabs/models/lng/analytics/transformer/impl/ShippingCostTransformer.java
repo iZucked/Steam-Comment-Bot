@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,6 +63,7 @@ import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
@@ -231,6 +233,9 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			int startHeelCV = 0;
 			int startHeelVolume = 0;
 			int idx = 0;
+
+			Map<IPortSlot, ShippingCostRow> mapPortSlotToRow = new HashMap<IPortSlot, ShippingCostRow>();
+
 			for (final ShippingCostRow row : plan.getRows()) {
 
 				if (row.getDate() == null) {
@@ -298,6 +303,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 						}
 					}
 					elements.add(slot);
+					mapPortSlotToRow.put(slot, row);
 				}
 				++idx;
 			}
@@ -305,7 +311,8 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			// Create the vessel now we have the start/end requirements
 			final IVessel vessel = builder.createVessel(modelVessel.getName(), vesselClass, new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalHourlyRate(plan.getNotionalDayRate())),
 					startConstraint, endConstraint, startHeelVolume, startHeelCV, startHeelPrice);
-
+			
+			
 			/*
 			 * Create the sequences object and generate the arrival times based on window start TODO: We could use the sequence scheduler to do this for us.
 			 */
@@ -315,6 +322,19 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
 			final IPortSlotProvider slotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 
+			
+			// Add start/end port slots into the row map.
+			{
+				IResource r = vesselProvider.getResource(vessel);
+				IStartEndRequirementProvider startEndRequirementProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
+				ISequenceElement startElement = startEndRequirementProvider.getStartElement(r);
+				ISequenceElement endElement = startEndRequirementProvider.getEndElement(r);
+				
+				mapPortSlotToRow.put(slotProvider.getPortSlot(startElement), plan.getRows().get(0));
+				mapPortSlotToRow.put(slotProvider.getPortSlot(endElement), plan.getRows().get(plan.getRows().size() - 1));
+			}
+			
+			
 			final int[][] arrivalTimes = new int[1][elements.size() + 2];
 			int index = 0;
 			final IResource resource = vesselProvider.getResource(vessel);
@@ -398,6 +418,8 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				final VoyagePlanIterator itr = injector.getInstance(VoyagePlanIterator.class);
 				itr.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), arrivalTimes[0]);
 
+				long totalDischargeVolumeInMMBTu = 0;
+
 				while (itr.hasNextObject()) {
 					final Object obj = itr.nextObject();
 					idxX++;
@@ -416,11 +438,11 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 						// Charter out is currently our OTHER destination
 						final String typeString = portType == PortType.CharterOut ? "Other" : portType.name();
 						final ExtraData extraData = line.addExtraData("port" + idxX, idxStr + " - " + portDetails.getOptions().getPortSlot().getPort().getName() + " - (" + typeString + ")");
-						
+
 						// Exlcude end port from port costs
-						if (!(portDetails.getOptions().getPortSlot() instanceof EndPortSlot)) {
-							createPortCostComponent(extraData, ports, pricing, plan, portDetails);
-						}
+//						if (!(portDetails.getOptions().getPortSlot() instanceof EndPortSlot)) {
+							createPortCostComponent(extraData, ports, pricing, plan, portDetails, mapPortSlotToRow.get(portDetails.getOptions().getPortSlot()));
+//						}
 						if (portDetails.getOptions().getPortSlot() instanceof ILoadOption) {
 							currentAllocationAnnotation = allocationIterator.next();
 							// Add in LOAD VOLUME
@@ -431,6 +453,11 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 							if (currentAllocationAnnotation != null) {
 								final int dischargeVolume = OptimiserUnitConvertor.convertToExternalVolume(currentAllocationAnnotation.getDischargeVolume());
 								extraData.addExtraData("volume", "Discharge Volume", dischargeVolume, ExtraDataFormatType.INTEGER);
+
+								final int cargoCVValue = currentAllocationAnnotation.getLoadOption().getCargoCVValue();
+								final long dischargeVolumeInMMBTu = OptimiserUnitConvertor.convertToExternalVolume(Calculator.convertM3ToMMBTu(currentAllocationAnnotation.getDischargeVolume(),
+										cargoCVValue));
+								totalDischargeVolumeInMMBTu += dischargeVolumeInMMBTu;
 								currentAllocationAnnotation = null;
 							}
 						} else {
@@ -491,8 +518,16 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 				// line.setUnitCost(line.getTotalCost() / (double) line.getMmbtuDelivered());
 				//
 				{
-					final ExtraData summary = line.addExtraData("summary", "01 - Summary", line.getTotalCost(), ExtraDataFormatType.STRING_FORMAT);
-					summary.setFormat("$%,d");
+					final ExtraData summary;
+					if (totalDischargeVolumeInMMBTu == 0) {
+						summary = line.addExtraData("summary", "01 - Summary", line.getTotalCost(), ExtraDataFormatType.STRING_FORMAT);
+						summary.setFormat("$%,d");
+					} else {
+
+						final double totalCostPerMMBTu = (double) line.getTotalCost() / (double) totalDischargeVolumeInMMBTu;
+						summary = line.addExtraData("summary", "01 - Summary", totalCostPerMMBTu, ExtraDataFormatType.STRING_FORMAT);
+						summary.setFormat("%,.02f $/MMBTu");
+					}
 					summary.addExtraData("duration", "Duration", totalDuration, ExtraDataFormatType.DURATION);
 					final ExtraData fuelCostData = summary.addExtraData("fuelcost", "Fuel Cost", totalFuelCost, ExtraDataFormatType.CURRENCY);
 
@@ -607,21 +642,24 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 		}
 	}
 
-	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final ShippingCostPlan plan, final PortDetails portDetails) {
+	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final ShippingCostPlan plan, final PortDetails portDetails,
+			ShippingCostRow row) {
 		result.addExtraData("duration", "Duration", portDetails.getOptions().getVisitDuration(), ExtraDataFormatType.DURATION);
 		final Port port = ports.reverseLookup(portDetails.getOptions().getPortSlot().getPort());
 		result.addExtraData("location", "Location", port.getName(), ExtraDataFormatType.AUTO);
 		int total = 0;
-		for (final PortCost cost : pricing.getPortCosts()) {
-			if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
-				// this is the cost for the given port
-				total += cost.getPortCost(plan.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
-				result.addExtraData("portcost", "Port Cost", total, ExtraDataFormatType.CURRENCY);
+		if (row.isIncludePortCosts()) {
+			for (final PortCost cost : pricing.getPortCosts()) {
+				if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
+					// this is the cost for the given port
+					// FIXME: This does not take into account START/END/OTHER COSTS
+					total += cost.getPortCost(plan.getVessel().getVesselClass(), portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
+					result.addExtraData("portcost", "Port Cost", total, ExtraDataFormatType.CURRENCY);
 
-				break;
+					break;
+				}
 			}
 		}
-
 		total += (plan.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24;
 		result.addExtraData("hirecost", "Hire Cost", (plan.getNotionalDayRate() * portDetails.getOptions().getVisitDuration()) / 24, ExtraDataFormatType.CURRENCY);
 

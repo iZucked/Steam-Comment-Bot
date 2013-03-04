@@ -301,6 +301,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 				final EList<ShippingCostRow> planRows = plan.getRows();
 
 				final int selectionIndex = rows.getScenarioViewer().getGrid().getSelectionIndex();
+				ShippingCostRow selectedRow = planRows.get(selectionIndex);
 
 				manager.add(new Action("Insert new row") {
 					@Override
@@ -321,27 +322,13 @@ public class ShippingCostsView extends ScenarioInstanceView {
 					}
 				});
 
-				if (selectionIndex >= 0 && selectionIndex < plan.getRows().size() - 1) {
-					manager.add(new Action("Move Down") {
-						@Override
-						public void run() {
+				// Forbid moving end elements up
+				if (selectedRow.getDestinationType() != DestinationType.END
+				// Permit moving end elements only if they are not at the end
+						&& ((selectedRow.getDestinationType() == DestinationType.START && selectionIndex > 0)
+						// Permit moving anything else up, except into the first position
+						|| (selectedRow.getDestinationType() != DestinationType.START && selectionIndex > 1))) {
 
-							final Object input = rows.getScenarioViewer().getInput();
-							if (input instanceof ShippingCostPlan) {
-
-								final ShippingCostRow rowA = planRows.remove(selectionIndex);
-								planRows.add(selectionIndex + 1, rowA);
-								final CompoundCommand cmd = new CompoundCommand("Move row Down");
-								cmd.append(SetCommand.create(getEditingDomain(), plan, AnalyticsPackage.eINSTANCE.getShippingCostPlan_Rows(), planRows));
-								getEditingDomain().getCommandStack().execute(cmd);
-							}
-
-							super.run();
-						}
-					});
-				}
-
-				if (selectionIndex > 0) {
 					manager.add(new Action("Move Up") {
 						@Override
 						public void run() {
@@ -352,6 +339,32 @@ public class ShippingCostsView extends ScenarioInstanceView {
 								final ShippingCostRow rowA = planRows.remove(selectionIndex);
 								planRows.add(selectionIndex - 1, rowA);
 								final CompoundCommand cmd = new CompoundCommand("Move row up");
+								cmd.append(SetCommand.create(getEditingDomain(), plan, AnalyticsPackage.eINSTANCE.getShippingCostPlan_Rows(), planRows));
+								getEditingDomain().getCommandStack().execute(cmd);
+							}
+
+							super.run();
+						}
+					});
+				}
+
+				// Forbid moving start elements down
+				if (selectedRow.getDestinationType() != DestinationType.START
+				// Permit moving end elements only if they are not at the end
+						&& ((selectedRow.getDestinationType() == DestinationType.END && selectionIndex < plan.getRows().size() - 1)
+						// Permit moving anything else down, except into the last position
+						|| (selectedRow.getDestinationType() != DestinationType.END && selectionIndex < plan.getRows().size() - 2))) {
+
+					manager.add(new Action("Move Down") {
+						@Override
+						public void run() {
+
+							final Object input = rows.getScenarioViewer().getInput();
+							if (input instanceof ShippingCostPlan) {
+
+								final ShippingCostRow rowA = planRows.remove(selectionIndex);
+								planRows.add(selectionIndex + 1, rowA);
+								final CompoundCommand cmd = new CompoundCommand("Move row Down");
 								cmd.append(SetCommand.create(getEditingDomain(), plan, AnalyticsPackage.eINSTANCE.getShippingCostPlan_Rows(), planRows));
 								getEditingDomain().getCommandStack().execute(cmd);
 							}
