@@ -87,39 +87,6 @@ public class DeliveryTypeValueListInlineEditor extends UnsettableInlineEditor {
 		return wrapControl(combo);
 	}
 
-//	@Override
-//	protected void updateValueDisplay(final Object value) {
-//		if (combo.isDisposed()) {
-//			return;
-//		}
-//		final int indexOf = values.indexOf(value);
-//		combo.select(indexOf);
-//	}
-
-//	@Override
-//	protected Control createValueControl(final Composite parent) {
-//		combo = new Combo(parent, SWT.READ_ONLY);
-//
-//		combo.setItems(names.toArray(new String[names.size()]));
-//
-//		final SelectionListener sl = new SelectionAdapter() {
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				doSetValue(values.get(combo.getSelectionIndex()), false);
-//			}
-//		};
-//
-//		combo.addSelectionListener(sl);
-//		combo.addDisposeListener(new DisposeListener() {
-//			@Override
-//			public void widgetDisposed(DisposeEvent e) {
-//				combo.removeSelectionListener(sl);
-//			}
-//		});
-//
-//		return combo;
-//	}
-
 	@Override
 	protected void updateValueDisplay(final Object value) {
 		if (combo.isDisposed()) {
