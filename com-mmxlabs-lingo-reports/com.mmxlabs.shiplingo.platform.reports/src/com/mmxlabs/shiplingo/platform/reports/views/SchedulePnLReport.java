@@ -12,6 +12,7 @@ import java.util.List;
 import org.eclipse.emf.ecore.EObject;
 
 import com.google.common.collect.Lists;
+import com.mmxlabs.models.lng.cargo.Cargo;
 import com.mmxlabs.models.lng.cargo.CargoType;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.CharterOutEvent;
@@ -25,6 +26,7 @@ import com.mmxlabs.models.lng.schedule.GeneratedCharterOut;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.schedule.SchedulePackage;
 import com.mmxlabs.models.lng.schedule.Sequence;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.StartEvent;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
@@ -135,7 +137,14 @@ public class SchedulePnLReport extends EMFReportView {
 
 			Double getValue(final SlotVisit visit) {
 				final CargoAllocation cargoAllocation = visit.getSlotAllocation().getCargoAllocation();
-				if (cargoAllocation.getInputCargo().getCargoType() != CargoType.FLEET) {
+				if (cargoAllocation == null) {
+					return null;
+				}
+				final Cargo inputCargo = cargoAllocation.getInputCargo();
+				if (inputCargo == null) {
+					return null;
+				}
+				if (inputCargo.getCargoType() != CargoType.FLEET) {
 					return null;
 				}
 				// TODO: Fixed (other) port costs?
