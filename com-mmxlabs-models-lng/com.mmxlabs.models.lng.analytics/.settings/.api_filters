@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<component id="com.mmxlabs.models.lng.analytics" version="2">
+    <resource path="src/com/mmxlabs/models/lng/analytics/AnalyticsPackage.java" type="com.mmxlabs.models.lng.analytics.AnalyticsPackage">
+        <filter comment="Ingoring generation number changes" id="388194388">
+            <message_arguments>
+                <message_argument value="com.mmxlabs.models.lng.analytics.AnalyticsPackage"/>
+                <message_argument value="SHIPPING_COST_ROW_FEATURE_COUNT"/>
+                <message_argument value="8"/>
+            </message_arguments>
+        </filter>
+    </resource>
+</component>
