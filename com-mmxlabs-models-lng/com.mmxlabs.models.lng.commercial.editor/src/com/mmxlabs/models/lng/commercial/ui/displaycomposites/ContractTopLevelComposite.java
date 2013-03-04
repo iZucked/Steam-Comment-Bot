@@ -73,7 +73,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		// createChildComposites(root, object, eClass, middle);
 
 		final TabItem page2 = new TabItem(tabFolder, SWT.None);
-		page2.setText("Additional Constraints");
+		page2.setText("Restrictions");
 		// final Group g = new Group(tabFolder, SWT.NONE);
 		final Composite g2 = new Composite(tabFolder, SWT.NONE);
 		page2.setControl(g2);
