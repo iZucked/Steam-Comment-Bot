@@ -272,8 +272,12 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 			// are good
 			currentPlan = calculateVoyagePlan();
 			cost = evaluatePlan(currentPlan);
-			currentProblemCount = currentPlan.getCapacityViolations();
-			currentProblemCount = currentPlan.getCapacityViolations();
+			if (currentPlan != null) {
+				currentProblemCount = currentPlan.getCapacityViolations();
+			}
+			else {
+				currentProblemCount = Integer.MAX_VALUE;
+			}
 		}
 
 		// this way could be cheaper, but we need to add in a sanity check
