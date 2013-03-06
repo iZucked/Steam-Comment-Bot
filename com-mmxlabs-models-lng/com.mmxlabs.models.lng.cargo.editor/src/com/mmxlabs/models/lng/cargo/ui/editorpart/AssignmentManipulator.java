@@ -151,8 +151,8 @@ class AssignmentManipulator implements ICellRenderer, ICellManipulator {
 				return vs.getName();
 		}
 		
-		// this case should not occur
-		return "Unknown";
+		// This case can happen in e.g. the wiring editor row slot only rows
+		return "";
 	}
 
 	@Override
