@@ -54,7 +54,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		gd.horizontalIndent = 0;
 		tabFolder.setLayoutData(gd);
 		final TabItem mainTabPage = new TabItem(tabFolder, SWT.None);
-		mainTabPage.setText(EditorUtils.unmangle(eClass.getName()));
+		page1.setText("Contract");//EditorUtils.unmangle(eClass.getName()));
 		final Composite mainTabComposite = new Composite(tabFolder, SWT.NONE);
 		mainTabPage.setControl(mainTabComposite);
 		// g.setText(EditorUtils.unmangle(eClass.getName()));
@@ -73,7 +73,7 @@ public class ContractTopLevelComposite extends DefaultTopLevelComposite {
 		createChildComposites(root, object, eClass, priceInfoTabComposite);
 
 		final TabItem constraintTabPage = new TabItem(tabFolder, SWT.None);
-		constraintTabPage.setText("Additional Constraints");
+		page2.setText("Restrictions");
 		// final Group g = new Group(tabFolder, SWT.NONE);
 		final Composite constraintTabComposite = new Composite(tabFolder, SWT.NONE);
 		constraintTabPage.setControl(constraintTabComposite);

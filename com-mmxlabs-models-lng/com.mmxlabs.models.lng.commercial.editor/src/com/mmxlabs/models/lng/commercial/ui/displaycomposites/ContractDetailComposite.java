@@ -21,39 +21,43 @@ import com.mmxlabs.models.ui.impl.DefaultDetailComposite;
  */
 public class ContractDetailComposite extends DefaultDetailComposite {
 
-	private final boolean top;
+	private final boolean mainTab;
 
 	public ContractDetailComposite(final Composite parent, final int style, final boolean top) {
 		super(parent, style);
 
-		this.top = top;
+		this.mainTab = top;
 	}
 
 	@Override
 	public void addInlineEditor(final IInlineEditor editor) {
 
-		// By default all elements are in the top
-		boolean topElement = true;
+		// By default all elements are in the main tab
+		boolean mainTabElement = true;
 
 		// Here the exceptions are listed for the elements which should go into the bottom
 		// Here the exceptions are listed for the elements which should go into the bottom
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedListsArePermissive()) {
-			topElement = false;
+			mainTabElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedContracts()) {
-			topElement = false;
+			mainTabElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getContract_RestrictedPorts()) {
-			topElement = false;
+			mainTabElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_MaxCvValue()) {
-			topElement = false;
+			mainTabElement = false;
 		}
 		if (editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_MinCvValue()) {
-			topElement = false;
+			mainTabElement = false;
 		}
+		if (editor.getFeature() == CommercialPackage.eINSTANCE.getSalesContract_PurchaseDeliveryType()) {
+			mainTabElement = false;
+		}
+
 		// Do not add elements if they are for the wrong section.
-		if (top != topElement) {
+		if (mainTab != mainTabElement) {
 			return;
 		}
 

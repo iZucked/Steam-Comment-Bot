@@ -19,14 +19,18 @@
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//Contract">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/entity"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/allowedPorts"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/preferredPort"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The list of ports that this contract can be attached to."
+          propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/allowedPorts"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="The default port to pick for new slots under this contract."
+          propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/preferredPort"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/minQuantity"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/maxQuantity"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/restrictedListsArePermissive"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/restrictedContracts"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/restrictedPorts"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/priceInfo"/>
+      <genFeatures createChild="false" propertyDescription="When checked, restricted port and contract pairings are instead the only permitted options"
+          ecoreFeature="ecore:EAttribute commercial.ecore#//Contract/restrictedListsArePermissive"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If set, these contracts cannot be paired to this contract"
+          propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/restrictedContracts"/>
+      <genFeatures notify="false" createChild="false" propertyDescription="If set, these ports cannot be paried to this contract."
+          propertySortChoices="true" ecoreFeature="ecore:EReference commercial.ecore#//Contract/restrictedPorts"/>
     </genClasses>
     <genClasses ecoreClass="commercial.ecore#//SalesContract">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute commercial.ecore#//SalesContract/minCvValue"/>

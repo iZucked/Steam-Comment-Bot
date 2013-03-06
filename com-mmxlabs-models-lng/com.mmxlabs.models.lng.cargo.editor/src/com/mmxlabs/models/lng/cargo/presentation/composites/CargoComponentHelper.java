@@ -79,7 +79,7 @@ public class CargoComponentHelper extends BaseComponentHelper {
 			helper.addEditorsToComposite(detailComposite, topClass);
 
 		// This line is not auto-generated
-		add_cargoTypeEditor(detailComposite, topClass);
+//		add_cargoTypeEditor(detailComposite, topClass);
 		add_loadSlotEditor(detailComposite, topClass);
 		add_dischargeSlotEditor(detailComposite, topClass);
 		add_allowRewiringEditor(detailComposite, topClass);

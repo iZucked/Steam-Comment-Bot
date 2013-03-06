@@ -215,4 +215,17 @@
           inheritable="true">
     </displayCompositeFactory>
  </extension>
+ <extension
+       point="com.mmxlabs.models.ui.editorfactories">
+    <editorFactory
+          factoryClass="com.mmxlabs.models.lng.commercial.editorfactories.DeliveryTypeValueListInlineEditorFactory"
+          id="com.mmxlabs.models.lng.commercial.editorfactories.DeliveryTypeValueListInlineEditorFactory">
+       <FeatureAnyOf>
+          <EDataTypeIs
+                EDataTypeName="CargoDeliveryType"
+                EDataTypeURI="http://www.mmxlabs.com/models/lng/types/1/">
+          </EDataTypeIs>
+       </FeatureAnyOf>
+    </editorFactory>
+ </extension>
 </plugin>

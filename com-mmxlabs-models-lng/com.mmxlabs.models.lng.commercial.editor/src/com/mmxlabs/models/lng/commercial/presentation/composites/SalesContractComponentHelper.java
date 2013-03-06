@@ -94,7 +94,7 @@ public class SalesContractComponentHelper extends BaseComponentHelper {
 	 * @generated NO
 	 */
 	protected void add_PurchaseDeliveryTypeEditor(final IInlineEditorContainer detailComposite, final EClass topClass) {
-		//detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
-		detailComposite.addInlineEditor(new EENumInlineEditor(CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
+		detailComposite.addInlineEditor(ComponentHelperUtils.createDefaultEditor(topClass, CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
+//		detailComposite.addInlineEditor(new (CommercialPackage.Literals.SALES_CONTRACT__PURCHASE_DELIVERY_TYPE));
 	}
 }

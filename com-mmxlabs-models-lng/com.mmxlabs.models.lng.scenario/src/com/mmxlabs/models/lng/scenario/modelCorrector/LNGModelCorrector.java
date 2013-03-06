@@ -78,7 +78,7 @@ import com.mmxlabs.models.mmxcore.UUIDObject;
 
 /**
  * The {@link LNGModelCorrector} is intended to correct models when they are loaded. For example new references added to a metamodel may be in an incorrect state for existing model instances. This
- * class can be invoked to correct such references. Should model migration be added at some point, this class should become redundant.
+ * class can be invoked to correct such references. Much of this should now be ported to the model migration.
  * 
  * @author Simon Goodall
  * 
