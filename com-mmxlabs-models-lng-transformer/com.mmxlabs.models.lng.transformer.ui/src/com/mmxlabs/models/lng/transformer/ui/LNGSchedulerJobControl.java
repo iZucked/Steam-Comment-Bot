@@ -234,9 +234,12 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		optimiser.step(REPORT_PERCENTAGE);
 		currentProgress += REPORT_PERCENTAGE;
 
-		if ((currentProgress % 5) == 0) {
-			saveInitialSolution(optimiser.getBestSolution(false), currentProgress);
-		}
+//		if ((currentProgress % 5) == 0) {
+			// Disable intermediate solution exporting. This is to avoid various concurrency issues caused by UI updating at the same time as a new solution is exported.
+			// See e.g. FogBugz: 830, 838, 847, 848
+			
+//			saveInitialSolution(optimiser.getBestSolution(false), currentProgress);
+//		}
 
 		// System.err.println("current fitness " +
 		// optimiser.getFitnessEvaluator().getCurrentFitness() + ", best " +
