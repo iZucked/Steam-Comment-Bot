@@ -326,6 +326,10 @@ public class MigrateToV1 extends AbstractMigrationUnit {
 			}
 			
 			EObject oldContract = (EObject) eObj.eGet(feature);
+			if (oldContract == null) {
+				continue;
+			}
+			
 			EClass class_params = null;
 			// NPE here?
 			if (oldContract.eClass().getName().equals("FixedPriceContract")) {
