@@ -440,6 +440,8 @@ public class DetailCompositeDialog extends Dialog {
 		validate();
 
 		if (lockedForEditing) {
+			String text = getShell().getText();
+			getShell().setText(text + " (Editor Locked - reopen to edit)");
 			disableControls(displayComposite.getComposite());
 		}
 	}
