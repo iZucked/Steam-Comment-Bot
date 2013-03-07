@@ -608,8 +608,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 
 			line.setProfit((int) (totalPNL / 1000l));
 
-			line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolume() + allocation.getFuelVolume()));
-			line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolume()));
+			line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getLoadVolumeInM3()));
+			line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolumeInM3()));
 
 			final double cv = line.getFrom().getCvValue();
 
