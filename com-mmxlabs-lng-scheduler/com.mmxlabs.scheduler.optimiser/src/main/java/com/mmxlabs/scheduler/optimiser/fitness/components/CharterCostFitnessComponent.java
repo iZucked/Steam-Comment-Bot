@@ -86,7 +86,7 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	@Override
 	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		// TODO: is this actually being called on PortDetails objects or is it now being called
-		// on PortOptions objects? (and why does it always return true? 
+		// on PortOptions objects? (and why does it always return true?
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
 			final PortOptions options = detail.getOptions();
@@ -107,10 +107,9 @@ public class CharterCostFitnessComponent extends AbstractPerRouteSchedulerFitnes
 	 */
 	@Override
 	protected long endSequenceAndGetCost() {
-		// addDiscountedValue(firstLoadTime,
-		// Calculator.multiply(lastTime - firstLoadTime, charterPrice));
 
 		return ((firstLoadTime == -1) || (lastTime == -1)) ? 0 : getDiscountedValue(firstLoadTime,
-				Calculator.quantityFromRateTime((int) charterPrice.getValueAtPoint(firstLoadTime), lastTime - firstLoadTime));
+				Calculator.quantityFromRateTime(charterPrice.getValueAtPoint(firstLoadTime), lastTime - firstLoadTime))
+				/ Calculator.ScaleFactor;
 	}
 }
