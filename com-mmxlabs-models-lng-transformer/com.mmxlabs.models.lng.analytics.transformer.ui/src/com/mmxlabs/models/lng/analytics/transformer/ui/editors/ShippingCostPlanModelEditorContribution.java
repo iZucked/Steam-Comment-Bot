@@ -47,7 +47,7 @@ public class ShippingCostPlanModelEditorContribution implements IJointModelEdito
 		if (TMP_ENABLE_EDITOR) {
 			editorPane = new ShippingCostRowViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			editorPane.createControl(sash);
-			editorPane.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getShippingCostPlan_Rows()), editorPart.getAdapterFactory());
+			editorPane.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getShippingCostPlan_Rows()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 
 			editorPane.getViewer().setInput(Collections.emptyList());
 

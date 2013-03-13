@@ -49,7 +49,7 @@ public class CargoSandboxEditorContribution implements IJointModelEditorContribu
 		if (TMP_ENABLE_EDITOR) {
 			editorPane = new CargoSandboxesViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			editorPane.createControl(sash);
-			editorPane.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getCargoSandbox_Cargoes()), editorPart.getAdapterFactory());
+			editorPane.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getCargoSandbox_Cargoes()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 
 			editorPane.getViewer().setInput(Collections.emptyList());
 

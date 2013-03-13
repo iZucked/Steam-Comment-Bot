@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui;bundle-version="3.7.0",
  com.mmxlabs.optimiser.optimiser-common;bundle-version="[1.0.0,2.0.0)",
  com.mmxlabs.models.lng.transformer;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.models.lng.schedule;bundle-version="[3.0.0,4.0.0)",
- com.mmxlabs.models.ui.validation;bundle-version="[2.0.0,3.0.0)",
+ com.mmxlabs.models.ui.validation;bundle-version="[3.0.0,4.0.0)",
  com.mmxlabs.scheduler.optimiser;bundle-version="[4.0.0,5.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ActivationPolicy: lazy

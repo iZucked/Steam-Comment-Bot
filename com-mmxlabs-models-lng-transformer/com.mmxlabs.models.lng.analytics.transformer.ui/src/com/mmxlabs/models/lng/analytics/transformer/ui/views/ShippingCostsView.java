@@ -163,7 +163,7 @@ public class ShippingCostsView extends ScenarioInstanceView {
 		// rows.setExternalToolBarManager((ToolBarManager) getViewSite().getActionBars().getToolBarManager());
 		rows.createControl(sidebarSash);
 		rows.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-		rows.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getShippingCostPlan_Rows()), getAdapterFactory());
+		rows.init(Collections.singletonList(AnalyticsPackage.eINSTANCE.getShippingCostPlan_Rows()), getAdapterFactory(), getEditingDomain().getCommandStack());
 
 		createMenuManager(rows.getScenarioViewer().getGrid());
 		getViewSite().setSelectionProvider(rows.getViewer());
