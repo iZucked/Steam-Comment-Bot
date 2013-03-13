@@ -5,6 +5,7 @@
 package com.mmxlabs.models.ui.tabular;
 
 import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,6 +17,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
@@ -76,6 +79,24 @@ public class EObjectTableViewer extends GridTableViewer {
 	protected static final String COLUMN_MNEMONICS = "COLUMN_MNEMONICS";
 	protected static final String COLUMN_RENDERER_AND_PATH = "COLUMN_RENDERER_AND_PATH";
 
+	private CommandStack currentCommandStack ;
+	private final CommandStackListener commandStackListener = new CommandStackListener() {
+		
+		@Override
+		public void commandStackChanged(final EventObject event) {
+			
+			// TODO: This is fairly coarse grained check -perhaps we should check the mostRecentCommand result and check to see if it contains the conainer - OR contained elements?
+			
+			Display.getDefault().asyncExec(new Runnable() {
+				@Override
+				public void run() {
+					if (!getControl().isDisposed())
+						refresh();
+				}
+			});
+		}
+	};
+	
 	protected IColorProvider delegateColourProvider;
 
 	protected IStatusProvider statusProvider;
@@ -104,7 +125,7 @@ public class EObjectTableViewer extends GridTableViewer {
 			synchronized (objectsToUpdate) {
 				for (final EObject o : objectsToUpdate) {
 					EObjectTableViewer.this.update(o, null);
-					EObjectTableViewer.this.updateObjectExternalNotifiers(o);
+//					EObjectTableViewer.this.updateObjectExternalNotifiers(o);
 
 					// consider refresh?
 				}
@@ -114,59 +135,59 @@ public class EObjectTableViewer extends GridTableViewer {
 		}
 	};
 
-	final MMXContentAdapter adapter = new MMXContentAdapter() {
-		@Override
-		protected void missedNotifications(final List<Notification> notifications) {
-			for (final Notification notification : new ArrayList<Notification>(notifications)) {
-				if (!notification.isTouch()) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							if (!getControl().isDisposed())
-								refresh();
-						}
-					});
-					return;
-				}
-			}
-		}
-
-		@Override
-		public void reallyNotifyChanged(final Notification notification) {
-			// System.err.println(notification);
-			if (notification.isTouch() == false) {
-				if (notification.getEventType() == Notification.REMOVING_ADAPTER)
-					return;
-				// this is a change, so we have to refresh.
-				// ideally we just want to update the changed object, but we
-				// get the notification from
-				// somewhere below, so we need to go up
-				EObject source = (EObject) notification.getNotifier();
-				// if (currentElements.contains(source))
-				// return;
-				if (source == currentContainer) {
-					Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							refresh();
-						}
-					});
-					return;
-				}
-				source = getElementForNotificationTarget(source);
-				if (source != null) {
-					synchronized (objectsToUpdate) {
-						objectsToUpdate.add(source);
-						if (!waitingForUpdate) {
-							waitingForUpdate = true;
-							Display.getDefault().asyncExec(updateRunner);
-						}
-					}
-					return;
-				}
-			}
-		}
-	};
+//	final MMXContentAdapter adapter = new MMXContentAdapter() {
+//		@Override
+//		protected void missedNotifications(final List<Notification> notifications) {
+//			for (final Notification notification : new ArrayList<Notification>(notifications)) {
+//				if (!notification.isTouch()) {
+//					Display.getDefault().asyncExec(new Runnable() {
+//						@Override
+//						public void run() {
+//							if (!getControl().isDisposed())
+//								refresh();
+//						}
+//					});
+//					return;
+//				}
+//			}
+//		}
+//
+//		@Override
+//		public void reallyNotifyChanged(final Notification notification) {
+//			// System.err.println(notification);
+//			if (notification.isTouch() == false) {
+//				if (notification.getEventType() == Notification.REMOVING_ADAPTER)
+//					return;
+//				// this is a change, so we have to refresh.
+//				// ideally we just want to update the changed object, but we
+//				// get the notification from
+//				// somewhere below, so we need to go up
+//				EObject source = (EObject) notification.getNotifier();
+//				// if (currentElements.contains(source))
+//				// return;
+//				if (source == currentContainer) {
+//					Display.getDefault().asyncExec(new Runnable() {
+//						@Override
+//						public void run() {
+//							refresh();
+//						}
+//					});
+//					return;
+//				}
+//				source = getElementForNotificationTarget(source);
+//				if (source != null) {
+//					synchronized (objectsToUpdate) {
+//						objectsToUpdate.add(source);
+//						if (!waitingForUpdate) {
+//							waitingForUpdate = true;
+//							Display.getDefault().asyncExec(updateRunner);
+//						}
+//					}
+//					return;
+//				}
+//			}
+//		}
+//	};
 
 	public EObject getElementForNotificationTarget(EObject source) {
 		while (!(currentElements.contains(source)) && ((source = source.eContainer()) != null))
@@ -205,45 +226,45 @@ public class EObjectTableViewer extends GridTableViewer {
 	 */
 	final HashSet<EObject> currentElements = new HashSet<EObject>();
 
-	private final IMMXAdapter externalAdapter = new MMXAdapterImpl() {
-
-		protected void missedNotifications(final List<Notification> missed) {
-			for (final Notification n : new ArrayList<Notification>(missed)) {
-				if (n != null) {
-					reallyNotifyChanged(n);
-				}
-			}
-		}
-
-		@Override
-		public void reallyNotifyChanged(final Notification msg) {
-			if (!msg.isTouch()) {
-				final Object notifier = msg.getNotifier();
-				// redraw all objects listening to this notifier
-				final Set<EObject> changed = externalReferences.get(notifier);
-				if (changed != null) {
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							// wait to refresh if there is an import happening
-							// elsewhere. then refresh everything.
-							if (refreshOrGiveUp()) {
-								return;
-							}
-
-							for (final EObject e : changed) {
-								EObjectTableViewer.this.update(e, null);
-							}
-
-						}
-					});
-				}
-			}
-		}
-	};
-
-	private final Map<EObject, Set<Notifier>> externalNotifiersByObject = new HashMap<EObject, Set<Notifier>>();
-
-	private final Map<Notifier, Set<EObject>> externalReferences = new HashMap<Notifier, Set<EObject>>();
+//	private final IMMXAdapter externalAdapter = new MMXAdapterImpl() {
+//
+//		protected void missedNotifications(final List<Notification> missed) {
+//			for (final Notification n : new ArrayList<Notification>(missed)) {
+//				if (n != null) {
+//					reallyNotifyChanged(n);
+//				}
+//			}
+//		}
+//
+//		@Override
+//		public void reallyNotifyChanged(final Notification msg) {
+//			if (!msg.isTouch()) {
+//				final Object notifier = msg.getNotifier();
+//				// redraw all objects listening to this notifier
+//				final Set<EObject> changed = externalReferences.get(notifier);
+//				if (changed != null) {
+//					Display.getDefault().asyncExec(new Runnable() {
+//						public void run() {
+//							// wait to refresh if there is an import happening
+//							// elsewhere. then refresh everything.
+//							if (refreshOrGiveUp()) {
+//								return;
+//							}
+//
+//							for (final EObject e : changed) {
+//								EObjectTableViewer.this.update(e, null);
+//							}
+//
+//						}
+//					});
+//				}
+//			}
+//		}
+//	};
+//
+//	private final Map<EObject, Set<Notifier>> externalNotifiersByObject = new HashMap<EObject, Set<Notifier>>();
+//
+//	private final Map<Notifier, Set<EObject>> externalReferences = new HashMap<Notifier, Set<EObject>>();
 
 	private boolean sortDescending = false;
 
@@ -529,12 +550,17 @@ public class EObjectTableViewer extends GridTableViewer {
 	}
 
 	public void dispose() {
-		removeAdapters();
+//		removeAdapters();
 		cellRenderers.clear();
 
+		if (currentCommandStack != null) {
+			currentCommandStack.removeCommandStackListener(commandStackListener);
+			currentCommandStack = null;
+		}
+		
 		currentContainer = null;
-		externalReferences.clear();
-		externalNotifiersByObject.clear();
+//		externalReferences.clear();
+//		externalNotifiersByObject.clear();
 		currentElements.clear();
 		columnSortOrder.clear();
 
@@ -548,10 +574,18 @@ public class EObjectTableViewer extends GridTableViewer {
 		return getGrid();
 	}
 
-	public void init(final IStructuredContentProvider contentProvider) {
+	/**
+	 * @since 3.0
+	 */
+	public void init(final IStructuredContentProvider contentProvider, final CommandStack commandStack) {
 		final GridTableViewer viewer = this;
 		final Grid table = viewer.getGrid();
 
+		currentCommandStack = commandStack;
+		if (currentCommandStack != null) {
+			currentCommandStack.addCommandStackListener(commandStackListener);
+		}
+		
 		table.setRowHeaderVisible(true);
 		table.setRowHeaderRenderer(new NoIndexRowHeaderRenderer());
 
@@ -605,13 +639,13 @@ public class EObjectTableViewer extends GridTableViewer {
 
 			@Override
 			public Object[] getElements(final Object inputElement) {
-				removeAdapters();
+//				removeAdapters();
 				currentElements.clear();
 				final Object[] elements = contentProvider.getElements(inputElement);
 				for (final Object o : elements) {
 					if (o instanceof EObject) {
 						currentElements.add((EObject) o);
-						updateObjectExternalNotifiers((EObject) o);
+//						updateObjectExternalNotifiers((EObject) o);
 					}
 				}
 
@@ -707,7 +741,10 @@ public class EObjectTableViewer extends GridTableViewer {
 
 	private EReference currentReference;
 
-	public void init(final AdapterFactory adapterFactory, final EReference... path) {
+	/**
+	 * @since 3.0
+	 */
+	public void init(final AdapterFactory adapterFactory, final CommandStack commandStack, final EReference... path) {
 		init(new IStructuredContentProvider() {
 			@SuppressWarnings("rawtypes")
 			@Override
@@ -717,7 +754,7 @@ public class EObjectTableViewer extends GridTableViewer {
 					for (final EReference ref : path) {
 						object = o.eGet(ref);
 						if (object instanceof EList) {
-							o.eAdapters().add(adapter);
+//							o.eAdapters().add(adapter);
 							currentContainer = o;
 							currentReference = ref;
 							return ((EList) object).toArray();
@@ -740,7 +777,7 @@ public class EObjectTableViewer extends GridTableViewer {
 			public void inputChanged(final Viewer viewer, final Object oldInput, final Object newInput) {
 
 			}
-		});
+		},commandStack);
 	}
 
 	protected boolean refreshOrGiveUp() {
@@ -748,95 +785,95 @@ public class EObjectTableViewer extends GridTableViewer {
 		return false;
 	}
 
-	protected void removeAdapters() {
-		adapter.disable();
-		externalAdapter.disable();
-		if (currentContainer != null) {
-			currentContainer.eAdapters().remove(adapter);
-		}
-		for (final Notifier n : externalReferences.keySet()) {
-			n.eAdapters().remove(externalAdapter);
-		}
-
-		externalReferences.clear();
-		externalNotifiersByObject.clear();
-
-		// TODO put this into IMMXAdapter#enable(boolean)
-		adapter.enable();
-		externalAdapter.enable();
-	}
-
-	private void updateObjectExternalNotifiers(final EObject object) {
-		final Set<Notifier> dropNotifiers = new HashSet<Notifier>();
-		final Set<Notifier> addNotifiers = new HashSet<Notifier>();
-		Set<Notifier> notifiers = externalNotifiersByObject.get(object);
-
-		// look at the existing notifiers for this object, and disassociate them
-		if (notifiers != null) {
-			for (final Notifier notifier : notifiers) {
-				final Set<EObject> references = externalReferences.get(notifier);
-				references.remove(object);
-				if (references.isEmpty()) {
-					dropNotifiers.add(notifier); // we may no longer have any
-													// need to be notified by
-													// this notifier at all
-				}
-			}
-		} else {
-			notifiers = new HashSet<Notifier>();
-		}
-
-		// now ask all the cell renderers what we need to watch for this object
-		for (final Pair<EMFPath, ICellRenderer> pathAndRenderer : cellRenderers) {
-			final Iterable<Pair<Notifier, List<Object>>> newNotifiers = pathAndRenderer.getSecond().getExternalNotifiers(pathAndRenderer.getFirst().get(object));
-			for (final Pair<Notifier, List<Object>> notifierAndFeatures : newNotifiers) {
-				// get the notifier we are interested in
-				final Notifier n = notifierAndFeatures.getFirst();
-				if (n == null) {
-					log.debug(pathAndRenderer + " has provided a null notifier for " + object);
-					continue;
-				}
-				notifiers.add(n); // add it to the notifiers for this object
-
-				// relate this object to this notifier, so we can disconnect it
-				// in a future update.
-				Set<EObject> er = externalReferences.get(n);
-				if (er == null) {
-					er = new HashSet<EObject>();
-					externalReferences.put(n, er);
-				}
-
-				if (er.isEmpty()) {
-					addNotifiers.add(n); // this notifier had no related
-											// objects, so we need to adapt it.
-				}
-
-				er.add(object);
-			}
-		}
-
-		// actually hook up the notifiers
-		final Iterator<Notifier> iter = dropNotifiers.iterator();
-		while (iter.hasNext()) {
-			final Notifier n = iter.next();
-			if (addNotifiers.contains(n)) {
-				iter.remove();
-				addNotifiers.remove(n);
-			}
-		}
-
-		for (final Notifier n : dropNotifiers) {
-			if (n != null) {
-				n.eAdapters().remove(externalAdapter);
-			}
-		}
-
-		for (final Notifier n : addNotifiers) {
-			if (n != null) {
-				n.eAdapters().add(externalAdapter);
-			}
-		}
-	}
+//	protected void removeAdapters() {
+//		adapter.disable();
+//		externalAdapter.disable();
+//		if (currentContainer != null) {
+//			currentContainer.eAdapters().remove(adapter);
+//		}
+//		for (final Notifier n : externalReferences.keySet()) {
+//			n.eAdapters().remove(externalAdapter);
+//		}
+//
+//		externalReferences.clear();
+//		externalNotifiersByObject.clear();
+//
+//		// TODO put this into IMMXAdapter#enable(boolean)
+//		adapter.enable();
+//		externalAdapter.enable();
+//	}
+//
+//	private void updateObjectExternalNotifiers(final EObject object) {
+//		final Set<Notifier> dropNotifiers = new HashSet<Notifier>();
+//		final Set<Notifier> addNotifiers = new HashSet<Notifier>();
+//		Set<Notifier> notifiers = externalNotifiersByObject.get(object);
+//
+//		// look at the existing notifiers for this object, and disassociate them
+//		if (notifiers != null) {
+//			for (final Notifier notifier : notifiers) {
+//				final Set<EObject> references = externalReferences.get(notifier);
+//				references.remove(object);
+//				if (references.isEmpty()) {
+//					dropNotifiers.add(notifier); // we may no longer have any
+//													// need to be notified by
+//													// this notifier at all
+//				}
+//			}
+//		} else {
+//			notifiers = new HashSet<Notifier>();
+//		}
+//
+//		// now ask all the cell renderers what we need to watch for this object
+//		for (final Pair<EMFPath, ICellRenderer> pathAndRenderer : cellRenderers) {
+//			final Iterable<Pair<Notifier, List<Object>>> newNotifiers = pathAndRenderer.getSecond().getExternalNotifiers(pathAndRenderer.getFirst().get(object));
+//			for (final Pair<Notifier, List<Object>> notifierAndFeatures : newNotifiers) {
+//				// get the notifier we are interested in
+//				final Notifier n = notifierAndFeatures.getFirst();
+//				if (n == null) {
+//					log.debug(pathAndRenderer + " has provided a null notifier for " + object);
+//					continue;
+//				}
+//				notifiers.add(n); // add it to the notifiers for this object
+//
+//				// relate this object to this notifier, so we can disconnect it
+//				// in a future update.
+//				Set<EObject> er = externalReferences.get(n);
+//				if (er == null) {
+//					er = new HashSet<EObject>();
+//					externalReferences.put(n, er);
+//				}
+//
+//				if (er.isEmpty()) {
+//					addNotifiers.add(n); // this notifier had no related
+//											// objects, so we need to adapt it.
+//				}
+//
+//				er.add(object);
+//			}
+//		}
+//
+//		// actually hook up the notifiers
+//		final Iterator<Notifier> iter = dropNotifiers.iterator();
+//		while (iter.hasNext()) {
+//			final Notifier n = iter.next();
+//			if (addNotifiers.contains(n)) {
+//				iter.remove();
+//				addNotifiers.remove(n);
+//			}
+//		}
+//
+//		for (final Notifier n : dropNotifiers) {
+//			if (n != null) {
+//				n.eAdapters().remove(externalAdapter);
+//			}
+//		}
+//
+//		for (final Notifier n : addNotifiers) {
+//			if (n != null) {
+//				n.eAdapters().add(externalAdapter);
+//			}
+//		}
+//	}
 
 	/**
 	 * @return names that can be used in the filter (see {@link #setFilterString(String)})
