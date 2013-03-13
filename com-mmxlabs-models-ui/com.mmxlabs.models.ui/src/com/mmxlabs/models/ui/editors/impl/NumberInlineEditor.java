@@ -142,26 +142,26 @@ public class NumberInlineEditor extends UnsettableInlineEditor implements Modify
 
 	private Object scale(final Object internalValue) {
 		if (internalValue instanceof Integer) {
-			return (Integer) (((Integer) internalValue).intValue() * scale);
+			return ((Integer) internalValue).intValue() * scale;
 		} else if (internalValue instanceof Long) {
-			return (Long) (((Long) internalValue).longValue() * scale);
+			return ((Long) internalValue).longValue() * scale;
 		} else if (internalValue instanceof Float) {
-			return (Float) (((Float) internalValue).floatValue() * scale);
+			return ((Float) internalValue).floatValue() * scale;
 		} else if (internalValue instanceof Double) {
-			return (Double) (((Double) internalValue).doubleValue() * scale);
+			return ((Double) internalValue).doubleValue() * scale;
 		}
 		return internalValue;
 	}
 
 	private Object descale(final Object displayValue) {
 		if (displayValue instanceof Integer) {
-			return (Integer) (((Integer) displayValue).intValue() / scale);
+			return ((Integer) displayValue).intValue() / scale;
 		} else if (displayValue instanceof Long) {
-			return (Long) (((Long) displayValue).longValue() / scale);
+			return ((Long) displayValue).longValue() / scale;
 		} else if (displayValue instanceof Float) {
-			return (Float) (((Float) displayValue).floatValue() / scale);
+			return ((Float) displayValue).floatValue() / scale;
 		} else if (displayValue instanceof Double) {
-			return (Double) (((Double) displayValue).doubleValue() / scale);
+			return ((Double) displayValue).doubleValue() / scale;
 		}
 		return displayValue;
 	}
