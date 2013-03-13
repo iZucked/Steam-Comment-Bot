@@ -321,7 +321,7 @@ public final class LNGVoyageCalculator implements ILNGVoyageCalculator {
 
 				if (routeNboProvidedInMT < routeRequiredConsumptionInMT) {
 					// Need to supplement
-					if (options.useNBOForIdle()) {
+					if (options.useFBOForSupplement()) {
 						routeDiffInMT = 0;
 						routeFboProvidedInMT = routeRequiredConsumptionInMT - routeNboProvidedInMT;
 						routeFboProvidedInM3 = Calculator.convertMTToM3(routeFboProvidedInMT, equivalenceFactorM3ToMT);
