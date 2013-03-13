@@ -29,7 +29,7 @@ public class CargoView extends ScenarioTableViewerView<CargoModelViewer> {
 
 	@Override
 	protected void initViewerPane(final CargoModelViewer pane) {
-		pane.init(Arrays.asList(new EReference[] { CargoPackage.eINSTANCE.getCargoModel_Cargoes() }), null);
+		pane.init(Arrays.asList(new EReference[] { CargoPackage.eINSTANCE.getCargoModel_Cargoes() }), getAdapterFactory(), getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(CargoModel.class));
 	}
 

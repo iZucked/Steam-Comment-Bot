@@ -31,11 +31,11 @@ public class FleetModelEditorContribution extends BaseJointModelEditorContributi
 
 		vesselViewerPane = new VesselViewerPane_Editor(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		vesselViewerPane.createControl(sash);
-		vesselViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_Vessels()), editorPart.getAdapterFactory());
+		vesselViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_Vessels()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 
 		eventViewerPane = new VesselEventViewerPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		eventViewerPane.createControl(sash);
-		eventViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_VesselEvents()), editorPart.getAdapterFactory());
+		eventViewerPane.init(Collections.singletonList(FleetPackage.eINSTANCE.getFleetModel_VesselEvents()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 
 		vesselViewerPane.getViewer().setInput(modelObject);
 		eventViewerPane.getViewer().setInput(modelObject);

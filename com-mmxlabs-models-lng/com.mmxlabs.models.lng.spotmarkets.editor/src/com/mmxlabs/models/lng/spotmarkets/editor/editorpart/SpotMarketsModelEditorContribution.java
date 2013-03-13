@@ -38,7 +38,7 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 
 		fleetCostPane = new CharterMarketPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		fleetCostPane.createControl(parent);
-		fleetCostPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharteringSpotMarkets() }), editorPart.getAdapterFactory());
+		fleetCostPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_CharteringSpotMarkets() }), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 		fleetCostPane.getViewer().setInput(modelObject);
 
 		indexPage = editorPart.addPage(fleetCostPane.getControl());
@@ -61,7 +61,7 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 		final SpotMarketGroupPane desSalesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.DES_SALE);
 		desSalesPane.createControl(sash);
 		desSalesPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesSalesSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
-				editorPart.getAdapterFactory());
+				editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 		desSalesPane.getViewer().setInput(modelObject);
 		desSalesPane.defaultSetTitle("DES Sales");
 		//
@@ -75,7 +75,7 @@ public class SpotMarketsModelEditorContribution extends BaseJointModelEditorCont
 		final SpotMarketGroupPane fobPurchasesPane = new SpotMarketGroupPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars(), SpotType.FOB_PURCHASE);
 		fobPurchasesPane.createControl(sash);
 		fobPurchasesPane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_FobPurchasesSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
-				editorPart.getAdapterFactory());
+				editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 		fobPurchasesPane.getViewer().setInput(modelObject);
 		fobPurchasesPane.defaultSetTitle("FOB Purchases");
 

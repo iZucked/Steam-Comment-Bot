@@ -26,7 +26,7 @@ public class VesselEventView extends ScenarioTableViewerView<VesselEventViewerPa
 
 	@Override
 	protected void initViewerPane(final VesselEventViewerPane pane) {
-		pane.init(Arrays.asList(new EReference[] { FleetPackage.eINSTANCE.getFleetModel_VesselEvents() }), null);
+		pane.init(Arrays.asList(new EReference[] { FleetPackage.eINSTANCE.getFleetModel_VesselEvents() }), getAdapterFactory(), getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(FleetModel.class));
 	}
 

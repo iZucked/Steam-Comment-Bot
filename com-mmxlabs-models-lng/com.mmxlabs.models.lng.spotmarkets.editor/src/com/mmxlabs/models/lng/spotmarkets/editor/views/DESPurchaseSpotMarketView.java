@@ -28,7 +28,8 @@ public class DESPurchaseSpotMarketView extends ScenarioTableViewerView<SpotMarke
 
 	@Override
 	protected void initViewerPane(final SpotMarketGroupPane pane) {
-		pane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }), null);
+		pane.init(Arrays.asList(new EReference[] { SpotMarketsPackage.eINSTANCE.getSpotMarketsModel_DesPurchaseSpotMarket(), SpotMarketsPackage.eINSTANCE.getSpotMarketGroup_Markets() }),
+				getAdapterFactory(), getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(SpotMarketsModel.class));
 	}
 

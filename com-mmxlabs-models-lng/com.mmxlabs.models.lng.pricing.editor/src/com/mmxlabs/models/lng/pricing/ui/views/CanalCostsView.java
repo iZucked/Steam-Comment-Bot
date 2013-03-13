@@ -27,7 +27,7 @@ public class CanalCostsView extends ScenarioTableViewerView<CanalCostsPane> {
 
 	@Override
 	protected void initViewerPane(final CanalCostsPane pane) {
-		pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_RouteCosts() }), null);
+		pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_RouteCosts() }), getAdapterFactory(), getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(PricingModel.class));
 	}
 

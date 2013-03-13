@@ -27,7 +27,7 @@ public class CooldownCostsView extends ScenarioTableViewerView<CooldownCostsPane
 
 	@Override
 	protected void initViewerPane(final CooldownCostsPane pane) {
-		pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_CooldownPrices() }), null);
+		pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_CooldownPrices() }), getAdapterFactory(), getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(PricingModel.class));
 	}
 

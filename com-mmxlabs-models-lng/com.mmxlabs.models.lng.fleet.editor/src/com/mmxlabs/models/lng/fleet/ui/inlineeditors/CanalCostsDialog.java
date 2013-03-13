@@ -63,7 +63,7 @@ public class CanalCostsDialog extends Dialog {
 		final Composite content = (Composite) super.createDialogArea(parent);
 		tableViewer = new EObjectTableViewer(content, SWT.FULL_SELECTION | SWT.BORDER);
 
-		tableViewer.init(adapterFactory, containment);
+		tableViewer.init(adapterFactory, editingDomain.getCommandStack(), containment);
 
 		final Grid table = tableViewer.getGrid();
 

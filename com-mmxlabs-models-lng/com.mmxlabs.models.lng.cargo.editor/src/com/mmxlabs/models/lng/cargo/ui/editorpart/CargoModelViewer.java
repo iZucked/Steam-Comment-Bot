@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EObject;
@@ -80,8 +81,8 @@ public class CargoModelViewer extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		super.init(path, adapterFactory);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		super.init(path, adapterFactory, commandStack);
 		// final RewireAction rewireAction = new RewireAction(getJointModelEditorPart());
 		final RotateSlotsAction rotate = new RotateSlotsAction(getJointModelEditorPart());
 		viewer.addSelectionChangedListener(rotate);

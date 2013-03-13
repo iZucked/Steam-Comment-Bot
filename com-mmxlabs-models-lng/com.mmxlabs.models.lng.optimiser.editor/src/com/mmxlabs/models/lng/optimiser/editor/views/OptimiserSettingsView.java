@@ -25,7 +25,7 @@ public class OptimiserSettingsView extends ScenarioTableViewerView<OptimiserSett
 
 	@Override
 	protected void initViewerPane(final OptimiserSettingsEditorPane pane) {
-		pane.init(Arrays.asList(new EReference[] { OptimiserPackage.eINSTANCE.getOptimiserModel_Settings() }), null);
+		pane.init(Arrays.asList(new EReference[] { OptimiserPackage.eINSTANCE.getOptimiserModel_Settings() }), getAdapterFactory(), getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(OptimiserModel.class));
 	}
 

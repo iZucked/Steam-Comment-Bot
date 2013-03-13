@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.commercial.ui.editorpart;
 
 import java.util.List;
 
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.ui.IActionBars;
@@ -25,8 +26,8 @@ public class ContractEditorPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		super.init(path, adapterFactory);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		super.init(path, adapterFactory, commandStack);
 		addNameManipulator("Name");
 
 		addTypicalColumn("Entity", new SingleReferenceManipulator(CommercialPackage.eINSTANCE.getContract_Entity(), getReferenceValueProviderCache(), getEditingDomain()));

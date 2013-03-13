@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.spotmarkets.editor.editorpart;
 
 import java.util.List;
 
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.ui.IActionBars;
@@ -32,8 +33,8 @@ public class CharterMarketPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		super.init(path, adapterFactory);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		super.init(path, adapterFactory, commandStack);
 
 		addTypicalColumn("Vessel Classes", new MultipleReferenceManipulator(SpotMarketsPackage.eINSTANCE.getCharterCostModel_VesselClasses(), getReferenceValueProviderCache(), getEditingDomain(),
 				MMXCorePackage.eINSTANCE.getNamedObject_Name()));

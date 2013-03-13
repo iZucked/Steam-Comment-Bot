@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.command.IdentityCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -68,8 +69,8 @@ public class PortEditorPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		super.init(path, adapterFactory);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		super.init(path, adapterFactory, commandStack);
 
 		addNameManipulator("Name");
 

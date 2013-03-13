@@ -27,7 +27,7 @@ public class PortCostsView extends ScenarioTableViewerView<PortCostPane> {
 
 	@Override
 	protected void initViewerPane(final PortCostPane pane) {
-		pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_PortCosts() }), null);
+		pane.init(Arrays.asList(new EReference[] { PricingPackage.eINSTANCE.getPricingModel_PortCosts() }), getAdapterFactory(), getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(PricingModel.class));
 	}
 

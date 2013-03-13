@@ -27,7 +27,7 @@ public class DischargeSlotsView extends ScenarioTableViewerView<DischargeSlotVie
 
 	@Override
 	protected void initViewerPane(final DischargeSlotViewer pane) {
-		pane.init(Arrays.asList(new EReference[] { CargoPackage.eINSTANCE.getCargoModel_DischargeSlots() }), null);
+		pane.init(Arrays.asList(new EReference[] { CargoPackage.eINSTANCE.getCargoModel_DischargeSlots() }), getAdapterFactory(), getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(CargoModel.class));
 	}
 

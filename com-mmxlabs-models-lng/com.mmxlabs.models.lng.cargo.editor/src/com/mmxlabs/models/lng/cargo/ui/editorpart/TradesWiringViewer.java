@@ -21,6 +21,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CompoundCommand;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -324,8 +325,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 			}
 
 			@Override
-			public void init(final AdapterFactory adapterFactory, final EReference... path) {
-				super.init(adapterFactory, path);
+			public void init(final AdapterFactory adapterFactory, final CommandStack commandStack , final EReference... path) {
+				super.init(adapterFactory, commandStack, path);
 
 				init(new IStructuredContentProvider() {
 
@@ -414,7 +415,7 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 						return rows.toArray();
 					}
 
-				});
+				}, commandStack);
 
 			}
 
@@ -566,8 +567,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		return scenarioViewer;
 	}
 
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		getScenarioViewer().init(adapterFactory, new EReference[0]);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		getScenarioViewer().init(adapterFactory, commandStack, new EReference[0]);
 
 		getScenarioViewer().setStatusProvider(getJointModelEditorPart().getStatusProvider());
 
@@ -927,8 +928,8 @@ public class TradesWiringViewer extends ScenarioTableViewerPane {
 		return rows;
 	}
 
-	public void init(final AdapterFactory adapterFactory) {
-		getScenarioViewer().init(adapterFactory);
+	public void init(final AdapterFactory adapterFactory, CommandStack commandStack) {
+		getScenarioViewer().init(adapterFactory, commandStack);
 
 	}
 

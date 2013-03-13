@@ -38,9 +38,11 @@ public class CommercialModelEditorContribution extends BaseJointModelEditorContr
 		salesContractEditorPane.createControl(sash);
 		entityEditorPane.createControl(sash);
 
-		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory());
-		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory());
-		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory());
+		entityEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_Entities()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
+		purchaseContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_PurchaseContracts()), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
+				.getCommandStack());
+		salesContractEditorPane.init(Collections.singletonList(CommercialPackage.eINSTANCE.getCommercialModel_SalesContracts()), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
+				.getCommandStack());
 
 		entityEditorPane.getViewer().setInput(modelObject);
 		purchaseContractEditorPane.getViewer().setInput(modelObject);

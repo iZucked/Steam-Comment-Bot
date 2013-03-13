@@ -36,7 +36,7 @@ public class PortView extends ScenarioTableViewerView<PortEditorPane> {
 
 	@Override
 	protected void initViewerPane(final PortEditorPane pane) {
-		pane.init(Arrays.asList(new EReference[] { PortPackage.eINSTANCE.getPortModel_Ports() }), null);
+		pane.init(Arrays.asList(new EReference[] { PortPackage.eINSTANCE.getPortModel_Ports() }), null, getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(PortModel.class));
 
 		// Add action to create and edit cargo groups

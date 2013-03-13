@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.optimiser.ui.editorpart;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EObject;
@@ -46,8 +47,8 @@ public class OptimiserSettingsEditorPane extends ScenarioTableViewerPane {
 	 * @see com.mmxlabs.models.lng.ui.tabular.ScenarioTableViewerPane#init(java.util.List, org.eclipse.emf.common.notify.AdapterFactory)
 	 */
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		super.init(path, adapterFactory);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		super.init(path, adapterFactory, commandStack);
 		addNameManipulator("Name");
 
 		addTypicalColumn("Seed", new NumericAttributeManipulator(OptimiserPackage.eINSTANCE.getOptimiserSettings_Seed(), getEditingDomain()));

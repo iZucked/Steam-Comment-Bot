@@ -66,14 +66,14 @@ public class PricingModelEditorContribution extends BaseJointModelEditorContribu
 
 		commodityPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		commodityPane.createControl(sash2);
-		commodityPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()), editorPart.getAdapterFactory());
+		commodityPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CommodityIndices()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 		commodityPane.getViewer().setInput(modelObject);
 		commodityPane.defaultSetTitle("Commodity Indices");
 
 		charterIndicesPane = new IndexPane(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 		charterIndicesPane.setUseIntegers(true);
 		charterIndicesPane.createControl(sash2);
-		charterIndicesPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CharterIndices()), editorPart.getAdapterFactory());
+		charterIndicesPane.init(Collections.singletonList(PricingPackage.eINSTANCE.getPricingModel_CharterIndices()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 		charterIndicesPane.getViewer().setInput(modelObject);
 		charterIndicesPane.defaultSetTitle("Chartering Indices");
 

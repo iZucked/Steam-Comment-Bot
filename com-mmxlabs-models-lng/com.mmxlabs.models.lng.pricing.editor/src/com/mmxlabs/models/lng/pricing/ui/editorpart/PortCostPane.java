@@ -7,6 +7,7 @@ package com.mmxlabs.models.lng.pricing.ui.editorpart;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.ecore.EReference;
@@ -47,8 +48,8 @@ public class PortCostPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		super.init(path, adapterFactory);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		super.init(path, adapterFactory, commandStack);
 		
 		addTypicalColumn("Ports", new MultipleReferenceManipulator(
 				PricingPackage.eINSTANCE.getPortCost_Ports(),

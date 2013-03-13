@@ -6,6 +6,7 @@ package com.mmxlabs.models.lng.pricing.ui.editorpart;
 
 import java.util.List;
 
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
@@ -33,14 +34,14 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 	}
 
 	@Override
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		super.init(path, adapterFactory);
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		super.init(path, adapterFactory, commandStack);
 
-		EditingDomain ed = getEditingDomain();
+		final EditingDomain ed = getEditingDomain();
 		
-		NonEditableColumn vesselManipulator = new NonEditableColumn() {
+		final NonEditableColumn vesselManipulator = new NonEditableColumn() {
 			@Override
-			public String render(Object object) {
+			public String render(final Object object) {
 				if (object instanceof RouteCost) {
 					return ((RouteCost) object).getVesselClass().getName();
 				}
@@ -49,9 +50,9 @@ public class CanalCostsPane extends ScenarioTableViewerPane {
 
 		};
 		
-		NonEditableColumn routeManipulator = new NonEditableColumn() {
+		final NonEditableColumn routeManipulator = new NonEditableColumn() {
 			@Override
-			public String render(Object object) {
+			public String render(final Object object) {
 				if (object instanceof RouteCost) {
 					return ((RouteCost) object).getRoute().getName();
 				}

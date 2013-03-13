@@ -40,7 +40,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		{
 			this.cargoViewerPane = new CargoModelViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			cargoViewerPane.createControl(parent);
-			cargoViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargoes()), editorPart.getAdapterFactory());
+			cargoViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_Cargoes()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 			cargoViewerPane.getViewer().setInput(modelObject);
 			cargoPageNumber = editorPart.addPage(cargoViewerPane.getControl());
 			editorPart.setPageText(cargoPageNumber, "Cargoes");
@@ -48,7 +48,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		if (showSlotTabs) {
 			this.loadSlotViewerPane = new LoadSlotViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			loadSlotViewerPane.createControl(parent);
-			loadSlotViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_LoadSlots()), editorPart.getAdapterFactory());
+			loadSlotViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_LoadSlots()), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 			loadSlotViewerPane.getViewer().setInput(modelObject);
 			loadSlotPageNumber = editorPart.addPage(loadSlotViewerPane.getControl());
 			editorPart.setPageText(loadSlotPageNumber, "Load Slots");
@@ -56,7 +56,8 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		if (showSlotTabs) {
 			this.dischargeSlotViewerPane = new DischargeSlotViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			dischargeSlotViewerPane.createControl(parent);
-			dischargeSlotViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()), editorPart.getAdapterFactory());
+			dischargeSlotViewerPane.init(Collections.singletonList(CargoPackage.eINSTANCE.getCargoModel_DischargeSlots()), editorPart.getAdapterFactory(), editorPart.getEditingDomain()
+					.getCommandStack());
 			dischargeSlotViewerPane.getViewer().setInput(modelObject);
 			dischargeSlotPageNumber = editorPart.addPage(dischargeSlotViewerPane.getControl());
 			editorPart.setPageText(dischargeSlotPageNumber, "Discharge Slots");
@@ -70,7 +71,7 @@ public class CargoModelEditorContribution extends BaseJointModelEditorContributi
 		if (useNewTradesEditor) {
 			this.tradesViewer = new TradesWiringViewer(editorPart.getSite().getPage(), editorPart, editorPart, editorPart.getEditorSite().getActionBars());
 			tradesViewer.createControl(parent);
-			tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory());
+			tradesViewer.init(Collections.<EReference> emptyList(), editorPart.getAdapterFactory(), editorPart.getEditingDomain().getCommandStack());
 			tradesViewer.getViewer().setInput(modelObject);
 			tradesViewerPageNumber = editorPart.addPage(tradesViewer.getControl());
 			editorPart.setPageText(tradesViewerPageNumber, "Trades");

@@ -27,7 +27,7 @@ public class LoadSlotsView extends ScenarioTableViewerView<LoadSlotViewer> {
 
 	@Override
 	protected void initViewerPane(final LoadSlotViewer pane) {
-		pane.init(Arrays.asList(new EReference[] { CargoPackage.eINSTANCE.getCargoModel_LoadSlots() }), null);
+		pane.init(Arrays.asList(new EReference[] { CargoPackage.eINSTANCE.getCargoModel_LoadSlots() }), getAdapterFactory(), getEditingDomain().getCommandStack());
 		pane.getViewer().setInput(getRootObject().getSubModel(CargoModel.class));
 	}
 
