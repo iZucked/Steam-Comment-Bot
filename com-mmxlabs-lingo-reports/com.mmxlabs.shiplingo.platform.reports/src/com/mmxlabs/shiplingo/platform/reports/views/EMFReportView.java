@@ -485,7 +485,7 @@ public abstract class EMFReportView extends ViewPart implements ISelectionListen
 		hookContextMenu();
 		contributeToActionBars();
 
-		viewer.init(getContentProvider());
+		viewer.init(getContentProvider(), null);
 
 		getSite().setSelectionProvider(viewer);
 		if (handleSelections()) {
