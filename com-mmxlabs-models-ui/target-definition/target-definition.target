@@ -76,7 +76,7 @@
 <unit id="com.mmxlabs.org.eclipse.nebula.widgets.ganttchart.source" version="1.0.1.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.feature.group" version="3.0.0.RELEASE"/>
 <unit id="com.mmxlabs.scenario.service.feature.source.feature.group" version="3.0.0.RELEASE"/>
-<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="2.1.0".RELEASE"/>
+<unit id="com.mmxlabs.rcp.common.feature.source.feature.group" version="2.1.0.RELEASE"/>
 <unit id="com.mmxlabs.rcp.common.feature.feature.group" version="2.1.0.RELEASE"/>
 <unit id="com.mmxlabs.models.migration.feature.source.feature.group" version="2.0.0.RELEASE"/>
 <unit id="com.mmxlabs.models.migration.feature.feature.group" version="2.0.0.RELEASE"/>
