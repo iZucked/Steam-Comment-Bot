@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.ui.ViewerPane;
 import org.eclipse.emf.ecore.EObject;
@@ -80,9 +81,9 @@ import com.mmxlabs.rcp.common.actions.PackGridTableColumnsAction;
 import com.mmxlabs.scenario.service.model.ScenarioLock;
 
 public class ScenarioTableViewerPane extends ViewerPane {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(ScenarioTableViewerPane.class);
-	
+
 	protected static final String VIEW_GROUP = "view";
 	protected static final String ADD_REMOVE_GROUP = "addremove";
 	protected static final String EDIT_GROUP = "edit";
@@ -113,10 +114,10 @@ public class ScenarioTableViewerPane extends ViewerPane {
 	 */
 	protected Action deleteAction;
 
-	private ISelectionListener selectionListener = new ISelectionListener() {
+	private final ISelectionListener selectionListener = new ISelectionListener() {
 
 		@Override
-		public void selectionChanged(IWorkbenchPart part, ISelection selection) {
+		public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 
 			if (part == ScenarioTableViewerPane.this.part) {
 				return;
@@ -130,7 +131,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 			}
 			if (scenarioViewer != null) {
 				try {
-				scenarioViewer.setSelection(selection, true);
+					scenarioViewer.setSelection(selection, true);
 				} catch (final Exception e) {
 					log.error(e.getMessage(), e);
 				}
@@ -234,7 +235,7 @@ public class ScenarioTableViewerPane extends ViewerPane {
 
 			enableOpenListener();
 
-//			scenarioViewer.getGrid().setCellSelectionEnabled(true);
+			// scenarioViewer.getGrid().setCellSelectionEnabled(true);
 			filterField.setViewer(scenarioViewer);
 
 			final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(scenarioViewer) {
@@ -330,8 +331,11 @@ public class ScenarioTableViewerPane extends ViewerPane {
 		setTitle(string, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEF_VIEW));
 	}
 
-	public void init(final List<EReference> path, final AdapterFactory adapterFactory) {
-		scenarioViewer.init(adapterFactory, path.toArray(new EReference[path.size()]));
+	/**
+	 * @since 3.0
+	 */
+	public void init(final List<EReference> path, final AdapterFactory adapterFactory, final CommandStack commandStack) {
+		scenarioViewer.init(adapterFactory, commandStack, path.toArray(new EReference[path.size()]));
 
 		scenarioViewer.setStatusProvider(getJointModelEditorPart().getStatusProvider());
 
