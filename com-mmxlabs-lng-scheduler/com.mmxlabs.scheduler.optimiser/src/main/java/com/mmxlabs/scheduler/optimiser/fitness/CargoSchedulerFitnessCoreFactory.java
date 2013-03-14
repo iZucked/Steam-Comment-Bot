@@ -37,6 +37,8 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 
 	public static final String PORT_COST_COMPONENT_NAME = "cargo-scheduler-port-cost";
 
+	public static final String PROFIT_COMPONENT_NAME = "cargo-scheduler-group-profit";
+
 	@Inject(optional = true)
 	private Iterable<ICargoFitnessComponentProvider> externalComponentProviders;
 
@@ -44,7 +46,7 @@ public final class CargoSchedulerFitnessCoreFactory implements IFitnessCoreFacto
 	public Collection<String> getFitnessComponentNames() {
 
 		final List<String> result = CollectionsUtil.makeArrayList(LATENESS_COMPONENT_NAME, CAPACITY_COMPONENT_NAME, COST_BASE_COMPONENT_NAME, COST_LNG_COMPONENT_NAME, CHARTER_COST_COMPONENT_NAME,
-				ROUTE_PRICE_COMPONENT_NAME, COST_COOLDOWN_COMPONENT_NAME, PORT_COST_COMPONENT_NAME);
+				ROUTE_PRICE_COMPONENT_NAME, COST_COOLDOWN_COMPONENT_NAME, PORT_COST_COMPONENT_NAME, PROFIT_COMPONENT_NAME);
 
 		if (externalComponentProviders != null) {
 			for (final ICargoFitnessComponentProvider provider : externalComponentProviders) {

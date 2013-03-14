@@ -2,7 +2,7 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.scheduler.optimiser.fitness.components.pnl;
+package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import java.util.Collection;
 import java.util.Iterator;

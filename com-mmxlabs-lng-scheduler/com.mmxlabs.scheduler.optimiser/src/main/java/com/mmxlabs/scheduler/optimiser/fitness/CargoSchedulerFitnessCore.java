@@ -4,8 +4,6 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness;
 
-import static org.mockito.Mockito.ignoreStubs;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,6 +31,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComp
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.PortCostFitnessComponent;
+import com.mmxlabs.scheduler.optimiser.fitness.components.ProfitAndLossAllocationComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
@@ -98,6 +97,8 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 		schedulerComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this, SchedulerConstants.DCP_portCostProvider,
 				SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
+
+		allocationComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, this));
 
 		allComponents.addAll(schedulerComponents);
 		allComponents.addAll(allocationComponents);
