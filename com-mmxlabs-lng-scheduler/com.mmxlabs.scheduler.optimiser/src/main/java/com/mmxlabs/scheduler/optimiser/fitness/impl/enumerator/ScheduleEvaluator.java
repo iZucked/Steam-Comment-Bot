@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -102,7 +103,7 @@ public class ScheduleEvaluator {
 		// and then compute the resulting P&L fitness components.
 
 		// Compute load volumes and prices
-		final Collection<IAllocationAnnotation> allocations = cargoAllocator.allocate(scheduledSequences);
+		final Map<VoyagePlan, IAllocationAnnotation> allocations = cargoAllocator.allocate(scheduledSequences);
 		scheduledSequences.setAllocations(allocations);
 		// Finally evaluate whole-solution components, like P&L.
 

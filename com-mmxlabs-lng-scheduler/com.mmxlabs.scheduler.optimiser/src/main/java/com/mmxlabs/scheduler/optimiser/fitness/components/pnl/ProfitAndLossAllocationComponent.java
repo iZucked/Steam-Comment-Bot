@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.components.pnl;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -98,18 +99,13 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 	}
 
 	@Override
-	public long evaluate(final ScheduledSequences solution, final Collection<IAllocationAnnotation> allocations) {
+	public long evaluate(final ScheduledSequences solution, final Map<VoyagePlan, IAllocationAnnotation> allocations) {
 		return evaluateAndMaybeAnnotate(solution, allocations, null);
 	}
 
-	private long evaluateAndMaybeAnnotate(final ScheduledSequences solution, final Collection<IAllocationAnnotation> allocations, final IAnnotatedSolution annotatedSolution) {
+	private long evaluateAndMaybeAnnotate(final ScheduledSequences solution, final Map<VoyagePlan, IAllocationAnnotation> allocations, final IAnnotatedSolution annotatedSolution) {
 		if (entityProvider == null) {
 			return 0;
-		}
-		final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
-		IAllocationAnnotation currentAllocation = null;
-		if (allocationIterator.hasNext()) {
-			currentAllocation = allocationIterator.next();
 		}
 		long accumulator = 0;
 
@@ -123,15 +119,11 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 
 					PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
 					PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
+					final IAllocationAnnotation currentAllocation = allocations.get(firstDetails);
 					if ((currentAllocation != null) && ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {
 						cargo = true;
 						final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, sequence.getStartTime(), annotatedSolution);
 						accumulator += cargoGroupValue;
-						if (allocationIterator.hasNext()) {
-							currentAllocation = allocationIterator.next();
-						} else {
-							currentAllocation = null;
-						}
 					} else if ((vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE || vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE) && plan.getSequence().length == 4) {
 						firstDetails = (PortDetails) plan.getSequence()[1];
 						lastDetails = (PortDetails) plan.getSequence()[2];
@@ -141,11 +133,6 @@ public class ProfitAndLossAllocationComponent implements ICargoAllocationFitness
 							// TODO: Does it matter really?
 							final long cargoGroupValue = entityValueCalculator.evaluate(plan, currentAllocation, vessel, currentAllocation.getLoadTime(), annotatedSolution);
 							accumulator += cargoGroupValue;
-							if (allocationIterator.hasNext()) {
-								currentAllocation = allocationIterator.next();
-							} else {
-								currentAllocation = null;
-							}
 						}
 					}
 				}

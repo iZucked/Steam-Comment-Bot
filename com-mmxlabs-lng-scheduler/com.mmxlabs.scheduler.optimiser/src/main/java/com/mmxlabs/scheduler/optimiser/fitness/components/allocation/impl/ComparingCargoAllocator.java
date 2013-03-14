@@ -4,7 +4,7 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
-import java.util.Collection;
+import java.util.Map;
 
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -57,7 +57,7 @@ public class ComparingCargoAllocator implements ICargoAllocator {
 	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator#allocate(com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences)
 	 */
 	@Override
-	public Collection<IAllocationAnnotation> allocate(final ScheduledSequences sequences) {
+	public Map<VoyagePlan, IAllocationAnnotation> allocate(final ScheduledSequences sequences) {
 		// TODO Auto-generated method stub
 		return fastAllocator.allocate(sequences);
 	}

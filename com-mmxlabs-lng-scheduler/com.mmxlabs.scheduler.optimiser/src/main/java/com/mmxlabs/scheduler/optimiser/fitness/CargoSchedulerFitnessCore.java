@@ -227,7 +227,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		final IAnnotations elementAnnotations = solution.getElementAnnotations();
 
 		// now add some more data for each load slot
-		for (final IAllocationAnnotation annotation : schedule.getAllocations()) {
+		for (final IAllocationAnnotation annotation : schedule.getAllocations().values()) {
 			final ISequenceElement loadElement = portSlotProvider.getElement(annotation.getLoadOption());
 			final ISequenceElement dischargeElement = portSlotProvider.getElement(annotation.getDischargeOption());
 			elementAnnotations.setAnnotation(loadElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);

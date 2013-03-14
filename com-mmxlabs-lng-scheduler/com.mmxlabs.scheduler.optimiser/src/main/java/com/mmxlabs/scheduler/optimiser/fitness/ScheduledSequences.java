@@ -5,8 +5,8 @@
 package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
@@ -23,13 +23,13 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public final class ScheduledSequences extends ArrayList<ScheduledSequence> {
 	private static final long serialVersionUID = 1L;
 
-	private Collection<IAllocationAnnotation> allocations = null;
+	private Map<VoyagePlan, IAllocationAnnotation> allocations = null;
 
-	public final Collection<IAllocationAnnotation> getAllocations() {
+	public final Map<VoyagePlan, IAllocationAnnotation> getAllocations() {
 		return allocations;
 	}
 
-	public final void setAllocations(final Collection<IAllocationAnnotation> allocations) {
+	public final void setAllocations(final Map<VoyagePlan, IAllocationAnnotation> allocations) {
 		this.allocations = allocations;
 	}
 

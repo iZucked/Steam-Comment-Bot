@@ -5,15 +5,14 @@
 package com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+import com.mmxlabs.common.Pair;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
@@ -76,6 +75,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	 */
 	final ArrayList<IDischargeOption> dischargeSlots = new ArrayList<IDischargeOption>();
 
+	final ArrayList<VoyagePlan> voyagePlans = new ArrayList<VoyagePlan>();
+
 	final ArrayList<Integer> loadPricesPerM3 = new ArrayList<Integer>();
 	final ArrayList<Integer> dischargePricesPerM3 = new ArrayList<Integer>();
 
@@ -131,10 +132,11 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 		loadPricesPerM3.clear();
 		dischargePricesPerM3.clear();
+		voyagePlans.clear();
 	}
 
 	@Override
-	public Collection<IAllocationAnnotation> allocate(final ScheduledSequences sequences) {
+	public Map<VoyagePlan, IAllocationAnnotation> allocate(final ScheduledSequences sequences) {
 		reset();
 
 		final VoyagePlanIterator planIterator = voyagePlanIteratorProvider.get();
@@ -175,6 +177,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 						ballastVoyage = (VoyageDetails) object;
 						assert plan != null;
 						addCargo(plan, loadDetails, ladenVoyage, dischargeDetails, ballastVoyage, loadTime, dischargeTime, plan.getLNGFuelVolume(), vessel);
+						voyagePlans.add(plan);
 						loadDetails = null;
 						dischargeDetails = null;
 					}
@@ -183,15 +186,16 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 			if (vessel.getVesselInstanceType() == VesselInstanceType.FOB_SALE || vessel.getVesselInstanceType() == VesselInstanceType.DES_PURCHASE) {
 				if (loadDetails != null && dischargeDetails != null) {
 					addVirtualCargo(loadDetails, dischargeDetails);
+					voyagePlans.add(plan);
 				}
 			}
 
 		}
 
 		solve();
-		final LinkedList<IAllocationAnnotation> result = new LinkedList<IAllocationAnnotation>();
-		for (final IAllocationAnnotation aa : getAllocations()) {
-			result.add(aa);
+		final Map<VoyagePlan, IAllocationAnnotation> result = new HashMap<VoyagePlan, IAllocationAnnotation>();
+		for (final Pair<VoyagePlan, IAllocationAnnotation> p : getAllocations()) {
+			result.put(p.getFirst(), p.getSecond());
 		}
 		return result;
 	}
@@ -506,14 +510,15 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		cargoAllocationProvider = tvlp;
 	}
 
-	public Iterable<IAllocationAnnotation> getAllocations() {
-		return new Iterable<IAllocationAnnotation>() {
+	public Iterable<Pair<VoyagePlan, IAllocationAnnotation>> getAllocations() {
+		return new Iterable<Pair<VoyagePlan, IAllocationAnnotation>>() {
 			@Override
-			public Iterator<IAllocationAnnotation> iterator() {
-				return new Iterator<IAllocationAnnotation>() {
+			public Iterator<Pair<VoyagePlan, IAllocationAnnotation>> iterator() {
+				return new Iterator< Pair<VoyagePlan, IAllocationAnnotation>>() {
 					final Iterator<ILoadOption> loadIterator = loadSlots.iterator();
 					final Iterator<IDischargeOption> dischargeIterator = dischargeSlots.iterator();
 					final Iterator<Integer> priceIterator = unitPricesPerM3.iterator();
+					final Iterator<VoyagePlan> voyagePlansIterator = voyagePlans.iterator();
 					int allocationIndex;
 
 					@Override
@@ -522,7 +527,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 					}
 
 					@Override
-					public IAllocationAnnotation next() {
+					public Pair<VoyagePlan, IAllocationAnnotation> next() {
 						final AllocationAnnotation annotation = new AllocationAnnotation();
 
 						final ILoadOption loadSlot = loadIterator.next();
@@ -539,7 +544,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 						annotation.setDischargeTime(slotTimes.get(dischargeSlot));
 						annotation.setDischargeVolume(allocation[allocationIndex++]);
 
-						return annotation;
+						return new Pair<VoyagePlan, IAllocationAnnotation>(voyagePlansIterator.next(), annotation);
 					}
 
 					@Override
