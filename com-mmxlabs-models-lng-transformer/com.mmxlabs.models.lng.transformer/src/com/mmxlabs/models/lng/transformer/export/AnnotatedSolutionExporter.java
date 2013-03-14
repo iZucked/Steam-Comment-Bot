@@ -99,7 +99,6 @@ public class AnnotatedSolutionExporter {
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
 		final IPortSlotProvider portSlotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		final IPortTypeProvider portTypeProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portTypeProvider, IPortTypeProvider.class);
 		final Schedule output = factory.createSchedule();
 
 		// go through the annotated solution and build stuff for the EMF;
@@ -139,7 +138,6 @@ public class AnnotatedSolutionExporter {
 			boolean skipStartEndElements = false;
 			boolean isFOBSequence = false;
 			boolean isDESSequence = false;
-			boolean isCargoShortsSequence = false;
 
 			// TODO use spot rates correctly.
 			final ICurve hireRate;
@@ -203,7 +201,6 @@ public class AnnotatedSolutionExporter {
 				break;
 			case CARGO_SHORTS:
 				eSequence.setSequenceType(SequenceType.CARGO_SHORTS);
-				isCargoShortsSequence = true;
 				if (sequence.size() < 2) {
 					continue;
 				}
