@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
@@ -65,7 +66,7 @@ public class ScheduleEvaluator {
 		setLoadPriceCalculators(calculatorProvider.getLoadPriceCalculators());
 	}
 
-	public long evaluateSchedule(final ScheduledSequences scheduledSequences, final int[] changedSequences) {
+	public long evaluateSchedule(final ISequences ISequences, final ScheduledSequences scheduledSequences, final int[] changedSequences) {
 		// First, we evaluate all the scheduler components. These are fitness components dependent only on
 		// values from the ScheduledSequences.
 
@@ -87,7 +88,7 @@ public class ScheduleEvaluator {
 
 		// Prime the load price calculators with the scheduled result
 		for (final ILoadPriceCalculator calculator : loadPriceCalculators) {
-			calculator.prepareEvaluation(scheduledSequences);
+			calculator.prepareEvaluation(ISequences);
 		}
 
 		// Execute custom logic to manipulate the schedule and choices

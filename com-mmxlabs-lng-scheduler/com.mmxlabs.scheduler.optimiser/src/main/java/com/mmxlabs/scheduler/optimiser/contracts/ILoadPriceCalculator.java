@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.contracts;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -21,12 +22,12 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
  */
 public interface ILoadPriceCalculator extends ICalculator {
 	/**
-	 * This will be called with a {@link ScheduledSequences} instance once before any of the load slots therein contained have their prices calculated with the
+	 * This will be called with a {@link ISequences} instance once before any of the load slots therein contained have their prices calculated with the
 	 * {@link #calculateLoadUnitPrice(ILoadSlot, IDischargeSlot, int, int, int)} method.
 	 * 
 	 * @param sequences
 	 */
-	public void prepareEvaluation(ScheduledSequences sequences);
+	public void prepareEvaluation(ISequences sequences);
 
 	/**
 	 * Find the price (in $/M3) for loading at the given slot. Although every argument here except loadSlot and loadVolume can be found in the previous call to

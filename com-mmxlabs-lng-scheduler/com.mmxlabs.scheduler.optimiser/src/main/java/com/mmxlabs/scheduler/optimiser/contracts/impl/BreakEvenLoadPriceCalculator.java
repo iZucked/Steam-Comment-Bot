@@ -5,6 +5,7 @@
 package com.mmxlabs.scheduler.optimiser.contracts.impl;
 
 import com.mmxlabs.common.detailtree.IDetailTree;
+import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeOption;
 import com.mmxlabs.scheduler.optimiser.components.IDischargeSlot;
 import com.mmxlabs.scheduler.optimiser.components.ILoadOption;
@@ -12,7 +13,6 @@ import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.contracts.IBreakEvenPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -23,7 +23,7 @@ public class BreakEvenLoadPriceCalculator implements ILoadPriceCalculator, IBrea
 	private int price;
 
 	@Override
-	public void prepareEvaluation(final ScheduledSequences sequences) {
+	public void prepareEvaluation(final ISequences sequences) {
 		price = 0;
 	}
 

@@ -24,7 +24,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPriceCalculator, ICooldownPriceCalculator {
 
 	@Override
-	public void prepareEvaluation(final ScheduledSequences sequences) {
+	public void prepareEvaluation(final ISequences sequences) {
 	}
 
 	/**
@@ -39,11 +39,6 @@ public abstract class SimpleContract implements ILoadPriceCalculator, ISalesPric
 	public int calculateLoadUnitPrice(final ILoadSlot loadSlot, final IDischargeSlot dischargeSlot, final int loadTime, final int dischargeTime, final int dischargePricePerMMBTu,
 			final long loadVolumeInM3, final long dischargeVolumeInM3, final IVessel vessel, final VoyagePlan plan, final IDetailTree annotations) {
 		return calculateSimpleUnitPrice(loadTime);
-	}
-
-	@Override
-	public void prepareEvaluation(final ISequences sequences) {
-
 	}
 
 	@Override

@@ -512,7 +512,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			scheduledSequences.set(index, sequence);
 		}
 
-		lastValue = evaluator.evaluateSchedule(scheduledSequences, changedSequences);
+		lastValue = evaluator.evaluateSchedule(sequences, scheduledSequences, changedSequences);
 
 		logValue(lastValue);
 
