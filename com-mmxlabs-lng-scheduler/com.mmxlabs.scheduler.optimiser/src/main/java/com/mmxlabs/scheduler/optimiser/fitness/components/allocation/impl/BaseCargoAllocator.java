@@ -57,15 +57,15 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	/**
 	 * Contains the quantity of LNG which <em>must</em> be loaded for a given cargo (by cargo index/LP variable, see {@link #variableTable})
 	 */
-	final ArrayList<Long> forcedLoadVolume = new ArrayList<Long>();
+	final ArrayList<Long> forcedLoadVolumeInM3 = new ArrayList<Long>();
 	/**
 	 * Contains the capacity of the vessel carrying the cargo, by cargo index.
 	 */
-	final ArrayList<Long> vesselCapacity = new ArrayList<Long>();
+	final ArrayList<Long> vesselCapacityInM3 = new ArrayList<Long>();
 	/**
 	 * Contains the unit price (difference between sales price and purchase price) for each cargo, by cargo index.
 	 */
-	final ArrayList<Integer> unitPrices = new ArrayList<Integer>();
+	final ArrayList<Integer> unitPricesPerM3 = new ArrayList<Integer>();
 
 	/**
 	 * The load slot for each cargo
@@ -76,8 +76,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 	 */
 	final ArrayList<IDischargeOption> dischargeSlots = new ArrayList<IDischargeOption>();
 
-	final ArrayList<Integer> loadPrices = new ArrayList<Integer>();
-	final ArrayList<Integer> dischargePrices = new ArrayList<Integer>();
+	final ArrayList<Integer> loadPricesPerM3 = new ArrayList<Integer>();
+	final ArrayList<Integer> dischargePricesPerM3 = new ArrayList<Integer>();
 
 	int cargoCount;
 
@@ -123,14 +123,14 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 		variableTable.clear();
 		slotTimes.clear();
-		unitPrices.clear();
+		unitPricesPerM3.clear();
 		loadSlots.clear();
 		dischargeSlots.clear();
-		vesselCapacity.clear();
-		forcedLoadVolume.clear();
+		vesselCapacityInM3.clear();
+		forcedLoadVolumeInM3.clear();
 
-		loadPrices.clear();
-		dischargePrices.clear();
+		loadPricesPerM3.clear();
+		dischargePricesPerM3.clear();
 	}
 
 	@Override
@@ -362,8 +362,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		variableTable.put(dischargeSlot, ci);
 
 		// We have to load this much LNG no matter what
-		forcedLoadVolume.add(requiredFuelVolumeInM3);
-		this.vesselCapacity.add(vesselCapacityInM3);
+		forcedLoadVolumeInM3.add(requiredFuelVolumeInM3);
+		this.vesselCapacityInM3.add(vesselCapacityInM3);
 
 		final int cargoCVValue = loadSlot.getCargoCVValue();
 
@@ -388,10 +388,10 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		final int dischargePricePerM3 = Calculator.costPerM3FromMMBTu(dischargePricePerMMBtu, cargoCVValue);
 		final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
-		loadPrices.add(loadPricePerM3);
-		dischargePrices.add(dischargePricePerM3);
+		loadPricesPerM3.add(loadPricePerM3);
+		dischargePricesPerM3.add(dischargePricePerM3);
 
-		this.unitPrices.add(dischargePricePerM3 - loadPricePerM3);
+		this.unitPricesPerM3.add(dischargePricePerM3 - loadPricePerM3);
 
 		cargoCount++;
 	}
@@ -439,8 +439,8 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		variableTable.put(dischargeSlot, ci);
 
 		// We have to load this much LNG no matter what
-		forcedLoadVolume.add(0l);
-		this.vesselCapacity.add(Long.MAX_VALUE);
+		forcedLoadVolumeInM3.add(0l);
+		this.vesselCapacityInM3.add(Long.MAX_VALUE);
 
 		final int cargoCVValue = loadSlot.getCargoCVValue();
 
@@ -458,10 +458,10 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 		final int loadPricePerMMBTu = loadSlot.getLoadPriceCalculator().calculateLoadUnitPrice(loadSlot, dischargeSlot, time, dischargePricePerMMBTu, loadVolumeInM3, null);
 		final int loadPricePerM3 = Calculator.costPerM3FromMMBTu(loadPricePerMMBTu, cargoCVValue);
 
-		loadPrices.add(loadPricePerM3);
-		dischargePrices.add(dischargePricePerM3);
+		loadPricesPerM3.add(loadPricePerM3);
+		dischargePricesPerM3.add(dischargePricePerM3);
 
-		this.unitPrices.add(dischargePricePerM3 - loadPricePerM3);
+		this.unitPricesPerM3.add(dischargePricePerM3 - loadPricePerM3);
 
 		cargoCount++;
 	}
@@ -513,7 +513,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 				return new Iterator<IAllocationAnnotation>() {
 					final Iterator<ILoadOption> loadIterator = loadSlots.iterator();
 					final Iterator<IDischargeOption> dischargeIterator = dischargeSlots.iterator();
-					final Iterator<Integer> priceIterator = unitPrices.iterator();
+					final Iterator<Integer> priceIterator = unitPricesPerM3.iterator();
 					int allocationIndex;
 
 					@Override
@@ -530,11 +530,11 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 						annotation.setLoadSlot(loadSlot);
 						annotation.setDischargeSlot(dischargeSlot);
-						annotation.setFuelVolume(forcedLoadVolume.get(allocationIndex));
+						annotation.setFuelVolume(forcedLoadVolumeInM3.get(allocationIndex));
 
 						// TODO recompute load price here; this is not necessarily right
-						annotation.setLoadM3Price(loadPrices.get(allocationIndex));
-						annotation.setDischargeM3Price(dischargePrices.get(allocationIndex));
+						annotation.setLoadM3Price(loadPricesPerM3.get(allocationIndex));
+						annotation.setDischargeM3Price(dischargePricesPerM3.get(allocationIndex));
 						annotation.setLoadTime(slotTimes.get(loadSlot));
 						annotation.setDischargeTime(slotTimes.get(dischargeSlot));
 						annotation.setDischargeVolume(allocation[allocationIndex++]);

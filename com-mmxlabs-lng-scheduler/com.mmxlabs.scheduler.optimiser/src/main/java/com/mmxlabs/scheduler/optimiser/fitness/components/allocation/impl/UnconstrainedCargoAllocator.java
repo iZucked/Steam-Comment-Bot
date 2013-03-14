@@ -20,16 +20,16 @@ public class UnconstrainedCargoAllocator extends BaseCargoAllocator {
 	protected long[] allocateSpareVolume() {
 		final long[] result = new long[cargoCount];
 		for (int i = 0; i < result.length; i++) {
-			final long flv = forcedLoadVolume.get(i);
+			final long flv = forcedLoadVolumeInM3.get(i);
 			long maxLoadVolume = loadSlots.get(i).getMaxLoadVolume();
 			if (maxLoadVolume == 0) {
-				maxLoadVolume = vesselCapacity.get(i);
+				maxLoadVolume = vesselCapacityInM3.get(i);
 			}
 			long maxDischargeVolume = dischargeSlots.get(i).getMaxDischargeVolume();
 			if (maxDischargeVolume == 0) {
-				maxDischargeVolume =vesselCapacity.get(i) - flv;
+				maxDischargeVolume =vesselCapacityInM3.get(i) - flv;
 			}else {
-				maxDischargeVolume = Math.min(maxDischargeVolume, vesselCapacity.get(i) - flv);
+				maxDischargeVolume = Math.min(maxDischargeVolume, vesselCapacityInM3.get(i) - flv);
 			}
 			result[i] = Math.min(maxLoadVolume - flv, maxDischargeVolume);
 		}

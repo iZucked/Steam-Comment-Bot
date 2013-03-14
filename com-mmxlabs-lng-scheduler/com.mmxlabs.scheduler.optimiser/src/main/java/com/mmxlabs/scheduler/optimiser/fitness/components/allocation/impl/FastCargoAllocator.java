@@ -70,8 +70,8 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 		final Comparator<Integer> comparator = new Comparator<Integer>() {
 			@Override
 			public int compare(final Integer arg0, final Integer arg1) {
-				final double d0 = unitPrices.get(arg0);
-				final double d1 = unitPrices.get(arg1);
+				final double d0 = unitPricesPerM3.get(arg0);
+				final double d1 = unitPricesPerM3.get(arg1);
 
 				if (d0 > d1) {
 					return -1;
@@ -100,7 +100,7 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 			// constraint
 			// second = discharge slot constraint
 			// we can just knock this off the remaining volume at the start.
-			final long fuelVolume = forcedLoadVolume.get(variable);
+			final long fuelVolume = forcedLoadVolumeInM3.get(variable);
 			if (constraintIndices.getFirst() != null) {
 				remainders[constraintIndices.getFirst()] -= fuelVolume;
 			}
@@ -131,7 +131,7 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 		// Now run through variables (remember they are sorted in decreasing
 		// unit value)
 		for (final int variable : variables) {
-			final long fuelRequired = forcedLoadVolume.get(variable);
+			final long fuelRequired = forcedLoadVolumeInM3.get(variable);
 			final Pair<Integer, Integer> constraintIndices = cargoConstraints.get(variable);
 			// This is however much is left in the load-side summed volume
 			// constraint
@@ -149,7 +149,7 @@ public class FastCargoAllocator extends BaseCargoAllocator {
 			final long dischargeSlack = dischargeSlots.get(variable).getMaxDischargeVolume() - allocations[variable];
 
 			// and finally this is what is left of the vessel cargo capacity
-			final long cargoSlack = vesselCapacity.get(variable) - (fuelRequired + allocations[variable]);
+			final long cargoSlack = vesselCapacityInM3.get(variable) - (fuelRequired + allocations[variable]);
 
 			// the maximum we can allocate here is the minimum of all of these
 			final long allocation = Math.min(Math.min(Math.min(Math.min(loadSlack, dischargeSlack), slack1), slack2), cargoSlack);
