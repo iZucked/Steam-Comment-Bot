@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser.fitness;
 
+import static org.mockito.Mockito.ignoreStubs;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -34,6 +36,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.PortCostFitnessCompone
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
+import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -258,7 +261,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		}
 
 		// Allow components to do any extra annotations
-		planIterator.annotateSchedulerComponents(schedulerComponents, schedule, solution);
+		ScheduleEvaluator.annotateSchedulerComponents(planIterator, schedulerComponents, schedule, solution);
 
 		for (final ICargoAllocationFitnessComponent component : allocationComponents) {
 			component.annotate(schedule, solution);
