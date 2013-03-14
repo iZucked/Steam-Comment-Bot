@@ -10,15 +10,13 @@ import java.util.Map;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
-import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @author hinton
  * 
  */
-public abstract class AbstractPerRouteSchedulerFitnessComponent extends AbstractSchedulerFitnessComponent implements ICargoSchedulerFitnessComponent {
+public abstract class AbstractPerRouteSchedulerFitnessComponent extends AbstractSchedulerFitnessComponent {
 	private final Map<IResource, Long> evaluatedFitnesses = new HashMap<IResource, Long>();
 
 	private final Map<IResource, Long> acceptedFitnesses = new HashMap<IResource, Long>();
@@ -87,21 +85,6 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	 */
 	protected abstract boolean reallyEvaluateObject(Object object, int time);
 
-	
-	
-	@Override
-	public boolean annotateNextObject(Object object, int time,
-			IAnnotatedSolution solution) {
-		if (currentResource != null) {
-			return reallyAnnotateObject(object, time, solution);
-		}
-		return true;
-	}
-
-	protected boolean reallyAnnotateObject(Object object, int time, IAnnotatedSolution solution) {
-		return nextObject(object, time);
-	}
-	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -154,20 +137,5 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	public void acceptLastEvaluation() {
 		acceptedFitnesses.putAll(evaluatedFitnesses);
 		super.acceptLastEvaluation();
-	}
-
-	/**
-	 * Adds the per-route fitness of this objective to the map associated with {@link SchedulerConstants#G_AI_fitnessPerRoute}
-	 */
-	@Override
-	public void endEvaluationAndAnnotate(final IAnnotatedSolution solution) {
-		super.endEvaluationAndAnnotate(solution);
-		setLastEvaluatedFitness(accumulator);
-		@SuppressWarnings("unchecked")
-		final Map<IResource, Map<String, Long>> fitnessByRoute = solution.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, Map.class);
-
-		for (final Map.Entry<IResource, Long> entry : evaluatedFitnesses.entrySet()) {
-			fitnessByRoute.get(entry.getKey()).put(getName(), entry.getValue());
-		}
 	}
 }

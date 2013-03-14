@@ -6,7 +6,6 @@ package com.mmxlabs.scheduler.optimiser.fitness.components;
 
 import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
@@ -87,15 +86,5 @@ public abstract class AbstractSchedulerFitnessComponent implements ICargoSchedul
 		if (data != null) {
 			discountCurve = data.getDataComponentProvider(SchedulerConstants.DCP_discountCurveProvider, IDiscountCurveProvider.class).getDiscountCurve(getName());
 		}
-	}
-
-	@Override
-	public boolean annotateNextObject(final Object object, final int time, final IAnnotatedSolution solution) {
-		return nextObject(object, time);
-	}
-
-	@Override
-	public void endEvaluationAndAnnotate(final IAnnotatedSolution solution) {
-
 	}
 }

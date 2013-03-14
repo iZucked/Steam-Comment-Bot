@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.voyage.impl;
 import java.util.EnumMap;
 
 import com.google.common.base.Objects;
-import com.mmxlabs.common.Equality;
 import com.mmxlabs.common.impl.LongFastEnumMap;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
@@ -18,7 +17,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
  * 
  */
 
-public final class PortDetails implements Cloneable {
+public final class PortDetails implements IProfitAndLossDetails, Cloneable {
 
 	private PortOptions options;
 
@@ -27,18 +26,17 @@ public final class PortDetails implements Cloneable {
 
 	private final LongFastEnumMap<CapacityViolationType> capacityViolations = new LongFastEnumMap<CapacityViolationType>(CapacityViolationType.values().length);
 
+	private long totalGroupProfitAndLoss;
+
 	public PortDetails() {
-	
+
 	}
 
-	// TODO: remove when finished recoding
-	//private PortDetails(final int visitDuration, final IPortSlot portSlot, final EnumMap<FuelComponent, Long> fuelConsumption, final LongFastEnumMap<CapacityViolationType> capacityViolations) {
-	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final LongFastEnumMap<CapacityViolationType> capacityViolations) {
-		//this.visitDuration = visitDuration;
-		//this.portSlot = portSlot;
+	private PortDetails(final PortOptions options, final EnumMap<FuelComponent, Long> fuelConsumption, final LongFastEnumMap<CapacityViolationType> capacityViolations, long totalGroupProfitAndLoss) {
 		this.options = options;
 		this.fuelConsumption.putAll(fuelConsumption);
 		this.capacityViolations.putAll(capacityViolations);
+		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss;
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel) {
@@ -49,7 +47,7 @@ public final class PortDetails implements Cloneable {
 			return 0l;
 		}
 	}
-	
+
 	/**
 	 * @since 2.0
 	 */
@@ -57,9 +55,8 @@ public final class PortDetails implements Cloneable {
 		if (!fuelPrice.containsKey(fuel)) {
 			return 0;
 		}
-		return (int) fuelPrice.get(fuel);
+		return fuelPrice.get(fuel);
 	}
-		
 
 	public final void setFuelConsumption(final FuelComponent fuel, final long consumption) {
 		fuelConsumption.put(fuel, consumption);
@@ -80,32 +77,9 @@ public final class PortDetails implements Cloneable {
 		capacityViolations.put(type, quantity);
 	}
 
-	// TODO: remove when finished recoding
-	/*
-	public final int getVisitDuration() {
-		return visitDuration;
-	}
-
-	public final void setVisitDuration(final int visitDuration) {
-		this.visitDuration = visitDuration;
-	}
-	*/
-	
-
 	public final long getPortCost(final Object key) {
 		throw new UnsupportedOperationException("Undefined API");
 	}
-
-	// TODO: remove when finished recoding
-	/*
-	public final IPortSlot getPortSlot() {
-		return portSlot;
-	}
-
-	public final void setPortSlot(final IPortSlot portSlot) {
-		this.portSlot = portSlot;
-	}
-	*/
 
 	/**
 	 * @since 2.0
@@ -125,35 +99,15 @@ public final class PortDetails implements Cloneable {
 	public final boolean equals(final Object obj) {
 
 		if (obj instanceof PortDetails) {
-			
 			final PortDetails d = (PortDetails) obj;
 
-			// TODO: remove when finished recoding
-			/*
-			if (visitDuration != d.visitDuration) {
-				return false;
-			}
-			*/
-
-			if (!Equality.isEqual(capacityViolations, d.capacityViolations)) {
-				return false;
-			}
-
-			if (!Equality.isEqual(fuelConsumption, d.fuelConsumption)) {
-				return false;
-			}
-			
-			// TODO: remove when finished recoding
-			/*
-			if (!Equality.isEqual(portSlot, d.portSlot)) {
-				return false;
-			}
-			*/
-			
-			if (!Equality.isEqual(options, d.options)) {
-				return false;
-			}
-			return true;
+			// @formatter:off
+			return Objects.equal(totalGroupProfitAndLoss, d.totalGroupProfitAndLoss)
+				&& Objects.equal(fuelConsumption, d.fuelConsumption)
+				&& Objects.equal(capacityViolations, d.capacityViolations)
+				&& Objects.equal(options, d.options)
+						;
+			// @formatter:on
 		}
 
 		return false;
@@ -161,11 +115,7 @@ public final class PortDetails implements Cloneable {
 
 	@Override
 	public final int hashCode() {
-
-		// TODO: remove when finished recoding
-		//return Objects.hashCode(visitDuration, capacityViolations, fuelConsumption, portSlot);
-		return Objects.hashCode(options, capacityViolations, fuelConsumption);
-
+		return Objects.hashCode(options, capacityViolations, fuelConsumption, totalGroupProfitAndLoss);
 	}
 
 	@Override
@@ -174,18 +124,25 @@ public final class PortDetails implements Cloneable {
 		return Objects.toStringHelper(PortDetails.class)
 				.add("fuelConsumption", fuelConsumption)
 				.add("options", options)
-				// TODO: remove when finished recoding
-				/*
-				.add("visitDuration", visitDuration)
-				.add("portSlot", portSlot)
-				*/
 				.add("capacityViolations", capacityViolations)
+				.add("totalGroupProfitAndLoss", totalGroupProfitAndLoss)
 				.toString();
 		// @formatter:on
 	}
 
 	@Override
 	public PortDetails clone() {
-		return new PortDetails(new PortOptions(options), fuelConsumption, capacityViolations);
+		return new PortDetails(new PortOptions(options), fuelConsumption, capacityViolations, totalGroupProfitAndLoss);
 	}
+
+	@Override
+	public long getTotalGroupProfitAndLoss() {
+		return totalGroupProfitAndLoss;
+	}
+
+	@Override
+	public void setTotalGroupProfitAndLoss(final long totalGroupProfitAndLoss) {
+		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss;
+	}
+
 }

@@ -33,6 +33,7 @@ import com.mmxlabs.scheduler.optimiser.events.IIdleEvent;
 import com.mmxlabs.scheduler.optimiser.events.IJourneyEvent;
 import com.mmxlabs.scheduler.optimiser.events.IPortVisitEvent;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProviderEditor;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
@@ -160,7 +161,8 @@ public class VoyagePlanAnnotatorTest {
 		voyageDetails3.setTravelTime(50);
 		voyageDetails3.setIdleTime(20);
 
-		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotEditor, vesselProvider);
+		final IPortCostProvider portCostProvider = context.mock(IPortCostProvider.class);
+		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotEditor, portCostProvider, vesselProvider);
 
 		final VoyagePlan plan1 = new VoyagePlan();
 		plan1.setSequence(new Object[] { loadDetails1, voyageDetails1, dischargeDetails1, voyageDetails2, loadDetails2 });
@@ -179,6 +181,7 @@ public class VoyagePlanAnnotatorTest {
 				allowing(vesselProvider).getVessel(resource);
 				allowing(vessel).getVesselInstanceType();
 				will(returnValue(vessel));
+				allowing(portCostProvider);
 			}
 		});
 
@@ -407,12 +410,13 @@ public class VoyagePlanAnnotatorTest {
 		}
 	}
 
-	private VoyagePlanAnnotator createVoyagePlanAnnotator(final IPortSlotProvider portSlotProvider, final IVesselProvider vesselProvider) {
+	private VoyagePlanAnnotator createVoyagePlanAnnotator(final IPortSlotProvider portSlotProvider, final IPortCostProvider portCostProvider, final IVesselProvider vesselProvider) {
 
 		return Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
+				bind(IPortCostProvider.class).toInstance(portCostProvider);
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(VoyagePlanIterator.class);
 				bind(VoyagePlanAnnotator.class);

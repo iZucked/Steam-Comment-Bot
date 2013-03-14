@@ -39,7 +39,6 @@ import com.mmxlabs.scheduler.optimiser.components.impl.InterpolatingConsumptionR
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.contracts.impl.FixedPriceContract;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
@@ -156,7 +155,7 @@ public class SimpleSchedulerTest {
 		Injector injector = parentInjector.createChildInjector(m);
 
 		// Generate initial state
-//		final IInitialSequenceBuilder sequenceBuilder = injector.getInstance(IInitialSequenceBuilder.class);
+		// final IInitialSequenceBuilder sequenceBuilder = injector.getInstance(IInitialSequenceBuilder.class);
 
 		// final ISequences initialSequences = sequenceBuilder.createInitialSequences(data, null, null, Collections.<ISequenceElement, ISequenceElement> emptyMap());
 
@@ -190,12 +189,12 @@ public class SimpleSchedulerTest {
 		for (IConstraintChecker c : optimiser.getConstraintCheckers()) {
 			injector.injectMembers(c);
 		}
-		
+
 		for (IFitnessComponent c : optimiser.getFitnessEvaluator().getFitnessComponents()) {
 			injector.injectMembers(c);
 			injector.injectMembers(c.getFitnessCore());
 		}
-		
+
 		final IFitnessEvaluator fitnessEvaluator = optimiser.getFitnessEvaluator();
 
 		final LinearSimulatedAnnealingFitnessEvaluator linearFitnessEvaluator = (LinearSimulatedAnnealingFitnessEvaluator) fitnessEvaluator;
@@ -236,25 +235,5 @@ public class SimpleSchedulerTest {
 			}
 			System.out.println("]");
 		}
-	}
-
-	private ISchedulerFactory provideSchedulerFactory() {
-		final ISchedulerFactory factory = new ISchedulerFactory() {
-
-			@Override
-			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents,
-					final Collection<ICargoAllocationFitnessComponent> allocationComponents) {
-
-				final ScheduleEvaluator scheduleEvaluator = new ScheduleEvaluator();
-				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
-				scheduleEvaluator.setFitnessComponents(schedulerComponents, allocationComponents);
-				scheduleEvaluator.init();
-
-				final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
-				scheduler.setScheduleEvaluator(scheduleEvaluator);
-				return scheduler;
-			}
-		};
-		return factory;
 	}
 }

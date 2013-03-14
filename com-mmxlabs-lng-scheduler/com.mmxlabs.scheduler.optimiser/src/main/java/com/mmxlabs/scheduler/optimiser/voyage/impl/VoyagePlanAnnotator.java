@@ -32,7 +32,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityAnno
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.ICapacityEntry;
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.CapacityAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.capacity.impl.CapacityEntry;
+import com.mmxlabs.scheduler.optimiser.fitness.components.portcost.impl.PortCostAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
@@ -54,6 +56,9 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 
 	@Inject
 	private IVesselProvider vesselProvider;
+
+	@Inject
+	private IPortCostProvider portCostProvider;
 
 	@Inject
 	private Provider<VoyagePlanIterator> voyagePlanIteratorProvider;
@@ -115,6 +120,13 @@ public class VoyagePlanAnnotator implements IVoyagePlanAnnotator {
 					if (!entries.isEmpty()) {
 						final ICapacityAnnotation annotation = new CapacityAnnotation(entries);
 						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_capacityViolationInfo, annotation);
+					}
+					// Port Costs
+					{
+						final long cost = portCostProvider.getPortCost(currentPortSlot.getPort(), vessel, currentPortSlot.getPortType());
+
+						solution.getElementAnnotations().setAnnotation(element, SchedulerConstants.AI_portCostInfo, new PortCostAnnotation(cost));
+
 					}
 
 				} else if (currentPortSlot instanceof IDischargeSlot) {

@@ -12,7 +12,6 @@ import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.optimiser.core.scenario.common.IMultiMatrixProvider;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
@@ -21,7 +20,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.FastCa
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
-import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -411,8 +409,7 @@ public final class SchedulerUtils {
 	// DEFAULT_VPO_CACHE_SIZE);
 	// }
 
-	public static DirectRandomSequenceScheduler createDirectRandomSequenceScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> components,
-			final Collection<ICargoAllocationFitnessComponent> components2, final int vpoCacheSize) {
+	public static DirectRandomSequenceScheduler createDirectRandomSequenceScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> components, final int vpoCacheSize) {
 
 		final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
 		final ScheduleEvaluator evaluator = new ScheduleEvaluator();
@@ -437,15 +434,12 @@ public final class SchedulerUtils {
 		allocator.setTotalVolumeLimitProvider(tvlp);
 		allocator.init();
 
-		evaluator.setFitnessComponents(components, components2);
-		evaluator.setLoadPriceCalculators(data.getDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, ICalculatorProvider.class).getLoadPriceCalculators());
-		evaluator.setCargoAllocator(allocator);
+		evaluator.setFitnessComponents(components);
 
 		return scheduler;
 	}
 
-	public static DirectRandomSequenceScheduler createDirectRandomSequenceScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> components,
-			final Collection<ICargoAllocationFitnessComponent> components2) {
-		return createDirectRandomSequenceScheduler(data, components, components2, DEFAULT_VPO_CACHE_SIZE);
+	public static DirectRandomSequenceScheduler createDirectRandomSequenceScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> components) {
+		return createDirectRandomSequenceScheduler(data, components, DEFAULT_VPO_CACHE_SIZE);
 	}
 }

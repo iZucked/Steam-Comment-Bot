@@ -4,6 +4,8 @@
  */
 package com.mmxlabs.scheduler.optimiser;
 
+import static org.mockito.Mockito.mock;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.TreeMap;
@@ -49,6 +51,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.impl.SimpleSequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.providers.IPortCVProvider;
+import com.mmxlabs.scheduler.optimiser.providers.IPortCostProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IPortTypeProvider;
@@ -124,8 +127,8 @@ public class TestCalculations {
 				false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)),
-				1, false);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
+				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, false);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
 
@@ -178,8 +181,8 @@ public class TestCalculations {
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
-		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, vesselProvider);
-
+		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
+		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, portCostProvider, vesselProvider);
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
 		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
@@ -552,8 +555,8 @@ public class TestCalculations {
 				false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)),
-				1, false);
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
+				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), 1, false);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
 
@@ -608,8 +611,8 @@ public class TestCalculations {
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
-		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, vesselProvider);
-
+		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
+		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, portCostProvider, vesselProvider);
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
 		final ScheduledSequence scheduledSequence = scheduler.schedule(resource, sequence, expectedArrivalTimes);
@@ -981,7 +984,7 @@ public class TestCalculations {
 				false, false);
 
 		final ITimeWindow dischargeWindow = builder.createTimeWindow(50, 50);
-		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE, 
+		final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-1", port3, dischargeWindow, 0, 150000000, 0, Long.MAX_VALUE,
 				new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(200)), 1, false);
 
 		final ICargo cargo1 = builder.createCargo("cargo-1", loadSlot, dischargeSlot, false);
@@ -1035,7 +1038,8 @@ public class TestCalculations {
 
 		final ISequence sequence = new ListSequence(sequenceList);
 
-		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, vesselProvider);
+		final IPortCostProvider portCostProvider = mock(IPortCostProvider.class);
+		final VoyagePlanAnnotator annotator = createVoyagePlanAnnotator(portSlotProvider, portCostProvider, vesselProvider);
 
 		// Schedule sequence
 		final int[] expectedArrivalTimes = new int[] { 1, 25, 50, 75 };
@@ -1394,12 +1398,13 @@ public class TestCalculations {
 		return builder;
 	}
 
-	private VoyagePlanAnnotator createVoyagePlanAnnotator(final IPortSlotProvider portSlotProvider, final IVesselProvider vesselProvider) {
+	private VoyagePlanAnnotator createVoyagePlanAnnotator(final IPortSlotProvider portSlotProvider, final IPortCostProvider portCostProvider, final IVesselProvider vesselProvider) {
 
 		return Guice.createInjector(new AbstractModule() {
 			@Override
 			protected void configure() {
 				bind(IPortSlotProvider.class).toInstance(portSlotProvider);
+				bind(IPortCostProvider.class).toInstance(portCostProvider);
 				bind(IVesselProvider.class).toInstance(vesselProvider);
 				bind(VoyagePlanIterator.class);
 				bind(VoyagePlanAnnotator.class);

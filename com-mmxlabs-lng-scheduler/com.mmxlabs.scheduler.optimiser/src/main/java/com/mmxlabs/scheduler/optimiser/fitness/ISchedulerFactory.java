@@ -9,5 +9,5 @@ import java.util.Collection;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 
 public interface ISchedulerFactory {
-	public ISequenceScheduler createScheduler(IOptimisationData data, Collection<ICargoSchedulerFitnessComponent> schedulerComponents, Collection<ICargoAllocationFitnessComponent> allocationComponents);
+	public ISequenceScheduler createScheduler(IOptimisationData data, Collection<ICargoSchedulerFitnessComponent> schedulerComponents);
 }

@@ -6,24 +6,16 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 
 import javax.inject.Inject;
 
-import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
-import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
-import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IGeneratedCharterOutEvaluator;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
@@ -38,35 +30,16 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 public class ScheduleEvaluator {
 
 	@Inject
-	private ICargoAllocator cargoAllocator;
-
-	@Inject
-	private ICalculatorProvider calculatorProvider;
-
-	@com.google.inject.Inject(optional = true)
-	private IGeneratedCharterOutEvaluator generatedCharterOutEvaluator;
-
-	@com.google.inject.Inject(optional = true)
-	private IBreakEvenEvaluator breakEvenEvaluator;
+	private ScheduleCalculator scheduleCalculator;
 
 	@Inject
 	private VoyagePlanIterator vpIterator;
 
-	private Collection<ILoadPriceCalculator> loadPriceCalculators;
 	private Collection<ICargoSchedulerFitnessComponent> fitnessComponents;
-	private Collection<ICargoAllocationFitnessComponent> allocationComponents;
 
 	private long[] fitnesses;
 
-	/**
-	 * @since 2.0
-	 */
-	@Inject
-	public void init() {
-		setLoadPriceCalculators(calculatorProvider.getLoadPriceCalculators());
-	}
-
-	public long evaluateSchedule(final ISequences ISequences, final ScheduledSequences scheduledSequences, final int[] changedSequences) {
+	public long evaluateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final int[] changedSequences) {
 		// First, we evaluate all the scheduler components. These are fitness components dependent only on
 		// values from the ScheduledSequences.
 
@@ -86,35 +59,7 @@ public class ScheduleEvaluator {
 			total += l;
 		}
 
-		// Prime the load price calculators with the scheduled result
-		for (final ILoadPriceCalculator calculator : loadPriceCalculators) {
-			calculator.prepareEvaluation(ISequences);
-		}
-
-		// Execute custom logic to manipulate the schedule and choices
-		if (breakEvenEvaluator != null) {
-			breakEvenEvaluator.processSchedule(scheduledSequences);
-		}
-
-		if (generatedCharterOutEvaluator != null) {
-			generatedCharterOutEvaluator.processSchedule(scheduledSequences);
-		}
-
-		// Next we do P&L related business; first we have to assign the load volumes,
-		// and then compute the resulting P&L fitness components.
-
-		// Compute load volumes and prices
-		final Map<VoyagePlan, IAllocationAnnotation> allocations = cargoAllocator.allocate(scheduledSequences);
-		scheduledSequences.setAllocations(allocations);
-		// Finally evaluate whole-solution components, like P&L.
-
-		for (final ICargoAllocationFitnessComponent component : allocationComponents) {
-			final long l = component.evaluate(scheduledSequences, allocations);
-			if (l == Long.MAX_VALUE) {
-				return Long.MAX_VALUE;
-			}
-			total += l;
-		}
+		scheduleCalculator.calculateSchedule(sequences, scheduledSequences, null);
 
 		return total;
 	}
@@ -123,18 +68,9 @@ public class ScheduleEvaluator {
 		return fitnessComponents;
 	}
 
-	public void setCargoAllocator(final ICargoAllocator cargoAllocator) {
-		this.cargoAllocator = cargoAllocator;
-	}
-
-	public void setFitnessComponents(final Collection<ICargoSchedulerFitnessComponent> fitnessComponents, final Collection<ICargoAllocationFitnessComponent> allocationComponents) {
+	public void setFitnessComponents(final Collection<ICargoSchedulerFitnessComponent> fitnessComponents) {
 		this.fitnessComponents = fitnessComponents;
 		this.fitnesses = new long[fitnessComponents.size()];
-		this.allocationComponents = allocationComponents;
-	}
-
-	public void setLoadPriceCalculators(final Collection<ILoadPriceCalculator> loadPriceCalculators) {
-		this.loadPriceCalculators = loadPriceCalculators;
 	}
 
 	public void evaluateSchedule(final ScheduledSequences bestResult) {
@@ -258,74 +194,5 @@ public class ScheduleEvaluator {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Ask the components to annotate the given sequences.
-	 * 
-	 * @param components
-	 * @param sequence
-	 * @param annotatedSequence
-	 */
-	public static void annotateSchedulerComponents(VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences sequences,
-			final IAnnotatedSolution annotatedSolution) {
-
-		for (final ICargoSchedulerFitnessComponent component : components) {
-			component.startEvaluation();
-		}
-
-		for (final ScheduledSequence sequence : sequences) {
-			annotateSequence(vpItr, sequence, components, annotatedSolution);
-		}
-
-		for (final ICargoSchedulerFitnessComponent component : components) {
-			component.endEvaluationAndAnnotate(annotatedSolution);
-		}
-	}
-
-	/**
-	 * @param sequence
-	 * @param components
-	 * @param annotatedSolution
-	 */
-	private static void annotateSequence(VoyagePlanIterator vpItr, final ScheduledSequence sequence, final Iterable<ICargoSchedulerFitnessComponent> components,
-			final IAnnotatedSolution annotatedSolution) {
-		for (final ICargoSchedulerFitnessComponent component : components) {
-			component.startSequence(sequence.getResource(), true);
-		}
-
-		vpItr.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getArrivalTimes());
-
-		while (vpItr.hasNextObject()) {
-			if (vpItr.nextObjectIsStartOfPlan()) {
-				final Object obj = vpItr.nextObject();
-				final int time = vpItr.getCurrentTime();
-				final VoyagePlan plan = vpItr.getCurrentPlan();
-
-				for (final ICargoSchedulerFitnessComponent component : components) {
-					if (!component.nextVoyagePlan(plan, time)) {
-						return;
-					}
-					if (!component.annotateNextObject(obj, time, annotatedSolution)) {
-						return;
-					}
-				}
-			} else {
-				final Object obj = vpItr.nextObject();
-				final int time = vpItr.getCurrentTime();
-				for (final ICargoSchedulerFitnessComponent component : components) {
-					if (!component.annotateNextObject(obj, time, annotatedSolution)) {
-						return;
-					}
-				}
-			}
-
-		}
-
-		for (final ICargoSchedulerFitnessComponent component : components) {
-			if (!component.endSequence()) {
-				return;
-			}
-		}
 	}
 }

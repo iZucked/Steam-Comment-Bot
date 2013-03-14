@@ -16,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  * @author Simon Goodall
  * 
  */
-public final class VoyageDetails implements Cloneable {
+public final class VoyageDetails implements IProfitAndLossDetails, Cloneable {
 
 	private VoyageOptions options;
 
@@ -38,6 +38,8 @@ public final class VoyageDetails implements Cloneable {
 
 	private boolean charterOutIdleTime;
 
+	private long totalGroupProfitAndLoss;
+
 	public VoyageDetails() {
 		fuelConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
 		routeAdditionalConsumption = new LongFastEnumEnumMap<FuelComponent, FuelUnit>(FuelComponent.values().length, FuelUnit.values().length);
@@ -46,7 +48,7 @@ public final class VoyageDetails implements Cloneable {
 
 	public VoyageDetails(final int idleTime2, final int travelTime2, final int speed2, final int startTime2, final long routeCost2, final VoyageOptions options,
 			final LongFastEnumEnumMap<FuelComponent, FuelUnit> fuelConsumption2, final LongFastEnumEnumMap<FuelComponent, FuelUnit> routeAdditionalConsumption2,
-			final LongFastEnumMap<FuelComponent> fuelUnitPrices2) {
+			final LongFastEnumMap<FuelComponent> fuelUnitPrices2, final long totalGroupProfitAndLoss2) {
 		this.idleTime = idleTime2;
 		this.travelTime = travelTime2;
 		this.speed = speed2;
@@ -56,11 +58,12 @@ public final class VoyageDetails implements Cloneable {
 		this.fuelConsumption = fuelConsumption2;
 		this.fuelUnitPrices = fuelUnitPrices2;
 		this.routeAdditionalConsumption = routeAdditionalConsumption2;
+		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss2;
 	}
 
 	@Override
 	public VoyageDetails clone() {
-		return new VoyageDetails(idleTime, travelTime, speed, startTime, routeCost, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices);
+		return new VoyageDetails(idleTime, travelTime, speed, startTime, routeCost, new VoyageOptions(options), fuelConsumption, routeAdditionalConsumption, fuelUnitPrices, totalGroupProfitAndLoss);
 	}
 
 	public final long getFuelConsumption(final FuelComponent fuel, final FuelUnit fuelUnit) {
@@ -147,6 +150,7 @@ public final class VoyageDetails implements Cloneable {
 				&& Objects.equal(fuelConsumption,  d.fuelConsumption)
 				&& Objects.equal(routeAdditionalConsumption,  d.routeAdditionalConsumption)
 				&& Objects.equal(fuelUnitPrices,  d.fuelUnitPrices)
+				&& Objects.equal(totalGroupProfitAndLoss,  d.totalGroupProfitAndLoss)
 				;
 				// @formatter:on
 		}
@@ -166,7 +170,18 @@ public final class VoyageDetails implements Cloneable {
 				.add("speed", speed)
 				.add("startTime", startTime)
 				.add("routeCost", routeCost)
+				.add("totalGroupProfitAndLoss", totalGroupProfitAndLoss)
 				.toString();
 		// @formatter:on
+	}
+
+	@Override
+	public long getTotalGroupProfitAndLoss() {
+		return totalGroupProfitAndLoss;
+	}
+
+	@Override
+	public void setTotalGroupProfitAndLoss(long totalGroupProfitAndLoss) {
+		this.totalGroupProfitAndLoss = totalGroupProfitAndLoss;
 	}
 }

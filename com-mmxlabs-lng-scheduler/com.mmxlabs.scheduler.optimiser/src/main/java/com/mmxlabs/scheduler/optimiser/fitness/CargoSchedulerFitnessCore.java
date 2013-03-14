@@ -16,10 +16,7 @@ import javax.inject.Provider;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
-import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequence;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
@@ -33,12 +30,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.PortCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ProfitAndLossAllocationComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IPortSlotProvider;
-import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
@@ -52,9 +46,9 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	private final List<ICargoSchedulerFitnessComponent> schedulerComponents;
-	private final List<ICargoAllocationFitnessComponent> allocationComponents;
 	private final List<ICargoFitnessComponent> allComponents;
 	private ISequenceScheduler scheduler;
+
 	@Inject
 	private ICalculatorProvider calculatorProvider;
 	@Inject
@@ -65,11 +59,13 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Inject
 	private VoyagePlanIterator planIterator;
+	
+	@Inject
+	private ScheduleCalculator scheduleCalculator;
 
 	public CargoSchedulerFitnessCore() {
 		allComponents = new ArrayList<ICargoFitnessComponent>();
-		allocationComponents = new ArrayList<ICargoAllocationFitnessComponent>();
-		schedulerComponents = new ArrayList<ICargoSchedulerFitnessComponent>(5);
+		schedulerComponents = new ArrayList<ICargoSchedulerFitnessComponent>(8);
 		schedulerComponents.add(new LatenessComponent(CargoSchedulerFitnessCoreFactory.LATENESS_COMPONENT_NAME, SchedulerConstants.DCP_startEndRequirementProvider, this));
 
 		schedulerComponents.add(new CapacityComponent(CargoSchedulerFitnessCoreFactory.CAPACITY_COMPONENT_NAME, this));
@@ -98,10 +94,9 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		schedulerComponents.add(new PortCostFitnessComponent(CargoSchedulerFitnessCoreFactory.PORT_COST_COMPONENT_NAME, this, SchedulerConstants.DCP_portCostProvider,
 				SchedulerConstants.DCP_vesselProvider, SchedulerConstants.DCP_portSlotsProvider));
 
-		allocationComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, this));
+		schedulerComponents.add(new ProfitAndLossAllocationComponent(CargoSchedulerFitnessCoreFactory.PROFIT_COMPONENT_NAME, this));
 
 		allComponents.addAll(schedulerComponents);
-		allComponents.addAll(allocationComponents);
 	}
 
 	public CargoSchedulerFitnessCore(final Iterable<ICargoFitnessComponentProvider> externalComponentProviders) {
@@ -112,9 +107,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 				allComponents.add(component);
 				if (component instanceof ICargoSchedulerFitnessComponent) {
 					schedulerComponents.add((ICargoSchedulerFitnessComponent) component);
-				}
-				if (component instanceof ICargoAllocationFitnessComponent) {
-					allocationComponents.add((ICargoAllocationFitnessComponent) component);
 				}
 			}
 		}
@@ -162,10 +154,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 			lastAffectedResources.clear();
 			lastAffectedResources.addAll(affectedResources);
 		}
-		// final ScheduledSequences sequence = scheduler.schedule(sequences, false);
-
-		// return planIterator.iterateSchedulerComponents(components,
-		// scheduler.schedule(sequences, false));
 	}
 
 	@Override
@@ -176,10 +164,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	// @Inject
 	@Override
 	public void init(final IOptimisationData data) {
-		scheduler = schedulerFactory.createScheduler(data, schedulerComponents, allocationComponents);
-		//
-		// calculatorProvider = data.getDataComponentProvider(SchedulerConstants.DCP_calculatorProvider, ICalculatorProvider.class);
-
+		scheduler = schedulerFactory.createScheduler(data, schedulerComponents);
 		// Notify fitness components that a new optimisation is beginning
 		for (final ICargoFitnessComponent c : allComponents) {
 			c.init(data);
@@ -194,18 +179,12 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		}
 		allComponents.clear();
 		schedulerComponents.clear();
-		allocationComponents.clear();
 		scheduler.dispose();
 	}
 
 	public List<ICargoFitnessComponent> getCargoSchedulerFitnessComponent() {
 		return allComponents;
 	}
-
-	//
-	// public void setSchedulerFactory(final ISchedulerFactory schedulerFactory) {
-	// this.schedulerFactory = schedulerFactory;
-	// }
 
 	@Override
 	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
@@ -216,39 +195,14 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 			shippingCalculator.prepareEvaluation(sequences);
 		}
 
-		final IPortSlotProvider portSlotProvider = solution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
-		final IVesselProvider vesselProvider = solution.getContext().getOptimisationData().getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
-
 		// re-evaluate everything
 		final ScheduledSequences schedule = scheduler.schedule(sequences, forExport);
 
 		// Setting these annotations here is a bit untidy, but it will do for now.
 		solution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations, schedule.getAllocations());
 
-		final IAnnotations elementAnnotations = solution.getElementAnnotations();
-
-		// now add some more data for each load slot
-		for (final IAllocationAnnotation annotation : schedule.getAllocations().values()) {
-			final ISequenceElement loadElement = portSlotProvider.getElement(annotation.getLoadOption());
-			final ISequenceElement dischargeElement = portSlotProvider.getElement(annotation.getDischargeOption());
-			elementAnnotations.setAnnotation(loadElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
-			elementAnnotations.setAnnotation(dischargeElement, SchedulerConstants.AI_volumeAllocationInfo, annotation);
-		}
-
-		// Do basic voyageplan annotation
-		final VoyagePlanAnnotator annotator = voyagePlanAnnotatorProvider.get();
-
-		annotator.setPortSlotProvider(portSlotProvider);
-		annotator.setVesselProvider(vesselProvider);
-
-		for (final ScheduledSequence scheduledSequence : schedule) {
-			final IResource resource = scheduledSequence.getResource();
-			final ISequence sequence = sequences.getSequence(resource);
-
-			if (sequence.size() > 0) {
-				annotator.annotateFromScheduledSequence(scheduledSequence, solution);
-			}
-		}
+		// FIXME: This duplicates some of the earlier scheduler run.
+		scheduleCalculator.calculateSchedule(sequences, schedule, solution);
 
 		// set up per-route fitness map, which components can put their fitness
 		// in
@@ -259,13 +213,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 			}
 
 			solution.setGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, fitnessPerRoute);
-		}
-
-		// Allow components to do any extra annotations
-		ScheduleEvaluator.annotateSchedulerComponents(planIterator, schedulerComponents, schedule, solution);
-
-		for (final ICargoAllocationFitnessComponent component : allocationComponents) {
-			component.annotate(schedule, solution);
 		}
 	}
 }
