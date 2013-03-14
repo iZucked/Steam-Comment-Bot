@@ -46,8 +46,8 @@ public final class CapacityComponent extends AbstractPerRouteSchedulerFitnessCom
 	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof PortDetails) {
 			final PortDetails detail = (PortDetails) object;
-			for (CapacityViolationType cvt : CapacityViolationType.values()) {
-				long quantity = detail.getCapacityViolation(cvt);
+			for (final CapacityViolationType cvt : CapacityViolationType.values()) {
+				final long quantity = detail.getCapacityViolation(cvt);
 				if (quantity > 0) {
 					accumulator++;
 				}
