@@ -14,6 +14,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.command.AddCommand;
+import org.eclipse.emf.edit.command.CommandParameter;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.window.Window;
@@ -92,7 +93,7 @@ class SingleAddAction extends LockableAction {
 
 			final CompoundCommand add = new CompoundCommand();
 			for (final ISetting setting : settings) {
-				add.append(AddCommand.create(context.getCommandHandler().getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance()));
+				add.append(AddCommand.create(context.getCommandHandler().getEditingDomain(), setting.getContainer(), setting.getContainment(), setting.getInstance(), getInsertionIndex(setting)));
 			}
 			final CommandStack commandStack = context.getCommandHandler().getEditingDomain().getCommandStack();
 			commandStack.execute(add);
@@ -116,6 +117,16 @@ class SingleAddAction extends LockableAction {
 			}
 
 		}
+	}
+
+	/**
+	 * Overridable method to customise {@link AddCommand} insertion index location. Default is {@link CommandParameter#NO_INDEX}
+	 * 
+	 * @param setting
+	 * @return
+	 */
+	protected int getInsertionIndex(final ISetting setting) {
+		return CommandParameter.NO_INDEX;
 	}
 }
 
