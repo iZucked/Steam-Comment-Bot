@@ -26,6 +26,7 @@ import com.mmxlabs.models.lng.cargo.CargoFactory;
 import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.DischargeSlot;
 import com.mmxlabs.models.lng.cargo.LoadSlot;
+import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialFactory;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.FixedPriceParameters;
@@ -808,7 +809,11 @@ public class ScenarioTools {
 			} else if (e instanceof SlotVisit) {
 				final SlotVisit sv = (SlotVisit) e;
 				System.err.println("SlotVisit:");
-				System.err.println("\tDuration: " + sv.getDuration());
+				Slot slot = sv.getSlotAllocation().getSlot();
+				CargoAllocation ca = sv.getSlotAllocation().getCargoAllocation();
+				String description = (slot instanceof LoadSlot ? "load: " : "discharge: ");
+				int volume = (slot instanceof LoadSlot ? ca.getLoadVolume() : ca.getDischargeVolume());
+				System.err.println("\tDuration: " + sv.getDuration() + ", " + description + volume);
 			} else if (e instanceof SlotVisit) {
 				final SlotVisit pv = (SlotVisit) e;
 				System.err.println("SlotVisit:");
