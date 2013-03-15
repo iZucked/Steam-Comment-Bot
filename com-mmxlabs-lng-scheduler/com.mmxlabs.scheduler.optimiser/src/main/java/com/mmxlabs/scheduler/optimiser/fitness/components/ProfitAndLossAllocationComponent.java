@@ -34,7 +34,7 @@ public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessCo
 	}
 
 	@Override
-	public void startSequence(IResource resource, boolean sequenceHasChanged) {
+	public void startSequence(IResource resource) {
 
 	}
 

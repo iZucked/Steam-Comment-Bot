@@ -147,7 +147,7 @@ public class LatenessComponentTest {
 
 
 		c.startEvaluation();
-		c.startSequence(resource, true);
+		c.startSequence(resource);
 		c.nextVoyagePlan(voyagePlan, voyageStartTime);
 		c.nextObject(startDetails, 0);
 		c.nextObject(loadDetails, loadEndTime + loadLateTime);

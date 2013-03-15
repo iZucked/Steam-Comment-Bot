@@ -5,11 +5,9 @@
 package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 
 import java.util.Collection;
-import java.util.HashSet;
 
 import javax.inject.Inject;
 
-import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
@@ -42,15 +40,15 @@ public class ScheduleEvaluator {
 	public long evaluateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final int[] changedSequences) {
 		// First, we evaluate all the scheduler components. These are fitness components dependent only on
 		// values from the ScheduledSequences.
-
-		final HashSet<IResource> affectedResources = new HashSet<IResource>();
-		for (final int index : changedSequences) {
-			affectedResources.add(scheduledSequences.get(index).getResource());
-		}
+		//
+		// final HashSet<IResource> affectedResources = new HashSet<IResource>();
+		// for (final int index : changedSequences) {
+		// affectedResources.add(scheduledSequences.get(index).getResource());
+		// }
 
 		scheduleCalculator.calculateSchedule(sequences, scheduledSequences, null);
 
-		if (!iterateSchedulerComponents(vpIterator, fitnessComponents, scheduledSequences, affectedResources, fitnesses)) {
+		if (!iterateSchedulerComponents(vpIterator, fitnessComponents, scheduledSequences, fitnesses)) {
 			return Long.MAX_VALUE;
 		}
 
@@ -75,11 +73,7 @@ public class ScheduleEvaluator {
 	}
 
 	public void evaluateSchedule(final ScheduledSequences bestResult) {
-		final HashSet<IResource> allResources = new HashSet<IResource>();
-		for (final ScheduledSequence schedule : bestResult) {
-			allResources.add(schedule.getResource());
-		}
-		iterateSchedulerComponents(vpIterator, fitnessComponents, bestResult, allResources);
+		iterateSchedulerComponents(vpIterator, fitnessComponents, bestResult);
 	}
 
 	/**
@@ -88,8 +82,7 @@ public class ScheduleEvaluator {
 	 * @param components
 	 * @param sequences
 	 */
-	public static boolean iterateSchedulerComponents(VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences sequences,
-			final Collection<IResource> affectedResources) {
+	public static boolean iterateSchedulerComponents(VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences sequences) {
 
 		if (sequences == null) {
 			return false;
@@ -100,8 +93,7 @@ public class ScheduleEvaluator {
 		}
 
 		for (final ScheduledSequence sequence : sequences) {
-			// TODO work out why this makes for problems.
-			if (!iterateSchedulerComponents(vpItr, components, sequence, affectedResources.contains(sequence.getResource()))) {
+			if (!iterateSchedulerComponents(vpItr, components, sequence)) {
 				return false;
 			}
 		}
@@ -122,14 +114,13 @@ public class ScheduleEvaluator {
 	 *            output parameter containing fitnesses, in the order the iterator provides the components
 	 * @return
 	 */
-	public static boolean iterateSchedulerComponents(VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences sequences,
-			final Collection<IResource> affectedResources, final long[] fitnesses) {
+	public static boolean iterateSchedulerComponents(VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequences sequences, final long[] fitnesses) {
 		for (final ICargoSchedulerFitnessComponent component : components) {
 			component.startEvaluation();
 		}
 
 		for (final ScheduledSequence sequence : sequences) {
-			if (!iterateSchedulerComponents(vpItr, components, sequence, affectedResources.contains(sequence.getResource()))) {
+			if (!iterateSchedulerComponents(vpItr, components, sequence)) {
 				return false;
 			}
 		}
@@ -149,15 +140,10 @@ public class ScheduleEvaluator {
 	 * @param sequence
 	 * @return
 	 */
-	public static boolean iterateSchedulerComponents(VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequence sequence,
-			final boolean sequenceHasChanged) {
+	public static boolean iterateSchedulerComponents(VoyagePlanIterator vpItr, final Iterable<ICargoSchedulerFitnessComponent> components, final ScheduledSequence sequence) {
 
 		for (final ICargoSchedulerFitnessComponent component : components) {
-			/*
-			 * Although the "true" here looks bad (always evaluate every sequence), we need to keep track somehow of which sequences have changed in the layer above. The random sequence scheduler may
-			 * well change every sequence's schedule even if only one or two sequences' elements have been shifted by a move.
-			 */
-			component.startSequence(sequence.getResource(), sequenceHasChanged);
+			component.startSequence(sequence.getResource());
 		}
 
 		vpItr.setVoyagePlans(sequence.getResource(), sequence.getVoyagePlans(), sequence.getArrivalTimes());

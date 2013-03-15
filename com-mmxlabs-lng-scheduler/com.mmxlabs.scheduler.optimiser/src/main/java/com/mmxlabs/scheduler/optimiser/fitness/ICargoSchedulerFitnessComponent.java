@@ -29,10 +29,8 @@ public interface ICargoSchedulerFitnessComponent extends ICargoFitnessComponent 
 	 * 
 	 * @param resource
 	 *            the resource for the next sequence
-	 * @param sequenceHasChanged
-	 *            whether the sequence for this resource has changed at all since the last accepted evaluation
 	 */
-	void startSequence(IResource resource, boolean sequenceHasChanged);
+	void startSequence(IResource resource);
 
 	/**
 	 * Consider the next voyageplan - note that the contents of the given plan will be presented to nextObject after this

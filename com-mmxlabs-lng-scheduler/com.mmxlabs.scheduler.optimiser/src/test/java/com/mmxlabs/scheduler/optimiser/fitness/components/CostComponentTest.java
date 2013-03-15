@@ -110,7 +110,7 @@ public class CostComponentTest {
 		final IResource resource = context.mock(IResource.class);
 
 		c.startEvaluation();
-		c.startSequence(resource, true);
+		c.startSequence(resource);
 		// note, no voyage plan needs to be passed to the CostComponent for this test
 		c.nextVoyagePlan(voyagePlan, 0);
 		c.nextObject(voyage, 5);

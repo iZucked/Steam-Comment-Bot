@@ -27,19 +27,14 @@ public abstract class AbstractPerRouteSchedulerFitnessComponent extends Abstract
 	public AbstractPerRouteSchedulerFitnessComponent(final String name, final IFitnessCore core) {
 		super(name, core);
 	}
-	
+
 	@Override
-	public void startSequence(final IResource resource, final boolean sequenceHasChanged) {
-		if (sequenceHasChanged) {
-			if (reallyStartSequence(resource)) {
-				currentResource = resource;
-			} else {
-				currentResource = null;
-				evaluatedFitnesses.put(resource, 0l);
-			}
+	public void startSequence(final IResource resource) {
+		if (reallyStartSequence(resource)) {
+			currentResource = resource;
 		} else {
 			currentResource = null;
-			accumulator += acceptedFitnesses.get(resource);
+			evaluatedFitnesses.put(resource, 0l);
 		}
 	}
 
