@@ -20,6 +20,7 @@ import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
 import com.mmxlabs.scheduler.optimiser.contracts.ILoadPriceCalculator;
+import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -58,12 +59,6 @@ public class ScheduleCalculator {
 	private IBreakEvenEvaluator breakEvenEvaluator;
 
 	@Inject
-	private VoyagePlanIterator vpIterator;
-
-	@Inject(optional = true)
-	private IEntityProvider entityProvider;
-
-	@Inject
 	private IVesselProvider vesselProvider;
 
 	@Inject
@@ -84,9 +79,9 @@ public class ScheduleCalculator {
 
 	public void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
 
-		// for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-		// shippingCalculator.prepareEvaluation(sequences);
-		// }
+		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
+			shippingCalculator.prepareEvaluation(sequences);
+		}
 		// Prime the load price calculators with the scheduled result
 		for (final ILoadPriceCalculator calculator : calculatorProvider.getLoadPriceCalculators()) {
 			calculator.prepareEvaluation(sequences);

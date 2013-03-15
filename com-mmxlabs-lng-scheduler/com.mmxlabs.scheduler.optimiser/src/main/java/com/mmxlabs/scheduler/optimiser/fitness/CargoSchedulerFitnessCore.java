@@ -20,7 +20,6 @@ import com.mmxlabs.optimiser.core.fitness.IFitnessComponent;
 import com.mmxlabs.optimiser.core.fitness.IFitnessCore;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.contracts.ISalesPriceCalculator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CapacityComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CharterCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.CostComponent;
@@ -28,8 +27,6 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.PortCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ProfitAndLossAllocationComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
-import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 
 /**
@@ -43,15 +40,14 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	private final List<ICargoSchedulerFitnessComponent> schedulerComponents;
 	private final List<ICargoFitnessComponent> allComponents;
-	private ISequenceScheduler scheduler;
 
-	@Inject
-	private ICalculatorProvider calculatorProvider;
 	@Inject
 	private ISchedulerFactory schedulerFactory;
 
-	@Inject
-	private ScheduleCalculator scheduleCalculator;
+	/**
+	 * {@link ISequenceScheduler} instance created from the {@link ISchedulerFactory}
+	 */
+	private ISequenceScheduler scheduler;
 
 	public CargoSchedulerFitnessCore() {
 		allComponents = new ArrayList<ICargoFitnessComponent>();
@@ -114,9 +110,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public boolean evaluate(final ISequences sequences) {
-		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-			shippingCalculator.prepareEvaluation(sequences);
-		}
 
 		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
 
@@ -125,9 +118,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
-		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-			shippingCalculator.prepareEvaluation(sequences);
-		}
 
 		// we do this stuff with lastAffectedResources because each evaluation we will definitely need to reschedule:
 		// (a) resources that are changed by this move and (b) resources which were changed by last move which got rejected and so need recomputing again
@@ -168,21 +158,8 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Override
 	public void annotate(final ISequences sequences, final IAnnotatedSolution solution, final boolean forExport) {
-		lastAffectedResources.clear();
-		lastAffectedResources.addAll(sequences.getResources());
-
-		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
-			shippingCalculator.prepareEvaluation(sequences);
-		}
-
-		// re-evaluate everything
-		final ScheduledSequences schedule = scheduler.schedule(sequences, solution);
-
-		// Setting these annotations here is a bit untidy, but it will do for now.
-		solution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations, schedule.getAllocations());
-
-		// FIXME: This duplicates some of the earlier scheduler run.
-		scheduleCalculator.calculateSchedule(sequences, schedule, solution);
+		// re-evaluate everything and populate the IAnnotatedSolution
+		scheduler.schedule(sequences, solution);
 
 		// set up per-route fitness map, which components can put their fitness
 		// in
