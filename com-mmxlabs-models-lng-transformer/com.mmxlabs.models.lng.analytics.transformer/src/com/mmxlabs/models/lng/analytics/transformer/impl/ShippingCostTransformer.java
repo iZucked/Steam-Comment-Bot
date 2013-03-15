@@ -361,12 +361,12 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 
 			final AbstractSequenceScheduler scheduler = new AbstractSequenceScheduler() {
 				@Override
-				public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
+				public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
 					return null;
 				}
 
 				@Override
-				public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+				public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 					return null;
 				}
 

@@ -51,6 +51,7 @@ import com.mmxlabs.models.lng.types.PortCapability;
 import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -227,8 +228,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				final Vessel modelVessel = vessel;
 
 				final VesselClass eVc = modelVessel.getVesselClass();
-				
-				final IVesselClass vesselClass = TransformerHelper.buildIVesselClass(builder, eVc,spec.getBaseFuelPrice());				
+
+				final IVesselClass vesselClass = TransformerHelper.buildIVesselClass(builder, eVc, spec.getBaseFuelPrice());
 
 				for (final Route route : spec.getAllowedRoutes().isEmpty() ? portModel.getRoutes() : spec.getAllowedRoutes()) {
 					VesselClassRouteParameters parametersForRoute = null;
@@ -303,14 +304,13 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 							final int timeAtDischarge = loadPort.getLoadDuration() + minTimeLD + ladenAllowance;
 							final ITimeWindow dischargeWindow = builder.createTimeWindow(timeAtDischarge, timeAtDischarge);
-							
+
 							final long minCv = 0;
 							final long maxCv = Long.MAX_VALUE;
-							
-							
+
 							final IDischargeSlot dischargeSlot = builder.createDischargeSlot("discharge-" + id, ports.lookup(dischargePort), dischargeWindow,
-									OptimiserUnitConvertor.convertToInternalVolume(spec.getMinimumDischarge()), OptimiserUnitConvertor.convertToInternalVolume(spec.getMaximumDischarge()),
-									minCv, maxCv, dischargeCalculator, dischargePort.getDischargeDuration(), false);
+									OptimiserUnitConvertor.convertToInternalVolume(spec.getMinimumDischarge()), OptimiserUnitConvertor.convertToInternalVolume(spec.getMaximumDischarge()), minCv,
+									maxCv, dischargeCalculator, dischargePort.getDischargeDuration(), false);
 
 							final ICargo cargo = builder.createCargo(id, loadSlot, dischargeSlot, false);
 							cargoes.add(cargo);
@@ -384,12 +384,12 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 
 				final AbstractSequenceScheduler scheduler = new AbstractSequenceScheduler() {
 					@Override
-					public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
+					public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
 						return null;
 					}
 
 					@Override
-					public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+					public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 						return null;
 					}
 

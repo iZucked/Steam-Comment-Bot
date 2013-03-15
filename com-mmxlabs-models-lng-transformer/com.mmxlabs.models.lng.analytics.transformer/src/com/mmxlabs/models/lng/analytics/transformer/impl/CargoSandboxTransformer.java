@@ -76,6 +76,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -476,12 +477,12 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		final AbstractSequenceScheduler scheduler = new AbstractSequenceScheduler() {
 
 			@Override
-			public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
+			public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
 				return null;
 			}
 
 			@Override
-			public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+			public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 				return null;
 			}
 
