@@ -35,8 +35,6 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		return schedule(sequences, sequences.getResources(), solution);
 	}
 
-	// private final HashSet<IResource> lastAffectedResources = new HashSet<IResource>();
-
 	@Override
 	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 		random = new Random(seed);
@@ -48,15 +46,6 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 
 		prepare(resourceIndices);
 
-		// if (forExport) {
-		// final int sampleCount = EXPORT_INTENSITY * samplingUpperBound;
-		// for (int i = 0; i < sampleCount; i++) {
-		// for (int seq = 0; seq < arrivalTimes.length; seq++) {
-		// randomise(seq);
-		// }
-		// evaluate(resourceIndices);
-		// }
-		// } else {
 		final int sampleCount = samplingUpperBound;
 		for (int i = 0; i < sampleCount; i++) {
 			for (final int index : resourceIndices) {
@@ -65,7 +54,6 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 			}
 			evaluate(resourceIndices);
 		}
-		// }
 
 		return reEvaluateAndGetBestResult(solution);
 	}
