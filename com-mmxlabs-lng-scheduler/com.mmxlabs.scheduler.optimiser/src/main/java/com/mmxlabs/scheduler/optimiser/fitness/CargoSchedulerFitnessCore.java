@@ -7,7 +7,6 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -107,7 +106,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	public void accepted(final ISequences sequences, final Collection<IResource> affectedResources) {
 		// we can clear the affected resources from last move, because
 		// the scheduler doesn't need to reset its calculations for those resources
-		lastAffectedResources.clear();
 		for (final ICargoSchedulerFitnessComponent component : schedulerComponents) {
 			component.acceptLastEvaluation();
 		}
@@ -125,8 +123,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		return scheduledSequences != null;
 	}
 
-	final LinkedHashSet<IResource> lastAffectedResources = new LinkedHashSet<IResource>();
-
 	@Override
 	public boolean evaluate(final ISequences sequences, final Collection<IResource> affectedResources) {
 		for (final ISalesPriceCalculator shippingCalculator : calculatorProvider.getSalesPriceCalculators()) {
@@ -136,15 +132,9 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		// we do this stuff with lastAffectedResources because each evaluation we will definitely need to reschedule:
 		// (a) resources that are changed by this move and (b) resources which were changed by last move which got rejected and so need recomputing again
 
-		lastAffectedResources.addAll(affectedResources);
-		try {
-			final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
+		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
 
-			return scheduledSequences != null;
-		} finally {
-			lastAffectedResources.clear();
-			lastAffectedResources.addAll(affectedResources);
-		}
+		return scheduledSequences != null;
 	}
 
 	@Override
@@ -152,7 +142,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		return new ArrayList<IFitnessComponent>(allComponents);
 	}
 
-	// @Inject
 	@Override
 	public void init(final IOptimisationData data) {
 		scheduler = schedulerFactory.createScheduler(data, schedulerComponents);
