@@ -8,6 +8,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IProfitAndLossDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * Basic group P&L fitness component
@@ -15,7 +16,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.impl.IProfitAndLossDetails;
  * @author Simon Goodall
  * 
  */
-public class ProfitAndLossAllocationComponent extends AbstractPerRouteSchedulerFitnessComponent {
+public class ProfitAndLossAllocationComponent extends AbstractSchedulerFitnessComponent {
 
 	private long accumulator = 0;
 
@@ -26,24 +27,24 @@ public class ProfitAndLossAllocationComponent extends AbstractPerRouteSchedulerF
 		super(name, core);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
-	 */
 	@Override
-	protected boolean reallyStartSequence(final IResource resource) {
+	public void startEvaluation() {
 		accumulator = 0;
+
+	}
+
+	@Override
+	public void startSequence(IResource resource, boolean sequenceHasChanged) {
+
+	}
+
+	@Override
+	public boolean nextVoyagePlan(VoyagePlan voyagePlan, int time) {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyEvaluateObject(java.lang.Object, int)
-	 */
 	@Override
-	protected boolean reallyEvaluateObject(final Object object, final int time) {
+	public boolean nextObject(Object object, int time) {
 		if (object instanceof IProfitAndLossDetails) {
 			final IProfitAndLossDetails details = (IProfitAndLossDetails) object;
 			// Minimising optimiser, so negate P&L
@@ -52,13 +53,18 @@ public class ProfitAndLossAllocationComponent extends AbstractPerRouteSchedulerF
 		return true;
 	}
 
+	@Override
+	public boolean endSequence() {
+		return true;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#endSequenceAndGetCost()
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent #endEvaluationAndGetCost()
 	 */
 	@Override
-	protected long endSequenceAndGetCost() {
-		return accumulator / Calculator.ScaleFactor;
+	public long endEvaluationAndGetCost() {
+		return setLastEvaluatedFitness(accumulator / Calculator.ScaleFactor);
 	}
 }
