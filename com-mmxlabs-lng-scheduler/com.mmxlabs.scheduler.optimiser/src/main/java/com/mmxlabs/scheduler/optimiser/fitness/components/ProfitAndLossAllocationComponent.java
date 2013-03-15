@@ -10,16 +10,13 @@ import com.mmxlabs.scheduler.optimiser.fitness.CargoSchedulerFitnessCore;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.IProfitAndLossDetails;
 
 /**
- * Basic group P&L calculator.
+ * Basic group P&L fitness component
  * 
- * TODO: should this be divided differently?
- * 
- * Maybe in the new design we want different P&L bits in different places, specifically charter out revenue.
- * 
- * @author hinton
+ * @author Simon Goodall
  * 
  */
 public class ProfitAndLossAllocationComponent extends AbstractPerRouteSchedulerFitnessComponent {
+
 	private long accumulator = 0;
 
 	/**
@@ -30,9 +27,9 @@ public class ProfitAndLossAllocationComponent extends AbstractPerRouteSchedulerF
 	}
 
 	@Override
-	protected boolean reallyEvaluateObject(Object object, int time) {
+	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof IProfitAndLossDetails) {
-			IProfitAndLossDetails details = (IProfitAndLossDetails) object;
+			final IProfitAndLossDetails details = (IProfitAndLossDetails) object;
 			// Minimising optimiser, so negate P&L
 			accumulator -= details.getTotalGroupProfitAndLoss();
 		}
