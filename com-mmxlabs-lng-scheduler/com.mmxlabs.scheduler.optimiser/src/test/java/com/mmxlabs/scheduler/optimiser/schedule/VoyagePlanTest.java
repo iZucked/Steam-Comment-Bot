@@ -2,12 +2,13 @@
  * Copyright (C) Minimax Labs Ltd., 2010 - 2013
  * All rights reserved.
  */
-package com.mmxlabs.scheduler.optimiser.voyage.impl;
+package com.mmxlabs.scheduler.optimiser.schedule;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 public class VoyagePlanTest {
 
