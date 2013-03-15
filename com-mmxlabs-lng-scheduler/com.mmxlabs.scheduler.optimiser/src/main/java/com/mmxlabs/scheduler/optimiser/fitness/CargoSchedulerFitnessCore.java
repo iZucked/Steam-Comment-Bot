@@ -59,7 +59,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 	@Inject
 	private VoyagePlanIterator planIterator;
-	
+
 	@Inject
 	private ScheduleCalculator scheduleCalculator;
 
