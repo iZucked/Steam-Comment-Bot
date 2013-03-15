@@ -410,8 +410,8 @@ public class AnalyticsTransformer implements IAnalyticsTransformer {
 				final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
 				aca.setVesselProvider(vesselProvider);
 
-				final Collection<IAllocationAnnotation> allocations = aca.allocate(result);
-				final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
+				final Map<VoyagePlan, IAllocationAnnotation> allocations = aca.allocate(result);
+				final Iterator<IAllocationAnnotation> allocationIterator = allocations.values().iterator();
 
 				/*
 				 * Unpack the annotated solution and create output lines

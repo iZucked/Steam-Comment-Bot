@@ -518,8 +518,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
 		aca.setVesselProvider(vesselProvider);
 
-		final Collection<IAllocationAnnotation> allocations = aca.allocate(result);
-		final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
+		final Map<VoyagePlan, IAllocationAnnotation> allocations = aca.allocate(result);
+		final Iterator<IAllocationAnnotation> allocationIterator = allocations.values().iterator();
 
 		/*
 		 * Unpack the annotated solution and create output lines
@@ -637,8 +637,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				summary.addExtraData("routecost", "Route Cost", totalRouteCost, ExtraDataFormatType.CURRENCY);
 				summary.addExtraData("portcost", "Port Cost", totalPortCost, ExtraDataFormatType.CURRENCY);
 				summary.addExtraData("profit", "Profit", line.getProfit(), ExtraDataFormatType.CURRENCY);
-				summary.addExtraData("ssalesprice", "Sales Price", allocation.getDischargeM3Price() / cv / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
-				summary.addExtraData("purchaseprice", "Purchase Price", allocation.getLoadM3Price() / cv / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
+				summary.addExtraData("ssalesprice", "Sales Price", allocation.getDischargePricePerM3() / cv / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
+				summary.addExtraData("purchaseprice", "Purchase Price", allocation.getLoadPricePerM3() / cv / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
 				// summary.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * totalDuration) / 24, ExtraDataFormatType.CURRENCY);
 
 				final ExtraData dischargeData = summary.addExtraData("discharged", "MMBTU Discharged", (int) (line.getVolumeDischarged() * cv), ExtraDataFormatType.INTEGER);

@@ -104,6 +104,7 @@ import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
+import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @since 2.0
@@ -393,8 +394,8 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
 			aca.setVesselProvider(vesselProvider);
 
-			final Collection<IAllocationAnnotation> allocations = aca.allocate(result);
-			final Iterator<IAllocationAnnotation> allocationIterator = allocations.iterator();
+			final Map<VoyagePlan,IAllocationAnnotation> allocations = aca.allocate(result);
+			final Iterator<IAllocationAnnotation> allocationIterator = allocations.values().iterator();
 
 			/*
 			 * Unpack the annotated solution and create output lines //

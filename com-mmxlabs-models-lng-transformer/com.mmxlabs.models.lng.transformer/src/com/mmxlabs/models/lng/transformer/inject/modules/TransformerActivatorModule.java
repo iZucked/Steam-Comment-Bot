@@ -11,7 +11,6 @@ import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.Restrict
 import com.mmxlabs.models.lng.transformer.extensions.restrictedelements.RestrictedElementsTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.simplecontracts.SimpleContractTransformerFactory;
 import com.mmxlabs.models.lng.transformer.extensions.tradingexporter.TradingExporterExtensionFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.components.pnl.ProfitAndLossAllocationComponentProvider;
 
 /**
  * Module to register Transformer extension factories as a service
@@ -29,8 +28,6 @@ public class TransformerActivatorModule extends PeaberryActivationModule {
 		bindService(SimpleContractTransformerFactory.class).export();
 		bindService(RestrictedElementsTransformerFactory.class).export();
 		
-		bindService(ProfitAndLossAllocationComponentProvider.class).export();
-
 		bindService(EntityTransformerExtensionFactory.class).export();
 		bindService(TradingExporterExtensionFactory.class).export();
 	}

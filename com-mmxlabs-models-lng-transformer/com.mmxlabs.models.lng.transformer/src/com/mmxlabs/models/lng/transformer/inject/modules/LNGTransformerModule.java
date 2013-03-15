@@ -40,7 +40,6 @@ import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
 import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
 import com.mmxlabs.optimiser.lso.modules.MoveGeneratorModule;
 import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoAllocationFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
 import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
@@ -121,14 +120,12 @@ public class LNGTransformerModule extends AbstractModule {
 		final ISchedulerFactory factory = new ISchedulerFactory() {
 
 			@Override
-			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents,
-					final Collection<ICargoAllocationFitnessComponent> allocationComponents) {
+			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
 
 				final ScheduleEvaluator scheduleEvaluator = new ScheduleEvaluator();
 				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
-				scheduleEvaluator.setFitnessComponents(schedulerComponents, allocationComponents);
+				scheduleEvaluator.setFitnessComponents(schedulerComponents);
 				injector.injectMembers(scheduleEvaluator);
-				scheduleEvaluator.init();
 
 				final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
 				scheduler.setScheduleEvaluator(scheduleEvaluator);
