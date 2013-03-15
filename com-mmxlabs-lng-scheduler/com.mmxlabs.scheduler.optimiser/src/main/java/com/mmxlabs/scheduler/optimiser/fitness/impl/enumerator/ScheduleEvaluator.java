@@ -47,6 +47,9 @@ public class ScheduleEvaluator {
 		for (final int index : changedSequences) {
 			affectedResources.add(scheduledSequences.get(index).getResource());
 		}
+
+		scheduleCalculator.calculateSchedule(sequences, scheduledSequences, null);
+
 		if (!iterateSchedulerComponents(vpIterator, fitnessComponents, scheduledSequences, affectedResources, fitnesses)) {
 			return Long.MAX_VALUE;
 		}
@@ -58,8 +61,6 @@ public class ScheduleEvaluator {
 			}
 			total += l;
 		}
-
-		scheduleCalculator.calculateSchedule(sequences, scheduledSequences, null);
 
 		return total;
 	}
