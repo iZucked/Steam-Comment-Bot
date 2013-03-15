@@ -31,7 +31,6 @@ import com.mmxlabs.scheduler.optimiser.voyage.FuelUnit;
  */
 public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	protected IAnnotatedSolution annotatedSolution;
-	protected MMXRootObject inputScenario;
 	protected Schedule output;
 	protected ModelEntityMap entities;
 	protected final ScheduleFactory scheduleFactory = SchedulePackage.eINSTANCE.getScheduleFactory();
@@ -69,11 +68,6 @@ public abstract class BaseAnnotationExporter implements IAnnotationExporter {
 	@Override
 	public void setOutput(final Schedule output) {
 		this.output = output;
-	}
-
-	@Override
-	public void setScenario(final MMXRootObject inputScenario) {
-		this.inputScenario = inputScenario;
 	}
 
 	@Override

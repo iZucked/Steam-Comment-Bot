@@ -64,7 +64,7 @@ public class TradingExporterExtension implements IExporterExtension {
 	private Schedule outputSchedule;
 
 	@Override
-	public void startExporting(final MMXRootObject inputScenario, final Schedule outputSchedule, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
+	public void startExporting(final Schedule outputSchedule, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
 		this.entities = entities;
 		this.annotatedSolution = annotatedSolution;
 		this.outputSchedule = outputSchedule;

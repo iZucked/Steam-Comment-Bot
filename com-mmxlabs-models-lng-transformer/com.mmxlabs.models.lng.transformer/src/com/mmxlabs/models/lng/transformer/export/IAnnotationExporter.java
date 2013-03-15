@@ -32,11 +32,6 @@ public interface IAnnotationExporter {
 	void setOutput(Schedule output);
 
 	/**
-	 * @param inputScenario
-	 */
-	void setScenario(MMXRootObject inputScenario);
-
-	/**
 	 * @param entities
 	 */
 	void setModelEntityMap(ModelEntityMap entities);

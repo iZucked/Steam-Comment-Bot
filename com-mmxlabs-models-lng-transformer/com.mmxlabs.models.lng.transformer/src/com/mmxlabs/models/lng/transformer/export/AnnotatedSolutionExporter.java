@@ -103,13 +103,12 @@ public class AnnotatedSolutionExporter {
 		// go through the annotated solution and build stuff for the EMF;
 
 		for (final IExporterExtension extension : extensions) {
-			extension.startExporting(inputScenario, output, entities, annotatedSolution);
+			extension.startExporting(output, entities, annotatedSolution);
 		}
 
 		// prepare exporters
 		for (final IAnnotationExporter exporter : exporters) {
 			exporter.setOutput(output);
-			exporter.setScenario(inputScenario);
 			exporter.setModelEntityMap(entities);
 			exporter.setAnnotatedSolution(annotatedSolution);
 
