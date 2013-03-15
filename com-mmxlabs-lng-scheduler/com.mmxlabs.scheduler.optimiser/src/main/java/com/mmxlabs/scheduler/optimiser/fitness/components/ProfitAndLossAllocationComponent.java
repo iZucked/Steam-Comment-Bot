@@ -26,6 +26,22 @@ public class ProfitAndLossAllocationComponent extends AbstractPerRouteSchedulerF
 		super(name, core);
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyStartSequence(com.mmxlabs.optimiser.core.IResource)
+	 */
+	@Override
+	protected boolean reallyStartSequence(final IResource resource) {
+		accumulator = 0;
+		return true;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.mmxlabs.scheduler.optimiser.fitness.components.AbstractPerRouteSchedulerFitnessComponent#reallyEvaluateObject(java.lang.Object, int)
+	 */
 	@Override
 	protected boolean reallyEvaluateObject(final Object object, final int time) {
 		if (object instanceof IProfitAndLossDetails) {
@@ -33,12 +49,6 @@ public class ProfitAndLossAllocationComponent extends AbstractPerRouteSchedulerF
 			// Minimising optimiser, so negate P&L
 			accumulator -= details.getTotalGroupProfitAndLoss();
 		}
-		return true;
-	}
-
-	@Override
-	protected boolean reallyStartSequence(final IResource resource) {
-		accumulator = 0;
 		return true;
 	}
 
