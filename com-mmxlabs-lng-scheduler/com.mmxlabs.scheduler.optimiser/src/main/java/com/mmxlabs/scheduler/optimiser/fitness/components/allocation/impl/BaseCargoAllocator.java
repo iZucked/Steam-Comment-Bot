@@ -523,7 +523,7 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 					@Override
 					public boolean hasNext() {
-						return loadIterator.hasNext() && dischargeIterator.hasNext() && priceIterator.hasNext();
+						return loadIterator.hasNext() && dischargeIterator.hasNext() && priceIterator.hasNext() && voyagePlansIterator.hasNext();
 					}
 
 					@Override
