@@ -224,12 +224,10 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	}
 
 	protected final ScheduledSequences reEvaluateAndGetBestResult(final IAnnotatedSolution solution) {
-		if (!lastEvaluationWasBestResult) {
-			if (bestResult == null) {
-				return null;
-			}
-			evaluator.evaluateSchedule(sequences, bestResult, solution);
+		if (bestResult == null) {
+			return null;
 		}
+		evaluator.evaluateSchedule(sequences, bestResult, solution);
 		return bestResult;
 	}
 
