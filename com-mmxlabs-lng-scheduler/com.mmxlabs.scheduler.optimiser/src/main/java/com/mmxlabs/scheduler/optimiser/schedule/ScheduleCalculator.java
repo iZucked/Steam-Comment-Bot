@@ -15,6 +15,7 @@ import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
+import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
 import com.mmxlabs.scheduler.optimiser.components.IVessel;
 import com.mmxlabs.scheduler.optimiser.components.VesselInstanceType;
@@ -73,6 +74,13 @@ public class ScheduleCalculator {
 
 	@Inject
 	private Provider<VoyagePlanAnnotator> voyagePlanAnnotatorProvider;
+
+	public IAnnotatedSolution calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences) {
+		final AnnotatedSolution annotatedSolution = new AnnotatedSolution();
+		annotatedSolution.setSequences(sequences);
+		calculateSchedule(sequences, scheduledSequences, annotatedSolution);
+		return annotatedSolution;
+	}
 
 	public void calculateSchedule(final ISequences sequences, final ScheduledSequences scheduledSequences, final IAnnotatedSolution annotatedSolution) {
 
@@ -158,7 +166,7 @@ public class ScheduleCalculator {
 					PortDetails firstDetails = (PortDetails) plan.getSequence()[0];
 					PortDetails lastDetails = (PortDetails) plan.getSequence()[2];
 
-					IAllocationAnnotation currentAllocation = allocations.get(plan);
+					final IAllocationAnnotation currentAllocation = allocations.get(plan);
 
 					if ((currentAllocation != null)
 							&& ((firstDetails.getOptions().getPortSlot() == currentAllocation.getLoadOption()) && (lastDetails.getOptions().getPortSlot() == currentAllocation.getDischargeOption()))) {

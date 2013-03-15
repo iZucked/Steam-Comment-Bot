@@ -7,6 +7,7 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 
@@ -28,7 +29,7 @@ public class RelaxingSequenceScheduler extends EnumeratingSequenceScheduler {
 	final int steps = 20;
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
+	public ScheduledSequences schedule(final ISequences sequences,  final IAnnotatedSolution solution) {
 		setSequences(sequences);
 		resetBest();
 		prepare2();
@@ -40,7 +41,7 @@ public class RelaxingSequenceScheduler extends EnumeratingSequenceScheduler {
 			}
 		}
 		log.debug("relaxed; " + count + " evaluations");
-		return reEvaluateAndGetBestResult();
+		return reEvaluateAndGetBestResult(solution);
 	}
 
 	private void relax(final int seq, final int pos) {

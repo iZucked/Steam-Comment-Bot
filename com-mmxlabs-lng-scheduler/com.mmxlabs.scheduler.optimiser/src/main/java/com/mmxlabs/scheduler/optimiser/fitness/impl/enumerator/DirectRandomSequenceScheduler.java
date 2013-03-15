@@ -7,10 +7,8 @@ package com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator;
 import java.util.Collection;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.mmxlabs.common.RandomHelper;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
@@ -25,32 +23,28 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler {
 	private final int seed = 0;
 	private Random random;
-	private static final Logger log = LoggerFactory.getLogger(DirectRandomSequenceScheduler.class);
 	/**
 	 * Do this many times the usual number of samples for an exported solution. Slightly improves the quality of the exported schedule.
-	 */
-	private static final int EXPORT_INTENSITY = 1000;
-
-	/**
-	 * Never do more than this many samples
+	 * 
+	 * /** Never do more than this many samples
 	 */
 	private int samplingUpperBound = 1;
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
-		return schedule(sequences, sequences.getResources(), forExport);
+	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
+		return schedule(sequences, sequences.getResources(), solution);
 	}
 
 	// private final HashSet<IResource> lastAffectedResources = new HashSet<IResource>();
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 		random = new Random(seed);
 
 		setSequences(sequences);
 		resetBest();
 
-		final int[] resourceIndices = getResourceIndices(sequences, forExport ? sequences.getResources() : affectedResources);
+		final int[] resourceIndices = getResourceIndices(sequences, affectedResources);
 
 		prepare(resourceIndices);
 
@@ -73,7 +67,7 @@ public class DirectRandomSequenceScheduler extends EnumeratingSequenceScheduler 
 		}
 		// }
 
-		return reEvaluateAndGetBestResult();
+		return reEvaluateAndGetBestResult(solution);
 	}
 
 	private void randomise(final int seq) {

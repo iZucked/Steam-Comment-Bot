@@ -10,6 +10,7 @@ import java.util.List;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProvider;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -152,7 +153,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	 * The sequences being evaluated at the moment
 	 */
 	private ISequences sequences;
-
+	//
 	private ScheduleEvaluator evaluator;
 
 	/**
@@ -186,12 +187,12 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 	}
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
-		return schedule(sequences, sequences.getResources(), forExport);
+	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
+		return schedule(sequences, sequences.getResources(), solution);
 	}
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 		setSequences(sequences);
 		resetBest();
 
@@ -200,7 +201,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		enumerate(0, 0);
 		endLogEntry();
 
-		return reEvaluateAndGetBestResult();
+		return reEvaluateAndGetBestResult(solution);
 	}
 
 	/**
@@ -222,12 +223,12 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 		return affectedIndices;
 	}
 
-	protected final ScheduledSequences reEvaluateAndGetBestResult() {
+	protected final ScheduledSequences reEvaluateAndGetBestResult(final IAnnotatedSolution solution) {
 		if (!lastEvaluationWasBestResult) {
 			if (bestResult == null) {
 				return null;
 			}
-			evaluator.evaluateSchedule(bestResult);
+			evaluator.evaluateSchedule(sequences, bestResult, solution);
 		}
 		return bestResult;
 	}
@@ -395,7 +396,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			// trim the end of this time window so that the next element is
 			// reachable without lateness
 			// (but never so that the end time is before the start time)
-			if (!useTimeWindow[index+1]) {
+			if (!useTimeWindow[index + 1]) {
 				windowEndTime[index] = Math.max(windowStartTime[index], Math.min(windowEndTime[index], windowEndTime[index + 1] - minTimeToNextElement[index]));
 			}
 		}
@@ -512,7 +513,7 @@ public class EnumeratingSequenceScheduler extends AbstractSequenceScheduler {
 			scheduledSequences.set(index, sequence);
 		}
 
-		lastValue = evaluator.evaluateSchedule(sequences, scheduledSequences, changedSequences);
+		lastValue = evaluator.evaluateSchedule(sequences, scheduledSequences, null);
 
 		logValue(lastValue);
 

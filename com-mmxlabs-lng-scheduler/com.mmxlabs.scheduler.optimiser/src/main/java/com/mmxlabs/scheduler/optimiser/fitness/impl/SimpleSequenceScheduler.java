@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -27,7 +28,7 @@ import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
 public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final boolean forExport) {
+	public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
 		final ScheduledSequences answer = new ScheduledSequences();
 
 		for (final Map.Entry<IResource, ISequence> entry : sequences.getSequences().entrySet()) {
@@ -72,8 +73,8 @@ public final class SimpleSequenceScheduler extends AbstractSequenceScheduler {
 	}
 
 	@Override
-	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
-		return schedule(sequences, forExport);
+	public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
+		return schedule(sequences, solution);
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import com.mmxlabs.common.curves.ConstantValueCurve;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
 import com.mmxlabs.optimiser.common.dcproviders.IElementDurationProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -550,7 +551,7 @@ public class TestCalculations {
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
-		int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
+		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2.0);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1, false,
 				false, false);
 
@@ -979,7 +980,7 @@ public class TestCalculations {
 		final IVessel vessel1 = builder.createVessel("vessel-1", vesselClass1, new ConstantValueCurve(0), startRequirement, endRequirement, 0, 0, 0);
 
 		final ITimeWindow loadWindow = builder.createTimeWindow(25, 25);
-		int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2);
+		final int cargoCVValue = OptimiserUnitConvertor.convertToInternalConversionFactor(2);
 		final ILoadSlot loadSlot = builder.createLoadSlot("load-1", port2, loadWindow, 0, 150000000, new FixedPriceContract(OptimiserUnitConvertor.convertToInternalPrice(5)), cargoCVValue, 1, false,
 				false, false);
 
@@ -1376,12 +1377,12 @@ public class TestCalculations {
 	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final boolean b) {
+		public ScheduledSequences schedule(final ISequences sequences,  final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources,  final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 

@@ -6,6 +6,7 @@ package com.mmxlabs.scheduler.optimiser.fitness;
 
 import java.util.Collection;
 
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequences;
@@ -27,7 +28,7 @@ public interface ISequenceScheduler {
 	 * 
 	 * @return
 	 */
-	ScheduledSequences schedule(ISequences sequences, final Collection<IResource> affectedResources, boolean forExport);
+	ScheduledSequences schedule(ISequences sequences, final Collection<IResource> affectedResources, IAnnotatedSolution solution);
 
 	/**
 	 * Like {@link #schedule(ISequences, Collection, boolean)}, but with all resources needing evaluation.
@@ -36,7 +37,7 @@ public interface ISequenceScheduler {
 	 * @param forExport
 	 * @return
 	 */
-	ScheduledSequences schedule(ISequences sequences, boolean forExport);
+	ScheduledSequences schedule(ISequences sequences, IAnnotatedSolution solution);
 
 	/**
 	 * The caller can use this to avoid full evaluation on the next cycle if a schedule is accepted.
@@ -47,5 +48,4 @@ public interface ISequenceScheduler {
 	 * Release resources.
 	 */
 	void dispose();
-
 }

@@ -28,6 +28,7 @@ import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -75,7 +76,6 @@ public final class AbstractSequenceSchedulerTest {
 
 	Mockery context = new JUnit4Mockery();
 
-	
 	/**
 	 * Test high level inputs for a a two {@link VoyagePlan} sequence. Outputs cannot easily be tested with e JMock'd {@link IVoyagePlanOptimiser} so we just expect something to come out.
 	 * 
@@ -100,7 +100,7 @@ public final class AbstractSequenceSchedulerTest {
 		final LoadSlot loadSlot1 = new LoadSlot();
 		loadSlot1.setPort(port1);
 		loadSlot1.setTimeWindow(timeWindow1);
-		
+
 		final DischargeSlot dischargeSlot1 = new DischargeSlot();
 		dischargeSlot1.setPort(port2);
 		dischargeSlot1.setTimeWindow(timeWindow2);
@@ -265,15 +265,15 @@ public final class AbstractSequenceSchedulerTest {
 		expectedPortDetails1.setOptions(expectedPortOptions1);
 
 		final PortDetails expectedPortDetails2 = new PortDetails();
-		final PortOptions expectedPortOptions2 = new PortOptions(1, vessel, dischargeSlot1, VesselState.Laden);	
+		final PortOptions expectedPortOptions2 = new PortOptions(1, vessel, dischargeSlot1, VesselState.Laden);
 		expectedPortDetails2.setOptions(expectedPortOptions2);
 
 		final PortDetails expectedPortDetails3 = new PortDetails();
-		final PortOptions expectedPortOptions3 = new PortOptions(1, vessel, loadSlot2, VesselState.Ballast);	
+		final PortOptions expectedPortOptions3 = new PortOptions(1, vessel, loadSlot2, VesselState.Ballast);
 		expectedPortDetails3.setOptions(expectedPortOptions3);
 
 		final PortDetails expectedPortDetails4 = new PortDetails();
-		final PortOptions expectedPortOptions4 = new PortOptions(1, vessel, dischargeSlot2, VesselState.Laden);	
+		final PortOptions expectedPortOptions4 = new PortOptions(1, vessel, dischargeSlot2, VesselState.Laden);
 		expectedPortDetails4.setOptions(expectedPortOptions4);
 
 		final VoyageDetails expectedVoyageDetails1 = new VoyageDetails();
@@ -513,7 +513,7 @@ public final class AbstractSequenceSchedulerTest {
 		final PortDetails expectedPortDetails1 = new PortDetails();
 		final PortOptions expectedPortOptions1 = new PortOptions(1, vessel, loadSlot1, VesselState.Ballast);
 		expectedPortDetails1.setOptions(expectedPortOptions1);
-		
+
 		final PortDetails expectedPortDetails2 = new PortDetails();
 		final PortOptions expectedPortOptions2 = new PortOptions(1, vessel, dischargeSlot1, VesselState.Laden);
 		expectedPortDetails2.setOptions(expectedPortOptions2);
@@ -522,7 +522,6 @@ public final class AbstractSequenceSchedulerTest {
 		final PortOptions expectedPortOptions3 = new PortOptions(1, vessel, loadSlot2, VesselState.Ballast);
 		expectedPortDetails3.setOptions(expectedPortOptions3);
 
-		
 		final VoyageDetails expectedVoyageDetails1 = new VoyageDetails();
 		expectedVoyageDetails1.setOptions(expectedVoyageOptions1);
 		// expectedVoyageDetails1.setStartTime(6);
@@ -938,13 +937,13 @@ public final class AbstractSequenceSchedulerTest {
 	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final boolean b) {
+		public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 
 		}
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 
@@ -953,6 +952,5 @@ public final class AbstractSequenceSchedulerTest {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 	}
-	
-	
+
 }

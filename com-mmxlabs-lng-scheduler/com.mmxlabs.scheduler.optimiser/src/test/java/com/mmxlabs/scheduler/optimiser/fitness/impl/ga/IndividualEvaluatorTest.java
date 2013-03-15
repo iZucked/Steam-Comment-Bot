@@ -29,6 +29,7 @@ import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProvider
 import com.mmxlabs.optimiser.common.dcproviders.ITimeWindowDataComponentProviderEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.HashMapElementDurationEditor;
 import com.mmxlabs.optimiser.common.dcproviders.impl.TimeWindowDataComponentProvider;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IResource;
 import com.mmxlabs.optimiser.core.ISequence;
 import com.mmxlabs.optimiser.core.ISequenceElement;
@@ -62,13 +63,13 @@ public class IndividualEvaluatorTest {
 	private static class MockSequenceScheduler extends AbstractSequenceScheduler {
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final boolean b) {
+		public ScheduledSequences schedule(final ISequences sequences, final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 
 		}
 
 		@Override
-		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources, final boolean forExport) {
+		public ScheduledSequences schedule(final ISequences sequences, final Collection<IResource> affectedResources,  final IAnnotatedSolution solution) {
 			throw new UnsupportedOperationException("Method invocation is not part of the tests!");
 		}
 

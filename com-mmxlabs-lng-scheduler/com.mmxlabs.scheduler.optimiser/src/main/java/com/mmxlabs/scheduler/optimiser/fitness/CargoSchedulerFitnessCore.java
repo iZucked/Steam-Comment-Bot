@@ -120,7 +120,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 			shippingCalculator.prepareEvaluation(sequences);
 		}
 
-		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, false);
+		final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
 
 		return scheduledSequences != null;
 	}
@@ -138,7 +138,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 
 		lastAffectedResources.addAll(affectedResources);
 		try {
-			final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, false);
+			final ScheduledSequences scheduledSequences = scheduler.schedule(sequences, null);
 
 			return scheduledSequences != null;
 		} finally {
@@ -187,7 +187,7 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 		}
 
 		// re-evaluate everything
-		final ScheduledSequences schedule = scheduler.schedule(sequences, forExport);
+		final ScheduledSequences schedule = scheduler.schedule(sequences, solution);
 
 		// Setting these annotations here is a bit untidy, but it will do for now.
 		solution.setGeneralAnnotation(SchedulerConstants.G_AI_allocations, schedule.getAllocations());
