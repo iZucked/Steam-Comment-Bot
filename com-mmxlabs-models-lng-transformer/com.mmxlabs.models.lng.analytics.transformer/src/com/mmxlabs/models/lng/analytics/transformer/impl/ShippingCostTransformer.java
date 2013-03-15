@@ -49,7 +49,7 @@ import com.mmxlabs.models.lng.port.RouteLine;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.TransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
 import com.mmxlabs.models.lng.types.ExtraData;
@@ -60,6 +60,7 @@ import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationHelper;
 import com.mmxlabs.optimiser.common.components.ITimeWindow;
+import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
@@ -159,7 +160,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule(), createShippingCostModule());
 			final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
 
-			final ResourcelessModelEntityMap entities = injector.getInstance(ResourcelessModelEntityMap.class);
+			final ModelEntityMap entities = injector.getInstance(ModelEntityMap.class);
 
 			/*
 			 * Create ports and distances
@@ -311,8 +312,7 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			// Create the vessel now we have the start/end requirements
 			final IVessel vessel = builder.createVessel(modelVessel.getName(), vesselClass, new ConstantValueCurve(OptimiserUnitConvertor.convertToInternalHourlyRate(plan.getNotionalDayRate())),
 					startConstraint, endConstraint, startHeelVolume, startHeelCV, startHeelPrice);
-			
-			
+
 			/*
 			 * Create the sequences object and generate the arrival times based on window start TODO: We could use the sequence scheduler to do this for us.
 			 */
@@ -322,19 +322,17 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final IStartEndRequirementProvider startEndProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
 			final IPortSlotProvider slotProvider = data.getDataComponentProvider(SchedulerConstants.DCP_portSlotsProvider, IPortSlotProvider.class);
 
-			
 			// Add start/end port slots into the row map.
 			{
 				IResource r = vesselProvider.getResource(vessel);
 				IStartEndRequirementProvider startEndRequirementProvider = data.getDataComponentProvider(SchedulerConstants.DCP_startEndRequirementProvider, IStartEndRequirementProvider.class);
 				ISequenceElement startElement = startEndRequirementProvider.getStartElement(r);
 				ISequenceElement endElement = startEndRequirementProvider.getEndElement(r);
-				
+
 				mapPortSlotToRow.put(slotProvider.getPortSlot(startElement), plan.getRows().get(0));
 				mapPortSlotToRow.put(slotProvider.getPortSlot(endElement), plan.getRows().get(plan.getRows().size() - 1));
 			}
-			
-			
+
 			final int[][] arrivalTimes = new int[1][elements.size() + 2];
 			int index = 0;
 			final IResource resource = vesselProvider.getResource(vessel);
@@ -383,7 +381,6 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			// SchedulerUtils.setDataComponentProviders(data, scheduler);
 			// scheduler.setVoyagePlanOptimiser(optimiser);
 			// scheduler.init();
-
 			// run the scheduler on the sequences
 			final ScheduledSequences result = scheduler.schedule(sequences, arrivalTimes);
 
@@ -394,12 +391,14 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 			final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
 			aca.setVesselProvider(vesselProvider);
 
-			final Map<VoyagePlan,IAllocationAnnotation> allocations = aca.allocate(result);
+			final Map<VoyagePlan, IAllocationAnnotation> allocations = aca.allocate(result);
 			final Iterator<IAllocationAnnotation> allocationIterator = allocations.values().iterator();
 
 			/*
 			 * Unpack the annotated solution and create output lines //
 			 */
+
+			IAnnotatedSolution solution;
 
 			IAllocationAnnotation currentAllocationAnnotation = null;
 			final List<UnitCostLine> lines = new ArrayList<UnitCostLine>();
@@ -440,9 +439,9 @@ public class ShippingCostTransformer implements IShippingCostTransformer {
 						final ExtraData extraData = line.addExtraData("port" + idxX, idxStr + " - " + portDetails.getOptions().getPortSlot().getPort().getName() + " - (" + typeString + ")");
 
 						// Exlcude end port from port costs
-//						if (!(portDetails.getOptions().getPortSlot() instanceof EndPortSlot)) {
-							createPortCostComponent(extraData, ports, pricing, plan, portDetails, mapPortSlotToRow.get(portDetails.getOptions().getPortSlot()));
-//						}
+						// if (!(portDetails.getOptions().getPortSlot() instanceof EndPortSlot)) {
+						createPortCostComponent(extraData, ports, pricing, plan, portDetails, mapPortSlotToRow.get(portDetails.getOptions().getPortSlot()));
+						// }
 						if (portDetails.getOptions().getPortSlot() instanceof ILoadOption) {
 							currentAllocationAnnotation = allocationIterator.next();
 							// Add in LOAD VOLUME

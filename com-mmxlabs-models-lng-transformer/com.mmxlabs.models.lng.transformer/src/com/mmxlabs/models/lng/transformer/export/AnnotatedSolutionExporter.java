@@ -101,7 +101,6 @@ public class AnnotatedSolutionExporter {
 		final Schedule output = factory.createSchedule();
 
 		// go through the annotated solution and build stuff for the EMF;
-		entities.setScenario(inputScenario);
 
 		for (final IExporterExtension extension : extensions) {
 			extension.startExporting(inputScenario, output, entities, annotatedSolution);

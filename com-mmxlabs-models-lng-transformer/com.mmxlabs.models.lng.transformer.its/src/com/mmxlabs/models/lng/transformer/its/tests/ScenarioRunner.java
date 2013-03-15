@@ -7,7 +7,7 @@ package com.mmxlabs.models.lng.transformer.its.tests;
 import com.google.inject.Injector;
 import com.mmxlabs.models.lng.schedule.Schedule;
 import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
@@ -28,7 +28,7 @@ public class ScenarioRunner {
 	private final MMXRootObject scenario;
 
 	private IOptimisationContext context;
-	private ResourcelessModelEntityMap entities;
+	private ModelEntityMap entities;
 	private LocalSearchOptimiser optimiser;
 
 	private Schedule intialSchedule;

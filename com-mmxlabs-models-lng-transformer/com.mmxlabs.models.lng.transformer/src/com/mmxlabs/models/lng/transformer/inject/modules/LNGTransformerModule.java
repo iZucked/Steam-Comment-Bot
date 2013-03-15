@@ -25,7 +25,6 @@ import com.mmxlabs.models.lng.transformer.IncompleteScenarioException;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.ScenarioUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -89,8 +88,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(DateAndCurveHelper.class).in(Singleton.class);
 
-		bind(ResourcelessModelEntityMap.class).in(Singleton.class);
-		bind(ModelEntityMap.class).to(ResourcelessModelEntityMap.class).in(Singleton.class);
+		bind(ModelEntityMap.class).in(Singleton.class);
 
 		bind(ILNGVoyageCalculator.class).to(LNGVoyageCalculator.class);
 		bind(LNGVoyageCalculator.class).in(Singleton.class);
@@ -138,7 +136,7 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Provides
 	@Singleton
-	IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ResourcelessModelEntityMap entities) throws IncompleteScenarioException {
+	IOptimisationData provideOptimisationData(final LNGScenarioTransformer lngScenarioTransformer, final ModelEntityMap entities) throws IncompleteScenarioException {
 		final IOptimisationData optimisationData = lngScenarioTransformer.createOptimisationData(entities);
 
 		return optimisationData;
@@ -172,7 +170,7 @@ public class LNGTransformerModule extends AbstractModule {
 	@Provides
 	@Singleton
 	@Named("Initial")
-	private ISequences provideInitialSequences(final IOptimisationTransformer optimisationTransformer, final IOptimisationData data, final ResourcelessModelEntityMap mem) {
+	private ISequences provideInitialSequences(final IOptimisationTransformer optimisationTransformer, final IOptimisationData data, final ModelEntityMap mem) {
 
 		final ISequences sequences = optimisationTransformer.createInitialSequences(data, mem);
 

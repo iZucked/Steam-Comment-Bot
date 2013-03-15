@@ -13,7 +13,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.CommercialModel;
 import com.mmxlabs.models.lng.commercial.LegalEntity;
 import com.mmxlabs.models.lng.transformer.ITransformerExtension;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.transformer.util.EntityTransformerUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -35,7 +35,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 
 	private MMXRootObject rootObject;
 
-	private ResourcelessModelEntityMap entities;
+	private ModelEntityMap entities;
 
 	@Inject
 	private HashMapEntityProviderEditor entityProvider;
@@ -44,7 +44,7 @@ public class EntityTransformerExtension implements ITransformerExtension {
 	private DateAndCurveHelper dateAndCurveHelper;
 
 	@Override
-	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
+	public void startTransforming(final MMXRootObject rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
 		this.rootObject = rootObject;
 		this.entities = map;
 

@@ -68,7 +68,7 @@ import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.spotmarkets.CharterCostModel;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsFactory;
 import com.mmxlabs.models.lng.spotmarkets.SpotMarketsModel;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
@@ -671,7 +671,7 @@ public class ScenarioTools {
 			}
 		}
 
-		final ResourcelessModelEntityMap entities = transformer.getEntities();
+		final ModelEntityMap entities = transformer.getEntities();
 
 		final IOptimisationContext context = transformer.getOptimisationContext();
 		final LocalSearchOptimiser optimiser = transformer.getOptimiser();

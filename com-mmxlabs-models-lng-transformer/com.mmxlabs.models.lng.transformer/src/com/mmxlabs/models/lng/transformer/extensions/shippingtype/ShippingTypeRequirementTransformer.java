@@ -17,7 +17,7 @@ import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.commercial.Contract;
 import com.mmxlabs.models.lng.commercial.LNGPriceCalculatorParameters;
 import com.mmxlabs.models.lng.commercial.SalesContract;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.contracts.IContractTransformer;
 import com.mmxlabs.models.lng.types.CargoDeliveryType;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -39,8 +39,11 @@ public class ShippingTypeRequirementTransformer implements IContractTransformer 
 	@Inject
 	private IPortSlotProvider portSlotProvider;
 	
+	/**
+	 * @since 3.0
+	 */
 	@Override
-	public void startTransforming(final MMXRootObject rootObject, final ResourcelessModelEntityMap map, final ISchedulerBuilder builder) {
+	public void startTransforming(final MMXRootObject rootObject, final ModelEntityMap map, final ISchedulerBuilder builder) {
 	}
 
 	/**

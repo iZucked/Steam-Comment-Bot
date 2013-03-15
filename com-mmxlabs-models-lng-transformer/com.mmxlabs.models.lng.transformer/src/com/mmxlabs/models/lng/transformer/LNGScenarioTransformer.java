@@ -255,8 +255,9 @@ public class LNGScenarioTransformer {
 	 * 
 	 * @return
 	 * @throws IncompleteScenarioException
+	 * @since 3.0
 	 */
-	public IOptimisationData createOptimisationData(final ResourcelessModelEntityMap entities) throws IncompleteScenarioException {
+	public IOptimisationData createOptimisationData(final ModelEntityMap entities) throws IncompleteScenarioException {
 		/*
 		 * Set reference for hour 0
 		 */
@@ -668,7 +669,7 @@ public class LNGScenarioTransformer {
 	 * @param defaultRewiring
 	 */
 	private void buildCargoes(final ISchedulerBuilder builder, final Association<Port, IPort> portAssociation, final Association<Index<?>, ICurve> indexAssociation,
-			final Association<Vessel, IVessel> vesselAssociation, final Collection<IContractTransformer> contractTransformers, final ResourcelessModelEntityMap entities, final boolean defaultRewiring) {
+			final Association<Vessel, IVessel> vesselAssociation, final Collection<IContractTransformer> contractTransformers, final ModelEntityMap entities, final boolean defaultRewiring) {
 
 		final Date latestDate = getOptimisationSettings().getRange().isSetOptimiseBefore() ? getOptimisationSettings().getRange().getOptimiseBefore() : latestTime;
 

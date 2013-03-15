@@ -24,7 +24,6 @@ import com.mmxlabs.models.lng.transformer.IOptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.internal.Activator;
@@ -49,7 +48,7 @@ public class LNGTransformer {
 	private final Injector injector;
 
 	@Inject
-	private ResourcelessModelEntityMap entities;
+	private ModelEntityMap entities;
 
 	@Inject
 	private LNGScenarioTransformer lngScenarioTransformer;
@@ -177,8 +176,6 @@ public class LNGTransformer {
 		this.injector = Guice.createInjector(modules);
 
 		injector.injectMembers(this);
-		// Might no be required, could be done using @Inject on the method
-		entities.setScenario(scenario);
 	}
 
 	private void installModuleOverrides(final List<Module> modules, final Module mainModule, final Map<IOptimiserInjectorService.ModuleType, List<Module>> moduleOverrides,
@@ -210,7 +207,7 @@ public class LNGTransformer {
 		return scenario;
 	}
 
-	public ResourcelessModelEntityMap getEntities() {
+	public ModelEntityMap getEntities() {
 		return entities;
 	}
 

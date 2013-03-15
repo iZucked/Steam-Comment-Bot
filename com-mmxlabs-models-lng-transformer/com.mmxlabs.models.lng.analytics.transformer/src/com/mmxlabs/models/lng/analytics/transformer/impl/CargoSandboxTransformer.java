@@ -64,7 +64,7 @@ import com.mmxlabs.models.lng.pricing.IndexPoint;
 import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.TransformerHelper;
 import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
@@ -189,7 +189,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		final Injector injector = Guice.createInjector(new DataComponentProviderModule(), new ScheduleBuilderModule(), new SequencesManipulatorModule(), createShippingCostModule());
 		final ISchedulerBuilder builder = injector.getInstance(ISchedulerBuilder.class);
 
-		final ResourcelessModelEntityMap entities = injector.getInstance(ResourcelessModelEntityMap.class);
+		final ModelEntityMap entities = injector.getInstance(ModelEntityMap.class);
 
 		final SeriesParser indices = injector.getInstance(SeriesParser.class);
 		final DateAndCurveHelper dateHelper = injector.getInstance(DateAndCurveHelper.class);

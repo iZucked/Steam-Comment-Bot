@@ -12,17 +12,13 @@ import com.mmxlabs.scheduler.optimiser.initialsequencebuilder.ConstrainedInitial
  * @since 2.0
  */
 public interface IOptimisationTransformer {
-
-//	IOptimisationContext createOptimisationContext(IOptimisationData data, ResourcelessModelEntityMap mem);
-////
-//	Pair<IOptimisationContext, LocalSearchOptimiser> createOptimiserAndContext(IOptimisationData data, ResourcelessModelEntityMap mem);
-////
 	/**
 	 * Create initial sequences; starts with the advice sequences (if there are any) and then uses the {@link ConstrainedInitialSequenceBuilder} to sort out any unsequenced elements.
 	 * 
 	 * @param data
 	 * @return
+	 * @since 3.0
 	 */
-	ISequences createInitialSequences(IOptimisationData data, ResourcelessModelEntityMap mem);
+	ISequences createInitialSequences(IOptimisationData data, ModelEntityMap mem);
 
 }

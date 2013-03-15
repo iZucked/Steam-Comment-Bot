@@ -69,8 +69,11 @@ public class OptimisationTransformer implements IOptimisationTransformer {
 	 * @see com.mmxlabs.models.lng.transformer.IOptimisationTransformer#createInitialSequences(com.mmxlabs.optimiser.core.scenario.IOptimisationData,
 	 * com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap)
 	 */
+	/**
+	 * @since 3.0
+	 */
 	@Override
-	public ISequences createInitialSequences(final IOptimisationData data, final ResourcelessModelEntityMap mem) {
+	public ISequences createInitialSequences(final IOptimisationData data, final ModelEntityMap mem) {
 		/**
 		 * This sequences is passed into the initial sequence builder as a starting point. Extra elements may be added to the sequence in any position, but the existing elements will not be removed or
 		 * reordered

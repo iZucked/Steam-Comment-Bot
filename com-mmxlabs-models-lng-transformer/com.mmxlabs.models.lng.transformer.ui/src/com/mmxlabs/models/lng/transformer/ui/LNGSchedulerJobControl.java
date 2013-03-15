@@ -59,7 +59,7 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.schedule.VesselEventVisit;
 import com.mmxlabs.models.lng.transformer.IPostExportProcessor;
-import com.mmxlabs.models.lng.transformer.ResourcelessModelEntityMap;
+import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
 import com.mmxlabs.models.lng.transformer.inject.LNGTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
@@ -89,7 +89,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 
 	private final MMXRootObject scenario;
 
-	private ResourcelessModelEntityMap entities;
+	private ModelEntityMap entities;
 
 	private LocalSearchOptimiser optimiser;
 
@@ -234,12 +234,12 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 		optimiser.step(REPORT_PERCENTAGE);
 		currentProgress += REPORT_PERCENTAGE;
 
-//		if ((currentProgress % 5) == 0) {
-			// Disable intermediate solution exporting. This is to avoid various concurrency issues caused by UI updating at the same time as a new solution is exported.
-			// See e.g. FogBugz: 830, 838, 847, 848
-			
-//			saveInitialSolution(optimiser.getBestSolution(false), currentProgress);
-//		}
+		// if ((currentProgress % 5) == 0) {
+		// Disable intermediate solution exporting. This is to avoid various concurrency issues caused by UI updating at the same time as a new solution is exported.
+		// See e.g. FogBugz: 830, 838, 847, 848
+
+		// saveInitialSolution(optimiser.getBestSolution(false), currentProgress);
+		// }
 
 		// System.err.println("current fitness " +
 		// optimiser.getFitnessEvaluator().getCurrentFitness() + ", best " +
