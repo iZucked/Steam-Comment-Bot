@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-import javax.inject.Provider;
 
 import com.mmxlabs.common.CollectionsUtil;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
@@ -30,11 +29,9 @@ import com.mmxlabs.scheduler.optimiser.fitness.components.LatenessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.PortCostFitnessComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.ProfitAndLossAllocationComponent;
 import com.mmxlabs.scheduler.optimiser.fitness.components.RouteCostFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanIterator;
 import com.mmxlabs.scheduler.optimiser.providers.ICalculatorProvider;
 import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlanAnnotator;
 
 /**
  * {@link IFitnessCore} which schedules {@link ISequences} objects using an {@link ISequenceScheduler}. Various {@link IFitnessComponent}s implementing {@link ICargoSchedulerFitnessComponent}
@@ -53,12 +50,6 @@ public final class CargoSchedulerFitnessCore implements IFitnessCore {
 	private ICalculatorProvider calculatorProvider;
 	@Inject
 	private ISchedulerFactory schedulerFactory;
-
-	@Inject
-	private Provider<VoyagePlanAnnotator> voyagePlanAnnotatorProvider;
-
-	@Inject
-	private VoyagePlanIterator planIterator;
 
 	@Inject
 	private ScheduleCalculator scheduleCalculator;
