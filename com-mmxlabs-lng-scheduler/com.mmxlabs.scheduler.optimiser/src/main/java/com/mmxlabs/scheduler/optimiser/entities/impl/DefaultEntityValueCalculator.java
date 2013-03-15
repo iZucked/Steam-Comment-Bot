@@ -87,12 +87,12 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 
 		final int cvValue = currentAllocation.getLoadOption().getCargoCVValue();
 
-		final int dischargePricePerM3 = currentAllocation.getDischargeM3Price();
+		final int dischargePricePerM3 = currentAllocation.getDischargePricePerM3();
 		final int dischargePricePerMMBTu = Calculator.costPerMMBTuFromM3(dischargePricePerM3, cvValue);
 
-		final long dischargeVolumeInM3 = currentAllocation.getDischargeVolume();
-		final long loadVolumeInM3 = currentAllocation.getLoadVolume();
-		final int loadPricePerM3 = currentAllocation.getLoadM3Price();
+		final long dischargeVolumeInM3 = currentAllocation.getDischargeVolumeInM3();
+		final long loadVolumeInM3 = currentAllocation.getLoadVolumeInM3();
+		final int loadPricePerM3 = currentAllocation.getLoadPricePerM3();
 
 		// TODO should we be thinking in $/m3 or /mmbtu?
 		// TODO regas comes in here.
@@ -167,7 +167,7 @@ public class DefaultEntityValueCalculator implements IEntityValueCalculator {
 					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice((ILoadSlot) loadOption, (IDischargeSlot) dischargeOption, currentAllocation.getLoadTime(),
 							currentAllocation.getDischargeTime(), dischargePricePerMMBTu, loadVolumeInM3, dischargeVolumeInM3, vessel, plan, shippingDetails);
 				} else {
-					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getLoadTime(), dischargePricePerMMBTu, currentAllocation.getLoadVolume(),
+					loadOption.getLoadPriceCalculator().calculateLoadUnitPrice(loadOption, dischargeOption, currentAllocation.getLoadTime(), dischargePricePerMMBTu, currentAllocation.getLoadVolumeInM3(),
 							shippingDetails);
 				}
 			}

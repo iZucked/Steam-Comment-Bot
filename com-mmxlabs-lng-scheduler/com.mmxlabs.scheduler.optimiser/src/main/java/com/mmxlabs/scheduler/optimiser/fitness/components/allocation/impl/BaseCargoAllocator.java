@@ -328,14 +328,14 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 		annotation.setLoadSlot(loadSlot);
 		annotation.setDischargeSlot(dischargeSlot);
-		annotation.setFuelVolume(forcedLoadVolumeInM3);
+		annotation.setFuelVolumeInM3(forcedLoadVolumeInM3);
 
 		// TODO recompute load price here; this is not necessarily right
-		annotation.setLoadM3Price(loadPricePerM3);
-		annotation.setDischargeM3Price(dischargePricePerM3);
+		annotation.setLoadPricePerM3(loadPricePerM3);
+		annotation.setDischargePricePerM3(dischargePricePerM3);
 		annotation.setLoadTime(loadTime);
 		annotation.setDischargeTime(dischargeTime);
-		annotation.setDischargeVolume(maximumDischargeVolumeInM3);
+		annotation.setDischargeVolumeInM3(maximumDischargeVolumeInM3);
 
 		return annotation;
 	}
@@ -535,14 +535,14 @@ public abstract class BaseCargoAllocator implements ICargoAllocator {
 
 						annotation.setLoadSlot(loadSlot);
 						annotation.setDischargeSlot(dischargeSlot);
-						annotation.setFuelVolume(forcedLoadVolumeInM3.get(allocationIndex));
+						annotation.setFuelVolumeInM3(forcedLoadVolumeInM3.get(allocationIndex));
 
 						// TODO recompute load price here; this is not necessarily right
-						annotation.setLoadM3Price(loadPricesPerM3.get(allocationIndex));
-						annotation.setDischargeM3Price(dischargePricesPerM3.get(allocationIndex));
+						annotation.setLoadPricePerM3(loadPricesPerM3.get(allocationIndex));
+						annotation.setDischargePricePerM3(dischargePricesPerM3.get(allocationIndex));
 						annotation.setLoadTime(slotTimes.get(loadSlot));
 						annotation.setDischargeTime(slotTimes.get(dischargeSlot));
-						annotation.setDischargeVolume(allocation[allocationIndex++]);
+						annotation.setDischargeVolumeInM3(allocation[allocationIndex++]);
 
 						return new Pair<VoyagePlan, IAllocationAnnotation>(voyagePlansIterator.next(), annotation);
 					}

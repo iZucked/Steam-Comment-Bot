@@ -18,11 +18,11 @@ public interface IAllocationAnnotation {
 
 	public IDischargeOption getDischargeOption();
 
-	public long getLoadVolume();
+	public long getLoadVolumeInM3();
 
-	public long getFuelVolume();
+	public long getFuelVolumeInM3();
 
-	public long getDischargeVolume();
+	public long getDischargeVolumeInM3();
 
 	/**
 	 * @return
@@ -37,10 +37,10 @@ public interface IAllocationAnnotation {
 	/**
 	 * @return
 	 */
-	int getLoadM3Price();
+	int getLoadPricePerM3();
 
 	/**
 	 * @return
 	 */
-	int getDischargeM3Price();
+	int getDischargePricePerM3();
 }

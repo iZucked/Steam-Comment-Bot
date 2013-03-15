@@ -136,8 +136,8 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 				final Object[] newSequence = currentSequence.clone();
 				final IAllocationAnnotation currentAllocation = cargoAllocator.allocate(vessel, vp, arrivalTimes);
 				final int cvValue = currentAllocation.getLoadOption().getCargoCVValue();
-				final long dischargeVolume = currentAllocation.getDischargeVolume();
-				final long loadVolume = currentAllocation.getLoadVolume();
+				final long dischargeVolume = currentAllocation.getDischargeVolumeInM3();
+				final long loadVolume = currentAllocation.getLoadVolumeInM3();
 
 				if (missingPurchasePrice) {
 
@@ -145,7 +145,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 					// Purchase price in mmbtu = (sales revenue - shipping cost) / load volume in mmbtu
 
-					final int dischargePricePerM3 = currentAllocation.getDischargeM3Price();
+					final int dischargePricePerM3 = currentAllocation.getDischargePricePerM3();
 					// final int loadPricePerM3 = currentAllocation.getLoadM3Price();
 
 					final long totalShippingCost = entityValueCalculator.getShippingCosts(vp, vessel, false, seq.getStartTime(), null);
@@ -168,7 +168,7 @@ public class DefaultBreakEvenEvaluator implements IBreakEvenEvaluator {
 
 					// Perform a binary search on sales price
 					// First find a valid interval
-					int minPricePerMMBTu = Calculator.costPerMMBTuFromM3(currentAllocation.getLoadM3Price(), cvValue);
+					int minPricePerMMBTu = Calculator.costPerMMBTuFromM3(currentAllocation.getLoadPricePerM3(), cvValue);
 					long minPrice_Value = evaluateSalesPrice(seq, vessel, arrivalTimes, dischargeIdx, currentSequence, originalDischarge, newSequence, minPricePerMMBTu);
 					while (minPrice_Value > 0) {
 						// Subtract $5

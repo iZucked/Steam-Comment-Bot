@@ -16,23 +16,14 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	private ILoadOption loadSlot;
 	private IDischargeOption dischargeSlot;
 
-	private long fuelVolume;
-	private long dischargeVolume;
+	private long fuelVolumeInM3;
+	private long dischargeVolumeInM3;
 
 	private int loadTime;
 	private int dischargeTime;
 
-	private int loadM3Price;
-	private int dischargeM3Price;
-
-	@Override
-	public long getDischargeVolume() {
-		return dischargeVolume;
-	}
-
-	public void setDischargeVolume(final long dischargeVolume) {
-		this.dischargeVolume = dischargeVolume;
-	}
+	private int loadPricePerM3;
+	private int dischargePricePerM3;
 
 	@Override
 	public ILoadOption getLoadOption() {
@@ -53,17 +44,26 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public long getFuelVolume() {
-		return fuelVolume;
+	public long getDischargeVolumeInM3() {
+		return dischargeVolumeInM3;
 	}
 
-	public void setFuelVolume(final long fuelVolume) {
-		this.fuelVolume = fuelVolume;
+	public void setDischargeVolumeInM3(final long dischargeVolume) {
+		this.dischargeVolumeInM3 = dischargeVolume;
 	}
 
 	@Override
-	public long getLoadVolume() {
-		return getFuelVolume() + getDischargeVolume();
+	public long getFuelVolumeInM3() {
+		return fuelVolumeInM3;
+	}
+
+	public void setFuelVolumeInM3(final long fuelVolume) {
+		this.fuelVolumeInM3 = fuelVolume;
+	}
+
+	@Override
+	public long getLoadVolumeInM3() {
+		return getFuelVolumeInM3() + getDischargeVolumeInM3();
 	}
 
 	@Override
@@ -85,26 +85,26 @@ public class AllocationAnnotation implements IAllocationAnnotation {
 	}
 
 	@Override
-	public int getLoadM3Price() {
-		return loadM3Price;
+	public int getLoadPricePerM3() {
+		return loadPricePerM3;
 	}
 
-	public void setLoadM3Price(final int loadM3Price) {
-		this.loadM3Price = loadM3Price;
+	public void setLoadPricePerM3(final int loadM3Price) {
+		this.loadPricePerM3 = loadM3Price;
 	}
 
 	@Override
-	public int getDischargeM3Price() {
-		return dischargeM3Price;
+	public int getDischargePricePerM3() {
+		return dischargePricePerM3;
 	}
 
-	public void setDischargeM3Price(final int dischargeM3Price) {
-		this.dischargeM3Price = dischargeM3Price;
+	public void setDischargePricePerM3(final int dischargeM3Price) {
+		this.dischargePricePerM3 = dischargeM3Price;
 	}
 
 	@Override
 	public String toString() {
-		return loadSlot.getId() + "@" + loadTime + " to " + dischargeSlot.getId() + "@" + dischargeTime + ", loaded " + getLoadVolume() + ", used " + getFuelVolume() + " for fuel, discharged "
-				+ getDischargeVolume();
+		return loadSlot.getId() + "@" + loadTime + " to " + dischargeSlot.getId() + "@" + dischargeTime + ", loaded " + getLoadVolumeInM3() + ", used " + getFuelVolumeInM3()
+				+ " for fuel, discharged " + getDischargeVolumeInM3();
 	}
 }
