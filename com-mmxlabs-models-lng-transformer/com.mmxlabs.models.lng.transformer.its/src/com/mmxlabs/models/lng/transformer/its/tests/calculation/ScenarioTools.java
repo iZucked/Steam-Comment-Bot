@@ -685,7 +685,7 @@ public class ScenarioTools {
 		final Injector childInjector = transformer.getInjector().createChildInjector(new ExporterExtensionsModule());
 		childInjector.injectMembers(exporter);
 
-		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, startSolution);
+		final Schedule schedule = exporter.exportAnnotatedSolution(entities, startSolution);
 
 		return schedule;
 	}

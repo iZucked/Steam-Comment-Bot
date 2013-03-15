@@ -21,8 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mmxlabs.common.curves.ICurve;
-import com.mmxlabs.models.lng.cargo.Cargo;
-import com.mmxlabs.models.lng.cargo.CargoModel;
 import com.mmxlabs.models.lng.cargo.Slot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
@@ -38,7 +36,6 @@ import com.mmxlabs.models.lng.schedule.Sequence;
 import com.mmxlabs.models.lng.schedule.SequenceType;
 import com.mmxlabs.models.lng.schedule.SlotVisit;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
-import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IAnnotations;
 import com.mmxlabs.optimiser.core.IResource;
@@ -93,7 +90,10 @@ public class AnnotatedSolutionExporter {
 		extensions.add(extension);
 	}
 
-	public Schedule exportAnnotatedSolution(final MMXRootObject inputScenario, final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
+	/**
+	 * @since 3.0
+	 */
+	public Schedule exportAnnotatedSolution(final ModelEntityMap entities, final IAnnotatedSolution annotatedSolution) {
 		final IOptimisationData data = annotatedSolution.getContext().getOptimisationData();
 		final IVesselProvider vesselProvider = data.getDataComponentProvider(SchedulerConstants.DCP_vesselProvider, IVesselProvider.class);
 		final IAnnotations elementAnnotations = annotatedSolution.getElementAnnotations();
@@ -379,17 +379,6 @@ public class AnnotatedSolutionExporter {
 				}
 				if (allocation != null && allocation.getBallastLeg() != null && allocation.getLadenLeg() != null && allocation.getLadenIdle() != null && allocation.getBallastIdle() != null)
 					allocation = null;
-			}
-		}
-
-		// connect back-references to input cargoes.
-		final CargoModel cargoModel = inputScenario.getSubModel(CargoModel.class);
-		for (final Cargo cargo : cargoModel.getCargoes()) {
-			for (final CargoAllocation allocation : output.getCargoAllocations()) {
-				if (allocation.getLoadAllocation().isSetSlot() && allocation.getDischargeAllocation().isSetSlot() && allocation.getLoadAllocation().getSlot() == cargo.getLoadSlot()
-						&& allocation.getDischargeAllocation().getSlot() == cargo.getDischargeSlot()) {
-					allocation.setInputCargo(cargo);
-				}
 			}
 		}
 

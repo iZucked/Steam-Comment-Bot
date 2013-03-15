@@ -94,7 +94,7 @@ public class ScenarioRunner {
 		final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 		childInjector.injectMembers(exporter);
 
-		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
+		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
 
 		return schedule;
 	}

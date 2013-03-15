@@ -173,7 +173,7 @@ public class LNGSchedulerJobControl extends AbstractEclipseJobControl {
 			final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
 			childInjector.injectMembers(exporter);
 		}
-		final Schedule schedule = exporter.exportAnnotatedSolution(scenario, entities, solution);
+		final Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
 		final ScheduleModel scheduleModel = scenario.getSubModel(ScheduleModel.class);
 		final InputModel inputModel = scenario.getSubModel(InputModel.class);
 		final CargoModel cargoModel = scenario.getSubModel(CargoModel.class);
