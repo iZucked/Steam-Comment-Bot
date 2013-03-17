@@ -125,8 +125,6 @@ public class AnnotatedSolutionExporter {
 		final Map<String, Long> fobFitnessMap = new LinkedHashMap<String, Long>();
 
 		final Map<IVesselClass, AtomicInteger> counter = new HashMap<IVesselClass, AtomicInteger>();
-		@SuppressWarnings("unchecked")
-		final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, Map.class);
 		for (final IResource resource : resources) {
 			final IVessel vessel = vesselProvider.getVessel(resource);
 
@@ -219,22 +217,27 @@ public class AnnotatedSolutionExporter {
 			}
 			{
 				// set sequence fitness values
-				final EList<Fitness> eSequenceFitness = eSequence.getFitnesses();
-				final Map<String, Long> sequenceFitness = sequenceFitnesses.get(resource);
-				for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
+				@SuppressWarnings("unchecked")
+				final Map<IResource, Map<String, Long>> sequenceFitnesses = annotatedSolution.getGeneralAnnotation(SchedulerConstants.G_AI_fitnessPerRoute, Map.class);
 
-					if (isDESSequence || isFOBSequence) {
-						final Map<String, Long> m = isFOBSequence ? fobFitnessMap : desFitnessMap;
-						long value = e.getValue();
-						if (m.containsKey(e.getKey())) {
-							value += m.get(e.getKey()).longValue();
+				if (sequenceFitnesses != null) {
+					final EList<Fitness> eSequenceFitness = eSequence.getFitnesses();
+					final Map<String, Long> sequenceFitness = sequenceFitnesses.get(resource);
+					for (final Map.Entry<String, Long> e : sequenceFitness.entrySet()) {
+
+						if (isDESSequence || isFOBSequence) {
+							final Map<String, Long> m = isFOBSequence ? fobFitnessMap : desFitnessMap;
+							long value = e.getValue();
+							if (m.containsKey(e.getKey())) {
+								value += m.get(e.getKey()).longValue();
+							}
+							m.put(e.getKey(), value);
+						} else {
+							final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
+							sf.setName(e.getKey());
+							sf.setFitnessValue(e.getValue());
+							eSequenceFitness.add(sf);
 						}
-						m.put(e.getKey(), value);
-					} else {
-						final Fitness sf = ScheduleFactory.eINSTANCE.createFitness();
-						sf.setName(e.getKey());
-						sf.setFitnessValue(e.getValue());
-						eSequenceFitness.add(sf);
 					}
 
 				}
@@ -392,31 +395,32 @@ public class AnnotatedSolutionExporter {
 
 		@SuppressWarnings("unchecked")
 		final Map<String, Long> fitnesses = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_fitnessComponents, Map.class);
+		if (fitnesses != null) {
+			final Long runtime = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_runtime, Long.class);
+			final Integer iterations = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_iterations, Integer.class);
 
-		final Long runtime = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_runtime, Long.class);
-		final Integer iterations = annotatedSolution.getGeneralAnnotation(OptimiserConstants.G_AI_iterations, Integer.class);
+			final EList<Fitness> outputFitnesses = output.getFitnesses();
 
-		final EList<Fitness> outputFitnesses = output.getFitnesses();
+			for (final Map.Entry<String, Long> entry : fitnesses.entrySet()) {
+				final Fitness fitness = factory.createFitness();
+				fitness.setName(entry.getKey());
+				fitness.setFitnessValue(entry.getValue());
+				outputFitnesses.add(fitness);
+			}
 
-		for (final Map.Entry<String, Long> entry : fitnesses.entrySet()) {
-			final Fitness fitness = factory.createFitness();
-			fitness.setName(entry.getKey());
-			fitness.setFitnessValue(entry.getValue());
-			outputFitnesses.add(fitness);
-		}
+			if (isExportRuntimeAndFitness()) {
+				final Fitness eRuntime = factory.createFitness();
+				eRuntime.setName("runtime");
+				eRuntime.setFitnessValue(runtime);
 
-		if (isExportRuntimeAndFitness()) {
-			final Fitness eRuntime = factory.createFitness();
-			eRuntime.setName("runtime");
-			eRuntime.setFitnessValue(runtime);
+				outputFitnesses.add(eRuntime);
 
-			outputFitnesses.add(eRuntime);
+				final Fitness eIters = factory.createFitness();
+				eIters.setName("iterations");
+				eIters.setFitnessValue(iterations.longValue());
 
-			final Fitness eIters = factory.createFitness();
-			eIters.setName("iterations");
-			eIters.setFitnessValue(iterations.longValue());
-
-			outputFitnesses.add(eIters);
+				outputFitnesses.add(eIters);
+			}
 		}
 
 		for (final IExporterExtension extension : extensions) {

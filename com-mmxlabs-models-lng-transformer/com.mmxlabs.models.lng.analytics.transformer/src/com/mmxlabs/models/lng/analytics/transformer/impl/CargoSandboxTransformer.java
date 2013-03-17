@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.EnumMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +48,9 @@ import com.mmxlabs.models.lng.analytics.UnitCostLine;
 import com.mmxlabs.models.lng.analytics.Visit;
 import com.mmxlabs.models.lng.analytics.Voyage;
 import com.mmxlabs.models.lng.analytics.transformer.ICargoSandboxTransformer;
+import com.mmxlabs.models.lng.cargo.CargoFactory;
+import com.mmxlabs.models.lng.cargo.DischargeSlot;
+import com.mmxlabs.models.lng.cargo.LoadSlot;
 import com.mmxlabs.models.lng.fleet.Vessel;
 import com.mmxlabs.models.lng.fleet.VesselClass;
 import com.mmxlabs.models.lng.fleet.VesselClassRouteParameters;
@@ -61,17 +63,26 @@ import com.mmxlabs.models.lng.pricing.DataIndex;
 import com.mmxlabs.models.lng.pricing.DerivedIndex;
 import com.mmxlabs.models.lng.pricing.Index;
 import com.mmxlabs.models.lng.pricing.IndexPoint;
-import com.mmxlabs.models.lng.pricing.PortCost;
 import com.mmxlabs.models.lng.pricing.PricingModel;
 import com.mmxlabs.models.lng.pricing.RouteCost;
+import com.mmxlabs.models.lng.schedule.CargoAllocation;
+import com.mmxlabs.models.lng.schedule.Fuel;
+import com.mmxlabs.models.lng.schedule.FuelAmount;
+import com.mmxlabs.models.lng.schedule.FuelQuantity;
+import com.mmxlabs.models.lng.schedule.FuelUnit;
+import com.mmxlabs.models.lng.schedule.FuelUsage;
+import com.mmxlabs.models.lng.schedule.Idle;
+import com.mmxlabs.models.lng.schedule.Journey;
+import com.mmxlabs.models.lng.schedule.Schedule;
+import com.mmxlabs.models.lng.schedule.SlotAllocation;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.TransformerHelper;
+import com.mmxlabs.models.lng.transformer.export.AnnotatedSolutionExporter;
+import com.mmxlabs.models.lng.transformer.inject.modules.ExporterExtensionsModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.ScheduleBuilderModule;
 import com.mmxlabs.models.lng.transformer.util.DateAndCurveHelper;
 import com.mmxlabs.models.lng.types.ExtraData;
 import com.mmxlabs.models.lng.types.ExtraDataFormatType;
-import com.mmxlabs.models.lng.types.PortCapability;
-import com.mmxlabs.models.lng.types.util.SetUtils;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
 import com.mmxlabs.models.ui.validation.DefaultExtraValidationContext;
 import com.mmxlabs.models.ui.validation.ValidationHelper;
@@ -80,19 +91,16 @@ import com.mmxlabs.optimiser.core.IAnnotatedSolution;
 import com.mmxlabs.optimiser.core.IModifiableSequence;
 import com.mmxlabs.optimiser.core.IModifiableSequences;
 import com.mmxlabs.optimiser.core.IResource;
-import com.mmxlabs.optimiser.core.ISequenceElement;
 import com.mmxlabs.optimiser.core.ISequences;
 import com.mmxlabs.optimiser.core.ISequencesManipulator;
 import com.mmxlabs.optimiser.core.impl.AnnotatedSolution;
 import com.mmxlabs.optimiser.core.impl.ModifiableSequences;
+import com.mmxlabs.optimiser.core.impl.OptimisationContext;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.scheduler.optimiser.Calculator;
 import com.mmxlabs.scheduler.optimiser.OptimiserUnitConvertor;
 import com.mmxlabs.scheduler.optimiser.SchedulerConstants;
-import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossAnnotation;
-import com.mmxlabs.scheduler.optimiser.annotations.IProfitAndLossEntry;
+import com.mmxlabs.scheduler.optimiser.TradingConstants;
 import com.mmxlabs.scheduler.optimiser.builder.ISchedulerBuilder;
-import com.mmxlabs.scheduler.optimiser.components.ILoadSlot;
 import com.mmxlabs.scheduler.optimiser.components.IPort;
 import com.mmxlabs.scheduler.optimiser.components.IPortSlot;
 import com.mmxlabs.scheduler.optimiser.components.IStartEndRequirement;
@@ -109,9 +117,7 @@ import com.mmxlabs.scheduler.optimiser.contracts.impl.PriceExpressionContract;
 import com.mmxlabs.scheduler.optimiser.entities.IEntity;
 import com.mmxlabs.scheduler.optimiser.entities.IEntityValueCalculator;
 import com.mmxlabs.scheduler.optimiser.entities.impl.DefaultEntityValueCalculator;
-import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequence;
 import com.mmxlabs.scheduler.optimiser.fitness.ScheduledSequences;
-import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.IAllocationAnnotation;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.AbstractSequenceScheduler;
@@ -125,14 +131,11 @@ import com.mmxlabs.scheduler.optimiser.providers.IStartEndRequirementProvider;
 import com.mmxlabs.scheduler.optimiser.providers.IVesselProvider;
 import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModule;
 import com.mmxlabs.scheduler.optimiser.providers.impl.HashMapEntityProviderEditor;
+import com.mmxlabs.scheduler.optimiser.schedule.ScheduleCalculator;
 import com.mmxlabs.scheduler.optimiser.scheduleprocessor.IBreakEvenEvaluator;
-import com.mmxlabs.scheduler.optimiser.scheduleprocessor.impl.DefaultBreakEvenEvaluator;
 import com.mmxlabs.scheduler.optimiser.voyage.FuelComponent;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
 import com.mmxlabs.scheduler.optimiser.voyage.impl.LNGVoyageCalculator;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.PortDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyageDetails;
-import com.mmxlabs.scheduler.optimiser.voyage.impl.VoyagePlan;
 
 /**
  * @since 3.0
@@ -207,7 +210,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		for (final Port port : portModel.getPorts()) {
 			final IPort optPort = builder.createPort(port.getName(), !port.isAllowCooldown(), nullCalculator);
 			ports.add(port, optPort);
-			entities.addModelObject(portModel, optPort);
+			entities.addModelObject(port, optPort);
 		}
 		for (final Route route : portModel.getRoutes()) {
 			for (final RouteLine line : route.getLines()) {
@@ -271,6 +274,7 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			}
 		}
 		final IVesselClass vesselClass = TransformerHelper.buildIVesselClass(builder, eVc, baseFuelPrice);
+		entities.addModelObject(eVc, vesselClass);
 
 		/**
 		 * Set up vessel class route parameters
@@ -386,10 +390,20 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				priceCalculator = new PriceExpressionContract(curve);
 			}
 
+			// CREAETA FAKE LOAD SLOT TO MAP TO IN exporter
+			com.mmxlabs.models.lng.cargo.LoadSlot loadSlot = CargoFactory.eINSTANCE.createLoadSlot();
+			loadSlot.setName(id);
+			loadSlot.setPort(buy.getPort());
+			loadSlot.setContract(buy.getContract());
+			loadSlot.setWindowStart(buy.getDate());
+			loadSlot.setWindowStartTime(0);
+			loadSlot.setWindowSize(0);
+			loadSlot.setPriceExpression(buy.getPriceExpression());
 			final IPortSlot slot = builder.createLoadSlot(id, buyPort, timeWindow, 0, gasVolume, priceCalculator, cargoCVValue, buy.getPort().getLoadDuration(), false, true, false);
 			entityProvider.setEntityForSlot(entity, slot);
 
 			elements.add(slot);
+			entities.addModelObject(loadSlot, slot);
 
 		}
 		// Sell Opportunity
@@ -423,9 +437,21 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 
 			final long minCv = 0;
 			final long maxCv = Long.MAX_VALUE;
+
+			DischargeSlot dischargeSlot = CargoFactory.eINSTANCE.createDischargeSlot();
+			dischargeSlot.setName(id);
+			dischargeSlot.setPort(sell.getPort());
+			dischargeSlot.setContract(sell.getContract());
+			dischargeSlot.setWindowStart(sell.getDate());
+			dischargeSlot.setWindowStartTime(0);
+			dischargeSlot.setWindowSize(0);
+			dischargeSlot.setPriceExpression(sell.getPriceExpression());
+
 			final IPortSlot slot = builder.createDischargeSlot(id, sellPort, timeWindow, 0, gasVolume, minCv, maxCv, priceCalculator, sell.getPort().getDischargeDuration(), false);
 			elements.add(slot);
 			entityProvider.setEntityForSlot(entity, slot);
+
+			entities.addModelObject(dischargeSlot, slot);
 		}
 
 		{
@@ -437,6 +463,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		// Create the vessel now we have the start/end requirements
 		final IVessel vessel = builder.createVessel(modelVessel.getName(), vesselClass, new ConstantValueCurve(notionalDayRate / 24), startConstraint, endConstraint, startHeelVolume, startHeelCV,
 				startHeelPrice);
+		entities.addModelObject(modelVessel, vessel);
+
 		/*
 		 * Create a sequences assigning each cargo to the right vessel
 		 */
@@ -512,61 +540,83 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 			return null;
 
 		}
-		final IBreakEvenEvaluator beCalc = new DefaultBreakEvenEvaluator();
-		injector.injectMembers(beCalc);
-		beCalc.processSchedule(result);
+		// final IBreakEvenEvaluator beCalc = new DefaultBreakEvenEvaluator();
+		// injector.injectMembers(beCalc);
+		// beCalc.processSchedule(result);
+		//
+		// final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
+		// aca.setVesselProvider(vesselProvider);
 
-		final UnconstrainedCargoAllocator aca = injector.getInstance(UnconstrainedCargoAllocator.class);
-		aca.setVesselProvider(vesselProvider);
+		// final Map<VoyagePlan, IAllocationAnnotation> allocations = aca.allocate(result);
+		// final Iterator<IAllocationAnnotation> allocationIterator = allocations.values().iterator();
+		//
+		// /*
+		// * Unpack the annotated solution and create output lines
+		// */
+		//
+		// final IEntityValueCalculator entityValueCalculator = new DefaultEntityValueCalculator();
+		// injector.injectMembers(entityValueCalculator);
+		//
+		// final AnnotatedSolution solution = new AnnotatedSolution();
+		// solution.setSequences(sequences);
+		//
+		ScheduleCalculator scheduleCalculator = injector.getInstance(ScheduleCalculator.class);
+		final AnnotatedSolution solution = (AnnotatedSolution) scheduleCalculator.calculateSchedule(sequences, result);
+		solution.setContext(new OptimisationContext(data, null, null, null, null, null, null, null));
+		AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		// final AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
+		final Injector childInjector = injector.createChildInjector(new ExporterExtensionsModule());
+		childInjector.injectMembers(exporter);
 
-		final Map<VoyagePlan, IAllocationAnnotation> allocations = aca.allocate(result);
-		final Iterator<IAllocationAnnotation> allocationIterator = allocations.values().iterator();
+		Schedule schedule = exporter.exportAnnotatedSolution(entities, solution);
+		for (CargoAllocation cargoAllocation : schedule.getCargoAllocations()) {
 
-		/*
-		 * Unpack the annotated solution and create output lines
-		 */
-
-		final IEntityValueCalculator entityValueCalculator = new DefaultEntityValueCalculator();
-		injector.injectMembers(entityValueCalculator);
-
-		final AnnotatedSolution solution = new AnnotatedSolution();
-		solution.setSequences(sequences);
-		// AnnotatedSolutionExporter exporter = new AnnotatedSolutionExporter();
-		// exporter.exportAnnotatedSolution(root, entities, solution);
-
-		for (final ScheduledSequence sequence : result) {
-			final IAllocationAnnotation allocation = allocationIterator.next();
-			final VoyagePlan plan = sequence.getVoyagePlans().get(1);
-			// create line for plan
-			final long evaluate = entityValueCalculator.evaluate(plan, allocation, vessel, 0, solution);
+			// for (final ScheduledSequence sequence : result) {
+			// final IAllocationAnnotation allocation = allocationIterator.next();
+			// final VoyagePlan plan = sequence.getVoyagePlans().get(1);
+			// // create line for plan
+			// final long evaluate = entityValueCalculator.evaluate(plan, allocation, vessel, 0, solution);
 
 			// VisitEventExporter visitExporter = new VisitEventExporter();
-
-			final ISequenceElement buyElement = slotProvider.getElement(elements.get(0));
-			// visitExporter.export(buyElement, solution.getElementAnnotations());
-			final IProfitAndLossAnnotation generatedCharterOutProfitAndLoss = solution.getElementAnnotations().getAnnotation(buyElement, "element-profit-and-loss", IProfitAndLossAnnotation.class);
+			//
+			// final ISequenceElement buyElement = slotProvider.getElement(elements.get(0));
+			// // visitExporter.export(buyElement, solution.getElementAnnotations());
+			// final IProfitAndLossAnnotation generatedCharterOutProfitAndLoss = solution.getElementAnnotations().getAnnotation(buyElement, "element-profit-and-loss", IProfitAndLossAnnotation.class);
 
 			long totalPNL = 0;
-			for (final IProfitAndLossEntry entry : generatedCharterOutProfitAndLoss.getEntries()) {
-				totalPNL += entry.getFinalGroupValue();
+			// for (final IProfitAndLossEntry entry : generatedCharterOutProfitAndLoss.getEntries()) {
+			// totalPNL += entry.getFinalGroupValue();
+			// }
+
+			{
+				ExtraData groupValueData = cargoAllocation.getDataWithKey(TradingConstants.ExtraData_GroupValue);
+				totalPNL += groupValueData.getValueAs(Integer.class);
 			}
 
 			final UnitCostLine line = AnalyticsFactory.eINSTANCE.createUnitCostLine();
 
-			line.setFrom(ports.reverseLookup(((PortDetails) plan.getSequence()[0]).getOptions().getPortSlot().getPort()));
-			line.setTo(ports.reverseLookup(((PortDetails) plan.getSequence()[2]).getOptions().getPortSlot().getPort()));
+			line.setFrom((Port) cargoAllocation.getLoadAllocation().getPort());
+			line.setTo((Port) cargoAllocation.getDischargeAllocation().getPort());
 
 			final Pair<Port, Port> key = new Pair<Port, Port>(line.getFrom(), line.getTo());
 
-			final Map<FuelComponent, Integer[]> voyageSums = new EnumMap<FuelComponent, Integer[]>(FuelComponent.class);
+			final Map<Fuel, Integer[]> voyageSums = new EnumMap<Fuel, Integer[]>(Fuel.class);
+			final Map<Fuel, Integer[]> idleSums = new EnumMap<Fuel, Integer[]>(Fuel.class);
+
+			double cv = ((LoadSlot) cargoAllocation.getLoadAllocation().getSlot()).getSlotOrPortCV();
 
 			// unpack costs from plan
-			createPortCostComponent(line.addExtraData("loading", "1 Loading"), ports, pricing, (PortDetails) plan.getSequence()[0], notionalDayRate, modelVessel.getVesselClass());
-			createVoyageCostComponent(line.addExtraData("laden", "2 Laden Journey"), (VoyageDetails) plan.getSequence()[1], notionalDayRate);
-			sumVoyageCostComponent((VoyageDetails) plan.getSequence()[1], voyageSums);
-			createPortCostComponent(line.addExtraData("discharging", "3 Discharging"), ports, pricing, (PortDetails) plan.getSequence()[2], notionalDayRate, modelVessel.getVesselClass());
-			createVoyageCostComponent(line.addExtraData("ballast", "4 Ballast Journey"), (VoyageDetails) plan.getSequence()[3], notionalDayRate);
-			sumVoyageCostComponent((VoyageDetails) plan.getSequence()[3], voyageSums);
+			createPortCostComponent(line.addExtraData("loading", "1 Loading"), cargoAllocation.getLoadAllocation(), notionalDayRate);
+			createVoyageCostComponent(line.addExtraData("laden", "2 Laden Journey"), cargoAllocation.getLadenLeg(), cargoAllocation.getLadenIdle(), cv, notionalDayRate);
+
+			sumVoyageCostComponent(cargoAllocation.getLadenLeg(), voyageSums);
+			sumVoyageCostComponent(cargoAllocation.getLadenIdle(), idleSums);
+
+			createPortCostComponent(line.addExtraData("discharging", "3 Discharging"), cargoAllocation.getDischargeAllocation(), notionalDayRate);
+			createVoyageCostComponent(line.addExtraData("ballast", "4 Ballast Journey"),  cargoAllocation.getBallastLeg(), cargoAllocation.getBallastIdle(), cv, notionalDayRate);
+
+			sumVoyageCostComponent(cargoAllocation.getBallastLeg(), voyageSums);
+			sumVoyageCostComponent(cargoAllocation.getBallastIdle(), idleSums);
 
 			int totalDuration = 0;
 			int totalFuelCost = 0;
@@ -609,10 +659,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 
 			line.setProfit((int) (totalPNL / 1000l));
 
-			line.setVolumeLoaded(OptimiserUnitConvertor.convertToExternalVolume(allocation.getLoadVolumeInM3()));
-			line.setVolumeDischarged(OptimiserUnitConvertor.convertToExternalVolume(allocation.getDischargeVolumeInM3()));
-
-			final double cv = line.getFrom().getCvValue();
+			line.setVolumeLoaded(cargoAllocation.getLoadVolume());
+			line.setVolumeDischarged(cargoAllocation.getDischargeVolume());
 
 			line.setMmbtuDelivered((int) (line.getVolumeDischarged() * cv));
 			line.setUnitCost(line.getTotalCost() / (double) line.getMmbtuDelivered());
@@ -622,6 +670,31 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				summary.setFormat("$%,f");
 				summary.addExtraData("duration", "Duration", totalDuration, ExtraDataFormatType.DURATION);
 				final ExtraData fuelCostData = summary.addExtraData("fuelcost", "Fuel Cost", totalFuelCost, ExtraDataFormatType.CURRENCY);
+
+				for (final Fuel component : Fuel.values()) {
+
+					final FuelUnit unit;
+					if (component == Fuel.NBO || component == Fuel.FBO) {
+						unit = FuelUnit.M3;
+					} else {
+						unit = FuelUnit.MT;
+					}
+
+					if (voyageSums.containsKey(component)) {
+						String fuelName = component.getName();
+						final Integer[] sums = voyageSums.get(component);
+						// totalFuelCost += componentCost;
+						final ExtraData componentData = fuelCostData.addExtraData(fuelName, fuelName, sums[1], ExtraDataFormatType.CURRENCY);
+						componentData.addExtraData("quantity", "Usage (" + unit.name() + ")", sums[0], ExtraDataFormatType.INTEGER);
+					}
+					if (idleSums.containsKey(component)) {
+						String fuelName = "Idle " + component.getName();
+						final Integer[] sums = voyageSums.get(component);
+						// totalFuelCost += componentCost;
+						final ExtraData componentData = fuelCostData.addExtraData(fuelName, fuelName, sums[1], ExtraDataFormatType.CURRENCY);
+						componentData.addExtraData("quantity", "Usage (" + unit.name() + ")", sums[0], ExtraDataFormatType.INTEGER);
+					}
+				}
 
 				{
 					for (final FuelComponent component : FuelComponent.values()) {
@@ -638,8 +711,8 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 				summary.addExtraData("routecost", "Route Cost", totalRouteCost, ExtraDataFormatType.CURRENCY);
 				summary.addExtraData("portcost", "Port Cost", totalPortCost, ExtraDataFormatType.CURRENCY);
 				summary.addExtraData("profit", "Profit", line.getProfit(), ExtraDataFormatType.CURRENCY);
-				summary.addExtraData("ssalesprice", "Sales Price", allocation.getDischargePricePerM3() / cv / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
-				summary.addExtraData("purchaseprice", "Purchase Price", allocation.getLoadPricePerM3() / cv / 1000000.0, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
+				summary.addExtraData("salesprice", "Sales Price", cargoAllocation.getDischargeAllocation().getPrice(), ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
+				summary.addExtraData("purchaseprice", "Purchase Price", cargoAllocation.getLoadAllocation().getPrice(), ExtraDataFormatType.STRING_FORMAT).setFormat("$%,.02f");
 				// summary.addExtraData("hirecost", "Hire Cost", (spec.getNotionalDayRate() * totalDuration) / 24, ExtraDataFormatType.CURRENCY);
 
 				final ExtraData dischargeData = summary.addExtraData("discharged", "MMBTU Discharged", (int) (line.getVolumeDischarged() * cv), ExtraDataFormatType.INTEGER);
@@ -671,36 +744,40 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		};
 	}
 
-	private void createVoyageCostComponent(final ExtraData d, final VoyageDetails voyageDetails, final int notionalDayRate) {
-		final int duration = voyageDetails.getIdleTime() + voyageDetails.getTravelTime();
+	private void createVoyageCostComponent(final ExtraData d, final Journey journey, Idle idle, double cv, final int notionalDayRate) {
+		final int duration = idle.getDuration() + idle.getDuration();
 		int totalCost = 0;
-		d.addExtraData("distance", "Distance", voyageDetails.getOptions().getDistance(), ExtraDataFormatType.INTEGER);
+		d.addExtraData("distance", "Distance", journey.getDistance(), ExtraDataFormatType.INTEGER);
 		d.addExtraData("duration", "Duration", duration, ExtraDataFormatType.DURATION);
-		d.addExtraData("idletime", "Idle Time", voyageDetails.getIdleTime(), ExtraDataFormatType.DURATION);
-		d.addExtraData("traveltime", "Travel Time", voyageDetails.getTravelTime(), ExtraDataFormatType.DURATION);
-		d.addExtraData("speed", "Speed", OptimiserUnitConvertor.convertToExternalSpeed(voyageDetails.getSpeed()), ExtraDataFormatType.STRING_FORMAT).setFormat("%,f");
-		final int routeCost = OptimiserUnitConvertor.convertToExternalFixedCost(voyageDetails.getRouteCost());
+		d.addExtraData("idletime", "Idle Time", idle.getDuration(), ExtraDataFormatType.DURATION);
+		d.addExtraData("traveltime", "Travel Time", idle.getDuration(), ExtraDataFormatType.DURATION);
+		d.addExtraData("speed", "Speed", journey.getSpeed(), ExtraDataFormatType.STRING_FORMAT).setFormat("%,f");
+		final int routeCost = OptimiserUnitConvertor.convertToExternalFixedCost(journey.getToll());
 		totalCost += routeCost;
-		d.addExtraData("routecost", "Route Cost", routeCost, ExtraDataFormatType.CURRENCY).addExtraData("route", "Route", voyageDetails.getOptions().getRoute(), ExtraDataFormatType.AUTO);
+		d.addExtraData("routecost", "Route Cost", routeCost, ExtraDataFormatType.CURRENCY).addExtraData("route", "Route", journey.getRoute(), ExtraDataFormatType.AUTO);
 
 		final ExtraData fuelData = d.addExtraData("fuelcost", "Fuel Cost");
 		int totalFuelCost = 0;
 
-		for (final FuelComponent component : FuelComponent.values()) {
-			final long consumption = voyageDetails.getFuelConsumption(component, component.getDefaultFuelUnit());
-			final int unitPrice = voyageDetails.getFuelUnitPrice(component);
+		totalFuelCost = processFuelConsumptions(journey, cv, fuelData, totalFuelCost, "");
+		totalFuelCost = processFuelConsumptions(idle, cv, fuelData, totalFuelCost, "Idle ");
 
-			if (consumption == 0) {
-				continue;
-			}
-			final int componentCost = OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.costFromConsumption(consumption, unitPrice));
-			totalFuelCost += componentCost;
-			final ExtraData componentData = fuelData.addExtraData(component.name(), component.name(), componentCost, ExtraDataFormatType.CURRENCY);
-			componentData.addExtraData("quantity", "Usage (" + component.getDefaultFuelUnit().name() + ")", OptimiserUnitConvertor.convertToExternalVolume(consumption), ExtraDataFormatType.INTEGER);
-			componentData.addExtraData("unitprice", "Cost/" + component.getDefaultFuelUnit().name(), OptimiserUnitConvertor.convertToExternalPrice(unitPrice), ExtraDataFormatType.STRING_FORMAT)
-					.setFormat("$%,f");
-
-		}
+		// for (final FuelComponent component : FuelComponent.values()) {
+		//
+		// final long consumption = voyageDetails.getFuelConsumption(component, component.getDefaultFuelUnit());
+		// final int unitPrice = voyageDetails.getFuelUnitPrice(component);
+		//
+		// if (consumption == 0) {
+		// continue;
+		// }
+		// final int componentCost = OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.costFromConsumption(consumption, unitPrice));
+		// totalFuelCost += componentCost;
+		// final ExtraData componentData = fuelData.addExtraData(component.name(), component.name(), componentCost, ExtraDataFormatType.CURRENCY);
+		// componentData.addExtraData("quantity", "Usage (" + component.getDefaultFuelUnit().name() + ")", OptimiserUnitConvertor.convertToExternalVolume(consumption), ExtraDataFormatType.INTEGER);
+		// componentData.addExtraData("unitprice", "Cost/" + component.getDefaultFuelUnit().name(), OptimiserUnitConvertor.convertToExternalPrice(unitPrice), ExtraDataFormatType.STRING_FORMAT)
+		// .setFormat("$%,f");
+		//
+		// }
 		totalCost += totalFuelCost;
 		fuelData.setValue(totalFuelCost);
 		fuelData.setFormatType(ExtraDataFormatType.CURRENCY);
@@ -712,51 +789,109 @@ public class CargoSandboxTransformer implements ICargoSandboxTransformer {
 		d.addExtraData("hirecost", "Hire Cost", hireCost, ExtraDataFormatType.CURRENCY);
 	}
 
-	private void sumVoyageCostComponent(final VoyageDetails voyageDetails, final Map<FuelComponent, Integer[]> sums) {
-
-		for (final FuelComponent component : FuelComponent.values()) {
-			final long consumption = voyageDetails.getFuelConsumption(component, component.getDefaultFuelUnit());
-			final int unitPrice = voyageDetails.getFuelUnitPrice(component);
-
+	private int processFuelConsumptions(final FuelUsage fuelUsage, double cv, final ExtraData fuelData, int totalFuelCost, String fuelNamePrefix) {
+		for (FuelQuantity fq : fuelUsage.getFuels()) {
+			// Select correct quantity to get
+			final FuelUnit unit;
+			final FuelUnit unitPriceUnit;
+			boolean isM3 = false;
+			;
+			if (fq.getFuel() == Fuel.NBO || fq.getFuel() == Fuel.FBO) {
+				unit = FuelUnit.M3;
+				unitPriceUnit = FuelUnit.MMBTU;
+				isM3 = true;
+			} else {
+				unit = FuelUnit.MT;
+				unitPriceUnit = unit;
+			}
+			long consumption = 0;
+			long unitPriceConsumption = 0;
+			long cost = 0;
+			for (FuelAmount amount : fq.getAmounts()) {
+				if (amount.getUnit() == unit) {
+					consumption += amount.getQuantity();
+				}
+				if (amount.getUnit() == unitPriceUnit) {
+					unitPriceConsumption += amount.getQuantity();
+				}
+			}
+			cost += fq.getCost();
 			if (consumption == 0) {
 				continue;
 			}
+			// BAH NO MMBTU EXPORTED?
+			// Work backwards to get unit price
+			// TODO: NBO and IdleNBO getting different unitPrices!
+			double unitPrice = isM3 ? (cost / (consumption * cv)) : (cost / unitPriceConsumption);
+
+			String fuelName = fuelNamePrefix + fq.getFuel().getName();
+			final int componentCost = fq.getCost();
+			totalFuelCost += componentCost;
+			final ExtraData componentData = fuelData.addExtraData(fuelName, fuelName, componentCost, ExtraDataFormatType.CURRENCY);
+			componentData.addExtraData("quantity", "Usage (" + unit.name() + ")", consumption, ExtraDataFormatType.INTEGER);
+			componentData.addExtraData("unitprice", "Cost/" + unitPriceUnit.name(), unitPrice, ExtraDataFormatType.STRING_FORMAT).setFormat("$%,f");
+		}
+		return totalFuelCost;
+	}
+
+	private void sumVoyageCostComponent(FuelUsage fuelUsage, final Map<Fuel, Integer[]> sums) {
+
+		for (FuelQuantity fq : fuelUsage.getFuels()) {
+			// Select correct quantity to get
+			final FuelUnit unit;
+			final FuelUnit unitPriceUnit;
+			if (fq.getFuel() == Fuel.NBO || fq.getFuel() == Fuel.FBO) {
+				unit = FuelUnit.M3;
+				unitPriceUnit = FuelUnit.MMBTU;
+			} else {
+				unit = FuelUnit.MT;
+				unitPriceUnit = unit;
+			}
+			long consumption = 0;
+			long unitPriceConsumption = 0;
+			long cost = 0;
+			for (FuelAmount amount : fq.getAmounts()) {
+				if (amount.getUnit() == unit) {
+					consumption += amount.getQuantity();
+				}
+				if (amount.getUnit() == unitPriceUnit) {
+					unitPriceConsumption += amount.getQuantity();
+				}
+			}
+			cost += fq.getCost();
+			if (consumption == 0) {
+				continue;
+			}
+
 			Integer[] data;
-			if (sums.containsKey(component)) {
-				data = sums.get(component);
+			if (sums.containsKey(fq.getFuel())) {
+				data = sums.get(fq.getFuel());
 			} else {
 				data = new Integer[2];
 				data[0] = new Integer(0);
 				data[1] = new Integer(0);
-				sums.put(component, data);
+				sums.put(fq.getFuel(), data);
 			}
 			data[0] = data[0].intValue() + OptimiserUnitConvertor.convertToExternalVolume(consumption);
-			final int componentCost = OptimiserUnitConvertor.convertToExternalFixedCost(Calculator.costFromConsumption(consumption, unitPrice));
-			data[1] = data[1].intValue() + componentCost;
+			data[1] = data[1].intValue() + fq.getCost();
 		}
 	}
 
-	private void createPortCostComponent(final ExtraData result, final Association<Port, IPort> ports, final PricingModel pricing, final PortDetails portDetails, final int notionalDayRate,
-			final VesselClass vesselClass) {
-		result.addExtraData("duration", "Duration", portDetails.getOptions().getVisitDuration(), ExtraDataFormatType.DURATION);
-		final Port port = ports.reverseLookup(portDetails.getOptions().getPortSlot().getPort());
+	private void createPortCostComponent(final ExtraData result, SlotAllocation slotAllocation, final int notionalDayRate) {
+
+		int visitDuration = slotAllocation.getSlotVisit().getDuration();
+		result.addExtraData("duration", "Duration", visitDuration, ExtraDataFormatType.DURATION);
+		final Port port = (Port) slotAllocation.getPort();
 		result.addExtraData("location", "Location", port.getName(), ExtraDataFormatType.AUTO);
 		int total = 0;
-		for (final PortCost cost : pricing.getPortCosts()) {
-			if (SetUtils.getPorts(cost.getPorts()).contains(port)) {
-				// this is the cost for the given port
-				total += cost.getPortCost(vesselClass, portDetails.getOptions().getPortSlot() instanceof ILoadSlot ? PortCapability.LOAD : PortCapability.DISCHARGE);
-				result.addExtraData("portcost", "Port Cost", total, ExtraDataFormatType.CURRENCY);
+		// this is the cost for the given port
+		total += slotAllocation.getSlotVisit().getPortCost();
+		result.addExtraData("portcost", "Port Cost", total, ExtraDataFormatType.CURRENCY);
 
-				break;
-			}
-		}
-
-		total += (notionalDayRate * portDetails.getOptions().getVisitDuration()) / 24;
-		result.addExtraData("hirecost", "Hire Cost", (notionalDayRate * portDetails.getOptions().getVisitDuration()) / 24, ExtraDataFormatType.CURRENCY);
+		total += (notionalDayRate * visitDuration) / 24;
+		result.addExtraData("hirecost", "Hire Cost", (notionalDayRate * visitDuration) / 24, ExtraDataFormatType.CURRENCY);
 
 		result.setValue(total);
 		result.setFormatType(ExtraDataFormatType.CURRENCY);
 	}
-
 }
