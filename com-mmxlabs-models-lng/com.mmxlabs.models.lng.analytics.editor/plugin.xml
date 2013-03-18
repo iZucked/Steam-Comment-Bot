@@ -150,6 +150,12 @@
           label="Cargo Sandbox"
           targetEClass="com.mmxlabs.models.lng.analytics.CargoSandbox">
     </factory>
+    <factory
+          ID="com.mmxlabs.models.lng.analytics.ProvisionalCargoFactory"
+          factory="com.mmxlabs.models.ui.modelfactories.DefaultModelFactory"
+          label="Provisional Cargo"
+          targetEClass="com.mmxlabs.models.lng.analytics.ProvisionalCargo">
+    </factory>
  </extension>
  <extension
        point="com.mmxlabs.models.ui.displaycompositefactories">
