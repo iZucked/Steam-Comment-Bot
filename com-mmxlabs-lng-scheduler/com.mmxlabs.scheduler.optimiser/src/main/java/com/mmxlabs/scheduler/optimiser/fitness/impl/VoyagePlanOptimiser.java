@@ -406,9 +406,9 @@ public class VoyagePlanOptimiser implements IVoyagePlanOptimiser {
 		final VoyagePlan currentPlan = new VoyagePlan();
 
 		// Calculate voyage plan
-		final int feasiblity = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, CollectionsUtil.integersToIntArray(arrivalTimes), currentSequence.toArray());
+		final int feasibility = voyageCalculator.calculateVoyagePlan(currentPlan, vessel, CollectionsUtil.integersToIntArray(arrivalTimes), currentSequence.toArray());
 
-		if (feasiblity >= 0) {
+		if (feasibility >= 0) {
 			return currentPlan;
 		} else {
 			return null;
