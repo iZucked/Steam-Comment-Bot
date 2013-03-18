@@ -6,15 +6,11 @@ package com.mmxlabs.models.lng.transformer.inject.modules;
 
 import static org.ops4j.peaberry.Peaberry.service;
 
-import java.util.Collection;
-import java.util.Random;
-
 import javax.inject.Singleton;
 
 import org.eclipse.core.runtime.Platform;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Injector;
 import com.google.inject.Provides;
 import com.google.inject.name.Named;
 import com.mmxlabs.common.parser.series.SeriesParser;
@@ -34,22 +30,11 @@ import com.mmxlabs.optimiser.core.evaluation.IEvaluationProcessRegistry;
 import com.mmxlabs.optimiser.core.fitness.IFitnessFunctionRegistry;
 import com.mmxlabs.optimiser.core.modules.OptimiserCoreModule;
 import com.mmxlabs.optimiser.core.scenario.IOptimisationData;
-import com.mmxlabs.optimiser.lso.IMoveGenerator;
-import com.mmxlabs.optimiser.lso.modules.LinearFitnessEvaluatorModule;
-import com.mmxlabs.optimiser.lso.modules.LocalSearchOptimiserModule;
-import com.mmxlabs.optimiser.lso.modules.MoveGeneratorModule;
-import com.mmxlabs.optimiser.lso.movegenerators.impl.CompoundMoveGenerator;
-import com.mmxlabs.scheduler.optimiser.fitness.ICargoSchedulerFitnessComponent;
-import com.mmxlabs.scheduler.optimiser.fitness.ISchedulerFactory;
-import com.mmxlabs.scheduler.optimiser.fitness.ISequenceScheduler;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.ICargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.components.allocation.impl.UnconstrainedCargoAllocator;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.CachingVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.IVoyagePlanOptimiser;
 import com.mmxlabs.scheduler.optimiser.fitness.impl.VoyagePlanOptimiser;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.DirectRandomSequenceScheduler;
-import com.mmxlabs.scheduler.optimiser.fitness.impl.enumerator.ScheduleEvaluator;
-import com.mmxlabs.scheduler.optimiser.lso.ConstrainedMoveGenerator;
 import com.mmxlabs.scheduler.optimiser.manipulators.SequencesManipulatorModule;
 import com.mmxlabs.scheduler.optimiser.peaberry.SchedulerModule;
 import com.mmxlabs.scheduler.optimiser.voyage.ILNGVoyageCalculator;
@@ -72,13 +57,10 @@ public class LNGTransformerModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		install(new OptimiserCoreModule());
 		install(new ScheduleBuilderModule());
-		install(new LocalSearchOptimiserModule());
-		install(new MoveGeneratorModule());
 		install(new SequencesManipulatorModule());
 		install(new SchedulerModule());
-		install(new OptimiserCoreModule());
-		install(new LinearFitnessEvaluatorModule());
 
 		bind(MMXRootObject.class).toInstance(scenario);
 
@@ -97,41 +79,20 @@ public class LNGTransformerModule extends AbstractModule {
 
 		bind(VoyagePlanOptimiser.class);
 
+		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
+
 		if (Platform.isRunning()) {
 			bind(IFitnessFunctionRegistry.class).toProvider(service(IFitnessFunctionRegistry.class).single());
 			bind(IConstraintCheckerRegistry.class).toProvider(service(IConstraintCheckerRegistry.class).single());
 			bind(IEvaluationProcessRegistry.class).toProvider(service(IEvaluationProcessRegistry.class).single());
 		}
 
-		bind(IOptimisationTransformer.class).to(OptimisationTransformer.class).in(Singleton.class);
 	}
 
 	@Provides
 	IVoyagePlanOptimiser provideVoyagePlanOptimiser(final VoyagePlanOptimiser delegate) {
 		final CachingVoyagePlanOptimiser cachingVoyagePlanOptimiser = new CachingVoyagePlanOptimiser(delegate, DEFAULT_VPO_CACHE_SIZE);
 		return cachingVoyagePlanOptimiser;
-	}
-
-	@Provides
-	@Singleton
-	ISchedulerFactory provideSchedulerFactory(final Injector injector) {
-		final ISchedulerFactory factory = new ISchedulerFactory() {
-
-			@Override
-			public ISequenceScheduler createScheduler(final IOptimisationData data, final Collection<ICargoSchedulerFitnessComponent> schedulerComponents) {
-
-				final ScheduleEvaluator scheduleEvaluator = new ScheduleEvaluator();
-				// TODO: If we can change this API, then we can avoid the need for the ISchedulerFactory and this provider
-				scheduleEvaluator.setFitnessComponents(schedulerComponents);
-				injector.injectMembers(scheduleEvaluator);
-
-				final DirectRandomSequenceScheduler scheduler = new DirectRandomSequenceScheduler();
-				scheduler.setScheduleEvaluator(scheduleEvaluator);
-				injector.injectMembers(scheduler);
-				return scheduler;
-			}
-		};
-		return factory;
 	}
 
 	@Provides
@@ -176,17 +137,4 @@ public class LNGTransformerModule extends AbstractModule {
 
 		return sequences;
 	}
-
-	@Provides
-	@Singleton
-	private IMoveGenerator provideMoveGenerator(final ConstrainedMoveGenerator normalMoveGenerator, @Named(LocalSearchOptimiserModule.RANDOM_SEED) long seed) {
-
-		final CompoundMoveGenerator moveGenerator = new CompoundMoveGenerator();
-
-		moveGenerator.addGenerator(normalMoveGenerator, 1);
-		moveGenerator.setRandom(new Random(seed));
-
-		return moveGenerator;
-	}
-
 }

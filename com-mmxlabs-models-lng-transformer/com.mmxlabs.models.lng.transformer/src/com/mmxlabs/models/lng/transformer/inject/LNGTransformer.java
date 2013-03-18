@@ -15,7 +15,6 @@ import org.ops4j.peaberry.util.TypeLiterals;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
 import com.google.inject.Module;
@@ -25,6 +24,7 @@ import com.mmxlabs.models.lng.transformer.LNGScenarioTransformer;
 import com.mmxlabs.models.lng.transformer.ModelEntityMap;
 import com.mmxlabs.models.lng.transformer.OptimisationTransformer;
 import com.mmxlabs.models.lng.transformer.inject.modules.LNGTransformerModule;
+import com.mmxlabs.models.lng.transformer.inject.modules.OptimisationModule;
 import com.mmxlabs.models.lng.transformer.inject.modules.OptimiserSettingsModule;
 import com.mmxlabs.models.lng.transformer.internal.Activator;
 import com.mmxlabs.models.mmxcore.MMXRootObject;
@@ -43,50 +43,60 @@ import com.mmxlabs.scheduler.optimiser.providers.guice.DataComponentProviderModu
  */
 public class LNGTransformer {
 
+	/**
+	 * @since 3.0
+	 */
+	public static final String HINT_OPTIMISE_LSO = "hint-lngtransformer-optimise-lso";
+
 	private final MMXRootObject scenario;
 
 	private final Injector injector;
 
-	@Inject
-	private ModelEntityMap entities;
-
-	@Inject
-	private LNGScenarioTransformer lngScenarioTransformer;
-
-	@Inject
-	private IOptimisationData optimisationData;
-	@Inject
-	private IOptimisationTransformer optimisationTransformer;
-
-	// @Inject(optional = true)
 	private Iterable<IOptimiserInjectorService> extraModules;
 
-	@Inject
-	private IOptimisationContext context;
-
-	@Inject
-	private LocalSearchOptimiser optimiser;
-
-	public LNGTransformer(final MMXRootObject scenario) {
-		this(scenario, null, null);
+	/**
+	 * @param scenario
+	 * @param hints
+	 * @since 3.0
+	 */
+	public LNGTransformer(final MMXRootObject scenario, String... hints) {
+		this(scenario, null, null, hints);
 	}
 
 	/**
-	 * @since 2.0
+	 * @since 3.0
 	 */
-	public LNGTransformer(final MMXRootObject scenario, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides) {
-		this(scenario, null, localOverrides);
-	}
-
-	public LNGTransformer(final MMXRootObject scenario, final Module module) {
-		this(scenario, module, null);
+	public LNGTransformer(final MMXRootObject scenario, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
+		this(scenario, null, localOverrides, hints);
 	}
 
 	/**
-	 * @since 2.0
+	 * 
+	 * @param scenario
+	 * @param module
+	 * @param hints
+	 * @since 3.0
 	 */
-	public LNGTransformer(final MMXRootObject scenario, final Module module, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides) {
+	public LNGTransformer(final MMXRootObject scenario, final Module module, String... hints) {
+		this(scenario, module, null, hints);
+	}
+
+	/**
+	 * @since 3.0
+	 */
+	public LNGTransformer(final MMXRootObject scenario, final Module module, final Map<IOptimiserInjectorService.ModuleType, List<Module>> localOverrides, String... hints) {
 		this.scenario = scenario;
+
+		boolean performOptimisation = false;
+		// Check hints
+		if (hints != null) {
+			for (String hint : hints) {
+				if (HINT_OPTIMISE_LSO.equals(hint)) {
+					performOptimisation = true;
+				}
+			}
+		}
+
 		{
 			final Injector tmpInjector;
 			if (Platform.isRunning()) {
@@ -127,7 +137,7 @@ public class LNGTransformer {
 		// Grab any module overrides
 		if (extraModules != null) {
 			for (final IOptimiserInjectorService service : extraModules) {
-				final Map<ModuleType, List<Module>> m = service.requestModuleOverrides();
+				final Map<ModuleType, List<Module>> m = service.requestModuleOverrides(hints);
 				if (m != null) {
 					for (final Map.Entry<IOptimiserInjectorService.ModuleType, List<Module>> e : m.entrySet()) {
 						List<Module> overrides;
@@ -158,10 +168,14 @@ public class LNGTransformer {
 
 		// Install standard module with optional overrides
 		installModuleOverrides(modules, new DataComponentProviderModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_DataComponentProviderModule);
-		// modules.add(new SequencesManipulatorModule());
+
 		installModuleOverrides(modules, new LNGTransformerModule(scenario), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_LNGTransformerModule);
 
 		installModuleOverrides(modules, new OptimiserSettingsModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_ParametersModule);
+
+		if (performOptimisation) {
+			installModuleOverrides(modules, new OptimisationModule(), moduleOverrides, IOptimiserInjectorService.ModuleType.Module_Optimisation);
+		}
 
 		// Insert extra modules into modules list
 		if (extraModules != null) {
@@ -192,45 +206,44 @@ public class LNGTransformer {
 		}
 	}
 
-	public synchronized LNGScenarioTransformer getLNGScenarioTransformer() {
-		return lngScenarioTransformer;
-	}
-
 	/**
 	 * @since 2.0
 	 */
 	public IOptimisationTransformer getOptimisationTransformer() {
-		return optimisationTransformer;
+		return injector.getInstance(IOptimisationTransformer.class);
 	}
 
 	public MMXRootObject getScenario() {
 		return scenario;
 	}
 
+	/**
+	 * @since 3.0
+	 */
 	public ModelEntityMap getEntities() {
-		return entities;
+		return injector.getInstance(ModelEntityMap.class);
 	}
 
 	public LNGScenarioTransformer getLngScenarioTransformer() {
-		return lngScenarioTransformer;
+		return injector.getInstance(LNGScenarioTransformer.class);
 	}
 
 	public IOptimisationData getOptimisationData() {
-		return optimisationData;
+		return injector.getInstance(IOptimisationData.class);
 	}
 
 	/**
 	 * @since 2.0
 	 */
 	public IOptimisationContext getOptimisationContext() {
-		return context;
+		return injector.getInstance(IOptimisationContext.class);
 	}
 
 	/**
 	 * @since 2.0
 	 */
 	public LocalSearchOptimiser getOptimiser() {
-		return optimiser;
+		return injector.getInstance(LocalSearchOptimiser.class);
 	}
 
 	/**
